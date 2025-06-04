@@ -218,37 +218,63 @@ export const gradeSheetRouter = createTRPCRouter({
       });
     }),
   distribution: protectedProcedure.query(async ({ ctx }) => {
-    const sheets = await ctx.db.gradeSheet.findMany({
-      where: {
-        term: {
-          schoolYearId: ctx.schoolYearId,
-          schoolId: ctx.schoolId,
-        },
-      },
-      select: { scale: true, grades: true },
-    });
-
-    // 2. Build a 0–20 counter on the server:
-    const counts: Record<number, number> = {};
-    for (let i = 0; i <= 20; i++) counts[i] = 0;
-
-    for (const { scale, grades } of sheets) {
-      for (const { grade } of grades) {
-        let scaled = (grade / scale) * 20;
-        if (scaled < 0) scaled = 0;
-        if (scaled > 20) scaled = 20;
-        const bin = scaled === 20 ? 20 : Math.floor(scaled);
-        const valBin = counts[bin] ?? 0;
-        counts[bin] = valBin + 1;
-      }
+    interface Bucket {
+      bin: number;
+      count: bigint;
     }
 
-    // 3. Turn it into the array your client expects:
-    return Object.entries(counts)
-      .map(([key, val]) => ({
-        name: key,
-        value: val,
-      }))
-      .sort((a, b) => Number(a.name) - Number(b.name));
+    const raw: Bucket[] = await ctx.db.$queryRaw<Bucket[]>`
+        SELECT
+          CASE
+            WHEN floor((g.grade::numeric / gs.scale::numeric) * 20) < 0 THEN 0
+            WHEN floor((g.grade::numeric / gs.scale::numeric) * 20) >= 20 THEN 20
+            ELSE floor((g.grade::numeric / gs.scale::numeric) * 20)
+          END AS bin,
+          COUNT(DISTINCT g."studentId") AS count
+        -- COUNT(*) AS count
+        FROM "Grade" AS g
+        JOIN "GradeSheet" AS gs
+          ON g."gradeSheetId" = gs.id
+        GROUP BY bin
+        ORDER BY bin;
+      `;
+
+    // Then transform into the shape your chart needs:
+    return raw.map((r) => ({
+      name: r.bin.toString(),
+      value: Number(r.count),
+    }));
+    // const allGrades = await ctx.db.grade.findMany({
+    //   select: {
+    //     studentId: true,
+    //     grade: true,
+    //     gradeSheet: { select: { scale: true } },
+    //   },
+    // });
+
+    // // 2. Build a Set for each bin [0..20] to track unique studentIds.
+    // const studentSets: Record<number, Set<string>> = {};
+    // for (let i = 0; i <= 20; i++) {
+    //   studentSets[i] = new Set();
+    // }
+
+    // // 3. Loop over each grade-record, compute its “scaled bin”, then add studentId to that Set.
+    // for (const { studentId, grade, gradeSheet } of allGrades) {
+    //   const scale = gradeSheet.scale;
+    //   let scaled = (grade / scale) * 20;
+    //   if (scaled < 0) scaled = 0;
+    //   if (scaled > 20) scaled = 20;
+    //   const bin = scaled === 20 ? 20 : Math.floor(scaled);
+
+    //   studentSets[bin].add(studentId);
+    // }
+
+    // // 4. Transform each Set into its size, producing an array of { name, value } sorted by bin.
+    // const chartData = Object.entries(studentSets)
+    //   .map(([key, set]) => ({
+    //     name: key, // “0”, “1”, …, “20”
+    //     value: set.size, // number of distinct students in that bin
+    //   }))
+    //   .sort((a, b) => Number(a.name) - Number(b.name));
   }),
 });

@@ -34,7 +34,10 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  batchPrefetch([trpc.gradeSheet.all.queryOptions()]);
+  batchPrefetch([
+    trpc.gradeSheet.all.queryOptions(),
+    trpc.gradeSheet.distribution.queryOptions(),
+  ]);
   return (
     <div className="px-4 py-2">
       <Tabs defaultValue="overview">
