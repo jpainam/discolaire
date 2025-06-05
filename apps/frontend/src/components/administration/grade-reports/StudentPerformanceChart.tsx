@@ -33,9 +33,8 @@ const chartConfig = {
 export function StudentPerformanceChart() {
   const trpc = useTRPC();
   const { data: percentiles } = useSuspenseQuery(
-    trpc.gradeSheet.allPercentile.queryOptions(),
+    trpc.gradeSheet.allPercentile.queryOptions()
   );
-  console.log(percentiles);
   return (
     <ChartContainer config={chartConfig}>
       <LineChart
@@ -54,7 +53,7 @@ export function StudentPerformanceChart() {
           tickMargin={8}
           tickFormatter={(value) => (value as string).slice(0, 6)}
         />
-        <YAxis domain={[40, 100]} />
+        <YAxis domain={[0, 20]} />
         <ChartTooltip content={<ChartTooltipContent />} />
         <ChartLegend content={<ChartLegendContent />} />
         <Line

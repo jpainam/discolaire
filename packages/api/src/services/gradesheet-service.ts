@@ -150,7 +150,7 @@ export const gradeSheetService = {
       SELECT
         t.name AS term,
         ROUND(
-          100.0 * AVG(
+          20.0 * AVG(
             LEAST( GREATEST( g.grade::numeric / gs.scale::numeric, 0 ), 1 )
           )::numeric,
           2
@@ -158,13 +158,13 @@ export const gradeSheetService = {
         ROUND(
           PERCENTILE_CONT(0.10) WITHIN GROUP (
             ORDER BY LEAST( GREATEST( g.grade::numeric / gs.scale::numeric, 0 ), 1 )
-          )::numeric * 100.0,
+          )::numeric * 20.0,
           2
         ) AS bottom_10,
         ROUND(
           PERCENTILE_CONT(0.90) WITHIN GROUP (
             ORDER BY LEAST( GREATEST( g.grade::numeric / gs.scale::numeric, 0 ), 1 )
-          )::numeric * 100.0,
+          )::numeric * 20.0,
           2
         ) AS top_10
       FROM "Grade" AS g

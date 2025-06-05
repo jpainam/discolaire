@@ -2,6 +2,7 @@ import React from "react";
 
 import { checkPermission } from "@repo/api/permission";
 import { auth } from "@repo/auth";
+import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 import { caller } from "~/trpc/server";
@@ -29,12 +30,17 @@ export default async function Layout(props: {
   } else {
     canReadClassroom = await checkPermission(
       "classroom",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
   }
 
   if (!canReadClassroom) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
-  return <>{children}</>;
+  return (
+    <div className="grid grid-cols-1">
+      <ClassroomHeader />
+      {children}
+    </div>
+  );
 }
