@@ -158,3 +158,12 @@ className="resize-none" for textarea
   ]
 }
 ```
+
+https://shadbook-app.vercel.app/
+https://www.facebook.com/photo/?fbid=1442342332621612&set=pb.100068836477828.-2207520000&checkpoint_src=any
+https://github.com/Galaxies-dev/threads-clone-react-native/blob/main/components/UserProfile.tsx
+https://v0.dev/chat/page-improvement-needed-lzzqaWgCK4l
+https://icons.expo.fyi/Index
+
+https://bolt.new/~/sb1-jprga2td
+https://v0.dev/chat/grades-management-dashboard-Bl5ILGqJQYp

@@ -89,7 +89,7 @@ export default function WebcamCapture({ onUpload }: WebcamCaptureProps) {
         }
       },
       "image/jpeg",
-      0.9
+      0.9,
     );
   };
 

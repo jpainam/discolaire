@@ -13,7 +13,7 @@ export function ClassroomHeader() {
 
   const canCreateClassroom = useCheckPermission(
     "classroom",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   const { openSheet } = useSheet();
   //const canReadStudent = useCheckPermission("student", PermissionAction.READ);
