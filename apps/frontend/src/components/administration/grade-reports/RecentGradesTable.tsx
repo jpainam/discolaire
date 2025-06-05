@@ -48,50 +48,52 @@ export async function RecentGradesTable() {
     });
   });
   return (
-    <Table className="text-xs">
-      <TableHeader>
-        <TableRow>
-          <TableHead>{t("classroom")}</TableHead>
-          <TableHead>{t("subject")}</TableHead>
-          {/* <TableHead className="text-right">{t("Min")}</TableHead> */}
-          <TableHead className="text-right">{t("Moy.")}</TableHead>
-          <TableHead className="text-right">% {">= 10"}</TableHead>
-          <TableHead className="text-right">{t("date")}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {latest.map((g, index) => {
-          return (
-            <TableRow key={index}>
-              <TableCell className="font-medium">
-                <Link
-                  href={`/classrooms/${g.classroomId}`}
-                  className="hover:underline"
-                >
-                  {g.classroom}
-                </Link>
-              </TableCell>
-              <TableCell>{g.subject}</TableCell>
-              {/* <TableCell className="text-right">
+    <div>
+      <Table className="text-xs">
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
+            <TableHead>{t("classroom")}</TableHead>
+            <TableHead>{t("subject")}</TableHead>
+            {/* <TableHead className="text-right">{t("Min")}</TableHead> */}
+            <TableHead className="text-right">{t("Moy.")}</TableHead>
+            <TableHead className="text-right">% {">= 10"}</TableHead>
+            <TableHead className="text-right">{t("date")}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {latest.map((g, index) => {
+            return (
+              <TableRow key={index}>
+                <TableCell className="font-medium">
+                  <Link
+                    href={`/classrooms/${g.classroomId}`}
+                    className="hover:underline"
+                  >
+                    {g.classroom}
+                  </Link>
+                </TableCell>
+                <TableCell>{g.subject}</TableCell>
+                {/* <TableCell className="text-right">
                 {g.minGrade.toFixed(2)}
               </TableCell> */}
-              <TableCell className="text-right">
-                {g.avgGrade.toFixed(2)}
-              </TableCell>
-              <TableCell className="text-right">
-                {(g.successRate * 100).toFixed(1)}%
-              </TableCell>
-              <TableCell className="text-right">
-                {g.date.toLocaleDateString(i18next.language, {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+                <TableCell className="text-right">
+                  {g.avgGrade.toFixed(2)}
+                </TableCell>
+                <TableCell className="text-right">
+                  {(g.successRate * 100).toFixed(1)}%
+                </TableCell>
+                <TableCell className="text-right">
+                  {g.date.toLocaleDateString(i18next.language, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

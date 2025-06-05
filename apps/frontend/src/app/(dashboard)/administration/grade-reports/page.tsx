@@ -19,6 +19,7 @@ import { Suspense } from "react";
 import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
 import { GradeDistributionBySubject } from "~/components/administration/grade-reports/GradeDistributionChartBySubject";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
+import { GradeReportGenerator2 } from "~/components/administration/grade-reports/GradeReportGenerator2";
 import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
 import { StudentPerformanceChart } from "~/components/administration/grade-reports/StudentPerformanceChart";
 import { StudentPerformanceChart2 } from "~/components/administration/grade-reports/StudentPerformanceChart2";
@@ -99,13 +100,17 @@ export default async function Page() {
               </Card>
               <Card className="lg:col-span-4">
                 <CardHeader>
-                  <CardTitle>Grade Report Generator</CardTitle>
-                  <CardDescription>
-                    Generate and download grade reports
+                  <CardTitle>{t("Grade Report Generator")}</CardTitle>
+                  <CardDescription className="text-xs">
+                    {t("Generate and download grade reports")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <GradeReportGenerator />
+                  <ErrorBoundary errorComponent={ErrorFallback}>
+                    <Suspense fallback={<Skeleton className="h-48" />}>
+                      <GradeReportGenerator />
+                    </Suspense>
+                  </ErrorBoundary>
                 </CardContent>
               </Card>
             </div>
@@ -134,7 +139,7 @@ export default async function Page() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <GradeReportGenerator expanded={true} />
+                <GradeReportGenerator2 expanded={true} />
               </CardContent>
             </Card>
           </TabsContent>

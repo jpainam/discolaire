@@ -24,6 +24,8 @@ pnpm db:push
 
 ### AWS S3 or MINIO
 
+- ./minio server --console-address :9001 ./data --address ":9310"
+
 - Create a public avatars bucket and set the env `S3_AVATAR_BUCKET_NAME`
 - Create a admin policy for readwrite on all bucket
 
@@ -167,3 +169,5 @@ https://icons.expo.fyi/Index
 
 https://bolt.new/~/sb1-jprga2td
 https://v0.dev/chat/grades-management-dashboard-Bl5ILGqJQYp
+
+https://ui.ahmet.studio/blocks

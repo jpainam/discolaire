@@ -33,10 +33,10 @@ const chartConfig = {
 export function StudentPerformanceChart() {
   const trpc = useTRPC();
   const { data: percentiles } = useSuspenseQuery(
-    trpc.gradeSheet.allPercentile.queryOptions(),
+    trpc.gradeSheet.allPercentile.queryOptions()
   );
   return (
-    <ChartContainer config={chartConfig}>
+    <ChartContainer config={chartConfig} className="h-[200px] w-full">
       <LineChart
         accessibilityLayer
         data={percentiles}
