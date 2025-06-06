@@ -17,6 +17,7 @@ export const env = createEnv({
     DISCOLAIRE_API_KEY: z.string().min(1),
     MINIO_PORT: z.coerce.number().default(9000),
     S3_AVATAR_BUCKET_NAME: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().min(1).url(),
@@ -26,6 +27,7 @@ export const env = createEnv({
   },
   runtimeEnv: {
     DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     S3_AVATAR_BUCKET_NAME: process.env.S3_AVATAR_BUCKET_NAME,
     MESSAGING_SERVICE_URL: process.env.MESSAGING_SERVICE_URL,
     MINIO_PORT: process.env.MINIO_PORT,

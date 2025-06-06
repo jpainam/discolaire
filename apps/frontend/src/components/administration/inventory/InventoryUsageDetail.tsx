@@ -51,9 +51,9 @@ export function InventoryUsageDetail({
                 <Avatar>
                   <AvatarImage
                     src={item.user.avatar ?? "/placeholder.svg"}
-                    alt={item.user.name ?? ""}
+                    alt={item.user.name}
                   />
-                  <AvatarFallback>{item.user.name?.charAt(0)}</AvatarFallback>
+                  <AvatarFallback>{item.user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p>{item.user.name}</p>
@@ -100,10 +100,10 @@ export function InventoryUsageDetail({
                 <Avatar>
                   <AvatarImage
                     src={item.createdBy.avatar ?? "/placeholder.svg"}
-                    alt={item.createdBy.name ?? ""}
+                    alt={item.createdBy.name}
                   />
                   <AvatarFallback>
-                    {item.createdBy.name?.charAt(0)}
+                    {item.createdBy.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div>

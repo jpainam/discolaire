@@ -4,11 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import {
-  comparePasswords,
-  setSchoolYearSession,
-  setSession,
-} from "@repo/auth/session";
+//import { comparePasswords, setSchoolYearSession, setSession } from "@repo/auth";
 import { db } from "@repo/db";
 
 import { caller } from "~/trpc/server";
@@ -20,7 +16,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -29,7 +25,7 @@ export async function signIn(
       error: "Invalid form data",
     };
   }
-  const { username, password } = parsed.data;
+  const { username } = parsed.data;
 
   const user = await db.user.findFirst({
     where: {
@@ -41,13 +37,13 @@ export async function signIn(
       error: "invalid_credentials",
     };
   }
-  const isPasswordValid = await comparePasswords(password, user.password);
+  //const isPasswordValid = await comparePasswords(password, user.password);
 
-  if (!isPasswordValid) {
-    return {
-      error: "invalid_credentials",
-    };
-  }
+  // if (!isPasswordValid) {
+  //   return {
+  //     error: "invalid_credentials",
+  //   };
+  // }
 
   const schoolYear = await caller.schoolYear.getDefault({
     schoolId: user.schoolId,
@@ -58,7 +54,7 @@ export async function signIn(
       error: "no_school_year",
     };
   }
-  await Promise.all([setSession(user), setSchoolYearSession(schoolYear.id)]);
+  //await Promise.all([setSession(user), setSchoolYearSession(schoolYear.id)]);
 
   const redirectTo = formData.get("redirect") as string | null;
   await caller.loginActivity.login();
@@ -71,7 +67,7 @@ export async function signIn(
 
 //export async function signOut(formData: FormData) {
 export async function signOut() {
-  //const user = await auth();
+  //const user = await getSession();
   // if (!user) {
   //   return;
   // }

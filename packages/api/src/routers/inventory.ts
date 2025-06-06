@@ -1,11 +1,12 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { db } from "@repo/db";
 
 import { getAllAssets, getAllConsumables } from "../services/inventory-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const inventoryRouter = createTRPCRouter({
+export const inventoryRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
     const assets = await getAllAssets({
       schoolId: ctx.schoolId,
@@ -332,7 +333,7 @@ export const inventoryRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;
 
 async function syncStockQuantity({
   schoolId,

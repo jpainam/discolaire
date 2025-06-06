@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const shortcutRouter = createTRPCRouter({
+export const shortcutRouter = {
   create: protectedProcedure
     .input(
       z.object({
@@ -97,4 +98,4 @@ export const shortcutRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

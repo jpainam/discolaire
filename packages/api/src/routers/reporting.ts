@@ -1,10 +1,11 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { submitReportJob } from "../services/reporting-service";
 import { schoolService } from "../services/school-service";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { protectedProcedure, publicProcedure } from "../trpc";
 
-export const reportingRouter = createTRPCRouter({
+export const reportingRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.reporting.findMany({
       where: {
@@ -120,4 +121,4 @@ export const reportingRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

@@ -2,14 +2,14 @@ import type { NextRequest } from "next/server";
 
 import { AcccountStatement, renderToStream } from "@repo/reports";
 
-import { auth } from "@repo/auth";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

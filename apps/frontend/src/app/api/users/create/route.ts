@@ -2,17 +2,17 @@
 
 import { z } from "zod";
 
-import { auth } from "@repo/auth/session";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 const schema = z.object({
   entityId: z.string().min(1),
   entityType: z.enum(["student", "staff", "contact"]),
 });
 export async function POST(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

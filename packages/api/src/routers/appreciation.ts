@@ -1,6 +1,7 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateCategorySchema = z.object({
   name: z.string(),
@@ -10,7 +11,7 @@ const createUpdateSchema = z.object({
   content: z.string(),
   categoryId: z.number(),
 });
-export const appreciationRouter = createTRPCRouter({
+export const appreciationRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.appreciation.findMany({
       orderBy: {
@@ -105,4 +106,4 @@ export const appreciationRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

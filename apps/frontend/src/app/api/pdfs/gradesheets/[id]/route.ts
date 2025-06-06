@@ -1,11 +1,11 @@
 import * as XLSX from "@e965/xlsx";
 import type { RouterOutputs } from "@repo/api";
-import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
 import { GradeList } from "@repo/reports/gradesheet/GradeList";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
@@ -20,7 +20,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: number } },
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
@@ -45,7 +45,7 @@ export async function GET(
     const gradesheet = await caller.gradeSheet.get(Number(id));
     const allGrades = [...grades];
 
-    const session = await auth();
+    const session = await getSession();
     if (session?.user.profile === "student") {
       const student = await caller.student.getFromUserId(session.user.id);
       grades = grades.filter((g) => g.studentId === student.id);

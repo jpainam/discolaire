@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const consigneRouter = createTRPCRouter({
+export const consigneRouter = {
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.consigne.findUniqueOrThrow({
       include: {
@@ -160,4 +161,4 @@ export const consigneRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

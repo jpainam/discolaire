@@ -3,16 +3,16 @@ import { z } from "zod";
 
 import { IPBWReceipt, renderToStream } from "@repo/reports";
 
-import { auth } from "@repo/auth";
 import i18next from "i18next";
 import { numberToWords } from "~/lib/toword";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   id: z.coerce.number(),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

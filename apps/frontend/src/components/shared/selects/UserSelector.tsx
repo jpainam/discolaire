@@ -33,7 +33,7 @@ export function UserSelector({
       items={
         usersQuery.data?.map((user) => ({
           value: user.id,
-          label: user.name ?? user.username,
+          label: user.name,
         })) ?? []
       }
       disabled={disabled}

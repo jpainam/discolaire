@@ -1,10 +1,11 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { schoolYearService } from "../services/school-year-service";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { protectedProcedure, publicProcedure } from "../trpc";
 
-export const schoolYearRouter = createTRPCRouter({
+export const schoolYearRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
     const schoolYears = await ctx.db.schoolYear.findMany({
       where: {
@@ -142,4 +143,4 @@ export const schoolYearRouter = createTRPCRouter({
       }
       return ctx.db.schoolYear.delete({ where: { id: input } });
     }),
-});
+} satisfies TRPCRouterRecord;

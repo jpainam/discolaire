@@ -9,7 +9,6 @@ import {
 import React, { Suspense } from "react";
 
 import { checkPermission } from "@repo/api/permission";
-import { auth } from "@repo/auth";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
@@ -22,6 +21,7 @@ import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
 import { routes } from "~/configs/routes";
 import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -39,7 +39,7 @@ export default async function Layout(props: {
   const queryClient = getQueryClient();
 
   const { children } = props;
-  const session = await auth();
+  const session = await getSession();
   const staff = await queryClient.fetchQuery(trpc.staff.get.queryOptions(id));
 
   if (staff.userId !== session?.user.id) {

@@ -1,11 +1,11 @@
-import { auth } from "@repo/auth";
 import { db } from "@repo/db";
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { deleteFile, uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

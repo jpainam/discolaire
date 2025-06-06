@@ -2,7 +2,6 @@ import { z } from "zod";
 
 import { renderToStream } from "@repo/reports";
 
-import { auth } from "@repo/auth";
 import { ReminderLetter } from "@repo/reports";
 import { addDays } from "date-fns";
 import i18next from "i18next";
@@ -11,6 +10,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
+import { getSession } from "~/auth/server";
 
 const querySchema = z.object({
   ids: z.string().optional(),
@@ -24,7 +24,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

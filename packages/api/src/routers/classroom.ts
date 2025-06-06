@@ -1,14 +1,15 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { TransactionStatus } from "@repo/db";
 
-import { checkPermission2 } from "../permission";
+import { checkPermission } from "../permission";
 import { classroomService } from "../services/classroom-service";
 import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
 import { studentService } from "../services/student-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
   name: z.string().min(1),
@@ -20,7 +21,7 @@ const createUpdateSchema = z.object({
   seniorAdvisorId: z.string().min(1),
   headTeacherId: z.string().min(1),
 });
-export const classroomRouter = createTRPCRouter({
+export const classroomRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
     const classrooms = await classroomService.getAll({
       schoolYearId: ctx.schoolYearId,
@@ -45,7 +46,7 @@ export const classroomRouter = createTRPCRouter({
     }
     // Has access to classrooms where he teachers
     if (ctx.session.user.profile === "staff") {
-      if (checkPermission2("classroom", "Read", {}, ctx.permissions)) {
+      if (await checkPermission("classroom", "Read", {}, ctx.permissions)) {
         return classrooms;
       }
       const classes = await staffService.getClassrooms(
@@ -237,4 +238,4 @@ export const classroomRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

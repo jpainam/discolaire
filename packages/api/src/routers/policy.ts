@@ -1,6 +1,7 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
   name: z.string(),
@@ -10,7 +11,7 @@ const createUpdateSchema = z.object({
   resources: z.array(z.string()),
   condition: z.any(),
 });
-export const policyRouter = createTRPCRouter({
+export const policyRouter = {
   all: protectedProcedure
     .input(
       z.object({
@@ -135,4 +136,4 @@ export const policyRouter = createTRPCRouter({
         data: data,
       });
     }),
-});
+} satisfies TRPCRouterRecord;

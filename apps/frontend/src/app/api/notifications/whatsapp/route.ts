@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { auth } from "@repo/auth";
 import { sendWhatsapp } from "@repo/notification/whatsapp/whatsapp.send";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
+import { getSession } from "~/auth/server";
 const schema = z.object({
   template: z.string(),
 });
 export async function POST(request: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

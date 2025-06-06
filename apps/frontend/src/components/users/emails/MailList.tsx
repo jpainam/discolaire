@@ -75,7 +75,7 @@ export function MailList() {
               <Avatar className="h-8 w-8">
                 <AvatarImage
                   src={`/placeholder.svg?height=32&width=32`}
-                  alt={email.from ?? ""}
+                  alt={email.from}
                 />
                 <AvatarFallback>{email.avatar}</AvatarFallback>
               </Avatar>

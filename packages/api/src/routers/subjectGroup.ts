@@ -1,6 +1,8 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import type { TRPCRouterRecord } from "@trpc/server";
 
-export const subjectGroupRouter = createTRPCRouter({
+import { protectedProcedure } from "../trpc";
+
+export const subjectGroupRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.subjectGroup.findMany({
       where: {
@@ -8,4 +10,4 @@ export const subjectGroupRouter = createTRPCRouter({
       },
     });
   }),
-});
+} satisfies TRPCRouterRecord;

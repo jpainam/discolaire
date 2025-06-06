@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const communicationChannelRouter = createTRPCRouter({
+export const communicationChannelRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.communicationChannel.findMany({
       include: {
@@ -67,4 +68,4 @@ export const communicationChannelRouter = createTRPCRouter({
       },
     });
   }),
-});
+} satisfies TRPCRouterRecord;

@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const schoolYearEventRouter = createTRPCRouter({
+export const schoolYearEventRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.schoolYearEvent.findMany({
       orderBy: {
@@ -116,4 +117,4 @@ export const schoolYearEventRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

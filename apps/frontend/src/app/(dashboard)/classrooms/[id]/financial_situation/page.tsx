@@ -1,5 +1,5 @@
-import { auth } from "@repo/auth";
 import { sumBy } from "lodash";
+import { getSession } from "~/auth/server";
 import { ClassroomFinancialSituation } from "~/components/classrooms/finances/ClassroomFinancialSituation";
 
 import { caller } from "~/trpc/server";
@@ -10,7 +10,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const fees = await caller.classroom.fees(id);
   let balances = await caller.classroom.studentsBalance({ id });
-  const session = await auth();
+  const session = await getSession();
   if (session?.user.profile == "student") {
     const student = await caller.student.getFromUserId(session.user.id);
     balances = balances.filter((balance) => balance.student.id === student.id);

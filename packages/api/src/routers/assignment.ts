@@ -1,6 +1,7 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateCategorySchema = z.object({
   name: z.string(),
@@ -19,7 +20,7 @@ const createUpdateSchema = z.object({
   notify: z.boolean().optional().default(false),
   visibles: z.array(z.string()).optional(),
 });
-export const assignmentRouter = createTRPCRouter({
+export const assignmentRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.assignment.findMany({
       orderBy: {
@@ -135,4 +136,4 @@ export const assignmentRouter = createTRPCRouter({
         take: input.pageSize,
       });
     }),
-});
+} satisfies TRPCRouterRecord;

@@ -1,7 +1,8 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { getUserByEntity } from "../services/user-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createEditDocumentSchema = z.object({
   title: z.string().min(1),
@@ -11,7 +12,7 @@ const createEditDocumentSchema = z.object({
   entityType: z.enum(["student", "staff", "contact"]),
 });
 
-export const documentRouter = createTRPCRouter({
+export const documentRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
@@ -86,4 +87,4 @@ export const documentRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

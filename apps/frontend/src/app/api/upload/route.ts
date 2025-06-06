@@ -4,13 +4,13 @@ import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import type { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
+import { getSession } from "~/auth/server";
 
-import { auth } from "@repo/auth";
 import { env } from "~/env";
 import { s3client } from "~/lib/s3-client";
 
 export async function POST(request: Request) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

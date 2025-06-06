@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import type { $Enums } from "@repo/db";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const upsertSchema = z.object({
   userId: z.string(),
@@ -23,7 +24,7 @@ const upsertSchema = z.object({
     }),
   ),
 });
-export const notificationPreferenceRouter = createTRPCRouter({
+export const notificationPreferenceRouter = {
   user: protectedProcedure
     .input(
       z.object({
@@ -79,4 +80,4 @@ export const notificationPreferenceRouter = createTRPCRouter({
       }
       return true;
     }),
-});
+} satisfies TRPCRouterRecord;

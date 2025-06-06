@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { addMonths, getDay, subMonths } from "date-fns";
 import { z } from "zod";
 
 import { timetableService } from "../services/timetable-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createEditLessonSchema = z.object({
   dayOfWeek: z.coerce.number(),
@@ -12,7 +13,7 @@ const createEditLessonSchema = z.object({
   endTime: z.string().min(1),
   startDate: z.coerce.date(),
 });
-export const lessonRouter = createTRPCRouter({
+export const lessonRouter = {
   create: protectedProcedure
     .input(createEditLessonSchema)
     .mutation(async ({ ctx, input }) => {
@@ -154,4 +155,4 @@ export const lessonRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

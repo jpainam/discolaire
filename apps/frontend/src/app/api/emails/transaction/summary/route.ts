@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type { NextRequest } from "next/server";
 import { render } from "@react-email/render";
-import { subMonths } from "date-fns";
-import { z } from "zod";
-
 import { messagingService } from "@repo/api/services";
-import { auth } from "@repo/auth";
 import { db } from "@repo/db";
+import { subMonths } from "date-fns";
+import type { NextRequest } from "next/server";
+import { z } from "zod";
+import { getSession } from "~/auth/server";
 //import { parser } from "@repo/jobs";
 import { TransactionsSummary } from "@repo/transactional";
 import { parser } from "~/jobs";
@@ -17,7 +16,7 @@ const schema = z.object({
 });
 
 export async function GET(_req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
@@ -25,7 +24,7 @@ export async function GET(_req: NextRequest) {
 }
 
 export async function POST(req: Request) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

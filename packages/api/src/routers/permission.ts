@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const permissionRouter = createTRPCRouter({
+export const permissionRouter = {
   policies: protectedProcedure.query(async ({ ctx }) => {
     const policies = await ctx.db.policy.findMany({
       orderBy: {
@@ -76,4 +77,4 @@ export const permissionRouter = createTRPCRouter({
       };
     });
   }),
-});
+} satisfies TRPCRouterRecord;

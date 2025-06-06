@@ -3,12 +3,11 @@ import React, { Suspense } from "react";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { NoPermission } from "~/components/no-permission";
 
-import { auth } from "@repo/auth";
-
 import { decode } from "entities";
 import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
+import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
@@ -43,7 +42,7 @@ export default async function Layout(props: {
 }) {
   const params = await props.params;
 
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     redirect("/auth/login");
   }

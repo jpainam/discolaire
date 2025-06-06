@@ -1,6 +1,7 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateBook = z.object({
   title: z.string(),
@@ -10,7 +11,7 @@ const createUpdateBook = z.object({
   categoryId: z.string().min(1),
   author: z.string().optional().default(""),
 });
-export const bookRouter = createTRPCRouter({
+export const bookRouter = {
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.book.findUnique({
       where: {
@@ -120,4 +121,4 @@ export const bookRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.book.delete({ where: { id: input } });
     }),
-});
+} satisfies TRPCRouterRecord;

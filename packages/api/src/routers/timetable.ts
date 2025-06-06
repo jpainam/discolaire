@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { addMonths } from "date-fns";
 import { z } from "zod";
 
 import { timetableService } from "../services/timetable-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createTimetableSchema = z.object({
   description: z.string().optional(),
@@ -10,7 +11,7 @@ const createTimetableSchema = z.object({
   end: z.coerce.date(),
   subjectId: z.coerce.number(),
 });
-export const timetableRouter = createTRPCRouter({
+export const timetableRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.timetable.findMany({
       orderBy: {
@@ -129,4 +130,4 @@ export const timetableRouter = createTRPCRouter({
       },
     });
   }),
-});
+} satisfies TRPCRouterRecord;

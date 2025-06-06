@@ -1,20 +1,19 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { comparePasswords, hashPassword } from "@repo/auth/session";
-
-import { ratelimiter } from "../rateLimit";
 import {
   attachUser,
   getPermissions,
   getUserByEntity,
   userService,
 } from "../services/user-service";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { protectedProcedure, publicProcedure } from "../trpc";
+import { comparePasswords, hashPassword } from "../utils";
 
 const MAX_ATTEMPTS = 5;
 
-export const userRouter = createTRPCRouter({
+export const userRouter = {
   search: protectedProcedure
     .input(
       z.object({
@@ -41,7 +40,7 @@ export const userRouter = createTRPCRouter({
     }),
 
   getByEmail: publicProcedure
-    .use(ratelimiter({ limit: 5, namespace: "getByEmail.password" }))
+    //.use(ratelimiter({ limit: 5, namespace: "getByEmail.password" }))
     .input(
       z.object({
         email: z.string().email(),
@@ -160,7 +159,7 @@ export const userRouter = createTRPCRouter({
           profile: input.profile,
           schoolId: ctx.schoolId,
           password: await hashPassword(input.password),
-          emailVerified: input.emailVerified,
+          //emailVerified: input.emailVerified,
           isActive: input.isActive,
         },
       });
@@ -389,4 +388,4 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

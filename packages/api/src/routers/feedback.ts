@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const feedbackRouter = createTRPCRouter({
+export const feedbackRouter = {
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db.feedback.delete({ where: { id: input } });
   }),
@@ -27,4 +28,4 @@ export const feedbackRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

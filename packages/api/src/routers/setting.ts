@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const settingRouter = createTRPCRouter({
+export const settingRouter = {
   sports: protectedProcedure.query(({ ctx }) => {
     return ctx.db.sport.findMany({
       where: {
@@ -107,4 +108,4 @@ export const settingRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

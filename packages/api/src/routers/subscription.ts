@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const subscriptionRouter = createTRPCRouter({
+export const subscriptionRouter = {
   upsert: protectedProcedure
     .input(
       z.object({
@@ -144,4 +145,4 @@ export const subscriptionRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

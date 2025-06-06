@@ -1,13 +1,14 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
 import redisClient from "@repo/kv";
 
-import { checkPermission2 } from "../permission";
+import { checkPermission } from "../permission";
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";
 import { userService } from "../services/user-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
   firstName: z.string().min(1),
@@ -23,7 +24,7 @@ const createUpdateSchema = z.object({
   address: z.string().optional(),
   phoneNumber2: z.string().optional(),
 });
-export const contactRouter = createTRPCRouter({
+export const contactRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
@@ -141,7 +142,7 @@ export const contactRouter = createTRPCRouter({
         });
       }
 
-      const canReadStaff = checkPermission2(
+      const canReadStaff = await checkPermission(
         "staff",
         "Read",
         {},
@@ -388,4 +389,4 @@ export const contactRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

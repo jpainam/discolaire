@@ -1,7 +1,8 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { addMonths } from "date-fns";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
   title: z.string(),
@@ -12,7 +13,7 @@ const createUpdateSchema = z.object({
   alert: z.string(),
   data: z.any().optional(),
 });
-export const calendarEventRouter = createTRPCRouter({
+export const calendarEventRouter = {
   all: protectedProcedure
     .input(
       z.object({
@@ -63,4 +64,4 @@ export const calendarEventRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

@@ -3,27 +3,9 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import SuperJSON from "superjson";
-// function redirectToLogin() {
-//   if (
-//     typeof window !== "undefined" &&
-//     window.location.pathname !== routes.auth.login
-//   ) {
-//     window.location.href = routes.auth.login;
-//   }
-// }
 
 export const createQueryClient = () =>
   new QueryClient({
-    // queryCache: new QueryCache({
-    //   onError: (error) => {
-    //     if (
-    //       error instanceof TRPCClientError &&
-    //       error.data?.code === "UNAUTHORIZED"
-    //     ) {
-    //       redirectToLogin();
-    //     }
-    //   },
-    // }),
     defaultOptions: {
       queries: {
         // With SSR, we usually want to set some default staleTime

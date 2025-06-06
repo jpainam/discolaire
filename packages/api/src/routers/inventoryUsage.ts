@@ -1,6 +1,8 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import type { TRPCRouterRecord } from "@trpc/server";
 
-export const inventoryUsageRouter = createTRPCRouter({
+import { protectedProcedure } from "../trpc";
+
+export const inventoryUsageRouter = {
   usageSummary: protectedProcedure.query(async ({ ctx }) => {
     const userConsumables = await ctx.db.inventoryConsumableUsage.findMany({
       include: {
@@ -20,13 +22,13 @@ export const inventoryUsageRouter = createTRPCRouter({
       const userId = consumable.userId;
       const newCount = usersIdToCount.get(userId) ?? 0;
       usersIdToCount.set(userId, newCount + 1);
-      usersIdToName.set(userId, consumable.user.name ?? "");
+      usersIdToName.set(userId, consumable.user.name);
     });
     userAsset.forEach((asset) => {
       const userId = asset.userId;
       const newCount = usersIdToCount.get(userId) ?? 0;
       usersIdToCount.set(userId, newCount + 1);
-      usersIdToName.set(userId, asset.user.name ?? "");
+      usersIdToName.set(userId, asset.user.name);
     });
 
     usersIdToCount.forEach((count, userId) => {
@@ -61,4 +63,4 @@ export const inventoryUsageRouter = createTRPCRouter({
       };
     });
   }),
-});
+} satisfies TRPCRouterRecord;

@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const exclusionRouter = createTRPCRouter({
+export const exclusionRouter = {
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
     return ctx.db.exclusion.findUniqueOrThrow({
       where: {
@@ -196,4 +197,4 @@ export const exclusionRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

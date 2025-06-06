@@ -12,7 +12,7 @@
 
 // export async function GET(req: NextRequest) {
 //   try {
-//     const session = await auth();
+//     const session = await getSession();
 //     if (!session) {
 //       return new Response("Not authenticated", { status: 401 });
 //     }

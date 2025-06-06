@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@repo/auth";
 import { db } from "@repo/db";
+import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 import { numberToWords } from "~/lib/toword";
 
@@ -9,7 +9,7 @@ import { caller } from "~/trpc/server";
 
 export async function printReceipt(transactionId: number) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       throw new Error("Not authenticated");
     }

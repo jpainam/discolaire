@@ -1,13 +1,14 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createFinanceGroupSchema = z.object({
   name: z.string(),
   value: z.number().min(1),
   type: z.enum(["AMOUNT", "PERCENT"]).default("AMOUNT"),
 });
-export const accountingRouter = createTRPCRouter({
+export const accountingRouter = {
   groups: protectedProcedure.query(({ ctx }) => {
     return ctx.db.accountingGroup.findMany({
       where: {
@@ -57,4 +58,4 @@ export const accountingRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

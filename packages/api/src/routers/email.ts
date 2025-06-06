@@ -1,6 +1,7 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const getInitials = (name: string | null | undefined) => {
   return (
@@ -11,7 +12,7 @@ const getInitials = (name: string | null | undefined) => {
       .slice(0, 2) ?? ""
   );
 };
-export const emailRouter = createTRPCRouter({
+export const emailRouter = {
   get: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
@@ -31,7 +32,7 @@ export const emailRouter = createTRPCRouter({
 
       return {
         id: email.id,
-        from: email.sender.name ?? email.sender.email,
+        from: email.sender.name,
         email: email.sender.email,
         subject: email.subject,
         preview: email.body.slice(0, 60) + "...",
@@ -43,7 +44,7 @@ export const emailRouter = createTRPCRouter({
         thread: [
           {
             id: `${email.id}-1`,
-            from: email.sender.name ?? email.sender.email,
+            from: email.sender.name,
             email: email.sender.email,
             to: email.recipients.map((r) => r.user.email).join(", "),
             subject: email.subject,
@@ -53,7 +54,7 @@ export const emailRouter = createTRPCRouter({
           },
           ...email.replies.map((reply, index) => ({
             id: `${reply.id}-${index + 2}`,
-            from: reply.sender.name ?? reply.sender.email,
+            from: reply.sender.name,
             email: reply.sender.email,
             to: reply.recipients.map((r) => r.user.email).join(", "),
             subject: reply.subject,
@@ -129,7 +130,7 @@ export const emailRouter = createTRPCRouter({
           const e = r.email;
           return {
             id: e.id,
-            from: e.sender.name ?? e.sender.email,
+            from: e.sender.name,
             email: e.sender.email,
             subject: e.subject,
             preview: e.body.slice(0, 60) + "...",
@@ -146,7 +147,7 @@ export const emailRouter = createTRPCRouter({
       const sentFormatted = sent.map((e) => {
         return {
           id: e.id,
-          from: e.sender.name ?? e.sender.email,
+          from: e.sender.name,
           email: e.sender.email,
           subject: e.subject,
           preview: e.body.slice(0, 60) + "...",
@@ -241,4 +242,4 @@ export const emailRouter = createTRPCRouter({
         data: { deletedAt: null },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

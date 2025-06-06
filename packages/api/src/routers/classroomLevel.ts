@@ -1,9 +1,10 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const classroomLevelRouter = createTRPCRouter({
+export const classroomLevelRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.classroomLevel.findMany({
       where: {
@@ -155,4 +156,4 @@ export const classroomLevelRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

@@ -1,6 +1,7 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const healthVisitSchema = z.object({
   date: z.coerce.date().default(() => new Date()),
@@ -63,7 +64,7 @@ const issueSchema = z.object({
   observations: z.string().optional(),
 });
 
-export const healthRouter = createTRPCRouter({
+export const healthRouter = {
   createVisit: protectedProcedure
     .input(healthVisitSchema)
     .mutation(({ ctx, input }) => {
@@ -232,4 +233,4 @@ export const healthRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.healthVisit.delete({ where: { id: input } });
     }),
-});
+} satisfies TRPCRouterRecord;

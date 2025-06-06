@@ -1,10 +1,11 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import type { Prisma } from "@repo/db";
 
 import { gradeSheetService } from "../services/gradesheet-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createGradeSheetSchema = z.object({
   notifyParents: z.boolean().default(true),
@@ -23,7 +24,7 @@ const createGradeSheetSchema = z.object({
   ),
 });
 
-export const gradeSheetRouter = createTRPCRouter({
+export const gradeSheetRouter = {
   delete: protectedProcedure
     .input(z.union([z.array(z.coerce.number()), z.coerce.number()]))
     .mutation(async ({ ctx, input }) => {
@@ -287,4 +288,4 @@ export const gradeSheetRouter = createTRPCRouter({
       schoolId: ctx.schoolId,
     });
   }),
-});
+} satisfies TRPCRouterRecord;

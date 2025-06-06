@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const journalRouter = createTRPCRouter({
+export const journalRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.journal.findMany();
   }),
@@ -50,4 +51,4 @@ export const journalRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

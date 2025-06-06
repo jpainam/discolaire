@@ -1,4 +1,4 @@
-import { auth } from "@repo/auth";
+import { getSession } from "~/auth/server";
 import { GradeDataTable } from "~/components/classrooms/gradesheets/grades/GradeDataTable";
 import { GradeDetailsHeader } from "~/components/classrooms/gradesheets/grades/GradeDetailsHeader";
 import { caller } from "~/trpc/server";
@@ -9,7 +9,7 @@ export default async function Page(props: {
   const params = await props.params;
 
   const { gradesheetId } = params;
-  const session = await auth();
+  const session = await getSession();
   const gradesheet = await caller.gradeSheet.get(Number(gradesheetId));
 
   let grades = await caller.gradeSheet.grades(Number(gradesheetId));

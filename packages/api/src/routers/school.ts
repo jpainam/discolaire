@@ -1,9 +1,10 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import type { Prisma } from "@repo/db";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createSchoolSchema = z.object({
   name: z.string().min(1),
@@ -23,7 +24,7 @@ const createSchoolSchema = z.object({
   isActive: z.boolean().default(true),
   address: z.string().optional(),
 });
-export const schoolRouter = createTRPCRouter({
+export const schoolRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.school.findMany({
       orderBy: {
@@ -117,4 +118,4 @@ export const schoolRouter = createTRPCRouter({
         data: data,
       });
     }),
-});
+} satisfies TRPCRouterRecord;

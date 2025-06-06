@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { auth } from "@repo/auth";
 import {
   Table,
   TableBody,
@@ -18,9 +17,9 @@ import { env } from "~/env";
 import { PermissionAction } from "~/permissions";
 import { caller } from "~/trpc/server";
 import { SchoolTableAction } from "./SchoolTableAction";
-
+import { getSession } from "~/auth/server";
 export default async function Page() {
-  const sessions = await auth();
+  const sessions = await getSession();
   if (!sessions) {
     redirect("/auth/login");
   }

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { z } from "zod";
 
-import { auth } from "@repo/auth";
 import TransactionConfirmation from "@repo/transactional/emails/TransactionConfirmation";
 import { getServerTranslations } from "~/i18n/server";
 
@@ -10,6 +9,7 @@ import { nanoid } from "nanoid";
 import { resend } from "~/lib/resend";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
+import { getSession } from "~/auth/server";
 
 const schema = z.object({
   transactionId: z.coerce.number(),
@@ -20,7 +20,7 @@ const schema = z.object({
 });
 export async function POST(req: Request) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }

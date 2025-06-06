@@ -1,11 +1,11 @@
 import * as XLSX from "@e965/xlsx";
 import type { RouterOutputs } from "@repo/api";
-import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
 import { SubjectList } from "@repo/reports/classroom/SubjectList";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
@@ -19,7 +19,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

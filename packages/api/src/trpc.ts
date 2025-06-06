@@ -8,11 +8,9 @@
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import z, { ZodError } from "zod/v4";
+import { z, ZodError } from "zod/v4";
 
-//import type { Session } from "@repo/auth";
 import type { Auth } from "@repo/auth";
-import type { User } from "@repo/db";
 import { db } from "@repo/db";
 
 import { getPermissions } from "./services/user-service";
@@ -38,19 +36,13 @@ export const createTRPCContext = async (opts: {
   const session = await authApi.getSession({
     headers: opts.headers,
   });
-
-  //const source = opts.headers.get("x-trpc-source") ?? "unknown";
-  const schoolYearId = opts.headers.get("x-school-year") ?? null;
-  //console.log(">>> tRPC Request from", source, "by", session?.user?.username);
-
   return {
     authApi,
     session,
     db,
-    schoolYearId: schoolYearId,
+    schoolYearId: opts.headers.get("x-school-year") ?? null,
   };
 };
-
 /**
  * 2. INITIALIZATION
  *
@@ -70,8 +62,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
     },
   }),
 });
-
-//export type TrpcContextType = Awaited<ReturnType<typeof createTRPCContext>>;
 
 /**
  * Create a server-side caller
@@ -138,7 +128,6 @@ export const protectedProcedure = t.procedure
     if (!ctx.session?.user || !ctx.schoolYearId) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
-
     const permissions = await getPermissions(ctx.session.user.id);
     return next({
       ctx: {

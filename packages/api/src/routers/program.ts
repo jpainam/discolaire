@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const programRouter = createTRPCRouter({
+export const programRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.program.findMany({
       orderBy: {
@@ -52,4 +53,4 @@ export const programRouter = createTRPCRouter({
       },
     });
   }),
-});
+} satisfies TRPCRouterRecord;

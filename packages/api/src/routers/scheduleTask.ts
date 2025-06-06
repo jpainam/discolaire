@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const scheduleTaskRouter = createTRPCRouter({
+export const scheduleTaskRouter = {
   byName: protectedProcedure
     .input(
       z.object({
@@ -75,4 +76,4 @@ export const scheduleTaskRouter = createTRPCRouter({
       },
     });
   }),
-});
+} satisfies TRPCRouterRecord;

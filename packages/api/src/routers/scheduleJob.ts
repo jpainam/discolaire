@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const scheduleJobRouter = createTRPCRouter({
+export const scheduleJobRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.scheduleJob.findMany({
       include: {
@@ -61,4 +62,4 @@ export const scheduleJobRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

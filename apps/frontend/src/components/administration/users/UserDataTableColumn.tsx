@@ -60,7 +60,7 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
       ),
       cell: ({ row }) => (
         <AvatarState
-          pos={row.original.name?.length ?? 0}
+          pos={row.original.name.length}
           avatar={row.original.avatar}
         />
       ),

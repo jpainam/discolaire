@@ -1,21 +1,20 @@
 import { Separator } from "@repo/ui/components/separator";
 
-import { auth } from "@repo/auth";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { SubjectJournalEditor } from "./SubjectJournalEditor";
 import { SubjectJournalHeader } from "./SubjectJournalHeader";
 import { SubjectJournalList } from "./SubjectJournalList";
-
 export default async function Page(props: {
   params: Promise<{ subjectId: string; pageIndex?: string; pageSize?: string }>;
 }) {
   const params = await props.params;
   const { subjectId } = params;
-  const session = await auth();
+  const session = await getSession();
 
   batchPrefetch([
     trpc.subjectJournal.bySubject.queryOptions({

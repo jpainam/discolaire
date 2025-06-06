@@ -1,14 +1,15 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const loginActivityRouter = createTRPCRouter({
+export const loginActivityRouter = {
   login: protectedProcedure.query(({ ctx }) => {
     return ctx.db.loginActivity.create({
       data: {
         userId: ctx.session.user.id,
-        ipAddress: ctx.ipAddress,
-        userAgent: ctx.userAgent,
+        ipAddress: "",
+        userAgent: "",
         loginDate: new Date(),
       },
     });
@@ -69,4 +70,4 @@ export const loginActivityRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

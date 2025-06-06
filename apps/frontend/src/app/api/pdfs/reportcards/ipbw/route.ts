@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { IPBW, IPBWClassroom, renderToStream } from "@repo/reports";
 
-import { auth } from "@repo/auth";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),
@@ -12,7 +12,7 @@ const searchSchema = z.object({
   termId: z.coerce.number(),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

@@ -1,4 +1,3 @@
-import { auth } from "@repo/auth";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Tabs,
@@ -16,9 +15,10 @@ import { getServerTranslations } from "~/i18n/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { ChangeUserPassword } from "./ChangeUserPassword";
 import { UserProfile } from "./UserProfile";
+import { getSession } from "~/auth/server";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const session = await auth();
+  const session = await getSession();
   const { id } = params;
   const { t } = await getServerTranslations();
 

@@ -12,13 +12,13 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
 import type { RouterOutputs } from "@repo/api";
-import { auth } from "@repo/auth";
 import { cn } from "@repo/ui/lib/utils";
 import i18next from "i18next";
 import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
 import { AttendanceAction } from "~/components/classrooms/attendances/AttendanceAction";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
 type AbsenceType = RouterOutputs["absence"]["byClassroom"][number];
@@ -29,7 +29,7 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
 
   const { term } = searchParams;
-  const session = await auth();
+  const session = await getSession();
 
   const params = await props.params;
   const { t } = await getServerTranslations();

@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const degreeRouter = createTRPCRouter({
+export const degreeRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.degree.findMany({
       orderBy: {
@@ -51,4 +52,4 @@ export const degreeRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

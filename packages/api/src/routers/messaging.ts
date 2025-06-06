@@ -1,9 +1,10 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { messagingService } from "../services/messaging-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const messagingRouter = createTRPCRouter({
+export const messagingRouter = {
   sendEmail: protectedProcedure
     .input(
       z.object({
@@ -26,4 +27,4 @@ export const messagingRouter = createTRPCRouter({
         to: input.to,
       });
     }),
-});
+} satisfies TRPCRouterRecord;

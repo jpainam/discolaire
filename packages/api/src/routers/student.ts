@@ -1,3 +1,4 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
@@ -10,7 +11,7 @@ import { accountService } from "../services/account-service";
 import { contactService } from "../services/contact-service";
 import { isRepeating, studentService } from "../services/student-service";
 import { userService } from "../services/user-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
   const qq = `%${q}%`;
@@ -62,7 +63,7 @@ const createUpdateSchema = z.object({
     .default("ACTIVE"),
   classroom: z.string().optional(),
 });
-export const studentRouter = createTRPCRouter({
+export const studentRouter = {
   all: protectedProcedure
     .input(
       z
@@ -777,4 +778,4 @@ export const studentRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

@@ -13,7 +13,6 @@ import "@repo/ui/globals.css";
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //import { auth } from "@repo/auth";
-import { getUser } from "@repo/auth/session";
 import { detectLanguage } from "~/i18n/server";
 
 import { cookies } from "next/headers";
@@ -21,7 +20,6 @@ import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
-import { AuthProvider } from "~/providers/AuthProvider";
 
 import { ActiveThemeProvider } from "~/providers/ActiveThemeProvider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
@@ -58,11 +56,11 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
-  //const session = await auth();
+  //const session = await getSession();
   const cookieStore = await cookies();
   const activeThemeValue = cookieStore.get("active_theme")?.value ?? "blue";
   const isScaled = activeThemeValue.endsWith("-scaled");
-  const userPromise = getUser();
+  //const userPromise = getUser();
 
   const lng = await detectLanguage();
   return (
@@ -110,14 +108,12 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             <ActiveThemeProvider initialTheme={activeThemeValue}>
               <NuqsAdapter>
                 <TRPCReactProvider>
-                  <AuthProvider userPromise={userPromise}>
-                    <ConfirmDialogProvider>
-                      <ProgressBarProvider>
-                        {props.children}
-                      </ProgressBarProvider>
-                    </ConfirmDialogProvider>
-                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-                  </AuthProvider>
+                  {/* <AuthProvider userPromise={userPromise}> */}
+                  <ConfirmDialogProvider>
+                    <ProgressBarProvider>{props.children}</ProgressBarProvider>
+                  </ConfirmDialogProvider>
+                  {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+                  {/* </AuthProvider> */}
                 </TRPCReactProvider>
                 <TailwindIndicator />
                 <Toaster richColors />

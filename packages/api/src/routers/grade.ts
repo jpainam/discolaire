@@ -1,10 +1,11 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { gradeService } from "../services/grade-service";
 import { gradeSheetService } from "../services/gradesheet-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const gradeRouter = createTRPCRouter({
+export const gradeRouter = {
   delete: protectedProcedure
     .input(z.number())
     .mutation(async ({ ctx, input }) => {
@@ -79,4 +80,4 @@ export const gradeRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

@@ -1,10 +1,11 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { enrollmentService } from "../services/enrollment-service";
 import { isRepeating, studentService } from "../services/student-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const enrollmentRouter = createTRPCRouter({
+export const enrollmentRouter = {
   students: protectedProcedure
     .input(z.object({ classroomId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
@@ -252,4 +253,4 @@ export const enrollmentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return enrollmentService.getCount(input.schoolYearId ?? ctx.schoolYearId);
     }),
-});
+} satisfies TRPCRouterRecord;

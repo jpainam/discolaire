@@ -1,4 +1,3 @@
-import { auth } from "@repo/auth";
 import { Separator } from "@repo/ui/components/separator";
 import {
   SidebarInset,
@@ -14,6 +13,7 @@ import { SchoolContextProvider } from "~/providers/SchoolProvider";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
@@ -23,11 +23,10 @@ import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
-
 export default async function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     redirect("/auth/login");
   }

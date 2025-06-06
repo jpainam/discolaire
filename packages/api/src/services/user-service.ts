@@ -2,11 +2,11 @@ import { headers } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Prisma } from "@repo/db";
-import { hashPassword } from "@repo/auth/session";
 import { db } from "@repo/db";
 
 import type { Permission } from "..";
 import { env } from "../env";
+import { hashPassword } from "../utils";
 
 export const userService = {
   createAutoUser: async ({

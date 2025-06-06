@@ -54,9 +54,9 @@ model User {
     consumableUsages             InventoryConsumableUsage[] @relation("UserConsumableUsages")
     createdConsumableUsages      InventoryConsumableUsage[] @relation("CreatedConsumableUsages")
 
-    @@unique([email])
+    //@@unique([email])
     @@unique([username])
-    @@map("user")
+    @@map("User")
 }
 
 model Role {
@@ -185,7 +185,7 @@ model Session {
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([token])
-    @@map("session")
+    @@map("Session")
 }
 
 model Account {
@@ -204,7 +204,7 @@ model Account {
     createdAt             DateTime
     updatedAt             DateTime
 
-    @@map("account")
+    @@map("Account")
 }
 
 model Verification {
@@ -215,7 +215,7 @@ model Verification {
     createdAt  DateTime?
     updatedAt  DateTime?
 
-    @@map("verification")
+    @@map("Verification")
 }
 
 model Apikey {
@@ -242,5 +242,5 @@ model Apikey {
     permissions         String?
     metadata            String?
 
-    @@map("apikey")
+    @@map("Apikey")
 }

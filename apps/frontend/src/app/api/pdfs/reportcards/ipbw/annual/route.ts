@@ -1,17 +1,17 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
 import { IPBWAnnual } from "@repo/reports/reportcards/IPBWAnnual";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),
   classroomId: z.string().nullable(),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

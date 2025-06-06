@@ -1,10 +1,9 @@
-import type { NextRequest } from "next/server";
-import { z } from "zod";
-
-import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
 import { IPBWClassroomTrimestre } from "@repo/reports/reportcards/IPBWClassroomTrimestre";
 import { IPBWTrimestre } from "@repo/reports/reportcards/IPBWTrimestre";
+import type { NextRequest } from "next/server";
+import { z } from "zod";
+import { getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -13,7 +12,7 @@ const searchSchema = z.object({
   trimestreId: z.string().min(1),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

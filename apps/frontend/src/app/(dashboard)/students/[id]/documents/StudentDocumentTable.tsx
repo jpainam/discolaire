@@ -107,7 +107,7 @@ export function StudentDocumentTable() {
                   </TableCell>
 
                   <TableCell className="text-muted-foreground">
-                    {document.createdBy.name ?? t("unknown")}
+                    {document.createdBy.name}
                   </TableCell>
                   <TableCell className="text-center ">
                     <div className="flex flex-wrap  gap-2">

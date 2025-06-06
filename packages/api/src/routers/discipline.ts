@@ -1,12 +1,13 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { db } from "@repo/db";
 
 import { classroomService } from "../services/classroom-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const disciplineRouter = createTRPCRouter({
+export const disciplineRouter = {
   annual: protectedProcedure
     .input(
       z.object({
@@ -162,7 +163,7 @@ export const disciplineRouter = createTRPCRouter({
 
       return disciplines;
     }),
-});
+} satisfies TRPCRouterRecord;
 
 async function getDiscipline({
   studentIds,

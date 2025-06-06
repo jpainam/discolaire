@@ -1,7 +1,8 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { publicProcedure } from "../trpc";
 
 // https://bible-api.com/?random=verse
 const bibleVerseSchema = z.object({
@@ -21,7 +22,7 @@ const bibleVerseSchema = z.object({
   translation_note: z.string(),
 });
 
-export const bibleRouter = createTRPCRouter({
+export const bibleRouter = {
   random: publicProcedure.query(async () => {
     try {
       const response = await fetch("https://bible-api.com/?random=verse");
@@ -65,4 +66,4 @@ export const bibleRouter = createTRPCRouter({
       startMatric++;
     }
   }),
-});
+} satisfies TRPCRouterRecord;

@@ -1,18 +1,16 @@
-import { auth } from "@repo/auth";
-
 import { NoPermission } from "~/components/no-permission";
 
 import { checkPermission } from "@repo/api/permission";
 import { redirect } from "next/navigation";
+import { getSession } from "~/auth/server";
 import { PermissionAction } from "~/permissions";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
   children: React.ReactNode;
 }) {
   const params = await props.params;
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     redirect("/auth/login");
   }

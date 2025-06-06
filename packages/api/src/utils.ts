@@ -7,6 +7,7 @@
 //   return jwt.sign(payload, env.AUTH_SECRET);
 // };
 
+import { compare, hash } from "bcryptjs";
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
 
@@ -48,4 +49,18 @@ export const notificationQueue = new Queue("notification", { connection });
 
 export function roundToTwo(num: number): number {
   return Math.round((num + Number.EPSILON) * 100) / 100;
+}
+
+//const key = new TextEncoder().encode(env.AUTH_SECRET);
+const SALT_ROUNDS = 10;
+
+export async function hashPassword(password: string) {
+  return hash(password, SALT_ROUNDS);
+}
+
+export async function comparePasswords(
+  plainTextPassword: string,
+  hashedPassword: string,
+) {
+  return compare(plainTextPassword, hashedPassword);
 }

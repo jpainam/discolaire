@@ -11,7 +11,8 @@
       "default": "./src/index.ts"
     },
     "./services": "./src/services/index.ts",
-    "./permission": "./src/permission.ts"
+    "./permission": "./src/permission.ts",
+    "./email": "./src/email.ts"
   },
   "scripts": {
     "build": "tsc",
@@ -40,6 +41,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mime-types": "^3.0.1",
+    "nanoid": "^5.1.5",
     "next": "^15.3.3",
     "superjson": "2.2.2",
     "uuid": "^11.1.0",

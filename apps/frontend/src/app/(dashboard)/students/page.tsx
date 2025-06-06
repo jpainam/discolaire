@@ -1,4 +1,3 @@
-import { auth } from "@repo/auth";
 import { redirect } from "next/navigation";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -10,9 +9,10 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentHeader } from "./StudentHeader";
 import { StudentSearchPage } from "./StudentSearchPage";
 import { StudentStats } from "./StudentStats";
+import { getSession } from "~/auth/server";
 
 export default async function Page() {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     redirect("/auth/login");
   }

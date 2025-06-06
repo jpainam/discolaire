@@ -41,7 +41,7 @@ export default function Screen() {
           paddingHorizontal: 16,
         }}
       >
-        <Avatar imageUrl={session?.user?.avatar} />
+        <Avatar imageUrl={session?.user.image} />
 
         <ThemedView>
           <ThemedText type="defaultSemiBold">John Doe</ThemedText>

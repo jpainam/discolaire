@@ -1,7 +1,7 @@
 import { checkPermission } from "@repo/api/permission";
-import { auth } from "@repo/auth";
 import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
+import { getSession } from "~/auth/server";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 import { caller } from "~/trpc/server";
@@ -10,7 +10,7 @@ export default async function Layout({
   children,
   params,
 }: PropsWithChildren<{ params: Promise<{ id: string }> }>) {
-  const session = await auth();
+  const session = await getSession();
   const { id } = await params;
   if (!session) {
     redirect("/auth/login");

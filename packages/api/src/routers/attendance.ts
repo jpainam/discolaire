@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const attendanceRouter = createTRPCRouter({
+export const attendanceRouter = {
   delete: protectedProcedure
     .input(
       z.array(
@@ -131,4 +132,4 @@ export const attendanceRouter = createTRPCRouter({
         }),
       ]);
     }),
-});
+} satisfies TRPCRouterRecord;

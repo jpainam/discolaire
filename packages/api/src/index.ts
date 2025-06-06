@@ -11,7 +11,7 @@ import { createCallerFactory, createTRPCContext } from "./trpc";
  * const res = await trpc.post.all();
  *       ^? Post[]
  */
-//const createCaller = createCallerFactory(appRouter);
+const createCaller = createCallerFactory(appRouter);
 
 /**
  * Inference helpers for input types
@@ -28,9 +28,6 @@ type RouterInputs = inferRouterInputs<AppRouter>;
  *      ^? Post[]
  **/
 type RouterOutputs = inferRouterOutputs<AppRouter>;
-// export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
-// export type RouterInputs = inferRouterInputs<AppRouter>;
-// export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export enum PermissionAction {
   CREATE = "Create",
@@ -46,5 +43,5 @@ interface Permission {
   condition?: Record<string, unknown> | null;
 }
 
-export { appRouter, createTRPCContext };
+export { appRouter, createCaller, createTRPCContext };
 export type { AppRouter, Permission, RouterInputs, RouterOutputs };

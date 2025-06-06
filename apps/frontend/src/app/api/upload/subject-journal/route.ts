@@ -1,10 +1,10 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { auth } from "@repo/auth";
+import { getSession } from "~/auth/server";
 import { s3client } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

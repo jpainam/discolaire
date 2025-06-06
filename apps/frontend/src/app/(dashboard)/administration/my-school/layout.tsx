@@ -1,13 +1,12 @@
 import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
 
-import { auth } from "@repo/auth";
-
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { CreateSchoolAction } from "./CreateSchoolAction";
 
 export default async function Layout({ children }: PropsWithChildren) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     redirect("/auth/login");
   }

@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const libraryRouter = createTRPCRouter({
+export const libraryRouter = {
   count: protectedProcedure.query(async ({ ctx }) => {
     const books = await ctx.db.book.findMany({
       include: {
@@ -155,4 +156,4 @@ export const libraryRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

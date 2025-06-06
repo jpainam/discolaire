@@ -6,6 +6,7 @@ import { PermissionAction } from "~/permissions";
 import { UpdateAdminBreadcrumb } from "./UpdateAdminBreadcrumb";
 
 export default async function Layout({ children }: PropsWithChildren) {
+  //const session = await getSession();
   const canSeeAdminMenu = await checkPermission(
     "menu:administration",
     PermissionAction.READ,

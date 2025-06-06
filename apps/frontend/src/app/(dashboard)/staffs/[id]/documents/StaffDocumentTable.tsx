@@ -101,9 +101,7 @@ export function StaffDocumentTable() {
                   </TableCell>
                   <TableCell>{document.title}</TableCell>
                   <TableCell>{document.description}</TableCell>
-                  <TableCell>
-                    {document.createdBy.name ?? t("unknown")}
-                  </TableCell>
+                  <TableCell>{document.createdBy.name}</TableCell>
                   <TableCell>
                     <div className="flex flex-wrap  gap-2">
                       {document.attachments.map((attachment, index) => {

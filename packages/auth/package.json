@@ -6,8 +6,6 @@
     "type": "module",
     "exports": {
         ".": "./src/index.ts",
-        "./middleware": "./src/middleware.ts",
-        "./client": "./src/client.ts",
         "./env": "./env.ts"
     },
     "scripts": {
@@ -20,6 +18,7 @@
     "prettier": "@repo/prettier-config",
     "dependencies": {
         "@better-auth/expo": "1.2.8",
+        "@repo/api": "workspace:*",
         "@repo/db": "workspace:*",
         "@t3-oss/env-nextjs": "^0.13.6",
         "bcryptjs": "^3.0.2",
@@ -29,6 +28,7 @@
         "next": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
+        "resend": "^4.5.1",
         "zod": "catalog:"
     },
     "devDependencies": {

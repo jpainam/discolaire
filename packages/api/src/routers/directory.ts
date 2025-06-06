@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const directoryRouter = createTRPCRouter({
+export const directoryRouter = {
   all: protectedProcedure
     .input(z.object({ q: z.string().optional().default("") }))
     .query(async ({ ctx, input }) => {
@@ -84,4 +85,4 @@ export const directoryRouter = createTRPCRouter({
       }
       return directories;
     }),
-});
+} satisfies TRPCRouterRecord;

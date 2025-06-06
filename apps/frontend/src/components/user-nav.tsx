@@ -43,7 +43,7 @@ export function UserNav({ className }: { className?: string }) {
 
   const user = session.user;
   if (!user) return null;
-  const initials = user.name?.charAt(0) ?? "" + user.name?.charAt(1);
+  const initials = user.name.charAt(0) + user.name.charAt(1);
 
   return (
     <DropdownMenu>
@@ -83,7 +83,7 @@ export function UserNav({ className }: { className?: string }) {
                 }
                 alt={initials}
               />
-              <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
+              <AvatarFallback className="rounded-lg uppercase">{`${user.name.charAt(0)}${user.name.charAt(1)}`}</AvatarFallback>
             </Avatar>
           </Button>
         )}
@@ -108,7 +108,7 @@ export function UserNav({ className }: { className?: string }) {
                     }
                     alt={initials}
                   />
-                  <AvatarFallback className="rounded-lg uppercase">{`${user.name?.charAt(0)}${user.name?.charAt(1)}`}</AvatarFallback>
+                  <AvatarFallback className="rounded-lg uppercase">{`${user.name.charAt(0)}${user.name.charAt(1)}`}</AvatarFallback>
                 </Avatar>
               </DialogTrigger>
 

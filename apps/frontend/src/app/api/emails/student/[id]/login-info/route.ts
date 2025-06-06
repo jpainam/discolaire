@@ -1,17 +1,16 @@
-import { auth } from "@repo/auth/session";
 import WelcomeEmail from "@repo/transactional/emails/WelcomeEmail";
 import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { createUniqueInvite } from "~/actions/invite";
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { resend } from "~/lib/resend";
 import { caller } from "~/trpc/server";
-
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

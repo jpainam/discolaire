@@ -13,7 +13,6 @@ import {
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import { auth } from "@repo/auth";
 import {
   Card,
   CardAction,
@@ -35,6 +34,7 @@ import { PermissionAction } from "~/permissions";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { DefaultSettings } from "./DefaultSettings";
 import { SchoolDetailAction } from "./SchoolDetailAction";
+import { getSession } from "~/auth/server";
 
 export default async function Page(props: {
   params: Promise<{ schoolId: string }>;
@@ -43,7 +43,7 @@ export default async function Page(props: {
 
   const { schoolId } = params;
 
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     redirect("/auth/login");
   }

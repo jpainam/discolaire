@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const classroomSectionRouter = createTRPCRouter({
+export const classroomSectionRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.section.findMany({
       where: {
@@ -50,4 +51,4 @@ export const classroomSectionRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

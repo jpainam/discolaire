@@ -1,9 +1,8 @@
 import type { NextRequest } from "next/server";
-
-import { auth } from "@repo/auth";
+import { getSession } from "~/auth/server";
 
 export async function GET(_req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

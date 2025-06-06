@@ -1,7 +1,8 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createSubjectJournalSchema = z.object({
   title: z.string().min(1),
@@ -11,7 +12,7 @@ const createSubjectJournalSchema = z.object({
   attachment: z.string().optional(),
   status: z.enum(["APPROVED", "PENDING", "REJECTED"]).default("PENDING"),
 });
-export const subjectJournalRouter = createTRPCRouter({
+export const subjectJournalRouter = {
   all: protectedProcedure
     .input(
       z.object({
@@ -146,4 +147,4 @@ export const subjectJournalRouter = createTRPCRouter({
       }
       return subjectJournal;
     }),
-});
+} satisfies TRPCRouterRecord;

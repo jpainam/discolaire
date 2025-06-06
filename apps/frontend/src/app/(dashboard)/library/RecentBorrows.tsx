@@ -14,7 +14,7 @@ export async function RecentBorrows({ className }: { className?: string }) {
   const borrows = await caller.library.borrowBooks({});
   const recents = borrows.slice(0, 5).map((borrow) => {
     return {
-      name: borrow.user.name ?? borrow.user.email ?? borrow.user.username,
+      name: borrow.user.name,
       book: borrow.book.title,
       avatar: borrow.user.avatar,
       date: borrow.borrowed,

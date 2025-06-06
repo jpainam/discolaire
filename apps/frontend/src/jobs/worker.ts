@@ -5,7 +5,7 @@ import * as z from "zod";
 
 import { db } from "@repo/db";
 
-import { generateToken } from "./utils";
+//import { generateToken } from "./utils";
 
 const dataSchema = z.object({
   name: z.string().min(1),
@@ -39,14 +39,15 @@ async function jobWorker(job: Job<any, any, string>) {
         username: "admin",
       },
     });
+    console.log(user);
 
     const headers = new Map<string, string>();
     headers.set("x-trpc-source", "job-worker");
     headers.set("x-school-year", schoolYearId);
 
-    const token = await generateToken({ id: user.id });
+    //const token: string = "", //await generateToken({ id: user.id });
 
-    headers.set("Cookie", `session=${token}`);
+    headers.set("Cookie", `session=token`);
 
     const response = await fetch(url, {
       method: "POST",

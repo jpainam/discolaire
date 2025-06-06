@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const timetableCategoryRouter = createTRPCRouter({
+export const timetableCategoryRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.timetableCategory.findMany({
       orderBy: {
@@ -55,4 +56,4 @@ export const timetableCategoryRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

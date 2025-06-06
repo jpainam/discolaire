@@ -1,9 +1,10 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { feeService } from "../services/fee-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const feeRouter = createTRPCRouter({
+export const feeRouter = {
   delete: protectedProcedure
     .input(z.union([z.number(), z.array(z.number())]))
     .mutation(async ({ ctx, input }) => {
@@ -108,4 +109,4 @@ export const feeRouter = createTRPCRouter({
       },
     });
   }),
-});
+} satisfies TRPCRouterRecord;

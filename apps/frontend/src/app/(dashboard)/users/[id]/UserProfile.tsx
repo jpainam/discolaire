@@ -47,7 +47,7 @@ export function UserProfile() {
   const form = useForm({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
-      name: user.name ?? "",
+      name: user.name,
       email: user.email ?? "",
       username: user.username,
     },
@@ -111,7 +111,7 @@ export function UserProfile() {
               <div className="flex flex-col md:flex-row gap-6 items-start">
                 <div className="flex flex-col items-center space-y-2">
                   <AvatarState
-                    pos={user.name?.length ?? 0}
+                    pos={user.name.length}
                     avatar={user.avatar}
                     className="h-[100px] w-[100px] mb-2"
                   />

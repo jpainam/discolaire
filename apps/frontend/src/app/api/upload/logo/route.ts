@@ -1,11 +1,11 @@
-import { auth } from "@repo/auth";
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
   console.log("✅ POST /api/upload/logo");
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

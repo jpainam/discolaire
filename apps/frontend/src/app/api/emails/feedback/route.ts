@@ -2,11 +2,11 @@
 
 import { z } from "zod";
 
-import { auth } from "@repo/auth/session";
 import FeedbackEmail from "@repo/transactional/emails/FeedbackEmail";
 import { nanoid } from "nanoid";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { getSession } from "~/auth/server";
 import { resend } from "~/lib/resend";
 import { caller } from "~/trpc/server";
 
@@ -14,7 +14,7 @@ const schema = z.object({
   content: z.string().min(1),
 });
 export async function POST(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       react: FeedbackEmail({
         message: content,
         usernameSender: user.username,
-        emailSender: user.email ?? "",
+        emailSender: user.email,
         userId: user.id,
         school: { name: school.name, id: school.id },
       }) as React.ReactElement,

@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { CSAB, renderToStream } from "@repo/reports";
 
-import { auth } from "@repo/auth";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   studentId: z.string().optional(),
@@ -12,7 +12,7 @@ const searchSchema = z.object({
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

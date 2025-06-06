@@ -1,8 +1,4 @@
 import { render } from "@react-email/render";
-import i18next from "i18next";
-import { z } from "zod";
-
-import { auth } from "@repo/auth";
 import { db } from "@repo/db";
 import {
   AbsenceEmail,
@@ -11,6 +7,9 @@ import {
   ExclusionEmail,
   LatenessEmail,
 } from "@repo/transactional";
+import i18next from "i18next";
+import { z } from "zod";
+import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 
 import { caller } from "~/trpc/server";
@@ -28,7 +27,7 @@ const schema = z.object({
 
 export async function POST(req: Request) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }

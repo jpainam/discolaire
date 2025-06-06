@@ -1,7 +1,8 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createEditTermSchema = z.object({
   name: z.string().min(1),
@@ -10,7 +11,7 @@ const createEditTermSchema = z.object({
   isActive: z.boolean(),
   order: z.number().default(0),
 });
-export const termRouter = createTRPCRouter({
+export const termRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.term.findMany({
       orderBy: {
@@ -92,4 +93,4 @@ export const termRouter = createTRPCRouter({
         };
       }
     }),
-});
+} satisfies TRPCRouterRecord;

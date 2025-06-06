@@ -1,11 +1,12 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { getAnnualReport } from "../services/annual-service";
 import { getSequenceGrades } from "../services/sequence-service";
 import { getTrimestreGrades } from "../services/trimestre-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const reportCardRouter = createTRPCRouter({
+export const reportCardRouter = {
   getRemarks: protectedProcedure
     .input(
       z.object({
@@ -106,4 +107,4 @@ export const reportCardRouter = createTRPCRouter({
     .query(({ input }) => {
       return getAnnualReport({ classroomId: input.classroomId });
     }),
-});
+} satisfies TRPCRouterRecord;

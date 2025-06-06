@@ -1,11 +1,11 @@
-import { auth } from "@repo/auth";
 import { PermissionTable } from "~/components/users/PermissionTable";
 import { PermissionHeader } from "./PermissionHeader";
+import { getSession } from "~/auth/server";
 
 export default async function Page(props: {
   searchParams: Promise<{ userId?: string }>;
 }) {
-  const session = await auth();
+  const session = await getSession();
   const searchParams = await props.searchParams;
   const userId = searchParams.userId ?? session?.user.id;
   return (

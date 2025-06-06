@@ -1,10 +1,12 @@
+import { expoClient } from "@better-auth/expo/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { usernameClient } from "better-auth/client/plugins";
+import { createAuthClient } from "better-auth/react";
 import { useRouter } from "expo-router";
-
+import * as SecureStore from "expo-secure-store";
 import { trpc } from "./api";
 import { getBaseUrl } from "./base-url";
 import { deleteToken, setSchoolYear, setToken } from "./session-store";
-
 export const signIn = async (username: string, password: string) => {
   const res = await fetch(`${getBaseUrl()}/api/auth/signin`, {
     method: "POST",
@@ -50,3 +52,17 @@ export const useSignOut = () => {
     router.replace("/auth");
   };
 };
+
+export const authClient = createAuthClient({
+  baseURL: getBaseUrl(),
+
+  plugins: [
+    usernameClient(),
+    expoClient({
+      scheme: "expo",
+
+      storagePrefix: "expo",
+      storage: SecureStore,
+    }),
+  ],
+});

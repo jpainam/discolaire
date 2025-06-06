@@ -45,7 +45,7 @@ export async function getAllAssets({
       users: asset.usages.map((u) => {
         return {
           image: u.user.avatar ?? "",
-          name: u.user.name ?? "",
+          name: u.user.name,
         };
       }),
       note: asset.note ? asset.note.replace(/(\r\n|\n|\r)/g, ",") : null,
@@ -102,7 +102,7 @@ export async function getAllConsumables({
       schoolYearId: consumable.schoolYearId,
       users: consumable.usages.map((u) => {
         return {
-          name: u.user.name ?? "",
+          name: u.user.name,
           image: u.user.avatar ?? "",
         };
       }),

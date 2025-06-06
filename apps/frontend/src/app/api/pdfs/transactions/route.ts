@@ -4,7 +4,6 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { auth } from "@repo/auth";
 import { renderToStream } from "@repo/reports";
 import { TransactionList } from "@repo/reports/transactions/TransactionList";
 import { getServerTranslations } from "~/i18n/server";
@@ -12,6 +11,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   format: z
@@ -24,7 +24,7 @@ const searchSchema = z.object({
   status: z.enum(["VALIDATED", "PENDING", "CANCELED"]).optional(),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 403 });
   }

@@ -1,3 +1,4 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { subDays, subMonths } from "date-fns";
 import { z } from "zod";
@@ -6,7 +7,7 @@ import type { TransactionStatus } from "@repo/db";
 
 import { classroomService } from "../services/classroom-service";
 import { transactionService } from "../services/transaction-service";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 import { notificationQueue } from "../utils";
 
 const createSchema = z.object({
@@ -24,7 +25,7 @@ const createSchema = z.object({
   requiredFeeIds: z.array(z.coerce.number()).optional(),
 });
 
-export const transactionRouter = createTRPCRouter({
+export const transactionRouter = {
   count: protectedProcedure.query(({ ctx }) => {
     return ctx.db.transaction.count({
       where: {
@@ -526,4 +527,4 @@ export const transactionRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

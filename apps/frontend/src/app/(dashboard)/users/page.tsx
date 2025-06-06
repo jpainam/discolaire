@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-
-import { auth } from "@repo/auth";
+import { getSession } from "~/auth/server";
 
 export default async function Page() {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     redirect("/auth/login");
   }

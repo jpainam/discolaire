@@ -1,8 +1,8 @@
-import { auth } from "@repo/auth";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { decode } from "entities";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { EducationalResource } from "~/components/dashboard/EducationalResource";
 import { LatestGradesheet } from "~/components/dashboard/LatestGradesheet";
@@ -16,9 +16,8 @@ import { StudentDashboardContact } from "~/components/dashboard/StudentDashboard
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
-
 export default async function Page() {
-  const session = await auth();
+  const session = await getSession();
 
   if (session?.user.profile === "student") {
     const student = await caller.student.getFromUserId(session.user.id);

@@ -1,9 +1,9 @@
+import type { AppRouter } from "@repo/api";
 import { QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import superjson from "superjson";
-
-import type { AppRouter } from "@repo/api";
+import { authClient } from "./auth";
 
 import { getBaseUrl } from "./base-url";
 import { getSchoolYear, getToken } from "./session-store";
@@ -35,6 +35,11 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
           const headers = new Map<string, string>();
           headers.set("x-trpc-source", "expo-react");
           headers.set("x-school-year", getSchoolYear() ?? "");
+
+          const cookies = authClient.getCookie();
+          if (cookies) {
+            headers.set("Cookie", cookies);
+          }
 
           const token = getToken();
           if (token) headers.set("Authorization", `Bearer ${token}`);

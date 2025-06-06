@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const religionRouter = createTRPCRouter({
+export const religionRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.religion.findMany({
       where: {
@@ -67,4 +68,4 @@ export const religionRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

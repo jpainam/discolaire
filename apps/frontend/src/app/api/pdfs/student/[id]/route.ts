@@ -4,13 +4,13 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { auth } from "@repo/auth";
 import { renderToStream, StudentPage } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
 import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
@@ -27,7 +27,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 403 });
   }

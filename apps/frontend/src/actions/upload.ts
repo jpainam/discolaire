@@ -1,13 +1,11 @@
 "use server";
 
-import { auth } from "@repo/auth";
-
 import { env } from "~/env";
-
+import { getSession } from "~/auth/server";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function deleteFileFromAws(key: string): Promise<any> {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       throw new Error("Failed to authenticate user");
     }
@@ -29,7 +27,7 @@ export async function deleteFileFromAws(key: string): Promise<any> {
 
 export async function downloadFileFromAws(key: string): Promise<string> {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       throw new Error("Failed to authenticate user");
     }

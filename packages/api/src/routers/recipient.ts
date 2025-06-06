@@ -1,12 +1,12 @@
-import { z } from "zod";
-
-import { createTRPCRouter, protectedProcedure } from "../trpc";
-
 // const createUpdateGroupSchema = z.object({
 //   name: z.string().min(1),
 // });
+import type { TRPCRouterRecord } from "@trpc/server";
+import { z } from "zod";
 
-export const recipientRouter = createTRPCRouter({
+import { protectedProcedure } from "../trpc";
+
+export const recipientRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.recipient.findMany({
       include: {
@@ -101,4 +101,4 @@ export const recipientRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

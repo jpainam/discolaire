@@ -1,12 +1,13 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateRoleSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
 });
-export const roleRouter = createTRPCRouter({
+export const roleRouter = {
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.role.findUnique({
       include: {
@@ -213,4 +214,4 @@ export const roleRouter = createTRPCRouter({
       };
     });
   }),
-});
+} satisfies TRPCRouterRecord;

@@ -1,9 +1,10 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const subjectRouter = createTRPCRouter({
+export const subjectRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.subject.findMany({
       include: {
@@ -114,4 +115,4 @@ export const subjectRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

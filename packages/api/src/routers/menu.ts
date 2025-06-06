@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const menuRouter = createTRPCRouter({
+export const menuRouter = {
   byCategory: protectedProcedure
     .input(
       z.object({
@@ -26,4 +27,4 @@ export const menuRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.menuItem.delete({ where: { id: input.id } });
     }),
-});
+} satisfies TRPCRouterRecord;

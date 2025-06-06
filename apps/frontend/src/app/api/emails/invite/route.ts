@@ -1,11 +1,10 @@
 import type { NextRequest } from "next/server";
 
-import { auth } from "@repo/auth";
-
 import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { createUniqueInvite } from "~/actions/invite";
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { resend } from "~/lib/resend";
 import { caller } from "~/trpc/server";
@@ -17,7 +16,7 @@ const searchSchema = z.object({
 });
 
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Not authenticated", { status: 401 });
   }
@@ -60,7 +59,7 @@ export async function GET(req: NextRequest) {
         "X-Entity-Ref-ID": nanoid(),
       },
       react: InvitationEmail({
-        inviterName: session.user.name ?? "Admin",
+        inviterName: session.user.name,
         inviteeName: user.name,
         schoolName: school.name,
         inviteLink: `${env.NEXT_PUBLIC_BASE_URL}/invite/${invitation}?email=${user.email}`,

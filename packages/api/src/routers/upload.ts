@@ -1,3 +1,4 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -5,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { env } from "../env";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const client = new S3Client({
   region: env.S3_REGION,
@@ -15,7 +16,7 @@ const client = new S3Client({
   },
 });
 
-export const uploadRouter = createTRPCRouter({
+export const uploadRouter = {
   getSignedUrl: protectedProcedure
     .input(z.object({ key: z.string() }))
     .query(async ({ input }) => {
@@ -101,4 +102,4 @@ export const uploadRouter = createTRPCRouter({
         name: student.registrationNumber,
       }));
     }),
-});
+} satisfies TRPCRouterRecord;

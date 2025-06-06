@@ -7,10 +7,10 @@ import type { RouterOutputs } from "@repo/api";
 import { ClassroomList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
-import { auth } from "@repo/auth";
 import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
@@ -24,7 +24,7 @@ const searchSchema = z.object({
     .default("pdf"),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

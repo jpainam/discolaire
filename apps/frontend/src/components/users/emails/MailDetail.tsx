@@ -63,7 +63,7 @@ export function MailDetail({ emailId }: { emailId: string }) {
                 <Avatar>
                   <AvatarImage
                     src={`/placeholder.svg?height=40&width=40`}
-                    alt={message.from ?? ""}
+                    alt={message.from}
                   />
                   <AvatarFallback>{message.avatar}</AvatarFallback>
                 </Avatar>

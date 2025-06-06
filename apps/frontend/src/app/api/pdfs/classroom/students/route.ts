@@ -7,8 +7,8 @@ import type { RouterOutputs } from "@repo/api";
 import { ClassroomStudentList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
-import { auth } from "@repo/auth";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
@@ -17,7 +17,7 @@ const searchSchema = z.object({
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
 export async function GET(req: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

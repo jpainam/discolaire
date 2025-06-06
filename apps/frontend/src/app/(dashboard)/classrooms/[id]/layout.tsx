@@ -1,11 +1,11 @@
 import React from "react";
 
 import { checkPermission } from "@repo/api/permission";
-import { auth } from "@repo/auth";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ export default async function Layout(props: {
   const params = await props.params;
 
   let canReadClassroom = false;
-  const session = await auth();
+  const session = await getSession();
   if (session?.user.profile === "student") {
     const student = await caller.student.getFromUserId(session.user.id);
     const classroom = await caller.student.classroom({ studentId: student.id });

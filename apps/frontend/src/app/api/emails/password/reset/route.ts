@@ -9,7 +9,7 @@ import { z } from "zod";
 import { ResetPassword } from "@repo/transactional";
 import { getServerTranslations } from "~/i18n/server";
 
-import { hashPassword } from "@repo/auth/session";
+//import { hashPassword } from "@repo/auth/session";
 import { env } from "~/env";
 import { caller } from "~/trpc/server";
 
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     }
 
     const secretCode = crypto.randomBytes(32).toString("hex");
-    const hashedCode = await hashPassword(secretCode);
+    const hashedCode = ""; //await hashPassword(secretCode);
 
     const expiresAt = addMinutes(new Date(), 15); // Set expiration time to 15 minutes
 

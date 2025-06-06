@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { auth } from "@repo/auth";
 import { db } from "@repo/db";
+import { getSession } from "~/auth/server";
 
 import { env } from "~/env";
 
 export async function POST(request: Request) {
-  const session = await auth();
+  const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

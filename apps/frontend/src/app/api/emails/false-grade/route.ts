@@ -1,14 +1,14 @@
 import { render } from "@react-email/render";
 import type { NextRequest } from "next/server";
 
-import { auth } from "@repo/auth";
 import { FakeGradeReportEmail } from "@repo/transactional";
 
 import { caller } from "~/trpc/server";
+import { getSession } from "~/auth/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }

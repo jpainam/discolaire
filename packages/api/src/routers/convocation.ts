@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const convocationRouter = createTRPCRouter({
+export const convocationRouter = {
   all: protectedProcedure
     .input(
       z
@@ -28,4 +29,4 @@ export const convocationRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

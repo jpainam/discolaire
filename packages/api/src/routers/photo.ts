@@ -1,9 +1,10 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { listS3Objects } from "../services/s3-client";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
-export const photoRouter = createTRPCRouter({
+export const photoRouter = {
   listObjects: protectedProcedure
     .input(
       z.object({
@@ -19,4 +20,4 @@ export const photoRouter = createTRPCRouter({
         startAfter: input.startAfter,
       });
     }),
-});
+} satisfies TRPCRouterRecord;

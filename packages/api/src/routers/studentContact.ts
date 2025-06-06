@@ -1,8 +1,9 @@
+import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import redisClient from "@repo/kv";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
   relationshipId: z.number().optional(),
@@ -19,7 +20,7 @@ const createUpdateSchema = z.object({
   primaryContact: z.boolean().optional().default(true),
   paysFee: z.boolean().optional().default(true),
 });
-export const studentContactRouter = createTRPCRouter({
+export const studentContactRouter = {
   delete: protectedProcedure
     .input(z.object({ contactId: z.string(), studentId: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -198,4 +199,4 @@ export const studentContactRouter = createTRPCRouter({
         },
       });
     }),
-});
+} satisfies TRPCRouterRecord;

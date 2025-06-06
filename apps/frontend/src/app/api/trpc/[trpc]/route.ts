@@ -2,7 +2,8 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import type { NextRequest } from "next/server";
 
 import { appRouter, createTRPCContext } from "@repo/api";
-import { auth } from "@repo/auth";
+
+import { auth } from "~/auth/server";
 
 /**
  * Configure basic CORS headers
@@ -22,29 +23,22 @@ export const OPTIONS = () => {
   setCorsHeaders(response);
   return response;
 };
-// https://github.com/trpc/trpc/discussions/2036#discussioncomment-5137412
-const handler = async (req: NextRequest) => {
-  const session = await auth();
-  const schoolYearId = req.cookies.get("x-school-year")?.value ?? "";
-  const heads = new Headers(req.headers);
-  heads.set("x-school-year", schoolYearId);
 
+const handler = async (req: NextRequest) => {
   const response = await fetchRequestHandler({
     endpoint: "/api/trpc",
     router: appRouter,
     req,
     createContext: () =>
       createTRPCContext({
-        session: session,
-        headers: heads,
+        auth: auth,
+        headers: req.headers,
       }),
     onError({ error, path }) {
-      console.error(`>>> tRPC Error on '${path}'`);
-      console.error(
-        error.code != "UNAUTHORIZED" ? error.stack : "UNAUTHORIZED",
-      );
+      console.error(`>>> tRPC Error on '${path}'`, error);
     },
   });
+
   setCorsHeaders(response);
   return response;
 };
