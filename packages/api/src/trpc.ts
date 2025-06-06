@@ -8,26 +8,14 @@
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import { ZodError } from "zod";
+import z, { ZodError } from "zod/v4";
 
-import type { User } from "@repo/db";
 //import type { Session } from "@repo/auth";
-import { auth } from "@repo/auth";
-import { validateToken } from "@repo/auth/session";
+import type { Auth } from "@repo/auth";
+import type { User } from "@repo/db";
 import { db } from "@repo/db";
 
 import { getPermissions } from "./services/user-service";
-
-/**
- * Isomorphic Session getter for API requests
- * - Expo requests will have a session token in the Authorization header
- * - Next.js requests will have a session token in cookies
- */
-const isomorphicGetSession = async (headers: Headers) => {
-  const authToken = headers.get("Authorization") ?? null;
-  if (authToken) return validateToken(authToken);
-  return auth();
-};
 
 /**
  * 1. CONTEXT
@@ -42,28 +30,24 @@ const isomorphicGetSession = async (headers: Headers) => {
  * @see https://trpc.io/docs/server/context
  */
 
-interface Session {
-  user: User;
-  expires: string;
-}
 export const createTRPCContext = async (opts: {
   headers: Headers;
-  session: Session | null;
+  auth: Auth;
 }) => {
-  const authToken = opts.headers.get("Authorization") ?? null;
-  const session = await isomorphicGetSession(opts.headers);
+  const authApi = opts.auth.api;
+  const session = await authApi.getSession({
+    headers: opts.headers,
+  });
 
-  const source = opts.headers.get("x-trpc-source") ?? "unknown";
+  //const source = opts.headers.get("x-trpc-source") ?? "unknown";
   const schoolYearId = opts.headers.get("x-school-year") ?? null;
-  console.log(">>> tRPC Request from", source, "by", session?.user?.username);
+  //console.log(">>> tRPC Request from", source, "by", session?.user?.username);
 
   return {
+    authApi,
     session,
     db,
-    ipAddress: opts.headers.get("x-forwarded-for") ?? "127.0.0.1",
-    userAgent: opts.headers.get("user-agent") ?? "desktop",
-    schoolYearId: schoolYearId, // TODO: remove hardcoded value
-    token: authToken,
+    schoolYearId: schoolYearId,
   };
 };
 
@@ -73,18 +57,21 @@ export const createTRPCContext = async (opts: {
  * This is where the trpc api is initialized, connecting the context and
  * transformer
  */
-export const t = initTRPC.context<typeof createTRPCContext>().create({
+const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter: ({ shape, error }) => ({
     ...shape,
     data: {
       ...shape.data,
-      zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
+      zodError:
+        error.cause instanceof ZodError
+          ? z.flattenError(error.cause as ZodError<Record<string, unknown>>)
+          : null,
     },
   }),
 });
 
-export type TrpcContextType = Awaited<ReturnType<typeof createTRPCContext>>;
+//export type TrpcContextType = Awaited<ReturnType<typeof createTRPCContext>>;
 
 /**
  * Create a server-side caller

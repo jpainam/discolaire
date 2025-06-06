@@ -11,7 +11,7 @@ import { createCallerFactory, createTRPCContext } from "./trpc";
  * const res = await trpc.post.all();
  *       ^? Post[]
  */
-const createCaller = createCallerFactory(appRouter);
+//const createCaller = createCallerFactory(appRouter);
 
 /**
  * Inference helpers for input types
@@ -46,5 +46,5 @@ interface Permission {
   condition?: Record<string, unknown> | null;
 }
 
-export { appRouter, createCaller, createTRPCContext };
+export { appRouter, createTRPCContext };
 export type { AppRouter, Permission, RouterInputs, RouterOutputs };

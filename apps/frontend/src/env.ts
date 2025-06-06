@@ -2,10 +2,10 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { vercel } from "@t3-oss/env-nextjs/presets-zod";
 import { z } from "zod";
 
-import { env as authEnv } from "@repo/auth/env";
+import { authEnv } from "@repo/auth/env";
 
 export const env = createEnv({
-  extends: [authEnv, vercel()],
+  extends: [authEnv(), vercel()],
   shared: {
     NODE_ENV: z
       .enum(["development", "production", "test"])
@@ -16,6 +16,7 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
+    AUTH_SECRET: z.string().min(1),
     S3_ACCESS_KEY_ID: z.string().min(10),
     S3_REGION: z.string().min(2),
     S3_BUCKET_NAME: z.string().min(2),
@@ -50,6 +51,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    AUTH_SECRET: process.env.AUTH_SECRET,
     MINIO_PORT: process.env.MINIO_PORT,
     S3_IMAGE_BUCKET_NAME: process.env.S3_IMAGE_BUCKET_NAME,
     S3_DOCUMENT_BUCKET_NAME: process.env.S3_DOCUMENT_BUCKET_NAME,

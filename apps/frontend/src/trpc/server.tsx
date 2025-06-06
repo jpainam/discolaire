@@ -1,12 +1,13 @@
 import type { AppRouter } from "@repo/api";
 import { appRouter, createCaller, createTRPCContext } from "@repo/api";
-import { auth } from "@repo/auth";
+
 import type { TRPCQueryOptions } from "@trpc/tanstack-react-query";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { cookies, headers } from "next/headers";
 import { cache } from "react";
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { auth } from "~/auth/server";
 import { createQueryClient } from "./query-client";
 
 /**
@@ -18,12 +19,12 @@ const createContext = cache(async () => {
   heads.set("x-trpc-source", "rsc");
   heads.set(
     "x-school-year",
-    (await cookies()).get("x-school-year")?.value ?? "",
+    (await cookies()).get("x-school-year")?.value ?? ""
   );
 
   return createTRPCContext({
-    session: await auth(),
     headers: heads,
+    auth,
   });
 });
 
@@ -45,7 +46,7 @@ export function HydrateClient(props: { children: React.ReactNode }) {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
-  queryOptions: T,
+  queryOptions: T
 ) {
   const queryClient = getQueryClient();
   if (queryOptions.queryKey[1]?.type === "infinite") {
@@ -57,7 +58,7 @@ export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function batchPrefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
-  queryOptionsArray: T[],
+  queryOptionsArray: T[]
 ) {
   const queryClient = getQueryClient();
   for (const queryOptions of queryOptionsArray) {
@@ -69,4 +70,14 @@ export function batchPrefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
     }
   }
 }
+
+/**
+ * Create a server-side caller for the tRPC API
+ * @example
+ * const trpc = createCaller(createContext);
+ * const res = await trpc.post.all();
+ *       ^? Post[]
+ */
+//const createCaller = createCallerFactory(appRouter); old
+
 export const caller = createCaller(createContext);
