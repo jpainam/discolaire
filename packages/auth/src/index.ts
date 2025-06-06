@@ -4,8 +4,8 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { apiKey, oAuthProxy, username } from "better-auth/plugins";
 
-import { sendEmail } from "@repo/api/email";
 import { db } from "@repo/db";
+import { sendEmail } from "@repo/utils";
 
 export function initAuth(options: {
   baseUrl: string;

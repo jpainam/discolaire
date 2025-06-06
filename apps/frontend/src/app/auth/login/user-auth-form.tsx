@@ -76,7 +76,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           //you can also show the original error message
           alert(ctx.error.message);
         },
-      }
+      },
     );
     if (result.error) {
       // Handle the error

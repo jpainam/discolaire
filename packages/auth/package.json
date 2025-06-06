@@ -18,8 +18,8 @@
     "prettier": "@repo/prettier-config",
     "dependencies": {
         "@better-auth/expo": "1.2.8",
-        "@repo/api": "workspace:*",
         "@repo/db": "workspace:*",
+        "@repo/utils": "workspace:*",
         "@t3-oss/env-nextjs": "^0.13.6",
         "bcryptjs": "^3.0.2",
         "better-auth": "1.2.8",
