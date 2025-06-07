@@ -2,6 +2,7 @@ import type { BetterAuthOptions } from "better-auth";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
 import { apiKey, oAuthProxy, username } from "better-auth/plugins";
 
 import { db } from "@repo/db";
@@ -11,15 +12,13 @@ export function initAuth(options: {
   baseUrl: string;
   productionUrl: string;
   secret: string | undefined;
-
-  //discordClientId: string;
-  //discordClientSecret: string;
 }) {
   const config = {
     database: prismaAdapter(db, {
       provider: "postgresql",
     }),
     user: {
+      modelName: "User",
       additionalFields: {
         profile: {
           type: "string",
@@ -35,6 +34,16 @@ export function initAuth(options: {
         },
       },
     },
+    session: {
+      modelName: "Session",
+    },
+    account: {
+      modelName: "Account",
+    },
+    verification: {
+      modelName: "Verification",
+    },
+
     baseURL: options.baseUrl,
     secret: options.secret,
     emailAndPassword: {
@@ -65,6 +74,7 @@ export function initAuth(options: {
         productionURL: options.productionUrl,
       }),
       expo(),
+      nextCookies(),
     ],
     // socialProviders: {
     //   discord: {
@@ -88,3 +98,8 @@ export type Session = Auth["$Infer"]["Session"];
 //   }),
 //   plugins: [username(), apiKey()],
 // });
+export const auth = initAuth({
+  baseUrl: "http://localhost:3000",
+  productionUrl: "https://discolaire.com",
+  secret: "0111d4f51b0fab4c6fcc782c2e4420ae6c6b0391da1b53fdc425e327b61501f1",
+});

@@ -36,20 +36,20 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     error: "",
   });
   const searchParams = useSearchParams();
-  React.useEffect(() => {
-    const f = async () => {
-      const d = await authClient.signUp.email({
-        email: "jpainam@gmail.com",
-        name: "Jean P.Ainam",
-        password: "admin1234",
-        username: "admin",
-        profile: "staff",
-        schoolId: "cm1hbntgn00001h578bvyjxln",
-      });
-      console.log("Sign up result:", d);
-    };
-    void f();
-  }, []);
+  // React.useEffect(() => {
+  //   const f = async () => {
+  //     const d = await authClient.signUp.email({
+  //       email: "jpainam@gmail.com",
+  //       name: "Jean P.Ainam",
+  //       password: "admin1234",
+  //       username: "admin",
+  //       profile: "staff",
+  //       schoolId: "cm1hbntgn00001h578bvyjxln",
+  //     });
+  //     console.log("Sign up result:", d);
+  //   };
+  //   void f();
+  // }, []);
 
   const redirect = searchParams.get("redirect");
   const { t } = useLocale();
@@ -76,7 +76,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           //you can also show the original error message
           alert(ctx.error.message);
         },
-      },
+      }
     );
     if (result.error) {
       // Handle the error
@@ -88,10 +88,29 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     toast.success(t("signed_in_successfully"));
   };
 
+  const handleSubmit2 = async () => {
+    toast.info("Signing up...");
+    const data = await authClient.signUp.email({
+      email: "jpainam@gmail.com",
+      name: "Jean P.Ainam",
+      password: "admin1234",
+      username: "admin",
+      profile: "staff",
+      schoolId: "cm1hbntgn00001h578bvyjxln",
+    });
+    console.log("Sign up result:", data);
+    toast.success(t("signed_up_successfully"));
+    if (data.error) {
+      console.error("Sign up error:", data.error);
+      toast.error(data.error.message);
+      return;
+    }
+  };
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit2)}>
           <input type="hidden" name="redirect" value={redirect ?? ""} />
           <div className="grid gap-2">
             <div className={className}>

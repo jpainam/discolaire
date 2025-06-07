@@ -16,7 +16,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -26,6 +26,13 @@ export async function signIn(
     };
   }
   const { username } = parsed.data;
+
+  // await auth.api.signInUsername({
+  //   body: {
+  //     username: "user@email.com",
+  //     password: "password",
+  //   },
+  // });
 
   const user = await db.user.findFirst({
     where: {
