@@ -61,7 +61,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       redirect: redirect ?? "",
     },
   });
-  const handleSubmit = async (data: z.infer<typeof schema>) => {
+  const _handleSubmit = async (data: z.infer<typeof schema>) => {
     const result = await authClient.signIn.username(
       {
         username: data.username,
@@ -76,7 +76,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           //you can also show the original error message
           alert(ctx.error.message);
         },
-      }
+      },
     );
     if (result.error) {
       // Handle the error
