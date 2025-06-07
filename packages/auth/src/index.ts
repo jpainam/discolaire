@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { BetterAuthOptions } from "better-auth";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
@@ -49,14 +50,12 @@ export function initAuth(options: {
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url, token }, request) => {
-        console.log("Sending reset password email to:", user.email);
         const da = await sendEmail({
           from: "Discolaire <hi@discolaire.com>",
           to: "jpainam@gmail.com",
           subject: "Reset your password",
           text: `Click the link to reset your password: ${url}`,
         });
-        console.log("Email sent:", da);
       },
       requireEmailVerification: true,
     },
