@@ -26,7 +26,7 @@ import { Textarea } from "@repo/ui/components/textarea";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useSession } from "~/providers/AuthProvider";
+import { authClient } from "~/auth/client";
 
 //import { toast } from "~/registry/new-york/ui/use-toast";
 
@@ -49,7 +49,7 @@ const profileFormSchema = z.object({
     .array(
       z.object({
         value: z.string().url({ message: "Please enter a valid URL." }),
-      }),
+      })
     )
     .optional(),
 });
@@ -87,8 +87,9 @@ export function ProfileForm() {
     //   ),
     // });
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user } = useSession();
+
+  const { data: session } = authClient.useSession();
+  console.log(session);
   //const user = data?.user;
   //const { t } = useLocale();
 

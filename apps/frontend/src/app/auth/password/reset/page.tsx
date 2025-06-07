@@ -27,6 +27,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
+import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
 
 const formSchema = z.object({
@@ -54,6 +55,11 @@ export default function ResetPassword() {
     setIsSuccess(true);
     // In a real application, you would call your API here to reset the password
     console.log(values);
+    const { data, error } = await authClient.resetPassword({
+      newPassword: "admin1234",
+      token: "0IeOpWLpykapRElqQ3kNkd8G",
+    });
+    console.log("Reset password result:", data, error);
   }
   const router = useRouter();
   const { t } = useLocale();

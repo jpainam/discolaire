@@ -30,18 +30,18 @@ import { Button } from "@repo/ui/components/button";
 import { SidebarMenuButton, useSidebar } from "@repo/ui/components/sidebar";
 
 import { signOut } from "~/actions/signin";
+import { authClient } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useSession } from "~/providers/AuthProvider";
 
 export function UserNav({ className }: { className?: string }) {
   const { t } = useLocale();
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = authClient.useSession();
   const { isMobile } = useSidebar();
   //const pathname = usePathname();
 
-  const user = session.user;
+  const user = session?.user;
   if (!user) return null;
   const initials = user.name.charAt(0) + user.name.charAt(1);
 
@@ -56,9 +56,7 @@ export function UserNav({ className }: { className?: string }) {
             <Avatar className="h-7 w-7 rounded-lg">
               <AvatarImage
                 src={
-                  user.avatar
-                    ? `/api/download/avatars/${user.avatar}`
-                    : undefined
+                  user.image ? `/api/download/avatars/${user.image}` : undefined
                 }
                 alt={initials}
               />
@@ -77,9 +75,7 @@ export function UserNav({ className }: { className?: string }) {
             <Avatar className="h-8 w-8 rounded-lg">
               <AvatarImage
                 src={
-                  user.avatar
-                    ? `/api/download/avatars/${user.avatar}`
-                    : undefined
+                  user.image ? `/api/download/avatars/${user.image}` : undefined
                 }
                 alt={initials}
               />
@@ -102,8 +98,8 @@ export function UserNav({ className }: { className?: string }) {
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
                     src={
-                      user.avatar
-                        ? `/api/download/avatars/${user.avatar}`
+                      user.image
+                        ? `/api/download/avatars/${user.image}`
                         : undefined
                     }
                     alt={initials}
@@ -118,8 +114,8 @@ export function UserNav({ className }: { className?: string }) {
                 </VisuallyHidden>
                 <img
                   src={
-                    user.avatar
-                      ? `/api/download/avatars/${user.avatar}`
+                    user.image
+                      ? `/api/download/avatars/${user.image}`
                       : undefined
                   }
                   alt="Full Image"

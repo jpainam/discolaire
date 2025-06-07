@@ -43,7 +43,8 @@ export async function sendEmail({
   });
 
   if (error) {
-    return error;
+    console.error("Error sending email:", error);
+    throw new Error(error.message);
   } else {
     return data;
   }

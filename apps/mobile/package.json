@@ -56,6 +56,7 @@
   "devDependencies": {
     "@babel/core": "^7.27.4",
     "@repo/api": "workspace:*",
+    "@repo/auth": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",

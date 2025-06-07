@@ -65,11 +65,11 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
-import { useSession } from "~/providers/AuthProvider";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 import { useQuery } from "@tanstack/react-query";
+import { authClient } from "~/auth/client";
 import { AvatarState } from "../AvatarState";
 import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -83,7 +83,7 @@ export function StudentHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
   const router = useRouter();
   const { t } = useLocale();
@@ -92,7 +92,7 @@ export function StudentHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -117,7 +117,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -134,7 +134,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -145,7 +145,7 @@ export function StudentHeader() {
         status,
       });
     },
-    [t, studentStatusMutation, student.id],
+    [t, studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -160,11 +160,10 @@ export function StudentHeader() {
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
-
-  const { user } = useSession();
+  const { data: session } = authClient.useSession();
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(getFullName(student));
@@ -172,7 +171,7 @@ export function StudentHeader() {
   const studentsQuery = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const handleDeleteAvatar = async (userId: string) => {
@@ -204,11 +203,11 @@ export function StudentHeader() {
         avatar={student.user?.avatar}
       />
       <div className="flex w-full flex-col gap-1">
-        {user?.profile == "student" ? (
+        {session?.user.profile == "student" ? (
           <span className="bg-background h-9 px-4 py-2 rounded-md font-semibold w-full text-sm 2xl:w-[450px]">
             {getFullName(student)}
           </span>
-        ) : user?.profile == "contact" ? (
+        ) : session?.user.profile == "contact" ? (
           <StudentSelector
             onChange={(val) => {
               if (val) {
@@ -330,7 +329,7 @@ export function StudentHeader() {
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -447,7 +446,8 @@ export function StudentHeader() {
                   <DropdownMenuSubContent>
                     <DropdownMenuItem
                       disabled={
-                        user?.profile == "student" || user?.profile == "contact"
+                        session?.user.profile == "student" ||
+                        session?.user.profile == "contact"
                       }
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.ACTIVE);
@@ -459,7 +459,8 @@ export function StudentHeader() {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       disabled={
-                        user?.profile == "student" || user?.profile == "contact"
+                        session?.user.profile == "student" ||
+                        session?.user.profile == "contact"
                       }
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.INACTIVE);
@@ -474,7 +475,8 @@ export function StudentHeader() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       disabled={
-                        user?.profile == "student" || user?.profile == "contact"
+                        session?.user.profile == "student" ||
+                        session?.user.profile == "contact"
                       }
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.GRADUATED);
@@ -488,7 +490,8 @@ export function StudentHeader() {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       disabled={
-                        user?.profile == "student" || user?.profile == "contact"
+                        session?.user.profile == "student" ||
+                        session?.user.profile == "contact"
                       }
                       onSelect={() => {
                         void changeStudentStatus(StudentStatus.EXPELLED);

@@ -13,18 +13,18 @@ import { ThemedView } from "~/components/ThemedView";
 import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { useThemeColor } from "~/hooks/useThemeColor";
-import { useSession } from "~/providers/auth-provider";
 import { trpc } from "~/utils/api";
+import { authClient } from "~/utils/auth";
 export default function Screen() {
-  const { session } = useSession();
+  const { data: session } = authClient.useSession();
   if (!session) {
     return <Redirect href="/login" />;
   }
-  if (session.user?.profile === "student") {
+  if (session.user.profile === "student") {
     return <OnlyStudent />;
-  } else if (session.user?.profile === "contact") {
+  } else if (session.user.profile === "contact") {
     return <ContactStudent />;
-  } else if (session.user?.profile === "staff") {
+  } else if (session.user.profile === "staff") {
     return <SearchStudent />;
   } else {
     return (

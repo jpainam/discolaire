@@ -1,6 +1,10 @@
 import { expoClient } from "@better-auth/expo/client";
+import type { Auth } from "@repo/auth";
 import { useQueryClient } from "@tanstack/react-query";
-import { usernameClient } from "better-auth/client/plugins";
+import {
+  inferAdditionalFields,
+  usernameClient,
+} from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
@@ -58,6 +62,7 @@ export const authClient = createAuthClient({
 
   plugins: [
     usernameClient(),
+    inferAdditionalFields<Auth>(),
     expoClient({
       scheme: "expo",
 

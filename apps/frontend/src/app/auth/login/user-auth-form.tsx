@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 import { useLocale } from "~/i18n";
 //import { PasswordInput } from "@repo/ui/components/password-input";
@@ -35,6 +35,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [state, _submitAction, isPending] = React.useActionState(signIn, {
     error: "",
   });
+  const router = useRouter();
   const searchParams = useSearchParams();
   // React.useEffect(() => {
   //   const f = async () => {
@@ -76,7 +77,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           //you can also show the original error message
           alert(ctx.error.message);
         },
-      },
+      }
     );
     if (result.error) {
       // Handle the error
@@ -90,21 +91,35 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const handleSubmit2 = async () => {
     toast.info("Signing up...");
-    const data = await authClient.signUp.email({
-      email: "jpainam@gmail.com",
-      name: "Jean P.Ainam",
-      password: "admin1234",
+    const { data, error } = await authClient.signIn.username({
       username: "admin",
-      profile: "staff",
-      schoolId: "cm1hbntgn00001h578bvyjxln",
+      password: "admin1234",
     });
-    console.log("Sign up result:", data);
-    toast.success(t("signed_up_successfully"));
-    if (data.error) {
-      console.error("Sign up error:", data.error);
-      toast.error(data.error.message);
+    if (error) {
+      console.error("Sign in error:", error);
+      toast.error(error.message);
       return;
     }
+    console.log("Sign in result:", data);
+    toast.success(t("signed_in_successfully"));
+    console.log("Forget password result:", data, error);
+    router.push("/students");
+    // toast.info("Signing up...");
+    // const data = await authClient.signUp.email({
+    //   email: "jpainam@gmail.com",
+    //   name: "Jean P.Ainam",
+    //   password: "admin1234",
+    //   username: "admin",
+    //   profile: "staff",
+    //   schoolId: "cm1hbntgn00001h578bvyjxln",
+    // });
+    // console.log("Sign up result:", data);
+    // toast.success(t("signed_up_successfully"));
+    // if (data.error) {
+    //   console.error("Sign up error:", data.error);
+    //   toast.error(data.error.message);
+    //   return;
+    // }
   };
 
   return (

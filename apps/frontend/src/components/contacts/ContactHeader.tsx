@@ -16,13 +16,13 @@ import { useLocale } from "~/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
+import { authClient } from "~/auth/client";
 import { ContactSelector } from "~/components/shared/selects/ContactSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
-import { useSession } from "~/providers/AuthProvider";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { SearchCombobox } from "../SearchCombobox";
@@ -34,7 +34,7 @@ export function ContactHeader() {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
-  const session = useSession();
+  const { data: session } = authClient.useSession();
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(t("search_a_contact"));
@@ -43,7 +43,7 @@ export function ContactHeader() {
   const contacts = useQuery(
     trpc.contact.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -59,7 +59,7 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   return (
@@ -85,7 +85,7 @@ export function ContactHeader() {
       >
         Text whatsapp
       </Button> */}
-      {session.user?.profile != "staff" ? (
+      {session?.user.profile != "staff" ? (
         <ContactSelector
           className="w-full lg:w-1/3"
           onChange={(val) => {

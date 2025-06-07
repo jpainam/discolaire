@@ -18,7 +18,7 @@ export function initAuth(options: {
       provider: "postgresql",
     }),
     user: {
-      modelName: "User",
+      modelName: "user",
       additionalFields: {
         profile: {
           type: "string",
@@ -35,19 +35,29 @@ export function initAuth(options: {
       },
     },
     session: {
-      modelName: "Session",
+      modelName: "session",
     },
     account: {
-      modelName: "Account",
+      modelName: "account",
     },
     verification: {
-      modelName: "Verification",
+      modelName: "verification",
     },
 
     baseURL: options.baseUrl,
     secret: options.secret,
     emailAndPassword: {
       enabled: true,
+      sendResetPassword: async ({ user, url, token }, request) => {
+        console.log("Sending reset password email to:", user.email);
+        const da = await sendEmail({
+          from: "Discolaire <hi@discolaire.com>",
+          to: "jpainam@gmail.com",
+          subject: "Reset your password",
+          text: `Click the link to reset your password: ${url}`,
+        });
+        console.log("Email sent:", da);
+      },
       requireEmailVerification: true,
     },
     emailVerification: {
@@ -65,7 +75,9 @@ export function initAuth(options: {
     },
     plugins: [
       username(),
-      apiKey(),
+      apiKey({
+        enableMetadata: true,
+      }),
       oAuthProxy({
         /**
          * Auto-inference blocked by https://github.com/better-auth/better-auth/pull/2891
@@ -78,8 +90,8 @@ export function initAuth(options: {
     ],
     // socialProviders: {
     //   discord: {
-    //     clientId: options.discordClientId,
-    //     clientSecret: options.discordClientSecret,
+    //     clientId: process.env.AUTH_DISCORD_ID!,
+    //     clientSecret: process.env.AUTH_DISCORD_SECRET!,
     //     redirectURI: `${options.productionUrl}/api/auth/callback/discord`,
     //   },
     // },

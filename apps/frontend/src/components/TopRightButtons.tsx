@@ -6,10 +6,10 @@ import { Button } from "@repo/ui/components/button";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
+import { authClient } from "~/auth/client";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useSession } from "~/providers/AuthProvider";
 import { FeedBackDialog } from "./FeedbackDialog";
 import { UserLog } from "./UserLogs";
 
@@ -17,7 +17,7 @@ export function TopRightButtons() {
   const { openModal } = useModal();
   //const isActive = false;
   const { openSheet } = useSheet();
-  const session = useSession();
+  const { data: session } = authClient.useSession();
   const router = useRouter();
   const { t } = useLocale("description");
   return (
@@ -25,7 +25,7 @@ export function TopRightButtons() {
       <SimpleTooltip content="Messages">
         <Button
           onClick={() => {
-            router.push(`/users/${session.user?.id}/mails`);
+            router.push(`/users/${session?.user.id}/mails`);
           }}
           className="size-7"
           size={"icon"}

@@ -17,6 +17,7 @@ import { PermissionAction } from "~/permissions";
 
 import { useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
+import { authClient } from "~/auth/client";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { SearchCombobox } from "~/components/SearchCombobox";
@@ -25,18 +26,17 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
-import { useSession } from "~/providers/AuthProvider";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 export function StudentPageHeader() {
   const { t } = useLocale();
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = authClient.useSession();
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [value, setValue] = useState("");
@@ -46,7 +46,7 @@ export function StudentPageHeader() {
   const students = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
@@ -58,7 +58,7 @@ export function StudentPageHeader() {
     setBreadcrumbs(breads);
   }, [setBreadcrumbs, t]);
 
-  if (session.user?.profile !== "staff") {
+  if (session?.user.profile !== "staff") {
     return null;
   }
   return (

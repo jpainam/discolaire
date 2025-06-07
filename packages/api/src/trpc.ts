@@ -40,7 +40,7 @@ export const createTRPCContext = async (opts: {
     authApi,
     session,
     db,
-    schoolYearId: opts.headers.get("x-school-year") ?? null,
+    schoolYearId: opts.headers.get("x-school-year") ?? "2022-2023",
   };
 };
 /**

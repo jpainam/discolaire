@@ -14,14 +14,14 @@ import { ThemedText } from "~/components/ThemedText";
 import { ThemedView } from "~/components/ThemedView";
 import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
-import { useSession } from "~/providers/auth-provider";
+import { authClient } from "~/utils/auth";
 
 export default function Screen() {
   const [form, setForm] = useState({
     emailNotifications: true,
     pushNotifications: false,
   });
-  const { session } = useSession();
+  const { data: session } = authClient.useSession();
 
   const theme = useColorScheme() ?? "light";
 

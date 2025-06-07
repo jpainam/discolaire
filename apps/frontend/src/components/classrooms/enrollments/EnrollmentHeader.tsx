@@ -21,12 +21,12 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import { toast } from "sonner";
+import { authClient } from "~/auth/client";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useSession } from "~/providers/AuthProvider";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { getAge } from "~/utils";
@@ -36,15 +36,15 @@ export function EnrollmentHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(params.id),
+    trpc.classroom.students.queryOptions(params.id)
   );
   const { data: classroom } = useSuspenseQuery(
-    trpc.classroom.get.queryOptions(params.id),
+    trpc.classroom.get.queryOptions(params.id)
   );
   const { t } = useLocale();
   const { openModal } = useModal();
 
-  const session = useSession();
+  const { data: session } = authClient.useSession();
   const { school } = useSchool();
   const router = useRouter();
   const canUpdateSchool = useCheckPermission("school", PermissionAction.UPDATE);
@@ -64,13 +64,13 @@ export function EnrollmentHeader() {
     const oldest =
       students.length > 0
         ? Math.max(
-            ...students.map((student) => getAge(student.dateOfBirth) || 0),
+            ...students.map((student) => getAge(student.dateOfBirth) || 0)
           )
         : 0;
     const youngest =
       students.length > 0
         ? Math.min(
-            ...students.map((student) => getAge(student.dateOfBirth) || 0),
+            ...students.map((student) => getAge(student.dateOfBirth) || 0)
           )
         : 0;
 
@@ -87,7 +87,7 @@ export function EnrollmentHeader() {
           <Label>{t("effective")}: </Label>
           <span className="text-muted-foreground">{classroom.size}</span>
         </FlatBadge>
-        {session.user?.profile == "staff" && (
+        {session?.user.profile == "staff" && (
           <>
             <Separator orientation="vertical" className="hidden h-5 md:block" />
             <FlatBadge
@@ -155,7 +155,7 @@ export function EnrollmentHeader() {
                 ) {
                   toast.warning(
                     t(
-                      "Allow enrollments in classrooms that exceed the maximum size",
+                      "Allow enrollments in classrooms that exceed the maximum size"
                     ),
                     {
                       position: "top-center",
@@ -166,11 +166,11 @@ export function EnrollmentHeader() {
                             label: t("Authorize"),
                             onClick: () =>
                               router.push(
-                                `/administration/my-school/${school.id}`,
+                                `/administration/my-school/${school.id}`
                               ),
                           }
                         : undefined,
-                    },
+                    }
                   );
                   return;
                 }
@@ -206,7 +206,7 @@ export function EnrollmentHeader() {
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -217,7 +217,7 @@ export function EnrollmentHeader() {
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

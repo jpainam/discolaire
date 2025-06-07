@@ -33,6 +33,7 @@ import { usePathname } from "next/navigation";
 import { UserNav } from "~/components/user-nav";
 
 import React from "react";
+import { authClient } from "~/auth/client";
 import { FeedBackDialog } from "~/components/FeedbackDialog";
 import { Shortcut } from "~/components/Shortcut";
 import { SidebarLogo } from "~/components/sidebar-logo";
@@ -40,7 +41,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { useSession } from "~/providers/AuthProvider";
 export function MainSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -62,8 +62,8 @@ export function MainSidebar({
       icon: HouseIcon,
     },
   ];
-  const session = useSession();
-  if (session.user?.profile == "staff") {
+  const { data: session } = authClient.useSession();
+  if (session?.user.profile == "staff") {
     data.push(
       ...[
         {
@@ -76,7 +76,7 @@ export function MainSidebar({
           url: `/timetables`,
           icon: CalendarDays,
         },
-      ],
+      ]
     );
   }
   data.push({
@@ -86,7 +86,7 @@ export function MainSidebar({
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
@@ -97,7 +97,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({
@@ -110,7 +110,7 @@ export function MainSidebar({
   const others = [
     {
       name: "settings",
-      url: `/users/${session.user?.id}/settings`,
+      url: `/users/${session?.user.id}/settings`,
       icon: RiSettings3Line,
     },
     {

@@ -32,9 +32,9 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import { authClient } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useSession } from "~/providers/AuthProvider";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateEditSubject } from "./CreateEditSubject";
@@ -44,18 +44,18 @@ export function SubjectTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { openSheet } = useSheet();
-  const session = useSession();
+  const { data: session } = authClient.useSession();
   const { data: subjects } = useSuspenseQuery(
-    trpc.classroom.subjects.queryOptions(params.id),
+    trpc.classroom.subjects.queryOptions(params.id)
   );
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const queryClient = useQueryClient();
 
@@ -63,14 +63,14 @@ export function SubjectTable() {
     trpc.subject.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.subjects.pathFilter(),
+          trpc.classroom.subjects.pathFilter()
         );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    }),
+    })
   );
 
   return (
@@ -113,7 +113,7 @@ export function SubjectTable() {
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {session.user?.profile == "staff" ? (
+                  {session?.user.profile == "staff" ? (
                     <Link
                       className="hover:text-blue-600 hover:underline"
                       href={routes.staffs.details(subject.teacher?.id ?? "#")}

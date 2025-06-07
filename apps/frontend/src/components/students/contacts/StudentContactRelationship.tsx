@@ -19,8 +19,8 @@ import { Separator } from "@repo/ui/components/separator";
 import { useLocale } from "~/i18n";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { authClient } from "~/auth/client";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
-import { useSession } from "~/providers/AuthProvider";
 import { useTRPC } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({
@@ -47,10 +47,12 @@ export function StudentContactRelationship({
 }: {
   studentContact: StudentContactGetProcedureOutput;
 }) {
-  const session = useSession();
-  const disabled =
-    session.user?.profile === "student" || session.user?.profile === "contact";
+  const { data: session } = authClient.useSession();
+  const { t } = useLocale();
+  const trpc = useTRPC();
 
+  const disabled =
+    session?.user.profile === "student" || session?.user.profile === "contact";
   const form = useForm<z.infer<typeof editRelationshipSchema>>({
     resolver: zodResolver(editRelationshipSchema),
     disabled: disabled,
@@ -69,7 +71,6 @@ export function StudentContactRelationship({
       paysFee: studentContact.paysFee ?? false,
     },
   });
-  const trpc = useTRPC();
   const queryClient = useQueryClient();
   const updateStudentContactMutation = useMutation(
     trpc.studentContact.update.mutationOptions({
@@ -81,7 +82,7 @@ export function StudentContactRelationship({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   function onSubmit(data: z.infer<typeof editRelationshipSchema>) {
@@ -94,8 +95,6 @@ export function StudentContactRelationship({
       });
     }
   }
-
-  const { t } = useLocale();
 
   return (
     <Form {...form}>
