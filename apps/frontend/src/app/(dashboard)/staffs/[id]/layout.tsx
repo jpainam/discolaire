@@ -8,20 +8,20 @@ import {
 } from "lucide-react";
 import React, { Suspense } from "react";
 
-import { checkPermission } from "@repo/api/permission";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
 import { routes } from "~/configs/routes";
 import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { getSession } from "~/auth/server";
 
 interface UserLink {
   icon: React.ReactNode;

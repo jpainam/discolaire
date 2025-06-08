@@ -12,12 +12,12 @@ import {
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 
-import { checkPermission } from "@repo/api/permission";
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 import { SchoolTableAction } from "./SchoolTableAction";
-import { getSession } from "~/auth/server";
 export default async function Page() {
   const sessions = await getSession();
   if (!sessions) {
@@ -31,11 +31,11 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   const canUpdateSchool = await checkPermission(
     "school",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canDeleteSchool = await checkPermission(
     "school",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canReadSchool = await checkPermission("school", PermissionAction.READ);
 

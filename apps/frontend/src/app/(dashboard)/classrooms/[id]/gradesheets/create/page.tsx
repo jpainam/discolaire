@@ -1,13 +1,13 @@
-import { checkPermission } from "@repo/api/permission";
 import { CreateGradeSheet } from "~/components/classrooms/gradesheets/grades/CreateGradeSheet";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const canCreateGradeSheet = await checkPermission(
     "gradesheet",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   if (!canCreateGradeSheet) {

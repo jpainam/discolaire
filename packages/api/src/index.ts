@@ -36,12 +36,5 @@ export enum PermissionAction {
   UPDATE = "Update",
 }
 
-interface Permission {
-  resource: string;
-  action: "Read" | "Update" | "Create" | "Delete";
-  effect: "Allow" | "Deny";
-  condition?: Record<string, unknown> | null;
-}
-
 export { appRouter, createCaller, createTRPCContext };
-export type { AppRouter, Permission, RouterInputs, RouterOutputs };
+export type { AppRouter, RouterInputs, RouterOutputs };

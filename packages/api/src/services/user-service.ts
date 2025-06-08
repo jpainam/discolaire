@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import type { Prisma } from "@repo/db";
 import { db } from "@repo/db";
 
-import type { Permission } from "..";
 import { env } from "../env";
 import { hashPassword } from "../utils";
 
@@ -126,7 +125,7 @@ export const userService = {
         resource,
         action,
         effect,
-      } as Permission;
+      };
       updatedPermissions = [...permissions, newPermission];
     } else {
       updatedPermissions = permissions.filter(
@@ -222,7 +221,12 @@ export async function getPermissions(userId: string) {
     where: { id: userId },
   });
 
-  return (user.permissions ?? []) as unknown as Permission[];
+  return (user.permissions ?? []) as {
+    resource: string;
+    action: "Read" | "Update" | "Create" | "Delete";
+    effect: "Allow" | "Deny";
+    condition?: Record<string, unknown> | null;
+  }[];
 }
 
 export async function attachUser({

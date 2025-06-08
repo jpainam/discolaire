@@ -1,6 +1,6 @@
-import { checkPermission } from "@repo/api/permission";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 import { CreateEditSchool } from "./CreateEditSchool";
 
@@ -11,7 +11,7 @@ export default async function Page(props: {
 
   const canUpdateSchool = await checkPermission(
     "school",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   if (!canUpdateSchool) {
     return <NoPermission className="my-8" />;

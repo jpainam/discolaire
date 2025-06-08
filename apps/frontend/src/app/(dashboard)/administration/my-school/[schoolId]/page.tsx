@@ -24,17 +24,17 @@ import FlatBadge from "~/components/FlatBadge";
 import { NoPermission } from "~/components/no-permission";
 import { getServerTranslations } from "~/i18n/server";
 
-import { checkPermission } from "@repo/api/permission";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { env } from "~/env";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { DefaultSettings } from "./DefaultSettings";
 import { SchoolDetailAction } from "./SchoolDetailAction";
-import { getSession } from "~/auth/server";
 
 export default async function Page(props: {
   params: Promise<{ schoolId: string }>;
@@ -49,7 +49,7 @@ export default async function Page(props: {
   }
   const queryClient = getQueryClient();
   const school = await queryClient.fetchQuery(
-    trpc.school.get.queryOptions(schoolId),
+    trpc.school.get.queryOptions(schoolId)
   );
 
   if (
@@ -63,7 +63,7 @@ export default async function Page(props: {
 
   const canUpdateSchool = await checkPermission(
     "school",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
 
   const { t } = await getServerTranslations();

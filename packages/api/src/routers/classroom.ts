@@ -46,7 +46,7 @@ export const classroomRouter = {
     }
     // Has access to classrooms where he teachers
     if (ctx.session.user.profile === "staff") {
-      if (await checkPermission("classroom", "Read", {}, ctx.permissions)) {
+      if (checkPermission("classroom", "Read", {}, ctx.permissions)) {
         return classrooms;
       }
       const classes = await staffService.getClassrooms(

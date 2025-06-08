@@ -142,7 +142,7 @@ export const contactRouter = {
         });
       }
 
-      const canReadStaff = await checkPermission(
+      const canReadStaff = checkPermission(
         "staff",
         "Read",
         {},

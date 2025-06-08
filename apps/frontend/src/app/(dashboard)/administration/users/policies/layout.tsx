@@ -1,7 +1,7 @@
-import { checkPermission } from "@repo/api/permission";
 import { Label } from "@repo/ui/components/label";
 import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 
 import { PolicyHeader } from "~/components/administration/policies/PolicyHeader";
 import { NoPermission } from "~/components/no-permission";

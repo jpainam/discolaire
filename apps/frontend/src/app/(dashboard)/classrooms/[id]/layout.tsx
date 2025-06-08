@@ -1,11 +1,11 @@
 import React from "react";
 
-import { checkPermission } from "@repo/api/permission";
+import { getSession } from "~/auth/server";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
-import { getSession } from "~/auth/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ export default async function Layout(props: {
   } else {
     canReadClassroom = await checkPermission(
       "classroom",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
   }
 

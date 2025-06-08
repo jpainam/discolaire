@@ -1,15 +1,15 @@
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 
-import { checkPermission } from "@repo/api/permission";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
+import { checkPermission } from "~/permissions/server";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
-import { getSession } from "~/auth/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -28,7 +28,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (session?.user.profile === "staff") {
     const canReadStudent = await checkPermission(
       "student",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
     if (!canReadStudent) {
       return <NoPermission className="my-8" />;

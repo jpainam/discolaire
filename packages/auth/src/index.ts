@@ -57,7 +57,7 @@ export function initAuth(options: {
           text: `Click the link to reset your password: ${url}`,
         });
       },
-      requireEmailVerification: true,
+      requireEmailVerification: false,
     },
     emailVerification: {
       sendOnSignUp: true,
@@ -87,13 +87,6 @@ export function initAuth(options: {
       expo(),
       nextCookies(),
     ],
-    // socialProviders: {
-    //   discord: {
-    //     clientId: process.env.AUTH_DISCORD_ID!,
-    //     clientSecret: process.env.AUTH_DISCORD_SECRET!,
-    //     redirectURI: `${options.productionUrl}/api/auth/callback/discord`,
-    //   },
-    // },
     trustedOrigins: ["expo://"],
   } satisfies BetterAuthOptions;
 
@@ -102,15 +95,3 @@ export function initAuth(options: {
 
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth["$Infer"]["Session"];
-
-// export const auth = betterAuth({
-//   database: prismaAdapter(prisma, {
-//     provider: "postgresql",
-//   }),
-//   plugins: [username(), apiKey()],
-// });
-export const auth = initAuth({
-  baseUrl: "http://localhost:3000",
-  productionUrl: "https://discolaire.com",
-  secret: "0111d4f51b0fab4c6fcc782c2e4420ae6c6b0391da1b53fdc425e327b61501f1",
-});

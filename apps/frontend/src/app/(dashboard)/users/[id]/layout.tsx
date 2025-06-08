@@ -1,9 +1,9 @@
 import { NoPermission } from "~/components/no-permission";
 
-import { checkPermission } from "@repo/api/permission";
 import { redirect } from "next/navigation";
 import { getSession } from "~/auth/server";
 import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 export default async function Layout(props: {
   params: Promise<{ id: string }>;
