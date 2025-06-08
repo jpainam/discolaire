@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://school.discolaire.com"
-      : "http://localhost:3000",
+      : "http://localhost:3000"
   ),
   title: "Gestion Scolaire",
   description: "Gestion scolaire pour les écoles",
@@ -56,11 +56,9 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
-  //const session = await getSession();
   const cookieStore = await cookies();
-  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "wague";
+  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "blue";
   const isScaled = activeThemeValue.endsWith("-scaled");
-  //const userPromise = getUser();
 
   const lng = await detectLanguage();
   return (
@@ -93,10 +91,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <body
           className={cn(
             "bg-background overscroll-none font-sans antialiased",
-            //activeThemeValue ? `theme-${activeThemeValue}` : "",
-            "theme-wague",
+            activeThemeValue ? `theme-${activeThemeValue}` : "",
             isScaled ? "theme-scaled" : "",
-            fontVariables,
+            fontVariables
           )}
         >
           <ThemeProvider
