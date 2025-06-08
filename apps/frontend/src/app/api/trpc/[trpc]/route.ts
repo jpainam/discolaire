@@ -25,6 +25,10 @@ export const OPTIONS = () => {
 };
 
 const handler = async (req: NextRequest) => {
+  const schoolYearId = req.cookies.get("x-school-year")?.value ?? "";
+  const heads = new Headers(req.headers);
+  heads.set("x-school-year", schoolYearId);
+
   const response = await fetchRequestHandler({
     endpoint: "/api/trpc",
     router: appRouter,
@@ -32,7 +36,7 @@ const handler = async (req: NextRequest) => {
     createContext: () =>
       createTRPCContext({
         auth: auth,
-        headers: req.headers,
+        headers: heads,
       }),
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`, error);

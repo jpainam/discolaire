@@ -36,12 +36,12 @@ export const createTRPCContext = async (opts: {
   const session = await authApi.getSession({
     headers: opts.headers,
   });
-  console.log(">>>>>>>>>>>>>>>School Year ID:", opts.headers);
+  const schoolYearId = opts.headers.get("x-school-year") ?? null;
   return {
     authApi,
     session,
     db,
-    schoolYearId: opts.headers.get("x-school-year") ?? "2022-2023",
+    schoolYearId: schoolYearId,
   };
 };
 /**
