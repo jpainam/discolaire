@@ -27,11 +27,21 @@ export async function POST(request: Request) {
     let concernedId = "";
     let concernedType = "";
     if (entityId && entityType) {
-      const user = await caller.user.getUserByEntity({
+      const entity = await caller.user.getUserByEntityId({
         entityId,
         entityType: entityType as "staff" | "contact" | "student",
       });
-      concernedId = user.id;
+      if (!entity.userId) {
+        const user = await caller.user.createAutoUser({
+          entityId,
+          entityType: entityType as "staff" | "contact" | "student",
+          name: entity.name,
+        });
+        concernedId = user.id;
+      } else {
+        concernedId = entity.userId;
+      }
+
       concernedType = entityType;
     } else if (userId) {
       const user = await caller.user.get(userId);

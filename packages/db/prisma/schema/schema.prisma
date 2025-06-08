@@ -1058,14 +1058,3 @@ enum StudentStatus {
     GRADUATED
     EXPELLED
 }
-
-model PasswordReset {
-    id        Int      @id @default(autoincrement())
-    userId    String   @unique
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    resetCode String
-    expiresAt DateTime
-    createdAt DateTime @default(now())
-
-    @@index([resetCode, expiresAt])
-}

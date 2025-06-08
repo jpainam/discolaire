@@ -251,6 +251,7 @@ export const studentRouter = {
         profile: "student",
         entityId: student.id,
         schoolId: ctx.schoolId,
+        authApi: ctx.authApi,
       });
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
@@ -571,6 +572,7 @@ export const studentRouter = {
           name: `${student.firstName} ${student.lastName}`,
           entityId: student.id,
           schoolId: ctx.schoolId,
+          authApi: ctx.authApi,
         });
         await ctx.db.user.update({
           where: {

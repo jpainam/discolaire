@@ -131,6 +131,7 @@ export const staffRouter = {
         profile: "staff",
         schoolId: ctx.schoolId,
         entityId: staff.id,
+        authApi: ctx.authApi,
       });
       return staff;
     }),

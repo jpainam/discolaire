@@ -10,7 +10,6 @@ model User {
     email                        String?
     avatar                       String?
     isActive                     Boolean                    @default(true)
-    password                     String
     createdAt                    DateTime                   @default(now())
     updatedAt                    DateTime                   @updatedAt
     profile                      String
@@ -37,7 +36,6 @@ model User {
     documents                    Document[]                 @relation("owner")
     documentCreatedBy            Document[]                 @relation("createdBy")
     subjectJournals              SubjectJournal[]           @relation("createdBy")
-    passwordResets               PasswordReset?
     scheduleJobs                 ScheduleJob[]
     loginActivities              LoginActivity[]
     borrowedBooks                BorrowedBook[]

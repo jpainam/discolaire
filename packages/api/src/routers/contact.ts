@@ -299,6 +299,7 @@ export const contactRouter = {
         profile: "contact",
         schoolId: ctx.schoolId,
         entityId: contact.id,
+        authApi: ctx.authApi,
       });
 
       return contact;

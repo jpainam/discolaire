@@ -78,14 +78,13 @@ export function CreateEditUser({
       updateUserMutation.mutate({
         id: userId,
         username: data.username,
-        password: data.password,
       });
     } else {
       toast.loading(t("creating"), { id: 0 });
       createUserMutation.mutate({
         username: data.username,
-        password: data.password,
         entityId: entityId,
+        password: data.password,
         profile: type,
       });
     }

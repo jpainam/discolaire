@@ -20,8 +20,13 @@ export function initAuth(options: {
       provider: "postgresql",
     }),
     user: {
+      // Prisma automically camelCases model names, so we use camelCase here
       modelName: "user",
       additionalFields: {
+        isActive: {
+          type: "boolean",
+          required: true,
+        },
         profile: {
           type: "string",
           required: true,
@@ -52,8 +57,8 @@ export function initAuth(options: {
           await sendEmail({
             from: "Discolaire <hi@discolaire.com>",
             to: user.email, // verification email must be sent to the current user email to approve the change
-            subject: "Approve email change",
-            text: `Click the link to approve the change: ${url}`,
+            subject: "Confirmation de changement d'email",
+            text: `Cliquez sur le lien pour confirmer le changement.: ${url}`,
           });
         },
       },
@@ -76,8 +81,8 @@ export function initAuth(options: {
         const da = await sendEmail({
           from: "Discolaire <hi@discolaire.com>",
           to: user.email,
-          subject: "Reset your password",
-          text: `Click the link to reset your password: ${url}`,
+          subject: "Réinitialisez votre mot de passe.",
+          text: `Cliquez sur le lien pour réinitialiser votre mot de passe: ${url}`,
         });
       },
       requireEmailVerification: false,
@@ -90,8 +95,8 @@ export function initAuth(options: {
           from: "Discolaire <hi@discolaire.com>",
           to: user.email,
           subject: "Verify your email address",
-          text: `Click the link to verify your email: ${url} or copy and paste this token: ${token}`,
-          html: `<p>Click the link to verify your email: <a href="${url}">${url}</a></p><p>or copy and paste this token: <strong>${token}</strong></p>`,
+          text: `Cliquez sur le lien pour vérifier votre adresse e-mail : ${url}`,
+          html: `<p>Click the link to verify your email: <a href="${url}">${url}</a></p>`,
         });
       },
     },
@@ -118,3 +123,8 @@ export function initAuth(options: {
 
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth["$Infer"]["Session"];
+export const auth = initAuth({
+  baseUrl: "http://localhost:3000",
+  productionUrl: "https://discolaire.com",
+  secret: "test_scret",
+});

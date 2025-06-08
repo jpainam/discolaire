@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 
+import type { Auth } from "@repo/auth";
 import type { Prisma } from "@repo/db";
 import { db } from "@repo/db";
 
@@ -13,23 +14,24 @@ export const userService = {
     profile,
     name,
     entityId,
+    authApi,
   }: {
     schoolId: string;
     profile: string;
     name: string;
     entityId: string;
+    authApi: Auth["api"];
   }) => {
-    // create user
-    const userData = {
-      username: uuidv4(),
-      password: await hashPassword("password"),
-      schoolId: schoolId,
-      profile: profile,
-      isActive: false,
-      name: name,
-    };
-    const user = await db.user.create({
-      data: userData,
+    const session = await authApi.signUpEmail({
+      body: {
+        email: `${uuidv4()}@discolaire.com`,
+        username: uuidv4(),
+        password: await hashPassword("password"),
+        schoolId: schoolId,
+        profile: profile,
+        isActive: false,
+        name: name,
+      },
     });
     if (profile === "student") {
       await db.student.update({
@@ -37,7 +39,7 @@ export const userService = {
           id: entityId,
         },
         data: {
-          userId: user.id,
+          userId: session.user.id,
         },
       });
     } else if (profile === "staff") {
@@ -46,7 +48,7 @@ export const userService = {
           id: entityId,
         },
         data: {
-          userId: user.id,
+          userId: session.user.id,
         },
       });
     } else if (profile === "contact") {
@@ -55,12 +57,12 @@ export const userService = {
           id: entityId,
         },
         data: {
-          userId: user.id,
+          userId: session.user.id,
         },
       });
     }
     // send email
-    return user;
+    return session.user;
   },
   // TODO: add email sending
   sendWelcomeEmail: async ({
@@ -167,55 +169,6 @@ export const userService = {
   },
 };
 
-export async function getUserByEntity({
-  entityId,
-  entityType,
-  schoolId,
-}: {
-  entityId: string;
-  entityType: "staff" | "contact" | "student";
-  schoolId: string;
-}) {
-  let userId, name;
-  if (entityType == "staff") {
-    const dd = await db.staff.findUniqueOrThrow({
-      where: {
-        id: entityId,
-      },
-    });
-    userId = dd.userId;
-    name = `${dd.lastName} ${dd.firstName}`;
-  } else if (entityType == "student") {
-    const dd = await db.student.findFirstOrThrow({
-      where: {
-        id: entityId,
-      },
-    });
-    userId = dd.userId;
-    name = `${dd.lastName} ${dd.firstName}`;
-  } else {
-    const dd = await db.contact.findFirstOrThrow({
-      where: {
-        id: entityId,
-      },
-    });
-    userId = dd.userId;
-    name = `${dd.lastName} ${dd.firstName}`;
-  }
-  if (!userId) {
-    return userService.createAutoUser({
-      schoolId: schoolId,
-      entityId: entityId,
-      profile: entityType,
-      name: name,
-    });
-  }
-  return db.user.findFirstOrThrow({
-    where: {
-      id: userId,
-    },
-  });
-}
 export async function getPermissions(userId: string) {
   const user = await db.user.findUniqueOrThrow({
     where: { id: userId },
@@ -291,5 +244,55 @@ export async function attachUser({
   return {
     email: ddd.email,
     name: `${ddd.lastName} ${ddd.firstName}`,
+  };
+}
+
+export async function getEntityById({
+  entityId,
+  entityType,
+}: {
+  entityId: string;
+  entityType: "staff" | "student" | "contact";
+}) {
+  if (entityType == "staff") {
+    const dd = await db.staff.findUniqueOrThrow({
+      where: {
+        id: entityId,
+      },
+    });
+    return {
+      name: `${dd.lastName} ${dd.firstName}`,
+      id: dd.id,
+      userId: dd.userId,
+      email: dd.email,
+      entityType: "staff",
+    };
+  }
+  if (entityType == "student") {
+    const dd = await db.student.findUniqueOrThrow({
+      where: {
+        id: entityType,
+      },
+    });
+    return {
+      name: `${dd.lastName} ${dd.firstName}`,
+      id: dd.id,
+      userId: dd.userId,
+      email: dd.email,
+      entityType: "student",
+    };
+  }
+
+  const dd = await db.contact.findFirstOrThrow({
+    where: {
+      id: entityId,
+    },
+  });
+  return {
+    name: `${dd.lastName} ${dd.firstName}`,
+    id: dd.id,
+    userId: dd.userId,
+    entityType: "contact",
+    email: dd.email,
   };
 }

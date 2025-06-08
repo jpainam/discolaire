@@ -4,12 +4,11 @@ import { z } from "zod";
 
 import {
   attachUser,
+  getEntityById,
   getPermissions,
-  getUserByEntity,
   userService,
 } from "../services/user-service";
 import { protectedProcedure, publicProcedure } from "../trpc";
-import { hashPassword } from "../utils";
 
 const MAX_ATTEMPTS = 5;
 
@@ -40,7 +39,6 @@ export const userRouter = {
     }),
 
   getByEmail: publicProcedure
-    //.use(ratelimiter({ limit: 5, namespace: "getByEmail.password" }))
     .input(
       z.object({
         email: z.string().email(),
@@ -139,25 +137,25 @@ export const userRouter = {
           code: "FORBIDDEN",
         });
       }
-      const user = await ctx.db.user.create({
-        data: {
+
+      const session = await ctx.authApi.signUpEmail({
+        body: {
           email: `${input.username}@discolaire.com`,
-          username: input.username,
-          name: input.username,
+          password: input.password,
           profile: input.profile,
           schoolId: ctx.schoolId,
-          password: await hashPassword(input.password),
-          //emailVerified: input.emailVerified,
+          username: input.username,
+          name: input.username,
           isActive: input.isActive,
         },
       });
       const { email, name } = await attachUser({
         entityId: input.entityId,
         entityType: input.profile,
-        userId: user.id,
+        userId: session.user.id,
       });
       return ctx.db.user.update({
-        where: { id: user.id },
+        where: { id: session.user.id },
         data: {
           name,
           email,
@@ -170,7 +168,6 @@ export const userRouter = {
         id: z.string().min(1),
         username: z.string().min(1),
         name: z.string().optional(),
-        password: z.string().optional(),
         email: z.string().optional(),
         isActive: z.boolean().default(true),
       }),
@@ -190,7 +187,8 @@ export const userRouter = {
           message: "User with this username already exists",
         });
       }
-      return ctx.db.user.update({
+
+      const user = await ctx.db.user.update({
         where: {
           id: input.id,
         },
@@ -198,12 +196,18 @@ export const userRouter = {
           username: input.username,
           ...(input.name ? { name: input.name } : {}),
           ...(input.email ? { email: input.email } : {}),
-          ...(input.password
-            ? { password: await hashPassword(input.password) }
-            : {}),
           isActive: input.isActive,
         },
       });
+      return user;
+      // if (input.email && input.email != user.email) {
+      //   await ctx.authApi.changeEmail({
+      //     userId: user.id,
+      //     body: {
+      //       email: input.username ?? "",
+      //     },
+      //   });
+      // }
     }),
   createAutoUser: protectedProcedure
     .input(
@@ -219,20 +223,20 @@ export const userRouter = {
         profile: input.entityType,
         name: input.name,
         entityId: input.entityId,
+        authApi: ctx.authApi,
       });
     }),
-  getUserByEntity: protectedProcedure
+  getUserByEntityId: protectedProcedure
     .input(
       z.object({
         entityId: z.string(),
         entityType: z.enum(["staff", "contact", "student"]),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      return getUserByEntity({
+    .query(async ({ input }) => {
+      return getEntityById({
         entityId: input.entityId,
         entityType: input.entityType,
-        schoolId: ctx.schoolId,
       });
     }),
   getPermissions: protectedProcedure
@@ -276,14 +280,14 @@ export const userRouter = {
           code: "FORBIDDEN",
         });
       }
-      const user = await ctx.db.user.create({
-        data: {
+      const session = await ctx.authApi.signUpEmail({
+        body: {
           email: `${input.username}@discolaire.com`,
           username: input.username,
           name: input.username,
           profile: invite.entityType,
           schoolId: invite.schoolId,
-          password: await hashPassword(input.password),
+          password: input.password,
           isActive: true,
         },
       });
@@ -298,10 +302,10 @@ export const userRouter = {
       await attachUser({
         entityId: invite.entityId,
         entityType: invite.entityType as "staff" | "contact" | "student",
-        userId: user.id,
+        userId: session.user.id,
       });
 
-      return user;
+      return session.user;
     }),
   updatePermission: protectedProcedure
     .input(
