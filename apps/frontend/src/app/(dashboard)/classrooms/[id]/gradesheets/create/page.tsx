@@ -7,7 +7,7 @@ import { caller } from "~/trpc/server";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const canCreateGradeSheet = await checkPermission(
     "gradesheet",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
 
   if (!canCreateGradeSheet) {

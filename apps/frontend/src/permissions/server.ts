@@ -6,7 +6,7 @@ import { caller } from "~/trpc/server";
 export async function checkPermission(
   resource: string,
   action: "Read" | "Update" | "Delete" | "Create",
-  condition: Record<string, any> = {}
+  condition: Record<string, any> = {},
 ) {
   const session = await getSession();
   if (!session) return false;
@@ -21,7 +21,7 @@ export async function checkPermission(
         if (perm.condition) {
           // If deny condition matches, return false
           const conditionMatches = Object.entries(perm.condition).every(
-            ([key, value]) => condition[key] === value
+            ([key, value]) => condition[key] === value,
           );
           if (conditionMatches) {
             return false;
@@ -34,7 +34,7 @@ export async function checkPermission(
       if (perm.effect === "Allow") {
         if (perm.condition) {
           const conditionMatches = Object.entries(perm.condition).every(
-            ([key, value]) => condition[key] === value
+            ([key, value]) => condition[key] === value,
           );
           if (conditionMatches) isAllowed = true;
         } else {

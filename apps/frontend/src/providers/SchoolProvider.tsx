@@ -3,12 +3,16 @@
 import type { PropsWithChildren } from "react";
 import { createContext, useContext, useMemo } from "react";
 
-import type { Permission } from "@repo/api";
 import type { School, SchoolYear } from "@repo/db";
 
 interface SchoolContextProps {
   school: School;
-  permissions: Permission[];
+  permissions: {
+    resource: string;
+    action: "Read" | "Update" | "Create" | "Delete";
+    effect: "Allow" | "Deny";
+    condition?: Record<string, unknown> | null;
+  }[];
   schoolYear: SchoolYear;
 }
 
@@ -36,7 +40,12 @@ export const SchoolContextProvider = ({
 }: PropsWithChildren<{
   school: School;
   schoolYear: SchoolYear;
-  permissions: Permission[];
+  permissions: {
+    resource: string;
+    action: "Read" | "Update" | "Create" | "Delete";
+    effect: "Allow" | "Deny";
+    condition?: Record<string, unknown> | null;
+  }[];
 }>) => {
   const contextValue = useMemo(
     () => ({ school, permissions, schoolYear }),

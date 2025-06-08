@@ -31,11 +31,11 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   const canUpdateSchool = await checkPermission(
     "school",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const canDeleteSchool = await checkPermission(
     "school",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canReadSchool = await checkPermission("school", PermissionAction.READ);
 
