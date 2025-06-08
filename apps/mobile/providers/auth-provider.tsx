@@ -1,12 +1,9 @@
 // app/auth-context.tsx
-import { useQuery } from "@tanstack/react-query";
-import { router, useSegments } from "expo-router";
 import type { ReactNode } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import { ActivityIndicator, View } from "react-native";
 import type { RouterOutputs } from "~/utils/api";
-import { trpc } from "~/utils/api";
-import { useSignOut } from "~/utils/auth";
+import { authClient, useSignOut } from "~/utils/auth";
 
 type SessionType = RouterOutputs["auth"]["getSession"];
 interface AuthContextType {
@@ -19,39 +16,15 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [session, setSession] = useState<SessionType>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  //const [session, setSession] = useState<SessionType>(null);
+  //const [isLoading, setIsLoading] = useState(true);
 
   const signOut = useSignOut();
-  const segments = useSegments();
-  const sessionQuery = useQuery(trpc.auth.getSession.queryOptions());
+  //const segments = useSegments();
+  const { data: session, isPending } = authClient.useSession();
+  //const sessionQuery = useQuery(trpc.auth.getSession.queryOptions());
 
-  useEffect(() => {
-    if (sessionQuery.isPending) return;
-    setIsLoading(false);
-    if (sessionQuery.isError) {
-      setSession(null);
-      return;
-    }
-
-    const sess = sessionQuery.data;
-    if (sess) {
-      setSession(sess);
-    } else {
-      setSession(null);
-      if (segments[0] !== "auth") {
-        router.replace("/auth");
-      }
-    }
-  }, [
-    segments,
-    sessionQuery.data,
-    sessionQuery.error,
-    sessionQuery.isError,
-    sessionQuery.isPending,
-  ]);
-
-  if (isLoading) {
+  if (isPending) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
@@ -64,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         session,
         isAuthenticated: !!session?.user,
-        loading: isLoading,
+        loading: isPending,
         signOut,
       }}
     >

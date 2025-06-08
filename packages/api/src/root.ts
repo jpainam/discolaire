@@ -4,7 +4,6 @@ import { announcementRouter } from "./routers/announcement";
 import { appreciationRouter } from "./routers/appreciation";
 import { assignmentRouter } from "./routers/assignment";
 import { attendanceRouter } from "./routers/attendance";
-import { authRouter } from "./routers/auth";
 import { bibleRouter } from "./routers/bible";
 import { bookRouter } from "./routers/book";
 import { calendarEventRouter } from "./routers/calendarEvent";
@@ -154,7 +153,6 @@ export const appRouter = createTRPCRouter({
   chatter: chatterRouter,
   discipline: disciplineRouter,
   timetableCategory: timetableCategoryRouter,
-  auth: authRouter,
 });
 
 // export type definition of API
