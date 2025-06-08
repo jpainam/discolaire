@@ -55,7 +55,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       },
       {
         onError: (ctx) => {
-          // Handle the error
           if (ctx.error.status === 403) {
             toast.info("Please verify your email address");
           }
@@ -74,7 +73,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       },
     });
     setIsPending(false);
-    router.push(data.redirect ?? "/");
+    toast.success(t("signin_success"));
+    router.push("/");
   };
 
   return (
