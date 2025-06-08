@@ -8,14 +8,13 @@ import {
 import { LockKeyhole, Shield, User } from "lucide-react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
 import { PermissionTable } from "~/components/users/PermissionTable";
 import { getServerTranslations } from "~/i18n/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { ChangeUserPassword } from "./ChangeUserPassword";
 import { UserProfile } from "./UserProfile";
-import { getSession } from "~/auth/server";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const session = await getSession();
@@ -73,11 +72,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 key={params.id}
                 fallback={<Skeleton className="h-20" />}
               >
-                {session?.user.id == params.id ? (
-                  <ReinitializePassword />
-                ) : (
-                  <ChangeUserPassword />
-                )}
+                <ReinitializePassword />
               </Suspense>
             </ErrorBoundary>
           </TabsContent>

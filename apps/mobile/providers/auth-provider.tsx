@@ -1,13 +1,12 @@
 // app/auth-context.tsx
+import type { Session } from "@repo/auth";
 import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
 import { ActivityIndicator, View } from "react-native";
-import type { RouterOutputs } from "~/utils/api";
 import { authClient, useSignOut } from "~/utils/auth";
 
-type SessionType = RouterOutputs["auth"]["getSession"];
 interface AuthContextType {
-  session: SessionType;
+  session: Session | null;
   isAuthenticated: boolean;
   loading: boolean;
   signOut: () => Promise<void>;

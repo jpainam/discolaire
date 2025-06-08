@@ -53,19 +53,7 @@ export const userRouter = {
         },
       });
     }),
-  updatePassword: protectedProcedure
-    .input(z.object({ userId: z.string(), password: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.update({
-        where: {
-          id: input.userId,
-        },
-        data: {
-          isActive: true,
-          password: await hashPassword(input.password),
-        },
-      });
-    }),
+
   all: protectedProcedure
     .input(
       z.object({
