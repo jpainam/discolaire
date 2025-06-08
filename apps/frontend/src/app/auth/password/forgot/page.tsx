@@ -28,8 +28,8 @@ import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
-import { getErrorMessage } from "~/lib/handle-error";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -46,29 +46,28 @@ export default function Paage() {
       email: "",
     },
   });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    fetch("/api/emails/password/reset", {
-      method: "POST",
-      body: JSON.stringify(values),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(() => {
-        toast.success(t("reset_link_sent_successfully"));
-        setIsSuccess(true);
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error(getErrorMessage(err));
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
   const { t } = useLocale();
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    const { data, error } = await authClient.forgetPassword({
+      email: values.email,
+      redirectTo: "/auth/password/reset",
+    });
+    if (error) {
+      setIsLoading(false);
+      toast.error("Une erreur s'est produite");
+      return;
+    }
+    if (data.status) {
+      setIsLoading(false);
+      toast.error(data.status);
+      return;
+    }
+
+    toast.success("Un e-mail de réinitialisation a été envoyé");
+    setIsSuccess(true);
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary">

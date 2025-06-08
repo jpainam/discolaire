@@ -376,7 +376,6 @@
   "conditions": "Conditions",
   "cycle": "Cycle",
   "send_reset_link": "Envoyer le lien de réinitialisation",
-  "reset_link_sent_successfully": "Lien de réinitialisation envoyé avec succès",
   "check_your_email": "Vérifiez votre e-mail",
   "we_have_sent_you_an_email_with_reset_instructions": "Nous vous avons envoyé un lien de réinitialisation de mot de passe. Veuillez vérifier votre boîte de réception.",
   "daily": "Quotidien",

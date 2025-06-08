@@ -836,7 +836,6 @@
   "request": "Request",
   "send_reset_link": "Send reset link",
   "back_to_login": "Back to login",
-  "reset_link_sent_successfully": "Reset link sent successfully",
   "resetting": "Resetting...",
   "check_your_email": "Check your email",
   "we_have_sent_you_an_email_with_reset_instructions": "We've sent you a password reset link. Please check your inbox.",

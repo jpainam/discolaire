@@ -187,7 +187,6 @@
   "no_health_documents_found": "No se encontraron documentos de salud",
   "no_teachings_found": "No se encontraron enseñanzas",
   "teachings": "Enseñanzas",
-  "reset_link_sent_successfully": "Enlace de restablecimiento enviado con éxito",
   "check_your_email": "Revise su correo electrónico",
   "we_have_sent_you_an_email_with_reset_instructions": "Le hemos enviado un enlace para restablecer su contraseña. Por favor revise su bandeja de entrada.",
   "confirm_new_password": "Confirmar nueva contraseña",

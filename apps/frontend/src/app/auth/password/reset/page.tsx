@@ -27,6 +27,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
+import { toast } from "sonner";
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
 
@@ -46,23 +47,41 @@ export default function ResetPassword() {
       confirmPassword: "",
     },
   });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    setIsSuccess(true);
-    // In a real application, you would call your API here to reset the password
-    console.log(values);
-    const { data, error } = await authClient.resetPassword({
-      newPassword: "admin1234",
-      token: "0IeOpWLpykapRElqQ3kNkd8G",
-    });
-    console.log("Reset password result:", data, error);
-  }
   const router = useRouter();
   const { t } = useLocale();
+
+  const token = new URLSearchParams(window.location.search).get("token");
+  if (!token) {
+    return <div className="text-red-600">Invalid token</div>;
+  }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!token) {
+      return null;
+    }
+    if (values.password !== values.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    setIsLoading(true);
+    const { data, error } = await authClient.resetPassword({
+      newPassword: values.password,
+      token: token,
+    });
+    if (error) {
+      toast.error(error.message);
+      setIsLoading(false);
+      return;
+    }
+    if (data.status) {
+      console.error("Error resetting password:", data.status);
+      toast.error("Error resetting password");
+    }
+    setIsLoading(false);
+    setIsSuccess(true);
+    toast.success("Password reset successful");
+    router.push("/auth/login");
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary">
