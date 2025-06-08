@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { signIn } from "~/actions/signin";
+
 import { authClient } from "~/auth/client";
 import { cn } from "~/lib/utils";
 
@@ -32,25 +32,9 @@ const schema = z.object({
   redirect: z.string().optional(),
 });
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [state, _submitAction, isPending] = React.useActionState(signIn, {
-    error: "",
-  });
   const router = useRouter();
   const searchParams = useSearchParams();
-  // React.useEffect(() => {
-  //   const f = async () => {
-  //     const d = await authClient.signUp.email({
-  //       email: "jpainam@gmail.com",
-  //       name: "Jean P.Ainam",
-  //       password: "admin1234",
-  //       username: "admin",
-  //       profile: "staff",
-  //       schoolId: "cm1hbntgn00001h578bvyjxln",
-  //     });
-  //     console.log("Sign up result:", d);
-  //   };
-  //   void f();
-  // }, []);
+  const [isPending, setIsPending] = React.useState(false);
 
   const redirect = searchParams.get("redirect");
   const { t } = useLocale();
@@ -62,7 +46,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       redirect: redirect ?? "",
     },
   });
-  const _handleSubmit = async (data: z.infer<typeof schema>) => {
+  const handleSubmit = async (data: z.infer<typeof schema>) => {
+    setIsPending(true);
     const result = await authClient.signIn.username(
       {
         username: data.username,
@@ -77,7 +62,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           //you can also show the original error message
           alert(ctx.error.message);
         },
-      },
+      }
     );
     if (result.error) {
       // Handle the error
@@ -87,45 +72,20 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
     console.log("Signed in successfully", result);
     toast.success(t("signed_in_successfully"));
-  };
-
-  const handleSubmit2 = async () => {
-    toast.info("Signing up...");
-    const { data, error } = await authClient.signIn.username({
-      username: "admin",
-      password: "admin1234",
+    await fetch("/api/cookies/schoolyear", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    if (error) {
-      console.error("Sign in error:", error);
-      toast.error(error.message);
-      return;
-    }
-    console.log("Sign in result:", data);
-    toast.success(t("signed_in_successfully"));
-    console.log("Forget password result:", data, error);
-    router.push("/students");
-    // toast.info("Signing up...");
-    // const data = await authClient.signUp.email({
-    //   email: "jpainam@gmail.com",
-    //   name: "Jean P.Ainam",
-    //   password: "admin1234",
-    //   username: "admin",
-    //   profile: "staff",
-    //   schoolId: "cm1hbntgn00001h578bvyjxln",
-    // });
-    // console.log("Sign up result:", data);
-    // toast.success(t("signed_up_successfully"));
-    // if (data.error) {
-    //   console.error("Sign up error:", data.error);
-    //   toast.error(data.error.message);
-    //   return;
-    // }
+    setIsPending(false);
+    router.push(data.redirect ?? "/");
   };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit2)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           <input type="hidden" name="redirect" value={redirect ?? ""} />
           <div className="grid gap-2">
             <div className={className}>
@@ -170,9 +130,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               )}
             />
 
-            {state.error && (
-              <div className="text-sm text-red-500">{t(state.error)}</div>
-            )}
             <Button disabled={isPending}>
               {isPending && <ReloadIcon className="h-4 w-4 animate-spin" />}
               {t("signin_with_email")}

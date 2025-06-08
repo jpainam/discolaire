@@ -29,7 +29,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@repo/ui/components/button";
 import { SidebarMenuButton, useSidebar } from "@repo/ui/components/sidebar";
 
-import { signOut } from "~/actions/signin";
 import { authClient } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -176,8 +175,13 @@ export function UserNav({ className }: { className?: string }) {
         <DropdownMenuItem
           variant="destructive"
           onSelect={async () => {
-            await signOut();
-            router.push(`/auth/login`);
+            await authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  router.push("/auth/login"); // redirect to login page
+                },
+              },
+            });
           }}
         >
           <LogOut />
