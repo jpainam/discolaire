@@ -50,18 +50,13 @@ export default function Paage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    const { data, error } = await authClient.forgetPassword({
+    const { error } = await authClient.forgetPassword({
       email: values.email,
       redirectTo: "/auth/password/reset",
     });
     if (error) {
       setIsLoading(false);
       toast.error("Une erreur s'est produite");
-      return;
-    }
-    if (data.status) {
-      setIsLoading(false);
-      toast.error(data.status);
       return;
     }
 

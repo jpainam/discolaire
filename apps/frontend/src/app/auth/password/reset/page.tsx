@@ -27,6 +27,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { useLocale } from "~/i18n";
 
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
@@ -49,8 +50,9 @@ export default function ResetPassword() {
   });
   const router = useRouter();
   const { t } = useLocale();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
-  const token = new URLSearchParams(window.location.search).get("token");
   if (!token) {
     return <div className="text-red-600">Invalid token</div>;
   }
