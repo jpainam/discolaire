@@ -9,7 +9,7 @@ import {
   userService,
 } from "../services/user-service";
 import { protectedProcedure, publicProcedure } from "../trpc";
-import { comparePasswords, hashPassword } from "../utils";
+import { hashPassword } from "../utils";
 
 const MAX_ATTEMPTS = 5;
 
@@ -251,42 +251,6 @@ export const userRouter = {
     .input(z.string().min(1))
     .query(({ input }) => {
       return getPermissions(input);
-    }),
-
-  updateMyPassword: protectedProcedure
-    .input(
-      z.object({
-        oldPassword: z.string().min(1),
-        newPassword: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findUnique({
-        where: {
-          id: ctx.session.user.id,
-        },
-      });
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found",
-        });
-      }
-
-      if (!(await comparePasswords(input.oldPassword, user.password))) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Old password is incorrect",
-        });
-      }
-      return ctx.db.user.update({
-        where: {
-          id: ctx.session.user.id,
-        },
-        data: {
-          password: await hashPassword(input.newPassword),
-        },
-      });
     }),
 
   signUp: publicProcedure

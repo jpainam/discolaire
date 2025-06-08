@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { setSchoolYearCookie } from "~/actions/set-cookies";
+import { setSchoolYearCookie } from "~/actions/signin";
 import { useTRPC } from "~/trpc/react";
 interface SchoolYearSwitcherProps {
   className?: string;
@@ -23,7 +23,7 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: schoolYears } = useSuspenseQuery(
-    trpc.schoolYear.all.queryOptions(),
+    trpc.schoolYear.all.queryOptions()
   );
 
   return (

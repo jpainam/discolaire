@@ -101,9 +101,14 @@ export const schoolYearRouter = {
     });
   }),
   getDefault: publicProcedure
-    .input(z.object({ schoolId: z.string().min(1) }))
-    .query(({ input }) => {
-      return schoolYearService.getDefault(input.schoolId);
+    .input(z.object({ userId: z.string().min(1) }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUniqueOrThrow({
+        where: {
+          id: input.userId,
+        },
+      });
+      return schoolYearService.getDefault(user.schoolId);
     }),
   delete: protectedProcedure
     .input(z.string())
