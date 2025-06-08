@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { signInSchoolYearCookie } from "~/actions/set-cookies";
 import { authClient } from "~/auth/client";
 import { cn } from "~/lib/utils";
 
@@ -66,12 +67,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       setIsPending(false);
       return;
     }
-    await fetch("/api/cookies/schoolyear", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    await signInSchoolYearCookie();
     setIsPending(false);
     toast.success(t("signin_success"));
     router.push("/");

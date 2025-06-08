@@ -36,6 +36,7 @@ export const createTRPCContext = async (opts: {
   const session = await authApi.getSession({
     headers: opts.headers,
   });
+  console.log(">>>>>>>>>>>>>>>School Year ID:", opts.headers);
   return {
     authApi,
     session,

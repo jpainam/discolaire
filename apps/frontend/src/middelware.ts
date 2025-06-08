@@ -29,7 +29,7 @@ export async function middleware(request: NextRequest) {
   });
   const { pathname } = request.nextUrl;
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   if (isProtectedRoute && !session) {
