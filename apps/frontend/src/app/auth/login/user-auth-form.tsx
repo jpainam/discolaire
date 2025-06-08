@@ -57,21 +57,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         onError: (ctx) => {
           // Handle the error
           if (ctx.error.status === 403) {
-            alert("Please verify your email address");
+            toast.info("Please verify your email address");
           }
-          //you can also show the original error message
-          alert(ctx.error.message);
+          toast.error(ctx.error.message);
         },
-      },
+      }
     );
     if (result.error) {
-      // Handle the error
-      console.error("Sign in error:", result.error);
-      toast.error(result.error.message);
+      setIsPending(false);
       return;
     }
-    console.log("Signed in successfully", result);
-    toast.success(t("signed_in_successfully"));
     await fetch("/api/cookies/schoolyear", {
       method: "POST",
       headers: {
