@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { BetterAuthOptions } from "better-auth";
 import { expo } from "@better-auth/expo";
-import { APIError, betterAuth } from "better-auth";
+import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { apiKey, oAuthProxy, username } from "better-auth/plugins";
@@ -39,9 +39,7 @@ export function initAuth(options: {
         enabled: true,
         beforeDelete: async (user, request) => {
           if (user.email.includes("admin")) {
-            throw new APIError("BAD_REQUEST", {
-              message: "Admin accounts can't be deleted",
-            });
+            throw new Error("Admin accounts can't be deleted");
           }
         },
       },

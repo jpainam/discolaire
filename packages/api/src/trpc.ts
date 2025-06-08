@@ -14,6 +14,7 @@ import type { Auth } from "@repo/auth";
 import { db } from "@repo/db";
 
 import { getPermissions } from "./services/user-service";
+import { getCookieValue } from "./utils";
 
 /**
  * 1. CONTEXT
@@ -36,7 +37,7 @@ export const createTRPCContext = async (opts: {
   const session = await authApi.getSession({
     headers: opts.headers,
   });
-  const schoolYearId = opts.headers.get("x-school-year") ?? null;
+  const schoolYearId = getCookieValue(opts.headers, "x-school-year");
   return {
     authApi,
     session,

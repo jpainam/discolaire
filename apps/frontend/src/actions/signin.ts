@@ -14,7 +14,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -48,7 +48,6 @@ export async function signIn(
   await setSchoolYearCookie(schoolYear.id);
 
   const redirectTo = formData.get("redirect") as string | null;
-  await caller.loginActivity.login();
   if (redirectTo && redirectTo.trim() !== "") {
     redirect(redirectTo);
   }

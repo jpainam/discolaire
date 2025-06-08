@@ -64,3 +64,20 @@ export async function comparePasswords(
 ) {
   return compare(plainTextPassword, hashedPassword);
 }
+
+export function getCookieValue(headers: Headers, name: string): string | null {
+  const cookieHeader = headers.get("cookie");
+  if (!cookieHeader) return null;
+
+  const cookies = cookieHeader.split(";").reduce(
+    (acc, cookie) => {
+      const [key, value] = cookie.trim().split("=");
+      if (!key || !value) return acc; // Skip if key or value is missing
+      acc[key] = value;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
+
+  return cookies[name] ?? null;
+}

@@ -4,6 +4,9 @@ import type { NextConfig } from "next";
 import "./src/env";
 
 const config = {
+  // experimental: {
+  //   nodeMiddleware: true,
+  // },
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     "@repo/api",
