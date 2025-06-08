@@ -17,7 +17,7 @@ export async function POST(_req: NextRequest) {
   if (!schoolYear) {
     return NextResponse.json(
       { error: "No default school year found for the given school ID." },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
