@@ -36,7 +36,7 @@ export default function FAQsection() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
+    <main id="faq" className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Section */}
       <section className="relative flex h-[20vh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg?height=600&width=1200')] bg-cover bg-center opacity-30" />

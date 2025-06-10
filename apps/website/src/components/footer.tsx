@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Facebook } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -8,10 +8,10 @@ export function Footer() {
     {
       title: "Product",
       links: [
-        { name: "Features", href: "/features" },
-        { name: "Pricing", href: "/pricing" },
-        { name: "Testimonials", href: "/testimonials" },
-        { name: "FAQ", href: "/faq" },
+        { name: "Solutions", href: "/solutions" },
+        // { name: "Pricing", href: "/pricing" },
+        { name: "Testimonials", href: "/#testimonials" },
+        { name: "FAQ", href: "/#faq" },
       ],
     },
     {
@@ -26,18 +26,22 @@ export function Footer() {
     {
       title: "Support",
       links: [
-        { name: "Knowledge Base", href: "/about" },
-        { name: "Submit a Ticket", href: "/" },
-        { name: "Policies", href: "/" },
+        { name: "About", href: "/about" },
+        { name: "Submit a Ticket", href: "/ContactUs" },
+        { name: "Policy", href: "/policy" },
       ],
     },
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    {
+      icon: Facebook,
+      href: "https://www.facebook.com/discolaire",
+      label: "Facebook",
+    },
+    // { icon: Twitter, href: "#", label: "Twitter" },
+    // { icon: Instagram, href: "#", label: "Instagram" },
+    // { icon: Linkedin, href: "#", label: "LinkedIn" },
   ];
 
   return (

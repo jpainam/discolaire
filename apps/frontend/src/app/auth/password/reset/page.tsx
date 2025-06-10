@@ -66,7 +66,7 @@ export default function ResetPassword() {
       return;
     }
     setIsLoading(true);
-    const { data, error } = await authClient.resetPassword({
+    const { error } = await authClient.resetPassword({
       newPassword: values.password,
       token: token,
     });
@@ -74,10 +74,6 @@ export default function ResetPassword() {
       toast.error(error.message);
       setIsLoading(false);
       return;
-    }
-    if (data.status) {
-      console.error("Error resetting password:", data.status);
-      toast.error("Error resetting password");
     }
     setIsLoading(false);
     setIsSuccess(true);

@@ -7,7 +7,7 @@ export function ContactPage() {
     {
       icon: <MapPin className="h-8 w-8 text-white" />, // Smaller icon
       title: "Address",
-      details: "2257 Burdett Ave, Troy, NY 12180, USA",
+      details: "3710 EL CAMINO REAL, SANTA CLARA, CA 95051, USA",
     },
     {
       icon: <Phone className="h-8 w-8 text-white" />, // Smaller icon
@@ -17,7 +17,7 @@ export function ContactPage() {
     {
       icon: <Mail className="h-8 w-8 text-white" />, // Smaller icon
       title: "Email",
-      details: "contact@discolaire.com",
+      details: "support@discolaire.com",
     },
   ];
 
@@ -31,7 +31,7 @@ export function ContactPage() {
               Get in Touch
             </h1>
             <p className="mx-auto max-w-2xl py-4 text-zinc-400 md:text-lg">
-              Have questions? Reach out to us, and we’ll respond as soon as
+              Have questions? Reach out to us, and we'll respond as soon as
               possible.
             </p>
           </div>

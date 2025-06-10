@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Quote } from "lucide-react";
 
 import {
@@ -74,7 +75,14 @@ export default function AboutPage() {
                 and prepare students for the challenges of tomorrow's world.
               </p>
             </div>
-            <div className="relative h-[300px] overflow-hidden rounded-lg border border-zinc-800/50 bg-zinc-900/30"></div>
+            <Image
+              className="rounded-lg border border-zinc-800/50"
+              src="/pic1.png"
+              alt="Vision Image"
+              width={500}
+              height={300}
+            />
+            {/* <div className="relative h-[300px] overflow-hidden rounded-lg border border-zinc-800/50 bg-zinc-900/30"></div> */}
           </div>
         </div>
       </section>
@@ -83,7 +91,14 @@ export default function AboutPage() {
       <section className="bg-zinc-950/80 py-20">
         <div className="container">
           <div className="grid items-center gap-12 md:grid-cols-2">
-            <div className="relative order-2 h-[300px] overflow-hidden rounded-lg border border-zinc-800/50 bg-zinc-900/30 md:order-1"></div>
+            <Image
+              className="rounded-lg border border-zinc-800/50"
+              src="/pic2.png"
+              alt="Mission Image"
+              width={500}
+              height={300}
+            />
+            {/* <div className="relative order-2 h-[300px] overflow-hidden rounded-lg border border-zinc-800/50 bg-zinc-900/30 md:order-1"></div> */}
             <div className="order-1 md:order-2">
               <h2 className="mb-6 text-3xl font-bold">Our Mission</h2>
               <div className="mb-6 h-1 w-20 bg-zinc-800"></div>
