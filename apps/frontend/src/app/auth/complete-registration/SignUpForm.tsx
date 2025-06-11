@@ -42,7 +42,7 @@ export function SignUpForm() {
   const searchParams = useSearchParams();
   const trpc = useTRPC();
   const signUpMutation = useMutation(
-    trpc.user.signUp.mutationOptions({
+    trpc.user.completeRegistration.mutationOptions({
       onSuccess: () => {
         toast.success("Account created successfully");
         router.push("/auth/login");

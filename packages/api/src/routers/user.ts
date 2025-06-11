@@ -218,4 +218,37 @@ export const userRouter = {
         },
       });
     }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        username: z.string().min(1),
+        password: z.string().min(1),
+        entityId: z.string().min(1),
+        profile: z.enum(["staff", "contact", "student"]),
+        email: z.string().email().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return createUser({
+        schoolId: ctx.schoolId,
+        username: input.username,
+        password: input.password,
+        profile: input.profile,
+        name: input.username,
+        email: input.email,
+        entityId: input.entityId,
+        authApi: ctx.authApi,
+      });
+    }),
+  completeRegistration: publicProcedure
+    .input(
+      z.object({
+        username: z.string().min(1),
+        password: z.string().min(1),
+        token: z.string().min(1),
+      }),
+    )
+    .mutation(({ input }) => {
+      console.log("Completing registration for user", input.username);
+    }),
 } satisfies TRPCRouterRecord;
