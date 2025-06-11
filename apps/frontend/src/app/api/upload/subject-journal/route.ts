@@ -1,7 +1,7 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
-import { s3client } from "~/lib/s3-client";
+import { uploadFile } from "~/lib/s3-client";
+import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {
   const session = await getSession();
@@ -12,6 +12,13 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get("file");
     const subjectId = formData.get("subjectId") as string;
+    if (!subjectId) {
+      return Response.json(
+        { error: "No subject id provided" },
+        { status: 400 }
+      );
+    }
+    const subject = await caller.subject.get(Number(subjectId));
 
     if (!file) {
       return Response.json({ error: "No file provided" }, { status: 400 });
@@ -19,21 +26,17 @@ export async function POST(request: Request) {
     if (!(file instanceof File)) {
       return Response.json({ error: "Invalid file type" }, { status: 400 });
     }
-    const fileBuffer = await file.arrayBuffer();
 
     const filename = crypto.randomUUID();
-    const key = `journals/${subjectId}/${file.name}_${filename}.${file.type.split("/")[1]}`;
+    const key = `journals/${subject.course.name}/${file.name}_${filename}.${file.type.split("/")[1]}`;
 
-    const command = new PutObjectCommand({
-      Bucket: env.S3_DOCUMENT_BUCKET_NAME,
-      Key: key,
-      Body: Buffer.from(fileBuffer),
-      ContentType: file.type,
+    const result = await uploadFile({
+      file: file,
+      bucket: env.S3_DOCUMENT_BUCKET_NAME,
+      destination: key,
     });
-    await s3client.send(command);
-    return Response.json({
-      fileUrl: `https://${env.S3_DOCUMENT_BUCKET_NAME}.s3.eu-central-1.amazonaws.com/${key}`,
-    });
+
+    return Response.json(result);
   } catch (error) {
     return Response.json({ error: (error as Error).message }, { status: 500 });
   }

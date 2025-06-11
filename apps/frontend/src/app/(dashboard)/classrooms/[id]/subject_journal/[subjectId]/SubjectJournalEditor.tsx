@@ -133,19 +133,14 @@ export function SubjectJournalEditor() {
         return;
       }
       const fileData = (await response.json()) as {
-        fileUrl?: string;
-        error?: string;
+        key: string;
+        fullPath: string;
       };
-      if (fileData.fileUrl) {
-        setSelectedFile(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-        attachment = fileData.fileUrl;
-      } else if (fileData.error) {
-        toast.error(fileData.error);
-        return;
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
+      attachment = fileData.key;
     }
     const values = {
       title: data.title,
