@@ -120,32 +120,31 @@ export function CreateEditUser({
           />
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="username"> {t("username")}</FormLabel>
+                <FormLabel> {t("email")}</FormLabel>
                 <FormControl>
-                  <Input
-                    autoComplete="username"
-                    placeholder="username"
-                    {...field}
-                  />
+                  <Input type="email" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-
         <FormField
           control={form.control}
-          name="email"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel> {t("email")}</FormLabel>
+              <FormLabel> {t("password")}</FormLabel>
               <FormControl>
-                <Input type="email" {...field} />
+                <Input
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder={t("password")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
