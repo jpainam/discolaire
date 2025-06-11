@@ -10,7 +10,7 @@ import redisClient from "@repo/kv";
 import { accountService } from "../services/account-service";
 import { contactService } from "../services/contact-service";
 import { isRepeating, studentService } from "../services/student-service";
-import { userService } from "../services/user-service";
+import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
@@ -246,13 +246,17 @@ export const studentRouter = {
           entityType: "student",
         },
       });
-      await userService.createAutoUser({
-        name: `${input.firstName} ${input.lastName}`,
-        profile: "student",
-        entityId: student.id,
-        schoolId: ctx.schoolId,
+      await createUser({
+        email: input.email,
+        username: `${input.firstName.toLowerCase()}-${input.lastName.toLowerCase()}`,
         authApi: ctx.authApi,
+        profile: "student",
+        schoolId: ctx.schoolId,
+        name: `${input.firstName} ${input.lastName}`,
+        isActive: true,
+        entityId: student.id,
       });
+
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
 
@@ -549,42 +553,7 @@ export const studentRouter = {
       }
       return studentService.getUnpaidRequiredFees(input, classroom.id);
     }),
-  updateAvatar: protectedProcedure
-    .input(z.object({ id: z.string().min(1), avatar: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      const student = await ctx.db.student.findFirstOrThrow({
-        where: {
-          id: input.id,
-        },
-      });
-      if (student.userId) {
-        await ctx.db.user.update({
-          where: {
-            id: student.userId,
-          },
-          data: {
-            avatar: input.avatar,
-          },
-        });
-      } else {
-        const user = await userService.createAutoUser({
-          profile: "student",
-          name: `${student.firstName} ${student.lastName}`,
-          entityId: student.id,
-          schoolId: ctx.schoolId,
-          authApi: ctx.authApi,
-        });
-        await ctx.db.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            avatar: input.avatar,
-          },
-        });
-      }
-      return student;
-    }),
+
   disable: protectedProcedure
     .input(z.object({ id: z.string().min(1), isActive: z.boolean() }))
     .mutation(async ({ ctx, input }) => {

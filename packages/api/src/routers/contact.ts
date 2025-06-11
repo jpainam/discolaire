@@ -7,7 +7,7 @@ import redisClient from "@repo/kv";
 import { checkPermission } from "../permission";
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";
-import { userService } from "../services/user-service";
+import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -294,12 +294,15 @@ export const contactRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      await userService.createAutoUser({
+      await createUser({
+        email: input.email,
+        username: `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`,
         name: `${input.firstName} ${input.lastName}`,
+        authApi: ctx.authApi,
         profile: "contact",
         schoolId: ctx.schoolId,
+        isActive: input.isActive,
         entityId: contact.id,
-        authApi: ctx.authApi,
       });
 
       return contact;

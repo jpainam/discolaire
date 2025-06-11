@@ -78,12 +78,21 @@ export function initAuth(options: {
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url, token }, request) => {
-        const da = await sendEmail({
-          from: "Discolaire <hi@discolaire.com>",
-          to: user.email,
-          subject: "Réinitialisez votre mot de passe.",
-          text: `Cliquez sur le lien pour réinitialiser votre mot de passe: ${url}`,
-        });
+        if (url.includes("complete-registration")) {
+          await sendEmail({
+            from: "Discolaire <hi@discolaire.com>",
+            to: user.email,
+            subject: "Invitation",
+            text: `Cliquez sur le lien pour completed votre invitation: ${url}`,
+          });
+        } else {
+          await sendEmail({
+            from: "Discolaire <hi@discolaire.com>",
+            to: user.email,
+            subject: "Réinitialisez votre mot de passe.",
+            text: `Cliquez sur le lien pour réinitialiser votre mot de passe: ${url}`,
+          });
+        }
       },
       requireEmailVerification: false,
     },

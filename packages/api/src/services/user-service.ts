@@ -1,70 +1,13 @@
 import { headers } from "next/headers";
-import { v4 as uuidv4 } from "uuid";
+import { generateRandomString } from "better-auth/crypto";
 
 import type { Auth } from "@repo/auth";
 import type { Prisma } from "@repo/db";
 import { db } from "@repo/db";
 
 import { env } from "../env";
-import { hashPassword } from "../utils";
 
 export const userService = {
-  createAutoUser: async ({
-    schoolId,
-    profile,
-    name,
-    entityId,
-    authApi,
-  }: {
-    schoolId: string;
-    profile: string;
-    name: string;
-    entityId: string;
-    authApi: Auth["api"];
-  }) => {
-    const session = await authApi.signUpEmail({
-      body: {
-        email: `${uuidv4()}@discolaire.com`,
-        username: uuidv4(),
-        password: await hashPassword("password"),
-        schoolId: schoolId,
-        profile: profile,
-        isActive: false,
-        name: name,
-      },
-    });
-    if (profile === "student") {
-      await db.student.update({
-        where: {
-          id: entityId,
-        },
-        data: {
-          userId: session.user.id,
-        },
-      });
-    } else if (profile === "staff") {
-      await db.staff.update({
-        where: {
-          id: entityId,
-        },
-        data: {
-          userId: session.user.id,
-        },
-      });
-    } else if (profile === "contact") {
-      await db.contact.update({
-        where: {
-          id: entityId,
-        },
-        data: {
-          userId: session.user.id,
-        },
-      });
-    }
-    // send email
-    return session.user;
-  },
-  // TODO: add email sending
   sendWelcomeEmail: async ({
     userId,
     email,
@@ -295,4 +238,50 @@ export async function getEntityById({
     entityType: "contact",
     email: dd.email,
   };
+}
+
+export async function createUser({
+  email,
+  username,
+  authApi,
+  entityId,
+  password,
+  profile,
+  schoolId,
+  name,
+  isActive,
+}: {
+  email?: string;
+  username: string;
+  entityId: string;
+  name: string;
+  authApi: Auth["api"];
+  password?: string;
+  profile: "student" | "staff" | "contact";
+  schoolId: string;
+  isActive?: boolean;
+}) {
+  const session = await authApi.signUpEmail({
+    body: {
+      email: email ?? `${username}@discolaire.com`,
+      username: username,
+      name: name,
+      profile: profile,
+      schoolId: schoolId,
+      password: password ?? generateRandomString(12),
+      isActive: isActive ?? true,
+    },
+  });
+  await attachUser({
+    userId: session.user.id,
+    entityId: entityId,
+    entityType: profile,
+  });
+  await authApi.forgetPassword({
+    body: {
+      email: session.user.email,
+      redirectTo: "/complete-registration",
+    },
+  });
+  return session.user;
 }

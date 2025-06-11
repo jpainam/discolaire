@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { getEntityById, userService } from "../services/user-service";
+import { createUser, getEntityById } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createEditDocumentSchema = z.object({
@@ -48,12 +48,13 @@ export const documentRouter = {
       });
       let userId = entity.userId;
       if (!userId) {
-        const user = await userService.createAutoUser({
+        const user = await createUser({
           schoolId: ctx.schoolId,
           profile: input.entityType,
           name: entity.name,
-          entityId: input.entityId,
+          username: `${entity.name.toLowerCase()}.${entity.name.toLowerCase()}`,
           authApi: ctx.authApi,
+          entityId: entity.id,
         });
         userId = user.id;
       }

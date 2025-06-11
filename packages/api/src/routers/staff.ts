@@ -3,7 +3,7 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
-import { userService } from "../services/user-service";
+import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -126,13 +126,16 @@ export const staffRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      await userService.createAutoUser({
+      await createUser({
         name: `${input.firstName} ${input.lastName}`,
         profile: "staff",
+        username: `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`,
+        email: input.email ?? "",
         schoolId: ctx.schoolId,
         entityId: staff.id,
         authApi: ctx.authApi,
       });
+
       return staff;
     }),
 

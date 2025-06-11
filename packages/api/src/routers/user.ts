@@ -3,14 +3,12 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
-  attachUser,
+  createUser,
   getEntityById,
   getPermissions,
   userService,
 } from "../services/user-service";
 import { protectedProcedure, publicProcedure } from "../trpc";
-
-const MAX_ATTEMPTS = 5;
 
 export const userRouter = {
   search: protectedProcedure
@@ -90,22 +88,7 @@ export const userRouter = {
     .mutation(async ({ input }) => {
       return userService.deleteUsers(Array.isArray(input) ? input : [input]);
     }),
-  roles: protectedProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return ctx.db.userRole.findMany({
-        include: {
-          role: true,
-        },
-        where: {
-          userId: input.userId,
-        },
-      });
-    }),
+
   get: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
@@ -115,50 +98,6 @@ export const userRouter = {
         },
         where: {
           id: input,
-        },
-      });
-    }),
-  create: protectedProcedure
-    .input(
-      z.object({
-        username: z.string().min(1),
-        password: z.string().min(1),
-        entityId: z.string().min(1),
-        emailVerified: z.coerce.date().optional(),
-        isActive: z.boolean().default(true),
-        profile: z.enum(["staff", "contact", "student"]),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const exists = await userService.validateUsername(input.username);
-      if (exists.error) {
-        throw new TRPCError({
-          message: exists.error,
-          code: "FORBIDDEN",
-        });
-      }
-
-      const session = await ctx.authApi.signUpEmail({
-        body: {
-          email: `${input.username}@discolaire.com`,
-          password: input.password,
-          profile: input.profile,
-          schoolId: ctx.schoolId,
-          username: input.username,
-          name: input.username,
-          isActive: input.isActive,
-        },
-      });
-      const { email, name } = await attachUser({
-        entityId: input.entityId,
-        entityType: input.profile,
-        userId: session.user.id,
-      });
-      return ctx.db.user.update({
-        where: { id: session.user.id },
-        data: {
-          name,
-          email,
         },
       });
     }),
@@ -209,23 +148,7 @@ export const userRouter = {
       //   });
       // }
     }),
-  createAutoUser: protectedProcedure
-    .input(
-      z.object({
-        entityId: z.string().min(1),
-        entityType: z.enum(["staff", "contact", "student"]),
-        name: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return userService.createAutoUser({
-        schoolId: ctx.schoolId,
-        profile: input.entityType,
-        name: input.name,
-        entityId: input.entityId,
-        authApi: ctx.authApi,
-      });
-    }),
+
   getUserByEntityId: protectedProcedure
     .input(
       z.object({
@@ -233,11 +156,24 @@ export const userRouter = {
         entityType: z.enum(["staff", "contact", "student"]),
       }),
     )
-    .query(async ({ input }) => {
-      return getEntityById({
+    .query(async ({ input, ctx }) => {
+      const entity = await getEntityById({
         entityId: input.entityId,
         entityType: input.entityType,
       });
+      let userId = entity.userId;
+      if (!userId) {
+        const user = await createUser({
+          schoolId: ctx.schoolId,
+          profile: input.entityType,
+          name: entity.name,
+          username: `${entity.name.toLowerCase()}.${entity.name.toLowerCase()}`,
+          authApi: ctx.authApi,
+          entityId: entity.id,
+        });
+        userId = user.id;
+      }
+      return { ...entity, userId: userId };
     }),
   getPermissions: protectedProcedure
     .input(z.string().min(1))
@@ -245,68 +181,6 @@ export const userRouter = {
       return getPermissions(input);
     }),
 
-  signUp: publicProcedure
-    .input(
-      z.object({
-        username: z.string().min(1),
-        password: z.string().min(1),
-        token: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const invite = await ctx.db.invite.findUnique({
-        where: {
-          token: input.token,
-        },
-      });
-      if (!invite || invite.used || new Date(invite.expiresAt) < new Date()) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Invalid, expired invite or used token",
-        });
-      }
-
-      if (invite.attempts >= MAX_ATTEMPTS) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Too many failed attempts, contact support",
-        });
-      }
-
-      const exists = await userService.validateUsername(input.username);
-      if (exists.error) {
-        throw new TRPCError({
-          message: exists.error,
-          code: "FORBIDDEN",
-        });
-      }
-      const session = await ctx.authApi.signUpEmail({
-        body: {
-          email: `${input.username}@discolaire.com`,
-          username: input.username,
-          name: input.username,
-          profile: invite.entityType,
-          schoolId: invite.schoolId,
-          password: input.password,
-          isActive: true,
-        },
-      });
-      await ctx.db.invite.update({
-        where: { token: input.token },
-        data: {
-          attempts: 0,
-          used: true,
-          lastAttempt: new Date(),
-        },
-      });
-      await attachUser({
-        entityId: invite.entityId,
-        entityType: invite.entityType as "staff" | "contact" | "student",
-        userId: session.user.id,
-      });
-
-      return session.user;
-    }),
   updatePermission: protectedProcedure
     .input(
       z.object({
