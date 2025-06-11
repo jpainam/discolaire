@@ -35,7 +35,7 @@ export function SubjectJournalList() {
   const queryClient = useQueryClient();
   const params = useParams<{ id: string; subjectId: string }>();
   const { data: subject } = useSuspenseQuery(
-    trpc.subject.get.queryOptions(Number(params.subjectId))
+    trpc.subject.get.queryOptions(Number(params.subjectId)),
   );
   const searchParams = useSearchParams();
   const { createQueryString } = useCreateQueryString();
@@ -51,7 +51,7 @@ export function SubjectJournalList() {
         await queryClient.invalidateQueries(trpc.subjectJournal.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    })
+    }),
   );
   const pageIndex = searchParams.get("pageIndex")
     ? Number(searchParams.get("pageIndex"))
@@ -65,11 +65,11 @@ export function SubjectJournalList() {
       subjectId: Number(params.subjectId),
       pageIndex,
       pageSize,
-    })
+    }),
   );
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`
+      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`,
     );
   };
 
