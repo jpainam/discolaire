@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     if (!subjectId) {
       return Response.json(
         { error: "No subject id provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const subject = await caller.subject.get(Number(subjectId));
