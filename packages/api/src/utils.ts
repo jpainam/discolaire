@@ -7,7 +7,6 @@
 //   return jwt.sign(payload, env.AUTH_SECRET);
 // };
 
-import { compare, hash } from "bcryptjs";
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
 
@@ -22,22 +21,6 @@ export function generateStringColor(): string {
   return color;
 }
 
-/**
- * Exclude keys from object
- * @param obj
- * @param keys
- * @returns
- */
-export const exclude = <Type, Key extends keyof Type>(
-  obj: Type,
-  keys: Key[],
-): Omit<Type, Key> => {
-  for (const key of keys) {
-    delete obj[key];
-  }
-  return obj;
-};
-
 const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
@@ -49,20 +32,6 @@ export const notificationQueue = new Queue("notification", { connection });
 
 export function roundToTwo(num: number): number {
   return Math.round((num + Number.EPSILON) * 100) / 100;
-}
-
-//const key = new TextEncoder().encode(env.AUTH_SECRET);
-const SALT_ROUNDS = 10;
-
-export async function hashPassword(password: string) {
-  return hash(password, SALT_ROUNDS);
-}
-
-export async function comparePasswords(
-  plainTextPassword: string,
-  hashedPassword: string,
-) {
-  return compare(plainTextPassword, hashedPassword);
 }
 
 export function getCookieValue(headers: Headers, name: string): string | null {

@@ -6,6 +6,11 @@
 git clone  https://github.com/jpainam/discolaire.git
 ```
 
+- Install ts-node globally
+  `npm install -g ts-node typescript`
+- Install `pm2` globally
+- Configure `pm2` to autostart on reboot
+
 ### 1. Setup dependencies
 
 ```bash

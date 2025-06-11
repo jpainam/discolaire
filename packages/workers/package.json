@@ -1,0 +1,23 @@
+{
+    "name": "@repo/workers",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "build": "rimraf ./build && tsc",
+        "start": "npm run build && node build/index.js",
+        "start:dev": "npx nodemon",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "bullmq": "^5.53.1",
+        "dotenv": "^16.5.0",
+        "ioredis": "^5.6.1"
+    },
+    "devDependencies": {
+        "@types/node": "catalog:",
+        "nodemon": "^2.0.22",
+        "rimraf": "^4.4.1",
+        "ts-node": "^10.9.2",
+        "typescript": "catalog:"
+    }
+}
