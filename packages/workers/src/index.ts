@@ -12,7 +12,7 @@ const worker = new Worker(
     console.log(`Processing job ${job.id}`, job.data);
     // your logic here
   },
-  { connection }
+  { connection },
 );
 
 worker.on("completed", (job) => {
