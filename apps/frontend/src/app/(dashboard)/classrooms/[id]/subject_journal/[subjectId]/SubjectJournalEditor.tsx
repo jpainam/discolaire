@@ -60,7 +60,7 @@ export function SubjectJournalEditor() {
   const { t, i18n } = useLocale();
   const params = useParams<{ subjectId: string }>();
   const { data: subject } = useSuspenseQuery(
-    trpc.subject.get.queryOptions(Number(params.subjectId)),
+    trpc.subject.get.queryOptions(Number(params.subjectId))
   );
 
   const queryClient = useQueryClient();
@@ -72,7 +72,7 @@ export function SubjectJournalEditor() {
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.subjectJournal.all.pathFilter(),
+          trpc.subjectJournal.all.pathFilter()
         );
         toast.success(t("created_successfully"), { id: 0 });
         setSelectedFile(null);
@@ -84,7 +84,7 @@ export function SubjectJournalEditor() {
         form.reset();
         setOpen(false);
       },
-    }),
+    })
   );
 
   const [richText, setRichText] = useState(false);
@@ -115,7 +115,7 @@ export function SubjectJournalEditor() {
     },
   });
   const handleSubmit = async (
-    data: z.infer<typeof createSubjectJournalSchema>,
+    data: z.infer<typeof createSubjectJournalSchema>
   ) => {
     let attachment = "";
     if (selectedFile) {
@@ -193,7 +193,7 @@ export function SubjectJournalEditor() {
             </div>
           </div>
           <div className="flex items-center">
-            <span className="mr-2">{t("rich_text")}</span>
+            <span className="mr-2 text-sm">{t("Rich text")}</span>
             <Switch checked={richText} onCheckedChange={setRichText} />
           </div>
         </div>

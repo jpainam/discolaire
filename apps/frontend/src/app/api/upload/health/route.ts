@@ -33,11 +33,11 @@ export async function POST(request: Request) {
     for (const file of files) {
       const ext = file.name.split(".").pop();
       const key = randomUUID();
-      destinations.push(`${user.id}/${key}.${ext}`);
+      destinations.push(`healthvisits/${user.id}/${key}.${ext}`);
     }
     const results = await uploadFiles({
       files: files,
-      bucket: env.S3_HEALTHVISIT_BUCKET_NAME,
+      bucket: env.S3_DOCUMENT_BUCKET_NAME,
       destinations: destinations,
     });
     // TODO Send an email to the user to confirm the change
@@ -57,17 +57,17 @@ export async function DELETE(request: Request) {
     if (!documentId) {
       return Response.json(
         { error: "No documentId provided" },
-        { status: 400 },
+        { status: 400 }
       );
     }
     const document = await caller.document.get(documentId);
     await Promise.all(
       document.attachments.map((attachment) =>
         deleteFile({
-          bucket: env.S3_HEALTHVISIT_BUCKET_NAME,
+          bucket: env.S3_DOCUMENT_BUCKET_NAME,
           key: attachment,
-        }),
-      ),
+        })
+      )
     );
 
     return Response.json({ message: "Avatar deleted successfully" });
