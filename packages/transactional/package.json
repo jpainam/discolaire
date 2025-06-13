@@ -9,6 +9,7 @@
       "types": "./dist/emails/*.d.ts",
       "default": "./emails/*.tsx"
     },
+    "./services/*": "./services/*.ts",
     ".": "./index.ts"
   },
   "workspaces": [

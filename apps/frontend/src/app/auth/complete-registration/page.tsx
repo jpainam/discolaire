@@ -6,7 +6,7 @@ const registrationSearchParamsSchema = {
 };
 
 export const registrationSearchParams = createLoader(
-  registrationSearchParamsSchema
+  registrationSearchParamsSchema,
 );
 
 interface PageProps {
