@@ -251,7 +251,7 @@ export const TransactionsSummary = ({
             </Section>
 
             <br />
-            <Footer locale={locale} />
+            <Footer />
           </Container>
         </Body>
       </Tailwind>

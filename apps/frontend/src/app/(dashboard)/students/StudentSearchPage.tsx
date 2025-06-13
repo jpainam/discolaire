@@ -103,7 +103,7 @@ export function StudentSearchPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 px-4 py-2">
+      <div className="grid gap-3 px-4 py-2 ">
         {searchResults.map((student) => (
           <StudentSearchResultCard key={student.id} student={student} />
         ))}
@@ -120,11 +120,11 @@ export function StudentSearchPage() {
           </div>
         )}
 
-      {!selectedClassroom && !searchQuery && selectedStatus == "all" && (
-        <div className="text-center py-12">
+      {searchResults.length == 0 && (
+        <div className="text-center text-sm py-12">
           <Search className="mx-auto h-12 w-12 " />
           <h3 className="mt-4">{t("Search for students")}</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-xs text-muted-foreground">
             {t("Enter a student name, ID, or email to get started.")}
           </p>
         </div>

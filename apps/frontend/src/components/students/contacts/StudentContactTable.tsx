@@ -30,6 +30,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 
+import { Badge } from "@repo/ui/components/badge";
 import {
   useMutation,
   useQueryClient,
@@ -151,7 +152,13 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                     {contact.userId ? (
                       <FlatBadge variant={"green"}>{t("invited")}</FlatBadge>
                     ) : (
-                      <FlatBadge variant={"red"}>{t("not_invited")}</FlatBadge>
+                      <Badge variant="outline" className="gap-1.5">
+                        <span
+                          className="size-1.5 rounded-full bg-red-500"
+                          aria-hidden="true"
+                        ></span>
+                        {t("not_invited")}
+                      </Badge>
                     )}
                   </TableCell>
                   <TableCell>

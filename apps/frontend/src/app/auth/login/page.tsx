@@ -4,7 +4,6 @@ import Link from "next/link";
 import { getServerTranslations } from "~/i18n/server";
 
 import { ModeSwitcher } from "~/components/mode-switcher";
-import { routes } from "~/configs/routes";
 import { UserAuthForm } from "./user-auth-form";
 
 export const metadata: Metadata = {
@@ -59,12 +58,12 @@ export default async function Page() {
               </p> */}
           </div>
           <UserAuthForm />
-          <div className="mt-4 text-center text-sm">
+          {/* <div className="mt-4 text-center text-sm">
             {t("dont_have_an_account")}{" "}
             <Link href={routes.auth.signup} className="underline">
               {t("sign_up")}
             </Link>
-          </div>
+          </div> */}
           <div className="grid flex-row justify-between py-8 text-sm text-muted-foreground md:flex">
             {/* {t("by_clicking_text")}{" "} */}
             <Link

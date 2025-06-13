@@ -23,8 +23,8 @@ import {
   UserIcon,
   UserPlus2,
   Users,
+  XIcon,
 } from "lucide-react";
-import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import type * as RPNInput from "react-phone-number-input";
@@ -68,7 +68,9 @@ import { breadcrumbAtom } from "~/lib/atoms";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
+import { Badge } from "@repo/ui/components/badge";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { authClient } from "~/auth/client";
 import { AvatarState } from "../AvatarState";
 import { SearchCombobox } from "../SearchCombobox";
@@ -241,19 +243,6 @@ export function StudentHeader() {
         )}
 
         <div className="flex flex-row items-center gap-1">
-          <FlatBadge
-            className="hidden md:block text-xs capitalize"
-            variant={
-              student.status == StudentStatus.ACTIVE
-                ? "green"
-                : student.status == StudentStatus.INACTIVE
-                  ? "yellow"
-                  : "red"
-            }
-          >
-            {t(`${student.status.toLowerCase()}`)}
-          </FlatBadge>
-
           {canEditStudent && (
             <Button
               disabled={!canEditStudent}
@@ -561,33 +550,46 @@ export function StudentHeader() {
 
         <div className="grid grid-cols-3 flex-row items-center gap-4 text-sm font-semibold md:flex">
           {student.registrationNumber && (
-            <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-              <NotebookTabs className="h-4 w-4 text-foreground" />
-              <span> {student.registrationNumber}</span>
-            </div>
+            <Badge>
+              <NotebookTabs
+                className="-ms-0.5 opacity-60"
+                size={12}
+                aria-hidden="true"
+              />
+              {student.registrationNumber}
+            </Badge>
           )}
-          <FlatBadge
-            className="md:hidden"
-            variant={
-              student.status == StudentStatus.ACTIVE
-                ? "green"
-                : student.status == StudentStatus.INACTIVE
-                  ? "yellow"
-                  : "red"
-            }
-          >
-            {t(`${student.status}`)}
-          </FlatBadge>
+          {student.classroom ? (
+            <Badge variant="outline" className="gap-1.5">
+              <span
+                className="size-1.5 rounded-full bg-emerald-500"
+                aria-hidden="true"
+              ></span>
+              {t("Registered")}
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="gap-1.5">
+              <span
+                className="size-1.5 rounded-full bg-amber-500"
+                aria-hidden="true"
+              ></span>
+              {t("Not Registered")}
+            </Badge>
+          )}
           {student.classroom && (
-            <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-              <SquareEqual className="h-4 w-4 text-foreground" />
+            <Badge variant="outline" className="gap-1.5">
+              <SquareEqual
+                className="-ms-0.5 opacity-60"
+                size={12}
+                aria-hidden="true"
+              />
               <Link
                 href={routes.classrooms.details(student.classroom.id)}
-                className="line-clamp-1 text-blue-700 hover:underline"
+                className="line-clamp-1 hover:underline"
               >
                 {student.classroom.name}
               </Link>
-            </div>
+            </Badge>
           )}
 
           {student.phoneNumber && (
@@ -606,6 +608,18 @@ export function StudentHeader() {
           {student.isRepeating && (
             <FlatBadge variant={"red"}>{t("repeating")}</FlatBadge>
           )}
+          <Badge variant="outline" className="gap-1">
+            {student.status == StudentStatus.ACTIVE ? (
+              <CheckIcon
+                className="text-emerald-500"
+                size={12}
+                aria-hidden="true"
+              />
+            ) : (
+              <XIcon className="text-yellow-500" size={12} aria-hidden="true" />
+            )}
+            {t(`${student.status.toLowerCase()}`)}
+          </Badge>
           <FlatBadge
             variant={student.gender == "female" ? "pink" : "blue"}
             className="flex flex-row items-center gap-1"

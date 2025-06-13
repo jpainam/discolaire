@@ -11,7 +11,6 @@ import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
-import { StudentMainContent } from "~/components/students/StudentMainContent";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 interface Props {
@@ -76,7 +75,8 @@ export default async function Layout(props: {
         </ErrorBoundary>
 
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
-        <StudentMainContent>{children}</StudentMainContent>
+        {/* <StudentMainContent>{children}</StudentMainContent> */}
+        <main className="flex-1">{children}</main>
         <div className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />

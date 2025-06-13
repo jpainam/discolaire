@@ -59,7 +59,10 @@ export function StudentSearchResultCard({
     }),
   );
   return (
-    <Card key={student.id} className="py-2 shadow-none">
+    <Card
+      key={student.id}
+      className="py-2 shadow-none transition-shadow hover:bg-muted/50"
+    >
       <CardContent className="px-2">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4">
@@ -73,7 +76,7 @@ export function StudentSearchResultCard({
               <div className="flex items-center gap-3 mb-2">
                 <Link
                   href={`/students/${student.id}`}
-                  className="hover:underline hover:text-blue-600"
+                  className="text-sm hover:underline hover:text-blue-600"
                 >
                   {getFullName(student)}
                 </Link>
@@ -88,7 +91,7 @@ export function StudentSearchResultCard({
               <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1.5">
                   <CalendarDays className="h-4 w-4" />
-                  <span>
+                  <span className="text-xs">
                     {student.dateOfBirth?.toLocaleDateString(i18next.language, {
                       year: "numeric",
                       month: "numeric",
@@ -99,7 +102,7 @@ export function StudentSearchResultCard({
                 {student.classroom?.name && (
                   <div className="flex items-center gap-1.5">
                     <GraduationCap className="h-4 w-4" />
-                    <span>{student.classroom.name}</span>
+                    <span className="text-xs">{student.classroom.name}</span>
                   </div>
                 )}
                 {student.email && (
@@ -111,7 +114,7 @@ export function StudentSearchResultCard({
                 {student.phoneNumber && (
                   <div className="flex items-center gap-1.5">
                     <Phone className="h-4 w-4" />
-                    <span>{student.phoneNumber}</span>
+                    <span className="text-xs">{student.phoneNumber}</span>
                   </div>
                 )}
                 {/* <div className="flex items-center gap-2">
@@ -126,10 +129,12 @@ export function StudentSearchResultCard({
                   </span>
                 </div> */}
 
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  <span>{student.residence}</span>
-                </div>
+                {student.residence && (
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    <span className="text-xs">{student.residence}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
