@@ -10,6 +10,8 @@ import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
 import { db } from "@repo/db";
 import { sendEmail } from "@repo/utils";
 
+import { completeRegistration, sendResetPassword } from "./emails";
+
 /* eslint-disable @typescript-eslint/require-await */
 export function initAuth(options: {
   baseUrl: string;
@@ -83,19 +85,9 @@ export function initAuth(options: {
       disableSignUp: true,
       sendResetPassword: async ({ user, url, token }, request) => {
         if (url.includes("complete-registration")) {
-          await sendEmail({
-            from: "Discolaire <hi@discolaire.com>",
-            to: user.email,
-            subject: "Invitation",
-            text: `Cliquez sur le lien pour completed votre invitation: ${url}`,
-          });
+          await completeRegistration({ user, url });
         } else {
-          await sendEmail({
-            from: "Discolaire <hi@discolaire.com>",
-            to: user.email,
-            subject: "Réinitialisez votre mot de passe.",
-            text: `Cliquez sur le lien pour réinitialiser votre mot de passe: ${url}`,
-          });
+          await sendResetPassword({ user, url });
         }
       },
       requireEmailVerification: false,

@@ -12,32 +12,17 @@ import {
   Text,
 } from "@react-email/components";
 
-import { Logo } from "../components/logo";
 import { geti18n } from "../locales";
-import { getAssetUrl } from "../utils";
-
-interface School {
-  logo?: string | null;
-  name: string;
-  id: string;
-}
-
-const assetUrl = getAssetUrl();
-const defaultSchool = {
-  logo: `${assetUrl}/images/logo-round.png`,
-  name: "Institut Polyvalent Wague",
-  id: "1",
-};
 
 export const ResetPassword = ({
   username = "Dupont",
   resetLink = "https://example.com/reset-password",
   locale = "fr",
-  school = defaultSchool,
+  school = "Institut Polyvalent Wague",
 }: {
   username: string;
   resetLink: string;
-  school: School;
+  school: string;
   locale: string;
 }) => {
   const { t } = geti18n({ locale });
@@ -46,15 +31,17 @@ export const ResetPassword = ({
       <Tailwind>
         <Head />
         <Preview>{t("reinitialize_password")}</Preview>
+        <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
+          {school}
+        </Heading>
         <Body className="mx-auto my-auto bg-[#fff] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
             style={{ borderStyle: "solid", borderWidth: 1 }}
           >
-            <Logo logoUrl={school.logo} />
-            <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
+            {/* <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
               {t("reinitialize_password")}
-            </Heading>
+            </Heading> */}
             <Text className="text-[14px] leading-[24px] text-[#121212]">
               Hello {username},
               <br />
