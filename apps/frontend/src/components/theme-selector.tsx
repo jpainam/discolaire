@@ -9,50 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useTheme } from "next-themes";
 import { useLocale } from "~/i18n";
-import { THEMES } from "~/lib/themes";
 import { useThemeConfig } from "~/providers/ActiveThemeProvider";
+import { defaultThemes } from "~/themes";
 
-// const DEFAULT_THEMES = [
-//   {
-//     name: "Default",
-//     value: "default",
-//   },
-//   {
-//     name: "Blue",
-//     value: "blue",
-//   },
-//   {
-//     name: "Green",
-//     value: "green",
-//   },
-//   {
-//     name: "Amber",
-//     value: "amber",
-//   },
-// ];
-
-// const SCALED_THEMES = [
-//   {
-//     name: "Default",
-//     value: "default-scaled",
-//   },
-//   {
-//     name: "Blue",
-//     value: "blue-scaled",
-//   },
-// ];
-
-// const MONO_THEMES = [
-//   {
-//     name: "Mono",
-//     value: "mono-scaled",
-//   },
-// ];
+type ThemeKey = keyof typeof defaultThemes;
 
 export function ThemeSelector() {
   const { activeTheme, setActiveTheme } = useThemeConfig();
   const { t } = useLocale();
+  const { resolvedTheme } = useTheme();
+  const currentMode = (resolvedTheme ?? "light") as "light" | "dark";
+  const themeKey: ThemeKey = activeTheme as ThemeKey;
 
   return (
     <div className="hidden md:flex items-center gap-1">
@@ -71,36 +40,35 @@ export function ThemeSelector() {
           <span className="text-muted-foreground block sm:hidden">
             {t("theme")}
           </span>
-          <SelectValue placeholder={t("theme")} />
+          <SelectValue placeholder={t("theme")}>
+            {defaultThemes[themeKey].label}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent align="end">
           <SelectGroup>
-            {/* <SelectLabel>Default</SelectLabel> */}
-            {THEMES.map((theme) => (
-              <SelectItem key={theme.name} value={theme.value}>
-                {theme.name}
-              </SelectItem>
-            ))}
+            {Object.entries(defaultThemes).map(([key, theme]) => {
+              return (
+                <SelectItem key={key} value={key}>
+                  <ColorBox color={theme[currentMode].primary} />
+                  <ColorBox color={theme[currentMode].accent} />
+                  <ColorBox color={theme[currentMode].secondary} />
+                  <ColorBox color={theme[currentMode].border} />
+                  {theme.label}
+                </SelectItem>
+              );
+            })}
           </SelectGroup>
-          {/* <SelectSeparator />
-          <SelectGroup>
-            <SelectLabel>Scaled</SelectLabel>
-            {SCALED_THEMES.map((theme) => (
-              <SelectItem key={theme.name} value={theme.value}>
-                {theme.name}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-          <SelectGroup>
-            <SelectLabel>Monospaced</SelectLabel>
-            {MONO_THEMES.map((theme) => (
-              <SelectItem key={theme.name} value={theme.value}>
-                {theme.name}
-              </SelectItem>
-            ))}
-          </SelectGroup> */}
         </SelectContent>
       </Select>
     </div>
+  );
+}
+
+function ColorBox({ color }: { color: string }) {
+  return (
+    <div
+      className="border-muted h-3 w-3 rounded-sm border"
+      style={{ backgroundColor: color }}
+    />
   );
 }

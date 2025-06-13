@@ -8,8 +8,8 @@ import { I18nProvider } from "~/i18n/i18n-context";
 import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
-//import "./globals.css";
-import "@repo/ui/globals.css";
+import "./globals.css";
+
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //import { auth } from "@repo/auth";
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://school.discolaire.com"
-      : "http://localhost:3000",
+      : "http://localhost:3000"
   ),
   title: "Gestion Scolaire",
   description: "Gestion scolaire pour les écoles",
@@ -57,7 +57,7 @@ export const viewport: Viewport = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const cookieStore = await cookies();
-  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "blue";
+  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "caffeine";
   const isScaled = activeThemeValue.endsWith("-scaled");
 
   const lng = await detectLanguage();
@@ -93,7 +93,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             "bg-background overscroll-none font-sans antialiased",
             activeThemeValue ? `theme-${activeThemeValue}` : "",
             isScaled ? "theme-scaled" : "",
-            fontVariables,
+            fontVariables
           )}
         >
           <ThemeProvider
