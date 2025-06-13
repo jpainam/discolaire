@@ -104,4 +104,19 @@ export const defaultThemes = {
       border: "#3a3633",
     },
   },
+  t3_chat: {
+    label: "T3 Chat",
+    light: {
+      primary: "#1e9df1",
+      accent: "#E3ECF6",
+      secondary: "#0f1419",
+      border: "#e1eaef",
+    },
+    dark: {
+      primary: "#1c9cf0",
+      accent: "#061622",
+      secondary: "#f0f3f4",
+      border: "#242628",
+    },
+  },
 };
