@@ -6,11 +6,12 @@ import {
   Heading,
   Hr,
   Html,
-  Link,
   Preview,
   Tailwind,
   Text,
 } from "@react-email/components";
+
+import { Footer } from "../components/footer";
 
 const InvitationEmail = ({
   inviterName = "Alex Chen",
@@ -47,13 +48,6 @@ const InvitationEmail = ({
               Accepter l'invitation
             </Button>
 
-            <Text className="my-[24px] text-[14px] text-[#666666]">
-              Ou copiez et collez cette URL dans votre navigateur :{" "}
-              <Link href={inviteLink} className="text-[#0071e3] underline">
-                {inviteLink}
-              </Link>
-            </Text>
-
             <Hr className="my-[32px] border-[#e6e6e6]" />
 
             <Text className="text-[14px] text-[#666666]">
@@ -62,18 +56,7 @@ const InvitationEmail = ({
               contacter, support@discolaire.com.
             </Text>
           </Container>
-
-          <Container className="mx-auto mt-[32px] max-w-[600px] text-center">
-            <Text className="m-0 text-[12px] text-[#666666]">
-              Example, Inc. • 123 Example Street, San Francisco, CA 94103
-            </Text>
-            <Text className="m-0 mt-[8px] text-[12px] text-[#666666]">
-              <Link href="#" className="text-[#666666] underline">
-                Unsubscribe
-              </Link>{" "}
-              • © {new Date().getFullYear()} Example
-            </Text>
-          </Container>
+          <Footer />
         </Body>
       </Tailwind>
     </Html>
