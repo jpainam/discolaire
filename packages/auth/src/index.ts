@@ -82,7 +82,7 @@ export function initAuth(options: {
     secret: options.secret,
     emailAndPassword: {
       enabled: true,
-      disableSignUp: true,
+      //disableSignUp: true,
       sendResetPassword: async ({ user, url, token }, request) => {
         if (url.includes("complete-registration")) {
           await completeRegistration({ user, url });

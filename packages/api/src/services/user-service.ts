@@ -287,7 +287,7 @@ export async function createUser({
   schoolId: string;
   isActive?: boolean;
 }) {
-  const session = await authApi.signUpEmail({
+  const newUser = await authApi.signUpEmail({
     body: {
       email: email ?? `${username}@discolaire.com`,
       username: username,
@@ -299,15 +299,15 @@ export async function createUser({
     },
   });
   await attachUser({
-    userId: session.user.id,
+    userId: newUser.user.id,
     entityId: entityId,
     entityType: profile,
   });
   await authApi.forgetPassword({
     body: {
-      email: session.user.email,
-      redirectTo: "/complete-registration",
+      email: newUser.user.email,
+      redirectTo: `/auth/complete-registration/${newUser.user.id}`,
     },
   });
-  return session.user;
+  return newUser.user;
 }

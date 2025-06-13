@@ -243,6 +243,7 @@ export const userRouter = {
   completeRegistration: publicProcedure
     .input(
       z.object({
+        userId: z.string().min(1),
         username: z.string().min(1),
         password: z.string().min(1),
         token: z.string().min(1),
@@ -255,19 +256,20 @@ export const userRouter = {
           newPassword: input.password,
         },
       });
-      await ctx.authApi.updateUser({
-        body: {
-          username: input.username,
-          name: input.username,
-          isActive: true,
-        },
-      });
       if (!status) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Invalid token or password reset failed",
         });
       }
-      return true;
+      return ctx.db.user.update({
+        where: {
+          id: input.userId,
+        },
+        data: {
+          username: input.username,
+          isActive: true,
+        },
+      });
     }),
 } satisfies TRPCRouterRecord;

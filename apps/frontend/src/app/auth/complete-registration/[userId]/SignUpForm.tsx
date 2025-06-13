@@ -12,7 +12,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,7 +22,6 @@ import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -36,11 +34,18 @@ const formSchema = z.object({
   token: z.string().min(1),
 });
 
-export function SignUpForm({ token }: { token: string }) {
-  console.log("SignUpForm rendered with token:", token);
+export function SignUpForm({
+  token,
+  userId,
+  name,
+}: {
+  token: string;
+  userId: string;
+  name: string;
+}) {
   const router = useRouter();
   const { t } = useLocale();
-  const searchParams = useSearchParams();
+
   const trpc = useTRPC();
   const signUpMutation = useMutation(
     trpc.user.completeRegistration.mutationOptions({
@@ -52,7 +57,7 @@ export function SignUpForm({ token }: { token: string }) {
         console.error(err);
         toast.error(err.message);
       },
-    }),
+    })
   );
 
   const form = useForm({
@@ -60,13 +65,14 @@ export function SignUpForm({ token }: { token: string }) {
     defaultValues: {
       username: "",
       password: "",
-      token: searchParams.get("token") ?? "",
+      token: token,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     signUpMutation.mutate(
       {
+        userId,
         username: values.username,
         password: values.password,
         token: values.token,
@@ -76,7 +82,7 @@ export function SignUpForm({ token }: { token: string }) {
           console.error(err);
           toast.error(err.message);
         },
-      },
+      }
     );
   }
 
@@ -84,14 +90,15 @@ export function SignUpForm({ token }: { token: string }) {
     <div className="flex min-h-screen items-center justify-center bg-secondary">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{t("create_an_account")}</CardTitle>
-          <CardDescription>
-            {t("create_an_account_description")}
+          <CardTitle>{t("Configure your account")}</CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">
+            {t("Please fill in the details of your account.")}
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="text-center mb-2 text-xl font-bold">{name}</div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="username"
@@ -114,7 +121,7 @@ export function SignUpForm({ token }: { token: string }) {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("password")}</FormLabel>
+                    <FormLabel>{t("new_password")}</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -127,30 +134,13 @@ export function SignUpForm({ token }: { token: string }) {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="token"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("registrationCode")}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t("registrationCode")} {...field} />
-                    </FormControl>
-                    <FormDescription className="text-xs">
-                      {t("registration_code_description")}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <Button
                 type="submit"
                 className="w-full"
-                disabled={signUpMutation.isPending}
+                isLoading={signUpMutation.isPending}
               >
-                {signUpMutation.isPending
-                  ? t("creating")
-                  : t("create_an_account")}
+                {t("Register")}
               </Button>
             </form>
           </Form>
