@@ -176,3 +176,7 @@ https://bolt.new/~/sb1-jprga2td
 https://v0.dev/chat/grades-management-dashboard-Bl5ILGqJQYp
 
 https://ui.ahmet.studio/blocks
+
+https://www.kibo-ui.com/
+
+https://magicui.design/
