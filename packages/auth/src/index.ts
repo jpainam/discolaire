@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { BetterAuthOptions } from "better-auth";
+import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-import { apiKey, oAuthProxy, username } from "better-auth/plugins";
+import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
 
 import { db } from "@repo/db";
 import { sendEmail } from "@repo/utils";
@@ -110,7 +110,7 @@ export function initAuth(options: {
       },
     },
     plugins: [
-      //admin(),
+      admin() as unknown as BetterAuthPlugin,
       username(),
       apiKey({
         enableMetadata: true,
