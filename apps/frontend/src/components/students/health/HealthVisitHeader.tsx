@@ -8,14 +8,13 @@ import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import { useLocale } from "~/i18n";
 
-import { toast } from "sonner";
 import { authClient } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 
-export function HealthVisitHeader({ userId }: { userId: string | null }) {
+export function HealthVisitHeader() {
   const { t } = useLocale();
-  //const { openSheet } = useSheet();
+
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const { data: session } = authClient.useSession();
@@ -25,22 +24,9 @@ export function HealthVisitHeader({ userId }: { userId: string | null }) {
       <div className="ml-auto">
         {session?.user.profile == "staff" && (
           <Button
-            onClick={async () => {
-              if (!userId) {
-                const response = await fetch("/api/users/create", {
-                  method: "POST",
-                  body: JSON.stringify({
-                    entityId: params.id,
-                    entityType: "student",
-                  }),
-                });
-                if (!response.ok) {
-                  toast.error("Error creating user");
-                  return;
-                }
-              }
+            onClick={() => {
               router.push(
-                routes.students.health.index(params.id) + "/new-visit",
+                routes.students.health.index(params.id) + "/new-visit"
               );
             }}
             variant={"default"}

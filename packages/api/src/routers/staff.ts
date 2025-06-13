@@ -3,7 +3,7 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
-import { createUser } from "../services/user-service";
+import { createUser, updateUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -141,8 +141,16 @@ export const staffRouter = {
 
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
+      await updateUser({
+        entityId: input.id,
+        email: data.email,
+        name: `${data.firstName} ${data.lastName}`,
+        profile: "staff",
+        authApi: ctx.authApi,
+      });
+
       return ctx.db.staff.update({
         where: {
           id: id,

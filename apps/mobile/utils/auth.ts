@@ -2,6 +2,7 @@ import { expoClient } from "@better-auth/expo/client";
 import type { Auth } from "@repo/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  adminClient,
   inferAdditionalFields,
   usernameClient,
 } from "better-auth/client/plugins";
@@ -62,6 +63,7 @@ export const authClient = createAuthClient({
 
   plugins: [
     usernameClient(),
+    adminClient(),
     inferAdditionalFields<Auth>(),
     expoClient({
       scheme: "expo",

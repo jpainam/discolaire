@@ -27,6 +27,10 @@ export async function sendEmail({
   bcc?: string | string[];
   cc?: string | string[];
 }) {
+  if (to.includes("@discolaire.com")) {
+    console.warn("Cannot send emails to @discolaire.com addresses", to);
+    return;
+  }
   const { data, error } = await resend.emails.send({
     from: from,
     to: to,

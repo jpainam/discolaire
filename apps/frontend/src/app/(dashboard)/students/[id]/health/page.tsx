@@ -9,14 +9,14 @@ import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const student = await caller.student.get(params.id);
-  //const { t } = await getServerTranslations();
+
   prefetch(trpc.health.visits.queryOptions({ userId: student.id }));
 
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense fallback={<Skeleton className="h-8" />}>
-          <HealthVisitHeader userId={student.userId} />
+          <HealthVisitHeader />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>

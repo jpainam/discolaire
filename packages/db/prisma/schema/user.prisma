@@ -1,13 +1,18 @@
 model User {
     id                           String                     @id @default(uuid())
     name                         String
+    email                        String?
     emailVerified                Boolean                    @default(false)
     image                        String?
     sessions                     Session[]
     accounts                     Account[]
     apikeys                      Apikey[]
     username                     String
-    email                        String?
+    displayUsername              String?
+    role                         String?
+    banned                       Boolean?
+    banReason                    String?
+    banExpires                   DateTime?
     avatar                       String?
     isActive                     Boolean                    @default(true)
     createdAt                    DateTime                   @default(now())
@@ -170,15 +175,16 @@ model SchoolYearEventType {
 }
 
 model Session {
-    id        String   @id
-    expiresAt DateTime
-    token     String
-    createdAt DateTime
-    updatedAt DateTime
-    ipAddress String?
-    userAgent String?
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id             String   @id
+    expiresAt      DateTime
+    token          String
+    createdAt      DateTime
+    updatedAt      DateTime
+    ipAddress      String?
+    userAgent      String?
+    userId         String
+    user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    impersonatedBy String?
 
     @@unique([token])
 }

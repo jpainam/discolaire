@@ -1,6 +1,4 @@
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
-
+import { randomUUID } from "crypto";
 import { CreateEditHealthVisit } from "~/components/students/health/CreateEditHealthVisit";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
@@ -8,15 +6,18 @@ import { getFullName } from "~/utils";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const student = await caller.student.get(params.id);
-  const { t } = await getServerTranslations();
-  if (!student.userId) {
-    return <EmptyState className="py-8" title={t("no_user_attached_yet")} />;
+
+  let userId = student.userId;
+  if (!userId) {
+    const user = await caller.user.create({
+      profile: "student",
+      username: `${student.firstName?.toLowerCase()}.${student.lastName?.toLowerCase()}`,
+      entityId: student.id,
+      email: student.email ?? "",
+      password: randomUUID(),
+    });
+    userId = user.id;
   }
 
-  return (
-    <CreateEditHealthVisit
-      name={getFullName(student)}
-      userId={student.userId}
-    />
-  );
+  return <CreateEditHealthVisit name={getFullName(student)} userId={userId} />;
 }

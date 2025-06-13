@@ -240,6 +240,31 @@ export async function getEntityById({
   };
 }
 
+export async function updateUser({
+  entityId,
+  email,
+  name,
+  authApi,
+  profile,
+}: {
+  entityId: string;
+  email?: string;
+  name?: string;
+  authApi: Auth["api"];
+  profile: "student" | "staff" | "contact";
+}) {
+  const entity = await getEntityById({
+    entityId: entityId,
+    entityType: profile,
+  });
+  if (email && email !== entity.email) {
+    await authApi.changeEmail({
+      body: {
+        newEmail: email,
+      },
+    });
+  }
+}
 export async function createUser({
   email,
   username,

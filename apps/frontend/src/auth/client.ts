@@ -1,4 +1,5 @@
 import {
+  adminClient,
   apiKeyClient,
   inferAdditionalFields,
   usernameClient,
@@ -8,6 +9,7 @@ import type { auth } from "./server";
 export const authClient = createAuthClient({
   plugins: [
     apiKeyClient(),
+    adminClient(),
     usernameClient(),
     inferAdditionalFields<typeof auth>(),
   ],
