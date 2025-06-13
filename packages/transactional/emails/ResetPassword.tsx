@@ -17,15 +17,13 @@ import { geti18n } from "../locales";
 export const ResetPassword = ({
   username = "Dupont",
   resetLink = "https://example.com/reset-password",
-  locale = "fr",
   school = "Institut Polyvalent Wague",
 }: {
   username: string;
   resetLink: string;
   school: string;
-  locale: string;
 }) => {
-  const { t } = geti18n({ locale });
+  const { t } = geti18n({ locale: "fr" });
   return (
     <Html>
       <Tailwind>
