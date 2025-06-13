@@ -50,7 +50,7 @@ export function ThemeSelector({ className }: { className?: string }) {
           variant="ghost"
           className={cn(
             "h-7 text-xs justify-start *:data-[slot=select-value]:w-12",
-            className
+            className,
           )}
         >
           <span className="text-muted-foreground hidden sm:block">
@@ -146,7 +146,7 @@ function ThemeControls() {
     setMetaColor(
       resolvedTheme === "dark"
         ? META_THEME_COLORS.light
-        : META_THEME_COLORS.dark
+        : META_THEME_COLORS.dark,
     );
   }, [resolvedTheme, setTheme, setMetaColor]);
 

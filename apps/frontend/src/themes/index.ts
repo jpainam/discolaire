@@ -59,4 +59,49 @@ export const defaultThemes = {
       border: "#ffffff",
     },
   },
+  bubblegum: {
+    label: "Bubblegum",
+    light: {
+      primary: "#d04f99",
+      accent: "#fbe2a7",
+      secondary: "#8acfd1",
+      border: "#d04f99",
+    },
+    dark: {
+      primary: "#fbe2a7",
+      accent: "#c67b96",
+      secondary: "#e4a2b1",
+      border: "#324859",
+    },
+  },
+  claude: {
+    label: "Claude",
+    light: {
+      primary: "#c96442",
+      accent: "#e9e6dc",
+      secondary: "#e9e6dc",
+      border: "#dad9d4",
+    },
+    dark: {
+      primary: "#d97757",
+      accent: "#1a1915",
+      secondary: "#faf9f5",
+      border: "#3e3e38",
+    },
+  },
+  claymorphism: {
+    label: "Claymorphism",
+    light: {
+      primary: "#6366f1",
+      accent: "#f3e5f5",
+      secondary: "#d6d3d1",
+      border: "#d6d3d1",
+    },
+    dark: {
+      primary: "#818cf8",
+      accent: "#484441",
+      secondary: "#3a3633",
+      border: "#3a3633",
+    },
+  },
 };
