@@ -21,7 +21,10 @@ export function ThemeSelector() {
   const { t } = useLocale();
   const { resolvedTheme } = useTheme();
   const currentMode = (resolvedTheme ?? "light") as "light" | "dark";
-  const themeKey: ThemeKey = activeTheme as ThemeKey;
+  let themeKey: ThemeKey = activeTheme as ThemeKey;
+  if (!Object.keys(defaultThemes).includes(activeTheme)) {
+    themeKey = "amber_minimal";
+  }
 
   return (
     <div className="hidden md:flex items-center gap-1">
