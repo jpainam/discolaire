@@ -44,4 +44,19 @@ export const defaultThemes = {
       border: "#201e18",
     },
   },
+  neo_brutalism: {
+    label: "Neo Brutalism",
+    light: {
+      primary: "#ff3333",
+      accent: "#0066ff",
+      secondary: "#ffff00",
+      border: "#000000",
+    },
+    dark: {
+      primary: "#ff6666",
+      accent: "#3399ff",
+      secondary: "#ffff33",
+      border: "#ffffff",
+    },
+  },
 };

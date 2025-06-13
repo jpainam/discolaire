@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -28,7 +28,9 @@ export async function signIn(
     body: {
       username,
       password,
+      rememberMe: true,
     },
+    headers: await headers(),
   });
   if (!result) {
     return {
