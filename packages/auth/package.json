@@ -19,6 +19,7 @@
     "dependencies": {
         "@better-auth/expo": "1.2.8",
         "@repo/db": "workspace:*",
+        "@repo/transactional": "workspace:*",
         "@repo/utils": "workspace:*",
         "@t3-oss/env-nextjs": "^0.13.6",
         "bcryptjs": "^3.0.2",
