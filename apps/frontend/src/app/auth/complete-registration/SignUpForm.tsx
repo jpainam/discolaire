@@ -36,7 +36,8 @@ const formSchema = z.object({
   token: z.string().min(1),
 });
 
-export function SignUpForm() {
+export function SignUpForm({ token }: { token: string }) {
+  console.log("SignUpForm rendered with token:", token);
   const router = useRouter();
   const { t } = useLocale();
   const searchParams = useSearchParams();
@@ -51,7 +52,7 @@ export function SignUpForm() {
         console.error(err);
         toast.error(err.message);
       },
-    }),
+    })
   );
 
   const form = useForm({
@@ -75,7 +76,7 @@ export function SignUpForm() {
           console.error(err);
           toast.error(err.message);
         },
-      },
+      }
     );
   }
 

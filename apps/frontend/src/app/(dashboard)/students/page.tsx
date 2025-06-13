@@ -3,13 +3,13 @@ import { redirect } from "next/navigation";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentDataTable } from "~/components/students/StudentDataTable";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentHeader } from "./StudentHeader";
 import { StudentSearchPage } from "./StudentSearchPage";
 import { StudentStats } from "./StudentStats";
-import { getSession } from "~/auth/server";
 
 export default async function Page() {
   const session = await getSession();

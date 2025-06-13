@@ -3,6 +3,7 @@ import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
 
@@ -44,7 +45,9 @@ export function initAuth(options: {
         enabled: true,
         beforeDelete: async (user, request) => {
           if (user.email.includes("admin")) {
-            throw new Error("Admin accounts can't be deleted");
+            throw new APIError("BAD_REQUEST", {
+              message: "Admin accounts can't be deleted",
+            });
           }
         },
       },
@@ -77,6 +80,7 @@ export function initAuth(options: {
     secret: options.secret,
     emailAndPassword: {
       enabled: true,
+      disableSignUp: true,
       sendResetPassword: async ({ user, url, token }, request) => {
         if (url.includes("complete-registration")) {
           await sendEmail({

@@ -248,7 +248,26 @@ export const userRouter = {
         token: z.string().min(1),
       }),
     )
-    .mutation(({ input }) => {
-      console.log("Completing registration for user", input.username);
+    .mutation(async ({ input, ctx }) => {
+      const { status } = await ctx.authApi.resetPassword({
+        body: {
+          token: input.token,
+          newPassword: input.password,
+        },
+      });
+      await ctx.authApi.updateUser({
+        body: {
+          username: input.username,
+          name: input.username,
+          isActive: true,
+        },
+      });
+      if (!status) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid token or password reset failed",
+        });
+      }
+      return true;
     }),
 } satisfies TRPCRouterRecord;
