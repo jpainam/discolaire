@@ -18,7 +18,7 @@ import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
 import { Shortcut } from "~/components/Shortcut";
-import { ThemeSelector } from "~/components/theme-selector";
+import { ThemeSelector } from "~/components/ThemeSelector";
 import { TopRightButtons } from "~/components/TopRightButtons";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
