@@ -61,7 +61,7 @@ export function SignUpForm({
         console.error(err);
         toast.error(err.message);
       },
-    })
+    }),
   );
 
   const form = useForm({
