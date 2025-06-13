@@ -253,6 +253,7 @@ export async function updateUser({
   authApi: Auth["api"];
   profile: "student" | "staff" | "contact";
 }) {
+  console.log(name);
   const entity = await getEntityById({
     entityId: entityId,
     entityType: profile,

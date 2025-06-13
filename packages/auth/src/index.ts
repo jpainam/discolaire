@@ -4,7 +4,7 @@ import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
+import { apiKey, oAuthProxy, username } from "better-auth/plugins";
 
 import { db } from "@repo/db";
 import { sendEmail } from "@repo/utils";
@@ -110,8 +110,8 @@ export function initAuth(options: {
       },
     },
     plugins: [
+      //admin(),
       username(),
-      admin(),
       apiKey({
         enableMetadata: true,
       }),
