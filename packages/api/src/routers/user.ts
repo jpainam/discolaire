@@ -250,16 +250,11 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { status } = await ctx.authApi.resetPassword({
-        body: {
-          token: input.token,
-          newPassword: input.password,
-        },
-      });
-      if (!status) {
+      const isValid = await userService.validateUsername(input.username);
+      if (isValid.error) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Invalid token or password reset failed",
+          message: "Username is not valid",
         });
       }
       return ctx.db.user.update({

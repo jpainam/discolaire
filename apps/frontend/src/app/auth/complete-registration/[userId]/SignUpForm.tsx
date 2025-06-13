@@ -22,9 +22,11 @@ import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 
@@ -45,12 +47,14 @@ export function SignUpForm({
 }) {
   const router = useRouter();
   const { t } = useLocale();
+  const [isLoading, setIsLoading] = useState(false);
 
   const trpc = useTRPC();
   const signUpMutation = useMutation(
     trpc.user.completeRegistration.mutationOptions({
       onSuccess: () => {
-        toast.success("Account created successfully");
+        toast.success(t("created_successfully"));
+        setIsLoading(false);
         router.push("/auth/login");
       },
       onError: (err) => {
@@ -69,21 +73,27 @@ export function SignUpForm({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    signUpMutation.mutate(
-      {
-        userId,
-        username: values.username,
-        password: values.password,
-        token: values.token,
-      },
-      {
-        onError: (err) => {
-          console.error(err);
-          toast.error(err.message);
-        },
-      }
-    );
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!token) {
+      return null;
+    }
+    setIsLoading(true);
+    const { error } = await authClient.resetPassword({
+      newPassword: values.password,
+      token: token,
+    });
+    if (error) {
+      toast.error(error.message);
+      setIsLoading(false);
+      return;
+    }
+
+    signUpMutation.mutate({
+      userId,
+      username: values.username,
+      password: values.password,
+      token: values.token,
+    });
   }
 
   return (
@@ -138,7 +148,7 @@ export function SignUpForm({
               <Button
                 type="submit"
                 className="w-full"
-                isLoading={signUpMutation.isPending}
+                isLoading={signUpMutation.isPending || isLoading}
               >
                 {t("Register")}
               </Button>
