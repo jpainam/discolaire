@@ -1,4 +1,19 @@
 export const defaultThemes = {
+  default: {
+    label: "Default",
+    dark: {
+      primary: "#3b82f6",
+      accent: "#1e3a8a",
+      secondary: "#262626",
+      border: "#404040",
+    },
+    light: {
+      primary: "#3b82f6",
+      accent: "#e0f2fe",
+      secondary: "#f3f4f6",
+      border: "#e5e7eb",
+    },
+  },
   amber_minimal: {
     label: "Amber Minimal",
     dark: {
@@ -117,6 +132,21 @@ export const defaultThemes = {
       accent: "#061622",
       secondary: "#f0f3f4",
       border: "#242628",
+    },
+  },
+  vintage_paper: {
+    label: "Vintage Paper",
+    light: {
+      primary: "#a67c52",
+      accent: "#d4c8aa",
+      secondary: "#e2d8c3",
+      border: "#dbd0ba",
+    },
+    dark: {
+      primary: "#c0a080",
+      accent: "#59493e",
+      secondary: "#4a4039",
+      border: "#4a4039",
     },
   },
 };

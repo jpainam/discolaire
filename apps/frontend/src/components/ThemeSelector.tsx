@@ -4,24 +4,24 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
+  CommandList,
 } from "@repo/ui/components/command";
-import { Input } from "@repo/ui/components/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import { Check, ChevronDown, Moon, Search, Shuffle, Sun } from "lucide-react";
+import { Check, ChevronDown, Moon, Shuffle, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
@@ -40,7 +40,7 @@ export function ThemeSelector({ className }: { className?: string }) {
   if (!Object.keys(defaultThemes).includes(activeTheme)) {
     themeKey = "amber_minimal";
   }
-  const [search, setSearch] = useState("");
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -50,7 +50,7 @@ export function ThemeSelector({ className }: { className?: string }) {
           variant="ghost"
           className={cn(
             "h-7 text-xs justify-start *:data-[slot=select-value]:w-12",
-            className,
+            className
           )}
         >
           <span className="text-muted-foreground hidden sm:block">
@@ -65,17 +65,7 @@ export function ThemeSelector({ className }: { className?: string }) {
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0" align="center">
         <Command className="h-100 w-full rounded-lg border shadow-md">
-          <div className="flex w-full items-center">
-            <div className="flex w-full items-center border-b px-3 py-1">
-              <Search className="size-4 shrink-0 opacity-50" />
-              <Input
-                placeholder={t("search")}
-                className="border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-          </div>
+          <CommandInput placeholder={t("search")} />
           <div className="flex items-center justify-between px-4 py-2">
             <div className="text-muted-foreground text-xs">
               {Object.keys(defaultThemes).length} themes
@@ -83,7 +73,7 @@ export function ThemeSelector({ className }: { className?: string }) {
             <ThemeControls />
           </div>
           <Separator />
-          <ScrollArea className="h-[500px] max-h-[70vh]">
+          <CommandList className="h-[500px] max-h-[70vh]">
             <CommandEmpty>{t("No themes found.")}</CommandEmpty>
             {Object.keys(defaultThemes).length > 0 && (
               <CommandGroup>
@@ -95,7 +85,6 @@ export function ThemeSelector({ className }: { className?: string }) {
                       value={`${key}-${index}`}
                       onSelect={() => {
                         setActiveTheme(key);
-                        setSearch("");
                       }}
                       className="data-[highlighted]:bg-secondary/50 flex items-center gap-2 py-2"
                     >
@@ -113,7 +102,7 @@ export function ThemeSelector({ className }: { className?: string }) {
                 })}
               </CommandGroup>
             )}
-          </ScrollArea>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
@@ -146,7 +135,7 @@ function ThemeControls() {
     setMetaColor(
       resolvedTheme === "dark"
         ? META_THEME_COLORS.light
-        : META_THEME_COLORS.dark,
+        : META_THEME_COLORS.dark
     );
   }, [resolvedTheme, setTheme, setMetaColor]);
 
