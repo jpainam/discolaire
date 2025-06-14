@@ -120,6 +120,7 @@ export const userRouter = {
           },
         },
       });
+
       if (existingUser) {
         throw new TRPCError({
           code: "FORBIDDEN",

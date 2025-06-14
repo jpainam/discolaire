@@ -10,7 +10,8 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { z, ZodError } from "zod/v4";
 
-import type { Auth } from "@repo/auth";
+import type { Auth, Session } from "@repo/auth";
+import type { PrismaClient } from "@repo/db";
 import { db } from "@repo/db";
 
 import { getPermissions } from "./services/user-service";
@@ -32,8 +33,13 @@ import { getCookieValue } from "./utils";
 export const createTRPCContext = async (opts: {
   headers: Headers;
   auth: Auth;
-}) => {
-  const authApi = opts.auth.api;
+}): Promise<{
+  authApi: Auth["api"];
+  session: Session | null;
+  db: PrismaClient;
+  schoolYearId: string | null;
+}> => {
+  const authApi: Auth["api"] = opts.auth.api;
 
   const session = await authApi.getSession({
     headers: opts.headers,

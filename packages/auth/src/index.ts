@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
+import type { BetterAuthOptions } from "better-auth";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -106,7 +106,7 @@ export function initAuth(options: {
       },
     },
     plugins: [
-      admin() as unknown as BetterAuthPlugin,
+      admin(),
       username(),
       apiKey({
         enableMetadata: true,
@@ -129,8 +129,15 @@ export function initAuth(options: {
 
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth["$Infer"]["Session"];
-// export const auth = initAuth({
-//   baseUrl: "http://localhost:3000",
-//   productionUrl: "https://discolaire.com",
-//   secret: "test_scret",
-// });
+export const auth = initAuth({
+  baseUrl: "http://localhost:3000",
+  productionUrl: "https://discolaire.com",
+  secret: "test_scret",
+});
+
+void auth.api.setUserPassword({
+  body: {
+    userId: "clg1q2w3e4r5t6y7u8i9o0p",
+    newPassword: "password123",
+  },
+});
