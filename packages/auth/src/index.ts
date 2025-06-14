@@ -129,8 +129,8 @@ export function initAuth(options: {
 
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth["$Infer"]["Session"];
-export const auth = initAuth({
-  baseUrl: "http://localhost:3000",
-  productionUrl: "https://discolaire.com",
-  secret: "test_scret",
-});
+// export const auth = initAuth({
+//   baseUrl: "http://localhost:3000",
+//   productionUrl: "https://discolaire.com",
+//   secret: "test_scret",
+// });

@@ -83,7 +83,7 @@ export function StudentContactRelationship({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   function onSubmit(data: z.infer<typeof editRelationshipSchema>) {

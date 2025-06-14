@@ -17,9 +17,8 @@ import { useLocale } from "~/i18n";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useTRPC } from "~/trpc/react";
 import { authClient } from "~/auth/client";
-import { auth } from "@repo/auth";
+import { useTRPC } from "~/trpc/react";
 
 const createEditUserSchema = z.object({
   username: z.string().min(1),
@@ -61,7 +60,7 @@ export function CreateEditUser({
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateUserMutation = useMutation(
     trpc.user.update.mutationOptions({
@@ -73,13 +72,13 @@ export function CreateEditUser({
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof createEditUserSchema>) => {
     if (userId) {
       toast.loading(t("updating"), { id: 0 });
-      authClient.admin.createUser;
+
       void authClient.admin.setUserPassword({
         userId: userId,
         newPassword: data.password,

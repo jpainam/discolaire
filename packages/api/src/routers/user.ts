@@ -108,6 +108,7 @@ export const userRouter = {
         username: z.string().min(1),
         name: z.string().optional(),
         email: z.string().optional(),
+        password: z.string().min(6).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
