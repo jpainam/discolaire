@@ -25,7 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -52,7 +51,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
   const router = useRouter();
   const trpc = useTRPC();
   const { data: studentContacts } = useSuspenseQuery(
-    trpc.student.contacts.queryOptions(studentId),
+    trpc.student.contacts.queryOptions(studentId)
   );
 
   const queryClient = useQueryClient();
@@ -69,7 +68,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
       onSuccess: () => {
         toast.success(t("updated_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const deleteStudentContactMutation = useMutation(
     trpc.studentContact.delete.mutationOptions({
@@ -83,16 +82,16 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const canUpdateStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canDeleteStudentContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
 
   return (
@@ -139,7 +138,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                     <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
+                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline"
                       )}
                     >
                       {getFullName(contact)}
@@ -149,17 +148,16 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                   {/* <TableCell>{contact.email ?? "N/A"}</TableCell> */}
                   <TableCell>{contact.phoneNumber1} </TableCell>
                   <TableCell>
-                    {contact.userId ? (
-                      <FlatBadge variant={"green"}>{t("invited")}</FlatBadge>
-                    ) : (
-                      <Badge variant="outline" className="gap-1.5">
-                        <span
-                          className="size-1.5 rounded-full bg-red-500"
-                          aria-hidden="true"
-                        ></span>
-                        {t("not_invited")}
-                      </Badge>
-                    )}
+                    <Badge variant="outline" className="gap-1.5">
+                      <span
+                        className={cn(
+                          "size-1.5 rounded-full",
+                          contact.user ? "bg-emerald-500" : "bg-red-500"
+                        )}
+                        aria-hidden="true"
+                      ></span>
+                      {!contact.userId ? t("not_invited") : t("invited")}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-end gap-2">
@@ -200,7 +198,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
-                                `${routes.students.contacts(c.studentId)}/${c.contactId}`,
+                                `${routes.students.contacts(c.studentId)}/${c.contactId}`
                               );
                             }}
                           >

@@ -449,7 +449,7 @@ importers:
     dependencies:
       '@better-auth/expo':
         specifier: 1.2.8
-        version: 1.2.8(better-auth@1.2.8)
+        version: 1.2.8(better-auth@1.2.9)
       '@expo/vector-icons':
         specifier: ^14.1.0
         version: 14.1.0(expo-font@13.3.1(expo@53.0.9(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.1.6)(react@19.0.0)))(react-native-webview@13.14.0(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.1.6)(react@19.0.0))(react@19.0.0))(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.1.6)(react@19.0.0))(react@19.0.0))(react@19.0.0))(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.1.6)(react@19.0.0))(react@19.0.0)
@@ -478,8 +478,8 @@ importers:
         specifier: 'catalog:'
         version: 11.1.4(@tanstack/react-query@5.79.0(react@19.0.0))(@trpc/client@11.1.4(@trpc/server@11.1.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.1.4(typescript@5.8.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.8.3)
       better-auth:
-        specifier: 1.2.8
-        version: 1.2.8
+        specifier: 1.2.9
+        version: 1.2.9
       entities:
         specifier: ^6.0.0
         version: 6.0.0
@@ -915,7 +915,7 @@ importers:
     dependencies:
       '@better-auth/expo':
         specifier: 1.2.8
-        version: 1.2.8(better-auth@1.2.8)
+        version: 1.2.8(better-auth@1.2.9)
       '@repo/db':
         specifier: workspace:*
         version: link:../db
@@ -932,8 +932,8 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       better-auth:
-        specifier: 1.2.8
-        version: 1.2.8
+        specifier: 1.2.9
+        version: 1.2.9
       jose:
         specifier: ^6.0.11
         version: 6.0.11
@@ -6342,8 +6342,8 @@ packages:
     resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
     hasBin: true
 
-  better-auth@1.2.8:
-    resolution: {integrity: sha512-y8ry7ZW3/3ZIr82Eo1zUDtMzdoQlFnwNuZ0+b0RxoNZgqmvgTIc/0tCDC7NDJerqSu4UCzer0dvYxBsv3WMIGg==}
+  better-auth@1.2.9:
+    resolution: {integrity: sha512-WLqBXDzuaCQetQctLGC5oTfGmL32zUvxnM4Y+LZkhwseMaZWq5EKI+c/ZATgz2YkFt7726q659PF8CfB9P1VuA==}
 
   better-call@1.0.9:
     resolution: {integrity: sha512-Qfm0gjk0XQz0oI7qvTK1hbqTsBY4xV2hsHAxF8LZfUYl3RaECCIifXuVqtPpZJWvlCCMlQSvkvhhyuApGUba6g==}
@@ -12923,10 +12923,10 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@better-auth/expo@1.2.8(better-auth@1.2.8)':
+  '@better-auth/expo@1.2.8(better-auth@1.2.9)':
     dependencies:
       '@better-fetch/fetch': 1.1.18
-      better-auth: 1.2.8
+      better-auth: 1.2.9
       better-call: 1.0.9
       zod: 3.25.45
 
@@ -17684,7 +17684,7 @@ snapshots:
 
   bcryptjs@3.0.2: {}
 
-  better-auth@1.2.8:
+  better-auth@1.2.9:
     dependencies:
       '@better-auth/utils': 0.2.5
       '@better-fetch/fetch': 1.1.18

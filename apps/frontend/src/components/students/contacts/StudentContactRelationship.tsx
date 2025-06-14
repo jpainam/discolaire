@@ -10,6 +10,7 @@ import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
@@ -82,7 +83,7 @@ export function StudentContactRelationship({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   function onSubmit(data: z.infer<typeof editRelationshipSchema>) {
@@ -99,12 +100,10 @@ export function StudentContactRelationship({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="p-0">
-          <CardHeader className="flex flex-row items-center justify-center space-y-0 border-b bg-muted/50 px-2 py-1">
-            <CardTitle className="text-md group flex items-center py-0">
-              {t("relationship")}
-            </CardTitle>
-            <div className="ml-auto flex items-center gap-1">
+        <Card className="gap-0 pt-2">
+          <CardHeader>
+            <CardTitle>{t("relationship")}</CardTitle>
+            <CardAction className="flex flex-row gap-4">
               <Button className="opacity-0" type="button"></Button>
               {form.formState.isDirty && (
                 <Button
@@ -137,8 +136,9 @@ export function StudentContactRelationship({
                   </span>
                 </Button>
               )}
-            </div>
+            </CardAction>
           </CardHeader>
+          <Separator className="my-0" />
           <CardContent className="p-2">
             <div className="flex flex-col gap-4">
               <CheckboxField

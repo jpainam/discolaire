@@ -64,7 +64,7 @@ export function ReinitializePassword() {
     toast.success(t("updated_successfully"), { id: 0 });
     await queryClient.invalidateQueries(trpc.user.pathFilter());
 
-    router.push(routes.auth.login);
+    router.push("/auth/login");
   }
   const { t } = useLocale();
   return (

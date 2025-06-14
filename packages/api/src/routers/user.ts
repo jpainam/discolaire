@@ -108,7 +108,6 @@ export const userRouter = {
         username: z.string().min(1),
         name: z.string().optional(),
         email: z.string().optional(),
-        isActive: z.boolean().default(true),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -135,7 +134,6 @@ export const userRouter = {
           username: input.username,
           ...(input.name ? { name: input.name } : {}),
           ...(input.email ? { email: input.email } : {}),
-          isActive: input.isActive,
         },
       });
       return user;
