@@ -1,7 +1,6 @@
 "use client";
 
 import { Mail, SendIcon } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 
 import { DropdownMenuItem } from "@repo/ui/components/dropdown-menu";
@@ -16,13 +15,11 @@ export function DropdownInvitation({
   entityType,
   email,
 }: {
-  entityType: string;
+  entityType: "staff" | "student" | "contact";
   entityId: string;
   email?: string | null;
 }) {
   const { t } = useLocale();
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const confirm = useConfirm();
   const trpc = useTRPC();
@@ -34,7 +31,7 @@ export function DropdownInvitation({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (
@@ -55,13 +52,12 @@ export function DropdownInvitation({
         {t("copy_invite")}
       </DropdownMenuItem> */}
       <DropdownMenuItem
-        disabled={isLoading}
         onSelect={async () => {
           if (!email) {
             toast.error(t("email_not_found"));
             return;
           }
-          setIsLoading(true);
+
           const isConfirmed = await confirm({
             title: t("send_invite"),
             icon: <Mail className="h-4 w-4" />,
@@ -76,7 +72,6 @@ export function DropdownInvitation({
             },
           });
           if (isConfirmed) {
-            setIsLoading(true);
             toast.loading(t("sending_invite"), { id: 0 });
             createUserMutation.mutate({
               entityId: entityId,
