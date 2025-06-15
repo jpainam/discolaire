@@ -131,15 +131,8 @@ export function initAuth(options: {
 
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth["$Infer"]["Session"];
-export const auth = initAuth({
-  baseUrl: "http://localhost:3000",
-  productionUrl: "https://discolaire.com",
-  secret: "test_scret",
-});
-
-void auth.api.setUserPassword({
-  body: {
-    userId: "clg1q2w3e4r5t6y7u8i9o0p",
-    newPassword: "password123",
-  },
-});
+// export const auth = initAuth({
+//   baseUrl: "http://localhost:3000",
+//   productionUrl: "https://discolaire.com",
+//   secret: "test_scret",
+// });

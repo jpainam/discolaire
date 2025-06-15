@@ -25,13 +25,22 @@ const unProtectedRoutes = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
   const schoolYearId = request.cookies.get("x-school-year")?.value;
   if (isProtectedRoute && !schoolYearId) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-  const session = getSessionCookie(request);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let session: any = null;
+  try {
+    session = getSessionCookie(request);
+  } catch (err) {
+    console.error("❌ Failed to get session in middleware:", err);
+    session = null;
+  }
+  //const session = getSessionCookie(request);
   // const session = await auth.api.getSession({
   //   headers: await headers(),
   // });
