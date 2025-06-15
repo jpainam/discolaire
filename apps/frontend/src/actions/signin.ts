@@ -12,9 +12,16 @@ const signInSchema = z.object({
   password: z.string().min(1),
 });
 
+/**
+ * Deprecated: Use `client side sign` instead.
+ * Sign in a user.
+ * @param previousState - The previous state of the form.
+ * @param formData - The form data submitted by the user.
+ * @returns The result of the sign-in attempt.
+ */
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -71,11 +78,6 @@ export async function setCookieFromSignIn({ userId }: { userId: string }) {
   return {
     error: null,
   };
-
-  // if (redirectTo && redirectTo.trim() !== "") {
-  //   redirect(redirectTo);
-  // }
-  // redirect("/");
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {

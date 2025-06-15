@@ -248,7 +248,11 @@ export const studentRouter = {
       });
       await createUser({
         email: input.email,
-        username: `${input.firstName.toLowerCase()}-${input.lastName.toLowerCase()}`,
+        username:
+          `${input.firstName.toLowerCase()}-${input.lastName.toLowerCase()}`.replace(
+            /[^a-zA-Z0-9]/g,
+            "",
+          ),
         authApi: ctx.authApi,
         profile: "student",
         schoolId: ctx.schoolId,

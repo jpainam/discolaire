@@ -1,4 +1,6 @@
+import type { APIError } from "better-auth/api";
 import { headers } from "next/headers";
+import { TRPCError } from "@trpc/server";
 import { generateRandomString } from "better-auth/crypto";
 
 import type { Auth } from "@repo/auth";
@@ -287,27 +289,41 @@ export async function createUser({
   schoolId: string;
   isActive?: boolean;
 }) {
-  const newUser = await authApi.signUpEmail({
-    body: {
-      email: email ?? `${username}@discolaire.com`,
-      username: username,
-      name: name,
-      profile: profile,
-      schoolId: schoolId,
-      password: password ?? generateRandomString(12),
-      isActive: isActive ?? true,
-    },
-  });
-  await attachUser({
-    userId: newUser.user.id,
-    entityId: entityId,
-    entityType: profile,
-  });
-  await authApi.forgetPassword({
-    body: {
-      email: newUser.user.email,
-      redirectTo: `/auth/complete-registration/${newUser.user.id}`,
-    },
-  });
-  return newUser.user;
+  try {
+    const finalEmail = email?.trim() ? email : `${username}@discolaire.com`;
+    console.log(
+      ">>>>>>>>>>>>>>>>>>>>>>>>>> Creating user with email:",
+      finalEmail,
+    );
+    const newUser = await authApi.signUpEmail({
+      body: {
+        email: finalEmail,
+        username: username,
+        name: name,
+        profile: profile,
+        schoolId: schoolId,
+        password: password ?? generateRandomString(12),
+        isActive: isActive ?? true,
+      },
+    });
+    await attachUser({
+      userId: newUser.user.id,
+      entityId: entityId,
+      entityType: profile,
+    });
+
+    await authApi.forgetPassword({
+      body: {
+        email: newUser.user.email,
+        redirectTo: `/auth/complete-registration/${newUser.user.id}`,
+      },
+    });
+    return newUser.user;
+  } catch (error) {
+    const err = error as APIError;
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: err.message,
+    });
+  }
 }

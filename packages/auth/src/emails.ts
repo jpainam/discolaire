@@ -21,7 +21,6 @@ export async function completeRegistration({
     to: user.email,
     subject: "Bienvenue sur " + school.name,
     react: InvitationEmail({
-      inviterName: user.name,
       inviteeName: user.name,
       schoolName: school.name,
       inviteLink: `${url}&id=${newUser.id}`,

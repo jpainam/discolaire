@@ -296,7 +296,11 @@ export const contactRouter = {
       });
       await createUser({
         email: input.email,
-        username: `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`,
+        username:
+          `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`.replace(
+            /[^a-zA-Z0-9]/g,
+            "",
+          ),
         name: `${input.firstName} ${input.lastName}`,
         authApi: ctx.authApi,
         profile: "contact",

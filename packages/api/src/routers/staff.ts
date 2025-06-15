@@ -129,7 +129,11 @@ export const staffRouter = {
       await createUser({
         name: `${input.firstName} ${input.lastName}`,
         profile: "staff",
-        username: `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`,
+        username:
+          `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`.replace(
+            /[^a-zA-Z0-9]/g,
+            "",
+          ),
         email: input.email ?? "",
         schoolId: ctx.schoolId,
         entityId: staff.id,

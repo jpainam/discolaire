@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
   const school = await caller.school.getSchool();
@@ -59,7 +59,6 @@ export async function GET(req: NextRequest) {
         "X-Entity-Ref-ID": nanoid(),
       },
       react: InvitationEmail({
-        inviterName: session.user.name,
         inviteeName: user.name,
         schoolName: school.name,
         inviteLink: `${env.NEXT_PUBLIC_BASE_URL}/invite/${invitation}?email=${user.email}`,
@@ -77,7 +76,7 @@ export async function GET(req: NextRequest) {
 
 async function getNameEmail(
   entityId: string,
-  entityType: "staff" | "contact" | "student",
+  entityType: "staff" | "contact" | "student"
 ) {
   if (entityType == "staff") {
     const s = await caller.staff.get(entityId);

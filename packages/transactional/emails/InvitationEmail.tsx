@@ -14,7 +14,6 @@ import {
 import { Footer } from "../components/footer";
 
 const InvitationEmail = ({
-  inviterName = "Alex Chen",
   inviteeName = "Jamie Smith",
   schoolName = "Design Collective",
   inviteLink = "https://app.example.com/invite/team/abc123",
@@ -37,8 +36,8 @@ const InvitationEmail = ({
             </Text>
 
             <Text className="mb-[32px] text-[16px] leading-[24px] text-[#333333]">
-              <strong>{inviterName}</strong> vous a invité à rejoindre la
-              plateforme de gestion scolaire de <strong>{schoolName}</strong>.
+              Vous êtes invits à rejoindre la plateforme de gestion scolaire de{" "}
+              <strong>{schoolName}</strong>.
             </Text>
 
             <Button
@@ -64,7 +63,6 @@ const InvitationEmail = ({
 };
 
 InvitationEmail.PreviewProps = {
-  inviterName: "Alex Chen",
   inviteeName: "Jamie Smith",
   teamName: "Design Collective",
   inviteLink: "https://app.example.com/invite/team/abc123",
