@@ -9,7 +9,6 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { authClient } from "~/auth/client";
-import { caller, trpc } from "~/trpc/server";
 
 export function DropdownInvitation({
   entityId,
@@ -25,7 +24,15 @@ export function DropdownInvitation({
   const [isLoading, setIsLoading] = useState(false);
 
   //const { openModal, closeModal } = useModal();
+  console.log("entityId", entityId);
+  console.log("entityType", entityType);
   const confirm = useConfirm();
+  // const createUserMutation = useMutation(trpc.user.create.mutationOptions({
+  //   onSuccess: (newUser) => {},
+  //   onError: (error) => {
+  //     toast.error(t("error_creating_user", { error: error.message }));
+  //   },
+  // }));
 
   return (
     <>
@@ -71,7 +78,7 @@ export function DropdownInvitation({
 
             await authClient.forgetPassword({
               email: email,
-              redirectTo: `/auth/complete-registration/${newUser.user.id}`,
+              //redirectTo: `/auth/complete-registration/${newUser.user.id}`,
             });
             toast.success(t("email_sent_successfully"), { id: 0 });
           }

@@ -18,7 +18,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       username:
         `${staff.firstName?.toLowerCase()}.${staff.lastName?.toLowerCase()}`.replace(
           /[^a-zA-Z0-9]/g,
-          ""
+          "",
         ),
     });
     userId = user.id;

@@ -358,11 +358,17 @@ export function StudentHeader() {
                 <ImageMinusIcon />
               </Button>
             ) : (
-              <ChangeAvatarButton entityId={student.id} entityType="student">
-                <Button size={"icon"} className="size-7" variant={"ghost"}>
-                  <ImagePlusIcon />
-                </Button>
-              </ChangeAvatarButton>
+              <>
+                {student.userId ? (
+                  <ChangeAvatarButton userId={student.userId}>
+                    <Button size={"icon"} className="size-7" variant={"ghost"}>
+                      <ImagePlusIcon />
+                    </Button>
+                  </ChangeAvatarButton>
+                ) : (
+                  <AvatarState pos={1} />
+                )}
+              </>
             )}
           </SimpleTooltip>
           <SimpleTooltip content={t("Success Probability")}>

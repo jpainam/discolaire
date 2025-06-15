@@ -264,12 +264,18 @@ export function ContactDetailsHeader() {
               {t("Remove avatar")}
             </Button>
           ) : (
-            <ChangeAvatarButton entityId={contact.id} entityType="contact">
-              <Button variant={"outline"} size={"sm"}>
-                <ImageUpIcon />
-                {t("change_avatar")}
-              </Button>
-            </ChangeAvatarButton>
+            <>
+              {contact.userId ? (
+                <ChangeAvatarButton userId={contact.userId}>
+                  <Button variant={"outline"} size={"sm"}>
+                    <ImageUpIcon />
+                    {t("change_avatar")}
+                  </Button>
+                </ChangeAvatarButton>
+              ) : (
+                <AvatarState pos={1} />
+              )}
+            </>
           )}
 
           {canCreateContact && (

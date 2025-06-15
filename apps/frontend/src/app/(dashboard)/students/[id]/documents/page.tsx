@@ -3,12 +3,26 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentDocumentHeader } from "~/components/students/documents/StudentDocumentHeader";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { StudentDocumentTable } from "./StudentDocumentTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   prefetch(trpc.student.documents.queryOptions(params.id));
+  const student = await caller.student.get(params.id);
+  let userId = student.userId;
+  if (!userId) {
+    const user = await caller.user.create({
+      entityId: student.id,
+      profile: "student",
+      username:
+        `${student.firstName?.toLowerCase()}.${student.lastName?.toLowerCase()}`.replace(
+          /[^a-zA-Z0-9]/g,
+          "",
+        ),
+    });
+    userId = user.id;
+  }
 
   return (
     <HydrateClient>
@@ -21,7 +35,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StudentDocumentHeader />
+          <StudentDocumentHeader userId={userId} />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>

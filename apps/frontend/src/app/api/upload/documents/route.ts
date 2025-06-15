@@ -12,9 +12,11 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const files = formData.getAll("files") as File[] | null;
-    //const entityId = formData.get("entityId") as string;
-    const entityType = formData.get("entityType") as string;
 
+    const userId = formData.get("userId") as string | null;
+    if (!userId) {
+      return Response.json({ error: "User Id missing" }, { status: 400 });
+    }
     if (!files) {
       return Response.json({ error: "Files missing" }, { status: 400 });
     }
@@ -24,12 +26,12 @@ export async function POST(request: Request) {
     ) {
       return Response.json({ error: "Invalid file type" }, { status: 400 });
     }
-
+    const user = await caller.user.get(userId);
     const destinations = [];
     for (const file of files) {
       const ext = file.name.split(".").pop();
       const key = randomUUID();
-      destinations.push(`${entityType}/${key}.${ext}`);
+      destinations.push(`${user.profile}/${key}.${ext}`);
     }
     const results = await uploadFiles({
       files: files,

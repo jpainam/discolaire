@@ -33,6 +33,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AvatarState } from "~/components/AvatarState";
 import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -95,12 +96,18 @@ export function StaffProfileHeader({
     <div className="flex flex-col gap-1">
       <div className="flex flex-row items-center gap-2">
         {!staff.user?.avatar ? (
-          <ChangeAvatarButton entityId={staff.id} entityType="staff">
-            <Button size={"sm"} variant={"outline"}>
-              <ImagePlusIcon />
-              {t("change_avatar")}
-            </Button>
-          </ChangeAvatarButton>
+          <>
+            {staff.userId ? (
+              <ChangeAvatarButton userId={staff.userId}>
+                <Button size={"sm"} variant={"outline"}>
+                  <ImagePlusIcon />
+                  {t("change_avatar")}
+                </Button>
+              </ChangeAvatarButton>
+            ) : (
+              <AvatarState pos={0} />
+            )}
+          </>
         ) : (
           <Button
             onClick={() => {

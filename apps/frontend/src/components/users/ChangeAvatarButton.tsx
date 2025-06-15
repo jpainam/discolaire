@@ -6,7 +6,6 @@ import React, { useCallback } from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
-import { getUserByEntity } from "~/actions/signin";
 import { ImageCropper } from "~/components/image-cropper";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
@@ -21,11 +20,9 @@ const accept = {
 
 export function ChangeAvatarButton(
   props: PropsWithChildren<{
-    entityId?: string;
-    entityType?: string;
     className?: string;
-    userId?: string;
-  }>
+    userId: string;
+  }>,
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -47,7 +44,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    []
+    [],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -60,16 +57,12 @@ export function ChangeAvatarButton(
     async (croppedImageUrl: string) => {
       toast.loading(t("Processing..."), { id: 0 });
       try {
-        const user = await getUserByEntity({
-          entityId: props.entityId ?? "",
-          entityType: props.entityType ?? "",
-        });
         const croppedBlob = await (await fetch(croppedImageUrl)).blob();
         const formData = new FormData();
         formData.append(
           "file",
           croppedBlob,
-          selectedFile?.name ?? "avatar.png"
+          selectedFile?.name ?? "avatar.png",
         );
 
         formData.append("userId", props.userId);
@@ -91,14 +84,7 @@ export function ChangeAvatarButton(
         console.error(error);
       }
     },
-    [
-      props.entityId,
-      props.entityType,
-      props.userId,
-      router,
-      selectedFile?.name,
-      t,
-    ]
+    [props.userId, router, selectedFile?.name, t],
   );
 
   return (

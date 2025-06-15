@@ -7,11 +7,9 @@ import { Label } from "@repo/ui/components/label";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
-import { useParams } from "next/navigation";
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
 
-export function StudentDocumentHeader() {
-  const params = useParams<{ id: string }>();
+export function StudentDocumentHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
@@ -23,12 +21,7 @@ export function StudentDocumentHeader() {
           onClick={() => {
             openModal({
               title: `${t("upload")} ${t("document")}`,
-              view: (
-                <CreateEditDocument
-                  entityId={params.id}
-                  entityType={"student"}
-                />
-              ),
+              view: <CreateEditDocument userId={userId} />,
             });
           }}
           variant={"default"}
