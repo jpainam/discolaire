@@ -1,4 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
+import { headers } from "next/headers";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -112,20 +113,33 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const isValid = await userService.validateUsername(input.username);
-      if (isValid.error) {
+      const userExist = await ctx.db.user.findFirst({
+        where: {
+          username: input.username,
+        },
+      });
+      if (userExist && userExist.id !== input.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Username is not valid",
+          message: "Username is already taken",
         });
       }
       if (input.password) {
-        await ctx.authApi.setUserPassword({
-          body: {
-            userId: input.id,
-            newPassword: input.password,
-          },
-        });
+        try {
+          await ctx.authApi.setUserPassword({
+            body: {
+              userId: input.id,
+              newPassword: input.password,
+            },
+            headers: await headers(),
+          });
+        } catch (error) {
+          const err = error as Error;
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: `Failed to update password ${err.message}`,
+          });
+        }
       }
 
       return ctx.db.user.update({

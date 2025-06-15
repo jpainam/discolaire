@@ -14,7 +14,7 @@ const signInSchema = z.object({
 
 export async function signIn(
   previousState: { error: string },
-  formData: FormData,
+  formData: FormData
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 
@@ -55,6 +55,27 @@ export async function signIn(
   }
 
   redirect("/");
+}
+
+export async function setCookieFromSignIn({ userId }: { userId: string }) {
+  const schoolYear = await caller.schoolYear.getDefault({
+    userId: userId,
+  });
+
+  if (!schoolYear) {
+    return {
+      error: "no_school_year",
+    };
+  }
+  await setSchoolYearCookie(schoolYear.id);
+  return {
+    error: null,
+  };
+
+  // if (redirectTo && redirectTo.trim() !== "") {
+  //   redirect(redirectTo);
+  // }
+  // redirect("/");
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {
