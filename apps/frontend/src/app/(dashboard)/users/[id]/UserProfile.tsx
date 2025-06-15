@@ -55,7 +55,8 @@ export function UserProfile() {
 
   const updateUser = useMutation(
     trpc.user.update.mutationOptions({
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.user.get.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (err) => {
@@ -63,13 +64,13 @@ export function UserProfile() {
       },
     }),
   );
-  const handleSubmit = (data: z.infer<typeof usernameSchema>) => {
+  const handleSubmit = (values: z.infer<typeof usernameSchema>) => {
     toast.loading(t("updating"), { id: 0 });
     updateUser.mutate({
-      id: user.id,
-      username: data.username,
-      email: data.email,
-      name: data.name,
+      id: params.id,
+      username: values.username,
+      email: values.email,
+      name: values.name,
     });
   };
   const queryClient = useQueryClient();

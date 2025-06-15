@@ -24,47 +24,50 @@ import { z } from "zod";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { authClient } from "~/auth/client";
+import { authClient, useSession } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useTRPC } from "~/trpc/react";
 
 const passwordFormSchema = z.object({
   oldPassword: z.string().min(1),
   newPassword: z.string().min(1),
 });
 
+// Only user can reinitialize their own password. For staff to reinitialize user, use the CreateEditUser component.
 export function ReinitializePassword() {
+  const params = useParams<{ id: string }>();
+  const { data: session, isPending } = useSession();
+  const disabled = isPending ? true : session?.user.id !== params.id;
   const form = useForm({
     resolver: zodResolver(passwordFormSchema),
+    disabled,
     defaultValues: {
       oldPassword: "",
       newPassword: "",
     },
     mode: "onChange",
   });
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
 
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof passwordFormSchema>) {
     toast.loading(t("updating"), { id: 0 });
-    const { error } = await authClient.changePassword({
-      newPassword: values.newPassword,
-      currentPassword: values.oldPassword,
-      revokeOtherSessions: true,
-    });
-    if (error) {
-      toast.error(error.message, { id: 0 });
-      return;
+    if (session?.user.id === params.id) {
+      const { error } = await authClient.changePassword({
+        newPassword: values.newPassword,
+        currentPassword: values.oldPassword,
+        revokeOtherSessions: true,
+      });
+      if (error) {
+        toast.error(error.message, { id: 0 });
+        return;
+      }
+      router.push("/auth/login");
+    } else {
+      toast.error(t("Not authorized"), { id: 0 });
     }
-    toast.success(t("updated_successfully"), { id: 0 });
-    await queryClient.invalidateQueries(trpc.user.pathFilter());
-
-    router.push("/auth/login");
   }
   const { t } = useLocale();
   return (
@@ -91,6 +94,7 @@ export function ReinitializePassword() {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        disabled={disabled}
                         id="oldPassword"
                         type="password"
                         required
@@ -122,6 +126,7 @@ export function ReinitializePassword() {
                       <Input
                         id="newPassword"
                         type="password"
+                        disabled={disabled}
                         required
                         {...field}
                       />

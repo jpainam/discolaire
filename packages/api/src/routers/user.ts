@@ -106,35 +106,37 @@ export const userRouter = {
       z.object({
         id: z.string().min(1),
         username: z.string().min(1),
-        password: z.string().min(1),
+        password: z.string().optional(),
+        email: z.string().email().optional(),
+        name: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const existingUser = await ctx.db.user.findFirst({
-        where: {
-          username: input.username,
-          id: {
-            not: input.id,
-          },
-        },
-      });
-
-      if (existingUser) {
+      const isValid = await userService.validateUsername(input.username);
+      if (isValid.error) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "User with this username already exists",
+          message: "Username is not valid",
+        });
+      }
+      if (input.password) {
+        await ctx.authApi.setUserPassword({
+          body: {
+            userId: input.id,
+            newPassword: input.password,
+          },
         });
       }
 
-      await ctx.authApi.setUserPassword({
-        body: {
-          userId: input.id,
-          newPassword: input.password,
+      return ctx.db.user.update({
+        where: {
+          id: input.id,
         },
-      });
-      return ctx.authApi.updateUser({
-        body: {
+        data: {
           username: input.username,
+          ...(input.email && { email: input.email }),
+          isActive: true,
+          ...(input.name && { name: input.name }),
         },
       });
     }),
@@ -215,6 +217,7 @@ export const userRouter = {
         password: z.string().min(1),
         entityId: z.string().min(1),
         profile: z.enum(["staff", "contact", "student"]),
+        email: z.string().email().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -224,6 +227,7 @@ export const userRouter = {
         password: input.password,
         profile: input.profile,
         name: input.username,
+        email: input.email,
         entityId: input.entityId,
         authApi: ctx.authApi,
       });

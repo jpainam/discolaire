@@ -13,6 +13,8 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
 import { PermissionTable } from "~/components/users/PermissionTable";
 import { getServerTranslations } from "~/i18n/server";
+import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { UserProfile } from "./UserProfile";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -20,6 +22,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const session = await getSession();
   const { id } = params;
   const { t } = await getServerTranslations();
+  const canReadPermission = await checkPermission(
+    "policy",
+    PermissionAction.READ,
+  );
 
   prefetch(trpc.user.get.queryOptions(id));
 
@@ -78,7 +84,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </TabsContent>
           {session?.user.profile == "staff" && (
             <TabsContent value="tab-3">
-              <PermissionTable userId={params.id} />
+              {canReadPermission && <PermissionTable userId={params.id} />}
             </TabsContent>
           )}
         </Tabs>
