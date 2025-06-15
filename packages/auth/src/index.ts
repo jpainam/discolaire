@@ -82,8 +82,10 @@ export function initAuth(options: {
     secret: options.secret,
     emailAndPassword: {
       enabled: true,
-      //disableSignUp: true,
       sendResetPassword: async ({ user, url, token }, request) => {
+        if (user.email.includes("@discolaire.com")) {
+          return;
+        }
         if (url.includes("complete-registration")) {
           await completeRegistration({ user, url });
         } else {

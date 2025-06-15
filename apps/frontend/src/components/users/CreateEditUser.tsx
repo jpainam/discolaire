@@ -23,7 +23,6 @@ import { useTRPC } from "~/trpc/react";
 const createEditUserSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
-  email: z.string().email().optional(),
 });
 
 export function CreateEditUser({
@@ -42,7 +41,6 @@ export function CreateEditUser({
     defaultValues: {
       username: username ?? "",
       password: "",
-      email: "",
     },
   });
   const { closeModal } = useModal();
@@ -86,7 +84,6 @@ export function CreateEditUser({
       updateUserMutation.mutate({
         id: userId,
         username: data.username,
-        email: data.email,
         password: data.password,
       });
     } else {
@@ -96,7 +93,6 @@ export function CreateEditUser({
         entityId: entityId,
         password: data.password,
         profile: type,
-        email: data.email,
       });
     }
   };
@@ -107,39 +103,25 @@ export function CreateEditUser({
         className="flex flex-col gap-2"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="username"> {t("username")}</FormLabel>
-                <FormControl>
-                  <Input
-                    autoComplete="username"
-                    placeholder="username"
-                    {...field}
-                  />
-                </FormControl>
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="username"> {t("username")}</FormLabel>
+              <FormControl>
+                <Input
+                  autoComplete="username"
+                  placeholder="username"
+                  {...field}
+                />
+              </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel> {t("email")}</FormLabel>
-                <FormControl>
-                  <Input type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="password"

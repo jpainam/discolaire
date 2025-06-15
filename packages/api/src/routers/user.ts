@@ -106,9 +106,7 @@ export const userRouter = {
       z.object({
         id: z.string().min(1),
         username: z.string().min(1),
-        name: z.string().optional(),
-        email: z.string().optional(),
-        password: z.string().min(6).optional(),
+        password: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -128,25 +126,17 @@ export const userRouter = {
         });
       }
 
-      const user = await ctx.db.user.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          username: input.username,
-          ...(input.name ? { name: input.name } : {}),
-          ...(input.email ? { email: input.email } : {}),
+      await ctx.authApi.setUserPassword({
+        body: {
+          userId: input.id,
+          newPassword: input.password,
         },
       });
-      return user;
-      // if (input.email && input.email != user.email) {
-      //   await ctx.authApi.changeEmail({
-      //     userId: user.id,
-      //     body: {
-      //       email: input.username ?? "",
-      //     },
-      //   });
-      // }
+      return ctx.authApi.updateUser({
+        body: {
+          username: input.username,
+        },
+      });
     }),
 
   getUserByEntityId: protectedProcedure
@@ -225,7 +215,6 @@ export const userRouter = {
         password: z.string().min(1),
         entityId: z.string().min(1),
         profile: z.enum(["staff", "contact", "student"]),
-        email: z.string().email().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -235,7 +224,6 @@ export const userRouter = {
         password: input.password,
         profile: input.profile,
         name: input.username,
-        email: input.email,
         entityId: input.entityId,
         authApi: ctx.authApi,
       });
