@@ -3,7 +3,7 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
-import { createUser, updateUser } from "../services/user-service";
+import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -147,15 +147,7 @@ export const staffRouter = {
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
-      await updateUser({
-        entityId: input.id,
-        email: data.email,
-        name: `${data.firstName} ${data.lastName}`,
-        profile: "staff",
-        authApi: ctx.authApi,
-      });
-
-      return ctx.db.staff.update({
+      const staff = await ctx.db.staff.update({
         where: {
           id: id,
         },
@@ -166,6 +158,33 @@ export const staffRouter = {
             : undefined,
         },
       });
+      let userId = staff.userId;
+      if (!userId) {
+        const user = await createUser({
+          name: `${input.firstName} ${input.lastName}`,
+          profile: "staff",
+          username:
+            `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`.replace(
+              /[^a-zA-Z0-9]/g,
+              "",
+            ),
+          email: input.email,
+          schoolId: ctx.schoolId,
+          entityId: staff.id,
+          authApi: ctx.authApi,
+        });
+        userId = user.id;
+      }
+      await ctx.db.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          name: `${input.firstName} ${input.lastName}`,
+        },
+      });
+
+      return staff;
     }),
   count: protectedProcedure
     .input(

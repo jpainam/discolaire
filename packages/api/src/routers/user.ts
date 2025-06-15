@@ -5,7 +5,6 @@ import { z } from "zod";
 
 import {
   createUser,
-  getEntityById,
   getPermissions,
   userService,
 } from "../services/user-service";
@@ -154,33 +153,6 @@ export const userRouter = {
         },
       });
     }),
-
-  getUserByEntityId: protectedProcedure
-    .input(
-      z.object({
-        entityId: z.string(),
-        entityType: z.enum(["staff", "contact", "student"]),
-      }),
-    )
-    .query(async ({ input, ctx }) => {
-      const entity = await getEntityById({
-        entityId: input.entityId,
-        entityType: input.entityType,
-      });
-      let userId = entity.userId;
-      if (!userId) {
-        const user = await createUser({
-          schoolId: ctx.schoolId,
-          profile: input.entityType,
-          name: entity.name,
-          username: `${entity.name.toLowerCase()}.${entity.name.toLowerCase()}`,
-          authApi: ctx.authApi,
-          entityId: entity.id,
-        });
-        userId = user.id;
-      }
-      return { ...entity, userId: userId };
-    }),
   getPermissions: protectedProcedure
     .input(z.string().min(1))
     .query(({ input }) => {
@@ -228,7 +200,7 @@ export const userRouter = {
     .input(
       z.object({
         username: z.string().min(1),
-        password: z.string().min(1),
+        password: z.string().optional(),
         entityId: z.string().min(1),
         profile: z.enum(["staff", "contact", "student"]),
         email: z.string().email().optional(),

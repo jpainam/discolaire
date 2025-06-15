@@ -38,14 +38,12 @@ export function CreateEditDocument({
   documentId,
   title,
   description,
-  entityId,
-  entityType,
+  userId,
 }: {
   documentId?: string;
   title?: string;
   description?: string;
-  entityId: string;
-  entityType: "student" | "contact" | "staff";
+  userId: string;
 }) {
   const form = useForm({
     resolver: zodResolver(createEditDocumentSchema),
@@ -68,7 +66,7 @@ export function CreateEditDocument({
     trpc.document.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.student.documents.pathFilter(),
+          trpc.student.documents.pathFilter()
         );
         await queryClient.invalidateQueries(trpc.staff.documents.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
@@ -77,14 +75,14 @@ export function CreateEditDocument({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateDocumentMutation = useMutation(
     trpc.document.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.staff.documents.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.student.documents.pathFilter(),
+          trpc.student.documents.pathFilter()
         );
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
@@ -92,18 +90,17 @@ export function CreateEditDocument({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { closeModal } = useModal();
   const handleSubmit = async (
-    data: z.infer<typeof createEditDocumentSchema>,
+    data: z.infer<typeof createEditDocumentSchema>
   ) => {
     const values = {
       title: data.title,
       description: data.description,
-      entityId: entityId,
-      entityType: entityType,
+      userId: userId,
     };
 
     if (documentId) {
@@ -116,8 +113,7 @@ export function CreateEditDocument({
     files.forEach((file) => {
       formData.append("files", file, file.name);
     });
-    formData.append("entityId", entityId);
-    formData.append("entityType", entityType);
+    formData.append("userId", userId);
 
     const response = await fetch("/api/upload/documents", {
       method: "POST",
@@ -154,7 +150,7 @@ export function CreateEditDocument({
             aria-label="Remove file"
             onClick={() =>
               setFiles((prevFiles) =>
-                prevFiles.filter((prevFile) => prevFile.name !== file.name),
+                prevFiles.filter((prevFile) => prevFile.name !== file.name)
               )
             }
           >
@@ -221,7 +217,7 @@ export function CreateEditDocument({
                 isDragActive
                   ? "border-primary bg-primary/10 ring-2 ring-primary/20"
                   : "border-border",
-                "flex justify-center rounded-md border border-dashed py-4 transition-colors duration-200",
+                "flex justify-center rounded-md border border-dashed py-4 transition-colors duration-200"
               )}
             >
               <input {...getInputProps()} />

@@ -1,15 +1,13 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { createUser, getEntityById } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createEditDocumentSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   attachments: z.array(z.string()).optional().default([]),
-  entityId: z.string().min(1),
-  entityType: z.enum(["student", "staff", "contact"]),
+  userId: z.string().min(1),
 });
 
 export const documentRouter = {
@@ -42,27 +40,11 @@ export const documentRouter = {
   create: protectedProcedure
     .input(createEditDocumentSchema)
     .mutation(async ({ ctx, input }) => {
-      const entity = await getEntityById({
-        entityId: input.entityId,
-        entityType: input.entityType,
-      });
-      let userId = entity.userId;
-      if (!userId) {
-        const user = await createUser({
-          schoolId: ctx.schoolId,
-          profile: input.entityType,
-          name: entity.name,
-          username: `${entity.name.toLowerCase()}.${entity.name.toLowerCase()}`,
-          authApi: ctx.authApi,
-          entityId: entity.id,
-        });
-        userId = user.id;
-      }
       return ctx.db.document.create({
         data: {
           title: input.title,
           description: input.description,
-          userId: userId,
+          userId: input.userId,
           attachments: input.attachments,
           createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,

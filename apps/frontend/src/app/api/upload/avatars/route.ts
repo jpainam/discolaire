@@ -12,9 +12,10 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file");
-    const entityId = formData.get("entityId") as string | null;
-    const entityType = formData.get("entityType") as string | null;
     const userId = formData.get("userId") as string | null;
+    if (!userId) {
+      return Response.json({ error: "User Id missing" }, { status: 400 });
+    }
 
     if (!file) {
       return Response.json({ error: "Data missing" }, { status: 400 });
@@ -24,22 +25,9 @@ export async function POST(request: Request) {
     }
 
     const ext = file.name.split(".").pop();
-    let concernedId = "";
-    let concernedType = "";
-    if (entityId && entityType) {
-      const entity = await caller.user.getUserByEntityId({
-        entityId,
-        entityType: entityType as "staff" | "contact" | "student",
-      });
-      concernedId = entity.userId;
-      concernedType = entityType;
-    } else if (userId) {
-      const user = await caller.user.get(userId);
-      concernedId = user.id;
-      concernedType = user.profile;
-    }
+    const user = await caller.user.get(userId);
 
-    const key = `${concernedType}/${userId}.${ext}`;
+    const key = `${user.profile}/${userId}.${ext}`;
     const result = await uploadFile({
       file: file,
       bucket: env.S3_AVATAR_BUCKET_NAME,
@@ -47,7 +35,7 @@ export async function POST(request: Request) {
     });
     await db.user.update({
       where: {
-        id: concernedId,
+        id: userId,
       },
       data: {
         avatar: result.key,

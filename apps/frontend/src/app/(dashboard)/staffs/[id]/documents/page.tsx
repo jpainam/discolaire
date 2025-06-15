@@ -2,13 +2,27 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { StaffDocumentHeader } from "./StaffDocumentHeader";
 import { StaffDocumentTable } from "./StaffDocumentTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   prefetch(trpc.staff.documents.queryOptions(params.id));
+  const staff = await caller.staff.get(params.id);
+  let userId = staff.userId;
+  if (!userId) {
+    const user = await caller.user.create({
+      entityId: staff.id,
+      profile: "staff",
+      username:
+        `${staff.firstName?.toLowerCase()}.${staff.lastName?.toLowerCase()}`.replace(
+          /[^a-zA-Z0-9]/g,
+          ""
+        ),
+    });
+    userId = user.id;
+  }
 
   return (
     <HydrateClient>
@@ -21,7 +35,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StaffDocumentHeader />
+          <StaffDocumentHeader userId={userId} />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>

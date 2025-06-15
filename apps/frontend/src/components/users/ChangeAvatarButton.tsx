@@ -6,6 +6,7 @@ import React, { useCallback } from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
+import { getUserByEntity } from "~/actions/signin";
 import { ImageCropper } from "~/components/image-cropper";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
@@ -24,7 +25,7 @@ export function ChangeAvatarButton(
     entityType?: string;
     className?: string;
     userId?: string;
-  }>,
+  }>
 ) {
   const [selectedFile, setSelectedFile] =
     React.useState<FileWithPreview | null>(null);
@@ -46,7 +47,7 @@ export function ChangeAvatarButton(
       setDialogOpen(true);
     },
 
-    [],
+    []
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -59,16 +60,19 @@ export function ChangeAvatarButton(
     async (croppedImageUrl: string) => {
       toast.loading(t("Processing..."), { id: 0 });
       try {
+        const user = await getUserByEntity({
+          entityId: props.entityId ?? "",
+          entityType: props.entityType ?? "",
+        });
         const croppedBlob = await (await fetch(croppedImageUrl)).blob();
         const formData = new FormData();
         formData.append(
           "file",
           croppedBlob,
-          selectedFile?.name ?? "avatar.png",
+          selectedFile?.name ?? "avatar.png"
         );
-        formData.append("entityId", props.entityId ?? "");
-        formData.append("entityType", props.entityType ?? "");
-        formData.append("userId", props.userId ?? "");
+
+        formData.append("userId", props.userId);
         const response = await fetch("/api/upload/avatars", {
           method: "POST",
           body: formData,
@@ -94,7 +98,7 @@ export function ChangeAvatarButton(
       router,
       selectedFile?.name,
       t,
-    ],
+    ]
   );
 
   return (
