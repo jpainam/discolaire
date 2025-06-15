@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import {
   createUser,
+  getByEntity,
   getPermissions,
   userService,
 } from "../services/user-service";
@@ -217,6 +218,38 @@ export const userRouter = {
         entityId: input.entityId,
         authApi: ctx.authApi,
       });
+    }),
+  invite: protectedProcedure
+    .input(
+      z.object({
+        entityId: z.string().min(1),
+        entityType: z.enum(["staff", "student", "contact"]),
+        email: z.string().min(1).email(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const entity = await getByEntity({
+        entityId: input.entityId,
+        entityType: input.entityType,
+      });
+      if (!entity.userId) {
+        await createUser({
+          schoolId: ctx.schoolId,
+          username: entity.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase(),
+          profile: input.entityType,
+          name: entity.name,
+          email: input.email,
+          entityId: input.entityId,
+          authApi: ctx.authApi,
+        });
+      } else {
+        await ctx.authApi.forgetPassword({
+          body: {
+            email: input.email,
+            redirectTo: `/auth/complete-registration/${entity.userId}`,
+          },
+        });
+      }
     }),
   completeRegistration: publicProcedure
     .input(

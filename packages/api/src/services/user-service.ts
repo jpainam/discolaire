@@ -190,55 +190,55 @@ export async function attachUser({
   };
 }
 
-// export async function getEntityById({
-//   entityId,
-//   entityType,
-// }: {
-//   entityId: string;
-//   entityType: "staff" | "student" | "contact";
-// }) {
-//   if (entityType == "staff") {
-//     const dd = await db.staff.findUniqueOrThrow({
-//       where: {
-//         id: entityId,
-//       },
-//     });
-//     return {
-//       name: `${dd.lastName} ${dd.firstName}`,
-//       id: dd.id,
-//       userId: dd.userId,
-//       email: dd.email,
-//       entityType: "staff",
-//     };
-//   }
-//   if (entityType == "student") {
-//     const dd = await db.student.findUniqueOrThrow({
-//       where: {
-//         id: entityType,
-//       },
-//     });
-//     return {
-//       name: `${dd.lastName} ${dd.firstName}`,
-//       id: dd.id,
-//       userId: dd.userId,
-//       email: dd.email,
-//       entityType: "student",
-//     };
-//   }
+export async function getByEntity({
+  entityId,
+  entityType,
+}: {
+  entityId: string;
+  entityType: "staff" | "student" | "contact";
+}) {
+  if (entityType == "staff") {
+    const dd = await db.staff.findUniqueOrThrow({
+      where: {
+        id: entityId,
+      },
+    });
+    return {
+      name: `${dd.lastName} ${dd.firstName}`,
+      id: dd.id,
+      userId: dd.userId,
+      email: dd.email,
+      entityType: "staff",
+    };
+  }
+  if (entityType == "student") {
+    const dd = await db.student.findUniqueOrThrow({
+      where: {
+        id: entityType,
+      },
+    });
+    return {
+      name: `${dd.lastName} ${dd.firstName}`,
+      id: dd.id,
+      userId: dd.userId,
+      email: dd.email,
+      entityType: "student",
+    };
+  }
 
-//   const dd = await db.contact.findFirstOrThrow({
-//     where: {
-//       id: entityId,
-//     },
-//   });
-//   return {
-//     name: `${dd.lastName} ${dd.firstName}`,
-//     id: dd.id,
-//     userId: dd.userId,
-//     entityType: "contact",
-//     email: dd.email,
-//   };
-// }
+  const dd = await db.contact.findFirstOrThrow({
+    where: {
+      id: entityId,
+    },
+  });
+  return {
+    name: `${dd.lastName} ${dd.firstName}`,
+    id: dd.id,
+    userId: dd.userId,
+    entityType: "contact",
+    email: dd.email,
+  };
+}
 
 export async function createUser({
   email,

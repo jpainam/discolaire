@@ -8,7 +8,8 @@ import { DropdownMenuItem } from "@repo/ui/components/dropdown-menu";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
-import { authClient } from "~/auth/client";
+import { useMutation } from "@tanstack/react-query";
+import { useTRPC } from "~/trpc/react";
 
 export function DropdownInvitation({
   entityId,
@@ -23,16 +24,18 @@ export function DropdownInvitation({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  //const { openModal, closeModal } = useModal();
-  console.log("entityId", entityId);
-  console.log("entityType", entityType);
   const confirm = useConfirm();
-  // const createUserMutation = useMutation(trpc.user.create.mutationOptions({
-  //   onSuccess: (newUser) => {},
-  //   onError: (error) => {
-  //     toast.error(t("error_creating_user", { error: error.message }));
-  //   },
-  // }));
+  const trpc = useTRPC();
+  const createUserMutation = useMutation(
+    trpc.user.invite.mutationOptions({
+      onSuccess: () => {
+        toast.success(t("email_sent_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
 
   return (
     <>
@@ -75,12 +78,17 @@ export function DropdownInvitation({
           if (isConfirmed) {
             setIsLoading(true);
             toast.loading(t("sending_invite"), { id: 0 });
-
-            await authClient.forgetPassword({
+            createUserMutation.mutate({
+              entityId: entityId,
+              entityType: entityType,
               email: email,
-              //redirectTo: `/auth/complete-registration/${newUser.user.id}`,
             });
-            toast.success(t("email_sent_successfully"), { id: 0 });
+
+            // await authClient.forgetPassword({
+            //   email: email,
+            //   //redirectTo: `/auth/complete-registration/${newUser.user.id}`,
+            // });
+            // toast.success(t("email_sent_successfully"), { id: 0 });
           }
         }}
       >
