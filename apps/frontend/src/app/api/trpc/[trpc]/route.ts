@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 
 import { appRouter, createTRPCContext } from "@repo/api";
 
+import { logger } from "@repo/utils";
 import { auth } from "~/auth/server";
 
 /**
@@ -35,7 +36,7 @@ const handler = async (req: NextRequest) => {
         headers: req.headers,
       }),
     onError({ error, path }) {
-      console.error(`>>> tRPC Error on '${path}'`, error);
+      logger.error(`>>> tRPC Error on '${path}'`, error.message);
     },
   });
 

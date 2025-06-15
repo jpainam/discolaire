@@ -53,3 +53,5 @@ export async function sendEmail({
     return data;
   }
 }
+
+export { logger } from "./logger";

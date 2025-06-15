@@ -59,6 +59,7 @@
     "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@repo/validators": "workspace:*",
     "@sentry/nextjs": "^9.24.0",
     "@t3-oss/env-nextjs": "^0.13.6",
