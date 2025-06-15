@@ -31,16 +31,7 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute && !schoolYearId) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let session: any = null;
-  try {
-    session = getSessionCookie(request);
-  } catch (err) {
-    console.error("❌ Failed to get session in middleware:", err);
-    session = null;
-  }
-  //const session = getSessionCookie(request);
+  const session = getSessionCookie(request);
   // const session = await auth.api.getSession({
   //   headers: await headers(),
   // });
