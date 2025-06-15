@@ -33,7 +33,6 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AvatarState } from "~/components/AvatarState";
 import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -66,7 +65,7 @@ export function StaffProfileHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -104,9 +103,7 @@ export function StaffProfileHeader({
                   {t("change_avatar")}
                 </Button>
               </ChangeAvatarButton>
-            ) : (
-              <AvatarState pos={0} />
-            )}
+            ) : null}
           </>
         ) : (
           <Button

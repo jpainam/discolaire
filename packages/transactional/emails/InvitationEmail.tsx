@@ -36,7 +36,7 @@ const InvitationEmail = ({
             </Text>
 
             <Text className="mb-[32px] text-[16px] leading-[24px] text-[#333333]">
-              Vous êtes invits à rejoindre la plateforme de gestion scolaire de{" "}
+              Vous êtes invités à rejoindre la plateforme de gestion scolaire de{" "}
               <strong>{schoolName}</strong>.
             </Text>
 

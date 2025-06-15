@@ -85,7 +85,7 @@ export function StudentHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
   const router = useRouter();
   const { t } = useLocale();
@@ -94,7 +94,7 @@ export function StudentHeader() {
 
   const canCreateStudent = useCheckPermission(
     "student",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
 
@@ -119,7 +119,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -136,7 +136,7 @@ export function StudentHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const changeStudentStatus = useCallback(
@@ -147,7 +147,7 @@ export function StudentHeader() {
         status,
       });
     },
-    [t, studentStatusMutation, student.id],
+    [t, studentStatusMutation, student.id]
   );
 
   const navigateToStudent = (id: string) => {
@@ -162,7 +162,7 @@ export function StudentHeader() {
 
   const canDeleteStudent = useCheckPermission(
     "student",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
   const { data: session } = authClient.useSession();
@@ -173,7 +173,7 @@ export function StudentHeader() {
   const studentsQuery = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    }),
+    })
   );
 
   const handleDeleteAvatar = async (userId: string) => {
@@ -318,7 +318,7 @@ export function StudentHeader() {
               onClick={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -365,9 +365,7 @@ export function StudentHeader() {
                       <ImagePlusIcon />
                     </Button>
                   </ChangeAvatarButton>
-                ) : (
-                  <AvatarState pos={1} />
-                )}
+                ) : null}
               </>
             )}
           </SimpleTooltip>
