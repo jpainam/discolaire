@@ -21,7 +21,7 @@ const signInSchema = z.object({
  */
 export async function signIn(
   previousState: { error: string },
-  formData: FormData
+  formData: FormData,
 ) {
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
 

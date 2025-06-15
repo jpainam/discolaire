@@ -291,10 +291,6 @@ export async function createUser({
 }) {
   try {
     const finalEmail = email?.trim() ? email : `${username}@discolaire.com`;
-    console.log(
-      ">>>>>>>>>>>>>>>>>>>>>>>>>> Creating user with email:",
-      finalEmail,
-    );
     const newUser = await authApi.signUpEmail({
       body: {
         email: finalEmail,
