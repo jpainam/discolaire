@@ -25,7 +25,7 @@ const unProtectedRoutes = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
   const schoolYearId = request.cookies.get("x-school-year")?.value;
   if (isProtectedRoute && !schoolYearId) {
