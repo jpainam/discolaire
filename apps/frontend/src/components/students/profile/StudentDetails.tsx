@@ -8,7 +8,6 @@ import {
   CakeSlice,
   CalendarMinus,
   CalendarPlus,
-  CircleUser,
   ExternalLink,
   MedalIcon,
   Phone,
@@ -33,10 +32,10 @@ export default function StudentDetails() {
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const { data: siblings } = useSuspenseQuery(
-    trpc.student.siblings.queryOptions(params.id),
+    trpc.student.siblings.queryOptions(params.id)
   );
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
 
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
@@ -114,12 +113,12 @@ export default function StudentDetails() {
           <AtSign className="h-4 w-4 stroke-1" />
           {t("email")}
         </span>
-        <span>{student.user?.email ?? "N/A"}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <EmailComponent email={student.user?.email} />
+        {/* <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <CircleUser className="h-4 w-4 stroke-1" />
           {t("userId")}
         </span>
-        <span>{student.userId ?? "N/A"}</span>
+        <span>{student.userId ?? "N/A"}</span> */}
       </div>
       <Separator className="my-2 w-full" />
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
@@ -203,4 +202,15 @@ export default function StudentDetails() {
       )}
     </div>
   );
+}
+
+function EmailComponent({ email }: { email?: string | null }) {
+  if (
+    !email ||
+    email.includes("@example.com") ||
+    email.includes("@discolaire.com")
+  ) {
+    return <span></span>;
+  }
+  return <span>{email}</span>;
 }

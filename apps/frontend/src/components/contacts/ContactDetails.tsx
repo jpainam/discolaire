@@ -50,7 +50,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
         <dl className="grid gap-3">
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("email")}</dt>
-            <dd>{contact.user?.email ?? "N/A"}</dd>
+            <EmailComponent email={contact.user?.email} />
           </div>
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("phoneNumber")} 1</dt>
@@ -68,4 +68,15 @@ export function ContactDetails({ contactId }: { contactId: string }) {
       </div>
     </>
   );
+}
+
+function EmailComponent({ email }: { email?: string | null }) {
+  if (
+    !email ||
+    email.includes("@example.com") ||
+    email.includes("@discolaire.com")
+  ) {
+    return <dd className="text-muted-foreground">N/A</dd>;
+  }
+  return <dd>{email}</dd>;
 }
