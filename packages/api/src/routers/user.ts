@@ -108,7 +108,7 @@ export const userRouter = {
         id: z.string().min(1),
         username: z.string().min(1),
         password: z.string().optional(),
-        email: z.string().email().optional(),
+        email: z.string().email().optional().or(z.literal("")),
         name: z.string().optional(),
       }),
     )
@@ -125,24 +125,15 @@ export const userRouter = {
         });
       }
       if (input.password) {
-        try {
-          await ctx.authApi.setUserPassword({
-            body: {
-              userId: input.id,
-              newPassword: input.password,
-            },
-            headers: await headers(),
-          });
-        } catch (error) {
-          const err = error as Error;
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: `Failed to update password ${err.message}`,
-          });
-        }
+        await ctx.authApi.setUserPassword({
+          body: {
+            userId: input.id,
+            newPassword: input.password,
+          },
+          headers: await headers(),
+        });
       }
-
-      return ctx.db.user.update({
+      await ctx.db.user.update({
         where: {
           id: input.id,
         },
@@ -151,6 +142,19 @@ export const userRouter = {
           ...(input.email && { email: input.email }),
           isActive: true,
           ...(input.name && { name: input.name }),
+        },
+      });
+      if (input.email && userExist?.email !== input.email) {
+        await ctx.authApi.sendVerificationEmail({
+          body: {
+            email: input.email,
+          },
+          headers: await headers(),
+        });
+      }
+      return ctx.db.user.findUniqueOrThrow({
+        where: {
+          id: input.id,
         },
       });
     }),
@@ -204,7 +208,7 @@ export const userRouter = {
         password: z.string().optional(),
         entityId: z.string().min(1),
         profile: z.enum(["staff", "contact", "student"]),
-        email: z.string().email().optional(),
+        email: z.string().optional().or(z.literal("")),
       }),
     )
     .mutation(async ({ ctx, input }) => {

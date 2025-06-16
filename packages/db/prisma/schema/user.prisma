@@ -1,7 +1,7 @@
 model User {
     id                           String                     @id @default(uuid())
     name                         String
-    email                        String?
+    email                        String
     emailVerified                Boolean                    @default(false)
     image                        String?
     sessions                     Session[]
@@ -58,6 +58,7 @@ model User {
     createdConsumableUsages      InventoryConsumableUsage[] @relation("CreatedConsumableUsages")
 
     @@unique([username])
+    @@unique([email])
 }
 
 model Role {

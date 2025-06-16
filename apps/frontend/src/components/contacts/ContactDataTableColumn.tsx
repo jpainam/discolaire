@@ -170,14 +170,13 @@ export function getColumns({
       },
     },
     {
-      accessorKey: "email",
+      accessorKey: "address",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("email")} />
+        <DataTableColumnHeader column={column} title={t("address")} />
       ),
       cell: ({ row }) => {
-        return (
-          <div className="text-muted-foreground">{row.getValue("email")}</div>
-        );
+        const contact = row.original;
+        return <div className="text-muted-foreground">{contact.address}</div>;
       },
     },
     {
@@ -199,11 +198,11 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
 
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
@@ -214,7 +213,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
         await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const router = useRouter();
   return (

@@ -103,7 +103,7 @@ export function initAuth(options: {
           to: user.email,
           subject: "Verify your email address",
           text: `Cliquez sur le lien pour vérifier votre adresse e-mail : ${url}`,
-          html: `<p>Click the link to verify your email: <a href="${url}">${url}</a></p>`,
+          html: `<p>Cliquez sur le lien pour vérifier votre adresse e-mail <a href="${url}">${url}</a></p>`,
         });
       },
     },

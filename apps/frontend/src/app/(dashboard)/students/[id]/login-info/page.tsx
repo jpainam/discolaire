@@ -104,6 +104,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <AttachUserButton
               entityId={student.id}
               type={"student"}
+              email={student.user?.email}
               userId={student.userId ?? undefined}
               username={student.user?.username}
             />
@@ -116,6 +117,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               <AttachUserButton
                 entityId={std.contactId}
                 type={"contact"}
+                email={std.contact.user?.email}
                 userId={std.contact.userId ?? undefined}
                 username={std.contact.user?.username}
               />

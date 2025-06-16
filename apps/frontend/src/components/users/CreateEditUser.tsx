@@ -22,17 +22,20 @@ import { useTRPC } from "~/trpc/react";
 const createEditUserSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
+  email: z.string().email().optional().or(z.literal("")),
 });
 
 export function CreateEditUser({
   entityId,
   userId,
   username,
+  email,
   type,
 }: {
   entityId: string;
   userId?: string;
   username?: string;
+  email?: string | null;
   type: "staff" | "contact" | "student";
 }) {
   const form = useForm({
@@ -40,6 +43,7 @@ export function CreateEditUser({
     defaultValues: {
       username: username ?? "",
       password: "",
+      email: email ?? "",
     },
   });
   const { closeModal } = useModal();
@@ -50,26 +54,32 @@ export function CreateEditUser({
   const createUserMutation = useMutation(
     trpc.user.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.user.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.user.get.pathFilter());
+        await queryClient.invalidateQueries(trpc.staff.get.pathFilter());
+        await queryClient.invalidateQueries(trpc.contact.get.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.get.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateUserMutation = useMutation(
     trpc.user.update.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.user.pathFilter());
+        await queryClient.invalidateQueries(trpc.user.get.pathFilter());
+        await queryClient.invalidateQueries(trpc.staff.get.pathFilter());
+        await queryClient.invalidateQueries(trpc.contact.get.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.get.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const handleSubmit = (data: z.infer<typeof createEditUserSchema>) => {
@@ -79,6 +89,7 @@ export function CreateEditUser({
         id: userId,
         username: data.username,
         password: data.password,
+        email: data.email,
       });
     } else {
       toast.loading(t("creating"), { id: 0 });
@@ -87,6 +98,7 @@ export function CreateEditUser({
         entityId: entityId,
         password: data.password,
         profile: type,
+        email: data.email,
       });
     }
   };
@@ -97,24 +109,40 @@ export function CreateEditUser({
         className="flex flex-col gap-2"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="username"> {t("username")}</FormLabel>
-              <FormControl>
-                <Input
-                  autoComplete="username"
-                  placeholder="username"
-                  {...field}
-                />
-              </FormControl>
+        <div className="grid grid-cols-2 gap-x-4">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor="username"> {t("username")}</FormLabel>
+                <FormControl>
+                  <Input
+                    autoComplete="username"
+                    placeholder="username"
+                    {...field}
+                  />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel> {t("email")}</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}

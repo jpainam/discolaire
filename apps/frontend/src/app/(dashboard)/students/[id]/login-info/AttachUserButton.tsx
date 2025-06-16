@@ -13,10 +13,12 @@ export function AttachUserButton({
   entityId,
   type,
   username,
+  email,
 }: {
   userId?: string;
   entityId: string;
   username?: string;
+  email?: string | null;
   type: "staff" | "contact" | "student";
 }) {
   const { t } = useLocale();
@@ -31,6 +33,7 @@ export function AttachUserButton({
               userId={userId}
               type={type}
               entityId={entityId}
+              email={email}
               username={username}
             />
           ),

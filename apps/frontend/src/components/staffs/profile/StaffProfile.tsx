@@ -6,6 +6,7 @@ import { AvatarState } from "~/components/AvatarState";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import EmailVerification from "~/components/EmailComponent";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -15,7 +16,7 @@ export function StaffProfile() {
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: staff } = useSuspenseQuery(
-    trpc.staff.get.queryOptions(params.id),
+    trpc.staff.get.queryOptions(params.id)
   );
 
   const { t, i18n } = useLocale();
@@ -68,6 +69,12 @@ export function StaffProfile() {
               </span>
             </li>
           </ul>
+          {staff.user?.email && (
+            <EmailVerification
+              email={staff.user.email}
+              isVerified={staff.user.emailVerified}
+            />
+          )}
           <Separator className="my-2" />
           <ul className="grid gap-2">
             <li className="flex items-center justify-between">

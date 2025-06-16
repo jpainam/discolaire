@@ -65,7 +65,7 @@ export function StaffProfileHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -166,6 +166,7 @@ export function StaffProfileHeader({
                       <CreateEditUser
                         userId={staff.userId}
                         type="staff"
+                        email={staff.user?.email}
                         entityId={params.id}
                         username={staff.user?.username}
                       />
