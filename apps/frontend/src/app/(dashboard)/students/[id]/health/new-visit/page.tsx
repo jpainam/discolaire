@@ -13,7 +13,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       profile: "student",
       username: `${student.firstName?.toLowerCase()}.${student.lastName?.toLowerCase()}`,
       entityId: student.id,
-      email: student.email ?? "",
+      email: student.user?.email ?? "",
       password: randomUUID(),
     });
     userId = user.id;

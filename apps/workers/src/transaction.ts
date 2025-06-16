@@ -15,7 +15,11 @@ export const transactionWorker = {
 
       const contacts = await db.studentContact.findMany({
         include: {
-          contact: true,
+          contact: {
+            include: {
+              user: true,
+            },
+          },
         },
         where: {
           studentId: transaction.account.studentId,
@@ -24,7 +28,7 @@ export const transactionWorker = {
       const destinationEmails = contacts
         .map((c) => {
           if (c.accessBilling || c.paysFee) {
-            return c.contact.email;
+            return c.contact.user?.email;
           }
         })
         .filter((email) => email != "")

@@ -114,7 +114,7 @@ export default function StudentDetails() {
           <AtSign className="h-4 w-4 stroke-1" />
           {t("email")}
         </span>
-        <span>{student.email ?? "N/A"}</span>
+        <span>{student.user?.email ?? "N/A"}</span>
         <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <CircleUser className="h-4 w-4 stroke-1" />
           {t("userId")}

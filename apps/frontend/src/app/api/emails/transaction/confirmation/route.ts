@@ -6,10 +6,10 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { db } from "@repo/db";
 import { nanoid } from "nanoid";
+import { getSession } from "~/auth/server";
 import { resend } from "~/lib/resend";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
-import { getSession } from "~/auth/server";
 
 const schema = z.object({
   transactionId: z.coerce.number(),
@@ -39,7 +39,11 @@ export async function POST(req: Request) {
 
     const contacts = await db.studentContact.findMany({
       include: {
-        contact: true,
+        contact: {
+          include: {
+            user: true,
+          },
+        },
       },
       where: {
         studentId: transaction.account.studentId,
@@ -48,7 +52,7 @@ export async function POST(req: Request) {
     const destinationEmails = contacts
       .map((c) => {
         if (c.accessBilling || c.paysFee) {
-          return c.contact.email;
+          return c.contact.user?.email;
         }
       })
       .filter((email) => email != null);

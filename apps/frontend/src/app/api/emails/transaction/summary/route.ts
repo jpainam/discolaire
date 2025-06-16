@@ -42,8 +42,11 @@ export async function POST(req: Request) {
       where: {
         id: staffId,
       },
+      include: {
+        user: true,
+      },
     });
-    if (!staff.email) {
+    if (!staff.user?.email) {
       throw new Error("Staff email is required");
     }
 
@@ -111,7 +114,7 @@ export async function POST(req: Request) {
       receipt: false,
       schedule: "now",
       subject: "Transactions Summary",
-      to: staff.email,
+      to: staff.user.email,
     });
     return new Response(JSON.stringify(response), { status: 200 });
   } catch (e) {

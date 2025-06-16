@@ -7,8 +7,8 @@ import type { RouterOutputs } from "@repo/api";
 import { ClassroomStudentList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
-import { caller } from "~/trpc/server";
 import { getSession } from "~/auth/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
@@ -83,7 +83,7 @@ async function toExcel({
       Religion: student.religion?.name,
       formerSchool: student.formerSchool?.name,
       Residence: student.residence,
-      Email: student.email,
+      Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
       "Date of Birth":
@@ -126,7 +126,7 @@ async function toCSV({
     return {
       "First Name": student.firstName,
       "Last Name": student.lastName,
-      Email: student.email,
+      Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
       "Date of Birth": student.dateOfBirth?.toLocaleDateString(i18n.language, {

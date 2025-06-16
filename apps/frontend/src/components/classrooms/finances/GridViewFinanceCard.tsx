@@ -100,7 +100,7 @@ export function GridViewFinanceCard({
                 <Phone />
               </Button>
             </SimpleTooltip>
-            <SimpleTooltip content={student.email ?? "@email"}>
+            <SimpleTooltip content={student.user?.email ?? "@email"}>
               <Button variant={"ghost"} size={"icon"} className="h-6 w-6">
                 <AtSign />
               </Button>

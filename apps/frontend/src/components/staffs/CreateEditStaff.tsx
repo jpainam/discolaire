@@ -44,7 +44,6 @@ const staffCreateEditSchema = z.object({
   degreeId: z.string().optional(),
   employmentType: z.string().optional(),
   address: z.string().optional(),
-  email: z.string().email().optional().or(z.literal("")),
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
   dateOfHire: z.coerce.date().optional(),
@@ -76,7 +75,6 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       degreeId: staff ? String(staff.degreeId) : "",
       employmentType: staff?.employmentType ?? "",
       address: staff?.address ?? "",
-      email: staff?.email ?? "",
       phoneNumber1: staff?.phoneNumber1 ?? "",
       phoneNumber2: staff?.phoneNumber2 ?? "",
       dateOfHire: staff?.dateOfHire ?? new Date(),
@@ -137,7 +135,6 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
         : undefined,
       employmentType: data.employmentType,
       address: data.address,
-      email: data.email,
       phoneNumber1: data.phoneNumber1,
       phoneNumber2: data.phoneNumber2,
       dateOfHire: data.dateOfHire,
@@ -199,7 +196,6 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
           </div>
 
           <InputField name="firstName" label={t("firstName")} />
-          <InputField name="email" label={t("email")} />
           <div className="grid grid-cols-2 gap-2">
             <InputField name="phoneNumber1" label={`${t("phone")} 1`} />
             <InputField name="phoneNumber2" label={`${t("phone")} 2`} />

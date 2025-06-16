@@ -7,10 +7,10 @@ import type { RouterOutputs } from "@repo/api";
 import { renderToStream, StudentList } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
+import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
-import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),
@@ -98,7 +98,7 @@ async function toExcel({
       religion: student.religion?.name,
       formerSchool: student.formerSchool?.name,
       Residence: student.residence,
-      Email: student.email,
+      Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
       "Date of Birth":

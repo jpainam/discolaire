@@ -40,7 +40,7 @@ function exportToCSV(
     val.push(row.isRepeating ? "Yes" : "No");
     val.push(row.classroom?.name ?? "");
     val.push(row.dateOfBirth?.toLocaleDateString() ?? "");
-    val.push(row.email ?? "");
+    val.push(row.user?.email ?? "");
     data.push(val.join(","));
   });
 

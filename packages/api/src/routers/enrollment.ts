@@ -164,7 +164,7 @@ export const enrollmentRouter = {
             { lastName: { startsWith: qq, mode: "insensitive" } },
             { residence: { startsWith: qq, mode: "insensitive" } },
             { phoneNumber: { startsWith: qq, mode: "insensitive" } },
-            { email: { startsWith: qq, mode: "insensitive" } },
+            // { email: { startsWith: qq, mode: "insensitive" } },
             { registrationNumber: { startsWith: qq, mode: "insensitive" } },
           ],
         },

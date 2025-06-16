@@ -79,11 +79,11 @@ export function ClassroomFinancialSituation({
 
     const qq = debouncedQuery.toLowerCase();
     const filtered = balances.filter((balance) => {
-      const { firstName, lastName, email } = balance.student;
+      const { firstName, lastName } = balance.student;
       return (
         firstName?.toLowerCase().includes(qq) ||
         lastName?.toLowerCase().includes(qq) ||
-        email?.toLowerCase().includes(qq) ||
+        // user?.email?.toLowerCase().includes(qq) ||
         (!isNaN(Number(qq)) && balance.balance >= Number(qq))
       );
     });

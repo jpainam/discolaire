@@ -148,7 +148,6 @@ export async function attachUser({
       },
     });
     return {
-      email: d.email,
       name: `${d.lastName} ${d.firstName}`,
     };
   }
@@ -167,7 +166,6 @@ export async function attachUser({
       },
     });
     return {
-      email: dd.email,
       name: `${dd.lastName} ${dd.firstName}`,
     };
   }
@@ -185,7 +183,6 @@ export async function attachUser({
     },
   });
   return {
-    email: ddd.email,
     name: `${ddd.lastName} ${ddd.firstName}`,
   };
 }
@@ -202,12 +199,15 @@ export async function getByEntity({
       where: {
         id: entityId,
       },
+      include: {
+        user: true,
+      },
     });
     return {
       name: `${dd.lastName} ${dd.firstName}`,
       id: dd.id,
       userId: dd.userId,
-      email: dd.email,
+      email: dd.user?.email,
       entityType: "staff",
     };
   }
@@ -216,12 +216,15 @@ export async function getByEntity({
       where: {
         id: entityType,
       },
+      include: {
+        user: true,
+      },
     });
     return {
       name: `${dd.lastName} ${dd.firstName}`,
       id: dd.id,
       userId: dd.userId,
-      email: dd.email,
+      email: dd.user?.email,
       entityType: "student",
     };
   }
@@ -230,13 +233,16 @@ export async function getByEntity({
     where: {
       id: entityId,
     },
+    include: {
+      user: true,
+    },
   });
   return {
     name: `${dd.lastName} ${dd.firstName}`,
     id: dd.id,
     userId: dd.userId,
     entityType: "contact",
-    email: dd.email,
+    email: dd.user?.email,
   };
 }
 

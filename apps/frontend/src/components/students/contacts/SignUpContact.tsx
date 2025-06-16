@@ -72,7 +72,7 @@ export function SignUpContact() {
                 onClick={async () => {
                   const allPromise = Promise.all(
                     studentContactsQuery.data.map(async (std) => {
-                      if (!std.contact.email) {
+                      if (!std.contact.user?.email) {
                         toast.error(
                           t("email_not_found") +
                             " " +
@@ -83,7 +83,7 @@ export function SignUpContact() {
                         return;
                       }
                       await fetch(
-                        `/api/emails/invite?email=${std.contact.email}&entityId=${std.contact.id}&entityType=contact`,
+                        `/api/emails/invite?email=${std.contact.user.email}&entityId=${std.contact.id}&entityType=contact`,
                         {
                           method: "GET",
                         },

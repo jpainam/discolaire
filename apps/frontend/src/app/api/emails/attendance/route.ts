@@ -78,7 +78,7 @@ async function completeSend(title: string, body: string, studentId: string) {
   }
 
   const contactEmails = studentContacts
-    .map((c) => c.contact.email)
+    .map((c) => c.contact.user?.email)
     .filter((v) => v != null);
   await caller.messaging.sendEmail({
     subject: title,

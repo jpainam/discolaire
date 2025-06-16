@@ -105,10 +105,10 @@ export function StudentSearchResultCard({
                     <span className="text-xs">{student.classroom.name}</span>
                   </div>
                 )}
-                {student.email && (
+                {student.user?.email && (
                   <div className="flex items-center gap-1.5">
                     <Mail className="h-4 w-4" />
-                    <span>{student.email}</span>
+                    <span>{student.user.email}</span>
                   </div>
                 )}
                 {student.phoneNumber && (

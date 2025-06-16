@@ -49,7 +49,7 @@ export function StaffProfile() {
             </li>
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">{t("email")}</span>
-              <span>{staff.email}</span>
+              <span>{staff.user?.email}</span>
             </li>
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">

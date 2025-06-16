@@ -50,7 +50,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
         <dl className="grid gap-3">
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("email")}</dt>
-            <dd>{contact.email ?? "N/A"}</dd>
+            <dd>{contact.user?.email ?? "N/A"}</dd>
           </div>
           <div className="grid items-center justify-between md:flex">
             <dt className="text-muted-foreground">{t("phoneNumber")} 1</dt>

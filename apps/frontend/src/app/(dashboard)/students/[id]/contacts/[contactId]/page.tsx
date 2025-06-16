@@ -96,7 +96,7 @@ export default async function Page(props: {
               <Label className="flex flex-row items-center gap-1 text-muted-foreground">
                 <Mail className="h-4 w-4" /> {t("primaryEmail")}
               </Label>
-              {contact.email}
+              {contact.user?.email}
             </div>
             {/* <div className="grid p-2 md:grid-cols-2">
               <Label className="flex flex-row gap-1 items-center text-muted-foreground">

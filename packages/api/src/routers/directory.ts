@@ -18,12 +18,13 @@ export const directoryRouter = {
       const qq = `%${input.q}%`;
       const contacts = await ctx.db.contact.findMany({
         orderBy: { lastName: "asc" },
+        include: { user: true },
         take: 10,
         where: {
           schoolId: ctx.schoolId,
           OR: [
             { firstName: { contains: qq, mode: "insensitive" } },
-            { email: { contains: qq, mode: "insensitive" } },
+            // { email: { contains: qq, mode: "insensitive" } },
             { lastName: { contains: qq, mode: "insensitive" } },
           ],
         },
@@ -35,18 +36,19 @@ export const directoryRouter = {
           lastName: contact.lastName,
           phoneNumber1: contact.phoneNumber1,
           phoneNumber2: contact.phoneNumber2,
-          email: contact.email,
+          email: contact.user?.email ?? null,
         });
       }
       const students = await ctx.db.student.findMany({
         take: 10,
         orderBy: { lastName: "asc" },
+        include: { user: true },
         where: {
           schoolId: ctx.schoolId,
           OR: [
             { firstName: { contains: qq, mode: "insensitive" } },
             { lastName: { contains: qq, mode: "insensitive" } },
-            { email: { contains: qq, mode: "insensitive" } },
+            // { email: { contains: qq, mode: "insensitive" } },
             { registrationNumber: { contains: qq, mode: "insensitive" } },
           ],
         },
@@ -58,18 +60,19 @@ export const directoryRouter = {
           lastName: student.lastName,
           phoneNumber1: student.phoneNumber,
           phoneNumber2: null,
-          email: student.email,
+          email: student.user?.email ?? null,
         });
       }
       const staffs = await ctx.db.staff.findMany({
         orderBy: { lastName: "asc" },
+        include: { user: true },
         take: 10,
         where: {
           schoolId: ctx.schoolId,
           OR: [
             { firstName: { contains: qq, mode: "insensitive" } },
             { lastName: { contains: qq, mode: "insensitive" } },
-            { email: { contains: qq, mode: "insensitive" } },
+            // { email: { contains: qq, mode: "insensitive" } },
           ],
         },
       });
@@ -80,7 +83,7 @@ export const directoryRouter = {
           lastName: staff.lastName,
           phoneNumber1: staff.phoneNumber1,
           phoneNumber2: staff.phoneNumber2,
-          email: staff.email,
+          email: staff.user?.email ?? null,
         });
       }
       return directories;

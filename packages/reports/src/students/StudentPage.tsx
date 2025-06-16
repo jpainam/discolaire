@@ -119,7 +119,7 @@ export function StudentPage({
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
             <Item label={"Tel"} value={student.phoneNumber} />
-            <Item label="Email" value={student.email} />
+            <Item label="Email" value={student.user?.email} />
           </View>
 
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
@@ -191,7 +191,8 @@ export function StudentPage({
                   </View>
                   <View style={{ width: "30%" }}>
                     <Text>
-                      {contact.contact.phoneNumber1}/{contact.contact.email}
+                      {contact.contact.phoneNumber1}/
+                      {contact.contact.user?.email}
                     </Text>
                   </View>
                   <View style={{ width: "30%" }}>

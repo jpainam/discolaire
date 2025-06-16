@@ -44,7 +44,7 @@ export async function StudentDashboardContact({
                     {getFullName(contact)}
                   </Link>
                   <div className="flex flex-row gap-2 text-muted-foreground">
-                    <p>{contact.email}</p>
+                    <p>{contact.user?.email}</p>
                     <p>
                       {contact.phoneNumber1} / {contact.phoneNumber2}
                     </p>
