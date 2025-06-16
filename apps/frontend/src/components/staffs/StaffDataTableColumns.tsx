@@ -201,7 +201,7 @@ export function fetchStaffColumns({
       ),
       cell: ({ row }) => {
         const c = row.original;
-        return <div className="text-muted-foreground">{c.email}</div>;
+        return <div className="text-muted-foreground">{c.user?.email}</div>;
       },
       enableSorting: true,
     },
@@ -277,7 +277,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
         await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const router = useRouter();
   const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
@@ -318,7 +318,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
           <DropdownInvitation
             entityId={staff.id}
             entityType="staff"
-            email={staff.email}
+            email={staff.user?.email}
           />
 
           {canDeleteStaff && (

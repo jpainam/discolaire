@@ -7,13 +7,11 @@ import redisClient from "@repo/kv";
 import { checkPermission } from "../permission";
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";
-import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  email: z.string().optional().default(""),
   title: z.string().optional(),
   employer: z.string().optional(),
   gender: z.enum(["male", "female"]).default("male"),
@@ -267,7 +265,12 @@ export const contactRouter = {
             { lastName: { startsWith: q, mode: "insensitive" } },
             { phoneNumber1: { startsWith: q, mode: "insensitive" } },
             { phoneNumber2: { startsWith: q, mode: "insensitive" } },
-            { email: { startsWith: q, mode: "insensitive" } },
+            {
+              user: {
+                email: { startsWith: q, mode: "insensitive" },
+              },
+            },
+
             { employer: { startsWith: q, mode: "insensitive" } },
             { title: { startsWith: q, mode: "insensitive" } },
           ],
@@ -276,12 +279,11 @@ export const contactRouter = {
     }),
   create: protectedProcedure
     .input(createUpdateSchema)
-    .mutation(async ({ ctx, input }) => {
-      const contact = await ctx.db.contact.create({
+    .mutation(({ ctx, input }) => {
+      return ctx.db.contact.create({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
-          email: input.email,
           title: input.title,
           gender: input.gender,
           employer: input.employer,
@@ -294,22 +296,6 @@ export const contactRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      await createUser({
-        email: input.email,
-        username:
-          `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`.replace(
-            /[^a-zA-Z0-9]/g,
-            "",
-          ),
-        name: `${input.firstName} ${input.lastName}`,
-        authApi: ctx.authApi,
-        profile: "contact",
-        schoolId: ctx.schoolId,
-        isActive: input.isActive,
-        entityId: contact.id,
-      });
-
-      return contact;
     }),
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
@@ -321,7 +307,6 @@ export const contactRouter = {
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
-          email: input.email,
           gender: input.gender,
           title: input.title,
           employer: input.employer,
@@ -362,7 +347,6 @@ export const contactRouter = {
                 { lastName: { startsWith: qq, mode: "insensitive" } },
                 { residence: { startsWith: qq, mode: "insensitive" } },
                 { phoneNumber: { startsWith: qq, mode: "insensitive" } },
-                { email: { startsWith: qq, mode: "insensitive" } },
                 { registrationNumber: { startsWith: qq, mode: "insensitive" } },
               ],
             },

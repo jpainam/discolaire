@@ -33,7 +33,6 @@ const createUpdateStudentSchema = z.object({
   isBaptized: z.boolean().optional().default(false),
   isNew: z.boolean().optional().default(true),
   gender: z.string().min(1),
-  email: z.string().email().optional().or(z.literal("")),
   residence: z.string().optional(),
   phoneNumber: z.string().optional(),
   formerSchoolId: z.string().min(1),
@@ -51,7 +50,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   sports: z
@@ -59,7 +58,7 @@ const createUpdateStudentSchema = z.object({
       z.object({
         label: z.string(),
         value: z.string(),
-      }),
+      })
     )
     .optional(),
   classroom: z.string().optional(),
@@ -82,7 +81,6 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       gender: student.gender ?? "male",
       residence: student.residence ?? "",
       phoneNumber: student.phoneNumber ?? "",
-      email: student.email ?? "",
       isRepeating: student.isRepeating ? ("yes" as const) : ("no" as const),
       isNew: student.isNew,
       sunPlusNo: student.sunPlusNo ?? "",
@@ -125,7 +123,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
         router.push(routes.students.details(student.id));
         toast.success(t("updated_successfully"), { id: 0 });
       },
-    }),
+    })
   );
 
   const onSubmit = (data: z.infer<typeof createUpdateStudentSchema>) => {

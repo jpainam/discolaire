@@ -3,7 +3,6 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
-import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -18,7 +17,6 @@ const createUpdateSchema = z.object({
   dateOfBirth: z.coerce.date().optional(),
   isTeacher: z.boolean().default(false),
   gender: z.enum(["female", "male"]).default("male"),
-  email: z.string().email().optional().or(z.literal("")),
   phoneNumber1: z.string().optional(),
   phoneNumber2: z.string().optional(),
   observation: z.string().optional(),
@@ -115,39 +113,23 @@ export const staffRouter = {
 
   create: protectedProcedure
     .input(createUpdateSchema)
-    .mutation(async ({ ctx, input }) => {
-      const staff = await ctx.db.staff.create({
+    .mutation(({ ctx, input }) => {
+      return ctx.db.staff.create({
         data: {
           ...input,
-          //userId: user.id,
           dateOfBirth: input.dateOfBirth
             ? fromZonedTime(input.dateOfBirth, "UTC")
             : undefined,
           schoolId: ctx.schoolId,
         },
       });
-      await createUser({
-        name: `${input.firstName} ${input.lastName}`,
-        profile: "staff",
-        username:
-          `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`.replace(
-            /[^a-zA-Z0-9]/g,
-            "",
-          ),
-        email: input.email ?? "",
-        schoolId: ctx.schoolId,
-        entityId: staff.id,
-        authApi: ctx.authApi,
-      });
-
-      return staff;
     }),
 
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(({ ctx, input }) => {
       const { id, ...data } = input;
-      const staff = await ctx.db.staff.update({
+      return ctx.db.staff.update({
         where: {
           id: id,
         },
@@ -158,33 +140,6 @@ export const staffRouter = {
             : undefined,
         },
       });
-      let userId = staff.userId;
-      if (!userId) {
-        const user = await createUser({
-          name: `${input.firstName} ${input.lastName}`,
-          profile: "staff",
-          username:
-            `${input.firstName.toLowerCase()}.${input.lastName.toLowerCase()}`.replace(
-              /[^a-zA-Z0-9]/g,
-              "",
-            ),
-          email: input.email,
-          schoolId: ctx.schoolId,
-          entityId: staff.id,
-          authApi: ctx.authApi,
-        });
-        userId = user.id;
-      }
-      await ctx.db.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          name: `${input.firstName} ${input.lastName}`,
-        },
-      });
-
-      return staff;
     }),
   count: protectedProcedure
     .input(

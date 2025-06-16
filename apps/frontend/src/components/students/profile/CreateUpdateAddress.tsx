@@ -54,12 +54,6 @@ export function CreateUpdateAddress() {
                 label={t("sun_plus_no")}
               />
             )}
-            <InputField
-              name="email"
-              className="flex-1"
-              placeholder="Email"
-              label="Email"
-            />
           </div>
           <div className="flex flex-col gap-3 md:flex-row">
             <FormField

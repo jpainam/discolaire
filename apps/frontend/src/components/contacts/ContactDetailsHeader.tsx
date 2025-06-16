@@ -55,7 +55,7 @@ export function ContactDetailsHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: contact } = useSuspenseQuery(
-    trpc.contact.get.queryOptions(params.id),
+    trpc.contact.get.queryOptions(params.id)
   );
 
   const router = useRouter();
@@ -72,11 +72,11 @@ export function ContactDetailsHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const canDeleteContact = useCheckPermission(
     "contact",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -94,11 +94,11 @@ export function ContactDetailsHeader() {
 
   const canUpdateContact = useCheckPermission(
     "contact",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const handleDeleteAvatar = async (userId: string) => {
@@ -218,7 +218,7 @@ export function ContactDetailsHeader() {
               <DropdownInvitation
                 entityType="contact"
                 entityId={contact.id}
-                email={contact.email}
+                email={contact.user?.email}
               />
 
               {canDeleteContact && (

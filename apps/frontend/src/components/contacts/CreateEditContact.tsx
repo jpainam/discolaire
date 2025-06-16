@@ -34,7 +34,6 @@ const createEditContactSchema = z.object({
   employer: z.string().optional(),
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
-  email: z.string().optional().default(""),
   address: z.string().optional(),
   observation: z.string().optional(),
 });
@@ -59,7 +58,6 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
       employer: contact?.employer ?? "",
       phoneNumber1: contact?.phoneNumber1 ?? "",
       phoneNumber2: contact?.phoneNumber2 ?? "",
-      email: contact?.email ?? "",
       address: contact?.address ?? "",
       observation: contact?.observation ?? "",
     },
@@ -78,7 +76,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateContactMutation = useMutation(
     trpc.contact.update.mutationOptions({
@@ -90,13 +88,12 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const onSubmit = (data: z.infer<typeof createEditContactSchema>) => {
     const values = {
       ...data,
-      email: data.email,
     };
     if (contact) {
       toast.loading(t("updating"), { id: 0 });
@@ -152,7 +149,6 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
             className="col-span-2"
             label={t("firstName")}
           />
-          <InputField name="email" className="col-span-2" label={t("email")} />
 
           <InputField name="title" label={t("title")} />
           <InputField name="employer" label={t("employer")} />

@@ -10,7 +10,6 @@ import redisClient from "@repo/kv";
 import { accountService } from "../services/account-service";
 import { contactService } from "../services/contact-service";
 import { isRepeating, studentService } from "../services/student-service";
-import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
@@ -25,7 +24,9 @@ const whereClause = (q: string): Prisma.StudentFindManyArgs => {
             { lastName: { startsWith: qq, mode: "insensitive" } },
             { residence: { startsWith: qq, mode: "insensitive" } },
             { phoneNumber: { startsWith: qq, mode: "insensitive" } },
-            { email: { startsWith: qq, mode: "insensitive" } },
+            {
+              user: { email: { startsWith: qq, mode: "insensitive" } },
+            },
             { registrationNumber: { startsWith: qq, mode: "insensitive" } },
           ],
         },
@@ -40,7 +41,6 @@ const createUpdateSchema = z.object({
   dateOfBirth: z.coerce.date(),
   placeOfBirth: z.string().min(1),
   gender: z.string().min(1),
-  email: z.string().email().optional().or(z.literal("")),
   residence: z.string().optional(),
   sunPlusNo: z.string().optional(),
   phoneNumber: z.string().optional(),
@@ -210,7 +210,6 @@ export const studentRouter = {
           dateOfBirth: fromZonedTime(input.dateOfBirth, "UTC"),
           placeOfBirth: input.placeOfBirth,
           gender: input.gender,
-          email: input.email,
           sunPlusNo: input.sunPlusNo,
           residence: input.residence,
           isNew: input.isNew,
@@ -234,33 +233,6 @@ export const studentRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      await ctx.db.logActivity.create({
-        data: {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          userId: ctx.session.user.id,
-          title: "Student profile",
-          type: "CREATE",
-          url: `/students/${student.id}`,
-          entityId: student.id,
-          entityType: "student",
-        },
-      });
-      await createUser({
-        email: input.email,
-        username:
-          `${input.firstName.toLowerCase()}-${input.lastName.toLowerCase()}`.replace(
-            /[^a-zA-Z0-9]/g,
-            "",
-          ),
-        authApi: ctx.authApi,
-        profile: "student",
-        schoolId: ctx.schoolId,
-        name: `${input.firstName} ${input.lastName}`,
-        isActive: true,
-        entityId: student.id,
-      });
-
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
 
@@ -276,18 +248,6 @@ export const studentRouter = {
             classroomId: input.classroom,
             schoolYearId: ctx.schoolYearId,
             createdBy: ctx.session.user.id,
-          },
-        });
-        await ctx.db.logActivity.create({
-          data: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-            userId: ctx.session.user.id,
-            title: "Student enrollment",
-            type: "CREATE",
-            url: `/students/${student.id}/enrollments`,
-            entityId: student.id,
-            entityType: "student",
           },
         });
       }
@@ -315,19 +275,6 @@ export const studentRouter = {
         //   message: "Registration number already exists",
         // });
       }
-      await ctx.db.logActivity.create({
-        data: {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          userId: ctx.session.user.id,
-          title: "Student profile",
-          type: "UPDATE",
-          url: `/students/${input.id}`,
-          entityId: input.id,
-          data: input,
-          entityType: "student",
-        },
-      });
       return ctx.db.student.update({
         where: { id: input.id },
         data: {
@@ -337,7 +284,6 @@ export const studentRouter = {
           dateOfBirth: fromZonedTime(input.dateOfBirth, "UTC"),
           placeOfBirth: input.placeOfBirth,
           gender: input.gender,
-          email: input.email,
           isRepeating: input.isRepeating,
           isNew: input.isNew,
           sunPlusNo: input.sunPlusNo,
@@ -513,7 +459,7 @@ export const studentRouter = {
                 { lastName: { startsWith: qq, mode: "insensitive" } },
                 { phoneNumber1: { startsWith: qq, mode: "insensitive" } },
                 { phoneNumber2: { startsWith: qq, mode: "insensitive" } },
-                { email: { startsWith: qq, mode: "insensitive" } },
+                { user: { email: { startsWith: qq, mode: "insensitive" } } },
               ],
             },
             {

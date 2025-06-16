@@ -402,7 +402,6 @@ model Staff {
     dateOfRelease             DateTime?   @db.Date
     isTeacher                 Boolean?    @default(true)
     gender                    Gender      @default(male)
-    email                     String?
     phoneNumber1              String?
     phoneNumber2              String?
     address                   String?
@@ -442,7 +441,6 @@ model Student {
     id                 String                   @id @default(uuid())
     registrationNumber String?
     isActive           Boolean                  @default(true)
-    email              String?
     firstName          String?
     lastName           String?
     dateOfBirth        DateTime?                @db.Date
@@ -591,7 +589,6 @@ model Contact {
     employer        String?
     phoneNumber1    String?
     phoneNumber2    String?
-    email           String?
     isActive        Boolean          @default(true)
     address         String?
     gender          String?          @default("male")
