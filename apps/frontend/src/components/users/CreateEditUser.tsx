@@ -64,7 +64,7 @@ export function CreateEditUser({
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateUserMutation = useMutation(
     trpc.user.update.mutationOptions({
@@ -79,7 +79,7 @@ export function CreateEditUser({
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof createEditUserSchema>) => {
