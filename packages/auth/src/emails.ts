@@ -10,6 +10,10 @@ export async function completeRegistration({
   user: { id: string; email: string; name: string };
   url: string;
 }) {
+  if (user.email.includes("@example.com")) {
+    console.warn("User email is a placeholder, skipping email sending.");
+    return;
+  }
   const newUser = await db.user.findUniqueOrThrow({
     where: { id: user.id },
   });
@@ -35,6 +39,10 @@ export async function sendResetPassword({
   user: { id: string; email: string; name: string };
   url: string;
 }) {
+  if (user.email.includes("@example.com")) {
+    console.warn("User email is a placeholder, skipping email sending.");
+    return;
+  }
   const newUser = await db.user.findUniqueOrThrow({
     where: { id: user.id },
   });

@@ -40,7 +40,7 @@ export default function EmailVerification({
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to send verification email"
+          : "Failed to send verification email",
       );
     }
   };

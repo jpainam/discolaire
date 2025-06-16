@@ -56,7 +56,7 @@ export function StudentSearchResultCard({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
     <Card
@@ -105,12 +105,8 @@ export function StudentSearchResultCard({
                     <span className="text-xs">{student.classroom.name}</span>
                   </div>
                 )}
-                {student.user?.email && (
-                  <div className="flex items-center gap-1.5">
-                    <Mail className="h-4 w-4" />
-                    <span>{student.user.email}</span>
-                  </div>
-                )}
+                <EmailComponent email={student.user?.email} />
+
                 {student.phoneNumber && (
                   <div className="flex items-center gap-1.5">
                     <Phone className="h-4 w-4" />
@@ -213,5 +209,20 @@ export function StudentSearchResultCard({
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function EmailComponent({ email }: { email?: string | null }) {
+  if (
+    !email ||
+    email.includes("@example.com") ||
+    email.includes("@discolaire.com")
+  )
+    return null;
+  return (
+    <div className="flex items-center gap-1.5">
+      <Mail className="h-4 w-4" />
+      <span>{email}</span>
+    </div>
   );
 }

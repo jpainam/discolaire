@@ -1,4 +1,3 @@
-import { db } from "@repo/db";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { decode } from "entities";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
@@ -19,17 +18,6 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 export default async function Page() {
   const session = await getSession();
-  const users = await db.user.findMany();
-  for (const user of users) {
-    if (!user.email || user.email === "") {
-      await db.user.update({
-        where: { id: user.id },
-        data: {
-          email: `${user.username}@example.com`,
-        },
-      });
-    }
-  }
 
   if (session?.user.profile === "student") {
     const student = await caller.student.getFromUserId(session.user.id);
