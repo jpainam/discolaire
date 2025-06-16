@@ -32,10 +32,10 @@ export default function StudentDetails() {
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
   const { data: siblings } = useSuspenseQuery(
-    trpc.student.siblings.queryOptions(params.id)
+    trpc.student.siblings.queryOptions(params.id),
   );
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id)
+    trpc.student.get.queryOptions(params.id),
   );
 
   const dateFormat = Intl.DateTimeFormat(i18n.language, {
