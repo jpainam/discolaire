@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 import { appRouter, createTRPCContext } from "@repo/api";
 
 import { logger } from "@repo/utils";
+import { redirect } from "next/navigation";
 import { auth } from "~/auth/server";
 
 /**
@@ -37,6 +38,10 @@ const handler = async (req: NextRequest) => {
       }),
     onError({ error, path }) {
       logger.error(`>>> tRPC Error on '${path}'`, error.message);
+      // TODO Temporary fix for unauthorized errors
+      if (error.code == "UNAUTHORIZED") {
+        redirect("/auth/login");
+      }
     },
   });
 

@@ -205,6 +205,7 @@ export async function gradesReportTracker({
           classroom: true,
         },
       },
+      term: true,
     },
     where: {
       term: {

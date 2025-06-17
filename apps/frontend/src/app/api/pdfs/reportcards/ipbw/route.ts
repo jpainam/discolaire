@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { IPBW, IPBWClassroom, renderToStream } from "@repo/reports";
 
-import { caller } from "~/trpc/server";
 import { getSession } from "~/auth/server";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),
@@ -78,7 +78,7 @@ async function classroomReportCard({
       students,
       disciplines,
       classroom,
-      title: `BULLETIN SCOLAIRE : ${term?.name}`,
+      title: `BULLETIN SCOLAIRE : ${term.name}`,
       subjects,
       report,
       contacts,
@@ -134,7 +134,7 @@ async function indvidualReportCard({
       disciplines: disciplines,
       student,
       classroom,
-      title: `BULLETIN SCOLAIRE : ${term?.name}`,
+      title: `BULLETIN SCOLAIRE : ${term.name}`,
       subjects,
       report,
       contact,

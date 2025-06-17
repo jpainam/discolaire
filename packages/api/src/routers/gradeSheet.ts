@@ -5,8 +5,9 @@ import { z } from "zod";
 import type { Prisma } from "@repo/db";
 
 import {
-  getGradeReportAdmin,
+  gradeReportTracker,
   gradeSheetService,
+  gradesReportTracker,
 } from "../services/gradesheet-service";
 import { protectedProcedure } from "../trpc";
 
@@ -291,10 +292,15 @@ export const gradeSheetRouter = {
       schoolId: ctx.schoolId,
     });
   }),
-  getGradeReportAdmin: protectedProcedure.query(({ ctx }) => {
-    return getGradeReportAdmin({
+  gradesReportTracker: protectedProcedure.query(({ ctx }) => {
+    return gradesReportTracker({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.schoolId,
     });
   }),
+  gradeReportTracker: protectedProcedure
+    .input(z.object({ subjectId: z.coerce.number() }))
+    .query(({ input }) => {
+      return gradeReportTracker({ subjectId: input.subjectId });
+    }),
 } satisfies TRPCRouterRecord;

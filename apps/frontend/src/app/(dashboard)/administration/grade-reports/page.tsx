@@ -20,6 +20,7 @@ import { GradeDistributionChart } from "~/components/administration/grade-report
 import { GradeDistributionBySubject } from "~/components/administration/grade-reports/GradeDistributionChartBySubject";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
 import { GradeReportGenerator2 } from "~/components/administration/grade-reports/GradeReportGenerator2";
+import { GradeReportTrackerDataTable } from "~/components/administration/grade-reports/GradeReportTrackerDataTable";
 import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
 import { StudentPerformanceChart } from "~/components/administration/grade-reports/StudentPerformanceChart";
 import { StudentPerformanceChart2 } from "~/components/administration/grade-reports/StudentPerformanceChart2";
@@ -27,7 +28,6 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { GradeReportSettings } from "./settings/GradeReportSettings";
-import { GradeSheetDataTable } from "~/components/administration/grade-reports/GradeSheetDataTable";
 
 export const metadata: Metadata = {
   title: "Grades Management Dashboard",
@@ -42,6 +42,7 @@ export default async function Page() {
     trpc.term.all.queryOptions(),
     trpc.gradeSheet.distribution.queryOptions(),
     trpc.gradeSheet.allPercentile.queryOptions(),
+    trpc.gradeSheet.gradesReportTracker.queryOptions(),
   ]);
   return (
     <HydrateClient>
@@ -113,7 +114,7 @@ export default async function Page() {
                   </div>
                 }
               >
-                <GradeSheetDataTable />
+                <GradeReportTrackerDataTable />
               </Suspense>
             </ErrorBoundary>
           </TabsContent>

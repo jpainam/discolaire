@@ -69,7 +69,7 @@ export default async function Page(props: {
     <div className="flex w-full flex-col gap-2 text-sm mb-10">
       <div className="grid flex-row items-center gap-4 px-4 md:flex">
         <Label className="uppercase font-bold">
-          BULLETIN SCOLAIRE : {term?.name}
+          BULLETIN SCOLAIRE : {term.name}
         </Label>
         <FlatBadge variant={"green"}>
           {t("Moy.Max")} :{Math.max(...averages).toFixed(2)}
