@@ -51,11 +51,11 @@ export function GradeReportGenerator() {
     if (reportType == "001") {
       window.open(
         `/api/pdfs/gradereports/roll-of-honor?classroomId=${selectedClass}&format=${formatType}&termId=${termId}`,
-        "_blank"
+        "_blank",
       );
     } else {
       toast.warning(
-        t("This report type is not yet implemented. Please check back later.")
+        t("This report type is not yet implemented. Please check back later."),
       );
     }
   };

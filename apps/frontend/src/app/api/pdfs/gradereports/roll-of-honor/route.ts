@@ -3,18 +3,18 @@ import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import type { RouterOutputs } from "@repo/api";
-import { GradeList, renderToStream } from "@repo/reports";
+import { renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
+import { RollOfHonor } from "@repo/reports/gradereports/RollOfHonor";
 import { getSession } from "~/auth/server";
-import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
-import { xlsxType } from "~/utils";
+import { getFullName, xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
 
 const searchSchema = z.object({
-  id: z.string().min(1),
+  termId: z.coerce.number(),
+  classroomId: z.string().min(1),
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
 export async function GET(req: NextRequest) {
@@ -34,23 +34,54 @@ export async function GET(req: NextRequest) {
       const error = result.error.issues.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
-    const { id, format } = result.data;
+    const { termId, classroomId, format } = result.data;
+
+    const report = await caller.reportCard.getSequence({
+      classroomId: classroomId,
+      termId: Number(termId),
+    });
+    const { globalRanks } = report;
+    const students = await caller.classroom.students(classroomId);
+    const studentsMap = new Map(students.map((s) => [s.id, s]));
+    const reports: {
+      registrationNumber: string | null;
+      studentName: string;
+      dateOfBirth: Date | null;
+      isRepeating: boolean;
+      grade: number;
+      observation: string;
+    }[] = [];
+    /// GEt the list of report with global average >= 12
+    Array.from(globalRanks).map(([key, value], _index) => {
+      const student = studentsMap.get(key);
+      if (!student) return;
+      if (value.average >= 12) {
+        reports.push({
+          registrationNumber: student.registrationNumber,
+          studentName: getFullName(student),
+          dateOfBirth: student.dateOfBirth,
+          isRepeating: student.isRepeating,
+          grade: value.average,
+          observation: getAppreciations(value.average),
+        });
+      }
+    });
+
     const school = await caller.school.getSchool();
-
-    const student = await caller.student.get(id);
-
-    const grades = await caller.student.grades({ id });
+    const term = await caller.term.get(termId);
+    const classroom = await caller.classroom.get(classroomId);
 
     if (format === "csv") {
-      const { blob, headers } = await toExcel({ grades, student });
+      const { blob, headers } = await toExcel({ reports });
       return new Response(blob, { headers });
     } else {
       const stream = await renderToStream(
-        GradeList({
-          student: student,
-          grades: grades,
+        RollOfHonor({
+          reports: reports,
           school: school,
-        })
+          term: term,
+          classroom: classroom,
+        }),
       );
 
       //const blob = await new Response(stream).blob();
@@ -68,26 +99,33 @@ export async function GET(req: NextRequest) {
 }
 
 async function toExcel({
-  grades,
-  student,
+  reports,
 }: {
-  student: RouterOutputs["student"]["get"];
-  grades: RouterOutputs["student"]["grades"];
+  reports: {
+    registrationNumber: string | null;
+    studentName: string;
+    dateOfBirth: Date | null;
+    isRepeating: boolean;
+    grade: number;
+    observation: string;
+  }[];
 }) {
   const { t } = await getServerTranslations();
-  const rows = grades.map((grade) => {
+  const rows = reports.map((grade) => {
     return {
-      Sequence: grade.gradeSheet.term.name,
-      Matiere: grade.gradeSheet.subject.course.shortName,
-      Description: grade.gradeSheet.name,
-      Note: grade.grade,
-      Appreciation: getAppreciations(grade.grade),
-      Date: grade.gradeSheet.updatedAt.toLocaleDateString(),
+      "Registration Number": grade.registrationNumber ?? "",
+      "Student Name": grade.studentName,
+      "Date of Birth": grade.dateOfBirth
+        ? new Date(grade.dateOfBirth).toLocaleDateString()
+        : "",
+      "Is Repeating": grade.isRepeating ? t("yes") : t("no"),
+      Grade: grade.grade,
+      Observation: grade.observation,
     };
   });
   const worksheet = XLSX.utils.json_to_sheet(rows);
   const workbook = XLSX.utils.book_new();
-  const sheetName = getSheetName(t("grades") + " " + student.lastName);
+  const sheetName = "Tableau de Honneur";
   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
   const u8 = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });

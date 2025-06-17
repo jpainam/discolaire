@@ -21,9 +21,9 @@ export function RollOfHonor({
   classroom: RouterOutputs["classroom"]["get"];
   term: RouterOutputs["term"]["get"];
   reports: {
-    registrationMatricule: string;
+    registrationNumber: string | null;
     studentName: string;
-    dateOfBirth: Date;
+    dateOfBirth: Date | null;
     isRepeating: boolean;
     grade: number;
     observation: string;
@@ -63,7 +63,7 @@ export function RollOfHonor({
           >
             <Text>TABLEAU D'HONNEUR</Text>
             <Text>
-              {classroom.name} - {term?.name}
+              {classroom.name} - {term.name}
             </Text>
           </View>
           <View

@@ -12,7 +12,8 @@
     "./gradesheet/*": "./src/gradesheet/*.tsx",
     "./course/*": "./src/course/*.tsx",
     "./accesslogs/*": "./src/accesslogs/*.tsx",
-    "./reportcards/*": "./src/reportcards/*.tsx"
+    "./reportcards/*": "./src/reportcards/*.tsx",
+    "./gradereports/*": "./src/gradereports/*.tsx"
   },
   "scripts": {
     "build": "tsc",
