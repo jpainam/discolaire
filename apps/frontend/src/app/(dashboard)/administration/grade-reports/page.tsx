@@ -27,6 +27,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { GradeReportSettings } from "./settings/GradeReportSettings";
+import { GradeSheetDataTable } from "~/components/administration/grade-reports/GradeSheetDataTable";
 
 export const metadata: Metadata = {
   title: "Grades Management Dashboard",
@@ -48,7 +49,7 @@ export default async function Page() {
         <Tabs defaultValue="overview">
           <TabsList>
             <TabsTrigger value="overview">{t("dashboard")}</TabsTrigger>
-            {/* <TabsTrigger value="grades">{t("grades")}</TabsTrigger> */}
+            <TabsTrigger value="grades">{t("grades")}</TabsTrigger>
             <TabsTrigger value="reports">{t("reports")}</TabsTrigger>
             <TabsTrigger value="analytics">{t("charts")}</TabsTrigger>
             <TabsTrigger value="settings">{t("settings")}</TabsTrigger>
@@ -101,7 +102,7 @@ export default async function Page() {
               <GradeReportGenerator />
             </div>
           </TabsContent>
-          {/* <TabsContent value="grades" className="space-y-4">
+          <TabsContent value="grades" className="space-y-4">
             <ErrorBoundary errorComponent={ErrorFallback}>
               <Suspense
                 fallback={
@@ -115,7 +116,7 @@ export default async function Page() {
                 <GradeSheetDataTable />
               </Suspense>
             </ErrorBoundary>
-          </TabsContent> */}
+          </TabsContent>
           <TabsContent value="reports">
             <Card>
               <CardHeader>

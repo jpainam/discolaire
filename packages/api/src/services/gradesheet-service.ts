@@ -188,3 +188,118 @@ export const gradeSheetService = {
     return result;
   },
 };
+
+export async function gradesReportTracker({
+  schoolYearId,
+  schoolId,
+}: {
+  schoolYearId: string;
+  schoolId: string;
+}) {
+  const gradeSheets = await db.gradeSheet.findMany({
+    include: {
+      subject: {
+        include: {
+          course: true,
+          teacher: true,
+          classroom: true,
+        },
+      },
+    },
+    where: {
+      term: {
+        schoolId: schoolId,
+        schoolYearId: schoolYearId,
+      },
+    },
+  });
+
+  const results = new Map<
+    number,
+    {
+      id: number;
+      subject: {
+        id: number;
+        course: {
+          name: string;
+        };
+        classroom: {
+          name: string;
+        };
+        coefficient: number;
+        teacher?: {
+          id?: string;
+          firstName?: string | null;
+          lastName?: string | null;
+        };
+      };
+      courseName: string;
+      teacherName: string;
+      terms: number[];
+    }
+  >();
+  gradeSheets.forEach((sheet) => {
+    const key = sheet.subject.id;
+    if (!results.has(key)) {
+      results.set(key, {
+        id: sheet.subject.id,
+        subject: {
+          id: sheet.subject.id,
+          classroom: {
+            name: sheet.subject.classroom.reportName,
+          },
+          coefficient: sheet.subject.coefficient,
+          teacher: {
+            id: sheet.subject.teacher?.id,
+            firstName: sheet.subject.teacher?.firstName,
+            lastName: sheet.subject.teacher?.lastName,
+          },
+          course: {
+            name: sheet.subject.course.name,
+          },
+        },
+        courseName: sheet.subject.course.name,
+        teacherName: `${sheet.subject.teacher?.firstName ?? ""} ${sheet.subject.teacher?.lastName ?? ""}`,
+        terms: [sheet.termId],
+      });
+    } else {
+      const entry = results.get(key);
+      entry?.terms.push(sheet.termId);
+    }
+  });
+  const resultsArray = Array.from(results.values());
+  return resultsArray;
+}
+
+export async function gradeReportTracker({ subjectId }: { subjectId: number }) {
+  const reports = await db.gradeSheet.findMany({
+    include: {
+      term: true,
+      grades: true,
+    },
+    orderBy: {
+      term: {
+        order: "asc",
+      },
+    },
+    where: {
+      subjectId,
+    },
+  });
+
+  return reports.map((report) => {
+    const nbAbsent = report.grades.filter((grade) => grade.isAbsent).length;
+    const n = report.grades.length - nbAbsent;
+    const gradeSum = report.grades.reduce((acc, grade) => acc + grade.grade, 0);
+    return {
+      id: report.id,
+      createdAt: report.createdAt,
+      name: report.name,
+      nbAbsent: nbAbsent,
+      n: n,
+      term: report.term,
+      average: n > 0 ? gradeSum / n : 0,
+      scale: report.scale,
+    };
+  });
+}

@@ -4,7 +4,10 @@ import { z } from "zod";
 
 import type { Prisma } from "@repo/db";
 
-import { gradeSheetService } from "../services/gradesheet-service";
+import {
+  getGradeReportAdmin,
+  gradeSheetService,
+} from "../services/gradesheet-service";
 import { protectedProcedure } from "../trpc";
 
 const createGradeSheetSchema = z.object({
@@ -284,6 +287,12 @@ export const gradeSheetRouter = {
     //   schoolId: ctx.schoolId,
     // });
     return gradeSheetService.percentileRawQuery({
+      schoolYearId: ctx.schoolYearId,
+      schoolId: ctx.schoolId,
+    });
+  }),
+  getGradeReportAdmin: protectedProcedure.query(({ ctx }) => {
+    return getGradeReportAdmin({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.schoolId,
     });

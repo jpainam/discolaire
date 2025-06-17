@@ -12,7 +12,7 @@ import { fetchGradeSheetColumns } from "./GradeSheetDataTableColumn";
 export function GradeSheetDataTable() {
   const trpc = useTRPC();
   const { data: gradesheets } = useSuspenseQuery(
-    trpc.gradeSheet.all.queryOptions(),
+    trpc.gradeSheet.all.queryOptions()
   );
 
   const { t } = useLocale();
