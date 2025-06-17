@@ -69,8 +69,6 @@ export function RollOfHonor({
           <View
             style={{
               flexDirection: "column",
-              display: "flex",
-              fontSize: 10,
             }}
           >
             <View
@@ -81,96 +79,122 @@ export function RollOfHonor({
                 border: "1px solid black",
               }}
             >
-              <Item label="Effectif évalué" />
-              <Item label="Moy. générale de la classe" />
-              <Item label="Nombre de notes >= 10" />
+              <Item label="N" width="5%" />
+              <Item label="Matricule" width="12%" />
+              <Item label="Noms et Prénoms" width="35%" />
+              <Item label="Date/LieuNaiss" width="15%" />
+              <Item label="Redou." width="10%" />
+              <Item label="Moy." width="8%" />
+              <Item label="Observation" width="15%" last />
             </View>
+
+            {reports.map((grade, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: "row",
+                    borderBottom: "1px solid black",
+                    width: "100%",
+                    borderLeft: "1px solid black",
+                    borderRight: "1px solid black",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "5%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text> {index + 1}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "12%",
+                      paddingLeft: 5,
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>{grade.registrationNumber}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "35%",
+                      paddingLeft: 5,
+                      paddingVertical: 3,
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>{grade.studentName}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "15%",
+                      justifyContent: "center",
+                      paddingLeft: 5,
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>{grade.dateOfBirth?.toLocaleDateString()}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "10%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>{grade.isRepeating ? "OUI" : "NON"}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "8%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>{grade.grade.toFixed(2)}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "15%",
+                      paddingLeft: 3,
+                      //borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>{getAppreciations(grade.grade)}</Text>
+                  </View>
+                </View>
+              );
+            })}
           </View>
-          {reports.map((grade, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  flexDirection: "row",
-                  borderTop: "1px solid black",
-                }}
-              >
-                <View
-                  style={{
-                    width: "4%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRight: "1px solid black",
-                  }}
-                >
-                  <Text> {index + 1}</Text>
-                </View>
-                <View
-                  style={{
-                    width: "45%",
-                    paddingLeft: 5,
-                    paddingVertical: 3,
-                    borderRight: "1px solid black",
-                  }}
-                >
-                  <Text>{grade.studentName}</Text>
-                </View>
-                <View
-                  style={{
-                    width: "10%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRight: "1px solid black",
-                  }}
-                >
-                  <Text>{grade.isRepeating ? "OUI" : "NON"}</Text>
-                </View>
-                <View
-                  style={{
-                    width: "10%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRight: "1px solid black",
-                  }}
-                >
-                  <Text>{grade.grade}</Text>
-                </View>
-                <View
-                  style={{
-                    width: "10%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRight: "1px solid black",
-                  }}
-                >
-                  <Text></Text>
-                </View>
-                <View
-                  style={{
-                    width: "20%",
-                    paddingLeft: 3,
-                  }}
-                >
-                  <Text>{getAppreciations(grade.grade)}</Text>
-                </View>
-              </View>
-            );
-          })}
         </View>
       </Page>
     </Document>
   );
 }
 
-function Item({ label, last = false }: { label: string; last?: boolean }) {
+function Item({
+  label,
+  width,
+  last = false,
+}: {
+  label: string;
+  last?: boolean;
+  width?: string;
+}) {
   return (
     <View
       style={{
-        width: "15%",
+        width: width ?? "auto",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        paddingHorizontal: 3,
+        paddingVertical: 3,
         borderRight: last ? "" : "1px solid black",
       }}
     >
