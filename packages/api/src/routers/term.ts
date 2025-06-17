@@ -54,7 +54,7 @@ export const termRouter = {
       });
     }),
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
-    return ctx.db.term.findUnique({
+    return ctx.db.term.findUniqueOrThrow({
       where: {
         id: input,
       },

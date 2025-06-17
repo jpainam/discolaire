@@ -42,7 +42,7 @@ export function UserProfile() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: user } = useSuspenseQuery(
-    trpc.user.get.queryOptions(params.id)
+    trpc.user.get.queryOptions(params.id),
   );
   const form = useForm({
     resolver: zodResolver(usernameSchema),
@@ -62,7 +62,7 @@ export function UserProfile() {
       onError: (err) => {
         toast.error(err.message, { id: 0 });
       },
-    })
+    }),
   );
   const handleSubmit = (values: z.infer<typeof usernameSchema>) => {
     toast.loading(t("updating"), { id: 0 });

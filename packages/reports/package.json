@@ -30,6 +30,7 @@
     "@react-pdf/renderer": "^4.3.0",
     "@react-pdf/stylesheet": "^5.2.2",
     "@repo/api": "workspace:*",
+    "@repo/db": "workspace:*",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "entities": "^6.0.0",

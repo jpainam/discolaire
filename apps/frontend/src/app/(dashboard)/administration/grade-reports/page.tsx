@@ -98,21 +98,7 @@ export default async function Page() {
                   </ErrorBoundary>
                 </CardContent>
               </Card>
-              <Card className="lg:col-span-4">
-                <CardHeader>
-                  <CardTitle>{t("Grade Report Generator")}</CardTitle>
-                  <CardDescription className="text-xs">
-                    {t("Generate and download grade reports")}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ErrorBoundary errorComponent={ErrorFallback}>
-                    <Suspense fallback={<Skeleton className="h-48" />}>
-                      <GradeReportGenerator />
-                    </Suspense>
-                  </ErrorBoundary>
-                </CardContent>
-              </Card>
+              <GradeReportGenerator />
             </div>
           </TabsContent>
           {/* <TabsContent value="grades" className="space-y-4">
