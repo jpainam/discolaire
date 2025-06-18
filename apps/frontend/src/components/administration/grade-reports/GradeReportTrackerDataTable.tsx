@@ -11,7 +11,7 @@ import { fetchGradeTrackerColumns } from "./GradeReportTrackerColumn";
 export function GradeReportTrackerDataTable() {
   const trpc = useTRPC();
   const { data: gradeTracker } = useSuspenseQuery(
-    trpc.gradeSheet.gradesReportTracker.queryOptions()
+    trpc.gradeSheet.gradesReportTracker.queryOptions(),
   );
 
   const { t } = useLocale();
