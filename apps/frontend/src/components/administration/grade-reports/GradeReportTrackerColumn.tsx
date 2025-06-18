@@ -7,6 +7,7 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 
 import { Badge } from "@repo/ui/components/badge";
 import { Progress } from "@repo/ui/components/progress";
+import { decode } from "entities";
 import { CheckIcon } from "lucide-react";
 
 export function fetchGradeTrackerColumns({
@@ -64,14 +65,14 @@ export function fetchGradeTrackerColumns({
         const subject = row.original.subject;
         return (
           <div className="flex items-center gap-2 text-muted-foreground">
-            <span>{subject.teacher?.lastName}</span>
+            <span>{decode(subject.teacher?.lastName ?? "")}</span>
             <span className="text-xs">({subject.classroom.name})</span>
           </div>
         );
       },
     },
     {
-      accessorKey: "grades",
+      accessorKey: "terms",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("Progress")} />
       ),
@@ -82,7 +83,7 @@ export function fetchGradeTrackerColumns({
         return (
           <div className="flex items-center gap-2">
             <Progress value={completed} className="w-20" />
-            <span className="text-sm text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               {Math.round(completed)}%
             </span>
           </div>
@@ -102,7 +103,7 @@ export function fetchGradeTrackerColumns({
       },
     },
     {
-      accessorKey: "subject.classroom.name",
+      accessorKey: "remaining",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("Remaining")} />
       ),
@@ -119,7 +120,7 @@ export function fetchGradeTrackerColumns({
       },
     },
     {
-      accessorKey: "subject.classroom.name",
+      accessorKey: "status",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("Status")} />
       ),
@@ -137,7 +138,7 @@ export function fetchGradeTrackerColumns({
                   size={12}
                   aria-hidden="true"
                 />
-                Completed
+                {t("Completed")}
               </Badge>
             ) : completed > 0 ? (
               <Badge variant="outline" className="gap-1.5">
@@ -145,7 +146,7 @@ export function fetchGradeTrackerColumns({
                   className="size-1.5 rounded-full bg-red-500"
                   aria-hidden="true"
                 ></span>
-                In Progress
+                {t("In Progress")}
               </Badge>
             ) : (
               <Badge variant="outline">Not Started</Badge>

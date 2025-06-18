@@ -5,12 +5,13 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+import { GradeReportTrackerDataTableAction } from "./GradeReportTrackerAction";
 import { fetchGradeTrackerColumns } from "./GradeReportTrackerColumn";
 
 export function GradeReportTrackerDataTable() {
   const trpc = useTRPC();
   const { data: gradeTracker } = useSuspenseQuery(
-    trpc.gradeSheet.gradesReportTracker.queryOptions(),
+    trpc.gradeSheet.gradesReportTracker.queryOptions()
   );
 
   const { t } = useLocale();
@@ -24,7 +25,11 @@ export function GradeReportTrackerDataTable() {
     data: gradeTracker,
     columns: columns,
   });
-  return <DataTable table={table} />;
+  return (
+    <DataTable table={table}>
+      <GradeReportTrackerDataTableAction table={table} />
+    </DataTable>
+  );
 
   // return (
   //   <div className="grid gap-2">
