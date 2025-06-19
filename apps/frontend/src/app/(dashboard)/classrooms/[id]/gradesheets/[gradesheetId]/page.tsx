@@ -45,19 +45,19 @@ export default async function Page(props: {
   const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
   const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
   const maleCount = grades.filter(
-    (grade) => grade.student.gender == "male"
+    (grade) => grade.student.gender == "male",
   ).length;
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male"
+      (grade) => grade.grade >= 10 && grade.student.gender == "male",
     ).length / (maleCount == 0 ? 1e9 : maleCount);
 
   const femaleCount = grades.filter(
-    (grade) => grade.student.gender == "female"
+    (grade) => grade.student.gender == "female",
   ).length;
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female"
+      (grade) => grade.grade >= 10 && grade.student.gender == "female",
     ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const isClosed = gradesheet.term.endDate
