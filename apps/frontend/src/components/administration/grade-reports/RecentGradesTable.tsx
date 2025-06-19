@@ -15,6 +15,7 @@ export async function RecentGradesTable() {
   const { t } = await getServerTranslations();
   const grades = await caller.gradeSheet.getLatestGradesheet({ limit: 5 });
   const latest: {
+    id: number;
     subject: string;
     classroom: string;
     classroomId: string;
@@ -37,6 +38,7 @@ export async function RecentGradesTable() {
       gradeSheet.grades.length;
     const maxGrade = Math.max(...gradeSheet.grades.map((g) => g.grade));
     latest.push({
+      id: gradeSheet.id,
       subject: subject,
       classroomId: gradeSheet.subject.classroom.id,
       classroom,
@@ -72,7 +74,14 @@ export async function RecentGradesTable() {
                     {g.classroom}
                   </Link>
                 </TableCell>
-                <TableCell>{g.subject}</TableCell>
+                <TableCell>
+                  <Link
+                    href={`/classrooms/${g.classroomId}/gradesheets/${g.id}`}
+                    className="hover:underline"
+                  >
+                    {g.subject}
+                  </Link>
+                </TableCell>
                 {/* <TableCell className="text-right">
                 {g.minGrade.toFixed(2)}
               </TableCell> */}
