@@ -45,19 +45,19 @@ export default async function Page(props: {
   const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
   const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
   const maleCount = grades.filter(
-    (grade) => grade.student.gender == "male",
+    (grade) => grade.student.gender == "male"
   ).length;
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / (maleCount == 0 ? 1e9 : maleCount);
 
   const femaleCount = grades.filter(
-    (grade) => grade.student.gender == "female",
+    (grade) => grade.student.gender == "female"
   ).length;
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const isClosed = gradesheet.term.endDate
@@ -177,13 +177,17 @@ export default async function Page(props: {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{t("males")}:</span>
+                <span className="text-muted-foreground">
+                  {t("males")} ({maleCount}):
+                </span>
                 <span className="font-medium">
                   {(males10Rate * 100).toFixed(2)}%
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{t("females")}:</span>
+                <span className="text-muted-foreground">
+                  {t("females")} ({femaleCount}):
+                </span>
                 <span className="font-medium">
                   {(females10Rate * 100).toFixed(2)}%
                 </span>
