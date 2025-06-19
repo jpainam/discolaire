@@ -46,12 +46,12 @@ export default async function Page(props: {
   const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male"
+      (grade) => grade.grade >= 10 && grade.student.gender == "male",
     ).length / len;
 
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female"
+      (grade) => grade.grade >= 10 && grade.student.gender == "female",
     ).length / len;
 
   const isClosed = gradesheet.term.endDate

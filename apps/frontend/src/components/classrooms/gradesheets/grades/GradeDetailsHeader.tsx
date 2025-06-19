@@ -28,39 +28,18 @@ import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { ReportFalseGrade } from "./ReportFalseGrade";
 
-type GradeSheetGetGradeProcedureOutput = NonNullable<
-  RouterOutputs["gradeSheet"]["grades"]
->[number];
-
 type GradeSheetGetProcedureOutput = NonNullable<
   RouterOutputs["gradeSheet"]["get"]
 >;
 
 export function GradeDetailsHeader({
-  grades,
   gradesheet,
 }: {
-  grades: GradeSheetGetGradeProcedureOutput[];
   gradesheet: GradeSheetGetProcedureOutput;
 }) {
   const params = useParams<{ id: string }>();
 
-  const { t, i18n } = useLocale();
-
-  const grades10 = grades.filter((grade) => grade.grade >= 10).length;
-  const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
-
-  const males10Rate =
-    grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male"
-    ).length / len;
-
-  const females10Rate =
-    grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female"
-    ).length / len;
-
-  const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
+  const { t } = useLocale();
 
   const confirm = useConfirm();
   const router = useRouter();
@@ -90,12 +69,12 @@ export function GradeDetailsHeader({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
 
   return (
@@ -123,7 +102,7 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
-                    "_blank"
+                    "_blank",
                   );
                 }}
               >
@@ -134,7 +113,7 @@ export function GradeDetailsHeader({
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
-                    "_blank"
+                    "_blank",
                   );
                 }}
               >

@@ -85,21 +85,21 @@ export function ClassroomGradeList({
     trpc.grade.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.gradesheets.pathFilter()
+          trpc.classroom.gradesheets.pathFilter(),
         );
         await queryClient.invalidateQueries(
-          trpc.gradeSheet.grades.pathFilter()
+          trpc.gradeSheet.grades.pathFilter(),
         );
         toast.success(t("marked_absent_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   return (
     <div className="gap-2 flex flex-col">
