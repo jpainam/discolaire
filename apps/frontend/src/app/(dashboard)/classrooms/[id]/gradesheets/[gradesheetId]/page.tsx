@@ -44,15 +44,21 @@ export default async function Page(props: {
   const grades10 = grades.filter((grade) => grade.grade >= 10).length;
   const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
   const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
+  const maleCount = grades.filter(
+    (grade) => grade.student.gender == "male"
+  ).length;
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
-    ).length / len;
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
+    ).length / (maleCount == 0 ? 1e9 : maleCount);
 
+  const femaleCount = grades.filter(
+    (grade) => grade.student.gender == "female"
+  ).length;
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
-    ).length / len;
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
+    ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const isClosed = gradesheet.term.endDate
     ? gradesheet.term.endDate < new Date()
