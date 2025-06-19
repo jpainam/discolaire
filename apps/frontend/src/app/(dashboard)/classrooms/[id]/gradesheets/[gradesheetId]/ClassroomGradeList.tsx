@@ -22,7 +22,7 @@ import {
 } from "@repo/ui/components/table";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
-import { FlagOff, Pencil, Search } from "lucide-react";
+import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -31,8 +31,11 @@ import { AvatarState } from "~/components/AvatarState";
 import { EditGradeStudent } from "~/components/classrooms/gradesheets/grades/EditGradeStudent";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -105,6 +108,27 @@ export function ClassroomGradeList({
     "gradesheet",
     PermissionAction.UPDATE
   );
+
+  const canDeleteGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.DELETE
+  );
+  const router = useRouter();
+  const deleteGradeSheetMutation = useMutation(
+    trpc.gradeSheet.delete.mutationOptions({
+      onSettled: async () => {
+        await queryClient.invalidateQueries(trpc.gradeSheet.pathFilter());
+        await queryClient.invalidateQueries(trpc.grade.pathFilter());
+      },
+      onSuccess: () => {
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.push(routes.classrooms.gradesheets.index(params.id));
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    })
+  );
   return (
     <div className="gap-2 flex flex-col">
       <div className="flex items-center gap-2">
@@ -144,6 +168,39 @@ export function ClassroomGradeList({
             <XMLIcon />
             {t("xml_export")}
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"outline"} size={"icon"} className="size-8">
+                <MoreVertical className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownHelp />
+
+              {canDeleteGradesheet && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    disabled={deleteGradeSheetMutation.isPending || isClosed}
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteGradeSheetMutation.mutate(gradesheet.id);
+                      }
+                    }}
+                    variant="destructive"
+                  >
+                    <Trash2 />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className="bg-background overflow-hidden rounded-md border">
