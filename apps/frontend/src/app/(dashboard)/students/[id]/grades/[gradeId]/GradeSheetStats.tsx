@@ -27,7 +27,7 @@ export async function GradeSheetStats({
         <TableHeader>
           <TableRow className="border">
             <TableHead align="center" className="border" rowSpan={2}>
-              {t("number_of_avg")}
+              {t("average")}
             </TableHead>
             <TableHead align="center" className="border" colSpan={2}>
               {t("success_rate")}
