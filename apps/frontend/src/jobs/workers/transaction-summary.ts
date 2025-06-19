@@ -13,15 +13,15 @@ const dataSchema = z.object({
 });
 
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
-import { sendEmail } from "@repo/utils";
-import { logger } from "@sentry/nextjs";
+import { logger, sendEmail } from "@repo/utils";
+
 import { Worker } from "bullmq";
+import { JobNames } from "../job-names";
 import { jobQueueName } from "../queue";
 import { getRedis } from "../redis-client";
-import { JobNames } from "../worker";
 
 const connection = getRedis();
-
+logger.log("[Worker] Initializing transaction summary worker");
 new Worker(
   jobQueueName,
   async (job) => {
