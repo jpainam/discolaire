@@ -152,9 +152,7 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium text-muted-foreground">
-              {t("overall_average")}
-            </div>
+            <div className="text-sm font-medium">{t("overall_average")}</div>
             <div className="flex items-center space-x-2">
               <TrendingUp className="h-5 w-5 text-green-600" />
               <span className="text-2xl font-bold ">{average.toFixed(2)}</span>
@@ -164,9 +162,7 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium text-muted-foreground">
-              {t("average")} ≥ 10
-            </div>
+            <div className="text-sm font-medium">{t("average")} ≥ 10</div>
             <div className="flex items-center space-x-2">
               <Award className="h-5 w-5 text-purple-600" />
               <span className="text-2xl font-bold ">{grades10}</span>
@@ -176,9 +172,7 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium text-muted-foreground">
-              {t("success_rate")}
-            </div>
+            <div className="text-sm font-medium">{t("success_rate")}</div>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">
@@ -202,9 +196,7 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium text-gray-600">
-              {t("success_rate")} ≥ 10
-            </div>
+            <div className="text-sm font-medium">{t("success_rate")} ≥ 10</div>
             <div className="flex items-center space-x-2">
               <Progress value={(grades10 * 100) / len} />
               <span className="text-sm font-medium ">
