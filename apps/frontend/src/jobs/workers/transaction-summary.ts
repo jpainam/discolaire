@@ -37,7 +37,7 @@ new Worker(
       if (!result.success) {
         const validationError = fromError(result.error);
         throw new Error(
-          `Invalid job data for job ${job.id} ${validationError.message}`
+          `Invalid job data for job ${job.id} ${validationError.message}`,
         );
       }
       const { cron, schoolId, userId, schoolYearId } = result.data;
@@ -110,5 +110,5 @@ new Worker(
       });
     }
   },
-  { connection }
+  { connection },
 );
