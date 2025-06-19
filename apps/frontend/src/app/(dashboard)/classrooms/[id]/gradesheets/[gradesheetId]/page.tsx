@@ -40,24 +40,26 @@ export default async function Page(props: {
 
   const { t } = await getServerTranslations();
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
-  const minGrade = Math.min(...grades.map((grade) => grade.grade));
+  const minGrade = Math.min(
+    ...grades.filter((g) => !g.isAbsent).map((grade) => grade.grade)
+  );
   const grades10 = grades.filter((grade) => grade.grade >= 10).length;
   const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
   const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
   const maleCount = grades.filter(
-    (grade) => grade.student.gender == "male",
+    (grade) => !grade.isAbsent && grade.student.gender == "male"
   ).length;
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / (maleCount == 0 ? 1e9 : maleCount);
 
   const femaleCount = grades.filter(
-    (grade) => grade.student.gender == "female",
+    (grade) => !grade.isAbsent && grade.student.gender == "female"
   ).length;
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const isClosed = gradesheet.term.endDate
@@ -104,7 +106,7 @@ export default async function Page(props: {
               {t("scale")}: {gradesheet.scale}
             </p>
             <p className="text-sm text-muted-foreground">
-              {t("term")}:{gradesheet.term.name}
+              {t("term")} : {gradesheet.term.name}
             </p>
           </div>
 
@@ -141,7 +143,9 @@ export default async function Page(props: {
             <div className="text-sm font-medium">{t("evaluated_students")}</div>
             <div className="flex items-center space-x-2">
               <Users className="h-5 w-5 text-blue-600" />
-              <span className="text-2xl font-bold">{grades.length}</span>
+              <span className="text-2xl font-bold">
+                {len} / {grades.length}
+              </span>
             </div>
           </CardContent>
         </Card>

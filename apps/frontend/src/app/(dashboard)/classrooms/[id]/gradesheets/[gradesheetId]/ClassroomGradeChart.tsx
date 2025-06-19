@@ -29,32 +29,32 @@ export function ClassroomGradeChart({
   grades: RouterOutputs["gradeSheet"]["grades"];
 }) {
   const { t } = useLocale();
-  const p05 = grades.filter((g) => g.grade < 5).length;
+  const p05 = grades.filter((g) => !g.isAbsent && g.grade < 5).length;
   const p09 = grades.filter((g) => g.grade >= 5 && g.grade < 10).length;
   const p13 = grades.filter((g) => g.grade >= 10 && g.grade < 14).length;
   const p17 = grades.filter((g) => g.grade >= 14 && g.grade < 18).length;
   const p20 = grades.filter((g) => g.grade >= 18).length;
-  const total = grades.length;
+  const total = grades.filter((g) => !g.isAbsent).length;
   //const totalFailed = grades.filter((g) => g.grade < 10).length;
 
   const malePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "male",
+    (g) => g.grade >= 10 && g.student.gender === "male"
   ).length;
   const femalePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "female",
+    (g) => g.grade >= 10 && g.student.gender === "female"
   ).length;
   const maleFailedCount = grades.filter(
-    (g) => g.grade < 10 && g.student.gender === "male",
+    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "male"
   ).length;
   const femaleFailedCount = grades.filter(
-    (g) => g.grade < 10 && g.student.gender === "female",
+    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "female"
   ).length;
 
   const countp18 = grades.filter((g) => g.grade >= 18).length;
   const countp14 = grades.filter((g) => g.grade >= 14 && g.grade < 18).length;
   const countp10 = grades.filter((g) => g.grade >= 10 && g.grade < 14).length;
   const countp05 = grades.filter((g) => g.grade >= 8 && g.grade < 10).length;
-  const countp00 = grades.filter((g) => g.grade < 8).length;
+  const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
   return (
     <div className="flex flex-col gap-2">
       <Card className="px-0">
