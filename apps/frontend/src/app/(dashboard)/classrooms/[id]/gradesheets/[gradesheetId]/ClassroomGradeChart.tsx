@@ -18,7 +18,6 @@ import {
   Legend,
   Pie,
   PieChart,
-  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -38,16 +37,16 @@ export function ClassroomGradeChart({
   //const totalFailed = grades.filter((g) => g.grade < 10).length;
 
   const malePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "male",
+    (g) => g.grade >= 10 && g.student.gender === "male"
   ).length;
   const femalePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "female",
+    (g) => g.grade >= 10 && g.student.gender === "female"
   ).length;
   const maleFailedCount = grades.filter(
-    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "male",
+    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "male"
   ).length;
   const femaleFailedCount = grades.filter(
-    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "female",
+    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "female"
   ).length;
 
   const countp18 = grades.filter((g) => g.grade >= 18).length;
@@ -73,23 +72,21 @@ export function ClassroomGradeChart({
             }}
             className="h-[200px]"
           >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={[
-                  { range: "0-5", count: p05, fill: "#ef4444" },
-                  { range: "6-9", count: p09, fill: "#f97316" },
-                  { range: "10-13", count: p13, fill: "#eab308" },
-                  { range: "14-17", count: p17, fill: "#22c55e" },
-                  { range: "18-20", count: p20, fill: "#16a34a" },
-                ]}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="range" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <BarChart
+              data={[
+                { range: "0-5", count: p05, fill: "#ef4444" },
+                { range: "6-9", count: p09, fill: "#f97316" },
+                { range: "10-13", count: p13, fill: "#eab308" },
+                { range: "14-17", count: p17, fill: "#22c55e" },
+                { range: "18-20", count: p20, fill: "#16a34a" },
+              ]}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="range" />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="count" radius={[4, 4, 0, 0]} />
+            </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
@@ -113,42 +110,40 @@ export function ClassroomGradeChart({
             }}
             className="h-[200px]"
           >
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={[
-                    {
-                      name: "Garçons réussis",
-                      value: malePassedCount,
-                      fill: "#3b82f6",
-                    },
-                    {
-                      name: "Garçons échoués",
-                      value: maleFailedCount,
-                      fill: "#9315fd",
-                    },
-                    {
-                      name: "Filles réussies",
-                      value: femalePassedCount,
-                      fill: "#16a34a",
-                    },
-                    {
-                      name: "Filles échouées",
-                      value: femaleFailedCount,
-                      fill: "#ec4899",
-                    },
-                  ]}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
-                  paddingAngle={2}
-                  dataKey="value"
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            <PieChart>
+              <Pie
+                data={[
+                  {
+                    name: "Garçons réussis",
+                    value: malePassedCount,
+                    fill: "#3b82f6",
+                  },
+                  {
+                    name: "Garçons échoués",
+                    value: maleFailedCount,
+                    fill: "#9315fd",
+                  },
+                  {
+                    name: "Filles réussies",
+                    value: femalePassedCount,
+                    fill: "#16a34a",
+                  },
+                  {
+                    name: "Filles échouées",
+                    value: femaleFailedCount,
+                    fill: "#ec4899",
+                  },
+                ]}
+                cx="50%"
+                cy="50%"
+                innerRadius={40}
+                outerRadius={80}
+                paddingAngle={2}
+                dataKey="value"
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Legend />
+            </PieChart>
           </ChartContainer>
         </CardContent>
       </Card>
