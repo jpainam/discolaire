@@ -219,7 +219,7 @@ export function ClassroomGradeList({
           </TableHeader>
           <TableBody>
             {filtered.map((g, index) => (
-              <TableRow key={index} className="hover:bg-gray-50">
+              <TableRow key={index}>
                 <TableCell>
                   <AvatarState
                     avatar={g.student.user?.avatar}
