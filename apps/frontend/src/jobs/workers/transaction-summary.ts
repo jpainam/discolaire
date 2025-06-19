@@ -1,8 +1,15 @@
 import { db } from "@repo/db";
 import { subMonths } from "date-fns";
-import * as z from "zod";
+import { z } from "zod/v4";
 
 import parser from "cron-parser";
+import { createErrorMap, fromError } from "zod-validation-error/v4";
+
+z.config({
+  customError: createErrorMap({
+    includePath: true,
+  }),
+});
 const dataSchema = z.object({
   name: z.string().min(1),
   schoolYearId: z.string().min(1),
@@ -28,8 +35,10 @@ new Worker(
     if (job.name === JobNames.TRANSACTION_SUMMARY) {
       const result = dataSchema.safeParse(job.data);
       if (!result.success) {
-        const error = result.error.errors.map((e) => e.message).join(", ");
-        throw new Error(`Invalid job data for job ${job.id} ${error}`);
+        const validationError = fromError(result.error);
+        throw new Error(
+          `Invalid job data for job ${job.id} ${validationError.message}`
+        );
       }
       const { cron, schoolId, userId, schoolYearId } = result.data;
 
@@ -101,5 +110,5 @@ new Worker(
       });
     }
   },
-  { connection },
+  { connection }
 );
