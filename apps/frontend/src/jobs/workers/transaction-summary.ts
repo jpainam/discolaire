@@ -101,5 +101,5 @@ new Worker(
       });
     }
   },
-  { connection }
+  { connection },
 );
