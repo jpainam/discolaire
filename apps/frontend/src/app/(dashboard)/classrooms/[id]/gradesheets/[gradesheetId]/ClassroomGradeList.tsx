@@ -24,10 +24,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { FlagOff, Pencil, Search } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AvatarState } from "~/components/AvatarState";
 import { EditGradeStudent } from "~/components/classrooms/gradesheets/grades/EditGradeStudent";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
@@ -52,6 +55,7 @@ export function ClassroomGradeList({
 
   const confirm = useConfirm();
   const { t } = useLocale();
+  const params = useParams<{ id: string }>();
   const { openModal } = useModal();
   const [query, setQuery] = useState("");
   const [filtered, setFiltered] =
@@ -85,32 +89,62 @@ export function ClassroomGradeList({
     trpc.grade.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.gradesheets.pathFilter(),
+          trpc.classroom.gradesheets.pathFilter()
         );
         await queryClient.invalidateQueries(
-          trpc.gradeSheet.grades.pathFilter(),
+          trpc.gradeSheet.grades.pathFilter()
         );
         toast.success(t("marked_absent_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   return (
     <div className="gap-2 flex flex-col">
-      <div className="relative w-full md:w-64 ">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={t("search") + "..."}
-          className="pl-8"
-          //value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+      <div className="flex items-center gap-2">
+        <div className="relative w-full md:w-64 ">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={t("search") + "..."}
+            className="pl-8"
+            //value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            variant={"secondary"}
+            size={"sm"}
+            onClick={() => {
+              window.open(
+                `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
+                "_blank"
+              );
+            }}
+          >
+            <PDFIcon />
+            {t("pdf_export")}
+          </Button>
+          <Button
+            size={"sm"}
+            variant={"secondary"}
+            onClick={() => {
+              window.open(
+                `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
+                "_blank"
+              );
+            }}
+          >
+            <XMLIcon />
+            {t("xml_export")}
+          </Button>
+        </div>
       </div>
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>

@@ -28,15 +28,21 @@ export function GradeList({
   const grades10 = allGrades.filter((grade) => grade.grade >= 10).length;
   const len = allGrades.filter((grade) => !grade.isAbsent).length || 1e9;
 
+  const maleCount = allGrades.filter(
+    (grade) => grade.student.gender == "male",
+  ).length;
   const males10Rate =
     allGrades.filter(
       (grade) => grade.grade >= 10 && grade.student.gender == "male",
-    ).length / len;
+    ).length / (maleCount == 0 ? 1e9 : maleCount);
 
+  const femaleCount = allGrades.filter(
+    (grade) => grade.student.gender == "female",
+  ).length;
   const females10Rate =
     allGrades.filter(
       (grade) => grade.grade >= 10 && grade.student.gender == "female",
-    ).length / len;
+    ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const dateFormatter = Intl.DateTimeFormat("fr", {
     day: "numeric",
