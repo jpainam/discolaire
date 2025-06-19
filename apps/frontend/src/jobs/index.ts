@@ -1,71 +1,68 @@
+/**
+ * This file only initilializes the job queue and sets up the cron jobs.
+ * It does not contain any job processing logic.
+ * The actual job processing logic is in the worker folders.
+ */
 import parser from "cron-parser";
-import { fromZonedTime } from "date-fns-tz";
 
 import { db } from "@repo/db";
 
-import { env } from "~/env";
+import { logger } from "@repo/utils";
 import { jobQueue } from "./queue";
 
 export const name = "jobs";
 
-export { parser };
-
 export async function initializeJobs() {
   const repeatableJobs = await jobQueue.getJobSchedulers();
-  console.log(`Removing ${repeatableJobs.length} repeatable jobs...`);
+
   for (const job of repeatableJobs) {
     if (job.id) await jobQueue.removeJobScheduler(job.id);
-    console.log(`Removed repeatable job: ${job.key}`);
   }
-
-  console.log("Draining the queue...");
+  logger.log(`[Scheduler] Removed ${repeatableJobs.length} repeatable jobs`);
   await jobQueue.drain(true); // Pass `true` to remove delayed jobs as well
-  console.log("Queue cleared.");
+  logger.log("[Scheduler] Queue drained.");
 
   const tasks = await db.scheduleTask.findMany();
-  console.log(`Initializing jobs ${tasks.length}...`);
+  logger.log(`[Scheduler] Initializing ${tasks.length} jobs`);
   for (const task of tasks) {
     if (!isValidCron(task.cron)) {
-      console.error(`Invalid cron pattern for task ${task.name}: ${task.cron}`);
+      logger.error(`Invalid cron pattern for task ${task.name}: ${task.cron}`);
       continue;
     }
-    const name = task.name as TaskNameType;
-    const url = TASK_NAME_URL_MAP[name];
     const school = await db.school.findUniqueOrThrow({
       where: {
         id: task.schoolId,
       },
     });
 
-    const localTime = fromZonedTime("18:00", school.timezone);
-    const cron = task.cron.replace("18", localTime.getUTCHours().toString());
-
     await jobQueue.upsertJobScheduler(
       `${task.id}-${task.name}`,
-      { pattern: cron },
+      { pattern: task.cron, tz: school.timezone },
       {
         name: task.name,
         data: {
-          ...task,
-          url,
+          ...(task.data as Record<string, unknown>),
+          name: task.name,
+          schoolId: task.schoolId,
+          taskId: task.id,
+          schoolYearId: task.schoolYearId,
+          cron: task.cron,
         },
         opts: {
+          removeOnComplete: true,
+          // removeOnFail: {
+          //   age: 30 * 24 * 3600, // 30 days
+          // },
           backoff: 3,
           attempts: 5,
           removeOnFail: 10,
         },
-      },
+      }
     );
   }
 
-  console.log("All jobs initialized and added to the queue.");
+  logger.log("[Scheduler] Jobs initialized successfully");
 }
-
-const TASK_NAME_URL_MAP = {
-  "transaction-summary": `${env.NEXT_PUBLIC_BASE_URL}/api/emails/transaction/summary`,
-} as const;
-
-type TaskNameType = keyof typeof TASK_NAME_URL_MAP;
 
 function isValidCron(cron: string): boolean {
   try {
