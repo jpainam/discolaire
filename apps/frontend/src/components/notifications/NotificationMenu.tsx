@@ -84,7 +84,7 @@ function Dot({ className }: { className?: string }) {
 export default function NotificationMenu({ userId }: { userId: string }) {
   const trpc = useTRPC();
   const notificationQuery = useQuery(
-    trpc.userNotification.user.queryOptions({ userId })
+    trpc.userNotification.user.queryOptions({ userId }),
   );
   const [notifications, setNotifications] = useState(initialNotifications);
   const unreadCount = notifications.filter((n) => n.unread).length;
@@ -96,7 +96,7 @@ export default function NotificationMenu({ userId }: { userId: string }) {
       notifications.map((notification) => ({
         ...notification,
         unread: false,
-      }))
+      })),
     );
   };
 
@@ -105,8 +105,8 @@ export default function NotificationMenu({ userId }: { userId: string }) {
       notifications.map((notification) =>
         notification.id === id
           ? { ...notification, unread: false }
-          : notification
-      )
+          : notification,
+      ),
     );
   };
 
