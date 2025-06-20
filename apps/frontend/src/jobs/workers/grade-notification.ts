@@ -62,6 +62,12 @@ new Worker(
       const title = `[Notes] ${gradesheet.subject.course.name}`;
       const message = `Nouvelle saisie des notes ${gradesheet.name}. Veuillez vérifier vos notes pour plus de détails.`;
       const data = [];
+      const adminUsers = await db.user.findMany({
+        where: {
+          role: "admin",
+        },
+      });
+      userIds.push(...adminUsers.map((user) => user.id));
 
       for (const userId of userIds) {
         data.push({
