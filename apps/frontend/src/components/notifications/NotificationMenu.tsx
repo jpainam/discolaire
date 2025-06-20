@@ -1,6 +1,6 @@
 "use client";
 
-import { BellIcon } from "lucide-react";
+import { BellIcon, Loader2, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 
 import { Badge } from "@repo/ui/components/badge";
@@ -10,8 +10,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useQuery } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
 import { useLocale } from "~/i18n";
-
+import { useTRPC } from "~/trpc/react";
 const initialNotifications = [
   {
     id: 1,
@@ -79,9 +81,11 @@ function Dot({ className }: { className?: string }) {
   );
 }
 
-export default function NotificationMenu() {
-  //const trpc = useTRPC();
-  //const notificationQuery = useQuery(trpc.userNotification.);
+export default function NotificationMenu({ userId }: { userId: string }) {
+  const trpc = useTRPC();
+  const notificationQuery = useQuery(
+    trpc.userNotification.user.queryOptions({ userId })
+  );
   const [notifications, setNotifications] = useState(initialNotifications);
   const unreadCount = notifications.filter((n) => n.unread).length;
 
@@ -92,7 +96,7 @@ export default function NotificationMenu() {
       notifications.map((notification) => ({
         ...notification,
         unread: false,
-      })),
+      }))
     );
   };
 
@@ -101,8 +105,8 @@ export default function NotificationMenu() {
       notifications.map((notification) =>
         notification.id === id
           ? { ...notification, unread: false }
-          : notification,
-      ),
+          : notification
+      )
     );
   };
 
@@ -130,56 +134,70 @@ export default function NotificationMenu() {
           )}
         </Button>
       </PopoverTrigger>
+
       <PopoverContent align="end" className="w-80 p-1">
-        <div className="flex items-baseline justify-between gap-4 px-3 py-2">
-          <div className="text-sm font-semibold">{t("Notifications")}</div>
-          {unreadCount > 0 && (
-            <button
-              className="text-xs font-medium hover:underline"
-              onClick={handleMarkAllAsRead}
-            >
-              {t("Mark all as read")}
-            </button>
-          )}
-        </div>
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          className="bg-border -mx-1 my-1 h-px"
-        ></div>
-        {notifications.map((notification) => (
-          <div
-            key={notification.id}
-            className="hover:bg-accent rounded-md px-3 py-2 text-sm transition-colors"
-          >
-            <div className="relative flex items-start pe-3">
-              <div className="flex-1 space-y-1">
+        {notificationQuery.isLoading ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : notificationQuery.data?.length == 0 ? (
+          <div className="flex justify-center gap-1 items-center h-20 text-muted-foreground text-sm">
+            <TriangleAlert className="w-4 h-4 " />
+            {t("No notifications")}
+          </div>
+        ) : (
+          <>
+            <div className="flex items-baseline justify-between gap-4 px-3 py-2">
+              <div className="text-sm font-semibold">{t("Notifications")}</div>
+              {unreadCount > 0 && (
                 <button
-                  className="text-foreground/80 text-left after:absolute after:inset-0"
-                  onClick={() => handleNotificationClick(notification.id)}
+                  className="text-xs font-medium hover:underline"
+                  onClick={handleMarkAllAsRead}
                 >
-                  <span className="text-foreground font-medium hover:underline">
-                    {notification.user}
-                  </span>{" "}
-                  {notification.action}{" "}
-                  <span className="text-foreground font-medium hover:underline">
-                    {notification.target}
-                  </span>
-                  .
+                  {t("Mark all as read")}
                 </button>
-                <div className="text-muted-foreground text-xs">
-                  {notification.timestamp}
-                </div>
-              </div>
-              {notification.unread && (
-                <div className="absolute end-0 self-center">
-                  <span className="sr-only">Unread</span>
-                  <Dot />
-                </div>
               )}
             </div>
-          </div>
-        ))}
+            <div
+              role="separator"
+              aria-orientation="horizontal"
+              className="bg-border -mx-1 my-1 h-px"
+            ></div>
+            {notificationQuery.data?.map((notification) => (
+              <div
+                key={notification.id}
+                className="hover:bg-accent rounded-md px-3 py-2 text-sm transition-colors"
+              >
+                <div className="relative flex items-start pe-3">
+                  <div className="flex-1 space-y-1">
+                    <button
+                      className="text-foreground/80 text-left after:absolute after:inset-0"
+                      onClick={() => handleNotificationClick(notification.id)}
+                    >
+                      <span className="text-foreground font-medium hover:underline">
+                        {notification.title}
+                      </span>{" "}
+                      {/* {notification.action}{" "} */}
+                      <span className="text-foreground font-medium hover:underline">
+                        {notification.message}
+                      </span>
+                      .
+                    </button>
+                    <div className="text-muted-foreground text-xs">
+                      {formatDistanceToNow(notification.createdAt, {
+                        addSuffix: true,
+                      })}
+                    </div>
+                  </div>
+                  {!notification.read && (
+                    <div className="absolute end-0 self-center">
+                      <span className="sr-only">Unread</span>
+                      <Dot />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </PopoverContent>
     </Popover>
   );

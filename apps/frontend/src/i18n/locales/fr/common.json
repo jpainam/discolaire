@@ -678,6 +678,7 @@
   "manual_attendance": "Présence manuelle",
   "mapping_file": "Fichier de correspondance",
   "mark_absent": "Marquer absent",
+  "No notifications": "Aucune notification",
   "mark_absent_confirmation": "Etes-vous sûr de vouloir marquer cet élève absent? Ceci supprimera sa note actuelle.",
   "mark_all_absent": "Marquer tous absents",
   "Mark all as read": "Marquer tout comme lu",

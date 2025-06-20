@@ -97,7 +97,7 @@ export default async function Layout({
                   orientation="vertical"
                   className="hidden md:block mr-1 w-px data-[orientation=vertical]:h-6"
                 />
-                <NotificationMenu />
+                <NotificationMenu userId={session.user.id} />
                 <UserNav className={"hidden md:block"} />
               </div>
             </div>
