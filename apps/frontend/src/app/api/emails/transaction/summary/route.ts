@@ -21,7 +21,7 @@ const schema = z.object({
       amount: z.coerce.number(),
       status: z.string(),
       deletedAt: z.coerce.date().nullable(),
-    })
+    }),
   ),
 });
 export async function POST(req: Request) {
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
       }),
       {
         plainText: true,
-      }
+      },
     );
 
     await sendEmail({
