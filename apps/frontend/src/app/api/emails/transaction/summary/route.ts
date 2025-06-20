@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { render } from "@react-email/render";
 import { db } from "@repo/db";
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
 import { sendEmail } from "@repo/utils";
@@ -52,8 +53,36 @@ export async function POST(req: Request) {
       });
     }
 
+    const plainText = await render(
+      TransactionsSummary({
+        locale: school.defaultLocale,
+        school: {
+          name: school.name,
+          id: school.id,
+          logo: school.logo ?? "",
+        },
+        transactions: transactions.map((transaction) => {
+          return {
+            id: transaction.id,
+            description: transaction.description ?? "",
+            name: transaction.account.name,
+            date: transaction.createdAt.toISOString(),
+            amount: transaction.amount,
+            status: transaction.status,
+            currency: school.currency,
+            deleted: transaction.deletedAt != null,
+          };
+        }),
+        fullName: user.name,
+      }),
+      {
+        plainText: true,
+      }
+    );
+
     await sendEmail({
-      from: `${school.name} <no-reply@discolaire.com>`,
+      from: `${school.name} <contact@discolaire.com>`,
+      text: plainText,
       react: TransactionsSummary({
         locale: school.defaultLocale,
         school: {

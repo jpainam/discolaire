@@ -77,7 +77,7 @@ export function SchoolFeed({ className }: { className?: string }) {
               "group flex items-center justify-between",
               "p-2 rounded-lg",
               "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
-              "transition-all duration-200"
+              "transition-all duration-200",
             )}
           >
             <div className="flex items-center gap-2">

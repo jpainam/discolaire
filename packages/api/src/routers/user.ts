@@ -282,4 +282,16 @@ export const userRouter = {
         },
       });
     }),
+  createApiKey: protectedProcedure.query(async ({ ctx }) => {
+    const apiKey = await ctx.authApi.createApiKey({
+      body: {
+        name: `API Key for ${ctx.session.user.name}`,
+        rateLimitEnabled: true,
+        rateLimitTimeWindow: 1000 * 60 * 60 * 24, // 1 day
+        rateLimitMax: 10000, // 10k requests per day
+        userId: ctx.session.user.id,
+      },
+    });
+    console.log("API Key created for student:", apiKey);
+  }),
 } satisfies TRPCRouterRecord;
