@@ -36,7 +36,7 @@ new Worker(
       if (!result.success) {
         const validationError = fromError(result.error);
         throw new Error(
-          `Invalid job data for job ${job.id} ${validationError.message}`
+          `Invalid job data for job ${job.id} ${validationError.message}`,
         );
       }
       const { renderToString } = await import("react-dom/server");
@@ -102,7 +102,7 @@ new Worker(
             };
           }),
           fullName: user.name,
-        })
+        }),
       );
       try {
         await sendEmail({
@@ -114,19 +114,19 @@ new Worker(
       } catch (error) {
         const err = error as Error;
         logger.error(
-          `[Worker] Error sending transaction summary email for user ${userId}: ${err.message}`
+          `[Worker] Error sending transaction summary email for user ${userId}: ${err.message}`,
         );
         throw error;
       }
       logger.log(
-        `[Worker] Transaction summary email sent successfully for user ${userId}`
+        `[Worker] Transaction summary email sent successfully for user ${userId}`,
       );
     } else {
       logger.warn(
-        `[Worker] Received unknown job name: ${job.name} for job ${job.id}`
+        `[Worker] Received unknown job name: ${job.name} for job ${job.id}`,
       );
       throw new Error(`Unknown job name: ${job.name}`);
     }
   },
-  { connection }
+  { connection },
 );

@@ -92,7 +92,7 @@ export default function NotificationMenu() {
       notifications.map((notification) => ({
         ...notification,
         unread: false,
-      }))
+      })),
     );
   };
 
@@ -101,8 +101,8 @@ export default function NotificationMenu() {
       notifications.map((notification) =>
         notification.id === id
           ? { ...notification, unread: false }
-          : notification
-      )
+          : notification,
+      ),
     );
   };
 
