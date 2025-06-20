@@ -31,6 +31,10 @@ export async function sendEmail({
     console.warn("Cannot send emails to @discolaire.com addresses", to);
     return;
   }
+  if (to.includes("@example.com")) {
+    console.warn("Cannot send emails to @example.com addresses", to);
+    return;
+  }
   const { data, error } = await resend.emails.send({
     from: from,
     to: to,

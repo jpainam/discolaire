@@ -34,7 +34,7 @@ export async function initializeJobs() {
         id: task.schoolId,
       },
     });
-
+    logger.log(`[Scheduler] Job ${task.name} with cron ${task.cron}`);
     await jobQueue.upsertJobScheduler(
       `${task.id}-${task.name}`,
       { pattern: task.cron, tz: school.timezone },
@@ -57,7 +57,7 @@ export async function initializeJobs() {
           attempts: 5,
           removeOnFail: 10,
         },
-      },
+      }
     );
   }
 

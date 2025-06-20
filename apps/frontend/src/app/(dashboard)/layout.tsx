@@ -16,6 +16,7 @@ import { Suspense } from "react";
 import { getSession } from "~/auth/server";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
+import NotificationMenu from "~/components/notifications/NotificationMenu";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
 import { Shortcut } from "~/components/Shortcut";
 import { ThemeSelector } from "~/components/ThemeSelector";
@@ -96,6 +97,7 @@ export default async function Layout({
                   orientation="vertical"
                   className="hidden md:block mr-1 w-px data-[orientation=vertical]:h-6"
                 />
+                <NotificationMenu />
                 <UserNav className={"hidden md:block"} />
               </div>
             </div>

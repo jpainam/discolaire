@@ -51,7 +51,7 @@ export function NotificationHeader() {
           router.push(
             routes.students.notifications(params.id) +
               "?" +
-              createQueryString({ to, from }),
+              createQueryString({ to, from })
           );
         }}
       />
@@ -60,7 +60,7 @@ export function NotificationHeader() {
         <Button size="sm" variant="outline" className="gap-1">
           <MailOpen className="h-4 w-4" />
           <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-            {t("mark_all_as_read")}
+            {t("Mark all as read")}
           </span>
         </Button>
         <DropdownMenu>

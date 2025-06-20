@@ -1,9 +1,8 @@
 import { db } from "@repo/db";
-import { subMonths } from "date-fns";
-import { z } from "zod/v4";
-
 import parser from "cron-parser";
+import { subMonths } from "date-fns";
 import { createErrorMap, fromError } from "zod-validation-error/v4";
+import { z } from "zod/v4";
 
 z.config({
   customError: createErrorMap({
@@ -37,9 +36,10 @@ new Worker(
       if (!result.success) {
         const validationError = fromError(result.error);
         throw new Error(
-          `Invalid job data for job ${job.id} ${validationError.message}`,
+          `Invalid job data for job ${job.id} ${validationError.message}`
         );
       }
+      const { renderToString } = await import("react-dom/server");
       const { cron, schoolId, userId, schoolYearId } = result.data;
 
       const user = await db.user.findUniqueOrThrow({
@@ -81,10 +81,8 @@ new Worker(
           createdAt: "desc",
         },
       });
-
-      await sendEmail({
-        from: `${school.name} <no-reply@discolaire.com>`,
-        react: TransactionsSummary({
+      const emailHtml = renderToString(
+        TransactionsSummary({
           locale: school.defaultLocale,
           school: {
             name: school.name,
@@ -104,11 +102,31 @@ new Worker(
             };
           }),
           fullName: user.name,
-        }),
-        subject: `Résumé des transactions - ${school.name}`,
-        to: user.email,
-      });
+        })
+      );
+      try {
+        await sendEmail({
+          from: `${school.name} <no-reply@discolaire.com>`,
+          html: emailHtml,
+          subject: `Résumé des transactions - ${school.name}`,
+          to: user.email,
+        });
+      } catch (error) {
+        const err = error as Error;
+        logger.error(
+          `[Worker] Error sending transaction summary email for user ${userId}: ${err.message}`
+        );
+        throw error;
+      }
+      logger.log(
+        `[Worker] Transaction summary email sent successfully for user ${userId}`
+      );
+    } else {
+      logger.warn(
+        `[Worker] Received unknown job name: ${job.name} for job ${job.id}`
+      );
+      throw new Error(`Unknown job name: ${job.name}`);
     }
   },
-  { connection },
+  { connection }
 );

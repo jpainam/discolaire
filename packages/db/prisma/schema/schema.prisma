@@ -767,6 +767,7 @@ model SchoolYear {
     stockMovements       InventoryStockMovement[]
     inventoryAssetUsages InventoryAssetUsage[]
     events               SchoolYearEvent[]
+    userNotifications    UserNotification[]
 }
 
 model Cycle {

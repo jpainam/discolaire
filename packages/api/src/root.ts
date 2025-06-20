@@ -73,6 +73,7 @@ import { timetableCategoryRouter } from "./routers/timetableCategory";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
 import { userRouter } from "./routers/user";
+import { userNotificationRouter } from "./routers/userNotification";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
@@ -90,6 +91,7 @@ export const appRouter = createTRPCRouter({
   fee: feeRouter,
   book: bookRouter,
   degree: degreeRouter,
+  userNotification: userNotificationRouter,
   course: courseRouter,
   gradeAppreciation: gradeAppreciationRouter,
   classroomCycle: classroomCycleRouter,

@@ -631,7 +631,6 @@
   "mark_absent": "Mark Absent",
   "mark_absent_confirmation": "Are you sure you want to mark this student as absent? This will delete his grade record",
   "mark_all_absent": "Mark all absent",
-  "mark_all_as_read": "Mark all as read",
   "mark_all_holiday": "Mark all holiday",
   "mark_all_present": "Mark all present",
   "marked_absent_successfully": "Marked absent successfully",

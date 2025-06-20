@@ -56,6 +56,7 @@ model User {
     stockMovements               InventoryStockMovement[]
     consumableUsages             InventoryConsumableUsage[] @relation("UserConsumableUsages")
     createdConsumableUsages      InventoryConsumableUsage[] @relation("CreatedConsumableUsages")
+    notifications                UserNotification[]
 
     @@unique([email])
     @@unique([username])
@@ -239,4 +240,17 @@ model Apikey {
     updatedAt           DateTime
     permissions         String?
     metadata            String?
+}
+
+model UserNotification {
+    id           Int        @id @default(autoincrement())
+    userId       String
+    user         User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    title        String
+    message      String
+    schoolYearId String
+    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    read         Boolean    @default(false)
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
 }
