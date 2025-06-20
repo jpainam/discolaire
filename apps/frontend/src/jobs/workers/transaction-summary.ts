@@ -18,10 +18,10 @@ const dataSchema = z.object({
   taskId: z.number(),
 });
 
-import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
-import { logger, sendEmail } from "@repo/utils";
+import { logger } from "@repo/utils";
 
 import { Worker } from "bullmq";
+import { env } from "~/env";
 import { JobNames } from "../job-names";
 import { jobQueueName } from "../queue";
 import { getRedis } from "../redis-client";
@@ -36,10 +36,10 @@ new Worker(
       if (!result.success) {
         const validationError = fromError(result.error);
         throw new Error(
-          `Invalid job data for job ${job.id} ${validationError.message}`,
+          `Invalid job data for job ${job.id} ${validationError.message}`
         );
       }
-      const { renderToString } = await import("react-dom/server");
+
       const { cron, schoolId, userId, schoolYearId } = result.data;
 
       const user = await db.user.findUniqueOrThrow({
@@ -81,52 +81,31 @@ new Worker(
           createdAt: "desc",
         },
       });
-      const emailHtml = renderToString(
-        TransactionsSummary({
-          locale: school.defaultLocale,
-          school: {
-            name: school.name,
-            id: school.id,
-            logo: school.logo ?? "",
+      const response = await fetch(
+        `${env.NEXT_PUBLIC_BASE_URL}/api/emails/transaction/summary`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": env.DISCOLAIRE_API_KEY,
           },
-          transactions: transactions.map((transaction) => {
-            return {
-              id: transaction.id,
-              description: transaction.description ?? "",
-              name: transaction.account.name ?? "",
-              date: transaction.createdAt.toISOString(),
-              amount: transaction.amount,
-              status: transaction.status,
-              currency: school.currency,
-              deleted: transaction.deletedAt != null,
-            };
+          body: JSON.stringify({
+            schoolId: school.id,
+            userId: user.id,
+            transactions: transactions,
           }),
-          fullName: user.name,
-        }),
+        }
       );
-      try {
-        await sendEmail({
-          from: `${school.name} <no-reply@discolaire.com>`,
-          html: emailHtml,
-          subject: `Résumé des transactions - ${school.name}`,
-          to: user.email,
-        });
-      } catch (error) {
-        const err = error as Error;
+      if (!response.ok) {
+        const errorText = await response.text();
         logger.error(
-          `[Worker] Error sending transaction summary email for user ${userId}: ${err.message}`,
+          `Failed to send transaction summary email for user ${user.id}: ${errorText}`
         );
-        throw error;
+        throw new Error(
+          `Failed to send transaction summary email: ${errorText}`
+        );
       }
-      logger.log(
-        `[Worker] Transaction summary email sent successfully for user ${userId}`,
-      );
-    } else {
-      logger.warn(
-        `[Worker] Received unknown job name: ${job.name} for job ${job.id}`,
-      );
-      throw new Error(`Unknown job name: ${job.name}`);
     }
   },
-  { connection },
+  { connection }
 );

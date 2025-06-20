@@ -1,5 +1,6 @@
 import { Queue, QueueEvents } from "bullmq";
 
+import { logger } from "@repo/utils";
 import { getRedis } from "./redis-client";
 
 const connection = getRedis();
@@ -14,11 +15,11 @@ queueEvents.on("failed", (job, _listener) => {
 });
 
 queueEvents.on("completed", (job) => {
-  console.log(`Job ${job.jobId} completed successfully`);
+  logger.log(`Job ${job.jobId} completed successfully`);
 });
 
 jobQueue.on("error", (error) => {
-  console.error(`Queue error: ${error}`);
+  logger.error(`Queue error: ${error}`);
 });
 
 jobQueue.on("waiting", (job) => {

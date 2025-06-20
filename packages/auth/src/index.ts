@@ -112,6 +112,7 @@ export function initAuth(options: {
       username(),
       apiKey({
         enableMetadata: true,
+        // apiKeyHeaders: ["x-api-key", "xyz-api-key"]
       }),
       oAuthProxy({
         /**
