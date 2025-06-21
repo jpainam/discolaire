@@ -24,7 +24,9 @@ import StudentFeesTab from "~/components/student/StudentFeesTab";
 import StudentGradesTab from "~/components/student/StudentGradesTab";
 import StudentParentsTab from "~/components/student/StudentParentsTab";
 import StudentTransactionsTab from "~/components/student/StudentTransactionsTab";
+import { ThemedText } from "~/components/ThemedText";
 import { Colors } from "~/constants/Colors";
+import { getFullName } from "~/utils";
 
 // Define tab types for TypeScript
 type TabType = "info" | "parents" | "grades" | "fees" | "transactions";
@@ -67,9 +69,7 @@ export default function StudentProfileScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
-      {/* <Stack.Screen options={{ headerShown: false }} /> */}
-
+    <View style={styles.container}>
       {/* Student Profile Header */}
       <View style={styles.profileHeader}>
         <View style={styles.profileImageContainer}>
@@ -79,20 +79,24 @@ export default function StudentProfileScreen() {
           />
           {student.isNew && (
             <View style={styles.newBadge}>
-              <Text style={styles.newBadgeText}>NEW</Text>
+              <Text style={styles.newBadgeText}>Nouveau</Text>
             </View>
           )}
         </View>
 
         <View style={styles.nameContainer}>
-          <Text
-            style={styles.studentName}
-          >{`${student.firstName} ${student.lastName}`}</Text>
+          <ThemedText style={styles.studentName}>
+            {getFullName(student)}
+          </ThemedText>
           <View style={styles.classContainer}>
-            <Text style={styles.className}>{student.currentClass}</Text>
-            {student.isRepeating && (
+            <ThemedText style={styles.className}>
+              {student.currentClass}
+            </ThemedText>
+            {!student.isRepeating && (
               <View style={styles.repeatingBadge}>
-                <Text style={styles.repeatingBadgeText}>Repeating</Text>
+                <ThemedText style={styles.repeatingBadgeText}>
+                  Redoublant
+                </ThemedText>
               </View>
             )}
           </View>
@@ -215,7 +219,7 @@ export default function StudentProfileScreen() {
           renderTabContent()
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 const theme = Appearance.getColorScheme() ?? "light";
@@ -236,12 +240,14 @@ const styles = StyleSheet.create({
   },
 
   profileHeader: {
-    backgroundColor: "#fff",
-    padding: 20,
+    backgroundColor: Colors[theme].background,
+    //padding: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 6,
     flexDirection: "row",
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
+    borderBottomColor: Colors[theme].border,
   },
   profileImageContainer: {
     position: "relative",
@@ -274,7 +280,7 @@ const styles = StyleSheet.create({
   studentName: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#1e293b",
+    color: Colors[theme].text,
     marginBottom: 4,
   },
   classContainer: {
@@ -283,7 +289,7 @@ const styles = StyleSheet.create({
   },
   className: {
     fontSize: 16,
-    color: "#64748b",
+    color: Colors[theme].textSecondary,
     marginRight: 8,
   },
   repeatingBadge: {
@@ -298,9 +304,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   tabContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: Colors[theme].background,
     borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
+    borderBottomColor: Colors[theme].border,
   },
   tabScroll: {
     paddingHorizontal: 16,

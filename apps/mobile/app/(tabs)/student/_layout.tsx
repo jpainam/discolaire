@@ -1,91 +1,42 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
-import { TouchableOpacity } from "react-native";
 import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
+import { useStudentFilterStore } from "~/stores/student";
 
-const Layout = () => {
+export default function Layout() {
   const theme = useColorScheme() ?? "light";
+  const setQuery = useStudentFilterStore((s) => s.setQuery);
   return (
-    <Stack
-      screenOptions={{
-        headerShadowVisible: false,
-      }}
-    >
-      <Stack.Screen name="index" />
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          headerTitle: "Elèves",
+          headerLargeTitle: true,
+          headerShadowVisible: false,
+          headerLargeTitleShadowVisible: false,
+          headerStyle: {
+            backgroundColor: Colors[theme].background,
+          },
+          headerSearchBarOptions: {
+            placeholder: "Rechercher...",
+            hideWhenScrolling: true,
+            onChangeText: (text) => {
+              setQuery(text.nativeEvent.text);
+            },
+          },
+        }}
+      />
       <Stack.Screen
         name="[id]"
         options={{
-          title: "Elève",
+          title: "Détails",
+          headerShadowVisible: false,
           headerStyle: {
-            backgroundColor:
-              theme === "light"
-                ? Colors.light.background
-                : Colors.dark.background,
-          },
-          headerRight: () => {
-            return (
-              <TouchableOpacity>
-                <Ionicons
-                  name="calendar"
-                  color={
-                    theme === "light" ? Colors.light.icon : Colors.dark.icon
-                  }
-                  size={25}
-                />
-              </TouchableOpacity>
-            );
+            backgroundColor: Colors[theme].background,
           },
         }}
       />
     </Stack>
   );
-};
-export default Layout;
-
-// import { Stack } from "expo-router";
-// import { TouchableOpacity } from "react-native";
-// import { IconSymbol } from "~/components/ui/IconSymbol";
-// import { Colors } from "~/constants/Colors";
-// import { useColorScheme } from "~/hooks/useColorScheme";
-
-// export default function Layout() {
-//   const theme = useColorScheme() ?? "light";
-//   return (
-//     <Stack>
-//       <Stack.Screen
-//         name="index"
-//         options={{
-//           title: "Student",
-//           headerLargeTitle: true,
-//           headerTransparent: true,
-//           headerBlurEffect: "regular",
-//           headerStyle: {
-//             backgroundColor:
-//               theme === "light"
-//                 ? Colors.light.background
-//                 : Colors.dark.background,
-//           },
-//           headerSearchBarOptions: {
-//             placeholder: "Search",
-//           },
-//           headerRight: () => {
-//             return (
-//               <TouchableOpacity>
-//                 <IconSymbol
-//                   name="calendar"
-//                   color={
-//                     theme === "light" ? Colors.light.icon : Colors.dark.icon
-//                   }
-//                   size={25}
-//                 />
-//               </TouchableOpacity>
-//             );
-//           },
-//         }}
-//       />
-//       <Stack.Screen name="profile" options={{ title: "Profile" }} />
-//       <Stack.Screen name="settings" options={{ title: "Settings" }} />
-//     </Stack>
-//   );
-// }
+}

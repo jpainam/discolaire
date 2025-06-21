@@ -1,6 +1,7 @@
 import { Briefcase, Mail, MapPin, Phone } from "lucide-react-native";
 import React from "react";
 import {
+  Appearance,
   Image,
   Linking,
   StyleSheet,
@@ -8,7 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Colors } from "~/constants/Colors";
 import type { Student } from "~/types/student";
+import { ThemedText } from "../ThemedText";
 
 interface StudentParentsTabProps {
   student: Student;
@@ -33,12 +36,18 @@ export default function StudentParentsTab({ student }: StudentParentsTabProps) {
               style={styles.parentImage}
             />
             <View style={styles.parentInfo}>
-              <Text style={styles.parentName}>{parent.fullName}</Text>
-              <Text style={styles.relationshipType}>{parent.relationship}</Text>
+              <ThemedText style={styles.parentName}>
+                {parent.fullName}
+              </ThemedText>
+              <ThemedText style={styles.relationshipType}>
+                {parent.relationship}
+              </ThemedText>
               <View style={styles.emergencyContainer}>
                 {parent.isEmergencyContact && (
                   <View style={styles.emergencyBadge}>
-                    <Text style={styles.emergencyText}>Emergency Contact</Text>
+                    <ThemedText style={styles.emergencyText}>
+                      Emergency Contact
+                    </ThemedText>
                   </View>
                 )}
               </View>
@@ -50,7 +59,7 @@ export default function StudentParentsTab({ student }: StudentParentsTabProps) {
           <View style={styles.contactSection}>
             <View style={styles.contactRow}>
               <View style={styles.contactLabelContainer}>
-                <Phone size={16} color="#4361ee" />
+                <Phone size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Phone</Text>
               </View>
               <TouchableOpacity
@@ -62,7 +71,7 @@ export default function StudentParentsTab({ student }: StudentParentsTabProps) {
 
             <View style={styles.contactRow}>
               <View style={styles.contactLabelContainer}>
-                <Mail size={16} color="#4361ee" />
+                <Mail size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Email</Text>
               </View>
               <TouchableOpacity onPress={() => handleEmail(parent.email)}>
@@ -72,7 +81,7 @@ export default function StudentParentsTab({ student }: StudentParentsTabProps) {
 
             <View style={styles.contactRow}>
               <View style={styles.contactLabelContainer}>
-                <MapPin size={16} color="#4361ee" />
+                <MapPin size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Address</Text>
               </View>
               <Text style={styles.contactValue}>{parent.address}</Text>
@@ -80,7 +89,7 @@ export default function StudentParentsTab({ student }: StudentParentsTabProps) {
 
             <View style={styles.contactRow}>
               <View style={styles.contactLabelContainer}>
-                <Briefcase size={16} color="#4361ee" />
+                <Briefcase size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Occupation</Text>
               </View>
               <Text style={styles.contactValue}>{parent.occupation}</Text>
@@ -98,12 +107,13 @@ export default function StudentParentsTab({ student }: StudentParentsTabProps) {
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   parentCard: {
-    backgroundColor: "#ffffff",
+    backgroundColor: Colors[theme].cardBackground,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -130,12 +140,12 @@ const styles = StyleSheet.create({
   parentName: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    //color: "#1e293b",
     marginBottom: 4,
   },
   relationshipType: {
     fontSize: 14,
-    color: "#64748b",
+    //color: "#64748b",
     marginBottom: 4,
   },
   emergencyContainer: {
@@ -150,11 +160,11 @@ const styles = StyleSheet.create({
   emergencyText: {
     fontSize: 12,
     fontWeight: "500",
-    color: "#ef4444",
+    //color: "#ef4444",
   },
   divider: {
     height: 1,
-    backgroundColor: "#e2e8f0",
+    backgroundColor: Colors[theme].border,
     marginBottom: 16,
   },
   contactSection: {},
@@ -170,12 +180,12 @@ const styles = StyleSheet.create({
   },
   contactLabel: {
     fontSize: 14,
-    color: "#64748b",
+    color: Colors[theme].textSecondary,
     marginLeft: 8,
   },
   contactValue: {
     fontSize: 14,
-    color: "#1e293b",
+    color: Colors[theme].text,
     textAlign: "right",
   },
   noDataContainer: {

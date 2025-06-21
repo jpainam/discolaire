@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { Redirect, Stack } from "expo-router";
-import { useState } from "react";
+import { Redirect } from "expo-router";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
   StyleSheet,
+  View,
 } from "react-native";
 import { StudentListItem } from "~/components/StudentListItem";
 import { ThemedText } from "~/components/ThemedText";
@@ -13,6 +14,7 @@ import { ThemedView } from "~/components/ThemedView";
 import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { useThemeColor } from "~/hooks/useThemeColor";
+import { useStudentFilterStore } from "~/stores/student";
 import { trpc } from "~/utils/api";
 import { authClient } from "~/utils/auth";
 export default function Screen() {
@@ -36,64 +38,42 @@ export default function Screen() {
 }
 
 function SearchStudent() {
-  const [search, setSearch] = useState("");
+  const { query, setQuery } = useStudentFilterStore();
+
+  useEffect(() => {
+    return () => {
+      setQuery("");
+    }; // Clear on unmount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const {
     data: students,
     isPending,
     isRefetching,
     refetch,
-  } = useQuery(trpc.student.search.queryOptions({ query: search }));
+  } = useQuery(trpc.student.search.queryOptions({ query }));
 
   const borderColor = useThemeColor({}, "border");
-  const theme = useColorScheme();
+  const theme = useColorScheme() ?? "light";
 
   return (
-    <ThemedView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: "Elèves",
-          headerLargeTitle: true,
-          headerTransparent: true,
-          headerBlurEffect: "regular",
-          headerStyle: {
-            backgroundColor:
-              theme === "light"
-                ? Colors.light.background
-                : Colors.dark.background,
-          },
-          headerSearchBarOptions: {
-            placeholder: "Rechercher...",
-            onChangeText: (e) => setSearch(e.nativeEvent.text),
-            autoFocus: true,
-            hideWhenScrolling: false,
-            //onCancelButtonPress: () => {},
-          },
-          // headerRight: () => {
-          //   return (
-          //     <TouchableOpacity
-          //       onPress={() => {
-          //         router.push("/classroom/calendar");
-          //       }}
-          //     >
-          //       <Ionicons
-          //         name="chatbubbles"
-          //         //name={focused ? "calendar" : "calendar-outline"}
-          //         color={
-          //           theme === "light" ? Colors.light.icon : Colors.dark.icon
-          //         }
-          //         size={25}
-          //       />
-          //     </TouchableOpacity>
-          //   );
-          // },
-        }}
-      />
+    <View>
       <FlatList
+        style={{ backgroundColor: Colors[theme].background }}
         data={students}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
         contentInsetAdjustmentBehavior="automatic"
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingVertical: 2,
+          paddingBottom: 60,
+        }}
         ItemSeparatorComponent={() => (
           <ThemedView
             style={{
@@ -108,16 +88,15 @@ function SearchStudent() {
               {isPending ? (
                 <ActivityIndicator size={"large"} />
               ) : (
-                <ThemedText style={styles.emptyText}>Aucun élève</ThemedText>
+                <ThemedText style={styles.emptyText}>Aucune classe</ThemedText>
               )}
             </ThemedView>
           );
         }}
-        renderItem={({ item }) => (
-          <StudentListItem key={item.id} student={item} />
-        )}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <StudentListItem student={item} />}
       />
-    </ThemedView>
+    </View>
   );
 }
 

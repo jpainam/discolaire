@@ -1,7 +1,9 @@
 import { Calendar, Heart, Chrome as Home, MapPin } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Appearance, StyleSheet, Text, View } from "react-native";
+import { Colors } from "~/constants/Colors";
 import type { Student } from "~/types/student";
+import { ThemedText } from "../ThemedText";
 
 interface StudentBasicInfoProps {
   student: Student;
@@ -11,12 +13,14 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Personal Information</Text>
+        <ThemedText style={styles.sectionTitle}>
+          Personal Information
+        </ThemedText>
 
         <View style={styles.infoCard}>
           <View style={styles.infoRow}>
             <View style={styles.infoLabelContainer}>
-              <Calendar size={16} color="#4361ee" />
+              <Calendar size={16} color={Colors[theme].tint} />
               <Text style={styles.infoLabel}>Date of Birth</Text>
             </View>
             <Text style={styles.infoValue}>{student.dateOfBirth}</Text>
@@ -26,7 +30,7 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
 
           <View style={styles.infoRow}>
             <View style={styles.infoLabelContainer}>
-              <MapPin size={16} color="#4361ee" />
+              <MapPin size={16} color={Colors[theme].tint} />
               <Text style={styles.infoLabel}>Place of Birth</Text>
             </View>
             <Text style={styles.infoValue}>{student.placeOfBirth}</Text>
@@ -36,13 +40,13 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
 
           <View style={styles.infoRow}>
             <View style={styles.infoLabelContainer}>
-              <Heart size={16} color="#4361ee" />
+              <Heart size={16} color={Colors[theme].tint} />
               <Text style={styles.infoLabel}>Religious Status</Text>
             </View>
             <View style={styles.badgeContainer}>
               {student.isAdventist && (
                 <View style={[styles.badge, styles.adventistBadge]}>
-                  <Text style={styles.badgeText}>Adventist</Text>
+                  <ThemedText style={styles.badgeText}>Adventist</ThemedText>
                 </View>
               )}
               {student.isBaptized && (
@@ -64,7 +68,7 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
         <View style={styles.infoCard}>
           <View style={styles.infoRow}>
             <View style={styles.infoLabelContainer}>
-              <Home size={16} color="#4361ee" />
+              <Home size={16} color={Colors[theme].tint} />
               <Text style={styles.infoLabel}>Address</Text>
             </View>
             <Text style={styles.infoValue}>{student.address}</Text>
@@ -141,6 +145,7 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
   );
 }
 
+const theme = Appearance.getColorScheme() ?? "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -151,11 +156,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1e293b",
+    color: Colors[theme].text,
     marginBottom: 8,
   },
   infoCard: {
-    backgroundColor: "#ffffff",
+    backgroundColor: Colors[theme].cardBackground,
     borderRadius: 12,
     padding: 16,
     shadowColor: "#000",
@@ -176,19 +181,19 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 14,
-    color: "#64748b",
+    color: Colors[theme].textSecondary,
     marginLeft: 8,
   },
   infoValue: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#1e293b",
+    color: Colors[theme].text,
     textAlign: "right",
     flex: 1,
   },
   divider: {
     height: 1,
-    backgroundColor: "#e2e8f0",
+    backgroundColor: Colors[theme].border,
     marginVertical: 8,
   },
   badgeContainer: {
@@ -211,7 +216,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#1e293b",
+    color: Colors[theme].text,
   },
   statusRow: {
     flexDirection: "row",

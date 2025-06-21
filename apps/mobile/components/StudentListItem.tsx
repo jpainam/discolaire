@@ -71,9 +71,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   itemContainer: {
-    paddingVertical: 2,
+    paddingVertical: 8,
     alignItems: "center",
-    paddingHorizontal: 16,
+    //paddingHorizontal: 16,
     flexDirection: "row",
     gap: 8,
   },
