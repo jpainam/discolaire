@@ -34,9 +34,12 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
         headers() {
           const headers = new Map<string, string>();
           headers.set("x-trpc-source", "expo-react");
-          headers.set("x-school-year", getSchoolYear() ?? "");
+          const schoolYear = getSchoolYear();
 
-          const cookies = authClient.getCookie();
+          const cookies =
+            authClient.getCookie() + ";x-school-year=" + schoolYear;
+
+          // add cookies to the headers
           if (cookies) {
             headers.set("Cookie", cookies);
           }

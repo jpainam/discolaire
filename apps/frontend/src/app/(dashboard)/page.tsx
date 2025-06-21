@@ -62,7 +62,7 @@ export default async function Page() {
   ]);
 
   return (
-    <div className="@container grid md:grid-cols-3 flex-1 gap-2 p-4">
+    <div className="@container grid md:grid-cols-2 2xl:grid-cols-3 flex-1 gap-2 p-4">
       <Suspense
         key={"quick-statistics"}
         fallback={
