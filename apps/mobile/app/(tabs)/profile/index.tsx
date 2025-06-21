@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Appearance,
@@ -130,6 +131,22 @@ export default function Screen() {
             </ThemedView>
           </ThemedView>
         </ThemedView>
+      </ThemedView>
+
+      <ThemedView>
+        <TouchableOpacity
+          onPress={async () => {
+            await authClient.signOut();
+            router.push("/auth");
+          }}
+          style={[styles.rowWrapper, styles.rowLast]}
+        >
+          <ThemedView style={styles.row}>
+            <ThemedText style={[styles.rowLabel, styles.rowLabelLogout]}>
+              Log Out
+            </ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
       </ThemedView>
 
       <Text style={styles.contentFooter}>App Version 2.24 #50491</Text>

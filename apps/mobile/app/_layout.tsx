@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { useFonts } from "expo-font";
 import { router, Stack, useNavigationContainerRef } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
@@ -19,26 +16,23 @@ import { queryClient } from "../utils/api";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
+  // const [loaded] = useFonts({
+  //   SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+  // });
 
   const { data: isAuthenticated, isPending } = authClient.useSession();
   const navContainerRef = useNavigationContainerRef();
   const isReady = navContainerRef.isReady();
-
   useEffect(() => {
-    if (!isAuthenticated) {
-      if (isReady) {
-        router.push("/auth");
-      }
+    if (!isAuthenticated && isReady) {
+      router.push("/auth");
     }
   }, [isAuthenticated, isReady]);
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  // if (!loaded) {
+  //   // Async font loading only occurs in development.
+  //   return null;
+  // }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -48,6 +42,10 @@ export default function RootLayout() {
         ) : (
           <Stack screenOptions={{}}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="auth"
+              options={{ headerShown: false, title: "Home" }}
+            />
             <Stack.Screen
               name="notifications"
               options={{ headerShown: false }}

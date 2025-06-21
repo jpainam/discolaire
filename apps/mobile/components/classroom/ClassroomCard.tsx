@@ -14,7 +14,6 @@ import type { RouterOutputs } from "@repo/api";
 import { Colors as Colors2 } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { ThemedText } from "../ThemedText";
-import CapacityIndicator from "./CapacityIndicator";
 
 export default function ClassroomCard({
   classroom,
@@ -76,7 +75,7 @@ export default function ClassroomCard({
         </View>
       </View>
 
-      <CapacityIndicator current={classroom.size} max={classroom.maxSize} />
+      {/* <CapacityIndicator current={classroom.size} max={classroom.maxSize} /> */}
     </TouchableOpacity>
   );
 }

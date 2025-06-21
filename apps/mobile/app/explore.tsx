@@ -3,6 +3,8 @@
 // import { Image } from "expo-image";
 // import { Platform, StyleSheet } from "react-native";
 
+import { View } from "react-native";
+
 // import { Collapsible } from "~/components/Collapsible";
 // import { ExternalLink } from "~/components/ExternalLink";
 // import ParallaxScrollView from "~/components/ParallaxScrollView";
@@ -130,3 +132,7 @@
 //     gap: 8,
 //   },
 // });
+
+export default function TabTwoScreen() {
+  return <View></View>;
+}
