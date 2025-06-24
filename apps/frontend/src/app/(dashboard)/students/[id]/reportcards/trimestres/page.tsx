@@ -21,6 +21,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/get-appreciation";
 import { TrimestreHeader } from "./TrimestreHeader";
+
 export default async function Page(props: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{
@@ -46,7 +47,7 @@ export default async function Page(props: {
   const { studentsReport, summary, globalRanks } =
     await caller.reportCard.getTrimestre({
       classroomId: classroom.id,
-      trimestreId: trimestreId,
+      trimestreId: trimestreId as "trim1" | "trim2" | "trim3",
     });
 
   const subjects = await caller.classroom.subjects(classroom.id);
@@ -66,7 +67,7 @@ export default async function Page(props: {
 
   const disciplines = await caller.discipline.trimestre({
     classroomId: classroom.id,
-    trimestreId: trimestreId,
+    trimestreId: trimestreId as "trim1" | "trim2" | "trim3",
   });
 
   const disc = disciplines.get(params.id);

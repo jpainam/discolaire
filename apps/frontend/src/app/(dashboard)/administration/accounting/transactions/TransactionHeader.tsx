@@ -19,21 +19,21 @@ export function TransactionHeader() {
       from: searchParams.from ?? undefined,
       to: searchParams.to ?? undefined,
       classroomId: searchParams.classroomId ?? undefined,
-    })
+    }),
   );
   const { t } = useLocale();
   const totals = transactions.reduce((acc, curr) => acc + curr.amount, 0);
   const validated = transactions.reduce(
     (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
-    0
+    0,
   );
   const canceled = transactions.reduce(
     (acc, curr) => acc + (curr.status == "CANCELED" ? curr.amount : 0),
-    0
+    0,
   );
   const pending = transactions.reduce(
     (acc, curr) => acc + (curr.status == "PENDING" ? curr.amount : 0),
-    0
+    0,
   );
   const { school } = useSchool();
   const moneyFormatter = new Intl.NumberFormat(i18next.language, {

@@ -187,12 +187,12 @@ export function getRequiredColumns({
 }
 
 function ActionCells({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   transaction,
 }: {
   transaction: RequiredTransactionOutput;
 }) {
   //const { openSheet } = useSheet();
-  console.log("transaction", transaction);
   const confirm = useConfirm();
   const { t } = useLocale();
   //const router = useRouter();
