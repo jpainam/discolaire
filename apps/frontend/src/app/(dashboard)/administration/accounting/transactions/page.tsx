@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { TransactionDataTable } from "~/components/administration/transactions/TransactionDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { transactionSearchParams } from "~/utils/filter-params";
+import { transactionSearchParams } from "~/utils/search-params";
 import { TransactionHeader } from "./TransactionHeader";
 interface PageProps {
   searchParams: Promise<SearchParams>;
@@ -20,7 +20,7 @@ export default async function Page(props: PageProps) {
       from: searchParams.from ? new Date(searchParams.from) : undefined,
       to: searchParams.to ? new Date(searchParams.to) : undefined,
       classroomId: searchParams.classroomId ?? undefined,
-    }),
+    })
   );
 
   return (

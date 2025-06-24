@@ -9,7 +9,7 @@ import { caller } from "~/trpc/server";
 const searchSchema = z.object({
   studentId: z.string().nullable(),
   classroomId: z.string().nullable(),
-  trimestreId: z.string().min(1),
+  trimestreId: z.enum(["trim1", "trim2", "trim3"]),
 });
 export async function GET(req: NextRequest) {
   const session = await getSession();
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(
       { error: "Invalid request body", errors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -50,7 +50,7 @@ async function classroomReportCard({
   trimestreId,
 }: {
   classroomId: string;
-  trimestreId: string;
+  trimestreId: "trim1" | "trim2" | "trim3";
 }) {
   const school = await caller.school.getSchool();
   const students = await caller.classroom.students(classroomId);
@@ -79,7 +79,7 @@ async function classroomReportCard({
       report,
       contacts,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {
@@ -94,7 +94,7 @@ async function indvidualReportCard({
   trimestreId,
 }: {
   studentId: string;
-  trimestreId: string;
+  trimestreId: "trim1" | "trim2" | "trim3";
 }) {
   const student = await caller.student.get(studentId);
   if (!student.classroom) {
@@ -134,7 +134,7 @@ async function indvidualReportCard({
       report,
       contact,
       schoolYear: classroom.schoolYear,
-    }),
+    })
   );
 
   const headers: Record<string, string> = {

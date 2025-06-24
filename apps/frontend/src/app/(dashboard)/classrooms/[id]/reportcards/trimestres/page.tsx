@@ -15,23 +15,28 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import _ from "lodash";
 import Link from "next/link";
+import type { SearchParams } from "nuqs/server";
 import { Fragment } from "react";
 import { AvatarState } from "~/components/AvatarState";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
+import { trimestreSearchParams } from "~/utils/search-params";
 import { TrimestreHeader } from "./TrimestreHeader";
-export default async function Page(props: {
+
+interface PageProps {
+  searchParams: Promise<SearchParams>;
   params: Promise<{ id: string }>;
-  searchParams: Promise<{
-    trimestreId: string;
-    format: string;
-  }>;
-}) {
+}
+
+export default async function Page(props: PageProps) {
   const { t } = await getServerTranslations();
+  const searchParams = await trimestreSearchParams(props.searchParams);
+  if (!searchParams.trimestreId) {
+    throw new Error("Trimestre ID is required");
+  }
   const params = await props.params;
   const classroom = await caller.classroom.get(params.id);
 
-  const searchParams = await props.searchParams;
   const { trimestreId } = searchParams;
   const { title: _title, seq1, seq2 } = getTitle({ trimestreId });
 
@@ -135,7 +140,7 @@ export default async function Page(props: {
                             value.average > 10 &&
                               "bg-green-600 text-green-100 p-1.5",
                             value.average < 10 &&
-                              "bg-red-600 text-red-100 p-1.5",
+                              "bg-red-600 text-red-100 p-1.5"
                           )}
                         >
                           {value.average.toFixed(2)}
@@ -153,7 +158,7 @@ export default async function Page(props: {
                       {Object.keys(groups).map(
                         (groupId: string, indexg: number) => {
                           const items = groups[Number(groupId)]?.sort(
-                            (a, b) => a.order - b.order,
+                            (a, b) => a.order - b.order
                           );
 
                           if (!items) return null;
@@ -164,7 +169,7 @@ export default async function Page(props: {
                             >
                               {items.map((subject, indexs) => {
                                 const grade = studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id,
+                                  (c) => c.subjectId === subject.id
                                 );
                                 const g = grade?.grade1 ?? 0;
                                 return (
@@ -175,7 +180,7 @@ export default async function Page(props: {
                                         ? "!bg-red-50 dark:!bg-red-800"
                                         : g < 15
                                           ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                          : "!bg-green-50 dark:!bg-green-800",
+                                          : "!bg-green-50 dark:!bg-green-800"
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}`}
                                   >
@@ -185,7 +190,7 @@ export default async function Page(props: {
                               })}
                             </Fragment>
                           );
-                        },
+                        }
                       )}
                     </TableRow>
                     <TableRow
@@ -201,7 +206,7 @@ export default async function Page(props: {
                       {Object.keys(groups).map(
                         (groupId: string, indexg: number) => {
                           const items = groups[Number(groupId)]?.sort(
-                            (a, b) => a.order - b.order,
+                            (a, b) => a.order - b.order
                           );
 
                           if (!items) return null;
@@ -212,7 +217,7 @@ export default async function Page(props: {
                             >
                               {items.map((subject, indexs) => {
                                 const grade = studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id,
+                                  (c) => c.subjectId === subject.id
                                 );
                                 const g = grade?.grade2 ?? 0;
                                 return (
@@ -223,7 +228,7 @@ export default async function Page(props: {
                                         ? "!bg-red-50 dark:!bg-red-800"
                                         : g < 15
                                           ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                          : "!bg-green-50 dark:!bg-green-800",
+                                          : "!bg-green-50 dark:!bg-green-800"
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}-2`}
                                   >
@@ -233,7 +238,7 @@ export default async function Page(props: {
                               })}
                             </Fragment>
                           );
-                        },
+                        }
                       )}
                     </TableRow>
                   </Fragment>

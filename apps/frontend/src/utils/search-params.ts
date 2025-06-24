@@ -4,6 +4,7 @@ import {
   parseAsInteger,
   parseAsIsoDate,
   parseAsString,
+  parseAsStringLiteral,
 } from "nuqs/server";
 
 // Describe your search params, and reuse this in useQueryStates / createSerializer:
@@ -19,7 +20,7 @@ export const reportcardSearchParamsSchema = {
   trimestreId: parseAsString,
 };
 export const reportcardSearchParams = createLoader(
-  reportcardSearchParamsSchema,
+  reportcardSearchParamsSchema
 );
 export const transactionSearchParamsSchema = {
   from: parseAsIsoDate,
@@ -29,5 +30,13 @@ export const transactionSearchParamsSchema = {
 };
 
 export const transactionSearchParams = createLoader(
-  transactionSearchParamsSchema,
+  transactionSearchParamsSchema
 );
+
+export const trimestreSearchParamsSchema = {
+  trimestreId: parseAsStringLiteral(["trim1", "trim2", "trim3"]),
+  classroomId: parseAsString,
+  format: parseAsStringLiteral(["pdf", "csv"]),
+};
+
+export const trimestreSearchParams = createLoader(trimestreSearchParamsSchema);

@@ -22,7 +22,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
 import { useRouter } from "~/hooks/use-router";
-import { reportcardSearchParamsSchema } from "~/utils/filter-params";
+import { reportcardSearchParamsSchema } from "~/utils/search-params";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function ReportCardHeader() {
@@ -46,7 +46,7 @@ export function ReportCardHeader() {
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ termId: val, trimestreId: undefined }),
+              createQueryString({ termId: val, trimestreId: undefined })
           );
         }}
       />

@@ -84,7 +84,7 @@ export const disciplineRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        trimestreId: z.string().min(1),
+        trimestreId: z.enum(["trim1", "trim2", "trim3"]),
       }),
     )
     .query(async ({ input, ctx }) => {
@@ -94,24 +94,25 @@ export const disciplineRouter = {
           schoolYearId: ctx.schoolYearId,
         },
       });
-
-      if (!["trim1", "trim2", "trim3"].includes(input.trimestreId)) {
+      if (terms.length < 6) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Trimestre not found",
+          message: `Not enough terms ${terms.length} found for schoolId: ${ctx.schoolId}, schoolYearId: ${ctx.schoolYearId}`,
         });
       }
+      const sortedTerms = terms.sort((a, b) => a.order - b.order);
+
       let seq1: number | null;
       let seq2: number | null;
       if (input.trimestreId === "trim1") {
-        seq1 = terms.find((t) => t.order === 1)?.id ?? null;
-        seq2 = terms.find((t) => t.order === 2)?.id ?? null;
+        seq1 = sortedTerms[0]?.id ?? null;
+        seq2 = sortedTerms[1]?.id ?? null;
       } else if (input.trimestreId === "trim2") {
-        seq1 = terms.find((t) => t.order === 3)?.id ?? null;
-        seq2 = terms.find((t) => t.order === 4)?.id ?? null;
+        seq1 = sortedTerms[2]?.id ?? null;
+        seq2 = sortedTerms[3]?.id ?? null;
       } else {
-        seq1 = terms.find((t) => t.order === 5)?.id ?? null;
-        seq2 = terms.find((t) => t.order === 6)?.id ?? null;
+        seq1 = sortedTerms[4]?.id ?? null;
+        seq2 = sortedTerms[5]?.id ?? null;
       }
       if (!seq1 || !seq2) {
         throw new TRPCError({

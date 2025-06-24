@@ -22,7 +22,7 @@ import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
-import { reportcardSearchParamsSchema } from "~/utils/filter-params";
+import { reportcardSearchParamsSchema } from "~/utils/search-params";
 
 export function ReportCardHeader({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
@@ -34,7 +34,7 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
 
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);

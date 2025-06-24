@@ -22,7 +22,7 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
 import { useRouter } from "~/hooks/use-router";
-import { transactionSearchParamsSchema } from "~/utils/filter-params";
+import { transactionSearchParamsSchema } from "~/utils/search-params";
 
 export function TransactionHeader() {
   const { t } = useLocale();

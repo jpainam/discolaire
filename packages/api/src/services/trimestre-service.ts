@@ -5,7 +5,7 @@ import { getGrades } from "./reportcard-service";
 
 export async function getTrimestreGrades(
   classroomId: string,
-  trimestreId: string,
+  trimestreId: "trim1" | "trim2" | "trim3",
   schoolId: string,
   schoolYearId: string,
 ) {
@@ -15,22 +15,28 @@ export async function getTrimestreGrades(
       schoolYearId: schoolYearId,
     },
   });
+  if (terms.length < 6) {
+    throw new Error(
+      `Not enough terms ${terms.length} found for schoolId: ${schoolId}, schoolYearId: ${schoolYearId}`,
+    );
+  }
   let grades1: Awaited<ReturnType<typeof getGrades>> = [];
   let grades2: Awaited<ReturnType<typeof getGrades>> = [];
   let seq1: number | null | undefined = null;
   let seq2: number | null | undefined = null;
+  const sortedTerms = terms.sort((a, b) => a.order - b.order);
   if (trimestreId === "trim1") {
-    seq1 = terms.find((t) => t.order === 1)?.id;
-    seq2 = terms.find((t) => t.order === 2)?.id;
+    seq1 = sortedTerms[0]?.id;
+    seq2 = sortedTerms[1]?.id;
   } else if (trimestreId === "trim2") {
-    seq1 = terms.find((t) => t.order === 3)?.id;
-    seq2 = terms.find((t) => t.order === 4)?.id;
+    seq1 = sortedTerms[2]?.id;
+    seq2 = sortedTerms[3]?.id;
   } else {
-    seq1 = terms.find((t) => t.order === 5)?.id;
-    seq2 = terms.find((t) => t.order === 6)?.id;
+    seq1 = sortedTerms[4]?.id;
+    seq2 = sortedTerms[5]?.id;
   }
   if (!seq1 || !seq2) {
-    throw new Error("Invalid trimestreId");
+    throw new Error(`Invalid trimestreId, ${seq1}, ${seq2}, ${trimestreId}`);
   }
   grades1 = await getGrades(classroomId, seq1);
   grades2 = await getGrades(classroomId, seq2);

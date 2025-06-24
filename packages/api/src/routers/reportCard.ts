@@ -86,7 +86,7 @@ export const reportCardRouter = {
   getTrimestre: protectedProcedure
     .input(
       z.object({
-        trimestreId: z.string().min(1),
+        trimestreId: z.enum(["trim1", "trim2", "trim3"]),
         classroomId: z.string().min(1),
       }),
     )
