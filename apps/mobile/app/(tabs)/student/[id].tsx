@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
 import {
@@ -37,10 +38,10 @@ export default function StudentProfileScreen() {
   const [activeTab, setActiveTab] = useState<TabType>("info");
 
   const { data: student, isPending } = useQuery(
-    trpc.student.get.queryOptions(id)
+    trpc.student.get.queryOptions(id),
   );
 
-  if (!student && !isPending) {
+  if (!student) {
     return (
       <SafeAreaView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />
@@ -61,7 +62,13 @@ export default function StudentProfileScreen() {
       case "grades":
         return <StudentGradesTab student={student} />;
       case "fees":
-        return <StudentFeesTab student={student} />;
+        return student.classroom ? (
+          <StudentFeesTab classroomId={student.classroom.id} />
+        ) : (
+          <View style={styles.loadingContainer}>
+            <ThemedText>N'est pas inscrit</ThemedText>
+          </View>
+        );
       case "transactions":
         return <StudentTransactionsTab student={student} />;
       default:
@@ -69,23 +76,23 @@ export default function StudentProfileScreen() {
     }
   };
 
-  if (!student) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Stack.Screen options={{ headerShown: false }} />
-        <View style={styles.notFoundContainer}>
-          <Text style={styles.notFoundText}>Student not found</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  // if (!student) {
+  //   return (
+  //     <SafeAreaView style={styles.container}>
+  //       <Stack.Screen options={{ headerShown: false }} />
+  //       <View style={styles.notFoundContainer}>
+  //         <Text style={styles.notFoundText}>Student not found</Text>
+  //       </View>
+  //     </SafeAreaView>
+  //   );
+  // }
   return (
     <View style={styles.container}>
       {/* Student Profile Header */}
       <View style={styles.profileHeader}>
         <View style={styles.profileImageContainer}>
           <Image
-            source={{ uri: student.photoUrl }}
+            source={{ uri: student.user?.avatar ?? "" }}
             style={styles.profileImage}
           />
           {student.isNew && (

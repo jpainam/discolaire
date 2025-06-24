@@ -178,6 +178,7 @@ export const studentService = {
             subject: {
               include: {
                 course: true,
+                teacher: true,
               },
             },
           },

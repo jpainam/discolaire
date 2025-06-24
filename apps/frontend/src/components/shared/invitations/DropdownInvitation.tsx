@@ -52,6 +52,7 @@ export function DropdownInvitation({
         {t("copy_invite")}
       </DropdownMenuItem> */}
       <DropdownMenuItem
+        disabled={!email}
         onSelect={async () => {
           if (!email) {
             toast.error(t("email_not_found"));

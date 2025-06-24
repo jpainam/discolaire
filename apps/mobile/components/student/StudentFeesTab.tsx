@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   CircleAlert as AlertCircle,
   Calendar,
@@ -7,27 +8,25 @@ import {
   DollarSign,
 } from "lucide-react-native";
 import React, { useState } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import type { Student } from "~/types/student";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { trpc } from "~/utils/api";
 
-interface StudentFeesTabProps {
-  student: Student;
-}
-
-export default function StudentFeesTab({ student }: StudentFeesTabProps) {
+export default function StudentFeesTab({
+  classroomId,
+}: {
+  classroomId: string;
+}) {
   const [expandedFee, setExpandedFee] = useState<string | null>(null);
 
-  const toggleFeeExpansion = (feeId: string) => {
-    if (expandedFee === feeId) {
+  const { data: fees, isPending } = useQuery(
+    trpc.classroom.fees.queryOptions(classroomId),
+  );
+
+  const toggleFeeExpansion = (feeId: number) => {
+    if (expandedFee === feeId.toString()) {
       setExpandedFee(null);
     } else {
-      setExpandedFee(feeId);
+      setExpandedFee(feeId.toString());
     }
   };
 
@@ -36,9 +35,9 @@ export default function StudentFeesTab({ student }: StudentFeesTabProps) {
     let totalAmount = 0;
     let totalPaid = 0;
 
-    student.fees.forEach((fee) => {
+    fees?.forEach((fee) => {
       totalAmount += fee.amount;
-      totalPaid += fee.amountPaid;
+      totalPaid += 0; //fee.amountPaid;
     });
 
     const balance = totalAmount - totalPaid;
@@ -54,22 +53,30 @@ export default function StudentFeesTab({ student }: StudentFeesTabProps) {
 
   const summary = calculateSummary();
 
-  const renderPaymentItem = ({
-    item,
-    index,
-  }: {
-    item: { reference: string; date: string; method: string; amount: number };
-    index: number;
-  }) => (
-    <View key={`${index}-item`} style={styles.paymentItem}>
-      <View style={styles.paymentDetails}>
-        <Text style={styles.paymentReference}>Receipt #{item.reference}</Text>
-        <Text style={styles.paymentDate}>{item.date}</Text>
-        <Text style={styles.paymentMethod}>{item.method}</Text>
+  // const renderPaymentItem = ({
+  //   item,
+  //   index,
+  // }: {
+  //   item: { reference: string; date: string; method: string; amount: number };
+  //   index: number;
+  // }) => (
+  //   <View key={`${index}-item`} style={styles.paymentItem}>
+  //     <View style={styles.paymentDetails}>
+  //       <Text style={styles.paymentReference}>Receipt #{item.reference}</Text>
+  //       <Text style={styles.paymentDate}>{item.date}</Text>
+  //       <Text style={styles.paymentMethod}>{item.method}</Text>
+  //     </View>
+  //     <Text style={styles.paymentAmount}>${item.amount.toFixed(2)}</Text>
+  //   </View>
+  // );
+
+  if (isPending) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Loading...</Text>
       </View>
-      <Text style={styles.paymentAmount}>${item.amount.toFixed(2)}</Text>
-    </View>
-  );
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -159,7 +166,7 @@ export default function StudentFeesTab({ student }: StudentFeesTabProps) {
 
       <Text style={styles.feesListTitle}>Fees Breakdown</Text>
 
-      {student.fees.map((fee) => (
+      {fees?.map((fee) => (
         <View key={fee.id} style={styles.feeCard}>
           <TouchableOpacity
             style={styles.feeHeader}
@@ -169,20 +176,26 @@ export default function StudentFeesTab({ student }: StudentFeesTabProps) {
             <View style={styles.feeType}>
               <DollarSign size={16} color="#4361ee" />
               <View style={styles.feeInfo}>
-                <Text style={styles.feeName}>{fee.name}</Text>
-                <Text style={styles.feePeriod}>{fee.period}</Text>
+                <Text style={styles.feeName}>{fee.description}</Text>
+                <Text style={styles.feePeriod}>
+                  {fee.dueDate.toLocaleDateString("fr-FR", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                </Text>
               </View>
             </View>
 
             <View style={styles.feeHeaderRight}>
               <View style={styles.feeAmounts}>
                 <Text style={styles.feeAmountPaid}>
-                  ${fee.amountPaid.toFixed(2)}
+                  ${fee.amount.toFixed(2)}
                 </Text>
                 <Text style={styles.feeAmount}>/${fee.amount.toFixed(2)}</Text>
               </View>
 
-              {expandedFee === fee.id ? (
+              {expandedFee === fee.id.toString() ? (
                 <ChevronUp size={20} color="#64748b" />
               ) : (
                 <ChevronDown size={20} color="#64748b" />
@@ -190,21 +203,27 @@ export default function StudentFeesTab({ student }: StudentFeesTabProps) {
             </View>
           </TouchableOpacity>
 
-          {expandedFee === fee.id && (
+          {expandedFee === fee.id.toString() && (
             <View style={styles.feeDetails}>
               <View style={styles.feeDueContainer}>
                 <View style={styles.feeDueInfo}>
                   <Calendar size={16} color="#64748b" />
                   <Text style={styles.feeDueLabel}>Due Date</Text>
                 </View>
-                <Text style={styles.feeDueDate}>{fee.dueDate}</Text>
+                <Text style={styles.feeDueDate}>
+                  {fee.dueDate.toLocaleDateString("fr-FR", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                </Text>
               </View>
 
               <View style={styles.divider} />
 
               <Text style={styles.paymentsTitle}>Payment History</Text>
 
-              {fee.payments.length > 0 ? (
+              {/* {fee.payments.length > 0 ? (
                 <FlatList
                   data={fee.payments}
                   renderItem={renderPaymentItem}
@@ -217,13 +236,13 @@ export default function StudentFeesTab({ student }: StudentFeesTabProps) {
                     No payments recorded
                   </Text>
                 </View>
-              )}
+              )} */}
             </View>
           )}
         </View>
       ))}
 
-      {student.fees.length === 0 && (
+      {fees?.length === 0 && (
         <View style={styles.noDataContainer}>
           <Text style={styles.noDataText}>No fees information available</Text>
         </View>

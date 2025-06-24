@@ -1,62 +1,53 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 
 import { auth } from "~/auth/server";
 import { caller } from "~/trpc/server";
 
-const signInSchema = z.object({
-  username: z.string().min(1),
-  password: z.string().min(1),
-});
+export async function signIn({
+  username,
+  password,
+  redirectTo,
+}: {
+  username: string;
+  password: string;
+  redirectTo?: string | null;
+}) {
+  let user;
+  let schoolYear;
 
-/**
- * Deprecated: Use `client side sign` instead.
- * Sign in a user.
- * @param previousState - The previous state of the form.
- * @param formData - The form data submitted by the user.
- * @returns The result of the sign-in attempt.
- */
-export async function signIn(
-  previousState: { error: string },
-  formData: FormData,
-) {
-  const parsed = signInSchema.safeParse(Object.fromEntries(formData));
+  try {
+    const result = await auth.api.signInUsername({
+      body: {
+        username,
+        password,
+        rememberMe: true,
+      },
+    });
 
-  if (!parsed.success) {
-    return {
-      error: "Invalid form data",
-    };
+    if (!result) {
+      return { error: "invalid_credentials" };
+    }
+
+    user = result.user;
+
+    schoolYear = await caller.schoolYear.getDefault({
+      userId: user.id,
+    });
+
+    if (!schoolYear) {
+      return { error: "no_school_year" };
+    }
+
+    await setSchoolYearCookie(schoolYear.id);
+  } catch (error) {
+    const err = error as Error;
+    return { error: err.message || "unknown_error" };
   }
-  const { username, password } = parsed.data;
-  const result = await auth.api.signInUsername({
-    body: {
-      username,
-      password,
-      rememberMe: true,
-    },
-    headers: await headers(),
-  });
-  if (!result) {
-    return {
-      error: "invalid_credentials",
-    };
-  }
 
-  const schoolYear = await caller.schoolYear.getDefault({
-    userId: result.user.id,
-  });
-
-  if (!schoolYear) {
-    return {
-      error: "no_school_year",
-    };
-  }
-  await setSchoolYearCookie(schoolYear.id);
-
-  const redirectTo = formData.get("redirect") as string | null;
+  // ✅ Redirect outside the try-catch
   if (redirectTo && redirectTo.trim() !== "") {
     redirect(redirectTo);
   }

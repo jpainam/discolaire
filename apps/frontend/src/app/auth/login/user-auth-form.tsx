@@ -19,9 +19,7 @@ import { Input } from "@repo/ui/components/input";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { setCookieFromSignIn } from "~/actions/signin";
-import { authClient } from "~/auth/client";
-import { useRouter } from "~/hooks/use-router";
+import { signIn } from "~/actions/signin";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
@@ -41,36 +39,19 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   });
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
-  const router = useRouter();
   const { t } = useLocale();
   const [isPending, setIsPending] = React.useState(false);
   const handleSubmit = async (values: z.infer<typeof schema>) => {
     setIsPending(true);
-    const { data, error } = await authClient.signIn.username({
+    const result = await signIn({
       username: values.username,
       password: values.password,
-      rememberMe: true,
-    });
-    if (error) {
-      toast.error(error.message, { id: 0 });
-      setIsPending(false);
-    }
-    if (!data) {
-      toast.error(t("invalid_credentials"), { id: 0 });
-      setIsPending(false);
-      return;
-    }
-    const user = data.user;
-
-    const result = await setCookieFromSignIn({
-      userId: user.id,
+      redirectTo: redirect ?? null,
     });
     if (result.error) {
-      toast.error(result.error, { id: 0 });
+      toast.error(t(result.error), { id: 0 });
       setIsPending(false);
-      return;
     }
-    router.push(redirect ?? "/");
   };
 
   return (

@@ -1,7 +1,9 @@
 import type { RouterOutputs } from "@repo/api";
+import { useQuery } from "@tanstack/react-query";
 import { Briefcase, Mail, MapPin, Phone } from "lucide-react-native";
 import React from "react";
 import {
+  ActivityIndicator,
   Appearance,
   Image,
   Linking,
@@ -11,6 +13,8 @@ import {
   View,
 } from "react-native";
 import { Colors } from "~/constants/Colors";
+import { getFullName } from "~/utils";
+import { trpc } from "~/utils/api";
 import { ThemedText } from "../ThemedText";
 
 export default function StudentParentsTab({
@@ -18,6 +22,9 @@ export default function StudentParentsTab({
 }: {
   student: RouterOutputs["student"]["get"];
 }) {
+  const { data: studentContacts, isPending } = useQuery(
+    trpc.student.contacts.queryOptions(student.id),
+  );
   const handlePhoneCall = async (phoneNumber: string) => {
     await Linking.openURL(`tel:${phoneNumber}`);
   };
@@ -26,24 +33,34 @@ export default function StudentParentsTab({
     await Linking.openURL(`mailto:${email}`);
   };
 
+  if (isPending) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator
+          size="large"
+          style={{ flex: 1, justifyContent: "center" }}
+        />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
-      {student.parents.map((parent, index) => (
+      {studentContacts?.map((std, index) => (
         <View key={index} style={styles.parentCard}>
           <View style={styles.parentHeader}>
             <Image
-              source={{ uri: parent.photoUrl }}
+              source={{ uri: std.contact.user?.avatar ?? "" }}
               style={styles.parentImage}
             />
             <View style={styles.parentInfo}>
               <ThemedText style={styles.parentName}>
-                {parent.fullName}
+                {getFullName(std.contact)}
               </ThemedText>
               <ThemedText style={styles.relationshipType}>
-                {parent.relationship}
+                {std.relationship?.name}
               </ThemedText>
               <View style={styles.emergencyContainer}>
-                {parent.isEmergencyContact && (
+                {std.emergencyContact && (
                   <View style={styles.emergencyBadge}>
                     <ThemedText style={styles.emergencyText}>
                       Emergency Contact
@@ -63,9 +80,11 @@ export default function StudentParentsTab({
                 <Text style={styles.contactLabel}>Phone</Text>
               </View>
               <TouchableOpacity
-                onPress={() => handlePhoneCall(parent.phoneNumber)}
+                onPress={() => handlePhoneCall(std.contact.phoneNumber1 ?? "")}
               >
-                <Text style={styles.contactValue}>{parent.phoneNumber}</Text>
+                <Text style={styles.contactValue}>
+                  {std.contact.phoneNumber1 ?? ""}
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -74,8 +93,12 @@ export default function StudentParentsTab({
                 <Mail size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Email</Text>
               </View>
-              <TouchableOpacity onPress={() => handleEmail(parent.email)}>
-                <Text style={styles.contactValue}>{parent.email}</Text>
+              <TouchableOpacity
+                onPress={() => handleEmail(std.contact.user?.email ?? "")}
+              >
+                <Text style={styles.contactValue}>
+                  {std.contact.user?.email}
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -84,7 +107,7 @@ export default function StudentParentsTab({
                 <MapPin size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Address</Text>
               </View>
-              <Text style={styles.contactValue}>{parent.address}</Text>
+              <Text style={styles.contactValue}>{std.contact.address}</Text>
             </View>
 
             <View style={styles.contactRow}>
@@ -92,13 +115,13 @@ export default function StudentParentsTab({
                 <Briefcase size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Occupation</Text>
               </View>
-              <Text style={styles.contactValue}>{parent.occupation}</Text>
+              <Text style={styles.contactValue}>{std.contact.title}</Text>
             </View>
           </View>
         </View>
       ))}
 
-      {student.parents.length === 0 && (
+      {studentContacts?.length === 0 && (
         <View style={styles.noDataContainer}>
           <Text style={styles.noDataText}>No parent information available</Text>
         </View>

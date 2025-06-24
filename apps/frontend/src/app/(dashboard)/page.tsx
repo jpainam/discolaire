@@ -8,7 +8,6 @@ import { EducationalResource } from "~/components/dashboard/EducationalResource"
 import { LatestGradesheet } from "~/components/dashboard/LatestGradesheet";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
-import { SchoolFeed } from "~/components/dashboard/SchoolFeed";
 import { SchoolLife } from "~/components/dashboard/SchoolLife";
 import { Chart01 } from "~/components/dashboard/student/Chart01";
 import { StudentGradeTrend } from "~/components/dashboard/student/StudentGradeTrend";
@@ -62,7 +61,7 @@ export default async function Page() {
   ]);
 
   return (
-    <div className="@container grid md:grid-cols-2 2xl:grid-cols-3 flex-1 gap-2 p-4">
+    <div className="@container grid md:grid-cols-2 2xl:grid-cols-2 flex-1 gap-2 p-4">
       <Suspense
         key={"quick-statistics"}
         fallback={
@@ -77,7 +76,7 @@ export default async function Page() {
         <QuickStatistics className="col-span-full" />
       </Suspense>
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
-      <SchoolFeed />
+      {/* <SchoolFeed /> */}
       <HydrateClient>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Skeleton className="h-60 w-full" />}>

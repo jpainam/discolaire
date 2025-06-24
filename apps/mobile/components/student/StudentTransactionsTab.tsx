@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/api";
+import { useQuery } from "@tanstack/react-query";
 import {
   CircleArrowDown as ArrowDownCircle,
   CircleArrowUp as ArrowUpCircle,
@@ -6,24 +8,25 @@ import {
 } from "lucide-react-native";
 import React from "react";
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import type { Student } from "~/types/student";
-
-interface StudentTransactionsTabProps {
-  student: Student;
-}
+import { trpc } from "~/utils/api";
 
 export default function StudentTransactionsTab({
   student,
-}: StudentTransactionsTabProps) {
-  // Get transaction icon based on type
+}: {
+  student: RouterOutputs["student"]["get"];
+}) {
+  const { data: transactions, isPending } = useQuery(
+    trpc.student.transactions.queryOptions(student.id),
+  );
   const getTransactionIcon = (type: string) => {
-    if (type === "credit") {
+    if (type.toLocaleLowerCase() === "credit") {
       return <ArrowDownCircle size={20} color="#10b981" />;
     } else {
       return <ArrowUpCircle size={20} color="#ef4444" />;
@@ -33,40 +36,49 @@ export default function StudentTransactionsTab({
   const renderTransactionItem = ({
     item,
   }: {
-    item: {
-      type: string;
-      description: string;
-      title: string;
-      date: string;
-      amount: number;
-      category: string;
-    };
+    item: RouterOutputs["student"]["transactions"][number];
   }) => (
     <TouchableOpacity style={styles.transactionItem} activeOpacity={0.7}>
       <View style={styles.transactionIcon}>
-        {getTransactionIcon(item.type)}
+        {getTransactionIcon(item.transactionType ?? ("" as string))}
       </View>
 
       <View style={styles.transactionDetails}>
-        <Text style={styles.transactionTitle}>{item.title}</Text>
+        <Text style={styles.transactionTitle}>{item.description}</Text>
         <Text style={styles.transactionDescription}>{item.description}</Text>
-        <Text style={styles.transactionDate}>{item.date}</Text>
+        <Text style={styles.transactionDate}>
+          {item.createdAt.toLocaleDateString("fr-FR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })}
+        </Text>
       </View>
 
       <View style={styles.transactionAmount}>
         <Text
           style={[
             styles.amountText,
-            item.type === "credit" ? styles.creditAmount : styles.debitAmount,
+            item.transactionType === "CREDIT"
+              ? styles.creditAmount
+              : styles.debitAmount,
           ]}
         >
-          {item.type === "credit" ? "+" : "-"}${item.amount.toFixed(2)}
+          {item.transactionType === "CREDIT" ? "+" : "-"}$
+          {item.amount.toFixed(2)}
         </Text>
-        <Text style={styles.transactionCategory}>{item.category}</Text>
+        <Text style={styles.transactionCategory}>{item.method}</Text>
       </View>
     </TouchableOpacity>
   );
 
+  if (isPending) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
@@ -85,7 +97,8 @@ export default function StudentTransactionsTab({
         <View style={styles.balanceItem}>
           <Text style={styles.balanceLabel}>Current Balance</Text>
           <Text style={styles.balanceValue}>
-            ${student.financialInfo?.currentBalance.toFixed(2) ?? "0.00"}
+            {/* {student.financialInfo?.currentBalance.toFixed(2) ?? "0.00"} FCFA */}
+            3000 000 FCFA
           </Text>
         </View>
 
@@ -94,16 +107,17 @@ export default function StudentTransactionsTab({
         <View style={styles.balanceItem}>
           <Text style={styles.balanceLabel}>Last Transaction</Text>
           <Text style={styles.balanceDate}>
-            {student.financialInfo?.lastTransactionDate ?? "N/A"}
+            {/* {student.financialInfo?.lastTransactionDate ?? "N/A"} */}
+            Jun 30, 2023
           </Text>
         </View>
       </View>
 
       <Text style={styles.transactionsTitle}>Recent Transactions</Text>
 
-      {student.transactions.length > 0 ? (
+      {transactions && transactions.length > 0 ? (
         <FlatList
-          data={student.transactions}
+          data={transactions}
           renderItem={renderTransactionItem}
           keyExtractor={(item, index) => `transaction-${index}`}
           showsVerticalScrollIndicator={false}

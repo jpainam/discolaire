@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/api";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronUp } from "lucide-react-native";
 import React, { useState } from "react";
 import {
@@ -7,14 +9,58 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import type { Student } from "~/types/student";
+import { trpc } from "~/utils/api";
 
-interface StudentGradesTabProps {
-  student: Student;
-}
-
-export default function StudentGradesTab({ student }: StudentGradesTabProps) {
+export default function StudentGradesTab({
+  student,
+}: {
+  student: RouterOutputs["student"]["get"];
+}) {
   const [expandedTerm, setExpandedTerm] = useState<string | null>("Current");
+  const { data: grades } = useQuery(
+    trpc.student.grades.queryOptions({ id: student.id }),
+  );
+  const gradesByTerm: {
+    name: string;
+    termId: number;
+    grades: {
+      score: number;
+      subject: string;
+      coeff: number;
+      teacher: string;
+      scale: number;
+    }[];
+  }[] = [];
+  if (grades) {
+    grades.forEach((grade) => {
+      const term = gradesByTerm.find(
+        (t) => t.termId === grade.gradeSheet.termId,
+      );
+      if (term) {
+        term.grades.push({
+          subject: grade.gradeSheet.subject.course.name,
+          score: grade.grade,
+          teacher: "Tom",
+          coeff: grade.gradeSheet.subject.coefficient,
+          scale: grade.gradeSheet.scale,
+        });
+      } else {
+        gradesByTerm.push({
+          name: grade.gradeSheet.term.name,
+          termId: grade.gradeSheet.termId,
+          grades: [
+            {
+              subject: grade.gradeSheet.subject.course.name,
+              score: grade.grade,
+              teacher: "Tom",
+              scale: grade.gradeSheet.scale,
+              coeff: grade.gradeSheet.subject.coefficient,
+            },
+          ],
+        });
+      }
+    });
+  }
 
   const toggleTermExpansion = (term: string) => {
     if (expandedTerm === term) {
@@ -81,7 +127,7 @@ export default function StudentGradesTab({ student }: StudentGradesTabProps) {
 
   return (
     <View style={styles.container}>
-      {student.academicTerms.map((term) => (
+      {gradesByTerm.map((term) => (
         <View key={term.name} style={styles.termCard}>
           <TouchableOpacity
             style={styles.termHeader}
@@ -90,7 +136,7 @@ export default function StudentGradesTab({ student }: StudentGradesTabProps) {
           >
             <View>
               <Text style={styles.termName}>{term.name}</Text>
-              <Text style={styles.termDates}>{term.period}</Text>
+              <Text style={styles.termDates}>{"2022-2023"}</Text>
             </View>
 
             <View style={styles.termHeaderRight}>
@@ -130,7 +176,7 @@ export default function StudentGradesTab({ student }: StudentGradesTabProps) {
         </View>
       ))}
 
-      {student.academicTerms.length === 0 && (
+      {gradesByTerm.length === 0 && (
         <View style={styles.noDataContainer}>
           <Text style={styles.noDataText}>No academic records available</Text>
         </View>
