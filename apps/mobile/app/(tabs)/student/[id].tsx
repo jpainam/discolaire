@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
 import {
   BookOpenText,
@@ -18,7 +19,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getStudent } from "~//data/students";
 import StudentBasicInfo from "~/components/student/StudentBasicInfo";
 import StudentFeesTab from "~/components/student/StudentFeesTab";
 import StudentGradesTab from "~/components/student/StudentGradesTab";
@@ -27,23 +27,24 @@ import StudentTransactionsTab from "~/components/student/StudentTransactionsTab"
 import { ThemedText } from "~/components/ThemedText";
 import { Colors } from "~/constants/Colors";
 import { getFullName } from "~/utils";
+import { trpc } from "~/utils/api";
 
 // Define tab types for TypeScript
 type TabType = "info" | "parents" | "grades" | "fees" | "transactions";
 
 export default function StudentProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  console.log("Student ID:", id);
   const [activeTab, setActiveTab] = useState<TabType>("info");
-  const [isLoading, _] = useState(false);
 
-  // This would normally fetch data from your API
-  const student = getStudent("1");
+  const { data: student, isPending } = useQuery(
+    trpc.student.get.queryOptions(id)
+  );
 
-  if (!student) {
+  if (!student && !isPending) {
     return (
       <SafeAreaView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />
+
         <View style={styles.notFoundContainer}>
           <Text style={styles.notFoundText}>Student not found</Text>
         </View>
@@ -68,6 +69,16 @@ export default function StudentProfileScreen() {
     }
   };
 
+  if (!student) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Stack.Screen options={{ headerShown: false }} />
+        <View style={styles.notFoundContainer}>
+          <Text style={styles.notFoundText}>Student not found</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
   return (
     <View style={styles.container}>
       {/* Student Profile Header */}
@@ -90,7 +101,7 @@ export default function StudentProfileScreen() {
           </ThemedText>
           <View style={styles.classContainer}>
             <ThemedText style={styles.className}>
-              {student.currentClass}
+              {student.classroom?.name}
             </ThemedText>
             {!student.isRepeating && (
               <View style={styles.repeatingBadge}>
@@ -211,7 +222,7 @@ export default function StudentProfileScreen() {
         contentContainerStyle={styles.contentInner}
         showsVerticalScrollIndicator={false}
       >
-        {isLoading ? (
+        {isPending ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#4361ee" />
           </View>

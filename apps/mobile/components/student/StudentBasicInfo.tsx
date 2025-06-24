@@ -1,15 +1,15 @@
+import type { RouterOutputs } from "@repo/api";
 import { Calendar, Heart, Chrome as Home, MapPin } from "lucide-react-native";
 import React from "react";
 import { Appearance, StyleSheet, Text, View } from "react-native";
 import { Colors } from "~/constants/Colors";
-import type { Student } from "~/types/student";
 import { ThemedText } from "../ThemedText";
 
-interface StudentBasicInfoProps {
-  student: Student;
-}
-
-export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
+export default function StudentBasicInfo({
+  student,
+}: {
+  student: RouterOutputs["student"]["get"];
+}) {
   return (
     <View style={styles.container}>
       <View style={styles.section}>
@@ -23,7 +23,13 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
               <Calendar size={16} color={Colors[theme].tint} />
               <Text style={styles.infoLabel}>Date of Birth</Text>
             </View>
-            <Text style={styles.infoValue}>{student.dateOfBirth}</Text>
+            <Text style={styles.infoValue}>
+              {student.dateOfBirth?.toLocaleDateString("fr-FR", {
+                month: "long",
+                day: "2-digit",
+                year: "numeric",
+              })}
+            </Text>
           </View>
 
           <View style={styles.divider} />
@@ -44,7 +50,7 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
               <Text style={styles.infoLabel}>Religious Status</Text>
             </View>
             <View style={styles.badgeContainer}>
-              {student.isAdventist && (
+              {student.religion?.name == "adventist" && (
                 <View style={[styles.badge, styles.adventistBadge]}>
                   <ThemedText style={styles.badgeText}>Adventist</ThemedText>
                 </View>
@@ -54,7 +60,7 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
                   <Text style={styles.badgeText}>Baptized</Text>
                 </View>
               )}
-              {!student.isAdventist && !student.isBaptized && (
+              {student.religion?.name == "adventist" && !student.isBaptized && (
                 <Text style={styles.infoValue}>None</Text>
               )}
             </View>
@@ -71,7 +77,7 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
               <Home size={16} color={Colors[theme].tint} />
               <Text style={styles.infoLabel}>Address</Text>
             </View>
-            <Text style={styles.infoValue}>{student.address}</Text>
+            <Text style={styles.infoValue}>{student.residence}</Text>
           </View>
         </View>
       </View>
@@ -82,14 +88,20 @@ export default function StudentBasicInfo({ student }: StudentBasicInfoProps) {
         <View style={styles.infoCard}>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Current Class</Text>
-            <Text style={styles.infoValue}>{student.currentClass}</Text>
+            <Text style={styles.infoValue}>{student.classroom?.name}</Text>
           </View>
 
           <View style={styles.divider} />
 
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Admission Date</Text>
-            <Text style={styles.infoValue}>{student.admissionDate}</Text>
+            <Text style={styles.infoValue}>
+              {student.dateOfEntry?.toLocaleDateString("fr-FR", {
+                year: "numeric",
+                month: "long",
+                day: "2-digit",
+              })}
+            </Text>
           </View>
 
           <View style={styles.divider} />

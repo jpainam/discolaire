@@ -1,3 +1,4 @@
+import type { RouterOutputs } from "@repo/api";
 import { Briefcase, Mail, MapPin, Phone } from "lucide-react-native";
 import React from "react";
 import {
@@ -10,14 +11,13 @@ import {
   View,
 } from "react-native";
 import { Colors } from "~/constants/Colors";
-import type { Student } from "~/types/student";
 import { ThemedText } from "../ThemedText";
 
-interface StudentParentsTabProps {
-  student: Student;
-}
-
-export default function StudentParentsTab({ student }: StudentParentsTabProps) {
+export default function StudentParentsTab({
+  student,
+}: {
+  student: RouterOutputs["student"]["get"];
+}) {
   const handlePhoneCall = async (phoneNumber: string) => {
     await Linking.openURL(`tel:${phoneNumber}`);
   };
