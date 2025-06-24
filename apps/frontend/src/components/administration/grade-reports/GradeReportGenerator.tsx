@@ -21,14 +21,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useLocale } from "~/i18n";
+import { useSchool } from "~/providers/SchoolProvider";
+import { useTRPC } from "~/trpc/react";
 const reportTypes = [
   { id: "001", label: "Roll of Honor" },
+  { id: "002", label: "Grade report card" },
   { id: "individual", label: "Individual Student Report" },
   { id: "class", label: "Class Summary Report" },
   { id: "progress", label: "Progress Report" },
@@ -38,26 +41,42 @@ const reportTypes = [
 export function GradeReportGenerator() {
   const [selectedClass, setSelectedClass] = useState<string | null>();
   const [reportType, setReportType] = useState("individual");
-  const [termId, setTermId] = useState<string | null>();
+  const [selectedTerm, setTerm] = useState<{
+    id: string;
+    type: "trim" | "seq" | "ann";
+  } | null>();
   const [formatType, setFormatType] = useState("pdf");
 
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const termQuery = useQuery(trpc.term.all.queryOptions());
+  const { school } = useSchool();
 
   const handleGenerateReport = () => {
-    if (!selectedClass || !termId) {
+    if (!selectedClass || !selectedTerm) {
       toast.error(t("Please select a classroom and term"));
       return;
     }
     if (reportType == "001") {
       window.open(
-        `/api/pdfs/gradereports/roll-of-honor?classroomId=${selectedClass}&format=${formatType}&termId=${termId}`,
-        "_blank",
+        `/api/pdfs/gradereports/roll-of-honor?classroomId=${selectedClass}&format=${formatType}&termId=${selectedTerm.id}`,
+        "_blank"
       );
-    } else {
-      toast.warning(
-        t("This report type is not yet implemented. Please check back later."),
-      );
+      return;
     }
+    if (reportType == "002") {
+      let url = `/api/pdfs/reportcards/ipbw?classroomId=${selectedClass}&termId=${selectedTerm.id}`;
+      if (selectedTerm.type === "trim") {
+        url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${selectedTerm.id}&classroomId=${selectedClass}&format=pdf`;
+      } else if (selectedTerm.type === "ann") {
+        url = `/api/pdfs/reportcards/ipbw/annual?classroomId=${selectedClass}&format=pdf`;
+      }
+      window.open(url, "_blank");
+      return;
+    }
+    toast.warning(
+      t("This report type is not yet implemented. Please check back later.")
+    );
   };
 
   return (
@@ -97,7 +116,45 @@ export function GradeReportGenerator() {
           </div>
           <div className="grid gap-2">
             <Label>{t("terms")}</Label>
-            <TermSelector onChange={(val) => setTermId(val)} />
+            <Select
+              onValueChange={(value) => {
+                const [type, id] = value.split("_");
+                if (!id) {
+                  setTerm(null);
+                  return;
+                }
+                setTerm({
+                  id,
+                  type:
+                    type === "trim" ? "trim" : type === "seq" ? "seq" : "ann",
+                });
+              }}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={t("terms")} />
+              </SelectTrigger>
+              <SelectContent>
+                {termQuery.data?.map((term) => (
+                  <SelectItem key={term.id} value={`seq_${term.id}`}>
+                    {term.name}
+                  </SelectItem>
+                ))}
+                {school.hasQuarterlyReports && (
+                  <>
+                    <SelectItem value="trim_trim1">
+                      {t("Trimestre 1")}
+                    </SelectItem>
+                    <SelectItem value="trim_trim2">
+                      {t("Trimestre 2")}
+                    </SelectItem>
+                    <SelectItem value="trim_trim3">
+                      {t("Trimestre 3")}
+                    </SelectItem>
+                  </>
+                )}
+                <SelectItem value="ann_annual">{t("Annuel")}</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

@@ -23,7 +23,7 @@ export async function StudentLatestGrade({
     <Card>
       <CardHeader>
         <CardTitle>
-          {t("latest_grades")} - {name}
+          {t("Recent Grades")} - {name}
         </CardTitle>
         {/* <CardDescription>Card Description</CardDescription> */}
       </CardHeader>
@@ -51,7 +51,7 @@ export async function StudentLatestGrade({
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      },
+                      }
                     )}
                   </span>
                 </div>

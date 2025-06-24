@@ -22,7 +22,7 @@ import { useTRPC } from "~/trpc/react";
 export function LatestGradesheet() {
   const trpc = useTRPC();
   const { data: latestGradesheet } = useSuspenseQuery(
-    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 }),
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 })
   );
 
   const grades = latestGradesheet.map((g) => {
@@ -34,7 +34,7 @@ export function LatestGradesheet() {
         (
           g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
           g.grades.length
-        ).toFixed(2),
+        ).toFixed(2)
       ),
     };
   });
@@ -53,12 +53,13 @@ export function LatestGradesheet() {
       color: "var(--chart-3)",
     },
   } satisfies ChartConfig;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Rows3Icon className="h-4 w-4" />
-          {t("latest_grades")}
+          {t("Recent Grades")}
         </CardTitle>
         {/* <CardDescription>
           Default tooltip with ChartTooltipContent.

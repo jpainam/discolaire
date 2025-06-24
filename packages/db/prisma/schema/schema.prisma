@@ -642,6 +642,7 @@ model School {
     allowOverEnrollment  Boolean?                   @default(true)
     applyRequiredFee     ApplyRequiredFee           @default(NO)
     includeRequiredFee   Boolean?                   @default(false)
+    hasQuarterlyReports  Boolean                    @default(true)
     contacts             Contact[]
     users                User[]
     students             Student[]
