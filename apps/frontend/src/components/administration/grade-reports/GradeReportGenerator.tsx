@@ -26,16 +26,15 @@ import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
+import { StatisticByCourseDialog } from "./StatisticByCourseDialog";
 const reportTypes = [
   { id: "001", label: "Roll of Honor" },
   { id: "002", label: "Grade report card" },
-  { id: "individual", label: "Individual Student Report" },
-  { id: "class", label: "Class Summary Report" },
-  { id: "progress", label: "Progress Report" },
-  { id: "final", label: "Final Grade Report" },
+  { id: "003", label: "Statistics by course" },
 ];
 
 export function GradeReportGenerator() {
@@ -51,8 +50,15 @@ export function GradeReportGenerator() {
   const trpc = useTRPC();
   const termQuery = useQuery(trpc.term.all.queryOptions());
   const { school } = useSchool();
+  const { openModal } = useModal();
 
   const handleGenerateReport = () => {
+    if (reportType == "003") {
+      openModal({
+        view: <StatisticByCourseDialog />,
+      });
+      return;
+    }
     if (!selectedClass || !selectedTerm) {
       toast.error(t("Please select a classroom and term"));
       return;
@@ -60,7 +66,7 @@ export function GradeReportGenerator() {
     if (reportType == "001") {
       window.open(
         `/api/pdfs/gradereports/roll-of-honor?classroomId=${selectedClass}&format=${formatType}&termId=${selectedTerm.id}`,
-        "_blank",
+        "_blank"
       );
       return;
     }
@@ -74,8 +80,9 @@ export function GradeReportGenerator() {
       window.open(url, "_blank");
       return;
     }
+
     toast.warning(
-      t("This report type is not yet implemented. Please check back later."),
+      t("This report type is not yet implemented. Please check back later.")
     );
   };
 
