@@ -44,7 +44,7 @@ export function GradeReportGenerator() {
     id: string;
     type: "trim" | "seq" | "ann";
   } | null>();
-  const [formatType, setFormatType] = useState("pdf");
+  const [formatType, setFormatType] = useState<"pdf" | "csv">("pdf");
 
   const { t } = useLocale();
   const trpc = useTRPC();
@@ -55,7 +55,7 @@ export function GradeReportGenerator() {
   const handleGenerateReport = () => {
     if (reportType == "003") {
       openModal({
-        view: <StatisticByCourseDialog />,
+        view: <StatisticByCourseDialog format={formatType} />,
       });
       return;
     }
@@ -66,7 +66,7 @@ export function GradeReportGenerator() {
     if (reportType == "001") {
       window.open(
         `/api/pdfs/gradereports/roll-of-honor?classroomId=${selectedClass}&format=${formatType}&termId=${selectedTerm.id}`,
-        "_blank",
+        "_blank"
       );
       return;
     }
@@ -82,7 +82,7 @@ export function GradeReportGenerator() {
     }
 
     toast.warning(
-      t("This report type is not yet implemented. Please check back later."),
+      t("This report type is not yet implemented. Please check back later.")
     );
   };
 
@@ -94,7 +94,10 @@ export function GradeReportGenerator() {
           {t("Generate and download grade reports")}
         </CardDescription>
         <CardAction>
-          <Select defaultValue="pdf" onValueChange={setFormatType}>
+          <Select
+            defaultValue="pdf"
+            onValueChange={(val) => setFormatType(val as "pdf" | "csv")}
+          >
             <SelectTrigger size="sm" className="h-7">
               <SelectValue placeholder="Format" />
             </SelectTrigger>

@@ -29,7 +29,7 @@ const schema = z.object({
   courseId: z.string().min(1),
   termId: z.coerce.number(),
 });
-export function StatisticByCourseDialog() {
+export function StatisticByCourseDialog({ format }: { format: "pdf" | "csv" }) {
   const form = useForm({
     defaultValues: {
       courseId: "",
@@ -43,8 +43,8 @@ export function StatisticByCourseDialog() {
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof schema>) => {
     window.open(
-      `/api/pdfs/gradereports/statistics-by-course?courseId=${data.courseId}&termId=${data.termId}`,
-      "_blank",
+      `/api/pdfs/gradereports/statistics-by-course?courseId=${data.courseId}&termId=${data.termId}&format=${format}`,
+      "_blank"
     );
     closeModal();
   };

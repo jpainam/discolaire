@@ -3,11 +3,11 @@ import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { getServerTranslations } from "~/i18n/server";
-
 import { renderToStream } from "@react-pdf/renderer";
+import type { RouterOutputs } from "@repo/api";
 import { getSession } from "~/auth/server";
 import { StatisticByCourse } from "~/reports/gradereports/StatisticByCourse";
+import { getAppreciations } from "~/reports/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
@@ -42,8 +42,8 @@ export async function GET(req: NextRequest) {
     const term = await caller.term.get(Number(termId));
     const course = await caller.course.get(courseId);
     if (format === "csv") {
-      //const { blob, headers } = await toExcel({ reports });
-      //return new Response(blob, { headers });
+      const { blob, headers } = toExcel({ stats });
+      return new Response(blob, { headers });
     } else {
       const stream = await renderToStream(
         await StatisticByCourse({
@@ -60,43 +60,29 @@ export async function GET(req: NextRequest) {
       // @ts-expect-error TODO: fix this
       return new Response(stream, { headers });
     }
-    return new Response("Not implemented yet", {
-      status: 501,
-    });
   } catch (error) {
     console.error(error);
     return new Response(String(error), { status: 500 });
   }
 }
 
-async function _toExcel({
-  reports,
-}: {
-  reports: {
-    registrationNumber: string | null;
-    studentName: string;
-    dateOfBirth: Date | null;
-    isRepeating: boolean;
-    grade: number;
-    observation: string;
-  }[];
-}) {
-  const { t } = await getServerTranslations();
-  const rows = reports.map((grade) => {
+function toExcel({ stats }: { stats: RouterOutputs["course"]["statistics"] }) {
+  const rows = stats.map((s) => {
     return {
-      "Registration Number": grade.registrationNumber ?? "",
-      "Student Name": grade.studentName,
-      "Date of Birth": grade.dateOfBirth
-        ? new Date(grade.dateOfBirth).toLocaleDateString()
-        : "",
-      "Is Repeating": grade.isRepeating ? t("yes") : t("no"),
-      Grade: grade.grade,
-      Observation: grade.observation,
+      Classe: s.classroom.reportName,
+      Enseignant: s.teacher?.lastName,
+      "Evalué/Effectif": `${s.evaluated}/${s.total}`,
+      Moyenne: s.avg,
+      "Moy >= 10": s.above10,
+      "Taux de réussite Garcons ": (s.boysRate * 100).toFixed(2) + "%",
+      "Taux de réussite Filles": (s.girlsRate * 100).toFixed(2) + "%",
+      "Taux de réussite": (s.totalRate * 100).toFixed(2) + "%",
+      Appréciation: getAppreciations(s.avg),
     };
   });
   const worksheet = XLSX.utils.json_to_sheet(rows);
   const workbook = XLSX.utils.book_new();
-  const sheetName = "Tableau de Honneur";
+  const sheetName = "Statistiques des matières";
   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
   const u8 = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
