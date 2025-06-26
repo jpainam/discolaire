@@ -1,12 +1,13 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { IPBWReceipt, renderToStream } from "@repo/reports";
+import { renderToStream } from "@react-pdf/renderer";
 
 import i18next from "i18next";
-import { numberToWords } from "~/lib/toword";
-import { caller } from "~/trpc/server";
 import { getSession } from "~/auth/server";
+import { numberToWords } from "~/lib/toword";
+import IPBWReceipt from "~/reports/statements/IPBWReceipt";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   id: z.coerce.number(),

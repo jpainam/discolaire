@@ -3,12 +3,13 @@ import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
+import { renderToStream } from "@react-pdf/renderer";
 import type { RouterOutputs } from "@repo/api";
-import { ClassroomStudentList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
 import { getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
+import ClassroomStudentList from "~/reports/classroom/ClassroomStudentList";
 
 const searchSchema = z.object({
   preview: z.coerce.boolean().default(true),

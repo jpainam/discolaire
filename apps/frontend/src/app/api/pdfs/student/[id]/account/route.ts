@@ -1,9 +1,10 @@
 import type { NextRequest } from "next/server";
 
-import { AcccountStatement, renderToStream } from "@repo/reports";
+import { renderToStream } from "@react-pdf/renderer";
 
-import { caller } from "~/trpc/server";
 import { getSession } from "~/auth/server";
+import { caller } from "~/trpc/server";
+import AcccountStatement from "~/reports/statements/AccountStatement";
 
 export async function GET(
   req: NextRequest,

@@ -1,9 +1,9 @@
 import * as XLSX from "@e965/xlsx";
+import { renderToStream } from "@react-pdf/renderer";
 import type { RouterOutputs } from "@repo/api";
-import { renderToStream } from "@repo/reports";
-import { AccessLogs } from "@repo/reports/accesslogs/AccessLogs";
 import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
+import { AccessLogs } from "~/reports/accesslogs/AccessLogs";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 

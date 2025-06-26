@@ -8,7 +8,7 @@ const config: NextConfig = {
     "@repo/api",
     "@repo/auth",
     "@repo/db",
-    "@repo/reports",
+    "@react-pdf/renderer",
     "@repo/transactional",
     "@repo/ui",
     "@repo/validators",

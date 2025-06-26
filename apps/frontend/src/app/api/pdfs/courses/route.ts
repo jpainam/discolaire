@@ -1,7 +1,6 @@
 import * as XLSX from "@e965/xlsx";
+import { renderToStream } from "@react-pdf/renderer";
 import type { RouterOutputs } from "@repo/api";
-import { renderToStream } from "@repo/reports";
-import { CourseList } from "@repo/reports/course/CourseList";
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -9,6 +8,7 @@ import { z } from "zod";
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
+import { CourseList } from "~/reports/course/CourseList";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 

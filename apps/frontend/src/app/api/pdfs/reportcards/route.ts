@@ -1,10 +1,11 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { CSAB, renderToStream } from "@repo/reports";
+import { renderToStream } from "@react-pdf/renderer";
 
-import { caller } from "~/trpc/server";
 import { getSession } from "~/auth/server";
+import CSAB from "~/reports/reportcards/CSAB";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().optional(),

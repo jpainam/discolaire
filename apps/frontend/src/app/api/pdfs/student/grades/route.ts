@@ -3,15 +3,16 @@ import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
+import { renderToStream } from "@react-pdf/renderer";
 import type { RouterOutputs } from "@repo/api";
-import { GradeList, renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
+import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/get-appreciation";
-import { getSession } from "~/auth/server";
+import GradeList from "~/reports/students/GradeList";
 
 const searchSchema = z.object({
   id: z.string().min(1),

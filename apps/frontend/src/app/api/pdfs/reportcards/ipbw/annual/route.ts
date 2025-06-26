@@ -1,10 +1,10 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { renderToStream } from "@repo/reports";
-import { IPBWAnnual } from "@repo/reports/reportcards/IPBWAnnual";
-import { caller } from "~/trpc/server";
+import { renderToStream } from "@react-pdf/renderer";
 import { getSession } from "~/auth/server";
+import { IPBWAnnual } from "~/reports/reportcards/IPBWAnnual";
+import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),

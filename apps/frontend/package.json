@@ -18,6 +18,8 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@e965/xlsx": "^0.20.3",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@hookform/resolvers": "^3.10.0",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-accessible-icon": "^1.1.7",

@@ -1,9 +1,9 @@
-import { renderToStream } from "@repo/reports";
-import { IPBWClassroomTrimestre } from "@repo/reports/reportcards/IPBWClassroomTrimestre";
-import { IPBWTrimestre } from "@repo/reports/reportcards/IPBWTrimestre";
+import { renderToStream } from "@react-pdf/renderer";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { getSession } from "~/auth/server";
+import { IPBWClassroomTrimestre } from "~/reports/reportcards/IPBWClassroomTrimestre";
+import { IPBWTrimestre } from "~/reports/reportcards/IPBWTrimestre";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({

@@ -1,7 +1,7 @@
-import { renderToStream } from "@repo/reports";
-import { LoginInfo } from "@repo/reports/students/LoginInfo";
+import { renderToStream } from "@react-pdf/renderer";
 import type { NextRequest } from "next/server";
 import { getSession } from "~/auth/server";
+import { LoginInfo } from "~/reports/students/LoginInfo";
 import { caller } from "~/trpc/server";
 
 export async function GET(

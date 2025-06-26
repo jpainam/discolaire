@@ -3,11 +3,11 @@ import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { renderToStream } from "@repo/reports";
+import { renderToStream } from "@react-pdf/renderer";
 import { getServerTranslations } from "~/i18n/server";
 
-import { RollOfHonor } from "@repo/reports/gradereports/RollOfHonor";
 import { getSession } from "~/auth/server";
+import { RollOfHonor } from "~/reports/gradereports/RollOfHonor";
 import { caller } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/get-appreciation";

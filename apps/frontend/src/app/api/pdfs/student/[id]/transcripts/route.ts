@@ -3,14 +3,14 @@ import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { renderToStream } from "@repo/reports";
+import { renderToStream } from "@react-pdf/renderer";
 import { getServerTranslations } from "~/i18n/server";
 
-import { GradesheetList } from "@repo/reports/students/GradesheetList";
+import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
+import { GradesheetList } from "~/reports/students/GradesheetList";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
-import { getSession } from "~/auth/server";
 
 const searchSchema = z.object({
   format: z

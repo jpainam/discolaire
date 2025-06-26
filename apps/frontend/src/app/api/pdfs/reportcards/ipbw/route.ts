@@ -1,9 +1,11 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { IPBW, IPBWClassroom, renderToStream } from "@repo/reports";
+import { renderToStream } from "@react-pdf/renderer";
 
 import { getSession } from "~/auth/server";
+import IPBW from "~/reports/reportcards/IPBW";
+import IPBWClassroom from "~/reports/reportcards/IPBWClassroom";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({

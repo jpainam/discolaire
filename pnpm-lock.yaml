@@ -95,6 +95,12 @@ importers:
       '@e965/xlsx':
         specifier: ^0.20.3
         version: 0.20.3
+      '@fortawesome/fontawesome-svg-core':
+        specifier: ^6.7.2
+        version: 6.7.2
+      '@fortawesome/free-solid-svg-icons':
+        specifier: ^6.7.2
+        version: 6.7.2
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.56.4(react@19.0.0))
@@ -212,9 +218,6 @@ importers:
       '@repo/notification':
         specifier: workspace:*
         version: link:../../packages/notification
-      '@repo/reports':
-        specifier: workspace:*
-        version: link:../../packages/reports
       '@repo/transactional':
         specifier: workspace:*
         version: link:../../packages/transactional
@@ -1161,82 +1164,6 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      typescript:
-        specifier: 'catalog:'
-        version: 5.8.3
-
-  packages/reports:
-    dependencies:
-      '@fortawesome/fontawesome-svg-core':
-        specifier: ^6.7.2
-        version: 6.7.2
-      '@fortawesome/free-solid-svg-icons':
-        specifier: ^6.7.2
-        version: 6.7.2
-      '@react-pdf/fns':
-        specifier: ^3.1.2
-        version: 3.1.2
-      '@react-pdf/renderer':
-        specifier: ^4.3.0
-        version: 4.3.0(react@19.1.0)
-      '@react-pdf/stylesheet':
-        specifier: ^5.2.2
-        version: 5.2.2
-      '@repo/api':
-        specifier: workspace:*
-        version: link:../api
-      '@repo/db':
-        specifier: workspace:*
-        version: link:../db
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
-      date-fns-tz:
-        specifier: ^3.2.0
-        version: 3.2.0(date-fns@4.1.0)
-      entities:
-        specifier: ^6.0.0
-        version: 6.0.0
-      hast-util-to-jsx-runtime:
-        specifier: ^2.3.6
-        version: 2.3.6
-      html-react-parser:
-        specifier: ^5.2.5
-        version: 5.2.5(@types/react@19.1.6)(react@19.1.0)
-      html-to-react:
-        specifier: ^1.7.0
-        version: 1.7.0(react@19.1.0)
-      jose:
-        specifier: ^6.0.11
-        version: 6.0.11
-      qrcode:
-        specifier: ^1.5.4
-        version: 1.5.4
-      rehype-parse:
-        specifier: ^9.0.1
-        version: 9.0.1
-      unified:
-        specifier: ^11.0.5
-        version: 11.0.5
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@repo/prettier-config':
-        specifier: workspace:*
-        version: link:../prettier-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@types/qrcode':
-        specifier: ^1.5.5
-        version: 1.5.5
-      eslint:
-        specifier: 'catalog:'
-        version: 9.28.0(jiti@2.4.2)
-      prettier:
-        specifier: 'catalog:'
-        version: 3.5.3
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -4282,14 +4209,8 @@ packages:
   '@react-navigation/routers@7.4.0':
     resolution: {integrity: sha512-th5THnuWKJlmr7GGHiicy979di11ycDWub9iIXbEDvQwmwmsRzppmVbfs2nD8bC/MgyMgqWu/gxfys+HqN+kcw==}
 
-  '@react-pdf/fns@3.1.0':
-    resolution: {integrity: sha512-BjT7C/IeYlrF4Pevlrlo+fILhSxsWSm6Ka/rQrQzYsyQuOsqI6bmBzsTW+T6ghqrD5HLRKr1n8vjAaE9g4rFhA==}
-
   '@react-pdf/fns@3.1.2':
     resolution: {integrity: sha512-qTKGUf0iAMGg2+OsUcp9ffKnKi41RukM/zYIWMDJ4hRVYSr89Q7e3wSDW/Koqx3ea3Uy/z3h2y3wPX6Bdfxk6g==}
-
-  '@react-pdf/font@3.1.0':
-    resolution: {integrity: sha512-5q+r3DhZK41gVZp2Uw5M69FEVWeoasnM/HscW3kdpYnwjcB2bhCRWmBGCjm8fmuwQstwNPM1ZxyCWZRTRchwnA==}
 
   '@react-pdf/font@4.0.2':
     resolution: {integrity: sha512-/dAWu7Y2RD1RxarDZ9SkYPHgBYOhmcDnet4W/qN/m8k+A2Hr3ja54GymSR7GGxWBtxjKtNauVKrTa9LS1n8WUw==}
@@ -4322,17 +4243,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@react-pdf/stylesheet@5.2.2':
-    resolution: {integrity: sha512-oHP+hZakETrecnZCSRPqNvFhSyBgoZSDOkonY9WJOxRkUb6P6A+mAVSOWBaNt2eM4FHMDpYDeR9stx+gAWn6gg==}
-
   '@react-pdf/stylesheet@6.1.0':
     resolution: {integrity: sha512-BGZ2sYNUp38VJUegjva/jsri3iiRGnVNjWI+G9dTwAvLNOmwFvSJzqaCsEnqQ/DW5mrTBk/577FhDY7pv6AidA==}
 
   '@react-pdf/textkit@6.0.0':
     resolution: {integrity: sha512-fDt19KWaJRK/n2AaFoVm31hgGmpygmTV7LsHGJNGZkgzXcFyLsx+XUl63DTDPH3iqxj3xUX128t104GtOz8tTw==}
-
-  '@react-pdf/types@2.8.0':
-    resolution: {integrity: sha512-lBnLonM2GupyTzUGlWTEoUUGvsRcgbWLn0Py3i3lK/tgn2rPCYwJ9gQ5A3warT5g4jQWyc7HmaNoPU/Zy5iBbQ==}
 
   '@react-pdf/types@2.9.0':
     resolution: {integrity: sha512-ckj80vZLlvl9oYrQ4tovEaqKWP3O06Eb1D48/jQWbdwz1Yh7Y9v1cEmwlP8ET+a1Whp8xfdM0xduMexkuPANCQ==}
@@ -8003,25 +7918,8 @@ packages:
   hsl-to-rgb-for-reals@1.1.1:
     resolution: {integrity: sha512-LgOWAkrN0rFaQpfdWBQlv/VhkOxb5AsBjk6NQVx4yEzWS923T07X0M1Y0VNko2H52HeSpZrZNNMJ0aFqsdVzQg==}
 
-  html-dom-parser@5.1.1:
-    resolution: {integrity: sha512-+o4Y4Z0CLuyemeccvGN4bAO20aauB2N9tFEAep5x4OW34kV4PTarBHm6RL02afYt2BMKcr0D2Agep8S3nJPIBg==}
-
   html-parse-stringify@3.0.1:
     resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
-
-  html-react-parser@5.2.5:
-    resolution: {integrity: sha512-bRPdv8KTqG9CEQPMNGksDqmbiRfVQeOidry8pVetdh/1jQ1Edx4KX5m0lWvDD89Pt4CqTYjK1BLz6NoNVxN/Uw==}
-    peerDependencies:
-      '@types/react': 0.14 || 15 || 16 || 17 || 18 || 19
-      react: 0.14 || 15 || 16 || 17 || 18 || 19
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  html-to-react@1.7.0:
-    resolution: {integrity: sha512-b5HTNaTGyOj5GGIMiWVr1k57egAZ/vGy0GGefnCQ1VW5hu9+eku8AXHtf2/DeD95cj/FKBKYa1J7SWBOX41yUQ==}
-    peerDependencies:
-      react: ^0.13.0 || ^0.14.0 || >=15
 
   html-to-text@9.0.5:
     resolution: {integrity: sha512-qY60FjREgVZL03vJU6IfMV4GDjGBIoOyvuFdpBDIX9yTlDw0TjxVBQp+P8NvpdIXNJvfWBTNul7fsAQJq2FNpg==}
@@ -8030,14 +7928,8 @@ packages:
   html-url-attributes@3.0.1:
     resolution: {integrity: sha512-ol6UPyBWqsrO6EJySPz2O7ZSr856WDrEzM5zMqp+FJJLGMW35cLYmmZnl0vztAZxRUoNZJFTCohfjuIJ8I4QBQ==}
 
-  htmlparser2@10.0.0:
-    resolution: {integrity: sha512-TwAZM+zE5Tq3lrEHvOlvwgj1XLWQCtaaibSN11Q+gGBAS7Y1uZSWwXXRe4iF6OXnaq1riyQAPFOBtYc77Mxq0g==}
-
   htmlparser2@8.0.2:
     resolution: {integrity: sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==}
-
-  htmlparser2@9.1.0:
-    resolution: {integrity: sha512-5zfg6mHUoaer/97TxnGpxmbR7zJtPwIYFMZ/H5ucTlPZhKvtum05yiPK3Mgai3a0DyVxv7qYqoweaEd2nrYQzQ==}
 
   http-errors@2.0.0:
     resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
@@ -8824,9 +8716,6 @@ packages:
 
   lodash-es@4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-
-  lodash.camelcase@4.3.0:
-    resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
 
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
@@ -10255,9 +10144,6 @@ packages:
 
   react-promise-suspense@0.3.4:
     resolution: {integrity: sha512-I42jl7L3Ze6kZaq+7zXWSunBa3b1on5yfvUW6Eo/3fFOj6dZ5Bqmcd264nJbTK/gn1HjjILAjSwnZbV4RpSaNQ==}
-
-  react-property@2.0.2:
-    resolution: {integrity: sha512-+PbtI3VuDV0l6CleQMsx2gtK0JZbZKbpdu5ynr+lbsuvtmgbNcS3VM0tuY2QjFNOcWxvXeHjDpy42RO+4U2rug==}
 
   react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
@@ -15236,17 +15122,7 @@ snapshots:
     dependencies:
       nanoid: 3.3.11
 
-  '@react-pdf/fns@3.1.0':
-    dependencies:
-      '@babel/runtime': 7.27.4
-
   '@react-pdf/fns@3.1.2': {}
-
-  '@react-pdf/font@3.1.0':
-    dependencies:
-      '@react-pdf/types': 2.9.0
-      fontkit: 2.0.4
-      is-url: 1.2.4
 
   '@react-pdf/font@4.0.2':
     dependencies:
@@ -15295,12 +15171,6 @@ snapshots:
       react: 19.0.0
       scheduler: 0.25.0-rc-603e6108-20241029
 
-  '@react-pdf/reconciler@1.1.4(react@19.1.0)':
-    dependencies:
-      object-assign: 4.1.1
-      react: 19.1.0
-      scheduler: 0.25.0-rc-603e6108-20241029
-
   '@react-pdf/render@4.3.0':
     dependencies:
       '@babel/runtime': 7.27.4
@@ -15331,33 +15201,6 @@ snapshots:
       queue: 6.0.2
       react: 19.0.0
 
-  '@react-pdf/renderer@4.3.0(react@19.1.0)':
-    dependencies:
-      '@babel/runtime': 7.27.4
-      '@react-pdf/fns': 3.1.2
-      '@react-pdf/font': 4.0.2
-      '@react-pdf/layout': 4.4.0
-      '@react-pdf/pdfkit': 4.0.3
-      '@react-pdf/primitives': 4.1.1
-      '@react-pdf/reconciler': 1.1.4(react@19.1.0)
-      '@react-pdf/render': 4.3.0
-      '@react-pdf/types': 2.9.0
-      events: 3.3.0
-      object-assign: 4.1.1
-      prop-types: 15.8.1
-      queue: 6.0.2
-      react: 19.1.0
-
-  '@react-pdf/stylesheet@5.2.2':
-    dependencies:
-      '@babel/runtime': 7.26.9
-      '@react-pdf/fns': 3.1.0
-      '@react-pdf/types': 2.8.0
-      color-string: 1.9.1
-      hsl-to-hex: 1.0.0
-      media-engine: 1.0.3
-      postcss-value-parser: 4.2.0
-
   '@react-pdf/stylesheet@6.1.0':
     dependencies:
       '@react-pdf/fns': 3.1.2
@@ -15373,12 +15216,6 @@ snapshots:
       bidi-js: 1.0.3
       hyphen: 1.10.6
       unicode-properties: 1.4.1
-
-  '@react-pdf/types@2.8.0':
-    dependencies:
-      '@react-pdf/font': 3.1.0
-      '@react-pdf/primitives': 4.1.1
-      '@react-pdf/stylesheet': 6.1.0
 
   '@react-pdf/types@2.9.0':
     dependencies:
@@ -19800,31 +19637,9 @@ snapshots:
 
   hsl-to-rgb-for-reals@1.1.1: {}
 
-  html-dom-parser@5.1.1:
-    dependencies:
-      domhandler: 5.0.3
-      htmlparser2: 10.0.0
-
   html-parse-stringify@3.0.1:
     dependencies:
       void-elements: 3.1.0
-
-  html-react-parser@5.2.5(@types/react@19.1.6)(react@19.1.0):
-    dependencies:
-      domhandler: 5.0.3
-      html-dom-parser: 5.1.1
-      react: 19.1.0
-      react-property: 2.0.2
-      style-to-js: 1.1.16
-    optionalDependencies:
-      '@types/react': 19.1.6
-
-  html-to-react@1.7.0(react@19.1.0):
-    dependencies:
-      domhandler: 5.0.3
-      htmlparser2: 9.1.0
-      lodash.camelcase: 4.3.0
-      react: 19.1.0
 
   html-to-text@9.0.5:
     dependencies:
@@ -19836,21 +19651,7 @@ snapshots:
 
   html-url-attributes@3.0.1: {}
 
-  htmlparser2@10.0.0:
-    dependencies:
-      domelementtype: 2.3.0
-      domhandler: 5.0.3
-      domutils: 3.2.2
-      entities: 6.0.0
-
   htmlparser2@8.0.2:
-    dependencies:
-      domelementtype: 2.3.0
-      domhandler: 5.0.3
-      domutils: 3.2.2
-      entities: 4.5.0
-
-  htmlparser2@9.1.0:
     dependencies:
       domelementtype: 2.3.0
       domhandler: 5.0.3
@@ -20640,8 +20441,6 @@ snapshots:
       p-locate: 5.0.0
 
   lodash-es@4.17.21: {}
-
-  lodash.camelcase@4.3.0: {}
 
   lodash.debounce@4.0.8: {}
 
@@ -22493,8 +22292,6 @@ snapshots:
   react-promise-suspense@0.3.4:
     dependencies:
       fast-deep-equal: 2.0.1
-
-  react-property@2.0.2: {}
 
   react-refresh@0.14.2: {}
 
