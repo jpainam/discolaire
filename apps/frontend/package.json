@@ -57,7 +57,6 @@
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/notification": "workspace:*",
-    "@repo/reports": "workspace:*",
     "@repo/transactional": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/utils": "workspace:*",

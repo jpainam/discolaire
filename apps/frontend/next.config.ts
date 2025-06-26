@@ -12,7 +12,6 @@ const config = {
     "@repo/api",
     "@repo/auth",
     "@repo/db",
-    "@repo/reports",
     "@repo/transactional",
     "@repo/ui",
     "@repo/validators",
