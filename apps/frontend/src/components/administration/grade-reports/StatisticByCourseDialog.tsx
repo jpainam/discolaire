@@ -44,7 +44,7 @@ export function StatisticByCourseDialog() {
   const handleSubmit = (data: z.infer<typeof schema>) => {
     window.open(
       `/api/pdfs/gradereports/statistics-by-course?courseId=${data.courseId}&termId=${data.termId}`,
-      "_blank"
+      "_blank",
     );
     closeModal();
   };

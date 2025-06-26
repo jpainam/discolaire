@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
           course: course,
           school: school,
           term: term,
-        })
+        }),
       );
 
       //const blob = await new Response(stream).blob();
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-async function toExcel({
+async function _toExcel({
   reports,
 }: {
   reports: {
