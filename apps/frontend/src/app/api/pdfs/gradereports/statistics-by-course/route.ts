@@ -3,11 +3,11 @@ import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { renderToStream } from "@repo/reports";
 import { getServerTranslations } from "~/i18n/server";
 
-import { StatisticByCourse } from "@repo/reports/gradereports/StatisticByCourse";
+import { renderToStream } from "@react-pdf/renderer";
 import { getSession } from "~/auth/server";
+import { StatisticByCourse } from "~/reports/gradereports/StatisticByCourse";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
@@ -38,11 +38,9 @@ export async function GET(req: NextRequest) {
       id: courseId,
       termId: Number(termId),
     });
-
     const school = await caller.school.getSchool();
     const term = await caller.term.get(Number(termId));
     const course = await caller.course.get(courseId);
-
     if (format === "csv") {
       //const { blob, headers } = await toExcel({ reports });
       //return new Response(blob, { headers });
@@ -55,7 +53,6 @@ export async function GET(req: NextRequest) {
           term: term,
         }),
       );
-
       //const blob = await new Response(stream).blob();
       const headers: Record<string, string> = {
         "Content-Type": "application/pdf",
@@ -64,6 +61,9 @@ export async function GET(req: NextRequest) {
       // @ts-expect-error TODO: fix this
       return new Response(stream, { headers });
     }
+    return new Response("Not implemented yet", {
+      status: 501,
+    });
   } catch (error) {
     console.error(error);
     return new Response(String(error), { status: 500 });
