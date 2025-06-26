@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       id: courseId,
       termId: Number(termId),
     });
-    const school = await caller.school.getSchool();
+    //const school = await caller.school.getSchool();
     const term = await caller.term.get(Number(termId));
     const course = await caller.course.get(courseId);
     if (format === "csv") {
@@ -46,12 +46,11 @@ export async function GET(req: NextRequest) {
       //return new Response(blob, { headers });
     } else {
       const stream = await renderToStream(
-        StatisticByCourse({
+        await StatisticByCourse({
           stats: stats,
           course: course,
-          school: school,
           term: term,
-        }),
+        })
       );
       //const blob = await new Response(stream).blob();
       const headers: Record<string, string> = {
