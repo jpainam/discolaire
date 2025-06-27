@@ -1,15 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import * as XLSX from "@e965/xlsx";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { renderToStream } from "@react-pdf/renderer";
-import type { RouterOutputs } from "@repo/api";
 import { getSession } from "~/auth/server";
 import { SummaryOfResult } from "~/reports/gradereports/SummaryOfResult";
-import { getAppreciations } from "~/reports/utils";
 import { caller } from "~/trpc/server";
-import { xlsxType } from "~/utils";
 
 const searchSchema = z.object({
   termId: z.coerce.number(),
@@ -45,6 +40,12 @@ export async function GET(req: NextRequest) {
     if (format === "csv") {
       //const { blob, headers } = toExcel({ stats });
       //return new Response(blob, { headers });
+      return new Response(
+        JSON.stringify({
+          error: "CSV format is not supported for this report type.",
+        }),
+        { status: 400 },
+      );
     } else {
       const stream = await renderToStream(
         await SummaryOfResult({
@@ -52,7 +53,7 @@ export async function GET(req: NextRequest) {
           students: students,
           classroom: classroom,
           term: term,
-        })
+        }),
       );
       //const blob = await new Response(stream).blob();
       const headers: Record<string, string> = {
@@ -66,38 +67,4 @@ export async function GET(req: NextRequest) {
     console.error(error);
     return new Response(String(error), { status: 500 });
   }
-}
-
-function toExcel({ stats }: { stats: RouterOutputs["course"]["statistics"] }) {
-  const rows = stats.map((s) => {
-    return {
-      Classe: s.classroom.reportName,
-      Enseignant: s.teacher?.lastName,
-      "Evalué/Effectif": `${s.evaluated}/${s.total}`,
-      Moyenne: s.avg,
-      "Moy >= 10": s.above10,
-      "Taux de réussite Garcons ": (s.boysRate * 100).toFixed(2) + "%",
-      "Taux de réussite Filles": (s.girlsRate * 100).toFixed(2) + "%",
-      "Taux de réussite": (s.totalRate * 100).toFixed(2) + "%",
-      Appréciation: getAppreciations(s.avg),
-    };
-  });
-  const worksheet = XLSX.utils.json_to_sheet(rows);
-  const workbook = XLSX.utils.book_new();
-  const sheetName = "Statistiques des matières";
-  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-
-  const u8 = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
-
-  const blob = new Blob([u8], {
-    type: `${xlsxType};charset=utf-8;`,
-  });
-  const headers: Record<string, string> = {
-    "Content-Type": xlsxType,
-    "Cache-Control": "no-store, max-age=0",
-  };
-  const filename = `List-${sheetName}.xlsx`;
-  headers["Content-Disposition"] = `attachment; filename="${filename}"`;
-
-  return { blob, headers };
 }
