@@ -6,14 +6,14 @@ import { z } from "zod";
 import { renderToStream } from "@react-pdf/renderer";
 import type { RouterOutputs } from "@repo/api";
 import { getSession } from "~/auth/server";
-import { StatisticByCourse } from "~/reports/gradereports/StatisticByCourse";
+import { SummaryOfResult } from "~/reports/gradereports/SummaryOfResult";
 import { getAppreciations } from "~/reports/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
 const searchSchema = z.object({
   termId: z.coerce.number(),
-  courseId: z.string().min(1),
+  classroomId: z.string().min(1),
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
 export async function GET(req: NextRequest) {
@@ -33,24 +33,26 @@ export async function GET(req: NextRequest) {
       const error = result.error.issues.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
-    const { termId, courseId, format } = result.data;
-    const stats = await caller.course.statistics({
-      id: courseId,
-      termId: Number(termId),
+    const { termId, classroomId, format } = result.data;
+    const report = await caller.reportCard.getSequence({
+      classroomId: classroomId,
+      termId: termId,
     });
-    //const school = await caller.school.getSchool();
+    const { globalRanks } = report;
+    const students = await caller.classroom.students(classroomId);
+    const classroom = await caller.classroom.get(classroomId);
     const term = await caller.term.get(Number(termId));
-    const course = await caller.course.get(courseId);
     if (format === "csv") {
-      const { blob, headers } = toExcel({ stats });
-      return new Response(blob, { headers });
+      //const { blob, headers } = toExcel({ stats });
+      //return new Response(blob, { headers });
     } else {
       const stream = await renderToStream(
-        await StatisticByCourse({
-          stats: stats,
-          course: course,
+        await SummaryOfResult({
+          globalRanks: globalRanks,
+          students: students,
+          classroom: classroom,
           term: term,
-        }),
+        })
       );
       //const blob = await new Response(stream).blob();
       const headers: Record<string, string> = {

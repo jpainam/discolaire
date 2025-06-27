@@ -12,13 +12,19 @@ import { caller } from "~/trpc/server";
 import { IPBWHeader } from "../headers/IPBWHeader";
 
 export async function SummaryOfResult({
+  globalRanks,
   term,
-  course,
+  students,
+  classroom,
 }: {
+  globalRanks: RouterOutputs["reportCard"]["getSequence"]["globalRanks"];
+  students: RouterOutputs["classroom"]["students"];
+
   term: RouterOutputs["term"]["get"];
-  course: RouterOutputs["course"]["get"];
+  classroom: RouterOutputs["classroom"]["get"];
 }) {
   const school = await caller.school.getSchool();
+  const studentsMap = new Map(students.map((s) => [s.id, s]));
   return (
     <Document>
       <Page
@@ -53,15 +59,69 @@ export async function SummaryOfResult({
             }}
           >
             <Text>SYNTHESE - RECAPITULATIVE DES RESULTATS</Text>
-            <Text>
-              {course.reportName} - {term.name}
-            </Text>
           </View>
           <View
             style={{
-              flexDirection: "column",
+              flexDirection: "row",
+              display: "flex",
+              width: "100%",
             }}
-          ></View>
+          >
+            <View
+              style={{
+                width: "45%",
+                flexDirection: "column",
+                display: "flex",
+                border: "1px solid black",
+              }}
+            >
+              <View style={{ flexDirection: "row", display: "flex" }}>
+                <View
+                  style={{
+                    width: "65%",
+                    paddingHorizontal: 4,
+                    paddingVertical: 2,
+                    borderRight: "1px solid black",
+                  }}
+                >
+                  <Text>PERIODE</Text>
+                </View>
+                <View style={{ paddingHorizontal: 4, paddingVertical: 2 }}>
+                  <Text>{term.name}</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  borderTop: "1px solid black",
+                  display: "flex",
+                }}
+              >
+                <View
+                  style={{
+                    width: "65%",
+                    paddingHorizontal: 4,
+                    paddingVertical: 2,
+                    borderRight: "1px solid black",
+                  }}
+                >
+                  <Text>CLASSE</Text>
+                </View>
+                <View style={{ paddingHorizontal: 4, paddingVertical: 2 }}>
+                  <Text>{classroom.name}</Text>
+                </View>
+              </View>
+            </View>
+
+            <View
+              style={{
+                border: "1px solid black",
+                width: "45%",
+              }}
+            >
+              <Text>ANNEE SCOLAIRE {term.schoolYear.name}</Text>
+            </View>
+          </View>
         </View>
       </Page>
     </Document>
