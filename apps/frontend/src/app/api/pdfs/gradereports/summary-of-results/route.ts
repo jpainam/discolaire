@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
           stats: stats,
           course: course,
           term: term,
-        })
+        }),
       );
       //const blob = await new Response(stream).blob();
       const headers: Record<string, string> = {

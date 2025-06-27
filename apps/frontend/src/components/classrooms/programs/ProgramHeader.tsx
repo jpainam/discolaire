@@ -35,7 +35,7 @@ export function ProgramHeader({
   const pathname = usePathname();
   const canEditSubjectProgram = useCheckPermission(
     "program",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   useEffect(() => {
     const breads = [
@@ -77,7 +77,7 @@ export function ProgramHeader({
               router.push(
                 routes.classrooms.programs(params.id) +
                   `/${subject.id}` +
-                  "/create-or-edit"
+                  "/create-or-edit",
               );
             }}
             size={"icon"}
