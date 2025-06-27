@@ -21,7 +21,7 @@ export function StudentAssignmentHeader() {
   const { t } = useLocale();
   const [_, setTerm] = useQueryState("term", parseAsInteger);
   return (
-    <div className="flex flex-row items-center gap-2 bg-secondary px-2 py-1">
+    <div className="flex flex-row items-center gap-2 bg-muted text-muted-foreground px-2 py-1">
       <NotebookPen className="h-4 w-4" />
       <Label>{t("assignments")}</Label>
       <TermSelector

@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Users } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
@@ -53,7 +53,7 @@ export function StudentSearchPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 placeholder={t(
-                  "Enter a student name, ID, or email to get started.",
+                  "Enter a student name, ID, or email to get started."
                 )}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -109,7 +109,7 @@ export function StudentSearchPage() {
         ))}
       </div>
 
-      {searchResults.length === 0 &&
+      {/* {searchResults.length === 0 &&
         (searchQuery || selectedClassroom || selectedStatus != "all") && (
           <div className="text-center py-12">
             <Users className="mx-auto h-12 w-12 " />
@@ -118,7 +118,7 @@ export function StudentSearchPage() {
               {t("Try adjusting your search criteria or check the spelling.")}
             </p>
           </div>
-        )}
+        )} */}
 
       {searchResults.length == 0 && (
         <div className="text-center text-sm py-12">

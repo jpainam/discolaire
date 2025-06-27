@@ -23,7 +23,7 @@ export function LoginInfoHeader() {
   const Icon = sidebarIcons.login_info;
   const params = useParams<{ id: string }>();
   return (
-    <div className="flex flex-row gap-2 items-center bg-secondary px-4 py-1 text-secondary-foreground">
+    <div className="flex flex-row gap-2 items-center bg-muted px-4 py-1 text-muted-foreground">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("login_info")}</Label>
       <div className="ml-auto">
@@ -40,7 +40,7 @@ export function LoginInfoHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}/login-info`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

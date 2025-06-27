@@ -12,7 +12,7 @@ import { useTRPC } from "~/trpc/react";
 export function ProgramList({ classroomId }: { classroomId: string }) {
   const trpc = useTRPC();
   const subjectsQuery = useQuery(
-    trpc.classroom.subjects.queryOptions(classroomId),
+    trpc.classroom.subjects.queryOptions(classroomId)
   );
   const router = useRouter();
   const params = useParams<{ subjectId: string }>();
@@ -38,10 +38,10 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
               router.push(`/classrooms/${classroomId}/programs/${subject.id}`);
             }}
             className={cn(
-              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
+              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary hover:text-secondary-foreground`,
               subject.id === Number(params.subjectId)
                 ? "bg-secondary font-bold text-secondary-foreground"
-                : "text-secondary-foreground/80 hover:bg-secondary/10",
+                : ""
             )}
           >
             <div

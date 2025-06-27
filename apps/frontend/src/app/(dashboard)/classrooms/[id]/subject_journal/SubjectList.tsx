@@ -27,10 +27,8 @@ export function SubjectList({
             router.push(`/classrooms/${classroomId}/subject_journal`);
           }}
           className={cn(
-            `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
-            !params.subjectId
-              ? "bg-secondary font-bold text-secondary-foreground"
-              : "text-secondary-foreground/80 hover:bg-secondary/10",
+            `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary hover:text-secondary-foreground`,
+            !params.subjectId ? "bg-muted font-bold text-muted-foreground" : ""
           )}
         >
           <div
@@ -46,14 +44,14 @@ export function SubjectList({
             key={index}
             onClick={() => {
               router.push(
-                `/classrooms/${classroomId}/subject_journal/${subject.id}`,
+                `/classrooms/${classroomId}/subject_journal/${subject.id}`
               );
             }}
             className={cn(
-              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary`,
+              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary hover:text-secondary-foreground`,
               subject.id === Number(params.subjectId)
-                ? "bg-secondary font-bold text-secondary-foreground"
-                : "text-secondary-foreground/80 hover:bg-secondary/10",
+                ? "bg-muted font-bold text-muted-foreground"
+                : ""
             )}
           >
             <div

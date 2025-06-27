@@ -32,7 +32,7 @@ export function SubjectHeader() {
 
   const params = useParams<{ id: string }>();
   const { data: subjects } = useSuspenseQuery(
-    trpc.classroom.subjects.queryOptions(params.id),
+    trpc.classroom.subjects.queryOptions(params.id)
   );
   const Icon = sidebarIcons.subjects;
   const { t } = useLocale();
@@ -55,7 +55,7 @@ export function SubjectHeader() {
   const { openSheet } = useSheet();
   const canAddClassroomSubject = useCheckPermission(
     "subject",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const badgeVariants = [
@@ -67,7 +67,7 @@ export function SubjectHeader() {
   ] as FlatBadgeVariant[];
 
   return (
-    <div className="grid w-full grid-cols-1 flex-row items-center gap-2 border-b bg-muted px-4 py-1 text-secondary-foreground md:flex">
+    <div className="grid w-full grid-cols-1 flex-row items-center gap-2 border-b bg-muted px-4 py-1 text-muted-foreground md:flex">
       {Icon && <Icon className="hidden h-4 w-4 md:block" />}
       <Label className="hidden md:block">{t("subjects")}</Label>
       <div className="grid grid-cols-3 flex-row items-center gap-2 md:flex">
@@ -125,7 +125,7 @@ export function SubjectHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -136,7 +136,7 @@ export function SubjectHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/classroom/${params.id}/subjects?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

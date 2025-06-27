@@ -23,7 +23,7 @@ export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(studentId),
+    trpc.student.get.queryOptions(studentId)
   );
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();
@@ -32,7 +32,7 @@ export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
   const isEnrolled = !!student.classroom;
 
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
+    <div className="flex flex-row items-center gap-2 border-b bg-muted text-muted-foreground px-4 py-1">
       <ArrowRightLeft className="h-4 w-4" />
       <Label>{t("enrollments")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">

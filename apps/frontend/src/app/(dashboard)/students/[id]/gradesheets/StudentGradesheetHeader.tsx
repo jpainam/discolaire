@@ -20,7 +20,7 @@ export function StudentGradesheetHeader() {
   const params = useParams<{ id: string }>();
 
   return (
-    <div className="flex border-b flex-row items-center gap-1 px-4 py-1">
+    <div className="flex border-b flex-row items-center text-muted-foreground bg-muted gap-1 px-4 py-1">
       <Captions className="w-4 h-4" />
       <Label>{t("transcripts")}</Label>
       <div className="ml-auto">
@@ -37,7 +37,7 @@ export function StudentGradesheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}/transcripts?format=pdf`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -48,7 +48,7 @@ export function StudentGradesheetHeader() {
               onSelect={() => {
                 window.open(
                   `/api/pdfs/student/${params.id}/transcripts?format=csv`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

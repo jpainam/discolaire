@@ -22,7 +22,7 @@ export function IdCardHeader() {
   const { t } = useLocale();
   const Icon = sidebarIcons.id_card;
   return (
-    <div className="flex border-b flex-row items-center gap-1 bg-secondary px-4 py-1 text-secondary-foreground">
+    <div className="flex border-b flex-row items-center gap-1 bg-muted px-4 py-1 text-muted-foreground">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("id_card")}</Label>
       <div className="ml-auto">

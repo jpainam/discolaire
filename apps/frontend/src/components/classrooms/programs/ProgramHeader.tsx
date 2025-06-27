@@ -35,7 +35,7 @@ export function ProgramHeader({
   const pathname = usePathname();
   const canEditSubjectProgram = useCheckPermission(
     "program",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   useEffect(() => {
     const breads = [
@@ -59,7 +59,7 @@ export function ProgramHeader({
   const router = useRouter();
 
   return (
-    <div className="flex flex-row border-b items-center gap-2 bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="flex flex-row border-b items-center gap-2 bg-muted px-2 py-1 text-muted-foreground">
       <div className="flex flex-row items-center gap-2">
         <Label>{subject.course.name}</Label>
         <FlatBadge variant={"green"}>
@@ -77,7 +77,7 @@ export function ProgramHeader({
               router.push(
                 routes.classrooms.programs(params.id) +
                   `/${subject.id}` +
-                  "/create-or-edit",
+                  "/create-or-edit"
               );
             }}
             size={"icon"}

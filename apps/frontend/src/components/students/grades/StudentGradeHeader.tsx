@@ -41,7 +41,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
   const trpc = useTRPC();
   const params = useParams<{ gradeId: string; id: string }>();
   const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(params.id),
+    trpc.student.get.queryOptions(params.id)
   );
   // const searchParams = useSearchParams();
   const [term] = useQueryState("term", parseAsInteger);
@@ -53,13 +53,13 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
     trpc.student.grades.queryOptions({
       id: student.id,
       termId: term ? Number(term) : undefined,
-    }),
+    })
   );
 
   const queryClient = useQueryClient();
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const confirm = useConfirm();
   const deleteGradeMutation = useMutation(
@@ -72,14 +72,14 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
         await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
         router.push(`/students/${student.id}/grades`);
       },
-    }),
+    })
   );
 
   const [studentAvg, setStudentAvg] = useState<number | null>(null);
   const [classroomAvg, setClassroomAvg] = useState<number | null>(null);
 
   const classroomMinMaxMoyGrades = useQuery(
-    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId),
+    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId)
   );
 
   useEffect(() => {
@@ -127,7 +127,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
   }
   return (
     <div>
-      <div className="flex flex-row items-center gap-2 border-b px-4 py-1 text-secondary-foreground">
+      <div className="flex flex-row items-center gap-2 border-b px-4 py-1 bg-muted text-muted-foreground">
         <ListIcon className="h-4 w-4" />
         <Label>{t("grades")}</Label>
         <TermSelector
@@ -139,7 +139,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
               "?" +
                 createQueryString({
                   term: val,
-                }),
+                })
             );
           }}
           defaultValue={term ? `${term}` : undefined}
@@ -189,7 +189,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=pdf`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -199,7 +199,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
                 onSelect={() => {
                   window.open(
                     `/api/pdfs/student/grades/?id=${student.id}&format=csv`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >

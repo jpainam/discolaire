@@ -34,13 +34,13 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
 
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
   const { termId, trimestreId } = searchParams;
   return (
-    <div className="grid md:flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1 text-secondary-foreground">
+    <div className="grid md:flex flex-row items-center gap-2 border-b bg-muted px-4 py-1 text-muted-foreground">
       <div className="flex flex-row items-center gap-1">
         <BookText className="h-4 w-4" />
         <Label>{t("reportcards")}</Label>

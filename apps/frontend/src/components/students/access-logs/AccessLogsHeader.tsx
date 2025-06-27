@@ -35,7 +35,7 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
     trpc.loginActivity.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.loginActivity.all.pathFilter(),
+          trpc.loginActivity.all.pathFilter()
         );
         toast.success(t("deleted_successfully"), { id: 0 });
         router.refresh();
@@ -43,10 +43,10 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
-    <div className="flex flex-row gap-2 border-b items-center bg-secondary px-4 py-1 text-secondary-foreground">
+    <div className="flex flex-row gap-2 border-b items-center bg-muted px-4 py-1 text-muted-foreground">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("access_logs")}</Label>
       <div className="ml-auto flex flex-row">
@@ -63,7 +63,7 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
               onSelect={() => {
                 window.open(
                   `/api/accesslogs?format=pdf&userId=${userId}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >
@@ -74,7 +74,7 @@ export function AccessLogsHeader({ userId }: { userId: string }) {
               onSelect={() => {
                 window.open(
                   `/api/accesslogs?format=csv&userId=${userId}`,
-                  "_blank",
+                  "_blank"
                 );
               }}
             >

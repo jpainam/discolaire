@@ -35,6 +35,7 @@ const reportTypes = [
   { id: "001", label: "Roll of Honor" },
   { id: "002", label: "Grade report card" },
   { id: "003", label: "Statistics by course" },
+  { id: "004", label: "Summary of results" },
 ];
 
 export function GradeReportGenerator() {
@@ -66,7 +67,7 @@ export function GradeReportGenerator() {
     if (reportType == "001") {
       window.open(
         `/api/pdfs/gradereports/roll-of-honor?classroomId=${selectedClass}&format=${formatType}&termId=${selectedTerm.id}`,
-        "_blank",
+        "_blank"
       );
       return;
     }
@@ -82,7 +83,7 @@ export function GradeReportGenerator() {
     }
 
     toast.warning(
-      t("This report type is not yet implemented. Please check back later."),
+      t("This report type is not yet implemented. Please check back later.")
     );
   };
 

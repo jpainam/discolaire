@@ -13,7 +13,7 @@ export function StudentDocumentHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
+    <div className="flex flex-row items-center gap-2 border-b bg-muted text-muted-foreground px-4 py-1">
       <FolderOpen className="hidden md:block h-4 w-4" />
       <Label className="hidden md:block">{t("documents")}</Label>
       <div className="ml-auto flex items-center gap-2">

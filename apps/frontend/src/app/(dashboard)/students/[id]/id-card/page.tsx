@@ -24,7 +24,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }
 
   return (
-    <>
+    <div>
       <IdCardHeader />
       <div className="mx-auto  grid md:grid-cols-2 p-4 gap-6">
         {/* Front of the card */}
@@ -215,6 +215,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </div>
         </Card>
       </div>
-    </>
+    </div>
   );
 }

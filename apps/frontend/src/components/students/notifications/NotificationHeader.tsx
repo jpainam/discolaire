@@ -34,7 +34,7 @@ export function NotificationHeader() {
   const router = useRouter();
   console.log(value);
   return (
-    <div className="md:flex grid md:flex-row items-center gap-2 border-b bg-secondary px-2 py-1 text-secondary-foreground">
+    <div className="md:flex grid md:flex-row items-center gap-2 border-b bg-muted px-2 py-1 text-muted-foreground">
       {Icon && <Icon className="h-4 w-4 hidden md:block" />}
       <Label className="hidden md:block">{t("notifications")}</Label>
 
@@ -51,7 +51,7 @@ export function NotificationHeader() {
           router.push(
             routes.students.notifications(params.id) +
               "?" +
-              createQueryString({ to, from }),
+              createQueryString({ to, from })
           );
         }}
       />

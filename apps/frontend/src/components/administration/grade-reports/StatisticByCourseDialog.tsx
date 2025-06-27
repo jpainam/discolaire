@@ -44,7 +44,7 @@ export function StatisticByCourseDialog({ format }: { format: "pdf" | "csv" }) {
   const handleSubmit = (data: z.infer<typeof schema>) => {
     window.open(
       `/api/pdfs/gradereports/statistics-by-course?courseId=${data.courseId}&termId=${data.termId}&format=${format}`,
-      "_blank",
+      "_blank"
     );
     closeModal();
   };
@@ -63,7 +63,7 @@ export function StatisticByCourseDialog({ format }: { format: "pdf" | "csv" }) {
               <FormControl>
                 <>
                   {courseQuery.isLoading ? (
-                    <Skeleton />
+                    <Skeleton className="h-8 w-full" />
                   ) : (
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="w-full">
