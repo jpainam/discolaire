@@ -17,13 +17,11 @@ import {
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
-import { GradeDistributionBySubject } from "~/components/administration/grade-reports/GradeDistributionChartBySubject";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
-import { GradeReportGenerator2 } from "~/components/administration/grade-reports/GradeReportGenerator2";
+
 import { GradeReportTrackerDataTable } from "~/components/administration/grade-reports/GradeReportTrackerDataTable";
 import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
 import { StudentPerformanceChart } from "~/components/administration/grade-reports/StudentPerformanceChart";
-import { StudentPerformanceChart2 } from "~/components/administration/grade-reports/StudentPerformanceChart2";
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
@@ -52,7 +50,7 @@ export default async function Page() {
             <TabsTrigger value="overview">{t("dashboard")}</TabsTrigger>
             <TabsTrigger value="grades">{t("grades")}</TabsTrigger>
             <TabsTrigger value="reports">{t("reports")}</TabsTrigger>
-            <TabsTrigger value="analytics">{t("charts")}</TabsTrigger>
+
             <TabsTrigger value="settings">{t("settings")}</TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
@@ -119,44 +117,9 @@ export default async function Page() {
             </ErrorBoundary>
           </TabsContent>
           <TabsContent value="reports">
-            <Card>
-              <CardHeader>
-                <CardTitle>Grade Reports</CardTitle>
-                <CardDescription>
-                  Generate and manage grade reports
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <GradeReportGenerator2 expanded={true} />
-              </CardContent>
-            </Card>
+            <GradeReportGenerator />
           </TabsContent>
-          <TabsContent value="analytics" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Grade Analytics</CardTitle>
-                <CardDescription>
-                  In-depth analysis of grade data
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <h3 className="mb-4 text-sm font-medium">
-                    Grade Distribution by Subject
-                  </h3>
-                  <GradeDistributionBySubject />
-                </div>
-                <div>
-                  <h3 className="mb-4 text-sm font-medium">
-                    Performance Trends
-                  </h3>
-                  <div className="h-[300px]">
-                    <StudentPerformanceChart2 extended={true} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+
           <TabsContent value="settings" className="space-y-4">
             <ErrorBoundary errorComponent={ErrorFallback}>
               <Suspense fallback={<Skeleton className="h-48" />}>
