@@ -67,6 +67,8 @@
   "edit_a_category": "Modifier une catégorie",
   "age": "Age",
   "no_results": "Aucun résultat",
+  "Staff Management": "Gestion du personnel",
+  "staff_management_description": "Gérer le personnel, leurs rôles, et leurs responsabilités.",
   "Generate and download grade reports": "Générer et télécharger des bulletins de notes",
   "search_a_contact": "Rechercher un contact",
   "create_classroom_description": "Saisir les informations de la classe, telles que le niveau, l'enseignant principal et la capacité d'accueil.",

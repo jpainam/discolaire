@@ -56,7 +56,7 @@ export function StudentSearchResultCard({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
     <Card
@@ -83,9 +83,23 @@ export function StudentSearchResultCard({
                 <Badge variant="outline" className="text-xs">
                   {student.registrationNumber ?? "N/A"}
                 </Badge>
-                <Badge className="text-xs" variant={"secondary"}>
-                  {t(`${student.status.toLowerCase()}`)}
-                </Badge>
+                {student.status == "ACTIVE" ? (
+                  <Badge variant="outline" className="gap-1.5">
+                    <span
+                      className="size-1.5 rounded-full bg-emerald-500"
+                      aria-hidden="true"
+                    ></span>
+                    {t(`${student.status.toUpperCase()}`)}
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="gap-1.5">
+                    <span
+                      className="size-1.5 rounded-full bg-red-500"
+                      aria-hidden="true"
+                    ></span>
+                    {t(`${student.status.toUpperCase()}`)}
+                  </Badge>
+                )}
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm text-muted-foreground">

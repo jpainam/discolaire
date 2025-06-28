@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
@@ -11,7 +11,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@repo/ui/components/command";
 import {
   Popover,
@@ -32,11 +31,7 @@ interface StaffSelectorProps {
   placeholder?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
-  supportSelectAll?: boolean;
-  excludedLevels?: string[];
   searchPlaceholder?: string;
-
-  onSelectCreateLevel?: () => void;
 }
 
 export const StaffSelector = ({
@@ -46,7 +41,6 @@ export const StaffSelector = ({
   placeholder,
   searchPlaceholder,
   defaultValue,
-  onSelectCreateLevel,
 }: StaffSelectorProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | undefined>(defaultValue);
@@ -119,27 +113,6 @@ export const StaffSelector = ({
                 </CommandItem>
               ))}
             </CommandGroup>
-            {onSelectCreateLevel !== undefined && (
-              <>
-                <CommandSeparator />
-                <CommandGroup>
-                  <CommandItem
-                    className="flex w-full cursor-pointer items-center gap-x-2"
-                    onSelect={() => {
-                      onSelectCreateLevel();
-                      setOpen(false);
-                    }}
-                    onClick={() => {
-                      onSelectCreateLevel();
-                      setOpen(false);
-                    }}
-                  >
-                    <Plus size={12} />
-                    Create a new schema
-                  </CommandItem>
-                </CommandGroup>
-              </>
-            )}
           </CommandList>
         </Command>
       </PopoverContent>

@@ -149,4 +149,34 @@ export const defaultThemes = {
       border: "#4a4039",
     },
   },
+  retro_arcade: {
+    label: "Retro Arcade",
+    light: {
+      primary: "#d33682",
+      accent: "#cb4b16",
+      secondary: "#2aa198",
+      border: "#839496",
+    },
+    dark: {
+      primary: "#d33682",
+      accent: "#cb4b16",
+      secondary: "#2aa198",
+      border: "#586e75",
+    },
+  },
+  twitter: {
+    label: "Twitter",
+    light: {
+      primary: "#1e9df1",
+      accent: "#E3ECF6",
+      secondary: "#0f1419",
+      border: "#e1eaef",
+    },
+    dark: {
+      primary: "#1c9cf0",
+      accent: "#061622",
+      secondary: "#f0f3f4",
+      border: "#242628",
+    },
+  },
 };

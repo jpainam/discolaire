@@ -19,7 +19,7 @@ import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
-import { StaffHeader } from "~/components/staffs/StaffHeader";
+import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
 import { routes } from "~/configs/routes";
 import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
@@ -101,7 +101,7 @@ export default async function Layout(props: {
             </div>
           }
         >
-          <StaffHeader />
+          <StaffDetailHeader />
         </Suspense>
       </ErrorBoundary>
       <div className="grid 2xl:grid-cols-[30%_70%] gap-2 px-4">

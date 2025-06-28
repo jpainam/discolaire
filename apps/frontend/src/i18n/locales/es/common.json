@@ -373,6 +373,8 @@
   "consignes": "Instrucciones",
   "contactAccessHistory": "Contactos",
   "Summary of results": "Resumen de resultados",
+  "Staff Management": "Gestión del personal",
+  "staff_management_description": "Gestión del personal. Crear, modificar y eliminar miembros del personal.",
   "contactAdministrator": "Contacto",
   "Grade report card": "Boletín de calificaciones",
   "student_contact_description": "Información de contacto del estudiante",
