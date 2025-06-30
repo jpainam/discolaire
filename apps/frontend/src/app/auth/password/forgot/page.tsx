@@ -68,7 +68,7 @@ export default function Paage() {
     <div className="flex min-h-screen items-center justify-center bg-secondary">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{t("forgot_password")}</CardTitle>
+          <CardTitle>{t("Forgot password")}</CardTitle>
           <CardDescription>
             {t("enter_your_email_to_reset_your_password")}
           </CardDescription>

@@ -107,7 +107,7 @@ export function ReinitializePassword() {
                         className="underline"
                         href={routes.auth.forgotPassword}
                       >
-                        {t("forgotPassword")}
+                        {t("Forgot password")}
                       </Link>
                     </FormDescription>
                     <FormMessage />

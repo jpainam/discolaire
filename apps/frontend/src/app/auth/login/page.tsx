@@ -38,7 +38,7 @@ export default async function Page() {
             {t("school_portal")}
           </Link>
         </div>
-        <div className="relative z-20 mt-auto rounded-md bg-secondary/40">
+        <div className="relative z-20 mt-auto rounded-md bg-muted">
           <blockquote className="space-y-2">
             <p className="text-sm xl:text-lg tracking-tighter">
               {t("signin_quote")}

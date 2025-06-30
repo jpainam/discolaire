@@ -106,7 +106,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               href="/auth/password/forgot"
               className="ml-auto text-sm text-primary hover:underline"
             >
-              {t("forgot_password")}?
+              {t("Forgot password")}?
             </Link>
           </div>
         </form>
