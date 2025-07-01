@@ -6,9 +6,9 @@ export async function register() {
     await import("../sentry.server.config");
   }
   if (process.env.NEXT_RUNTIME === "nodejs" && !initialized) {
-    const { initializeJobs } = await import("./jobs");
+    const { initializeJobs } = await import("./workers");
     await initializeJobs();
-    await import("./jobs/workers");
+    await import("./workers");
     initialized = true;
   }
 
