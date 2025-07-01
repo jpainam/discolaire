@@ -25,9 +25,9 @@
     },
     "prettier": "@repo/prettier-config",
     "dependencies": {
-        "@t3-oss/env-nextjs": "^0.13.6",
+        "@t3-oss/env-nextjs": "^0.13.8",
         "nanoid": "^5.1.5",
-        "resend": "^4.5.1",
+        "resend": "^4.6.0",
         "zod": "catalog:"
     }
 }
