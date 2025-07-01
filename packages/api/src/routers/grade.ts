@@ -1,8 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { gradeService } from "../services/grade-service";
-import { gradeSheetService } from "../services/gradesheet-service";
 import { protectedProcedure } from "../trpc";
 
 export const gradeRouter = {
@@ -36,27 +34,6 @@ export const gradeRouter = {
         },
         where: {
           id: input,
-        },
-      });
-    }),
-  successRate: protectedProcedure.input(z.number()).query(async ({ input }) => {
-    return gradeSheetService.sucessRate(input);
-  }),
-  all: protectedProcedure
-    .input(
-      z.optional(
-        z.object({
-          gradeSheetId: z.coerce.number().optional(),
-        }),
-      ),
-    )
-    .query(async ({ input, ctx }) => {
-      if (input?.gradeSheetId) {
-        return gradeService.getGradesByGradesheetId(input.gradeSheetId);
-      }
-      return ctx.db.grade.findMany({
-        orderBy: {
-          gradeSheetId: "desc",
         },
       });
     }),

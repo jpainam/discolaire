@@ -14,12 +14,6 @@ import React, {
 
 import { cn } from "../lib/utils";
 
-const TRANSITION = {
-  type: "spring",
-  bounce: 0.1,
-  duration: 0.4,
-};
-
 interface FloatingPanelContextType {
   isOpen: boolean;
   openFloatingPanel: (rect: DOMRect) => void;
@@ -88,7 +82,13 @@ export function FloatingPanelRoot({
 
   return (
     <FloatingPanelContext.Provider value={floatingPanelLogic}>
-      <MotionConfig transition={TRANSITION}>
+      <MotionConfig
+        transition={{
+          type: "spring",
+          bounce: 0.1,
+          duration: 0.4,
+        }}
+      >
         <div className={cn("relative", className)}>{children}</div>
       </MotionConfig>
     </FloatingPanelContext.Provider>

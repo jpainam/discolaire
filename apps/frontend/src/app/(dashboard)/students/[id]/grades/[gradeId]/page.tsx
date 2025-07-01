@@ -45,22 +45,22 @@ export default async function Page(props: GradeSheetPageProps) {
     day: "numeric",
   });
   const fulldate = dateFormat.format(
-    searchParams.date ? new Date(searchParams.date) : new Date()
+    searchParams.date ? new Date(searchParams.date) : new Date(),
   );
   const grades = await caller.gradeSheet.grades(
-    Number(searchParams.gradesheetId)
+    Number(searchParams.gradesheetId),
   );
   const evaluated = grades.filter((g) => !g.isAbsent);
   const len = evaluated.length;
   const maleCount = evaluated.filter((g) => g.student.gender === "male").length;
   const femaleCount = evaluated.filter(
-    (g) => g.student.gender === "female"
+    (g) => g.student.gender === "female",
   ).length;
   const maleAbove10 = evaluated.filter(
-    (g) => g.grade >= 10 && g.student.gender === "male"
+    (g) => g.grade >= 10 && g.student.gender === "male",
   ).length;
   const femaleAbove10 = evaluated.filter(
-    (g) => g.grade >= 10 && g.student.gender === "female"
+    (g) => g.grade >= 10 && g.student.gender === "female",
   ).length;
   const above10 = evaluated.filter((g) => g.grade >= 10).length;
   return (
