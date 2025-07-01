@@ -168,9 +168,7 @@ export const gradeSheetRouter = {
       },
     });
   }),
-  successRate: protectedProcedure.input(z.number()).query(async ({ input }) => {
-    return gradeSheetService.sucessRate(input);
-  }),
+
   all: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.gradeSheet.findMany({
       where: {

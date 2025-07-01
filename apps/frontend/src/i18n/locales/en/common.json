@@ -508,6 +508,7 @@
   "finish": "Finish",
   "firstName": "First Name",
   "for": "For",
+  "out_of_participants": "{{n1}} out of {{n2}} participants",
   "formerSchool": "Former School",
   "former_schools": "Former Schools",
   "francophone": "Francophone",

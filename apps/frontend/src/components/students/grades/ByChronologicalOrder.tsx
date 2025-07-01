@@ -31,13 +31,13 @@ export function ByChronologicalOrder({
           i18next.language,
           {
             month: "short",
-          },
+          }
         );
         const d = grade.gradeSheet.createdAt.toLocaleDateString(
           i18next.language,
           {
             day: "numeric",
-          },
+          }
         );
         return (
           <div
@@ -62,17 +62,17 @@ export function ByChronologicalOrder({
                 coef: grade.gradeSheet.subject.coefficient.toString(),
               };
               router.push(
-                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
+                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`
               );
             }}
             key={grade.id}
             className={cn(
               "flex cursor-pointer flex-row items-center gap-4 border-b border-accent px-4 py-2",
-              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none",
+              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none"
             )}
           >
             <div className="flex w-[50px] flex-col justify-center">
-              <div className="mb-1 flex flex-col items-center rounded-md bg-secondary px-1 text-xs">
+              <div className="mb-1 flex flex-col items-center rounded-md bg-muted text-muted-foreground px-1 text-xs">
                 <div>{d}</div>
                 <div>{m}</div>
               </div>

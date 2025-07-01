@@ -37,16 +37,16 @@ export function ClassroomGradeChart({
   //const totalFailed = grades.filter((g) => g.grade < 10).length;
 
   const malePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "male",
+    (g) => g.grade >= 10 && g.student.gender === "male"
   ).length;
   const femalePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "female",
+    (g) => g.grade >= 10 && g.student.gender === "female"
   ).length;
   const maleFailedCount = grades.filter(
-    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "male",
+    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "male"
   ).length;
   const femaleFailedCount = grades.filter(
-    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "female",
+    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "female"
   ).length;
 
   const countp18 = grades.filter((g) => g.grade >= 18).length;
@@ -83,7 +83,7 @@ export function ClassroomGradeChart({
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="range" />
-              <YAxis />
+              <YAxis width={25} />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar dataKey="count" radius={[4, 4, 0, 0]} />
             </BarChart>

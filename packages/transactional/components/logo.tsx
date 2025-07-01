@@ -1,12 +1,13 @@
-import React from "react";
 import { Img, Section } from "@react-email/components";
+
+import { env } from "../env";
 
 export function Logo({ logoUrl }: { logoUrl?: string | null }) {
   return (
     <Section>
       {logoUrl && (
         <Img
-          src={`${logoUrl}`}
+          src={`${env.NEXT_PUBLIC_BASE_URL}/api/download/images/${logoUrl}`}
           width="100"
           height="100"
           alt="Logo"

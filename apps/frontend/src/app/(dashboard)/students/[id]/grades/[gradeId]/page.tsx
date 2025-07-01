@@ -1,4 +1,11 @@
 import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Separator } from "@repo/ui/components/separator";
+import {
   ArrowDownLeft,
   ArrowUpLeft,
   BookText,
@@ -9,11 +16,8 @@ import {
   Hash,
   Waves,
 } from "lucide-react";
-
-import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
-
-import { GradeSheetStats } from "./GradeSheetStats";
+import { caller } from "~/trpc/server";
 
 interface GradeSheetPageProps {
   params: Promise<{ id: string; gradeId: number }>;
@@ -41,8 +45,24 @@ export default async function Page(props: GradeSheetPageProps) {
     day: "numeric",
   });
   const fulldate = dateFormat.format(
-    searchParams.date ? new Date(searchParams.date) : new Date(),
+    searchParams.date ? new Date(searchParams.date) : new Date()
   );
+  const grades = await caller.gradeSheet.grades(
+    Number(searchParams.gradesheetId)
+  );
+  const evaluated = grades.filter((g) => !g.isAbsent);
+  const len = evaluated.length;
+  const maleCount = evaluated.filter((g) => g.student.gender === "male").length;
+  const femaleCount = evaluated.filter(
+    (g) => g.student.gender === "female"
+  ).length;
+  const maleAbove10 = evaluated.filter(
+    (g) => g.grade >= 10 && g.student.gender === "male"
+  ).length;
+  const femaleAbove10 = evaluated.filter(
+    (g) => g.grade >= 10 && g.student.gender === "female"
+  ).length;
+  const above10 = evaluated.filter((g) => g.grade >= 10).length;
   return (
     <div
       className="text-md flex flex-col gap-2"
@@ -124,7 +144,63 @@ export default async function Page(props: GradeSheetPageProps) {
         </li>
       </ul>
       <Separator className="my-2" />
-      <GradeSheetStats gradeSheetId={Number(searchParams.gradesheetId)} />
+      <div className="grid grid-cols-1 px-4 md:grid-cols-3 gap-4">
+        <Card className="gap-2">
+          <CardHeader>
+            <CardTitle>
+              {t("males")} {">=10"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-blue-600">
+              {((maleAbove10 * 100) / (maleCount || 1e-9)).toFixed(2)}%
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t("out_of_participants", {
+                n1: maleAbove10,
+                n2: maleCount,
+              })}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="gap-2">
+          <CardHeader>
+            <CardTitle>
+              {t("females")} {">=10"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-pink-600">
+              {((femaleAbove10 * 100) / (femaleCount || 1e-9)).toFixed(2)}%
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t("out_of_participants", {
+                n1: femaleAbove10,
+                n2: femaleCount,
+              })}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="gap-2">
+          <CardHeader>
+            <CardTitle>{t("success_rate")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-green-600">
+              {((above10 * 100) / (len || 1e-9)).toFixed(2)}%
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t("out_of_participants", {
+                n1: above10,
+                n2: len,
+              })}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* <StudentGradeChart grades={[]} /> */}
     </div>
   );
