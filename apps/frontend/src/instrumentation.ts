@@ -8,7 +8,6 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs" && !initialized) {
     const { initializeJobs } = await import("./workers");
     await initializeJobs();
-    await import("./workers");
     initialized = true;
   }
 
