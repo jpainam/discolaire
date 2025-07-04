@@ -11,8 +11,8 @@ import { logger } from "@repo/utils";
 
 import { db } from "@repo/db";
 import { Worker } from "bullmq";
-import { JobNames } from "./job-names";
-import { jobQueueName } from "./queue";
+
+import { JobNames, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 
 z.config({
@@ -82,5 +82,5 @@ new Worker(
       });
     }
   },
-  { connection },
+  { connection }
 );

@@ -57,7 +57,7 @@ export async function initializeJobs() {
           attempts: 5,
           removeOnFail: 10,
         },
-      },
+      }
     );
   }
 
@@ -73,5 +73,5 @@ function isValidCron(cron: string): boolean {
   }
 }
 
-export * from "./grade-notification";
-export * from "./transaction-summary";
+export * from "./grade-notification.worker";
+export * from "./transaction-summary.worker";
