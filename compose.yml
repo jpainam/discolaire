@@ -50,7 +50,7 @@ services:
       context: ./apps/worker
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      REDIS_URL: redis://redis:${REDIS_PORT}
+      REDIS_URL: ${REDIS_URL}
       MINIO_URL: http://minio:${MINIO_PORT}
     depends_on:
       - redis

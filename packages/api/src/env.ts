@@ -21,7 +21,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().min(1).url(),
-    NEXT_PUBLIC_MINIO_ENDPOINT: z.string().min(1).url(),
+    NEXT_PUBLIC_MINIO_URL: z.string().min(1).url(),
 
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]),
   },
@@ -31,7 +31,7 @@ export const env = createEnv({
     S3_AVATAR_BUCKET_NAME: process.env.S3_AVATAR_BUCKET_NAME,
     MESSAGING_SERVICE_URL: process.env.MESSAGING_SERVICE_URL,
     MINIO_PORT: process.env.MINIO_PORT,
-    NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
+    NEXT_PUBLIC_MINIO_URL: process.env.NEXT_PUBLIC_MINIO_URL,
     MESSAGING_SECRET_KEY: process.env.MESSAGING_SECRET_KEY,
     REDIS_URL: process.env.REDIS_URL,
     NEXT_PUBLIC_DEPLOYMENT_ENV: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,

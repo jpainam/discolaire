@@ -42,7 +42,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().url(),
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.string().default("local"),
-    NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url(),
+    NEXT_PUBLIC_MINIO_URL: z.string().url(),
     NEXT_PUBLIC_PROSPECT_SERVICE_URL: z.string().url(),
     NEXT_PUBLIC_LIBRARY_SERVICE_URL: z.string().url(),
   },
@@ -57,7 +57,7 @@ export const env = createEnv({
     S3_IMAGE_BUCKET_NAME: process.env.S3_IMAGE_BUCKET_NAME,
     S3_DOCUMENT_BUCKET_NAME: process.env.S3_DOCUMENT_BUCKET_NAME,
     NEXT_PUBLIC_DEPLOYMENT_ENV: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,
-    NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
+    NEXT_PUBLIC_MINIO_URL: process.env.NEXT_PUBLIC_MINIO_URL,
     S3_AVATAR_BUCKET_NAME: process.env.S3_AVATAR_BUCKET_NAME,
     WHATSAPP_VERIFY_TOKEN: process.env.WHATSAPP_VERIFY_TOKEN,
     WHATSAPP_API_TOKEN: process.env.WHATSAPP_API_TOKEN,

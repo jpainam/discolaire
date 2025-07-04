@@ -36,7 +36,7 @@ new Worker(
       if (!result.success) {
         const validationError = fromError(result.error);
         throw new Error(
-          `Invalid job data for job ${job.id} ${validationError.message}`
+          `Invalid job data for job ${job.id} ${validationError.message}`,
         );
       }
 
@@ -94,18 +94,18 @@ new Worker(
             userId: user.id,
             transactions: transactions,
           }),
-        }
+        },
       );
       if (!response.ok) {
         const errorText = await response.text();
         logger.error(
-          `Failed to send transaction summary email for user ${user.id}: ${errorText}`
+          `Failed to send transaction summary email for user ${user.id}: ${errorText}`,
         );
         throw new Error(
-          `Failed to send transaction summary email: ${errorText}`
+          `Failed to send transaction summary email: ${errorText}`,
         );
       }
     }
   },
-  { connection }
+  { connection },
 );

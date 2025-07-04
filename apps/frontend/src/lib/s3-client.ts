@@ -25,7 +25,7 @@ function getHost(input: string): string {
 }
 
 export const minioClient = new Minio.Client({
-  endPoint: getHost(env.NEXT_PUBLIC_MINIO_ENDPOINT),
+  endPoint: getHost(env.NEXT_PUBLIC_MINIO_URL),
   port: env.MINIO_PORT,
   useSSL: false, // set to False when using localhost
   accessKey: env.S3_ACCESS_KEY_ID,
@@ -75,11 +75,11 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData,
+      metaData
     );
     return {
       key: destination,
-      fullPath: `https://${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${destination}`,
+      fullPath: `https://${env.NEXT_PUBLIC_MINIO_URL}/${bucket}/${destination}`,
     };
   } else {
     const command = new PutObjectCommand({
@@ -121,7 +121,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number,
+  concurrency: number
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];
@@ -190,7 +190,7 @@ export async function listS3Objects({
         size: obj.size,
         lastModified: obj.lastModified ? new Date(obj.lastModified) : null,
         key: obj.name ?? "",
-        location: `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${obj.name}`,
+        location: `${env.NEXT_PUBLIC_MINIO_URL}/${bucket}/${obj.name}`,
         bucket: bucket,
         prefix: prefix ?? "",
       });

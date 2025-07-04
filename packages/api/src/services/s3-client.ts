@@ -21,7 +21,7 @@ function getHost(input: string): string {
 }
 
 export const minioClient = new Minio.Client({
-  endPoint: getHost(env.NEXT_PUBLIC_MINIO_ENDPOINT),
+  endPoint: getHost(env.NEXT_PUBLIC_MINIO_URL),
   port: env.MINIO_PORT,
   useSSL: false, // set to False when using localhost
   accessKey: env.S3_ACCESS_KEY_ID,
@@ -84,7 +84,7 @@ export async function listS3Objects({
         mime: !m ? "application/octet-stream" : m,
         lastModified: obj.lastModified ? new Date(obj.lastModified) : null,
         key: obj.name ?? "",
-        location: `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${bucket}/${obj.name}`,
+        location: `${env.NEXT_PUBLIC_MINIO_URL}/${bucket}/${obj.name}`,
         bucket: bucket,
         prefix: prefix ?? "",
       });

@@ -82,5 +82,5 @@ new Worker(
       });
     }
   },
-  { connection }
+  { connection },
 );
