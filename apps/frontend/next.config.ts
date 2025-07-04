@@ -4,6 +4,7 @@ import type { NextConfig } from "next";
 import "./src/env";
 
 const config = {
+  output: "standalone",
   // experimental: {
   //   nodeMiddleware: true,
   // },

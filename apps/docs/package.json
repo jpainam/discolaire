@@ -1,0 +1,32 @@
+{
+    "name": "discolaire-docs",
+    "version": "0.0.1",
+    "description": "Digitalisation Scolaire - Copyrigth 2024",
+    "scripts": {
+        "dev": "next --turbopack",
+        "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
+        "build": "next build",
+        "start": "next start"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://https://github.com/jpainam/portal_docs.git"
+    },
+    "author": "Jean Paul Ainam <jpainam@discolaire.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/jpainam/portal_docs/issues"
+    },
+    "homepage": "https://github.com/jpainam/portal_docs#readme",
+    "dependencies": {
+        "next": "catalog:",
+        "nextra": "latest",
+        "nextra-theme-docs": "latest",
+        "react": "catalog:",
+        "react-dom": "catalog:"
+    },
+    "devDependencies": {
+        "@types/node": "catalog:",
+        "typescript": "catalog:"
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "index": "Introduction",
+  "gettingstarted": "Installation",
+  "staff": "Personnel",
+  "student": "Élève",
+  "parent": "Parent",
+  "about": {
+    "title": "A Propos",
+    "type": "page"
+  },
+  "contact": {
+    "title": "Contact ↗",
+    "type": "page",
+    "href": "https://discolaire.com",
+    "newWindow": true
+  }
+}
