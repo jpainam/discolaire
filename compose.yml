@@ -31,7 +31,8 @@ services:
 
   frontend:
     build:
-      context: ./apps/frontend
+      context: .
+      dockerfile: apps/frontend/Dockerfile
     ports:
       - "${FRONTEND_PORT}:3000"
     env_file:
@@ -43,7 +44,8 @@ services:
 
   docs:
     build:
-      context: ./apps/docs
+      context: .
+      dockerfile: apps/docs/Dockerfile
     ports:
       - "${DOCS_PORT}:4000"
     depends_on:
