@@ -3,10 +3,14 @@
 set -e
 
 echo "Loading environment..."
-export $(grep -v '^#' .env | xargs)
+export $(grep -v '^#' .env | sed 's/#.*//' | xargs)
 
 echo "Starting docker services..."
-docker compose up --build -d
+
+docker compose build --no-cache
+docker compose up -d
+
+#COMPOSE_BAKE=true docker compose up --build -d
 
 echo "Waiting for MinIO to start..."
 sleep 5  # Adjust if needed
