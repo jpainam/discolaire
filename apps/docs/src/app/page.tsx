@@ -82,7 +82,7 @@ export default function IndexPage() {
         <h1
           className={cn(
             "text-4xl md:text-5xl lg:text-7xl font-semibold  px-4 tracking-tight max-w-4xl text-center text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-100 to-gray-400",
-            tilt_wrap.className
+            tilt_wrap.className,
           )}
         >
           The Open Source Google Analytics Replacement
