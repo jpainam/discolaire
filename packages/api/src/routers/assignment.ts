@@ -15,7 +15,7 @@ const createUpdateSchema = z.object({
   classroomId: z.string(),
   attachments: z.array(z.string()).optional(),
   from: z.coerce.date(),
-  termId: z.coerce.number(),
+  termId: z.string().min(1),
   to: z.coerce.date(),
   notify: z.boolean().optional().default(false),
   visibles: z.array(z.string()).optional(),

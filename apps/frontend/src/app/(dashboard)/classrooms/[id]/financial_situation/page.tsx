@@ -13,13 +13,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const session = await getSession();
   if (session?.user.profile == "student") {
     const student = await caller.student.getFromUserId(session.user.id);
-    balances = balances.filter((balance) => balance.student.id === student.id);
+    balances = balances.filter((balance) => balance.studentId === student.id);
   } else if (session?.user.profile == "contact") {
     const contact = await caller.contact.getFromUserId(session.user.id);
     const students = await caller.contact.students(contact.id);
     const studentIds = students.map((student) => student.studentId);
     balances = balances.filter((balance) =>
-      studentIds.includes(balance.student.id),
+      studentIds.includes(balance.studentId),
     );
   }
 

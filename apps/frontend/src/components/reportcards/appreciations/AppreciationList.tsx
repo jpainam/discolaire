@@ -30,7 +30,7 @@ export function AppreciationList({
   const { t } = useLocale();
   const searchParams = useSearchParams();
   const classroomId = searchParams.get("classroom");
-  const termId = Number(searchParams.get("term"));
+  const termId = searchParams.get("term");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const upsertStudentRemarkMutation = useMutation(
@@ -58,6 +58,9 @@ export function AppreciationList({
   }
   if (appreciationCategoriesQuery.isError) {
     showErrorToast(appreciationCategoriesQuery.error);
+  }
+  if (!termId) {
+    return <div>No term selected</div>;
   }
   return (
     <div className="flex flex-col items-start gap-0">

@@ -25,7 +25,7 @@ const createUpdateSchema = z.object({
   sendAgendaFrequency: z.string().optional(),
   address: z.string().optional(),
   countryId: z.string().optional(),
-  degreeId: z.number().optional(),
+  degreeId: z.string().optional(),
 });
 export const staffRouter = {
   all: protectedProcedure.query(({ ctx }) => {

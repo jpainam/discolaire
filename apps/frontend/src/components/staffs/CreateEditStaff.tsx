@@ -128,11 +128,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       jobTitle: data.jobTitle,
       countryId: data.countryId,
       observation: data.observation,
-      degreeId: data.degreeId
-        ? !Number.isNaN(parseInt(data.degreeId, 10))
-          ? parseInt(data.degreeId, 10)
-          : undefined
-        : undefined,
+      degreeId: data.degreeId,
       employmentType: data.employmentType,
       address: data.address,
       phoneNumber1: data.phoneNumber1,

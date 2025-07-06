@@ -4,34 +4,6 @@ import { z } from "zod";
 import { protectedProcedure } from "../trpc";
 
 export const studentAccountRouter = {
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.studentAccount.findMany({
-      orderBy: {
-        student: {
-          lastName: "asc",
-        },
-      },
-      include: {
-        student: true,
-      },
-    });
-  }),
-  getByStudentId: protectedProcedure
-    .input(z.string())
-    .query(({ ctx, input }) => {
-      return ctx.db.studentAccount.findFirst({
-        where: {
-          studentId: input,
-        },
-      });
-    }),
-  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
-    return ctx.db.studentAccount.findUnique({
-      where: {
-        id: input,
-      },
-    });
-  }),
   getStatements: protectedProcedure
     .input(
       z.object({
@@ -72,9 +44,7 @@ export const studentAccountRouter = {
         where: {
           deletedAt: null,
           status: "VALIDATED",
-          account: {
-            studentId: input.studentId,
-          },
+          studentId: input.studentId,
         },
         orderBy: {
           createdAt: "asc",

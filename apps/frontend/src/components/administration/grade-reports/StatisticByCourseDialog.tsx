@@ -27,13 +27,13 @@ import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 const schema = z.object({
   courseId: z.string().min(1),
-  termId: z.coerce.number(),
+  termId: z.string().min(1),
 });
 export function StatisticByCourseDialog({ format }: { format: "pdf" | "csv" }) {
   const form = useForm({
     defaultValues: {
       courseId: "",
-      termId: 0,
+      termId: "",
     },
     resolver: zodResolver(schema),
   });

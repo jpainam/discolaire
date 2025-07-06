@@ -2,13 +2,13 @@ import { CreateEditChatter } from "~/components/classrooms/attendances/chatter/C
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
-  searchParams: Promise<{ term: number }>;
+  searchParams: Promise<{ term: string }>;
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const students = await caller.classroom.students(params.id);
-  const termId = Number(searchParams.term);
+  const termId = searchParams.term;
   const classroomId = params.id;
 
   return (

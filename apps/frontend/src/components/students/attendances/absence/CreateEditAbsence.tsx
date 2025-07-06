@@ -84,7 +84,7 @@ export function CreateEditAbsence({
       studentId: params.id,
       value: data.value,
       justify: data.justify,
-      termId: parseInt(data.termId),
+      termId: data.termId,
     };
     if (absence) {
       toast.loading(t("updating"), { id: 0 });

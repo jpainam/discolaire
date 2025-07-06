@@ -50,21 +50,19 @@ export async function GET(
 
     if (session.user.profile == "student") {
       const student = await caller.student.getFromUserId(session.user.id);
-      balances = balances.filter(
-        (balance) => balance.student.id === student.id,
-      );
+      balances = balances.filter((balance) => balance.studentId === student.id);
     } else if (session.user.profile == "contact") {
       const contact = await caller.contact.getFromUserId(session.user.id);
       const students = await caller.contact.students(contact.id);
       const studentIds = students.map((student) => student.studentId);
       balances = balances.filter((balance) =>
-        studentIds.includes(balance.student.id),
+        studentIds.includes(balance.studentId),
       );
     }
     if (ids) {
       const selectedIds = ids.split(",");
       balances = balances.filter((stud) =>
-        selectedIds.includes(stud.student.id),
+        selectedIds.includes(stud.studentId),
       );
     }
 
@@ -124,8 +122,8 @@ async function toExcel({
   const { t } = await getServerTranslations();
   const rows = students.map((stud) => {
     return {
-      "Nom et Prénom": getFullName(stud.student),
-      Redoublant: stud.student.isRepeating ? "Oui" : "Non",
+      "Nom et Prénom": getFullName(stud),
+      Redoublant: stud.isRepeating ? "Oui" : "Non",
       "Total versé": stud.balance,
       Restant: stud.balance - amountDue,
       Status: stud.balance - amountDue < 0 ? "Débiteur" : "Créditeur",

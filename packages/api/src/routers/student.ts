@@ -7,7 +7,6 @@ import { z } from "zod";
 import type { Prisma } from "@repo/db";
 import redisClient from "@repo/kv";
 
-import { accountService } from "../services/account-service";
 import { contactService } from "../services/contact-service";
 import { isRepeating, studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
@@ -236,11 +235,6 @@ export const studentRouter = {
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
 
-      void accountService.attachAccount(
-        student.id,
-        `${student.firstName} ${student.lastName}`,
-        ctx.session.user.id,
-      );
       if (input.classroom) {
         await ctx.db.enrollment.create({
           data: {
@@ -258,11 +252,7 @@ export const studentRouter = {
     .mutation(async ({ ctx, input }) => {
       void studentService.addClubs(input.id, input.clubs ?? []);
       void studentService.addSports(input.id, input.sports ?? []);
-      void accountService.attachAccount(
-        input.id,
-        `${input.firstName} ${input.lastName}`,
-        ctx.session.user.id,
-      );
+
       if (
         input.registrationNumber &&
         (await studentService.registrationNumberExists(
@@ -421,7 +411,7 @@ export const studentRouter = {
     });
   }),
   grades: protectedProcedure
-    .input(z.object({ id: z.string(), termId: z.coerce.number().optional() }))
+    .input(z.object({ id: z.string(), termId: z.string().optional() }))
     .query(({ ctx, input }) => {
       return studentService.getGrades({
         studentId: input.id,
@@ -477,9 +467,7 @@ export const studentRouter = {
   transactions: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.transaction.findMany({
       where: {
-        account: {
-          studentId: input,
-        },
+        studentId: input,
         deletedAt: null,
         schoolYearId: ctx.schoolYearId,
       },

@@ -153,7 +153,7 @@ export const studentService = {
     schoolYearId,
   }: {
     studentId: string;
-    termId?: number;
+    termId?: string;
     schoolYearId: string;
   }) => {
     const grades = db.grade.findMany({

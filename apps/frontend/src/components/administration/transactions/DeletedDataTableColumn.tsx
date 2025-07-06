@@ -76,18 +76,18 @@ export const getDeletedDataTableColumn = ({
         );
       },
     }),
-    columnHelper.accessor("account", {
+    columnHelper.accessor("student", {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("account")} />
+        <DataTableColumnHeader column={column} title={t("student")} />
       ),
       cell: ({ row }) => {
         const transaction = row.original;
         return (
           <Link
             className="hover:underline hover:text-blue-600"
-            href={`/students/${transaction.account.studentId}/transactions`}
+            href={`/students/${transaction.studentId}/transactions`}
           >
-            {transaction.account.student.lastName}
+            {transaction.student.lastName}
           </Link>
         );
       },
@@ -102,7 +102,7 @@ export const getDeletedDataTableColumn = ({
         return (
           <Link
             className="hover:underline hover:text-blue-600"
-            href={`/students/${transaction.account.studentId}/transactions/${transaction.id}`}
+            href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
           >
             {transaction.transactionRef}
           </Link>

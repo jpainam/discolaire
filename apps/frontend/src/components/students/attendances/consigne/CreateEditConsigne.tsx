@@ -82,7 +82,7 @@ export function CreateEditConsigne({
       studentId: params.id,
       //duration: parseInt(data.hours) * 60 + parseInt(data.minutes),
       duration: Number(data.duration),
-      termId: parseInt(data.termId),
+      termId: data.termId,
       date: data.date,
       task: data.task,
     };

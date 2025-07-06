@@ -82,7 +82,7 @@ export function CreateEditExclusion({
       startDate: data.startDate,
       endDate: data.endDate,
       reason: data.reason,
-      termId: parseInt(data.termId),
+      termId: data.termId,
     };
     if (exclusion) {
       toast.loading(t("updating"), { id: 0 });

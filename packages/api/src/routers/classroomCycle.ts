@@ -5,7 +5,7 @@ import { protectedProcedure } from "../trpc";
 
 export const classroomCycleRouter = {
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.cycle.findMany({
+    return ctx.db.classroomCycle.findMany({
       orderBy: {
         name: "asc",
       },
@@ -17,7 +17,7 @@ export const classroomCycleRouter = {
   delete: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.cycle.delete({
+      return ctx.db.classroomCycle.delete({
         where: {
           id: input,
         },
@@ -31,7 +31,7 @@ export const classroomCycleRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.cycle.update({
+      return ctx.db.classroomCycle.update({
         where: {
           id: input.id,
         },
@@ -48,7 +48,7 @@ export const classroomCycleRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.cycle.create({
+      return ctx.db.classroomCycle.create({
         data: {
           name: input.name,
           schoolId: ctx.schoolId,

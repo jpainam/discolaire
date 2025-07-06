@@ -24,9 +24,7 @@ export default async function Page(props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const studentId = params.id;
-  const termId = searchParams.termId
-    ? parseInt(searchParams.termId)
-    : undefined;
+  const termId = searchParams.termId ?? undefined;
 
   const classroom = await caller.student.classroom({ studentId: studentId });
   if (!classroom) {
@@ -63,7 +61,7 @@ async function LateItem({
   termId,
 }: {
   studentId: string;
-  termId?: number;
+  termId?: string;
 }) {
   const lates = await caller.lateness.byStudent({
     studentId: studentId,
@@ -125,7 +123,7 @@ async function ChatterItem({
   termId,
 }: {
   studentId: string;
-  termId?: number;
+  termId?: string;
 }) {
   const chatters = await caller.chatter.byStudent({
     studentId: studentId,
@@ -177,7 +175,7 @@ async function ConsigneItem({
   termId,
 }: {
   studentId: string;
-  termId?: number;
+  termId?: string;
 }) {
   const consignes = await caller.consigne.byStudent({
     studentId: studentId,
@@ -238,7 +236,7 @@ async function ExclusionItem({
   termId,
 }: {
   studentId: string;
-  termId?: number;
+  termId?: string;
 }) {
   const exclusions = await caller.exclusion.byStudent({
     studentId: studentId,
@@ -307,7 +305,7 @@ async function AbsenceItem({
   termId,
 }: {
   studentId: string;
-  termId?: number;
+  termId?: string;
 }) {
   const absences = await caller.absence.byStudent({
     studentId: studentId,

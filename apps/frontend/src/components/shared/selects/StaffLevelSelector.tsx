@@ -78,7 +78,7 @@ export const StaffLevelSelector = ({
             className={cn(`w-[250px] justify-between`, className)}
           >
             {value
-              ? staffLevels.find((level) => level.id == Number(value))?.name
+              ? staffLevels.find((level) => level.id == value)?.name
               : t("select_an_option")}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -97,15 +97,14 @@ export const StaffLevelSelector = ({
                       key={level.id}
                       className="flex w-full cursor-pointer items-center justify-between space-x-2"
                       onSelect={(_selectedValue) => {
-                        const v =
-                          level.id == Number(value) ? undefined : level.id;
+                        const v = level.id == value ? undefined : level.id;
                         onChange(v?.toString() ?? undefined);
                         setValue(v?.toString() ?? "");
                         setOpen(false);
                       }}
                     >
                       <span>{level.name}</span>
-                      {Number(value) === level.id && (
+                      {value === level.id && (
                         <Check
                           className="text-brand"
                           strokeWidth={2}

@@ -80,7 +80,7 @@ export function CreateEditLateness({
     const values = {
       studentId: params.id,
       duration: Number(data.duration), //parseInt(data.hours) * 60 + parseInt(data.minutes),
-      termId: parseInt(data.termId),
+      termId: data.termId,
       date: data.date,
       reason: data.reason,
       justify: data.justify,

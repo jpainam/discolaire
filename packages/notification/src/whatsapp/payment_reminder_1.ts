@@ -42,9 +42,7 @@ export async function sendPaymentReminder({
   }, 0);
   const transactions = await db.transaction.findMany({
     where: {
-      account: {
-        studentId: student.id,
-      },
+      studentId: student.id,
       schoolYearId: schoolYearId,
     },
   });

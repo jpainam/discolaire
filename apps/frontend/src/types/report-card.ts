@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const reportCardSchema = z.object({
   studentId: z.string(),
-  termId: z.number(),
+  termId: z.string(),
   classroomId: z.string(),
   remark: z.string().nullish(),
   remarkBy: z.string().nullish(),

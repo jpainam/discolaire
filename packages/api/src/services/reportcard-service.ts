@@ -25,7 +25,7 @@ export function calculateFinalGrade(
 
 export async function getGrades(
   classroomId: string,
-  termId: number,
+  termId: string,
   minGradesThresholdRatio = 0.5,
 ) {
   const gradeSheets = await db.gradeSheet.findMany({

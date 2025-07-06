@@ -17,7 +17,7 @@ export const chatterRouter = {
   createClassroom: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         students: z.array(
           z.object({
             id: z.string().min(1),
@@ -64,7 +64,7 @@ export const chatterRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        termId: z.coerce.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -117,7 +117,7 @@ export const chatterRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
-        termId: z.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -138,7 +138,7 @@ export const chatterRouter = {
   create: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
         value: z.coerce.number(),
         studentId: z.string().min(1),
@@ -159,7 +159,7 @@ export const chatterRouter = {
     .input(
       z.object({
         id: z.coerce.number(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         value: z.coerce.number(),
       }),
     )

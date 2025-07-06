@@ -55,11 +55,7 @@ export const transactionRouter = {
       const studentIds: string[] = students.map((stud) => stud.id);
       return ctx.db.transaction.findMany({
         include: {
-          account: {
-            include: {
-              student: true,
-            },
-          },
+          student: true,
         },
         where: {
           AND: [
@@ -79,10 +75,8 @@ export const transactionRouter = {
             ...(input.classroom
               ? [
                   {
-                    account: {
-                      studentId: {
-                        in: studentIds,
-                      },
+                    studentId: {
+                      in: studentIds,
                     },
                   },
                 ]
@@ -114,13 +108,9 @@ export const transactionRouter = {
       return ctx.db.transaction.findMany({
         take: input.limit,
         include: {
-          account: {
+          student: {
             include: {
-              student: {
-                include: {
-                  user: true,
-                },
-              },
+              user: true,
             },
           },
         },
@@ -145,12 +135,10 @@ export const transactionRouter = {
             ...(input.classroomId
               ? [
                   {
-                    account: {
-                      student: {
-                        enrollments: {
-                          some: {
-                            classroomId: input.classroomId,
-                          },
+                    student: {
+                      enrollments: {
+                        some: {
+                          classroomId: input.classroomId,
                         },
                       },
                     },
@@ -205,11 +193,7 @@ export const transactionRouter = {
     .query(async ({ ctx, input }) => {
       const t = await ctx.db.transaction.findUnique({
         include: {
-          account: {
-            include: {
-              student: true,
-            },
-          },
+          student: true,
         },
         where: {
           id: input,
@@ -294,25 +278,20 @@ export const transactionRouter = {
       where: {
         deletedAt: null,
         schoolYearId: ctx.schoolYearId,
-        account: {
-          studentId: {
-            in: enrollmentIds,
-          },
+
+        studentId: {
+          in: enrollmentIds,
         },
       },
       select: {
-        account: {
-          select: {
-            studentId: true,
-          },
-        },
+        studentId: true,
         amount: true,
       },
     });
 
     const totalTransactionMap: Record<string, number> = {};
     transactions.forEach((transaction) => {
-      const studentId = transaction.account.studentId;
+      const studentId = transaction.studentId;
       if (totalTransactionMap[studentId]) {
         totalTransactionMap[studentId] += transaction.amount;
       } else {
@@ -347,20 +326,10 @@ export const transactionRouter = {
     .mutation(async ({ ctx, input }) => {
       const currentDate = Date.now();
       const transactionRef = `${input.transactionType.substring(0, 2)}000${currentDate}`;
-      const account = await ctx.db.studentAccount.findFirst({
-        where: {
-          studentId: input.studentId,
-        },
-      });
-      if (!account) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: `account for ${input.studentId} not found`,
-        });
-      }
+
       const result = await ctx.db.transaction.create({
         data: {
-          accountId: account.id,
+          studentId: input.studentId,
           amount: Number(input.amount),
           transactionRef: transactionRef,
           transactionType: input.transactionType,

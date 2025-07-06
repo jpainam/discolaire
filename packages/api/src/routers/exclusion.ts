@@ -14,7 +14,7 @@ export const exclusionRouter = {
   createClassroom: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         students: z.array(
           z.object({
             id: z.string().min(1),
@@ -74,7 +74,7 @@ export const exclusionRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        termId: z.coerce.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -127,7 +127,7 @@ export const exclusionRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
-        termId: z.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -148,7 +148,7 @@ export const exclusionRouter = {
   create: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         startDate: z.coerce.date().default(() => new Date()),
         endDate: z.coerce.date().default(() => new Date()),
         studentId: z.string().min(1),
@@ -171,7 +171,7 @@ export const exclusionRouter = {
     .input(
       z.object({
         id: z.coerce.number(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         startDate: z.coerce.date(),
         endDate: z.coerce.date(),
       }),

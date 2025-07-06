@@ -228,7 +228,7 @@ export function AttendanceHeader() {
                 }
                 deletePeriodictAttendance.mutate({
                   classroomId: params.id,
-                  termId: Number(termId),
+                  termId,
                 });
               }
             }}

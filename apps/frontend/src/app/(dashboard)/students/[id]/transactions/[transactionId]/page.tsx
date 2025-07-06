@@ -33,8 +33,8 @@ export default async function Page(props: {
   } = await caller.transaction.getReceiptInfo(params.transactionId);
 
   const { t, i18n } = await getServerTranslations();
-  const studentAccount = await caller.studentAccount.get(transaction.accountId);
-  if (studentAccount?.studentId !== params.id) {
+
+  if (transaction.studentId !== params.id) {
     redirect(routes.students.transactions.index(params.id));
   }
 

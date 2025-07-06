@@ -5,7 +5,7 @@ import { protectedProcedure } from "../trpc";
 
 export const classroomSectionRouter = {
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.section.findMany({
+    return ctx.db.classroomSection.findMany({
       where: {
         schoolId: ctx.schoolId,
       },
@@ -14,7 +14,7 @@ export const classroomSectionRouter = {
   delete: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.section.delete({
+      return ctx.db.classroomSection.delete({
         where: {
           id: input,
         },
@@ -28,7 +28,7 @@ export const classroomSectionRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.section.update({
+      return ctx.db.classroomSection.update({
         where: {
           id: input.id,
         },
@@ -44,7 +44,7 @@ export const classroomSectionRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.section.create({
+      return ctx.db.classroomSection.create({
         data: {
           name: input.name,
           schoolId: ctx.session.user.schoolId,

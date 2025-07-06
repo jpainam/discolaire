@@ -68,13 +68,13 @@ export function TransactionDetails({
       <div className="flex flex-row items-center gap-1">
         <Badge className="w-4 h-4" />
         {/* <Label>{t("account")}:</Label> */}
-        {transactionQuery.data.account.name}
+        {getFullName(transactionQuery.data.student)}
       </div>
       <div className="flex flex-row items-center gap-1">
         <User className="w-4 h-4" />
         {/* <Label>{t("student")}:</Label> */}
         <span className="overflow-hidden truncate">
-          {getFullName(transactionQuery.data.account.student)}
+          {getFullName(transactionQuery.data.student)}
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">

@@ -37,7 +37,7 @@ export function GridViewFinanceCard({
     selectedStudentIdsAtom,
   );
 
-  const student = studentBalance.student;
+  const student = studentBalance;
   const balance = studentBalance.balance;
 
   const handleClick = useCallback(() => {

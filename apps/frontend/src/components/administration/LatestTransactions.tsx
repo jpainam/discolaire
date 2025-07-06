@@ -50,14 +50,14 @@ export async function LatestTransactions({
           >
             <AvatarState
               className="w-8 h-8 rounded-full"
-              pos={transaction.account.student.lastName?.length ?? 0}
-              avatar={transaction.account.student.user?.avatar}
+              pos={transaction.student.lastName?.length ?? 0}
+              avatar={transaction.student.user?.avatar}
             />
 
             <div className="flex-1 flex items-center justify-between min-w-0">
               <div className="space-y-0.5">
                 <h3 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-                  {getFullName(transaction.account.student)}
+                  {getFullName(transaction.student)}
                 </h3>
                 <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
                   {transaction.createdAt.toLocaleDateString("en-US", {

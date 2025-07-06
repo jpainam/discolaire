@@ -13,7 +13,7 @@ import { getFullName, xlsxType } from "~/utils";
 
 const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),
-  termId: z.coerce.number().optional(),
+  termId: z.string().optional(),
   subjectId: z.coerce.number().optional(),
 });
 
@@ -49,7 +49,7 @@ export async function GET(
       gradesheets = gradesheets.filter((g) => g.subjectId == subjectId);
     }
     if (termId) {
-      gradesheets = gradesheets.filter((g) => g.termId == Number(termId));
+      gradesheets = gradesheets.filter((g) => g.termId == termId);
     }
 
     if (format === "csv") {

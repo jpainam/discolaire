@@ -15,6 +15,7 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { routes } from "~/configs/routes";
 import { caller } from "~/trpc/server";
+import { getFullName } from "~/utils";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -23,10 +24,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const { t, i18n } = await getServerTranslations();
 
-  const account = await caller.studentAccount.getByStudentId(id);
-  if (!account) {
-    throw new Error("Account not found");
-  }
+  const student = await caller.student.get(id);
+
   const statements = await caller.studentAccount.getStatements({
     studentId: id,
   });
@@ -158,7 +157,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           />
         )} */}
             <TableRow className="font-bold">
-              <TableCell colSpan={2}>{account.name}</TableCell>
+              <TableCell colSpan={2}>{getFullName(student)}</TableCell>
               <TableCell colSpan={4}>{t("total_for_account")}</TableCell>
               <TableCell>
                 {Math.abs(balance).toLocaleString(i18n.language, {

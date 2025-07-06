@@ -5,7 +5,7 @@ import { protectedProcedure } from "../trpc";
 
 export const degreeRouter = {
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.degree.findMany({
+    return ctx.db.staffDegree.findMany({
       orderBy: {
         name: "asc",
       },
@@ -14,8 +14,8 @@ export const degreeRouter = {
       },
     });
   }),
-  delete: protectedProcedure.input(z.number()).mutation(({ input, ctx }) => {
-    return ctx.db.degree.delete({
+  delete: protectedProcedure.input(z.string()).mutation(({ input, ctx }) => {
+    return ctx.db.staffDegree.delete({
       where: {
         id: input,
       },
@@ -24,12 +24,12 @@ export const degreeRouter = {
   update: protectedProcedure
     .input(
       z.object({
-        id: z.coerce.number(),
+        id: z.string().min(1),
         name: z.string().min(1),
       }),
     )
     .mutation(({ input, ctx }) => {
-      return ctx.db.degree.update({
+      return ctx.db.staffDegree.update({
         where: {
           id: input.id,
         },
@@ -45,7 +45,7 @@ export const degreeRouter = {
       }),
     )
     .mutation(({ input, ctx }) => {
-      return ctx.db.degree.create({
+      return ctx.db.staffDegree.create({
         data: {
           name: input.name,
           schoolId: ctx.schoolId,

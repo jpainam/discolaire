@@ -119,7 +119,7 @@ export function CreateGradeSheet({
     toast.loading(t("creating"), { id: 0 });
     const values = {
       ...data,
-      termId: Number(data.termId),
+      termId: data.termId,
       subjectId: Number(data.subjectId),
       grades: data.grades.map((grade) => ({
         ...grade,

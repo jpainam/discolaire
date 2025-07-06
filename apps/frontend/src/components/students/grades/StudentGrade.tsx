@@ -2,7 +2,7 @@
 
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
@@ -28,7 +28,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
     }),
   );
 
-  const [term] = useQueryState("term", parseAsInteger);
+  const [term] = useQueryState("term", parseAsString);
 
   const [view] = useQueryState("view", {
     defaultValue: "by_chronological_order",
@@ -42,9 +42,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
   const sortedGrades = useMemo(() => {
     let filteredGrades = grades;
     if (term) {
-      filteredGrades = grades.filter(
-        (g) => g.gradeSheet.termId === Number(term),
-      );
+      filteredGrades = grades.filter((g) => g.gradeSheet.termId === term);
     }
 
     const sorted =

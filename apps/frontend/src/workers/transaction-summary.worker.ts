@@ -64,7 +64,7 @@ new Worker(
       const endDate = new Date();
       const transactions = await db.transaction.findMany({
         include: {
-          account: true,
+          student: true,
         },
         where: {
           AND: [

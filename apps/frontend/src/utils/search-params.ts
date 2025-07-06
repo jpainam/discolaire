@@ -1,7 +1,6 @@
 import {
   createLoader,
   parseAsFloat,
-  parseAsInteger,
   parseAsIsoDate,
   parseAsString,
   parseAsStringLiteral,
@@ -16,7 +15,7 @@ export const coordinatesSearchParams = {
 export const loadSearchParams = createLoader(coordinatesSearchParams);
 
 export const reportcardSearchParamsSchema = {
-  termId: parseAsInteger,
+  termId: parseAsString,
   trimestreId: parseAsString,
 };
 export const reportcardSearchParams = createLoader(

@@ -79,7 +79,7 @@ export function ClassroomFinancialSituation({
 
     const qq = debouncedQuery.toLowerCase();
     const filtered = balances.filter((balance) => {
-      const { firstName, lastName } = balance.student;
+      const { firstName, lastName } = balance;
       return (
         firstName?.toLowerCase().includes(qq) ||
         lastName?.toLowerCase().includes(qq) ||

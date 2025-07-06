@@ -28,7 +28,7 @@ export function CreateEditStaffLevel({
   id,
   name,
 }: {
-  id?: number;
+  id?: string;
   name?: string;
 }) {
   const form = useForm({

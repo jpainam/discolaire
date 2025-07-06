@@ -6,11 +6,7 @@ export const transactionService = {
   getReceiptInfo: async (transactionId: number) => {
     const transaction = await db.transaction.findUniqueOrThrow({
       include: {
-        account: {
-          include: {
-            student: true,
-          },
-        },
+        student: true,
       },
       where: {
         id: transactionId,
@@ -18,7 +14,7 @@ export const transactionService = {
     });
 
     const classroom = await studentService.getClassroom(
-      transaction.account.studentId,
+      transaction.studentId,
       transaction.schoolYearId,
     );
     if (!classroom) {
@@ -32,9 +28,7 @@ export const transactionService = {
     const totalFee = fees.reduce((acc, fee) => acc + fee.amount, 0);
     const transactions = await db.transaction.findMany({
       where: {
-        account: {
-          studentId: transaction.account.studentId,
-        },
+        studentId: transaction.studentId,
         deletedAt: null,
         schoolYearId: transaction.schoolYearId,
       },
@@ -70,7 +64,7 @@ export const transactionService = {
         contact: true,
       },
       where: {
-        studentId: transaction.account.studentId,
+        studentId: transaction.studentId,
       },
     });
     let contact = studentContact.find((c) => c.primaryContact)?.contact;
@@ -78,7 +72,7 @@ export const transactionService = {
     contact ??= studentContact[0]?.contact;
 
     return {
-      student: transaction.account.student,
+      student: transaction.student,
       contact: contact ?? null,
       remaining,
       totalFee,

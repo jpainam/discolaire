@@ -6,6 +6,7 @@ import { sendEmail } from "@repo/utils";
 import { z } from "zod";
 
 import { getSession } from "~/auth/server";
+import { getFullName } from "~/utils";
 
 const schema = z.object({
   schoolId: z.string(),
@@ -14,8 +15,9 @@ const schema = z.object({
     z.object({
       id: z.coerce.number(),
       description: z.string().optional(),
-      account: z.object({
-        name: z.string().default(""),
+      student: z.object({
+        lastName: z.string().default(""),
+        firstName: z.string().default(""),
       }),
       createdAt: z.coerce.date(),
       amount: z.coerce.number(),
@@ -65,7 +67,7 @@ export async function POST(req: Request) {
           return {
             id: transaction.id,
             description: transaction.description ?? "",
-            name: transaction.account.name,
+            name: getFullName(transaction.student),
             date: transaction.createdAt.toISOString(),
             amount: transaction.amount,
             status: transaction.status,
@@ -94,7 +96,7 @@ export async function POST(req: Request) {
           return {
             id: transaction.id,
             description: transaction.description ?? "",
-            name: transaction.account.name,
+            name: getFullName(transaction.student),
             date: transaction.createdAt.toISOString(),
             amount: transaction.amount,
             status: transaction.status,

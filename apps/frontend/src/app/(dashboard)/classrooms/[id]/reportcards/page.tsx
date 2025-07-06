@@ -43,11 +43,11 @@ export default async function Page(props: {
     globalRanks,
   } = await caller.reportCard.getSequence({
     classroomId: params.id,
-    termId: Number(termId),
+    termId: termId,
   });
 
   const classroom = await caller.classroom.get(params.id);
-  const term = await caller.term.get(Number(termId));
+  const term = await caller.term.get(termId);
   const subjects = await caller.classroom.subjects(params.id);
   const students = await caller.classroom.students(params.id);
   const studentsMap = new Map(students.map((s) => [s.id, s]));
@@ -61,7 +61,6 @@ export default async function Page(props: {
 
   // const discipline = await caller.discipline.classroom({
   //   classroomId: params.id,
-  //   termId: Number(term),
   // });
 
   const { t } = await getServerTranslations();

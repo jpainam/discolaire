@@ -1,7 +1,7 @@
 "use client";
 
 import { LayoutGridIcon, ListIcon, MoreVertical, Trash2 } from "lucide-react";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
@@ -44,7 +44,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
     trpc.student.get.queryOptions(params.id),
   );
   // const searchParams = useSearchParams();
-  const [term] = useQueryState("term", parseAsInteger);
+  const [term] = useQueryState("term", parseAsString);
   const [view, setView] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
@@ -52,7 +52,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
   const { data: grades } = useSuspenseQuery(
     trpc.student.grades.queryOptions({
       id: student.id,
-      termId: term ? Number(term) : undefined,
+      termId: term ?? undefined,
     }),
   );
 
@@ -88,7 +88,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
 
     if (term) {
       classroomMinMaxMoyGrades.data?.forEach((grade) => {
-        if (grade.termId == Number(term)) {
+        if (grade.termId == term) {
           gradeSum += (grade.avg ?? 0) * (grade.coefficient ?? 0);
           coeffSum += grade.coefficient ?? 0;
         }
@@ -105,7 +105,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
 
     if (term) {
       grades.forEach((grade) => {
-        if (grade.gradeSheet.termId == Number(term)) {
+        if (grade.gradeSheet.termId == term) {
           gradeSum += grade.grade * grade.gradeSheet.subject.coefficient;
           coeffSum += grade.gradeSheet.subject.coefficient;
         }

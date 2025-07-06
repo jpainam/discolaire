@@ -2,7 +2,7 @@
 
 import { isSameDay } from "date-fns";
 import { Eye } from "lucide-react";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
@@ -29,7 +29,7 @@ export function StudentAssignmentTable({
 }: {
   assignments: StudentAssignment[];
 }) {
-  const [term] = useQueryState("term", parseAsInteger);
+  const [term] = useQueryState("term", parseAsString);
   const [items, setItems] = useState(assignments);
   useEffect(() => {
     if (!term) {

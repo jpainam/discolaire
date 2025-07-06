@@ -197,7 +197,7 @@ export async function gradesReportTracker({
       };
       courseName: string;
       teacherName: string;
-      terms: number[];
+      terms: string[];
     }
   >();
   gradeSheets.forEach((sheet) => {

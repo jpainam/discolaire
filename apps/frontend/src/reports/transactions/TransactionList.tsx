@@ -89,9 +89,7 @@ export function TransactionList({
                   <Text style={{ width: "10%", paddingLeft: 2 }}>
                     {tra.createdAt.toLocaleDateString()}
                   </Text>
-                  <Text style={{ width: "15%" }}>
-                    {tra.account.student.lastName}
-                  </Text>
+                  <Text style={{ width: "15%" }}>{tra.student.lastName}</Text>
                   <Text style={{ width: "20%" }}>{tra.transactionRef}</Text>
                   <Text style={{ width: "10%" }}>{tra.transactionType}</Text>
                   <Text style={{ width: "25%" }}>{tra.description}</Text>

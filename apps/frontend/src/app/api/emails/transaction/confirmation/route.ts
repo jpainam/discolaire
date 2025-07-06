@@ -46,7 +46,7 @@ export async function POST(req: Request) {
         },
       },
       where: {
-        studentId: transaction.account.studentId,
+        studentId: transaction.studentId,
       },
     });
     const destinationEmails = contacts

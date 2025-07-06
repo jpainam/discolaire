@@ -72,7 +72,7 @@ export const latenessRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        termId: z.coerce.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -102,7 +102,7 @@ export const latenessRouter = {
   createClassroom: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
         students: z.array(
           z.object({
@@ -134,7 +134,7 @@ export const latenessRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
-        termId: z.coerce.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -158,7 +158,7 @@ export const latenessRouter = {
   create: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
         duration: z.coerce.number(),
         studentId: z.string().min(1),
@@ -180,7 +180,7 @@ export const latenessRouter = {
     .input(
       z.object({
         id: z.coerce.number(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         duration: z.coerce.number(),
         justify: z.coerce.number().optional(),
         reason: z.string().optional().default(""),

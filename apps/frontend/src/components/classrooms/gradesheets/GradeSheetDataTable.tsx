@@ -19,7 +19,7 @@ export function GradeSheetDataTable() {
     trpc.classroom.gradesheets.queryOptions(params.id),
   );
 
-  const [termId] = useQueryState("term", parseAsInteger);
+  const [termId] = useQueryState("term");
   const [subjectId] = useQueryState("subject", parseAsInteger);
 
   const filteredGradesheets = useMemo(() => {
@@ -28,7 +28,7 @@ export function GradeSheetDataTable() {
     if (subjectId && isFinite(subjectId)) {
       result = result.filter((g) => g.subjectId == subjectId);
     }
-    if (termId && isFinite(termId)) {
+    if (termId) {
       result = result.filter((g) => g.termId == termId);
     }
     return result;

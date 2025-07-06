@@ -65,7 +65,7 @@ export const attendanceRouter = {
     .input(
       z.object({
         classroomId: z.string(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
       }),
     )
     .mutation(({ ctx, input }) => {

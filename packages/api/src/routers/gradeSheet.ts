@@ -14,7 +14,7 @@ import { protectedProcedure } from "../trpc";
 const createGradeSheetSchema = z.object({
   notifyParents: z.boolean().default(true),
   notifyStudents: z.boolean().default(true),
-  termId: z.coerce.number(),
+  termId: z.string().min(1),
   subjectId: z.coerce.number(),
   weight: z.coerce.number().nonnegative(),
   name: z.string().min(1),

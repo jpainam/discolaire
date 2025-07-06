@@ -15,10 +15,10 @@ import type { RouterOutputs } from "@repo/api";
 import { cn } from "@repo/ui/lib/utils";
 import i18next from "i18next";
 import Link from "next/link";
+import { getSession } from "~/auth/server";
 import { AvatarState } from "~/components/AvatarState";
 import { AttendanceAction } from "~/components/classrooms/attendances/AttendanceAction";
 import { caller } from "~/trpc/server";
-import { getSession } from "~/auth/server";
 
 type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
 type AbsenceType = RouterOutputs["absence"]["byClassroom"][number];
@@ -35,7 +35,7 @@ export default async function Page(props: {
   const { t } = await getServerTranslations();
 
   const { id: classroomId } = params;
-  const termId = isNaN(Number(term)) ? undefined : Number(term);
+  const termId = term ?? undefined;
   const [absences, lates, consignes, chatters, exclusions] = await Promise.all([
     caller.absence.byClassroom({ classroomId, termId }),
     caller.lateness.byClassroom({ classroomId, termId }),

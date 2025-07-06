@@ -133,8 +133,10 @@ export const classroomRouter = {
   studentsBalance: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const result = await ctx.db.studentAccount.findMany({
+      const _result = await ctx.db.transaction.findMany({
         where: {
+          schoolYearId: ctx.schoolYearId,
+          status: TransactionStatus.VALIDATED,
           student: {
             enrollments: {
               some: {
@@ -144,15 +146,11 @@ export const classroomRouter = {
           },
         },
         orderBy: {
-          name: "asc",
+          student: {
+            lastName: "asc",
+          },
         },
         include: {
-          transactions: {
-            where: {
-              schoolYearId: ctx.schoolYearId,
-              status: TransactionStatus.VALIDATED,
-            },
-          },
           student: {
             include: {
               user: true,
@@ -160,16 +158,25 @@ export const classroomRouter = {
           },
         },
       });
-
-      return result.map((account) => {
-        const balance = account.transactions.reduce((acc, transaction) => {
-          return acc + transaction.amount;
-        }, 0);
+      // TODO fix students Balance to return students and balance >
+      const students = await classroomService.getStudents(input.id);
+      return students.map((student) => {
         return {
-          ...account,
-          balance: balance,
+          ...student,
+          studentId: student.id,
+          balance: 0,
         };
       });
+
+      // return result.map((account) => {
+      //   const balance = transactions.reduce((acc, transaction) => {
+      //     return acc + transaction.amount;
+      //   }, 0);
+      //   return {
+      //     ...account,
+      //     balance: balance,
+      //   };
+      // });
     }),
   teachers: protectedProcedure
     .input(z.string())

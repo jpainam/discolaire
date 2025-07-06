@@ -22,8 +22,8 @@ export async function getTrimestreGrades(
   }
   let grades1: Awaited<ReturnType<typeof getGrades>> = [];
   let grades2: Awaited<ReturnType<typeof getGrades>> = [];
-  let seq1: number | null | undefined = null;
-  let seq2: number | null | undefined = null;
+  let seq1: string | null | undefined = null;
+  let seq2: string | null | undefined = null;
   const sortedTerms = terms.sort((a, b) => a.order - b.order);
   if (trimestreId === "trim1") {
     seq1 = sortedTerms[0]?.id;

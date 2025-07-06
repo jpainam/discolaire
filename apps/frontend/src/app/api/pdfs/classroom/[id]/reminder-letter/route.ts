@@ -8,9 +8,9 @@ import { sumBy } from "lodash";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getSession } from "~/auth/server";
+import ReminderLetter from "~/reports/statements/ReminderLetter";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
-import ReminderLetter from "~/reports/statements/ReminderLetter";
 
 const querySchema = z.object({
   ids: z.string().optional(),
@@ -55,14 +55,14 @@ export async function GET(
     if (ids) {
       const selectedIds = ids.split(",");
       students = students.filter((stud) =>
-        selectedIds.includes(stud.student.id),
+        selectedIds.includes(stud.studentId),
       );
     }
     const reminders = students
       .filter((stud) => stud.balance - amountDue < 0)
       .map((stud) => {
         return {
-          studentName: getFullName(stud.student),
+          studentName: getFullName(stud),
           amount: (amountDue - stud.balance).toLocaleString(i18next.language, {
             style: "currency",
             maximumFractionDigits: 0,

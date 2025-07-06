@@ -3,7 +3,7 @@ import { getGrades } from "./reportcard-service";
 
 export async function getSequenceGrades(
   classroomId: string,
-  sequenceId: number,
+  sequenceId: string,
 ): Promise<{
   studentsReport: Map<
     string,

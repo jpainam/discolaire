@@ -116,7 +116,7 @@ export const courseRouter = {
     .input(
       z.object({
         id: z.string().min(1),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {

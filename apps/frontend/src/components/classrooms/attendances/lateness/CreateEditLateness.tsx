@@ -52,7 +52,7 @@ export function CreateEditLateness({
   termId,
   classroomId,
 }: {
-  termId: number;
+  termId: string;
   classroomId: string;
   students: RouterOutputs["classroom"]["students"];
 }) {

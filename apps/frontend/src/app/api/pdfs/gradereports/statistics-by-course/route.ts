@@ -12,7 +12,7 @@ import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
 const searchSchema = z.object({
-  termId: z.coerce.number(),
+  termId: z.string().min(1),
   courseId: z.string().min(1),
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
@@ -36,10 +36,10 @@ export async function GET(req: NextRequest) {
     const { termId, courseId, format } = result.data;
     const stats = await caller.course.statistics({
       id: courseId,
-      termId: Number(termId),
+      termId,
     });
     //const school = await caller.school.getSchool();
-    const term = await caller.term.get(Number(termId));
+    const term = await caller.term.get(termId);
     const course = await caller.course.get(courseId);
     if (format === "csv") {
       const { blob, headers } = toExcel({ stats });

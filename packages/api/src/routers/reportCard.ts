@@ -11,7 +11,7 @@ export const reportCardRouter = {
     .input(
       z.object({
         classroomId: z.string(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
       }),
     )
     .query(({ ctx, input }) => {
@@ -28,7 +28,7 @@ export const reportCardRouter = {
       z.object({
         studentId: z.string(),
         classroomId: z.string(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -47,7 +47,7 @@ export const reportCardRouter = {
       z.object({
         studentId: z.string(),
         classroomId: z.string(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         remark: z.string(),
       }),
     )
@@ -77,7 +77,7 @@ export const reportCardRouter = {
     .input(
       z.object({
         classroomId: z.string(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
       }),
     )
     .query(({ input }) => {

@@ -77,7 +77,7 @@ export function CreateEditChatter({
     const values = {
       studentId: params.id,
       value: data.value,
-      termId: parseInt(data.termId),
+      termId: data.termId,
     };
     if (chatter) {
       toast.loading(t("updating"), { id: 0 });

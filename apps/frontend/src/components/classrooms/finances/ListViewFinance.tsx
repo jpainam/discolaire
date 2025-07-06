@@ -57,7 +57,7 @@ export function ListViewFinance({
                 <Checkbox
                   onCheckedChange={(checked) => {
                     setSelectedStudents((_stds) =>
-                      checked ? students.map((stud) => stud.student.id) : [],
+                      checked ? students.map((stud) => stud.studentId) : [],
                     );
                   }}
                 />
@@ -87,28 +87,28 @@ export function ListViewFinance({
                       onCheckedChange={(checked) => {
                         setSelectedStudents((students) =>
                           checked
-                            ? [...students, stud.student.id]
-                            : students.filter((id) => id !== stud.student.id),
+                            ? [...students, stud.studentId]
+                            : students.filter((id) => id !== stud.studentId),
                         );
                       }}
-                      checked={selectedStudents.includes(stud.student.id)}
+                      checked={selectedStudents.includes(stud.studentId)}
                     />
                   </TableCell>
                   <TableCell>
                     <AvatarState
-                      pos={getFullName(stud.student).length}
-                      avatar={stud.student.user?.avatar}
+                      pos={getFullName(stud).length}
+                      avatar={stud.user?.avatar}
                     />
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {stud.student.registrationNumber}
+                    {stud.registrationNumber}
                   </TableCell>
                   <TableCell>
                     <Link
                       className="hover:text-blue-600 hover:underline"
-                      href={routes.students.details(stud.student.id)}
+                      href={routes.students.details(stud.id)}
                     >
-                      {getFullName(stud.student)}
+                      {getFullName(stud)}
                     </Link>
                   </TableCell>
                   <TableCell>

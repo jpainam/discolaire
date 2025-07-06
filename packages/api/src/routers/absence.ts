@@ -74,7 +74,7 @@ export const absenceRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        termId: z.coerce.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -99,7 +99,7 @@ export const absenceRouter = {
     }),
   byStudent: protectedProcedure
     .input(
-      z.object({ studentId: z.string().min(1), termId: z.number().optional() }),
+      z.object({ studentId: z.string().min(1), termId: z.string().optional() }),
     )
     .query(async ({ ctx, input }) => {
       return ctx.db.absence.findMany({
@@ -135,7 +135,7 @@ export const absenceRouter = {
   createClassroom: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         students: z.array(
           z.object({
             id: z.string().min(1),
@@ -168,7 +168,7 @@ export const absenceRouter = {
   create: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
         value: z.coerce.number(),
         justify: z.coerce.number().optional(),
@@ -191,7 +191,7 @@ export const absenceRouter = {
     .input(
       z.object({
         id: z.coerce.number(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         value: z.coerce.number(),
         justify: z.coerce.number().default(0),
       }),

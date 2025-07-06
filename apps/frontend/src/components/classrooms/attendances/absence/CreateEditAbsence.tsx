@@ -54,7 +54,7 @@ export function CreateEditAbsence({
   termId,
   classroomId,
 }: {
-  termId: number;
+  termId: string;
   classroomId: string;
   students: RouterOutputs["classroom"]["students"];
 }) {

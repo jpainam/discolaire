@@ -22,7 +22,7 @@ export default function StudentGradesTab({
   );
   const gradesByTerm: {
     name: string;
-    termId: number;
+    termId: string;
     grades: {
       score: number;
       subject: string;

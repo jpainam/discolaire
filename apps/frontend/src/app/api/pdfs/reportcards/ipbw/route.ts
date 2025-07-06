@@ -11,7 +11,7 @@ import { caller } from "~/trpc/server";
 const searchSchema = z.object({
   studentId: z.string().nullable(),
   classroomId: z.string().nullable(),
-  termId: z.coerce.number(),
+  termId: z.string().min(1),
 });
 export async function GET(req: NextRequest) {
   const session = await getSession();
@@ -55,14 +55,14 @@ async function classroomReportCard({
   termId,
 }: {
   classroomId: string;
-  termId: number;
+  termId: string;
 }) {
   const school = await caller.school.getSchool();
   const students = await caller.classroom.students(classroomId);
   const contacts = await caller.student.getPrimaryContacts({ classroomId });
   const report = await caller.reportCard.getSequence({
-    classroomId: classroomId,
-    termId: termId,
+    classroomId,
+    termId,
   });
 
   const subjects = await caller.classroom.subjects(classroomId);
@@ -70,8 +70,8 @@ async function classroomReportCard({
   const classroom = await caller.classroom.get(classroomId);
 
   const disciplines = await caller.discipline.sequence({
-    classroomId: classroomId,
-    termId: termId,
+    classroomId,
+    termId,
   });
 
   const stream = await renderToStream(
@@ -100,7 +100,7 @@ async function indvidualReportCard({
   termId,
 }: {
   studentId: string;
-  termId: number;
+  termId: string;
 }) {
   const student = await caller.student.get(studentId);
   if (!student.classroom) {
@@ -109,7 +109,7 @@ async function indvidualReportCard({
 
   const report = await caller.reportCard.getSequence({
     classroomId: student.classroom.id,
-    termId: termId,
+    termId,
   });
 
   const subjects = await caller.classroom.subjects(student.classroom.id);
@@ -127,7 +127,7 @@ async function indvidualReportCard({
 
   const disciplines = await caller.discipline.sequence({
     classroomId: classroom.id,
-    termId: Number(termId),
+    termId,
   });
 
   const stream = await renderToStream(

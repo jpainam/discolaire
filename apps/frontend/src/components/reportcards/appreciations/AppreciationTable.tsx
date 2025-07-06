@@ -48,11 +48,11 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
   const [remarksMap, setRemarkMaps] = useState<Record<string, ReportCardType>>(
     {},
   );
-  const termId = Number(searchParams.get("term"));
+  const termId = searchParams.get("term");
   const remarksQuery = useQuery(
     trpc.reportCard.getRemarks.queryOptions({
       classroomId: classroomId ?? "",
-      termId: termId || 0,
+      termId: termId ?? "",
     }),
   );
 

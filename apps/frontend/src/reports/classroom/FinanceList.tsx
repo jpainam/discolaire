@@ -197,8 +197,8 @@ export function FinanceList({
                     style={{ width: "40%", paddingLeft: 5, paddingVertical: 3 }}
                   >
                     <Text>
-                      {decode(student.student.lastName ?? "")}{" "}
-                      {decode(student.student.firstName ?? "")}
+                      {decode(student.lastName ?? "")}{" "}
+                      {decode(student.firstName ?? "")}
                     </Text>
                   </View>
                   <View
@@ -208,7 +208,7 @@ export function FinanceList({
                       alignItems: "center",
                     }}
                   >
-                    <Text>{student.student.isRepeating ? "OUI" : "NON"}</Text>
+                    <Text>{student.isRepeating ? "OUI" : "NON"}</Text>
                   </View>
                   <View
                     style={{

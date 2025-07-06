@@ -34,7 +34,7 @@ export const consigneRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        termId: z.coerce.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -88,7 +88,7 @@ export const consigneRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
-        termId: z.number().optional(),
+        termId: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -110,7 +110,7 @@ export const consigneRouter = {
   create: protectedProcedure
     .input(
       z.object({
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
         studentId: z.string().min(1),
         task: z.string().min(1),
@@ -133,7 +133,7 @@ export const consigneRouter = {
     .input(
       z.object({
         id: z.coerce.number(),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
         date: z.coerce.date(),
         task: z.string().min(1),
         duration: z.number().default(1),

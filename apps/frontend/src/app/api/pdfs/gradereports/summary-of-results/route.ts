@@ -7,7 +7,7 @@ import { SummaryOfResult } from "~/reports/gradereports/SummaryOfResult";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
-  termId: z.coerce.number(),
+  termId: z.string().min(1),
   classroomId: z.string().min(1),
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
@@ -30,13 +30,13 @@ export async function GET(req: NextRequest) {
     }
     const { termId, classroomId, format } = result.data;
     const report = await caller.reportCard.getSequence({
-      classroomId: classroomId,
-      termId: termId,
+      classroomId,
+      termId,
     });
     const { globalRanks } = report;
     const students = await caller.classroom.students(classroomId);
     const classroom = await caller.classroom.get(classroomId);
-    const term = await caller.term.get(Number(termId));
+    const term = await caller.term.get(termId);
     if (format === "csv") {
       //const { blob, headers } = toExcel({ stats });
       //return new Response(blob, { headers });
