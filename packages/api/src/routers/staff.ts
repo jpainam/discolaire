@@ -3,6 +3,8 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
+import { getFullName } from "../../../../apps/frontend/src/utils/index";
+import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -129,13 +131,40 @@ export const staffRouter = {
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
-      if (input.email) {
-        await ctx.authApi.changeEmail({
-          body: {
-            newEmail: input.email,
-          },
-        });
+      const { id, email, ...data } = input;
+      const staff = await ctx.db.staff.findUniqueOrThrow({
+        where: {
+          id: id,
+        },
+        include: {
+          user: true,
+        },
+      });
+      if (email && staff.user?.email !== email) {
+        if (staff.user) {
+          // If the email is changed, we need to update the user email as well
+          await ctx.db.user.update({
+            where: {
+              id: staff.user.id,
+            },
+            data: {
+              email: email,
+            },
+          });
+        } else {
+          await createUser({
+            email,
+            entityId: id,
+            username: getFullName(staff)
+              .replace(/[^a-zA-Z0-9]/g, "")
+              .toLowerCase(),
+            authApi: ctx.authApi,
+            schoolId: ctx.schoolId,
+            name: getFullName(staff),
+            profile: "staff",
+            isActive: true,
+          });
+        }
       }
       return ctx.db.staff.update({
         where: {

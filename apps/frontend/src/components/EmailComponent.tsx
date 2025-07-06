@@ -25,8 +25,10 @@ export default function EmailVerification({
     try {
       setIsLoading(true);
       const { error } = await authClient.sendVerificationEmail({ email });
+
       if (error) {
         toast.error(error.message);
+        setIsLoading(false);
         return;
       }
 

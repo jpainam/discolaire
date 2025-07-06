@@ -37,6 +37,7 @@ const handler = async (req: NextRequest) => {
       }),
     onError({ error, path }) {
       logger.error(`>>> tRPC Error on '${path}'`, error.message);
+      console.error(error);
     },
   });
 
