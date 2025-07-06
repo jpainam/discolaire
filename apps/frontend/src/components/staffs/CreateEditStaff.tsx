@@ -20,6 +20,7 @@ import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@repo/ui/components/input";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -41,6 +42,7 @@ const staffCreateEditSchema = z.object({
   jobTitle: z.string().optional(),
   countryId: z.string().optional(),
   observation: z.string().optional(),
+  email: z.string().email().optional().or(z.literal("")),
   degreeId: z.string().optional(),
   employmentType: z.string().optional(),
   address: z.string().optional(),
@@ -70,6 +72,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       gender: staff?.gender ?? "male",
       isActive: staff?.isActive ?? true,
       jobTitle: staff?.jobTitle ?? "",
+      email: staff?.user?.email ?? "",
       countryId: staff?.countryId ?? "",
       observation: staff?.observation ?? "",
       degreeId: staff ? String(staff.degreeId) : "",
@@ -103,7 +106,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateStaffMutation = useMutation(
     trpc.staff.update.mutationOptions({
@@ -115,7 +118,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const onSubmit = (data: z.infer<typeof staffCreateEditSchema>) => {
@@ -133,6 +136,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       address: data.address,
       phoneNumber1: data.phoneNumber1,
       phoneNumber2: data.phoneNumber2,
+      email: data.email,
       dateOfHire: data.dateOfHire,
       dateOfRelease: data.dateOfRelease,
       dateOfCriminalRecordCheck: data.dateOfCriminalRecordCheck,
@@ -196,6 +200,19 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
             <InputField name="phoneNumber1" label={`${t("phone")} 1`} />
             <InputField name="phoneNumber2" label={`${t("phone")} 2`} />
           </div>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("email")}</FormLabel>
+                <FormControl>
+                  <Input placeholder="email" type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <InputField name="jobTitle" label={t("jobTitle")} />
           <FormField

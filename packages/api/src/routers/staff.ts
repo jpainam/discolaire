@@ -19,6 +19,7 @@ const createUpdateSchema = z.object({
   gender: z.enum(["female", "male"]).default("male"),
   phoneNumber1: z.string().optional(),
   phoneNumber2: z.string().optional(),
+  email: z.string().email().optional().or(z.literal("")),
   observation: z.string().optional(),
   dateOfLastAdvancement: z.coerce.date().optional(),
   dateOfCriminalRecordCheck: z.coerce.date().optional(),
@@ -127,8 +128,15 @@ export const staffRouter = {
 
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
+      if (input.email) {
+        await ctx.authApi.changeEmail({
+          body: {
+            newEmail: input.email,
+          },
+        });
+      }
       return ctx.db.staff.update({
         where: {
           id: id,

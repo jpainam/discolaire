@@ -6,6 +6,7 @@ import { AlertCircle, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { authClient } from "~/auth/client";
+import { useLocale } from "~/i18n";
 
 interface EmailVerificationProps {
   email: string;
@@ -17,21 +18,23 @@ export default function EmailVerification({
   isVerified,
 }: EmailVerificationProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLocale();
   const [verificationSent, setVerificationSent] = useState(false);
 
   const sendVerificationEmail = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await authClient.sendVerificationEmail({ email });
+      const { error } = await authClient.sendVerificationEmail({ email });
       if (error) {
         toast.error(error.message);
         return;
       }
-      console.log("Verification email status:", data);
+
       setVerificationSent(true);
-      toast.message("Verification email sent", {
-        description:
-          "Please check your inbox and follow the link to verify your email.",
+      toast.message(t("Verification email sent"), {
+        description: t(
+          "Please check your inbox and follow the link to verify your email."
+        ),
       });
 
       setIsLoading(false);
@@ -40,7 +43,7 @@ export default function EmailVerification({
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to send verification email",
+          : "Failed to send verification email"
       );
     }
   };
@@ -85,7 +88,7 @@ export default function EmailVerification({
           disabled={isLoading}
           className="text-xs h-7"
         >
-          {isLoading ? "Sending..." : "Verify email"}
+          {isLoading ? "Sending..." : t("Verify email")}
         </Button>
       )}
       {!isVerified && verificationSent && (

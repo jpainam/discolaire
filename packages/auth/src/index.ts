@@ -59,6 +59,7 @@ export function initAuth(options: {
           { user, newEmail, url, token },
           request,
         ) => {
+          console.log(">>> sendChangeEmailVerification:", user.email, newEmail);
           await sendEmail({
             from: "Discolaire <hi@discolaire.com>",
             to: user.email, // verification email must be sent to the current user email to approve the change
@@ -83,6 +84,7 @@ export function initAuth(options: {
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url, token }, request) => {
+        console.log(">>> sendResetPassword:", user.email);
         if (user.email.includes("@discolaire.com")) {
           return;
         }
@@ -98,12 +100,13 @@ export function initAuth(options: {
       sendOnSignUp: true,
 
       sendVerificationEmail: async ({ user, url, token }, _request) => {
+        console.log(">>> sendVerificationEmail", user.email);
         await sendEmail({
           from: "Discolaire <hi@discolaire.com>",
           to: user.email,
-          subject: "Verify your email address",
-          text: `Cliquez sur le lien pour vérifier votre adresse e-mail : ${url}`,
-          html: `<p>Cliquez sur le lien pour vérifier votre adresse e-mail <a href="${url}">${url}</a></p>`,
+          subject: "Verifier votre adresse e-mail",
+          text: `Cliquez sur le lien ci-dessous pour vérifier votre adresse e-mail : ${url}`,
+          html: `<p>Cliquez sur le lien ci-dessous pour vérifier votre adresse e-mail <a href='${url}'>${url}</a></p>`,
         });
       },
     },
