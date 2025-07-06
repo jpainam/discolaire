@@ -573,7 +573,7 @@ model Contact {
     prefix          String?
     firstName       String?
     lastName        String?
-    title           String?
+    occupation      String?
     employer        String?
     phoneNumber1    String?
     phoneNumber2    String?

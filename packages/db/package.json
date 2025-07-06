@@ -32,7 +32,8 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@faker-js/faker": "^9.8.0",
-    "@prisma/client": "^6.11.0"
+    "@prisma/client": "^6.11.0",
+    "mysql2": "^3.14.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

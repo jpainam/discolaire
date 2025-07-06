@@ -4,7 +4,7 @@ model Transaction {
     method          String            @default("CASH")
     amount          Float
     description     String?
-    transactionType String?           @default("CREDIT")
+    transactionType TransactionType   @default(CREDIT)
     createdAt       DateTime          @default(now()) @db.Timestamp(6)
     updatedAt       DateTime          @updatedAt
     createdById     String?
@@ -38,6 +38,12 @@ enum TransactionStatus {
     PENDING
     CANCELED
     VALIDATED
+}
+
+enum TransactionType {
+    CREDIT
+    DEBIT
+    DISCOUNT
 }
 
 model ScheduleTask {

@@ -12,7 +12,7 @@ coverage
 .next/
 out/
 next-env.d.ts
-
+_json
 # nitro
 .nitro/
 .output/
