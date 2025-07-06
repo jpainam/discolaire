@@ -72,6 +72,17 @@ export const userService = {
         effect,
       };
       updatedPermissions = [...permissions, newPermission];
+      if (
+        newPermission.resource == "user" &&
+        newPermission.action == "Create"
+      ) {
+        await db.user.update({
+          where: { id: userId },
+          data: {
+            role: "admin",
+          },
+        });
+      }
     } else {
       updatedPermissions = permissions.filter(
         (perm) => !(perm.resource === resource && perm.action === action),
