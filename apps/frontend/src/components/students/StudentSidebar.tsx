@@ -144,11 +144,11 @@ export function StudentSidebar({
   const pathname = usePathname();
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
   if (!canReadTransaction) {
     data.information = data.information.filter(
-      (item) => item.name !== "transactions"
+      (item) => item.name !== "transactions",
     );
   }
 

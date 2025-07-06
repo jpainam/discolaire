@@ -9,7 +9,7 @@ import { PrintAction } from "./PrintAction";
 import { TransactionTabMenu } from "./TransactionTabMenu";
 
 export default async function Layout(
-  props: PropsWithChildren<{ params: Promise<{ id: string }> }>
+  props: PropsWithChildren<{ params: Promise<{ id: string }> }>,
 ) {
   const session = await getSession();
   if (!session) {
@@ -30,7 +30,7 @@ export default async function Layout(
   } else {
     canReadTransaction = await checkPermission(
       "transaction",
-      PermissionAction.READ
+      PermissionAction.READ,
     );
   }
 
