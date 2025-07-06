@@ -35,7 +35,7 @@ export function StudentAssignmentHeader() {
           router.push(
             `?${createQueryString({
               term: val,
-            })}`
+            })}`,
           );
         }}
         className="md:w-[250px]"

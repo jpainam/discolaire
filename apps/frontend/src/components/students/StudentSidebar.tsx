@@ -33,7 +33,9 @@ import {
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 export function StudentSidebar({
   ...props
@@ -140,6 +142,15 @@ export function StudentSidebar({
   };
   const { t } = useLocale();
   const pathname = usePathname();
+  const canReadTransaction = useCheckPermission(
+    "transaction",
+    PermissionAction.READ
+  );
+  if (!canReadTransaction) {
+    data.information = data.information.filter(
+      (item) => item.name !== "transactions"
+    );
+  }
 
   return (
     <Sidebar collapsible="icon" {...props}>
