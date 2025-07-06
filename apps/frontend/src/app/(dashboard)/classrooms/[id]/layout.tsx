@@ -1,6 +1,6 @@
 import React from "react";
 
-import { staffService } from "@repo/api/services/staff-service";
+import { studentService } from "@repo/api/services";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSession } from "~/auth/server";
@@ -26,8 +26,12 @@ export default async function Layout(props: {
   const { user } = session;
 
   if (user.profile === "student") {
-    const student = await caller.student.getFromUserId(session.user.id);
-    const classroom = await caller.student.classroom({ studentId: student.id });
+    const student = await studentService.getFromUserId(user.id);
+    const classroom = await caller.student.classroom({
+      studentId: student.id,
+      schoolYearId,
+    });
+
     if (classroom?.id === params.id) {
       canReadClassroom = true;
     }
@@ -39,16 +43,17 @@ export default async function Layout(props: {
   } else {
     canReadClassroom = await checkPermission(
       "classroom",
-      PermissionAction.READ
+      PermissionAction.READ,
     );
 
     if (!canReadClassroom) {
-      const classrooms = await staffService.getClassrooms(
-        user.id,
-        schoolYearId
-      );
-      const allowedClassrooms = classrooms.map((c) => c.id);
-      canReadClassroom = allowedClassrooms.includes(params.id);
+      const staff = await caller.staff.getFromUserId(user.id);
+      const classrooms = await caller.staff.classrooms({
+        staffId: staff.id,
+        schoolYearId,
+      });
+      const classroomIds = classrooms.map((c) => c.id);
+      canReadClassroom = classroomIds.includes(params.id);
     }
   }
 

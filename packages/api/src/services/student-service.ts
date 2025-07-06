@@ -77,27 +77,6 @@ export const studentService = {
       },
     });
   },
-  getClassroomByUserId: async (userId: string, schoolYearId: string) => {
-    const student = await db.student.findFirst({
-      where: {
-        userId: userId,
-      },
-    });
-    if (!student) {
-      return null;
-    }
-    return db.classroom.findFirst({
-      where: {
-        schoolId: student.schoolId,
-        enrollments: {
-          some: {
-            studentId: student.id,
-            schoolYearId: schoolYearId,
-          },
-        },
-      },
-    });
-  },
   getClassroom: async (studentId: string, schoolYearId: string) => {
     const classroom = await db.classroom.findFirst({
       where: {

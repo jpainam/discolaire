@@ -28,8 +28,9 @@ export const classroomRouter = {
       schoolId: ctx.session.user.schoolId,
     });
     if (ctx.session.user.profile === "student") {
-      const classroom = await studentService.getClassroomByUserId(
-        ctx.session.user.id,
+      const student = await studentService.getFromUserId(ctx.session.user.id);
+      const classroom = await studentService.getClassroom(
+        student.id,
         ctx.schoolYearId,
       );
       return classrooms.filter((cl) => cl.id === classroom?.id);
@@ -49,8 +50,9 @@ export const classroomRouter = {
       if (checkPermission("classroom", "Read", {}, ctx.permissions)) {
         return classrooms;
       }
+      const staff = await staffService.getFromUserId(ctx.session.user.id);
       const classes = await staffService.getClassrooms(
-        ctx.session.user.id,
+        staff.id,
         ctx.schoolYearId,
       );
       const classesIds = classes.map((c) => c.id);

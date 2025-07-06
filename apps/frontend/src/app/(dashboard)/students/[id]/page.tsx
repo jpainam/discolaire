@@ -1,40 +1,13 @@
-import { NoPermission } from "~/components/no-permission";
-import { PermissionAction } from "~/permissions";
-
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
-import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
-import { checkPermission } from "~/permissions/server";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  //const queryClient = getQueryClient();
-
-  const student = await caller.student.get(params.id);
-  // https://trpc.io/docs/client/tanstack-react-query/server-components
-  // const student = await queryClient.fetchQuery(
-  //   trpc.student.get.queryOptions(params.id)
-  // );
-
-  const session = await getSession();
-  let canReadContacts =
-    session?.user.profile === "student" && session.user.id === student.userId;
-
-  if (session?.user.profile === "staff") {
-    const canReadStudent = await checkPermission(
-      "student",
-      PermissionAction.READ,
-    );
-    if (!canReadStudent) {
-      return <NoPermission className="my-8" />;
-    }
-    canReadContacts = await checkPermission("student", PermissionAction.READ);
-  }
 
   batchPrefetch([
     trpc.student.siblings.queryOptions(params.id),
@@ -67,20 +40,18 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         </Suspense>
       </ErrorBoundary>
 
-      {canReadContacts && (
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense
-            key={params.id}
-            fallback={
-              <div className="px-4">
-                <Skeleton className="h-20 w-full" />
-              </div>
-            }
-          >
-            <StudentContactTable studentId={params.id} />
-          </Suspense>
-        </ErrorBoundary>
-      )}
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          key={params.id}
+          fallback={
+            <div className="px-4">
+              <Skeleton className="h-20 w-full" />
+            </div>
+          }
+        >
+          <StudentContactTable studentId={params.id} />
+        </Suspense>
+      </ErrorBoundary>
     </HydrateClient>
   );
 }

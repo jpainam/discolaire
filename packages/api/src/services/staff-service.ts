@@ -1,35 +1,59 @@
 import { db } from "@repo/db";
 
 export const staffService = {
-  getClassrooms: async (userId: string, schoolYearId: string) => {
-    const staff = await db.staff.findFirst({
+  getFromUserId: async (userId: string) => {
+    return db.staff.findFirstOrThrow({
       where: {
         userId: userId,
       },
     });
-    if (!staff) {
-      return [];
-    }
-    return db.classroom.findMany({
+  },
+  getClassrooms: async (staffId: string, schoolYearId: string) => {
+    return _getClassrooms(staffId, schoolYearId);
+  },
+  getStudents: async (staffId: string, schoolYearId: string) => {
+    const classrooms = await _getClassrooms(staffId, schoolYearId);
+    const classroomIds = classrooms.map((c) => c.id);
+    return db.student.findMany({
       where: {
-        OR: [
-          {
-            headTeacherId: staff.id,
-          },
-          {
-            seniorAdvisorId: staff.id,
-          },
-          {
-            subjects: {
-              some: {
-                teacherId: staff.id,
-              },
+        enrollments: {
+          some: {
+            classroomId: {
+              in: classroomIds,
             },
+            schoolYearId: schoolYearId,
           },
-        ],
-        schoolYearId: schoolYearId,
-        schoolId: staff.schoolId,
+        },
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        userId: true,
       },
     });
   },
 };
+
+function _getClassrooms(staffId: string, schoolYearId: string) {
+  return db.classroom.findMany({
+    where: {
+      OR: [
+        {
+          headTeacherId: staffId,
+        },
+        {
+          seniorAdvisorId: staffId,
+        },
+        {
+          subjects: {
+            some: {
+              teacherId: staffId,
+            },
+          },
+        },
+      ],
+      schoolYearId: schoolYearId,
+    },
+  });
+}

@@ -7,7 +7,9 @@ import { z } from "zod";
 import type { Prisma } from "@repo/db";
 import redisClient from "@repo/kv";
 
+import { checkPermission } from "../permission";
 import { contactService } from "../services/contact-service";
+import { staffService } from "../services/staff-service";
 import { isRepeating, studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
 
@@ -137,6 +139,25 @@ export const studentRouter = {
       }),
     )
     .query(async ({ ctx, input }) => {
+      if (ctx.session.user.profile != "staff") {
+        return [];
+      }
+      const canReadStudent = checkPermission(
+        "student",
+        "Read",
+        {},
+        ctx.permissions,
+      );
+      const studentIds: string[] = [];
+      if (!canReadStudent) {
+        const staff = await staffService.getFromUserId(ctx.session.user.id);
+        const students = await staffService.getStudents(
+          staff.id,
+          ctx.schoolYearId,
+        );
+        studentIds.push(...students.map((s) => s.id));
+      }
+
       const data = await ctx.db.student.findMany({
         take: input.limit,
         orderBy: {
@@ -152,6 +173,7 @@ export const studentRouter = {
               },
             },
           },
+          ...(studentIds.length > 0 ? { id: { in: studentIds } } : {}),
           ...whereClause(input.query).where,
         },
         include: {

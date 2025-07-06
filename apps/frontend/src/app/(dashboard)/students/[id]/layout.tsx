@@ -11,6 +11,8 @@ import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
+import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 interface Props {
@@ -47,16 +49,35 @@ export default async function Layout(props: {
   }
   const { user } = session;
 
-  const { id } = params;
   const queryClient = getQueryClient();
   const student = await queryClient.fetchQuery(
-    trpc.student.get.queryOptions(id),
+    trpc.student.get.queryOptions(params.id),
   );
+  // https://trpc.io/docs/client/tanstack-react-query/server-components
+  // const student = await queryClient.fetchQuery(
+  //   trpc.student.get.queryOptions(params.id)
+  // );
 
-  const { children } = props;
+  let canReadStudent =
+    (user.profile === "student" && user.id === student.userId) ||
+    (await checkPermission("student", PermissionAction.READ));
 
-  if (user.profile == "student" && user.id !== student.userId) {
-    return <NoPermission isFullPage={true} className="mt-8" resourceText="" />;
+  if (!canReadStudent) {
+    if (user.profile === "contact") {
+      const contact = await caller.contact.getFromUserId(user.id);
+      const students = await caller.contact.students(contact.id);
+      const studentIds = students.map((s) => s.studentId);
+      canReadStudent = studentIds.includes(params.id);
+    } else if (user.profile === "staff") {
+      const staff = await caller.staff.getFromUserId(user.id);
+      const students = await caller.staff.students(staff.id);
+      const studentIds = students.map((s) => s.id);
+      canReadStudent = studentIds.includes(params.id);
+    }
+  }
+
+  if (!canReadStudent) {
+    return <NoPermission className="my-8" />;
   }
 
   return (
@@ -76,7 +97,7 @@ export default async function Layout(props: {
 
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
         {/* <StudentMainContent>{children}</StudentMainContent> */}
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">{props.children}</main>
         <div className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />

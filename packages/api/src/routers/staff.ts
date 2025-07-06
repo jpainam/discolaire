@@ -4,6 +4,7 @@ import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
 import { getFullName } from "../../../../apps/frontend/src/utils/index";
+import { staffService } from "../services";
 import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
@@ -251,5 +252,24 @@ export const staffRouter = {
           createdBy: true,
         },
       });
+    }),
+  getFromUserId: protectedProcedure.input(z.string()).query(({ input }) => {
+    return staffService.getFromUserId(input);
+  }),
+  classrooms: protectedProcedure
+    .input(
+      z.object({ staffId: z.string(), schoolYearId: z.string().optional() }),
+    )
+    .query(({ ctx, input }) => {
+      return staffService.getClassrooms(
+        input.staffId,
+        input.schoolYearId ?? ctx.schoolYearId,
+      );
+    }),
+
+  students: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      return staffService.getStudents(input, ctx.schoolYearId);
     }),
 } satisfies TRPCRouterRecord;
