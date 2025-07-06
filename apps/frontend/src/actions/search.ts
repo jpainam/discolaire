@@ -14,3 +14,10 @@ export async function searchStudents({
     limit: 10,
   });
 }
+
+export async function searchContacts({ q }: { q?: string }) {
+  return caller.contact.search({
+    query: q,
+    limit: 10,
+  });
+}

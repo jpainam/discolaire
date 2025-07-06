@@ -1,15 +1,30 @@
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { getSession } from "~/auth/server";
 import { ContactDataTable } from "~/components/contacts/ContactDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { ContactHeader } from "./ContactHeader";
+import { ContactSearchPage } from "./ContactSearchPage";
 
-export default function Page() {
+export default async function Page() {
   prefetch(trpc.contact.all.queryOptions());
+  const session = await getSession();
+  if (!session) {
+    redirect("/auth/login");
+  }
+  const { user } = session;
+
+  // const canReadContact = await checkPermission(
+  //   "contact",
+  //   PermissionAction.READ
+  // );
 
   return (
     <HydrateClient>
+      <ContactHeader />
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           key={"contacts"}
@@ -21,9 +36,13 @@ export default function Page() {
             </div>
           }
         >
-          <div className="px-4">
-            <ContactDataTable />
-          </div>
+          {user.profile != "staff" ? (
+            <div className="px-4 py-4">
+              <ContactDataTable />
+            </div>
+          ) : (
+            <ContactSearchPage />
+          )}
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

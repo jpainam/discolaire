@@ -2,8 +2,6 @@ import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import { getSession } from "~/auth/server";
 import { NoPermission } from "~/components/no-permission";
-import { PermissionAction } from "~/permissions";
-import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 
 export default async function Layout({
@@ -28,13 +26,13 @@ export default async function Layout({
       return <NoPermission className="my-8" />;
     }
   } else {
-    const canReadContact = await checkPermission(
-      "contact",
-      PermissionAction.READ,
-    );
-    if (!canReadContact) {
-      return <NoPermission className="my-8" />;
-    }
+    // const canReadContact = await checkPermission(
+    //   "contact",
+    //   PermissionAction.READ,
+    // );
+    // if (!canReadContact) {
+    //   return <NoPermission className="my-8" />;
+    // }
   }
   return <>{children}</>;
 }

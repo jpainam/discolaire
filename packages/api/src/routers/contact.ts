@@ -4,7 +4,6 @@ import { z } from "zod";
 
 import redisClient from "@repo/kv";
 
-import { checkPermission } from "../permission";
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
@@ -140,28 +139,26 @@ export const contactRouter = {
         });
       }
 
-      const canReadStaff = checkPermission(
-        "staff",
-        "Read",
-        {},
-        ctx.permissions,
-      );
-      if (canReadStaff) {
-        return ctx.db.contact.findMany({
-          take: input?.limit ?? 50,
-          include: {
-            user: true,
-          },
-          where: {
-            schoolId: ctx.schoolId,
-          },
-          orderBy: {
-            lastAccessed: "desc",
-            //lastName: "asc",
-          },
-        });
-      }
-      return [];
+      // const canReadStaff = checkPermission(
+      //   "staff",
+      //   "Read",
+      //   {},
+      //   ctx.permissions,
+      // );
+
+      return ctx.db.contact.findMany({
+        take: input?.limit ?? 50,
+        include: {
+          user: true,
+        },
+        where: {
+          schoolId: ctx.schoolId,
+        },
+        orderBy: {
+          lastAccessed: "desc",
+          //lastName: "asc",
+        },
+      });
     }),
   students: protectedProcedure
     .input(z.string().min(1))
@@ -253,10 +250,44 @@ export const contactRouter = {
     )
     .query(async ({ ctx, input }) => {
       const q = `%${input.query}%`;
+      if (ctx.session.user.profile == "contact") {
+        const contact = await contactService.getFromUserId(ctx.session.user.id);
+        const c = await ctx.db.contact.findUniqueOrThrow({
+          include: {
+            user: true,
+          },
+          where: {
+            id: contact.id,
+          },
+        });
+        return [c];
+      }
+      if (ctx.session.user.profile == "student") {
+        const student = await studentService.getFromUserId(ctx.session.user.id);
+        const studentContacts = await ctx.db.studentContact.findMany({
+          where: {
+            studentId: student.id,
+          },
+        });
+        const contactIds = studentContacts.map((sc) => sc.contactId);
+        return ctx.db.contact.findMany({
+          include: {
+            user: true,
+          },
+          where: {
+            id: {
+              in: contactIds,
+            },
+          },
+        });
+      }
       return ctx.db.contact.findMany({
         take: input.limit,
         orderBy: {
           lastName: "asc",
+        },
+        include: {
+          user: true,
         },
         where: {
           schoolId: ctx.schoolId,
