@@ -1,5 +1,8 @@
 import React from "react";
 
+import { staffService } from "@repo/api/services/staff-service";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { getSession } from "~/auth/server";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";
@@ -16,13 +19,19 @@ export default async function Layout(props: {
 
   let canReadClassroom = false;
   const session = await getSession();
-  if (session?.user.profile === "student") {
+  const schoolYearId = (await cookies()).get("x-school-year")?.value;
+  if (!session || !schoolYearId) {
+    redirect("/auth/login?redirect=/dashboard/classrooms/" + params.id);
+  }
+  const { user } = session;
+
+  if (user.profile === "student") {
     const student = await caller.student.getFromUserId(session.user.id);
     const classroom = await caller.student.classroom({ studentId: student.id });
     if (classroom?.id === params.id) {
       canReadClassroom = true;
     }
-  } else if (session?.user.profile === "contact") {
+  } else if (user.profile === "contact") {
     const contact = await caller.contact.getFromUserId(session.user.id);
     const classrooms = await caller.contact.classrooms(contact.id);
     const classroomIds = classrooms.map((c) => c.id);
@@ -30,8 +39,17 @@ export default async function Layout(props: {
   } else {
     canReadClassroom = await checkPermission(
       "classroom",
-      PermissionAction.READ,
+      PermissionAction.READ
     );
+
+    if (!canReadClassroom) {
+      const classrooms = await staffService.getClassrooms(
+        user.id,
+        schoolYearId
+      );
+      const allowedClassrooms = classrooms.map((c) => c.id);
+      canReadClassroom = allowedClassrooms.includes(params.id);
+    }
   }
 
   if (!canReadClassroom) {
