@@ -34,7 +34,7 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
 
   const canPrintReportCard = useCheckPermission(
     "reportcard",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
 
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
@@ -48,7 +48,7 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
       <div className="grid grid-cols-2 md:flex flex-row items-center gap-2">
         <TermSelector
           className="md:w-[300px]"
-          defaultValue={termId ? `${termId}` : undefined}
+          defaultValue={termId}
           onChange={(val) => {
             router.push(`/students/${params.id}/reportcards?termId=${val}`);
           }}

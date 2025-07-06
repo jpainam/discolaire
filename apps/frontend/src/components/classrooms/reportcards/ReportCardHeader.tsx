@@ -42,11 +42,11 @@ export function ReportCardHeader() {
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector
         className="md:w-[350px]"
-        defaultValue={termId ? `${termId}` : undefined}
+        defaultValue={termId}
         onChange={(val) => {
           router.push(
             `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ termId: val, trimestreId: undefined }),
+              createQueryString({ termId: val, trimestreId: undefined })
           );
         }}
       />
