@@ -41,7 +41,7 @@
     "lodash": "^4.17.21",
     "mime-types": "^3.0.1",
     "nanoid": "^5.1.5",
-    "next": "^15.3.4",
+    "next": "catalog:",
     "superjson": "2.2.2",
     "uuid": "^11.1.0",
     "zod": "catalog:"

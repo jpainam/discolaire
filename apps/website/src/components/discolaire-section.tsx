@@ -1,7 +1,5 @@
 "use client";
 
-import { SparklesCore } from "./ui/sparkles";
-
 export function DiscolaireSection() {
   return (
     <div className="flex h-[40rem] w-full flex-col items-center justify-center overflow-hidden rounded-md bg-black">
@@ -16,14 +14,14 @@ export function DiscolaireSection() {
         <div className="absolute inset-x-60 top-0 h-px w-1/4 bg-gradient-to-r from-transparent via-sky-500 to-transparent" />
 
         {/* Core component */}
-        <SparklesCore
+        {/* <SparklesCore
           background="transparent"
           minSize={0.4}
           maxSize={1}
           particleDensity={1200}
           className="h-full w-full"
           particleColor="#FFFFFF"
-        />
+        /> */}
 
         {/* Radial Gradient to prevent sharp edges */}
         <div className="absolute inset-0 h-full w-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
