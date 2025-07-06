@@ -115,7 +115,7 @@ export default function StudentParentsTab({
                 <Briefcase size={16} color={Colors[theme].tint} />
                 <Text style={styles.contactLabel}>Occupation</Text>
               </View>
-              <Text style={styles.contactValue}>{std.contact.title}</Text>
+              <Text style={styles.contactValue}>{std.contact.occupation}</Text>
             </View>
           </View>
         </View>

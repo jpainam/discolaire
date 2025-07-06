@@ -30,7 +30,7 @@ const createEditContactSchema = z.object({
   prefix: z.string().optional(),
   lastName: z.string().min(1),
   firstName: z.string().min(1),
-  title: z.string().optional(),
+  occupation: z.string().optional(),
   employer: z.string().optional(),
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
@@ -54,7 +54,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
       prefix: contact?.prefix ?? "",
       lastName: contact?.lastName ?? "",
       firstName: contact?.firstName ?? "",
-      title: contact?.title ?? "",
+      occupation: contact?.occupation ?? "",
       employer: contact?.employer ?? "",
       phoneNumber1: contact?.phoneNumber1 ?? "",
       phoneNumber2: contact?.phoneNumber2 ?? "",
@@ -150,7 +150,7 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
             label={t("firstName")}
           />
 
-          <InputField name="title" label={t("title")} />
+          <InputField name="occupation" label={t("occupation")} />
           <InputField name="employer" label={t("employer")} />
 
           <InputField name="phoneNumber1" label={t("phoneNumber") + "1"} />

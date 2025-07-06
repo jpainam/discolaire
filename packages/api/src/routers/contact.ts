@@ -12,7 +12,7 @@ import { protectedProcedure } from "../trpc";
 const createUpdateSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  title: z.string().optional(),
+  occupation: z.string().optional(),
   employer: z.string().optional(),
   gender: z.enum(["male", "female"]).default("male"),
   isActive: z.boolean().default(true),
@@ -272,7 +272,7 @@ export const contactRouter = {
             },
 
             { employer: { startsWith: q, mode: "insensitive" } },
-            { title: { startsWith: q, mode: "insensitive" } },
+            { occupation: { startsWith: q, mode: "insensitive" } },
           ],
         },
       });
@@ -284,7 +284,7 @@ export const contactRouter = {
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
-          title: input.title,
+          occupation: input.occupation,
           gender: input.gender,
           employer: input.employer,
           isActive: input.isActive,
@@ -308,7 +308,7 @@ export const contactRouter = {
           firstName: input.firstName,
           lastName: input.lastName,
           gender: input.gender,
-          title: input.title,
+          occupation: input.occupation,
           employer: input.employer,
           isActive: input.isActive,
           observation: input.observation,

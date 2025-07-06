@@ -18,6 +18,7 @@ import {
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { TransactionType } from "@repo/db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
@@ -91,7 +92,7 @@ export function Step2() {
       method: paymentMethod,
       description: description,
       studentId: studentId,
-      transactionType: transactionType,
+      transactionType: transactionType as TransactionType,
       requiredFeeIds: requiredFeeIds,
       amount: Number(amount),
     });

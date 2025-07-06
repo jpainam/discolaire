@@ -60,7 +60,7 @@ export function Step1() {
     defaultValues: {
       amount: amount ?? 0,
       description: description ?? "",
-      transactionType: transactionType ?? "",
+      transactionType: transactionType ?? "CREDIT",
       paymentMethod: paymentMethod ?? "",
     },
     resolver: zodResolver(makePaymentFormSchema),

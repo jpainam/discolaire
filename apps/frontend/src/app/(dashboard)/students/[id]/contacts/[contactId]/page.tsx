@@ -87,9 +87,9 @@ export default async function Page(props: {
             </div>
             <div className="grid p-2 md:grid-cols-2">
               <Label className="flex flex-row items-center gap-1 text-muted-foreground">
-                <Briefcase className="h-4 w-4" /> {t("title")}
+                <Briefcase className="h-4 w-4" /> {t("occupation")}
               </Label>
-              {contact.title}
+              {contact.occupation}
             </div>
             <Separator />
             <div className="grid p-2 md:grid-cols-2">

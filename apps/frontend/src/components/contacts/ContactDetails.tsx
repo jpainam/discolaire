@@ -40,8 +40,8 @@ export function ContactDetails({ contactId }: { contactId: string }) {
           <span>{contact.firstName}</span>
         </li>
         <li className="grid items-center justify-between md:flex">
-          <span className="text-muted-foreground">{t("title")}</span>
-          <span>{contact.title}</span>
+          <span className="text-muted-foreground">{t("occupation")}</span>
+          <span>{contact.occupation}</span>
         </li>
       </ul>
 

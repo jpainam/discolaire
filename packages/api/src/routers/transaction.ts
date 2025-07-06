@@ -3,7 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { subDays, subMonths } from "date-fns";
 import { z } from "zod";
 
-import type { TransactionStatus } from "@repo/db";
+import type { TransactionStatus, TransactionType } from "@repo/db";
 
 import { classroomService } from "../services/classroom-service";
 import { transactionService } from "../services/transaction-service";
@@ -20,7 +20,7 @@ const createSchema = z.object({
     .optional()
     .default("PENDING"),
 
-  transactionType: z.string().optional().default("CREDIT"),
+  transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]),
   observation: z.string().optional(),
   requiredFeeIds: z.array(z.coerce.number()).optional(),
 });
@@ -332,7 +332,7 @@ export const transactionRouter = {
           studentId: input.studentId,
           amount: Number(input.amount),
           transactionRef: transactionRef,
-          transactionType: input.transactionType,
+          transactionType: input.transactionType as TransactionType,
           schoolYearId: ctx.schoolYearId,
           description: input.description,
           createdById: ctx.session.user.id,

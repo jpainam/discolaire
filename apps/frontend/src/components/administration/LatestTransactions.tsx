@@ -1,5 +1,6 @@
 import { Button } from "@repo/ui/components/button";
 
+import { TransactionType } from "@repo/db";
 import {
   Card,
   CardAction,
@@ -72,7 +73,7 @@ export async function LatestTransactions({
                 <span
                   className={cn(
                     "text-xs font-medium",
-                    transaction.transactionType === "incoming"
+                    transaction.transactionType === TransactionType.DEBIT
                       ? "text-emerald-600 dark:text-emerald-400"
                       : "text-red-600 dark:text-red-400",
                   )}
