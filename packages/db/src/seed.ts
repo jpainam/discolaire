@@ -1,8 +1,8 @@
-// import type { Prisma } from "@prisma/client";
-// import { faker } from "@faker-js/faker";
-// import { PrismaClient } from "@prisma/client";
+//import type { Prisma } from "@prisma/client";
+//import { faker } from "@faker-js/faker";
+import { PrismaClient } from "@prisma/client";
 
-// const client = new PrismaClient();
+const client = new PrismaClient();
 
 // // npx prisma db seed --preview-feature
 // async function updateStudents() {
@@ -76,20 +76,20 @@
 //   //     `Updated student ${student.id} ${student.firstName} ${student.lastName} ${student.email}`,
 //   //   );
 // }
-// async function main() {
-//   console.log("Seeding database...");
-//   await updateStudents();
-//   return new Promise((resolve, _reject) => {
-//     resolve(true);
-//   });
-// }
+async function main() {
+  console.log("Seeding database...");
+  //await updateStudents();
+  return new Promise((resolve, _reject) => {
+    resolve(true);
+  });
+}
 
-// main()
-//   .catch((e) => {
-//     console.error(e);
-//     throw e;
-//   })
-//   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-//   .finally(async () => {
-//     await client.$disconnect();
-//   });
+main()
+  .catch((e) => {
+    console.error(e);
+    throw e;
+  })
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  .finally(async () => {
+    await client.$disconnect();
+  });
