@@ -21,7 +21,7 @@ export function ContactHeader() {
 
   const canCreateContact = useCheckPermission(
     "contact",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   //const canReadStudent = useCheckPermission("student", PermissionAction.READ);
   return (

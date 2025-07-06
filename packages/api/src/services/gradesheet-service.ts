@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { db } from "@repo/db";
 
 export const gradeSheetService = {
@@ -45,10 +46,10 @@ export const gradeSheetService = {
       if (scaledPct > 100) scaledPct = 100;
 
       byTerm[term.name] ??= { sum: 0, values: [] };
-      // @ts-expect-error DO NOTHING,
-      byTerm[term.name].sum += scaledPct;
-      // @ts-expect-error DO NOTHING,
-      byTerm[term.name].values.push(scaledPct);
+
+      byTerm[term.name]!.sum += scaledPct;
+
+      byTerm[term.name]!.values.push(scaledPct);
     }
 
     // 3. For each term, sort its scaled‐grades array so we can pick percentiles.
