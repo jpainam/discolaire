@@ -44,7 +44,6 @@ import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { permissionRouter } from "./routers/permission";
 import { photoRouter } from "./routers/photo";
 import { policyRouter } from "./routers/policy";
-import { postRouter } from "./routers/post";
 import { programRouter } from "./routers/program";
 import { recipientRouter } from "./routers/recipient";
 import { religionRouter } from "./routers/religion";
@@ -139,7 +138,6 @@ export const appRouter = createTRPCRouter({
   program: programRouter,
   menu: menuRouter,
   policy: policyRouter,
-  post: postRouter,
   attendance: attendanceRouter,
   messaging: messagingRouter,
   transaction: transactionRouter,

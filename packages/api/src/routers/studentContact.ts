@@ -55,7 +55,7 @@ export const studentContactRouter = {
       });
     }),
   relationships: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.relationship.findMany({
+    return ctx.db.contactRelationship.findMany({
       where: {
         schoolId: ctx.schoolId,
       },
@@ -166,7 +166,7 @@ export const studentContactRouter = {
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.relationship.create({
+      return ctx.db.contactRelationship.create({
         data: {
           name: input.name,
           schoolId: ctx.schoolId,
@@ -181,7 +181,7 @@ export const studentContactRouter = {
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.relationship.update({
+      return ctx.db.contactRelationship.update({
         where: {
           id: input.id,
         },
@@ -193,7 +193,7 @@ export const studentContactRouter = {
   deleteRelationship: protectedProcedure
     .input(z.coerce.number())
     .mutation(({ ctx, input }) => {
-      return ctx.db.relationship.delete({
+      return ctx.db.contactRelationship.delete({
         where: {
           id: input,
         },
