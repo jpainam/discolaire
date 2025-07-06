@@ -19,8 +19,8 @@ model Transaction {
     deletedBy       String?
     status          TransactionStatus @default(PENDING)
     schoolYearId    String
-    accountId       Int
-    account         StudentAccount    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+    studentId       String
+    student         Student           @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolYear      SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 

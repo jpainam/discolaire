@@ -68,7 +68,7 @@ export const disciplineRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        termId: z.coerce.number(),
+        termId: z.string().min(1),
       }),
     )
     .query(async ({ input }) => {
@@ -102,8 +102,8 @@ export const disciplineRouter = {
       }
       const sortedTerms = terms.sort((a, b) => a.order - b.order);
 
-      let seq1: number | null;
-      let seq2: number | null;
+      let seq1: string | null;
+      let seq2: string | null;
       if (input.trimestreId === "trim1") {
         seq1 = sortedTerms[0]?.id ?? null;
         seq2 = sortedTerms[1]?.id ?? null;
@@ -171,7 +171,7 @@ async function getDiscipline({
   termId,
 }: {
   studentIds: string[];
-  termId: number;
+  termId: string;
 }) {
   const absences = await db.absence.findMany({
     where: {

@@ -23,7 +23,7 @@ export const termRouter = {
     });
   }),
   delete: protectedProcedure
-    .input(z.coerce.number())
+    .input(z.string().min(1))
     .mutation(({ ctx, input }) => {
       return ctx.db.term.delete({
         where: {
@@ -32,7 +32,7 @@ export const termRouter = {
       });
     }),
   update: protectedProcedure
-    .input(createEditTermSchema.extend({ id: z.coerce.number() }))
+    .input(createEditTermSchema.extend({ id: z.string().min(1) }))
     .mutation(({ ctx, input }) => {
       return ctx.db.term.update({
         where: {
@@ -52,7 +52,7 @@ export const termRouter = {
         },
       });
     }),
-  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
+  get: protectedProcedure.input(z.string().min(1)).query(({ ctx, input }) => {
     return ctx.db.term.findUniqueOrThrow({
       include: {
         schoolYear: true,

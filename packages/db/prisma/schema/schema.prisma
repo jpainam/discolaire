@@ -95,7 +95,7 @@ model Appreciation {
 model ReportCard {
     studentId   String
     classroomId String
-    termId      Int
+    termId      String
     remark      String?
     createdBy   User      @relation(fields: [createdById], references: [id])
     createdById String
@@ -135,10 +135,10 @@ model HealthVisit {
 }
 
 model Classroom {
-    id                String         @id @default(uuid())
+    id                String            @id @default(uuid())
     name              String
     reportName        String
-    maxSize           Int            @default(45)
+    maxSize           Int               @default(45)
     levelId           String
     sectionId         String?
     cycleId           String?
@@ -146,25 +146,25 @@ model Classroom {
     seniorAdvisorId   String?
     headTeacherId     String?
     classroomLeaderId String?
-    createdAt         DateTime       @default(now()) @db.Timestamp(6)
-    updatedAt         DateTime       @updatedAt
+    createdAt         DateTime          @default(now()) @db.Timestamp(6)
+    updatedAt         DateTime          @updatedAt
     createdBy         String?
     updatedBy         String?
-    deletedAt         DateTime?      @db.Timestamp(6)
+    deletedAt         DateTime?         @db.Timestamp(6)
     deletedBy         String?
-    cycle             Cycle?         @relation(fields: [cycleId], references: [id])
-    level             ClassroomLevel @relation(fields: [levelId], references: [id])
-    seniorAdvisor     Staff?         @relation("seniorAdvisor", fields: [seniorAdvisorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    headTeacher       Staff?         @relation("headTeacher", fields: [headTeacherId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    classroomLeader   Student?       @relation("classroomLeader", fields: [classroomLeaderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    schoolYear        SchoolYear     @relation(fields: [schoolYearId], references: [id])
-    section           Section?       @relation(fields: [sectionId], references: [id])
+    cycle             ClassroomCycle?   @relation(fields: [cycleId], references: [id])
+    level             ClassroomLevel    @relation(fields: [levelId], references: [id])
+    seniorAdvisor     Staff?            @relation("seniorAdvisor", fields: [seniorAdvisorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    headTeacher       Staff?            @relation("headTeacher", fields: [headTeacherId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    classroomLeader   Student?          @relation("classroomLeader", fields: [classroomLeaderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    schoolYear        SchoolYear        @relation(fields: [schoolYearId], references: [id])
+    section           ClassroomSection? @relation(fields: [sectionId], references: [id])
     enrollments       Enrollment[]
     fees              Fee[]
     subjects          Subject[]
     assignments       Assignment[]
     reportCards       ReportCard[]
-    school            School         @relation(fields: [schoolId], references: [id])
+    school            School            @relation(fields: [schoolId], references: [id])
     schoolId          String
 }
 
@@ -247,7 +247,7 @@ model GradeSheet {
     weight      Float      @default(100)
     scale       Float      @default(20)
     subjectId   Int
-    termId      Int
+    termId      String
     grades      Grade[]
     createdBy   User?      @relation(fields: [createdById], references: [id])
     subject     Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
@@ -295,7 +295,7 @@ model Assignment {
     isActive    Boolean?  @default(true)
     categoryId  String
     subjectId   Int
-    termId      Int
+    termId      String
     term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
     post        Boolean?  @default(false)
     dueDate     DateTime  @default(now()) @db.Timestamp(6)
@@ -327,7 +327,7 @@ model Event {
 }
 
 model Term {
-    id           Int           @id @default(autoincrement())
+    id           String        @id @default(cuid())
     name         String
     schoolYearId String
     order        Int
@@ -378,8 +378,8 @@ model ContactRelationship {
     name String
 }
 
-model Degree {
-    id       Int     @id @default(autoincrement())
+model StaffDegree {
+    id       String  @id @default(cuid())
     name     String
     Staff    Staff[]
     School   School  @relation(fields: [schoolId], references: [id])
@@ -387,38 +387,38 @@ model Degree {
 }
 
 model Staff {
-    id                        String      @id @default(uuid())
+    id                        String       @id @default(uuid())
     prefix                    String?
     firstName                 String?
     lastName                  String?
-    isActive                  Boolean     @default(true)
+    isActive                  Boolean      @default(true)
     jobTitle                  String?
     employmentType            String?
-    degreeId                  Int?
-    dateOfHire                DateTime?   @db.Date
+    degreeId                  String?
+    dateOfHire                DateTime?    @db.Date
     bloodType                 String?
-    dateOfBirth               DateTime?   @db.Date
+    dateOfBirth               DateTime?    @db.Date
     sendAgendaFrequency       String?
-    dateOfRelease             DateTime?   @db.Date
-    isTeacher                 Boolean?    @default(true)
-    gender                    Gender      @default(male)
+    dateOfRelease             DateTime?    @db.Date
+    isTeacher                 Boolean?     @default(true)
+    gender                    Gender       @default(male)
     phoneNumber1              String?
     phoneNumber2              String?
     address                   String?
     observation               String?
-    dateOfCriminalRecordCheck DateTime?   @db.Date
-    createdAt                 DateTime?   @default(now()) @db.Timestamp(6)
-    updatedAt                 DateTime    @updatedAt
+    dateOfCriminalRecordCheck DateTime?    @db.Date
+    createdAt                 DateTime?    @default(now()) @db.Timestamp(6)
+    updatedAt                 DateTime     @updatedAt
     userId                    String?
     countryId                 String?
-    dateOfLastAdvancement     DateTime?   @db.Date
-    country                   Country?    @relation(fields: [countryId], references: [id])
-    user                      User?       @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    dateOfLastAdvancement     DateTime?    @db.Date
+    country                   Country?     @relation(fields: [countryId], references: [id])
+    user                      User?        @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
     subjects                  Subject[]
-    degree                    Degree?     @relation(fields: [degreeId], references: [id])
-    classrooms                Classroom[] @relation("seniorAdvisor")
-    classrooms2               Classroom[] @relation("headTeacher")
-    school                    School      @relation(fields: [schoolId], references: [id])
+    degree                    StaffDegree? @relation(fields: [degreeId], references: [id])
+    classrooms                Classroom[]  @relation("seniorAdvisor")
+    classrooms2               Classroom[]  @relation("headTeacher")
+    school                    School       @relation(fields: [schoolId], references: [id])
     schoolId                  String
 }
 
@@ -477,7 +477,7 @@ model Student {
     country            Country?                 @relation(fields: [countryId], references: [id])
     formerSchool       FormerSchool?            @relation(fields: [formerSchoolId], references: [id])
     user               User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
-    accounts           StudentAccount[]
+    transactions       Transaction[]
     studentContacts    StudentContact[]
     siblings           StudentSibling[]         @relation("sibling")
     siblings2          StudentSibling[]         @relation("student")
@@ -505,18 +505,6 @@ model StudentSibling {
     student   Student @relation("student", fields: [studentId], references: [id])
 
     @@unique([studentId, siblingId])
-}
-
-model StudentAccount {
-    id           Int           @id @default(autoincrement())
-    name         String?
-    studentId    String
-    createdBy    String?
-    createdAt    DateTime      @default(now()) @db.Timestamp(6)
-    updatedAt    DateTime      @updatedAt
-    updatedBy    String?
-    student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    transactions Transaction[]
 }
 
 model RequiredFeeTransaction {
@@ -658,12 +646,12 @@ model School {
     subjectGroup         SubjectGroup[]
     courses              Course[]
     schoolYears          SchoolYear[]
-    cycles               Cycle[]
-    sections             Section[]
+    cycles               ClassroomCycle[]
+    sections             ClassroomSection[]
     levels               ClassroomLevel[]
     terms                Term[]
     documents            Document[]
-    degrees              Degree[]
+    degrees              StaffDegree[]
     relationships        Relationship[]
     timetableCategories  TimetableCategory[]
     inventoryAssets      InventoryAsset[]
@@ -771,7 +759,7 @@ model SchoolYear {
     userNotifications    UserNotification[]
 }
 
-model Cycle {
+model ClassroomCycle {
     id         String      @id @default(cuid())
     name       String
     classrooms Classroom[]
@@ -779,7 +767,7 @@ model Cycle {
     schoolId   String
 }
 
-model Section {
+model ClassroomSection {
     id         String      @id @default(cuid())
     name       String
     classrooms Classroom[]

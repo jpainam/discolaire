@@ -2,7 +2,7 @@ model Absence {
     id          Int      @id @default(autoincrement())
     date        DateTime
     value       Int
-    termId      Int
+    termId      String
     term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     studentId   String
     student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -19,7 +19,7 @@ model Lateness {
     studentId   String
     student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
     date        DateTime
-    termId      Int
+    termId      String
     duration    Int
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
@@ -35,7 +35,7 @@ model Chatter {
     id          Int      @id @default(autoincrement())
     date        DateTime
     value       Int
-    termId      Int
+    termId      String
     term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
     studentId   String
     student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -48,7 +48,7 @@ model Consigne {
     id          Int      @id @default(autoincrement())
     studentId   String
     student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    termId      Int
+    termId      String
     date        DateTime
     task        String
     duration    Int
@@ -61,7 +61,7 @@ model Exclusion {
     id          Int      @id @default(autoincrement())
     studentId   String
     student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    termId      Int
+    termId      String
     startDate   DateTime
     endDate     DateTime
     reason      String
@@ -90,7 +90,7 @@ model Convocation {
     id          Int      @id @default(autoincrement())
     studentId   String
     student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    termId      Int
+    termId      String
     term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
     date        DateTime
     reason      String
