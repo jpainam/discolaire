@@ -282,7 +282,7 @@ export async function createUser({
   const newUser = await authApi.signUpEmail({
     body: {
       email: finalEmail,
-      username: username,
+      username: username.toLowerCase(),
       name: name,
       profile: profile,
       schoolId: schoolId,

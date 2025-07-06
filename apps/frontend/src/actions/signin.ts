@@ -21,7 +21,7 @@ export async function signIn({
   try {
     const result = await auth.api.signInUsername({
       body: {
-        username,
+        username: username.toLowerCase(),
         password,
         rememberMe: true,
       },
