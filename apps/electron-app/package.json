@@ -1,0 +1,14 @@
+{
+    "name": "discolaire-electron-app",
+    "version": "1.0.0",
+    "scripts": {
+        "prepare-frontend": "cp -r ../frontend/.next ./frontend",
+        "package": "npm run prepare-frontend && electron-packager . Discolaire ..."
+    },
+    "dependencies": {
+        "electron": "^37.2.0"
+    },
+    "devDependencies": {
+        "@electron/packager": "^18.3.6"
+    }
+}

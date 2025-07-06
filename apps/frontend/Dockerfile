@@ -8,6 +8,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+ENV NODE_OPTIONS="--max-old-space-size=6144"
 
 
 # Install dependencies based on the preferred package manager

@@ -42,14 +42,14 @@ services:
       - redis
       - minio
 
-  docs:
-    build:
-      context: .
-      dockerfile: apps/docs/Dockerfile
-    ports:
-      - "${DOCS_PORT}:4000"
-    depends_on:
-      - postgres
+  # docs:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/docs/Dockerfile
+  #   ports:
+  #     - "${DOCS_PORT}:4000"
+  #   depends_on:
+  #     - postgres
 
 volumes:
   pgdata:
