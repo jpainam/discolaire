@@ -86,7 +86,7 @@ export const studentAccountRouter = {
             )?.name ?? "",
           transactionRef: (transaction.transactionRef ?? "").toUpperCase(),
           description: transaction.description ?? "",
-          type: transaction.transactionType ?? "CREDIT",
+          type: transaction.transactionType,
           amount: transaction.amount,
           operation: "transaction",
         });
