@@ -31,7 +31,6 @@ model User {
     announcements                Announcement[]
     recipients                   Recipient[]
     policies                     UserPolicy[]
-    posts                        Post[]
     gradeSheets                  GradeSheet[]
     religion                     Religion[]
     clubs                        Club[]                     @relation("president")

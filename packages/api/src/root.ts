@@ -33,7 +33,6 @@ import { gradeSheetRouter } from "./routers/gradeSheet";
 import { healthRouter } from "./routers/health";
 import { inventoryRouter } from "./routers/inventory";
 import { inventoryUsageRouter } from "./routers/inventoryUsage";
-import { journalRouter } from "./routers/journal";
 import { latenessRouter } from "./routers/lateness";
 import { lessonRouter } from "./routers/lesson";
 import { libraryRouter } from "./routers/library";
@@ -97,7 +96,6 @@ export const appRouter = createTRPCRouter({
   classroomCycle: classroomCycleRouter,
   classroomLevel: classroomLevelRouter,
   classroomSection: classroomSectionRouter,
-  journal: journalRouter,
   user: userRouter,
   bible: bibleRouter,
   subscription: subscriptionRouter,
