@@ -33,17 +33,27 @@ import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { CreateEditStaff } from "./CreateEditStaff";
 
+//  const defaultVisibles = [
+//       "select",
+//       "id",
+//       "avatar",
+//       "lastName",
+//       "firstName",
+//       "gender",
+//       "jobTitle",
+//       "phoneNumber1",
+//       "email",
+//       //"degreeId",
+//       //"employmentType",
+//       "actions",
+//     ];
 type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"]>[number];
 export function fetchStaffColumns({
   t,
-  columns,
 }: {
   t: TFunction<string, unknown>;
-  columns: string[];
-}): {
-  columns: ColumnDef<StaffProcedureOutput, unknown>[];
-} {
-  const allcolumns = [
+}): ColumnDef<StaffProcedureOutput, unknown>[] {
+  return [
     {
       id: "select",
       accessorKey: "select",
@@ -125,24 +135,7 @@ export function fetchStaffColumns({
         );
       },
     },
-    // {
-    //   id: "fullName",
-    //   accessorKey: "",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("fullName")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const staff = row.original;
-    //     return (
-    //       <Link
-    //         className="hover:text-blue-600 hover:underline"
-    //         href={routes.staffs.details(staff.id)}
-    //       >
-    //         {getFullName(staff)}
-    //       </Link>
-    //     );
-    //   },
-    // },
+
     {
       id: "gender",
       accessorKey: "gender",
@@ -205,42 +198,7 @@ export function fetchStaffColumns({
       },
       enableSorting: true,
     },
-    // {
-    //   accessorKey: "isActive",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("active")} />
-    //   ),
-    //   cell: (info) => info.getValue(),
-    //   enableSorting: true,
-    // },
-    {
-      accessorKey: "degree",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("degree")} />
-      ),
-      cell: ({ row }) => {
-        const staff = row.original;
-        return (
-          <div className="text-muted-foreground">{staff.degree?.name}</div>
-        );
-      },
-      enableSorting: true,
-    },
-    {
-      accessorKey: "employmentType",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("employmentType")} />
-      ),
-      cell: ({ row }) => {
-        const staff = row.original;
-        return (
-          <div className="text-muted-foreground">
-            {t(staff.employmentType ?? "")}
-          </div>
-        );
-      },
-      enableSorting: true,
-    },
+
     {
       id: "actions",
       cell: ({ row }) => <ActionsCell staff={row.original} />,
@@ -249,16 +207,6 @@ export function fetchStaffColumns({
       enableHiding: false,
     },
   ] as ColumnDef<StaffProcedureOutput, unknown>[];
-
-  const filteredColumns = columns // @ts-expect-error TODO: fix type
-    .map((col) => allcolumns.find((c) => c.accessorKey === col))
-    .filter(Boolean) as ColumnDef<StaffProcedureOutput, unknown>[];
-
-  // @ts-expect-error TODO: fix type
-  filteredColumns.push(allcolumns[allcolumns.length - 1]);
-  return {
-    columns: filteredColumns,
-  };
 }
 
 function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
@@ -277,7 +225,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
         await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
-    }),
+    })
   );
   const router = useRouter();
   const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);

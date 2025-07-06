@@ -7,8 +7,8 @@ import { useLocale } from "~/i18n";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
-import { StaffDataTableActions } from "./StaffDataTableActions";
-import { fetchStaffColumns } from "./StaffDataTableColumns";
+import { StaffDataTableActions } from "./StaffDataTableAction";
+import { fetchStaffColumns } from "./StaffDataTableColumn";
 
 export function StaffDataTable() {
   const { t } = useLocale();
@@ -16,25 +16,9 @@ export function StaffDataTable() {
   const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
 
   const columns = useMemo(() => {
-    const defaultVisibles = [
-      "select",
-      "id",
-      "avatar",
-      "lastName",
-      "firstName",
-      "gender",
-      "jobTitle",
-      "phoneNumber1",
-      "email",
-      //"degreeId",
-      //"employmentType",
-      "actions",
-    ];
-    const { columns } = fetchStaffColumns({
+    return fetchStaffColumns({
       t: t,
-      columns: defaultVisibles,
     });
-    return columns;
   }, [t]);
 
   const { table } = useDataTable({
