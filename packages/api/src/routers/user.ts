@@ -86,8 +86,15 @@ export const userRouter = {
     }),
   delete: protectedProcedure
     .input(z.union([z.array(z.string()), z.string()]))
-    .mutation(async ({ input }) => {
-      return userService.deleteUsers(Array.isArray(input) ? input : [input]);
+    .mutation(async ({ input, ctx }) => {
+      const userIds = Array.isArray(input) ? input : [input];
+      await ctx.pubsub.publish("user", {
+        type: "delete",
+        data: {
+          id: userIds.join(","),
+        },
+      });
+      return userService.deleteUsers(userIds);
     }),
 
   get: protectedProcedure
@@ -133,6 +140,7 @@ export const userRouter = {
           headers: await headers(),
         });
       }
+
       await ctx.db.user.update({
         where: {
           id: input.id,
@@ -152,6 +160,15 @@ export const userRouter = {
           headers: await headers(),
         });
       }
+      await ctx.pubsub.publish("user", {
+        type: "update",
+        data: {
+          id: input.id,
+          metadata: {
+            name: input.name,
+          },
+        },
+      });
       return ctx.db.user.findUniqueOrThrow({
         where: {
           id: input.id,
@@ -173,7 +190,17 @@ export const userRouter = {
         effect: z.enum(["Allow", "Deny"]),
       }),
     )
-    .mutation(({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      await ctx.pubsub.publish("permission", {
+        type: "update",
+        data: {
+          id: input.userId,
+          metadata: {
+            resource: input.resource,
+            effect: input.effect,
+          },
+        },
+      });
       return userService.updatePermission({
         userId: input.userId,
         resource: input.resource,
@@ -201,6 +228,16 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      await ctx.pubsub.publish("user", {
+        type: "create",
+        data: {
+          id: input.entityId,
+          metadata: {
+            profile: input.profile,
+            entityId: input.entityId,
+          },
+        },
+      });
       return createUser({
         schoolId: ctx.schoolId,
         username: input.username,

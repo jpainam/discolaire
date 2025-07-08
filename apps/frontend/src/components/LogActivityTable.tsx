@@ -12,7 +12,7 @@ export async function LogActivityTable({
   const { t, i18n } = await getServerTranslations();
 
   return (
-    <div className="space-y-3 max-h-80 overflow-y-auto">
+    <div className="space-y-3 max-h-[calc(100vh-20rem)] overflow-y-auto">
       {logs.length === 0 && (
         <EmptyState className="my-8" title={t("no_data")} />
       )}
@@ -20,7 +20,7 @@ export async function LogActivityTable({
         <div
           key={index}
           className={cn(
-            "text-xs border-l-2 pl-3 border-amber-500 hover:bg-neutral-800 p-2 transition-colors",
+            "text-xs border-l-2 pl-3 border-amber-500 hover:bg-muted p-2 transition-colors",
             log.action === "delete" && "border-red-500",
             log.action === "create" && "border-green-500",
             log.action === "update" && "border-orange-500",
