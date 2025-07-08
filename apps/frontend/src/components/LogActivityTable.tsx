@@ -28,7 +28,6 @@ export async function LogActivityTable({
           )}
         >
           <div className="text-neutral-500 font-mono">
-            Il y'a{" "}
             {formatDistanceToNow(log.createdAt, {
               locale:
                 i18n.language == "fr" ? fr : i18n.language == "en" ? enUS : es,
@@ -44,9 +43,9 @@ export async function LogActivityTable({
             {log.entityId && (
               <span>
                 {" "}
-                sur l'entité{" "}
+                correspondant à{" "}
                 <span className="text-orange-500 font-mono">
-                  {log.entityId} {JSON.stringify(log.metadata)}
+                  {log.entityId} {log.metadata && JSON.stringify(log.metadata)}
                 </span>
               </span>
             )}
