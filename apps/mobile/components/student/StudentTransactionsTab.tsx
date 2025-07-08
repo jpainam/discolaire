@@ -1,4 +1,6 @@
 import type { RouterOutputs } from "@repo/api";
+import { TransactionType } from "@repo/db";
+
 import { useQuery } from "@tanstack/react-query";
 import {
   CircleArrowDown as ArrowDownCircle,
@@ -23,10 +25,10 @@ export default function StudentTransactionsTab({
   student: RouterOutputs["student"]["get"];
 }) {
   const { data: transactions, isPending } = useQuery(
-    trpc.student.transactions.queryOptions(student.id),
+    trpc.student.transactions.queryOptions(student.id)
   );
-  const getTransactionIcon = (type: string) => {
-    if (type.toLocaleLowerCase() === "credit") {
+  const getTransactionIcon = (type: TransactionType) => {
+    if (type === TransactionType.CREDIT) {
       return <ArrowDownCircle size={20} color="#10b981" />;
     } else {
       return <ArrowUpCircle size={20} color="#ef4444" />;
@@ -40,7 +42,7 @@ export default function StudentTransactionsTab({
   }) => (
     <TouchableOpacity style={styles.transactionItem} activeOpacity={0.7}>
       <View style={styles.transactionIcon}>
-        {getTransactionIcon(item.transactionType ?? ("" as string))}
+        {getTransactionIcon(item.transactionType)}
       </View>
 
       <View style={styles.transactionDetails}>
