@@ -3,7 +3,6 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient } from "~/trpc/server";
-import { RateTable } from "./RateTable";
 
 export default function Page() {
   return (
@@ -18,7 +17,10 @@ export default function Page() {
             </div>
           }
         >
-          <RateTable />
+          <div className="font-mono text-accent justify-center text-center flex items-center my-8">
+            {" "}
+            En cours d'implementation
+          </div>
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
