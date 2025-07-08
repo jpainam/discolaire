@@ -40,7 +40,6 @@ model User {
     documents                    Document[]                 @relation("owner")
     documentCreatedBy            Document[]                 @relation("createdBy")
     subjectJournals              SubjectJournal[]           @relation("createdBy")
-    scheduleJobs                 ScheduleJob[]
     borrowedBooks                BorrowedBook[]
     healthVisits                 HealthVisit[]
     logActivities                LogActivity[]
@@ -56,6 +55,7 @@ model User {
     createdConsumableUsages      InventoryConsumableUsage[] @relation("CreatedConsumableUsages")
     notifications                UserNotification[]
     enrollmentCreatedBy          Enrollment[]               @relation("EnrollmentCreatedBy")
+    classroomCreatedBy           Classroom[]                @relation("ClassroomCreatedBy")
 
     @@unique([email])
     @@unique([username])

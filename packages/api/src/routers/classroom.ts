@@ -115,8 +115,7 @@ export const classroomRouter = {
           maxSize: input.maxSize,
           seniorAdvisorId: input.seniorAdvisorId,
           headTeacherId: input.headTeacherId,
-
-          //createdById: { connect: { id: ctx.session.user.id } },
+          createdById: ctx.session.user.id,
         },
       });
       await ctx.pubsub.publish("classroom", {

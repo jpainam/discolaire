@@ -1,29 +1,61 @@
-// import { Skeleton } from "@repo/ui/components/skeleton";
-// import { Suspense } from "react";
-// import { UserAccessLogTable } from "./UserAccessLogTable";
-// import { UserAccessLogHeader } from "./UserAccessLogHeader";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/components/table";
+import i18next from "i18next";
+import { auth } from "~/auth/server";
+import { getServerTranslations } from "~/i18n/server";
 
-// export default async function Page(props: { params: Promise<{ id: string }> }) {
-//   const params = await props.params;
-
-//   return (
-//     <div className="flex flex-col gap-2">
-//       <UserAccessLogHeader userId={params.id} />
-//       <Suspense
-//         fallback={
-//           <div className="grid grid-cols-1 lg:grid-cols-4 px-4 gap-4">
-//             {Array.from({ length: 16 }).map((_, i) => (
-//               <Skeleton key={i} className="h-8 " />
-//             ))}
-//           </div>
-//         }
-//       >
-//         <UserAccessLogTable userId={params.id} />
-//       </Suspense>
-//     </div>
-//   );
-// }
-
-export default function Page() {
-  return <div></div>;
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const { t } = await getServerTranslations();
+  const { sessions } = await auth.api.listUserSessions({
+    body: {
+      userId: params.id,
+    },
+  });
+  return (
+    <div>
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead className="h-9 py-2">ID</TableHead>
+              <TableHead className="h-9 py-2">{t("createAt")}</TableHead>
+              <TableHead className="h-9 py-2">{t("expiresAt")}</TableHead>
+              <TableHead className="h-9 py-2">{t("ipAddress")}</TableHead>
+              <TableHead className="h-9 py-2">{t("userAgent")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sessions.map((sess, index) => (
+              <TableRow key={index}>
+                <TableCell className="py-2 font-medium">{sess.id}</TableCell>
+                <TableCell className="py-2">
+                  {sess.createdAt.toLocaleDateString(i18next.language, {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                </TableCell>
+                <TableCell className="py-2">
+                  {sess.expiresAt.toLocaleDateString(i18next.language, {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                </TableCell>
+                <TableCell className="py-2">{sess.ipAddress}</TableCell>
+                <TableCell className="py-2">{sess.userAgent}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
 }

@@ -49,7 +49,6 @@ import { religionRouter } from "./routers/religion";
 import { reportCardRouter } from "./routers/reportCard";
 import { reportingRouter } from "./routers/reporting";
 import { roleRouter } from "./routers/role";
-import { scheduleJobRouter } from "./routers/scheduleJob";
 import { scheduleTaskRouter } from "./routers/scheduleTask";
 import { schoolRouter } from "./routers/school";
 import { schoolYearRouter } from "./routers/schoolYear";
@@ -81,7 +80,6 @@ export const appRouter = createTRPCRouter({
   contact: contactRouter,
   subject: subjectRouter,
   timetable: timetableRouter,
-  scheduleJob: scheduleJobRouter,
   directory: directoryRouter,
   library: libraryRouter,
   subjectGroup: subjectGroupRouter,

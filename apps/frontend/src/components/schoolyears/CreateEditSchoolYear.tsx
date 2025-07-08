@@ -77,7 +77,7 @@ export function CreateEditSchoolYear({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const createSchoolYearMutation = useMutation(
     trpc.schoolYear.create.mutationOptions({
@@ -89,7 +89,7 @@ export function CreateEditSchoolYear({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const onSubmit = (data: z.infer<typeof schoolYearSchema>) => {
     const values = {

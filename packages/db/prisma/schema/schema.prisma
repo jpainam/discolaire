@@ -148,7 +148,6 @@ model Classroom {
     classroomLeaderId String?
     createdAt         DateTime          @default(now()) @db.Timestamp(6)
     updatedAt         DateTime          @updatedAt
-    createdBy         String?
     updatedBy         String?
     deletedAt         DateTime?         @db.Timestamp(6)
     deletedBy         String?
@@ -166,6 +165,8 @@ model Classroom {
     reportCards       ReportCard[]
     school            School            @relation(fields: [schoolId], references: [id])
     schoolId          String
+    createdById       String?
+    createdBy         User?             @relation("ClassroomCreatedBy", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade)
 }
 
 model Enrollment {

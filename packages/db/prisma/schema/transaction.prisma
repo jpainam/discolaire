@@ -24,16 +24,6 @@ model Transaction {
     schoolYear      SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
-model ScheduleJob {
-    id           Int    @id @default(autoincrement())
-    userId       String
-    timezone     String
-    cron         String
-    type         String
-    triggerDevId String
-    user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 enum TransactionStatus {
     PENDING
     CANCELED

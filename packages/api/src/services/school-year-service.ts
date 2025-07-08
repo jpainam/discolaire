@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { addYears } from "date-fns";
+
 import { db } from "@repo/db";
 
 export const schoolYearService = {
@@ -54,12 +56,58 @@ export const schoolYearService = {
             ...rest,
             createdAt: new Date(),
             updatedAt: new Date(),
-            createdBy: userId,
+            createdById: userId,
             schoolYearId: newYear.id,
           },
         });
+        // fees
+        const fees = await db.fee.findMany({
+          where: {
+            classroomId: cl.id,
+          },
+        });
+        const allFees = fees.map(({ id, ...f }) => ({
+          ...f,
+          classroomId: cl.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          dueDate: addYears(f.dueDate, 1),
+        }));
+        await db.fee.createMany({
+          data: allFees,
+        });
+        // subjects
+        const subjects = await db.subject.findMany({
+          where: {
+            classroomId: cl.id,
+          },
+        });
+        const allSubjects = subjects.map(({ id, ...s }) => ({
+          ...s,
+          classroomId: cl.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }));
+        await db.subject.createMany({
+          data: allSubjects,
+        });
       }),
     );
+    const terms = await db.term.findMany({
+      where: {
+        schoolYearId: prevSchoolYearId,
+        schoolId: schoolId,
+      },
+    });
+    const allTerms = terms.map(({ id, ...t }) => ({
+      ...t,
+      schoolYearId: newYear.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+    await db.term.createMany({
+      data: allTerms,
+    });
   },
   getDefault: async (schoolId: string) => {
     const schoolyear = await db.schoolYear.findFirst({
