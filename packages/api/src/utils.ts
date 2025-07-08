@@ -21,13 +21,13 @@ export function generateStringColor(): string {
   return color;
 }
 
-const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
+export const connection = new IORedis(`${env.REDIS_URL}?family=0`, {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
 });
 
 // Define queues
-export const logQueue = new Queue("log", { connection });
+export const logQueue = new Queue("log-queue", { connection });
 export const notificationQueue = new Queue("notification", { connection });
 
 export function roundToTwo(num: number): number {
@@ -50,3 +50,13 @@ export function getCookieValue(headers: Headers, name: string): string | null {
 
   return cookies[name] ?? null;
 }
+
+export const logAction = async (data: {
+  userId?: string;
+  action: string;
+  entity: string;
+  entityId?: string;
+  metadata?: any;
+}) => {
+  await logQueue.add("log-action", data);
+};

@@ -41,7 +41,6 @@ model User {
     documentCreatedBy            Document[]                 @relation("createdBy")
     subjectJournals              SubjectJournal[]           @relation("createdBy")
     scheduleJobs                 ScheduleJob[]
-    loginActivities              LoginActivity[]
     borrowedBooks                BorrowedBook[]
     healthVisits                 HealthVisit[]
     logActivities                LogActivity[]
@@ -130,19 +129,14 @@ model Subscription {
 }
 
 model LogActivity {
-    id           Int             @id @default(autoincrement())
-    title        String
-    url          String
-    description  String?
-    userId       String
-    schoolId     String
-    entityId     String?
-    entityType   String?
-    schoolYearId String
-    type         LogActivityType @default(READ)
-    createdAt    DateTime        @default(now())
-    data         Json?
-    user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id        Int      @id @default(autoincrement())
+    userId    String?
+    action    String
+    entity    String
+    entityId  String?
+    metadata  Json?
+    createdAt DateTime @default(now())
+    user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum LogActivityType {

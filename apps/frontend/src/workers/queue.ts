@@ -9,7 +9,9 @@ export const JobNames = {
 
 const connection = getRedis();
 export const jobQueueName = "job-queue";
+export const logQueueName = "log-queue";
 export const jobQueue = new Queue(jobQueueName, { connection });
+export const logQueue = new Queue(logQueueName, { connection });
 
 // Queue Events for Debugging
 const queueEvents = new QueueEvents(jobQueueName, { connection });
@@ -28,4 +30,11 @@ jobQueue.on("error", (error) => {
 
 jobQueue.on("waiting", (job) => {
   console.log(`Job ${job} added`);
+});
+
+logQueue.on("error", (error) => {
+  logger.error(`Log queue error: ${error}`);
+});
+logQueue.on("waiting", (job) => {
+  console.log(`Log job ${job} added`);
 });
