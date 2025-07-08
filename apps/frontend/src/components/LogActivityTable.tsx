@@ -24,7 +24,7 @@ export async function LogActivityTable({
             log.action === "delete" && "border-red-500",
             log.action === "create" && "border-green-500",
             log.action === "update" && "border-orange-500",
-            log.action === "read" && "border-blue-500"
+            log.action === "read" && "border-blue-500",
           )}
         >
           <div className="text-neutral-500 font-mono">

@@ -2,7 +2,7 @@
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { AlertCircle, CheckIcon } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { authClient } from "~/auth/client";
@@ -35,7 +35,7 @@ export default function EmailVerification({
       setVerificationSent(true);
       toast.message(t("Verification email sent"), {
         description: t(
-          "Please check your inbox and follow the link to verify your email.",
+          "Please check your inbox and follow the link to verify your email."
         ),
       });
 
@@ -45,7 +45,7 @@ export default function EmailVerification({
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to send verification email",
+          : "Failed to send verification email"
       );
     }
   };
@@ -64,13 +64,17 @@ export default function EmailVerification({
           </Badge>
         )}
         {!isVerified && verificationSent && (
-          <Badge
-            variant="outline"
-            className="text-xs font-normal text-blue-500 border-blue-200 bg-blue-50"
-          >
-            <AlertCircle className="h-3 w-3 mr-1" />
+          <Badge variant="outline" className="gap-1.5">
+            <CheckIcon className="bg-amber-500" size={12} aria-hidden="true" />
             Verification sent
           </Badge>
+          // <Badge
+          //   variant="outline"
+          //   className="text-xs font-normal text-blue-500 border-blue-200 bg-blue-50"
+          // >
+          //   <AlertCircle className="h-3 w-3 mr-1" />
+          //   Verification sent
+          // </Badge>
         )}
         {isVerified && (
           <Badge variant="outline" className="gap-1">
