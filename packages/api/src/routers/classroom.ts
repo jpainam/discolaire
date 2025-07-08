@@ -66,10 +66,17 @@ export const classroomRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
+      const classroomIds = Array.isArray(input) ? input : [input];
+      await ctx.pubsub.publish("classroom", {
+        type: "delete",
+        data: {
+          id: classroomIds.join(","),
+        },
+      });
       return ctx.db.classroom.deleteMany({
         where: {
           id: {
-            in: Array.isArray(input) ? input : [input],
+            in: classroomIds,
           },
         },
       });
@@ -96,7 +103,7 @@ export const classroomRouter = {
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.classroom.create({
+      const cl = await ctx.db.classroom.create({
         data: {
           name: input.name,
           levelId: input.levelId,
@@ -112,6 +119,16 @@ export const classroomRouter = {
           //createdById: { connect: { id: ctx.session.user.id } },
         },
       });
+      await ctx.pubsub.publish("classroom", {
+        type: "create",
+        data: {
+          id: cl.id,
+          metadata: {
+            name: cl.name,
+          },
+        },
+      });
+      return cl;
     }),
 
   subjects: protectedProcedure.input(z.string().min(1)).query(({ input }) => {
@@ -202,6 +219,15 @@ export const classroomRouter = {
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      await ctx.pubsub.publish("classroom", {
+        type: "update",
+        data: {
+          id: input.id,
+          metadata: {
+            name: input.name,
+          },
+        },
+      });
       return ctx.db.classroom.update({
         where: {
           id: input.id,

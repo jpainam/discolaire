@@ -254,16 +254,34 @@ export const studentRouter = {
           schoolId: ctx.schoolId,
         },
       });
+      await ctx.pubsub.publish("student", {
+        type: "create",
+        data: {
+          id: student.id,
+          metadata: {
+            name: student.lastName,
+          },
+        },
+      });
       void studentService.addClubs(student.id, input.clubs ?? []);
       void studentService.addSports(student.id, input.sports ?? []);
 
       if (input.classroom) {
-        await ctx.db.enrollment.create({
+        const enr = await ctx.db.enrollment.create({
           data: {
             studentId: student.id,
             classroomId: input.classroom,
             schoolYearId: ctx.schoolYearId,
             createdBy: ctx.session.user.id,
+          },
+        });
+        await ctx.pubsub.publish("enrollment", {
+          type: "create",
+          data: {
+            id: enr.id.toString(),
+            metadata: {
+              name: student.lastName,
+            },
           },
         });
       }
@@ -287,6 +305,15 @@ export const studentRouter = {
         //   message: "Registration number already exists",
         // });
       }
+      await ctx.pubsub.publish("student", {
+        type: "update",
+        data: {
+          id: input.id,
+          metadata: {
+            name: input.lastName,
+          },
+        },
+      });
       return ctx.db.student.update({
         where: { id: input.id },
         data: {
@@ -372,8 +399,15 @@ export const studentRouter = {
     }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
-    .mutation(({ ctx, input }) => {
-      return studentService.delete(input, ctx.schoolId);
+    .mutation(async ({ ctx, input }) => {
+      const r = await studentService.delete(input, ctx.schoolId);
+      await ctx.pubsub.publish("student", {
+        type: "delete",
+        data: {
+          id: Array.isArray(input) ? input.join(",") : input,
+        },
+      });
+      return r;
     }),
   siblings: protectedProcedure
     .input(z.string())
@@ -517,6 +551,15 @@ export const studentRouter = {
   disable: protectedProcedure
     .input(z.object({ id: z.string().min(1), isActive: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
+      await ctx.pubsub.publish("student", {
+        type: "update",
+        data: {
+          id: input.id,
+          metadata: {
+            name: input.isActive ? "Enabled" : "Disabled",
+          },
+        },
+      });
       return ctx.db.student.update({
         where: {
           id: input.id,
@@ -541,6 +584,15 @@ export const studentRouter = {
         },
       });
       const photos = [...student.photos, input.url];
+      await ctx.pubsub.publish("student", {
+        type: "update",
+        data: {
+          id: input.id,
+          metadata: {
+            name: "Added photo",
+          },
+        },
+      });
       return ctx.db.student.update({
         where: {
           id: input.id,
@@ -610,6 +662,15 @@ export const studentRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      await ctx.pubsub.publish("student", {
+        type: "update_status",
+        data: {
+          id: input.studentId,
+          metadata: {
+            name: input.status,
+          },
+        },
+      });
       return ctx.db.student.update({
         where: {
           id: input.studentId,
