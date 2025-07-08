@@ -23,7 +23,6 @@ import {
   FileText,
   KeySquare,
   LineChart,
-  Logs,
   Mail,
   NotebookPen,
   NotepadTextDashed,
@@ -132,11 +131,6 @@ export function StudentSidebar({
         name: "documents",
         icon: FileText,
         url: `/students/${params.id}/documents`,
-      },
-      {
-        name: "access_logs",
-        icon: Logs,
-        url: `/students/${params.id}/access-logs`,
       },
     ],
   };

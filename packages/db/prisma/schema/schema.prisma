@@ -649,6 +649,7 @@ model School {
     consumableUsages     InventoryConsumableUsage[]
     schoolYearEvents     SchoolYearEvent[]
     schoolYearEventTypes SchoolYearEventType[]
+    logActivities        LogActivity[]
 }
 
 model FormerSchool {

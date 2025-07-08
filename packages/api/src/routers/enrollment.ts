@@ -116,22 +116,19 @@ export const enrollmentRouter = {
               schoolYearId: ctx.schoolYearId,
             },
           ];
-      const dataLog = data.map((enrollment) => {
-        return {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          userId: ctx.session.user.id,
-          title: "Student enrollment",
-          type: "CREATE" as const,
-          url: `/students/${enrollment.studentId}/enrollments`,
-          entityId: enrollment.studentId,
-          entityType: "student",
-        };
-      });
-      await ctx.db.logActivity.createMany({ data: dataLog });
-      return ctx.db.enrollment.createMany({
-        data: data,
-      });
+
+      const results = await Promise.all(
+        data.map(async (e) => {
+          const enr = await ctx.db.enrollment.create({ data: e });
+          await ctx.pubsub.publish("enrollment", {
+            type: "create",
+            data: {
+              id: enr.id.toString(),
+            },
+          });
+        }),
+      );
+      return results;
     }),
 
   unenrolled: protectedProcedure
@@ -182,29 +179,16 @@ export const enrollmentRouter = {
       const studentIds = Array.isArray(input.studentId)
         ? input.studentId
         : [input.studentId];
-
-      const data = studentIds.map((studentId) => {
-        return {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          userId: ctx.session.user.id,
-          title: "Student enrollment",
-          type: "DELETE" as const,
-          url: `/students/${studentId}/enrollments`,
-          entityId: studentId,
-          entityType: "student",
-        };
+      await ctx.pubsub.publish("enrollment", {
+        type: "delete",
+        data: {
+          id: studentIds.join(","),
+        },
       });
-      await ctx.db.logActivity.createMany({
-        data: data,
-      });
-
       return ctx.db.enrollment.deleteMany({
         where: {
           studentId: {
-            in: Array.isArray(input.studentId)
-              ? input.studentId
-              : [input.studentId],
+            in: studentIds,
           },
           classroomId: input.classroomId,
         },
@@ -214,32 +198,18 @@ export const enrollmentRouter = {
     .input(z.union([z.array(z.coerce.number()), z.coerce.number()]))
     .mutation(async ({ ctx, input }) => {
       const studentIds = Array.isArray(input) ? input : [input];
-      const enrollments = await ctx.db.enrollment.findMany({
-        where: {
-          id: {
-            in: studentIds,
-          },
+
+      await ctx.pubsub.publish("enrollment", {
+        type: "delete",
+        data: {
+          id: studentIds.join(","),
         },
       });
-      const data = enrollments.map((enrollment) => {
-        return {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          userId: ctx.session.user.id,
-          title: "Student enrollment",
-          type: "DELETE" as const,
-          url: `/students/${enrollment.studentId}/enrollments`,
-          entityId: enrollment.studentId,
-          entityType: "student",
-        };
-      });
-      await ctx.db.logActivity.createMany({
-        data: data,
-      });
+
       return ctx.db.enrollment.deleteMany({
         where: {
           id: {
-            in: Array.isArray(input) ? input : [input],
+            in: studentIds,
           },
         },
       });

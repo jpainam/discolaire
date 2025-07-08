@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
-import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -14,14 +14,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.get.queryOptions(params.id),
     trpc.student.contacts.queryOptions(params.id),
   ]);
-
-  await caller.logActivity.create({
-    title: "Student Profile",
-    type: "READ",
-    url: `/students/${params.id}`,
-    entityId: params.id,
-    entityType: "student",
-  });
 
   return (
     <HydrateClient>

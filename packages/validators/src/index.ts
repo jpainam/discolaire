@@ -1,5 +1,11 @@
-import { z } from "zod";
+import { createErrorMap } from "zod-validation-error/v4";
+import { z } from "zod/v4";
 
+z.config({
+  customError: createErrorMap({
+    includePath: true,
+  }),
+});
 export const unused = z.string().describe(
   `This lib is currently used for simple schemas
    But as your application grows and you need other validators to share
@@ -54,3 +60,12 @@ export const createUpdateStudentSchema = z.object({
 //     }),
 //   ),
 // });
+
+export const logActivitySchema = z.object({
+  userId: z.string(),
+  action: z.string(),
+  entity: z.string(),
+  entityId: z.string().optional(),
+  metadata: z.any().optional(),
+  schoolId: z.string(),
+});

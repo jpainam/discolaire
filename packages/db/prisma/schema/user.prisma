@@ -137,6 +137,8 @@ model LogActivity {
     metadata  Json?
     createdAt DateTime @default(now())
     user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    schoolId  String
+    school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }
 
 enum LogActivityType {

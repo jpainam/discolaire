@@ -183,7 +183,7 @@ export function getColumns({
         const teacher = row.original.headTeacher;
         return teacher ? (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:text-blue-600 hover:underline line-clamp-1 overflow-ellipsis"
             href={routes.staffs.details(teacher.id)}
           >
             {teacher.lastName}

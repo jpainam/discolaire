@@ -96,7 +96,7 @@ export default async function Layout(props: {
         </ErrorBoundary>
 
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
-        {/* <StudentMainContent>{children}</StudentMainContent> */}
+
         <main className="flex-1">{props.children}</main>
         <div className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>

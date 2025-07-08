@@ -37,7 +37,6 @@ import { latenessRouter } from "./routers/lateness";
 import { lessonRouter } from "./routers/lesson";
 import { libraryRouter } from "./routers/library";
 import { logActivityRouter } from "./routers/logActivity";
-import { loginActivityRouter } from "./routers/loginActivity";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
@@ -109,7 +108,6 @@ export const appRouter = createTRPCRouter({
   email: emailRouter,
   inventoryUsage: inventoryUsageRouter,
   consigne: consigneRouter,
-  loginActivity: loginActivityRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,
   communicationChannel: communicationChannelRouter,

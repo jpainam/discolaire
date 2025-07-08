@@ -2,7 +2,7 @@
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { AlertCircle, CheckCircle } from "lucide-react";
+import { AlertCircle, CheckIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { authClient } from "~/auth/client";
@@ -73,13 +73,21 @@ export default function EmailVerification({
           </Badge>
         )}
         {isVerified && (
-          <Badge
-            variant="outline"
-            className="text-xs font-normal text-emerald-500 border-emerald-200 bg-emerald-50"
-          >
-            <CheckCircle className="h-3 w-3 mr-1" />
-            Verified
+          <Badge variant="outline" className="gap-1">
+            <CheckIcon
+              className="text-emerald-500"
+              size={12}
+              aria-hidden="true"
+            />
+            {t("Verified")}
           </Badge>
+          // <Badge
+          //   variant="outline"
+          //   className="text-xs font-normal text-emerald-500 border-emerald-200 bg-emerald-50"
+          // >
+          //   <CheckCircle className="h-3 w-3 mr-1" />
+          //Verified
+          // </Badge>
         )}
       </div>
       {!isVerified && !verificationSent && (

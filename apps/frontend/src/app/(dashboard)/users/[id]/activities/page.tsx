@@ -13,7 +13,7 @@ import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const activities = await caller.user.activities(params.id);
+  const activities = await caller.logActivity.user(params.id);
   const { i18n } = await getServerTranslations();
   if (activities.length === 0) {
     return (
@@ -39,10 +39,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 day: "2-digit",
               })}
             </TimelineDate>
-            <TimelineTitle className="sm:-mt-0.5">{item.title}</TimelineTitle>
+            <TimelineTitle className="sm:-mt-0.5">{item.action}</TimelineTitle>
             <TimelineIndicator />
           </TimelineHeader>
-          <TimelineContent>{item.description}</TimelineContent>
+          <TimelineContent>
+            {JSON.stringify(item.metadata, null, 2)}
+          </TimelineContent>
         </TimelineItem>
       ))}
     </Timeline>

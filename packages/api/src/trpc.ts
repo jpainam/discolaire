@@ -14,6 +14,7 @@ import type { Auth, Session } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
 import { db } from "@repo/db";
 
+import { PubSubLogger } from "./pubsub-logger";
 import { getPermissions } from "./services/user-service";
 import { getCookieValue } from "./utils";
 
@@ -138,6 +139,7 @@ export const protectedProcedure = t.procedure
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     const permissions = await getPermissions(ctx.session.user.id);
+
     return next({
       ctx: {
         // infers the `session` as non-nullable
@@ -145,6 +147,10 @@ export const protectedProcedure = t.procedure
         permissions: permissions,
         schoolId: ctx.session.user.schoolId,
         schoolYearId: ctx.schoolYearId,
+        pubsub: new PubSubLogger(
+          ctx.session.user.id,
+          ctx.session.user.schoolId,
+        ),
       },
     });
   });
