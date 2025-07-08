@@ -55,6 +55,7 @@ model User {
     consumableUsages             InventoryConsumableUsage[] @relation("UserConsumableUsages")
     createdConsumableUsages      InventoryConsumableUsage[] @relation("CreatedConsumableUsages")
     notifications                UserNotification[]
+    enrollmentCreatedBy          Enrollment[]               @relation("EnrollmentCreatedBy")
 
     @@unique([email])
     @@unique([username])

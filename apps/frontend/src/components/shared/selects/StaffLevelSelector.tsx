@@ -163,7 +163,7 @@ function CreateStaffLevel() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const handleSubmit = (data: z.infer<typeof createLevelSchema>) => {

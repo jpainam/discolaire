@@ -109,7 +109,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateStaffMutation = useMutation(
     trpc.staff.update.mutationOptions({
@@ -121,7 +121,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const onSubmit = (data: z.infer<typeof staffCreateEditSchema>) => {

@@ -168,6 +168,23 @@ model Classroom {
     schoolId          String
 }
 
+model Enrollment {
+    id           Int        @id @default(autoincrement())
+    schoolYearId String
+    createdAt    DateTime   @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime   @updatedAt
+    createdById  String?
+    classroomId  String
+    observation  String?
+    studentId    String
+    classroom    Classroom  @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    createdBy    User?      @relation("EnrollmentCreatedBy", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+    @@unique([schoolYearId, classroomId, studentId])
+}
+
 model SubjectJournal {
     id          Int      @id @default(autoincrement())
     subjectId   Int
@@ -347,22 +364,6 @@ model Term {
     consignes    Consigne[]
     chatters     Chatter[]
     convocations Convocation[]
-}
-
-model Enrollment {
-    id           Int        @id @default(autoincrement())
-    schoolYearId String
-    createdAt    DateTime   @default(now()) @db.Timestamp(6)
-    updatedAt    DateTime   @updatedAt
-    createdBy    String?
-    classroomId  String
-    observation  String?
-    studentId    String
-    classroom    Classroom  @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-    @@unique([schoolYearId, classroomId, studentId])
 }
 
 model ContactRelationship {

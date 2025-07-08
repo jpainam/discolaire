@@ -106,6 +106,7 @@ export const enrollmentRouter = {
               classroomId: input.classroomId,
               observation: input.observation,
               schoolYearId: ctx.schoolYearId,
+              createdById: ctx.session.user.id,
             };
           })
         : [
@@ -114,6 +115,7 @@ export const enrollmentRouter = {
               classroomId: input.classroomId,
               observation: input.observation,
               schoolYearId: ctx.schoolYearId,
+              createdById: ctx.session.user.id,
             },
           ];
 

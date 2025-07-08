@@ -80,19 +80,21 @@ export const schoolYearRouter = {
         endDate: z.coerce.date(),
         name: z.string(),
         isActive: z.boolean().default(true),
+        previousSchoolYearId: z.string().optional(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.schoolYear.create({
-        data: {
-          startDate: input.startDate,
-          endDate: input.endDate,
-          name: input.name,
-          schoolId: ctx.schoolId,
-          isActive: input.isActive,
-        },
+    .mutation(({ ctx, input }) => {
+      return schoolYearService.create({
+        startDate: input.startDate,
+        endDate: input.endDate,
+        name: input.name,
+        schoolId: ctx.schoolId,
+        isActive: input.isActive,
+        userId: ctx.session.user.id,
+        prevSchoolYearId: input.previousSchoolYearId,
       });
     }),
+
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.schoolYear.findUniqueOrThrow({
       where: {

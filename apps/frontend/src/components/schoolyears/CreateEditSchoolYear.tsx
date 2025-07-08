@@ -3,6 +3,7 @@
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -14,13 +15,19 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const schoolYearSchema = z.object({
@@ -28,6 +35,7 @@ const schoolYearSchema = z.object({
   start: z.coerce.date(),
   end: z.coerce.date(),
   isActive: z.boolean().default(true),
+  previousSchoolYearId: z.string().optional(),
 });
 interface CreateEditSchoolYearProps {
   id?: string;
@@ -51,11 +59,13 @@ export function CreateEditSchoolYear({
       end: endDate ?? new Date(),
       name: name ?? "",
       isActive: isActive ?? true,
+      previousSchoolYearId: "",
     },
   });
   const { closeModal } = useModal();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const schoolYearQuery = useQuery(trpc.schoolYear.all.queryOptions());
 
   const updateSchoolYearMutation = useMutation(
     trpc.schoolYear.update.mutationOptions({
@@ -67,7 +77,7 @@ export function CreateEditSchoolYear({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const createSchoolYearMutation = useMutation(
     trpc.schoolYear.create.mutationOptions({
@@ -79,7 +89,7 @@ export function CreateEditSchoolYear({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const onSubmit = (data: z.infer<typeof schoolYearSchema>) => {
     const values = {
@@ -87,6 +97,7 @@ export function CreateEditSchoolYear({
       endDate: data.end,
       name: data.name,
       isActive: !data.isActive,
+      previousSchoolYearId: data.previousSchoolYearId,
     };
     if (id) {
       toast.loading(t("updating"), { id: 0 });
@@ -99,7 +110,7 @@ export function CreateEditSchoolYear({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
@@ -107,7 +118,7 @@ export function CreateEditSchoolYear({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("name")}</FormLabel>
+              <FormLabel>{t("Caption")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -147,22 +158,58 @@ export function CreateEditSchoolYear({
             </FormItem>
           )}
         />
-        <FormField
-          name="isActive"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="mt-4 flex flex-row items-center gap-2 space-y-0">
-              <FormControl>
-                <Checkbox
-                  defaultChecked={!field.value}
-                  onCheckedChange={(checked) => field.onChange(checked)}
-                />
-              </FormControl>
-              <FormLabel>{t("lock")}</FormLabel>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!id && (
+          <FormField
+            control={form.control}
+            name="previousSchoolYearId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  {t("Create from a previous school year?")}
+                </FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("school_year")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {schoolYearQuery.isPending && (
+                        <SelectItem disabled value="loading">
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        </SelectItem>
+                      )}
+                      {schoolYearQuery.data?.map((schoolYear) => (
+                        <SelectItem key={schoolYear.id} value={schoolYear.id}>
+                          {schoolYear.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {id && (
+          <FormField
+            name="isActive"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="mt-4 flex flex-row items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    defaultChecked={!field.value}
+                    onCheckedChange={(checked) => field.onChange(checked)}
+                  />
+                </FormControl>
+                <FormLabel>{t("lock")}</FormLabel>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <div className="ml-auto mt-4 flex flex-row gap-4">
           <Button
             type="button"

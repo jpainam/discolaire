@@ -272,7 +272,7 @@ export const studentRouter = {
             studentId: student.id,
             classroomId: input.classroom,
             schoolYearId: ctx.schoolYearId,
-            createdBy: ctx.session.user.id,
+            createdById: ctx.session.user.id,
           },
         });
         await ctx.pubsub.publish("enrollment", {
