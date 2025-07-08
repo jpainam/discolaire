@@ -69,7 +69,7 @@ export function StaffHeader() {
                 size="sm"
               >
                 <Plus />
-                {t("Add Staff")}
+                {t("Add staff")}
               </Button>
             )}
           </div>

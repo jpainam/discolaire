@@ -66,11 +66,13 @@ export const staffRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
+      const staffIds = Array.isArray(input) ? input : [input];
+
       const staffs = await ctx.db.staff.findMany({
         where: {
           schoolId: ctx.schoolId,
           id: {
-            in: Array.isArray(input) ? input : [input],
+            in: staffIds,
           },
         },
       });
@@ -84,6 +86,12 @@ export const staffRouter = {
           },
         });
       }
+      await ctx.pubsub.publish("staff", {
+        type: "delete",
+        data: {
+          id: staffIds.join(","),
+        },
+      });
       return ctx.db.staff.deleteMany({
         where: {
           schoolId: ctx.schoolId,
@@ -117,22 +125,48 @@ export const staffRouter = {
 
   create: protectedProcedure
     .input(createUpdateSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.staff.create({
+    .mutation(async ({ ctx, input }) => {
+      const { email, ...data } = input;
+      const staff = await ctx.db.staff.create({
         data: {
-          ...input,
+          ...data,
           dateOfBirth: input.dateOfBirth
             ? fromZonedTime(input.dateOfBirth, "UTC")
             : undefined,
           schoolId: ctx.schoolId,
         },
       });
+      if (email) {
+        await createUser({
+          email,
+          entityId: staff.id,
+          username: getFullName(staff)
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .toLowerCase(),
+          authApi: ctx.authApi,
+          schoolId: ctx.schoolId,
+          name: getFullName(staff),
+          profile: "staff",
+          isActive: true,
+        });
+      }
+      await ctx.pubsub.publish("staff", {
+        type: "create",
+        data: {
+          id: staff.id,
+          metadata: {
+            name: input.lastName,
+          },
+        },
+      });
+      return staff;
     }),
 
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { id, email, ...data } = input;
+
       const staff = await ctx.db.staff.findUniqueOrThrow({
         where: {
           id: id,
@@ -167,6 +201,15 @@ export const staffRouter = {
           });
         }
       }
+      await ctx.pubsub.publish("staff", {
+        type: "update",
+        data: {
+          id: id,
+          metadata: {
+            name: data.lastName,
+          },
+        },
+      });
       return ctx.db.staff.update({
         where: {
           id: id,

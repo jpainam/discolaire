@@ -35,7 +35,7 @@ export default function EmailVerification({
       setVerificationSent(true);
       toast.message(t("Verification email sent"), {
         description: t(
-          "Please check your inbox and follow the link to verify your email."
+          "Please check your inbox and follow the link to verify your email.",
         ),
       });
 
@@ -45,7 +45,7 @@ export default function EmailVerification({
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to send verification email"
+          : "Failed to send verification email",
       );
     }
   };

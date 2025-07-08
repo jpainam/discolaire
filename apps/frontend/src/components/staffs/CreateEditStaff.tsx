@@ -24,6 +24,7 @@ import { Input } from "@repo/ui/components/input";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { CountryPicker } from "../shared/CountryPicker";
@@ -75,7 +76,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       email: staff?.user?.email ?? "",
       countryId: staff?.countryId ?? "",
       observation: staff?.observation ?? "",
-      degreeId: staff ? String(staff.degreeId) : "",
+      degreeId: staff?.degreeId ?? "",
       employmentType: staff?.employmentType ?? "",
       address: staff?.address ?? "",
       phoneNumber1: staff?.phoneNumber1 ?? "",
@@ -95,18 +96,20 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const createStaffMutation = useMutation(
     trpc.staff.create.mutationOptions({
-      onSuccess: async () => {
+      onSuccess: async (result) => {
         await queryClient.invalidateQueries(trpc.staff.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeSheet();
+        router.push(`/staff/${result.id}`);
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateStaffMutation = useMutation(
     trpc.staff.update.mutationOptions({
@@ -118,7 +121,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const onSubmit = (data: z.infer<typeof staffCreateEditSchema>) => {
@@ -131,7 +134,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
       jobTitle: data.jobTitle,
       countryId: data.countryId,
       observation: data.observation,
-      degreeId: data.degreeId,
+      degreeId: data.degreeId?.trim() ? data.degreeId : undefined,
       employmentType: data.employmentType,
       address: data.address,
       phoneNumber1: data.phoneNumber1,
@@ -260,7 +263,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
                     onChange={(val) => {
                       field.onChange(val);
                     }}
-                    defaultValue={staff?.degreeId?.toString() ?? undefined}
+                    defaultValue={field.value}
                   />
                 </FormControl>
                 <FormMessage />
