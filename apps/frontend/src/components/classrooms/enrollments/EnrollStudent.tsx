@@ -44,17 +44,17 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
   const unenrollStudentsQuery = useQuery(
     trpc.enrollment.unenrolled.queryOptions({
       q: debounceValue,
-    })
+    }),
   );
 
   const createEnrollmentMutation = useMutation(
     trpc.enrollment.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.students.pathFilter()
+          trpc.classroom.students.pathFilter(),
         );
         await queryClient.invalidateQueries(
-          trpc.enrollment.unenrolled.pathFilter()
+          trpc.enrollment.unenrolled.pathFilter(),
         );
         closeModal();
         toast.success(t("enrolled_successfully"), { id: 0 });
@@ -62,7 +62,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -101,15 +101,15 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     if (selectedIds.includes(stud.id)) {
                       return setSelectedIds(
                         selectedIds.filter(
-                          (selectedId) => selectedId !== stud.id
-                        )
+                          (selectedId) => selectedId !== stud.id,
+                        ),
                       );
                     }
 
                     return setSelectedIds(
                       unenrollStudentsQuery.data
                         .filter((u) => [...selectedIds, stud.id].includes(u.id))
-                        .map((u) => u.id)
+                        .map((u) => u.id),
                     );
                   }}
                 >
@@ -149,7 +149,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
           <div className="flex -space-x-2">
             {selectedIds.map((studId) => {
               const stud = unenrollStudentsQuery.data?.find(
-                (u) => u.id === studId
+                (u) => u.id === studId,
               );
               return (
                 <Avatar
