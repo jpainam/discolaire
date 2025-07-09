@@ -123,7 +123,8 @@ export const schoolYearRouter = {
       if (hasClassroom) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Cannot delete school year with classrooms",
+          message:
+            "On ne peut pas supprimer une année scolaire avec des classes",
         });
       }
       const hasTerms = await ctx.db.term.count({
@@ -134,7 +135,8 @@ export const schoolYearRouter = {
       if (hasTerms) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Cannot delete school year with terms",
+          message:
+            "On ne peut pas supprimer une année scolaire avec des trimestres",
         });
       }
       const hasEnrollment = await ctx.db.enrollment.findFirst({
@@ -145,7 +147,8 @@ export const schoolYearRouter = {
       if (hasEnrollment) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Cannot delete school year with enrollments",
+          message:
+            "On ne peut pas supprimer une année scolaire avec des élèves inscrits",
         });
       }
       return ctx.db.schoolYear.delete({ where: { id: input } });

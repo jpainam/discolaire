@@ -710,6 +710,9 @@ importers:
       '@repo/kv':
         specifier: workspace:*
         version: link:../kv
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@repo/validators':
         specifier: workspace:*
         version: link:../validators

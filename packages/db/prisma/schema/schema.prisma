@@ -156,7 +156,7 @@ model Classroom {
     seniorAdvisor     Staff?            @relation("seniorAdvisor", fields: [seniorAdvisorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
     headTeacher       Staff?            @relation("headTeacher", fields: [headTeacherId], references: [id], onDelete: SetNull, onUpdate: Cascade)
     classroomLeader   Student?          @relation("classroomLeader", fields: [classroomLeaderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    schoolYear        SchoolYear        @relation(fields: [schoolYearId], references: [id])
+    schoolYear        SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     section           ClassroomSection? @relation(fields: [sectionId], references: [id])
     enrollments       Enrollment[]
     fees              Fee[]
