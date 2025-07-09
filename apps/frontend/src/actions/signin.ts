@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { auth } from "~/auth/server";
@@ -25,6 +25,7 @@ export async function signIn({
         password,
         rememberMe: true,
       },
+      headers: await headers(),
     });
 
     if (!result) {

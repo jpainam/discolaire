@@ -137,6 +137,7 @@ export const userRouter = {
             userId: input.id,
             newPassword: input.password,
           },
+          // TODO this is bad. I should not get the headers from next, keep api away from next
           headers: await headers(),
         });
       }
@@ -278,6 +279,7 @@ export const userRouter = {
             email: input.email,
             redirectTo: `/auth/complete-registration/${entity.userId}`,
           },
+          headers: await headers(),
         });
       }
     }),
@@ -317,6 +319,7 @@ export const userRouter = {
         rateLimitMax: 10000, // 10k requests per day
         userId: ctx.session.user.id,
       },
+      headers: await headers(),
     });
     console.log("API Key created for student:", apiKey);
   }),

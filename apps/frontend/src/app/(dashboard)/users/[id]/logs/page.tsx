@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import i18next from "i18next";
+import { headers } from "next/headers";
 import { auth } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 
@@ -17,6 +18,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     body: {
       userId: params.id,
     },
+    headers: await headers(),
   });
   return (
     <div>

@@ -289,6 +289,7 @@ export async function createUser({
       password: password ?? generateRandomString(12),
       isActive: isActive ?? true,
     },
+    headers: await headers(),
   });
   await attachUser({
     userId: newUser.user.id,
@@ -301,6 +302,7 @@ export async function createUser({
       email: newUser.user.email,
       redirectTo: `/auth/complete-registration/${newUser.user.id}`,
     },
+    headers: await headers(),
   });
   return newUser.user;
 }
