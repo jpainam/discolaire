@@ -30,16 +30,25 @@ export const schoolYearService = {
         isActive: isActive ?? true,
         enrollmentStartDate: startDate,
         enrollmentEndDate: endDate,
+        isDefault: true,
       },
     });
     if (!prevSchoolYearId) {
+      await db.schoolYear.update({
+        where: {
+          id: prevSchoolYearId,
+        },
+        data: {
+          isDefault: false,
+        },
+      });
       return newYear;
     }
-    const schoolYear = await db.schoolYear.findUniqueOrThrow({
-      where: {
-        id: prevSchoolYearId,
-      },
-    });
+    // const schoolYear = await db.schoolYear.findUniqueOrThrow({
+    //   where: {
+    //     id: prevSchoolYearId,
+    //   },
+    // });
     // Classroom
     const classrooms = await db.classroom.findMany({
       where: {
@@ -102,8 +111,6 @@ export const schoolYearService = {
     const allTerms = terms.map(({ id, ...t }) => ({
       ...t,
       schoolYearId: newYear.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     }));
     await db.term.createMany({
       data: allTerms,
