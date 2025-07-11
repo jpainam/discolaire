@@ -1,7 +1,9 @@
 #!/bin/bash
 
 set -e
-export NODE_OPTIONS="--max-old-space-size=3072"
+set -a
+source env.example
+set +a
 
 echo "🔧 Updating package index and installing core dependencies..."
 sudo apt update
@@ -22,19 +24,47 @@ npm install -g pnpm pm2
 
 echo "✅ Dependencies installed"
 
-# Install MinIO
-echo "🗃️ Installing MinIO..."
-wget https://dl.min.io/server/minio/release/linux-amd64/minio -O minio
-chmod +x minio
-sudo mv minio /usr/local/bin/
 
-# Install MinIO Client (mc)
-echo "🛠️ Installing MinIO Client (mc)..."
-wget https://dl.min.io/client/mc/release/linux-amd64/mc -O mc
-chmod +x mc
-sudo mv mc /usr/local/bin/
+TMP_DIR=$(mktemp -d)
 
-# 1. Clone your repo
+# Download MinIO
+if ! command -v minio &> /dev/null; then
+  echo "⬇️  Downloading MinIO..."
+  wget -q https://dl.min.io/server/minio/release/linux-amd64/minio -O "$TMP_DIR/minio"
+  chmod +x "$TMP_DIR/minio"
+  sudo mv "$TMP_DIR/minio" /usr/local/bin/minio
+else
+  echo "🟢 MinIO already installed, skipping download."
+fi
+
+# Download mc
+if ! command -v mc &> /dev/null; then
+  echo "⬇️  Downloading MinIO Client (mc)..."
+  wget -q https://dl.min.io/client/mc/release/linux-amd64/mc -O "$TMP_DIR/mc"
+  chmod +x "$TMP_DIR/mc"
+  sudo mv "$TMP_DIR/mc" /usr/local/bin/mc
+else
+  echo "🟢 mc already installed, skipping download."
+fi
+
+rm -rf "$TMP_DIR"
+
+
+echo "🛠️ Setting up PostgreSQL database..."
+sudo -u postgres psql -c "CREATE USER $POSTGRES_USER WITH PASSWORD '$POSTGRES_PASSWORD';" || true
+sudo -u postgres psql -c "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER;" || true
+
+DB_EXISTS=$(PGPASSWORD="$POSTGRES_PASSWORD" psql -U "$POSTGRES_USER" -h localhost -tAc "SELECT 1 FROM pg_database WHERE datname = '$POSTGRES_DB'")
+
+if [ -f "./database.sql" ] && [ "$DB_EXISTS" != "1" ]; then
+  echo "📄 Importing database.sql..."
+  chmod +r ./database.sql
+  PGPASSWORD="$POSTGRES_PASSWORD" pg_restore --no-owner -U "$POSTGRES_USER" -d "$POSTGRES_DB" -h localhost "$(pwd)/database.sql"
+else
+  echo "⚠️ database.sql not found, skipping import."
+fi
+
+# 2. Clone your repo
 REPO_URL="https://github.com/jpainam/discolaire.git"
 APP_DIR="$HOME/discolaire"
 
@@ -48,37 +78,12 @@ fi
 cp "$(dirname "$0")/env.example" "$APP_DIR/.env"
 cd "$APP_DIR"
 
-# 2. Setup PostgreSQL database and import schema
-DB_NAME="discolaire"
-DB_USER="discolaire"
-DB_PASS="securepassword"  # change this as needed
-
-echo "🛠️ Setting up PostgreSQL database..."
-sudo -u postgres psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';" || true
-sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_USER;" || true
-
-if [ -f "./database.sql" ]; then
-  echo "📄 Importing database.sql..."
-  sudo -u postgres psql -d $DB_NAME -f ./database.sql
-else
-  echo "⚠️ database.sql not found, skipping import."
-fi
-
 # 3. Install Node modules and build
 echo "📥 Installing dependencies with pnpm..."
 pnpm install
 
-echo "📀 Adding swap space if needed..."
-sudo fallocate -l 2G /swapfile || true
-sudo chmod 600 /swapfile || true
-sudo mkswap /swapfile || true
-sudo swapon /swapfile || true
-echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab || true
-sudo sysctl vm.swappiness=10
-echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
-
 echo "🏗️ Building the app..."
-pnpm build --concurrency=1
+pnpm build
 
 # 4. Start your app with PM2
 echo "🚀 Starting Next.js app with PM2..."
@@ -86,7 +91,9 @@ pm2 start "pnpm --filter frontend start" --name discolaire-app
 
 # 5. Start MinIO using PM2
 echo "🗃️ Starting MinIO..."
-mkdir -p ~/minio/data
+if [ ! -d "$HOME/minio/data" ]; then
+  mkdir -p "$HOME/minio/data"
+fi
 export MINIO_ROOT_USER=minioadmin
 export MINIO_ROOT_PASSWORD=minioadmin
 pm2 start "minio server ~/minio/data --console-address ':9001'" --name minio
@@ -110,7 +117,9 @@ for bucket in documents images avatars; do
   mc anonymous set public local/$bucket
 done
 
+source ~/.bashrc
 echo "✅ Buckets created and set to public access."
 echo "✅ All services are up and running."
 echo "➡️ Visit your app:        http://localhost:3000"
 echo "➡️ Visit MinIO Console:  http://localhost:9001"
+

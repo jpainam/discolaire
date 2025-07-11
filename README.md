@@ -1,5 +1,10 @@
 # Digitalisation Scolaire (discolaire)
 
+## Configuration système requise
+
+- Linux 8GB RAM, 120GB Disque
+- Windows 64 Bits, 8GB RAM, 120GB Disque
+
 ## Installation
 
 Il est fortement conseillé d'utiliser une distribution Linux (Ubuntu ou Debian)
@@ -17,10 +22,15 @@ Il est fortement conseillé d'utiliser une distribution Linux (Ubuntu ou Debian)
 3. Copier et renommer `env.example` en `.env`
 4. CMD `npm install -g pnpm pm2`
 
-- Install ts-node globally
+### Commande utils
+
+- `pm2`
+- - `pm2 delete id_or_name`, `pm2 stop id_or_name`, `pm2 delete all
+
+* Install ts-node globally
   `npm install -g ts-node typescript`
-- Install `pm2` globally
-- Configure `pm2` to autostart on reboot
+* Install `pm2` globally
+* Configure `pm2` to autostart on reboot
 
 ### 1. Setup dependencies
 
