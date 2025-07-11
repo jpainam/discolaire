@@ -53,15 +53,26 @@ rm -rf "$TMP_DIR"
 echo "🛠️ Setting up PostgreSQL database..."
 sudo -u postgres psql -c "CREATE USER $POSTGRES_USER WITH PASSWORD '$POSTGRES_PASSWORD';" || true
 sudo -u postgres psql -c "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER;" || true
+SQL_DUMP="$(pwd)/database.sql"
+if [ ! -f "$SQL_DUMP" ]; then
+  echo "❌ Error: Dump file '$SQL_DUMP' not found."
+  exit 1
+fi
 
-DB_EXISTS=$(PGPASSWORD="$POSTGRES_PASSWORD" psql -U "$POSTGRES_USER" -h localhost -tAc "SELECT 1 FROM pg_database WHERE datname = '$POSTGRES_DB'")
+# Check if the database already contains data
+HAS_DATA=$(PGPASSWORD="$POSTGRES_PASSWORD" psql -U "$POSTGRES_USER" -h localhost -d "$POSTGRES_DB" -t -c \
+"SELECT EXISTS (
+   SELECT 1 FROM information_schema.tables t
+   JOIN pg_class c ON t.table_name = c.relname
+   WHERE t.table_schema = 'public'
+   AND c.reltuples > 0
+);")
 
-if [ -f "./database.sql" ] && [ "$DB_EXISTS" != "1" ]; then
-  echo "📄 Importing database.sql..."
-  chmod +r ./database.sql
-  PGPASSWORD="$POSTGRES_PASSWORD" pg_restore --no-owner -U "$POSTGRES_USER" -d "$POSTGRES_DB" -h localhost "$(pwd)/database.sql"
+if [[ "$HAS_DATA" =~ "f" ]]; then
+  echo "📄 Database is empty. Restoring from $SQL_DUMP..."
+  PGPASSWORD="$POSTGRES_PASSWORD" pg_restore --no-owner -U "$POSTGRES_USER" -d "$POSTGRES_DB" -h localhost "$SQL_DUMP"
 else
-  echo "⚠️ database.sql not found, skipping import."
+  echo "✅ Database already contains data. Skipping restore."
 fi
 
 # 2. Clone your repo
@@ -75,7 +86,7 @@ else
   git clone "$REPO_URL" "$APP_DIR"
 fi
 
-cp "$(dirname "$0")/env.example" "$APP_DIR/.env"
+cp "$(dirname "${BASH_SOURCE[0]}")/env.example" "$APP_DIR/.env"
 cd "$APP_DIR"
 
 # 3. Install Node modules and build
@@ -87,7 +98,7 @@ pnpm build
 
 # 4. Start your app with PM2
 echo "🚀 Starting Next.js app with PM2..."
-pm2 delete all
+
 pm2 start "pnpm --filter frontend start" --name discolaire-app
 
 # 5. Start MinIO using PM2
@@ -110,7 +121,7 @@ pm2 startup --silent | bash
 
 # 8. Create MinIO buckets
 echo "🔗 Connecting mc to local MinIO server..."
-mc alias set local $NEXT_PUBLIC_MINIO_URL minioadmin minioadmin
+mc alias set local http://127.0.0.1:$MINIO_API_PORT minioadmin minioadmin
 
 echo "🪣 Creating buckets: documents, images, avatars..."
 for bucket in documents images avatars; do
@@ -123,4 +134,3 @@ echo "✅ Buckets created and set to public access."
 echo "✅ All services are up and running."
 echo "➡️ Visit your app:        $NEXT_PUBLIC_BASE_URL"
 echo "➡️ Visit MinIO Console:  http://localhost:9001"
-
