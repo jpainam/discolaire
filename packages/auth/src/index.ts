@@ -15,11 +15,7 @@ import { completeRegistration, sendResetPassword } from "./emails";
 
 const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */
-export function initAuth(options: {
-  baseUrl: string;
-  productionUrl: string;
-  secret: string | undefined;
-}) {
+export function initAuth(options: { secret: string | undefined }) {
   const config = {
     database: prismaAdapter(db, {
       provider: "postgresql",
@@ -80,8 +76,6 @@ export function initAuth(options: {
     verification: {
       modelName: "verification",
     },
-
-    baseURL: options.baseUrl,
     secret: options.secret,
     emailAndPassword: {
       enabled: true,
@@ -119,17 +113,11 @@ export function initAuth(options: {
         enableMetadata: true,
         // apiKeyHeaders: ["x-api-key", "xyz-api-key"]
       }),
-      oAuthProxy({
-        /**
-         * Auto-inference blocked by https://github.com/better-auth/better-auth/pull/2891
-         */
-        currentURL: options.baseUrl,
-        productionURL: options.productionUrl,
-      }),
+      oAuthProxy(),
       expo(),
       nextCookies(),
     ],
-    trustedOrigins: ["expo://", env.NEXT_PUBLIC_BASE_URL],
+    //trustedOrigins: ["expo://", env.NEXT_PUBLIC_BASE_URL],
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);

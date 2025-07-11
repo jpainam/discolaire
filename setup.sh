@@ -80,14 +80,18 @@ REPO_URL="https://github.com/jpainam/discolaire.git"
 APP_DIR="$HOME/discolaire"
 
 if [ -d "$APP_DIR/.git" ]; then
-  echo "📁 $APP_DIR already exists. Skipping clone."
+  echo "📁 $APP_DIR already exists. Resetting to remote state..."
+  cp "$(dirname "${BASH_SOURCE[0]}")/env.example" "$APP_DIR/.env"
+  cd "$APP_DIR"
+  git fetch origin
+  git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
 else
   echo "📦 Cloning repo into $APP_DIR..."
   git clone "$REPO_URL" "$APP_DIR"
+  cp "$(dirname "${BASH_SOURCE[0]}")/env.example" "$APP_DIR/.env"
+  cd "$APP_DIR"
 fi
 
-cp "$(dirname "${BASH_SOURCE[0]}")/env.example" "$APP_DIR/.env"
-cd "$APP_DIR"
 
 # 3. Install Node modules and build
 echo "📥 Installing dependencies with pnpm..."
