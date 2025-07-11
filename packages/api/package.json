@@ -1,5 +1,4 @@
 {
-  "prettier": "@repo/prettier-config",
   "name": "@repo/api",
   "version": "0.1.0",
   "private": true,
@@ -21,6 +20,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
+  "prettier": "@repo/prettier-config",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.840.0",
     "@aws-sdk/s3-presigned-post": "^3.840.0",
@@ -28,8 +28,8 @@
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/kv": "workspace:*",
-    "@repo/validators": "workspace:*",
     "@repo/utils": "workspace:*",
+    "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@trpc/server": "catalog:",
     "@unkey/ratelimit": "^2.0.0",
