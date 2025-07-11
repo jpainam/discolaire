@@ -97,7 +97,7 @@ if [ ! -d "$HOME/minio/data" ]; then
 fi
 export MINIO_ROOT_USER=minioadmin
 export MINIO_ROOT_PASSWORD=minioadmin
-pm2 start "minio server ~/minio/data --console-address ':9001'" --name minio
+pm2 start "minio server ~/minio/data --console-address ':$MINIO_CONSOLE_PORT'" --name minio
 
 # 6. Enable Redis and PostgreSQL
 echo "💾 Enabling Redis and PostgreSQL services..."
@@ -121,6 +121,6 @@ done
 source ~/.bashrc
 echo "✅ Buckets created and set to public access."
 echo "✅ All services are up and running."
-echo "➡️ Visit your app:        http://localhost:3000"
+echo "➡️ Visit your app:        $NEXT_PUBLIC_BASE_URL"
 echo "➡️ Visit MinIO Console:  http://localhost:9001"
 

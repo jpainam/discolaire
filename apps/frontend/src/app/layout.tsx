@@ -89,7 +89,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             "bg-background overscroll-none font-sans antialiased",
             activeThemeValue ? `theme-${activeThemeValue}` : "",
             isScaled ? "theme-scaled" : "",
-            fontVariables
+            fontVariables,
           )}
         >
           <ThemeProvider

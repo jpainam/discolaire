@@ -4,7 +4,7 @@ export function getCdnUrl() {
   if (env.NODE_ENV == "production") {
     return "https://discolaire-public.s3.eu-central-1.amazonaws.com";
   }
-  return "http://localhost:3000";
+  return env.NEXT_PUBLIC_BASE_URL;
 }
 
 export function getAppreciations(grade?: number | null) {

@@ -9,7 +9,7 @@ export async function submitReportJob(
 ) {
   try {
     console.log("submitReportJob", url, data.id);
-    const fullUrl = `${env.REPORTING_URL}/${url}`;
+    const fullUrl = `${env.NEXT_PUBLIC_BASE_URL}/${url}`;
     const body = JSON.stringify(
       {
         ...data,

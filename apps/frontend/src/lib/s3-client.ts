@@ -21,7 +21,7 @@ function getHost(input: string): { host: string; port: string } {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     throw new Error(
-      `Invalid URL: ${input}. Please provide a valid URL for Minio.`
+      `Invalid URL: ${input}. Please provide a valid URL for Minio.`,
     );
   }
 }
@@ -78,7 +78,7 @@ export const uploadFile = async ({
       destination,
       Buffer.from(await file.arrayBuffer()),
       file.size,
-      metaData
+      metaData,
     );
     return {
       key: destination,
@@ -124,7 +124,7 @@ export async function uploadFiles({
 
 async function runWithConcurrency<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number
+  concurrency: number,
 ): Promise<T[]> {
   const results: T[] = [];
   const queue = [...tasks];

@@ -6,7 +6,7 @@ import { env } from "~/env";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ key: string[] }> }
+  { params }: { params: Promise<{ key: string[] }> },
 ) {
   const { key } = await params;
   const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV === "local";
@@ -23,7 +23,7 @@ export async function GET(
     if (!response.ok || !contentType.startsWith("image/")) {
       return NextResponse.json(
         { error: "Image not found or invalid format" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -40,7 +40,7 @@ export async function GET(
     console.error("Image fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch image" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

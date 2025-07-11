@@ -2,15 +2,13 @@
 import { db } from "@repo/db";
 import { getSession } from "~/auth/server";
 
-import { env } from "~/env";
-
 export async function POST(request: Request) {
   const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
   const { url, userId, size, id, reportApiKey } = await request.json();
-  if (reportApiKey !== env.REPORT_API_KEY) {
+  if (reportApiKey !== "EMPTY") {
     return Response.json({ error: "Not authorized" }, { status: 401 });
   }
   if (!url || !userId || !id) {
