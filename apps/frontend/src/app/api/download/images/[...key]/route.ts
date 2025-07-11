@@ -6,7 +6,7 @@ import { env } from "~/env";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ key: string[] }> },
+  { params }: { params: Promise<{ key: string[] }> }
 ) {
   const { key } = await params;
 
@@ -14,7 +14,7 @@ export async function GET(
   const encodedKey = encodeURIComponent(key.join("/"));
 
   const s3Url = isLocal
-    ? `http://localhost:${env.MINIO_PORT}/${env.S3_IMAGE_BUCKET_NAME}/${encodedKey}`
+    ? `${env.NEXT_PUBLIC_MINIO_URL}/${env.S3_IMAGE_BUCKET_NAME}/${encodedKey}`
     : `https://${env.S3_IMAGE_BUCKET_NAME}.s3.eu-central-1.amazonaws.com/${encodedKey}`;
 
   try {
@@ -24,7 +24,7 @@ export async function GET(
     if (!response.ok || !contentType.startsWith("image/")) {
       return NextResponse.json(
         { error: "Image not found or invalid format" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -41,7 +41,7 @@ export async function GET(
     console.error("Image fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch image" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

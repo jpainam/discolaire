@@ -61,9 +61,9 @@ export function getAssetUrl(asset: string) {
   const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV === "local";
   if (isLocal) {
     if (asset === "images") {
-      return `http://localhost:${env.MINIO_PORT}/${env.S3_IMAGE_BUCKET_NAME}`;
+      return `${env.NEXT_PUBLIC_MINIO_URL}/${env.S3_IMAGE_BUCKET_NAME}`;
     } else if (asset == "avatars") {
-      return `http://localhost:${env.MINIO_PORT}/${env.S3_AVATAR_BUCKET_NAME}`;
+      return `${env.NEXT_PUBLIC_MINIO_URL}/${env.S3_AVATAR_BUCKET_NAME}`;
     }
   } else {
     if (asset === "images") {

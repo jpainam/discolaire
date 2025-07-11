@@ -87,6 +87,7 @@ pnpm build
 
 # 4. Start your app with PM2
 echo "🚀 Starting Next.js app with PM2..."
+pm2 delete all
 pm2 start "pnpm --filter frontend start" --name discolaire-app
 
 # 5. Start MinIO using PM2
@@ -109,7 +110,7 @@ pm2 startup --silent | bash
 
 # 8. Create MinIO buckets
 echo "🔗 Connecting mc to local MinIO server..."
-mc alias set local http://127.0.0.1:9000 minioadmin minioadmin
+mc alias set local $NEXT_PUBLIC_MINIO_URL minioadmin minioadmin
 
 echo "🪣 Creating buckets: documents, images, avatars..."
 for bucket in documents images avatars; do

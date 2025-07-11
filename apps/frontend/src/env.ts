@@ -30,7 +30,6 @@ export const env = createEnv({
     DISCOLAIRE_API_KEY: z.string().min(1),
     SUPER_ADMIN_USERNAME: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
-    MINIO_PORT: z.coerce.number(),
     REPORT_API_KEY: z.string().min(1),
     DISCORD_WEBHOOK_URL: z.string().url(),
   },
@@ -52,7 +51,6 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     AUTH_SECRET: process.env.AUTH_SECRET,
-    MINIO_PORT: process.env.MINIO_PORT,
     DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
     S3_IMAGE_BUCKET_NAME: process.env.S3_IMAGE_BUCKET_NAME,
     S3_DOCUMENT_BUCKET_NAME: process.env.S3_DOCUMENT_BUCKET_NAME,

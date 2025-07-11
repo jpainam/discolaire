@@ -6,23 +6,27 @@ import { env } from "../env";
 
 const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local";
 
-function getHost(input: string): string {
+function getHost(input: string): { host: string; port: string } {
   if (!input.startsWith("http")) {
     input = "http://" + input;
   }
 
   try {
     const url = new URL(input);
-    return url.hostname;
+    return { host: url.hostname, port: url.port };
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
-    return input.split(":")[0] ?? "localhost"; // fallback
+    throw new Error(
+      `Invalid URL: ${input}. Please provide a valid URL for Minio.`,
+    );
   }
 }
 
+const { host, port } = getHost(env.NEXT_PUBLIC_MINIO_URL);
+
 export const minioClient = new Minio.Client({
-  endPoint: getHost(env.NEXT_PUBLIC_MINIO_URL),
-  port: env.MINIO_PORT,
+  endPoint: host,
+  port: Number(port),
   useSSL: false, // set to False when using localhost
   accessKey: env.S3_ACCESS_KEY_ID,
   secretKey: env.S3_SECRET_ACCESS_KEY,
