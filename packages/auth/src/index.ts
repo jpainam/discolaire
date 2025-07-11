@@ -10,8 +10,10 @@ import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
 import { db } from "@repo/db";
 import { sendEmail } from "@repo/utils";
 
+import { authEnv } from "../env";
 import { completeRegistration, sendResetPassword } from "./emails";
 
+const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */
 export function initAuth(options: {
   baseUrl: string;
@@ -127,7 +129,7 @@ export function initAuth(options: {
       expo(),
       nextCookies(),
     ],
-    trustedOrigins: ["expo://"],
+    trustedOrigins: ["expo://", env.NEXT_PUBLIC_BASE_URL],
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);

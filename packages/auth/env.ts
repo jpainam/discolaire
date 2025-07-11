@@ -10,7 +10,12 @@ export function authEnv() {
           : z.string().min(1).optional(),
       NODE_ENV: z.enum(["development", "production"]).optional(),
     },
-    experimental__runtimeEnv: {},
+    client: {
+      NEXT_PUBLIC_BASE_URL: z.url(),
+    },
+    experimental__runtimeEnv: {
+      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    },
     skipValidation:
       !!process.env.CI || process.env.npm_lifecycle_event === "lint",
   });
