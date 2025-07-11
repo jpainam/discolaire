@@ -2,9 +2,20 @@
 
 ## Installation
 
-```bash
-git clone  https://github.com/jpainam/discolaire.git
-```
+Il est fortement conseillé d'utiliser une distribution Linux (Ubuntu ou Debian)
+
+### Linux
+
+1. Copier les fichier `setup.sh`, `env.example` et `database.sql` dans votre dossier de travail
+2. Ouvrir le terminal est executer `chmod +x setup`.
+3. Executer `./setup.sh`
+
+### Windows
+
+1. Installer [PostgresSQL](https://www.postgresql.org/download/windows/), [PgAdmin4](https://www.pgadmin.org/download/pgadmin-4-windows/), [Git](https://desktop.github.com/download/), [NodeJs](https://nodejs.org/en/download)
+2. CMD `git clone  https://github.com/jpainam/discolaire.git` et naviguer dans le dossier
+3. Copier et renommer `env.example` en `.env`
+4. CMD `npm install -g pnpm pm2`
 
 - Install ts-node globally
   `npm install -g ts-node typescript`
