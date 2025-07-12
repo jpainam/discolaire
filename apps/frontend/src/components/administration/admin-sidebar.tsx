@@ -127,10 +127,10 @@ export function AdminSidebar({
             title: "configurations_page",
             url: "/administration/settings",
           },
-          // {
-          //   title: "grade_options",
-          //   url: "/administration/settings/grade-options",
-          // },
+          {
+            title: "Api Keys",
+            url: "/administration/settings/api-keys",
+          },
           // {
           //   title: "religions",
           //   url: "/administration/settings/religions",

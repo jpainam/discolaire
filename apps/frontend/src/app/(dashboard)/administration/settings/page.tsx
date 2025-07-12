@@ -13,9 +13,9 @@ export default function Page() {
         <ClubTable />
         <SportTable />
         <ReligionTable />
+        <TimetableCategoryTable />
       </div>
       <StaffLevelTable />
-      <TimetableCategoryTable />
     </div>
   );
 }
