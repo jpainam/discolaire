@@ -15,12 +15,6 @@ import { Worker } from "bullmq";
 import { JobNames, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 
-z.config({
-  customError: createErrorMap({
-    includePath: true,
-  }),
-});
-
 const newGradeSchema = z.object({
   gradeSheetId: z.coerce.number(),
 });
@@ -82,5 +76,5 @@ new Worker(
       });
     }
   },
-  { connection },
+  { connection }
 );

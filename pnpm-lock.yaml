@@ -804,9 +804,6 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../db
-      '@repo/transactional':
-        specifier: workspace:*
-        version: link:../transactional
       '@repo/utils':
         specifier: workspace:*
         version: link:../utils

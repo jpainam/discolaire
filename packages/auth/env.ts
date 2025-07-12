@@ -9,13 +9,18 @@ export function authEnv() {
           ? z.string().min(1)
           : z.string().min(1).optional(),
       NODE_ENV: z.enum(["development", "production"]).optional(),
+      DISCOLAIRE_API_KEY: z.string().min(1),
     },
     client: {
       NEXT_PUBLIC_BASE_URL: z.url(),
     },
-    experimental__runtimeEnv: {
+    runtimeEnv: {
+      AUTH_SECRET: process.env.AUTH_SECRET,
+      NODE_ENV: process.env.NODE_ENV,
+      DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
       NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     },
+
     skipValidation:
       !!process.env.CI || process.env.npm_lifecycle_event === "lint",
   });

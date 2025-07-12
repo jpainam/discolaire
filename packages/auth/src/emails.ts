@@ -1,8 +1,6 @@
-import { db } from "@repo/db";
-import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
-import ResetPassword from "@repo/transactional/emails/ResetPassword";
-import { sendEmail } from "@repo/utils";
+import { authEnv } from "../env";
 
+const env = authEnv();
 export async function completeRegistration({
   user,
   url,
@@ -14,22 +12,28 @@ export async function completeRegistration({
     console.warn("User email is a placeholder, skipping email sending.");
     return;
   }
-  const newUser = await db.user.findUniqueOrThrow({
-    where: { id: user.id },
-  });
-  const school = await db.school.findUniqueOrThrow({
-    where: { id: newUser.schoolId },
-  });
-  await sendEmail({
-    from: `Invitation ${school.name} <hi@discolaire.com>`,
-    to: user.email,
-    subject: "Bienvenue sur " + school.name,
-    react: InvitationEmail({
-      inviteeName: user.name,
-      schoolName: school.name,
-      inviteLink: `${url}&id=${newUser.id}`,
-    }) as React.ReactElement,
-  });
+
+  const response = await fetch(
+    `${env.NEXT_PUBLIC_BASE_URL}/api/emails/invitations`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.DISCOLAIRE_API_KEY,
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        email: user.email,
+        name: user.name,
+        url: url,
+      }),
+    },
+  );
+  if (!response.ok) {
+    const error = (await response.json()) as Error;
+    console.error(error);
+    throw new Error(`Failed to send invitation email: ${error.message}`);
+  }
 }
 
 export async function sendResetPassword({
@@ -43,20 +47,26 @@ export async function sendResetPassword({
     console.warn("User email is a placeholder, skipping email sending.");
     return;
   }
-  const newUser = await db.user.findUniqueOrThrow({
-    where: { id: user.id },
-  });
-  const school = await db.school.findUniqueOrThrow({
-    where: { id: newUser.schoolId },
-  });
-  await sendEmail({
-    from: `${school.name} <hi@discolaire.com>`,
-    to: user.email,
-    subject: "Réinitialisez votre mot de passe.",
-    react: ResetPassword({
-      username: newUser.username,
-      resetLink: `${url}`,
-      school: school.name,
-    }) as React.ReactElement,
-  });
+
+  const response = await fetch(
+    `${env.NEXT_PUBLIC_BASE_URL}/api/emails/invitations`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.DISCOLAIRE_API_KEY,
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        email: user.email,
+        name: user.name,
+        url: url,
+      }),
+    },
+  );
+  if (!response.ok) {
+    const error = (await response.json()) as Error;
+    console.error(error);
+    throw new Error(`Failed to send invitation email: ${error.message}`);
+  }
 }
