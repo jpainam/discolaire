@@ -14,7 +14,7 @@ export async function completeRegistration({
   }
 
   const response = await fetch(
-    `${env.NEXT_PUBLIC_BASE_URL}/api/emails/invitations`,
+    `${env.NEXT_PUBLIC_BASE_URL}/api/emails/invitation`,
     {
       method: "POST",
       headers: {
@@ -49,7 +49,7 @@ export async function sendResetPassword({
   }
 
   const response = await fetch(
-    `${env.NEXT_PUBLIC_BASE_URL}/api/emails/invitations`,
+    `${env.NEXT_PUBLIC_BASE_URL}/api/emails/reset-password`,
     {
       method: "POST",
       headers: {

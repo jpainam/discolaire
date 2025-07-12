@@ -76,5 +76,5 @@ new Worker(
       });
     }
   },
-  { connection }
+  { connection },
 );

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       const validationError = fromError(result.error);
       return NextResponse.json(
         { error: validationError.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const { url, email, name } = result.data;

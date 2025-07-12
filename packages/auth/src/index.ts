@@ -11,7 +11,7 @@ import { db } from "@repo/db";
 import { sendEmail } from "@repo/utils";
 
 import { authEnv } from "../env";
-import { completeRegistration, sendResetPassword } from "./emails";
+import { completeRegistration, sendResetPassword } from "./utils";
 
 const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */
