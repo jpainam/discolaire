@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { db } from "@repo/db";
 import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
 import { sendEmail } from "@repo/utils";
 import type { NextRequest } from "next/server";
@@ -6,7 +7,6 @@ import { NextResponse } from "next/server";
 import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 import { getSession } from "~/auth/server";
-import { caller } from "~/trpc/server";
 
 z.config({
   customError: createErrorMap({
@@ -32,19 +32,24 @@ export async function POST(req: NextRequest) {
       const validationError = fromError(result.error);
       return NextResponse.json(
         { error: validationError.message },
-        { status: 400 },
+        { status: 400 }
       );
     }
     const { url, email, name, userId } = result.data;
-    const school = await caller.school.getSchool();
+    const user = await db.user.findFirstOrThrow({
+      where: { id: userId },
+      include: {
+        school: true,
+      },
+    });
 
     await sendEmail({
-      from: `${school.name} <hi@discolaire.com>`,
+      from: `${user.school.name} <hi@discolaire.com>`,
       to: email,
-      subject: "Invitation " + school.name,
+      subject: "Invitation " + user.school.name,
       react: InvitationEmail({
         inviteeName: name,
-        schoolName: school.name,
+        schoolName: user.school.name,
         inviteLink: `${url}&id=${userId}`,
       }) as React.ReactElement,
     });

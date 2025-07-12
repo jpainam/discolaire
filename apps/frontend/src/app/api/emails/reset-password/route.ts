@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { db } from "@repo/db";
 import ResetPassword from "@repo/transactional/emails/ResetPassword";
 import { sendEmail } from "@repo/utils";
 import type { NextRequest } from "next/server";
@@ -6,7 +7,6 @@ import { NextResponse } from "next/server";
 import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 import { getSession } from "~/auth/server";
-import { caller } from "~/trpc/server";
 
 z.config({
   customError: createErrorMap({
@@ -22,30 +22,38 @@ const schema = z.object({
 });
 export async function POST(req: NextRequest) {
   const session = await getSession();
+
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
+
   try {
     const body = await req.json();
     const result = schema.safeParse(body);
+
     if (!result.success) {
       const validationError = fromError(result.error);
       return NextResponse.json(
         { error: validationError.message },
-        { status: 400 },
+        { status: 400 }
       );
     }
-    const { url, email, name } = result.data;
-    const school = await caller.school.getSchool();
+    const { url, email, name, userId } = result.data;
+    const user = await db.user.findFirstOrThrow({
+      where: { id: userId },
+      include: {
+        school: true,
+      },
+    });
 
     await sendEmail({
-      from: `${school.name} <hi@discolaire.com>`,
+      from: `${user.school.name} <hi@discolaire.com>`,
       to: email,
       subject: "Réinitialisez votre mot de passe.",
       react: ResetPassword({
         username: name,
         resetLink: `${url}`,
-        school: school.name,
+        school: user.school.name,
       }) as React.ReactElement,
     });
 
