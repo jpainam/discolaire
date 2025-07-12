@@ -23,6 +23,7 @@ export function CreateAuthApiKey() {
     setIsLoading(true);
     const { data: apiKey, error } = await authClient.apiKey.create({
       name: "Discolaire API Key",
+      rateLimitEnabled: false,
       //expiresIn: 60 * 60 * 24 * 7, // Omit for never expiring key
       prefix: "disc",
     });
