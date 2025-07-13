@@ -242,17 +242,6 @@ model CalendarEvent {
     data           Json?
 }
 
-model Timetable {
-    id          String   @id @default(cuid())
-    description String?
-    start       DateTime @db.Timestamptz()
-    end         DateTime @db.Timestamptz()
-    subjectId   Int
-    subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    createdAt   DateTime @default(now()) @db.Timestamp(6)
-    createdById String
-}
-
 model GradeSheet {
     id          Int        @id @default(autoincrement())
     name        String
@@ -670,24 +659,23 @@ model FormerSchool {
 }
 
 model Subject {
-    id              Int              @id @default(autoincrement())
+    id              Int                @id @default(autoincrement())
     courseId        String
     teacherId       String?
     classroomId     String
     subjectGroupId  Int?
-    order           Int              @default(1)
-    coefficient     Float            @default(1)
-    program         String?          @db.Text
+    order           Int                @default(1)
+    coefficient     Float              @default(1)
+    program         String?            @db.Text
     gradeSheets     GradeSheet[]
     Program         Program[]
-    classroom       Classroom        @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    course          Course           @relation(fields: [courseId], references: [id])
-    subjectGroup    SubjectGroup?    @relation(fields: [subjectGroupId], references: [id])
-    teacher         Staff?           @relation(fields: [teacherId], references: [id])
+    classroom       Classroom          @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    course          Course             @relation(fields: [courseId], references: [id])
+    subjectGroup    SubjectGroup?      @relation(fields: [subjectGroupId], references: [id])
+    teacher         Staff?             @relation(fields: [teacherId], references: [id])
     assignments     Assignment[]
-    timetables      Timetable[]
-    subjectJournals SubjectJournal[] @relation("subject")
-    lessons         Lesson[]
+    subjectJournals SubjectJournal[]   @relation("subject")
+    timetables      SubjectTimetable[]
 
     @@unique([courseId, teacherId, classroomId])
 }

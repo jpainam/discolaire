@@ -100,18 +100,18 @@ model Convocation {
 }
 
 model TimetableCategory {
-    id           String     @id @default(cuid())
-    name         String     @unique
+    id           String             @id @default(cuid())
+    name         String             @unique
     schoolId     String
-    school       School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    school       School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
     schoolYearId String
-    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
-    lessons      Lesson[]
+    schoolYear   SchoolYear         @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    createdAt    DateTime           @default(now())
+    updatedAt    DateTime           @updatedAt
+    lessons      SubjectTimetable[]
 }
 
-model Lesson {
+model SubjectTimetable {
     id         Int                @id @default(autoincrement())
     start      DateTime
     end        DateTime

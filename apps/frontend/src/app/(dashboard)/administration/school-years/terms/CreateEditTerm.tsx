@@ -56,7 +56,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const updateTermMutation = useMutation(
     trpc.term.update.mutationOptions({
@@ -68,7 +68,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { t } = useLocale();
   const onSubmit = (data: z.infer<typeof createEditTermSchema>) => {
@@ -106,7 +106,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
           name="startDate"
           render={({ field }) => (
             <FormItem className="col-span-3">
-              <FormLabel htmlFor="startDate">{t("start_date")}</FormLabel>
+              <FormLabel htmlFor="startDate">{t("Start date")}</FormLabel>
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
@@ -123,7 +123,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
           name="endDate"
           render={({ field }) => (
             <FormItem className="col-span-3">
-              <FormLabel htmlFor="endDate">{t("end_date")}</FormLabel>
+              <FormLabel htmlFor="endDate">{t("End date")}</FormLabel>
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}

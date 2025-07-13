@@ -81,8 +81,8 @@ export function CreateEditLesson({
   const { closeModal } = useModal();
   const hours24 = useMemo(() => {
     const t = [];
-    for (let h = 0; h < 24; h++) {
-      for (let m = 0; m < 60; m += 15) {
+    for (let h = 7; h < 24; h++) {
+      for (let m = 0; m < 60; m += 30) {
         const hour = h.toString().padStart(2, "0");
         const minute = m.toString().padStart(2, "0");
         t.push(`${hour}:${minute}`);
@@ -109,7 +109,7 @@ export function CreateEditLesson({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const { openModal } = useModal();
@@ -228,8 +228,7 @@ export function CreateEditLesson({
             control={form.control}
             name="isRepeating"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("repeat")} ?</FormLabel>
+              <FormItem className="flex flex-row items-center gap-2">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -238,6 +237,7 @@ export function CreateEditLesson({
                     }
                   />
                 </FormControl>
+                <FormLabel>{t("Repeat every week?")}</FormLabel>
 
                 <FormMessage />
               </FormItem>
@@ -250,9 +250,12 @@ export function CreateEditLesson({
             name="startDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("Start")}</FormLabel>
+                <FormLabel>{t("Date")}</FormLabel>
                 <FormControl>
-                  <DatePicker onChange={field.onChange} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -290,9 +293,12 @@ export function CreateEditLesson({
             name="endDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("End")}</FormLabel>
+                <FormLabel>{t("Date")}</FormLabel>
                 <FormControl>
-                  <DatePicker onChange={field.onChange} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                  />
                 </FormControl>
 
                 <FormMessage />

@@ -13,7 +13,7 @@ const createEditLessonSchema = z.object({
   end: z.coerce.date(),
   startDate: z.coerce.date(),
 });
-export const lessonRouter = {
+export const subjectTimetableRouter = {
   create: protectedProcedure
     .input(createEditLessonSchema)
     .mutation(async ({ ctx, input }) => {
@@ -40,14 +40,14 @@ export const lessonRouter = {
           events.push({ ...event });
         }
       }
-      return ctx.db.lesson.createMany({
+      return ctx.db.subjectTimetable.createMany({
         data: events,
       });
     }),
   clearByClassroom: protectedProcedure
     .input(z.object({ classroomId: z.string().min(1) }))
     .mutation(({ ctx, input }) => {
-      return ctx.db.lesson.deleteMany({
+      return ctx.db.subjectTimetable.deleteMany({
         where: {
           subject: {
             classroomId: input.classroomId,
@@ -65,7 +65,7 @@ export const lessonRouter = {
     )
     .query(async ({ ctx, input }) => {
       // take -3/+3 month from the currentDate
-      const lessons = await ctx.db.lesson.findMany({
+      const lessons = await ctx.db.subjectTimetable.findMany({
         include: {
           subject: {
             include: {
@@ -97,18 +97,18 @@ export const lessonRouter = {
     )
     .mutation(async ({ ctx, input }) => {
       if (input.type === "current") {
-        return ctx.db.lesson.delete({
+        return ctx.db.subjectTimetable.delete({
           where: {
             id: input.id,
           },
         });
       }
-      const event = await ctx.db.lesson.findUniqueOrThrow({
+      const event = await ctx.db.subjectTimetable.findUniqueOrThrow({
         where: {
           id: input.id,
         },
       });
-      return ctx.db.lesson.deleteMany({
+      return ctx.db.subjectTimetable.deleteMany({
         where: {
           groupKey: event.groupKey,
           ...(input.type == "before"

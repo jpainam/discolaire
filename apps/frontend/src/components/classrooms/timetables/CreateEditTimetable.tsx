@@ -93,7 +93,7 @@ export function CreateEditTimetable({
     trpc.timetable.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.timetable.classroom.pathFilter(),
+          trpc.timetable.classroom.pathFilter()
         );
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
@@ -101,7 +101,7 @@ export function CreateEditTimetable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const dayNames = [
@@ -247,7 +247,7 @@ export function CreateEditTimetable({
             name="startTime"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <FormLabel>{t("start_date")}</FormLabel>
+                <FormLabel>{t("Start date")}</FormLabel>
                 <FormControl>
                   <Input
                     type="time"
@@ -263,7 +263,7 @@ export function CreateEditTimetable({
             name="endTime"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <FormLabel>{t("end_date")}</FormLabel>
+                <FormLabel>{t("End date")}</FormLabel>
                 <FormControl>
                   <Input
                     type="time"

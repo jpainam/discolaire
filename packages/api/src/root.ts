@@ -34,7 +34,6 @@ import { healthRouter } from "./routers/health";
 import { inventoryRouter } from "./routers/inventory";
 import { inventoryUsageRouter } from "./routers/inventoryUsage";
 import { latenessRouter } from "./routers/lateness";
-import { lessonRouter } from "./routers/lesson";
 import { libraryRouter } from "./routers/library";
 import { logActivityRouter } from "./routers/logActivity";
 import { menuRouter } from "./routers/menu";
@@ -62,6 +61,7 @@ import { studentContactRouter } from "./routers/studentContact";
 import { subjectRouter } from "./routers/subject";
 import { subjectGroupRouter } from "./routers/subjectGroup";
 import { subjectJournalRouter } from "./routers/subjectJournal";
+import { subjectTimetableRouter } from "./routers/subjectTimetable";
 import { subscriptionRouter } from "./routers/subscription";
 import { termRouter } from "./routers/term";
 import { timetableRouter } from "./routers/timetable";
@@ -139,7 +139,7 @@ export const appRouter = createTRPCRouter({
   transaction: transactionRouter,
   reporting: reportingRouter,
   subjectJournal: subjectJournalRouter,
-  lesson: lessonRouter,
+  subjectTimetable: subjectTimetableRouter,
   lateness: latenessRouter,
   absence: absenceRouter,
   chatter: chatterRouter,

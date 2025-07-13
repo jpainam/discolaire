@@ -77,7 +77,7 @@ export function CreateEditSchoolYear({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const createSchoolYearMutation = useMutation(
     trpc.schoolYear.create.mutationOptions({
@@ -89,7 +89,7 @@ export function CreateEditSchoolYear({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const onSubmit = (data: z.infer<typeof schoolYearSchema>) => {
     const values = {
@@ -131,7 +131,7 @@ export function CreateEditSchoolYear({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("start_date")}</FormLabel>
+              <FormLabel>{t("Start date")}</FormLabel>
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
@@ -147,7 +147,7 @@ export function CreateEditSchoolYear({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("end_date")}</FormLabel>
+              <FormLabel>{t("End date")}</FormLabel>
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}

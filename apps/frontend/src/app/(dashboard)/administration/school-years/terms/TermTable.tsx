@@ -49,7 +49,7 @@ export function TermTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
     <div className="px-4">
@@ -58,8 +58,8 @@ export function TermTable() {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("name")}</TableHead>
-              <TableHead>{t("start_date")}</TableHead>
-              <TableHead>{t("end_date")}</TableHead>
+              <TableHead>{t("Start date")}</TableHead>
+              <TableHead>{t("End date")}</TableHead>
               <TableHead>{t("is_active")}</TableHead>
               <TableHead>{t("school_year")}</TableHead>
               <TableHead className="text-right"></TableHead>
