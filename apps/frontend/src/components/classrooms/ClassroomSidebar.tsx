@@ -118,7 +118,7 @@ export function ClassroomSidebar({
   };
   const canSendCommunication = useCheckPermission(
     "communication",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   if (canSendCommunication) {
     data.information.push({
