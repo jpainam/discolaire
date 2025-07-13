@@ -4,17 +4,16 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { auth } from "~/auth/server";
+import { env } from "~/env";
 import { caller } from "~/trpc/server";
 
-export async function signIn({
-  username,
-  password,
-  redirectTo,
-}: {
-  username: string;
-  password: string;
-  redirectTo?: string | null;
-}) {
+export async function signIn(
+  prevState: { error?: string } | undefined,
+  formData: FormData
+): Promise<{ error?: string } | undefined> {
+  const username = formData.get("username") as string;
+  const password = formData.get("password") as string;
+  const redirectTo = formData.get("redirectTo") as string | null;
   let user;
   let schoolYear;
 
@@ -73,11 +72,14 @@ export async function setCookieFromSignIn({ userId }: { userId: string }) {
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {
+  const isSecure =
+    env.NODE_ENV === "production" &&
+    env.NEXT_PUBLIC_BASE_URL.startsWith("https");
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
   (await cookies()).set("x-school-year", schoolYearId, {
     expires: expiresInOneDay,
     httpOnly: true,
-    secure: true,
+    secure: isSecure, // 👈 allow over HTTP, Hosted locally
     sameSite: "lax",
   });
 }
