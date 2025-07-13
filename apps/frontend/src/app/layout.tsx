@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { fontVariables } from "~/lib/fonts";
 
 import { Toaster } from "@repo/ui/components/sonner";
 import { I18nProvider } from "~/i18n/i18n-context";
@@ -89,7 +88,6 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             "bg-background overscroll-none font-sans antialiased",
             activeThemeValue ? `theme-${activeThemeValue}` : "",
             isScaled ? "theme-scaled" : "",
-            fontVariables,
           )}
         >
           <ThemeProvider
