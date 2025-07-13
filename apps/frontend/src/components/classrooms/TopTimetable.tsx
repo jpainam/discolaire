@@ -52,7 +52,7 @@ export default function TopTimetable() {
     trpc.lesson.byClassroom.queryOptions({
       classroomId: params.id,
       from: subDays(today, 7),
-    })
+    }),
   );
 
   const periods = timetablesQuery.data ?? [];
@@ -212,7 +212,7 @@ function TopTimetableCard({
           ? "bg-muted opacity-50"
           : isSameDay(period.start, today)
             ? "bg-red-600"
-            : "bg-card"
+            : "bg-card",
       )}
     >
       <div className="mb-2 flex items-start justify-between">
@@ -235,14 +235,14 @@ function TopTimetableCard({
       <div className="flex justify-between text-sm text-muted-foreground">
         <FlatBadge variant={"green"}>
           <Clock2Icon className="mr-2 h-4 w-4" />
-          {period.startTime.toLocaleTimeString(i18n.language, {
+          {period.start.toLocaleTimeString(i18n.language, {
             hour: "2-digit",
             minute: "2-digit",
           })}
         </FlatBadge>
         <FlatBadge variant={"pink"}>
           <Clock3Icon className="mr-2 h-4 w-4" />
-          {period.endTime.toLocaleTimeString(i18n.language, {
+          {period.end.toLocaleTimeString(i18n.language, {
             hour: "2-digit",
             minute: "2-digit",
           })}

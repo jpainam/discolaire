@@ -92,7 +92,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                   const dayEvents = singleDayEvents.filter(
                     (event) =>
                       isSameDay(parseISO(event.startDate), day) ||
-                      isSameDay(parseISO(event.endDate), day)
+                      isSameDay(parseISO(event.endDate), day),
                   );
                   const groupedEvents = groupEvents(dayEvents);
 
@@ -137,7 +137,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                             event,
                             day,
                             groupIndex,
-                            groupedEvents.length
+                            groupedEvents.length,
                           );
                           const hasOverlap = groupedEvents.some(
                             (otherGroup, otherIndex) =>
@@ -151,9 +151,9 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                                   {
                                     start: parseISO(otherEvent.startDate),
                                     end: parseISO(otherEvent.endDate),
-                                  }
-                                )
-                              )
+                                  },
+                                ),
+                              ),
                           );
 
                           if (!hasOverlap)
@@ -168,7 +168,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                               <EventBlock event={event} />
                             </div>
                           );
-                        })
+                        }),
                       )}
                     </div>
                   );

@@ -66,7 +66,7 @@ export function LessonDetails({
         {event.start.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.startTime.toLocaleTimeString(i18n.language)}
+        - {event.start.toLocaleTimeString(i18n.language)}
       </div>
       <div className="flex flex-row items-center text-muted-foreground">
         <CalendarDays className="mr-2 h-4 w-4" />
@@ -76,7 +76,7 @@ export function LessonDetails({
         {event.end.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.endTime.toLocaleTimeString(i18n.language)}
+        - {event.end.toLocaleTimeString(i18n.language)}
       </div>
 
       <Button
@@ -105,33 +105,9 @@ export function LessonDetails({
         size={"sm"}
         variant={"default"}
         onClick={() => {
-          const startHours = String(event.startTime.getHours()).padStart(
-            2,
-            "0",
-          );
-          const startMinutes = String(event.startTime.getMinutes()).padStart(
-            2,
-            "0",
-          );
-          const endHours = String(event.endTime.getHours()).padStart(2, "0");
-          const endMinutes = String(event.endTime.getMinutes()).padStart(
-            2,
-            "0",
-          );
-
-          closeModal();
-
           openModal({
             title: t("update"),
-            view: (
-              <CreateEditLesson
-                dayOfWeek={event.startTime.getDay()}
-                categoryId={event.categoryId}
-                startTime={`${startHours}:${startMinutes}`}
-                endTime={`${endHours}:${endMinutes}`}
-                subjectId={event.subjectId}
-              />
-            ),
+            view: <CreateEditLesson lesson={event} />,
           });
         }}
       >

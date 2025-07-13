@@ -26,7 +26,7 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
   const WEEK_DAYS = Array.from({ length: 7 }, (_, i) =>
     format(addDays(start, i), "EEE", {
       locale: i18n.language == "fr" ? fr : i18n.language == "en" ? enUS : es,
-    })
+    }),
   ); //["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const allEvents = [...multiDayEvents, ...singleDayEvents];
@@ -38,9 +38,9 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
       calculateMonthEventPositions(
         multiDayEvents,
         singleDayEvents,
-        selectedDate
+        selectedDate,
       ),
-    [multiDayEvents, singleDayEvents, selectedDate]
+    [multiDayEvents, singleDayEvents, selectedDate],
   );
 
   return (

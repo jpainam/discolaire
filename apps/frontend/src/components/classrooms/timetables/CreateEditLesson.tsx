@@ -17,6 +17,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { RouterOutputs } from "@repo/api";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Select,
   SelectContent,
@@ -27,13 +29,14 @@ import {
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { isBefore } from "date-fns";
 import { PlusIcon } from "lucide-react";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { CreateEditTimetableCategory } from "~/app/(dashboard)/administration/settings/timetable-categories/CreateEditTimetableCategory";
+import { DatePicker } from "~/components/DatePicker";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { useTRPC } from "~/trpc/react";
-import { isBefore } from "date-fns";
+import { CreateEditTimetableCategory } from "./CreateEditTimetableCategory";
 
 const createEditTimetable = z.object({
   startTime: z.string().min(1),
@@ -41,41 +44,32 @@ const createEditTimetable = z.object({
   endDate: z.coerce.date(),
   endTime: z.string().min(1),
   categoryId: z.string().min(1),
-  dayOfWeek: z.coerce.number().positive(), // 0-6 (Sunday-Saturday)
   subjectId: z.string().min(1),
-  repeat: z
-    .enum(["daily", "weekly", "biweekly", "monthly", "yearly"])
-    .default("weekly"),
+  isRepeating: z.boolean().default(true),
 });
 export function CreateEditLesson({
-  lessonId,
-  categoryId,
-  startTime,
-  endTime,
-  dayOfWeek,
-  start,
-  subjectId,
+  lesson,
 }: {
-  lessonId?: string;
-  startTime?: string;
-  endTime?: string;
-  categoryId?: string;
-  category?: string;
-  dayOfWeek?: number;
-  start?: Date;
-  subjectId?: number;
+  lesson?: RouterOutputs["lesson"]["byClassroom"][number] | null;
 }) {
   const params = useParams<{ id: string }>();
+
+  const formatTimeForInput = (date: Date) => {
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = Math.floor(date.getMinutes() / 15) * 15;
+    return `${hours}:${minutes.toString().padStart(2, "0")}`;
+  };
 
   const form = useForm({
     resolver: zodResolver(createEditTimetable),
     defaultValues: {
-      startTime: startTime ?? "08:00",
-      categoryId: categoryId ?? "",
-      endTime: endTime ?? "09:00",
-      subjectId: subjectId ? `${subjectId}` : "",
-      dayOfWeek: dayOfWeek ?? 0,
-      repeat: "weekly" as const,
+      startDate: lesson?.start ?? new Date(),
+      startTime: lesson ? formatTimeForInput(lesson.start) : "08:00",
+      categoryId: lesson?.categoryId ?? "",
+      endDate: lesson?.end ?? new Date(),
+      endTime: lesson ? formatTimeForInput(lesson.start) : "09:00",
+      subjectId: lesson?.subjectId ? `${lesson.subjectId}` : "",
+      isRepeating: lesson?.groupKey ? true : false,
     },
   });
   const trpc = useTRPC();
@@ -115,7 +109,7 @@ export function CreateEditLesson({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const { openModal } = useModal();
@@ -140,14 +134,14 @@ export function CreateEditLesson({
     }
 
     const values = {
-      startTime: data.startTime,
-      endTime: data.endTime,
+      start: start,
+      end: end,
       subjectId: Number(data.subjectId),
-      isRepeating: data.isRepeating ?? false,
+      isRepeating: data.isRepeating,
       categoryId: data.categoryId,
-      startDate: start ?? new Date(),
+      startDate: start,
     };
-    if (lessonId) {
+    if (lesson) {
       toast.loading(t("updating"), { id: 0 });
       console.log("updating");
     } else {
@@ -170,7 +164,9 @@ export function CreateEditLesson({
                 <FormLabel>{t("subject")}</FormLabel>
                 <FormControl>
                   <SubjectSelector
-                    defaultValue={subjectId ? `${subjectId}` : undefined}
+                    defaultValue={
+                      lesson?.subjectId ? `${lesson.subjectId}` : undefined
+                    }
                     classroomId={params.id}
                     {...field}
                   />
@@ -230,52 +226,17 @@ export function CreateEditLesson({
         <div className="grid grid-cols-2 gap-x-4">
           <FormField
             control={form.control}
-            name="dayOfWeek"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("week_days")}</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("week_days")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 7 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>
-                          {t(getDayOfWeek(i))}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="repeat"
+            name="isRepeating"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t("repeat")} ?</FormLabel>
                 <FormControl>
-                  <Select
-                    defaultValue={"weekly"}
-                    onValueChange={(val) => {
-                      field.onChange(val);
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("repeat")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="daily">{t("daily")}</SelectItem>
-                      <SelectItem value="weekly">{t("weekly")}</SelectItem>
-                      <SelectItem value="biweekly">{t("biweekly")}</SelectItem>
-                      <SelectItem value="monthly">{t("monthly")}</SelectItem>
-                      <SelectItem value="yearly">{t("yearly")}</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked === true)
+                    }
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -284,6 +245,20 @@ export function CreateEditLesson({
           />
         </div>
         <div className="grid grid-cols-2 gap-x-4">
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Start")}</FormLabel>
+                <FormControl>
+                  <DatePicker onChange={field.onChange} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="startTime"
@@ -304,6 +279,22 @@ export function CreateEditLesson({
                     </SelectContent>
                   </Select>
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-x-4">
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("End")}</FormLabel>
+                <FormControl>
+                  <DatePicker onChange={field.onChange} />
+                </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}

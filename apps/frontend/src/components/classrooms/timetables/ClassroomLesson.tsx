@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { format, getDay, parse, startOfWeek } from "date-fns";
@@ -42,13 +43,13 @@ export function ClassroomLesson() {
   const params = useParams<{ id: string }>();
   const [_currentDate, _] = useQueryState(
     "date",
-    parseAsIsoDateTime.withDefault(new Date())
+    parseAsIsoDateTime.withDefault(new Date()),
   );
   const trpc = useTRPC();
   const calendarEventsQuery = useQuery(
     trpc.lesson.byClassroom.queryOptions({
       classroomId: params.id,
-    })
+    }),
   );
   const [view, setView] = useState<RbcView>(RbcViews.MONTH);
   const [date, setDate] = useState(new Date());
@@ -88,13 +89,12 @@ export function ClassroomLesson() {
 
   const handleSelectSlot = useCallback(
     ({ start, end }: { start: Date; end: Date }) => {
-      const days = getWeekdayNumbersBetweenDates(start, end);
       openModal({
         title: t("add"),
-        view: <CreateEditLesson dayOfWeek={days[0]} />,
+        view: <CreateEditLesson />,
       });
     },
-    [openModal, t]
+    [openModal, t],
   );
 
   const handleSelectEvent = useCallback(
@@ -104,7 +104,7 @@ export function ClassroomLesson() {
         view: <LessonDetails event={event} />,
       });
     },
-    [openModal, t]
+    [openModal, t],
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -121,18 +121,18 @@ export function ClassroomLesson() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    []
+    [],
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -230,19 +230,3 @@ export function ClassroomLesson() {
     </div>
   );
 }
-
-const getWeekdayNumbersBetweenDates = (
-  startDate: Date,
-  endDate: Date
-): number[] => {
-  const uniqueDays = new Set<number>();
-  const current = new Date(startDate);
-
-  // Ensure we include the endDate itself
-  while (current <= endDate) {
-    uniqueDays.add(current.getDay()); // getDay returns 0 (Sun) to 6 (Sat)
-    current.setDate(current.getDate() + 1);
-  }
-
-  return Array.from(uniqueDays).sort((a, b) => a - b);
-};

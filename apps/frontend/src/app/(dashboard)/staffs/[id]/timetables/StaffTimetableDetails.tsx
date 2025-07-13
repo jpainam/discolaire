@@ -38,7 +38,7 @@ export function StaffTimetableDetails({
         {event.start.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.startTime.toLocaleTimeString(i18n.language)}
+        - {event.start.toLocaleTimeString(i18n.language)}
       </div>
       <div className="flex flex-row gap-2 items-center text-muted-foreground">
         <CalendarDays className="h-4 w-4" />
@@ -48,7 +48,7 @@ export function StaffTimetableDetails({
         {event.end.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.endTime.toLocaleTimeString(i18n.language)}
+        - {event.end.toLocaleTimeString(i18n.language)}
       </div>
 
       <Button

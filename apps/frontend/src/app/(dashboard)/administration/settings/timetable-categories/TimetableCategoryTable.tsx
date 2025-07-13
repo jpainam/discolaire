@@ -25,8 +25,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CreateEditTimetableCategory } from "~/components/classrooms/timetables/CreateEditTimetableCategory";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditTimetableCategory } from "./CreateEditTimetableCategory";
 
 export function TimetableCategoryTable() {
   const trpc = useTRPC();
