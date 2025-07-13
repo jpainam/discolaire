@@ -49,7 +49,7 @@ export default function TopTimetable() {
   const trpc = useTRPC();
   const [today, setToday] = useState<Date>(new Date());
   const timetablesQuery = useQuery(
-    trpc.lesson.byClassroom.queryOptions({
+    trpc.subjectTimetable.byClassroom.queryOptions({
       classroomId: params.id,
       from: subDays(today, 7),
     }),
@@ -196,7 +196,7 @@ function TopTimetableCard({
   period,
 }: {
   today: Date;
-  period: RouterOutputs["lesson"]["byClassroom"][number];
+  period: RouterOutputs["subjectTimetable"]["byClassroom"][number];
 }) {
   const { i18n } = useLocale();
 

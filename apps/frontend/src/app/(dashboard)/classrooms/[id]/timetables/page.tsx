@@ -14,7 +14,7 @@ export default async function Page(props: {
 
   // const mode = searchParams.mode ?? "week";
   batchPrefetch([
-    trpc.lesson.byClassroom.queryOptions({
+    trpc.subjectTimetable.byClassroom.queryOptions({
       classroomId: params.id,
     }),
     trpc.classroom.teachers.queryOptions(params.id),

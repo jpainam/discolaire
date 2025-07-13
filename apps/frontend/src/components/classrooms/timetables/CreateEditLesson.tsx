@@ -50,7 +50,7 @@ const createEditTimetable = z.object({
 export function CreateEditLesson({
   lesson,
 }: {
-  lesson?: RouterOutputs["lesson"]["byClassroom"][number] | null;
+  lesson?: RouterOutputs["subjectTimetable"]["byClassroom"][number] | null;
 }) {
   const params = useParams<{ id: string }>();
 
@@ -100,16 +100,16 @@ export function CreateEditLesson({
   }, [watchStartTime, hours24]);
 
   const createLessonMutation = useMutation(
-    trpc.lesson.create.mutationOptions({
+    trpc.subjectTimetable.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.lesson.pathFilter());
+        await queryClient.invalidateQueries(trpc.subjectTimetable.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const { openModal } = useModal();

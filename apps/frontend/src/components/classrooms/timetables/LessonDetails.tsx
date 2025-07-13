@@ -22,7 +22,7 @@ import { CreateEditLesson } from "./CreateEditLesson";
 export function LessonDetails({
   event,
 }: {
-  event: RouterOutputs["lesson"]["byClassroom"][number];
+  event: RouterOutputs["subjectTimetable"]["byClassroom"][number];
 }) {
   const { t, i18n } = useLocale();
   const confirm = useConfirm();
@@ -31,13 +31,13 @@ export function LessonDetails({
 
   const { openModal, closeModal } = useModal();
   const deleteLessonMutation = useMutation(
-    trpc.lesson.delete.mutationOptions({
+    trpc.subjectTimetable.delete.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.lesson.byClassroom.pathFilter(),
+          trpc.subjectTimetable.byClassroom.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
         closeModal();

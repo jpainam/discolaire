@@ -10,7 +10,7 @@ import { useLocale } from "~/i18n";
 export function StaffTimetableDetails({
   event,
 }: {
-  event: RouterOutputs["lesson"]["byClassroom"][number];
+  event: RouterOutputs["subjectTimetable"]["byClassroom"][number];
 }) {
   const { t, i18n } = useLocale();
 

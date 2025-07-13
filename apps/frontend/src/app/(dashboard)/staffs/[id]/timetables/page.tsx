@@ -27,7 +27,8 @@ import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { StaffTimetableDetails } from "./StaffTimetableDetails";
 
-type TimetableEventType = RouterOutputs["lesson"]["byClassroom"][number];
+type TimetableEventType =
+  RouterOutputs["subjectTimetable"]["byClassroom"][number];
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const CalendarWrapper = BigCalendar;
@@ -40,7 +41,7 @@ export default function Page() {
   );
   const trpc = useTRPC();
   const calendarEventsQuery = useQuery(
-    trpc.lesson.byClassroom.queryOptions({
+    trpc.subjectTimetable.byClassroom.queryOptions({
       classroomId: params.id,
     }),
   );

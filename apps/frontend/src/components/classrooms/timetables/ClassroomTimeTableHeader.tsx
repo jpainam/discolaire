@@ -43,9 +43,9 @@ export function ClassroomTimeTableHeader() {
     PermissionAction.CREATE,
   );
   const clearClassroomLessonMutation = useMutation(
-    trpc.lesson.clearByClassroom.mutationOptions({
+    trpc.subjectTimetable.clearByClassroom.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.lesson.pathFilter());
+        await queryClient.invalidateQueries(trpc.subjectTimetable.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {

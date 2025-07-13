@@ -34,7 +34,8 @@ import { useQuery } from "@tanstack/react-query";
 
 // moment.locale(i18next.language);
 // const localizer = momentLocalizer(moment);
-type TimetableEventType = RouterOutputs["lesson"]["byClassroom"][number];
+type TimetableEventType =
+  RouterOutputs["subjectTimetable"]["byClassroom"][number];
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const CalendarWrapper = BigCalendar;
@@ -47,7 +48,7 @@ export function ClassroomLesson() {
   );
   const trpc = useTRPC();
   const calendarEventsQuery = useQuery(
-    trpc.lesson.byClassroom.queryOptions({
+    trpc.subjectTimetable.byClassroom.queryOptions({
       classroomId: params.id,
     }),
   );

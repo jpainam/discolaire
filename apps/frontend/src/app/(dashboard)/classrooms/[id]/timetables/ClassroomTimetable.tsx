@@ -18,7 +18,7 @@ export function ClassroomTimetable() {
   );
 
   const { data: events } = useSuspenseQuery(
-    trpc.lesson.byClassroom.queryOptions({
+    trpc.subjectTimetable.byClassroom.queryOptions({
       classroomId: params.id,
     }),
   );
