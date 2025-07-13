@@ -52,7 +52,7 @@ export default function TopTimetable() {
     trpc.lesson.byClassroom.queryOptions({
       classroomId: params.id,
       from: subDays(today, 7),
-    }),
+    })
   );
 
   const periods = timetablesQuery.data ?? [];
@@ -165,14 +165,14 @@ export default function TopTimetable() {
             <Button
               onClick={() => {
                 openModal({
-                  title: t("create_timetable"),
+                  title: t("add"),
                   view: <CreateEditLesson />,
                 });
               }}
               size={"sm"}
             >
               <PlusIcon />
-              {t("create_timetable")}
+              {t("add")}
             </Button>
             <Button
               onClick={() => {
@@ -212,7 +212,7 @@ function TopTimetableCard({
           ? "bg-muted opacity-50"
           : isSameDay(period.start, today)
             ? "bg-red-600"
-            : "bg-card",
+            : "bg-card"
       )}
     >
       <div className="mb-2 flex items-start justify-between">

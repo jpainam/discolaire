@@ -1,16 +1,16 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { addMonths, getDay, subMonths } from "date-fns";
+import { addDays, addMonths, subMonths } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-import { timetableService } from "../services/timetable-service";
 import { protectedProcedure } from "../trpc";
 
 const createEditLessonSchema = z.object({
-  dayOfWeek: z.coerce.number(),
-  startTime: z.string().min(1),
+  start: z.coerce.date(),
   categoryId: z.string().min(1),
+  isRepeating: z.boolean().default(false),
   subjectId: z.coerce.number().nonnegative(),
-  endTime: z.string().min(1),
+  end: z.coerce.date(),
   startDate: z.coerce.date(),
 });
 export const lessonRouter = {
@@ -22,25 +22,26 @@ export const lessonRouter = {
           id: ctx.schoolYearId,
         },
       });
-      const events = timetableService.generateRange({
-        startDate: input.startDate,
-        startTime: input.startTime,
-        endTime: input.endTime,
-        dayOfWeek: input.dayOfWeek,
-        finalDate: schoolYear?.endDate ?? addMonths(new Date(), 9),
-      });
-      const data = events.map((event) => {
-        return {
-          subjectId: input.subjectId,
-          startTime: event.start,
-          categoryId: input.categoryId,
-          endTime: event.end,
-          schoolId: ctx.schoolId,
-          //createdById: ctx.session.user.id,
-        };
-      });
+      const endDate = schoolYear?.endDate ?? addMonths(new Date(), 9);
+      const groupKey = uuidv4();
+      const event = {
+        start: input.start,
+        end: input.end,
+        groupKey: groupKey,
+        subjectId: input.subjectId,
+        categoryId: input.categoryId,
+        schoolId: ctx.schoolId,
+      };
+      const events = [event];
+      if (input.isRepeating) {
+        while (event.start <= endDate) {
+          event.start = addDays(event.start, 7);
+          event.end = addDays(event.end, 7);
+          events.push({ ...event });
+        }
+      }
       return ctx.db.lesson.createMany({
-        data: data,
+        data: events,
       });
     }),
   clearByClassroom: protectedProcedure
@@ -74,10 +75,10 @@ export const lessonRouter = {
           },
         },
         where: {
-          startTime: {
+          start: {
             gte: input.from,
           },
-          endTime: {
+          end: {
             lte: input.to,
           },
           subject: {
@@ -85,16 +86,7 @@ export const lessonRouter = {
           },
         },
       });
-
-      const events = [];
-      for (const lesson of lessons) {
-        events.push({
-          start: lesson.startTime,
-          end: lesson.endTime,
-          ...lesson,
-        });
-      }
-      return events;
+      return lessons;
     }),
   delete: protectedProcedure
     .input(
@@ -116,42 +108,20 @@ export const lessonRouter = {
           id: input.id,
         },
       });
-
-      const schoolYear = await ctx.db.schoolYear.findUnique({
+      return ctx.db.lesson.deleteMany({
         where: {
-          id: ctx.schoolYearId,
-        },
-      });
-      const endDate = schoolYear?.endDate ?? addMonths(new Date(), 9);
-
-      const events = await ctx.db.lesson.findMany({
-        where: {
-          subjectId: event.subjectId,
-          ...(input.type == "after"
+          groupKey: event.groupKey,
+          ...(input.type == "before"
             ? {
-                startTime: {
-                  gte: event.startTime,
-                  lte: endDate,
+                start: {
+                  lte: event.start,
                 },
               }
             : {
-                startTime: {
-                  gte: schoolYear?.startDate ?? subMonths(new Date(), 9),
-                  lte: event.startTime,
+                start: {
+                  gt: event.start,
                 },
               }),
-        },
-      });
-
-      const targetDayOfTheWeek = getDay(event.startTime);
-      const matchingEventIds = events
-        .filter((evt) => getDay(evt.startTime) === targetDayOfTheWeek)
-        .map((ev) => ev.id);
-      return ctx.db.lesson.deleteMany({
-        where: {
-          id: {
-            in: matchingEventIds,
-          },
         },
       });
     }),

@@ -21,18 +21,24 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { PlusIcon } from "lucide-react";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { CreateEditTimetableCategory } from "~/app/(dashboard)/administration/settings/timetable-categories/CreateEditTimetableCategory";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { useTRPC } from "~/trpc/react";
+import { isBefore } from "date-fns";
 
 const createEditTimetable = z.object({
   startTime: z.string().min(1),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
   endTime: z.string().min(1),
   categoryId: z.string().min(1),
   dayOfWeek: z.coerce.number().positive(), // 0-6 (Sunday-Saturday)
@@ -109,25 +115,27 @@ export function CreateEditLesson({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
-  const dayNames = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
 
-  const getDayOfWeek = (dayNumber: number): string => {
-    return dayNames[dayNumber] ?? "";
-  };
+  const { openModal } = useModal();
 
   const handleSubmit = (data: z.infer<typeof createEditTimetable>) => {
     if (!data.subjectId) {
       toast.error(t("subject_required"), { id: 0 });
+      return;
+    }
+    const start = data.startDate;
+    const end = data.endDate;
+    const [startHours = 0, startMinutes = 0] = data.startTime
+      .split(":")
+      .map(Number);
+    const [endHours = 0, endMinutes = 0] = data.endTime.split(":").map(Number);
+
+    start.setHours(startHours, startMinutes, 0);
+    end.setHours(endHours, endMinutes, 0);
+    if (isBefore(end, start)) {
+      toast.error("End date cannot be before start date");
       return;
     }
 
@@ -135,9 +143,8 @@ export function CreateEditLesson({
       startTime: data.startTime,
       endTime: data.endTime,
       subjectId: Number(data.subjectId),
-      repeat: data.repeat,
+      isRepeating: data.isRepeating ?? false,
       categoryId: data.categoryId,
-      dayOfWeek: Number(data.dayOfWeek),
       startDate: start ?? new Date(),
     };
     if (lessonId) {
@@ -154,53 +161,71 @@ export function CreateEditLesson({
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <FormField
-          control={form.control}
-          name="subjectId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("subject")}</FormLabel>
-              <FormControl>
-                <SubjectSelector
-                  defaultValue={subjectId ? `${subjectId}` : undefined}
-                  classroomId={params.id}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {categoryQuery.isPending ? (
-          <Skeleton className="h-8" />
-        ) : (
+        <div className="grid grid-cols-2 gap-x-4">
           <FormField
             control={form.control}
-            name="categoryId"
+            name="subjectId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("category")}</FormLabel>
+                <FormLabel>{t("subject")}</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("category")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categoryQuery.data?.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <SubjectSelector
+                    defaultValue={subjectId ? `${subjectId}` : undefined}
+                    classroomId={params.id}
+                    {...field}
+                  />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
-        )}
+
+          {categoryQuery.isPending ? (
+            <Skeleton className="h-8" />
+          ) : (
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("category")}</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(val) => {
+                        if (val === "-1") {
+                          openModal({
+                            title: t("create"),
+                            view: <CreateEditTimetableCategory />,
+                          });
+                        } else {
+                          field.onChange(val);
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("category")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categoryQuery.data?.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                        <SelectSeparator />
+                        <SelectItem value="-1">
+                          <PlusIcon className="h-4 w-4" />
+                          {t("create")}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
 
         <div className="grid grid-cols-2 gap-x-4">
           <FormField

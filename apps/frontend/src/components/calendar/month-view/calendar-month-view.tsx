@@ -9,17 +9,25 @@ import {
   getCalendarCells,
 } from "~/components/calendar/helpers";
 
+import { addDays, format, startOfWeek } from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
 import type { IEvent } from "~/components/calendar/interfaces";
+import { useLocale } from "~/i18n";
 
 interface IProps {
   singleDayEvents: IEvent[];
   multiDayEvents: IEvent[];
 }
 
-const WEEK_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
 export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendar();
+  const { i18n } = useLocale();
+  const start = startOfWeek(new Date());
+  const WEEK_DAYS = Array.from({ length: 7 }, (_, i) =>
+    format(addDays(start, i), "EEE", {
+      locale: i18n.language == "fr" ? fr : i18n.language == "en" ? enUS : es,
+    })
+  ); //["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const allEvents = [...multiDayEvents, ...singleDayEvents];
 
@@ -30,9 +38,9 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
       calculateMonthEventPositions(
         multiDayEvents,
         singleDayEvents,
-        selectedDate,
+        selectedDate
       ),
-    [multiDayEvents, singleDayEvents, selectedDate],
+    [multiDayEvents, singleDayEvents, selectedDate]
   );
 
   return (

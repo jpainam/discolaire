@@ -69,7 +69,7 @@ export function CalendarHeader({ events }: IProps) {
                   <ToggleGroupItem
                     value={modeValue}
                     className={cn(
-                      "w-full rounded-none shadow-none text-base flex items-center justify-center gap-2 relative border-none",
+                      "w-full rounded-none shadow-none text-base flex items-center justify-center gap-2 relative border-none"
                       //isSelected && "z-5"
                     )}
                   >
@@ -160,7 +160,7 @@ export function CalendarHeader({ events }: IProps) {
           <Button
             onClick={() => {
               openModal({
-                title: t("create_timetable"),
+                title: t("add"),
                 view: <CreateEditLesson />,
               });
             }}

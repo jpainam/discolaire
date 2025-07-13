@@ -18,6 +18,7 @@ import { WeekViewMultiDayEventsRow } from "~/components/calendar/week-and-day-vi
 
 import { getEventBlockStyle, groupEvents } from "~/components/calendar/helpers";
 
+import { fr } from "date-fns/locale";
 import type { IEvent } from "~/components/calendar/interfaces";
 
 interface IProps {
@@ -55,9 +56,9 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                   key={index}
                   className="py-2 text-center text-xs font-medium text-t-quaternary"
                 >
-                  {format(day, "EE")}{" "}
+                  {format(day, "EE", { locale: fr })}{" "}
                   <span className="ml-1 font-semibold text-t-secondary">
-                    {format(day, "d")}
+                    {format(day, "d", { locale: fr })}
                   </span>
                 </span>
               ))}
@@ -74,7 +75,9 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
                     {index !== 0 && (
                       <span className="text-xs text-t-quaternary">
-                        {format(new Date().setHours(hour), "hh a")}
+                        {format(new Date().setHours(hour), "hh a", {
+                          locale: fr,
+                        })}
                       </span>
                     )}
                   </div>
@@ -89,7 +92,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                   const dayEvents = singleDayEvents.filter(
                     (event) =>
                       isSameDay(parseISO(event.startDate), day) ||
-                      isSameDay(parseISO(event.endDate), day),
+                      isSameDay(parseISO(event.endDate), day)
                   );
                   const groupedEvents = groupEvents(dayEvents);
 
@@ -134,7 +137,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                             event,
                             day,
                             groupIndex,
-                            groupedEvents.length,
+                            groupedEvents.length
                           );
                           const hasOverlap = groupedEvents.some(
                             (otherGroup, otherIndex) =>
@@ -148,9 +151,9 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                                   {
                                     start: parseISO(otherEvent.startDate),
                                     end: parseISO(otherEvent.endDate),
-                                  },
-                                ),
-                              ),
+                                  }
+                                )
+                              )
                           );
 
                           if (!hasOverlap)
@@ -165,7 +168,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                               <EventBlock event={event} />
                             </div>
                           );
-                        }),
+                        })
                       )}
                     </div>
                   );

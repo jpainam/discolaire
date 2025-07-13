@@ -17,6 +17,7 @@ import { EventBlock } from "~/components/calendar/week-and-day-view/event-block"
 import { getEventBlockStyle, groupEvents } from "~/components/calendar/helpers";
 
 import { Calendar } from "@repo/ui/components/calendar";
+import { fr } from "date-fns/locale";
 import type { IEvent } from "~/components/calendar/interfaces";
 import { useLocale } from "~/i18n";
 
@@ -39,7 +40,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
         isWithinInterval(now, {
           start: parseISO(event.startDate),
           end: parseISO(event.endDate),
-        }),
+        })
       ) || null
     );
   };
@@ -87,7 +88,9 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
                     {index !== 0 && (
                       <span className="text-xs text-t-quaternary">
-                        {format(new Date().setHours(hour), "hh a")}
+                        {format(new Date().setHours(hour), "hh a", {
+                          locale: fr,
+                        })}
                       </span>
                     )}
                   </div>
@@ -136,7 +139,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       event,
                       selectedDate,
                       groupIndex,
-                      groupedEvents.length,
+                      groupedEvents.length
                     );
                     const hasOverlap = groupedEvents.some(
                       (otherGroup, otherIndex) =>
@@ -150,9 +153,9 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                             {
                               start: parseISO(otherEvent.startDate),
                               end: parseISO(otherEvent.endDate),
-                            },
-                          ),
-                        ),
+                            }
+                          )
+                        )
                     );
 
                     if (!hasOverlap)
@@ -167,7 +170,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         <EventBlock event={event} />
                       </div>
                     );
-                  }),
+                  })
                 )}
               </div>
 

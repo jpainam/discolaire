@@ -36,11 +36,11 @@ export function ClassroomTimeTableHeader() {
   const { openModal } = useModal();
   const canDeleteTimetable = useCheckPermission(
     "timetable",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canCreateTimetable = useCheckPermission(
     "timetable",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   const clearClassroomLessonMutation = useMutation(
     trpc.lesson.clearByClassroom.mutationOptions({
@@ -51,7 +51,7 @@ export function ClassroomTimeTableHeader() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
     <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
@@ -62,7 +62,7 @@ export function ClassroomTimeTableHeader() {
           <Button
             onClick={() => {
               openModal({
-                title: t("create_timetable"),
+                title: t("add"),
                 view: <CreateEditLesson />,
               });
             }}

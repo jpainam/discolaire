@@ -39,7 +39,7 @@ export function ClassroomTimeTable() {
   const calendarEventsQuery = useQuery(
     trpc.timetable.classroom.queryOptions({
       classroomId: params.id,
-    }),
+    })
   );
   const [view, setView] = useState<RbcView>(RbcViews.AGENDA);
   const [date, setDate] = useState(new Date());
@@ -80,7 +80,7 @@ export function ClassroomTimeTable() {
   const handleSelectSlot = useCallback(
     ({ start, end }: { start: Date; end: Date }) => {
       openModal({
-        title: t("create_timetable"),
+        title: t("add"),
         view: (
           <CreateEditTimetable
             classroomId={params.id}
@@ -90,7 +90,7 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const handleSelectEvent = useCallback(
@@ -110,7 +110,7 @@ export function ClassroomTimeTable() {
         ),
       });
     },
-    [openModal, params.id, t],
+    [openModal, params.id, t]
   );
 
   const { _views, _scrollToTime, formats } = useMemo(
@@ -127,18 +127,18 @@ export function ClassroomTimeTable() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer,
+          localizer?: DateLocalizer
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    [],
+    []
   );
 
   const handleViewChange = (view: RbcView) => {
@@ -235,7 +235,7 @@ export function ClassroomTimeTable() {
 
 const getWeekdayNumbersBetweenDates = (
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): number[] => {
   const uniqueDays = new Set<number>();
   const current = new Date(startDate);

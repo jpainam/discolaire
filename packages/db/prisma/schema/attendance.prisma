@@ -113,13 +113,14 @@ model TimetableCategory {
 
 model Lesson {
     id         Int                @id @default(autoincrement())
-    startTime  DateTime
-    endTime    DateTime
+    start      DateTime
+    end        DateTime
     subjectId  Int
     schoolId   String
+    groupKey   String?
     subject    Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
     categoryId String
     category   TimetableCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-    @@unique([startTime, endTime, subjectId])
+    @@unique([start, end, subjectId])
 }
