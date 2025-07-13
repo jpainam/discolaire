@@ -201,3 +201,11 @@ https://ui.ahmet.studio/blocks
 https://www.kibo-ui.com/
 
 https://magicui.design/
+
+# Drop DB
+
+sudo -u postgres dropdb discolaire
+
+# Drop user
+
+sudo -u postgres dropuser discolaire
