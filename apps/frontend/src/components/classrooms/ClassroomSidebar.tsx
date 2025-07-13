@@ -118,7 +118,7 @@ export function ClassroomSidebar({
   };
   const canSendCommunication = useCheckPermission(
     "communication",
-    PermissionAction.CREATE,
+    PermissionAction.CREATE
   );
   if (canSendCommunication) {
     data.information.push({
@@ -149,7 +149,7 @@ export function ClassroomSidebar({
           </SidebarMenu>
         </SidebarGroup>
 
-        <SidebarGroup className="pt-0">
+        <SidebarGroup>
           {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
           <SidebarMenu>
             {data.information.map((item) => (
@@ -162,9 +162,9 @@ export function ClassroomSidebar({
                 >
                   <Link href={item.url}>
                     <item.icon
-                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                      size={22}
-                      aria-hidden="true"
+                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                    //size={22}
+                    //aria-hidden="true"
                     />
                     <span>{t(item.name)}</span>
                   </Link>

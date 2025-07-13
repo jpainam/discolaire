@@ -138,11 +138,11 @@ export function StudentSidebar({
   const pathname = usePathname();
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (!canReadTransaction) {
     data.information = data.information.filter(
-      (item) => item.name !== "transactions",
+      (item) => item.name !== "transactions"
     );
   }
 
@@ -165,7 +165,7 @@ export function StudentSidebar({
           </SidebarMenu>
         </SidebarGroup>
 
-        <SidebarGroup className="pt-0">
+        <SidebarGroup>
           {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
           <SidebarMenu>
             {data.information.map((item) => (
@@ -183,9 +183,9 @@ export function StudentSidebar({
                     }
                   >
                     <item.icon
-                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                      size={22}
-                      aria-hidden="true"
+                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                    //size={22}
+                    //aria-hidden="true"
                     />
                     <span>{t(item.name)}</span>
                   </Link>

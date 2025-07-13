@@ -76,7 +76,7 @@ export function MainSidebar({
           url: `/timetables`,
           icon: CalendarDays,
         },
-      ],
+      ]
     );
   }
   data.push({
@@ -86,7 +86,7 @@ export function MainSidebar({
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadLibrary) {
     data.push({
@@ -97,7 +97,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
   if (canReadAdministration) {
     data.push({
@@ -143,9 +143,9 @@ export function MainSidebar({
                 >
                   <Link href={item.url}>
                     <item.icon
-                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                      size={22}
-                      aria-hidden="true"
+                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                    //size={22}
+                    //aria-hidden="true"
                     />
                     <span>{t(item.name)}</span>
                   </Link>
@@ -167,9 +167,9 @@ export function MainSidebar({
                 >
                   <Link href={item.url}>
                     <item.icon
-                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                      size={22}
-                      aria-hidden="true"
+                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                    //size={22}
+                    //aria-hidden="true"
                     />
                     <span>{t(item.name)}</span>
                   </Link>

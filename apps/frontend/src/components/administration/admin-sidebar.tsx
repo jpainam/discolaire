@@ -243,8 +243,8 @@ export function AdminSidebar({
                 >
                   <Link href={item.url}>
                     <item.icon
-                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                      size={22}
+                      //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                      //size={22}
                       aria-hidden="true"
                     />
                     <span>{t(item.name)}</span>

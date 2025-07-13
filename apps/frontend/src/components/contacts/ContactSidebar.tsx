@@ -44,10 +44,10 @@ export function ContactSidebar({
   const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="h-16 max-md:mt-2 mb-2 justify-center">
+      <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
-      <SidebarContent className="-mt-2">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
@@ -61,7 +61,7 @@ export function ContactSidebar({
           </SidebarMenu>
         </SidebarGroup>
 
-        <SidebarGroup className="pt-0">
+        <SidebarGroup>
           {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
           <SidebarMenu>
             {data.information.map((item) => (
@@ -73,9 +73,9 @@ export function ContactSidebar({
                 >
                   <Link href={item.url}>
                     <item.icon
-                      className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                      size={22}
-                      aria-hidden="true"
+                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                    //size={22}
+                    //aria-hidden="true"
                     />
                     <span>{t(item.name)}</span>
                   </Link>
