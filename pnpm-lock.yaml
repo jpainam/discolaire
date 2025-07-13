@@ -33,6 +33,9 @@ catalogs:
     eslint:
       specifier: ^9.30.0
       version: 9.30.1
+    framer-motion:
+      specifier: ^12.23.0
+      version: 12.23.0
     next:
       specifier: 15.3.4
       version: 15.3.4
@@ -294,7 +297,7 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
       framer-motion:
-        specifier: ^12.23.0
+        specifier: 'catalog:'
         version: 12.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       geist:
         specifier: ^1.4.2
@@ -635,7 +638,7 @@ importers:
         specifier: ^0.6.4
         version: 0.6.4
       framer-motion:
-        specifier: ^12.22.0
+        specifier: 'catalog:'
         version: 12.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       motion:
         specifier: ^12.22.0

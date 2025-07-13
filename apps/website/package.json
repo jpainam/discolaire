@@ -20,7 +20,7 @@
     "@splinetool/runtime": "^1.10.18",
     "@tabler/icons-react": "^3.34.0",
     "cobe": "^0.6.4",
-    "framer-motion": "^12.22.0",
+    "framer-motion": "catalog:",
     "motion": "^12.22.0",
     "next": "catalog:",
     "next-themes": "^0.4.6",
