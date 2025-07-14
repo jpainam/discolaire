@@ -50,11 +50,11 @@ export default async function Layout({
 
   return (
     <SidebarProvider
-      style={{
-        // @ts-expect-error Ignore
-        "--sidebar-width": "14rem",
-        "--sidebar-width-mobile": "16rem",
-      }}
+      // style={{
+      //   // @ts-expect-error Ignore
+      //   "--sidebar-width": "14rem",
+      //   "--sidebar-width-mobile": "16rem",
+      // }}
       defaultOpen={defaultOpen}
     >
       <SchoolContextProvider
