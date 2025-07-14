@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -14,7 +13,7 @@ import {
   streamText,
 } from "ai";
 
-import type { VisibilityType } from "@repo/db";
+import type { Prisma, VisibilityType } from "@repo/db";
 import { geolocation } from "@vercel/functions";
 import { after } from "next/server";
 import type { ResumableStreamContext } from "resumable-stream";
@@ -75,10 +74,9 @@ export async function POST(request: Request) {
 
   try {
     const json = await request.json();
-    console.log("Received JSON:", json); // Add this
     requestBody = postRequestBodySchema.parse(json);
   } catch (error) {
-    console.error("Invalid POST body:", error); // Add this
+    console.error("Invalid POST body:", error);
     return new ChatSDKError("bad_request:api").toResponse();
   }
 
@@ -133,7 +131,6 @@ export async function POST(request: Request) {
 
     const messagesFromDb = await getMessagesByChatId({ id });
     const uiMessages = [...convertToUIMessages(messagesFromDb), message];
-
     const { longitude, latitude, city, country } = geolocation(request);
 
     const requestHints: RequestHints = {
@@ -149,8 +146,7 @@ export async function POST(request: Request) {
           chatId: id,
           id: message.id,
           role: "user",
-          // @ts-expect-error TODO - Fix type for parts
-          parts: message.parts,
+          parts: message.parts as Prisma.JsonValue,
           attachments: [],
           createdAt: new Date(),
         },
@@ -203,11 +199,10 @@ export async function POST(request: Request) {
       generateId: generateUUID,
       onFinish: ({ messages }) => {
         void saveMessages({
-          // @ts-expect-error TODO - Fix type for parts
           messages: messages.map((message) => ({
             id: message.id,
             role: message.role,
-            parts: message.parts,
+            parts: message.parts as Prisma.JsonValue,
             createdAt: new Date(),
             attachments: [],
             chatId: id,
@@ -252,6 +247,9 @@ export async function DELETE(request: Request) {
   }
 
   const chat = await getChatById({ id });
+  if (!chat) {
+    return new ChatSDKError("not_found:chat").toResponse();
+  }
 
   if (chat.userId !== session.user.id) {
     return new ChatSDKError("forbidden:chat").toResponse();
