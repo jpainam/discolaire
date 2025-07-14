@@ -9,7 +9,6 @@ import type { VisibilityType, Vote } from "@repo/db";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
-import { ChatHeader } from "~/components/ai/chat-header";
 import { fetcher, fetchWithErrorHandlers, generateUUID } from "~/lib/utils";
 import { Artifact } from "./artifact";
 import { Messages } from "./messages";
@@ -138,14 +137,14 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh bg-background">
-        <ChatHeader
+      <div className="flex flex-col min-w-0 h-[calc(100vh-4rem)] bg-background">
+        {/* <ChatHeader
           chatId={id}
           selectedModelId={initialChatModel}
           selectedVisibilityType={initialVisibilityType}
           isReadonly={isReadonly}
           session={session}
-        />
+        /> */}
 
         <Messages
           chatId={id}

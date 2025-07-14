@@ -79,7 +79,7 @@ function PureMultimodalInput({
 
   const [localStorageInput, setLocalStorageInput] = useLocalStorage(
     "input",
-    ""
+    "",
   );
 
   useEffect(() => {
@@ -185,7 +185,7 @@ function PureMultimodalInput({
         const uploadPromises = files.map((file) => uploadFile(file));
         const uploadedAttachments = await Promise.all(uploadPromises);
         const successfullyUploadedAttachments = uploadedAttachments.filter(
-          (attachment) => attachment !== undefined
+          (attachment) => attachment !== undefined,
         );
 
         setAttachments((currentAttachments) => [
@@ -198,7 +198,7 @@ function PureMultimodalInput({
         setUploadQueue([]);
       }
     },
-    [setAttachments]
+    [setAttachments],
   );
 
   const { isAtBottom, scrollToBottom } = useScrollToBottom();
@@ -286,7 +286,7 @@ function PureMultimodalInput({
         onChange={handleInput}
         className={cx(
           "min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-muted pb-10 dark:border-zinc-700",
-          className
+          className,
         )}
         rows={2}
         autoFocus
@@ -336,7 +336,7 @@ export const MultimodalInput = memo(
       return false;
 
     return true;
-  }
+  },
 );
 
 function PureAttachmentsButton({

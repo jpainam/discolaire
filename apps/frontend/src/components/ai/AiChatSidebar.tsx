@@ -18,6 +18,7 @@ import {
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { SidebarHistory } from "~/components/ai/sidebar-history";
+import { SidebarLogo } from "../sidebar-logo";
 
 export function AiChatSidebar({
   ...props
@@ -27,6 +28,9 @@ export function AiChatSidebar({
 
   return (
     <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <SidebarLogo />
+      </SidebarHeader>
       <SidebarHeader>
         <SidebarMenu>
           <div className="flex flex-row justify-between items-center">
@@ -64,6 +68,7 @@ export function AiChatSidebar({
       <SidebarContent>
         <SidebarHistory />
       </SidebarContent>
+      {/* <SidebarFooter>{<SidebarUserNav  />}</SidebarFooter> */}
     </Sidebar>
   );
 }
