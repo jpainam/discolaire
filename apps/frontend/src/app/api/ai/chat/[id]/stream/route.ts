@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
 import type { AiChat } from "@repo/db";
 import { VisibilityType } from "@repo/db";
@@ -38,7 +37,7 @@ export async function GET(
     return new ChatSDKError("unauthorized:chat").toResponse();
   }
 
-  let chat: AiChat;
+  let chat: AiChat | null = null;
 
   try {
     chat = await getChatById({ id: chatId });

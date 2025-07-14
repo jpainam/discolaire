@@ -58,7 +58,7 @@ export function getStreamContext() {
     } catch (error: any) {
       if (error.message.includes("REDIS_URL")) {
         console.log(
-          " > Resumable streams are disabled due to missing REDIS_URL"
+          " > Resumable streams are disabled due to missing REDIS_URL",
         );
       } else {
         console.error(error);
@@ -193,7 +193,7 @@ export async function POST(request: Request) {
         dataStream.merge(
           result.toUIMessageStream({
             sendReasoning: true,
-          })
+          }),
         );
       },
       generateId: generateUUID,
@@ -219,8 +219,8 @@ export async function POST(request: Request) {
     if (streamContext) {
       return new Response(
         await streamContext.resumableStream(streamId, () =>
-          stream.pipeThrough(new JsonToSseTransformStream())
-        )
+          stream.pipeThrough(new JsonToSseTransformStream()),
+        ),
       );
     } else {
       return new Response(stream.pipeThrough(new JsonToSseTransformStream()));

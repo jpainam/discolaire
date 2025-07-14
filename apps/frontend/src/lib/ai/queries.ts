@@ -15,7 +15,7 @@ export async function getUser(email: string): Promise<User> {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get user by email"
+      "Failed to get user by email",
     );
   }
 }
@@ -54,7 +54,7 @@ export async function deleteChatById({ id }: { id: string }) {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to delete chat by id"
+      "Failed to delete chat by id",
     );
   }
 }
@@ -80,7 +80,7 @@ export async function getChatsByUserId({
       if (!selectedChat) {
         throw new ChatSDKError(
           "not_found:database",
-          `Chat with id ${startingAfter} not found`
+          `Chat with id ${startingAfter} not found`,
         );
       }
       filteredChats = await db.aiChat.findMany({
@@ -98,7 +98,7 @@ export async function getChatsByUserId({
       if (!selectedChat) {
         throw new ChatSDKError(
           "not_found:database",
-          `Chat with id ${endingBefore} not found`
+          `Chat with id ${endingBefore} not found`,
         );
       }
       filteredChats = await db.aiChat.findMany({
@@ -125,7 +125,7 @@ export async function getChatsByUserId({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get chats by user id"
+      "Failed to get chats by user id",
     );
   }
 }
@@ -168,7 +168,7 @@ export async function getMessagesByChatId({ id }: { id: string }) {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get messages by chat id"
+      "Failed to get messages by chat id",
     );
   }
 }
@@ -224,7 +224,7 @@ export async function getVotesByChatId({ id }: { id: string }) {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get votes by chat id"
+      "Failed to get votes by chat id",
     );
   }
 }
@@ -275,7 +275,7 @@ export async function getDocumentsById({ id }: { id: string }) {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get documents by id"
+      "Failed to get documents by id",
     );
   }
 }
@@ -289,7 +289,7 @@ export async function getDocumentById({ id }: { id: string }) {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get document by id"
+      "Failed to get document by id",
     );
   }
 }
@@ -318,7 +318,7 @@ export async function deleteDocumentsByIdAfterTimestamp({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to delete documents by id after timestamp"
+      "Failed to delete documents by id after timestamp",
     );
   }
 }
@@ -336,7 +336,7 @@ export async function saveSuggestions({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to save suggestions"
+      "Failed to save suggestions",
     );
   }
 }
@@ -354,7 +354,7 @@ export async function getSuggestionsByDocumentId({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get suggestions by document id"
+      "Failed to get suggestions by document id",
     );
   }
 }
@@ -368,7 +368,7 @@ export async function getMessageById({ id }: { id: string }) {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get message by id"
+      "Failed to get message by id",
     );
   }
 }
@@ -409,7 +409,7 @@ export async function deleteMessagesByChatIdAfterTimestamp({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to delete messages by chat id after timestamp"
+      "Failed to delete messages by chat id after timestamp",
     );
   }
 }
@@ -432,7 +432,7 @@ export async function updateChatVisiblityById({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to update chat visibility by id"
+      "Failed to update chat visibility by id",
     );
   }
 }
@@ -446,7 +446,7 @@ export async function getMessageCountByUserId({
 }) {
   try {
     const twentyFourHoursAgo = new Date(
-      Date.now() - differenceInHours * 60 * 60 * 1000
+      Date.now() - differenceInHours * 60 * 60 * 1000,
     );
     const stats = await db.aiMessage.aggregate({
       _count: true,
@@ -465,7 +465,7 @@ export async function getMessageCountByUserId({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get message count by user id"
+      "Failed to get message count by user id",
     );
   }
 }
@@ -485,7 +485,7 @@ export async function createStreamId({
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to create stream id"
+      "Failed to create stream id",
     );
   }
 }
@@ -503,7 +503,7 @@ export async function getStreamIdsByChatId({ chatId }: { chatId: string }) {
     console.error(error);
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get stream ids by chat id"
+      "Failed to get stream ids by chat id",
     );
   }
 }
