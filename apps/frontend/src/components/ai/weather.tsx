@@ -1,46 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import cx from "classnames";
 import { format, isWithinInterval } from "date-fns";
 import { useEffect, useState } from "react";
-
-interface WeatherAtLocation {
-  latitude: number;
-  longitude: number;
-  generationtime_ms: number;
-  utc_offset_seconds: number;
-  timezone: string;
-  timezone_abbreviation: string;
-  elevation: number;
-  current_units: {
-    time: string;
-    interval: string;
-    temperature_2m: string;
-  };
-  current: {
-    time: string;
-    interval: number;
-    temperature_2m: number;
-  };
-  hourly_units: {
-    time: string;
-    temperature_2m: string;
-  };
-  hourly: {
-    time: string[];
-    temperature_2m: number[];
-  };
-  daily_units: {
-    time: string;
-    sunrise: string;
-    sunset: string;
-  };
-  daily: {
-    time: string[];
-    sunrise: string[];
-    sunset: string[];
-  };
-}
 
 const SAMPLE = {
   latitude: 37.763283,
@@ -205,19 +172,17 @@ function n(num: number): number {
 export function Weather({
   weatherAtLocation = SAMPLE,
 }: {
-  weatherAtLocation?: WeatherAtLocation;
+  weatherAtLocation?: any;
 }) {
   const currentHigh = Math.max(
-    ...weatherAtLocation.hourly.temperature_2m.slice(0, 24)
+    ...weatherAtLocation.hourly.temperature_2m.slice(0, 24),
   );
   const currentLow = Math.min(
-    ...weatherAtLocation.hourly.temperature_2m.slice(0, 24)
+    ...weatherAtLocation.hourly.temperature_2m.slice(0, 24),
   );
 
   const isDay = isWithinInterval(new Date(weatherAtLocation.current.time), {
-    // @ts-expect-error TODO: Fix type error
     start: new Date(weatherAtLocation.daily.sunrise[0]),
-    // @ts-expect-error TODO: Fix type error
     end: new Date(weatherAtLocation.daily.sunset[0]),
   });
 
@@ -238,17 +203,18 @@ export function Weather({
 
   // Find the index of the current time or the next closest time
   const currentTimeIndex = weatherAtLocation.hourly.time.findIndex(
-    (time) => new Date(time) >= new Date(weatherAtLocation.current.time)
+    (time: string) =>
+      new Date(time) >= new Date(weatherAtLocation.current.time),
   );
 
   // Slice the arrays to get the desired number of items
   const displayTimes = weatherAtLocation.hourly.time.slice(
     currentTimeIndex,
-    currentTimeIndex + hoursToShow
+    currentTimeIndex + hoursToShow,
   );
   const displayTemperatures = weatherAtLocation.hourly.temperature_2m.slice(
     currentTimeIndex,
-    currentTimeIndex + hoursToShow
+    currentTimeIndex + hoursToShow,
   );
 
   return (
@@ -260,7 +226,7 @@ export function Weather({
         },
         {
           "bg-indigo-900": !isDay,
-        }
+        },
       )}
     >
       <div className="flex flex-row justify-between items-center">
@@ -273,7 +239,7 @@ export function Weather({
               },
               {
                 "bg-indigo-100": !isDay,
-              }
+              },
             )}
           />
           <div className="text-4xl font-medium text-blue-50">
@@ -286,7 +252,7 @@ export function Weather({
       </div>
 
       <div className="flex flex-row justify-between">
-        {displayTimes.map((time, index) => (
+        {displayTimes.map((time: string, index: number) => (
           <div key={time} className="flex flex-col items-center gap-1">
             <div className="text-blue-100 text-xs">
               {format(new Date(time), "ha")}
@@ -299,14 +265,11 @@ export function Weather({
                 },
                 {
                   "bg-indigo-200": !isDay,
-                }
+                },
               )}
             />
             <div className="text-blue-50 text-sm">
-              {
-                // @ts-expect-error TODO: Fix type error
-                n(displayTemperatures[index])
-              }
+              {n(displayTemperatures[index])}
               {weatherAtLocation.hourly_units.temperature_2m}
             </div>
           </div>

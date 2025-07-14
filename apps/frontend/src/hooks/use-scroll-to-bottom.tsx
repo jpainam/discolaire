@@ -1,5 +1,6 @@
-import useSWR from 'swr';
-import { useRef, useEffect, useCallback } from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { useCallback, useEffect, useRef } from "react";
+import useSWR from "swr";
 
 type ScrollFlag = ScrollBehavior | false;
 
@@ -8,40 +9,40 @@ export function useScrollToBottom() {
   const endRef = useRef<HTMLDivElement>(null);
 
   const { data: isAtBottom = false, mutate: setIsAtBottom } = useSWR(
-    'messages:is-at-bottom',
+    "messages:is-at-bottom",
     null,
     { fallbackData: false },
   );
 
   const { data: scrollBehavior = false, mutate: setScrollBehavior } =
-    useSWR<ScrollFlag>('messages:should-scroll', null, { fallbackData: false });
+    useSWR<ScrollFlag>("messages:should-scroll", null, { fallbackData: false });
 
   useEffect(() => {
     if (scrollBehavior) {
       endRef.current?.scrollIntoView({ behavior: scrollBehavior });
-      setScrollBehavior(false);
+      void setScrollBehavior(false);
     }
   }, [setScrollBehavior, scrollBehavior]);
 
   const scrollToBottom = useCallback(
-    (scrollBehavior: ScrollBehavior = 'smooth') => {
-      setScrollBehavior(scrollBehavior);
+    (scrollBehavior: ScrollBehavior = "smooth") => {
+      void setScrollBehavior(scrollBehavior);
     },
     [setScrollBehavior],
   );
 
   function onViewportEnter() {
-    setIsAtBottom(true);
+    void setIsAtBottom(true);
   }
 
   function onViewportLeave() {
-    setIsAtBottom(false);
+    void setIsAtBottom(false);
   }
 
   return {
     containerRef,
     endRef,
-    isAtBottom,
+    isAtBottom: !!isAtBottom,
     scrollToBottom,
     onViewportEnter,
     onViewportLeave,

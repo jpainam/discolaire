@@ -1,14 +1,17 @@
-import { z } from 'zod';
-import type { getWeather } from './ai/tools/get-weather';
-import type { createDocument } from './ai/tools/create-document';
-import type { updateDocument } from './ai/tools/update-document';
-import type { requestSuggestions } from './ai/tools/request-suggestions';
-import type { InferUITool, UIMessage } from 'ai';
+import type { InferUITool, UIDataTypes, UIMessage, UITools } from "ai";
+import { z } from "zod";
+import type { createDocument } from "./ai/tools/create-document";
+import type { getWeather } from "./ai/tools/get-weather";
+import type { requestSuggestions } from "./ai/tools/request-suggestions";
+import type { updateDocument } from "./ai/tools/update-document";
 
-import type { ArtifactKind } from '@/components/artifact';
-import type { Suggestion } from './db/schema';
+import type { AiSuggestion } from "@repo/db";
+import type { ArtifactKind } from "~/components/ai/artifact";
 
-export type DataPart = { type: 'append-message'; message: string };
+export interface DataPart {
+  type: "append-message";
+  message: string;
+}
 
 export const messageMetadataSchema = z.object({
   createdAt: z.string(),
@@ -23,26 +26,26 @@ type requestSuggestionsTool = InferUITool<
   ReturnType<typeof requestSuggestions>
 >;
 
-export type ChatTools = {
+export interface ChatTools extends UITools {
   getWeather: weatherTool;
   createDocument: createDocumentTool;
   updateDocument: updateDocumentTool;
   requestSuggestions: requestSuggestionsTool;
-};
+}
 
-export type CustomUIDataTypes = {
+export interface CustomUIDataTypes extends UIDataTypes {
   textDelta: string;
   imageDelta: string;
   sheetDelta: string;
   codeDelta: string;
-  suggestion: Suggestion;
+  suggestion: AiSuggestion;
   appendMessage: string;
   id: string;
   title: string;
   kind: ArtifactKind;
   clear: null;
   finish: null;
-};
+}
 
 export type ChatMessage = UIMessage<
   MessageMetadata,

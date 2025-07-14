@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client";
 
 import { isAfter } from "date-fns";
@@ -6,8 +8,8 @@ import { useState } from "react";
 import { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
 
-import type { Document } from "@/lib/db/schema";
-import { getDocumentTimestampByIndex } from "@repo/ui/lib/utils";
+import type { AiDocument } from "@repo/db";
+import { getDocumentTimestampByIndex } from "~/lib/utils";
 
 import { Button } from "@repo/ui/components/button";
 import { useArtifact } from "~/hooks/use-artifact";
@@ -15,7 +17,7 @@ import { LoaderIcon } from "./icons";
 
 interface VersionFooterProps {
   handleVersionChange: (type: "next" | "prev" | "toggle" | "latest") => void;
-  documents: Document[] | undefined;
+  documents: AiDocument[] | undefined;
   currentVersionIndex: number;
 }
 
@@ -55,16 +57,16 @@ export const VersionFooter = ({
           onClick={async () => {
             setIsMutating(true);
 
-            mutate(
-              `/api/document?id=${artifact.documentId}`,
+            await mutate(
+              `/api/ai/document?id=${artifact.documentId}`,
               await fetch(
-                `/api/document?id=${artifact.documentId}&timestamp=${getDocumentTimestampByIndex(
+                `/api/ai/document?id=${artifact.documentId}&timestamp=${getDocumentTimestampByIndex(
                   documents,
-                  currentVersionIndex
+                  currentVersionIndex,
                 )}`,
                 {
                   method: "DELETE",
-                }
+                },
               ),
               {
                 optimisticData: documents
@@ -75,14 +77,14 @@ export const VersionFooter = ({
                           new Date(
                             getDocumentTimestampByIndex(
                               documents,
-                              currentVersionIndex
-                            )
-                          )
-                        )
+                              currentVersionIndex,
+                            ),
+                          ),
+                        ),
                       ),
                     ]
                   : [],
-              }
+              },
             );
           }}
         >

@@ -6,7 +6,7 @@ import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { memo, useEffect, useRef } from "react";
 
-import type { Suggestion } from "@/lib/db/schema";
+import type { AiSuggestion } from "@repo/db";
 import {
   documentSchema,
   handleTransaction,
@@ -29,7 +29,7 @@ interface EditorProps {
   status: "streaming" | "idle";
   isCurrentVersion: boolean;
   currentVersionIndex: number;
-  suggestions: Suggestion[];
+  suggestions: AiSuggestion[];
 }
 
 function PureEditor({
@@ -93,7 +93,7 @@ function PureEditor({
   useEffect(() => {
     if (editorRef.current && content) {
       const currentContent = buildContentFromDocument(
-        editorRef.current.state.doc
+        editorRef.current.state.doc,
       );
 
       if (status === "streaming") {
@@ -102,7 +102,7 @@ function PureEditor({
         const transaction = editorRef.current.state.tr.replaceWith(
           0,
           editorRef.current.state.doc.content.size,
-          newDocument.content
+          newDocument.content,
         );
 
         transaction.setMeta("no-save", true);
@@ -116,7 +116,7 @@ function PureEditor({
         const transaction = editorRef.current.state.tr.replaceWith(
           0,
           editorRef.current.state.doc.content.size,
-          newDocument.content
+          newDocument.content,
         );
 
         transaction.setMeta("no-save", true);
@@ -129,14 +129,14 @@ function PureEditor({
     if (editorRef.current?.state.doc && content) {
       const projectedSuggestions = projectWithPositions(
         editorRef.current.state.doc,
-        suggestions
+        suggestions,
       ).filter(
-        (suggestion) => suggestion.selectionStart && suggestion.selectionEnd
+        (suggestion) => suggestion.selectionStart && suggestion.selectionEnd,
       );
 
       const decorations = createDecorations(
         projectedSuggestions,
-        editorRef.current
+        editorRef.current,
       );
 
       const transaction = editorRef.current.state.tr;

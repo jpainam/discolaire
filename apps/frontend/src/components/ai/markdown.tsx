@@ -1,11 +1,13 @@
-import Link from 'next/link';
-import React, { memo } from 'react';
-import ReactMarkdown, { type Components } from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { CodeBlock } from './code-block';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import Link from "next/link";
+import { memo } from "react";
+import type { Components } from "react-markdown";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { CodeBlock } from "./code-block";
 
 const components: Partial<Components> = {
-  // @ts-expect-error
+  // @ts-expect-error TODO fix this
   code: CodeBlock,
   pre: ({ children }) => <>{children}</>,
   ol: ({ node, children, ...props }) => {
@@ -38,7 +40,7 @@ const components: Partial<Components> = {
   },
   a: ({ node, children, ...props }) => {
     return (
-      // @ts-expect-error
+      // @ts-expect-error TODO fix this
       <Link
         className="text-blue-500 hover:underline"
         target="_blank"

@@ -1,18 +1,22 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useWindowSize } from 'usehooks-ts';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useWindowSize } from "usehooks-ts";
 
-import { ModelSelector } from '@/components/model-selector';
-import { SidebarToggle } from '@/components/sidebar-toggle';
-import { Button } from '@/components/ui/button';
-import { PlusIcon, VercelIcon } from './icons';
-import { useSidebar } from './ui/sidebar';
-import { memo } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { type VisibilityType, VisibilitySelector } from './visibility-selector';
-import type { Session } from 'next-auth';
+import type { Session } from "@repo/auth";
+import type { VisibilityType } from "@repo/db";
+import { Button } from "@repo/ui/components/button";
+import { useSidebar } from "@repo/ui/components/sidebar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
+import { memo } from "react";
+import { ModelSelector } from "~/components/ai/model-selector";
+import { PlusIcon, SidebarLeftIcon, VercelIcon } from "./icons";
+import { VisibilitySelector } from "./visibility-selector";
 
 function PureChatHeader({
   chatId,
@@ -28,13 +32,25 @@ function PureChatHeader({
   session: Session;
 }) {
   const router = useRouter();
-  const { open } = useSidebar();
+  const { open, toggleSidebar } = useSidebar();
 
   const { width: windowWidth } = useWindowSize();
 
   return (
     <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
-      <SidebarToggle />
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            data-testid="sidebar-toggle-button"
+            onClick={toggleSidebar}
+            variant="outline"
+            className="md:px-2 md:h-fit"
+          >
+            <SidebarLeftIcon size={16} />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent align="start">Toggle Sidebar</TooltipContent>
+      </Tooltip>
 
       {(!open || windowWidth < 768) && (
         <Tooltip>
@@ -43,7 +59,7 @@ function PureChatHeader({
               variant="outline"
               className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
               onClick={() => {
-                router.push('/');
+                router.push("/");
                 router.refresh();
               }}
             >

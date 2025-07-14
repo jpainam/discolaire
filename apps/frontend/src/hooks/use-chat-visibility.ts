@@ -1,12 +1,12 @@
 "use client";
 
+import { VisibilityType } from "@repo/db";
 import { useMemo } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
-import { updateChatVisibility } from "~/app/ai/(chat)/actions";
+import { updateChatVisibility } from "~/components/ai/actions";
 import type { ChatHistory } from "~/components/ai/sidebar-history";
 import { getChatHistoryPaginationKey } from "~/components/ai/sidebar-history";
-import type { VisibilityType } from "~/components/ai/visibility-selector";
 
 export function useChatVisibility({
   chatId,
@@ -16,28 +16,29 @@ export function useChatVisibility({
   initialVisibilityType: VisibilityType;
 }) {
   const { mutate, cache } = useSWRConfig();
-  const history: ChatHistory = cache.get("/api/history")?.data;
+  const history = cache.get("/api/ai/history")?.data as ChatHistory | undefined;
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { data: localVisibility, mutate: setLocalVisibility } = useSWR(
     `${chatId}-visibility`,
     null,
     {
       fallbackData: initialVisibilityType,
-    }
+    },
   );
 
   const visibilityType = useMemo(() => {
-    if (!history) return localVisibility;
+    if (!history) return localVisibility as VisibilityType;
     const chat = history.chats.find((chat) => chat.id === chatId);
-    if (!chat) return "private";
+    if (!chat) return VisibilityType.PRIVATE;
     return chat.visibility;
   }, [history, chatId, localVisibility]);
 
-  const setVisibilityType = (updatedVisibilityType: VisibilityType) => {
-    setLocalVisibility(updatedVisibilityType);
-    mutate(unstable_serialize(getChatHistoryPaginationKey));
+  const setVisibilityType = async (updatedVisibilityType: VisibilityType) => {
+    await setLocalVisibility(updatedVisibilityType);
+    await mutate(unstable_serialize(getChatHistoryPaginationKey));
 
-    updateChatVisibility({
+    await updateChatVisibility({
       chatId: chatId,
       visibility: updatedVisibilityType,
     });

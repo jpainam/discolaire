@@ -1,23 +1,24 @@
-'use client';
+"use client";
 
-import { startTransition, useMemo, useOptimistic, useState } from 'react';
+import { startTransition, useMemo, useOptimistic, useState } from "react";
 
-import { saveChatModelAsCookie } from '@/app/(chat)/actions';
-import { Button } from '@/components/ui/button';
+import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { chatModels } from '@/lib/ai/models';
-import { cn } from '@/lib/utils';
+} from "@repo/ui/components/dropdown-menu";
+import { saveChatModelAsCookie } from "~/components/ai/actions";
+import { chatModels } from "~/lib/ai/models";
+import { cn } from "~/lib/utils";
 
-import { CheckCircleFillIcon, ChevronDownIcon } from './icons';
-import { entitlementsByUserType } from '@/lib/ai/entitlements';
-import type { Session } from 'next-auth';
+import type { Session } from "@repo/auth";
+import { entitlementsByUserType } from "~/lib/ai/entitlements";
+import { CheckCircleFillIcon, ChevronDownIcon } from "./icons";
 
 export function ModelSelector({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   session,
   selectedModelId,
   className,
@@ -29,7 +30,7 @@ export function ModelSelector({
   const [optimisticModelId, setOptimisticModelId] =
     useOptimistic(selectedModelId);
 
-  const userType = session.user.type;
+  const userType = "regular"; //session.user.type;
   const { availableChatModelIds } = entitlementsByUserType[userType];
 
   const availableChatModels = chatModels.filter((chatModel) =>
@@ -49,7 +50,7 @@ export function ModelSelector({
       <DropdownMenuTrigger
         asChild
         className={cn(
-          'w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
+          "w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
           className,
         )}
       >
@@ -73,9 +74,9 @@ export function ModelSelector({
               onSelect={() => {
                 setOpen(false);
 
-                startTransition(() => {
+                startTransition(async () => {
                   setOptimisticModelId(id);
-                  saveChatModelAsCookie(id);
+                  await saveChatModelAsCookie(id);
                 });
               }}
               data-active={id === optimisticModelId}

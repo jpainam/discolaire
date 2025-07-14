@@ -1,26 +1,26 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import {
-  memo,
-  type MouseEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
-import type { ArtifactKind, UIArtifact } from './artifact';
-import { FileIcon, FullscreenIcon, ImageIcon, LoaderIcon } from './icons';
-import { cn, fetcher } from '@/lib/utils';
-import type { Document } from '@/lib/db/schema';
-import { InlineDocumentSkeleton } from './document-skeleton';
-import useSWR from 'swr';
-import { Editor } from './text-editor';
-import { DocumentToolCall, DocumentToolResult } from './document';
-import { CodeEditor } from './code-editor';
-import { useArtifact } from '@/hooks/use-artifact';
-import equal from 'fast-deep-equal';
-import { SpreadsheetEditor } from './sheet-editor';
-import { ImageEditor } from './image-editor';
+import type { AiDocument } from "@repo/db";
+import { DocumentKind } from "@repo/db";
+import equal from "fast-deep-equal";
+import type { MouseEvent } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import useSWR from "swr";
+import { useArtifact } from "~/hooks/use-artifact";
+import { cn, fetcher } from "~/lib/utils";
+import type { ArtifactKind, UIArtifact } from "./artifact";
+import { CodeEditor } from "./code-editor";
+import { DocumentToolCall, DocumentToolResult } from "./document";
+import { InlineDocumentSkeleton } from "./document-skeleton";
+import { FileIcon, FullscreenIcon, ImageIcon, LoaderIcon } from "./icons";
+import { ImageEditor } from "./image-editor";
+import { SpreadsheetEditor } from "./sheet-editor";
+import { Editor } from "./text-editor";
 
 interface DocumentPreviewProps {
   isReadonly: boolean;
@@ -36,8 +36,8 @@ export function DocumentPreview({
   const { artifact, setArtifact } = useArtifact();
 
   const { data: documents, isLoading: isDocumentsFetching } = useSWR<
-    Array<Document>
-  >(result ? `/api/document?id=${result.id}` : null, fetcher);
+    AiDocument[]
+  >(result ? `/api/ai/document?id=${result.id}` : null, fetcher);
 
   const previewDocument = useMemo(() => documents?.[0], [documents]);
   const hitboxRef = useRef<HTMLDivElement>(null);
@@ -84,32 +84,33 @@ export function DocumentPreview({
     return <LoadingSkeleton artifactKind={result.kind ?? args.kind} />;
   }
 
-  const document: Document | null = previewDocument
-    ? previewDocument
-    : artifact.status === 'streaming'
+  const document: AiDocument | null =
+    previewDocument ??
+    (artifact.status === "streaming"
       ? {
           title: artifact.title,
-          kind: artifact.kind,
+          kind: artifact.kind.toUpperCase() as DocumentKind,
           content: artifact.content,
           id: artifact.documentId,
           createdAt: new Date(),
-          userId: 'noop',
+          userId: "noop",
         }
-      : null;
+      : null);
 
   if (!document) return <LoadingSkeleton artifactKind={artifact.kind} />;
 
   return (
     <div className="relative w-full cursor-pointer">
       <HitboxLayer
+        // @ts-expect-error TODO fix this
         hitboxRef={hitboxRef}
         result={result}
         setArtifact={setArtifact}
       />
       <DocumentHeader
         title={document.title}
-        kind={document.kind}
-        isStreaming={artifact.status === 'streaming'}
+        kind={document.kind.toLocaleLowerCase() as ArtifactKind}
+        isStreaming={artifact.status === "streaming"}
       />
       <DocumentContent document={document} />
     </div>
@@ -129,7 +130,7 @@ const LoadingSkeleton = ({ artifactKind }: { artifactKind: ArtifactKind }) => (
         <FullscreenIcon />
       </div>
     </div>
-    {artifactKind === 'image' ? (
+    {artifactKind === "image" ? (
       <div className="overflow-y-scroll border rounded-b-2xl bg-muted border-t-0 dark:border-zinc-700">
         <div className="animate-pulse h-[257px] bg-muted-foreground/20 w-full" />
       </div>
@@ -157,7 +158,7 @@ const PureHitboxLayer = ({
       const boundingBox = event.currentTarget.getBoundingClientRect();
 
       setArtifact((artifact) =>
-        artifact.status === 'streaming'
+        artifact.status === "streaming"
           ? { ...artifact, isVisible: true }
           : {
               ...artifact,
@@ -215,7 +216,7 @@ const PureDocumentHeader = ({
           <div className="animate-spin">
             <LoaderIcon />
           </div>
-        ) : kind === 'image' ? (
+        ) : kind === "image" ? (
           <ImageIcon />
         ) : (
           <FileIcon />
@@ -234,19 +235,19 @@ const DocumentHeader = memo(PureDocumentHeader, (prevProps, nextProps) => {
   return true;
 });
 
-const DocumentContent = ({ document }: { document: Document }) => {
+const DocumentContent = ({ document }: { document: AiDocument }) => {
   const { artifact } = useArtifact();
 
   const containerClassName = cn(
-    'h-[257px] overflow-y-scroll border rounded-b-2xl dark:bg-muted border-t-0 dark:border-zinc-700',
+    "h-[257px] overflow-y-scroll border rounded-b-2xl dark:bg-muted border-t-0 dark:border-zinc-700",
     {
-      'p-4 sm:px-14 sm:py-16': document.kind === 'text',
-      'p-0': document.kind === 'code',
+      "p-4 sm:px-14 sm:py-16": document.kind === DocumentKind.TEXT,
+      "p-0": document.kind === DocumentKind.CODE,
     },
   );
 
   const commonProps = {
-    content: document.content ?? '',
+    content: document.content,
     isCurrentVersion: true,
     currentVersionIndex: 0,
     status: artifact.status,
@@ -256,24 +257,24 @@ const DocumentContent = ({ document }: { document: Document }) => {
 
   return (
     <div className={containerClassName}>
-      {document.kind === 'text' ? (
+      {document.kind === DocumentKind.TEXT ? (
         <Editor {...commonProps} onSaveContent={() => {}} />
-      ) : document.kind === 'code' ? (
+      ) : document.kind === DocumentKind.CODE ? (
         <div className="flex flex-1 relative w-full">
           <div className="absolute inset-0">
             <CodeEditor {...commonProps} onSaveContent={() => {}} />
           </div>
         </div>
-      ) : document.kind === 'sheet' ? (
+      ) : document.kind === DocumentKind.SHEET ? (
         <div className="flex flex-1 relative size-full p-4">
           <div className="absolute inset-0">
             <SpreadsheetEditor {...commonProps} />
           </div>
         </div>
-      ) : document.kind === 'image' ? (
+      ) : document.kind === DocumentKind.IMAGE ? (
         <ImageEditor
           title={document.title}
-          content={document.content ?? ''}
+          content={document.content}
           isCurrentVersion={true}
           currentVersionIndex={0}
           status={artifact.status}

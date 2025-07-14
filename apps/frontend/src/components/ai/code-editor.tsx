@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { EditorView } from '@codemirror/view';
-import { EditorState, Transaction } from '@codemirror/state';
-import { python } from '@codemirror/lang-python';
-import { oneDark } from '@codemirror/theme-one-dark';
-import { basicSetup } from 'codemirror';
-import React, { memo, useEffect, useRef } from 'react';
-import { Suggestion } from '@/lib/db/schema';
+import { python } from "@codemirror/lang-python";
+import { EditorState, Transaction } from "@codemirror/state";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { EditorView } from "@codemirror/view";
+import type { AiSuggestion } from "@repo/db";
+import { basicSetup } from "codemirror";
+import { memo, useEffect, useRef } from "react";
 
-type EditorProps = {
+interface EditorProps {
   content: string;
   onSaveContent: (updatedContent: string, debounce: boolean) => void;
-  status: 'streaming' | 'idle';
+  status: "streaming" | "idle";
   isCurrentVersion: boolean;
   currentVersionIndex: number;
-  suggestions: Array<Suggestion>;
-};
+  suggestions: AiSuggestion[];
+}
 
 function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,6 +54,7 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
 
           if (transaction) {
             const newContent = update.state.doc.toString();
+
             onSaveContent(newContent, true);
           }
         }
@@ -75,7 +76,7 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
     if (editorRef.current && content) {
       const currentContent = editorRef.current.state.doc.toString();
 
-      if (status === 'streaming' || currentContent !== content) {
+      if (status === "streaming" || currentContent !== content) {
         const transaction = editorRef.current.state.update({
           changes: {
             from: 0,
@@ -103,7 +104,7 @@ function areEqual(prevProps: EditorProps, nextProps: EditorProps) {
   if (prevProps.currentVersionIndex !== nextProps.currentVersionIndex)
     return false;
   if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) return false;
-  if (prevProps.status === 'streaming' && nextProps.status === 'streaming')
+  if (prevProps.status === "streaming" && nextProps.status === "streaming")
     return false;
   if (prevProps.content !== nextProps.content) return false;
 

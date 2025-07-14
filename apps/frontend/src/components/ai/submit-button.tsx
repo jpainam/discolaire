@@ -2,9 +2,8 @@
 
 import { useFormStatus } from "react-dom";
 
-import { LoaderIcon } from "~/components/icons";
-
 import { Button } from "@repo/ui/components/button";
+import { LoaderIcon } from "lucide-react";
 
 export function SubmitButton({
   children,

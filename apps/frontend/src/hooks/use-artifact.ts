@@ -1,15 +1,17 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import useSWR from 'swr';
-import { UIArtifact } from '@/components/artifact';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from "react";
+import useSWR from "swr";
+import type { UIArtifact } from "~/components/ai/artifact";
 
 export const initialArtifactData: UIArtifact = {
-  documentId: 'init',
-  content: '',
-  kind: 'text',
-  title: '',
-  status: 'idle',
+  documentId: "init",
+  content: "",
+  kind: "text",
+  title: "",
+  status: "idle",
   isVisible: false,
   boundingBox: {
     top: 0,
@@ -22,7 +24,7 @@ export const initialArtifactData: UIArtifact = {
 type Selector<T> = (state: UIArtifact) => T;
 
 export function useArtifactSelector<Selected>(selector: Selector<Selected>) {
-  const { data: localArtifact } = useSWR<UIArtifact>('artifact', null, {
+  const { data: localArtifact } = useSWR<UIArtifact>("artifact", null, {
     fallbackData: initialArtifactData,
   });
 
@@ -36,7 +38,7 @@ export function useArtifactSelector<Selected>(selector: Selector<Selected>) {
 
 export function useArtifact() {
   const { data: localArtifact, mutate: setLocalArtifact } = useSWR<UIArtifact>(
-    'artifact',
+    "artifact",
     null,
     {
       fallbackData: initialArtifactData,
@@ -50,10 +52,10 @@ export function useArtifact() {
 
   const setArtifact = useCallback(
     (updaterFn: UIArtifact | ((currentArtifact: UIArtifact) => UIArtifact)) => {
-      setLocalArtifact((currentArtifact) => {
-        const artifactToUpdate = currentArtifact || initialArtifactData;
+      void setLocalArtifact((currentArtifact) => {
+        const artifactToUpdate = currentArtifact ?? initialArtifactData;
 
-        if (typeof updaterFn === 'function') {
+        if (typeof updaterFn === "function") {
           return updaterFn(artifactToUpdate);
         }
 

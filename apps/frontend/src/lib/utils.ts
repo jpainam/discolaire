@@ -1,12 +1,37 @@
+import type { AiDocument, AiMessage } from "@repo/db";
+import type {
+  CoreAssistantMessage,
+  CoreToolMessage,
+  UIMessage,
+  UIMessagePart,
+} from "ai";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
+import { formatISO } from "date-fns";
 import i18next from "i18next";
 import { customAlphabet } from "nanoid";
 import { twMerge } from "tailwind-merge";
+import type { ErrorCode } from "./errors";
+import { ChatSDKError } from "./errors";
+import type { ChatMessage, ChatTools, CustomUIDataTypes } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+export const fetcher = async (url: string) => {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const { code, cause } = (await response.json()) as {
+      code: ErrorCode;
+      cause?: string;
+    };
+    throw new ChatSDKError(code, cause);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return response.json();
+};
 
 export function formatBytes(
   bytes: number,
@@ -83,4 +108,98 @@ export function getFileBasename(url: string): string {
   //const pathParts = parsedUrl.pathname.split("/");
   const pathParts = url.split("/");
   return pathParts.pop() ?? url;
+}
+
+export async function fetchWithErrorHandlers(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+) {
+  try {
+    const response = await fetch(input, init);
+
+    if (!response.ok) {
+      const { code, cause } = (await response.json()) as {
+        code: ErrorCode;
+        cause?: string;
+      };
+      throw new ChatSDKError(code, cause);
+    }
+
+    return response;
+  } catch (error: unknown) {
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      throw new ChatSDKError("offline:chat");
+    }
+
+    throw error;
+  }
+}
+
+export function getLocalStorage(key: string) {
+  if (typeof window !== "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return JSON.parse(localStorage.getItem(key) ?? "[]");
+  }
+  return [];
+}
+
+export function generateUUID(): string {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage;
+type ResponseMessage = ResponseMessageWithoutId & { id: string };
+
+export function getMostRecentUserMessage(messages: UIMessage[]) {
+  const userMessages = messages.filter((message) => message.role === "user");
+  return userMessages.at(-1);
+}
+
+export function getDocumentTimestampByIndex(
+  documents: AiDocument[],
+  index: number,
+) {
+  //if (!documents) return new Date();
+  if (index > documents.length) return new Date();
+  const document = documents[index];
+  if (!document) return new Date();
+  return document.createdAt;
+}
+
+export function getTrailingMessageId({
+  messages,
+}: {
+  messages: ResponseMessage[];
+}): string | null {
+  const trailingMessage = messages.at(-1);
+
+  if (!trailingMessage) return null;
+
+  return trailingMessage.id;
+}
+
+export function sanitizeText(text: string) {
+  return text.replace("<has_function_call>", "");
+}
+
+export function convertToUIMessages(messages: AiMessage[]): ChatMessage[] {
+  return messages.map((message) => ({
+    id: message.id,
+    role: message.role as "user" | "assistant" | "system",
+    parts: message.parts as UIMessagePart<CustomUIDataTypes, ChatTools>[],
+    metadata: {
+      createdAt: formatISO(message.createdAt),
+    },
+  }));
+}
+
+export function getTextFromMessage(message: ChatMessage): string {
+  return message.parts
+    .filter((part) => part.type === "text")
+    .map((part) => part.text)
+    .join("");
 }

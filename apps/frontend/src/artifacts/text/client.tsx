@@ -1,26 +1,26 @@
-import { Artifact } from '@/components/create-artifact';
-import { DiffView } from '@/components/diffview';
-import { DocumentSkeleton } from '@/components/document-skeleton';
-import { Editor } from '@/components/text-editor';
-import {
-  ClockRewind,
-  CopyIcon,
-  MessageIcon,
-  PenIcon,
-  RedoIcon,
-  UndoIcon,
-} from '@/components/icons';
-import type { Suggestion } from '@/lib/db/schema';
-import { toast } from 'sonner';
-import { getSuggestions } from '../actions';
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { Artifact } from "~/components/ai/create-artifact";
+import { DiffView } from "~/components/ai/diffview";
+import { DocumentSkeleton } from "~/components/ai/document-skeleton";
+import { Editor } from "~/components/ai/text-editor";
+
+import type { AiSuggestion } from "@repo/db";
+import { CopyIcon, PenIcon, RedoIcon, UndoIcon } from "lucide-react";
+import { toast } from "sonner";
+import { ClockRewind, MessageIcon } from "~/components/ai/icons";
+import { getSuggestions } from "../actions";
 
 interface TextArtifactMetadata {
-  suggestions: Array<Suggestion>;
+  suggestions: AiSuggestion[];
 }
 
-export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
-  kind: 'text',
-  description: 'Useful for text content, like drafting essays and emails.',
+export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
+  kind: "text",
+  description: "Useful for text content, like drafting essays and emails.",
   initialize: async ({ documentId, setMetadata }) => {
     const suggestions = await getSuggestions({ documentId });
 
@@ -29,7 +29,8 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     });
   },
   onStreamPart: ({ streamPart, setMetadata, setArtifact }) => {
-    if (streamPart.type === 'data-suggestion') {
+    if (streamPart.type === "data-suggestion") {
+      // @ts-expect-error TODO fix this
       setMetadata((metadata) => {
         return {
           suggestions: [...metadata.suggestions, streamPart.data],
@@ -37,18 +38,18 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
       });
     }
 
-    if (streamPart.type === 'data-textDelta') {
+    if (streamPart.type === "data-textDelta") {
       setArtifact((draftArtifact) => {
         return {
           ...draftArtifact,
           content: draftArtifact.content + streamPart.data,
           isVisible:
-            draftArtifact.status === 'streaming' &&
+            draftArtifact.status === "streaming" &&
             draftArtifact.content.length > 400 &&
             draftArtifact.content.length < 450
               ? true
               : draftArtifact.isVisible,
-          status: 'streaming',
+          status: "streaming",
         };
       });
     }
@@ -68,7 +69,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
       return <DocumentSkeleton artifactKind="text" />;
     }
 
-    if (mode === 'diff') {
+    if (mode === "diff") {
       const oldContent = getDocumentContentById(currentVersionIndex - 1);
       const newContent = getDocumentContentById(currentVersionIndex);
 
@@ -80,6 +81,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
         <div className="flex flex-row py-8 md:p-20 px-4">
           <Editor
             content={content}
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             suggestions={metadata ? metadata.suggestions : []}
             isCurrentVersion={isCurrentVersion}
             currentVersionIndex={currentVersionIndex}
@@ -87,7 +89,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
             onSaveContent={onSaveContent}
           />
 
-          {metadata?.suggestions && metadata.suggestions.length > 0 ? (
+          {metadata.suggestions.length > 0 ? (
             <div className="md:hidden h-dvh w-12 shrink-0" />
           ) : null}
         </div>
@@ -97,9 +99,9 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
   actions: [
     {
       icon: <ClockRewind size={18} />,
-      description: 'View changes',
+      description: "View changes",
       onClick: ({ handleVersionChange }) => {
-        handleVersionChange('toggle');
+        handleVersionChange("toggle");
       },
       isDisabled: ({ currentVersionIndex, setMetadata }) => {
         if (currentVersionIndex === 0) {
@@ -111,9 +113,9 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <UndoIcon size={18} />,
-      description: 'View Previous version',
+      description: "View Previous version",
       onClick: ({ handleVersionChange }) => {
-        handleVersionChange('prev');
+        handleVersionChange("prev");
       },
       isDisabled: ({ currentVersionIndex }) => {
         if (currentVersionIndex === 0) {
@@ -125,9 +127,9 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <RedoIcon size={18} />,
-      description: 'View Next version',
+      description: "View Next version",
       onClick: ({ handleVersionChange }) => {
-        handleVersionChange('next');
+        handleVersionChange("next");
       },
       isDisabled: ({ isCurrentVersion }) => {
         if (isCurrentVersion) {
@@ -139,24 +141,24 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <CopyIcon size={18} />,
-      description: 'Copy to clipboard',
+      description: "Copy to clipboard",
       onClick: ({ content }) => {
-        navigator.clipboard.writeText(content);
-        toast.success('Copied to clipboard!');
+        void navigator.clipboard.writeText(content);
+        toast.success("Copied to clipboard!");
       },
     },
   ],
   toolbar: [
     {
       icon: <PenIcon />,
-      description: 'Add final polish',
+      description: "Add final polish",
       onClick: ({ sendMessage }) => {
         sendMessage({
-          role: 'user',
+          role: "user",
           parts: [
             {
-              type: 'text',
-              text: 'Please add final polish and check for grammar, add section titles for better structure, and ensure everything reads smoothly.',
+              type: "text",
+              text: "Please add final polish and check for grammar, add section titles for better structure, and ensure everything reads smoothly.",
             },
           ],
         });
@@ -164,14 +166,14 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <MessageIcon />,
-      description: 'Request suggestions',
+      description: "Request suggestions",
       onClick: ({ sendMessage }) => {
         sendMessage({
-          role: 'user',
+          role: "user",
           parts: [
             {
-              type: 'text',
-              text: 'Please add suggestions you have that could improve the writing.',
+              type: "text",
+              text: "Please add suggestions you have that could improve the writing.",
             },
           ],
         });

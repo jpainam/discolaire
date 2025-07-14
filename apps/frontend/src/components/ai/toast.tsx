@@ -47,14 +47,14 @@ function Toast(props: ToastProps) {
         key={id}
         className={cn(
           "bg-zinc-100 p-3 rounded-lg w-full toast-mobile:w-fit flex flex-row gap-3",
-          multiLine ? "items-start" : "items-center"
+          multiLine ? "items-start" : "items-center",
         )}
       >
         <div
           data-type={type}
           className={cn(
             "data-[type=error]:text-red-600 data-[type=success]:text-green-600",
-            { "pt-1": multiLine }
+            { "pt-1": multiLine },
           )}
         >
           {iconsByType[type]}

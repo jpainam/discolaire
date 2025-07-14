@@ -1,23 +1,24 @@
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
 
-import { Chat } from '@/components/chat';
-import { DEFAULT_CHAT_MODEL } from '@/lib/ai/models';
-import { generateUUID } from '@/lib/utils';
-import { DataStreamHandler } from '@/components/data-stream-handler';
-import { auth } from '../(auth)/auth';
-import { redirect } from 'next/navigation';
+import { VisibilityType } from "@repo/db";
+import { redirect } from "next/navigation";
+import { getSession } from "~/auth/server";
+import { Chat } from "~/components/ai/chat";
+import { DataStreamHandler } from "~/components/ai/data-stream-handler";
+import { DEFAULT_CHAT_MODEL } from "~/lib/ai/models";
+import { generateUUID } from "~/lib/utils";
 
 export default async function Page() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session) {
-    redirect('/api/auth/guest');
+    redirect("/api/auth/guest");
   }
 
   const id = generateUUID();
 
   const cookieStore = await cookies();
-  const modelIdFromCookie = cookieStore.get('chat-model');
+  const modelIdFromCookie = cookieStore.get("chat-model");
 
   if (!modelIdFromCookie) {
     return (
@@ -27,7 +28,7 @@ export default async function Page() {
           id={id}
           initialMessages={[]}
           initialChatModel={DEFAULT_CHAT_MODEL}
-          initialVisibilityType="private"
+          initialVisibilityType={VisibilityType.PRIVATE}
           isReadonly={false}
           session={session}
           autoResume={false}
@@ -44,7 +45,7 @@ export default async function Page() {
         id={id}
         initialMessages={[]}
         initialChatModel={modelIdFromCookie.value}
-        initialVisibilityType="private"
+        initialVisibilityType={VisibilityType.PRIVATE}
         isReadonly={false}
         session={session}
         autoResume={false}

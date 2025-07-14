@@ -1,17 +1,19 @@
-import type { Node } from 'prosemirror-model';
-import { Plugin, PluginKey } from 'prosemirror-state';
-import {
-  type Decoration,
-  DecorationSet,
-  type EditorView,
-} from 'prosemirror-view';
-import { createRoot } from 'react-dom/client';
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type { Node } from "prosemirror-model";
+import { Plugin, PluginKey } from "prosemirror-state";
+import type { Decoration, EditorView } from "prosemirror-view";
+import { DecorationSet } from "prosemirror-view";
+import { createRoot } from "react-dom/client";
 
-import { Suggestion as PreviewSuggestion } from '@/components/suggestion';
-import type { Suggestion } from '@/lib/db/schema';
-import { ArtifactKind } from '@/components/artifact';
+import type { AiSuggestion } from "@repo/db";
+import type { ArtifactKind } from "~/components/ai/artifact";
+import { Suggestion as PreviewSuggestion } from "~/components/ai/suggestion";
 
-export interface UISuggestion extends Suggestion {
+export interface UISuggestion extends AiSuggestion {
   selectionStart: number;
   selectionEnd: number;
 }
@@ -46,8 +48,8 @@ function findPositionsInDoc(doc: Node, searchText: string): Position | null {
 
 export function projectWithPositions(
   doc: Node,
-  suggestions: Array<Suggestion>,
-): Array<UISuggestion> {
+  suggestions: AiSuggestion[],
+): UISuggestion[] {
   return suggestions.map((suggestion) => {
     const positions = findPositionsInDoc(doc, suggestion.originalText);
 
@@ -70,12 +72,12 @@ export function projectWithPositions(
 export function createSuggestionWidget(
   suggestion: UISuggestion,
   view: EditorView,
-  artifactKind: ArtifactKind = 'text',
+  artifactKind: ArtifactKind = "text",
 ): { dom: HTMLElement; destroy: () => void } {
-  const dom = document.createElement('span');
+  const dom = document.createElement("span");
   const root = createRoot(dom);
 
-  dom.addEventListener('mousedown', (event) => {
+  dom.addEventListener("mousedown", (event) => {
     event.preventDefault();
     view.dom.blur();
   });
@@ -108,7 +110,7 @@ export function createSuggestionWidget(
       state.schema.text(suggestion.suggestedText),
     );
 
-    textTransaction.setMeta('no-debounce', true);
+    textTransaction.setMeta("no-debounce", true);
 
     dispatch(textTransaction);
   };
@@ -132,7 +134,7 @@ export function createSuggestionWidget(
   };
 }
 
-export const suggestionsPluginKey = new PluginKey('suggestions');
+export const suggestionsPluginKey = new PluginKey("suggestions");
 export const suggestionsPlugin = new Plugin({
   key: suggestionsPluginKey,
   state: {

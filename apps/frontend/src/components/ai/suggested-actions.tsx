@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
 import type { UseChatHelpers } from "@ai-sdk/react";
+import type { VisibilityType } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { motion } from "framer-motion";
 import { memo } from "react";
 import type { ChatMessage } from "~/lib/types";
-import type { VisibilityType } from "./visibility-selector";
 
 interface SuggestedActionsProps {
   chatId: string;
+  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   selectedVisibilityType: VisibilityType;
 }
@@ -16,6 +18,7 @@ interface SuggestedActionsProps {
 function PureSuggestedActions({
   chatId,
   sendMessage,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   selectedVisibilityType,
 }: SuggestedActionsProps) {
   const suggestedActions = [
@@ -58,9 +61,9 @@ function PureSuggestedActions({
           <Button
             variant="ghost"
             onClick={async () => {
-              window.history.replaceState({}, "", `/chat/${chatId}`);
+              window.history.replaceState({}, "", `/ai/chat/${chatId}`);
 
-              sendMessage({
+              await sendMessage({
                 role: "user",
                 parts: [{ type: "text", text: suggestedAction.action }],
               });
@@ -86,5 +89,5 @@ export const SuggestedActions = memo(
       return false;
 
     return true;
-  }
+  },
 );

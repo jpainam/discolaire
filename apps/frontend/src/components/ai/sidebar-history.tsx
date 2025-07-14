@@ -1,6 +1,6 @@
 "use client";
 
-import type { Chat } from "@/lib/db/schema";
+import type { AiChat } from "@repo/db";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +19,6 @@ import {
 } from "@repo/ui/components/sidebar";
 import { isToday, isYesterday, subMonths, subWeeks } from "date-fns";
 import { motion } from "framer-motion";
-import type { User } from "next-auth";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -29,21 +28,21 @@ import { LoaderIcon } from "./icons";
 import { ChatItem } from "./sidebar-history-item";
 
 interface GroupedChats {
-  today: Chat[];
-  yesterday: Chat[];
-  lastWeek: Chat[];
-  lastMonth: Chat[];
-  older: Chat[];
+  today: AiChat[];
+  yesterday: AiChat[];
+  lastWeek: AiChat[];
+  lastMonth: AiChat[];
+  older: AiChat[];
 }
 
 export interface ChatHistory {
-  chats: Chat[];
+  chats: AiChat[];
   hasMore: boolean;
 }
 
 const PAGE_SIZE = 20;
 
-const groupChatsByDate = (chats: Chat[]): GroupedChats => {
+const groupChatsByDate = (chats: AiChat[]): GroupedChats => {
   const now = new Date();
   const oneWeekAgo = subWeeks(now, 1);
   const oneMonthAgo = subMonths(now, 1);
@@ -72,28 +71,28 @@ const groupChatsByDate = (chats: Chat[]): GroupedChats => {
       lastWeek: [],
       lastMonth: [],
       older: [],
-    } as GroupedChats
+    } as GroupedChats,
   );
 };
 
 export function getChatHistoryPaginationKey(
   pageIndex: number,
-  previousPageData: ChatHistory
+  previousPageData: ChatHistory,
 ) {
-  if (previousPageData && previousPageData.hasMore === false) {
+  if (previousPageData.hasMore === false) {
     return null;
   }
 
-  if (pageIndex === 0) return `/api/history?limit=${PAGE_SIZE}`;
+  if (pageIndex === 0) return `/api/ai/history?limit=${PAGE_SIZE}`;
 
   const firstChatFromPage = previousPageData.chats.at(-1);
 
   if (!firstChatFromPage) return null;
 
-  return `/api/history?ending_before=${firstChatFromPage.id}&limit=${PAGE_SIZE}`;
+  return `/api/ai/history?ending_before=${firstChatFromPage.id}&limit=${PAGE_SIZE}`;
 }
 
-export function SidebarHistory({ user }: { user: User | undefined }) {
+export function SidebarHistory() {
   const { setOpenMobile } = useSidebar();
   const { id } = useParams();
 
@@ -119,15 +118,15 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     ? paginatedChatHistories.every((page) => page.chats.length === 0)
     : false;
 
-  const handleDelete = async () => {
-    const deletePromise = fetch(`/api/chat?id=${deleteId}`, {
+  const handleDelete = () => {
+    const deletePromise = fetch(`/api/ai/chat?id=${deleteId}`, {
       method: "DELETE",
     });
 
     toast.promise(deletePromise, {
       loading: "Deleting chat...",
-      success: () => {
-        mutate((chatHistories) => {
+      success: async () => {
+        await mutate((chatHistories) => {
           if (chatHistories) {
             return chatHistories.map((chatHistory) => ({
               ...chatHistory,
@@ -144,21 +143,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     setShowDeleteDialog(false);
 
     if (deleteId === id) {
-      router.push("/");
+      router.push("/ai");
     }
   };
-
-  if (!user) {
-    return (
-      <SidebarGroup>
-        <SidebarGroupContent>
-          <div className="px-2 text-zinc-500 w-full flex flex-row justify-center items-center text-sm gap-2">
-            Login to save and revisit previous chats!
-          </div>
-        </SidebarGroupContent>
-      </SidebarGroup>
-    );
-  }
 
   if (isLoading) {
     return (
@@ -209,7 +196,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
             {paginatedChatHistories &&
               (() => {
                 const chatsFromHistory = paginatedChatHistories.flatMap(
-                  (paginatedChatHistory) => paginatedChatHistory.chats
+                  (paginatedChatHistory) => paginatedChatHistory.chats,
                 );
 
                 const groupedChats = groupChatsByDate(chatsFromHistory);
@@ -323,7 +310,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
           <motion.div
             onViewportEnter={() => {
               if (!isValidating && !hasReachedEnd) {
-                setSize((size) => size + 1);
+                void setSize((size) => size + 1);
               }
             }}
           />

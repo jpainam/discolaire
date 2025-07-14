@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
-import { auth } from "@/app/(auth)/auth";
-import { Chat } from "~/components/chat";
-import { getChatById, getMessagesByChatId } from "@/lib/db/queries";
-import { DataStreamHandler } from "@/components/data-stream-handler";
-import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
-import { convertToUIMessages } from "@/lib/utils";
+import { VisibilityType } from "@repo/db";
+import { getSession } from "~/auth/server";
+import { Chat } from "~/components/ai/chat";
+import { DataStreamHandler } from "~/components/ai/data-stream-handler";
+import { DEFAULT_CHAT_MODEL } from "~/lib/ai/models";
+import { getChatById, getMessagesByChatId } from "~/lib/ai/queries";
+import { convertToUIMessages } from "~/lib/utils";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -17,13 +19,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     notFound();
   }
 
-  const session = await auth();
+  const session = await getSession();
 
   if (!session) {
-    redirect("/api/auth/guest");
+    redirect("/auth/login");
   }
 
-  if (chat.visibility === "private") {
+  if (chat.visibility === VisibilityType.PRIVATE) {
     if (!session.user) {
       return notFound();
     }

@@ -1,19 +1,19 @@
-model Chat {
+model AiChat {
     id         String         @id @default(uuid())
     createdAt  DateTime       @default(now())
     title      String
     userId     String
     user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
     visibility VisibilityType @default(PRIVATE)
-    messages   Message[]
+    messages   AiMessage[]
     votes      Vote[]
     streams    Stream[]
 }
 
-model Message {
+model AiMessage {
     id          String   @id @default(uuid())
     chatId      String
-    chat        Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chat        AiChat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
     role        String
     parts       Json
     attachments Json
@@ -23,9 +23,9 @@ model Message {
 
 model Vote {
     chatId    String
-    chat      Chat    @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chat      AiChat    @relation(fields: [chatId], references: [id], onDelete: Cascade)
     messageId String
-    message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+    message   AiMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
     isUpvoted Boolean
 
     @@id([chatId, messageId])
@@ -47,7 +47,8 @@ model AiSuggestion {
     documentId        String
     document          AiDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
     documentCreatedAt DateTime   @default(now())
-    orignalText       String
+    originalText      String
+    suggestedText     String
     description       String
     isResolved        Boolean    @default(false)
     userId            String
@@ -58,7 +59,7 @@ model AiSuggestion {
 model Stream {
     id        String   @id @default(uuid())
     chatId    String
-    chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chat      AiChat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
     createdAt DateTime @default(now())
 }
 

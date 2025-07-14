@@ -1,13 +1,14 @@
-import { codeDocumentHandler } from '@/artifacts/code/server';
-import { imageDocumentHandler } from '@/artifacts/image/server';
-import { sheetDocumentHandler } from '@/artifacts/sheet/server';
-import { textDocumentHandler } from '@/artifacts/text/server';
-import type { ArtifactKind } from '@/components/artifact';
-import type { Document } from '../db/schema';
-import { saveDocument } from '../db/queries';
-import type { Session } from 'next-auth';
-import type { UIMessageStreamWriter } from 'ai';
-import type { ChatMessage } from '../types';
+import type { UIMessageStreamWriter } from "ai";
+import { codeDocumentHandler } from "~/artifacts/code/server";
+import { imageDocumentHandler } from "~/artifacts/image/server";
+import { sheetDocumentHandler } from "~/artifacts/sheet/server";
+import { textDocumentHandler } from "~/artifacts/text/server";
+import type { ArtifactKind } from "~/components/ai/artifact";
+
+import type { Session } from "@repo/auth";
+import type { AiDocument } from "@repo/db";
+import { saveDocument } from "../ai/queries";
+import type { ChatMessage } from "../types";
 
 export interface SaveDocumentProps {
   id: string;
@@ -25,7 +26,7 @@ export interface CreateDocumentCallbackProps {
 }
 
 export interface UpdateDocumentCallbackProps {
-  document: Document;
+  document: AiDocument;
   description: string;
   dataStream: UIMessageStreamWriter<ChatMessage>;
   session: Session;
@@ -52,7 +53,7 @@ export function createDocumentHandler<T extends ArtifactKind>(config: {
         session: args.session,
       });
 
-      if (args.session?.user?.id) {
+      if (args.session.user.id) {
         await saveDocument({
           id: args.id,
           title: args.title,
@@ -72,7 +73,7 @@ export function createDocumentHandler<T extends ArtifactKind>(config: {
         session: args.session,
       });
 
-      if (args.session?.user?.id) {
+      if (args.session.user.id) {
         await saveDocument({
           id: args.document.id,
           title: args.document.title,
@@ -90,11 +91,11 @@ export function createDocumentHandler<T extends ArtifactKind>(config: {
 /*
  * Use this array to define the document handlers for each artifact kind.
  */
-export const documentHandlersByArtifactKind: Array<DocumentHandler> = [
+export const documentHandlersByArtifactKind: DocumentHandler[] = [
   textDocumentHandler,
   codeDocumentHandler,
   imageDocumentHandler,
   sheetDocumentHandler,
 ];
 
-export const artifactKinds = ['text', 'code', 'image', 'sheet'] as const;
+export const artifactKinds = ["text", "code", "image", "sheet"] as const;

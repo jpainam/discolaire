@@ -1,16 +1,11 @@
 "use client";
 
 import { ChevronUp } from "lucide-react";
-import type { User } from "next-auth";
-import { signOut, useSession } from "next-auth/react";
+
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import type { User } from "@repo/db";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,17 +13,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@repo/ui/components/sidebar";
 import { useRouter } from "next/navigation";
+import { authClient, useSession } from "~/auth/client";
 import { guestRegex } from "~/lib/constants";
 import { LoaderIcon } from "./icons";
 import { toast } from "./toast";
 
 export function SidebarUserNav({ user }: { user: User }) {
   const router = useRouter();
-  const { data, status } = useSession();
+  const { data, isPending } = useSession();
   const { setTheme, resolvedTheme } = useTheme();
 
-  const isGuest = guestRegex.test(data?.user?.email ?? "");
+  const isGuest = guestRegex.test(data?.user.email ?? "");
 
   return (
     <SidebarMenu>
@@ -54,13 +55,13 @@ export function SidebarUserNav({ user }: { user: User }) {
               >
                 <Image
                   src={`https://avatar.vercel.sh/${user.email}`}
-                  alt={user.email ?? "User Avatar"}
+                  alt={user.email}
                   width={24}
                   height={24}
                   className="rounded-full"
                 />
                 <span data-testid="user-email" className="truncate">
-                  {isGuest ? "Guest" : user?.email}
+                  {isGuest ? "Guest" : user.email}
                 </span>
                 <ChevronUp className="ml-auto" />
               </SidebarMenuButton>
@@ -85,8 +86,8 @@ export function SidebarUserNav({ user }: { user: User }) {
               <button
                 type="button"
                 className="w-full cursor-pointer"
-                onClick={() => {
-                  if (status === "loading") {
+                onClick={async () => {
+                  if (isPending) {
                     toast({
                       type: "error",
                       description:
@@ -99,8 +100,12 @@ export function SidebarUserNav({ user }: { user: User }) {
                   if (isGuest) {
                     router.push("/login");
                   } else {
-                    signOut({
-                      redirectTo: "/",
+                    await authClient.signOut({
+                      fetchOptions: {
+                        onSuccess: () => {
+                          router.push("/auth/login"); // redirect to login page
+                        },
+                      },
                     });
                   }
                 }}

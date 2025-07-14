@@ -1,5 +1,6 @@
 "use client";
 
+import { VisibilityType } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -18,8 +19,6 @@ import {
   LockIcon,
 } from "./icons";
 
-export type VisibilityType = "private" | "public";
-
 const visibilities: {
   id: VisibilityType;
   label: string;
@@ -27,13 +26,13 @@ const visibilities: {
   icon: ReactNode;
 }[] = [
   {
-    id: "private",
+    id: VisibilityType.PRIVATE,
     label: "Private",
     description: "Only you can access this chat",
     icon: <LockIcon />,
   },
   {
-    id: "public",
+    id: VisibilityType.PRIVATE,
     label: "Public",
     description: "Anyone with the link can access this chat",
     icon: <GlobeIcon />,
@@ -57,7 +56,7 @@ export function VisibilitySelector({
 
   const selectedVisibility = useMemo(
     () => visibilities.find((visibility) => visibility.id === visibilityType),
-    [visibilityType]
+    [visibilityType],
   );
 
   return (
@@ -66,7 +65,7 @@ export function VisibilitySelector({
         asChild
         className={cn(
           "w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
-          className
+          className,
         )}
       >
         <Button
@@ -85,8 +84,8 @@ export function VisibilitySelector({
           <DropdownMenuItem
             data-testid={`visibility-selector-item-${visibility.id}`}
             key={visibility.id}
-            onSelect={() => {
-              setVisibilityType(visibility.id);
+            onSelect={async () => {
+              await setVisibilityType(visibility.id);
               setOpen(false);
             }}
             className="gap-4 group/item flex flex-row justify-between items-center"
