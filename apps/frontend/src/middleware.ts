@@ -24,8 +24,11 @@ const unProtectedRoutes = [
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  if (pathname.startsWith("/api/auth")) {
+    return NextResponse.next();
+  }
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
   const schoolYearId = request.cookies.get("x-school-year")?.value;
   if (isProtectedRoute && !schoolYearId) {

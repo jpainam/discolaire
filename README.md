@@ -13,7 +13,7 @@ Il est fortement conseillé d'utiliser une distribution Linux (Ubuntu ou Debian)
 
 1. Copier les fichier `setup.sh`, `env.example` et `database.sql` dans votre dossier de travail
 2. Ouvrir le terminal est executer `chmod +x setup.sh`
-3. Executer `. setup.sh`
+3. Executer `./setup.sh`
 
 ### Windows
 
