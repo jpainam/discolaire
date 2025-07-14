@@ -117,13 +117,13 @@ export function Chat({
       });
 
       setHasAppendedQuery(true);
-      window.history.replaceState({}, "", `/chat/${id}`);
+      window.history.replaceState({}, "", `/ai/chat/${id}`);
     }
   }, [query, sendMessage, hasAppendedQuery, id]);
 
   const { data: votes } = useSWR<Vote[]>(
-    messages.length >= 2 ? `/api/vote?chatId=${id}` : null,
-    fetcher,
+    messages.length >= 2 ? `/api/ai/vote?chatId=${id}` : null,
+    fetcher
   );
 
   const [attachments, setAttachments] = useState<Attachment[]>([]);
