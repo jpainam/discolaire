@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 import {
@@ -36,12 +35,10 @@ interface ToolProps {
   isToolbarVisible?: boolean;
   setIsToolbarVisible?: Dispatch<SetStateAction<boolean>>;
   isAnimating: boolean;
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   onClick: ({
     sendMessage,
   }: {
-    // @ts-expect-error TODO fix this
     sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   }) => void;
 }
@@ -140,7 +137,6 @@ const ReadingLevelSelector = ({
 }: {
   setSelectedTool: Dispatch<SetStateAction<string | null>>;
   isAnimating: boolean;
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
 }) => {
   const LEVELS = [
@@ -215,7 +211,7 @@ const ReadingLevelSelector = ({
               }}
               onClick={() => {
                 if (currentLevel !== 2 && hasUserSelectedLevel) {
-                  sendMessage({
+                  void sendMessage({
                     role: "user",
                     parts: [
                       {
@@ -257,7 +253,6 @@ export const Tools = ({
   isToolbarVisible: boolean;
   selectedTool: string | null;
   setSelectedTool: Dispatch<SetStateAction<string | null>>;
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   isAnimating: boolean;
   setIsToolbarVisible: Dispatch<SetStateAction<boolean>>;
@@ -317,14 +312,10 @@ const PureToolbar = ({
 }: {
   isToolbarVisible: boolean;
   setIsToolbarVisible: Dispatch<SetStateAction<boolean>>;
-  // @ts-expect-error TODO fix this
   status: UseChatHelpers<ChatMessage>["status"];
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
-  // @ts-expect-error TODO fix this
   stop: UseChatHelpers<ChatMessage>["stop"];
 
-  // @ts-expect-error TODO fix this
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
   artifactKind: ArtifactKind;
 }) => {
@@ -438,10 +429,9 @@ const PureToolbar = ({
             animate={{ scale: 1.4 }}
             exit={{ scale: 1 }}
             className="p-3"
-            onClick={() => {
-              stop();
-              // @ts-expect-error TODO fix this
-              setMessages((messages) => messages);
+            onClick={async () => {
+              await stop();
+              void setMessages((messages) => messages);
             }}
           >
             <StopIcon />

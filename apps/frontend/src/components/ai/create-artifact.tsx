@@ -27,7 +27,6 @@ interface ArtifactAction<M = any> {
 }
 
 export interface ArtifactToolbarContext {
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
 }
 

@@ -90,7 +90,9 @@
     "S3_BUCKET_NAME",
     "S3_AVATAR_BUCKET_NAME",
     "NEXT_PUBLIC_MINIO_URL",
-    "MESSAGING_SERVICE_URL"
+    "MESSAGING_SERVICE_URL",
+    "XAI_API_KEY",
+    "BLOB_READ_WRITE_TOKEN"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",

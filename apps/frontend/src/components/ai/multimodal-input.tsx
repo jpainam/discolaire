@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 "use client";
 
 import type { UIMessage } from "ai";
@@ -41,15 +40,12 @@ function PureMultimodalInput({
   chatId: string;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
-  // @ts-expect-error TODO fix this
   status: UseChatHelpers<ChatMessage>["status"];
   stop: () => void;
   attachments: Attachment[];
   setAttachments: Dispatch<SetStateAction<Attachment[]>>;
   messages: UIMessage[];
-  // @ts-expect-error TODO fix this
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   className?: string;
   selectedVisibilityType: VisibilityType;
@@ -344,7 +340,6 @@ function PureAttachmentsButton({
   status,
 }: {
   fileInputRef: React.RefObject<HTMLInputElement | null>;
-  // @ts-expect-error TODO fix this
   status: UseChatHelpers<ChatMessage>["status"];
 }) {
   return (
@@ -370,7 +365,6 @@ function PureStopButton({
   setMessages,
 }: {
   stop: () => void;
-  // @ts-expect-error TODO fix this
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
 }) {
   return (
@@ -380,8 +374,7 @@ function PureStopButton({
       onClick={(event) => {
         event.preventDefault();
         stop();
-        // @ts-expect-error TODO fix this
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
         setMessages((messages) => messages);
       }}
     >

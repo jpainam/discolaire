@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { UseChatHelpers } from "@ai-sdk/react";
 import type { Vote } from "@repo/db";
 import equal from "fast-deep-equal";
@@ -11,13 +10,10 @@ import { PreviewMessage, ThinkingMessage } from "./message";
 
 interface ArtifactMessagesProps {
   chatId: string;
-  // @ts-expect-error TODO fix this
   status: UseChatHelpers<ChatMessage>["status"];
   votes: Vote[] | undefined;
   messages: ChatMessage[];
-  // @ts-expect-error TODO fix this
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
-  // @ts-expect-error TODO fix this
   regenerate: UseChatHelpers<ChatMessage>["regenerate"];
   isReadonly: boolean;
   artifactStatus: UIArtifact["status"];
@@ -94,6 +90,7 @@ function areEqual(
     return true;
 
   if (prevProps.status !== nextProps.status) return false;
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (prevProps.status && nextProps.status) return false;
   if (prevProps.messages.length !== nextProps.messages.length) return false;
   if (!equal(prevProps.votes, nextProps.votes)) return false;

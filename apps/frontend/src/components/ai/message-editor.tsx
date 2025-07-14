@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
 import type { UseChatHelpers } from "@ai-sdk/react";
@@ -13,9 +12,7 @@ import { getTextFromMessage } from "~/lib/utils";
 export interface MessageEditorProps {
   message: ChatMessage;
   setMode: Dispatch<SetStateAction<"view" | "edit">>;
-  // @ts-expect-error TODO fix this
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
-  // @ts-expect-error TODO fix this
   regenerate: UseChatHelpers<ChatMessage>["regenerate"];
 }
 
@@ -98,7 +95,7 @@ export function MessageEditor({
             });
 
             setMode("view");
-            regenerate();
+            await regenerate();
           }}
         >
           {isSubmitting ? "Sending..." : "Send"}

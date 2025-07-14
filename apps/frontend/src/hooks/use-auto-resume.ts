@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 "use client";
 
 import type { UseChatHelpers } from "@ai-sdk/react";
@@ -10,9 +10,7 @@ import type { ChatMessage } from "~/lib/types";
 export interface UseAutoResumeParams {
   autoResume: boolean;
   initialMessages: ChatMessage[];
-  // @ts-expect-error - This is a custom type for the chat message status
   resumeStream: UseChatHelpers<ChatMessage>["resumeStream"];
-  // @ts-expect-error - This is a custom type for the chat message status
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
 }
 
@@ -30,7 +28,7 @@ export function useAutoResume({
     const mostRecentMessage = initialMessages.at(-1);
 
     if (mostRecentMessage?.role === "user") {
-      resumeStream();
+      void resumeStream();
     }
 
     // we intentionally run this once

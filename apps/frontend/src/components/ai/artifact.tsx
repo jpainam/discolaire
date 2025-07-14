@@ -65,19 +65,14 @@ function PureArtifact({
   chatId: string;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
-  // @ts-expect-error TODO fix this
   status: UseChatHelpers<ChatMessage>["status"];
-  // @ts-expect-error TODO fix this
   stop: UseChatHelpers<ChatMessage>["stop"];
   attachments: Attachment[];
   setAttachments: Dispatch<SetStateAction<Attachment[]>>;
   messages: ChatMessage[];
-  // @ts-expect-error TODO fix this
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
   votes: Vote[] | undefined;
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
-  // @ts-expect-error TODO fix this
   regenerate: UseChatHelpers<ChatMessage>["regenerate"];
   isReadonly: boolean;
   selectedVisibilityType: VisibilityType;

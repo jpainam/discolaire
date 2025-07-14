@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
 import type { UseChatHelpers } from "@ai-sdk/react";
@@ -10,7 +9,6 @@ import type { ChatMessage } from "~/lib/types";
 
 interface SuggestedActionsProps {
   chatId: string;
-  // @ts-expect-error TODO fix this
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   selectedVisibilityType: VisibilityType;
 }

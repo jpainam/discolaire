@@ -8,7 +8,6 @@ export function useMessages({
   status,
 }: {
   chatId: string;
-  // @ts-expect-error - This is a custom type for the chat message status
   status: UseChatHelpers<ChatMessage>["status"];
 }) {
   const {
