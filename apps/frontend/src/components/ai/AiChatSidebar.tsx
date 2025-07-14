@@ -19,12 +19,14 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { SidebarHistory } from "~/components/ai/sidebar-history";
 
-export function AppSidebar() {
+export function AiChatSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
 
   return (
-    <Sidebar className="group-data-[side=left]:border-r-0">
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <div className="flex flex-row justify-between items-center">
