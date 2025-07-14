@@ -9,6 +9,7 @@ import {
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 import { SidebarHistory } from "~/components/ai/sidebar-history";
 import { SidebarLogo } from "../sidebar-logo";
 
@@ -39,9 +40,11 @@ export function AiChatSidebar({
         </SidebarGroup> */}
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Plus />
-              <span>New Chat</span>
+            <SidebarMenuButton asChild>
+              <Link href="/ai">
+                <Plus />
+                <span>New Chat</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -59,7 +59,7 @@ export function getStreamContext() {
     } catch (error: any) {
       if (error.message.includes("REDIS_URL")) {
         console.log(
-          " > Resumable streams are disabled due to missing REDIS_URL",
+          " > Resumable streams are disabled due to missing REDIS_URL"
         );
       } else {
         console.error(error);
@@ -75,9 +75,10 @@ export async function POST(request: Request) {
 
   try {
     const json = await request.json();
+    console.log("Received JSON:", json); // Add this
     requestBody = postRequestBodySchema.parse(json);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (_) {
+  } catch (error) {
+    console.error("Invalid POST body:", error); // Add this
     return new ChatSDKError("bad_request:api").toResponse();
   }
 
@@ -91,7 +92,7 @@ export async function POST(request: Request) {
       id: string;
       message: ChatMessage;
       selectedChatModel: ChatModel["id"];
-      selectedVisibilityType: "public" | "private";
+      selectedVisibilityType: "PUBLIC" | "PRIVATE";
     } = requestBody;
 
     const session = await getSession();
@@ -196,7 +197,7 @@ export async function POST(request: Request) {
         dataStream.merge(
           result.toUIMessageStream({
             sendReasoning: true,
-          }),
+          })
         );
       },
       generateId: generateUUID,
@@ -223,8 +224,8 @@ export async function POST(request: Request) {
     if (streamContext) {
       return new Response(
         await streamContext.resumableStream(streamId, () =>
-          stream.pipeThrough(new JsonToSseTransformStream()),
-        ),
+          stream.pipeThrough(new JsonToSseTransformStream())
+        )
       );
     } else {
       return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
