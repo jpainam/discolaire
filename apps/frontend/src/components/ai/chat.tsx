@@ -33,6 +33,7 @@ export function Chat({
   initialChatModel,
   initialVisibilityType,
   isReadonly,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   session,
   autoResume,
 }: {
@@ -122,7 +123,7 @@ export function Chat({
 
   const { data: votes } = useSWR<Vote[]>(
     messages.length >= 2 ? `/api/ai/vote?chatId=${id}` : null,
-    fetcher
+    fetcher,
   );
 
   const [attachments, setAttachments] = useState<Attachment[]>([]);

@@ -16,7 +16,7 @@ export function SidebarLogo() {
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton size="lg" asChild>
-          <Link href="#dashboard">
+          <Link href="/">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <LayoutDashboard className="h-5 w-5" />
             </div>

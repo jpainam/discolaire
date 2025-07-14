@@ -10,8 +10,8 @@ import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
 //import { TimetableSidebar } from "./timetables/TimetableSidebar";
-import { UserSidebar } from "./users/UserSidebar";
 import { AiChatSidebar } from "./ai/AiChatSidebar";
+import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
