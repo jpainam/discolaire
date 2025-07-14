@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { streamObject } from "ai";
 import { z } from "zod";
 import { codePrompt, updateDocumentPrompt } from "~/lib/ai/prompts";
@@ -45,7 +44,7 @@ export const codeDocumentHandler = createDocumentHandler<"code">({
 
     const { fullStream } = streamObject({
       model: myProvider.languageModel("artifact-model"),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
       system: updateDocumentPrompt(document.content, "code"),
       prompt: description,
       schema: z.object({

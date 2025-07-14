@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { smoothStream, streamText } from "ai";
 import { updateDocumentPrompt } from "~/lib/ai/prompts";
 import { myProvider } from "~/lib/ai/providers";

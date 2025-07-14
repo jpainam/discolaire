@@ -50,7 +50,7 @@ export const sheetDocumentHandler = createDocumentHandler<"sheet">({
 
     const { fullStream } = streamObject({
       model: myProvider.languageModel("artifact-model"),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
+
       system: updateDocumentPrompt(document.content, "sheet"),
       prompt: description,
       schema: z.object({

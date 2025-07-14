@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
@@ -152,8 +152,8 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     {
       icon: <PenIcon />,
       description: "Add final polish",
-      onClick: ({ sendMessage }) => {
-        sendMessage({
+      onClick: async ({ sendMessage }) => {
+        await sendMessage({
           role: "user",
           parts: [
             {
@@ -167,8 +167,8 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     {
       icon: <MessageIcon />,
       description: "Request suggestions",
-      onClick: ({ sendMessage }) => {
-        sendMessage({
+      onClick: async ({ sendMessage }) => {
+        await sendMessage({
           role: "user",
           parts: [
             {

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -88,7 +86,7 @@ export const sheetArtifact = new Artifact<"sheet", Metadata>({
         const parsed = parse<string[]>(content, { skipEmptyLines: true });
 
         const nonEmptyRows = parsed.data.filter((row) =>
-          row.some((cell) => cell.trim() !== ""),
+          row.some((cell) => cell.trim() !== "")
         );
 
         const cleanedCsv = unparse(nonEmptyRows);
