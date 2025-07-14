@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { UseChatHelpers } from "@ai-sdk/react";
 import type { Vote } from "@repo/db";
 import equal from "fast-deep-equal";
@@ -12,13 +11,10 @@ import { PreviewMessage, ThinkingMessage } from "./message";
 
 interface MessagesProps {
   chatId: string;
-  // @ts-expect-error TODO fix this
   status: UseChatHelpers<ChatMessage>["status"];
   votes: Vote[] | undefined;
   messages: ChatMessage[];
-  // @ts-expect-error TODO fix this
   setMessages: UseChatHelpers<ChatMessage>["setMessages"];
-  // @ts-expect-error TODO fix this
   regenerate: UseChatHelpers<ChatMessage>["regenerate"];
   isReadonly: boolean;
   isArtifactVisible: boolean;

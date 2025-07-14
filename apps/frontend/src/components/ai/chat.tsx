@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -58,15 +57,11 @@ export function Chat({
   const {
     messages,
     setMessages,
-    // @ts-expect-error TODO fix this
     sendMessage,
     status,
     stop,
-    // @ts-expect-error TODO fix this
     regenerate,
-    // @ts-expect-error TODO fix this
     resumeStream,
-    // @ts-expect-error TODO fix this
   } = useChat<ChatMessage>({
     id,
     messages: initialMessages,
@@ -111,7 +106,7 @@ export function Chat({
 
   useEffect(() => {
     if (query && !hasAppendedQuery) {
-      sendMessage({
+      void sendMessage({
         role: "user" as const,
         parts: [{ type: "text", text: query }],
       });
@@ -123,7 +118,7 @@ export function Chat({
 
   const { data: votes } = useSWR<Vote[]>(
     messages.length >= 2 ? `/api/ai/vote?chatId=${id}` : null,
-    fetcher,
+    fetcher
   );
 
   const [attachments, setAttachments] = useState<Attachment[]>([]);
@@ -151,7 +146,6 @@ export function Chat({
           chatId={id}
           status={status}
           votes={votes}
-          // @ts-expect-error TODO fix this
           messages={messages}
           setMessages={setMessages}
           regenerate={regenerate}
@@ -169,7 +163,6 @@ export function Chat({
               stop={stop}
               attachments={attachments}
               setAttachments={setAttachments}
-              // @ts-expect-error TODO fix this
               messages={messages}
               setMessages={setMessages}
               sendMessage={sendMessage}
@@ -188,7 +181,6 @@ export function Chat({
         attachments={attachments}
         setAttachments={setAttachments}
         sendMessage={sendMessage}
-        // @ts-expect-error TODO fix this
         messages={messages}
         setMessages={setMessages}
         regenerate={regenerate}
