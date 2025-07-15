@@ -70,7 +70,6 @@ export async function getChatsByUserId({
   startingAfter: string | null;
   endingBefore: string | null;
 }) {
-  console.log(">>>>>>>>> The parameters", limit, startingAfter, endingBefore);
   try {
     const extendedLimit = limit + 1;
     let filteredChats = [];
