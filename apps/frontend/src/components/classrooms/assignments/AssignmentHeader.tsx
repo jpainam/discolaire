@@ -37,7 +37,7 @@ export function AssignmentHeader() {
   const Icon = sidebarIcons.assignments;
   const canCreateAssignment = useCheckPermission(
     "assignment",
-    PermissionAction.CREATE
+    PermissionAction.CREATE,
   );
   return (
     <div className="flex w-full flex-col">
@@ -60,7 +60,7 @@ export function AssignmentHeader() {
               className="w-56"
               onChange={(val) => {
                 router.push(
-                  `?${createQueryString({ from: val?.toLocaleDateString() })}`
+                  `?${createQueryString({ from: val?.toLocaleDateString() })}`,
                 );
               }}
             />
@@ -72,7 +72,7 @@ export function AssignmentHeader() {
               className="w-56"
               onChange={(val) => {
                 router.push(
-                  `?${createQueryString({ to: val?.toLocaleDateString() })}`
+                  `?${createQueryString({ to: val?.toLocaleDateString() })}`,
                 );
               }}
             />

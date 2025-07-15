@@ -50,7 +50,7 @@ export function TransactionHeader() {
           defaultValue={from}
           onChange={(val) => {
             router.push(
-              `?${createQueryString({ from: val?.toLocaleDateString() })}`
+              `?${createQueryString({ from: val?.toLocaleDateString() })}`,
             );
           }}
         />
@@ -61,7 +61,7 @@ export function TransactionHeader() {
           defaultValue={to}
           onChange={(val) => {
             router.push(
-              `?${createQueryString({ to: val?.toLocaleDateString() })}`
+              `?${createQueryString({ to: val?.toLocaleDateString() })}`,
             );
           }}
         />
