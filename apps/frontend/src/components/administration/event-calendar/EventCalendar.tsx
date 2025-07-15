@@ -73,7 +73,7 @@ export function EventCalendar() {
       end: searchParams.get("end")
         ? new Date(searchParams.get("end") ?? "")
         : undefined,
-    })
+    }),
   );
 
   const locales = {
@@ -121,7 +121,7 @@ export function EventCalendar() {
       });
     },
 
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const handleSelectEvent = useCallback(
@@ -132,7 +132,7 @@ export function EventCalendar() {
         view: <EventForm event={event} />,
       });
     },
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const { _views, scrollToTime, formats } = useMemo(
@@ -149,18 +149,18 @@ export function EventCalendar() {
         weekdayFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "EEE", culture),
         dayFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) =>
           localizer?.format(date, "EEE M/d", culture),
         timeGutterFormat: (
           date: Date,
           culture?: Culture,
-          localizer?: DateLocalizer
+          localizer?: DateLocalizer,
         ) => localizer?.format(date, "HH:mm", culture),
       } as Formats,
     }),
-    []
+    [],
   );
 
   const handleViewChange = (view: RbcView) => {

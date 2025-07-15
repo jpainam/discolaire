@@ -71,7 +71,7 @@ export function PureMessageActions({
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={() => {
-                const upvote = fetch("/api/vote", {
+                const upvote = fetch("/api/ai/vote", {
                   method: "PATCH",
                   body: JSON.stringify({
                     chatId,
@@ -89,7 +89,7 @@ export function PureMessageActions({
                         if (!currentVotes) return [];
 
                         const votesWithoutCurrent = currentVotes.filter(
-                          (vote) => vote.messageId !== message.id,
+                          (vote) => vote.messageId !== message.id
                         );
 
                         return [
@@ -101,7 +101,7 @@ export function PureMessageActions({
                           },
                         ];
                       },
-                      { revalidate: false },
+                      { revalidate: false }
                     );
 
                     return "Upvoted Response!";
@@ -124,7 +124,7 @@ export function PureMessageActions({
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={() => {
-                const downvote = fetch("/api/vote", {
+                const downvote = fetch("/api/ai/vote", {
                   method: "PATCH",
                   body: JSON.stringify({
                     chatId,
@@ -142,7 +142,7 @@ export function PureMessageActions({
                         if (!currentVotes) return [];
 
                         const votesWithoutCurrent = currentVotes.filter(
-                          (vote) => vote.messageId !== message.id,
+                          (vote) => vote.messageId !== message.id
                         );
 
                         return [
@@ -154,7 +154,7 @@ export function PureMessageActions({
                           },
                         ];
                       },
-                      { revalidate: false },
+                      { revalidate: false }
                     );
 
                     return "Downvoted Response!";
@@ -180,5 +180,5 @@ export const MessageActions = memo(
     if (prevProps.isLoading !== nextProps.isLoading) return false;
 
     return true;
-  },
+  }
 );
