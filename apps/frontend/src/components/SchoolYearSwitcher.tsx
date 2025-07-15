@@ -23,7 +23,7 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: schoolYears } = useSuspenseQuery(
-    trpc.schoolYear.all.queryOptions(),
+    trpc.schoolYear.all.queryOptions()
   );
 
   return (
@@ -38,12 +38,8 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
         size="sm"
         className="h-7 justify-start *:data-[slot=select-value]:w-fit "
       >
-        <span className="text-muted-foreground hidden sm:block">
-          {t("year")}:
-        </span>
-        <span className="text-muted-foreground block sm:hidden">
-          {t("year")}
-        </span>
+        <span className="text-muted-foreground hidden sm:block">Année:</span>
+        <span className="text-muted-foreground block sm:hidden">Année</span>
 
         <SelectValue placeholder={t("school_year")} />
       </SelectTrigger>

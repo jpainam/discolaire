@@ -3,6 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -38,16 +39,18 @@ export function AiChatSidebar({
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup> */}
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/ai">
-                <Plus />
-                <span>New Chat</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/ai">
+                  <Plus />
+                  <span>New Chat</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
         <SidebarHistory />
       </SidebarContent>
       {/* <SidebarFooter>{<SidebarUserNav  />}</SidebarFooter> */}
