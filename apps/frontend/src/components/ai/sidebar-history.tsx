@@ -71,19 +71,20 @@ const groupChatsByDate = (chats: AiChat[]): GroupedChats => {
       lastWeek: [],
       lastMonth: [],
       older: [],
-    } as GroupedChats,
+    } as GroupedChats
   );
 };
 
 export function getChatHistoryPaginationKey(
   pageIndex: number,
-  previousPageData: ChatHistory,
+  previousPageData?: ChatHistory
 ) {
-  if (previousPageData.hasMore === false) {
+  if (previousPageData && previousPageData.hasMore === false) {
     return null;
   }
 
-  if (pageIndex === 0) return `/api/ai/history?limit=${PAGE_SIZE}`;
+  if (pageIndex === 0 || !previousPageData)
+    return `/api/ai/history?limit=${PAGE_SIZE}`;
 
   const firstChatFromPage = previousPageData.chats.at(-1);
 
@@ -196,7 +197,7 @@ export function SidebarHistory() {
             {paginatedChatHistories &&
               (() => {
                 const chatsFromHistory = paginatedChatHistories.flatMap(
-                  (paginatedChatHistory) => paginatedChatHistory.chats,
+                  (paginatedChatHistory) => paginatedChatHistory.chats
                 );
 
                 const groupedChats = groupChatsByDate(chatsFromHistory);
