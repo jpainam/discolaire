@@ -58,7 +58,7 @@ async function RelativeDayLabel({ date }: { date: Date }) {
   let label = "";
   switch (diff) {
     case 0:
-      label = "today";
+      label = "Today";
       break;
     case 1:
       label = "yesterday";
