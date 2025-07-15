@@ -49,7 +49,9 @@ export function TransactionHeader() {
         <DatePicker
           defaultValue={from}
           onChange={(val) => {
-            router.push(`?${createQueryString({ from: val?.toDateString() })}`);
+            router.push(
+              `?${createQueryString({ from: val?.toLocaleDateString() })}`
+            );
           }}
         />
       </div>
@@ -58,7 +60,9 @@ export function TransactionHeader() {
         <DatePicker
           defaultValue={to}
           onChange={(val) => {
-            router.push(`?${createQueryString({ to: val?.toDateString() })}`);
+            router.push(
+              `?${createQueryString({ to: val?.toLocaleDateString() })}`
+            );
           }}
         />
       </div>
