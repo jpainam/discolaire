@@ -25,25 +25,25 @@ export function GradeList({
 }) {
   const maxGrade = Math.max(...allGrades.map((grade) => grade.grade));
   const minGrade = Math.min(
-    ...allGrades.filter((g) => !g.isAbsent).map((grade) => grade.grade),
+    ...allGrades.filter((g) => !g.isAbsent).map((grade) => grade.grade)
   );
   const grades10 = allGrades.filter((grade) => grade.grade >= 10).length;
   const len = allGrades.filter((grade) => !grade.isAbsent).length || 1e9;
 
   const maleCount = allGrades.filter(
-    (grade) => !grade.isAbsent && grade.student.gender == "male",
+    (grade) => !grade.isAbsent && grade.student.gender == "male"
   ).length;
   const males10Rate =
     allGrades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / (maleCount == 0 ? 1e9 : maleCount);
 
   const femaleCount = allGrades.filter(
-    (grade) => !grade.isAbsent && grade.student.gender == "female",
+    (grade) => !grade.isAbsent && grade.student.gender == "female"
   ).length;
   const females10Rate =
     allGrades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const dateFormatter = Intl.DateTimeFormat("fr", {
@@ -73,7 +73,7 @@ export function GradeList({
             gap: 6,
           }}
         >
-          <IPBWHeader style={{ fontSize: 7 }} school={school} />
+          {getHeader(school, { fontSize: 7 })}
           <View
             style={{
               flexDirection: "column",

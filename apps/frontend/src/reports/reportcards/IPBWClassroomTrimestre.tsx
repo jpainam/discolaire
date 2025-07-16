@@ -3,7 +3,7 @@ import _, { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 import { getAppreciations, getTitle } from "../utils";
 import { IPBWSignatureTrimestre } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
@@ -37,7 +37,7 @@ export function IPBWClassroomTrimestre({
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   const primaryContactsMap = new Map(
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    contacts.filter((c) => c.studentId != null).map((c) => [c.studentId, c]),
+    contacts.filter((c) => c.studentId != null).map((c) => [c.studentId, c])
   );
   const groups = _.groupBy(subjects, "subjectGroupId");
   const averages = values.map((g) => g.average);
@@ -71,7 +71,7 @@ export function IPBWClassroomTrimestre({
             }}
           >
             <View style={{ flexDirection: "column" }}>
-              <IPBWHeader school={school} />
+              {getHeader(school, { fontSize: 7 })}
               <View
                 style={{
                   flexDirection: "column",
@@ -121,7 +121,7 @@ export function IPBWClassroomTrimestre({
                 <IPBWTableHeader seq1={seq1} seq2={seq2} W={W} />
                 {Object.keys(groups).map((groupId: string) => {
                   const items = groups[Number(groupId)]?.sort(
-                    (a, b) => a.order - b.order,
+                    (a, b) => a.order - b.order
                   );
 
                   if (!items) return null;
@@ -132,7 +132,7 @@ export function IPBWClassroomTrimestre({
                     <>
                       {items.map((subject, index) => {
                         const grade = studentReport.studentCourses.find(
-                          (c) => c.subjectId === subject.id,
+                          (c) => c.subjectId === subject.id
                         );
                         const subjectSummary = summary.get(subject.id);
                         coeff +=
@@ -327,9 +327,9 @@ export function IPBWClassroomTrimestre({
                               items.map(
                                 (subject) =>
                                   studentReport.studentCourses.find(
-                                    (c) => c.subjectId === subject.id,
-                                  )?.total ?? 0,
-                              ),
+                                    (c) => c.subjectId === subject.id
+                                  )?.total ?? 0
+                              )
                             ).toFixed(1)}
                           </Text>
                         </View>
@@ -348,9 +348,9 @@ export function IPBWClassroomTrimestre({
                                 items.map(
                                   (subject) =>
                                     studentReport.studentCourses.find(
-                                      (c) => c.subjectId === subject.id,
-                                    )?.total,
-                                ),
+                                      (c) => c.subjectId === subject.id
+                                    )?.total
+                                )
                               ) / (coeff || 1)
                             ).toFixed(2)}
                           </Text>
@@ -417,7 +417,7 @@ export function IPBWClassroomTrimestre({
                       {sum(
                         studentReport.studentCourses
                           .filter((s) => s.average != null)
-                          .map((s) => s.coeff),
+                          .map((s) => s.coeff)
                       )}
                     </Text>
                   </View>
@@ -433,7 +433,7 @@ export function IPBWClassroomTrimestre({
                       {sum(
                         studentReport.studentCourses
                           .filter((s) => s.average != null)
-                          .map((s) => s.total ?? 0),
+                          .map((s) => s.total ?? 0)
                       ).toFixed(1)}
                     </Text>
                   </View>

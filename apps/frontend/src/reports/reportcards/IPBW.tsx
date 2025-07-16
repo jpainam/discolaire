@@ -60,7 +60,7 @@ export function IPBW({
         }}
       >
         <View style={{ flexDirection: "column" }}>
-          <IPBWHeader school={school} />
+          {getHeader(school)}
           <View
             style={{
               flexDirection: "column",
@@ -111,7 +111,7 @@ export function IPBW({
             <IPBWTableHeader W={W} />
             {Object.keys(groups).map((groupId: string, index: number) => {
               const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order,
+                (a, b) => a.order - b.order
               );
 
               if (!items) return null;
@@ -121,7 +121,7 @@ export function IPBW({
                 <>
                   {items.map((subject, index2) => {
                     const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id,
+                      (c) => c.subjectId === subject.id
                     );
                     const subjectSummary = summary.get(subject.id);
                     coeff += grade?.grade != null ? subject.coefficient : 0;
@@ -286,9 +286,9 @@ export function IPBW({
                           items.map(
                             (subject) =>
                               studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id,
-                              )?.total,
-                          ),
+                                (c) => c.subjectId === subject.id
+                              )?.total
+                          )
                         ).toFixed(1)}
                       </Text>
                     </View>
@@ -307,9 +307,9 @@ export function IPBW({
                             items.map(
                               (subject) =>
                                 studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id,
-                                )?.total,
-                            ),
+                                  (c) => c.subjectId === subject.id
+                                )?.total
+                            )
                           ) / (coeff || 1)
                         ).toFixed(2)}
                       </Text>

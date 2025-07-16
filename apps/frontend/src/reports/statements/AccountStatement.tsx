@@ -7,7 +7,7 @@ import "../fonts";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 // const CDN_URL = "https://discolaire-public.s3.eu-central-1.amazonaws.com";
 
@@ -58,7 +58,7 @@ export async function AcccountStatement({
       width: 40 * 3,
       height: 40 * 3,
       margin: 0,
-    },
+    }
   );
   let balance = 0;
   let month = getMonth(new Date());
@@ -79,7 +79,7 @@ export async function AcccountStatement({
         }}
       >
         <View style={{ flexDirection: "column", marginBottom: 40 }}>
-          <IPBWHeader school={school} />
+          {getHeader(school, { fontSize: 7 })}
 
           <Text
             style={{

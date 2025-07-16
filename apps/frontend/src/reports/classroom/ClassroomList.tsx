@@ -5,6 +5,7 @@ import { decode } from "entities";
 import type { RouterOutputs } from "@repo/api";
 
 import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export function ClassroomList({
   school,
@@ -36,7 +37,8 @@ export function ClassroomList({
             gap: 6,
           }}
         >
-          <IPBWHeader school={school} />
+          {getHeader(school)}
+
           <Text
             style={{
               alignSelf: "center",

@@ -3,8 +3,7 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 import type { RouterOutputs } from "@repo/api";
 
 import "../fonts";
-
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export function TransactionList({
   transactions,
@@ -29,12 +28,7 @@ export function TransactionList({
         }}
       >
         <View style={{ flexDirection: "column", display: "flex", gap: 6 }}>
-          <IPBWHeader
-            style={{
-              fontSize: 7,
-            }}
-            school={school}
-          />
+          {getHeader(school, { fontSize: 7 })}
           <View
             style={{
               flexDirection: "column",

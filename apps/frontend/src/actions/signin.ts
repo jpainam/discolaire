@@ -9,7 +9,7 @@ import { caller } from "~/trpc/server";
 
 export async function signIn(
   prevState: { error?: string } | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<{ error?: string } | undefined> {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;

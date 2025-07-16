@@ -46,7 +46,8 @@ export function FinanceList({
             gap: 6,
           }}
         >
-          <IPBWHeader style={{ fontSize: 7 }} school={school} />
+          {getHeader(school, { fontSize: 7 })}
+
           <View
             style={{
               flexDirection: "column",

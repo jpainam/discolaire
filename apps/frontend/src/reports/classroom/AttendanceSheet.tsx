@@ -6,7 +6,7 @@ import { decode } from "entities";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export function AttendanceSheet({
   school,
@@ -41,7 +41,7 @@ export function AttendanceSheet({
             flexDirection: "column",
           }}
         >
-          <IPBWHeader school={school} />
+          {getHeader(school)}
           <View
             style={{
               flexDirection: "column",

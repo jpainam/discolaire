@@ -38,7 +38,7 @@ export function IPBWClassroom({
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   const primaryContactsMap = new Map(
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    contacts.filter((c) => c.studentId != null).map((c) => [c.studentId, c]),
+    contacts.filter((c) => c.studentId != null).map((c) => [c.studentId, c])
   );
   const groups = _.groupBy(subjects, "subjectGroupId");
   const averages = values.map((g) => g.average);
@@ -70,7 +70,7 @@ export function IPBWClassroom({
             }}
           >
             <View style={{ flexDirection: "column" }}>
-              <IPBWHeader school={school} />
+              {getHeader(school)}
               <View
                 style={{
                   flexDirection: "column",
@@ -120,7 +120,7 @@ export function IPBWClassroom({
                 <IPBWTableHeader W={W} />
                 {Object.keys(groups).map((groupId: string, index: number) => {
                   const items = groups[Number(groupId)]?.sort(
-                    (a, b) => a.order - b.order,
+                    (a, b) => a.order - b.order
                   );
 
                   if (!items) return null;
@@ -131,7 +131,7 @@ export function IPBWClassroom({
                     <>
                       {items.map((subject, index) => {
                         const grade = studentReport.studentCourses.find(
-                          (c) => c.subjectId === subject.id,
+                          (c) => c.subjectId === subject.id
                         );
                         const subjectSummary = summary.get(subject.id);
                         coeff += grade?.grade != null ? subject.coefficient : 0;
@@ -308,9 +308,9 @@ export function IPBWClassroom({
                               items.map(
                                 (subject) =>
                                   studentReport.studentCourses.find(
-                                    (c) => c.subjectId === subject.id,
-                                  )?.total ?? 0,
-                              ),
+                                    (c) => c.subjectId === subject.id
+                                  )?.total ?? 0
+                              )
                             ).toFixed(1)}
                           </Text>
                         </View>
@@ -329,9 +329,9 @@ export function IPBWClassroom({
                                 items.map(
                                   (subject) =>
                                     studentReport.studentCourses.find(
-                                      (c) => c.subjectId === subject.id,
-                                    )?.total,
-                                ),
+                                      (c) => c.subjectId === subject.id
+                                    )?.total
+                                )
                               ) / (coeff || 1)
                             ).toFixed(2)}
                           </Text>

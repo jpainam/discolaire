@@ -4,7 +4,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import "../fonts";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export function LoginInfo({
   student,
@@ -30,12 +30,7 @@ export function LoginInfo({
         }}
       >
         <View style={{ flexDirection: "column", display: "flex", gap: 6 }}>
-          <IPBWHeader
-            style={{
-              fontSize: 7,
-            }}
-            school={school}
-          />
+          {getHeader(school, { fontSize: 7 })}
           <View style={{ marginVertical: 10, flexDirection: "column", gap: 6 }}>
             <Text
               style={{ fontSize: 12, fontWeight: "bold", alignSelf: "center" }}

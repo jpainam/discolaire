@@ -5,8 +5,7 @@ import type { RouterOutputs } from "@repo/api";
 import "../fonts";
 
 import type { Style } from "@react-pdf/stylesheet";
-
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export function StudentPage({
   student,
@@ -31,12 +30,7 @@ export function StudentPage({
         }}
       >
         <View style={{ flexDirection: "column", display: "flex", gap: 6 }}>
-          <IPBWHeader
-            style={{
-              fontSize: 7,
-            }}
-            school={school}
-          />
+          {getHeader(school, { fontSize: 7 })}
 
           <Text
             style={{

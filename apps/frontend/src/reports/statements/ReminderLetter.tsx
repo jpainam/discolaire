@@ -36,7 +36,7 @@ export function ReminderLetter({
         {reminders.map((reminder) => {
           return (
             <View style={{ flexDirection: "column", marginBottom: 40 }}>
-              <IPBWHeader school={school} />
+              {getHeader(school)}
               <View
                 style={{
                   justifyContent: "center",
