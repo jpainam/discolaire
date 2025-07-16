@@ -25,7 +25,7 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const router = useRouter();
   const trpc = useTRPC();
   const { data: schoolYears } = useSuspenseQuery(
-    trpc.schoolYear.all.queryOptions()
+    trpc.schoolYear.all.queryOptions(),
   );
 
   return (
