@@ -8,7 +8,7 @@ import "../fonts";
 
 import { decode } from "entities";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export function GradesheetList({
   school,

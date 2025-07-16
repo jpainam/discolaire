@@ -4,7 +4,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import "../fonts";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 import { getAppreciations } from "../utils";
 
 export function GradeList({

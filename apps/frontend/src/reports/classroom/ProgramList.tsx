@@ -7,7 +7,7 @@ import "../fonts";
 //import { getServerTranslations } from "~/i18n/server";
 import { decode } from "entities";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export function ProgramList({
   school,

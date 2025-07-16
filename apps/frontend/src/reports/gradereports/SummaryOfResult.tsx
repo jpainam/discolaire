@@ -9,7 +9,7 @@ import "../fonts";
 //import { getServerTranslations } from "~/i18n/server";
 
 import { caller } from "~/trpc/server";
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 export async function SummaryOfResult({
   globalRanks,

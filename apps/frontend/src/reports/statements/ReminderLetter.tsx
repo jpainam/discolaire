@@ -3,7 +3,7 @@ import { toZonedTime } from "date-fns-tz";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 
 interface ReminderLetterProps {
   school: RouterOutputs["school"]["getSchool"];

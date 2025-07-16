@@ -4,7 +4,6 @@ import { decode } from "entities";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
 import { getHeader } from "../headers";
 
 export function ClassroomList({

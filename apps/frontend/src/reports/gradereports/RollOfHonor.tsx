@@ -8,7 +8,7 @@ import "../fonts";
 
 //import { getServerTranslations } from "~/i18n/server";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 import { getAppreciations } from "../utils";
 
 export function RollOfHonor({

@@ -6,7 +6,7 @@ import _, { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
+import { getHeader } from "../headers";
 import { getAppreciations, getTitle } from "../utils";
 import { IPBWSignatureTrimestre } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
@@ -111,7 +111,7 @@ export function IPBWTrimestre({
             <IPBWTableHeader seq1={seq1} seq2={seq2} W={W} />
             {Object.keys(groups).map((groupId: string) => {
               const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order
+                (a, b) => a.order - b.order,
               );
 
               if (!items) return null;
@@ -121,7 +121,7 @@ export function IPBWTrimestre({
                 <>
                   {items.map((subject, index2) => {
                     const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id
+                      (c) => c.subjectId === subject.id,
                     );
                     const subjectSummary = summary.get(subject.id);
                     coeff += grade?.average != null ? subject.coefficient : 0;
@@ -302,9 +302,9 @@ export function IPBWTrimestre({
                           items.map(
                             (subject) =>
                               studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id
-                              )?.total
-                          )
+                                (c) => c.subjectId === subject.id,
+                              )?.total,
+                          ),
                         ).toFixed(1)}
                       </Text>
                     </View>
@@ -323,9 +323,9 @@ export function IPBWTrimestre({
                             items.map(
                               (subject) =>
                                 studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id
-                                )?.total
-                            )
+                                  (c) => c.subjectId === subject.id,
+                                )?.total,
+                            ),
                           ) / (coeff || 1)
                         ).toFixed(2)}
                       </Text>
@@ -392,7 +392,7 @@ export function IPBWTrimestre({
                   {sum(
                     studentReport.studentCourses
                       .filter((s) => s.average != null)
-                      .map((s) => s.coeff)
+                      .map((s) => s.coeff),
                   )}
                 </Text>
               </View>
@@ -408,7 +408,7 @@ export function IPBWTrimestre({
                   {sum(
                     studentReport.studentCourses
                       .filter((s) => s.average != null)
-                      .map((s) => s.total ?? 0)
+                      .map((s) => s.total ?? 0),
                   ).toFixed(1)}
                 </Text>
               </View>

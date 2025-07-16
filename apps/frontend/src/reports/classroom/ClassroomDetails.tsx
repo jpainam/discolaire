@@ -2,7 +2,6 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { IPBWHeader } from "../headers/IPBWHeader";
 import { getHeader } from "../headers";
 
 //import { getServerTranslations } from "~/i18n/server";

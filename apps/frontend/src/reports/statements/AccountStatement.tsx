@@ -58,7 +58,7 @@ export async function AcccountStatement({
       width: 40 * 3,
       height: 40 * 3,
       margin: 0,
-    }
+    },
   );
   let balance = 0;
   let month = getMonth(new Date());
