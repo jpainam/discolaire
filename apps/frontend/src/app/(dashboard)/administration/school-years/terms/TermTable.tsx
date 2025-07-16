@@ -49,7 +49,7 @@ export function TermTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   return (
     <div className="px-4">
@@ -82,14 +82,14 @@ export function TermTable() {
                 <TableRow key={term.id}>
                   <TableCell className="py-0">{term.name}</TableCell>
                   <TableCell className="py-0">
-                    {term.startDate?.toLocaleDateString(i18next.language, {
+                    {term.startDate.toLocaleDateString(i18next.language, {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
                     })}
                   </TableCell>
                   <TableCell className="py-0">
-                    {term.endDate?.toLocaleDateString(i18next.language, {
+                    {term.endDate.toLocaleDateString(i18next.language, {
                       day: "numeric",
                       month: "short",
                       year: "numeric",

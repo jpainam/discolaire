@@ -33,7 +33,7 @@ const formSchema = z.object({
       termId: z.string(),
       date: z.coerce.date(),
       observation: z.string().default(""),
-    }),
+    })
   ),
 });
 export function GradeReportSettings() {
@@ -55,7 +55,7 @@ export function GradeReportSettings() {
     defaultValues: {
       options: periodes.map((p) => ({
         termId: p.id,
-        date: p.date ?? new Date(),
+        date: p.date,
         observation: "",
       })),
     },
