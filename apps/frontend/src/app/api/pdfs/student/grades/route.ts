@@ -9,10 +9,10 @@ import { getServerTranslations } from "~/i18n/server";
 
 import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
+import GradeList from "~/reports/students/GradeList";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
-import { getAppreciations } from "~/utils/get-appreciation";
-import GradeList from "~/reports/students/GradeList";
+import { getAppreciations } from "~/utils/appreciations";
 
 const searchSchema = z.object({
   id: z.string().min(1),
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
           student: student,
           grades: grades,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

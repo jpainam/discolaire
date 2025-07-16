@@ -135,38 +135,40 @@ model HealthVisit {
 }
 
 model Classroom {
-    id                String            @id @default(uuid())
-    name              String
-    reportName        String
-    maxSize           Int               @default(45)
-    levelId           String
-    sectionId         String?
-    cycleId           String?
-    schoolYearId      String
-    seniorAdvisorId   String?
-    headTeacherId     String?
-    classroomLeaderId String?
-    createdAt         DateTime          @default(now()) @db.Timestamp(6)
-    updatedAt         DateTime          @updatedAt
-    updatedBy         String?
-    deletedAt         DateTime?         @db.Timestamp(6)
-    deletedBy         String?
-    cycle             ClassroomCycle?   @relation(fields: [cycleId], references: [id])
-    level             ClassroomLevel    @relation(fields: [levelId], references: [id])
-    seniorAdvisor     Staff?            @relation("seniorAdvisor", fields: [seniorAdvisorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    headTeacher       Staff?            @relation("headTeacher", fields: [headTeacherId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    classroomLeader   Student?          @relation("classroomLeader", fields: [classroomLeaderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    schoolYear        SchoolYear        @relation(fields: [schoolYearId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    section           ClassroomSection? @relation(fields: [sectionId], references: [id])
-    enrollments       Enrollment[]
-    fees              Fee[]
-    subjects          Subject[]
-    assignments       Assignment[]
-    reportCards       ReportCard[]
-    school            School            @relation(fields: [schoolId], references: [id])
-    schoolId          String
-    createdById       String?
-    createdBy         User?             @relation("ClassroomCreatedBy", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    id                    String               @id @default(uuid())
+    name                  String
+    reportName            String
+    maxSize               Int                  @default(45)
+    levelId               String
+    sectionId             String?
+    cycleId               String?
+    schoolYearId          String
+    seniorAdvisorId       String?
+    headTeacherId         String?
+    classroomLeaderId     String?
+    createdAt             DateTime             @default(now()) @db.Timestamp(6)
+    updatedAt             DateTime             @updatedAt
+    updatedBy             String?
+    deletedAt             DateTime?            @db.Timestamp(6)
+    deletedBy             String?
+    cycle                 ClassroomCycle?      @relation(fields: [cycleId], references: [id])
+    level                 ClassroomLevel       @relation(fields: [levelId], references: [id])
+    seniorAdvisor         Staff?               @relation("seniorAdvisor", fields: [seniorAdvisorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    headTeacher           Staff?               @relation("headTeacher", fields: [headTeacherId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    classroomLeader       Student?             @relation("classroomLeader", fields: [classroomLeaderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    schoolYear            SchoolYear           @relation(fields: [schoolYearId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    section               ClassroomSection?    @relation(fields: [sectionId], references: [id])
+    enrollments           Enrollment[]
+    fees                  Fee[]
+    subjects              Subject[]
+    assignments           Assignment[]
+    reportCards           ReportCard[]
+    school                School               @relation(fields: [schoolId], references: [id])
+    schoolId              String
+    createdById           String?
+    createdBy             User?                @relation("ClassroomCreatedBy", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    appreciationRuleSetId String?
+    appreciationRuleSet   AppreciationRuleSet? @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Enrollment {
@@ -243,22 +245,24 @@ model CalendarEvent {
 }
 
 model GradeSheet {
-    id          Int        @id @default(autoincrement())
-    name        String
-    isActive    Boolean?   @default(true)
-    createdAt   DateTime   @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime   @updatedAt
-    status      StatusEnum @default(PENDING)
-    createdById String?
-    observation String?
-    weight      Float      @default(100)
-    scale       Float      @default(20)
-    subjectId   Int
-    termId      String
-    grades      Grade[]
-    createdBy   User?      @relation(fields: [createdById], references: [id])
-    subject     Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    term        Term       @relation(fields: [termId], references: [id], onDelete: Cascade)
+    id                    Int                  @id @default(autoincrement())
+    name                  String
+    isActive              Boolean?             @default(true)
+    createdAt             DateTime             @default(now()) @db.Timestamp(6)
+    updatedAt             DateTime             @updatedAt
+    status                StatusEnum           @default(PENDING)
+    createdById           String?
+    observation           String?
+    weight                Float                @default(100)
+    scale                 Float                @default(20)
+    subjectId             Int
+    termId                String
+    grades                Grade[]
+    createdBy             User?                @relation(fields: [createdById], references: [id])
+    subject               Subject              @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    term                  Term                 @relation(fields: [termId], references: [id], onDelete: Cascade)
+    appreciationRuleSetId String?
+    appreciationRuleSet   AppreciationRuleSet? @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Grade {
@@ -583,64 +587,66 @@ model Country {
 }
 
 model School {
-    id                   String                     @id @default(cuid())
-    code                 String                     @unique
-    name                 String
-    authorization        String?
-    ministry             String?
-    department           String?
-    region               String?
-    defaultLocale        String                     @default("fr")
-    city                 String?
-    headmaster           String?
-    phoneNumber1         String?
-    phoneNumber2         String?
-    email                String?
-    website              String?
-    numberOfReceipts     Int?                       @default(1)
-    logo                 String?
-    createdAt            DateTime                   @default(now()) @db.Timestamp(6)
-    updatedAt            DateTime                   @updatedAt
-    isActive             Boolean                    @default(true)
-    address              String?
-    timezone             String                     @default("Africa/Brazzaville")
-    defaultCountryId     String?
-    registrationPrefix   String                     @default("1")
-    requestSunPlusNo     Boolean?                   @default(true)
-    allowOverEnrollment  Boolean?                   @default(true)
-    applyRequiredFee     ApplyRequiredFee           @default(NO)
-    includeRequiredFee   Boolean?                   @default(false)
-    hasQuarterlyReports  Boolean                    @default(true)
-    contacts             Contact[]
-    users                User[]
-    students             Student[]
-    currency             String
-    classrooms           Classroom[]
-    staffs               Staff[]
-    formerSchools        FormerSchool[]
-    religions            Religion[]
-    sports               Sport[]
-    clubs                Club[]
-    permissions          Policy[]
-    roles                Role[]
-    subjectGroup         SubjectGroup[]
-    courses              Course[]
-    schoolYears          SchoolYear[]
-    cycles               ClassroomCycle[]
-    sections             ClassroomSection[]
-    levels               ClassroomLevel[]
-    terms                Term[]
-    documents            Document[]
-    degrees              StaffDegree[]
-    relationships        ContactRelationship[]
-    timetableCategories  TimetableCategory[]
-    inventoryAssets      InventoryAsset[]
-    inventoryConsumables InventoryConsumable[]
-    stockMovements       InventoryStockMovement[]
-    consumableUsages     InventoryConsumableUsage[]
-    schoolYearEvents     SchoolYearEvent[]
-    schoolYearEventTypes SchoolYearEventType[]
-    logActivities        LogActivity[]
+    id                    String                     @id @default(cuid())
+    code                  String                     @unique
+    name                  String
+    authorization         String?
+    ministry              String?
+    department            String?
+    region                String?
+    defaultLocale         String                     @default("fr")
+    city                  String?
+    headmaster            String?
+    phoneNumber1          String?
+    phoneNumber2          String?
+    email                 String?
+    website               String?
+    numberOfReceipts      Int?                       @default(1)
+    logo                  String?
+    createdAt             DateTime                   @default(now()) @db.Timestamp(6)
+    updatedAt             DateTime                   @updatedAt
+    isActive              Boolean                    @default(true)
+    address               String?
+    timezone              String                     @default("Africa/Brazzaville")
+    defaultCountryId      String?
+    registrationPrefix    String                     @default("1")
+    requestSunPlusNo      Boolean?                   @default(true)
+    allowOverEnrollment   Boolean?                   @default(true)
+    applyRequiredFee      ApplyRequiredFee           @default(NO)
+    includeRequiredFee    Boolean?                   @default(false)
+    hasQuarterlyReports   Boolean                    @default(true)
+    contacts              Contact[]
+    users                 User[]
+    students              Student[]
+    currency              String
+    classrooms            Classroom[]
+    staffs                Staff[]
+    formerSchools         FormerSchool[]
+    religions             Religion[]
+    sports                Sport[]
+    clubs                 Club[]
+    permissions           Policy[]
+    roles                 Role[]
+    subjectGroup          SubjectGroup[]
+    courses               Course[]
+    schoolYears           SchoolYear[]
+    cycles                ClassroomCycle[]
+    sections              ClassroomSection[]
+    levels                ClassroomLevel[]
+    terms                 Term[]
+    documents             Document[]
+    degrees               StaffDegree[]
+    relationships         ContactRelationship[]
+    timetableCategories   TimetableCategory[]
+    inventoryAssets       InventoryAsset[]
+    inventoryConsumables  InventoryConsumable[]
+    stockMovements        InventoryStockMovement[]
+    consumableUsages      InventoryConsumableUsage[]
+    schoolYearEvents      SchoolYearEvent[]
+    schoolYearEventTypes  SchoolYearEventType[]
+    logActivities         LogActivity[]
+    AppreciationRuleSet   AppreciationRuleSet?       @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    appreciationRuleSetId String?
 }
 
 model FormerSchool {

@@ -2,7 +2,7 @@ import { Separator } from "@repo/ui/components/separator";
 import { getServerTranslations } from "~/i18n/server";
 
 import { caller } from "~/trpc/server";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 
 export async function ReportCardSummary({
   average,

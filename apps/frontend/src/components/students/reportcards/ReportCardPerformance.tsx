@@ -9,7 +9,7 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 
 import { cn } from "~/lib/utils";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 
 export async function ReportCardPerformance({
   max,

@@ -13,7 +13,7 @@ import {
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 import { ClassroomGradeChart } from "./ClassroomGradeChart";
 import { ClassroomGradeList } from "./ClassroomGradeList";
 
@@ -41,25 +41,25 @@ export default async function Page(props: {
   const { t } = await getServerTranslations();
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
   const minGrade = Math.min(
-    ...grades.filter((g) => !g.isAbsent).map((grade) => grade.grade),
+    ...grades.filter((g) => !g.isAbsent).map((grade) => grade.grade)
   );
   const grades10 = grades.filter((grade) => grade.grade >= 10).length;
   const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
   const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
   const maleCount = grades.filter(
-    (grade) => !grade.isAbsent && grade.student.gender == "male",
+    (grade) => !grade.isAbsent && grade.student.gender == "male"
   ).length;
   const males10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) => grade.grade >= 10 && grade.student.gender == "male"
     ).length / (maleCount == 0 ? 1e9 : maleCount);
 
   const femaleCount = grades.filter(
-    (grade) => !grade.isAbsent && grade.student.gender == "female",
+    (grade) => !grade.isAbsent && grade.student.gender == "female"
   ).length;
   const females10Rate =
     grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) => grade.grade >= 10 && grade.student.gender == "female"
     ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const isClosed = gradesheet.term.endDate

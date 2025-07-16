@@ -10,7 +10,7 @@ import { getSession } from "~/auth/server";
 import { RollOfHonor } from "~/reports/gradereports/RollOfHonor";
 import { caller } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 
 const searchSchema = z.object({
   termId: z.string().min(1),
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
           school: school,
           term: term,
           classroom: classroom,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

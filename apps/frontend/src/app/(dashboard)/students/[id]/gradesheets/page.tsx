@@ -10,7 +10,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 import { StudentGradesheetButton } from "./StudentGradesheetButton";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -129,7 +129,7 @@ function Cell({ grade }: { grade?: number | null }) {
       className={cn(
         "text-muted-foreground",
         g >= 18 ? "text-green-500" : "",
-        g < 10 ? "text-red-500" : "",
+        g < 10 ? "text-red-500" : ""
       )}
     >
       {gradeText}

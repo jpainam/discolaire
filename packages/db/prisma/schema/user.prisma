@@ -253,3 +253,23 @@ model UserNotification {
     createdAt    DateTime   @default(now())
     updatedAt    DateTime   @updatedAt
 }
+
+model AppreciationRuleSet {
+    id          String             @id @default(cuid())
+    name        String // e.g. "French Scale", "English A-F Scale", "Primary Scale"
+    scale       Int                @default(20) // e.g. 20, 10, 100 (used for normalization)
+    rules       AppreciationRule[]
+    schools     School[]
+    classrooms  Classroom[]
+    gradeSheets GradeSheet[]
+}
+
+model AppreciationRule {
+    id                    String              @id @default(cuid())
+    appreciationRuleSetId String
+    minGrade              Float // Lower bound (inclusive), e.g. 16
+    maxGrade              Float // Upper bound (exclusive), e.g. 18
+    label                 String // e.g. "Très bien", "A+", "Excellent"
+    order                 Int // For sorting
+    appreciationRuleSet   AppreciationRuleSet @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}

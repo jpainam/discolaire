@@ -58,4 +58,5 @@ export async function sendEmail({
   }
 }
 
+export { appreciationService } from "./appreciations";
 export { logger } from "./logger";

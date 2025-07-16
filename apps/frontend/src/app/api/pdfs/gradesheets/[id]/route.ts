@@ -9,7 +9,7 @@ import { getSheetName } from "~/lib/utils";
 import { GradeList } from "~/reports/gradesheet/GradeList";
 import { caller } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 
 const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),
@@ -18,7 +18,7 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: number } }
 ) {
   const session = await getSession();
   if (!session) {
@@ -33,7 +33,7 @@ export async function GET(
   if (!parsedQuery.success) {
     return NextResponse.json(
       { error: parsedQuery.error.format() },
-      { status: 400 },
+      { status: 400 }
     );
   }
   try {
@@ -71,7 +71,7 @@ export async function GET(
           allGrades: allGrades,
           gradesheet: gradesheet,
           school: school,
-        }),
+        })
       );
 
       //const blob = await new Response(stream).blob();

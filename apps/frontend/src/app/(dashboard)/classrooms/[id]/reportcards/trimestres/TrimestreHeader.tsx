@@ -7,7 +7,7 @@ import { Printer } from "lucide-react";
 import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 
 export function TrimestreHeader({
   classroom,

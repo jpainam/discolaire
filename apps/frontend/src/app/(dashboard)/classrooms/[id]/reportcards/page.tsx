@@ -23,7 +23,7 @@ import { Printer } from "lucide-react";
 import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
 import { caller } from "~/trpc/server";
-import { getAppreciations } from "~/utils/get-appreciation";
+import { getAppreciations } from "~/utils/appreciations";
 
 export default async function Page(props: {
   searchParams: Promise<{ termId: string }>;
@@ -169,7 +169,7 @@ export default async function Page(props: {
                       .sort((a, b) => a.order - b.order)
                       .map((subject, index) => {
                         const g = studentReport.studentCourses.find(
-                          (c) => c.subjectId === subject.id,
+                          (c) => c.subjectId === subject.id
                         )?.average;
                         return (
                           <TableCell
@@ -180,7 +180,7 @@ export default async function Page(props: {
                                 ? "!bg-red-50 dark:!bg-red-800"
                                 : (g ?? 0) < 15
                                   ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                  : "!bg-green-50 dark:!bg-green-800",
+                                  : "!bg-green-50 dark:!bg-green-800"
                             )}
                           >
                             {g ? g.toFixed(2) : "-"}
