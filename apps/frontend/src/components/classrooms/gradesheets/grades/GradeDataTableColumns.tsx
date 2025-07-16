@@ -189,9 +189,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const isClosed = grade.gradeSheet.term.endDate
-    ? grade.gradeSheet.term.endDate < new Date()
-    : false;
+  const isClosed = grade.gradeSheet.term.endDate < new Date();
 
   const markGradeAbsent = useMutation(
     trpc.grade.update.mutationOptions({
