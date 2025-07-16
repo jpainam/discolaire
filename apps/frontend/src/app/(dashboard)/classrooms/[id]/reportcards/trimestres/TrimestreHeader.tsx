@@ -3,11 +3,12 @@
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
+import { getAppreciationFn } from "@repo/utils";
 import { Printer } from "lucide-react";
 import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
-import { getAppreciations } from "~/utils/appreciations";
+import { useSchool } from "~/providers/SchoolProvider";
 
 export function TrimestreHeader({
   classroom,
@@ -24,6 +25,8 @@ export function TrimestreHeader({
 }) {
   const { createQueryString } = useCreateQueryString();
   const { t } = useLocale();
+  const { school } = useSchool();
+  const getAppreciations = getAppreciationFn(school.code);
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
   return (
     <div className="grid flex-row items-center gap-4 px-4 md:flex">

@@ -1,8 +1,8 @@
 import { Separator } from "@repo/ui/components/separator";
+import { getAppreciationFn } from "@repo/utils";
 import { getServerTranslations } from "~/i18n/server";
 
 import { caller } from "~/trpc/server";
-import { getAppreciations } from "~/utils/appreciations";
 
 export async function ReportCardSummary({
   average,
@@ -17,6 +17,8 @@ export async function ReportCardSummary({
   const cl = await caller.student.classroom({ studentId: id });
   if (!cl) return null;
   const classroom = await caller.classroom.get(cl.id);
+  const school = await caller.school.getSchool();
+  const getAppreciations = getAppreciationFn(school.code);
   return (
     <div className="flex-1 border text-sm">
       <div className="bg-muted/50 py-2 text-center font-bold">

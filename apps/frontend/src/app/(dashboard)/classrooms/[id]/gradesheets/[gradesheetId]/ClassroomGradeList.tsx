@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { getAppreciationFn } from "@repo/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
@@ -39,9 +40,8 @@ import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
+import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
-import { getAppreciations } from "~/utils/appreciations";
-
 export function ClassroomGradeList({
   grades,
   gradesheet,
@@ -55,6 +55,9 @@ export function ClassroomGradeList({
     if (grade >= 10) return "text-orange-600 bg-orange-50";
     return "text-red-600 bg-red-50";
   };
+
+  const { school } = useSchool();
+  const getAppreciations = getAppreciationFn(school.code);
 
   const confirm = useConfirm();
   const { t } = useLocale();
@@ -92,26 +95,26 @@ export function ClassroomGradeList({
     trpc.grade.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.classroom.gradesheets.pathFilter()
+          trpc.classroom.gradesheets.pathFilter(),
         );
         await queryClient.invalidateQueries(
-          trpc.gradeSheet.grades.pathFilter()
+          trpc.gradeSheet.grades.pathFilter(),
         );
         toast.success(t("marked_absent_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
 
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const router = useRouter();
   const deleteGradeSheetMutation = useMutation(
@@ -127,7 +130,7 @@ export function ClassroomGradeList({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   return (
     <div className="gap-2 flex flex-col">
@@ -148,7 +151,7 @@ export function ClassroomGradeList({
             onClick={() => {
               window.open(
                 `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
-                "_blank"
+                "_blank",
               );
             }}
           >
@@ -161,7 +164,7 @@ export function ClassroomGradeList({
             onClick={() => {
               window.open(
                 `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
-                "_blank"
+                "_blank",
               );
             }}
           >
@@ -274,7 +277,7 @@ export function ClassroomGradeList({
                             : "default"
                       }
                     >
-                      {getAppreciations(g.grade)}
+                      {getAppreciations(g.grade, gradesheet.scale)}
                     </Badge>
                   )}
                 </TableCell>
