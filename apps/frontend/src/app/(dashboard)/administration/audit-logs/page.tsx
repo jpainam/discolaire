@@ -344,7 +344,6 @@
 //                             <pre className="rounded-md bg-muted p-4 text-xs overflow-auto">
 //                               {JSON.stringify(
 //                                 {
-//                                   // @ts-expect-error TODO fix it
 //                                   [selectedLog.data]: selectedLog.data,
 //                                 },
 //                                 null,
@@ -357,7 +356,6 @@
 //                             <pre className="rounded-md bg-muted p-4 text-xs overflow-auto">
 //                               {JSON.stringify(
 //                                 {
-//                                   // @ts-expect-error TODO fix it
 //                                   [selectedLog.data]: selectedLog.data,
 //                                 },
 //                                 null,

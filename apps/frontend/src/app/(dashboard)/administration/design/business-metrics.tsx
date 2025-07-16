@@ -73,7 +73,7 @@ export function BusinessMetrics() {
               <div className="mt-2 space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span
-                    // @ts-expect-error TODO fix it
+                    // @ts-expect-error  fix it
                     className={`px-2 py-1 rounded-full ${statusColors[metric.status]}`}
                   >
                     {metric.status}

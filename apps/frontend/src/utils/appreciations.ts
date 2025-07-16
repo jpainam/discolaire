@@ -1,5 +1,7 @@
-export function getAppreciations(grade?: number | null) {
-  if (grade === undefined || grade == null) return "";
+export function getAppreciations(grade?: number | null, scale = 20): string {
+  // Convert the grade to a scale of 20 if it's not already
+  grade = grade ? Math.round((grade * 20) / scale) : undefined;
+  if (grade === undefined) return "";
   if (grade >= 0 && grade < 4) {
     return "Nul";
   } else if (grade >= 4 && grade < 6) {

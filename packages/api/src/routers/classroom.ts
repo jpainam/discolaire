@@ -186,7 +186,6 @@ export const classroomRouter = {
             ? -transaction.amount
             : transaction.amount;
       });
-      // TODO fix students Balance to return students and balance >
       const students = await classroomService.getStudents(input.id);
       return students.map((student) => {
         const balance = balances[student.id] ?? 0;
@@ -196,16 +195,6 @@ export const classroomRouter = {
           balance: balance,
         };
       });
-
-      // return result.map((account) => {
-      //   const balance = transactions.reduce((acc, transaction) => {
-      //     return acc + transaction.amount;
-      //   }, 0);
-      //   return {
-      //     ...account,
-      //     balance: balance,
-      //   };
-      // });
     }),
   teachers: protectedProcedure
     .input(z.string())

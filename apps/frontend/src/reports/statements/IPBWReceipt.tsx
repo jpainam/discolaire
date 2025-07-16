@@ -31,7 +31,7 @@ export function IPBWReceipt({
     remaining,
   } = info;
 
-  const numberOfReceipts = 3; //school.numberOfReceipts ?? 1
+  const numberOfReceipts = school.numberOfReceipts ?? 1;
   return (
     <Document>
       <Page

@@ -6,11 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { getAppreciationFn } from "@repo/utils";
 import { getServerTranslations } from "~/i18n/server";
 
 import { cn } from "~/lib/utils";
-import { caller } from "~/trpc/server";
+import { getAppreciations } from "~/utils/appreciations";
 
 export async function ReportCardPerformance({
   max,
@@ -24,9 +23,7 @@ export async function ReportCardPerformance({
   avg: number;
 }) {
   const { t } = await getServerTranslations();
-  const school = await caller.school.getSchool();
 
-  const getAppreciations = getAppreciationFn(school.code);
   const rowClassName = "border-r text-sm";
   return (
     <div className="border">

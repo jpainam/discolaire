@@ -111,7 +111,6 @@ export const SkeletonOne = () => {
     <div className="relative flex h-full gap-10 px-2 py-8">
       <div className="group mx-auto h-full w-full bg-white p-5 shadow-2xl dark:bg-neutral-900">
         <div className="flex h-full w-full flex-1 flex-col space-y-2">
-          {/* TODO */}
           <Image
             src="/linear.webp"
             alt="header"
@@ -137,7 +136,6 @@ export const SkeletonThree = () => {
     >
       <div className="group mx-auto h-full w-full bg-transparent dark:bg-transparent">
         <div className="relative flex h-full w-full flex-1 flex-col space-y-2">
-          {/* TODO */}
           <IconBrandYoutubeFilled className="absolute inset-0 z-10 m-auto h-20 w-20 text-red-500" />
           <Image
             src="https://assets.aceternity.com/fireship.jpg"
@@ -175,7 +173,6 @@ export const SkeletonTwo = () => {
   };
   return (
     <div className="relative flex h-full flex-col items-start gap-10 overflow-hidden p-8">
-      {/* TODO */}
       <div className="-ml-20 flex flex-row">
         {images.map((image, idx) => (
           <motion.div
