@@ -135,7 +135,7 @@ export function LoginForm() {
                       ease: "easeOut",
                     }}
                   >
-                    <div>
+                    <div className="flex flex-col space-y-2">
                       <Label htmlFor="password">{t("password")}</Label>
                       <Input
                         type="password"
@@ -143,6 +143,12 @@ export function LoginForm() {
                         className="border border-border"
                         name="password"
                       />
+                      <Link
+                        href="/auth/password/forgot"
+                        className="ml-auto text-sm text-primary hover:underline"
+                      >
+                        {t("Forgot password")}?
+                      </Link>
                     </div>
                   </motion.div>
 
