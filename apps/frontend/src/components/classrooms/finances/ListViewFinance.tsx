@@ -40,15 +40,15 @@ export function ListViewFinance({
 }) {
   const { t, i18n } = useLocale();
   const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
+    selectedStudentIdsAtom
   );
 
   const total = students.reduce(
     (acc, stud) => acc + (stud.balance - amountDue),
-    0,
+    0
   );
   return (
-    <div className="px-4">
+    <div className="px-4 py-2">
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
@@ -57,7 +57,7 @@ export function ListViewFinance({
                 <Checkbox
                   onCheckedChange={(checked) => {
                     setSelectedStudents((_stds) =>
-                      checked ? students.map((stud) => stud.studentId) : [],
+                      checked ? students.map((stud) => stud.studentId) : []
                     );
                   }}
                 />
@@ -88,7 +88,7 @@ export function ListViewFinance({
                         setSelectedStudents((students) =>
                           checked
                             ? [...students, stud.studentId]
-                            : students.filter((id) => id !== stud.studentId),
+                            : students.filter((id) => id !== stud.studentId)
                         );
                       }}
                       checked={selectedStudents.includes(stud.studentId)}
@@ -128,7 +128,7 @@ export function ListViewFinance({
                     <div
                       className={cn(
                         "w-fit px-2 text-center text-primary-foreground rounded-sm",
-                        remaining < 0 ? "bg-red-500" : "bg-green-500",
+                        remaining < 0 ? "bg-red-500" : "bg-green-500"
                       )}
                     >
                       {remaining < 0 ? "#D#" : "#C#"}

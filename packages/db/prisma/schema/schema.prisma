@@ -342,8 +342,8 @@ model Term {
     name         String
     schoolYearId String
     order        Int
-    startDate    DateTime?     @default(now()) @db.Timestamp(6)
-    endDate      DateTime?     @default(now()) @db.Timestamp(6)
+    startDate    DateTime      @default(now()) @db.Timestamp(6)
+    endDate      DateTime      @default(now()) @db.Timestamp(6)
     isActive     Boolean?      @default(true)
     observation  String?
     gradeSheets  GradeSheet[]

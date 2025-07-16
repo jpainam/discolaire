@@ -60,12 +60,11 @@ export const schoolYearService = {
     });
     await Promise.all(
       classrooms.map(async (classroom) => {
-        const { id, classroomLeaderId, ...rest } = classroom;
+        const { id, classroomLeaderId, createdAt, updatedAt, ...rest } =
+          classroom;
         const cl = await db.classroom.create({
           data: {
             ...rest,
-            createdAt: new Date(),
-            updatedAt: new Date(),
             createdById: userId,
             schoolYearId: newYear.id,
           },
@@ -109,6 +108,8 @@ export const schoolYearService = {
     });
     const allTerms = terms.map(({ id, ...t }) => ({
       ...t,
+      startDate: addYears(t.startDate, 1),
+      endDate: addYears(t.endDate, 1),
       schoolYearId: newYear.id,
     }));
     await db.term.createMany({

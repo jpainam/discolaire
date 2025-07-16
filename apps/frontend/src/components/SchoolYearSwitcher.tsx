@@ -14,6 +14,7 @@ import {
 } from "@repo/ui/components/select";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { setSchoolYearCookie } from "~/actions/signin";
+import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 interface SchoolYearSwitcherProps {
   className?: string;
@@ -21,16 +22,18 @@ interface SchoolYearSwitcherProps {
 }
 export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
   const { t } = useLocale();
+  const router = useRouter();
   const trpc = useTRPC();
   const { data: schoolYears } = useSuspenseQuery(
-    trpc.schoolYear.all.queryOptions(),
+    trpc.schoolYear.all.queryOptions()
   );
 
   return (
     <Select
       defaultValue={defaultValue}
-      onValueChange={(val) => {
-        void setSchoolYearCookie(val);
+      onValueChange={async (val) => {
+        await setSchoolYearCookie(val);
+        router.push("/");
       }}
     >
       <SelectTrigger

@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { TransactionStatus } from "@repo/db";
+import { TransactionStatus, TransactionType } from "@repo/db";
 
 import { checkPermission } from "../permission";
 import { classroomService } from "../services/classroom-service";
@@ -155,6 +155,7 @@ export const classroomRouter = {
         where: {
           schoolYearId: ctx.schoolYearId,
           status: TransactionStatus.VALIDATED,
+          deletedAt: null,
           student: {
             enrollments: {
               some: {
@@ -176,13 +177,23 @@ export const classroomRouter = {
           },
         },
       });
+      const balances: Record<string, number> = {};
+      _result.forEach((transaction) => {
+        const key = transaction.student.id;
+        balances[key] ??= 0;
+        balances[key] +=
+          transaction.transactionType == TransactionType.DEBIT
+            ? -transaction.amount
+            : transaction.amount;
+      });
       // TODO fix students Balance to return students and balance >
       const students = await classroomService.getStudents(input.id);
       return students.map((student) => {
+        const balance = balances[student.id] ?? 0;
         return {
           ...student,
           studentId: student.id,
-          balance: 0,
+          balance: balance,
         };
       });
 
