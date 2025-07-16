@@ -77,7 +77,6 @@ export function CSACongoHeader({
         </Text>
         <Text>BP: 5062 Brazzaville</Text>
         <Text>Tél: +24269632025</Text>
-        <Text>(Principal) (+237) 699474456 / 671690331</Text>
       </View>
       <View
         style={{

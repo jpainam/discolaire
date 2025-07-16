@@ -4,9 +4,9 @@ import { CSACongoHeader } from "./CSACongo";
 import { IPBWHeader } from "./IPBWHeader";
 export function getHeader(
   school: RouterOutputs["school"]["getSchool"],
-  style?: Style,
+  style?: Style
 ) {
-  if (school.name === "csabrazzaville") {
+  if (school.code == "csabrazzaville") {
     return <CSACongoHeader school={school} />;
   } else {
     return <IPBWHeader school={school} style={style} />;
