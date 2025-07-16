@@ -11,31 +11,25 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { AlertTriangle, Check, Copy, Key } from "lucide-react";
 import { useState } from "react";
-import { authClient } from "~/auth/client";
+import { createAuthApiKey } from "~/actions/signin";
 import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 export function CreateAuthApiKey() {
   const { t } = useLocale();
   const [isLoading, setIsLoading] = useState(false);
   const { openModal } = useModal();
+  const router = useRouter();
 
   const createApiKey = async () => {
     setIsLoading(true);
-    const { data: apiKey, error } = await authClient.apiKey.create({
-      name: "Discolaire API Key",
-      rateLimitEnabled: false,
-      //expiresIn: 60 * 60 * 24 * 7, // Omit for never expiring key
-      prefix: "disc",
+    const result = await createAuthApiKey();
+    openModal({
+      title: t("API key"),
+      view: <ShowApiKey apiKey={result.key} />,
     });
-    if (!error) {
-      openModal({
-        title: t("Error creating API key"),
-        view: <ShowApiKey apiKey={apiKey.key} />,
-      });
-      setIsLoading(false);
-      return;
-    }
     setIsLoading(false);
+    router.refresh();
   };
   return (
     <Button

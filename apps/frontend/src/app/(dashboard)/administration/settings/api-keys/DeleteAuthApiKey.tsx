@@ -3,6 +3,7 @@ import { Button } from "@repo/ui/components/button";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "~/auth/client";
+import { useRouter } from "~/hooks/use-router";
 
 export function DeleteAuthApiKey({ apiKeyId }: { apiKeyId: string }) {
   const deleteAction = async () => {
@@ -15,8 +16,11 @@ export function DeleteAuthApiKey({ apiKeyId }: { apiKeyId: string }) {
     } else {
       // Optionally, you can trigger a refresh or show a success message
       toast.success("API key deleted successfully", { id: 0 });
+      router.refresh();
     }
   };
+  const router = useRouter();
+
   return (
     <Button
       onClick={async () => {

@@ -3,13 +3,13 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "~/auth/server";
+import { auth, getSession } from "~/auth/server";
 import { env } from "~/env";
 import { caller } from "~/trpc/server";
 
 export async function signIn(
   prevState: { error?: string } | undefined,
-  formData: FormData,
+  formData: FormData
 ): Promise<{ error?: string } | undefined> {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
@@ -82,4 +82,22 @@ export async function setSchoolYearCookie(schoolYearId: string) {
     secure: isSecure, // 👈 allow over HTTP, Hosted locally
     sameSite: "lax",
   });
+}
+
+export async function createAuthApiKey() {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Not authenticated");
+  }
+  const userId = session.user.id;
+  const result = await auth.api.createApiKey({
+    body: {
+      name: "Auth API Key",
+      rateLimitEnabled: false,
+      //expiresIn: 60 * 60 * 24 * 7, // Omit for never expiring key
+      prefix: "disc",
+      userId: userId,
+    },
+  });
+  return result;
 }
