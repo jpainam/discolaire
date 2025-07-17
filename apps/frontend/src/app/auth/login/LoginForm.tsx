@@ -16,19 +16,24 @@ import { signIn } from "~/actions/signin";
 import { ModeSwitcher } from "~/components/mode-switcher";
 import { useLocale } from "~/i18n";
 
-const initialState = { error: undefined };
+const initialState = { error: undefined, _nonce: undefined };
 
 export function LoginForm() {
-  const [state, formAction] = useActionState(signIn, initialState);
+  const [state, formAction] = useActionState<
+    {
+      error?: string;
+      _nonce?: string;
+    },
+    FormData
+  >(signIn, initialState);
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
   const { t } = useLocale();
   useEffect(() => {
-    if (state?.error) {
-      console.error("Login error:", state.error);
-      toast.error(t(state.error) || "An error occurred during login.");
+    if (state.error) {
+      toast.error(t(state.error));
     }
-  }, [state?.error, t]);
+  }, [state.error, state._nonce, t]);
 
   return (
     <div className="rose-gradient relative min-h-screen overflow-hidden bg-background">

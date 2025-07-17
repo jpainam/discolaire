@@ -2,20 +2,34 @@
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import z from "zod";
 
 import { auth, getSession } from "~/auth/server";
 import { env } from "~/env";
 import { caller } from "~/trpc/server";
 
+const loginSchema = z.object({
+  username: z.string().min(1),
+  password: z.string().min(1),
+  redirectTo: z.string().optional(),
+});
 export async function signIn(
-  prevState: { error?: string } | undefined,
-  formData: FormData,
-): Promise<{ error?: string } | undefined> {
-  const username = formData.get("username") as string;
-  const password = formData.get("password") as string;
-  const redirectTo = formData.get("redirectTo") as string | null;
-  let user;
-  let schoolYear;
+  prevState: { error?: string; _nonce?: string } | undefined,
+  formData: FormData
+): Promise<{ error?: string; _nonce?: string }> {
+  const parsed = loginSchema.safeParse({
+    username: formData.get("username"),
+    password: formData.get("password"),
+    redirectTo: formData.get("redirectTo"),
+  });
+  if (!parsed.success) {
+    return {
+      error: "Invalid input",
+      _nonce: crypto.randomUUID(),
+    };
+  }
+  const { username, password, redirectTo } = parsed.data;
+  await Promise.resolve();
 
   try {
     const result = await auth.api.signInUsername({
@@ -28,13 +42,11 @@ export async function signIn(
     });
 
     if (!result) {
-      return { error: "invalid_credentials" };
+      return { error: "invalid_credentials", _nonce: crypto.randomUUID() };
     }
 
-    user = result.user;
-
-    schoolYear = await caller.schoolYear.getDefault({
-      userId: user.id,
+    const schoolYear = await caller.schoolYear.getDefault({
+      userId: result.user.id,
     });
 
     if (!schoolYear) {
@@ -44,15 +56,13 @@ export async function signIn(
     await setSchoolYearCookie(schoolYear.id);
   } catch (error) {
     const err = error as Error;
-    return { error: err.message || "unknown_error" };
+    return {
+      error: err.message,
+      _nonce: crypto.randomUUID(),
+    };
   }
 
-  // ✅ Redirect outside the try-catch
-  if (redirectTo && redirectTo.trim() !== "") {
-    redirect(redirectTo);
-  }
-
-  redirect("/");
+  redirect(redirectTo && redirectTo.trim() !== "" ? redirectTo : "/");
 }
 
 export async function setCookieFromSignIn({ userId }: { userId: string }) {
