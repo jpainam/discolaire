@@ -1,3 +1,4 @@
+import { TransactionType } from "@repo/db";
 import { sumBy } from "lodash";
 import type { IconType } from "react-icons";
 import {
@@ -12,7 +13,7 @@ import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 
-export interface TransactionType {
+export interface TransactionType2 {
   icon: IconType;
   title: string;
   amount: string;
@@ -26,7 +27,16 @@ export async function TransactionStats({ studentId }: { studentId: string }) {
   const classroom = await caller.student.classroom({ studentId });
   const fees = classroom ? await caller.classroom.fees(classroom.id) : [];
 
-  const statData: TransactionType[] = [
+  const discounts = transactions
+    .filter((t) => t.transactionType == TransactionType.DISCOUNT)
+    .map((t) => t.amount);
+  const totalDiscount = sumBy(discounts, (d) => d);
+  const totalPaid = transactions
+    .filter((t) => t.transactionType == TransactionType.CREDIT)
+    .map((t) => t.amount)
+    .reduce((acc, curr) => acc + curr, 0);
+
+  const statData: TransactionType2[] = [
     {
       title: t("total_fees"),
       amount: sumBy(fees, "amount").toLocaleString(i18n.language),
@@ -34,8 +44,8 @@ export async function TransactionStats({ studentId }: { studentId: string }) {
       iconWrapperFill: "#8A63D2",
     },
     {
-      title: t("amountPaid"),
-      amount: sumBy(transactions, "amount").toLocaleString(i18n.language),
+      title: `${t("amountPaid")} / ${t("discount")}`,
+      amount: `${totalPaid.toLocaleString(i18n.language)} / ${totalDiscount.toLocaleString(i18n.language)}`,
       icon: PiCurrencyCircleDollar,
       iconWrapperFill: "#0070F3",
     },
@@ -51,7 +61,7 @@ export async function TransactionStats({ studentId }: { studentId: string }) {
       title: t("transactionsCompleted"),
       amount: sumBy(
         transactions.filter((t) => t.status == "VALIDATED"),
-        "amount",
+        "amount"
       ).toLocaleString(i18n.language),
       icon: PiMoneyBold,
       iconWrapperFill: "#FF0000",
