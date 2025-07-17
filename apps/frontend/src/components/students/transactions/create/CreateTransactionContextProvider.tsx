@@ -33,7 +33,7 @@ export function useCreateTransaction() {
   const context = useContext(CreateTransactionContext);
   if (!context) {
     throw new Error(
-      "useCreateTransaction must be used within a <CreateTransactionContextProvider />"
+      "useCreateTransaction must be used within a <CreateTransactionContextProvider />",
     );
   }
   return context;

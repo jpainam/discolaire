@@ -96,7 +96,7 @@ export function CSACongoHeader({
             // }}
             style={{
               width: 125,
-              height: 80,
+              height: 100,
             }}
           />
         )}

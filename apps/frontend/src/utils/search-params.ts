@@ -19,7 +19,7 @@ export const reportcardSearchParamsSchema = {
   trimestreId: parseAsString,
 };
 export const reportcardSearchParams = createLoader(
-  reportcardSearchParamsSchema
+  reportcardSearchParamsSchema,
 );
 export const transactionSearchParamsSchema = {
   from: parseAsIsoDate,
@@ -29,7 +29,7 @@ export const transactionSearchParamsSchema = {
 };
 
 export const transactionSearchParams = createLoader(
-  transactionSearchParamsSchema
+  transactionSearchParamsSchema,
 );
 
 export const trimestreSearchParamsSchema = {
@@ -46,5 +46,5 @@ export const createTransactionSearchParamsSchema = {
 };
 
 export const createTransactionSearchParams = createLoader(
-  createTransactionSearchParamsSchema
+  createTransactionSearchParamsSchema,
 );

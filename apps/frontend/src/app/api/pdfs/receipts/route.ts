@@ -6,7 +6,7 @@ import { renderToStream } from "@react-pdf/renderer";
 import i18next from "i18next";
 import { getSession } from "~/auth/server";
 import { numberToWords } from "~/lib/toword";
-import IPBWReceipt from "~/reports/statements/IPBWReceipt";
+import { getReceipt } from "~/reports/statements/receipt";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -43,12 +43,12 @@ export async function GET(req: NextRequest) {
     const info = await caller.transaction.getReceiptInfo(id);
 
     const stream = await renderToStream(
-      IPBWReceipt({
-        transaction: transaction,
-        amountInWords: amountInWords,
-        school: school,
-        info: info,
-      }),
+      getReceipt({
+        school,
+        amountInWords,
+        transaction,
+        info,
+      })
     );
 
     // @ts-expect-error TODO: fix this

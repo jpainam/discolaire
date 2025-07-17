@@ -50,17 +50,17 @@ export function Step2() {
     trpc.transaction.create.mutationOptions({
       onSuccess: async (transaction) => {
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter()
+          trpc.student.transactions.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         router.push(
-          routes.students.transactions.details(student.id, transaction.id)
+          routes.students.transactions.details(student.id, transaction.id),
         );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   const form = useForm({

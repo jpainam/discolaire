@@ -2,19 +2,13 @@
 
 import { Label } from "@repo/ui/components/label";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import z from "zod";
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
-const schema = z.object({
-  studentId: z.string().min(1),
-  transactionType: z.enum(["DISCOUNT", "CREDIT", "DEBIT"]),
-});
 export function CreateStudentTransaction({
   studentId,
   fullName,
@@ -25,14 +19,12 @@ export function CreateStudentTransaction({
   const { t } = useLocale();
   const trpc = useTRPC();
   const [search, setSearch] = useState("");
-  const [value, setValue] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const studentsQuery = useQuery(
     trpc.student.search.queryOptions({
       query: search,
-    })
+    }),
   );
   return (
     <div className="flex flex-col p-4 gap-2 justify-center items-center">
@@ -48,8 +40,9 @@ export function CreateStudentTransaction({
         value={studentId ?? ""}
         label={fullName ?? t("select_an_option")}
         onSelect={(value, label) => {
-          setValue(value);
-          router.push(`/administration/accounting/create?studentId=${value}`);
+          router.push(
+            `/administration/accounting/create?studentId=${value}&label=${label}`,
+          );
         }}
         onSearchChange={setSearch}
         searchPlaceholder={t("search") + " ..."}
