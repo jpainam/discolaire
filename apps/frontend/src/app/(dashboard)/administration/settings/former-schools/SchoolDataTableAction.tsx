@@ -32,20 +32,8 @@ export function SchoolDataTableAction({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
-
-  // Clear selection on Escape key press
-  React.useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        table.toggleAllRowsSelected(false);
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [table]);
 
   const confirm = useConfirm();
 

@@ -192,7 +192,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
   const router = useRouter();
   const canDeleteEnrollment = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const queryClient = useQueryClient();
   const trpc = useTRPC();
@@ -201,13 +201,14 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
       onSuccess: async () => {
         toast.success(t("success"), { id: 0 });
         await queryClient.invalidateQueries(
-          trpc.classroom.students.pathFilter(),
+          trpc.classroom.students.pathFilter()
         );
+        await queryClient.invalidateQueries(trpc.classroom.get.pathFilter());
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const confirm = useConfirm();

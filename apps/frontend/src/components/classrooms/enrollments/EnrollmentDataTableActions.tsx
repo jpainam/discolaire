@@ -34,7 +34,7 @@ export function EnrollmentDataTableActions({
   //const rows = table.getFilteredSelectedRowModel().rows;
   const canUnEnrollStudent = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()
@@ -47,27 +47,17 @@ export function EnrollmentDataTableActions({
     trpc.enrollment.deleteByStudentIdClassroomId.mutationOptions({
       onSuccess: async () => {
         toast.success(t("unenrolled_successfully"), { id: 0 });
+        table.toggleAllRowsSelected(false);
         await queryClient.invalidateQueries(
-          trpc.classroom.students.pathFilter(),
+          trpc.classroom.students.pathFilter()
         );
+        await queryClient.invalidateQueries(trpc.classroom.get.pathFilter());
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
-
-  // Clear selection on Escape key press
-  React.useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        table.toggleAllRowsSelected(false);
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [table]);
 
   return (
     <>
