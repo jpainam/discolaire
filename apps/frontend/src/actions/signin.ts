@@ -15,7 +15,7 @@ const loginSchema = z.object({
 });
 export async function signIn(
   prevState: { error?: string; _nonce?: string } | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<{ error?: string; _nonce?: string }> {
   const parsed = loginSchema.safeParse({
     username: formData.get("username"),
