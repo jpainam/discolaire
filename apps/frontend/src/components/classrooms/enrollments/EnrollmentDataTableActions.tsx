@@ -34,7 +34,7 @@ export function EnrollmentDataTableActions({
   //const rows = table.getFilteredSelectedRowModel().rows;
   const canUnEnrollStudent = useCheckPermission(
     "enrollment",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const selectedIds = table
     .getFilteredSelectedRowModel()
@@ -49,14 +49,14 @@ export function EnrollmentDataTableActions({
         toast.success(t("unenrolled_successfully"), { id: 0 });
         table.toggleAllRowsSelected(false);
         await queryClient.invalidateQueries(
-          trpc.classroom.students.pathFilter()
+          trpc.classroom.students.pathFilter(),
         );
         await queryClient.invalidateQueries(trpc.classroom.get.pathFilter());
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
 
   return (
