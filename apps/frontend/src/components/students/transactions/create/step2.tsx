@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowLeft, Save } from "lucide-react";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -41,10 +40,9 @@ export function Step2() {
     paymentMethod,
     studentContacts,
     requiredFeeIds,
+    student,
   } = useCreateTransaction();
   const router = useRouter();
-  const params = useParams<{ id: string }>();
-  const studentId = params.id;
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
@@ -52,17 +50,17 @@ export function Step2() {
     trpc.transaction.create.mutationOptions({
       onSuccess: async (transaction) => {
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter(),
+          trpc.student.transactions.pathFilter()
         );
         toast.success(t("created_successfully"), { id: 0 });
         router.push(
-          routes.students.transactions.details(params.id, transaction.id),
+          routes.students.transactions.details(student.id, transaction.id)
         );
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
 
   const form = useForm({
@@ -70,7 +68,7 @@ export function Step2() {
     defaultValues: {
       paymentReceived: false,
       paymentCorrectness: false,
-      notifications: [params.id, ...studentContacts.map((c) => c.contactId)],
+      notifications: [student.id, ...studentContacts.map((c) => c.contactId)],
     },
   });
   function onSubmit(data: z.infer<typeof step2Schema>) {
@@ -91,7 +89,7 @@ export function Step2() {
     createTransactionMutation.mutate({
       method: paymentMethod,
       description: description,
-      studentId: studentId,
+      studentId: student.id,
       transactionType: transactionType as TransactionType,
       requiredFeeIds: requiredFeeIds,
       amount: Number(amount),

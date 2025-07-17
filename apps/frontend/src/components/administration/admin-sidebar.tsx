@@ -89,6 +89,10 @@ export function AdminSidebar({
             url: "/administration/accounting/transactions",
           },
           {
+            title: "Sasie des operations",
+            url: "/administration/accounting/create",
+          },
+          {
             title: "Groupes",
             url: "/administration/accounting/groups",
           },
