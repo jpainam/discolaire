@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { renderToStream } from "@react-pdf/renderer";
 
+import { db } from "@repo/db";
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 import { numberToWords } from "~/lib/toword";
@@ -35,6 +36,13 @@ export async function GET(req: NextRequest) {
 
     const transaction = await caller.transaction.get(id);
 
+    if (!transaction.printedAt) {
+      await db.transaction.update({
+        where: { id },
+        data: { printedAt: new Date(), printedById: session.user.id },
+      });
+    }
+
     const school = await caller.school.getSchool();
     //const student = await caller.student.get(transaction.account.studentId);
     //const contacts = await caller.student.contacts(transaction.account.studentId);
@@ -49,7 +57,7 @@ export async function GET(req: NextRequest) {
         amountInWords,
         transaction,
         info,
-      }),
+      })
     );
 
     // @ts-expect-error TODO: fix this

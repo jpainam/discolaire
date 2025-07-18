@@ -169,7 +169,7 @@ export function IPBWReceipt({
                 <Text>Enregistré par : {createdBy?.lastName}</Text>
                 <Text>
                   Imprimé par {printedBy?.lastName} le{" "}
-                  {transaction.printedAt?.toLocaleDateString()}
+                  {(transaction.printedAt ?? new Date()).toLocaleDateString()}
                 </Text>
               </View>
             </View>

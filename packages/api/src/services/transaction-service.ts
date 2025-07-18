@@ -39,17 +39,17 @@ export const transactionService = {
     // Get the staff who created, printed and received the transaction
     const createdBy = transaction.createdById
       ? await db.staff.findFirst({
-          where: { id: transaction.createdById },
+          where: { user: { id: transaction.createdById } },
         })
       : null;
     const printedBy = transaction.printedById
       ? await db.staff.findFirst({
-          where: { id: transaction.printedById },
+          where: { user: { id: transaction.printedById } },
         })
       : null;
     const receivedBy = transaction.receivedById
       ? await db.staff.findFirst({
-          where: { id: transaction.receivedById },
+          where: { user: { id: transaction.receivedById } },
         })
       : null;
 
