@@ -55,9 +55,27 @@ export const enrollmentService = {
         },
       },
     });
+    const previousYear = await db.schoolYear.findFirst({
+      where: {
+        id: {
+          not: schoolYearId,
+        },
+      },
+      orderBy: {
+        name: "desc",
+      },
+    });
+    const totalLastYear = previousYear
+      ? await db.enrollment.count({
+          where: {
+            schoolYearId: previousYear.id,
+          },
+        })
+      : 0;
     return {
       total,
       contactCount,
+      totalLastYear,
       repeating: students.filter((s) => s.enrollments.length > 1).length,
       new: newStudents,
       old: oldStudents,

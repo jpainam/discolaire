@@ -116,8 +116,8 @@ export async function QuickStatistics({ className }: { className?: string }) {
     {
       title: t("total_students"),
       value: enrolled.total,
-      delta: 0,
-      lastMonth: 105922,
+      delta: (enrolled.new / (enrolled.total || 1e9)) * 100,
+      lastMonth: enrolled.totalLastYear,
       positive: true,
       prefix: "",
       suffix: "",
@@ -200,11 +200,9 @@ export async function QuickStatistics({ className }: { className?: string }) {
                 </FlatBadge>
               </div>
               <div className="text-xs text-muted-foreground mt-2 border-t pt-2.5">
-                Vs last month:{" "}
+                Vs l'année dernière:{" "}
                 <span className="font-medium text-foreground">
-                  {/* {stat.lastFormat
-                    ? stat.lastFormat(stat.lastMonth)
-                    : stat.prefix + formatNumber(stat.lastMonth) + stat.suffix} */}
+                  {stat.lastMonth.toLocaleString()}
                 </span>
               </div>
             </CardContent>

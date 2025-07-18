@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
   const schoolYearId = request.cookies.get("x-school-year")?.value;
   if (isProtectedRoute && !schoolYearId) {
@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/s/")) {
     return NextResponse.rewrite(new URL("/404", request.url));
   }
-  if (pathname.includes("auth/login")) {
+  if (pathname.includes("auth/")) {
     return NextResponse.next();
   }
   const url = new URL(request.url);
