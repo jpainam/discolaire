@@ -22,7 +22,7 @@ import { useTRPC } from "~/trpc/react";
 export function LatestGradesheet() {
   const trpc = useTRPC();
   const { data: latestGradesheet } = useSuspenseQuery(
-    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 }),
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 })
   );
 
   const grades = latestGradesheet.map((g) => {
@@ -34,7 +34,7 @@ export function LatestGradesheet() {
         (
           g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
           g.grades.length
-        ).toFixed(2),
+        ).toFixed(2)
       ),
     };
   });

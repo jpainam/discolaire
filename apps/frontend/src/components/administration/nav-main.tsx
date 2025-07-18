@@ -61,9 +61,9 @@ export function NavMain({
             >
               <Link href={"/administration"}>
                 <Home
-                  className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                  size={22}
-                  aria-hidden="true"
+                //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                //size={22}
+                //aria-hidden="true"
                 />
                 <span>{t("home")}</span>
               </Link>
@@ -84,9 +84,9 @@ export function NavMain({
                   <SidebarMenuButton tooltip={t(item.title)}>
                     {item.icon && (
                       <item.icon
-                        className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                        size={22}
-                        aria-hidden="true"
+                      //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                      //size={22}
+                      //aria-hidden="true"
                       />
                     )}
                     <span>{t(item.title)}</span>

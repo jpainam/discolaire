@@ -1,20 +1,16 @@
-import { Button } from "@repo/ui/components/button";
-
 import { TransactionType } from "@repo/db";
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
-import { subDays } from "date-fns";
-import { ArrowDownLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { getServerTranslations } from "~/i18n/server";
+import { CURRENCY } from "~/lib/constants";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
@@ -24,9 +20,8 @@ export async function LatestTransactions({
 }: {
   className?: string;
 }) {
-  const today = new Date();
   const transactions = await caller.transaction.all({
-    from: subDays(today, 30),
+    limit: 10,
   });
   const { t } = await getServerTranslations();
   return (
@@ -36,7 +31,11 @@ export async function LatestTransactions({
         <CardDescription className="text-xs">
           ({transactions.length} {t("transactions")})
         </CardDescription>
-        <CardAction className="text-xs">{t("This Month")}</CardAction>
+        <CardAction>
+          <Link href="/administration/accounting/transactions">
+            {t("See all")}
+          </Link>
+        </CardAction>
       </CardHeader>
       <CardContent className="p-4">
         {transactions.slice(0, 6).map((transaction) => (
@@ -46,7 +45,7 @@ export async function LatestTransactions({
               "group flex items-center gap-3",
               "p-2 rounded-lg",
               "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
-              "transition-all duration-200",
+              "transition-all duration-200"
             )}
           >
             <AvatarState
@@ -73,35 +72,27 @@ export async function LatestTransactions({
                 <span
                   className={cn(
                     "text-xs font-medium",
-                    transaction.transactionType === TransactionType.DEBIT
+                    transaction.transactionType === TransactionType.CREDIT
                       ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-red-600 dark:text-red-400",
+                      : "text-red-600 dark:text-red-400"
                   )}
                 >
                   {transaction.transactionType === "CREDIT" ? "+" : "-"}
-                  {transaction.amount}
+                  {transaction.amount.toLocaleString("fr", {
+                    style: "currency",
+                    currency: CURRENCY,
+                  })}
                 </span>
-                {transaction.transactionType === "DEBIT" ? (
+                {/* {transaction.transactionType === "DEBIT" ? (
                   <ArrowDownLeft className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 ) : (
                   <ArrowUpRight className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
-                )}
+                )} */}
               </div>
             </div>
           </div>
         ))}
       </CardContent>
-      <CardFooter>
-        <Link
-          className="w-full"
-          href={"/administration/accounting/transactions"}
-        >
-          <Button size={"sm"} className="w-full">
-            {t("View All Transactions")}
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Button>
-        </Link>
-      </CardFooter>
     </Card>
   );
 }

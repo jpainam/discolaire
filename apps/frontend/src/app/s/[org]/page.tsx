@@ -77,12 +77,14 @@ export default async function Page() {
       </Suspense>
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
       {/* <SchoolFeed /> */}
+
       <HydrateClient>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Skeleton className="h-60 w-full" />}>
             <LatestGradesheet />
           </Suspense>
         </ErrorBoundary>
+
         <Suspense fallback={<Skeleton className="h-60 w-full" />}>
           <SchoolLife />
         </Suspense>

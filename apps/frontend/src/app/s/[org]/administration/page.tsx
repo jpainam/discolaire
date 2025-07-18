@@ -1,7 +1,9 @@
+import { Card, CardContent } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Suspense } from "react";
 //import { ClassroomStatistics } from "~/components/administration/ClassroomStatistics";
 import { LatestTransactions } from "~/components/administration/LatestTransactions";
+import { ShortCalendar } from "~/components/administration/ShortCalendar";
 //import { RecentActivities } from "~/components/administration/RecentActivities";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 
@@ -25,6 +27,11 @@ export default function Page() {
       <Suspense fallback={<Skeleton className="h-24 w-full" />}>
         <LatestTransactions />
       </Suspense>
+      <Card>
+        <CardContent>
+          <ShortCalendar />
+        </CardContent>
+      </Card>
 
       {/* <div className="grid grid-cols-1 gap-2 px-2 xl:grid-cols-12">
         <ClassroomStatistics className="col-span-5" />

@@ -91,6 +91,7 @@
     "bullmq": "^5.56.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "1.1.1",
     "codemirror": "^6.0.2",
     "cron-parser": "^4.9.0",
     "date-fns": "^4.1.0",
