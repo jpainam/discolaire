@@ -66,7 +66,7 @@ export function CreateEditConsumable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const updateConsumableMutation = useMutation(
     trpc.inventory.updateConsumable.mutationOptions({
@@ -78,7 +78,7 @@ export function CreateEditConsumable({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
