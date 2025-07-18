@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { renderToStream } from "@react-pdf/renderer";
 
-import i18next from "i18next";
 import { getSession } from "~/auth/server";
+import { getServerTranslations } from "~/i18n/server";
 import { numberToWords } from "~/lib/toword";
 import { getReceipt } from "~/reports/statements/receipt";
 import { caller } from "~/trpc/server";
@@ -38,7 +38,8 @@ export async function GET(req: NextRequest) {
     const school = await caller.school.getSchool();
     //const student = await caller.student.get(transaction.account.studentId);
     //const contacts = await caller.student.contacts(transaction.account.studentId);
-    const amountInWords = numberToWords(transaction.amount, i18next.language);
+    const { i18n } = await getServerTranslations();
+    const amountInWords = numberToWords(transaction.amount, i18n.language);
 
     const info = await caller.transaction.getReceiptInfo(id);
 
@@ -48,7 +49,7 @@ export async function GET(req: NextRequest) {
         amountInWords,
         transaction,
         info,
-      }),
+      })
     );
 
     // @ts-expect-error TODO: fix this
