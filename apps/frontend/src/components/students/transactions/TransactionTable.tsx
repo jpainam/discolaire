@@ -38,6 +38,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
+import { TransactionType } from "@repo/db";
 import {
   useMutation,
   useQueryClient,
@@ -60,28 +61,28 @@ export function TransactionTable() {
   });
   const trpc = useTRPC();
   const { data: transactions } = useSuspenseQuery(
-    trpc.student.transactions.queryOptions(params.id),
+    trpc.student.transactions.queryOptions(params.id)
   );
   const queryClient = useQueryClient();
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE,
+    PermissionAction.DELETE
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE,
+    PermissionAction.UPDATE
   );
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ,
+    PermissionAction.READ
   );
 
   const updateTransactionMutation = useMutation(
     trpc.transaction.updateStatus.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter(),
+          trpc.student.transactions.pathFilter()
         );
         await queryClient.invalidateQueries(trpc.studentAccount.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
@@ -89,7 +90,7 @@ export function TransactionTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    }),
+    })
   );
   const { openModal } = useModal();
   return (
@@ -125,7 +126,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.transactionRef}
@@ -134,7 +135,15 @@ export function TransactionTable() {
                       <> {transaction.transactionRef}</>
                     )}
                   </TableCell>
-                  <TableCell>{transaction.transactionType}</TableCell>
+                  <TableCell>
+                    {transaction.transactionType == TransactionType.DISCOUNT ? (
+                      <FlatBadge variant="pink">{t("discount")}</FlatBadge>
+                    ) : transaction.transactionType == TransactionType.DEBIT ? (
+                      <FlatBadge variant="red">{t("debit")}</FlatBadge>
+                    ) : (
+                      <FlatBadge variant="green">{t("credit")}</FlatBadge>
+                    )}
+                  </TableCell>
                   <TableCell>
                     {fullDateFormatter.format(transaction.createdAt)}
                   </TableCell>
@@ -144,7 +153,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id,
+                          transaction.id
                         )}
                       >
                         {transaction.description}

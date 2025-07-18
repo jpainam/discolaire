@@ -13,6 +13,7 @@ import { jobQueue } from "./queue";
 export const name = "jobs";
 
 export async function initializeJobs() {
+  await jobQueue.obliterate();
   const repeatableJobs = await jobQueue.getJobSchedulers();
 
   for (const job of repeatableJobs) {
@@ -57,7 +58,7 @@ export async function initializeJobs() {
           attempts: 5,
           removeOnFail: 10,
         },
-      },
+      }
     );
   }
 
