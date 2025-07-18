@@ -58,7 +58,7 @@ export async function initializeJobs() {
           attempts: 5,
           removeOnFail: 10,
         },
-      }
+      },
     );
   }
 

@@ -61,28 +61,28 @@ export function TransactionTable() {
   });
   const trpc = useTRPC();
   const { data: transactions } = useSuspenseQuery(
-    trpc.student.transactions.queryOptions(params.id)
+    trpc.student.transactions.queryOptions(params.id),
   );
   const queryClient = useQueryClient();
 
   const canDeleteTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.DELETE
+    PermissionAction.DELETE,
   );
   const canUpdateTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.UPDATE
+    PermissionAction.UPDATE,
   );
   const canReadTransaction = useCheckPermission(
     "transaction",
-    PermissionAction.READ
+    PermissionAction.READ,
   );
 
   const updateTransactionMutation = useMutation(
     trpc.transaction.updateStatus.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.student.transactions.pathFilter()
+          trpc.student.transactions.pathFilter(),
         );
         await queryClient.invalidateQueries(trpc.studentAccount.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
@@ -90,7 +90,7 @@ export function TransactionTable() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-    })
+    }),
   );
   const { openModal } = useModal();
   return (
@@ -126,7 +126,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id
+                          transaction.id,
                         )}
                       >
                         {transaction.transactionRef}
@@ -153,7 +153,7 @@ export function TransactionTable() {
                         className="hover:text-blue-600 hover:underline"
                         href={routes.students.transactions.details(
                           params.id,
-                          transaction.id
+                          transaction.id,
                         )}
                       >
                         {transaction.description}
