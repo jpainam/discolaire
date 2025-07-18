@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
   const schoolYearId = request.cookies.get("x-school-year")?.value;
   if (isProtectedRoute && !schoolYearId) {

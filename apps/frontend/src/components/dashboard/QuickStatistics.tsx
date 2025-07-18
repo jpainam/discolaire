@@ -108,7 +108,7 @@ import FlatBadge from "../FlatBadge";
 export async function QuickStatistics({ className }: { className?: string }) {
   const enrolled = await caller.enrollment.count({});
   const classrooms = await caller.classroom.all();
-  // const contactCount = await caller.contact.count();
+  const contactCount = await caller.contact.count();
 
   const staffCount = await caller.staff.count();
   const { t } = await getServerTranslations();
@@ -144,7 +144,7 @@ export async function QuickStatistics({ className }: { className?: string }) {
       title: t("total_contacts"),
       value: enrolled.contactCount,
       delta: 0,
-      lastMonth: classrooms.length,
+      lastMonth: contactCount,
       positive: true,
       prefix: "",
       suffix: "",
