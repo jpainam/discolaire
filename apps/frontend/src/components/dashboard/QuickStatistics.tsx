@@ -143,8 +143,8 @@ export async function QuickStatistics({ className }: { className?: string }) {
     {
       title: t("total_contacts"),
       value: enrolled.contactCount,
-      delta: 0,
-      lastMonth: contactCount,
+      delta: (contactCount.new / (contactCount.total || 1e9)) * 100,
+      lastMonth: contactCount.total,
       positive: true,
       prefix: "",
       suffix: "",
@@ -196,7 +196,7 @@ export async function QuickStatistics({ className }: { className?: string }) {
                 </span>
                 <FlatBadge variant={stat.positive ? "green" : "red"}>
                   {stat.delta > 0 ? <ArrowUp /> : <ArrowDown />}
-                  {stat.delta}%
+                  {stat.delta.toFixed(2)}%
                 </FlatBadge>
               </div>
               <div className="text-xs text-muted-foreground mt-2 border-t pt-2.5">
