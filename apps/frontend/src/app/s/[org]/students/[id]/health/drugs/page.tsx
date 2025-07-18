@@ -3,7 +3,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, trpc } from "~/trpc/server";
-import { prefetch } from "../../../../../../trpc/server";
+import { prefetch } from "../../../../../../../trpc/server";
 import { DrugHeader } from "./DrugHeader";
 import { DrugTable } from "./DrugTable";
 

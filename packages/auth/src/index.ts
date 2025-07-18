@@ -106,6 +106,13 @@ export function initAuth(options: { secret: string | undefined }) {
         });
       },
     },
+    advanced: {
+      // crossSubDomainCookies: {
+      //   enabled: true,
+      //   // eslint-disable-next-line turbo/no-undeclared-env-vars
+      //   domain: `.${process.env.PUBLIC_DOMAIN}`, // your domain
+      // },
+    },
     plugins: [
       admin(),
       username(),

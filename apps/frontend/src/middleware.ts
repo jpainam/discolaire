@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export const config = {
   //runtime: "nodejs",
   matcher: [
-    "/((?!api|_next/static|_next/image|images|fonts|favicon.ico|manifest.webmanifest|robots.txt).*)",
+    "/((?!api|_next/static|_next/image|images|avatars|fonts|favicon.ico|manifest.webmanifest|robots.txt).*)",
   ],
 };
 
@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
   const schoolYearId = request.cookies.get("x-school-year")?.value;
   if (isProtectedRoute && !schoolYearId) {
@@ -42,5 +42,15 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute && !session) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-  return NextResponse.next();
+  if (pathname.startsWith("/s/")) {
+    return NextResponse.rewrite(new URL("/404", request.url));
+  }
+  if (pathname.includes("auth/login")) {
+    return NextResponse.next();
+  }
+  const url = new URL(request.url);
+  url.pathname = `/s/default${pathname}`;
+  return NextResponse.rewrite(url);
+  //return NextResponse.rewrite(new URL(`/s/default${pathname}`, request.url));
+  //return NextResponse.next();
 }

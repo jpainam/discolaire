@@ -38,7 +38,7 @@ export function formatBytes(
   opts: {
     decimals?: number;
     sizeType?: "accurate" | "normal";
-  } = {},
+  } = {}
 ) {
   const { decimals = 0, sizeType = "normal" } = opts;
 
@@ -56,13 +56,13 @@ export function formatBytes(
 export function generateId({ length = 8, prefix = "" } = {}) {
   return `${prefix}${customAlphabet(
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-    length,
+    length
   )()}`;
 }
 
 export function formatDate(
   date: Date | string | number,
-  opts: Intl.DateTimeFormatOptions = {},
+  opts: Intl.DateTimeFormatOptions = {}
 ) {
   return new Intl.DateTimeFormat(i18next.language, {
     month: opts.month ?? "long",
@@ -79,7 +79,7 @@ export function formatDate(
 export function composeEventHandlers<E>(
   originalEventHandler?: (event: E) => void,
   ourEventHandler?: (event: E) => void,
-  { checkForDefaultPrevented = true } = {},
+  { checkForDefaultPrevented = true } = {}
 ) {
   return function handleEvent(event: E) {
     originalEventHandler?.(event);
@@ -112,7 +112,7 @@ export function getFileBasename(url: string): string {
 
 export async function fetchWithErrorHandlers(
   input: RequestInfo | URL,
-  init?: RequestInit,
+  init?: RequestInit
 ) {
   try {
     const response = await fetch(input, init);
@@ -161,7 +161,7 @@ export function getMostRecentUserMessage(messages: UIMessage[]) {
 
 export function getDocumentTimestampByIndex(
   documents: AiDocument[],
-  index: number,
+  index: number
 ) {
   //if (!documents) return new Date();
   if (index > documents.length) return new Date();
