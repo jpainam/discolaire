@@ -133,7 +133,7 @@ export default async function Page(props: PageProps) {
                           {grade?.grade != null && subject.coefficient}
                         </TableCell>
                         <TableCell className={cn(rowClassName)}>
-                          {grade?.total}
+                          {grade?.total?.toFixed(2)}
                         </TableCell>
                         <TableCell className={cn(rowClassName)}>
                           {grade?.rank}
