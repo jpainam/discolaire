@@ -44,8 +44,20 @@ export const enrollmentService = {
         active += 1;
       }
     });
+    const contactCount = await db.contact.count({
+      where: {
+        studentContacts: {
+          some: {
+            studentId: {
+              in: students.map((s) => s.id),
+            },
+          },
+        },
+      },
+    });
     return {
       total,
+      contactCount,
       repeating: students.filter((s) => s.enrollments.length > 1).length,
       new: newStudents,
       old: oldStudents,
