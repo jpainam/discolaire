@@ -21,22 +21,62 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { addMonths } from "date-fns";
+import i18next from "i18next";
 import { Info } from "lucide-react";
+import { useState } from "react";
+import { CURRENCY } from "~/lib/constants";
+import { useTRPC } from "~/trpc/react";
 
-export function TransactionSummaryCard() {
-  const alerts = [
-    { name: "Acme Corp", plan: "Enterprise", daysLeft: 3, renewUrl: "#" },
-    { name: "Beta LLC", plan: "Pro", daysLeft: 5, renewUrl: "#" },
-    { name: "Gamma Inc", plan: "Pro", daysLeft: 7, renewUrl: "#" },
-  ];
+export function TransactionSummaryCard({
+  startDate,
+  endDate,
+}: {
+  startDate: Date;
+  endDate: Date;
+}) {
+  const [from, setFrom] = useState<Date>(startDate);
+  const [to, setTo] = useState<Date>(endDate);
 
+  const trpc = useTRPC();
+  const { data: transactionSummary } = useSuspenseQuery(
+    trpc.transaction.getTransactionSummary.queryOptions({
+      from,
+      to,
+    }),
+  );
+  const handleChangeRange = (value: string) => {
+    switch (value) {
+      case "this-month":
+        setFrom(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+        setTo(addMonths(new Date(), 1));
+        break;
+      case "last-month":
+        setFrom(
+          new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+        );
+        setTo(new Date(new Date().getFullYear(), new Date().getMonth(), 0));
+        break;
+      case "this-year":
+        setFrom(new Date(new Date().getFullYear(), 0, 1));
+        setTo(addMonths(new Date(), 12));
+        break;
+      case "last-year":
+        setFrom(new Date(new Date().getFullYear() - 1, 0, 1));
+        setTo(new Date(new Date().getFullYear() - 1, 11, 31));
+        break;
+      default:
+        break;
+    }
+  };
   return (
     <div className="flex">
       <Card className="w-full">
         <CardHeader className="border-0">
           <CardTitle>Transactions</CardTitle>
           <CardAction>
-            <Select defaultValue="this-month">
+            <Select defaultValue="this-month" onValueChange={handleChangeRange}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Select a plan" />
               </SelectTrigger>
@@ -56,7 +96,12 @@ export function TransactionSummaryCard() {
               <div className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
                 Total Revenue
               </div>
-              <div className="text-2xl font-bold text-foreground">$128,400</div>
+              <div className="text-2xl font-bold text-foreground">
+                {transactionSummary.revenue.toLocaleString(i18next.language, {
+                  style: "currency",
+                  currency: CURRENCY,
+                })}
+              </div>
             </div>
             <div className="flex flex-col gap-1.5 flex-1">
               <div className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
@@ -113,22 +158,26 @@ export function TransactionSummaryCard() {
               View all
             </a>
           </div>
-          {alerts.map((item) => (
+          {transactionSummary.lastTransactions.slice(3).map((item) => (
             <div
-              key={item.name}
+              key={item.id}
               className="flex items-center justify-between bg-muted/40 rounded-md px-3 py-2.5 mb-2 last:mb-0"
             >
               <div className="flex items-center gap-2.5">
                 <span className="text-sm font-medium text-foreground">
-                  {item.name}
+                  {item.student.lastName}
                 </span>
-                <Badge>{item.plan}</Badge>
+                <Badge>{item.student.classroom?.reportName}</Badge>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="text-xs text-muted-foreground">
                   in{" "}
                   <span className="font-semibold text-foreground">
-                    {item.daysLeft}d
+                    {item.createdAt.toLocaleDateString(i18next.language, {
+                      month: "short",
+                      day: "numeric",
+                      year: "2-digit",
+                    })}
                   </span>
                 </span>
                 <Separator
@@ -136,7 +185,7 @@ export function TransactionSummaryCard() {
                   className="h-3 bg-accent-foreground/20"
                 />
                 <a
-                  href={item.renewUrl}
+                  href={`/students/${item.student.id}/transactions/${item.id}`}
                   className="text-xs text-primary font-medium hover:underline"
                 >
                   Renew

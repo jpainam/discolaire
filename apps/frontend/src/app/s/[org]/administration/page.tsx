@@ -1,13 +1,20 @@
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { addMonths, subMonths } from "date-fns";
 import { Suspense } from "react";
 //import { ClassroomStatistics } from "~/components/administration/ClassroomStatistics";
 import { TransactionSummaryCard } from "~/components/administration/TransactionSummaryCard";
 //import { RecentActivities } from "~/components/administration/RecentActivities";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
-import { HydrateClient } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default function Page() {
   //const { t } = await getServerTranslations();
+  batchPrefetch([
+    trpc.transaction.getTransactionSummary.queryOptions({
+      from: subMonths(new Date(), 3),
+      to: addMonths(new Date(), 1),
+    }),
+  ]);
   return (
     <HydrateClient>
       <div className="px-4 py-2 flex flex-col gap-4">
@@ -26,7 +33,10 @@ export default function Page() {
         </Suspense>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <Suspense fallback={<Skeleton className="h-24 w-full" />}>
-            <TransactionSummaryCard />
+            <TransactionSummaryCard
+              endDate={addMonths(new Date(), 1)}
+              startDate={subMonths(new Date(), 3)}
+            />
           </Suspense>
         </div>
 

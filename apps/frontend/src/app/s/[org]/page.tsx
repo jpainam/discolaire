@@ -73,7 +73,7 @@ export default async function Page() {
           </div>
         }
       >
-        <QuickStatistics className="col-span-full" />
+        <QuickStatistics />
       </Suspense>
       {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
       {/* <SchoolFeed /> */}

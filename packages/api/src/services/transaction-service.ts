@@ -159,7 +159,12 @@ export async function getTransactionSummary({
     );
     lastTransactions.push({
       id: transaction.id,
-      student: { lastName: student.lastName, firstName: student.firstName },
+      student: {
+        id: student.id,
+        lastName: student.lastName,
+        firstName: student.firstName,
+        classroom: student.classroom,
+      },
       amount: transaction.amount,
       transactionType: transaction.transactionType,
       createdAt: transaction.createdAt,

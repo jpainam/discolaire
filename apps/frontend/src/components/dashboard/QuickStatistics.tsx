@@ -150,7 +150,7 @@ export async function QuickStatistics() {
     },
   ];
   return (
-    <div className="grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+    <div className="col-span-full grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
       {stats.map((stat, index) => (
         <Card key={index} className="">
           <CardHeader className="border-0">
