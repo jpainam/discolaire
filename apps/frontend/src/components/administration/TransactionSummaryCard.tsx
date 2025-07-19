@@ -46,7 +46,7 @@ export function TransactionSummaryCard({
     trpc.transaction.getTransactionSummary.queryOptions({
       from,
       to,
-    })
+    }),
   );
   const handleChangeRange = (value: string) => {
     switch (value) {
@@ -56,7 +56,7 @@ export function TransactionSummaryCard({
         break;
       case "last-month":
         setFrom(
-          new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1)
+          new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
         );
         setTo(new Date(new Date().getFullYear(), new Date().getMonth(), 0));
         break;
