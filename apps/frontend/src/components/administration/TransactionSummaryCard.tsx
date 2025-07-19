@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { Separator } from "@repo/ui/components/separator";
 import {
   Tooltip,
   TooltipContent,
@@ -25,7 +24,9 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { addMonths } from "date-fns";
 import i18next from "i18next";
 import { Info } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 
@@ -38,13 +39,14 @@ export function TransactionSummaryCard({
 }) {
   const [from, setFrom] = useState<Date>(startDate);
   const [to, setTo] = useState<Date>(endDate);
+  const { t } = useLocale();
 
   const trpc = useTRPC();
   const { data: transactionSummary } = useSuspenseQuery(
     trpc.transaction.getTransactionSummary.queryOptions({
       from,
       to,
-    }),
+    })
   );
   const handleChangeRange = (value: string) => {
     switch (value) {
@@ -54,7 +56,7 @@ export function TransactionSummaryCard({
         break;
       case "last-month":
         setFrom(
-          new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+          new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1)
         );
         setTo(new Date(new Date().getFullYear(), new Date().getMonth(), 0));
         break;
@@ -99,36 +101,40 @@ export function TransactionSummaryCard({
               <div className="text-2xl font-bold text-foreground">
                 {transactionSummary.revenue.toLocaleString(i18next.language, {
                   style: "currency",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
                   currency: CURRENCY,
                 })}
               </div>
             </div>
             <div className="flex flex-col gap-1.5 flex-1">
               <div className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
-                Subscriptions
+                Nombre
               </div>
-              <div className="text-2xl font-bold text-foreground">312</div>
+              <div className="text-2xl font-bold text-foreground">
+                {transactionSummary.numberOfTransactions}
+              </div>
             </div>
           </div>
           {/* Segmented Progress Bar */}
           <div className="flex items-center gap-0.5 w-full h-2.5 rounded-full overflow-hidden mb-3.5 bg-muted">
-            <div className="bg-teal-400 h-full" style={{ width: "60%" }} />
-            <div className="bg-destructive h-full" style={{ width: "30%" }} />
-            <div className="bg-amber-400 h-full" style={{ width: "10%" }} />
+            <div className="bg-teal-400 h-full" style={{ width: "75%" }} />
+            <div className="bg-destructive h-full" style={{ width: "20%" }} />
+            <div className="bg-amber-400 h-full" style={{ width: "5%" }} />
           </div>
           {/* Legend */}
           <div className="flex items-center gap-5 mb-6">
             <div className="flex items-center gap-1 text-xs text-teal-600">
               <span className="size-2 rounded-full bg-teal-400 inline-block" />{" "}
-              Free
+              {t("credit")}
             </div>
             <div className="flex items-center gap-1 text-xs text-destructive">
               <span className="size-2 rounded-full bg-destructive inline-block" />{" "}
-              Pro
+              {t("debit")}
             </div>
             <div className="flex items-center gap-1 text-xs text-amber-600">
               <span className="size-2 rounded-full bg-amber-400 inline-block" />{" "}
-              Enterprise
+              {t("discount")}
               <span className="ms-1">
                 <TooltipProvider>
                   <Tooltip>
@@ -152,35 +158,38 @@ export function TransactionSummaryCard({
               Expiring Soon
             </div>
             <a
-              href="#"
+              href="/administration/accounting/transactions"
               className="text-sm text-primary font-medium hover:underline"
             >
-              View all
+              {t("view_all")}
             </a>
           </div>
-          {transactionSummary.lastTransactions.slice(3).map((item) => (
+          {transactionSummary.lastTransactions.slice(0, 3).map((item) => (
             <div
               key={item.id}
               className="flex items-center justify-between bg-muted/40 rounded-md px-3 py-2.5 mb-2 last:mb-0"
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-sm font-medium text-foreground">
+              <Link
+                target="_blank"
+                href={`/students/${item.student.id}/transactions/${item.id}`}
+                className="flex items-center gap-2.5 text-xs"
+              >
+                <span className="text-xs font-medium text-foreground">
                   {item.student.lastName}
                 </span>
-                <Badge>{item.student.classroom?.reportName}</Badge>
-              </div>
+                <Badge variant={"secondary"} className="text-xs">
+                  {item.student.classroom?.reportName}
+                </Badge>
+              </Link>
               <div className="flex items-center gap-2.5">
                 <span className="text-xs text-muted-foreground">
-                  in{" "}
-                  <span className="font-semibold text-foreground">
-                    {item.createdAt.toLocaleDateString(i18next.language, {
-                      month: "short",
-                      day: "numeric",
-                      year: "2-digit",
-                    })}
-                  </span>
+                  {item.createdAt.toLocaleDateString(i18next.language, {
+                    month: "short",
+                    day: "numeric",
+                    year: "2-digit",
+                  })}
                 </span>
-                <Separator
+                {/* <Separator
                   orientation="vertical"
                   className="h-3 bg-accent-foreground/20"
                 />
@@ -189,7 +198,7 @@ export function TransactionSummaryCard({
                   className="text-xs text-primary font-medium hover:underline"
                 >
                   Renew
-                </a>
+                </a> */}
               </div>
             </div>
           ))}
