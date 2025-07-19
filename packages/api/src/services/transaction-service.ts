@@ -1,4 +1,4 @@
-import { db } from "@repo/db";
+import { db, TransactionType } from "@repo/db";
 
 import { studentService } from "./student-service";
 
@@ -116,3 +116,62 @@ export const transactionService = {
     });
   },
 };
+
+export async function getTransactionSummary({
+  from,
+  to,
+  schoolId,
+  schoolYearId,
+}: {
+  from: Date;
+  to: Date;
+  schoolId: string;
+  schoolYearId: string;
+}) {
+  const transactions = await db.transaction.findMany({
+    where: {
+      createdAt: {
+        gte: from,
+        lte: to,
+      },
+      deletedAt: null,
+    },
+    include: {
+      student: true,
+    },
+  });
+  let totalCredit = 0;
+  let totalDebit = 0;
+  let totalDiscount = 0;
+  const lastTransactions = [];
+  for (const transaction of transactions) {
+    if (transaction.transactionType === TransactionType.CREDIT) {
+      totalCredit += transaction.amount;
+    } else if (transaction.transactionType === TransactionType.DEBIT) {
+      totalDebit += Math.abs(transaction.amount);
+    } else {
+      totalDiscount += transaction.amount;
+    }
+    const student = await studentService.get(
+      transaction.studentId,
+      schoolYearId,
+      schoolId,
+    );
+    lastTransactions.push({
+      id: transaction.id,
+      student: { lastName: student.lastName, firstName: student.firstName },
+      amount: transaction.amount,
+      transactionType: transaction.transactionType,
+      createdAt: transaction.createdAt,
+    });
+  }
+
+  return {
+    revenue: totalCredit - totalDebit - totalDiscount,
+    numberOfTransactions: transactions.length,
+    totalCredit: totalCredit,
+    totalDebit: totalDebit,
+    totalDiscount: totalDiscount,
+    lastTransactions: lastTransactions,
+  };
+}

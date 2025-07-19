@@ -60,7 +60,6 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import FlatBadge from "../FlatBadge";
 
@@ -105,7 +104,7 @@ import FlatBadge from "../FlatBadge";
 //   },
 // ];
 
-export async function QuickStatistics({ className }: { className?: string }) {
+export async function QuickStatistics() {
   const enrolled = await caller.enrollment.count({});
   const classrooms = await caller.classroom.all();
   const contactCount = await caller.contact.count();
@@ -151,15 +150,14 @@ export async function QuickStatistics({ className }: { className?: string }) {
     },
   ];
   return (
-    <div className={cn("flex items-center justify-center", className)}>
-      <div className="grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <Card key={index} className="">
-            <CardHeader className="border-0">
-              <CardTitle className="text-muted-foreground text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-              {/* <CardAction>
+    <div className="grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+      {stats.map((stat, index) => (
+        <Card key={index} className="">
+          <CardHeader className="border-0">
+            <CardTitle className="text-muted-foreground text-sm font-medium">
+              {stat.title}
+            </CardTitle>
+            {/* <CardAction>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button size="icon" variant={"ghost"} className="-me-1.5">
@@ -188,27 +186,26 @@ export async function QuickStatistics({ className }: { className?: string }) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </CardAction> */}
-            </CardHeader>
-            <CardContent className="space-y-2.5">
-              <div className="flex items-center gap-2.5">
-                <span className="text-2xl font-medium text-foreground tracking-tight">
-                  {stat.value.toLocaleString()}
-                </span>
-                <FlatBadge variant={stat.positive ? "green" : "red"}>
-                  {stat.delta > 0 ? <ArrowUp /> : <ArrowDown />}
-                  {stat.delta.toFixed(2)}%
-                </FlatBadge>
-              </div>
-              <div className="text-xs text-muted-foreground mt-2 border-t pt-2.5">
-                Vs l'année dernière:{" "}
-                <span className="font-medium text-foreground">
-                  {stat.lastMonth.toLocaleString()}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+          </CardHeader>
+          <CardContent className="space-y-2.5">
+            <div className="flex items-center gap-2.5">
+              <span className="text-2xl font-medium text-foreground tracking-tight">
+                {stat.value.toLocaleString()}
+              </span>
+              <FlatBadge variant={stat.positive ? "green" : "red"}>
+                {stat.delta > 0 ? <ArrowUp /> : <ArrowDown />}
+                {stat.delta.toFixed(2)}%
+              </FlatBadge>
+            </div>
+            <div className="text-xs text-muted-foreground mt-2 border-t pt-2.5">
+              Vs l'année dernière:{" "}
+              <span className="font-medium text-foreground">
+                {stat.lastMonth.toLocaleString()}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }

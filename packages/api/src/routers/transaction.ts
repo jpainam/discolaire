@@ -6,7 +6,10 @@ import { z } from "zod";
 import type { TransactionStatus, TransactionType } from "@repo/db";
 
 import { classroomService } from "../services/classroom-service";
-import { transactionService } from "../services/transaction-service";
+import {
+  getTransactionSummary,
+  transactionService,
+} from "../services/transaction-service";
 import { protectedProcedure } from "../trpc";
 import { notificationQueue } from "../utils";
 
@@ -494,6 +497,22 @@ export const transactionRouter = {
             },
           },
         },
+      });
+    }),
+
+  getTransactionSummary: protectedProcedure
+    .input(
+      z.object({
+        from: z.coerce.date().optional().default(subMonths(new Date(), 1)),
+        to: z.coerce.date().optional().default(new Date()),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      return getTransactionSummary({
+        from: input.from,
+        to: input.to,
+        schoolYearId: ctx.schoolYearId,
+        schoolId: ctx.schoolId,
       });
     }),
 } satisfies TRPCRouterRecord;
