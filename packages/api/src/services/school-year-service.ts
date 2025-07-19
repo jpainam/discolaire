@@ -69,7 +69,7 @@ export const schoolYearService = {
             schoolYearId: newYear.id,
           },
         });
-        logger.log(`Classroom ${cl.name} created`);
+        logger.info(`Classroom ${cl.name} created`);
         // fees
         const fees = await db.fee.findMany({
           where: {
@@ -84,7 +84,7 @@ export const schoolYearService = {
         await db.fee.createMany({
           data: allFees,
         });
-        logger.log(`Fees for classroom ${cl.name} created`);
+        logger.info(`Fees for classroom ${cl.name} created`);
         // subjects
         const subjects = await db.subject.findMany({
           where: {

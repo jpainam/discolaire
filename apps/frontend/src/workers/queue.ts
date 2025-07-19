@@ -21,7 +21,7 @@ queueEvents.on("failed", (job, _listener) => {
 });
 
 queueEvents.on("completed", (job) => {
-  logger.log(`Job ${job.jobId} completed successfully`);
+  logger.info(`Job ${job.jobId} completed successfully`);
 });
 
 jobQueue.on("error", (error) => {

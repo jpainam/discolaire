@@ -19,12 +19,12 @@ export async function initializeJobs() {
   for (const job of repeatableJobs) {
     if (job.id) await jobQueue.removeJobScheduler(job.id);
   }
-  logger.log(`[Scheduler] Removed ${repeatableJobs.length} repeatable jobs`);
+  logger.info(`[Scheduler] Removed ${repeatableJobs.length} repeatable jobs`);
   await jobQueue.drain(true); // Pass `true` to remove delayed jobs as well
-  logger.log("[Scheduler] Queue drained.");
+  logger.info("[Scheduler] Queue drained.");
 
   const tasks = await db.scheduleTask.findMany();
-  logger.log(`[Scheduler] Initializing ${tasks.length} jobs`);
+  logger.info(`[Scheduler] Initializing ${tasks.length} jobs`);
   for (const task of tasks) {
     if (!isValidCron(task.cron)) {
       logger.error(`Invalid cron pattern for task ${task.name}: ${task.cron}`);
@@ -35,7 +35,7 @@ export async function initializeJobs() {
         id: task.schoolId,
       },
     });
-    logger.log(`[Scheduler] Job ${task.name} with cron ${task.cron}`);
+    logger.info(`[Scheduler] Job ${task.name} with cron ${task.cron}`);
     await jobQueue.upsertJobScheduler(
       `${task.id}-${task.name}`,
       { pattern: task.cron, tz: school.timezone },
@@ -62,7 +62,7 @@ export async function initializeJobs() {
     );
   }
 
-  logger.log("[Scheduler] Jobs initialized successfully");
+  logger.info("[Scheduler] Jobs initialized successfully");
 }
 
 function isValidCron(cron: string): boolean {

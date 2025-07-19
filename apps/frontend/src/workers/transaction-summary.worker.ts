@@ -27,7 +27,7 @@ import { JobNames, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 
 const connection = getRedis();
-logger.log("[Worker] Initializing transaction summary worker");
+logger.info("[Worker] Initializing transaction summary worker");
 new Worker(
   jobQueueName,
   async (job) => {
