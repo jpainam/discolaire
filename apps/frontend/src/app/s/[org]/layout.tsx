@@ -1,29 +1,32 @@
+import { Suspense } from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 import { Separator } from "@repo/ui/components/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@repo/ui/components/sidebar";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { AppSidebar } from "~/components/app-sidebar";
-import { ModeSwitcher } from "~/components/mode-switcher";
-import { UserNav } from "~/components/user-nav";
-import { SchoolContextProvider } from "~/providers/SchoolProvider";
-
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { Suspense } from "react";
+
 import { getSession } from "~/auth/server";
+import { AppSidebar } from "~/components/app-sidebar";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
+import { ModeSwitcher } from "~/components/mode-switcher";
 import NotificationMenu from "~/components/notifications/NotificationMenu";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
 import { Shortcut } from "~/components/Shortcut";
 import { ThemeSelector } from "~/components/ThemeSelector";
 import { TopRightButtons } from "~/components/TopRightButtons";
+import { UserNav } from "~/components/user-nav";
+import { BannerLine } from "~/layouts/BannerLine";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
+import { SchoolContextProvider } from "~/providers/SchoolProvider";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+
 export default async function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -62,11 +65,11 @@ export default async function Layout({
         school={school}
         permissions={permissions}
       >
-        {/* <NoticeBanner /> */}
         <AppSidebar />
         <SidebarInset>
+          <BannerLine />
           <header className="bg-background sticky inset-x-0 top-0 isolate z-20 flex shrink-0 items-center gap-2 border-b">
-            <div className="flex py-2 w-full items-center gap-2 px-4">
+            <div className="flex w-full items-center gap-2 px-4 py-2">
               <SidebarTrigger className="-ml-1.5" />
               <Separator
                 orientation="vertical"
@@ -83,19 +86,19 @@ export default async function Layout({
                 <ThemeSelector />
                 <Separator
                   orientation="vertical"
-                  className="hidden md:block ml-1 w-px data-[orientation=vertical]:h-6"
+                  className="ml-1 hidden w-px data-[orientation=vertical]:h-6 md:block"
                 />
                 <TopRightButtons />
                 <Separator
                   orientation="vertical"
-                  className="hidden md:block w-px data-[orientation=vertical]:h-6"
+                  className="hidden w-px data-[orientation=vertical]:h-6 md:block"
                 />
                 <Shortcut className="hidden md:flex" />
                 <ModeSwitcher />
                 <LanguageSwitcher />
                 <Separator
                   orientation="vertical"
-                  className="hidden md:block mr-1 w-px data-[orientation=vertical]:h-6"
+                  className="mr-1 hidden w-px data-[orientation=vertical]:h-6 md:block"
                 />
                 <NotificationMenu userId={session.user.id} />
                 <UserNav className={"hidden md:block"} />
