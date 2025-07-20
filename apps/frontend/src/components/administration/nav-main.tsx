@@ -1,6 +1,8 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowLeft, ChevronRightIcon, Home } from "lucide-react";
 
 import {
@@ -17,8 +19,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@repo/ui/components/sidebar";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { useLocale } from "~/i18n";
 
 export function NavMain({

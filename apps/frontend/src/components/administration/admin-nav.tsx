@@ -38,7 +38,7 @@ export function AdminNav({ links }: NavProps) {
                 size: "sm",
               }),
               link.href === activeLink?.href &&
-                "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                "dark:bg-muted dark:hover:bg-muted dark:text-white dark:hover:text-white",
               "justify-start",
             )}
           >

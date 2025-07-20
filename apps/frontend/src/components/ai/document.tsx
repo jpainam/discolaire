@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { memo } from "react";
-
 import { toast } from "sonner";
-import { useArtifact } from "~/hooks/use-artifact";
+
 import type { ArtifactKind } from "./artifact";
+import { useArtifact } from "~/hooks/use-artifact";
 import { FileIcon, LoaderIcon, MessageIcon, PencilEditIcon } from "./icons";
 
 const getActionText = (
@@ -40,7 +40,7 @@ function PureDocumentToolResult({
   return (
     <button
       type="button"
-      className="bg-background cursor-pointer border py-2 px-3 rounded-xl w-fit flex flex-row gap-3 items-start"
+      className="bg-background flex w-fit cursor-pointer flex-row items-start gap-3 rounded-xl border px-3 py-2"
       onClick={(event) => {
         if (isReadonly) {
           toast.error(
@@ -106,7 +106,7 @@ function PureDocumentToolCall({
   return (
     <button
       type="button"
-      className="cursor pointer w-fit border py-2 px-3 rounded-xl flex flex-row items-start justify-between gap-3"
+      className="cursor pointer flex w-fit flex-row items-start justify-between gap-3 rounded-xl border px-3 py-2"
       onClick={(event) => {
         if (isReadonly) {
           toast.error(
@@ -131,8 +131,8 @@ function PureDocumentToolCall({
         }));
       }}
     >
-      <div className="flex flex-row gap-3 items-start">
-        <div className="text-zinc-500 mt-1">
+      <div className="flex flex-row items-start gap-3">
+        <div className="mt-1 text-zinc-500">
           {type === "create" ? (
             <FileIcon />
           ) : type === "update" ? (
@@ -155,7 +155,7 @@ function PureDocumentToolCall({
         </div>
       </div>
 
-      <div className="animate-spin mt-1">{<LoaderIcon />}</div>
+      <div className="mt-1 animate-spin">{<LoaderIcon />}</div>
     </button>
   );
 }

@@ -1,11 +1,12 @@
+import type { UIMessageStreamWriter } from "ai";
+import { streamObject, tool } from "ai";
 import { z } from "zod";
 
 import type { Session } from "@repo/auth";
 import type { AiSuggestion } from "@repo/db";
-import type { UIMessageStreamWriter } from "ai";
-import { streamObject, tool } from "ai";
-import { getDocumentById, saveSuggestions } from "~/lib/ai/queries";
+
 import type { ChatMessage } from "~/lib/types";
+import { getDocumentById, saveSuggestions } from "~/lib/ai/queries";
 import { generateUUID } from "~/lib/utils";
 import { myProvider } from "../providers";
 

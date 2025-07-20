@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import {
   ChartLine,
   HouseIcon,
@@ -15,8 +17,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
 import { InventorySettings } from "~/components/administration/inventory/InventorySettings";
 import { ConsumableUsageDataTable } from "~/components/administration/inventory/movements/ConsumableUsageDataTable";
 import { StockMovementHeader } from "~/components/administration/inventory/movements/StockMovementHeader";
@@ -46,7 +47,7 @@ export default async function Page() {
     <HydrateClient>
       <Tabs defaultValue="tab-1">
         <ScrollArea>
-          <TabsList className="w-full text-foreground h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
+          <TabsList className="text-foreground h-auto w-full gap-2 rounded-none border-b bg-transparent px-0 py-1">
             <TabsTrigger
               value="tab-1"
               className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
@@ -137,7 +138,7 @@ export default async function Page() {
           </ErrorBoundary>
         </TabsContent>
         {/* Movement de tock */}
-        <TabsContent value="tab-3" className=" gap-1 flex flex-col">
+        <TabsContent value="tab-3" className="flex flex-col gap-1">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
               fallback={

@@ -17,7 +17,7 @@ export function TabListItem({
   const isActive = href === pathname;
   return (
     <Link
-      className="flex flex-col items-start justify-center hover:rounded-md hover:bg-secondary"
+      className="hover:bg-secondary flex flex-col items-start justify-center hover:rounded-md"
       href={href}
     >
       <div className="flex flex-row items-center gap-2 px-4">
@@ -27,7 +27,7 @@ export function TabListItem({
           {isActive && (
             <div
               className={
-                "h-1 w-full rounded-t-md border-b-4 border-primary bg-primary"
+                "border-primary bg-primary h-1 w-full rounded-t-md border-b-4"
               }
             ></div>
           )}

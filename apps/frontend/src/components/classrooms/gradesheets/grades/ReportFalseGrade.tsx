@@ -26,7 +26,7 @@ export function ReportFalseGrade() {
     <FloatingPanelRoot>
       <FloatingPanelTrigger
         title="Add Note"
-        className="flex flex-row items-center space-x-2 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 flex flex-row items-center space-x-2 rounded-md px-4 py-2 transition-colors"
       >
         <div className="flex flex-row items-center gap-2">
           <BugIcon className="size-4" />

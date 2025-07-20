@@ -1,7 +1,6 @@
 import { PiGenderFemale, PiGenderMale } from "react-icons/pi";
 
 import { getServerTranslations } from "~/i18n/server";
-
 import { cn } from "~/lib/utils";
 import { EffectiveStatCounter } from "./EffectiveStatCounter";
 
@@ -46,7 +45,7 @@ export async function EffectiveStatCard({
       <div className="mb-2 flex items-start gap-5">
         <span
           className={cn(
-            "flex rounded-lg bg-muted p-3 text-muted-foreground",
+            "bg-muted text-muted-foreground flex rounded-lg p-3",
             iconFill,
           )}
         >
@@ -64,7 +63,7 @@ export async function EffectiveStatCard({
           <div className={cn("flex items-center gap-1")}>
             <span
               className={cn(
-                "flex rounded-full bg-secondary px-2.5 py-1.5 text-secondary-foreground",
+                "bg-secondary text-secondary-foreground flex rounded-full px-2.5 py-1.5",
               )}
             >
               <PiGenderMale className="h-auto w-4" />
@@ -76,7 +75,7 @@ export async function EffectiveStatCard({
           <div className={cn("flex items-center gap-1")}>
             <span
               className={cn(
-                "flex rounded-full bg-secondary px-2.5 py-1.5 text-secondary-foreground",
+                "bg-secondary text-secondary-foreground flex rounded-full px-2.5 py-1.5",
               )}
             >
               <PiGenderFemale className="h-auto w-4" />

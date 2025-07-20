@@ -1,9 +1,12 @@
-import type { RouterOutputs } from "@repo/api";
-import { cn } from "@repo/ui/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
+
+import type { RouterOutputs } from "@repo/api";
+import { cn } from "@repo/ui/lib/utils";
+
 import { getServerTranslations } from "~/i18n/server";
 import { EmptyState } from "./EmptyState";
+
 export async function LogActivityTable({
   logs,
 }: {
@@ -12,7 +15,7 @@ export async function LogActivityTable({
   const { t, i18n } = await getServerTranslations();
 
   return (
-    <div className="space-y-3 max-h-[calc(100vh-5rem)] overflow-y-auto">
+    <div className="max-h-[calc(100vh-5rem)] space-y-3 overflow-y-auto">
       {logs.length === 0 && (
         <EmptyState className="my-8" title={t("no_data")} />
       )}
@@ -20,14 +23,14 @@ export async function LogActivityTable({
         <div
           key={index}
           className={cn(
-            "text-xs border-l-2 pl-3 border-amber-500 hover:bg-muted p-2 transition-colors",
+            "hover:bg-muted border-l-2 border-amber-500 p-2 pl-3 text-xs transition-colors",
             log.action === "delete" && "border-red-500",
             log.action === "create" && "border-green-500",
             log.action === "update" && "border-orange-500",
             log.action === "read" && "border-blue-500",
           )}
         >
-          <div className="text-neutral-500 font-mono">
+          <div className="font-mono text-neutral-500">
             {formatDistanceToNow(log.createdAt, {
               locale:
                 i18n.language == "fr" ? fr : i18n.language == "en" ? enUS : es,
@@ -35,16 +38,16 @@ export async function LogActivityTable({
           </div>
           <div className="">
             {t("The user")}{" "}
-            <span className="text-orange-500 font-mono">
+            <span className="font-mono text-orange-500">
               {log.user?.name ?? "system"}
             </span>{" "}
             <span className="lowercase">{t(getActionString(log.action))} </span>
-            <span className=" font-mono lowercase">un/une {t(log.entity)}</span>
+            <span className="font-mono lowercase">un/une {t(log.entity)}</span>
             {log.entityId && (
               <span>
                 {" "}
                 correspondant à{" "}
-                <span className="text-orange-500 font-mono">
+                <span className="font-mono text-orange-500">
                   {log.entityId} {log.metadata && JSON.stringify(log.metadata)}
                 </span>
               </span>

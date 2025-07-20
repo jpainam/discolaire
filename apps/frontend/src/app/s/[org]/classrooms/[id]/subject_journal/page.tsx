@@ -1,8 +1,8 @@
 import i18next from "i18next";
+
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 import { isRichText } from "~/lib/utils";
-
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -22,21 +22,21 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4 mb-8">
+    <div className="mb-8 flex flex-col gap-4 p-4">
       {journals.map((journal, index) => {
         return (
           <div key={index}>
-            <div className="flex justify-between items-start ">
+            <div className="flex items-start justify-between">
               <div className="flex">
                 <div
-                  className="w-1.5 rounded-full mr-1"
+                  className="mr-1 w-1.5 rounded-full"
                   style={{
                     backgroundColor: journal.subject.course.color,
                   }}
                 ></div>
                 {/* <div className="w-1 bg-orange-400 mr-4 rounded-full"></div> */}
                 <div>
-                  <p className="font-bold text-lg uppercase">
+                  <p className="text-lg font-bold uppercase">
                     {journal.subject.course.name}
                   </p>
                   <p className="text-muted-foreground text-xs">
@@ -53,7 +53,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 })}
               </div>
             </div>
-            <div className="flex justify-between ml-6">
+            <div className="ml-6 flex justify-between">
               {isRichText(journal.content) ? (
                 <div
                   dangerouslySetInnerHTML={{
@@ -63,7 +63,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               ) : (
                 <div className="">{journal.content}</div>
               )}
-              <div className="bg-secondary px-4 py-1 text-sm rounded-xl border text-secondary-foreground h-fit">
+              <div className="bg-secondary text-secondary-foreground h-fit rounded-xl border px-4 py-1 text-sm">
                 Cours
               </div>
             </div>

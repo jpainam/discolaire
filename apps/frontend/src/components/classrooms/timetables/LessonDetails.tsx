@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   BookOpenText,
   CalendarDays,
@@ -11,11 +12,10 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditLesson } from "./CreateEditLesson";
 
@@ -46,19 +46,19 @@ export function LessonDetails({
   );
   return (
     <div className="grid grid-cols-2 gap-4 text-sm">
-      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center gap-2">
         <User2Icon className="h-4 w-4" />
         {t("teacher")}
       </div>
       <div className="font-bold">
         {event.subject.teacher?.prefix} {event.subject.teacher?.lastName}
       </div>
-      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center gap-2">
         <BookOpenText className="h-4 w-4" />
         {t("subject")}
       </div>
       <div className="font-bold">{event.subject.course.name}</div>
-      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center gap-2">
         <CalendarDays className="h-4 w-4" />
         {t("start_time")}
       </div>
@@ -68,7 +68,7 @@ export function LessonDetails({
         })}{" "}
         - {event.start.toLocaleTimeString(i18n.language)}
       </div>
-      <div className="flex flex-row items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center">
         <CalendarDays className="mr-2 h-4 w-4" />
         {t("end_time")}
       </div>
@@ -90,7 +90,7 @@ export function LessonDetails({
             alertDialogTitle: {
               className: "flex items-center gap-2",
             },
-            icon: <Trash2 className="h-5 w-5 text-destructive" />,
+            icon: <Trash2 className="text-destructive h-5 w-5" />,
           });
           if (isConfirm) {
             toast.loading(t("deleting"), { id: 0 });

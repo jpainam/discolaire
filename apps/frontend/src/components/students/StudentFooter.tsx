@@ -1,20 +1,21 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
 } from "@repo/ui/components/pagination";
-import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 type Student = RouterOutputs["student"]["all"][number];
 
 export function StudentFooter() {
@@ -49,7 +50,7 @@ export function StudentFooter() {
 
   return (
     <>
-      <div className="text-xs text-muted-foreground">
+      <div className="text-muted-foreground text-xs">
         {t("lastUpdatedAt")}{" "}
         {
           <time dateTime={new Date(student.updatedAt).toISOString()}>
@@ -57,7 +58,7 @@ export function StudentFooter() {
           </time>
         }
       </div>
-      <Pagination className="ml-auto mr-0 w-auto">
+      <Pagination className="mr-0 ml-auto w-auto">
         <PaginationContent className="gap-4">
           <PaginationItem>
             <Button

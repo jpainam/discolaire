@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -12,16 +13,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { cn } from "@repo/ui/lib/utils";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
-
-import { cn } from "@repo/ui/lib/utils";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { routes } from "../../configs/routes";
@@ -79,7 +79,7 @@ export default function StudentContactList({
   return (
     <div
       className={cn(
-        "overflow-y-auto px-4 text-sm gap-2 flex flex-col",
+        "flex flex-col gap-2 overflow-y-auto px-4 text-sm",
         className,
       )}
     >
@@ -118,8 +118,8 @@ export default function StudentContactList({
           const contact = contactQuery.data;
 
           return (
-            <Card key={index} className="p-0 gap-0">
-              <CardHeader className="border-b gap-0 bg-muted/50 p-2">
+            <Card key={index} className="gap-0 p-0">
+              <CardHeader className="bg-muted/50 gap-0 border-b p-2">
                 <CardTitle>
                   <AvatarState
                     avatar={student.user?.avatar}
@@ -127,7 +127,7 @@ export default function StudentContactList({
                     pos={getFullName(student).length}
                   />
                 </CardTitle>
-                <CardAction className="gap-2 flex flex-col">
+                <CardAction className="flex flex-col gap-2">
                   <Button
                     size="sm"
                     onClick={() => {
@@ -141,7 +141,7 @@ export default function StudentContactList({
 
                     {t("profile")}
                   </Button>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-muted-foreground text-xs">
                     {t("bornOn")}:{" "}
                     {student.dateOfBirth &&
                       dateFormatter.format(student.dateOfBirth)}
@@ -149,7 +149,7 @@ export default function StudentContactList({
                 </CardAction>
               </CardHeader>
               <CardContent className="p-2 text-sm">
-                <ul className="grid gap-2 ">
+                <ul className="grid gap-2">
                   <li className="flex items-center justify-between">
                     <span className="text-muted-foreground">
                       {t("lastName")}
@@ -178,7 +178,7 @@ export default function StudentContactList({
                 </ul>
               </CardContent>
               {canDeleteContact && (
-                <CardFooter className="border-t gap-0 flex flex-row items-center mb-3 justify-end">
+                <CardFooter className="mb-3 flex flex-row items-center justify-end gap-0 border-t">
                   <Button
                     onClick={async () => {
                       if (!contact?.id) {
@@ -201,7 +201,7 @@ export default function StudentContactList({
                     className="sisze-8"
                     variant="outline"
                   >
-                    <Trash2 className="h-4 w-4 text-destructive" />
+                    <Trash2 className="text-destructive h-4 w-4" />
                     <span className="sr-only">{t("delete")}</span>
                   </Button>
                 </CardFooter>

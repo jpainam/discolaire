@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { Check } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -11,8 +14,7 @@ import {
 } from "@repo/ui/components/card";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { cn } from "@repo/ui/lib/utils";
-import { Check } from "lucide-react";
-import { useState } from "react";
+
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
@@ -74,7 +76,7 @@ export function SubscriptionPlans({ plan }: { plan: string }) {
   ];
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4">
+    <div className="mx-auto w-full max-w-5xl p-4">
       {/* <h2 className="text-xl font-bold text-center mb-8">
         {t("choose_your_plan")}
       </h2> */}
@@ -89,7 +91,7 @@ export function SubscriptionPlans({ plan }: { plan: string }) {
           //   cancelText: t("cancel"),
           // });
         }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 gap-6 lg:grid-cols-3"
       >
         {plans.map((plan) => (
           <div key={plan.id} className="relative">
@@ -98,12 +100,12 @@ export function SubscriptionPlans({ plan }: { plan: string }) {
               className={cn(
                 "h-full transition-all duration-200",
                 selectedPlan === plan.id
-                  ? "border-primary ring-2 ring-primary"
+                  ? "border-primary ring-primary ring-2"
                   : "border-border hover:border-primary/50",
               )}
             >
               {selectedPlan === plan.id && (
-                <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4">
+                <div className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 transform">
                   <div className="bg-primary text-primary-foreground rounded-full p-1">
                     <Check className="h-4 w-4" />
                   </div>
@@ -127,7 +129,7 @@ export function SubscriptionPlans({ plan }: { plan: string }) {
                 <ul className="space-y-2">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
-                      <Check className="h-4 w-4 mr-2 mt-1 text-primary" />
+                      <Check className="text-primary mt-1 mr-2 h-4 w-4" />
                       <span className="text-sm">{feature}</span>
                     </li>
                   ))}

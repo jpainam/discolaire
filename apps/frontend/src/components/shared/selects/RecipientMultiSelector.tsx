@@ -1,8 +1,9 @@
 "use client";
 
+import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Command as CommandPrimitive } from "cmdk";
 import { X } from "lucide-react";
-import * as React from "react";
 
 import { Badge } from "@repo/ui/components/badge";
 import {
@@ -12,9 +13,8 @@ import {
   CommandList,
 } from "@repo/ui/components/command";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -85,14 +85,14 @@ export function RecipientMultiSelector({
       onKeyDown={handleKeyDown}
       className="overflow-visible bg-transparent"
     >
-      <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <div className="group border-input ring-offset-background focus-within:ring-ring rounded-md border px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-offset-2">
         <div className="flex flex-wrap gap-1">
           {selected.map((a_selection) => {
             return (
               <Badge key={a_selection} variant="secondary">
                 {recipientsQuery.data.find((r) => r.id === a_selection)?.name}
                 <button
-                  className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="ring-offset-background focus:ring-ring ml-1 rounded-full outline-none focus:ring-2 focus:ring-offset-2"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleUnselect(a_selection);
@@ -104,7 +104,7 @@ export function RecipientMultiSelector({
                   }}
                   onClick={() => handleUnselect(a_selection)}
                 >
-                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                  <X className="text-muted-foreground hover:text-foreground h-3 w-3" />
                 </button>
               </Badge>
             );
@@ -118,7 +118,7 @@ export function RecipientMultiSelector({
             onFocus={() => setOpen(true)}
             placeholder={t("select_recipients")}
             className={cn(
-              "ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground",
+              "placeholder:text-muted-foreground ml-2 flex-1 bg-transparent outline-none",
               className,
             )}
           />
@@ -127,7 +127,7 @@ export function RecipientMultiSelector({
       <div className="relative mt-2">
         <CommandList>
           {open && selectables.length > 0 ? (
-            <div className="absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
+            <div className="bg-popover text-popover-foreground animate-in absolute top-0 z-10 w-full rounded-md border shadow-md outline-none">
               <CommandGroup className="h-full overflow-auto">
                 {selectables.map((a_selection) => {
                   return (

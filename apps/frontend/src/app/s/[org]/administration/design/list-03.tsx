@@ -1,5 +1,5 @@
-import { cn } from "@repo/ui/lib/utils";
 import type { LucideIcon } from "lucide-react";
+import React from "react";
 import {
   AlertCircle,
   ArrowRight,
@@ -10,7 +10,8 @@ import {
   Timer,
   TrendingUp,
 } from "lucide-react";
-import React from "react";
+
+import { cn } from "@repo/ui/lib/utils";
 
 interface ListItem {
   id: string;
@@ -92,8 +93,8 @@ const ITEMS: ListItem[] = [
 
 export default function List03({ items = ITEMS, className }: List03Props) {
   return (
-    <div className={cn("w-full overflow-x-auto scrollbar-none", className)}>
-      <div className="flex gap-3 min-w-full p-1">
+    <div className={cn("scrollbar-none w-full overflow-x-auto", className)}>
+      <div className="flex min-w-full gap-3 p-1">
         {items.map((item) => (
           <div
             key={item.id}
@@ -108,19 +109,19 @@ export default function List03({ items = ITEMS, className }: List03Props) {
               "shadow-sm backdrop-blur-xl",
             )}
           >
-            <div className="p-4 space-y-3">
+            <div className="space-y-3 p-4">
               <div className="flex items-start justify-between">
                 <div
                   className={cn(
-                    "p-2 rounded-lg",
+                    "rounded-lg p-2",
                     iconStyles[item.iconStyle as keyof typeof iconStyles],
                   )}
                 >
-                  <item.icon className="w-4 h-4" />
+                  <item.icon className="h-4 w-4" />
                 </div>
                 <div
                   className={cn(
-                    "px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1.5",
+                    "flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-medium",
                     statusConfig[item.status].bg,
                     statusConfig[item.status].class,
                   )}
@@ -133,10 +134,10 @@ export default function List03({ items = ITEMS, className }: List03Props) {
               </div>
 
               <div>
-                <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-1">
+                <h3 className="mb-1 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                   {item.title}
                 </h3>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 line-clamp-2">
+                <p className="line-clamp-2 text-xs text-zinc-600 dark:text-zinc-400">
                   {item.subtitle}
                 </p>
               </div>
@@ -151,9 +152,9 @@ export default function List03({ items = ITEMS, className }: List03Props) {
                       {item.progress}%
                     </span>
                   </div>
-                  <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
                     <div
-                      className="h-full bg-zinc-900 dark:bg-zinc-100 rounded-full"
+                      className="h-full rounded-full bg-zinc-900 dark:bg-zinc-100"
                       style={{ width: `${item.progress}%` }}
                     />
                   </div>
@@ -172,7 +173,7 @@ export default function List03({ items = ITEMS, className }: List03Props) {
               )}
 
               <div className="flex items-center text-xs text-zinc-600 dark:text-zinc-400">
-                <Calendar className="w-3.5 h-3.5 mr-1.5" />
+                <Calendar className="mr-1.5 h-3.5 w-3.5" />
                 <span>{item.date}</span>
               </div>
             </div>
@@ -180,8 +181,8 @@ export default function List03({ items = ITEMS, className }: List03Props) {
             <div className="mt-auto border-t border-zinc-100 dark:border-zinc-800">
               <button
                 className={cn(
-                  "w-full flex items-center justify-center gap-2",
-                  "py-2.5 px-3",
+                  "flex w-full items-center justify-center gap-2",
+                  "px-3 py-2.5",
                   "text-xs font-medium",
                   "text-zinc-600 dark:text-zinc-400",
                   "hover:text-zinc-900 dark:hover:text-zinc-100",
@@ -190,7 +191,7 @@ export default function List03({ items = ITEMS, className }: List03Props) {
                 )}
               >
                 View Details
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>

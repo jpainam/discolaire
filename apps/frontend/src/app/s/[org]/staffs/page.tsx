@@ -1,9 +1,10 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
-import { ErrorFallback } from "~/components/error-fallback";
 
+import { ErrorFallback } from "~/components/error-fallback";
 import { StaffDataTable } from "~/components/staffs/StaffDataTable";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
@@ -16,7 +17,7 @@ export default function Page() {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="py-2 px-4">
+              <div className="px-4 py-2">
                 <Skeleton className="h-8 w-full" />
               </div>
             }

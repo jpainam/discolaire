@@ -1,3 +1,14 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import {
+  BoxIcon,
+  ChartLine,
+  HouseIcon,
+  PanelsTopLeftIcon,
+  SettingsIcon,
+  UsersRoundIcon,
+} from "lucide-react";
+
 import { Badge } from "@repo/ui/components/badge";
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -7,16 +18,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import {
-  BoxIcon,
-  ChartLine,
-  HouseIcon,
-  PanelsTopLeftIcon,
-  SettingsIcon,
-  UsersRoundIcon,
-} from "lucide-react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
@@ -36,7 +38,7 @@ export default async function Page() {
     <HydrateClient>
       <Tabs defaultValue="tab-1">
         <ScrollArea>
-          <TabsList className="text-foreground justify-start w-full mb-2 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
+          <TabsList className="text-foreground mb-2 h-auto w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1">
             <TabsTrigger
               value="tab-1"
               className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
@@ -126,7 +128,7 @@ export default async function Page() {
               fallback={
                 <div className="grid grid-cols-4 gap-4 px-4">
                   {Array.from({ length: 32 }).map((_, i) => (
-                    <Skeleton key={i} className="h-8 " />
+                    <Skeleton key={i} className="h-8" />
                   ))}
                 </div>
               }
@@ -141,7 +143,7 @@ export default async function Page() {
               fallback={
                 <div className="grid grid-cols-4 gap-4 px-4">
                   {Array.from({ length: 32 }).map((_, i) => (
-                    <Skeleton key={i} className="h-8 " />
+                    <Skeleton key={i} className="h-8" />
                   ))}
                 </div>
               }

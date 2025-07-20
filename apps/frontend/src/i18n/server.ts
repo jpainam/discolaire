@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import acceptLanguage from "accept-language";
 import type { i18n, TFunction } from "i18next";
+import { cache } from "react";
+import { cookies as getCookies, headers as getHeaders } from "next/headers";
+import acceptLanguage from "accept-language";
 import { createInstance } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
-import { cookies as getCookies, headers as getHeaders } from "next/headers";
-import { cache } from "react";
 import { initReactI18next } from "react-i18next/initReactI18next";
 
 import "server-only";

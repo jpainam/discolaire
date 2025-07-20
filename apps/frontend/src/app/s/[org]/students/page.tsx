@@ -1,8 +1,9 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentDataTable } from "~/components/students/StudentDataTable";

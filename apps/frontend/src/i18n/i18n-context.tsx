@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { useEffect } from "react";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import resourcesToBackend from "i18next-resources-to-backend";
-import { useEffect } from "react";
 import { initReactI18next, I18nextProvider as Provider } from "react-i18next";
 
 import { getOptions } from "./settings";

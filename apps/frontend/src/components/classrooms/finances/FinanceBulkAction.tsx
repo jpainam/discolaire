@@ -10,11 +10,11 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
+import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import SendNotificationDialog from "./SendNotificationDialog";
 
 export function FinanceBulkAction() {
@@ -24,7 +24,7 @@ export function FinanceBulkAction() {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
-        <MailIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+        <MailIcon className="text-muted-foreground mr-2 h-4 w-4" />
         {t("notifications")}
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>

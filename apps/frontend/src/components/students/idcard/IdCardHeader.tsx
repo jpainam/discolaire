@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreVertical } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -11,18 +12,17 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
 
-import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useLocale } from "~/i18n";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function IdCardHeader() {
   const { t } = useLocale();
   const Icon = sidebarIcons.id_card;
   return (
-    <div className="flex border-b flex-row items-center gap-1 bg-muted px-4 py-1 text-muted-foreground">
+    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-1 border-b px-4 py-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("id_card")}</Label>
       <div className="ml-auto">

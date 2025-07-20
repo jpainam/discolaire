@@ -10,10 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { CreateAssignment } from "./CreateAssignment";
 
@@ -25,7 +25,7 @@ export function AssignmentToolbar() {
     PermissionAction.CREATE,
   );
   return (
-    <header className="flex items-center justify-between border-b bg-muted/50 px-4 py-1">
+    <header className="bg-muted/50 flex items-center justify-between border-b px-4 py-1">
       <Label>{t("assignments")}</Label>
       <div className="flex flex-row items-center gap-2">
         {canCreateAssignment && (

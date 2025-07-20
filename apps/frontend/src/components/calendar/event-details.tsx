@@ -17,38 +17,38 @@ export function EventDetails({ event }: IProps) {
     <div>
       <div className="space-y-4">
         <div className="flex items-start gap-2">
-          <User className="mt-1 size-4 shrink-0 text-t-secondary" />
+          <User className="text-t-secondary mt-1 size-4 shrink-0" />
           <div>
             <p className="text-sm font-medium">Responsible</p>
-            <p className="text-sm text-t-secondary">{event.user.name}</p>
+            <p className="text-t-secondary text-sm">{event.user.name}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-2">
-          <Calendar className="mt-1 size-4 shrink-0 text-t-secondary" />
+          <Calendar className="text-t-secondary mt-1 size-4 shrink-0" />
           <div>
             <p className="text-sm font-medium">Start Date</p>
-            <p className="text-sm text-t-secondary">
+            <p className="text-t-secondary text-sm">
               {format(startDate, "MMM d, yyyy h:mm a")}
             </p>
           </div>
         </div>
 
         <div className="flex items-start gap-2">
-          <Clock className="mt-1 size-4 shrink-0 text-t-secondary" />
+          <Clock className="text-t-secondary mt-1 size-4 shrink-0" />
           <div>
             <p className="text-sm font-medium">End Date</p>
-            <p className="text-sm text-t-secondary">
+            <p className="text-t-secondary text-sm">
               {format(endDate, "MMM d, yyyy h:mm a")}
             </p>
           </div>
         </div>
 
         <div className="flex items-start gap-2">
-          <Text className="mt-1 size-4 shrink-0 text-t-secondary" />
+          <Text className="text-t-secondary mt-1 size-4 shrink-0" />
           <div>
             <p className="text-sm font-medium">Description</p>
-            <p className="text-sm text-t-secondary">{event.description}</p>
+            <p className="text-t-secondary text-sm">{event.description}</p>
           </div>
         </div>
       </div>

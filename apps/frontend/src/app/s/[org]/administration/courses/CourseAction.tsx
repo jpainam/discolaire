@@ -10,12 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { CreateEditCourse } from "./CreateEditCourse";
 
 export function CourseAction() {

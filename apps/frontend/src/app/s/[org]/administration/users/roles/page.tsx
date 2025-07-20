@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ExternalLinkIcon } from "lucide-react";
 
 import { Label } from "@repo/ui/components/label";
 import {
@@ -9,9 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { getServerTranslations } from "~/i18n/server";
 
-import { ExternalLinkIcon } from "lucide-react";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { CreateRoleButton } from "./CreateRoleButton";
 import { EditDeleteAction } from "./EditDeleteAction";
@@ -51,11 +51,11 @@ export default async function Page() {
                 <TableRow key={role.id}>
                   <TableCell>
                     <Link
-                      className="text-blue-500 flex items-center underline flex-row gap-1"
+                      className="flex flex-row items-center gap-1 text-blue-500 underline"
                       href={`./roles/${role.id}`}
                     >
                       {role.name}
-                      <ExternalLinkIcon className="w-4 h-4" />
+                      <ExternalLinkIcon className="h-4 w-4" />
                     </Link>
                   </TableCell>
                   <TableCell className="text-muted-foreground">

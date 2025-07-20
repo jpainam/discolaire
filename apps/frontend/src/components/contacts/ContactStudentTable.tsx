@@ -1,7 +1,14 @@
 "use client";
 
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { decode } from "entities";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -20,13 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { decode } from "entities";
-import { useParams } from "next/navigation";
+
 import { AvatarState } from "~/components/AvatarState";
 import { EmptyState } from "~/components/EmptyState";
 import { routes } from "~/configs/routes";
@@ -111,7 +112,7 @@ export function ContactStudentTable() {
                 </TableCell>
                 <TableCell>
                   <Link
-                    className="hover:underline text-muted-foreground"
+                    className="text-muted-foreground hover:underline"
                     href={
                       routes.students.contacts(student.id ?? "") +
                       "/" +
@@ -125,7 +126,7 @@ export function ContactStudentTable() {
                   {student.classroom?.name}
                 </TableCell>
 
-                <TableCell className=" text-right">
+                <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button size={"icon"} variant={"ghost"}>

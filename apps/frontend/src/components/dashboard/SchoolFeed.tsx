@@ -1,3 +1,5 @@
+import { ArrowUpRight, CreditCard, QrCode, Wallet } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -7,8 +9,9 @@ import {
   CardHeader,
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
-import { ArrowUpRight, CreditCard, QrCode, Wallet } from "lucide-react";
+
 import { CardTitle } from "../ui/card";
+
 interface AccountItem {
   id: string;
   title: string;
@@ -69,20 +72,20 @@ export function SchoolFeed({ className }: { className?: string }) {
           </Button>
         </CardAction>
       </CardHeader>
-      <CardContent className="px-3 gap-3">
+      <CardContent className="gap-3 px-3">
         {accounts.map((account) => (
           <div
             key={account.id}
             className={cn(
               "group flex items-center justify-between",
-              "p-2 rounded-lg",
+              "rounded-lg p-2",
               "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
               "transition-all duration-200",
             )}
           >
             <div className="flex items-center gap-2">
               <div
-                className={cn("p-1.5 rounded-lg", {
+                className={cn("rounded-lg p-1.5", {
                   "bg-emerald-100 dark:bg-emerald-900/30":
                     account.type === "savings",
                   "bg-blue-100 dark:bg-blue-900/30":
@@ -92,16 +95,16 @@ export function SchoolFeed({ className }: { className?: string }) {
                 })}
               >
                 {account.type === "savings" && (
-                  <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Wallet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                 )}
                 {account.type === "checking" && (
-                  <QrCode className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                  <QrCode className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                 )}
                 {account.type === "investment" && (
-                  <ArrowUpRight className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                  <ArrowUpRight className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                 )}
                 {account.type === "debt" && (
-                  <CreditCard className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
+                  <CreditCard className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
                 )}
               </div>
               <div>

@@ -1,5 +1,8 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { LibraryBigIcon, MoreVerticalIcon, PlusIcon } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -11,8 +14,7 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-import { useQuery } from "@tanstack/react-query";
-import { LibraryBigIcon, MoreVerticalIcon, PlusIcon } from "lucide-react";
+
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -23,6 +25,7 @@ import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { BookDataTable } from "./BookDataTable";
 import { CreateEditBook } from "./CreateEditBook";
+
 export function BookTab() {
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -32,7 +35,7 @@ export function BookTab() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-row px-4 border-y py-1 bg-muted/50 items-center justify-between">
+      <div className="bg-muted/50 flex flex-row items-center justify-between border-y px-4 py-1">
         <div className="flex flex-row items-center gap-2">
           <LibraryBigIcon />
           <Label>{t("materials")}</Label>

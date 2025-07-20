@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
+import { redirect } from "next/navigation";
+
 import { getSession } from "~/auth/server";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
@@ -40,7 +41,7 @@ export default async function Layout(
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row items-center justify-between border-b py-1 px-4">
+      <div className="flex flex-row items-center justify-between border-b px-4 py-1">
         <TransactionTabMenu />
         <PrintAction />
       </div>

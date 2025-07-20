@@ -1,5 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import { Download, Search } from "lucide-react";
+import { useQueryState } from "nuqs";
+
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
@@ -16,9 +20,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { Download, Search } from "lucide-react";
-import { useQueryState } from "nuqs";
-import { useState } from "react";
+
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useLocale } from "~/i18n";
 
@@ -97,10 +99,10 @@ export default function DataExportPage() {
   const { t } = useLocale();
 
   return (
-    <div className="container mx-auto py-3 px-4">
-      <div className="flex flex-col md:flex-row gap-4 mb-4">
+    <div className="container mx-auto px-4 py-3">
+      <div className="mb-4 flex flex-col gap-4 md:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-3 left-3 h-4 w-4" />
           <Input
             placeholder={t("search") + "..."}
             className="pl-10"
@@ -139,14 +141,14 @@ export default function DataExportPage() {
         </TabsList>
 
         <TabsContent value="all" className="mt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredOptions.map((option) => (
               <div
                 key={option.id}
-                className="p-2 border rounded-md bg-muted flex overflow-hidden justify-between items-center"
+                className="bg-muted flex items-center justify-between overflow-hidden rounded-md border p-2"
               >
                 <div>
-                  <p className="text-sm text-muted-foreground">#{option.id}</p>
+                  <p className="text-muted-foreground text-sm">#{option.id}</p>
                   <p className="text-sm">{option.name}</p>
                 </div>
                 <Button
@@ -164,14 +166,14 @@ export default function DataExportPage() {
 
         {categories.map((category) => (
           <TabsContent key={category.id} value={category.id} className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {getOptionsByCategory(category.id).map((option) => (
                 <div
                   key={option.id}
-                  className="border rounded-md p-2 bg-muted flex justify-between items-center overflow-hidden"
+                  className="bg-muted flex items-center justify-between overflow-hidden rounded-md border p-2"
                 >
                   <div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       #{option.id}
                     </p>
                     <p className="text-sm">{option.name}</p>

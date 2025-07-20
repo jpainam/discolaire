@@ -1,5 +1,20 @@
 "use client";
 
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import {
+  Mail,
+  MessageCircle,
+  MessageSquare,
+  MoreVertical,
+  PlusIcon,
+  Trash2,
+} from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -16,20 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import {
-  Mail,
-  MessageCircle,
-  MessageSquare,
-  MoreVertical,
-  PlusIcon,
-  Trash2,
-} from "lucide-react";
-import { toast } from "sonner";
+
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -40,6 +42,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSubscription } from "./CreateEditSubscription";
+
 export function SubscriptionHeader() {
   const { t } = useLocale();
   const { openSheet } = useSheet();
@@ -76,24 +79,24 @@ export function SubscriptionHeader() {
     {
       title: "SMS",
       value: totals.sms,
-      icon: <MessageSquare className="h-4 w-4 text-muted-foreground" />,
+      icon: <MessageSquare className="text-muted-foreground h-4 w-4" />,
       unlimited: totals.unlimitedSms,
     },
     {
       title: "WhatsApp",
       value: totals.whatsapp,
-      icon: <MessageCircle className="h-4 w-4 text-muted-foreground" />,
+      icon: <MessageCircle className="text-muted-foreground h-4 w-4" />,
       unlimited: totals.unlimitedWhatsapp,
     },
     {
       title: "Email",
       value: totals.email,
-      icon: <Mail className="h-4 w-4 text-muted-foreground" />,
+      icon: <Mail className="text-muted-foreground h-4 w-4" />,
       unlimited: totals.unlimitedEmail,
     },
   ];
   return (
-    <div className="py-2 px-4">
+    <div className="px-4 py-2">
       <div className="flex items-center justify-between">
         <Label className="hidden md:block">{t("subscriptions")}</Label>
         <div className="flex items-center gap-2">
@@ -114,7 +117,7 @@ export function SubscriptionHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size={"icon"} variant={"outline"} className="size-8">
-                <MoreVertical className="w-4 h-4" />
+                <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -154,7 +157,7 @@ export function SubscriptionHeader() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="grid gap-4 md:grid-cols-3 pt-2">
+      <div className="grid gap-4 pt-2 md:grid-cols-3">
         {totalData.map((item) => (
           <Card key={item.title} className="gap-2">
             <CardHeader>
@@ -163,7 +166,7 @@ export function SubscriptionHeader() {
             </CardHeader>
             <CardContent>
               <div className="text-lg font-bold">{item.value}</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {t("users_with_unlimited", {
                   unlimited: item.unlimited,
                   title: item.title,

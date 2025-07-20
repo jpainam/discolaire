@@ -1,7 +1,7 @@
 "use client";
 
-import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
 import { useParams } from "next/navigation";
+import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,16 +12,16 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useModal } from "~/hooks/use-modal";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 
 import CreateEditContact from "~/components/contacts/CreateEditContact";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { SimpleTooltip } from "~/components/simple-tooltip";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { LinkContact } from "./LinkContact";
@@ -37,7 +37,7 @@ export function StudentContactHeader() {
   const { openSheet } = useSheet();
 
   return (
-    <div className="flex flex-row items-center gap-2 bg-muted text-muted-foreground px-4 py-1">
+    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 px-4 py-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("contacts")}</Label>
 

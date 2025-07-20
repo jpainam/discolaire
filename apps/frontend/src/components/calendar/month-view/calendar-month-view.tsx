@@ -1,17 +1,14 @@
 import { useMemo } from "react";
+import { addDays, format, startOfWeek } from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
 
+import type { IEvent } from "~/components/calendar/interfaces";
 import { useCalendar } from "~/components/calendar/calendar-context";
-
-import { DayCell } from "~/components/calendar/month-view/day-cell";
-
 import {
   calculateMonthEventPositions,
   getCalendarCells,
 } from "~/components/calendar/helpers";
-
-import { addDays, format, startOfWeek } from "date-fns";
-import { enUS, es, fr } from "date-fns/locale";
-import type { IEvent } from "~/components/calendar/interfaces";
+import { DayCell } from "~/components/calendar/month-view/day-cell";
 import { useLocale } from "~/i18n";
 
 interface IProps {
@@ -48,7 +45,7 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
       <div className="grid grid-cols-7 divide-x">
         {WEEK_DAYS.map((day) => (
           <div key={day} className="flex items-center justify-center py-2">
-            <span className="text-xs font-medium text-t-quaternary">{day}</span>
+            <span className="text-t-quaternary text-xs font-medium">{day}</span>
           </div>
         ))}
       </div>

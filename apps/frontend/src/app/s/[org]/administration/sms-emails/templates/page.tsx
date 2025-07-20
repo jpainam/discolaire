@@ -16,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
 import { getServerTranslations } from "~/i18n/server";
 
 export default async function Page() {
@@ -24,7 +25,7 @@ export default async function Page() {
   const { t } = await getServerTranslations();
   return (
     <Card className="m-2">
-      <CardHeader className="flex flex-row items-start border-b bg-muted/50 py-2">
+      <CardHeader className="bg-muted/50 flex flex-row items-start border-b py-2">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
             {t("sms_management.templates")}
@@ -62,7 +63,7 @@ export default async function Page() {
           {tags && <SMSTemplateTagList tags={tags} />} */}
         </div>
       </CardContent>
-      <CardFooter className="border-t bg-muted/50 px-6 py-3">
+      <CardFooter className="bg-muted/50 border-t px-6 py-3">
         <div className="ml-auto flex flex-row items-center gap-4">
           <Button variant={"outline"} className="h-8">
             Cancel

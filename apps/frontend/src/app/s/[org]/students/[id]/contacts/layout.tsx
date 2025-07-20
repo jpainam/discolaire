@@ -1,10 +1,11 @@
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import type { Metadata } from "next";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
-import { ErrorFallback } from "~/components/error-fallback";
 
+import { ErrorFallback } from "~/components/error-fallback";
 import { SignUpContact } from "~/components/students/contacts/SignUpContact";
 import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";

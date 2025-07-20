@@ -1,8 +1,10 @@
+import { memo } from "react";
+import equal from "fast-deep-equal";
+import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { useCopyToClipboard } from "usehooks-ts";
 
 import type { Vote } from "@repo/db";
-
 import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,
@@ -10,9 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import equal from "fast-deep-equal";
-import { memo } from "react";
-import { toast } from "sonner";
+
 import type { ChatMessage } from "~/lib/types";
 import { CopyIcon, ThumbDownIcon, ThumbUpIcon } from "./icons";
 
@@ -39,7 +39,7 @@ export function PureMessageActions({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              className="py-1 px-2 h-fit text-muted-foreground"
+              className="text-muted-foreground h-fit px-2 py-1"
               variant="outline"
               onClick={async () => {
                 const textFromParts = message.parts
@@ -67,7 +67,7 @@ export function PureMessageActions({
           <TooltipTrigger asChild>
             <Button
               data-testid="message-upvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              className="text-muted-foreground !pointer-events-auto h-fit px-2 py-1"
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={() => {
@@ -120,7 +120,7 @@ export function PureMessageActions({
           <TooltipTrigger asChild>
             <Button
               data-testid="message-downvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              className="text-muted-foreground !pointer-events-auto h-fit px-2 py-1"
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={() => {

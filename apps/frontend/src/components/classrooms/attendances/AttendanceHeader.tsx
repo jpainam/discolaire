@@ -1,5 +1,7 @@
 "use client";
 
+import { useParams, useSearchParams } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   BaselineIcon,
   ChevronDown,
@@ -10,7 +12,6 @@ import {
   ShieldAlertIcon,
   Trash2,
 } from "lucide-react";
-import { useParams, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -33,18 +34,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function AttendanceHeader() {
@@ -81,7 +81,7 @@ export function AttendanceHeader() {
   const termId = searchParams.get("term");
 
   return (
-    <div className="grid flex-row items-center gap-4 border-b bg-muted px-4 py-1 md:flex">
+    <div className="bg-muted grid flex-row items-center gap-4 border-b px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("periods")}</Label>
       <TermSelector
         className="md:w-[300px]"
@@ -137,7 +137,7 @@ export function AttendanceHeader() {
               <Button disabled={!termId} size={"sm"}>
                 {t("add")}
                 <ChevronDown
-                  className="-me-1 ms-2 opacity-60"
+                  className="ms-2 -me-1 opacity-60"
                   size={16}
                   strokeWidth={2}
                   aria-hidden="true"
@@ -235,7 +235,7 @@ export function AttendanceHeader() {
             variant="destructive"
             className="size-8"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="h-4 w-4" />
           </Button>
         )}
 
@@ -248,7 +248,7 @@ export function AttendanceHeader() {
           <DropdownMenuContent align="end">
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="flex items-center gap-2">
-                <PDFIcon className="w-4 h-4" />
+                <PDFIcon className="h-4 w-4" />
                 {t("pdf_export")}
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
@@ -278,7 +278,7 @@ export function AttendanceHeader() {
             </DropdownMenuSub>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="flex items-center gap-2">
-                <XMLIcon className="w-4 h-4" />
+                <XMLIcon className="h-4 w-4" />
                 {t("xml_export")}
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>

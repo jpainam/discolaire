@@ -1,7 +1,8 @@
 "use client";
 
-import { CalendarDays, MoreVerticalIcon, PlusIcon, Trash2 } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CalendarDays, MoreVerticalIcon, PlusIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -13,16 +14,15 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditLesson } from "./CreateEditLesson";
 
@@ -54,7 +54,7 @@ export function ClassroomTimeTableHeader() {
     }),
   );
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary px-4 py-1">
+    <div className="bg-secondary flex flex-row items-center gap-2 border-b px-4 py-1">
       <CalendarDays className="h-4 w-4" />
       <Label>{t("classroom_timetables")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">

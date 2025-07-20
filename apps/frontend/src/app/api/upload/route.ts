@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type { NextRequest } from "next/server";
 import { DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import type { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
-import { getSession } from "~/auth/server";
 
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { s3client } from "~/lib/s3-client";
 

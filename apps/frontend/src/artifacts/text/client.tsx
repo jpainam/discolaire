@@ -3,15 +3,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { CopyIcon, PenIcon, RedoIcon, UndoIcon } from "lucide-react";
+import { toast } from "sonner";
+
+import type { AiSuggestion } from "@repo/db";
+
 import { Artifact } from "~/components/ai/create-artifact";
 import { DiffView } from "~/components/ai/diffview";
 import { DocumentSkeleton } from "~/components/ai/document-skeleton";
-import { Editor } from "~/components/ai/text-editor";
-
-import type { AiSuggestion } from "@repo/db";
-import { CopyIcon, PenIcon, RedoIcon, UndoIcon } from "lucide-react";
-import { toast } from "sonner";
 import { ClockRewind, MessageIcon } from "~/components/ai/icons";
+import { Editor } from "~/components/ai/text-editor";
 import { getSuggestions } from "../actions";
 
 interface TextArtifactMetadata {
@@ -78,7 +79,7 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
 
     return (
       <>
-        <div className="flex flex-row py-8 md:p-20 px-4">
+        <div className="flex flex-row px-4 py-8 md:p-20">
           <Editor
             content={content}
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -90,7 +91,7 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
           />
 
           {metadata.suggestions.length > 0 ? (
-            <div className="md:hidden h-dvh w-12 shrink-0" />
+            <div className="h-dvh w-12 shrink-0 md:hidden" />
           ) : null}
         </div>
       </>

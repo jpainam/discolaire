@@ -8,6 +8,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
+
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";

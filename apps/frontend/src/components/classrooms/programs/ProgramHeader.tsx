@@ -1,10 +1,11 @@
 "use client";
 
-import { MoreVertical, Pencil } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { useParams, usePathname } from "next/navigation";
+import { MoreVertical, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -13,16 +14,15 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import FlatBadge from "~/components/FlatBadge";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 
-import type { RouterOutputs } from "@repo/api";
+import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 
 export function ProgramHeader({
   subject,
@@ -59,7 +59,7 @@ export function ProgramHeader({
   const router = useRouter();
 
   return (
-    <div className="flex flex-row border-b items-center gap-2 bg-muted px-2 py-1 text-muted-foreground">
+    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-2 py-1">
       <div className="flex flex-row items-center gap-2">
         <Label>{subject.course.name}</Label>
         <FlatBadge variant={"green"}>

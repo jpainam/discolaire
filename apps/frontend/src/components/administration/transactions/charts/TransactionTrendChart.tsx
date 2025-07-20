@@ -1,12 +1,13 @@
 "use client";
 
-import _ from "lodash";
-import { useSearchParams } from "next/navigation";
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import _ from "lodash";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { Card, CardContent } from "@repo/ui/components/card";
 import type { ChartConfig } from "@repo/ui/components/chart";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartLegend,
@@ -15,10 +16,9 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 

@@ -2,24 +2,23 @@ import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { Toaster } from "@repo/ui/components/sonner";
-import { I18nProvider } from "~/i18n/i18n-context";
 
+import { I18nProvider } from "~/i18n/i18n-context";
 import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import "./globals.css";
 
-//import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-//import { auth } from "@repo/auth";
-import { detectLanguage } from "~/i18n/server";
-
 import { cookies } from "next/headers";
+
 import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { env } from "~/env";
+//import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+//import { auth } from "@repo/auth";
+import { detectLanguage } from "~/i18n/server";
 import { ActiveThemeProvider } from "~/providers/ActiveThemeProvider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 

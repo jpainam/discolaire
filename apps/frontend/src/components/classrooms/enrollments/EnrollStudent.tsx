@@ -1,8 +1,10 @@
 "use client";
 
-import { Check } from "lucide-react";
-import Image from "next/image";
 import React, { useState } from "react";
+import Image from "next/image";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Check } from "lucide-react";
+import { toast } from "sonner";
 
 import {
   Avatar,
@@ -20,13 +22,11 @@ import {
 } from "@repo/ui/components/command";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
+import { randomAvatar } from "~/components/raw-images";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { randomAvatar } from "~/components/raw-images";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -129,7 +129,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     </AvatarFallback>
                   </Avatar>
                   <div className="ml-2">
-                    <span className="text-xs font-medium leading-none">
+                    <span className="text-xs leading-none font-medium">
                       {getFullName(stud)}
                     </span>
                     {/* <span className="text-xs text-muted-foreground">
@@ -137,7 +137,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     </span> */}
                   </div>
                   {selectedIds.includes(stud.id) ? (
-                    <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    <Check className="text-primary ml-auto flex h-5 w-5" />
                   ) : null}
                 </CommandItem>
               ))}
@@ -155,7 +155,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
               return (
                 <Avatar
                   key={`${studId}-selected`}
-                  className="inline-block border-2 border-background"
+                  className="border-background inline-block border-2"
                 >
                   <AvatarImage
                     src={stud?.user?.avatar ?? undefined}
@@ -174,7 +174,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
             })}
           </div>
         ) : (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-sm">
             {t("select_students_to_enroll")}
           </span>
         )}

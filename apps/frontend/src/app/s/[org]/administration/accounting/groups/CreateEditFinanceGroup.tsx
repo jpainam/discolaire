@@ -1,5 +1,8 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -14,12 +17,9 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { useTRPC } from "~/trpc/react";
 
 const createFinanceGroupSchema = z.object({
@@ -130,7 +130,7 @@ export function CreateEditFinanceGroup({
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
                         <RadioGroupItem value="AMOUNT" />
                       </FormControl>
@@ -138,7 +138,7 @@ export function CreateEditFinanceGroup({
                         {t("amount")}
                       </FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
                         <RadioGroupItem value="PERCENT" />
                       </FormControl>

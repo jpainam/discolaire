@@ -1,17 +1,17 @@
 "use client";
 
+import { useCallback, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
-
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import { useTRPC } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";
 import { BySubject } from "./BySubject";
@@ -70,7 +70,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-between gap-4 border-b border-r bg-muted/50 py-1 px-4">
+      <div className="bg-muted/50 flex flex-row justify-between gap-4 border-r border-b px-4 py-1">
         <Button variant={"ghost"} onClick={() => handleSort("subject")}>
           {t("subject")}{" "}
           {orderBy === "subject" && sortOrder === "asc" ? (
@@ -92,7 +92,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
       {sortedGrades.length === 0 && (
         <EmptyState title={t("no_data")} className="my-8" />
       )}
-      <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-b border-r">
+      <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-r border-b">
         {view === "by_chronological_order" && (
           <ByChronologicalOrder
             grades={sortedGrades}

@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import { useLocale } from "~/i18n";
 
 export function DirectoryTable({

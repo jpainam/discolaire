@@ -1,13 +1,15 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { decode } from "entities";
-import { useParams } from "next/navigation";
+
+import type { IEvent } from "~/components/calendar/interfaces";
 //import { decode } from "entities";
 import { CalendarProvider } from "~/components/calendar/calendar-context";
 import { ClientContainer } from "~/components/calendar/client-container";
-import type { IEvent } from "~/components/calendar/interfaces";
 import { useTRPC } from "~/trpc/react";
+
 //import type { IEvent } from "~/components/calendar/interfaces";
 
 export function ClassroomTimetable() {
@@ -52,7 +54,7 @@ export function ClassroomTimetable() {
         } as IEvent;
       })}
     >
-      <div className="flex flex-col gap-4 py-2 px-4">
+      <div className="flex flex-col gap-4 px-4 py-2">
         <ClientContainer />
       </div>
     </CalendarProvider>

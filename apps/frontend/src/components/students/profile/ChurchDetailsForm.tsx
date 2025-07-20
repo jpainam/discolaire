@@ -15,11 +15,11 @@ import {
 } from "@repo/ui/components/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { Separator } from "@repo/ui/components/separator";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import { DatePickerField } from "~/components/shared/forms/date-picker-field";
 import { InputField } from "~/components/shared/forms/input-field";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 
 export function ChurchDetailsForm() {
   const { t } = useLocale();
@@ -90,13 +90,13 @@ export function ChurchDetailsForm() {
                     // defaultValue={!!field.value}
                     className="flex flex-row gap-4"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
                         <RadioGroupItem value="1" />
                       </FormControl>
                       <FormLabel className="font-normal">{t("yes")}</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
                         <RadioGroupItem value="0" />
                       </FormControl>
@@ -124,7 +124,7 @@ export function ChurchDetailsForm() {
                       // defaultValue={!!field.value}
                       className="flex flex-row gap-4"
                     >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
                           <RadioGroupItem value="1" />
                         </FormControl>
@@ -132,7 +132,7 @@ export function ChurchDetailsForm() {
                           {t("yes")}
                         </FormLabel>
                       </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
                           <RadioGroupItem value="0" />
                         </FormControl>

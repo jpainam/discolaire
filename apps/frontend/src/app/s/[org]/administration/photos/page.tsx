@@ -3,7 +3,7 @@ import { ZipImageMatcher } from "./ZipImageMatcher";
 
 export default function Page() {
   return (
-    <div className="grid md:flex flex-col px-4 gap-2 py-2">
+    <div className="grid flex-col gap-2 px-4 py-2 md:flex">
       <PhotosList />
       <ZipImageMatcher />
       {/* <ImportPhotos /> */}

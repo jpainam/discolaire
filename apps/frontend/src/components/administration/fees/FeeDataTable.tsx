@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useQueryState } from "nuqs";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { FeeDataTableActions } from "./FeeDataTableAction";
 import { fetchFeesColumns } from "./FeeDataTableColumn";

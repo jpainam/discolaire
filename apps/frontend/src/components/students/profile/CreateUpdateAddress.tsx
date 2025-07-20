@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { PiCalendarDotsDuotone } from "react-icons/pi";
 import type { Country } from "react-phone-number-input";
+import { PiCalendarDotsDuotone } from "react-icons/pi";
 
 import {
   Card,
@@ -18,13 +18,13 @@ import {
   FormMessage,
   useFormContext,
 } from "@repo/ui/components/form";
-import { PhoneInput } from "~/components/phone-input";
-import { useLocale } from "~/i18n";
 
 import { DatePicker } from "~/components/DatePicker";
+import { PhoneInput } from "~/components/phone-input";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
+import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 
 export function CreateUpdateAddress() {

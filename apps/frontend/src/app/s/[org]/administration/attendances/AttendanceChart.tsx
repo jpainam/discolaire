@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardAction,
@@ -11,13 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
+
 import { useIsMobile } from "~/hooks/use-mobile";
 import { useLocale } from "~/i18n";
 
@@ -174,7 +175,7 @@ export function AttendanceChart() {
             onValueChange={setTimeRange}
             variant="outline"
             // className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
-            className=" *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+            className="*:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
           >
             <ToggleGroupItem value="90d">3 derniers mois</ToggleGroupItem>
             <ToggleGroupItem value="30d">30 derniers jours</ToggleGroupItem>

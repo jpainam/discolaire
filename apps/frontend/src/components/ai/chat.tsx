@@ -3,28 +3,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useChat } from "@ai-sdk/react";
-import type { VisibilityType, Vote } from "@repo/db";
-import { DefaultChatTransport } from "ai";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import useSWR, { useSWRConfig } from "swr";
-import { fetcher, fetchWithErrorHandlers, generateUUID } from "~/lib/utils";
-import { Artifact } from "./artifact";
-import { Messages } from "./messages";
-import { MultimodalInput } from "./multimodal-input";
-
 import { unstable_serialize } from "swr/infinite";
-import { useArtifactSelector } from "~/hooks/use-artifact";
-import { getChatHistoryPaginationKey } from "./sidebar-history";
-import { toast } from "./toast";
 
 import type { Session } from "@repo/auth";
-import { useSearchParams } from "next/navigation";
+import type { VisibilityType, Vote } from "@repo/db";
+
+import type { Attachment, ChatMessage } from "~/lib/types";
+import { useArtifactSelector } from "~/hooks/use-artifact";
 import { useAutoResume } from "~/hooks/use-auto-resume";
 import { useChatVisibility } from "~/hooks/use-chat-visibility";
 import { ChatSDKError } from "~/lib/errors";
-import type { Attachment, ChatMessage } from "~/lib/types";
+import { fetcher, fetchWithErrorHandlers, generateUUID } from "~/lib/utils";
+import { Artifact } from "./artifact";
 import { useDataStream } from "./data-stream-provider";
+import { Messages } from "./messages";
+import { MultimodalInput } from "./multimodal-input";
+import { getChatHistoryPaginationKey } from "./sidebar-history";
+import { toast } from "./toast";
 
 export function Chat({
   id,
@@ -133,7 +133,7 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-[calc(100vh-4rem)] bg-background">
+      <div className="bg-background flex h-[calc(100vh-4rem)] min-w-0 flex-col">
         {/* <ChatHeader
           chatId={id}
           selectedModelId={initialChatModel}
@@ -153,7 +153,7 @@ export function Chat({
           isArtifactVisible={isArtifactVisible}
         />
 
-        <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
+        <form className="bg-background mx-auto flex w-full gap-2 px-4 pb-4 md:max-w-3xl md:pb-6">
           {!isReadonly && (
             <MultimodalInput
               chatId={id}

@@ -1,6 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -13,13 +18,11 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const schema = z.object({
   name: z.string().min(5),
   sku: z.string().optional(),
@@ -89,7 +92,7 @@ export function CreateEditAsset({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex gap-4 flex-col"
+        className="flex flex-col gap-4"
       >
         <FormField
           control={form.control}
@@ -148,7 +151,7 @@ export function CreateEditAsset({
             </FormItem>
           )}
         />
-        <div className="ml-auto flex flex-row gap-2 items-center">
+        <div className="ml-auto flex flex-row items-center gap-2">
           <Button
             onClick={() => {
               closeModal();

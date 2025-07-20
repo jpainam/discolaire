@@ -1,5 +1,11 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { SettingsIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -18,10 +24,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { SettingsIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -69,14 +72,14 @@ export function GradeReportSettings() {
         <Card>
           <CardHeader>
             <CardTitle className="flex flex-row items-center gap-2">
-              <SettingsIcon className="w-4 h-4" />
+              <SettingsIcon className="h-4 w-4" />
               {t("settings")}
             </CardTitle>
             <CardDescription>
               Sera publié après le conseil de classe ou le 29/08/2024
             </CardDescription>
             {form.formState.isDirty && (
-              <CardAction className="flex flex-row gap-2 items-center">
+              <CardAction className="flex flex-row items-center gap-2">
                 <Button
                   size={"sm"}
                   variant={"outline"}
@@ -91,12 +94,12 @@ export function GradeReportSettings() {
               </CardAction>
             )}
           </CardHeader>
-          <CardContent className="text-sm grid grid-cols-1 gap-4">
+          <CardContent className="grid grid-cols-1 gap-4 text-sm">
             {periodes.map((p, index) => {
               return (
                 <div
                   key={`${p.id}-${index}`}
-                  className="grid grid-cols-[40%_60%] gap-2 items-center"
+                  className="grid grid-cols-[40%_60%] items-center gap-2"
                 >
                   {/* <Input
                     value={p.id}

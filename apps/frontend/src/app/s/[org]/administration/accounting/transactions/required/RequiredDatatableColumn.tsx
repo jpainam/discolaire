@@ -1,10 +1,11 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Eye, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import i18next from "i18next";
+import { Eye, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -18,13 +19,12 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import FlatBadge from "~/components/FlatBadge";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import i18next from "i18next";
-import FlatBadge from "~/components/FlatBadge";
-import { useCheckPermission } from "~/hooks/use-permission";
 
 type RequiredTransactionOutput =
   RouterOutputs["transaction"]["required"][number];
@@ -69,7 +69,7 @@ export function getRequiredColumns({
       cell: ({ row }) => {
         const transaction = row.original;
         return (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             {transaction.createdAt.toLocaleDateString(i18next.language, {
               year: "2-digit",
               month: "short",
@@ -222,7 +222,7 @@ function ActionCells({
           <Button
             aria-label="Open menu"
             variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex size-8 p-0"
           >
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>

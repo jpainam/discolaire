@@ -1,4 +1,3 @@
-import { cn } from "@repo/ui/lib/utils";
 import {
   FileArchiveIcon,
   FileIcon,
@@ -8,6 +7,8 @@ import {
   ImageIcon,
   VideoIcon,
 } from "lucide-react";
+
+import { cn } from "@repo/ui/lib/utils";
 
 export const getFileIcon = (
   file: {

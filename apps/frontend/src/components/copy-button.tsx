@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -10,6 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+
 import { useLocale } from "~/i18n";
 
 function CopyButton({

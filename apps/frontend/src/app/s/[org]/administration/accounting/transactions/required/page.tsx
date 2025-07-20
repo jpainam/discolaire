@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { RequiredDatatable } from "./RequiredDatatable";
 

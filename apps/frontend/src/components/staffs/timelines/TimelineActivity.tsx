@@ -1,10 +1,11 @@
 "use client";
 
-import { Edit, PlusCircle, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { Edit, PlusCircle, Trash2 } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
+
 import { useLocale } from "~/i18n";
 
 // Define the structure of an activity
@@ -46,13 +47,13 @@ const ActivityItem = ({ activity, onDelete }: ActivityItemProps) => {
   // });
 
   return (
-    <div className="group flex items-center space-x-4 border-b py-2 last:border-b-0 hover:bg-muted/50">
+    <div className="group hover:bg-muted/50 flex items-center space-x-4 border-b py-2 last:border-b-0">
       <div className={`${color}`}>
         <Icon className="h-4 w-4" />
       </div>
       <div className="flex-1">
         <p className="text-sm font-semibold">{activity.description}</p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           {activity.date} | Entity ID: {activity.entityId} | Table:{" "}
           {activity.table}
         </p>

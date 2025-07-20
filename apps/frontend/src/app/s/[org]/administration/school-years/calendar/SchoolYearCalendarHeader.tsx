@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
+
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
@@ -53,7 +54,7 @@ export function SchoolYearCalendarHeader() {
   const { openSheet } = useSheet();
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
@@ -98,7 +99,7 @@ export function SchoolYearCalendarHeader() {
           }}
           size="sm"
         >
-          <PlusCircle className=" h-4 w-4" />
+          <PlusCircle className="h-4 w-4" />
           {t("add")}
         </Button>
         <Button
@@ -112,7 +113,7 @@ export function SchoolYearCalendarHeader() {
           size="icon"
           variant={"secondary"}
         >
-          <SquareGanttChartIcon className="w-4 h-4" />
+          <SquareGanttChartIcon className="h-4 w-4" />
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

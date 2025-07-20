@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlignVerticalJustifyCenter,
   MoreVertical,
@@ -33,7 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -69,7 +70,7 @@ export function GradeAppreciationTable() {
     <Card>
       <CardHeader>
         <CardTitle className="flex flex-row items-center gap-2">
-          <AlignVerticalJustifyCenter className="w-4 h-4" />
+          <AlignVerticalJustifyCenter className="h-4 w-4" />
           {t("appreciations")}
         </CardTitle>
         <CardAction>

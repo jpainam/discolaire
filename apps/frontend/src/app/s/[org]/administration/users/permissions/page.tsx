@@ -1,6 +1,6 @@
+import { getSession } from "~/auth/server";
 import { PermissionTable } from "~/components/users/PermissionTable";
 import { PermissionHeader } from "./PermissionHeader";
-import { getSession } from "~/auth/server";
 
 export default async function Page(props: {
   searchParams: Promise<{ userId?: string }>;

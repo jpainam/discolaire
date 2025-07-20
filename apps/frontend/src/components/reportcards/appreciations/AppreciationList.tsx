@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { ChevronLeft, Loader, PlusCircle, Settings2Icon } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { Fragment, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ChevronLeft, Loader, PlusCircle, Settings2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
-import { useLocale } from "~/i18n";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import type { AppreciationCategory } from "~/types/appreciation";
+import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
-import type { AppreciationCategory } from "~/types/appreciation";
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function AppreciationList({
@@ -65,13 +65,13 @@ export function AppreciationList({
   return (
     <div className="flex flex-col items-start gap-0">
       <div
-        className="flex w-full cursor-pointer flex-row items-center rounded-md p-2 hover:text-secondary-foreground"
+        className="hover:text-secondary-foreground flex w-full cursor-pointer flex-row items-center rounded-md p-2"
         onClick={() => {
           setSelectedCategoryAction(null);
         }}
       >
         <ChevronLeft className="mr-2 h-4 w-4" />
-        <span className="overflow-hidden text-muted-foreground">
+        <span className="text-muted-foreground overflow-hidden">
           {category.name}
         </span>
       </div>
@@ -93,7 +93,7 @@ export function AppreciationList({
                 ) : (
                   <div
                     key={appreciation.id}
-                    className="group/appreciation flex cursor-pointer items-center justify-between rounded-md p-1 text-left hover:bg-muted hover:text-muted-foreground"
+                    className="group/appreciation hover:bg-muted hover:text-muted-foreground flex cursor-pointer items-center justify-between rounded-md p-1 text-left"
                   >
                     <span
                       onClick={() => {
@@ -105,7 +105,7 @@ export function AppreciationList({
                           remark: appreciation.name,
                         });
                       }}
-                      className="flex-1 cursor-pointer overflow-ellipsis break-all"
+                      className="flex-1 cursor-pointer break-all overflow-ellipsis"
                     >
                       {appreciation.name}
                     </span>
@@ -137,7 +137,7 @@ export function AppreciationList({
         onClick={() => {
           setAddClicked(true);
         }}
-        className="my-1 flex w-full cursor-pointer flex-row items-center gap-2 rounded-md p-1 hover:bg-muted"
+        className="hover:bg-muted my-1 flex w-full cursor-pointer flex-row items-center gap-2 rounded-md p-1"
       >
         <PlusCircle className="h-5 w-5 stroke-1" />
         {t("add")}

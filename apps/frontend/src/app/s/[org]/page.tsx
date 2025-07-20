@@ -1,7 +1,9 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { decode } from "entities";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { decode } from "entities";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { getSession } from "~/auth/server";
 import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
 import { EducationalResource } from "~/components/dashboard/EducationalResource";
@@ -16,6 +18,7 @@ import { StudentDashboardContact } from "~/components/dashboard/StudentDashboard
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+
 export default async function Page() {
   const session = await getSession();
 
@@ -28,7 +31,7 @@ export default async function Page() {
     }));
 
     return (
-      <div className="grid lg:grid-cols-2 w-full gap-4 p-4">
+      <div className="grid w-full gap-4 p-4 lg:grid-cols-2">
         <StudentTransactionStat
           studentId={student.id}
           className="col-span-full"
@@ -61,15 +64,15 @@ export default async function Page() {
   ]);
 
   return (
-    <div className="@container grid md:grid-cols-2 2xl:grid-cols-2 flex-1 gap-2 p-4">
+    <div className="@container grid flex-1 gap-2 p-4 md:grid-cols-2 2xl:grid-cols-2">
       <Suspense
         key={"quick-statistics"}
         fallback={
-          <div className="col-span-full grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div className="col-span-full grid grid-cols-1 gap-4 lg:grid-cols-4">
             <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full hidden lg:flex" />
-            <Skeleton className="h-24 w-full hidden lg:flex" />
-            <Skeleton className="h-24 w-full hidden lg:flex" />
+            <Skeleton className="hidden h-24 w-full lg:flex" />
+            <Skeleton className="hidden h-24 w-full lg:flex" />
+            <Skeleton className="hidden h-24 w-full lg:flex" />
           </div>
         }
       >
@@ -105,7 +108,7 @@ export default async function Page() {
           <Suspense
             key={"classroom-size"}
             fallback={
-              <Skeleton className="h-60 w-full col-span-full hidden md:block" />
+              <Skeleton className="col-span-full hidden h-60 w-full md:block" />
             }
           >
             <DashboardClassroomSize className="col-span-full hidden md:block" />

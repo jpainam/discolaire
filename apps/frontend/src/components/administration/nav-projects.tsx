@@ -1,6 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
+import Link from "next/link";
 import {
   FileClockIcon,
   GalleryHorizontalEnd,
@@ -24,7 +25,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@repo/ui/components/sidebar";
-import Link from "next/link";
+
 import { useLocale } from "~/i18n";
 
 export function NavProjects({

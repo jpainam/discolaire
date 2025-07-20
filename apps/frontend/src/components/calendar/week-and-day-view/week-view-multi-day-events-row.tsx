@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   addDays,
   differenceInDays,
@@ -8,11 +9,9 @@ import {
   startOfDay,
   startOfWeek,
 } from "date-fns";
-import { useMemo } from "react";
-
-import { MonthEventBadge } from "~/components/calendar/month-view/month-event-badge";
 
 import type { IEvent } from "~/components/calendar/interfaces";
+import { MonthEventBadge } from "~/components/calendar/month-view/month-event-badge";
 
 interface IProps {
   selectedDate: Date;

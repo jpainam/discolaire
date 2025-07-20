@@ -1,19 +1,19 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { Trash2 } from "lucide-react";
-import { useParams } from "next/navigation";
 import React from "react";
+import { useParams } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 
 type ClassroomStudentProcedureOutput = NonNullable<
@@ -70,7 +70,7 @@ export function EnrollmentDataTableActions({
               description: t("delete_confirmation"),
               icon: (
                 <Trash2
-                  className="size-4 text-destructive"
+                  className="text-destructive size-4"
                   aria-hidden="true"
                 />
               ),
@@ -89,7 +89,7 @@ export function EnrollmentDataTableActions({
         >
           <Trash2 />
           {t("unenroll")}
-          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+          <span className="border-border bg-background text-muted-foreground/70 ms-1 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
             {table.getSelectedRowModel().rows.length}
           </span>
         </Button>

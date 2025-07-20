@@ -2,6 +2,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,10 +17,9 @@ import {
   FormLabel,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 import { PolicyEditor } from "./PolicyEditor";
 

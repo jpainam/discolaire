@@ -1,7 +1,7 @@
 "use client";
 
-import { MailIcon, MoreVertical } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { MailIcon, MoreVertical } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -13,11 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -35,7 +35,7 @@ export function ReportCardHeader() {
   });
   const termId = searchParams.get("termId");
   return (
-    <div className="grid grid-cols-1 flex-row items-center gap-4 bg-muted/40 px-4 py-1 md:flex">
+    <div className="bg-muted/40 grid grid-cols-1 flex-row items-center gap-4 px-4 py-1 md:flex">
       <Label className="hidden md:flex">{t("classrooms")}</Label>
       <ClassroomSelector
         defaultValue={classroomId}

@@ -1,6 +1,6 @@
-import { getSessionCookie } from "better-auth/cookies";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 // Define which paths should skip the middleware
 export const config = {

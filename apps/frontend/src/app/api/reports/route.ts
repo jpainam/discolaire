@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { db } from "@repo/db";
+
 import { getSession } from "~/auth/server";
 
 export async function POST(request: Request) {

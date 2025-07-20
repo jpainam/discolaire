@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { CheckCircle } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -7,8 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { CheckCircle } from "lucide-react";
-import Link from "next/link";
+
 import { getServerTranslations } from "~/i18n/server";
 
 export default async function Page(props: {
@@ -18,7 +20,7 @@ export default async function Page(props: {
   const { t } = await getServerTranslations();
   if (!searchParams.email) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-muted p-4">
+      <div className="bg-muted flex min-h-screen items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">{t("error")}</CardTitle>
@@ -32,10 +34,10 @@ export default async function Page(props: {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted p-4">
+    <div className="bg-muted flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
+          <div className="mb-4 flex justify-center">
             <CheckCircle className="h-12 w-12 text-green-500" />
           </div>
           <CardTitle className="text-lg">

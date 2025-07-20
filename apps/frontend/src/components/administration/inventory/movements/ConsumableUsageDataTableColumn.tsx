@@ -1,10 +1,12 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import i18next from "i18next";
+import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -18,16 +20,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import { CreateEditStockWithdrawal } from "~/components/administration/inventory/movements/CreateEditStockWithdrawal";
 import FlatBadge from "~/components/FlatBadge";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { InventoryUsageDetail } from "../InventoryUsageDetail";
 
@@ -210,7 +210,7 @@ function ActionCell({
           <Button
             aria-label="Open menu"
             variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex size-8 p-0"
           >
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>

@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,9 +19,8 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -107,7 +107,7 @@ export function SubjectSelector({
       </PopoverTrigger>
       <PopoverContent
         style={{ width: "var(--radix-popover-trigger-width)" }}
-        className="w-[300px] p-0 "
+        className="w-[300px] p-0"
       >
         <Command>
           <CommandInput

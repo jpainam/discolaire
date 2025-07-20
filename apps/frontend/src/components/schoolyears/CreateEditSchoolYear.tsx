@@ -1,9 +1,12 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -22,9 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+
 import { DatePicker } from "~/components/DatePicker";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -210,7 +211,7 @@ export function CreateEditSchoolYear({
             )}
           />
         )}
-        <div className="ml-auto mt-4 flex flex-row gap-4">
+        <div className="mt-4 ml-auto flex flex-row gap-4">
           <Button
             type="button"
             variant={"outline"}

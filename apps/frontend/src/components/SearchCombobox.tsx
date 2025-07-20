@@ -1,10 +1,10 @@
 "use client";
 
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import type { ALIGN_OPTIONS } from "@radix-ui/react-popper";
 import * as React from "react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
-import type { ALIGN_OPTIONS } from "@radix-ui/react-popper";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -94,7 +94,7 @@ export function SearchCombobox({
           className={cn("justify-between", className)}
           disabled={disabled}
         >
-          <span className="truncate flex items-center">
+          <span className="flex items-center truncate">
             {label ?? selectItemMsg}
           </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

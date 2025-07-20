@@ -3,6 +3,7 @@
 import type { Fee } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -18,14 +19,13 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Separator } from "@repo/ui/components/separator";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { CURRENCY } from "~/lib/constants";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>[number];

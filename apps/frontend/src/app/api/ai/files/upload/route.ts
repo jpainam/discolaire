@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 import { z } from "zod";
+
 import { getSession } from "~/auth/server";
+
 // ONLY USED FOR @vercel/blob
 // Use Blob instead of File since File is not available in Node.js environment
 const FileSchema = z.object({

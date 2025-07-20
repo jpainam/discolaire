@@ -1,10 +1,11 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";

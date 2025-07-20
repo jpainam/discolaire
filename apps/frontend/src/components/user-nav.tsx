@@ -1,11 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+//import { signinout } from "~/app/auth/login/signin";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { IconBell, IconCreditCard, IconUserCircle } from "@tabler/icons-react";
+import { Computer, LogOut, MoreVerticalIcon, Settings } from "lucide-react";
+
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@repo/ui/components/avatar";
+import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -21,17 +27,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { IconBell, IconCreditCard, IconUserCircle } from "@tabler/icons-react";
-import { Computer, LogOut, MoreVerticalIcon, Settings } from "lucide-react";
-import { useLocale } from "~/i18n";
-//import { signinout } from "~/app/auth/login/signin";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Button } from "@repo/ui/components/button";
 import { SidebarMenuButton, useSidebar } from "@repo/ui/components/sidebar";
 
 import { authClient } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 export function UserNav({ className }: { className?: string }) {
   const { t } = useLocale();
@@ -107,7 +108,7 @@ export function UserNav({ className }: { className?: string }) {
                 </Avatar>
               </DialogTrigger>
 
-              <DialogContent className="max-w-[90%] sm:max-w-[600px] p-0">
+              <DialogContent className="max-w-[90%] p-0 sm:max-w-[600px]">
                 <VisuallyHidden>
                   <DialogTitle></DialogTitle>
                 </VisuallyHidden>
@@ -118,7 +119,7 @@ export function UserNav({ className }: { className?: string }) {
                       : undefined
                   }
                   alt="Full Image"
-                  className="w-full h-auto rounded-lg"
+                  className="h-auto w-full rounded-lg"
                 />
               </DialogContent>
             </Dialog>

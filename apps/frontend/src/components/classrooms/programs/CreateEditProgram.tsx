@@ -1,5 +1,16 @@
 "use client";
 
+//import dynamic from "next/dynamic";
+import { useParams, usePathname } from "next/navigation";
+//import { html_content } from "./editor-content";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MoreVertical } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -16,27 +27,17 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Label } from "@repo/ui/components/label";
-//import dynamic from "next/dynamic";
-import { useParams, usePathname } from "next/navigation";
-import { toast } from "sonner";
-import { z } from "zod";
-import FlatBadge from "~/components/FlatBadge";
-import { useLocale } from "~/i18n";
 
-import { MoreVertical } from "lucide-react";
 import { EmptyState } from "~/components/EmptyState";
+import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
+import { TiptapEditor } from "~/components/tiptap-editor";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
-//import { html_content } from "./editor-content";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { RouterOutputs } from "@repo/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { TiptapEditor } from "~/components/tiptap-editor";
 
 // const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
 //   ssr: false,
@@ -101,7 +102,7 @@ export function CreateEditProgram({
         className="flex flex-col"
         onSubmit={form.handleSubmit(submitProgram)}
       >
-        <div className="flex border-b flex-row justify-end gap-4 bg-muted/50 px-4 py-1">
+        <div className="bg-muted/50 flex flex-row justify-end gap-4 border-b px-4 py-1">
           <div className="flex flex-row items-center gap-2">
             <Label className="hidden md:block">{subject.course.name}</Label>
             <FlatBadge variant={"green"}>
@@ -212,7 +213,7 @@ export function CreateEditProgram({
                 <FormControl>
                   <TiptapEditor
                     defaultContent={field.value}
-                    className="shadow-none rounded-none"
+                    className="rounded-none shadow-none"
                     onChange={field.onChange}
                   />
                 </FormControl>

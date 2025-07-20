@@ -1,14 +1,13 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -26,9 +25,11 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const updateBookSchema = z.object({
   title: z.string().trim().min(1),
   author: z.string().min(1),
@@ -106,9 +107,9 @@ export function CreateEditBook({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col flex-1 overflow-hidden"
+        className="flex flex-1 flex-col overflow-hidden"
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
+        <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto px-4">
           <FormField
             control={form.control}
             name="title"
@@ -206,7 +207,7 @@ export function CreateEditBook({
         </div>
 
         <SheetFooter>
-          <div className="flex flex-row gap-2 justify-end">
+          <div className="flex flex-row justify-end gap-2">
             <Button
               size={"sm"}
               variant={"default"}

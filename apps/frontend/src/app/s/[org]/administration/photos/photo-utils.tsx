@@ -7,6 +7,7 @@ import {
   ImageIcon,
   VideoIcon,
 } from "lucide-react";
+
 export const getFileIcon = ({ type, name }: { type: string; name: string }) => {
   const fileType = type;
   const fileName = name;

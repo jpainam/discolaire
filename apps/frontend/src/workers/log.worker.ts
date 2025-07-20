@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Worker } from "bullmq";
+import { fromError } from "zod-validation-error/v4";
 
 import { db } from "@repo/db";
 import { logActivitySchema } from "@repo/validators";
-import { fromError } from "zod-validation-error/v4";
+
 import { logQueue } from "./queue";
 import { getRedis } from "./redis-client";
+
 const connection = getRedis();
 
 new Worker(

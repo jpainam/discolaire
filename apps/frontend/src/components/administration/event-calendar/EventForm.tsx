@@ -2,8 +2,9 @@
 
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import type { SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,14 +30,13 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DateTimePicker } from "~/components/shared/date-time-picker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -410,7 +410,7 @@ export default function EventForm({
           <Button
             variant={isUpdateEvent ? "default" : "outline"}
             className={cn(
-              "@xl:w-auto w-full",
+              "w-full @xl:w-auto",
               isUpdateEvent
                 ? "bg-red-600 text-white hover:border-none hover:bg-red-700 hover:text-white hover:ring-0"
                 : "dark:hover:border-gray-400",
@@ -420,7 +420,7 @@ export default function EventForm({
             {isUpdateEvent ? "Delete" : "Cancel"}
           </Button>
 
-          <Button type="submit" className="hover:gray-700 @xl:w-auto w-full">
+          <Button type="submit" className="hover:gray-700 w-full @xl:w-auto">
             {isUpdateEvent ? "Update" : "Save"}
           </Button>
         </div>

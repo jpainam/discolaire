@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import Image from "next/image";
+import { redirect } from "next/navigation";
 import {
   BookMarkedIcon,
   Globe,
@@ -10,8 +14,6 @@ import {
   Phone,
   UserIcon,
 } from "lucide-react";
-import Image from "next/image";
-import { redirect } from "next/navigation";
 
 import {
   Card,
@@ -20,16 +22,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import FlatBadge from "~/components/FlatBadge";
-import { NoPermission } from "~/components/no-permission";
-import { getServerTranslations } from "~/i18n/server";
-
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
+import FlatBadge from "~/components/FlatBadge";
+import { NoPermission } from "~/components/no-permission";
 import { env } from "~/env";
+import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
@@ -71,7 +71,7 @@ export default async function Page(props: {
     <HydrateClient>
       <div className="flex flex-col gap-2 text-sm">
         <Card className="p-0">
-          <CardHeader className="flex flex-row items-center space-x-4 border-b bg-muted/50 p-2">
+          <CardHeader className="bg-muted/50 flex flex-row items-center space-x-4 border-b p-2">
             {school.logo && (
               <Image
                 src={`/api/download/images/${school.logo}`}
@@ -83,7 +83,7 @@ export default async function Page(props: {
 
             <div className="flex-1">
               <CardTitle className="text-xl">{school.name}</CardTitle>
-              <p className="text-sm text-muted-foreground">ID: {school.id}</p>
+              <p className="text-muted-foreground text-sm">ID: {school.id}</p>
             </div>
             <CardAction className="flex flex-row items-center space-x-2">
               <FlatBadge variant={school.isActive ? "green" : "red"}>
@@ -163,7 +163,7 @@ export default async function Page(props: {
         <Card>
           <CardContent>
             <ErrorBoundary errorComponent={ErrorFallback}>
-              <Suspense fallback={<Skeleton className="h-20 " />}>
+              <Suspense fallback={<Skeleton className="h-20" />}>
                 <DefaultSettings />
               </Suspense>
             </ErrorBoundary>

@@ -1,7 +1,10 @@
 "use client";
-import { Progress } from "@repo/ui/components/progress";
+
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, User } from "lucide-react";
+
+import { Progress } from "@repo/ui/components/progress";
+
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -32,8 +35,8 @@ export function GradeReportTracker({
     gradeTracker.isLoading
   ) {
     return (
-      <div className="text-center animate-spin">
-        <Loader2 className="w-8 h-8" />
+      <div className="animate-spin text-center">
+        <Loader2 className="h-8 w-8" />
       </div>
     );
   }
@@ -51,7 +54,7 @@ export function GradeReportTracker({
         </div>
 
         <div className="mt-6 space-y-4">
-          <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+          <div className="bg-muted flex items-center justify-between rounded-lg p-3">
             <span className="text-sm font-medium">Progress</span>
             <div className="flex items-center gap-2">
               <Progress
@@ -85,7 +88,7 @@ export function GradeReportTracker({
             ))} */}
           </div>
 
-          <div className="pt-4 border-t">
+          <div className="border-t pt-4">
             <div className="flex justify-between text-sm">
               <span>Completed:</span>
               <span className="font-medium">

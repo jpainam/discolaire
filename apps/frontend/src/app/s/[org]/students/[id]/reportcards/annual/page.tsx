@@ -1,3 +1,7 @@
+import { Fragment } from "react";
+import Link from "next/link";
+import _, { sum } from "lodash";
+
 import {
   Table,
   TableBody,
@@ -7,9 +11,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-import _, { sum } from "lodash";
-import Link from "next/link";
-import { Fragment } from "react";
+
 import { EmptyState } from "~/components/EmptyState";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
@@ -19,6 +21,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 import { AnnualHeader } from "./AnnualHeader";
+
 export default async function Page(props: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{
@@ -140,7 +143,7 @@ export default async function Page(props: {
                           {grade && grade.average !== null ? (
                             <TableCell
                               className={cn(
-                                "border-l  text-center",
+                                "border-l text-center",
                                 grade.average < 10
                                   ? "!bg-red-100 dark:!bg-red-900"
                                   : grade.average < 15
@@ -180,7 +183,7 @@ export default async function Page(props: {
                       );
                     })}
                     <TableRow
-                      className="bg-secondary border text-secondary-foreground"
+                      className="bg-secondary text-secondary-foreground border"
                       key={`recap-${groupId}`}
                     >
                       <TableCell

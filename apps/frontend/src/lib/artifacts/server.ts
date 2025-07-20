@@ -1,14 +1,15 @@
 import type { UIMessageStreamWriter } from "ai";
+
+import type { Session } from "@repo/auth";
+import type { AiDocument } from "@repo/db";
+
+import type { ChatMessage } from "../types";
+import type { ArtifactKind } from "~/components/ai/artifact";
 import { codeDocumentHandler } from "~/artifacts/code/server";
 import { imageDocumentHandler } from "~/artifacts/image/server";
 import { sheetDocumentHandler } from "~/artifacts/sheet/server";
 import { textDocumentHandler } from "~/artifacts/text/server";
-import type { ArtifactKind } from "~/components/ai/artifact";
-
-import type { Session } from "@repo/auth";
-import type { AiDocument } from "@repo/db";
 import { saveDocument } from "../ai/queries";
-import type { ChatMessage } from "../types";
 
 export interface SaveDocumentProps {
   id: string;

@@ -11,7 +11,7 @@ import {
 
 export default function Page() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary">
+    <div className="bg-secondary flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mb-4 flex justify-center">

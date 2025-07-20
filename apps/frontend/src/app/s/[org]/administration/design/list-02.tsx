@@ -1,4 +1,3 @@
-import { cn } from "@repo/ui/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowDownLeft,
@@ -8,6 +7,8 @@ import {
   ShoppingCart,
   Wallet,
 } from "lucide-react";
+
+import { cn } from "@repo/ui/lib/utils";
 
 interface Transaction {
   id: string;
@@ -103,7 +104,7 @@ export default function List02({
   return (
     <div
       className={cn(
-        "w-full max-w-xl mx-auto",
+        "mx-auto w-full max-w-xl",
         "bg-white dark:bg-zinc-900/70",
         "border border-zinc-100 dark:border-zinc-800",
         "rounded-xl shadow-sm backdrop-blur-xl",
@@ -111,10 +112,10 @@ export default function List02({
       )}
     >
       <div className="p-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
             Recent Activity
-            <span className="text-xs font-normal text-zinc-600 dark:text-zinc-400 ml-1">
+            <span className="ml-1 text-xs font-normal text-zinc-600 dark:text-zinc-400">
               (23 transactions)
             </span>
           </h2>
@@ -129,22 +130,22 @@ export default function List02({
               key={transaction.id}
               className={cn(
                 "group flex items-center gap-3",
-                "p-2 rounded-lg",
+                "rounded-lg p-2",
                 "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
                 "transition-all duration-200",
               )}
             >
               <div
                 className={cn(
-                  "p-2 rounded-lg",
+                  "rounded-lg p-2",
                   "bg-zinc-100 dark:bg-zinc-800",
                   "border border-zinc-200 dark:border-zinc-700",
                 )}
               >
-                <transaction.icon className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
+                <transaction.icon className="h-4 w-4 text-zinc-900 dark:text-zinc-100" />
               </div>
 
-              <div className="flex-1 flex items-center justify-between min-w-0">
+              <div className="flex min-w-0 flex-1 items-center justify-between">
                 <div className="space-y-0.5">
                   <h3 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
                     {transaction.title}
@@ -167,9 +168,9 @@ export default function List02({
                     {transaction.amount}
                   </span>
                   {transaction.type === "incoming" ? (
-                    <ArrowDownLeft className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <ArrowDownLeft className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   ) : (
-                    <ArrowUpRight className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
+                    <ArrowUpRight className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
                   )}
                 </div>
               </div>
@@ -178,12 +179,12 @@ export default function List02({
         </div>
       </div>
 
-      <div className="p-2 border-t border-zinc-100 dark:border-zinc-800">
+      <div className="border-t border-zinc-100 p-2 dark:border-zinc-800">
         <button
           type="button"
           className={cn(
-            "w-full flex items-center justify-center gap-2",
-            "py-2 px-3 rounded-lg",
+            "flex w-full items-center justify-center gap-2",
+            "rounded-lg px-3 py-2",
             "text-xs font-medium",
             "bg-gradient-to-r from-zinc-900 to-zinc-800",
             "dark:from-zinc-50 dark:to-zinc-200",
@@ -194,13 +195,13 @@ export default function List02({
             "transform transition-all duration-200",
             "hover:-translate-y-0.5",
             "active:translate-y-0",
-            "focus:outline-none focus:ring-2",
+            "focus:ring-2 focus:outline-none",
             "focus:ring-zinc-500 dark:focus:ring-zinc-400",
             "focus:ring-offset-2 dark:focus:ring-offset-zinc-900",
           )}
         >
           <span>View All Transactions</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </div>
     </div>

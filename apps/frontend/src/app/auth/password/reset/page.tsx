@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { KeyRound } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
@@ -25,12 +27,10 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useLocale } from "~/i18n";
 
-import { useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 const formSchema = z.object({
   password: z.string().min(1),
@@ -82,7 +82,7 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary">
+    <div className="bg-secondary flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{t("reset_password")}</CardTitle>
@@ -148,7 +148,7 @@ export default function ResetPassword() {
         <CardFooter className="flex justify-center">
           <Button
             variant="link"
-            className="text-sm text-muted-foreground"
+            className="text-muted-foreground text-sm"
             onClick={() => router.push("/auth/login")}
           >
             {t("back_to_login")}

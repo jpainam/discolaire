@@ -9,6 +9,7 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 import { Textarea } from "@repo/ui/components/textarea";
+
 import { useLocale } from "~/i18n";
 
 const ReportCardSummary = () => {

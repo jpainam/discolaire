@@ -1,8 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import type { School } from "@repo/db";
+import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
@@ -13,17 +19,11 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useLocale } from "~/i18n";
-import { FileUploader } from "~/uploads/file-uploader";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@repo/ui/components/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+import { FileUploader } from "~/uploads/file-uploader";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -299,7 +299,7 @@ export function CreateEditSchool({ school }: { school: School }) {
           control={form.control}
           name="isActive"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+            <FormItem className="flex flex-row items-start space-y-0 space-x-3">
               <FormControl>
                 <Checkbox
                   checked={field.value}

@@ -1,8 +1,10 @@
 "use client";
 
-import { Label } from "@repo/ui/components/label";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import { Label } from "@repo/ui/components/label";
+
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
@@ -27,7 +29,7 @@ export function CreateStudentTransaction({
     }),
   );
   return (
-    <div className="flex flex-col p-4 gap-2 justify-center items-center">
+    <div className="flex flex-col items-center justify-center gap-2 p-4">
       <Label>{t("students")}</Label>
       <SearchCombobox
         className="w-full lg:w-1/3"

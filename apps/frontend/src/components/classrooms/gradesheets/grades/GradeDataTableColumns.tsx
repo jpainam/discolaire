@@ -1,11 +1,14 @@
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { FlagOff, Pencil } from "lucide-react";
 import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
+import { FlagOff, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -16,17 +19,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { Badge } from "@repo/ui/components/badge";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { decode } from "entities";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 import { EditGradeStudent } from "./EditGradeStudent";
@@ -220,7 +220,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
             <Button
               aria-label="Open menu"
               variant="ghost"
-              className="flex size-8 p-0 data-[state=open]:bg-muted"
+              className="data-[state=open]:bg-muted flex size-8 p-0"
             >
               <DotsHorizontalIcon className="size-4" aria-hidden="true" />
             </Button>

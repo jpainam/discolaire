@@ -1,7 +1,7 @@
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { cn } from "@repo/ui/lib/utils";
 
 import rangeMap from "~/lib/range-map";
-import { cn } from "@repo/ui/lib/utils";
 
 interface DatatableSkeletonProps {
   rows: number;
@@ -18,7 +18,7 @@ export default function DatatableSkeleton({ rows }: DatatableSkeletonProps) {
         <div key={i}>
           <SkeletonLineGroup
             columns={6}
-            className={`grid-cols-6 gap-2 pb-2 pt-2`}
+            className={`grid-cols-6 gap-2 pt-2 pb-2`}
             skeletonClassName="h-8 w-full"
           />
         </div>

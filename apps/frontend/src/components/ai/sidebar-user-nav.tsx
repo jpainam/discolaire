@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronUp } from "lucide-react";
-
-import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ChevronUp } from "lucide-react";
+import { useTheme } from "next-themes";
 
 import type { User } from "@repo/db";
 import {
@@ -18,7 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
-import { useRouter } from "next/navigation";
+
 import { authClient, useSession } from "~/auth/client";
 import { guestRegex } from "~/lib/constants";
 import { LoaderIcon } from "./icons";
@@ -39,8 +39,8 @@ export function SidebarUserNav({ user }: { user: User }) {
             {status === "loading" ? (
               <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent bg-background data-[state=open]:text-sidebar-accent-foreground h-10 justify-between">
                 <div className="flex flex-row gap-2">
-                  <div className="size-6 bg-zinc-500/30 rounded-full animate-pulse" />
-                  <span className="bg-zinc-500/30 text-transparent rounded-md animate-pulse">
+                  <div className="size-6 animate-pulse rounded-full bg-zinc-500/30" />
+                  <span className="animate-pulse rounded-md bg-zinc-500/30 text-transparent">
                     Loading auth status
                   </span>
                 </div>

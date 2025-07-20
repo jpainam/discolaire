@@ -1,8 +1,8 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { useQuery } from "@tanstack/react-query";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
@@ -36,7 +36,7 @@ export function GradeAppreciationList() {
               );
             }}
             className={cn(
-              "cursor-pointer border-b p-2 hover:bg-muted/50",
+              "hover:bg-muted/50 cursor-pointer border-b p-2",
               // params.appreciationId == appr.id
               //   ? "bg-muted text-muted-foreground"
               //   : ""

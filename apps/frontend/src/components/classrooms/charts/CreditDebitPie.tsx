@@ -1,12 +1,13 @@
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
-import { Card, CardContent } from "@repo/ui/components/card";
 import type { ChartConfig } from "@repo/ui/components/chart";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
+
 import { getServerTranslations } from "~/i18n/server";
 
 const chartData = [

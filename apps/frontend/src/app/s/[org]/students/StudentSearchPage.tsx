@@ -1,7 +1,7 @@
 "use client";
 
-import { Search } from "lucide-react";
 import { useState } from "react";
+import { Search } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { StudentStatus } from "@repo/db";
@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+
 import { searchStudents } from "~/actions/search";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { useLocale } from "~/i18n";
@@ -45,12 +46,12 @@ export function StudentSearchPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex flex-1 flex-col overflow-hidden">
       <div className="border-b px-4 py-2">
-        <div className="gap-2 flex flex-col">
-          <div className="flex items-center flex-row gap-4 max-w-4xl">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+        <div className="flex flex-col gap-2">
+          <div className="flex max-w-4xl flex-row items-center gap-4">
+            <div className="relative flex-1">
+              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
               <Input
                 placeholder={t("Enter a name, ID, or email to get started.")}
                 value={searchQuery}
@@ -69,7 +70,7 @@ export function StudentSearchPage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-4xl">
+          <div className="grid max-w-4xl grid-cols-1 gap-4 lg:grid-cols-3">
             <ClassroomSelector
               className="w-full"
               onChange={(val) => {
@@ -101,7 +102,7 @@ export function StudentSearchPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 px-4 py-2 ">
+      <div className="grid gap-3 px-4 py-2">
         {searchResults.map((student) => (
           <StudentSearchResultCard key={student.id} student={student} />
         ))}
@@ -119,10 +120,10 @@ export function StudentSearchPage() {
         )} */}
 
       {searchResults.length == 0 && (
-        <div className="text-center text-sm py-12">
-          <Search className="mx-auto h-12 w-12 " />
+        <div className="py-12 text-center text-sm">
+          <Search className="mx-auto h-12 w-12" />
           <h3 className="mt-4">{t("Search for students")}</h3>
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="text-muted-foreground mt-2 text-xs">
             {t("Enter a name, ID, or email to get started.")}
           </p>
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { Mail, MoreVertical, NotebookPen } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
@@ -10,14 +11,13 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
 
-import { useSearchParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 export function StudentAssignmentHeader() {
   const { t } = useLocale();
@@ -26,7 +26,7 @@ export function StudentAssignmentHeader() {
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   return (
-    <div className="flex flex-row items-center gap-2 bg-muted text-muted-foreground px-2 py-1">
+    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 px-2 py-1">
       <NotebookPen className="h-4 w-4" />
       <Label>{t("assignments")}</Label>
       <TermSelector

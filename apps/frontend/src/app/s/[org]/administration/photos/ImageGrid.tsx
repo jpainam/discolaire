@@ -1,13 +1,7 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import {
@@ -20,9 +14,17 @@ import {
   UploadIcon,
   XIcon,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+
 import { StudentSearchDialog } from "~/components/students/StudentSearchDialog";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useModal } from "~/hooks/use-modal";
@@ -262,7 +264,7 @@ export function ImageGrid({
                           className="size-6"
                           size={"icon"}
                         >
-                          <MoreVertical className="w-3 h-3" />
+                          <MoreVertical className="h-3 w-3" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>

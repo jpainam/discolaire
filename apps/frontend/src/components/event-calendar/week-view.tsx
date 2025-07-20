@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import {
   addHours,
   areIntervalsOverlapping,
@@ -16,7 +17,6 @@ import {
   startOfDay,
   startOfWeek,
 } from "date-fns";
-import React, { useMemo } from "react";
 
 import type { CalendarEvent } from "~/components/event-calendar";
 import {

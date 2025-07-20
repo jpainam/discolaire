@@ -1,6 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical, Plus } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,21 +16,17 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
-import FlatBadge from "~/components/FlatBadge";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { useMemo } from "react";
-import { toast } from "sonner";
 import { authClient } from "~/auth/client";
+import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { getAge } from "~/utils";
@@ -79,7 +79,7 @@ export function EnrollmentHeader() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-3 items-center gap-2 border-y bg-muted px-4 py-1 text-secondary-foreground md:flex md:flex-row">
+      <div className="bg-muted text-secondary-foreground grid grid-cols-3 items-center gap-2 border-y px-4 py-1 md:flex md:flex-row">
         <FlatBadge
           variant={"yellow"}
           className="flex flex-row items-center gap-2"

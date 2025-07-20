@@ -1,4 +1,9 @@
 "use client";
+
+import type { Table } from "@tanstack/react-table";
+import { RiFilter3Line } from "@remixicon/react";
+import { useQuery } from "@tanstack/react-query";
+
 import type { RouterOutputs } from "@repo/api";
 import {
   Select,
@@ -7,12 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import type { Table } from "@tanstack/react-table";
-import { useLocale } from "~/i18n";
-
-import { RiFilter3Line } from "@remixicon/react";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useQuery } from "@tanstack/react-query";
+
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 type ProcedureOutput = NonNullable<
@@ -64,7 +66,7 @@ export function GradeReportTrackerDataTableAction({
   return (
     <div className="flex items-center gap-2">
       <RiFilter3Line
-        className="size-5 -ms-1.5 text-muted-foreground/60"
+        className="text-muted-foreground/60 -ms-1.5 size-5"
         size={20}
         aria-hidden="true"
       />
@@ -73,7 +75,7 @@ export function GradeReportTrackerDataTableAction({
           classroomColumn?.setFilterValue(value);
         }}
       >
-        <SelectTrigger size="sm" className="w-[200px] text-xs h-7">
+        <SelectTrigger size="sm" className="h-7 w-[200px] text-xs">
           <SelectValue placeholder={t("terms")} />
         </SelectTrigger>
         <SelectContent>
@@ -91,7 +93,7 @@ export function GradeReportTrackerDataTableAction({
       <Select defaultValue="1">
         <SelectTrigger
           size="sm"
-          className="text-xs [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_svg]:shrink-0 h-7 w-[150px]"
+          className="h-7 w-[150px] text-xs [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_svg]:shrink-0"
         >
           <SelectValue placeholder="Select status" />
         </SelectTrigger>
@@ -115,7 +117,7 @@ export function GradeReportTrackerDataTableAction({
           classroomColumn?.setFilterValue(value);
         }}
       >
-        <SelectTrigger size="sm" className="w-[200px] text-xs h-7">
+        <SelectTrigger size="sm" className="h-7 w-[200px] text-xs">
           <SelectValue placeholder={t("classrooms")} />
         </SelectTrigger>
         <SelectContent>

@@ -30,7 +30,7 @@ export function TimelineAction({ timelineId }: { timelineId: string }) {
       variant={"ghost"}
       size={"icon"}
     >
-      <Trash2 className="h-5 w-5 text-destructive" />
+      <Trash2 className="text-destructive h-5 w-5" />
       <span className="sr-only">Delete</span>
     </Button>
   );

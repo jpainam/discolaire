@@ -1,6 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -12,15 +17,12 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const schema = z.object({
   note: z.string().optional(),
   userId: z.string().min(1),
@@ -98,7 +100,7 @@ export function CreateEditAssetUsage({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="gap-4 grid grid-cols-1 px-4"
+        className="grid grid-cols-1 gap-4 px-4"
       >
         <FormField
           control={form.control}

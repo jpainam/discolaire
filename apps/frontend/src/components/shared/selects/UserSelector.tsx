@@ -1,6 +1,8 @@
-import { cn } from "@repo/ui/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import { cn } from "@repo/ui/lib/utils";
+
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";

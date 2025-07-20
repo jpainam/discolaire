@@ -1,23 +1,23 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Warehouse } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Warehouse } from "lucide-react";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";

@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 import { SignUpContactIcon } from "./SignUpContactIcon";
@@ -43,8 +43,8 @@ export function SignUpContact() {
     return;
   }
   return (
-    <div className="flex flex-row gap-4 py-2 px-4 text-sm">
-      <div className="flex w-full flex-col rounded-xl border border-[#f3ba63] bg-[#fff9ed] p-4 text-accent-foreground dark:border-[#693f05] dark:bg-[#271700]">
+    <div className="flex flex-row gap-4 px-4 py-2 text-sm">
+      <div className="text-accent-foreground flex w-full flex-col rounded-xl border border-[#f3ba63] bg-[#fff9ed] p-4 dark:border-[#693f05] dark:bg-[#271700]">
         <div className="flex flex-row">
           <div className="flex flex-1 flex-col gap-2">
             <div className="color-gray-900 text-md flex w-full flex-row justify-between font-bold">

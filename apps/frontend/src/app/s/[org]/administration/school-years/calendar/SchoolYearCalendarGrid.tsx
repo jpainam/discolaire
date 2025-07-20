@@ -1,8 +1,10 @@
 "use client";
 
-import { cn } from "@repo/ui/lib/utils";
 import { startOfWeek } from "date-fns";
 import i18next from "i18next";
+
+import { cn } from "@repo/ui/lib/utils";
+
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 
 export function SchoolYearCalendarGrid() {
@@ -37,7 +39,7 @@ export function SchoolYearCalendarGrid() {
         days.push(
           <div
             key={`empty-${i}`}
-            className="h-16 md:h-20 border border-border/50 bg-muted/20"
+            className="border-border/50 bg-muted/20 h-16 border md:h-20"
           ></div>,
         );
       }
@@ -53,7 +55,7 @@ export function SchoolYearCalendarGrid() {
         days.push(
           <div
             key={date1}
-            className="h-16 md:h-20 border border-border/50 p-1 overflow-hidden"
+            className="border-border/50 h-16 overflow-hidden border p-1 md:h-20"
           >
             <div className="text-xs font-medium">{day}</div>
             <div className="mt-1 space-y-1">
@@ -63,7 +65,7 @@ export function SchoolYearCalendarGrid() {
                   style={{
                     backgroundColor: event.type.color,
                   }}
-                  className={cn("text-xs rounded px-1 py-0.5 border truncate")}
+                  className={cn("truncate rounded border px-1 py-0.5 text-xs")}
                   title={event.name}
                 >
                   {event.name}
@@ -113,21 +115,21 @@ export function SchoolYearCalendarGrid() {
       {monthPairs.map((pair, pairIndex) => (
         <div
           key={`pair-${pairIndex}`}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="grid grid-cols-1 gap-6 md:grid-cols-2"
         >
           {pair.map((monthData) => (
             <div key={`${monthData?.year}-${monthData?.month}`}>
-              <h2 className="mb-2 capitalize text-xl font-semibold">
+              <h2 className="mb-2 text-xl font-semibold capitalize">
                 {monthData?.name} {monthData?.year}
               </h2>
               <div className="grid grid-cols-7 text-center">
-                <div className="py-1 font-medium text-xs">Sun</div>
-                <div className="py-1 font-medium text-xs">Mon</div>
-                <div className="py-1 font-medium text-xs">Tue</div>
-                <div className="py-1 font-medium text-xs">Wed</div>
-                <div className="py-1 font-medium text-xs">Thu</div>
-                <div className="py-1 font-medium text-xs">Fri</div>
-                <div className="py-1 font-medium text-xs">Sat</div>
+                <div className="py-1 text-xs font-medium">Sun</div>
+                <div className="py-1 text-xs font-medium">Mon</div>
+                <div className="py-1 text-xs font-medium">Tue</div>
+                <div className="py-1 text-xs font-medium">Wed</div>
+                <div className="py-1 text-xs font-medium">Thu</div>
+                <div className="py-1 text-xs font-medium">Fri</div>
+                <div className="py-1 text-xs font-medium">Sat</div>
                 {monthData?.days}
               </div>
             </div>

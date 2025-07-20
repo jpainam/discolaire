@@ -1,18 +1,18 @@
-import { cn } from "@repo/ui/lib/utils";
-import { isToday, startOfDay } from "date-fns";
 import { useMemo } from "react";
-
-import { EventBullet } from "~/components/calendar/month-view/event-bullet";
-import { MonthEventBadge } from "~/components/calendar/month-view/month-event-badge";
+import { isToday, startOfDay } from "date-fns";
+import i18next from "i18next";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import i18next from "i18next";
-import { getMonthCellEvents } from "~/components/calendar/helpers";
+import { cn } from "@repo/ui/lib/utils";
+
 import type { ICalendarCell, IEvent } from "~/components/calendar/interfaces";
+import { getMonthCellEvents } from "~/components/calendar/helpers";
+import { EventBullet } from "~/components/calendar/month-view/event-bullet";
+import { MonthEventBadge } from "~/components/calendar/month-view/month-event-badge";
 
 interface IProps {
   cell: ICalendarCell;
@@ -34,7 +34,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 border-l border-t py-1",
+        "flex flex-col gap-1 border-t border-l py-1",
         isSunday && "border-l-0",
       )}
     >
@@ -43,7 +43,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
           "h-6 px-1 text-xs font-semibold lg:px-2",
           !currentMonth && "opacity-20",
           isToday(date) &&
-            "flex w-6 translate-x-1 items-center justify-center rounded-full bg-primary-600 px-0 font-bold text-white",
+            "bg-primary-600 flex w-6 translate-x-1 items-center justify-center rounded-full px-0 font-bold text-white",
         )}
       >
         {day}
@@ -84,7 +84,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
             <button>
               <p
                 className={cn(
-                  "flex  h-4.5 px-1.5  items-start text-xs font-semibold text-t-quaternary",
+                  "text-t-quaternary flex h-4.5 items-start px-1.5 text-xs font-semibold",
                   !currentMonth && "opacity-50",
                 )}
               >
@@ -103,7 +103,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
               !currentMonth && "opacity-50",
             )}
           >
-            <div className="text-xs px-2">
+            <div className="px-2 text-xs">
               {date.toLocaleDateString(i18next.language, {
                 weekday: "short",
                 day: "2-digit",

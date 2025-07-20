@@ -1,12 +1,13 @@
-import type { Session } from "@repo/auth";
 import type { UIMessageStreamWriter } from "ai";
 import { tool } from "ai";
-
 import { z } from "zod";
+
+import type { Session } from "@repo/auth";
+
 import type { ArtifactKind } from "~/components/ai/artifact";
+import type { ChatMessage } from "~/lib/types";
 import { getDocumentById } from "~/lib/ai/queries";
 import { documentHandlersByArtifactKind } from "~/lib/artifacts/server";
-import type { ChatMessage } from "~/lib/types";
 
 interface UpdateDocumentProps {
   session: Session;

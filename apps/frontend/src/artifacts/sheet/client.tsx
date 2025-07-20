@@ -3,8 +3,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Artifact } from "~/components/ai/create-artifact";
-
 import {
   CopyIcon,
   LineChartIcon,
@@ -14,6 +12,8 @@ import {
 } from "lucide-react";
 import { parse, unparse } from "papaparse";
 import { toast } from "sonner";
+
+import { Artifact } from "~/components/ai/create-artifact";
 import { SpreadsheetEditor } from "~/components/ai/sheet-editor";
 
 type Metadata = any;

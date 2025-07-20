@@ -1,9 +1,11 @@
 "use server";
 
-import type { VisibilityType } from "@repo/db";
 import type { UIMessage } from "ai";
-import { generateText } from "ai";
 import { cookies } from "next/headers";
+import { generateText } from "ai";
+
+import type { VisibilityType } from "@repo/db";
+
 import { myProvider } from "~/lib/ai/providers";
 import {
   deleteMessagesByChatIdAfterTimestamp,

@@ -1,5 +1,11 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -12,20 +18,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function SubjectJournalHeader() {
@@ -58,7 +58,7 @@ export function SubjectJournalHeader() {
     PermissionAction.DELETE,
   );
   return (
-    <div className="flex flex-row items-center justify-between border-b bg-muted/50 px-4 py-1">
+    <div className="bg-muted/50 flex flex-row items-center justify-between border-b px-4 py-1">
       <Label>{t("subject_journal")}</Label>
       <Label className="font-bold">{subject.course.name}</Label>
       <div>

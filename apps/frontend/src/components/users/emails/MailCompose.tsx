@@ -1,9 +1,11 @@
 "use client";
 
+import { File, Paperclip, X } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { File, Paperclip, X } from "lucide-react";
+
 import { useMailContext } from "./MailContextProvider";
 
 export function MailCompose() {
@@ -24,8 +26,8 @@ export function MailCompose() {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-4 overflow-auto">
-      <div className="text-xl font-semibold mb-4">New Message</div>
+    <div className="flex flex-1 flex-col overflow-auto p-4">
+      <div className="mb-4 text-xl font-semibold">New Message</div>
       <div className="space-y-4">
         <div>
           <label className="text-sm font-medium">To:</label>
@@ -44,20 +46,20 @@ export function MailCompose() {
 
         {/* File Attachments */}
         {attachedFiles.length > 0 && (
-          <div className="border rounded-md p-3">
-            <div className="text-sm font-medium mb-2">
+          <div className="rounded-md border p-3">
+            <div className="mb-2 text-sm font-medium">
               Attachments ({attachedFiles.length})
             </div>
             <div className="space-y-2">
               {attachedFiles.map((file, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between bg-muted/50 rounded p-2 text-sm"
+                  className="bg-muted/50 flex items-center justify-between rounded p-2 text-sm"
                 >
                   <div className="flex items-center">
-                    <File className="h-4 w-4 mr-2 flex-shrink-0" />
-                    <span className="truncate max-w-[200px]">{file.name}</span>
-                    <span className="text-xs text-muted-foreground ml-2">
+                    <File className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="max-w-[200px] truncate">{file.name}</span>
+                    <span className="text-muted-foreground ml-2 text-xs">
                       {(file.size / 1024).toFixed(0)} KB
                     </span>
                   </div>
@@ -92,7 +94,7 @@ export function MailCompose() {
                 className="cursor-pointer"
               >
                 <span>
-                  <Paperclip className="h-4 w-4 mr-2" />
+                  <Paperclip className="mr-2 h-4 w-4" />
                   Attach Files
                 </span>
               </Button>

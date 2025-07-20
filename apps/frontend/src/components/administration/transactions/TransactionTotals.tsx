@@ -1,18 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsIsoDateTime, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
-import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
 import ContainersIcon from "~/components/icons/containers";
 import ExpenseIcon from "~/components/icons/expenses";
 import RevenueUpIcon from "~/components/icons/revenue-up";
 import SalesIcon from "~/components/icons/sales";
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 

@@ -1,9 +1,11 @@
 "use client";
 
-import { useAtom } from "jotai";
 import Link from "next/link";
+import i18next from "i18next";
+import { useAtom } from "jotai";
 
 import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Table,
@@ -14,14 +16,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useLocale } from "~/i18n";
-
-import { Badge } from "@repo/ui/components/badge";
 import { cn } from "@repo/ui/lib/utils";
-import i18next from "i18next";
+
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
 
@@ -127,7 +127,7 @@ export function ListViewFinance({
                   <TableCell className="w-32">
                     <div
                       className={cn(
-                        "w-fit px-2 text-center text-primary-foreground rounded-sm",
+                        "text-primary-foreground w-fit rounded-sm px-2 text-center",
                         remaining < 0 ? "bg-red-500" : "bg-green-500",
                       )}
                     >

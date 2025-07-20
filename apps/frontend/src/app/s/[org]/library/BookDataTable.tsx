@@ -1,6 +1,8 @@
+import React from "react";
+
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import React from "react";
+
 import { useLocale } from "~/i18n";
 import { getBookColumns } from "./BookDataTableColumn";
 

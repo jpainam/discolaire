@@ -1,11 +1,13 @@
 "use client";
 
-import _ from "lodash";
 import React, { useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import _ from "lodash";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
@@ -13,16 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 type TransactionQuotaProcedureOutput = NonNullable<

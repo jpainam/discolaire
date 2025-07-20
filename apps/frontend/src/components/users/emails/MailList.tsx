@@ -1,5 +1,7 @@
 "use client";
 
+import { Search } from "lucide-react";
+
 import {
   Avatar,
   AvatarFallback,
@@ -7,7 +9,7 @@ import {
 } from "@repo/ui/components/avatar";
 import { Input } from "@repo/ui/components/input";
 import { cn } from "@repo/ui/lib/utils";
-import { Search } from "lucide-react";
+
 import { useLocale } from "~/i18n";
 import { useMailContext } from "./MailContextProvider";
 
@@ -44,20 +46,20 @@ export function MailList() {
   return (
     <div
       className={cn(
-        "w-80 border-r overflow-y-auto",
+        "w-80 overflow-y-auto border-r",
         (selectedEmail ?? composing) && "hidden md:block",
       )}
     >
-      <div className="p-4 border-b sticky top-0 bg-background">
+      <div className="bg-background sticky top-0 border-b p-4">
         <div className="relative">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
           <Input placeholder="Search emails" className="pl-8" />
         </div>
       </div>
 
       <div className="divide-y">
         {filteredEmails.length === 0 && (
-          <div className="p-4 text-center text-muted-foreground">
+          <div className="text-muted-foreground p-4 text-center">
             No emails found in this folder.
           </div>
         )}
@@ -65,7 +67,7 @@ export function MailList() {
           <div
             key={email.id}
             className={cn(
-              "p-3 cursor-pointer hover:bg-muted/50 transition-colors",
+              "hover:bg-muted/50 cursor-pointer p-3 transition-colors",
               email.id === selectedEmail && "bg-muted",
               !email.read && "font-medium",
             )}
@@ -79,10 +81,10 @@ export function MailList() {
                 />
                 <AvatarFallback>{email.avatar}</AvatarFallback>
               </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between">
                   <div className="truncate font-medium">{email.from}</div>
-                  <div className="text-xs text-muted-foreground whitespace-nowrap ml-2">
+                  <div className="text-muted-foreground ml-2 text-xs whitespace-nowrap">
                     {email.date.toLocaleDateString(i18n.language, {
                       month: "2-digit",
                       day: "2-digit",
@@ -93,8 +95,8 @@ export function MailList() {
                     })}
                   </div>
                 </div>
-                <div className="text-sm truncate">{email.subject}</div>
-                <div className="text-xs text-muted-foreground truncate">
+                <div className="truncate text-sm">{email.subject}</div>
+                <div className="text-muted-foreground truncate text-xs">
                   {email.preview}
                 </div>
               </div>

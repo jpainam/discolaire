@@ -1,17 +1,17 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
-import { Card, CardContent } from "@repo/ui/components/card";
 import type { ChartConfig } from "@repo/ui/components/chart";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function FeeBar() {

@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Dispatch, SetStateAction } from "react";
+import { memo, useState } from "react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import type { Dispatch, SetStateAction } from "react";
-import { memo, useState } from "react";
-import { toast } from "sonner";
-import { cn } from "~/lib/utils";
+
 import type { UIArtifact } from "./artifact";
-import { artifactDefinitions } from "./artifact";
 import type { ArtifactActionContext } from "./create-artifact";
+import { cn } from "~/lib/utils";
+import { artifactDefinitions } from "./artifact";
 
 interface ArtifactActionsProps {
   artifact: UIArtifact;
@@ -63,7 +65,7 @@ function PureArtifactActions({
               variant="outline"
               className={cn("h-fit dark:hover:bg-zinc-700", {
                 "p-2": !action.label,
-                "py-1.5 px-2": action.label,
+                "px-2 py-1.5": action.label,
               })}
               onClick={async () => {
                 setIsLoading(true);

@@ -1,7 +1,10 @@
 "use client";
 
-import { MoreVertical, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import i18next from "i18next";
+import { MoreVertical, Plus } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -11,19 +14,16 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import i18next from "i18next";
-import { useEffect, useState } from "react";
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 
@@ -57,7 +57,7 @@ export function FeeHeader() {
   }, [classroomId, fees]);
 
   return (
-    <div className="flex flex-row items-center gap-4 px-4 border-b py-1">
+    <div className="flex flex-row items-center gap-4 border-b px-4 py-1">
       <Label className="hidden md:block">{t("classrooms")}</Label>
       <ClassroomSelector
         className="w-full md:w-[300px]"

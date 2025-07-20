@@ -4,12 +4,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { Node } from "prosemirror-model";
-import { Plugin, PluginKey } from "prosemirror-state";
 import type { Decoration, EditorView } from "prosemirror-view";
+import { Plugin, PluginKey } from "prosemirror-state";
 import { DecorationSet } from "prosemirror-view";
 import { createRoot } from "react-dom/client";
 
 import type { AiSuggestion } from "@repo/db";
+
 import type { ArtifactKind } from "~/components/ai/artifact";
 import { Suggestion as PreviewSuggestion } from "~/components/ai/suggestion";
 

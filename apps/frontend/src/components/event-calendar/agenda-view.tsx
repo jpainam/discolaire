@@ -1,11 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
 import { RiCalendarEventLine } from "@remixicon/react";
 import { addDays, format, isToday } from "date-fns";
-import { useMemo } from "react";
+
+import type { CalendarEvent } from "./types";
 import { AgendaDaysToShow } from "./constants";
 import { EventItem } from "./event-item";
-import type { CalendarEvent } from "./types";
 import { getAgendaEventsForDay } from "./utils";
 
 interface AgendaViewProps {

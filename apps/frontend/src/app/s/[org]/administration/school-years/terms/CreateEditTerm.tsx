@@ -1,5 +1,8 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -15,13 +18,10 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Switch } from "@repo/ui/components/switch";
+
+import { DatePicker } from "~/components/DatePicker";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { DatePicker } from "~/components/DatePicker";
 import { useTRPC } from "~/trpc/react";
 
 type Term = RouterOutputs["term"]["all"][number];

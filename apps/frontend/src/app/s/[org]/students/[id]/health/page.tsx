@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { HealthVisitHeader } from "~/components/students/health/HealthVisitHeader";
 import { HealthVisitTable } from "~/components/students/health/HealthVisitTable";
@@ -24,7 +26,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           fallback={
             <div className="grid grid-cols-3 gap-4 px-4 py-2">
               {Array.from({ length: 9 }).map((_, i) => (
-                <Skeleton key={i} className="h-8 " />
+                <Skeleton key={i} className="h-8" />
               ))}
             </div>
           }

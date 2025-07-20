@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -14,10 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 
 export function PolicyDataTable({ roleId }: { roleId: string }) {

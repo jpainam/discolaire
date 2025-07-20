@@ -2,6 +2,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addDays } from "date-fns";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -13,17 +19,14 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { SheetFooter } from "@repo/ui/components/sheet";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addDays } from "date-fns";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { DatePicker } from "~/components/DatePicker";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
+
 const formSchema = z.object({
   bookId: z.coerce.number().positive(),
   userId: z.string().min(1),
@@ -93,10 +96,10 @@ export function CreateEditLoan({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col flex-1 overflow-hidden"
+        className="flex flex-1 flex-col overflow-hidden"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
+        <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto px-4">
           <FormField
             control={form.control}
             name="bookId"

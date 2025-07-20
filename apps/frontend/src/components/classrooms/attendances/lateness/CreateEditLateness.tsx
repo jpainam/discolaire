@@ -1,12 +1,22 @@
 "use client";
 
-import { DiameterIcon, SaveIcon, XIcon } from "lucide-react";
 import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { DiameterIcon, SaveIcon, XIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Form } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
@@ -19,21 +29,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -129,7 +129,7 @@ export function CreateEditLateness({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg flex flex-row items-center gap-2">
+            <CardTitle className="flex flex-row items-center gap-2 text-lg">
               <div className="flex items-center gap-2">
                 <DiameterIcon className="h-6 w-6" />
                 {t("lateness")}
@@ -158,7 +158,7 @@ export function CreateEditLateness({
                 </Button>
               </div>
             </CardTitle>
-            <CardDescription className="gap-6 flex flex-row items-center">
+            <CardDescription className="flex flex-row items-center gap-6">
               <div className="flex flex-row items-center gap-2">
                 <Checkbox defaultChecked id="notifyParents" />{" "}
                 <Label htmlFor="notifyParents">{t("notify_parents")}</Label>

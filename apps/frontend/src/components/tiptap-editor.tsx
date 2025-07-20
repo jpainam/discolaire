@@ -1,29 +1,11 @@
 "use client";
-import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { Separator } from "@repo/ui/components/separator";
-import { Toggle } from "@repo/ui/components/toggle";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@repo/ui/components/tooltip";
+
+import type { Editor } from "@tiptap/react";
+import { useState } from "react";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
-import type { Editor } from "@tiptap/react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
@@ -46,18 +28,43 @@ import {
   UnderlineIcon,
   Undo,
 } from "lucide-react";
-import { useState } from "react";
+
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { Input } from "@repo/ui/components/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import { Separator } from "@repo/ui/components/separator";
+import { Toggle } from "@repo/ui/components/toggle";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
+
 import "./tiptap.css";
+
+import BulletList from "@tiptap/extension-bullet-list";
+import Color from "@tiptap/extension-color";
+import OrderedList from "@tiptap/extension-ordered-list";
+import TextStyle from "@tiptap/extension-text-style";
+
 // import Table from "@tiptap/extension-table";
 // import TableRow from "@tiptap/extension-table-row";
 // import TableCell from "@tiptap/extension-table-cell";
 // import TableHeader from "@tiptap/extension-table-header";
 import { Card, CardContent } from "@repo/ui/components/card";
-import BulletList from "@tiptap/extension-bullet-list";
-import Color from "@tiptap/extension-color";
-import OrderedList from "@tiptap/extension-ordered-list";
-import TextStyle from "@tiptap/extension-text-style";
+
 import { cn } from "~/lib/utils";
+
 interface EditorToolbarProps {
   editor: Editor | null;
 }
@@ -116,7 +123,7 @@ function EditorToolbar({ editor }: EditorToolbarProps) {
 
   return (
     <TooltipProvider>
-      <div className="border-b p-1 flex flex-wrap items-center gap-1">
+      <div className="flex flex-wrap items-center gap-1 border-b p-1">
         <Tooltip>
           <TooltipTrigger asChild>
             <Toggle
@@ -449,7 +456,7 @@ function EditorToolbar({ editor }: EditorToolbarProps) {
                   {colors.map((color) => (
                     <button
                       key={color}
-                      className="w-5 h-5 rounded-full border border-gray-200"
+                      className="h-5 w-5 rounded-full border border-gray-200"
                       style={{ backgroundColor: color }}
                       onClick={() =>
                         editor.chain().focus().setColor(color).run()
@@ -458,7 +465,7 @@ function EditorToolbar({ editor }: EditorToolbarProps) {
                     />
                   ))}
                   <button
-                    className="w-5 h-5 rounded-full border border-gray-200 flex items-center justify-center"
+                    className="flex h-5 w-5 items-center justify-center rounded-full border border-gray-200"
                     onClick={() => editor.chain().focus().unsetColor().run()}
                     aria-label="Remove text color"
                   >
@@ -559,10 +566,10 @@ export function TiptapEditor({
   });
 
   return (
-    <Card className={cn("border shadow-sm p-0", className)}>
+    <Card className={cn("border p-0 shadow-sm", className)}>
       <CardContent className="p-0">
         <EditorToolbar editor={editor} />
-        <div className="px-4 border-t min-h-[300px]">
+        <div className="min-h-[300px] border-t px-4">
           <EditorContent editor={editor} className="prose max-w-none" />
         </div>
       </CardContent>

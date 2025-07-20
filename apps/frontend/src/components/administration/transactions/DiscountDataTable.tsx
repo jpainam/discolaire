@@ -2,10 +2,10 @@
 
 import { useMemo } from "react";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { useLocale } from "~/i18n";
-
 import type { RouterOutputs } from "@repo/api";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
+
+import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { TransactionDataTableAction } from "./TransactionDataTableAction";
 import { fetchTransactionColumns } from "./TransactionDataTableColumn";

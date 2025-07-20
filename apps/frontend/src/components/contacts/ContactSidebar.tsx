@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+import { ArrowLeft, BellRing, User, Users } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,12 +14,10 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
-import { ArrowLeft, BellRing, User, Users } from "lucide-react";
 
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
+
 export function ContactSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {

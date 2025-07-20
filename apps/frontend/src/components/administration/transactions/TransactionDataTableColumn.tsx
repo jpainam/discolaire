@@ -1,11 +1,13 @@
+import type { ColumnDef, Row } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import Link from "next/link";
 import {
   CheckCircledIcon,
   CrossCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
-import type { ColumnDef, Row } from "@tanstack/react-table";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
 import i18next from "i18next";
 import { BookCopy, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -26,16 +28,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import FlatBadge from "~/components/FlatBadge";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
+import FlatBadge from "~/components/FlatBadge";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
 
@@ -101,7 +101,7 @@ export const fetchTransactionColumns = ({
         const transaction = row.original;
         return (
           <Link
-            className="hover:underline hover:text-blue-600"
+            className="hover:text-blue-600 hover:underline"
             href={`/students/${transaction.studentId}/transactions`}
           >
             {transaction.student.lastName}
@@ -117,7 +117,7 @@ export const fetchTransactionColumns = ({
         const transaction = row.original;
         return (
           <Link
-            className="hover:underline hover:text-blue-600"
+            className="hover:text-blue-600 hover:underline"
             href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
           >
             {transaction.transactionRef}
@@ -229,7 +229,7 @@ function ActionCell({
         {canUpdateTransaction && (
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <BookCopy className="mr-2 h-4 w-4 text-muted-foreground" />
+              <BookCopy className="text-muted-foreground mr-2 h-4 w-4" />
               {t("status")}
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
@@ -254,7 +254,7 @@ function ActionCell({
                 >
                   <FlatBadge variant={"green"}>
                     <CheckCircledIcon
-                      className="mr-2 size-4 text-muted-foreground"
+                      className="text-muted-foreground mr-2 size-4"
                       aria-hidden="true"
                     />
                     {t("validate")}
@@ -266,7 +266,7 @@ function ActionCell({
                 >
                   <FlatBadge variant={"red"}>
                     <CrossCircledIcon
-                      className="mr-2 size-4 text-muted-foreground"
+                      className="text-muted-foreground mr-2 size-4"
                       aria-hidden="true"
                     />
                     {t("cancel")}
@@ -275,7 +275,7 @@ function ActionCell({
                 <DropdownMenuRadioItem value={"PENDING"} className="capitalize">
                   <FlatBadge variant={"yellow"}>
                     <StopwatchIcon
-                      className="mr-2 size-4 text-muted-foreground"
+                      className="text-muted-foreground mr-2 size-4"
                       aria-hidden="true"
                     />
                     {t("pending")}

@@ -1,4 +1,5 @@
 "use client";
+
 import { Search } from "lucide-react";
 
 import { Label } from "@repo/ui/components/label";
@@ -7,6 +8,7 @@ import {
   SidebarGroupContent,
   SidebarInput,
 } from "@repo/ui/components/sidebar";
+
 import { useLocale } from "~/i18n";
 
 export function SearchForm({ ...props }: React.ComponentProps<"form">) {

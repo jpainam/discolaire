@@ -1,5 +1,11 @@
 "use client";
 
+import { useParams, useSearchParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -7,6 +13,7 @@ import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,13 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useParams, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
+
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
@@ -94,10 +95,10 @@ export function SubjectJournalList() {
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
       {journals.map((journal) => (
-        <div key={journal.id} className="rounded-md border p-2 bg-muted/50">
+        <div key={journal.id} className="bg-muted/50 rounded-md border p-2">
           <div className="flex items-start justify-between">
-            <span className="font-semibold text-sm">{journal.title}</span>
-            <p className="text-xs text-muted-foreground">
+            <span className="text-sm font-semibold">{journal.title}</span>
+            <p className="text-muted-foreground text-xs">
               {journal.createdBy.name} -{" "}
               {dateFormat.format(journal.publishDate)}
             </p>
@@ -148,7 +149,7 @@ export function SubjectJournalList() {
                   window.open(journal.attachment, "_blank");
               }}
             >
-              <span className="truncate max-w-[80%]">
+              <span className="max-w-[80%] truncate">
                 {getFileBasename(journal.attachment)}
               </span>
               <DownloadIcon className="h-4 w-4" />

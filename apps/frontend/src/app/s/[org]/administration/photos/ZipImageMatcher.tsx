@@ -1,5 +1,18 @@
 "use client";
 
+import { useCallback, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import JSZip from "jszip";
+import {
+  CheckCircle2,
+  FileIcon,
+  FileArchiveIcon as FileZip,
+  Upload,
+  XCircle,
+} from "lucide-react";
+import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
+
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,18 +33,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Separator } from "@repo/ui/components/separator";
-import { useMutation } from "@tanstack/react-query";
-import JSZip from "jszip";
-import {
-  CheckCircle2,
-  FileIcon,
-  FileArchiveIcon as FileZip,
-  Upload,
-  XCircle,
-} from "lucide-react";
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { toast } from "sonner";
+
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -196,7 +198,7 @@ export function ZipImageMatcher() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Left Column - Inputs */}
 
           <div className="space-y-6">
@@ -216,7 +218,7 @@ export function ZipImageMatcher() {
                 </SelectContent>
               </Select>
               {ids.length > 0 && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {ids.length} {t("IDs detected")}
                 </p>
               )}
@@ -226,7 +228,7 @@ export function ZipImageMatcher() {
               <Label>{t("Upload Zip File")}</Label>
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                className={`cursor-pointer rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
                   isDragActive
                     ? "border-primary bg-primary/5"
                     : "border-muted-foreground/25"
@@ -234,11 +236,11 @@ export function ZipImageMatcher() {
               >
                 <input {...getInputProps()} />
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <FileZip className="h-10 w-10 text-muted-foreground" />
+                  <FileZip className="text-muted-foreground h-10 w-10" />
                   {zipFile ? (
                     <div>
                       <p className="font-medium">{zipFile.name}</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         {(zipFile.size / 1024).toFixed(2)} KB
                       </p>
                     </div>
@@ -249,7 +251,7 @@ export function ZipImageMatcher() {
                       <p className="font-medium">
                         Drag & drop a zip file here, or click to select
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         Only .zip files are accepted
                       </p>
                     </div>
@@ -297,13 +299,13 @@ export function ZipImageMatcher() {
                 <Separator />
 
                 <div>
-                  <h3 className="text-sm font-medium mb-2">Match Results:</h3>
+                  <h3 className="mb-2 text-sm font-medium">Match Results:</h3>
                   <ScrollArea className="h-[350px] rounded-md border p-2">
                     <div className="space-y-2">
                       {fileResults.map((result, index) => (
                         <div
                           key={index}
-                          className={`p-1 rounded-md flex items-center justify-between ${
+                          className={`flex items-center justify-between rounded-md p-1 ${
                             result.matched
                               ? "bg-green-50 dark:bg-green-900"
                               : "bg-red-50 dark:bg-red-900"
@@ -316,11 +318,11 @@ export function ZipImageMatcher() {
                               <XCircle className="mr-2 h-4 w-4 text-red-500 dark:text-red-50" />
                             )}
                             <FileIcon className="mr-2 h-4 w-4" />
-                            <span className="font-medium text-xs truncate max-w-[150px]">
+                            <span className="max-w-[150px] truncate text-xs font-medium">
                               {result.fileName}
                             </span>
                           </div>
-                          <div className="text-sm ">
+                          <div className="text-sm">
                             {result.matched ? (
                               <span>
                                 Matched with ID:{" "}
@@ -339,10 +341,10 @@ export function ZipImageMatcher() {
                 </div>
               </>
             ) : (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center text-muted-foreground p-8">
-                  <FileZip className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <h3 className="font-medium mb-2">{t("No Results Yet")}</h3>
+              <div className="flex h-full items-center justify-center">
+                <div className="text-muted-foreground p-8 text-center">
+                  <FileZip className="mx-auto mb-4 h-12 w-12 opacity-50" />
+                  <h3 className="mb-2 font-medium">{t("No Results Yet")}</h3>
                   <p className="text-sm">
                     {t(
                       "Upload a zip file and click 'Match Files with IDs' to see the results here.",

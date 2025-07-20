@@ -1,7 +1,10 @@
 "use client";
-import { Button } from "@repo/ui/components/button";
+
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { Button } from "@repo/ui/components/button";
+
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
 

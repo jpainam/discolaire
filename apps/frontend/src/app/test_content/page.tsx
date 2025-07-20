@@ -1,7 +1,7 @@
 "use client";
 
-import { BarChart, HelpCircle, Menu, Settings, Users } from "lucide-react";
 import { useState } from "react";
+import { BarChart, HelpCircle, Menu, Settings, Users } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
@@ -24,7 +24,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen w-full overflow-hidden">
       {/* Left Sidebar */}
-      <div className="flex w-64 flex-col border-r bg-background">
+      <div className="bg-background flex w-64 flex-col border-r">
         <div className="flex h-14 items-center border-b px-4">
           <h1 className="text-lg font-semibold">Dashboard</h1>
         </div>
@@ -104,7 +104,7 @@ export default function Dashboard() {
             )}
           >
             {/* Buttons Column */}
-            <div className="flex w-14 flex-col border-l bg-background">
+            <div className="bg-background flex w-14 flex-col border-l">
               <div className="flex flex-col items-center space-y-4 p-2">
                 {panels.map((panel) => (
                   <Button
@@ -126,10 +126,10 @@ export default function Dashboard() {
             {/* Panel Content */}
             <div
               className={cn(
-                "border-l bg-background transition-all duration-300 ease-in-out",
+                "bg-background border-l transition-all duration-300 ease-in-out",
                 activeSidePanel
                   ? "w-[calc(25%-3.5rem)] opacity-100"
-                  : "w-0 opacity-0 overflow-hidden",
+                  : "w-0 overflow-hidden opacity-0",
               )}
             >
               {activeSidePanel && (

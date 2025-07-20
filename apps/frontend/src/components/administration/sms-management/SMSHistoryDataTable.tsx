@@ -2,12 +2,12 @@
 
 import { useMemo } from "react";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
 import type { DataTableFilterField } from "@repo/ui/datatable/data-table-toolbar";
+import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
-import { useLocale } from "~/i18n";
 
 import type { SMSHistory } from "~/types/sms";
+import { useLocale } from "~/i18n";
 import { SMSHistoryDataTableActions } from "./SMSHistoryActions";
 import { fetchSmsHistoryColumns } from "./SMSHistoryColumns";
 import { SMSHistoryFloatingBar } from "./SMSHistoryFloatingBar";

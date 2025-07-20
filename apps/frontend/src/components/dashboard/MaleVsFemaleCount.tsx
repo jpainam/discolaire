@@ -11,8 +11,8 @@ import {
 } from "@repo/ui/components/card";
 import { ChartContainer } from "@repo/ui/components/chart";
 import { Separator } from "@repo/ui/components/separator";
-import { useLocale } from "~/i18n";
 
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function MaleVsFemaleCount({
@@ -99,7 +99,7 @@ export function MaleVsFemaleCount({
         <div className="flex w-full items-center gap-2">
           <div className="grid flex-1 auto-rows-min gap-0.5">
             <div className="text-md text-muted-foreground">{t("boys")}</div>
-            <div className="flex items-baseline gap-1 text-xl font-bold tabular-nums leading-none">
+            <div className="flex items-baseline gap-1 text-xl leading-none font-bold tabular-nums">
               {maleCount}
             </div>
           </div>
@@ -107,7 +107,7 @@ export function MaleVsFemaleCount({
 
           <div className="grid flex-1 auto-rows-min gap-0.5">
             <div className="text-md text-muted-foreground">{t("girls")}</div>
-            <div className="flex items-baseline gap-1 text-xl font-bold tabular-nums leading-none">
+            <div className="flex items-baseline gap-1 text-xl leading-none font-bold tabular-nums">
               {femaleCount}
             </div>
           </div>

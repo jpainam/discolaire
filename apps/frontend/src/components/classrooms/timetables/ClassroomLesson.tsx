@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import type { EventProps, View as RbcView } from "react-big-calendar";
+import { useCallback, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
+//import { CreateEditTimetable } from "./CreateEditTimetable";
+import { useQuery } from "@tanstack/react-query";
 import { format, getDay, parse, startOfWeek } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
-import { useParams } from "next/navigation";
 import { parseAsIsoDateTime, useQueryState } from "nuqs";
-import { useCallback, useMemo, useState } from "react";
-import type { EventProps, View as RbcView } from "react-big-calendar";
 
 import type { RouterOutputs } from "@repo/api";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
 import type {
   Culture,
   DateLocalizer,
@@ -19,18 +22,14 @@ import BigCalendar, {
   dateFnsLocalizer,
   RbcViews,
 } from "~/components/big-calendar";
+import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getNameParts } from "~/utils";
 import { CreateEditLesson } from "./CreateEditLesson";
 import { LessonDetails } from "./LessonDetails";
-
-//import { CreateEditTimetable } from "./CreateEditTimetable";
-import { useQuery } from "@tanstack/react-query";
 
 // moment.locale(i18next.language);
 // const localizer = momentLocalizer(moment);

@@ -16,7 +16,7 @@ import {
 export function RecentActivities() {
   return (
     <Card className="col-span-5">
-      <CardHeader className="border-b bg-muted/50 p-2">
+      <CardHeader className="bg-muted/50 border-b p-2">
         <CardTitle>Recent Activities</CardTitle>
         <CardDescription>Latest updates from the school</CardDescription>
       </CardHeader>
@@ -28,10 +28,10 @@ export function RecentActivities() {
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
             <div className="ml-4 space-y-1">
-              <p className="text-sm font-medium leading-none">
+              <p className="text-sm leading-none font-medium">
                 John Doe submitted an assignment
               </p>
-              <p className="text-sm text-muted-foreground">2 hours ago</p>
+              <p className="text-muted-foreground text-sm">2 hours ago</p>
             </div>
           </div>
           <div className="flex items-center">
@@ -39,10 +39,10 @@ export function RecentActivities() {
               <GraduationCap className="h-4 w-4" />
             </Avatar>
             <div className="ml-4 space-y-1">
-              <p className="text-sm font-medium leading-none">
+              <p className="text-sm leading-none font-medium">
                 New course added: Advanced Mathematics
               </p>
-              <p className="text-sm text-muted-foreground">5 hours ago</p>
+              <p className="text-muted-foreground text-sm">5 hours ago</p>
             </div>
           </div>
           <div className="flex items-center">
@@ -51,10 +51,10 @@ export function RecentActivities() {
               <AvatarFallback>JL</AvatarFallback>
             </Avatar>
             <div className="ml-4 space-y-1">
-              <p className="text-sm font-medium leading-none">
+              <p className="text-sm leading-none font-medium">
                 Jane Lee marked attendance for Class 10A
               </p>
-              <p className="text-sm text-muted-foreground">1 day ago</p>
+              <p className="text-muted-foreground text-sm">1 day ago</p>
             </div>
           </div>
         </div>

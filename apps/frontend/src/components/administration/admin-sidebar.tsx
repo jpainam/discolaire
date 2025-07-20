@@ -1,15 +1,22 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   BlindsIcon,
   BrickWall,
+  CalendarDays,
   CircleArrowOutUpRight,
+  CircleDollarSign,
   Frame,
   ImageUp,
   LayoutListIcon,
   LifeBuoy,
   PrinterIcon,
+  SchoolIcon,
   Send,
+  Settings,
+  Users,
 } from "lucide-react";
 
 import {
@@ -22,15 +29,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
-import {
-  CalendarDays,
-  CircleDollarSign,
-  SchoolIcon,
-  Settings,
-  Users,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { useLocale } from "~/i18n";
 import { SearchForm } from "../search-form";
 import { SidebarLogo } from "../sidebar-logo";

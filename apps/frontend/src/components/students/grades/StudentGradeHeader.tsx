@@ -1,8 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { LayoutGridIcon, ListIcon, MoreVertical, Trash2 } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,23 +23,15 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import FlatBadge from "~/components/FlatBadge";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
+import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -127,7 +127,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
   }
   return (
     <div>
-      <div className="flex flex-row items-center gap-2 border-b px-4 py-1 bg-muted text-muted-foreground">
+      <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-4 py-1">
         <ListIcon className="h-4 w-4" />
         <Label>{t("grades")}</Label>
         <TermSelector
@@ -161,7 +161,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
             defaultValue={view}
             value={view}
             size={"sm"}
-            className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
+            className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
             onValueChange={(v) => {
               void setView(v);
             }}
@@ -232,7 +232,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
           </DropdownMenu>
         </div>
       </div>
-      <div className="md:hidden grid grid-cols-2 gap-2 px-4 pb-2">
+      <div className="grid grid-cols-2 gap-2 px-4 pb-2 md:hidden">
         {studentAvg && (
           <FlatBadge variant={"yellow"}>
             {t("student_general_avg")} : {studentAvg.toFixed(2)}

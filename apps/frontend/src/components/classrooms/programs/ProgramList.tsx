@@ -1,10 +1,10 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -38,9 +38,9 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
               router.push(`/classrooms/${classroomId}/programs/${subject.id}`);
             }}
             className={cn(
-              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary hover:text-secondary-foreground`,
+              `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-2`,
               subject.id === Number(params.subjectId)
-                ? "bg-secondary font-bold text-secondary-foreground"
+                ? "bg-secondary text-secondary-foreground font-bold"
                 : "",
             )}
           >

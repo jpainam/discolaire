@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -16,14 +17,13 @@ import {
   FormLabel,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Textarea } from "@repo/ui/components/textarea";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Textarea } from "@repo/ui/components/textarea";
+
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const createEditContactSchema = z.object({
@@ -107,10 +107,10 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col flex-1 overflow-hidden"
+        className="flex flex-1 flex-col overflow-hidden"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-4 px-4">
+        <div className="grid flex-1 auto-rows-min gap-4 overflow-y-auto px-4">
           <FormField
             control={form.control}
             name="prefix"

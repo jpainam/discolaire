@@ -1,11 +1,12 @@
 import type { InferUITool, UIDataTypes, UIMessage, UITools } from "ai";
 import { z } from "zod";
+
+import type { AiSuggestion } from "@repo/db";
+
 import type { createDocument } from "./ai/tools/create-document";
 import type { getWeather } from "./ai/tools/get-weather";
 import type { requestSuggestions } from "./ai/tools/request-suggestions";
 import type { updateDocument } from "./ai/tools/update-document";
-
-import type { AiSuggestion } from "@repo/db";
 import type { ArtifactKind } from "~/components/ai/artifact";
 
 export interface DataPart {

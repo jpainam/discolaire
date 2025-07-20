@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 import {
   Sheet,
@@ -10,6 +10,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@repo/ui/components/sheet";
+
 import { useSheet } from "~/hooks/use-sheet";
 
 export default function GlobalSheet() {

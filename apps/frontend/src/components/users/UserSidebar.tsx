@@ -1,15 +1,7 @@
 "use client";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-} from "@repo/ui/components/sidebar";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
 import {
   ActivityIcon,
   ArrowLeft,
@@ -21,13 +13,23 @@ import {
   User,
 } from "lucide-react";
 
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@repo/ui/components/sidebar";
+
 import { authClient } from "~/auth/client";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
+
 export function UserSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {

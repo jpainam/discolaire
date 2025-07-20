@@ -1,5 +1,3 @@
-import { Card, CardContent } from "@repo/ui/components/card";
-import { cn } from "@repo/ui/lib/utils";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -9,6 +7,9 @@ import {
   Server,
   UserCircle,
 } from "lucide-react";
+
+import { Card, CardContent } from "@repo/ui/components/card";
+import { cn } from "@repo/ui/lib/utils";
 
 const actions = [
   {
@@ -76,12 +77,12 @@ const actions = [
 export function CardStats() {
   return (
     <div className="flex items-center justify-center">
-      <div className="overflow-hidden rounded-[1rem] bg-muted shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-0.5 space-y-0.5 sm:space-y-0 p-0.5">
+      <div className="bg-muted grid grid-cols-1 space-y-0.5 overflow-hidden rounded-[1rem] p-0.5 shadow-sm sm:grid-cols-2 sm:gap-0.5 sm:space-y-0 lg:grid-cols-3">
         {actions.map((action) => (
           <Card
             key={action.title}
             className={cn(
-              "group relative rounded-xl border-0 bg-card p-0 focus-within:ring-2 focus-within:ring-ring focus-within:ring-inset",
+              "group bg-card focus-within:ring-ring relative rounded-xl border-0 p-0 focus-within:ring-2 focus-within:ring-inset",
             )}
           >
             <CardContent className="p-6">
@@ -98,19 +99,19 @@ export function CardStats() {
                 </span>
               </div>
               <div className="mt-4">
-                <h3 className="text-base font-semibold text-foreground">
+                <h3 className="text-foreground text-base font-semibold">
                   <a href={action.href} className="focus:outline-none">
                     <span aria-hidden="true" className="absolute inset-0" />
                     {action.title}
                   </a>
                 </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="text-muted-foreground mt-2 text-sm">
                   {action.description}
                 </p>
               </div>
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute top-6 right-6 text-muted-foreground/50 group-hover:text-muted-foreground/60"
+                className="text-muted-foreground/50 group-hover:text-muted-foreground/60 pointer-events-none absolute top-6 right-6"
               >
                 <ArrowUpRight className="h-6 w-6" />
               </span>

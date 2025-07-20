@@ -1,7 +1,8 @@
 "use client";
 
-import { useSetAtom } from "jotai";
 import { useEffect } from "react";
+import { useSetAtom } from "jotai";
+
 import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 

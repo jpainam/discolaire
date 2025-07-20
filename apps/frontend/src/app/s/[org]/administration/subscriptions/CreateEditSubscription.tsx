@@ -1,6 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -20,14 +25,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const formSchema = z.object({
   userId: z.string().min(1),
   emails: z.coerce.number().default(0),
@@ -232,7 +235,7 @@ export function CreateEditSubscription({
             />
           </div>
         </div>
-        <div className="flex flex-row justify-end items-center gap-4 p-4">
+        <div className="flex flex-row items-center justify-end gap-4 p-4">
           <Button
             type="button"
             onClick={() => {

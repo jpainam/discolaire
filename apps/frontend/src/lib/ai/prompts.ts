@@ -1,4 +1,5 @@
 import type { Geo } from "@vercel/functions";
+
 import type { ArtifactKind } from "~/components/ai/artifact";
 
 export const artifactsPrompt = `

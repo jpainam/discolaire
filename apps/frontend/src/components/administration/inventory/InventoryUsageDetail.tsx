@@ -1,3 +1,6 @@
+import { format } from "date-fns";
+import { Calendar, ClipboardList, Clock, Package, User } from "lucide-react";
+
 import type { RouterOutputs } from "@repo/api";
 import {
   Avatar,
@@ -13,17 +16,16 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@repo/ui/components/sheet";
-import { format } from "date-fns";
-import { Calendar, ClipboardList, Clock, Package, User } from "lucide-react";
+
 export function InventoryUsageDetail({
   item,
 }: {
   item: RouterOutputs["inventory"]["consumableUsages"][number];
 }) {
   return (
-    <SheetContent className="sm:max-w-md md:max-w-lg overflow-y-auto">
+    <SheetContent className="overflow-y-auto sm:max-w-md md:max-w-lg">
       <SheetHeader className="pb-4">
-        <SheetTitle className="text-xl flex items-center gap-2">
+        <SheetTitle className="flex items-center gap-2 text-xl">
           <Package className="h-5 w-5" />
           Item Details
         </SheetTitle>
@@ -44,10 +46,10 @@ export function InventoryUsageDetail({
 
         <div className="space-y-4">
           <div className="flex items-start gap-4">
-            <User className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <User className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Assigned To</h4>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="mt-1 flex items-center gap-2">
                 <Avatar>
                   <AvatarImage
                     src={item.user.avatar ?? "/placeholder.svg"}
@@ -57,17 +59,17 @@ export function InventoryUsageDetail({
                 </Avatar>
                 <div>
                   <p>{item.user.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {item.user.email}
                   </p>
                 </div>
               </div>
-              <p className="text-sm mt-1">Department: {item.user.profile}</p>
+              <p className="mt-1 text-sm">Department: {item.user.profile}</p>
             </div>
           </div>
 
           <div className="flex items-start gap-4">
-            <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <Calendar className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Transaction Date</h4>
               <p>{format(item.createdAt, "MMMM d, yyyy")}</p>
@@ -75,7 +77,7 @@ export function InventoryUsageDetail({
           </div>
 
           <div className="flex items-start gap-4">
-            <Package className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <Package className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Item Details</h4>
               <p>Quantity: {item.quantity}</p>
@@ -85,7 +87,7 @@ export function InventoryUsageDetail({
           </div>
 
           <div className="flex items-start gap-4">
-            <ClipboardList className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <ClipboardList className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Notes</h4>
               <p className="text-sm">{item.note}</p>
@@ -93,10 +95,10 @@ export function InventoryUsageDetail({
           </div>
 
           <div className="flex items-start gap-4">
-            <Clock className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <Clock className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Recorded By</h4>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="mt-1 flex items-center gap-2">
                 <Avatar>
                   <AvatarImage
                     src={item.createdBy.avatar ?? "/placeholder.svg"}
@@ -108,7 +110,7 @@ export function InventoryUsageDetail({
                 </Avatar>
                 <div>
                   <p>{item.createdBy.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {item.createdBy.email}
                   </p>
                 </div>

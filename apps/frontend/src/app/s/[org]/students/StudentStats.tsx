@@ -1,5 +1,7 @@
 "use client";
+
 import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { StatsGrid } from "~/components/students/StudentStats";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";

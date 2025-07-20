@@ -1,6 +1,8 @@
 import type { RouterOutputs } from "@repo/api";
+
 import CSACongoReceipt from "./CSACongoReceipt";
 import IPBWReceipt from "./IPBWReceipt";
+
 export function getReceipt({
   amountInWords,
   transaction,

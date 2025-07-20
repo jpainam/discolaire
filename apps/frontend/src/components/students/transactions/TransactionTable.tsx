@@ -1,15 +1,22 @@
 "use client";
 
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import {
   CheckCircledIcon,
   CrossCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import i18next from "i18next";
 import { BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
+import { TransactionType } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -31,23 +38,16 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { EmptyState } from "~/components/EmptyState";
-import type { FlatBadgeVariant } from "~/components/FlatBadge";
-import FlatBadge from "~/components/FlatBadge";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 
-import { TransactionType } from "@repo/db";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import i18next from "i18next";
+import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import { EmptyState } from "~/components/EmptyState";
+import FlatBadge from "~/components/FlatBadge";
 import { routes } from "~/configs/routes";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { DeleteTransaction } from "./DeleteTransaction";
 
@@ -192,7 +192,7 @@ export function TransactionTable() {
                           {canUpdateTransaction && (
                             <DropdownMenuSub>
                               <DropdownMenuSubTrigger>
-                                <BookCopy className="mr-2 h-4 w-4 text-muted-foreground" />
+                                <BookCopy className="text-muted-foreground mr-2 h-4 w-4" />
                                 {t("status")}
                               </DropdownMenuSubTrigger>
                               <DropdownMenuSubContent>
@@ -228,7 +228,7 @@ export function TransactionTable() {
                                   >
                                     <FlatBadge variant={"green"}>
                                       <CheckCircledIcon
-                                        className="mr-2 size-4 text-muted-foreground"
+                                        className="text-muted-foreground mr-2 size-4"
                                         aria-hidden="true"
                                       />
                                       {t("validate")}
@@ -240,7 +240,7 @@ export function TransactionTable() {
                                   >
                                     <FlatBadge variant={"red"}>
                                       <CrossCircledIcon
-                                        className="mr-2 size-4 text-muted-foreground"
+                                        className="text-muted-foreground mr-2 size-4"
                                         aria-hidden="true"
                                       />
                                       {t("cancel")}
@@ -252,7 +252,7 @@ export function TransactionTable() {
                                   >
                                     <FlatBadge variant={"yellow"}>
                                       <StopwatchIcon
-                                        className="mr-2 size-4 text-muted-foreground"
+                                        className="text-muted-foreground mr-2 size-4"
                                         aria-hidden="true"
                                       />
                                       {t("pending")}
@@ -313,17 +313,17 @@ export function TransactionStatus({ status }: { status: string }) {
     <FlatBadge className="gap-2" variant={variant as FlatBadgeVariant}>
       {status === "CANCELED" ? (
         <CrossCircledIcon
-          className="size-4 text-muted-foreground"
+          className="text-muted-foreground size-4"
           aria-hidden="true"
         />
       ) : status === "VALIDATED" ? (
         <CheckCircledIcon
-          className="size-4 text-muted-foreground"
+          className="text-muted-foreground size-4"
           aria-hidden="true"
         />
       ) : (
         <StopwatchIcon
-          className="size-4 text-muted-foreground"
+          className="text-muted-foreground size-4"
           aria-hidden="true"
         />
       )}

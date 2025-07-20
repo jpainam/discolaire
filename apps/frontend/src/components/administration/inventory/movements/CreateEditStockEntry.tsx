@@ -1,6 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -12,10 +17,7 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { ConsumableSelector } from "~/components/administration/inventory/ConsumableSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
@@ -92,7 +94,7 @@ export function CreateEditStockEntry({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="px-4 flex flex-col gap-6">
+        <div className="flex flex-col gap-6 px-4">
           <FormField
             control={form.control}
             name="consumableId"

@@ -1,5 +1,11 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,18 +25,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { EmptyState } from "~/components/EmptyState";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { EmptyState } from "~/components/EmptyState";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function HealthVisitTable({ userId }: { userId: string }) {

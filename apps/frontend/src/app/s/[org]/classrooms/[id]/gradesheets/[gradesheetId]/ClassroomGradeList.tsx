@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 "use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
+import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
 import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -20,13 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { decode } from "entities";
-import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+
 import { AvatarState } from "~/components/AvatarState";
 import { EditGradeStudent } from "~/components/classrooms/gradesheets/grades/EditGradeStudent";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -41,6 +44,7 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
+
 export function ClassroomGradeList({
   grades,
   gradesheet,
@@ -127,10 +131,10 @@ export function ClassroomGradeList({
     }),
   );
   return (
-    <div className="gap-2 flex flex-col">
+    <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
-        <div className="relative w-full md:w-64 ">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="relative w-full md:w-64">
+          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
           <Input
             placeholder={t("search") + "..."}
             className="pl-8"
@@ -283,7 +287,7 @@ export function ClassroomGradeList({
                           <Button
                             aria-label="Open menu"
                             variant="ghost"
-                            className="flex size-8 p-0 data-[state=open]:bg-muted"
+                            className="data-[state=open]:bg-muted flex size-8 p-0"
                           >
                             <DotsHorizontalIcon
                               className="size-4"

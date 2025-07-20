@@ -1,10 +1,12 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
 import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -28,16 +30,14 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useState } from "react";
+
+import FlatBadge from "~/components/FlatBadge";
+import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import FlatBadge from "~/components/FlatBadge";
-import { useModal } from "~/hooks/use-modal";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditAsset } from "./CreateEditAsset";
 import { CreateEditConsumable } from "./CreateEditConsumable";
@@ -80,7 +80,7 @@ export function getColumns({
         const inventory = row.original;
         return (
           <Link
-            className="hover:text-blue-600 line-clamp-1 hover:underline"
+            className="line-clamp-1 hover:text-blue-600 hover:underline"
             href={`/administration/inventory/${inventory.id}`}
           >
             {inventory.name}
@@ -220,7 +220,7 @@ function ActionCell({
           <Button
             aria-label="Open menu"
             variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex size-8 p-0"
           >
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>
@@ -315,7 +315,7 @@ export function AvatarGroup4({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   //https://mynaui.com/components/avatar-groups
   return (
-    <div className="flex -space-x-2 *:ring-3 *:ring-background">
+    <div className="*:ring-background flex -space-x-2 *:ring-3">
       {users.map((user, index) => (
         <Tooltip key={index}>
           <TooltipTrigger asChild>
@@ -339,7 +339,7 @@ export function AvatarGroup4({
         </Tooltip>
       ))}
       {users.length > 4 && (
-        <Avatar className="z-10 text-sm font-medium text-muted-foreground">
+        <Avatar className="text-muted-foreground z-10 text-sm font-medium">
           <AvatarFallback>+{users.length - 4}</AvatarFallback>
         </Avatar>
       )}

@@ -6,7 +6,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   return (
-    <div className="text-md grid w-full items-start gap-2  md:grid-cols-2">
+    <div className="text-md grid w-full items-start gap-2 md:grid-cols-2">
       <StudentContactList contactId={id} />
     </div>
   );

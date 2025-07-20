@@ -1,4 +1,11 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import {
+  AlertCircle,
+  Mail,
+  MessageSquare,
+  MessageSquareText,
+} from "lucide-react";
+
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import {
@@ -8,15 +15,11 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
-import {
-  AlertCircle,
-  Mail,
-  MessageSquare,
-  MessageSquareText,
-} from "lucide-react";
+
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { SubscriptionPlans } from "./SubscriptionPlans";
+
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { t } = await getServerTranslations();
   const params = await props.params;
@@ -64,20 +67,20 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     },
   ];
   return (
-    <div className="px-4 py-2 grid gap-2">
+    <div className="grid gap-2 px-4 py-2">
       <div className="grid gap-4 md:grid-cols-3">
         {totalUsed.map((item) => {
           return (
-            <Card key={item.title} className="overflow-hidden gap-4">
+            <Card key={item.title} className="gap-4 overflow-hidden">
               <CardHeader>
-                <CardTitle className="space-x-1 flex flex-row items-center">
+                <CardTitle className="flex flex-row items-center space-x-1">
                   <span>{item.icon}</span>
                   <span>{item.title}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm text-muted-foreground">
+                <div className="mb-1 flex items-center justify-between">
+                  <span className="text-muted-foreground text-sm">
                     {item.limit - item.total} {t("used")}
                   </span>
                   <Badge

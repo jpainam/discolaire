@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SaveIcon, XIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -8,13 +11,9 @@ import { StudentStatus } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
 
-import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";
@@ -127,7 +126,7 @@ export function CreateStudent() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-row items-center justify-end gap-4 border-b bg-muted/50 px-4 py-1">
+        <div className="bg-muted/50 flex flex-row items-center justify-end gap-4 border-b px-4 py-1">
           <Button
             isLoading={createStudentMutation.isPending}
             size={"sm"}

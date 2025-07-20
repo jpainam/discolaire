@@ -1,13 +1,14 @@
 "use client";
 
-import { useLocale } from "~/i18n";
-
-import { Label } from "@repo/ui/components/label";
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
+
+import { Label } from "@repo/ui/components/label";
+
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -34,8 +35,8 @@ export function StaffDetailHeader() {
   }, [staffs, params.id, setBreadcrumbs, t]);
 
   return (
-    <div className="grid lg:flex flex-row gap-4 items-center justify-between py-1 px-4">
-      <div className="flex  w-full flex-row items-center gap-2">
+    <div className="grid flex-row items-center justify-between gap-4 px-4 py-1 lg:flex">
+      <div className="flex w-full flex-row items-center gap-2">
         <Label className="hidden md:block">{t("staffs")}</Label>
         <StaffSelector
           className="w-full lg:w-1/2 2xl:w-[350px]"

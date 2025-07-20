@@ -1,14 +1,14 @@
-import { XIcon } from "lucide-react";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Textarea } from "@repo/ui/components/textarea";
+
+import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
-import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
 
 export function CreateEditAppreciation({
   category,
@@ -63,7 +63,7 @@ export function CreateEditAppreciation({
       <div className="ml-auto pb-1">
         <XIcon
           onClick={() => onCompleted?.()}
-          className="h-4 w-4 cursor-pointer hover:text-muted-foreground"
+          className="hover:text-muted-foreground h-4 w-4 cursor-pointer"
         />
       </div>
       <Textarea
@@ -74,9 +74,9 @@ export function CreateEditAppreciation({
 
       <div className="mt-2 flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-full bg-destructive" />
+          <div className="bg-destructive h-1.5 w-1.5 rounded-full" />
           <span
-            className="cursor-pointer text-xs hover:text-destructive hover:underline"
+            className="hover:text-destructive cursor-pointer text-xs hover:underline"
             onClick={async () => {
               if (!category || !appreciation) {
                 return;
@@ -99,7 +99,7 @@ export function CreateEditAppreciation({
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-1.5 rounded-full bg-green-700" />
           <span
-            className="cursor-pointer text-xs hover:text-muted-foreground hover:underline"
+            className="hover:text-muted-foreground cursor-pointer text-xs hover:underline"
             onClick={() => {
               if (category && appreciation) {
                 if (!value) {

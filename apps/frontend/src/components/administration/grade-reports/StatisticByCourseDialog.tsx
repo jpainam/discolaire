@@ -1,6 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -18,13 +22,12 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const schema = z.object({
   courseId: z.string().min(1),
   termId: z.string().min(1),

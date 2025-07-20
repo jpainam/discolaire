@@ -1,9 +1,11 @@
 "use client";
 
-import type { RouterOutputs } from "@repo/api";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { createContext, useContext, useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+import type { RouterOutputs } from "@repo/api";
+
 import { useTRPC } from "~/trpc/react";
 
 interface CalendarContextType {

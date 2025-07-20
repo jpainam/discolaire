@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { auth } from "~/auth/server";
+import i18next from "i18next";
 
 import { Badge } from "@repo/ui/components/badge";
 import {
@@ -10,7 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import i18next from "i18next";
+
+import { auth } from "~/auth/server";
 import { EmptyState } from "~/components/EmptyState";
 import { caller } from "~/trpc/server";
 import { CreateAuthApiKey } from "./CreateAuthApiKey";
@@ -22,7 +23,7 @@ export default async function Page() {
   });
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-4">
       <div className="flex flex-row items-center">
         <div className="ml-auto">
           <CreateAuthApiKey />

@@ -1,5 +1,7 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import i18next from "i18next";
 import {
   CalendarClock,
   CalendarDays,
@@ -28,13 +30,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSchoolYear } from "./CreateEditSchoolYear";
 
@@ -80,7 +80,7 @@ export function SchoolYearTable() {
               <TableHead>{t("Start date")}</TableHead>
               <TableHead>{t("End date")}</TableHead>
               <TableHead>{t("lock")}?</TableHead>
-              <TableHead className="w-[96px] "></TableHead>
+              <TableHead className="w-[96px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -174,7 +174,7 @@ export function SchoolYearTable() {
                           onSelect={async () => {
                             const isConfirm = await confirm({
                               icon: (
-                                <Trash2 className="h-4 w-4 text-destructive" />
+                                <Trash2 className="text-destructive h-4 w-4" />
                               ),
                               title: t("delete"),
                               description: t("delete_confirmation"),

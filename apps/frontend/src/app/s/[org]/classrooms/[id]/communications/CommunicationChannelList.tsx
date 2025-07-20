@@ -1,22 +1,5 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import {
   useMutation,
   useQueryClient,
@@ -35,10 +18,30 @@ import {
   Trash,
 } from "lucide-react";
 import { toast } from "sonner";
+
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditCommunicationChannel } from "./CreateEditCommunicationChannel";
+
 export function CommunicationChannelList() {
   const trpc = useTRPC();
   const { data: channels } = useSuspenseQuery(
@@ -81,20 +84,20 @@ export function CommunicationChannelList() {
   const { openModal } = useModal();
   const confirm = useConfirm();
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 px-4">
+    <div className="grid gap-4 px-4 md:grid-cols-2 lg:grid-cols-3">
       {channels.map((channel) => (
         <Card key={channel.id}>
           <CardHeader>
             <div
               onClick={() => handleChannelClick(channel.url)}
-              className="cursor-pointer flex items-center gap-2"
+              className="flex cursor-pointer items-center gap-2"
             >
               {getChannelIcon(channel.type)}
               <CardTitle>{channel.name}</CardTitle>
             </div>
             <CardDescription
               onClick={() => handleChannelClick(channel.url)}
-              className="cursor-pointer flex items-center gap-1 text-xs"
+              className="flex cursor-pointer items-center gap-1 text-xs"
             >
               <ExternalLink className="h-3 w-3" />
               <span className="truncate">{channel.url}</span>
@@ -103,7 +106,7 @@ export function CommunicationChannelList() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant={"ghost"} size={"sm"}>
-                    <MoreVertical className="w-4 h-4" />
+                    <MoreVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -144,14 +147,14 @@ export function CommunicationChannelList() {
           </CardHeader>
           <CardContent>
             {channel.lastAccessedAt && (
-              <p className="text-sm truncate">
+              <p className="truncate text-sm">
                 {channel.lastAccessedAt.toISOString()}
               </p>
             )}
           </CardContent>
           {channel.lastAccessedById && (
             <CardFooter className="pt-0">
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {channel.lastAccessedBy?.name}
               </p>
             </CardFooter>

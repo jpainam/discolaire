@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
 
+import { Fragment, useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Settings2Icon, WandSparkles } from "lucide-react";
-import { Fragment, useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -14,9 +14,9 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Separator } from "@repo/ui/components/separator";
-import { useLocale } from "~/i18n";
 
 import type { AppreciationCategory } from "~/types/appreciation";
+import { useLocale } from "~/i18n";
 import { AppreciationList } from "./AppreciationList";
 import { CreateEditAppreciationCategory } from "./CreateEditAppreciationCategory";
 
@@ -59,11 +59,11 @@ export function AppreciationCategoryList({
                     />
                   ) : (
                     <div
-                      className="group/category flex w-full items-center justify-between rounded-md px-2 py-1 hover:bg-secondary hover:text-secondary-foreground"
+                      className="group/category hover:bg-secondary hover:text-secondary-foreground flex w-full items-center justify-between rounded-md px-2 py-1"
                       key={`category-${category.id}`}
                     >
                       <span
-                        className="cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap text-left hover:underline"
+                        className="cursor-pointer overflow-hidden text-left overflow-ellipsis whitespace-nowrap hover:underline"
                         onClick={() => {
                           setSelectedCategory(category);
                         }}
@@ -76,7 +76,7 @@ export function AppreciationCategoryList({
                         onClick={() => {
                           setOpenIdItem(category.id);
                         }}
-                        className="h-4 w-4 opacity-0 hover:text-muted-foreground group-hover/category:opacity-100"
+                        className="hover:text-muted-foreground h-4 w-4 opacity-0 group-hover/category:opacity-100"
                       >
                         <motion.span
                           initial={{ opacity: 0, filter: "blur(4px)" }}
@@ -107,7 +107,7 @@ export function AppreciationCategoryList({
               onClick={() => {
                 setAddClicked(true);
               }}
-              className="my-1 flex cursor-pointer flex-row items-center gap-2 rounded-md p-1 hover:bg-muted"
+              className="hover:bg-muted my-1 flex cursor-pointer flex-row items-center gap-2 rounded-md p-1"
             >
               <PlusCircle className="h-5 w-5 stroke-1" />
               {t("add")}

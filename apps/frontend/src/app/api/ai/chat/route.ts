@@ -4,6 +4,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import type { ResumableStreamContext } from "resumable-stream";
+import { after } from "next/server";
+import { geolocation } from "@vercel/functions";
 import {
   convertToModelMessages,
   createUIMessageStream,
@@ -12,17 +15,17 @@ import {
   stepCountIs,
   streamText,
 } from "ai";
+import { createResumableStreamContext } from "resumable-stream";
 
 import type { Prisma, VisibilityType } from "@repo/db";
-import { geolocation } from "@vercel/functions";
-import { after } from "next/server";
-import type { ResumableStreamContext } from "resumable-stream";
-import { createResumableStreamContext } from "resumable-stream";
+
+import type { PostRequestBody } from "./schema";
+import type { ChatModel } from "~/lib/ai/models";
+import type { RequestHints } from "~/lib/ai/prompts";
+import type { ChatMessage } from "~/lib/types";
 import { getSession } from "~/auth/server";
 import { generateTitleFromUserMessage } from "~/components/ai/actions";
 import { entitlementsByUserType } from "~/lib/ai/entitlements";
-import type { ChatModel } from "~/lib/ai/models";
-import type { RequestHints } from "~/lib/ai/prompts";
 import { systemPrompt } from "~/lib/ai/prompts";
 import { myProvider } from "~/lib/ai/providers";
 import {
@@ -40,9 +43,7 @@ import { requestSuggestions } from "~/lib/ai/tools/request-suggestions";
 import { updateDocument } from "~/lib/ai/tools/update-document";
 import { isProductionEnvironment } from "~/lib/constants";
 import { ChatSDKError } from "~/lib/errors";
-import type { ChatMessage } from "~/lib/types";
 import { convertToUIMessages, generateUUID } from "~/lib/utils";
-import type { PostRequestBody } from "./schema";
 import { postRequestBodySchema } from "./schema";
 
 export const maxDuration = 60;

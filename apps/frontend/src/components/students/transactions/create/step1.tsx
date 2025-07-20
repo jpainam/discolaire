@@ -1,10 +1,14 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import i18next from "i18next";
 import { ArrowRight } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
@@ -14,6 +18,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
@@ -21,13 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Label } from "@repo/ui/components/label";
-import i18next from "i18next";
-import { useForm } from "react-hook-form";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
@@ -89,7 +89,7 @@ export function Step1() {
   ];
 
   return (
-    <div className="mx-auto w-full flex flex-col gap-8 max-w-3xl">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
       {school.applyRequiredFee !== "NO" && unpaidRequiredFees.length > 0 && (
         <div className="flex flex-col gap-2">
           <Label>{t("required_fees")}</Label>
@@ -114,7 +114,7 @@ export function Step1() {
                 />
                 <Label
                   htmlFor={`requiredfee-${index}`}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {fee.description} (
                   {fee.amount.toLocaleString(i18next.language, {
@@ -133,7 +133,7 @@ export function Step1() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-6  md:grid-cols-2 md:gap-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4">
             <FormField
               control={form.control}
               name="paymentMethod"

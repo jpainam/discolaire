@@ -1,9 +1,9 @@
 "use client";
 
-import { MailOpen, MoreVertical } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useState } from "react";
 import type { DateRange } from "react-day-picker";
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import { MailOpen, MoreVertical } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,12 +15,12 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function NotificationHeader() {
@@ -34,8 +34,8 @@ export function NotificationHeader() {
   const router = useRouter();
   console.log(value);
   return (
-    <div className="md:flex grid md:flex-row items-center gap-2 border-b bg-muted px-2 py-1 text-muted-foreground">
-      {Icon && <Icon className="h-4 w-4 hidden md:block" />}
+    <div className="bg-muted text-muted-foreground grid items-center gap-2 border-b px-2 py-1 md:flex md:flex-row">
+      {Icon && <Icon className="hidden h-4 w-4 md:block" />}
       <Label className="hidden md:block">{t("notifications")}</Label>
 
       <Input

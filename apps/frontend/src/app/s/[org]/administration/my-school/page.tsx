@@ -9,15 +9,16 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
 
 import { getSession } from "~/auth/server";
+import { EmptyState } from "~/components/EmptyState";
 import { env } from "~/env";
+import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 import { SchoolTableAction } from "./SchoolTableAction";
+
 export default async function Page() {
   const sessions = await getSession();
   if (!sessions) {

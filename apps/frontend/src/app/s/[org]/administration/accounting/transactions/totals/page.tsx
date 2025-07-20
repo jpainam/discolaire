@@ -4,7 +4,7 @@ import { TransactionTotals } from "~/components/administration/transactions/Tran
 
 export default function Page() {
   return (
-    <div className="flex flex-col px-4 gap-4 mb-8">
+    <div className="mb-8 flex flex-col gap-4 px-4">
       <TransactionTotals />
       {/* <Separator /> */}
       <TransactionTrendChart />

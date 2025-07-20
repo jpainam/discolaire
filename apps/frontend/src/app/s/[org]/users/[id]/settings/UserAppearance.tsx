@@ -1,5 +1,10 @@
 "use client";
 
+import { useCallback, useState } from "react";
+import { Layout, Palette } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useForm } from "react-hook-form";
+
 import {
   Card,
   CardContent,
@@ -18,10 +23,7 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { cn } from "@repo/ui/lib/utils";
-import { Layout, Palette } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+
 export function UserAppearance() {
   const { setTheme, resolvedTheme } = useTheme();
   const [fontSize, setFontSize] = useState("default");
@@ -103,7 +105,7 @@ export function UserAppearance() {
                         <FormControl>
                           <RadioGroupItem value="light" className="sr-only" />
                         </FormControl>
-                        <div className="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
+                        <div className="border-muted hover:border-accent items-center rounded-md border-2 p-1">
                           <div className="space-y-2 rounded-sm bg-[#ecedef] p-2">
                             <div className="space-y-2 rounded-md bg-white p-2 shadow-sm">
                               <div className="h-2 w-[80px] rounded-lg bg-[#ecedef]" />
@@ -122,7 +124,7 @@ export function UserAppearance() {
                         <FormControl>
                           <RadioGroupItem value="dark" className="sr-only" />
                         </FormControl>
-                        <div className="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground">
+                        <div className="border-muted bg-popover hover:bg-accent hover:text-accent-foreground items-center rounded-md border-2 p-1">
                           <div className="space-y-2 rounded-sm bg-slate-950 p-2">
                             <div className="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
                               <div className="h-2 w-[80px] rounded-lg bg-slate-400" />
@@ -156,8 +158,8 @@ export function UserAppearance() {
                   id={plan.name}
                   className="shadow-none data-[state=checked]:border-green-600 data-[state=checked]:bg-green-600 *:data-[slot=radio-group-indicator]:[&>svg]:fill-white *:data-[slot=radio-group-indicator]:[&>svg]:stroke-white"
                 />
-                <div className="gap-1 items-center flex flex-row font-normal">
-                  <div className={cn("h-4 w-4 rounded-full ", plan.bg)} />
+                <div className="flex flex-row items-center gap-1 font-normal">
+                  <div className={cn("h-4 w-4 rounded-full", plan.bg)} />
                   {plan.name}
                 </div>
               </Label>

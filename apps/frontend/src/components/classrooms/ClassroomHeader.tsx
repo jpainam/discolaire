@@ -1,7 +1,14 @@
 "use client";
 
-import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
+import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
+import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -12,25 +19,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
-import { useConfirm } from "~/providers/confirm-dialog";
-
 import { Label } from "@repo/ui/components/label";
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
-import { useEffect } from "react";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
@@ -104,7 +103,7 @@ export function ClassroomHeader() {
   }, [classrooms, params.id, setBreadcrumbs, t]);
 
   return (
-    <div className="grid w-full flex-row border-b items-center gap-2 px-4 py-1 md:flex">
+    <div className="grid w-full flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("classrooms")}</Label>
       <ClassroomSelector
         className="w-full md:w-[400px]"

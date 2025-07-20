@@ -1,3 +1,5 @@
+import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+
 import {
   Card,
   CardDescription,
@@ -5,9 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+
 import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
+
 export async function AttendanceStats() {
   const { t } = await getServerTranslations();
   return (
@@ -23,7 +26,7 @@ export async function AttendanceStats() {
             +12.5%
           </Badge> */}
           <FlatBadge className="gap-2" variant="green">
-            <TrendingUpIcon className="w-4 h-4" />
+            <TrendingUpIcon className="h-4 w-4" />
             +12.5%
           </FlatBadge>
         </CardFooter>
@@ -35,7 +38,7 @@ export async function AttendanceStats() {
         </CardHeader>
         <CardFooter>
           <FlatBadge className="gap-2" variant="indigo">
-            <TrendingDownIcon className="w-4 h-4" />
+            <TrendingDownIcon className="h-4 w-4" />
             -20%
           </FlatBadge>
         </CardFooter>
@@ -47,7 +50,7 @@ export async function AttendanceStats() {
         </CardHeader>
         <CardFooter>
           <FlatBadge className="gap-2" variant="pink">
-            <TrendingUpIcon className="w-4 h-4" />
+            <TrendingUpIcon className="h-4 w-4" />
             +12.5%
           </FlatBadge>
         </CardFooter>
@@ -59,7 +62,7 @@ export async function AttendanceStats() {
         </CardHeader>
         <CardFooter>
           <FlatBadge className="gap-2" variant="yellow">
-            <TrendingUpIcon className="w-4 h-4" />
+            <TrendingUpIcon className="h-4 w-4" />
             +4.5%
           </FlatBadge>
         </CardFooter>

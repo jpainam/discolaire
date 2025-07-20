@@ -1,3 +1,5 @@
+import type { Table } from "@tanstack/react-table";
+import * as React from "react";
 import {
   ArrowUpIcon,
   CheckCircledIcon,
@@ -7,8 +9,6 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import { SelectTrigger } from "@radix-ui/react-select";
-import type { Table } from "@tanstack/react-table";
-import * as React from "react";
 
 import type { Student } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
@@ -55,12 +55,12 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
   return (
     <div className="fixed inset-x-0 bottom-4 z-50 mx-auto w-fit px-4">
       <div className="w-full overflow-x-auto">
-        <div className="mx-auto flex w-fit items-center gap-2 rounded-md border bg-card p-2 shadow-2xl">
-          <div className="flex h-7 items-center rounded-md border border-dashed pl-2.5 pr-1">
-            <span className="whitespace-nowrap text-xs">
+        <div className="bg-card mx-auto flex w-fit items-center gap-2 rounded-md border p-2 shadow-2xl">
+          <div className="flex h-7 items-center rounded-md border border-dashed pr-1 pl-2.5">
+            <span className="text-xs whitespace-nowrap">
               {rows.length} selected
             </span>
-            <Separator orientation="vertical" className="ml-2 mr-1" />
+            <Separator orientation="vertical" className="mr-1 ml-2" />
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -75,7 +75,7 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
                   />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="flex items-center border bg-accent px-2 py-1 font-semibold text-foreground dark:bg-zinc-900">
+              <TooltipContent className="bg-accent text-foreground flex items-center border px-2 py-1 font-semibold dark:bg-zinc-900">
                 <p className="mr-2">Clear selection</p>
                 <Kbd abbrTitle="Escape" variant="outline">
                   Esc
@@ -110,7 +110,7 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
                     <Button
                       variant="secondary"
                       size="icon"
-                      className="size-7 border data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+                      className="data-[state=open]:bg-accent data-[state=open]:text-accent-foreground size-7 border"
                       disabled={isPending}
                     >
                       {isPending && method === "update-status" ? (
@@ -127,7 +127,7 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
                     </Button>
                   </TooltipTrigger>
                 </SelectTrigger>
-                <TooltipContent className="border bg-accent font-semibold text-foreground dark:bg-zinc-900">
+                <TooltipContent className="bg-accent text-foreground border font-semibold dark:bg-zinc-900">
                   <p>Update status</p>
                 </TooltipContent>
               </Tooltip>
@@ -173,7 +173,7 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
                     <Button
                       variant="secondary"
                       size="icon"
-                      className="size-7 border data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+                      className="data-[state=open]:bg-accent data-[state=open]:text-accent-foreground size-7 border"
                       disabled={isPending}
                     >
                       {isPending && method === "update-priority" ? (
@@ -187,7 +187,7 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
                     </Button>
                   </TooltipTrigger>
                 </SelectTrigger>
-                <TooltipContent className="border bg-accent font-semibold text-foreground dark:bg-zinc-900">
+                <TooltipContent className="bg-accent text-foreground border font-semibold dark:bg-zinc-900">
                   <p>Update priority</p>
                 </TooltipContent>
               </Tooltip>
@@ -233,7 +233,7 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
                   )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="border bg-accent font-semibold text-foreground dark:bg-zinc-900">
+              <TooltipContent className="bg-accent text-foreground border font-semibold dark:bg-zinc-900">
                 <p>Export tasks</p>
               </TooltipContent>
             </Tooltip>
@@ -271,7 +271,7 @@ export function StudentDataTableBar({ table }: ClassroomTableFloatingBarProps) {
                   )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="border bg-accent font-semibold text-foreground dark:bg-zinc-900">
+              <TooltipContent className="bg-accent text-foreground border font-semibold dark:bg-zinc-900">
                 <p>Delete tasks</p>
               </TooltipContent>
             </Tooltip>

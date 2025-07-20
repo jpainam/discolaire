@@ -1,4 +1,10 @@
-import { Card, CardContent, CardTitle } from "@repo/ui/components/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import {
   Table,
   TableBody,
@@ -8,11 +14,11 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { CardDescription, CardHeader } from "@repo/ui/components/card";
 import {
   immunizations,
   vaccines,
 } from "~/components/students/health/data-immunization";
+
 //import { ImmunizationHeader } from "~/components/students/health/ImmunizationHeader";
 export default function Page() {
   return (
@@ -40,7 +46,7 @@ export default function Page() {
                   {vaccines.map((v, index) => (
                     <TableHead
                       key={`${v.name}-${index}`}
-                      className=" bg-muted text-muted-foreground text-center"
+                      className="bg-muted text-muted-foreground text-center"
                     >
                       <div className="flex flex-col items-center gap-4 text-center">
                         <h1 className="font-bold">{v.name}</h1>
@@ -53,7 +59,7 @@ export default function Page() {
               <TableBody>
                 {immunizations.map((im, index) => (
                   <TableRow key={`${im.name}-im-${index}`}>
-                    <TableCell className=" bg-muted text-muted-foreground font-medium">
+                    <TableCell className="bg-muted text-muted-foreground font-medium">
                       <div className="flex flex-col items-center gap-4 text-center">
                         <h1 className="font-bold">{im.name}</h1>
                         <p>{im.description}</p>

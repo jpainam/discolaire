@@ -1,6 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -12,15 +17,13 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { ConsumableSelector } from "../ConsumableSelector";
+
 const schema = z.object({
   userId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
@@ -89,7 +92,7 @@ export function CreateEditStockWithdrawal({
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <div className="px-4 flex flex-col gap-6">
+        <div className="flex flex-col gap-6 px-4">
           <FormField
             control={form.control}
             name="userId"

@@ -1,3 +1,6 @@
+import Link from "next/link";
+import i18next from "i18next";
+
 import {
   Table,
   TableBody,
@@ -6,8 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import i18next from "i18next";
-import Link from "next/link";
+
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 

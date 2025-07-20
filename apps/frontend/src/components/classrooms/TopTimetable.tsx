@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { addDays, isSameDay, subDays } from "date-fns";
 import {
   CalendarCogIcon,
@@ -13,8 +16,6 @@ import {
   PlusIcon,
   PrinterIcon,
 } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -32,14 +33,13 @@ import {
   CarouselPrevious,
 } from "@repo/ui/components/carousel";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import FlatBadge from "~/components/FlatBadge";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import FlatBadge from "~/components/FlatBadge";
 import EyeIcon from "~/components/icons/eye";
 import { routes } from "~/configs/routes";
+import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditLesson } from "./timetables/CreateEditLesson";
@@ -207,7 +207,7 @@ function TopTimetableCard({
       }}
       key={period.id}
       className={cn(
-        "mx-1 w-full cursor-pointer rounded-sm border p-2 hover:bg-muted/50",
+        "hover:bg-muted/50 mx-1 w-full cursor-pointer rounded-sm border p-2",
         today > period.end
           ? "bg-muted opacity-50"
           : isSameDay(period.start, today)
@@ -220,7 +220,7 @@ function TopTimetableCard({
           <span className="overflow-hidden text-xs font-semibold">
             {period.subject.teacher?.lastName}
           </span>
-          <span className="overflow-hidden text-xs text-muted-foreground">
+          <span className="text-muted-foreground overflow-hidden text-xs">
             {period.subject.course.name}
           </span>
         </div>
@@ -232,7 +232,7 @@ function TopTimetableCard({
           })}
         </div>
       </div>
-      <div className="flex justify-between text-sm text-muted-foreground">
+      <div className="text-muted-foreground flex justify-between text-sm">
         <FlatBadge variant={"green"}>
           <Clock2Icon className="mr-2 h-4 w-4" />
           {period.start.toLocaleTimeString(i18n.language, {

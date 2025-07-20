@@ -3,8 +3,9 @@
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 
-import { useLocale } from "~/i18n";
 import { Button } from "@repo/ui/components/button";
+
+import { useLocale } from "~/i18n";
 
 export function CopyUserIdButton({ userId }: { userId: string }) {
   const { t } = useLocale();

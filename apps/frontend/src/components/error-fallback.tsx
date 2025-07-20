@@ -10,7 +10,7 @@ export function ErrorFallback({
   reset?: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center h-full space-y-4">
+    <div className="flex h-full flex-col items-center justify-center space-y-4">
       <div>
         <h2 className="text-md">
           {env.NODE_ENV == "production"

@@ -1,11 +1,12 @@
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
+import { EmptyState } from "~/components/EmptyState";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReportCardHeader } from "~/components/students/reportcards/ReportCardHeader";
+import { getServerTranslations } from "~/i18n/server";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Layout(props: {
@@ -27,7 +28,7 @@ export default async function Layout(props: {
   }
   prefetch(trpc.term.all.queryOptions());
   return (
-    <div className="flex w-full gap-2 flex-col">
+    <div className="flex w-full flex-col gap-2">
       <HydrateClient>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
@@ -44,7 +45,7 @@ export default async function Layout(props: {
       </HydrateClient>
       <Suspense
         fallback={
-          <div className="py-2 grid grid-cols-4 gap-4 px-4">
+          <div className="grid grid-cols-4 gap-4 px-4 py-2">
             {Array.from({ length: 20 }).map((_, i) => (
               <Skeleton key={i} className="h-8" />
             ))}

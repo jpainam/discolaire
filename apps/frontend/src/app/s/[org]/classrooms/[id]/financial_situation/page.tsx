@@ -1,7 +1,7 @@
 import { sumBy } from "lodash";
+
 import { getSession } from "~/auth/server";
 import { ClassroomFinancialSituation } from "~/components/classrooms/finances/ClassroomFinancialSituation";
-
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

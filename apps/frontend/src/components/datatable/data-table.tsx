@@ -4,6 +4,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  FilterFn,
+  PaginationState,
+  SortingState,
+  VisibilityState,
+} from "@tanstack/react-table";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
+import Image from "next/image";
 import {
   RiArrowDownSLine,
   RiArrowUpSLine,
@@ -17,6 +34,17 @@ import {
   RiSearch2Line,
   RiVerifiedBadgeFill,
 } from "@remixicon/react";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Trash2 } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -67,33 +95,6 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
-import type {
-  ColumnDef,
-  ColumnFiltersState,
-  FilterFn,
-  PaginationState,
-  SortingState,
-  VisibilityState,
-} from "@tanstack/react-table";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { Trash2 } from "lucide-react";
-import Image from "next/image";
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
 
 interface Item {
   id: string;
@@ -179,11 +180,11 @@ const getColumns = ({ data, setData }: GetColumnsProps): ColumnDef<Item>[] => [
     header: "Status",
     accessorKey: "status",
     cell: ({ row }) => (
-      <div className="flex items-center h-full">
+      <div className="flex h-full items-center">
         <Badge
           variant="outline"
           className={cn(
-            "gap-1 py-0.5 px-2 text-sm",
+            "gap-1 px-2 py-0.5 text-sm",
             row.original.status === "Inactive"
               ? "text-muted-foreground"
               : "text-primary-foreground",
@@ -406,7 +407,7 @@ export default function ContactsTable() {
               id={`${id}-input`}
               ref={inputRef}
               className={cn(
-                "peer min-w-60 ps-9 bg-background bg-gradient-to-br from-accent/60 to-accent",
+                "peer bg-background from-accent/60 to-accent min-w-60 bg-gradient-to-br ps-9",
                 Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9",
               )}
               value={
@@ -419,12 +420,12 @@ export default function ContactsTable() {
               type="text"
               aria-label="Search by name"
             />
-            <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 text-muted-foreground/60 peer-disabled:opacity-50">
+            <div className="text-muted-foreground/60 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 peer-disabled:opacity-50">
               <RiSearch2Line size={20} aria-hidden="true" />
             </div>
             {Boolean(table.getColumn("name")?.getFilterValue()) && (
               <button
-                className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/60 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-muted-foreground/60 hover:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg outline-offset-2 transition-colors focus:z-10 focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Clear filter"
                 onClick={() => {
                   table.getColumn("name")?.setFilterValue("");
@@ -451,7 +452,7 @@ export default function ContactsTable() {
                     aria-hidden="true"
                   />
                   Delete
-                  <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+                  <span className="border-border bg-background text-muted-foreground/70 ms-1 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
                     {table.getSelectedRowModel().rows.length}
                   </span>
                 </Button>
@@ -459,7 +460,7 @@ export default function ContactsTable() {
               <AlertDialogContent>
                 <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
                   <div
-                    className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
+                    className="border-border flex size-9 shrink-0 items-center justify-center rounded-full border"
                     aria-hidden="true"
                   >
                     <RiErrorWarningLine className="opacity-80" size={16} />
@@ -492,13 +493,13 @@ export default function ContactsTable() {
             <PopoverTrigger asChild>
               <Button variant="outline">
                 <RiFilter3Line
-                  className="size-5 -ms-1.5 text-muted-foreground/60"
+                  className="text-muted-foreground/60 -ms-1.5 size-5"
                   size={20}
                   aria-hidden="true"
                 />
                 Filter
                 {selectedStatuses.length > 0 && (
-                  <span className="-me-1 ms-3 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+                  <span className="border-border bg-background text-muted-foreground/70 ms-3 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
                     {selectedStatuses.length}
                   </span>
                 )}
@@ -506,7 +507,7 @@ export default function ContactsTable() {
             </PopoverTrigger>
             <PopoverContent className="w-auto min-w-36 p-3" align="end">
               <div className="space-y-3">
-                <div className="text-xs font-medium uppercase text-muted-foreground/60">
+                <div className="text-muted-foreground/60 text-xs font-medium uppercase">
                   Status
                 </div>
                 <div className="space-y-3">
@@ -524,7 +525,7 @@ export default function ContactsTable() {
                         className="flex grow justify-between gap-2 font-normal"
                       >
                         {value}{" "}
-                        <span className="ms-2 text-xs text-muted-foreground">
+                        <span className="text-muted-foreground ms-2 text-xs">
                           {statusCounts.get(value)}
                         </span>
                       </Label>
@@ -537,7 +538,7 @@ export default function ContactsTable() {
           {/* New filter button */}
           <Button variant="outline">
             <RiBardLine
-              className="size-5 -ms-1.5 text-muted-foreground/60"
+              className="text-muted-foreground/60 -ms-1.5 size-5"
               size={20}
               aria-hidden="true"
             />
@@ -556,13 +557,13 @@ export default function ContactsTable() {
                   <TableHead
                     key={header.id}
                     style={{ width: `${header.getSize()}px` }}
-                    className="relative h-9 select-none bg-sidebar border-y border-border first:border-l first:rounded-l-lg last:border-r last:rounded-r-lg"
+                    className="bg-sidebar border-border relative h-9 border-y select-none first:rounded-l-lg first:border-l last:rounded-r-lg last:border-r"
                   >
                     {header.isPlaceholder ? null : header.column.getCanSort() ? (
                       <div
                         className={cn(
                           header.column.getCanSort() &&
-                            "flex h-full cursor-pointer select-none items-center gap-2",
+                            "flex h-full cursor-pointer items-center gap-2 select-none",
                         )}
                         onClick={header.column.getToggleSortingHandler()}
                         onKeyDown={(e) => {
@@ -623,10 +624,10 @@ export default function ContactsTable() {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className="border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50"
+                className="hover:bg-accent/50 h-px border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="last:py-0 h-[inherit]">
+                  <TableCell key={cell.id} className="h-[inherit] last:py-0">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -647,7 +648,7 @@ export default function ContactsTable() {
       {table.getRowModel().rows.length > 0 && (
         <div className="flex items-center justify-between gap-3">
           <p
-            className="flex-1 whitespace-nowrap text-sm text-muted-foreground"
+            className="text-muted-foreground flex-1 text-sm whitespace-nowrap"
             aria-live="polite"
           >
             Page{" "}
@@ -746,7 +747,7 @@ function RowActions({
             <Button
               size="icon"
               variant="ghost"
-              className="shadow-none text-muted-foreground/60"
+              className="text-muted-foreground/60 shadow-none"
               aria-label="Edit item"
             >
               <RiMoreLine className="size-5" size={20} aria-hidden="true" />
@@ -798,7 +799,7 @@ function RowActions({
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isUpdatePending}
-              className="bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+              className="bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-white shadow-xs"
             >
               Delete
             </AlertDialogAction>

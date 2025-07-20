@@ -5,6 +5,7 @@ import type { RouterOutputs } from "@repo/api";
 import "../fonts";
 
 import type { Style } from "@react-pdf/stylesheet";
+
 import { getHeader } from "../headers";
 
 export function StudentPage({

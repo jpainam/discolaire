@@ -5,8 +5,8 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
-import { getServerTranslations } from "~/i18n/server";
 
+import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 
 interface StatisticProps {
@@ -23,7 +23,7 @@ async function StatisticCard({ title, total, justified }: StatisticProps) {
       //   style={{
       //     borderLeftColor: "#00FEFF",
       //   }}
-      className="rounded-md hover:bg-secondary"
+      className="hover:bg-secondary rounded-md"
     >
       <CardHeader className="px-2 py-0">
         <CardTitle className="text-md font-semibold">{title}</CardTitle>
@@ -31,7 +31,7 @@ async function StatisticCard({ title, total, justified }: StatisticProps) {
       <CardContent className="p-2">
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold">{total}</span>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-sm">
             {justified} {t("justified")}
           </span>
         </div>
@@ -42,7 +42,7 @@ async function StatisticCard({ title, total, justified }: StatisticProps) {
           //     justifiedPercentage > 50 ? "bg-green-500" : "bg-yellow-500"
           //   }
         />
-        <p className="mt-1 text-right text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-1 text-right text-xs">
           {justifiedPercentage.toFixed(1)}% {t("justified")}
         </p>
       </CardContent>

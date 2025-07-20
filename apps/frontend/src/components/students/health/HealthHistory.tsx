@@ -1,7 +1,16 @@
 "use client";
-import { Textarea } from "@repo/ui/components/textarea";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { Ambulance } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -21,17 +30,11 @@ import {
   useFormContext,
 } from "@repo/ui/components/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { Ambulance } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { Textarea } from "@repo/ui/components/textarea";
+
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const schemaForm = z.object({
   hasAdd: z.boolean().default(false),
   addNotes: z.string().optional(),
@@ -160,7 +163,7 @@ export function HealthHistory({ studentId }: { studentId: string }) {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle className=" flex flex-row items-center gap-2">
+            <CardTitle className="flex flex-row items-center gap-2">
               <Ambulance />
               {t("past_and_present_health_problems")}
               <div className="ml-auto flex flex-row items-center gap-2">
@@ -176,7 +179,7 @@ export function HealthHistory({ studentId }: { studentId: string }) {
               {t("please_check_all_that_apply")}
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-sm grid lg:grid-cols-2 gap-8">
+          <CardContent className="grid gap-8 text-sm lg:grid-cols-2">
             <RadioFormItem
               title={t("attention_deficit_disorder")}
               name="hasAdd"
@@ -229,7 +232,7 @@ export function HealthHistory({ studentId }: { studentId: string }) {
             />
           </CardContent>
           <CardFooter>
-            <div className="grid w-full grid-cols-1 text-sm gap-6 xl:grid-cols-2">
+            <div className="grid w-full grid-cols-1 gap-6 text-sm xl:grid-cols-2">
               <div>
                 <span>Notes internes: (Invisible sur les rapports)</span>
                 <Textarea />
@@ -264,7 +267,7 @@ function RadioFormItem({
         control={form.control}
         name={name}
         render={({ field }) => (
-          <FormItem className="flex flex-row py-0.5 items-center space-x-2">
+          <FormItem className="flex flex-row items-center space-x-2 py-0.5">
             <FormControl>
               <RadioGroup
                 onValueChange={(val) => field.onChange(val === "yes")}
@@ -289,7 +292,7 @@ function RadioFormItem({
           </FormItem>
         )}
       />
-      <div className="grid pl-4  w-full grid-cols-1 gap-2">
+      <div className="grid w-full grid-cols-1 gap-2 pl-4">
         <div>{title}</div>
 
         {radioValue && (

@@ -1,10 +1,11 @@
 "use client";
 
+import * as React from "react";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import * as React from "react";
 
 import { Button } from "@repo/ui/components/button";
+
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 
 export function ModeSwitcher() {

@@ -2,9 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { Check } from "lucide-react";
-import Image from "next/image";
 import React, { useState } from "react";
+import Image from "next/image";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Check } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -23,12 +24,11 @@ import {
 } from "@repo/ui/components/command";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
+import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -141,12 +141,12 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                     </AvatarFallback>
                   </Avatar>
                   <div className="ml-2">
-                    <span className="text-xs font-medium leading-none">
+                    <span className="text-xs leading-none font-medium">
                       {getFullName(stud)}
                     </span>
                   </div>
                   {selectedStudents.includes(stud) ? (
-                    <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    <Check className="text-primary ml-auto flex h-5 w-5" />
                   ) : null}
                 </CommandItem>
               ))}
@@ -160,7 +160,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
             {selectedStudents.map((stud) => (
               <Avatar
                 key={`${stud.id}-selected`}
-                className="inline-block border-2 border-background"
+                className="border-background inline-block border-2"
               >
                 <AvatarImage src={stud.avatar ?? undefined} alt="Image" />
                 <AvatarFallback>
@@ -175,7 +175,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
             ))}
           </div>
         ) : (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-sm">
             {t("select_students_to_add")}
           </span>
         )}

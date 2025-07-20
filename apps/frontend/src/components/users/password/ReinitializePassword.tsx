@@ -1,5 +1,12 @@
 "use client";
 
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -18,17 +25,11 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import Link from "next/link";
-import { toast } from "sonner";
-import { z } from "zod";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
 import { authClient, useSession } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 const passwordFormSchema = z.object({
   oldPassword: z.string().min(1),
@@ -101,7 +102,7 @@ export function ReinitializePassword() {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription className="flex justify-end text-sm text-muted-foreground">
+                    <FormDescription className="text-muted-foreground flex justify-end text-sm">
                       <Link
                         target="_blank"
                         className="underline"

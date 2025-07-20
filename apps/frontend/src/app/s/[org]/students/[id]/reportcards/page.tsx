@@ -1,3 +1,8 @@
+import type { SearchParams } from "nuqs/server";
+import { Fragment } from "react";
+import Link from "next/link";
+import _, { sum } from "lodash";
+
 import {
   Table,
   TableBody,
@@ -7,14 +12,10 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-import _, { sum } from "lodash";
-import Link from "next/link";
-import type { SearchParams } from "nuqs/server";
-import { Fragment } from "react";
-import { EmptyState } from "~/components/EmptyState";
-import type { FlatBadgeVariant } from "~/components/FlatBadge";
-import FlatBadge from "~/components/FlatBadge";
 
+import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import { EmptyState } from "~/components/EmptyState";
+import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
@@ -73,7 +74,7 @@ export default async function Page(props: PageProps) {
   const rowClassName = "border text-center py-0";
 
   return (
-    <div className="flex w-full flex-col gap-2 px-4 mb-10">
+    <div className="mb-10 flex w-full flex-col gap-2 px-4">
       <div className="bg-background overflow-hidden rounded-md border">
         <Table className="text-xs">
           <TableHeader>

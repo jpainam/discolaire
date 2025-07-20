@@ -8,10 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
 
+import { EmptyState } from "~/components/EmptyState";
 import { routes } from "~/configs/routes";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

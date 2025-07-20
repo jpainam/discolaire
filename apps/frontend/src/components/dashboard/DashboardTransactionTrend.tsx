@@ -1,9 +1,11 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
@@ -11,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -27,12 +28,11 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -125,23 +125,23 @@ export function DashboardTransactionTrend({
           </CardDescription>
         </div>
         <div className="flex">
-          <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-4">
-            <span className="text-sm text-muted-foreground">
+          <div className="data-[active=true]:bg-muted/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-4">
+            <span className="text-muted-foreground text-sm">
               {t("transactions")}
             </span>
-            <span className="text-lg font-bold leading-none sm:text-xl">
+            <span className="text-lg leading-none font-bold sm:text-xl">
               {/*moneyFormatter.format(totalAmount)*/ 0}
             </span>
           </div>
-          <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-4">
-            <span className="text-sm text-muted-foreground">
+          <div className="data-[active=true]:bg-muted/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-4">
+            <span className="text-muted-foreground text-sm">
               {t("journal")}
             </span>
-            <span className="text-lg font-bold leading-none sm:text-xl">
+            <span className="text-lg leading-none font-bold sm:text-xl">
               {/*moneyFormatter.format(100000000)*/ 0}
             </span>
           </div>
-          <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
+          <div className="data-[active=true]:bg-muted/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6">
             <Select
               defaultValue={timeRange ?? undefined}
               onValueChange={(val) => {

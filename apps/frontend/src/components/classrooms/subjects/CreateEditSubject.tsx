@@ -1,6 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -17,14 +20,11 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { SelectField } from "../../shared/forms/SelectField";
@@ -186,7 +186,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
                     defaultValue={subject?.order.toString()}
                   />
                 </FormControl>
-                <FormDescription className="text-xs text-muted-foreground">
+                <FormDescription className="text-muted-foreground text-xs">
                   {t("subject_order_description")}
                 </FormDescription>
                 <FormMessage />

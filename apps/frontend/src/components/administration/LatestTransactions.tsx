@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { TransactionType } from "@repo/db";
 import {
   Card,
@@ -8,7 +10,7 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
-import Link from "next/link";
+
 import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { caller } from "~/trpc/server";
@@ -43,18 +45,18 @@ export async function LatestTransactions({
             key={transaction.id}
             className={cn(
               "group flex items-center gap-3",
-              "p-2 rounded-lg",
+              "rounded-lg p-2",
               "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
               "transition-all duration-200",
             )}
           >
             <AvatarState
-              className="w-8 h-8 rounded-full"
+              className="h-8 w-8 rounded-full"
               pos={transaction.student.lastName?.length ?? 0}
               avatar={transaction.student.user?.avatar}
             />
 
-            <div className="flex-1 flex items-center justify-between min-w-0">
+            <div className="flex min-w-0 flex-1 items-center justify-between">
               <div className="space-y-0.5">
                 <h3 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
                   {getFullName(transaction.student)}

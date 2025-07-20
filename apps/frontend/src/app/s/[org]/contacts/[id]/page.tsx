@@ -1,7 +1,8 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
 import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
 
 import { ContactDetails } from "~/components/contacts/ContactDetails";
 import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";
@@ -21,9 +22,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <HydrateClient>
-      <div className="grid gap-4 py-2 px-4 xl:grid-cols-[40%_58%]">
+      <div className="grid gap-4 px-4 py-2 xl:grid-cols-[40%_58%]">
         <Card className="p-0">
-          <CardHeader className="border-b bg-muted/50 p-2">
+          <CardHeader className="bg-muted/50 border-b p-2">
             <ContactDetailsHeader />
           </CardHeader>
           <CardContent className="p-4 text-sm">

@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { format } from "date-fns";
+import i18next from "i18next";
 import {
   AlertCircle,
   Clock,
@@ -7,17 +9,15 @@ import {
   ShieldAlertIcon,
 } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
-
 import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import { cn } from "@repo/ui/lib/utils";
-import i18next from "i18next";
-import Link from "next/link";
+
 import { getSession } from "~/auth/server";
 import { AvatarState } from "~/components/AvatarState";
 import { AttendanceAction } from "~/components/classrooms/attendances/AttendanceAction";
+import { EmptyState } from "~/components/EmptyState";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
@@ -205,7 +205,7 @@ export default async function Page(props: {
                   attendance.type.slice(1)}
               </Badge>
             </div>
-            <div className="text-sm text-muted-foreground justify-between flex items-center">
+            <div className="text-muted-foreground flex items-center justify-between text-sm">
               {t(attendance.type)} - {attendance.description}
               {attendance.justification && (
                 <Badge variant="default" className="text-xs">
@@ -213,7 +213,7 @@ export default async function Page(props: {
                 </Badge>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               {format(attendance.date, "PPP")}
             </p>
           </div>

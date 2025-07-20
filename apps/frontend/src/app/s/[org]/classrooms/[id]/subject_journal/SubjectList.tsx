@@ -1,7 +1,8 @@
 "use client";
 
-import type { RouterOutputs } from "@repo/api";
 import { useParams } from "next/navigation";
+
+import type { RouterOutputs } from "@repo/api";
 
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
@@ -27,8 +28,8 @@ export function SubjectList({
             router.push(`/classrooms/${classroomId}/subject_journal`);
           }}
           className={cn(
-            `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary hover:text-secondary-foreground`,
-            !params.subjectId ? "bg-muted font-bold text-muted-foreground" : "",
+            `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-2`,
+            !params.subjectId ? "bg-muted text-muted-foreground font-bold" : "",
           )}
         >
           <div
@@ -48,9 +49,9 @@ export function SubjectList({
               );
             }}
             className={cn(
-              `flex cursor-pointer flex-row items-center gap-2 border-b p-2 hover:bg-secondary hover:text-secondary-foreground`,
+              `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-2`,
               subject.id === Number(params.subjectId)
-                ? "bg-muted font-bold text-muted-foreground"
+                ? "bg-muted text-muted-foreground font-bold"
                 : "",
             )}
           >

@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { Badge } from "@repo/ui/components/badge";
 import {
   Card,
@@ -10,9 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+
 import { CustomTooltipContent } from "../../charts-extra";
 
 const mrrData = [
@@ -72,19 +73,19 @@ export function Chart01() {
           <div className="space-y-0.5">
             <CardTitle>Test 1 </CardTitle>
             <div className="flex items-start gap-2">
-              <div className="font-semibold text-2xl">
+              <div className="text-2xl font-semibold">
                 {selectedValue === "off" ? "$1,439,346" : "$8,272,152"}
               </div>
-              <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none">
+              <Badge className="mt-1.5 border-none bg-emerald-500/24 text-emerald-500">
                 {selectedValue === "off" ? "+48.1%" : "+52.7%"}
               </Badge>
             </div>
           </div>
-          <div className="bg-black/50 inline-flex h-7 rounded-lg p-0.5 shrink-0">
+          <div className="inline-flex h-7 shrink-0 rounded-lg bg-black/50 p-0.5">
             <RadioGroup
               value={selectedValue}
               onValueChange={setSelectedValue}
-              className="group text-xs after:border after:border-border after:bg-background has-focus-visible:after:border-ring has-focus-visible:after:ring-ring/50 relative inline-grid grid-cols-[1fr_1fr] items-center gap-0 font-medium after:absolute after:inset-y-0 after:w-1/2 after:rounded-md after:shadow-xs after:transition-[translate,box-shadow] after:duration-300 after:[transition-timing-function:cubic-bezier(0.16,1,0.3,1)] has-focus-visible:after:ring-[3px] data-[state=off]:after:translate-x-0 data-[state=on]:after:translate-x-full"
+              className="group after:border-border after:bg-background has-focus-visible:after:border-ring has-focus-visible:after:ring-ring/50 relative inline-grid grid-cols-[1fr_1fr] items-center gap-0 text-xs font-medium after:absolute after:inset-y-0 after:w-1/2 after:rounded-md after:border after:shadow-xs after:transition-[translate,box-shadow] after:duration-300 after:[transition-timing-function:cubic-bezier(0.16,1,0.3,1)] has-focus-visible:after:ring-[3px] data-[state=off]:after:translate-x-0 data-[state=on]:after:translate-x-full"
               data-state={selectedValue}
             >
               <label className="group-data-[state=on]:text-muted-foreground/50 relative z-10 inline-flex h-full min-w-8 cursor-pointer items-center justify-center px-2 whitespace-nowrap transition-colors select-none">

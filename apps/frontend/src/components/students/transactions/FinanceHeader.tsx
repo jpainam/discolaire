@@ -1,7 +1,8 @@
 "use client";
 
-import { CircleDollarSignIcon, MoreVertical, Plus } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { CircleDollarSignIcon, MoreVertical, Plus } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,14 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export default function FinanceHeader() {
@@ -34,7 +34,7 @@ export default function FinanceHeader() {
   );
 
   return (
-    <div className="flex flex-row items-center gap-4 bg-muted/50 px-2 py-1">
+    <div className="bg-muted/50 flex flex-row items-center gap-4 px-2 py-1">
       <div className="flex flex-row items-center gap-2">
         <CircleDollarSignIcon className="h-4 w-4" />
         <Label>{t("transactions")}</Label>

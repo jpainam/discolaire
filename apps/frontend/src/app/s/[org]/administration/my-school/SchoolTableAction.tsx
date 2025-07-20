@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -11,11 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 
 export function SchoolTableAction({ schoolId }: { schoolId: string }) {
@@ -59,7 +59,7 @@ export function SchoolTableAction({ schoolId }: { schoolId: string }) {
             const isConfirmed = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="h-4 w-4 text-destructive" />,
+              icon: <Trash2 className="text-destructive h-4 w-4" />,
               alertDialogTitle: {
                 className: "flex items-center gap-1",
               },

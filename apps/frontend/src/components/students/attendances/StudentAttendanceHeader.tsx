@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import {
   BaselineIcon,
   ChevronDown,
@@ -11,7 +12,6 @@ import {
   ShieldAlertIcon,
   Trash2,
 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -22,14 +22,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import { PreventAbsence } from "~/components/attendances/PreventAbsence";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { CreateEditAbsence } from "./absence/CreateEditAbsence";
 import { CreateEditChatter } from "./chatter/CreateEditChatter";
@@ -54,9 +54,9 @@ export function StudentAttendanceHeader({
   );
 
   return (
-    <div className="grid md:flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
+    <div className="bg-muted/50 grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       <div className="flex flex-row items-center gap-1">
-        <LineChart className="w-4 h-4" />
+        <LineChart className="h-4 w-4" />
         <Label>{t("attendances")}</Label>
       </div>
       {/* <Label className="hidden md:block">{t("attendances")}</Label> */}

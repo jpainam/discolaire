@@ -8,10 +8,9 @@ import {
   ShieldAlertIcon,
 } from "lucide-react";
 
-import { getServerTranslations } from "~/i18n/server";
-
 import { EmptyState } from "~/components/EmptyState";
 import { StudentAttendanceHeader } from "~/components/students/attendances/StudentAttendanceHeader";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Layout(props: {
@@ -49,16 +48,16 @@ export default async function Layout(props: {
         classroomId={classroom.id}
         studentId={params.id}
       />
-      <div className="grid  md:grid-cols-[275px_1fr]">
-        <div className="border-r ">
-          <div className="flex cursor-pointer items-center gap-2 border-b px-2 py-2 bg-muted text-muted-foreground">
+      <div className="grid md:grid-cols-[275px_1fr]">
+        <div className="border-r">
+          <div className="bg-muted text-muted-foreground flex cursor-pointer items-center gap-2 border-b px-2 py-2">
             <FileStack className="h-4 w-4" />
             <div className="flex flex-col">
               <span className="text-sm font-semibold">
                 {" "}
                 {t("all_my_attendances")}
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-muted-foreground text-xs">
                 {t("justified")}
               </span>
             </div>
@@ -115,11 +114,11 @@ function AttendanceGroup({
 }) {
   const Icon = icon;
   return (
-    <div className="flex cursor-pointer items-center gap-2 border-b px-2 py-2 hover:bg-muted hover:text-muted-foreground">
+    <div className="hover:bg-muted hover:text-muted-foreground flex cursor-pointer items-center gap-2 border-b px-2 py-2">
       <Icon className="h-4 w-4" />
       <div className="flex flex-col">
         <span className="text-sm font-semibold">{title}</span>
-        <span className="text-xs text-muted-foreground">{description}</span>
+        <span className="text-muted-foreground text-xs">{description}</span>
       </div>
       <span className="ml-auto text-xs font-bold">{value}</span>
     </div>

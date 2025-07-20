@@ -5,11 +5,11 @@ import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 export function CreateAssignment() {
   const { closeModal } = useModal();

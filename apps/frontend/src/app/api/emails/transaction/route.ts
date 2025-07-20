@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+
 import { getSession } from "~/auth/server";
 
 export async function GET(_req: NextRequest) {

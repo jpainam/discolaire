@@ -1,10 +1,10 @@
+import type { ReactNode } from "react";
 import {
   CircleAlert,
   CircleCheckIcon,
   InfoIcon,
   TriangleAlert,
 } from "lucide-react";
-import type { ReactNode } from "react";
 
 type Variant = "warning" | "error" | "success" | "info";
 

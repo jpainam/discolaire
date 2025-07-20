@@ -5,9 +5,11 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@repo/ui/components/avatar";
+
 import { cn } from "~/lib/utils";
 import { ImageZoom } from "./ImageZoom";
 import { avatars, randomAvatar } from "./raw-images";
+
 interface AvatarStateProps {
   avatar?: string | null;
   className?: string;

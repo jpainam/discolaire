@@ -1,7 +1,6 @@
+import { PolicyTable } from "~/components/administration/policies/PolicyTable";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
-
-import { PolicyTable } from "~/components/administration/policies/PolicyTable";
 
 export default async function Page() {
   const canDeletePolicy = await checkPermission(

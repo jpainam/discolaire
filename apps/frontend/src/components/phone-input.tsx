@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { CheckIcon, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
+import { CheckIcon, ChevronsUpDown } from "lucide-react";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 
+import type { InputProps } from "@repo/ui/components/input";
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -13,7 +14,6 @@ import {
   CommandItem,
   CommandList,
 } from "@repo/ui/components/command";
-import type { InputProps } from "@repo/ui/components/input";
 import { Input } from "@repo/ui/components/input";
 import {
   Popover,
@@ -62,7 +62,7 @@ PhoneInput.displayName = "PhoneInput";
 const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => (
     <Input
-      className={cn("rounded-e-lg rounded-s-none", className)}
+      className={cn("rounded-s-none rounded-e-lg", className)}
       {...props}
       ref={ref}
     />
@@ -101,7 +101,7 @@ const CountrySelect = ({
         <Button
           type="button"
           variant={"outline"}
-          className={cn("flex gap-1 rounded-e-none rounded-s-lg px-3")}
+          className={cn("flex gap-1 rounded-s-lg rounded-e-none px-3")}
           disabled={disabled}
         >
           <FlagComponent country={value} countryName={value} />
@@ -134,7 +134,7 @@ const CountrySelect = ({
                       />
                       <span className="flex-1 text-sm">{option.label}</span>
                       {option.value && (
-                        <span className="text-sm text-foreground/50">
+                        <span className="text-foreground/50 text-sm">
                           {`+${RPNInput.getCountryCallingCode(option.value)}`}
                         </span>
                       )}
@@ -159,7 +159,7 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
   const Flag = flags[country];
 
   return (
-    <span className="flex w-fit rounded-sm ">
+    <span className="flex w-fit rounded-sm">
       {Flag && <Flag title={countryName} />}
     </span>
   );

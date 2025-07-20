@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { SubscriptionHeader } from "./SubscriptionHeader";
@@ -18,8 +20,8 @@ export default function Page() {
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
-            <div className="grid grid-cols-3 gap-4 py-2 px-4">
-              <Skeleton className="h-8 col-span-full" />
+            <div className="grid grid-cols-3 gap-4 px-4 py-2">
+              <Skeleton className="col-span-full h-8" />
               <Skeleton className="h-20" />
               <Skeleton className="h-20" />
               <Skeleton className="h-20" />
@@ -32,9 +34,9 @@ export default function Page() {
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
-            <div className="grid grid-cols-2 px-4 py-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 px-4 py-2">
               {Array.from({ length: 10 }).map((_, i) => (
-                <Skeleton key={i} className="h-8 " />
+                <Skeleton key={i} className="h-8" />
               ))}
             </div>
           }

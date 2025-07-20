@@ -1,7 +1,6 @@
-import { Card, CardContent, CardFooter } from "@repo/ui/components/card";
+import Link from "next/link";
 import i18next from "i18next";
 import { CircleArrowRight } from "lucide-react";
-import Link from "next/link";
 import {
   PiChartBarHorizontal,
   PiChartLineUp,
@@ -9,8 +8,9 @@ import {
   PiMoney,
 } from "react-icons/pi";
 
-import { getServerTranslations } from "~/i18n/server";
+import { Card, CardContent, CardFooter } from "@repo/ui/components/card";
 
+import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
@@ -118,13 +118,13 @@ async function TransactionStatCard({
               style: "currency",
             })}
           </span>
-          <p className="text-sm ">{subtitle}</p>
+          <p className="text-sm">{subtitle}</p>
         </div>
       </CardContent>
       <CardFooter className="p-0">
         <Link
           href={`/students/${studentId}/transactions`}
-          className="hover:underline flex w-full flex-row items-center justify-center gap-4 rounded-b-lg bg-gray-800/20 text-sm py-2 px-4"
+          className="flex w-full flex-row items-center justify-center gap-4 rounded-b-lg bg-gray-800/20 px-4 py-2 text-sm hover:underline"
         >
           {t("more_info")} <CircleArrowRight className="h-4 w-4" />
         </Link>

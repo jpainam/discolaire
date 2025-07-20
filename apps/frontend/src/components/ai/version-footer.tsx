@@ -2,17 +2,17 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client";
 
+import { useState } from "react";
 import { isAfter } from "date-fns";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
 
 import type { AiDocument } from "@repo/db";
-import { getDocumentTimestampByIndex } from "~/lib/utils";
-
 import { Button } from "@repo/ui/components/button";
+
 import { useArtifact } from "~/hooks/use-artifact";
+import { getDocumentTimestampByIndex } from "~/lib/utils";
 import { LoaderIcon } from "./icons";
 
 interface VersionFooterProps {
@@ -38,7 +38,7 @@ export const VersionFooter = ({
 
   return (
     <motion.div
-      className="absolute flex flex-col gap-4 lg:flex-row bottom-0 bg-background p-4 w-full border-t z-50 justify-between"
+      className="bg-background absolute bottom-0 z-50 flex w-full flex-col justify-between gap-4 border-t p-4 lg:flex-row"
       initial={{ y: isMobile ? 200 : 77 }}
       animate={{ y: 0 }}
       exit={{ y: isMobile ? 200 : 77 }}

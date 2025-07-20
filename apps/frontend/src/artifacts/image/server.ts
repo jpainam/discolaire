@@ -1,4 +1,5 @@
 import { experimental_generateImage } from "ai";
+
 import { myProvider } from "~/lib/ai/providers";
 import { createDocumentHandler } from "~/lib/artifacts/server";
 

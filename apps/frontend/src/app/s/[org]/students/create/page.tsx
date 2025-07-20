@@ -1,8 +1,7 @@
 import { NoPermission } from "~/components/no-permission";
+import { CreateStudent } from "~/components/students/profile/CreateStudent";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
-
-import { CreateStudent } from "~/components/students/profile/CreateStudent";
 
 export default async function Page() {
   const canCreateStudent = await checkPermission(

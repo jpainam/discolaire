@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { useRouter } from "next/navigation";
 import { useWindowSize } from "usehooks-ts";
 
@@ -12,7 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import { memo } from "react";
+
 import { ModelSelector } from "~/components/ai/model-selector";
 import { PlusIcon } from "./icons";
 import { VisibilitySelector } from "./visibility-selector";
@@ -36,7 +37,7 @@ function PureChatHeader({
   const { width: windowWidth } = useWindowSize();
 
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
+    <header className="bg-background sticky top-0 flex items-center gap-2 px-2 py-1.5 md:px-2">
       {(!open || windowWidth < 768) && (
         <Tooltip>
           <TooltipTrigger asChild>

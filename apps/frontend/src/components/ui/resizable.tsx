@@ -1,11 +1,11 @@
 "use client";
 
-import { GripVerticalIcon } from "lucide-react";
-import * as React from "react";
 import type {
   ImperativePanelGroupHandle,
   ImperativePanelHandle,
 } from "react-resizable-panels";
+import * as React from "react";
+import { GripVerticalIcon } from "lucide-react";
 import * as ResizablePrimitive from "react-resizable-panels";
 
 import { cn } from "@repo/ui/lib/utils";

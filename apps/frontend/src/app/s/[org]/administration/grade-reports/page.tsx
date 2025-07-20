@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import {
   Card,
@@ -14,11 +16,9 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
 import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
-
 import { GradeReportTrackerDataTable } from "~/components/administration/grade-reports/GradeReportTrackerDataTable";
 import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
 import { StudentPerformanceChart } from "~/components/administration/grade-reports/StudentPerformanceChart";
@@ -107,7 +107,7 @@ export default async function Page() {
                 fallback={
                   <div className="grid grid-cols-3 gap-4">
                     {Array.from({ length: 12 }).map((_, index) => (
-                      <Skeleton key={index} className="h-48 " />
+                      <Skeleton key={index} className="h-48" />
                     ))}
                   </div>
                 }

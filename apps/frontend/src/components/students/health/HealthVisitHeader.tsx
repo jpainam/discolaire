@@ -1,16 +1,16 @@
 "use client";
 
-import { Stethoscope } from "lucide-react";
 import { useParams } from "next/navigation";
+import { Stethoscope } from "lucide-react";
 
 //import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
 
 import { authClient } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 export function HealthVisitHeader() {
   const { t } = useLocale();

@@ -1,16 +1,6 @@
 "use client";
-import type { RouterOutputs } from "@repo/api";
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent } from "@repo/ui/components/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+
+import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
 import {
@@ -26,8 +16,20 @@ import {
   Phone,
   Trash2,
 } from "lucide-react";
-import Link from "next/link";
 import { toast } from "sonner";
+
+import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Card, CardContent } from "@repo/ui/components/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 
 import { AvatarState } from "~/components/AvatarState";
 import { useRouter } from "~/hooks/use-router";
@@ -35,6 +37,7 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+
 export function StudentSearchResultCard({
   student,
 }: {
@@ -61,7 +64,7 @@ export function StudentSearchResultCard({
   return (
     <Card
       key={student.id}
-      className="py-2 shadow-none transition-shadow hover:bg-muted/50"
+      className="hover:bg-muted/50 py-2 shadow-none transition-shadow"
     >
       <CardContent className="px-2">
         <div className="flex items-start justify-between">
@@ -73,10 +76,10 @@ export function StudentSearchResultCard({
             />
 
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="mb-2 flex items-center gap-3">
                 <Link
                   href={`/students/${student.id}`}
-                  className="text-sm hover:underline hover:text-blue-600"
+                  className="text-sm hover:text-blue-600 hover:underline"
                 >
                   {getFullName(student)}
                 </Link>
@@ -102,7 +105,7 @@ export function StudentSearchResultCard({
                 )}
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm text-muted-foreground">
+              <div className="text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-2 text-sm md:grid-cols-4">
                 <div className="flex items-center gap-1.5">
                   <CalendarDays className="h-4 w-4" />
                   <span className="text-xs">
@@ -164,7 +167,7 @@ export function StudentSearchResultCard({
                   //router.push(`/students/${student.id}/favorite`);
                 }}
               >
-                <HeartPlus className=" h-4 w-4" />
+                <HeartPlus className="h-4 w-4" />
                 {t("Favorite")}
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -172,7 +175,7 @@ export function StudentSearchResultCard({
                   router.push(`/students/${student.id}`);
                 }}
               >
-                <Eye className=" h-4 w-4" />
+                <Eye className="h-4 w-4" />
                 {t("View Profile")}
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -196,7 +199,7 @@ export function StudentSearchResultCard({
                   router.push(`/students/${student.id}/grades`);
                 }}
               >
-                <GraduationCap className=" h-4 w-4" />
+                <GraduationCap className="h-4 w-4" />
                 {t("View Grades")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -215,7 +218,7 @@ export function StudentSearchResultCard({
                 }}
                 variant="destructive"
               >
-                <Trash2 className=" h-4 w-4" />
+                <Trash2 className="h-4 w-4" />
                 {t("delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>

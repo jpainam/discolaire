@@ -1,11 +1,11 @@
 import type { VariantProps } from "class-variance-authority";
-import { cva } from "class-variance-authority";
 import * as React from "react";
+import { cva } from "class-variance-authority";
 
 import { cn } from "~/lib/utils";
 
 const kbdVariants = cva(
-  "select-none rounded border px-1.5 py-px font-mono text-[0.7rem] font-normal shadow-sm disabled:opacity-50",
+  "rounded border px-1.5 py-px font-mono text-[0.7rem] font-normal shadow-sm select-none disabled:opacity-50",
   {
     variants: {
       variant: {

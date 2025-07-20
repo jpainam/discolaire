@@ -1,7 +1,9 @@
 //import FinanceHeader from "~/components/students/transactions/FinanceHeader";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { TransactionStats } from "~/components/students/transactions/transaction-stats";
 import { TransactionTable } from "~/components/students/transactions/TransactionTable";

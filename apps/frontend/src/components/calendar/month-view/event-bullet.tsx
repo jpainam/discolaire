@@ -1,5 +1,6 @@
-import { cn } from "@repo/ui/lib/utils";
 import { cva } from "class-variance-authority";
+
+import { cn } from "@repo/ui/lib/utils";
 
 import type { TEventColor } from "~/components/calendar/types";
 

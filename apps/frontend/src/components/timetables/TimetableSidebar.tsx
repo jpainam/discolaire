@@ -1,6 +1,8 @@
 "use client";
-import { ArrowLeft, Plus } from "lucide-react";
+
 import * as React from "react";
+import Link from "next/link";
+import { ArrowLeft, Plus } from "lucide-react";
 
 import {
   Sidebar,
@@ -14,7 +16,7 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@repo/ui/components/sidebar";
-import Link from "next/link";
+
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 import { Calendars } from "./calendars";

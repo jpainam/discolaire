@@ -1,7 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subMonths } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -15,16 +18,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/components/form";
-import { Textarea } from "@repo/ui/components/textarea";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@repo/ui/components/input";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { Textarea } from "@repo/ui/components/textarea";
+
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { CountryPicker } from "../shared/CountryPicker";
@@ -190,9 +190,9 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col flex-1 overflow-hidden"
+        className="flex flex-1 flex-col overflow-hidden"
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
+        <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto px-4">
           <div className="grid grid-cols-[20%_80%] gap-2">
             <SelectField label={t("civility")} name="prefix" items={prefixes} />
             <InputField name="lastName" label={t("lastName")} />

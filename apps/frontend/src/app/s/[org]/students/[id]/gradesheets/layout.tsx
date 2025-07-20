@@ -1,6 +1,5 @@
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
-
 import { caller } from "~/trpc/server";
 import { StudentGradesheetHeader } from "./StudentGradesheetHeader";
 

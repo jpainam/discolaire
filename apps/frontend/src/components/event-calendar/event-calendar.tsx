@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { RiCalendarCheckLine } from "@remixicon/react";
 import {
   addDays,
@@ -18,7 +19,6 @@ import {
   ChevronRightIcon,
   PlusIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -29,8 +29,9 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { cn } from "~/lib/utils";
+
 import type { CalendarEvent, CalendarView } from ".";
+import { cn } from "~/lib/utils";
 import {
   addHoursToDate,
   AgendaDaysToShow,

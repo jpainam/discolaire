@@ -1,7 +1,9 @@
 import type { SearchParams } from "nuqs/server";
 import { createLoader, parseAsString } from "nuqs/server";
+
 import { caller } from "~/trpc/server";
 import { SignUpForm } from "./SignUpForm";
+
 const registrationSearchParamsSchema = {
   token: parseAsString,
 };

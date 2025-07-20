@@ -21,9 +21,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface AttendanceIssue {
@@ -111,8 +111,8 @@ export function RecentAttendance({ className }: { className?: string }) {
                   {issue.type.charAt(0).toUpperCase() + issue.type.slice(1)}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">{issue.details}</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-sm">{issue.details}</p>
+              <p className="text-muted-foreground text-xs">
                 {format(issue.date, "PPP")}
               </p>
             </div>

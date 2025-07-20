@@ -1,6 +1,6 @@
 import { Label } from "@repo/ui/components/label";
-import { getServerTranslations } from "~/i18n/server";
 
+import { getServerTranslations } from "~/i18n/server";
 import { TermHeader } from "./TermHeader";
 import { TermTable } from "./TermTable";
 

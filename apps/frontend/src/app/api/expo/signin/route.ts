@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
 import { z } from "zod";
+
 const schema = z.object({
   username: z.string(),
   password: z.string(),

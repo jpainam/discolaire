@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   BaselineIcon,
   CalendarDays,
@@ -8,11 +9,10 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@repo/ui/components/badge";
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
 
-import { Suspense } from "react";
+import { EmptyState } from "~/components/EmptyState";
 import { StudentAttendanceAction } from "~/components/students/attendances/StudentAttendanceAction";
+import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 
@@ -37,7 +37,7 @@ export default async function Page(props: {
   }
 
   return (
-    <div className="grid auto-rows-min gap-4 md:grid-cols-2 p-4">
+    <div className="grid auto-rows-min gap-4 p-4 md:grid-cols-2">
       <Suspense>
         <AbsenceItem termId={termId} studentId={studentId} />
       </Suspense>
@@ -82,14 +82,14 @@ async function LateItem({
             key={`${item.id}-exclusion-${index}`}
             className="flex flex-row items-center gap-2 rounded-md border p-2"
           >
-            <DiameterIcon className={"h-6 w-6 text-destructive"} />
+            <DiameterIcon className={"text-destructive h-6 w-6"} />
             <div className="flex-1 items-start justify-start">
               <div className="flex flex-col justify-between gap-1">
                 <div className="text-muted-foreground text-sm font-bold">
                   {t("lateness")}
                 </div>
 
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   {t("duration")}: {item.duration.toString()}
                 </div>
                 {item.justified && (
@@ -138,14 +138,14 @@ async function ChatterItem({
             key={`${item.id}-exclusion-${index}`}
             className="flex flex-row items-center gap-2 rounded-md border p-2"
           >
-            <NewspaperIcon className={"h-6 w-6 text-destructive"} />
+            <NewspaperIcon className={"text-destructive h-6 w-6"} />
             <div className="flex-1 items-start justify-start">
               <div className="flex flex-col justify-between gap-1">
                 <div className="text-muted-foreground text-sm font-bold">
                   {t("chatter")}
                 </div>
 
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   {t("number")}: {item.value.toString()}
                 </div>
               </div>
@@ -191,14 +191,14 @@ async function ConsigneItem({
             key={`${item.id}-absence-${index}`}
             className="flex flex-row items-center gap-2 rounded-md border p-2"
           >
-            <ShapesIcon className={"h-6 w-6 text-destructive"} />
+            <ShapesIcon className={"text-destructive h-6 w-6"} />
             <div className="flex-1 items-start justify-start">
               <div className="flex flex-col justify-between gap-1">
                 <div className="text-muted-foreground text-sm font-bold">
                   {t("consigne")}
                 </div>
 
-                <div className="text-xs text-muted-foreground">{item.task}</div>
+                <div className="text-muted-foreground text-xs">{item.task}</div>
 
                 <div className="flex flex-row items-center gap-2">
                   <Badge variant={"default"}>
@@ -252,17 +252,17 @@ async function ExclusionItem({
             key={`${item.id}-exclusion-${index}`}
             className="flex flex-row items-center gap-2 rounded-md border p-2"
           >
-            <ShieldAlertIcon className={"h-6 w-6 text-destructive"} />
+            <ShieldAlertIcon className={"text-destructive h-6 w-6"} />
             <div className="flex-1 items-start justify-start">
               <div className="flex flex-col justify-between gap-1">
                 <div className="text-muted-foreground text-sm font-bold">
                   {t("exclusion")}
                 </div>
 
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   {item.reason}
                 </div>
-                <div className="flex flex-row  items-center gap-2">
+                <div className="flex flex-row items-center gap-2">
                   <Badge className="text-xs" variant={"default"}>
                     {t("from")}{" "}
                     {Intl.DateTimeFormat(i18n.language, {
@@ -328,12 +328,12 @@ async function AbsenceItem({
               )}
             />
             <div className="flex-1 items-start justify-start">
-              <div className="flex flex-col justify-between ">
+              <div className="flex flex-col justify-between">
                 <div className="text-muted-foreground text-sm font-bold">
                   {t("absence")}
                 </div>
 
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   {t("total_absences") + ": " + item.value.toString()}
                 </div>
                 {item.justified && (

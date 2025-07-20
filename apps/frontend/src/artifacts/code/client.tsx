@@ -6,16 +6,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { CodeEditor } from "~/components/ai/code-editor";
-import { Artifact } from "~/components/ai/create-artifact";
-
 import { CopyIcon, LogsIcon, PlayIcon, RedoIcon, UndoIcon } from "lucide-react";
 import { toast } from "sonner";
+
 import type {
   ConsoleOutput,
   ConsoleOutputContent,
 } from "~/components/ai/console";
+import { CodeEditor } from "~/components/ai/code-editor";
 import { Console } from "~/components/ai/console";
+import { Artifact } from "~/components/ai/create-artifact";
 import { MessageIcon } from "~/components/ai/icons";
 import { generateUUID } from "~/lib/utils";
 

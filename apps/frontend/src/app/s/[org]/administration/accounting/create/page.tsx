@@ -1,4 +1,5 @@
 import type { SearchParams } from "nuqs/server";
+
 import { EmptyState } from "~/components/EmptyState";
 import { CreateTransaction } from "~/components/students/transactions/create/CreateTransaction";
 import { CreateTransactionContextProvider } from "~/components/students/transactions/create/CreateTransactionContextProvider";
@@ -40,7 +41,7 @@ export default async function Page(props: PageProps) {
         studentId={searchParams.studentId}
         fullName={getFullName(student)}
       />
-      <div className="flex flex-col justify-center items-center font-bold text-lg">
+      <div className="flex flex-col items-center justify-center text-lg font-bold">
         {getFullName(student)}
       </div>
       <CreateTransactionContextProvider

@@ -10,11 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import FlatBadge from "~/components/FlatBadge";
-import { useLocale } from "~/i18n";
-
 import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { ReportCardSummary } from "./ReportCardSummary";
 

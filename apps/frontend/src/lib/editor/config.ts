@@ -1,10 +1,10 @@
+import type { Transaction } from "prosemirror-state";
+import type { EditorView } from "prosemirror-view";
+import type { RefObject } from "react";
 import { textblockTypeInputRule } from "prosemirror-inputrules";
 import { Schema } from "prosemirror-model";
 import { schema } from "prosemirror-schema-basic";
 import { addListNodes } from "prosemirror-schema-list";
-import type { Transaction } from "prosemirror-state";
-import type { EditorView } from "prosemirror-view";
-import type { RefObject } from "react";
 
 import { buildContentFromDocument } from "./functions";
 

@@ -1,4 +1,7 @@
 "use client";
+
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { sumBy } from "lodash";
 import {
   BookUser,
@@ -12,10 +15,8 @@ import {
   SquareUser,
   TableProperties,
 } from "lucide-react";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 
@@ -30,10 +31,10 @@ export function ClassroomDetails() {
     trpc.classroom.get.queryOptions(params.id),
   );
   return (
-    <div className="grid w-full px-4 gap-4 divide-x md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid w-full gap-4 divide-x px-4 md:grid-cols-2 lg:grid-cols-3">
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <TableProperties className="h-4 w-4" />
             {t("name")}
           </div>
@@ -42,7 +43,7 @@ export function ClassroomDetails() {
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <Newspaper className="h-4 w-4" />
             <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
               {t("reportName")}
@@ -53,7 +54,7 @@ export function ClassroomDetails() {
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <SquareLibrary className="h-4 w-4" />
             {t("section")}
           </div>
@@ -62,7 +63,7 @@ export function ClassroomDetails() {
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <CircleDollarSign className="h-4 w-4" />
             {t("fees")}
           </div>
@@ -73,7 +74,7 @@ export function ClassroomDetails() {
       </ul>
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <CircleGauge className="h-4 w-4" />
             {t("level")}
           </div>
@@ -82,7 +83,7 @@ export function ClassroomDetails() {
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <Recycle className="h-4 w-4" />
             {t("cycle")}
           </div>
@@ -91,7 +92,7 @@ export function ClassroomDetails() {
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <SquareUser className="h-4 w-4" />
             <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
               {t("senior_advisor")}
@@ -102,7 +103,7 @@ export function ClassroomDetails() {
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <BookUser className="h-4 w-4" />
             {t("classroom_leader")}
           </div>
@@ -113,7 +114,7 @@ export function ClassroomDetails() {
       </ul>
       <ul className="grid gap-3 p-2 text-sm">
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <Hash className="h-4 w-4" />
             {t("max_size")}
           </div>
@@ -122,7 +123,7 @@ export function ClassroomDetails() {
           </span>
         </li>
         <li className="flex items-center justify-between">
-          <div className="flex flex-row items-center gap-1 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-1">
             <CircleUser className="h-4 w-4" />
             {t("head_teacher")}
           </div>

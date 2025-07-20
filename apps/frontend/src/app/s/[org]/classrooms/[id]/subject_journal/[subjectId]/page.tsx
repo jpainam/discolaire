@@ -1,14 +1,16 @@
-import { Separator } from "@repo/ui/components/separator";
-
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { SubjectJournalEditor } from "./SubjectJournalEditor";
 import { SubjectJournalHeader } from "./SubjectJournalHeader";
 import { SubjectJournalList } from "./SubjectJournalList";
+
 export default async function Page(props: {
   params: Promise<{ subjectId: string; pageIndex?: string; pageSize?: string }>;
 }) {
@@ -44,7 +46,7 @@ export default async function Page(props: {
             fallback={
               <div className="grid grid-cols-2 gap-2 px-4 py-2">
                 {Array.from({ length: 2 }).map((_, i) => (
-                  <Skeleton key={i} className="h-10 " />
+                  <Skeleton key={i} className="h-10" />
                 ))}
               </div>
             }
@@ -58,9 +60,9 @@ export default async function Page(props: {
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
-            <div className="grid grid-cols-4 px-4 py-2 gap-4">
+            <div className="grid grid-cols-4 gap-4 px-4 py-2">
               {Array.from({ length: 16 }).map((_, i) => (
-                <Skeleton key={i} className="h-10 " />
+                <Skeleton key={i} className="h-10" />
               ))}
             </div>
           }

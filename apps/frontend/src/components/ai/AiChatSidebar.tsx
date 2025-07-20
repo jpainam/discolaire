@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { Plus } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -9,8 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
-import { Plus } from "lucide-react";
-import Link from "next/link";
+
 import { SidebarHistory } from "~/components/ai/sidebar-history";
 import { SidebarLogo } from "../sidebar-logo";
 

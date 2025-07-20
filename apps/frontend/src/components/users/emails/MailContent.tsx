@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@repo/ui/lib/utils";
+
 import { MailCompose } from "./MailCompose";
 import { useMailContext } from "./MailContextProvider";
 import { MailDetail } from "./MailDetail";
@@ -11,7 +12,7 @@ export function MailContent() {
   return (
     <div
       className={cn(
-        "flex-1 flex flex-col h-full overflow-hidden",
+        "flex h-full flex-1 flex-col overflow-hidden",
         !selectedEmail && !composing && "hidden md:flex",
       )}
     >
@@ -20,7 +21,7 @@ export function MailContent() {
       ) : selectedEmail ? (
         <MailDetail emailId={selectedEmail} />
       ) : (
-        <div className="flex-1 flex items-center justify-center text-muted-foreground">
+        <div className="text-muted-foreground flex flex-1 items-center justify-center">
           Select an email to view or compose a new message
         </div>
       )}

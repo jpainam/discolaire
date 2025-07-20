@@ -1,15 +1,7 @@
 "use client";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-} from "@repo/ui/components/sidebar";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
 import {
   ArrowLeft,
   BookOpenText,
@@ -28,12 +20,23 @@ import {
   TableProperties,
   Users,
 } from "lucide-react";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@repo/ui/components/sidebar";
+
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
+
 export function ClassroomSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {

@@ -1,7 +1,9 @@
 "use client";
 
-import { MoreVertical, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
+import { MoreVertical, PlusIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,11 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 
-import { useQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import { authClient } from "~/auth/client";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -25,7 +23,9 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -62,7 +62,7 @@ export function StudentPageHeader() {
     return null;
   }
   return (
-    <div className="grid md:flex flex-row items-center gap-2 border-b px-4 py-1">
+    <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("students")}</Label>
       {/* {session.user?.profile === "contact" ? (
         <StudentSelector

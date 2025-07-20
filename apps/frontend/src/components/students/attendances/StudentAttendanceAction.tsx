@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Columns4Icon, MailIcon, MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -13,10 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 
 type AbsenceType = RouterOutputs["absence"]["get"];

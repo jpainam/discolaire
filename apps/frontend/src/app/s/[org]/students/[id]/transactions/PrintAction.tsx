@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams, usePathname } from "next/navigation";
 import { MoreVertical } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
@@ -10,12 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useLocale } from "~/i18n";
 
-import { useParams, usePathname } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useLocale } from "~/i18n";
 
 export function PrintAction() {
   const { t } = useLocale();

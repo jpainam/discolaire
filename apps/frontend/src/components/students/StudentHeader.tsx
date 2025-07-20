@@ -1,5 +1,17 @@
 "use client";
 
+import type * as RPNInput from "react-phone-number-input";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { decode } from "entities";
+import { useSetAtom } from "jotai";
 import {
   BellRing,
   CheckIcon,
@@ -25,12 +37,11 @@ import {
   Users,
   XIcon,
 } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
-import type * as RPNInput from "react-phone-number-input";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -43,35 +54,22 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
+import { authClient } from "~/auth/client";
 import FlatBadge from "~/components/FlatBadge";
+import { StudentSelector } from "~/components/shared/selects/StudentSelector";
+import { SimpleTooltip } from "~/components/simple-tooltip";
+import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
-import { useConfirm } from "~/providers/confirm-dialog";
-
-import { decode } from "entities";
-import { useSetAtom } from "jotai";
-import { useCallback, useEffect, useState } from "react";
-import { SimpleTooltip } from "~/components/simple-tooltip";
-
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { StudentSelector } from "~/components/shared/selects/StudentSelector";
-import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-
-import { Badge } from "@repo/ui/components/badge";
-import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { authClient } from "~/auth/client";
 import { AvatarState } from "../AvatarState";
 import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -198,15 +196,15 @@ export function StudentHeader() {
   };
 
   return (
-    <div className="flex border-b bg-muted/50 py-1 px-4  gap-2">
+    <div className="bg-muted/50 flex gap-2 border-b px-4 py-1">
       <AvatarState
-        className="hidden md:flex my-0 h-full w-[100px] rounded-md"
+        className="my-0 hidden h-full w-[100px] rounded-md md:flex"
         pos={getFullName(student).length}
         avatar={student.user?.avatar}
       />
       <div className="flex w-full flex-col gap-1">
         {session?.user.profile == "student" ? (
-          <span className="bg-background h-9 px-4 py-2 rounded-md font-semibold w-full text-sm 2xl:w-[450px]">
+          <span className="bg-background h-9 w-full rounded-md px-4 py-2 text-sm font-semibold 2xl:w-[450px]">
             {getFullName(student)}
           </span>
         ) : session?.user.profile == "contact" ? (
@@ -429,7 +427,7 @@ export function StudentHeader() {
               )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
-                  <ShieldCheck className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <ShieldCheck className="text-muted-foreground mr-2 h-4 w-4" />
                   <span>{t("status")}</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
@@ -526,7 +524,7 @@ export function StudentHeader() {
                       const isConfirm = await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
-                        icon: <Trash2 className="h-4 w-4 text-destructive" />,
+                        icon: <Trash2 className="text-destructive h-4 w-4" />,
                         alertDialogTitle: {
                           className: "flex items-center gap-2",
                         },
@@ -594,8 +592,8 @@ export function StudentHeader() {
           )}
 
           {student.phoneNumber && (
-            <div className="flex flex-row items-center gap-2 rounded dark:bg-secondary">
-              <Phone className="h-4 w-4 text-foreground" />
+            <div className="dark:bg-secondary flex flex-row items-center gap-2 rounded">
+              <Phone className="text-foreground h-4 w-4" />
               <span> {student.phoneNumber}</span>
             </div>
           )}

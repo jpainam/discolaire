@@ -1,14 +1,14 @@
 import type { Table } from "@tanstack/react-table";
 import * as React from "react";
+import { RiDeleteBinLine } from "@remixicon/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { RiDeleteBinLine } from "@remixicon/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 
 type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
@@ -65,7 +65,7 @@ export function SchoolDataTableAction({
             aria-hidden="true"
           />
           {t("delete")}
-          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+          <span className="border-border bg-background text-muted-foreground/70 ms-1 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
             {table.getSelectedRowModel().rows.length}
           </span>
         </Button>

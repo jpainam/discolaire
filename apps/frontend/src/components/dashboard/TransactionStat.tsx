@@ -6,7 +6,6 @@ import {
 } from "react-icons/pi";
 
 import { getServerTranslations } from "~/i18n/server";
-
 import { cn } from "~/lib/utils";
 import { TransactionStatCard } from "./TransactionStatCard";
 

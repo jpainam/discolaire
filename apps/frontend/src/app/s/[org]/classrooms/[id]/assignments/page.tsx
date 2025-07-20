@@ -12,7 +12,7 @@ export default async function Page(props: AssignmentPageProps) {
   const params = await props.params;
   const assignemts = await caller.classroom.assignments(params.id);
   return (
-    <div className="flex gap-2 flex-col">
+    <div className="flex flex-col gap-2">
       <AssignmentHeader />
       <div className="px-4">
         <AssignmentDataTable assignments={assignemts} />

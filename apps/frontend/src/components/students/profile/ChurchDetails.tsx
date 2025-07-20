@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
 import { ChurchDetailsForm } from "./ChurchDetailsForm";
 
 export function ChurchDetails() {

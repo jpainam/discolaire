@@ -1,11 +1,13 @@
 "use client";
 
-import { cn } from "@repo/ui/lib/utils";
 import type { PropsWithChildren } from "react";
-import React, { useCallback } from "react";
 import type { FileWithPath } from "react-dropzone";
+import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
+
+import { cn } from "@repo/ui/lib/utils";
+
 import { ImageCropper } from "~/components/image-cropper";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
@@ -92,7 +94,7 @@ export function ChangeAvatarButton(
       {selectedFile ? (
         <ImageCropper
           className={
-            "size-36 cursor-pointer ring-offset-2 ring-2 ring-slate-200"
+            "size-36 cursor-pointer ring-2 ring-slate-200 ring-offset-2"
           }
           dialogOpen={isDialogOpen}
           setDialogOpen={setDialogOpen}

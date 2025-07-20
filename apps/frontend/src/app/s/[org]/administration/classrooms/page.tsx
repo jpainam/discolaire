@@ -1,3 +1,12 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import {
+  BoxIcon,
+  HouseIcon,
+  LayoutPanelTopIcon,
+  PanelsTopLeftIcon,
+} from "lucide-react";
+
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
@@ -6,14 +15,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import {
-  BoxIcon,
-  HouseIcon,
-  LayoutPanelTopIcon,
-  PanelsTopLeftIcon,
-} from "lucide-react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
 import { ClassroomLevelChart } from "~/components/administration/classrooms/ClassroomLevelChart";
 import { ClassroomLevelEffectif } from "~/components/administration/classrooms/ClassroomLevelEffectif";
 import { ClassroomLevelHeader } from "~/components/administration/classrooms/ClassroomLevelHeader";
@@ -33,7 +35,7 @@ export default async function Page() {
   return (
     <Tabs defaultValue="tab-1" className="pt-2">
       <ScrollArea>
-        <TabsList className="bg-background w-full justify-start h-auto -space-x-px p-0 shadow-xs rtl:space-x-reverse">
+        <TabsList className="bg-background h-auto w-full justify-start -space-x-px p-0 shadow-xs rtl:space-x-reverse">
           <TabsTrigger
             value="tab-1"
             className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
@@ -87,9 +89,9 @@ export default async function Page() {
             <Suspense
               key={"classroom-table"}
               fallback={
-                <div className="grid grid-cols-4 p-4 gap-4">
+                <div className="grid grid-cols-4 gap-4 p-4">
                   {Array.from({ length: 16 }).map((_, i) => (
-                    <Skeleton key={i} className="h-8 " />
+                    <Skeleton key={i} className="h-8" />
                   ))}
                 </div>
               }

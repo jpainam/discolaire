@@ -1,3 +1,6 @@
+import { memo } from "react";
+import Link from "next/link";
+
 import type { AiChat } from "@repo/db";
 import { VisibilityType } from "@repo/db";
 import {
@@ -15,8 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
-import Link from "next/link";
-import { memo } from "react";
+
 import { useChatVisibility } from "~/hooks/use-chat-visibility";
 import {
   CheckCircleFillIcon,
@@ -76,7 +78,7 @@ const PureChatItem = ({
                     await setVisibilityType(VisibilityType.PRIVATE);
                   }}
                 >
-                  <div className="flex flex-row gap-2 items-center">
+                  <div className="flex flex-row items-center gap-2">
                     <LockIcon size={12} />
                     <span>Private</span>
                   </div>
@@ -90,7 +92,7 @@ const PureChatItem = ({
                     await setVisibilityType(VisibilityType.PUBLIC);
                   }}
                 >
-                  <div className="flex flex-row gap-2 items-center">
+                  <div className="flex flex-row items-center gap-2">
                     <GlobeIcon />
                     <span>Public</span>
                   </div>
@@ -103,7 +105,7 @@ const PureChatItem = ({
           </DropdownMenuSub>
 
           <DropdownMenuItem
-            className="cursor-pointer text-destructive focus:bg-destructive/15 focus:text-destructive dark:text-red-500"
+            className="text-destructive focus:bg-destructive/15 focus:text-destructive cursor-pointer dark:text-red-500"
             onSelect={() => onDelete(chat.id)}
           >
             <TrashIcon />

@@ -1,9 +1,11 @@
 "use client";
 
+import { Printer } from "lucide-react";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
-import { Printer } from "lucide-react";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
@@ -28,7 +30,7 @@ export function TrimestreHeader({
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
   return (
     <div className="grid flex-row items-center gap-4 px-4 md:flex">
-      <Label className="uppercase font-bold">{title}</Label>
+      <Label className="font-bold uppercase">{title}</Label>
       <FlatBadge variant={"green"}>
         {t("Moy.Max")} :{Math.max(...averages).toFixed(2)}
       </FlatBadge>

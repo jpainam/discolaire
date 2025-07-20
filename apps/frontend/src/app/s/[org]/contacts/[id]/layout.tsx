@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
+import { redirect } from "next/navigation";
+
 import { getSession } from "~/auth/server";
 import { NoPermission } from "~/components/no-permission";
 import { caller } from "~/trpc/server";

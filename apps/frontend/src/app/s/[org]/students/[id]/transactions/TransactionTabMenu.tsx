@@ -1,14 +1,13 @@
 "use client";
 
-import { CircleGauge, PlusIcon, Recycle } from "lucide-react";
 import { useParams } from "next/navigation";
-
-import { useLocale } from "~/i18n";
+import { CircleGauge, PlusIcon, Recycle } from "lucide-react";
 
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function TransactionTabMenu() {
@@ -39,7 +38,7 @@ export function TransactionTabMenu() {
     });
   }
   return (
-    <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
+    <div className="bg-muted text-muted-foreground flex max-w-fit items-center rounded-full">
       {menuTabs.map((link, _index) => {
         return (
           <TabMenu

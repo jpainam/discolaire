@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import {
   Bar,
   BarChart,
@@ -9,6 +10,7 @@ import {
   YAxis,
 } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
@@ -16,16 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const chartConfig = {

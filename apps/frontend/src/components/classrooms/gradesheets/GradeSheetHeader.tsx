@@ -1,7 +1,7 @@
 "use client";
 
-import { MoreVertical, PlusIcon, SettingsIcon } from "lucide-react";
 import { useParams } from "next/navigation";
+import { MoreVertical, PlusIcon, SettingsIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -21,6 +20,7 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function GradeSheetHeader() {
@@ -36,7 +36,7 @@ export function GradeSheetHeader() {
   );
 
   return (
-    <div className="grid flex-row items-center gap-4 bg-muted/40 px-4 py-1 md:flex md:border-b">
+    <div className="bg-muted/40 grid flex-row items-center gap-4 px-4 py-1 md:flex md:border-b">
       <Label className="hidden md:flex">{t("term")}</Label>
       <TermSelector
         showAllOption={true}
@@ -46,7 +46,7 @@ export function GradeSheetHeader() {
         }}
         className="w-[300px]"
       />
-      <Label className="hidden  md:flex">{t("subject")}</Label>
+      <Label className="hidden md:flex">{t("subject")}</Label>
       <SubjectSelector
         className="md:w-[300px]"
         defaultValue={subject ?? undefined}

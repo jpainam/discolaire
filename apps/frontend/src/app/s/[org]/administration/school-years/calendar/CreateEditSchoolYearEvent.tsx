@@ -1,5 +1,15 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,19 +28,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { DatePicker } from "~/components/DatePicker";
 import { SubmitButton } from "~/components/SubmitButton";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const schema = z.object({
   name: z.string().min(1),
   typeId: z.string().min(1),
@@ -166,7 +170,7 @@ export function CreateEditSchoolYearEvent({
             )}
           />
         </div>
-        <div className="flex flex-row justify-end items-center gap-2">
+        <div className="flex flex-row items-center justify-end gap-2">
           <Button
             size={"sm"}
             variant={"secondary"}

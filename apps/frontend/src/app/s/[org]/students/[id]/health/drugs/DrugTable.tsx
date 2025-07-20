@@ -1,4 +1,14 @@
 "use client";
+
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Table,
@@ -8,14 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { Pencil, Trash2 } from "lucide-react";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -73,7 +76,7 @@ export function DrugTable() {
                   <TableCell>{drug.description}</TableCell>
                   <TableCell>{drug.dosage}</TableCell>
                   <TableCell className="text-right">
-                    <div className="flex flex-row gap-4 items-center justify-end">
+                    <div className="flex flex-row items-center justify-end gap-4">
                       <Button
                         onClick={() => {
                           openModal({

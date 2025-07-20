@@ -1,14 +1,17 @@
+import i18next from "i18next";
+import { CalendarDays } from "lucide-react";
+
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import i18next from "i18next";
-import { CalendarDays } from "lucide-react";
+
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import FlatBadge from "../FlatBadge";
+
 export async function StudentLatestGrade({
   studentId,
   name,
@@ -32,17 +35,17 @@ export async function StudentLatestGrade({
           return (
             <div
               key={index}
-              className="flex border-b justify-between py-2 items-center"
+              className="flex items-center justify-between border-b py-2"
               // style={{
               //   backgroundColor: "red",
               // }}
             >
               <div className="flex flex-col items-start gap-0">
-                <span className="font-semibold text-sm ">
+                <span className="text-sm font-semibold">
                   {grade.gradeSheet.subject.course.name}
                 </span>
-                <div className="flex items-center text-muted-foreground text-xs mt-1">
-                  <CalendarDays className="h-3.5 w-3.5 mr-1.5" />
+                <div className="text-muted-foreground mt-1 flex items-center text-xs">
+                  <CalendarDays className="mr-1.5 h-3.5 w-3.5" />
                   <span>
                     le{" "}
                     {grade.gradeSheet.createdAt.toLocaleDateString(
@@ -57,7 +60,7 @@ export async function StudentLatestGrade({
                 </div>
               </div>
               <FlatBadge
-                className="w-[50px] items-center flex justify-center"
+                className="flex w-[50px] items-center justify-center"
                 variant={
                   grade.grade < 8
                     ? "red"

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ArrowLeft,
   Calendar,
@@ -6,7 +7,6 @@ import {
   Printer,
   Share2,
 } from "lucide-react";
-import Link from "next/link";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -21,8 +21,8 @@ import { Separator } from "@repo/ui/components/separator";
 
 export default function Page() {
   return (
-    <div className="container mx-auto py-6 max-w-5xl">
-      <div className="flex items-center justify-between mb-6">
+    <div className="container mx-auto max-w-5xl py-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon">
             <Link href="/health-records">
@@ -33,15 +33,15 @@ export default function Page() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
-            <Printer className="h-4 w-4 mr-2" />
+            <Printer className="mr-2 h-4 w-4" />
             Print
           </Button>
           <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
+            <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
           <Button variant="outline" size="sm">
-            <Share2 className="h-4 w-4 mr-2" />
+            <Share2 className="mr-2 h-4 w-4" />
             Share
           </Button>
         </div>
@@ -50,7 +50,7 @@ export default function Page() {
       {/* Patient Information Card */}
       <Card className="mb-6">
         <CardHeader className="pb-3">
-          <div className="flex justify-between items-start">
+          <div className="flex items-start justify-between">
             <div>
               <CardTitle className="text-xl">Balistreri Ray</CardTitle>
               <CardDescription>
@@ -61,24 +61,24 @@ export default function Page() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                 Date of Visit
               </h3>
               <p className="flex items-center">
-                <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                <Calendar className="text-muted-foreground mr-2 h-4 w-4" />
                 April 21, 2025
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                 Provider
               </h3>
               <p>Dr. Sarah Johnson</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                 Department
               </h3>
               <p>Internal Medicine</p>
@@ -109,55 +109,55 @@ export default function Page() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="border rounded-lg p-4">
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="rounded-lg border p-4">
+                <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                   Blood Pressure
                 </h3>
                 <p className="text-2xl font-bold">128/82 mmHg</p>
-                <p className="text-sm text-muted-foreground">Normal range</p>
+                <p className="text-muted-foreground text-sm">Normal range</p>
               </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <div className="rounded-lg border p-4">
+                <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                   Heart Rate
                 </h3>
                 <p className="text-2xl font-bold">76 bpm</p>
-                <p className="text-sm text-muted-foreground">Normal range</p>
+                <p className="text-muted-foreground text-sm">Normal range</p>
               </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <div className="rounded-lg border p-4">
+                <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                   Temperature
                 </h3>
                 <p className="text-2xl font-bold">98.6°F (37°C)</p>
-                <p className="text-sm text-muted-foreground">Normal</p>
+                <p className="text-muted-foreground text-sm">Normal</p>
               </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <div className="rounded-lg border p-4">
+                <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                   Respiratory Rate
                 </h3>
                 <p className="text-2xl font-bold">16 breaths/min</p>
-                <p className="text-sm text-muted-foreground">Normal range</p>
+                <p className="text-muted-foreground text-sm">Normal range</p>
               </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <div className="rounded-lg border p-4">
+                <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                   Oxygen Saturation
                 </h3>
                 <p className="text-2xl font-bold">98%</p>
-                <p className="text-sm text-muted-foreground">Normal range</p>
+                <p className="text-muted-foreground text-sm">Normal range</p>
               </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+              <div className="rounded-lg border p-4">
+                <h3 className="text-muted-foreground mb-1 text-sm font-medium">
                   Weight
                 </h3>
                 <p className="text-2xl font-bold">172 lbs (78 kg)</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   BMI: 24.2 (Normal)
                 </p>
               </div>
             </div>
 
             <div className="mt-4">
-              <h3 className="text-lg font-medium mb-2">Additional Notes</h3>
+              <h3 className="mb-2 text-lg font-medium">Additional Notes</h3>
               <p>
                 Patient appears well-hydrated. No signs of acute distress. Vital
                 signs are within normal limits.
@@ -175,7 +175,7 @@ export default function Page() {
         <CardContent>
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-medium mb-2">General Appearance</h3>
+              <h3 className="mb-2 text-lg font-medium">General Appearance</h3>
               <p>
                 Patient is alert and oriented to person, place, and time.
                 Well-groomed and in no acute distress.
@@ -185,7 +185,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">HEENT</h3>
+              <h3 className="mb-2 text-lg font-medium">HEENT</h3>
               <p>Head: Normocephalic, atraumatic.</p>
               <p>
                 Eyes: Pupils equal, round, and reactive to light. Extraocular
@@ -199,7 +199,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Cardiovascular</h3>
+              <h3 className="mb-2 text-lg font-medium">Cardiovascular</h3>
               <p>
                 Regular rate and rhythm. No murmurs, gallops, or rubs. Normal S1
                 and S2.
@@ -209,7 +209,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Respiratory</h3>
+              <h3 className="mb-2 text-lg font-medium">Respiratory</h3>
               <p>
                 Clear to auscultation bilaterally. No wheezes, rales, or
                 rhonchi.
@@ -219,7 +219,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Neurological</h3>
+              <h3 className="mb-2 text-lg font-medium">Neurological</h3>
               <p>
                 Cranial nerves II-XII intact. No focal deficits. Normal gait and
                 station. Negative Romberg. DTRs 2+ and symmetric.
@@ -241,7 +241,7 @@ export default function Page() {
         <CardContent>
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-medium mb-2">Primary Diagnosis</h3>
+              <h3 className="mb-2 text-lg font-medium">Primary Diagnosis</h3>
               <div className="flex items-center">
                 <Badge className="mr-2">Primary</Badge>
                 <p>Tension headache (ICD-10: G44.209)</p>
@@ -251,7 +251,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Secondary Conditions</h3>
+              <h3 className="mb-2 text-lg font-medium">Secondary Conditions</h3>
               <div className="space-y-2">
                 <div className="flex items-center">
                   <Badge variant="outline" className="mr-2">
@@ -271,7 +271,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Clinical Impression</h3>
+              <h3 className="mb-2 text-lg font-medium">Clinical Impression</h3>
               <p>
                 Patient's symptoms are consistent with tension headache, likely
                 exacerbated by work-related stress and mild dehydration. No
@@ -283,10 +283,10 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">
+              <h3 className="mb-2 text-lg font-medium">
                 Differential Diagnosis
               </h3>
-              <ul className="list-disc pl-5 space-y-1">
+              <ul className="list-disc space-y-1 pl-5">
                 <li>Migraine without aura</li>
                 <li>Cervicogenic headache</li>
                 <li>Sinusitis</li>
@@ -304,9 +304,9 @@ export default function Page() {
         <CardContent>
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-medium mb-2">Medications</h3>
+              <h3 className="mb-2 text-lg font-medium">Medications</h3>
               <div className="space-y-2">
-                <div className="p-3 border rounded-md">
+                <div className="rounded-md border p-3">
                   <div className="flex justify-between">
                     <h4 className="font-medium">Acetaminophen</h4>
                     <Badge>New</Badge>
@@ -316,12 +316,12 @@ export default function Page() {
                     Take 2 tablets every 6 hours as needed for headache, not to
                     exceed 4000mg in 24 hours
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Quantity: 30 tablets
                   </p>
                 </div>
 
-                <div className="p-3 border rounded-md">
+                <div className="rounded-md border p-3">
                   <div className="flex justify-between">
                     <h4 className="font-medium">Ibuprofen</h4>
                     <Badge>New</Badge>
@@ -331,7 +331,7 @@ export default function Page() {
                     Take 2 tablets every 8 hours with food as needed for
                     headache
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Quantity: 30 tablets
                   </p>
                 </div>
@@ -341,8 +341,8 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Recommendations</h3>
-              <ul className="list-disc pl-5 space-y-1">
+              <h3 className="mb-2 text-lg font-medium">Recommendations</h3>
+              <ul className="list-disc space-y-1 pl-5">
                 <li>Increase water intake to at least 2 liters per day</li>
                 <li>
                   Practice stress reduction techniques such as deep breathing or
@@ -359,7 +359,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Follow-up</h3>
+              <h3 className="mb-2 text-lg font-medium">Follow-up</h3>
               <p>
                 Return in 2 weeks if symptoms persist or worsen. Immediate
                 follow-up if new neurological symptoms develop.
@@ -369,7 +369,7 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Referrals</h3>
+              <h3 className="mb-2 text-lg font-medium">Referrals</h3>
               <p>
                 No referrals at this time. Will consider referral to neurology
                 if symptoms persist beyond 4 weeks or change in character.
@@ -379,13 +379,13 @@ export default function Page() {
             <Separator />
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Tests Ordered</h3>
-              <div className="p-3 border rounded-md">
+              <h3 className="mb-2 text-lg font-medium">Tests Ordered</h3>
+              <div className="rounded-md border p-3">
                 <h4 className="font-medium">Basic Blood Panel</h4>
                 <p className="text-sm">
                   Complete Blood Count, Basic Metabolic Panel
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Status: Completed - Results attached
                 </p>
               </div>
@@ -401,11 +401,11 @@ export default function Page() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <div className="flex items-center p-2 border rounded-md">
-              <FileText className="h-5 w-5 mr-2 text-muted-foreground" />
+            <div className="flex items-center rounded-md border p-2">
+              <FileText className="text-muted-foreground mr-2 h-5 w-5" />
               <div className="flex-1">
                 <p className="font-medium">Blood Test Results.pdf</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Uploaded on Apr 21, 2025
                 </p>
               </div>
@@ -413,11 +413,11 @@ export default function Page() {
                 <Download className="h-4 w-4" />
               </Button>
             </div>
-            <div className="flex items-center p-2 border rounded-md">
-              <FileText className="h-5 w-5 mr-2 text-muted-foreground" />
+            <div className="flex items-center rounded-md border p-2">
+              <FileText className="text-muted-foreground mr-2 h-5 w-5" />
               <div className="flex-1">
                 <p className="font-medium">Medication Prescription.pdf</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Uploaded on Apr 21, 2025
                 </p>
               </div>

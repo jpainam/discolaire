@@ -1,5 +1,7 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ImageMinus,
   ImagePlusIcon,
@@ -11,7 +13,6 @@ import {
   Trash2,
   UserPlus2,
 } from "lucide-react";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -23,20 +24,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
+import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
+import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
-import { CreateEditUser } from "~/components/users/CreateEditUser";
-import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateEditStaff } from "../CreateEditStaff";

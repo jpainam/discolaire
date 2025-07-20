@@ -19,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@repo/ui/components/alert-dialog";
+
 import { useLocale } from "~/i18n";
 
 export interface ConfirmOptions {
@@ -118,7 +119,7 @@ const ConfirmDialogContent: React.FC<{
             )}
             <AlertDialogAction
               onClick={onConfirm}
-              className="bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+              className="bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-white shadow-xs"
               {...confirmButton}
             >
               {confirmText && t(confirmText)}

@@ -1,13 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
+
 import { useLocale } from "~/i18n";
-
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
-
 import { SubscriptionDataTableAction } from "./SubscriptionDataTableAction";
 import { getColumns } from "./SubscriptionDataTableColumn";
 

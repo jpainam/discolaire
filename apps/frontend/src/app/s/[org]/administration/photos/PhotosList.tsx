@@ -1,4 +1,9 @@
 "use client";
+
+import { useEffect } from "react";
+import Link from "next/link";
+import { useSetAtom } from "jotai";
+
 import {
   Card,
   CardDescription,
@@ -6,11 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import FolderIcon from "~/components/icons/folder-solid";
 
-import { useSetAtom } from "jotai";
-import Link from "next/link";
-import { useEffect } from "react";
+import FolderIcon from "~/components/icons/folder-solid";
 import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 
@@ -30,7 +32,7 @@ export function PhotosList() {
     ]);
   }, [setBreadcrumbs, t]);
   return (
-    <div className="grid lg:grid-cols-3 gap-4">
+    <div className="grid gap-4 lg:grid-cols-3">
       <PhotoListItem
         href={`/administration/photos/students`}
         title={t("Student photos")}
@@ -69,7 +71,7 @@ function PhotoListItem({
   const { t } = useLocale();
   return (
     <Link href={href}>
-      <Card className="gap-2 p-2 ">
+      <Card className="gap-2 p-2">
         <CardHeader className="p-2">
           <CardTitle>
             <FolderIcon className="h-7 w-7" />
@@ -79,8 +81,8 @@ function PhotoListItem({
         {/* <CardContent></CardContent> */}
         <CardFooter className="px-2">
           <ul className="flex list-inside list-disc gap-3.5">
-            <li className="list-none text-sm ">{size}</li>
-            <li className="text-sm ">
+            <li className="list-none text-sm">{size}</li>
+            <li className="text-sm">
               {totalFiles} {t("files")}
             </li>
           </ul>

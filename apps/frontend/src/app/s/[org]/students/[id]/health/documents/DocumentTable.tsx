@@ -1,4 +1,7 @@
 "use client";
+
+import { DownloadCloud, MoreVertical, Trash2 } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -15,8 +18,9 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { DownloadCloud, MoreVertical, Trash2 } from "lucide-react";
+
 import { useLocale } from "~/i18n";
+
 export function HealthDocumentTable() {
   const { t } = useLocale();
   return (

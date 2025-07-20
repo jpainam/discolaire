@@ -1,4 +1,16 @@
 "use client";
+
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Pie,
+  PieChart,
+  XAxis,
+  YAxis,
+} from "recharts";
+
 import type { RouterOutputs } from "@repo/api";
 import {
   Card,
@@ -11,17 +23,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Pie,
-  PieChart,
-  XAxis,
-  YAxis,
-} from "recharts";
+
 import { useLocale } from "~/i18n";
+
 export function ClassroomGradeChart({
   grades,
 }: {
@@ -157,13 +161,13 @@ export function ClassroomGradeChart({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <div className="h-3 w-3 rounded-full bg-green-500"></div>
                 <span className="text-sm">Excellent {">= 18"}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-20 bg-gray-200 rounded-full h-2">
+                <div className="h-2 w-20 rounded-full bg-gray-200">
                   <div
-                    className="bg-green-500 h-2 rounded-full"
+                    className="h-2 rounded-full bg-green-500"
                     style={{ width: `${(countp18 / total) * 100}%` }}
                   ></div>
                 </div>
@@ -172,13 +176,13 @@ export function ClassroomGradeChart({
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                <div className="h-3 w-3 rounded-full bg-blue-500"></div>
                 <span className="text-sm">Bien {">= 14"}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-20 bg-gray-200 rounded-full h-2">
+                <div className="h-2 w-20 rounded-full bg-gray-200">
                   <div
-                    className="bg-blue-500 h-2 rounded-full"
+                    className="h-2 rounded-full bg-blue-500"
                     style={{ width: `${(countp14 / total) * 100}%` }}
                   ></div>
                 </div>
@@ -187,13 +191,13 @@ export function ClassroomGradeChart({
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                <div className="h-3 w-3 rounded-full bg-orange-500"></div>
                 <span className="text-sm">Assez bien {">= 10"}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-20 bg-gray-200 rounded-full h-2">
+                <div className="h-2 w-20 rounded-full bg-gray-200">
                   <div
-                    className="bg-orange-500 h-2 rounded-full"
+                    className="h-2 rounded-full bg-orange-500"
                     style={{ width: `${(countp10 / total) * 100}%` }}
                   ></div>
                 </div>
@@ -202,13 +206,13 @@ export function ClassroomGradeChart({
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
                 <span className="text-sm">Passable {">= 8"}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-20 bg-gray-200 rounded-full h-2">
+                <div className="h-2 w-20 rounded-full bg-gray-200">
                   <div
-                    className="bg-yellow-500 h-2 rounded-full"
+                    className="h-2 rounded-full bg-yellow-500"
                     style={{ width: `${(countp05 / total) * 100}%` }}
                   ></div>
                 </div>
@@ -217,13 +221,13 @@ export function ClassroomGradeChart({
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="h-3 w-3 rounded-full bg-red-500"></div>
                 <span className="text-sm">Nul {"< 8"}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-20 bg-gray-200 rounded-full h-2">
+                <div className="h-2 w-20 rounded-full bg-gray-200">
                   <div
-                    className="bg-red-500 h-2 rounded-full"
+                    className="h-2 rounded-full bg-red-500"
                     style={{ width: `${(countp00 / total) * 100}%` }}
                   ></div>
                 </div>

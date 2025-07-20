@@ -6,10 +6,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import FlatBadge from "~/components/FlatBadge";
-import { getServerTranslations } from "~/i18n/server";
 
+import FlatBadge from "~/components/FlatBadge";
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AttachUserButton } from "./AttachUserButton";
@@ -26,7 +26,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   return (
     <div className="flex flex-col text-sm">
       <LoginInfoHeader />
-      <div className="flex flex-col gap-2 px-4 mb-4">
+      <div className="mb-4 flex flex-col gap-2 px-4">
         <Separator />
         <div className="font-bold">{t("loginInformation")}</div>
         <Separator />

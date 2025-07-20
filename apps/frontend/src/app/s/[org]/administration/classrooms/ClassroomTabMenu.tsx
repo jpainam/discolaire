@@ -2,11 +2,10 @@
 
 import { CircleGauge, LayoutPanelTop, Recycle } from "lucide-react";
 
-import { useLocale } from "~/i18n";
-
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 
 export function ClassroomTabMenu() {
   const { t } = useLocale();
@@ -32,7 +31,7 @@ export function ClassroomTabMenu() {
   ];
 
   return (
-    <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
+    <div className="bg-muted text-muted-foreground flex max-w-fit items-center rounded-full">
       {menuTabs.map((link, _index) => {
         return (
           <TabMenu

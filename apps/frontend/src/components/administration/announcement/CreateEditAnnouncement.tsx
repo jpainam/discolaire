@@ -1,7 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,15 +20,11 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Separator } from "@repo/ui/components/separator";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 
 import { DatePicker } from "~/components/DatePicker";
 import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { SelectField } from "../../shared/forms/SelectField";
 
@@ -130,7 +131,7 @@ export function CreateEditAnnouncement({
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="col-span-full gap-y-1 space-y-0">
+                <FormItem className="col-span-full space-y-0 gap-y-1">
                   <FormLabel>{t("title")}</FormLabel>
                   <Input {...field} />
                 </FormItem>
@@ -153,7 +154,7 @@ export function CreateEditAnnouncement({
               control={form.control}
               name="link"
               render={({ field }) => (
-                <FormItem className="col-span-full gap-y-1 space-y-0">
+                <FormItem className="col-span-full space-y-0 gap-y-1">
                   <FormLabel>URL</FormLabel>
                   <Input {...field} />
                 </FormItem>

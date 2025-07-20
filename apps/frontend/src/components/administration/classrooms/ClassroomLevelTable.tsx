@@ -3,19 +3,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, Reorder } from "framer-motion";
 import { useAtom } from "jotai";
 import { Pencil } from "lucide-react";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 import { selectedClassroomLevelAtom } from "./_atom";
 import { CreateEditLevel } from "./CreateEditLevel";
@@ -84,7 +84,7 @@ export function ClassroomLevelTable() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="my-1 flex w-full flex-row items-center gap-4 rounded-md border bg-muted/50 pl-4 text-sm"
+            className="bg-muted/50 my-1 flex w-full flex-row items-center gap-4 rounded-md border pl-4 text-sm"
             key={item.id}
             value={item}
           >

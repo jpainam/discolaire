@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import { Separator } from "@repo/ui/components/separator";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function HealthHeader() {
@@ -48,7 +48,7 @@ export function HealthHeader() {
                 className={cn(
                   "flex items-center py-2 text-sm",
                   isActive
-                    ? "border-b border-b-primary"
+                    ? "border-b-primary border-b"
                     : "text-muted-foreground",
                 )}
                 href={menu.href + "?" + createQueryString({})}

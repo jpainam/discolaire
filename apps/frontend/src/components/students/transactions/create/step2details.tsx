@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { sumBy } from "lodash";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
-import { useState } from "react";
 
 import {
   Card,
@@ -11,12 +11,11 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { Checkbox } from "@repo/ui/components/checkbox";
-
+import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
-
-import { Label } from "@repo/ui/components/label";
 import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
@@ -132,7 +131,7 @@ export default function Step2Details() {
             {studentContacts.map((item) => (
               <div
                 key={`form-item-contact-${item.studentId}-${item.contactId}`}
-                className="flex flex-row items-center space-x-2 space-y-0"
+                className="flex flex-row items-center space-y-0 space-x-2"
               >
                 <Checkbox
                   id={`contact-${item.contactId}`}

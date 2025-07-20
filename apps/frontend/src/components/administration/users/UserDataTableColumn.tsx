@@ -1,7 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -15,14 +16,13 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
@@ -93,7 +93,7 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
       cell: ({ row }) => {
         const user = row.original;
 
-        return <div className="flex text-muted-foreground">{user.name}</div>;
+        return <div className="text-muted-foreground flex">{user.name}</div>;
       },
     },
     {
@@ -102,7 +102,7 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
         <DataTableColumnHeader column={column} title="E-mail" />
       ),
       cell: ({ row }) => (
-        <div className="flex text-muted-foreground">
+        <div className="text-muted-foreground flex">
           {row.getValue("email")}
         </div>
       ),
@@ -115,7 +115,7 @@ export function getUserColumns({ t }: { t: TFunction<string, unknown> }) {
       cell: ({ row }) => {
         const user = row.original;
         return (
-          <div className="flex text-muted-foreground">{t(user.profile)}</div>
+          <div className="text-muted-foreground flex">{t(user.profile)}</div>
         );
       },
     },

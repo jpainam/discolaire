@@ -1,7 +1,7 @@
 "use client";
 
-import { MoreVertical, PlusIcon } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
+import { MoreVertical, PlusIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
 
 import { DatePicker } from "~/components/DatePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -22,6 +21,7 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 
@@ -41,9 +41,9 @@ export function AssignmentHeader() {
   );
   return (
     <div className="flex w-full flex-col">
-      <div className="grid md:flex flex-row items-center gap-2 md:gap-6 border-b bg-muted px-4 py-1 text-muted-foreground">
+      <div className="bg-muted text-muted-foreground grid flex-row items-center gap-2 border-b px-4 py-1 md:flex md:gap-6">
         <div className="flex flex-row items-center gap-2">
-          {Icon && <Icon className="h-4 w-4 hidden md:block" />}
+          {Icon && <Icon className="hidden h-4 w-4 md:block" />}
           <Label className="hidden md:block">{t("assignments")}</Label>
         </div>
         <TermSelector

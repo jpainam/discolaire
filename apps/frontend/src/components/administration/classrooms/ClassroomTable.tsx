@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EyeIcon, Loader, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,15 +21,14 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
+import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
-import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 
 export default function ClassroomTable() {
@@ -133,7 +133,7 @@ export default function ClassroomTable() {
                                 title: t("delete"),
                                 description: t("delete_confirmation"),
                                 icon: (
-                                  <Trash2 className="h-8 w-8 text-destructive" />
+                                  <Trash2 className="text-destructive h-8 w-8" />
                                 ),
                                 alertDialogTitle: {
                                   className: "flex items-center gap-2",

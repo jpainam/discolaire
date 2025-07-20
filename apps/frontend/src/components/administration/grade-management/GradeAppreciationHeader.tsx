@@ -4,9 +4,9 @@ import { Plus } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
 import { CreateEditAppreciation } from "./CreateEditAppreciation";
 
 export function GradeAppreciationHeader() {
@@ -43,7 +43,7 @@ function AppreciationExample() {
   return (
     <p className="flex flex-row gap-2">
       <span>e.g.,</span>
-      <span className="ml-10 flex flex-col gap-0 text-muted-foreground">
+      <span className="text-muted-foreground ml-10 flex flex-col gap-0">
         <span>[12, {t("fair")}]</span>
         <span>[13, {t("pretty_good")}]</span>
         <span>[15, {t("good")}]</span>

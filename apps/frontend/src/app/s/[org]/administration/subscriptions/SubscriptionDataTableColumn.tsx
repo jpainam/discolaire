@@ -1,10 +1,11 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Pencil, Receipt, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Pencil, Receipt, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -18,14 +19,13 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSubscription } from "./CreateEditSubscription";
 
@@ -67,7 +67,7 @@ export function getColumns({
         const subscription = row.original;
         return (
           <Link
-            className="hover:text-blue-600 line-clamp-1 hover:underline"
+            className="line-clamp-1 hover:text-blue-600 hover:underline"
             href={`/users/${subscription.user.id}/subscriptions`}
           >
             {subscription.user.name}
@@ -179,7 +179,7 @@ function ActionCells({
           <Button
             aria-label="Open menu"
             variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex size-8 p-0"
           >
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>

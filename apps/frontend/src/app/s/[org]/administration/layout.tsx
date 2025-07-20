@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
-
 import { redirect } from "next/navigation";
+
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { UpdateAdminBreadcrumb } from "./UpdateAdminBreadcrumb";

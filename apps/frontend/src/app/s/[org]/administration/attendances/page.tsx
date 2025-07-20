@@ -11,7 +11,7 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   console.log(searchParams.category);
   return (
-    <div className="grid md:flex gap-4 flex-col p-4">
+    <div className="grid flex-col gap-4 p-4 md:flex">
       <AttendanceStats />
       <AttendanceChart />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">

@@ -1,7 +1,13 @@
 "use client";
 
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -20,21 +26,15 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
+import { authClient } from "~/auth/client";
 import { EmptyState } from "~/components/EmptyState";
+import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { authClient } from "~/auth/client";
-import { routes } from "~/configs/routes";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateEditSubject } from "./CreateEditSubject";
@@ -170,7 +170,7 @@ export function SubjectTable() {
                                   title: t("delete"),
                                   description: t("delete_confirmation"),
                                   icon: (
-                                    <Trash2 className="h-4 w-4 text-destructive" />
+                                    <Trash2 className="text-destructive h-4 w-4" />
                                   ),
                                   alertDialogTitle: {
                                     className: "flex items-center gap-2",

@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import i18next from "i18next";
 import { useAtom } from "jotai";
 import { AxeIcon, LinkIcon, SquarePlus } from "lucide-react";
 import { useQueryState } from "nuqs";
@@ -25,13 +27,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
+import { attachPolicyAtom } from "~/atoms/permission-atom";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
-import i18next from "i18next";
-import { attachPolicyAtom } from "~/atoms/permission-atom";
 import { useTRPC } from "~/trpc/react";
 import { CreateUserPolicy } from "./CreateUserPolicy";
 

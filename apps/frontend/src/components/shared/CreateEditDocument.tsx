@@ -1,10 +1,16 @@
 "use client";
 
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FileIcon, Trash2, UploadIcon, XIcon } from "lucide-react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   Form,
   FormControl,
@@ -14,19 +20,13 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Textarea } from "@repo/ui/components/textarea";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent } from "@repo/ui/components/card";
 import { Label } from "@repo/ui/components/label";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Textarea } from "@repo/ui/components/textarea";
 import { cn } from "@repo/ui/lib/utils";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { useForm } from "react-hook-form";
+
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { formatBytes } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -142,7 +142,7 @@ export function CreateEditDocument({
   const filesList = files.map((file) => (
     <li key={file.name}>
       <Card className="relative p-2">
-        <div className="absolute right-2 top-1/2 -translate-y-1/2">
+        <div className="absolute top-1/2 right-2 -translate-y-1/2">
           <Button
             type="button"
             variant="ghost"
@@ -154,16 +154,16 @@ export function CreateEditDocument({
               )
             }
           >
-            <Trash2 className="h-5 w-5 text-destructive" aria-hidden={true} />
+            <Trash2 className="text-destructive h-5 w-5" aria-hidden={true} />
           </Button>
         </div>
         <CardContent className="flex items-center space-x-2 p-0">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-muted">
-            <FileIcon className="h-5 w-5 text-foreground" aria-hidden={true} />
+          <span className="bg-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-md">
+            <FileIcon className="text-foreground h-5 w-5" aria-hidden={true} />
           </span>
           <div>
-            <p className="text-sm text-foreground">{file.name}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-foreground text-sm">{file.name}</p>
+            <p className="text-muted-foreground text-xs">
               {formatBytes(file.size)}
             </p>
           </div>
@@ -207,7 +207,7 @@ export function CreateEditDocument({
         />
 
         {!documentId && (
-          <div className="col-span-full gap-2 flex flex-col">
+          <div className="col-span-full flex flex-col gap-2">
             <Label htmlFor="file-upload-2" className="font-medium">
               {t("documents")}
             </Label>
@@ -215,7 +215,7 @@ export function CreateEditDocument({
               {...getRootProps()}
               className={cn(
                 isDragActive
-                  ? "border-primary bg-primary/10 ring-2 ring-primary/20"
+                  ? "border-primary bg-primary/10 ring-primary/20 ring-2"
                   : "border-border",
                 "flex justify-center rounded-md border border-dashed py-4 transition-colors duration-200",
               )}
@@ -223,19 +223,19 @@ export function CreateEditDocument({
               <input {...getInputProps()} />
               {isDragActive ? (
                 <div className="flex flex-col items-center justify-center gap-2 sm:px-5">
-                  <UploadIcon className="size-5 text-muted-foreground" />
-                  <p className="font-medium text-sm text-muted-foreground">
+                  <UploadIcon className="text-muted-foreground size-5" />
+                  <p className="text-muted-foreground text-sm font-medium">
                     Drop the files here
                   </p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center gap-2 sm:px-5">
-                  <UploadIcon className="size-5 text-muted-foreground" />
-                  <div className="flex flex-col gap-px items-center justify-center">
-                    <p className="font-medium text-sm text-muted-foreground">
+                  <UploadIcon className="text-muted-foreground size-5" />
+                  <div className="flex flex-col items-center justify-center gap-px">
+                    <p className="text-muted-foreground text-sm font-medium">
                       Drag {`'n'`} drop files here, or click to select files
                     </p>
-                    <p className="text-xs text-muted-foreground/70">
+                    <p className="text-muted-foreground/70 text-xs">
                       You can upload multiple files (up to{" "}
                       {formatBytes(10000000)} each)
                     </p>

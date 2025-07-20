@@ -2,6 +2,7 @@
 "use client";
 
 import type { Student } from "@repo/db";
+
 import { useLocale } from "~/i18n";
 
 export function EnrollmentStats({ students }: { students: Student[] }) {

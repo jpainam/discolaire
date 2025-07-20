@@ -1,5 +1,8 @@
 "use client";
 
+import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   RiAdminLine,
   RiBrainLine,
@@ -8,6 +11,15 @@ import {
   RiSettings3Line,
   RiUserFollowLine,
 } from "@remixicon/react";
+import {
+  CalendarDays,
+  FolderOpen,
+  HelpCircleIcon,
+  HouseIcon,
+  LibraryBigIcon,
+  Users,
+} from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -21,27 +33,17 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@repo/ui/components/sidebar";
-import {
-  CalendarDays,
-  FolderOpen,
-  HelpCircleIcon,
-  HouseIcon,
-  LibraryBigIcon,
-  Users,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { UserNav } from "~/components/user-nav";
 
-import React from "react";
 import { authClient } from "~/auth/client";
 import { FeedBackDialog } from "~/components/FeedbackDialog";
 import { Shortcut } from "~/components/Shortcut";
 import { SidebarLogo } from "~/components/sidebar-logo";
+import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+
 export function MainSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {

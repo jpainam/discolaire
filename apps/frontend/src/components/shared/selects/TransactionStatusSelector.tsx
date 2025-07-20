@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useLocale } from "~/i18n";
 
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function TransactionStatusSelector({

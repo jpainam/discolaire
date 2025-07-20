@@ -1,13 +1,15 @@
 "server-only";
+
 import {
   DeleteObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import * as Minio from "minio";
+
 import { env } from "~/env";
 
-import * as Minio from "minio";
 const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local";
 
 function getHost(input: string): { host: string; port: string } {

@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@repo/ui/components/table";
-import { EmptyState } from "~/components/EmptyState";
-import { useLocale } from "~/i18n";
-
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, PlusCircleIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -22,10 +12,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useModal } from "~/hooks/use-modal";
-import { useConfirm } from "~/providers/confirm-dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/components/table";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { EmptyState } from "~/components/EmptyState";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditReligion } from "./CreateEditReligion";
 

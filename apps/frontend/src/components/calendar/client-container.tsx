@@ -1,10 +1,9 @@
 "use client";
 
-import { isSameDay, parseISO } from "date-fns";
 import { useMemo } from "react";
+import { isSameDay, parseISO } from "date-fns";
 
 import { useCalendar } from "~/components/calendar/calendar-context";
-
 import { CalendarHeader } from "~/components/calendar/header/calendar-header";
 import { CalendarMonthView } from "~/components/calendar/month-view/calendar-month-view";
 import { CalendarDayView } from "~/components/calendar/week-and-day-view/calendar-day-view";

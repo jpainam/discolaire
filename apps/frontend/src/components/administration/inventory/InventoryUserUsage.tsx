@@ -1,4 +1,7 @@
 "use client";
+
+import { useSuspenseQuery } from "@tanstack/react-query";
+
 import {
   Card,
   CardContent,
@@ -7,9 +10,9 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useLocale } from "~/i18n";
 import { cn } from "@repo/ui/lib/utils";
+
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function InventoryUserUsage({ className }: { className?: string }) {
@@ -34,7 +37,7 @@ export function InventoryUserUsage({ className }: { className?: string }) {
                 <div className="w-full">
                   <div className="flex items-center justify-between">
                     <div className="text-sm font-medium">{usage.name}</div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-muted-foreground text-sm">
                       {usage.count} {t("items")}
                     </div>
                   </div>

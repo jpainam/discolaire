@@ -1,5 +1,4 @@
 import { getServerTranslations } from "~/i18n/server";
-
 import { CardSignatureCanvas } from "./CardSignatureCanvas";
 
 export async function ReportCardSignature() {

@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { LockKeyhole, Shield, User } from "lucide-react";
+
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Tabs,
@@ -5,9 +9,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { LockKeyhole, Shield, User } from "lucide-react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
@@ -17,6 +19,7 @@ import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { UserProfile } from "./UserProfile";
+
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const session = await getSession();
@@ -33,7 +36,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <HydrateClient>
       <div className="w-full px-4">
         <Tabs defaultValue="tab-1">
-          <TabsList className="items-start justify-start text-foreground h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1 w-full text-left">
+          <TabsList className="text-foreground h-auto w-full items-start justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-left">
             <TabsTrigger
               value="tab-1"
               className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"

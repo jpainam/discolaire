@@ -1,8 +1,9 @@
 "use client";
 
-import { Check, Loader } from "lucide-react";
-import Image from "next/image";
 import React, { useState } from "react";
+import Image from "next/image";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Check, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -22,13 +23,12 @@ import {
 } from "@repo/ui/components/command";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
+import { randomAvatar } from "~/components/raw-images";
+import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { randomAvatar } from "~/components/raw-images";
-import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -142,11 +142,11 @@ export function LinkContact({ studentId }: { studentId: string }) {
                       />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="ml-2 text-xs font-medium leading-none">
+                  <div className="ml-2 text-xs leading-none font-medium">
                     {getFullName(contact)}
                   </div>
                   {selectedContacts.includes(contact) ? (
-                    <Check className="ml-auto flex h-5 w-5 text-primary" />
+                    <Check className="text-primary ml-auto flex h-5 w-5" />
                   ) : null}
                 </CommandItem>
               ))}
@@ -160,7 +160,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
             {selectedContacts.map((contact) => (
               <Avatar
                 key={`${contact.id}-selected`}
-                className="inline-block border-2 border-background"
+                className="border-background inline-block border-2"
               >
                 <AvatarImage
                   src={contact.user?.avatar ?? undefined}
@@ -178,7 +178,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
             ))}
           </div>
         ) : (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-sm">
             {t("select_students_to_add")}
           </span>
         )}

@@ -1,14 +1,14 @@
-import React, { Suspense } from "react";
-
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { NoPermission } from "~/components/no-permission";
-
-import { decode } from "entities";
 import type { Metadata } from "next";
+import React, { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
+import { decode } from "entities";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
+import { NoPermission } from "~/components/no-permission";
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { PermissionAction } from "~/permissions";
@@ -98,7 +98,7 @@ export default async function Layout(props: {
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
 
         <main className="flex-1">{props.children}</main>
-        <div className="flex flex-row items-center border-y bg-muted/50 px-6 py-1">
+        <div className="bg-muted/50 flex flex-row items-center border-y px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />
           </Suspense>

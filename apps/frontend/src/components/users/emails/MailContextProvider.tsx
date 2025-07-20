@@ -1,8 +1,9 @@
 "use client";
 
-import type { RouterOutputs } from "@repo/api";
 import type { PropsWithChildren } from "react";
 import { createContext, useContext, useState } from "react";
+
+import type { RouterOutputs } from "@repo/api";
 
 interface MailContextProps {
   activeView: string;

@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { FileIcon, MoreHorizontal, Paperclip, Star, X } from "lucide-react";
+
 import {
   Avatar,
   AvatarFallback,
@@ -5,9 +9,7 @@ import {
 } from "@repo/ui/components/avatar";
 import { Button } from "@repo/ui/components/button";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useQuery } from "@tanstack/react-query";
-import { FileIcon, MoreHorizontal, Paperclip, Star, X } from "lucide-react";
-import { useState } from "react";
+
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { useMailContext } from "./MailContextProvider";
@@ -41,8 +43,8 @@ export function MailDetail({ emailId }: { emailId: string }) {
   const email = emailQuery.data;
   const { i18n } = useLocale();
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-background">
+    <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="bg-background sticky top-0 flex items-center justify-between border-b p-4">
         <h2 className="text-xl font-semibold">{email?.subject}</h2>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon">
@@ -58,8 +60,8 @@ export function MailDetail({ emailId }: { emailId: string }) {
         {/* Email Thread */}
         <div className="space-y-6">
           {email?.thread.map((message) => (
-            <div key={message.id} className="border rounded-lg p-4">
-              <div className="flex items-center gap-3 mb-3">
+            <div key={message.id} className="rounded-lg border p-4">
+              <div className="mb-3 flex items-center gap-3">
                 <Avatar>
                   <AvatarImage
                     src={`/placeholder.svg?height=40&width=40`}
@@ -74,7 +76,7 @@ export function MailDetail({ emailId }: { emailId: string }) {
                       &lt;{message.email}&gt;
                     </span>
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-muted-foreground text-xs">
                     To: {message.to} •{" "}
                     {message.date.toLocaleDateString(i18n.language, {
                       month: "2-digit",
@@ -87,20 +89,20 @@ export function MailDetail({ emailId }: { emailId: string }) {
                   </div>
                 </div>
               </div>
-              <div className="whitespace-pre-line text-sm">
+              <div className="text-sm whitespace-pre-line">
                 {message.content}
               </div>
 
               {/* Sample attachments - in a real app, these would come from the message data */}
               {message.id === "6-2" && (
                 <div className="mt-4 border-t pt-3">
-                  <div className="text-sm font-medium mb-2">
+                  <div className="mb-2 text-sm font-medium">
                     Attachments (1)
                   </div>
-                  <div className="flex items-center bg-muted/50 rounded p-2 text-sm w-fit">
-                    <FileIcon className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <div className="bg-muted/50 flex w-fit items-center rounded p-2 text-sm">
+                    <FileIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span>report.pdf</span>
-                    <span className="text-xs text-muted-foreground ml-2">
+                    <span className="text-muted-foreground ml-2 text-xs">
                       245 KB
                     </span>
                   </div>
@@ -113,34 +115,34 @@ export function MailDetail({ emailId }: { emailId: string }) {
         {/* Reply Form */}
         <form
           onSubmit={handleReplySubmit}
-          className="mt-6 border rounded-lg p-4"
+          className="mt-6 rounded-lg border p-4"
         >
           <div className="mb-2 text-sm font-medium">Reply to {email?.from}</div>
           <Textarea
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
             placeholder="Write your reply here..."
-            className="min-h-[120px] w-full mb-3"
+            className="mb-3 min-h-[120px] w-full"
           />
 
           {/* File Attachments in Reply */}
           {attachedFiles.length > 0 && (
-            <div className="border rounded-md p-3 mb-3">
-              <div className="text-sm font-medium mb-2">
+            <div className="mb-3 rounded-md border p-3">
+              <div className="mb-2 text-sm font-medium">
                 Attachments ({attachedFiles.length})
               </div>
               <div className="space-y-2">
                 {attachedFiles.map((file, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between bg-muted/50 rounded p-2 text-sm"
+                    className="bg-muted/50 flex items-center justify-between rounded p-2 text-sm"
                   >
                     <div className="flex items-center">
-                      <FileIcon className="h-4 w-4 mr-2 flex-shrink-0" />
-                      <span className="truncate max-w-[200px]">
+                      <FileIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                      <span className="max-w-[200px] truncate">
                         {file.name}
                       </span>
-                      <span className="text-xs text-muted-foreground ml-2">
+                      <span className="text-muted-foreground ml-2 text-xs">
                         {(file.size / 1024).toFixed(0)} KB
                       </span>
                     </div>
@@ -176,7 +178,7 @@ export function MailDetail({ emailId }: { emailId: string }) {
                   className="cursor-pointer"
                 >
                   <span>
-                    <Paperclip className="h-4 w-4 mr-2" />
+                    <Paperclip className="mr-2 h-4 w-4" />
                     Attach
                   </span>
                 </Button>

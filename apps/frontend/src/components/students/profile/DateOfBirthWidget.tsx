@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 
 import { useLocale } from "~/i18n";
-
 // import type { ConfettiRef } from "~/components/magicui/Confetti";
 // import Confetti from "~/components/magicui/Confetti";
 import { cn } from "~/lib/utils";

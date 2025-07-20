@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pencil, PlusIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -22,13 +23,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
+import { AvatarState } from "~/components/AvatarState";
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AvatarState } from "~/components/AvatarState";
 import { useTRPC } from "~/trpc/react";
 import { AddStaffSchedule } from "./AddStaffSchedule";
 
@@ -77,7 +77,7 @@ export function CanReceiveTransactionSummary({
 
   return (
     <Card className="text-sm">
-      <CardHeader className="flex flex-row items-center border-b bg-muted/50 px-2 pb-2 pt-0">
+      <CardHeader className="bg-muted/50 flex flex-row items-center border-b px-2 pt-0 pb-2">
         <CardTitle className="p-0">
           {t("destinations")} - {t("transaction_summary")}
         </CardTitle>
@@ -171,7 +171,7 @@ export function CanReceiveTransactionSummary({
                         variant={"ghost"}
                         size={"icon"}
                       >
-                        <Trash2 className="h-4 w-4 text-destructive" />
+                        <Trash2 className="text-destructive h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>
@@ -181,7 +181,7 @@ export function CanReceiveTransactionSummary({
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter className="border-t bg-muted/80 p-2">
+      <CardFooter className="bg-muted/80 border-t p-2">
         {t("staffs")} - {schedules.length}
       </CardFooter>
     </Card>

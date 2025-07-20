@@ -1,6 +1,7 @@
 // "use client";
 
 import { SidebarProvider } from "@repo/ui/components/sidebar";
+
 import BigCalendar from "~/components/event-calendar/big-calendar";
 import { EventSidebar } from "~/components/event-calendar/event-sidebar";
 

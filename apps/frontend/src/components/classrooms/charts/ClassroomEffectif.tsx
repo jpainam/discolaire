@@ -3,6 +3,7 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
@@ -10,7 +11,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartLegend,
@@ -18,6 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
+
 import { getServerTranslations } from "~/i18n/server";
 
 type ClassroomAllProcedureOutput = NonNullable<
@@ -94,7 +95,7 @@ export async function ClassroomEffectif({
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
+        <div className="flex gap-2 leading-none font-medium">
           {maleRate.toFixed(2)} % {t("boys")}
           {maleRate > femaleRate ? (
             <TrendingUp className="h-4 w-4 text-green-500" />

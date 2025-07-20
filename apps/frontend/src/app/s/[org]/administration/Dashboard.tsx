@@ -1,4 +1,5 @@
 "use client";
+
 import {
   BookOpen,
   Calendar,
@@ -59,7 +60,7 @@ export function Dashboard() {
   ];
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40 p-4 md:p-6">
+    <div className="bg-muted/40 flex min-h-screen w-full flex-col p-4 md:p-6">
       <div className="flex-1 space-y-4">
         {/* Overview Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -68,11 +69,11 @@ export function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 Total Students
               </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <Users className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">1,284</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 +12 from last month
               </p>
             </CardContent>
@@ -80,11 +81,11 @@ export function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Teachers</CardTitle>
-              <UserCheck className="h-4 w-4 text-muted-foreground" />
+              <UserCheck className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">86</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 +2 new this semester
               </p>
             </CardContent>
@@ -92,11 +93,11 @@ export function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Classes</CardTitle>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
+              <BookOpen className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">42</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 +4 new classes added
               </p>
             </CardContent>
@@ -106,11 +107,11 @@ export function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 Attendance Rate
               </CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground" />
+              <Clock className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">94.8%</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 +2.4% from last week
               </p>
             </CardContent>
@@ -168,14 +169,14 @@ export function Dashboard() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
-                    <Calendar className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full">
+                    <Calendar className="text-primary h-5 w-5" />
                   </div>
                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">
+                    <p className="text-sm leading-none font-medium">
                       Staff Meeting
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Today, 10:00 AM
                     </p>
                   </div>
@@ -184,14 +185,14 @@ export function Dashboard() {
                   </Badge>
                 </div>
                 <div className="flex items-center">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
-                    <GraduationCap className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full">
+                    <GraduationCap className="text-primary h-5 w-5" />
                   </div>
                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">
+                    <p className="text-sm leading-none font-medium">
                       Science Fair
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Today, 1:00 PM
                     </p>
                   </div>
@@ -200,14 +201,14 @@ export function Dashboard() {
                   </Badge>
                 </div>
                 <div className="flex items-center">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
-                    <School className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full">
+                    <School className="text-primary h-5 w-5" />
                   </div>
                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">
+                    <p className="text-sm leading-none font-medium">
                       Parent-Teacher Conference
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Today, 4:30 PM
                     </p>
                   </div>
@@ -277,7 +278,7 @@ export function Dashboard() {
                     <p className="text-sm font-medium">
                       John Doe submitted assignment
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       10 minutes ago
                     </p>
                   </div>
@@ -294,7 +295,7 @@ export function Dashboard() {
                     <p className="text-sm font-medium">
                       Maria Smith marked attendance
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       25 minutes ago
                     </p>
                   </div>
@@ -311,7 +312,7 @@ export function Dashboard() {
                     <p className="text-sm font-medium">
                       Robert Johnson updated grades
                     </p>
-                    <p className="text-xs text-muted-foreground">1 hour ago</p>
+                    <p className="text-muted-foreground text-xs">1 hour ago</p>
                   </div>
                 </div>
               </div>
@@ -333,19 +334,19 @@ export function Dashboard() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="text-sm font-medium">Mathematics</div>
-                <div className="text-sm text-muted-foreground">68%</div>
+                <div className="text-muted-foreground text-sm">68%</div>
               </div>
               <Progress value={68} className="mt-2" />
 
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-sm font-medium">Science</div>
-                <div className="text-sm text-muted-foreground">72%</div>
+                <div className="text-muted-foreground text-sm">72%</div>
               </div>
               <Progress value={72} className="mt-2" />
 
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-sm font-medium">English</div>
-                <div className="text-sm text-muted-foreground">84%</div>
+                <div className="text-muted-foreground text-sm">84%</div>
               </div>
               <Progress value={84} className="mt-2" />
             </CardContent>
@@ -358,19 +359,19 @@ export function Dashboard() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="text-sm font-medium">Computer Lab</div>
-                <div className="text-sm text-muted-foreground">92%</div>
+                <div className="text-muted-foreground text-sm">92%</div>
               </div>
               <Progress value={92} className="mt-2" />
 
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-sm font-medium">Library</div>
-                <div className="text-sm text-muted-foreground">78%</div>
+                <div className="text-muted-foreground text-sm">78%</div>
               </div>
               <Progress value={78} className="mt-2" />
 
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-sm font-medium">Sports Facilities</div>
-                <div className="text-sm text-muted-foreground">65%</div>
+                <div className="text-muted-foreground text-sm">65%</div>
               </div>
               <Progress value={65} className="mt-2" />
             </CardContent>

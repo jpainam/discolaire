@@ -1,17 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { useActionState, useEffect } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import { useFormStatus } from "react-dom";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-
 import { Label } from "@repo/ui/components/label";
-import { useActionState, useEffect } from "react";
-import { useFormStatus } from "react-dom";
-import { toast } from "sonner";
+
 import { signIn } from "~/actions/signin";
 import { ModeSwitcher } from "~/components/mode-switcher";
 import { useLocale } from "~/i18n";
@@ -36,12 +37,12 @@ export function LoginForm() {
   }, [state.error, state._nonce, t]);
 
   return (
-    <div className="rose-gradient relative min-h-screen overflow-hidden bg-background">
-      <div className="absolute -top-10 left-0 h-1/2 w-full rounded-b-full bg-gradient-to-b from-background to-transparent blur"></div>
-      <div className="lg:absolute z-50 lg:right-4 lg:top-4 flex flex-row gap-2 md:right-8 md:top-8">
+    <div className="rose-gradient bg-background relative min-h-screen overflow-hidden">
+      <div className="from-background absolute -top-10 left-0 h-1/2 w-full rounded-b-full bg-gradient-to-b to-transparent blur"></div>
+      <div className="z-50 flex flex-row gap-2 md:top-8 md:right-8 lg:absolute lg:top-4 lg:right-4">
         <ModeSwitcher />
       </div>
-      <div className="absolute -top-64 left-0 h-1/2 w-full rounded-full bg-gradient-to-b from-primary/80 to-transparent blur-3xl"></div>
+      <div className="from-primary/80 absolute -top-64 left-0 h-1/2 w-full rounded-full bg-gradient-to-b to-transparent blur-3xl"></div>
       <div className="relative z-10 grid min-h-screen grid-cols-1 md:grid-cols-2">
         <motion.div
           className="hidden flex-1 items-center justify-center space-y-8 p-8 text-center md:flex"
@@ -85,7 +86,7 @@ export function LoginForm() {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           >
             <form action={formAction}>
-              <Card className="w-full max-w-md border-border/70 bg-card/20 shadow-[0_10px_26px_#e0e0e0a1] backdrop-blur-lg dark:shadow-none">
+              <Card className="border-border/70 bg-card/20 w-full max-w-md shadow-[0_10px_26px_#e0e0e0a1] backdrop-blur-lg dark:shadow-none">
                 <CardContent className="space-y-6 p-8">
                   {/* Logo and Header */}
                   <motion.div
@@ -103,7 +104,7 @@ export function LoginForm() {
                         {t("Login")}
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       {t("enter_email_below_to_sign_in")}
                     </p>
                   </motion.div>
@@ -145,12 +146,12 @@ export function LoginForm() {
                       <Input
                         type="password"
                         required
-                        className="border border-border"
+                        className="border-border border"
                         name="password"
                       />
                       <Link
                         href="/auth/password/forgot"
-                        className="ml-auto text-sm text-primary hover:underline"
+                        className="text-primary ml-auto text-sm hover:underline"
                       >
                         {t("Forgot password")}?
                       </Link>
@@ -184,10 +185,10 @@ export function LoginForm() {
                     }}
                   >
                     <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-border"></div>
+                      <div className="border-border w-full border-t"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="bg-card px-2 text-muted-foreground">
+                      <span className="bg-card text-muted-foreground px-2">
                         OR
                       </span>
                     </div>
@@ -206,7 +207,7 @@ export function LoginForm() {
                   >
                     <Button
                       variant="secondary"
-                      className="w-full bg-primary-foreground text-primary shadow-[0_4px_16px_var(--border)] duration-300 hover:bg-primary-foreground/95 dark:shadow-[0_4px_14px_var(--muted-foreground)]"
+                      className="bg-primary-foreground text-primary hover:bg-primary-foreground/95 w-full shadow-[0_4px_16px_var(--border)] duration-300 dark:shadow-[0_4px_14px_var(--muted-foreground)]"
                     >
                       <svg
                         className="h-5 w-5"
@@ -225,7 +226,7 @@ export function LoginForm() {
 
                   {/* Terms */}
                   <motion.p
-                    className="mt-2 text-center text-xs text-muted-foreground"
+                    className="text-muted-foreground mt-2 text-center text-xs"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{
@@ -237,14 +238,14 @@ export function LoginForm() {
                     By signing in you agree to our{" "}
                     <Link
                       href="#"
-                      className="text-muted-foreground underline hover:text-primary"
+                      className="text-muted-foreground hover:text-primary underline"
                     >
                       terms of service
                     </Link>{" "}
                     and{" "}
                     <Link
                       href="#"
-                      className="text-muted-foreground underline hover:text-primary"
+                      className="text-muted-foreground hover:text-primary underline"
                     >
                       privacy policy
                     </Link>

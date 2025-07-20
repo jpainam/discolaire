@@ -1,6 +1,14 @@
 "use client";
 
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
+import i18next from "i18next";
+import { DownloadIcon, FileIcon, RatioIcon } from "lucide-react";
+
 import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardAction,
@@ -10,14 +18,7 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
-import { format } from "date-fns";
-import { enUS, es, fr } from "date-fns/locale";
-import { DownloadIcon, FileIcon, RatioIcon } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
-import { useQuery } from "@tanstack/react-query";
-import i18next from "i18next";
-import Link from "next/link";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
@@ -39,7 +40,7 @@ export function EducationalResource({ className }: { className?: string }) {
     <Card className={cn(className)}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <RatioIcon className="w-4 h-4" />
+          <RatioIcon className="h-4 w-4" />
           {t("resources")}
         </CardTitle>
         <CardDescription className="text-xs">
@@ -61,18 +62,15 @@ export function EducationalResource({ className }: { className?: string }) {
         {resources?.slice(0, 5).map((resource, index) => (
           <div
             key={index}
-            className="group relative flex justify-between pr-2 items-center space-x-4 border hover:bg-muted/50 transition-colors"
+            className="group hover:bg-muted/50 relative flex items-center justify-between space-x-4 border pr-2 transition-colors"
           >
-            <div
-              className="border-l-4 py-2  p-4"
-              style={{ borderColor: "red" }}
-            >
-              <div className="flex-1 min-w-0">
+            <div className="border-l-4 p-4 py-2" style={{ borderColor: "red" }}>
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <Badge className="font-medium" variant={"outline"}>
                     {resource.title}
                   </Badge>
-                  <time className="text-sm text-muted-foreground">
+                  <time className="text-muted-foreground text-sm">
                     {format(resource.createdAt, "d MMMM", {
                       locale:
                         i18next.language == "fr"
@@ -83,9 +81,9 @@ export function EducationalResource({ className }: { className?: string }) {
                     })}
                   </time>
                 </div>
-                <div className="mt-1 leading-none tracking-tight group-hover:text-primary">
-                  <div className="flex text-xs items-center gap-2">
-                    <FileIcon className="h-4 w-4 text-muted-foreground" />
+                <div className="group-hover:text-primary mt-1 leading-none tracking-tight">
+                  <div className="flex items-center gap-2 text-xs">
+                    <FileIcon className="text-muted-foreground h-4 w-4" />
                     <Link href={"#"} target="_blank" className="truncate">
                       {resource.attachments.length > 0
                         ? resource.attachments[0]
@@ -98,7 +96,7 @@ export function EducationalResource({ className }: { className?: string }) {
             <Button
               variant="ghost"
               size="icon"
-              className="opacity-0 group-hover:opacity-100 transition-opacity"
+              className="opacity-0 transition-opacity group-hover:opacity-100"
             >
               <DownloadIcon className="h-4 w-4" />
             </Button>

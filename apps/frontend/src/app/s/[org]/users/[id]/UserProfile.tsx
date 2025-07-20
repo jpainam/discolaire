@@ -1,5 +1,18 @@
 "use client";
+
+import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { t } from "i18next";
+import { ImageMinus, ImageUpIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -18,17 +31,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { t } from "i18next";
-import { ImageMinus, ImageUpIcon } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { AvatarState } from "~/components/AvatarState";
 import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
 import { useTRPC } from "~/trpc/react";
@@ -109,12 +112,12 @@ export function UserProfile() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex flex-col md:flex-row gap-6 items-start">
+              <div className="flex flex-col items-start gap-6 md:flex-row">
                 <div className="flex flex-col items-center space-y-2">
                   <AvatarState
                     pos={user.name.length}
                     avatar={user.avatar}
-                    className="h-[100px] w-[100px] mb-2"
+                    className="mb-2 h-[100px] w-[100px]"
                   />
 
                   {user.avatar ? (
@@ -154,7 +157,7 @@ export function UserProfile() {
                       </FormItem>
                     )}
                   />
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <FormField
                       control={form.control}
                       name="name"

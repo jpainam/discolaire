@@ -6,8 +6,8 @@
 import parser from "cron-parser";
 
 import { db } from "@repo/db";
-
 import { logger } from "@repo/utils";
+
 import { jobQueue } from "./queue";
 
 export const name = "jobs";

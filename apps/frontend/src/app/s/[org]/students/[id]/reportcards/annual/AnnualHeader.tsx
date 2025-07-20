@@ -1,8 +1,10 @@
 "use client";
 
+import { FileSliders, Printer } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
-import { FileSliders, Printer } from "lucide-react";
+
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useLocale } from "~/i18n";
 
@@ -16,8 +18,8 @@ export function AnnualHeader({
   const { createQueryString } = useCreateQueryString();
   const { t } = useLocale();
   return (
-    <div className="flex flex-row gap-2 items-center justify-between px-4">
-      <FileSliders className="w-4 h-4" />
+    <div className="flex flex-row items-center justify-between gap-2 px-4">
+      <FileSliders className="h-4 w-4" />
       <Label>BULLETIN ANNUEL</Label>
 
       <Button

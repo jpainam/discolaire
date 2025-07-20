@@ -1,14 +1,13 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-
-import type { RouterOutputs } from "@repo/api";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
-import { Badge } from "@repo/ui/components/badge";
-import { Progress } from "@repo/ui/components/progress";
 import { decode } from "entities";
 import { CheckIcon } from "lucide-react";
+
+import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Progress } from "@repo/ui/components/progress";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 export function fetchGradeTrackerColumns({
   t,
@@ -64,7 +63,7 @@ export function fetchGradeTrackerColumns({
       cell: ({ row }) => {
         const subject = row.original.subject;
         return (
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2">
             <span>{decode(subject.teacher?.lastName ?? "")}</span>
             <span className="text-xs">({subject.classroom.name})</span>
           </div>
@@ -83,7 +82,7 @@ export function fetchGradeTrackerColumns({
         return (
           <div className="flex items-center gap-2">
             <Progress value={completed} className="w-20" />
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               {Math.round(completed)}%
             </span>
           </div>

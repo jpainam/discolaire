@@ -1,15 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-
 import {
   Form,
   FormField,
@@ -18,10 +16,12 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import { SelectField } from "../shared/forms/SelectField";
 import { InputField } from "../shared/forms/input-field";
+import { SelectField } from "../shared/forms/SelectField";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 
 type ClassroomAllProcedureOutput = NonNullable<
@@ -118,9 +118,9 @@ export function CreateEditClassroom({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col flex-1 overflow-hidden"
+        className="flex flex-1 flex-col overflow-hidden"
       >
-        <div className="grid overflow-y-auto flex-1 auto-rows-min gap-6 px-4">
+        <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto px-4">
           <InputField label={t("class_name_report")} name="reportName" />
           <InputField label={t("class_name")} name="name" />
           <InputField type="number" label={t("max_size")} name="maxSize" />

@@ -1,18 +1,18 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const editGradeStudentSchema = z.object({
@@ -80,7 +80,7 @@ export function EditGradeStudent({
           <InputField name="grade" label={t("grade")} type="number" />
           <CheckboxField name="isAbsent" label={t("absent")} />
         </div>
-        <div className="ml-auto mt-4 flex flex-row gap-4">
+        <div className="mt-4 ml-auto flex flex-row gap-4">
           <Button
             onClick={() => {
               closeModal();

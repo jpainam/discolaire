@@ -1,5 +1,7 @@
-import { Button } from "@repo/ui/components/button";
 import { memo } from "react";
+
+import { Button } from "@repo/ui/components/button";
+
 import { initialArtifactData, useArtifact } from "~/hooks/use-artifact";
 import { CrossIcon } from "./icons";
 

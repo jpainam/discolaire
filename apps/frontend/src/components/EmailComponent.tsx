@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
+import { CheckIcon } from "lucide-react";
+import { toast } from "sonner";
+
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { CheckIcon } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+
 import { authClient } from "~/auth/client";
 import { useLocale } from "~/i18n";
 
@@ -52,12 +54,12 @@ export default function EmailVerification({
 
   return (
     <div className="flex items-center gap-2 py-1">
-      <div className="flex-1 flex items-center gap-2">
+      <div className="flex flex-1 items-center gap-2">
         <span className="font-medium">{email}</span>
         {!isVerified && !verificationSent && (
-          <Badge variant="outline" className="gap-1.5 ">
+          <Badge variant="outline" className="gap-1.5">
             <span
-              className="size-1.5 rounded-full bg-red-500 "
+              className="size-1.5 rounded-full bg-red-500"
               aria-hidden="true"
             ></span>
             Not verified
@@ -100,7 +102,7 @@ export default function EmailVerification({
           size="sm"
           onClick={sendVerificationEmail}
           disabled={isLoading}
-          className="text-xs h-7"
+          className="h-7 text-xs"
         >
           {isLoading ? "Sending..." : t("Verify email")}
         </Button>
@@ -111,7 +113,7 @@ export default function EmailVerification({
           size="sm"
           onClick={sendVerificationEmail}
           disabled={isLoading}
-          className="text-xs h-7"
+          className="h-7 text-xs"
         >
           Resend
         </Button>

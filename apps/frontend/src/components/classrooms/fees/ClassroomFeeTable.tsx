@@ -1,7 +1,14 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { subDays } from "date-fns";
 import { addDays } from "date-fns/addDays";
+import i18next from "i18next";
 import { sumBy } from "lodash";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -22,21 +29,14 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
+import { CURRENCY } from "~/lib/constants";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import i18next from "i18next";
-import { useParams } from "next/navigation";
-import { useCheckPermission } from "~/hooks/use-permission";
-import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditFee } from "./CreateEditFee";
 

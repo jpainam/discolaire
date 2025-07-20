@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { sendWhatsapp } from "@repo/notification/whatsapp/whatsapp.send";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
+
+import { sendWhatsapp } from "@repo/notification/whatsapp/whatsapp.send";
+
 import { getSession } from "~/auth/server";
+
 const schema = z.object({
   template: z.string(),
 });

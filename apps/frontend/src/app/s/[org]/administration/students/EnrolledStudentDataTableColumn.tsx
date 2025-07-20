@@ -1,15 +1,15 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import Link from "next/link";
+import i18next from "i18next";
+
 import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import type { ColumnDef } from "@tanstack/react-table";
 
-import type { TFunction } from "i18next";
-import i18next from "i18next";
-import FlatBadge from "~/components/FlatBadge";
-
-import { Badge } from "@repo/ui/components/badge";
-import Link from "next/link";
 import { AvatarState } from "~/components/AvatarState";
+import FlatBadge from "~/components/FlatBadge";
 import { getFullName } from "~/utils";
 
 export function fetchStudentColumns({

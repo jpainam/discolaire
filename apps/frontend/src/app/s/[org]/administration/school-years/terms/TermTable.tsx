@@ -1,5 +1,7 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import i18next from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,13 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditTerm } from "./CreateEditTerm";
 

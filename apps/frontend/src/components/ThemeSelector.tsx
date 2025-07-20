@@ -1,4 +1,9 @@
 "use client";
+
+import { useCallback } from "react";
+import { Check, ChevronDown, Moon, Shuffle, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Command,
@@ -19,9 +24,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import { Check, ChevronDown, Moon, Shuffle, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useCallback } from "react";
+
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
@@ -49,7 +52,7 @@ export function ThemeSelector({ className }: { className?: string }) {
           size="sm"
           variant="ghost"
           className={cn(
-            "h-7 text-xs justify-start *:data-[slot=select-value]:w-12",
+            "h-7 justify-start text-xs *:data-[slot=select-value]:w-12",
             className,
           )}
         >

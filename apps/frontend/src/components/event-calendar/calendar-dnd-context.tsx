@@ -6,6 +6,8 @@ import type {
   DragStartEvent,
   UniqueIdentifier,
 } from "@dnd-kit/core";
+import type { ReactNode } from "react";
+import { createContext, useContext, useId, useRef, useState } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -16,8 +18,6 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { addMinutes, differenceInMinutes } from "date-fns";
-import type { ReactNode } from "react";
-import { createContext, useContext, useId, useRef, useState } from "react";
 
 import type { CalendarEvent } from "~/components/event-calendar";
 import { EventItem } from "~/components/event-calendar";

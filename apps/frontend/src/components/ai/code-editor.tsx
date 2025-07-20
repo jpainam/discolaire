@@ -1,12 +1,13 @@
 "use client";
 
+import { memo, useEffect, useRef } from "react";
 import { python } from "@codemirror/lang-python";
 import { EditorState, Transaction } from "@codemirror/state";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view";
-import type { AiSuggestion } from "@repo/db";
 import { basicSetup } from "codemirror";
-import { memo, useEffect, useRef } from "react";
+
+import type { AiSuggestion } from "@repo/db";
 
 interface EditorProps {
   content: string;
@@ -93,7 +94,7 @@ function PureCodeEditor({ content, onSaveContent, status }: EditorProps) {
 
   return (
     <div
-      className="relative not-prose w-full pb-[calc(80dvh)] text-sm"
+      className="not-prose relative w-full pb-[calc(80dvh)] text-sm"
       ref={containerRef}
     />
   );

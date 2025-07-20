@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { decode } from "entities";
 import {
   AtSign,
   BookHeart,
@@ -14,17 +18,13 @@ import {
   School,
   SquareUserRound,
 } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
 import { PiChurchDuotone } from "react-icons/pi";
 
 import { Separator } from "@repo/ui/components/separator";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { decode } from "entities";
 import House from "~/components/icons/house";
 import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export default function StudentDetails() {
@@ -46,35 +46,35 @@ export default function StudentDetails() {
   });
 
   return (
-    <div className="flex gap-2 flex-col text-sm py-2">
+    <div className="flex flex-col gap-2 py-2 text-sm">
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
         </span>
         <span>{decode(student.lastName ?? "")}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <SquareUserRound className="h-4 w-4 stroke-1" />
           {t("firstName")}
         </span>
         <span>{decode(student.firstName ?? "")} </span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <PiChurchDuotone className="h-4 w-4 stroke-1" />
           {t("religion")}
         </span>
         <span>{student.religion ? student.religion.name : "N/A"}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <Cake className="h-4 w-4 stroke-1" />
           {t("dateOfBirth")}
         </span>
         <span>
           {student.dateOfBirth && dateFormat.format(student.dateOfBirth)}
         </span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <CakeSlice className="h-4 w-4 stroke-1" />
           {t("placeOfBirth")}
         </span>
         <span>{student.placeOfBirth ?? "N/A"}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <BoxesIcon className="h-4 w-4 stroke-1" />
           {t("clubs")}
         </span>
@@ -84,19 +84,19 @@ export default function StudentDetails() {
       </div>
       <Separator className="my-2 w-full" />
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <House className="h-4 w-4 stroke-1" />
           {t("residence")}
         </span>
         <span>{student.residence ?? "N/A"}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <CalendarPlus className="h-4 w-4 stroke-1" />
           {t("dateOfEntry")}
         </span>
         <span>
           {student.dateOfEntry && dateFormat.format(student.dateOfEntry)}
         </span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <CalendarMinus className="h-4 w-4 stroke-1" />
           {t("dateOfExit")}
         </span>
@@ -104,12 +104,12 @@ export default function StudentDetails() {
           {" "}
           {student.dateOfExit && dateFormat.format(student.dateOfExit)}
         </span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <Phone className="h-4 w-4 stroke-1" />
           {t("phoneNumber")}
         </span>
         <span>{student.phoneNumber ?? "N/A"}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <AtSign className="h-4 w-4 stroke-1" />
           {t("email")}
         </span>
@@ -122,18 +122,18 @@ export default function StudentDetails() {
       </div>
       <Separator className="my-2 w-full" />
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <School className="h-4 w-4 stroke-1" />
           {t("formerSchool")}
         </span>
         <span className="line-clamp-1 overflow-ellipsis">
           {student.formerSchool?.name ?? "N/A"}
         </span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <BookHeart className="h-4 w-4 stroke-1" /> {t("hobbies")}
         </span>
         <span>{student.hobbies.join(", ")}</span>
-        <span className="flex flex-row items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <MedalIcon className="h-4 w-4 stroke-1" />
           {t("sports")}
         </span>
@@ -189,7 +189,7 @@ export default function StudentDetails() {
                   <span className="truncate capitalize">
                     {sibling.lastName?.toLowerCase()}{" "}
                   </span>
-                  <ExternalLink className="h-4 w-4 bg-muted" />
+                  <ExternalLink className="bg-muted h-4 w-4" />
                 </Link>
               </li>
             );
@@ -198,7 +198,7 @@ export default function StudentDetails() {
       </div>
 
       {student.observation && (
-        <div className="px-4 text-muted-foreground">{student.observation}</div>
+        <div className="text-muted-foreground px-4">{student.observation}</div>
       )}
     </div>
   );

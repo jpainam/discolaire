@@ -1,15 +1,15 @@
-import { Button } from "@repo/ui/components/button";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { Columns2, Grid3X3, List, PlusIcon } from "lucide-react";
 
+import { Button } from "@repo/ui/components/button";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
+import { cn } from "@repo/ui/lib/utils";
+
+import type { IEvent } from "~/components/calendar/interfaces";
+import type { TCalendarView } from "~/components/calendar/types";
 import { DateNavigator } from "~/components/calendar/header/date-navigator";
 import { TodayButton } from "~/components/calendar/header/today-button";
 import { UserSelect } from "~/components/calendar/header/user-select";
-
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import { cn } from "@repo/ui/lib/utils";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import type { IEvent } from "~/components/calendar/interfaces";
-import type { TCalendarView } from "~/components/calendar/types";
 import { CreateEditLesson } from "~/components/classrooms/timetables/CreateEditLesson";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -40,7 +40,7 @@ export function CalendarHeader({ events }: IProps) {
         <ChangeBadgeVariantInput />
         <LayoutGroup>
           <ToggleGroup
-            className="flex gap-0 -space-x-px rounded-sm border overflow-hidden shadow-sm shadow-black/5 rtl:space-x-reverse"
+            className="flex gap-0 -space-x-px overflow-hidden rounded-sm border shadow-sm shadow-black/5 rtl:space-x-reverse"
             type="single"
             variant="outline"
             value={view}
@@ -56,7 +56,7 @@ export function CalendarHeader({ events }: IProps) {
                 <motion.div
                   key={modeValue}
                   layout
-                  className="flex-1 flex divide-x"
+                  className="flex flex-1 divide-x"
                   animate={{ flex: isSelected ? 1.6 : 1 }}
                   transition={{
                     flex: {
@@ -69,13 +69,13 @@ export function CalendarHeader({ events }: IProps) {
                   <ToggleGroupItem
                     value={modeValue}
                     className={cn(
-                      "w-full rounded-none shadow-none text-base flex items-center justify-center gap-2 relative border-none",
+                      "relative flex w-full items-center justify-center gap-2 rounded-none border-none text-base shadow-none",
                       //isSelected && "z-5"
                     )}
                   >
                     <motion.div
                       layout
-                      className="flex items-center justify-center gap-2 py-2 px-3"
+                      className="flex items-center justify-center gap-2 px-3 py-2"
                       initial={false}
                       animate={{
                         scale: isSelected ? 1 : 0.95,
@@ -114,7 +114,7 @@ export function CalendarHeader({ events }: IProps) {
                           <motion.p
                             layout="position"
                             key={`text-${modeValue}`}
-                            className="text-sm origin-left whitespace-nowrap"
+                            className="origin-left text-sm whitespace-nowrap"
                             initial={{
                               opacity: 0,
                               x: -2,

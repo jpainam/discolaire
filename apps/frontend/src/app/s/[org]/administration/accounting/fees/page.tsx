@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { FeeBar } from "~/components/administration/fees/charts/FeeBar";
 import { FeeTrend } from "~/components/administration/fees/charts/FeeTrend";
 import { FeeDataTable } from "~/components/administration/fees/FeeDataTable";
@@ -19,7 +21,7 @@ export default function Page() {
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
-            <div className="py-2 px-4">
+            <div className="px-4 py-2">
               <Skeleton className="h-8" />
             </div>
           }
@@ -30,7 +32,7 @@ export default function Page() {
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
-            <div className="grid md:grid-cols-4 px-4 gap-4">
+            <div className="grid gap-4 px-4 md:grid-cols-4">
               {Array.from({ length: 16 }).map((_, i) => (
                 <Skeleton key={i} className="h-8" />
               ))}

@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter } from "~/hooks/use-router";
+import { useParams } from "next/navigation";
+import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
-import i18next from "i18next";
-import { useParams } from "next/navigation";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface ByChronologicalOrderProps {
@@ -67,12 +67,12 @@ export function ByChronologicalOrder({
             }}
             key={grade.id}
             className={cn(
-              "flex cursor-pointer flex-row items-center gap-4 border-b border-accent px-4 py-2",
+              "border-accent flex cursor-pointer flex-row items-center gap-4 border-b px-4 py-2",
               grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none",
             )}
           >
             <div className="flex w-[50px] flex-col justify-center">
-              <div className="mb-1 flex flex-col items-center rounded-md bg-muted text-muted-foreground px-1 text-xs">
+              <div className="bg-muted text-muted-foreground mb-1 flex flex-col items-center rounded-md px-1 text-xs">
                 <div>{d}</div>
                 <div>{m}</div>
               </div>
@@ -87,19 +87,19 @@ export function ByChronologicalOrder({
               <div className="py-0 text-xs font-bold uppercase">
                 {grade.gradeSheet.subject.course.name}
               </div>
-              <div className="py-0 text-xs text-muted-foreground">
+              <div className="text-muted-foreground py-0 text-xs">
                 {grade.gradeSheet.name}
               </div>
-              <div className="py-0 text-xs text-muted-foreground">
+              <div className="text-muted-foreground py-0 text-xs">
                 {t("average_of_classroom")}{" "}
                 {minMaxMoy
                   .find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.avg?.toFixed(2)}
               </div>
             </div>
-            <div className="ml-auto w-[100px] flex flex-col text-sm">
+            <div className="ml-auto flex w-[100px] flex-col text-sm">
               <span className="font-bold">{grade.grade}</span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-muted-foreground text-xs">
                 {grade.gradeSheet.term.name}
               </span>
             </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -23,15 +24,14 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { AddUserToRole } from "./AddUserToRole";
 

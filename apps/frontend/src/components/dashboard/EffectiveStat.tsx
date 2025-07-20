@@ -1,7 +1,6 @@
 import type { IconType } from "react-icons/lib";
 
 import { getServerTranslations } from "~/i18n/server";
-
 import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { MaleVsFemaleCount } from "./MaleVsFemaleCount";

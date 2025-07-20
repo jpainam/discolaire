@@ -1,11 +1,12 @@
-import { Label } from "@repo/ui/components/label";
-import { getServerTranslations } from "~/i18n/server";
-
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { UserDataTable } from "~/components/administration/users/UserDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
+import { getServerTranslations } from "~/i18n/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Page() {
@@ -14,7 +15,7 @@ export default async function Page() {
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <div className="flex gap-2 p-4 flex-col">
+        <div className="flex flex-col gap-2 p-4">
           <Label>{t("users")}</Label>
           <Suspense
             fallback={

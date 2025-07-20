@@ -1,10 +1,9 @@
 import { Contact, FileStack, NotepadTextDashed, Users } from "lucide-react";
 
-import { getServerTranslations } from "~/i18n/server";
-
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
+import { getServerTranslations } from "~/i18n/server";
 
 interface UserLink {
   icon: React.ReactNode;

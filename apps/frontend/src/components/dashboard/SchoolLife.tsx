@@ -1,4 +1,24 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import {
+  eachDayOfInterval,
+  endOfWeek,
+  getDay,
+  parseISO,
+  startOfWeek,
+} from "date-fns";
+import {
+  AlertTriangleIcon,
+  AmbulanceIcon,
+  ClockIcon,
+  FileTextIcon,
+  LifeBuoy,
+  UsersIcon,
+} from "lucide-react";
+
 import { Badge } from "@repo/ui/components/badge";
 import {
   Card,
@@ -17,24 +37,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import {
-  eachDayOfInterval,
-  endOfWeek,
-  getDay,
-  parseISO,
-  startOfWeek,
-} from "date-fns";
-import {
-  AlertTriangleIcon,
-  AmbulanceIcon,
-  ClockIcon,
-  FileTextIcon,
-  LifeBuoy,
-  UsersIcon,
-} from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+
 import { useIsMobile } from "~/hooks/use-mobile";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -118,7 +121,7 @@ export function SchoolLife({ className }: { className?: string }) {
     const summary = [
       {
         category: t("Absents"),
-        icon: <UsersIcon className="h-4 w-4 text-primary" />,
+        icon: <UsersIcon className="text-primary h-4 w-4" />,
         mon: absenceCounts[0],
         tue: absenceCounts[1],
         wed: absenceCounts[2],
@@ -145,7 +148,7 @@ export function SchoolLife({ className }: { className?: string }) {
       },
       {
         category: t("Exclusions"),
-        icon: <AlertTriangleIcon className="w-4 h-4 text-orange-500" />,
+        icon: <AlertTriangleIcon className="h-4 w-4 text-orange-500" />,
         mon: exclusionCounts[0],
         tue: exclusionCounts[1],
         wed: exclusionCounts[2],
@@ -154,7 +157,7 @@ export function SchoolLife({ className }: { className?: string }) {
       },
       {
         category: "Convocations",
-        icon: <FileTextIcon className="w-4 h-4 text-gray-500" />,
+        icon: <FileTextIcon className="h-4 w-4 text-gray-500" />,
         mon: convocationCounts[0],
         tue: convocationCounts[1],
         wed: convocationCounts[2],
@@ -226,7 +229,7 @@ export function SchoolLife({ className }: { className?: string }) {
     <Card className={cn(className)}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <LifeBuoy className="w-4 h-4" />
+          <LifeBuoy className="h-4 w-4" />
           {t("school_life")}
         </CardTitle>
         {/* <CardDescription>Card Description</CardDescription> */}
@@ -252,7 +255,7 @@ export function SchoolLife({ className }: { className?: string }) {
                 })}
               </TableHead>
               {days.map((day, index) => (
-                <TableHead key={index} className="text-right w-[80px]">
+                <TableHead key={index} className="w-[80px] text-right">
                   {day}
                 </TableHead>
               ))}
@@ -280,12 +283,12 @@ export function SchoolLife({ className }: { className?: string }) {
                   return (
                     <TableRow
                       key={row.category}
-                      className="border-b hover:bg-muted/10 transition-colors"
+                      className="hover:bg-muted/10 border-b transition-colors"
                     >
                       <TableCell>
                         <Link
                           href={`/administration/attendances/?category=${row.category}`}
-                          className="text-muted-foreground hover:text-blue-500 hover:underline  flex items-center gap-2"
+                          className="text-muted-foreground flex items-center gap-2 hover:text-blue-500 hover:underline"
                         >
                           {Icon}
                           {row.category}
@@ -296,7 +299,7 @@ export function SchoolLife({ className }: { className?: string }) {
                           variant={row.mon == 0 ? "secondary" : "outline"}
                           className={
                             (row.mon ?? 0) > 10
-                              ? " text-destructive-foreground"
+                              ? "text-destructive-foreground"
                               : ""
                           }
                         >
@@ -308,7 +311,7 @@ export function SchoolLife({ className }: { className?: string }) {
                           variant={row.tue == 0 ? "secondary" : "outline"}
                           className={
                             (row.tue ?? 0) > 10
-                              ? " text-destructive-foreground"
+                              ? "text-destructive-foreground"
                               : ""
                           }
                         >
@@ -320,7 +323,7 @@ export function SchoolLife({ className }: { className?: string }) {
                           variant={row.wed == 0 ? "secondary" : "outline"}
                           className={
                             (row.mon ?? 0) > 10
-                              ? " text-destructive-foreground"
+                              ? "text-destructive-foreground"
                               : ""
                           }
                         >
@@ -332,7 +335,7 @@ export function SchoolLife({ className }: { className?: string }) {
                           variant={row.thu == 0 ? "secondary" : "outline"}
                           className={
                             (row.thu ?? 0) > 10
-                              ? " text-destructive-foreground"
+                              ? "text-destructive-foreground"
                               : ""
                           }
                         >
@@ -344,7 +347,7 @@ export function SchoolLife({ className }: { className?: string }) {
                           variant={row.fri == 0 ? "secondary" : "outline"}
                           className={
                             (row.fri ?? 0) > 10
-                              ? " text-destructive-foreground"
+                              ? "text-destructive-foreground"
                               : ""
                           }
                         >

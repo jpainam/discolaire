@@ -1,7 +1,9 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
 import { Download, Plus } from "lucide-react";
+
+import { Button } from "@repo/ui/components/button";
+
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";

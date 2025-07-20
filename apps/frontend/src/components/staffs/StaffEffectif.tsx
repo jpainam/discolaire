@@ -1,5 +1,7 @@
 "use client";
+
 import type { RouterOutputs } from "@repo/api";
+
 import { useLocale } from "~/i18n";
 
 export function StaffEffectif({

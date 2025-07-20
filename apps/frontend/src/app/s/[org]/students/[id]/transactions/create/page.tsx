@@ -1,12 +1,12 @@
 import { CircleDollarSign } from "lucide-react";
 
 import { Label } from "@repo/ui/components/label";
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
 
 import { AlertState } from "~/components/AlertState";
+import { EmptyState } from "~/components/EmptyState";
 import { CreateTransaction } from "~/components/students/transactions/create/CreateTransaction";
 import { CreateTransactionContextProvider } from "~/components/students/transactions/create/CreateTransactionContextProvider";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -30,13 +30,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="flex w-full flex-col gap-8">
-      <div className="flex items-center gap-2 border-b bg-secondary px-2 py-2 text-secondary-foreground">
+      <div className="bg-secondary text-secondary-foreground flex items-center gap-2 border-b px-2 py-2">
         <CircleDollarSign className="h-4 w-4" />
         <Label className="py-1.5"> {t("make_payment")}</Label>
       </div>
 
       {unpaidRequiredFees.length !== 0 && (
-        <div className="mx-auto w-full flex flex-col  max-w-3xl">
+        <div className="mx-auto flex w-full max-w-3xl flex-col">
           <AlertState variant="warning">{t("required_fee_warning")}</AlertState>
         </div>
       )}

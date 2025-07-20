@@ -1,3 +1,5 @@
+import React, { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import {
   BookOpenCheck,
   CalendarDays,
@@ -6,21 +8,19 @@ import {
   History,
   KeySquare,
 } from "lucide-react";
-import React, { Suspense } from "react";
-
-import { NoPermission } from "~/components/no-permission";
-import { getServerTranslations } from "~/i18n/server";
-import { PermissionAction } from "~/permissions";
-import { checkPermission } from "~/permissions/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
+import { NoPermission } from "~/components/no-permission";
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
 import { routes } from "~/configs/routes";
+import { getServerTranslations } from "~/i18n/server";
+import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 interface UserLink {
@@ -97,14 +97,14 @@ export default async function Layout(props: {
           key={params.id}
           fallback={
             <div className="px-4 py-2">
-              <Skeleton className="h-8 " />
+              <Skeleton className="h-8" />
             </div>
           }
         >
           <StaffDetailHeader />
         </Suspense>
       </ErrorBoundary>
-      <div className="grid 2xl:grid-cols-[30%_70%] gap-2 px-4">
+      <div className="grid gap-2 px-4 2xl:grid-cols-[30%_70%]">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             key={params.id}
@@ -115,7 +115,7 @@ export default async function Layout(props: {
         </ErrorBoundary>
 
         <div className="w-full md:grid-cols-2 xl:grid-cols-3">
-          <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
+          <div className="bg-muted text-muted-foreground flex max-w-fit items-center rounded-full">
             {userLinks.map((link: UserLink, _index) => {
               return (
                 <StaffTabMenu

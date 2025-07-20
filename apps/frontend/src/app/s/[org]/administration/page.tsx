@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { addMonths, subMonths } from "date-fns";
 import { Suspense } from "react";
+import { addMonths, subMonths } from "date-fns";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 //import { ClassroomStatistics } from "~/components/administration/ClassroomStatistics";
 import { TransactionSummaryCard } from "~/components/administration/TransactionSummaryCard";
 //import { RecentActivities } from "~/components/administration/RecentActivities";
@@ -17,11 +19,11 @@ export default function Page() {
   ]);
   return (
     <HydrateClient>
-      <div className="px-4 py-2 flex flex-col gap-4">
+      <div className="flex flex-col gap-4 px-4 py-2">
         <Suspense
           key={"quick-statistics"}
           fallback={
-            <div className="col-span-full grid lg:grid-cols-4 gap-4">
+            <div className="col-span-full grid gap-4 lg:grid-cols-4">
               <Skeleton className="h-24 w-full" />
               <Skeleton className="h-24 w-full" />
               <Skeleton className="h-24 w-full" />

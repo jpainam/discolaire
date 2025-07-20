@@ -1,11 +1,14 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+
 //import TopTimetable from "~/components/classrooms/TopTimetable";
 //import { api } from "~/trpc/server";
 
@@ -48,7 +51,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <Suspense
           key={params.id}
           fallback={
-            <div className="py-2 px-4">
+            <div className="px-4 py-2">
               <Skeleton className="h-8 w-full" />
             </div>
           }
@@ -61,12 +64,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           fallback={
             <div className="grid grid-cols-4 gap-4 p-4">
               {Array.from({ length: 12 }).map((_, i) => (
-                <Skeleton key={i} className="h-8 w-full " />
+                <Skeleton key={i} className="h-8 w-full" />
               ))}
             </div>
           }
         >
-          <div className="py-2 px-4">
+          <div className="px-4 py-2">
             <EnrollmentDataTable />
           </div>
         </Suspense>

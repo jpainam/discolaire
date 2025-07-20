@@ -1,11 +1,12 @@
 "use client";
+
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
 import { Separator } from "@repo/ui/components/separator";
 
 import { AvatarState } from "~/components/AvatarState";
-
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import EmailVerification from "~/components/EmailComponent";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -27,7 +28,7 @@ export function StaffProfile() {
 
   return (
     <Card className="p-0">
-      <CardHeader className="flex flex-row items-start gap-4 py-4 border-b bg-muted/50">
+      <CardHeader className="bg-muted/50 flex flex-row items-start gap-4 border-b py-4">
         <AvatarState
           avatar={staff.user?.avatar}
           className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"

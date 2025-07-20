@@ -1,21 +1,21 @@
 "use client";
 
+import { useCallback } from "react";
+import Link from "next/link";
+import i18next from "i18next";
 import { useAtom } from "jotai";
 import { ArrowDownUp, AtSign, DollarSign, Phone, Users } from "lucide-react";
-import Link from "next/link";
-import { useCallback } from "react";
 
 import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
-import { useLocale } from "~/i18n";
 
-import { Badge } from "@repo/ui/components/badge";
-import i18next from "i18next";
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { SimpleTooltip } from "~/components/simple-tooltip";
 import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { getFullName } from "~/utils";
@@ -60,8 +60,8 @@ export function GridViewFinanceCard({
   return (
     <Card
       className={cn(
-        "rounded-sm p-2 shadow-none hover:bg-muted hover:shadow-md",
-        selectedStudents.includes(student.id) && "border-green-600 bg-muted",
+        "hover:bg-muted rounded-sm p-2 shadow-none hover:shadow-md",
+        selectedStudents.includes(student.id) && "bg-muted border-green-600",
       )}
     >
       <CardContent className="flex flex-row items-start p-0">

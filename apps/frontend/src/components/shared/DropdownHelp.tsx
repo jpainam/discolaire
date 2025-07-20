@@ -10,10 +10,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useLocale } from "~/i18n";
 
 import CalendarIcon from "~/components/icons/calendar";
 import YoutubeIcon from "~/components/icons/youtube";
+import { useLocale } from "~/i18n";
 
 export function DropdownHelp() {
   const { t } = useLocale();
@@ -21,7 +21,7 @@ export function DropdownHelp() {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
-        <HelpCircleIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+        <HelpCircleIcon className="text-muted-foreground mr-2 h-4 w-4" />
         <span>{t("help")}</span>
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>

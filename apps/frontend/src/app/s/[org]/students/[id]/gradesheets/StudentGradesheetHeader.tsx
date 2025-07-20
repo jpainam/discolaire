@@ -1,5 +1,8 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import { Captions, MoreVertical } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -9,19 +12,19 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { Captions, MoreVertical } from "lucide-react";
-import { useParams } from "next/navigation";
+
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useLocale } from "~/i18n";
+
 export function StudentGradesheetHeader() {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
 
   return (
-    <div className="flex border-b flex-row items-center text-muted-foreground bg-muted gap-1 px-4 py-1">
-      <Captions className="w-4 h-4" />
+    <div className="text-muted-foreground bg-muted flex flex-row items-center gap-1 border-b px-4 py-1">
+      <Captions className="h-4 w-4" />
       <Label>{t("transcripts")}</Label>
       <div className="ml-auto">
         <DropdownMenu>

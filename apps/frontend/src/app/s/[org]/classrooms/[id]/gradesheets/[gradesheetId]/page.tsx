@@ -1,6 +1,4 @@
-import { Badge } from "@repo/ui/components/badge";
-import { Card, CardContent } from "@repo/ui/components/card";
-import { Progress } from "@repo/ui/components/progress";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import i18next from "i18next";
 import {
   Award,
@@ -10,7 +8,11 @@ import {
   TriangleAlert,
   Users,
 } from "lucide-react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Badge } from "@repo/ui/components/badge";
+import { Card, CardContent } from "@repo/ui/components/card";
+import { Progress } from "@repo/ui/components/progress";
+
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
@@ -70,31 +72,31 @@ export default async function Page(props: {
   return (
     <div className="flex w-full flex-col gap-2 px-4 py-2">
       <Card className="p-0">
-        <CardContent className="grid p-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <CardContent className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-center space-x-2 mb-2">
+            <div className="mb-2 flex items-center space-x-2">
               <BookOpen className="h-5 w-5 text-blue-600" />
               <div className="font-medium">
                 {gradesheet.subject.course.name}
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("coeff")} : {gradesheet.subject.coefficient}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("Devoir")} : {gradesheet.name}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("teacher")} : {gradesheet.subject.teacher?.lastName}
             </p>
           </div>
 
           <div>
-            <div className="flex items-center space-x-2 mb-2">
+            <div className="mb-2 flex items-center space-x-2">
               <Calendar className="h-5 w-5 text-green-600" />
-              <div className="font-medium ">Informations</div>
+              <div className="font-medium">Informations</div>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("date")} :{" "}
               {gradesheet.createdAt.toLocaleDateString(i18next.language, {
                 year: "numeric",
@@ -103,34 +105,34 @@ export default async function Page(props: {
                 day: "numeric",
               })}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("scale")}: {gradesheet.scale}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("term")} : {gradesheet.term.name}
             </p>
           </div>
 
           <div>
-            <div className="flex items-center space-x-2 mb-2">
+            <div className="mb-2 flex items-center space-x-2">
               <TrendingUp className="h-5 w-5 text-purple-600" />
-              <div className="font-medium ">Notes</div>
+              <div className="font-medium">Notes</div>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("max_grade")} : {isFinite(maxGrade) ? maxGrade : "-"}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("min_grade")} : {isFinite(minGrade) ? minGrade : "-"}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("average")} : {average.toFixed(2)}
             </p>
           </div>
 
           <div>
-            <div className="flex items-center space-x-2 mb-2">
+            <div className="mb-2 flex items-center space-x-2">
               <Award className="h-5 w-5 text-orange-600" />
-              <div className="font-medium ">{t("appreciation")}</div>
+              <div className="font-medium">{t("appreciation")}</div>
             </div>
             <Badge variant="secondary" className="text-sm">
               {getAppreciations(average, gradesheet.scale)}
@@ -138,7 +140,7 @@ export default async function Page(props: {
           </div>
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
         <Card className="px-0 py-2">
           <CardContent>
             <div className="text-sm font-medium">{t("evaluated_students")}</div>
@@ -156,7 +158,7 @@ export default async function Page(props: {
             <div className="text-sm font-medium">{t("overall_average")}</div>
             <div className="flex items-center space-x-2">
               <TrendingUp className="h-5 w-5 text-green-600" />
-              <span className="text-2xl font-bold ">{average.toFixed(2)}</span>
+              <span className="text-2xl font-bold">{average.toFixed(2)}</span>
             </div>
           </CardContent>
         </Card>
@@ -166,7 +168,7 @@ export default async function Page(props: {
             <div className="text-sm font-medium">{t("average")} ≥ 10</div>
             <div className="flex items-center space-x-2">
               <Award className="h-5 w-5 text-purple-600" />
-              <span className="text-2xl font-bold ">{grades10}</span>
+              <span className="text-2xl font-bold">{grades10}</span>
             </div>
           </CardContent>
         </Card>
@@ -200,7 +202,7 @@ export default async function Page(props: {
             <div className="text-sm font-medium">{t("success_rate")} ≥ 10</div>
             <div className="flex items-center space-x-2">
               <Progress value={(grades10 * 100) / len} />
-              <span className="text-sm font-medium ">
+              <span className="text-sm font-medium">
                 {((grades10 * 100) / len).toFixed(2)}%
               </span>
             </div>
@@ -220,7 +222,7 @@ export default async function Page(props: {
           </p>
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_25%] gap-2">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_25%]">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <ClassroomGradeList gradesheet={gradesheet} grades={grades} />
         </ErrorBoundary>

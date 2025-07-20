@@ -1,3 +1,6 @@
+import { headers } from "next/headers";
+import i18next from "i18next";
+
 import {
   Table,
   TableBody,
@@ -6,8 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import i18next from "i18next";
-import { headers } from "next/headers";
+
 import { auth } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 

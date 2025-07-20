@@ -1,11 +1,11 @@
 "use client";
 
-import { addDays, getDay, setHours, setMinutes } from "date-fns";
 import { useMemo, useState } from "react";
-import { useCalendarContext } from "~/components/event-calendar/calendar-context";
+import { addDays, getDay, setHours, setMinutes } from "date-fns";
 
 import type { CalendarEvent, EventColor } from "~/components/event-calendar";
 import { EventCalendar } from "~/components/event-calendar";
+import { useCalendarContext } from "~/components/event-calendar/calendar-context";
 
 // Etiquettes data for calendar filtering
 export const etiquettes = [

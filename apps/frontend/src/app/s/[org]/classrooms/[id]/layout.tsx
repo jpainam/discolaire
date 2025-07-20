@@ -1,8 +1,9 @@
 import React from "react";
-
-import { studentService } from "@repo/api/services";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import { studentService } from "@repo/api/services";
+
 import { getSession } from "~/auth/server";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";

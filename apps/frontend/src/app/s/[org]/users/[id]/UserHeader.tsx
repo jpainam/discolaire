@@ -1,7 +1,8 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { AvatarState } from "~/components/AvatarState";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -18,24 +19,24 @@ export function UserHeader() {
       <AvatarState
         pos={1}
         avatar={user.avatar}
-        className="w-[100px] h-[100px]"
+        className="h-[100px] w-[100px]"
       />
 
-      <div className="space-y-0.5 ">
+      <div className="space-y-0.5">
         <div className="flex flex-row gap-16">
-          <div className="flex flex-row items-center gap-2 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-2">
             {user.name}
           </div>
-          <div className="flex flex-row items-center gap-2 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-2">
             <span className="font-bold">{t("username")}</span>
             {user.username}
           </div>
-          <div className="flex flex-row items-center gap-2 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-row items-center gap-2">
             <span className="font-bold">{t("email")}</span>
             {user.email}
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           {t("userManagementDescription")}
         </p>
       </div>

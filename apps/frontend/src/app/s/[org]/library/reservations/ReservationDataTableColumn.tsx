@@ -1,4 +1,12 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addDays } from "date-fns";
+import i18next from "i18next";
+import { StampIcon, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -14,13 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { ColumnDef } from "@tanstack/react-table";
-import { addDays } from "date-fns";
-import type { TFunction } from "i18next";
-import i18next from "i18next";
-import { StampIcon, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
@@ -171,7 +173,7 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
           <DropdownMenuContent align="end">
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
-                <StampIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                <StampIcon className="text-muted-foreground mr-2 h-4 w-4" />
                 <span>{t("status")}</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>

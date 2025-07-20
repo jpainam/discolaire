@@ -1,7 +1,9 @@
 "use client";
 
-import { Loader, Mail } from "lucide-react";
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader, Mail } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -24,12 +26,10 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -65,7 +65,7 @@ export default function Paage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary">
+    <div className="bg-secondary flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{t("Forgot password")}</CardTitle>
@@ -120,7 +120,7 @@ export default function Paage() {
         <CardFooter className="flex justify-center">
           <Button
             variant="link"
-            className="text-sm text-muted-foreground"
+            className="text-muted-foreground text-sm"
             onClick={() => router.push("/auth/login")}
           >
             {t("back_to_login")}

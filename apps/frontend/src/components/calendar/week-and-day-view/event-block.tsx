@@ -1,17 +1,17 @@
+import type { VariantProps } from "class-variance-authority";
+import type { HTMLAttributes } from "react";
 import { cva } from "class-variance-authority";
 import { differenceInMinutes, format, parseISO } from "date-fns";
 
-import { useCalendar } from "~/components/calendar/calendar-context";
-
 import { cn } from "@repo/ui/lib/utils";
-import type { VariantProps } from "class-variance-authority";
-import type { HTMLAttributes } from "react";
+
 import type { IEvent } from "~/components/calendar/interfaces";
+import { useCalendar } from "~/components/calendar/calendar-context";
 import { useModal } from "~/hooks/use-modal";
 import { EventDetails } from "../event-details";
 
 const calendarWeekEventCardVariants = cva(
-  "flex select-none flex-col gap-0.5 truncate whitespace-nowrap rounded-md border px-2 py-1.5 text-xs focus-visible:outline-offset-2",
+  "flex flex-col gap-0.5 truncate rounded-md border px-2 py-1.5 text-xs whitespace-nowrap select-none focus-visible:outline-offset-2",
   {
     variants: {
       color: {
@@ -62,7 +62,7 @@ export function EventBlock({ event, className }: IProps) {
 
   const calendarWeekEventCardClasses = cn(
     calendarWeekEventCardVariants({ color, className }),
-    durationInMinutes < 35 && "py-0 justify-center",
+    durationInMinutes < 35 && "justify-center py-0",
   );
   const { openModal } = useModal();
 

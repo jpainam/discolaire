@@ -22,7 +22,7 @@ export function TabLink({
     <Link href={href} className="relative z-10">
       <div
         className={cn(
-          "flex flex-row items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted-foreground transition-all",
+          "text-muted-foreground flex flex-row items-center gap-2 rounded-full px-4 py-1.5 text-sm transition-all",
           isActive
             ? "bg-primary text-primary-foreground"
             : "hover:text-secondary-foreground",
@@ -33,7 +33,7 @@ export function TabLink({
       {isActive && (
         <motion.div
           layoutId="indicator"
-          className="absolute left-0 top-0 h-full w-full rounded-full bg-primary"
+          className="bg-primary absolute top-0 left-0 h-full w-full rounded-full"
           style={{ zIndex: -1 }}
         />
       )}

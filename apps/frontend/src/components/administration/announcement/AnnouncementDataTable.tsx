@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { NoticeboardDataTableActions } from "./NoticeboardDataTableActions";
 import { getColumns } from "./NoticeboardDataTableColumns";

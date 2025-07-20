@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
-import { MoreVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import i18next from "i18next";
+import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -20,20 +26,14 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
-
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
@@ -146,7 +146,7 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
                               title: t("delete"),
                               description: t("delete_confirmation"),
                               icon: (
-                                <Trash2 className="h-5 w-5 text-destructive" />
+                                <Trash2 className="text-destructive h-5 w-5" />
                               ),
                               alertDialogTitle: {
                                 className: "flex items-center gap-2",

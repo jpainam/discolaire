@@ -2,6 +2,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -18,12 +21,7 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
-import { FileUploader } from "~/uploads/file-uploader";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { DateRangePicker } from "~/components/shared/DateRangePicker";
 import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
@@ -32,7 +30,9 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+import { FileUploader } from "~/uploads/file-uploader";
 
 // const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
 //   ssr: false,
@@ -169,15 +169,15 @@ export function CreateEditAssignment({
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex items-center flex-row  gap-2 border-b bg-muted/50 px-4 py-1">
+        <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
           <FormField
             control={form.control}
             name="termId"
             render={({ field }) => (
-              <FormItem className="flex flex-row gap-2 items-center">
+              <FormItem className="flex flex-row items-center gap-2">
                 <FormLabel>{t("terms")}</FormLabel>
                 <FormControl>
-                  <TermSelector className="md:w-64 w-full" {...field} />
+                  <TermSelector className="w-full md:w-64" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -204,7 +204,7 @@ export function CreateEditAssignment({
             </Button>
           </div>
         </div>
-        <div className="grid px-4 grid-cols-1 gap-2 md:gap-x-8 gap-y-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2 gap-y-4 px-4 md:grid-cols-3 md:gap-x-8">
           <FormField
             control={form.control}
             name="title"
@@ -370,7 +370,7 @@ export function CreateEditAssignment({
             control={form.control}
             name="visibles"
             render={() => (
-              <FormItem className="flex flex-row space-x-8 items-start">
+              <FormItem className="flex flex-row items-start space-x-8">
                 <FormLabel>{t("visible_to")}</FormLabel>
 
                 {visiblesTo.map((item) => (

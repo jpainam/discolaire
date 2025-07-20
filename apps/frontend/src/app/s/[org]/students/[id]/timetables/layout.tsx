@@ -1,6 +1,6 @@
-import { CalendarProvider } from "~/components/calendar/calendar-context";
-
 import { decode } from "entities";
+
+import { CalendarProvider } from "~/components/calendar/calendar-context";
 import { getEvents, getUsers } from "~/components/calendar/requests";
 
 export default async function Layout({
@@ -27,7 +27,7 @@ export default async function Layout({
       })}
       events={events}
     >
-      <div className="flex  flex-col gap-4 py-2 px-4">{children}</div>
+      <div className="flex flex-col gap-4 px-4 py-2">{children}</div>
     </CalendarProvider>
   );
 }

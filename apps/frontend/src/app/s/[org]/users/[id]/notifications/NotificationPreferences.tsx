@@ -1,18 +1,20 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
+import { useState } from "react";
+import { useParams } from "next/navigation";
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { Mail, MessageSquare, Phone } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
+
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
+import { Separator } from "@repo/ui/components/separator";
+
 import type { NotificationType } from "~/configs/constants";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -155,20 +157,20 @@ export function NotificationPreferences() {
   const { t } = useLocale();
 
   return (
-    <div className="space-y-8 p-4 container max-w-3xl">
+    <div className="container max-w-3xl space-y-8 p-4">
       {notificationEvents.map((event) => (
         <div key={event.id} className="space-y-3">
           <div>
-            <h3 className="text-md flex gap-1 items-center flex-row font-medium">
+            <h3 className="text-md flex flex-row items-center gap-1 font-medium">
               <span>{event.icon}</span>
               <span> {t(event.name)}</span>
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t(event.description)}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-[40%_15%_15%_15%] gap-4 items-center">
+          <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-[40%_15%_15%_15%]">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id={`${event.id}-all`}
@@ -190,7 +192,7 @@ export function NotificationPreferences() {
                   handleChannelChange(event.id, "email", checked === true)
                 }
               />
-              <Mail className="h-4 w-4 mr-1 text-muted-foreground" />
+              <Mail className="text-muted-foreground mr-1 h-4 w-4" />
               <Label htmlFor={`${event.id}-email`}>Email</Label>
             </div>
 
@@ -202,7 +204,7 @@ export function NotificationPreferences() {
                   handleChannelChange(event.id, "sms", checked === true)
                 }
               />
-              <Phone className="h-4 w-4 mr-1 text-muted-foreground" />
+              <Phone className="text-muted-foreground mr-1 h-4 w-4" />
               <Label htmlFor={`${event.id}-sms`}>SMS</Label>
             </div>
 
@@ -214,7 +216,7 @@ export function NotificationPreferences() {
                   handleChannelChange(event.id, "whatsapp", checked === true)
                 }
               />
-              <MessageSquare className="h-4 w-4 mr-1 text-muted-foreground" />
+              <MessageSquare className="text-muted-foreground mr-1 h-4 w-4" />
               <Label htmlFor={`${event.id}-whatsapp`}>WhatsApp</Label>
             </div>
           </div>
@@ -223,7 +225,7 @@ export function NotificationPreferences() {
         </div>
       ))}
 
-      <div className="flex ">
+      <div className="flex">
         <Button
           isLoading={upsertMutation.isPending}
           size={"sm"}

@@ -1,13 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useMemo } from "react";
-
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { useLocale } from "~/i18n";
-
+import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { parseAsInteger, useQueryState } from "nuqs";
+
+import { DataTable, useDataTable } from "@repo/ui/datatable";
+
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { GradeSheetDataTableActions } from "./GradeSheetDataTableActions";
 import { fetchGradeSheetColumns } from "./GradeSheetDataTableColumns";

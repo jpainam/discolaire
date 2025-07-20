@@ -1,4 +1,7 @@
 import { render } from "@react-email/render";
+import i18next from "i18next";
+import { z } from "zod";
+
 import { db } from "@repo/db";
 import {
   AbsenceEmail,
@@ -7,11 +10,9 @@ import {
   ExclusionEmail,
   LatenessEmail,
 } from "@repo/transactional";
-import i18next from "i18next";
-import { z } from "zod";
+
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
-
 import { caller } from "~/trpc/server";
 
 const dateFormat = Intl.DateTimeFormat(i18next.language, {

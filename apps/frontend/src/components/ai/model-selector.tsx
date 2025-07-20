@@ -2,6 +2,7 @@
 
 import { startTransition, useMemo, useOptimistic, useState } from "react";
 
+import type { Session } from "@repo/auth";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -9,12 +10,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
 import { saveChatModelAsCookie } from "~/components/ai/actions";
+import { entitlementsByUserType } from "~/lib/ai/entitlements";
 import { chatModels } from "~/lib/ai/models";
 import { cn } from "~/lib/utils";
-
-import type { Session } from "@repo/auth";
-import { entitlementsByUserType } from "~/lib/ai/entitlements";
 import { CheckCircleFillIcon, ChevronDownIcon } from "./icons";
 
 export function ModelSelector({
@@ -50,14 +50,14 @@ export function ModelSelector({
       <DropdownMenuTrigger
         asChild
         className={cn(
-          "w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
+          "data-[state=open]:bg-accent data-[state=open]:text-accent-foreground w-fit",
           className,
         )}
       >
         <Button
           data-testid="model-selector"
           variant="outline"
-          className="md:px-2 md:h-[34px]"
+          className="md:h-[34px] md:px-2"
         >
           {selectedChatModel?.name}
           <ChevronDownIcon />
@@ -84,11 +84,11 @@ export function ModelSelector({
             >
               <button
                 type="button"
-                className="gap-4 group/item flex flex-row justify-between items-center w-full"
+                className="group/item flex w-full flex-row items-center justify-between gap-4"
               >
-                <div className="flex flex-col gap-1 items-start">
+                <div className="flex flex-col items-start gap-1">
                   <div>{chatModel.name}</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-muted-foreground text-xs">
                     {chatModel.description}
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MailIcon, MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -11,14 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function AssignmentDetailsHeader({

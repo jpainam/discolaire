@@ -3,10 +3,10 @@
 import { KeyRound, UserPlus2 } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import { CreateEditUser } from "~/components/users/CreateEditUser";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 
 export function AttachUserButton({
   userId,

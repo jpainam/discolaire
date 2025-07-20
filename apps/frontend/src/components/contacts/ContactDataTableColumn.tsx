@@ -1,10 +1,12 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Pencil, ReceiptText, Trash2, Users } from "lucide-react";
 import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
+import { Pencil, ReceiptText, Trash2, Users } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
@@ -19,17 +21,15 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import FlatBadge from "~/components/FlatBadge";
-import { useSheet } from "~/hooks/use-sheet";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { decode } from "entities";
+import FlatBadge from "~/components/FlatBadge";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
@@ -108,7 +108,7 @@ export function getColumns({
         const v = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline line-clamp-1"
+            className="line-clamp-1 hover:text-blue-600 hover:underline"
             href={routes.contacts.details(v.id)}
           >
             {v.lastName && decode(v.lastName)}
@@ -125,7 +125,7 @@ export function getColumns({
         const v = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline line-clamp-1 text-muted-foreground"
+            className="text-muted-foreground line-clamp-1 hover:text-blue-600 hover:underline"
             href={routes.contacts.details(v.id)}
           >
             {v.firstName && decode(v.firstName)}
@@ -217,7 +217,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
   );
   const router = useRouter();
   return (
-    <div className="justify-end flex">
+    <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button aria-label="Open menu" variant="ghost">

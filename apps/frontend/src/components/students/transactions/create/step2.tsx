@@ -1,9 +1,13 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { TransactionType } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -14,14 +18,10 @@ import {
   FormItem,
   FormLabel,
 } from "@repo/ui/components/form";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { TransactionType } from "@repo/db";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 import Step2Details from "./step2details";
@@ -110,7 +110,7 @@ export function Step2() {
             control={form.control}
             name="paymentReceived"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-4">
+              <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md p-4">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -130,7 +130,7 @@ export function Step2() {
             control={form.control}
             name="paymentCorrectness"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-4">
+              <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md p-4">
                 <FormControl>
                   <Checkbox
                     id={"paymentCorrectness"}

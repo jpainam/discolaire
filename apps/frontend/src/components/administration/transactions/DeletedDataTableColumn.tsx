@@ -1,6 +1,8 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import { createColumnHelper } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import Link from "next/link";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { createColumnHelper } from "@tanstack/react-table";
 import i18next from "i18next";
 import { Eye, MoreHorizontal } from "lucide-react";
 
@@ -14,12 +16,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { CrossCircledIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import FlatBadge from "~/components/FlatBadge";
 import { TransactionDetails } from "./TransactionDetails";
 
 type TransactionAllProcedureOutput = NonNullable<
@@ -84,7 +84,7 @@ export const getDeletedDataTableColumn = ({
         const transaction = row.original;
         return (
           <Link
-            className="hover:underline hover:text-blue-600"
+            className="hover:text-blue-600 hover:underline"
             href={`/students/${transaction.studentId}/transactions`}
           >
             {transaction.student.lastName}
@@ -101,7 +101,7 @@ export const getDeletedDataTableColumn = ({
 
         return (
           <Link
-            className="hover:underline hover:text-blue-600"
+            className="hover:text-blue-600 hover:underline"
             href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
           >
             {transaction.transactionRef}
@@ -125,7 +125,7 @@ export const getDeletedDataTableColumn = ({
         return (
           <FlatBadge className="gap-2" variant={"red"}>
             <CrossCircledIcon
-              className="size-4 text-muted-foreground"
+              className="text-muted-foreground size-4"
               aria-hidden="true"
             />
             <span className="capitalize">{t("deleted")}</span>

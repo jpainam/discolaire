@@ -1,4 +1,10 @@
 "use client";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import _ from "lodash";
+import { toast } from "sonner";
+import { useDebouncedCallback } from "use-debounce";
+
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Switch } from "@repo/ui/components/switch";
 import {
@@ -9,10 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import _ from "lodash";
-import { toast } from "sonner";
-import { useDebouncedCallback } from "use-debounce";
+
 import { menuPolicies, policies } from "~/configs/policies";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
@@ -70,7 +73,7 @@ export function PermissionTable({ userId }: { userId: string }) {
   }
   if (permissionsQuery.isPending) {
     return (
-      <div className="w-full grid grid-cols-2 gap-4 p-2">
+      <div className="grid w-full grid-cols-2 gap-4 p-2">
         {Array.from({ length: 10 }).map((_, index) => (
           <Skeleton key={index} className="h-8" />
         ))}
@@ -84,7 +87,7 @@ export function PermissionTable({ userId }: { userId: string }) {
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent bg-muted/50">
+            <TableRow className="bg-muted/50 hover:bg-transparent">
               <TableHead>{t("name")}</TableHead>
               <TableHead>{t("read")}</TableHead>
               <TableHead>{t("edit")}</TableHead>
@@ -171,7 +174,7 @@ export function PermissionTable({ userId }: { userId: string }) {
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent bg-muted/50">
+            <TableRow className="bg-muted/50 hover:bg-transparent">
               <TableHead>{t("menu")}</TableHead>
               <TableHead>{t("access")}?</TableHead>
             </TableRow>

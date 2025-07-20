@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -11,12 +12,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+
+import { CreateEditRole } from "~/components/administration/users/CreateEditRole";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateEditRole } from "~/components/administration/users/CreateEditRole";
 import { useTRPC } from "~/trpc/react";
 
 interface EditDeleteActionProps {
@@ -74,7 +74,7 @@ export function EditDeleteAction({
             const isConfirmed = await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-              icon: <Trash2 className="size-4 text-destructive" />,
+              icon: <Trash2 className="text-destructive size-4" />,
               alertDialogTitle: {
                 className: "flex items-center gap-2",
               },

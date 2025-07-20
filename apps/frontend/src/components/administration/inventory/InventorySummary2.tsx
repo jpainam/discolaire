@@ -1,11 +1,5 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+
 import {
   Bar,
   BarChart,
@@ -16,6 +10,15 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+
 import { InventoryPieChart } from "./InventoryPieChart";
 
 const monthlyUsageData = [

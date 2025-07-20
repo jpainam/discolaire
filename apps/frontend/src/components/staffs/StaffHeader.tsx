@@ -1,17 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
 import { Download, Plus } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
+
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
-
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
-import { useEffect } from "react";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";

@@ -4,6 +4,7 @@ import { BookOpenText, CalendarDays, Trash2, User2Icon } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 
@@ -18,19 +19,19 @@ export function StaffTimetableDetails({
 
   return (
     <div className="grid grid-cols-2 gap-4 text-sm">
-      <div className="flex gap-2 flex-row items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center gap-2">
         <User2Icon className="h-4 w-4" />
         {t("teacher")}
       </div>
       <div className="font-bold">
         {event.subject.teacher?.prefix} {event.subject.teacher?.lastName}
       </div>
-      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center gap-2">
         <BookOpenText className="h-4 w-4" />
         {t("subject")}
       </div>
       <div className="font-bold">{event.subject.course.name}</div>
-      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center gap-2">
         <CalendarDays className="h-4 w-4" />
         {t("start_time")}
       </div>
@@ -40,7 +41,7 @@ export function StaffTimetableDetails({
         })}{" "}
         - {event.start.toLocaleTimeString(i18n.language)}
       </div>
-      <div className="flex flex-row gap-2 items-center text-muted-foreground">
+      <div className="text-muted-foreground flex flex-row items-center gap-2">
         <CalendarDays className="h-4 w-4" />
         {t("end_time")}
       </div>

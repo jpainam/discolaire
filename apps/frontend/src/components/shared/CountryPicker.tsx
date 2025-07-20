@@ -1,9 +1,10 @@
 "use client";
 
+import type * as RPNInput from "react-phone-number-input";
+import React, { useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { t } from "i18next";
 import { CheckIcon, ChevronsUpDown } from "lucide-react";
-import React, { useEffect, useMemo } from "react";
-import type * as RPNInput from "react-phone-number-input";
 import { getCountries } from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import countryNames from "react-phone-number-input/locale/en.json";
@@ -25,7 +26,6 @@ import {
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 

@@ -1,3 +1,5 @@
+import { differenceInCalendarDays, format } from "date-fns";
+
 import {
   Card,
   CardContent,
@@ -5,10 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { differenceInCalendarDays, format } from "date-fns";
+
 import { AvatarState } from "~/components/AvatarState";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
+
 export async function RecentBorrows({ className }: { className?: string }) {
   const { t } = await getServerTranslations();
   const borrows = await caller.library.borrowBooks({});
@@ -37,10 +40,10 @@ export async function RecentBorrows({ className }: { className?: string }) {
               <div key={index} className="flex items-center">
                 <AvatarState pos={borrow.name.length} avatar={borrow.avatar} />
                 <div className="ml-4 space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm leading-none font-medium">
                     {borrow.name}
                   </p>
-                  <p className="text-sm text-muted-foreground">{borrow.book}</p>
+                  <p className="text-muted-foreground text-sm">{borrow.book}</p>
                 </div>
                 <RelativeDayLabel date={borrow.date} />
               </div>
@@ -73,6 +76,6 @@ async function RelativeDayLabel({ date }: { date: Date }) {
       label = format(date, "MMMM d, yyyy");
   }
   return (
-    <div className="ml-auto text-muted-foreground text-sm">{t(label)}</div>
+    <div className="text-muted-foreground ml-auto text-sm">{t(label)}</div>
   );
 }

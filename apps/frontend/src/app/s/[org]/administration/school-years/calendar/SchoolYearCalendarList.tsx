@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@repo/ui/lib/utils";
+
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 
 export function SchoolYearCalendarList() {
@@ -26,11 +27,11 @@ export function SchoolYearCalendarList() {
             style={{
               backgroundColor: event.type.color,
             }}
-            className={cn("p-4 rounded-lg border")}
+            className={cn("rounded-lg border p-4")}
           >
             <div className="font-semibold">{event.name}</div>
             <div className="text-sm">{formattedDate}</div>
-            <div className="text-xs mt-1">{event.type.name}</div>
+            <div className="mt-1 text-xs">{event.type.name}</div>
           </div>
         );
       })}

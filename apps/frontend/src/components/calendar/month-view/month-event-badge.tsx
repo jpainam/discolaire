@@ -1,16 +1,16 @@
+import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import { endOfDay, format, isSameDay, parseISO, startOfDay } from "date-fns";
 
-import { useCalendar } from "~/components/calendar/calendar-context";
-
 import { cn } from "@repo/ui/lib/utils";
-import type { VariantProps } from "class-variance-authority";
+
 import type { IEvent } from "~/components/calendar/interfaces";
+import { useCalendar } from "~/components/calendar/calendar-context";
 import { useModal } from "~/hooks/use-modal";
 import { EventDetails } from "../event-details";
 
 const eventBadgeVariants = cva(
-  "mx-1 flex size-auto h-6.5 select-none items-center justify-between gap-1.5 truncate whitespace-nowrap rounded-md border px-2 text-xs",
+  "mx-1 flex size-auto h-6.5 items-center justify-between gap-1.5 truncate rounded-md border px-2 text-xs whitespace-nowrap select-none",
   {
     variants: {
       color: {

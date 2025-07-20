@@ -1,7 +1,7 @@
 "use client";
 
-import { ChevronDown, FileEdit, Filter, Plus, Trash, X } from "lucide-react";
 import { useState } from "react";
+import { ChevronDown, FileEdit, Filter, Plus, Trash, X } from "lucide-react";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+
 import { useLocale } from "~/i18n";
 
 // Sample activity data
@@ -165,7 +166,7 @@ export function UserLog() {
             Reset
           </Button>
         </div>
-        <div className="grid  grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <Select
             value={selectedUser ?? ""}
             onValueChange={(value) => setSelectedUser(value || null)}
@@ -213,7 +214,7 @@ export function UserLog() {
       </div>
 
       {/* Activity list */}
-      <div className="flex-1 overflow-auto h-screen">
+      <div className="h-screen flex-1 overflow-auto">
         <div className="space-y-4">
           {filteredActivities.length > 0 ? (
             filteredActivities.map((activity) => (
@@ -221,14 +222,14 @@ export function UserLog() {
                 key={activity.id}
                 className="flex flex-col gap-2 border-b py-2"
               >
-                <div className="flex flex-row text-xs items-center justify-between">
+                <div className="flex flex-row items-center justify-between text-xs">
                   <p className="font-medium">{activity.user}</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     {activity.timestamp}
                   </p>
                 </div>
 
-                <div className="flex text-xs flex-row items-center gap-2 justify-between">
+                <div className="flex flex-row items-center justify-between gap-2 text-xs">
                   <Badge
                     variant="outline"
                     className={`mr-2 ${actionTypes[activity.action as keyof typeof actionTypes].color}`}
@@ -244,11 +245,11 @@ export function UserLog() {
             ))
           ) : (
             <div className="flex flex-col items-center justify-center rounded-md border border-dashed p-8 text-center">
-              <X className="h-8 w-8 text-muted-foreground" />
+              <X className="text-muted-foreground h-8 w-8" />
               <h3 className="mt-2 text-sm font-medium">
                 {t("no_activities_found")}
               </h3>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {t("try_adjusting_filters")}
               </p>
             </div>

@@ -1,11 +1,16 @@
 "use client";
 
+import { useCallback, useRef } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { useCallback, useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
+import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
@@ -24,20 +29,15 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+
 import { AvatarState } from "~/components/AvatarState";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -138,7 +138,7 @@ export function CreateGradeSheet({
         className="flex w-full flex-col gap-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid px-2 flex-row gap-2 border-b md:flex">
+        <div className="grid flex-row gap-2 border-b px-2 md:flex">
           <div className="grid w-[75%] grid-cols-1 items-center gap-x-4 gap-y-2 border-r p-2 md:grid-cols-2">
             <FormField
               control={form.control}
@@ -220,7 +220,7 @@ export function CreateGradeSheet({
                 control={form.control}
                 name="notifyParents"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start ">
+                  <FormItem className="flex flex-row items-start">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
@@ -235,7 +235,7 @@ export function CreateGradeSheet({
                 control={form.control}
                 name="notifyStudents"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start ">
+                  <FormItem className="flex flex-row items-start">
                     <FormControl>
                       <Checkbox
                         checked={field.value}

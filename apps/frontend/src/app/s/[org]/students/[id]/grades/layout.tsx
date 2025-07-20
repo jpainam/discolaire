@@ -1,12 +1,13 @@
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { Suspense } from "react";
+
+import { EmptyState } from "~/components/EmptyState";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentGrade } from "~/components/students/grades/StudentGrade";
 import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
+import { getServerTranslations } from "~/i18n/server";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Layout(props: {
@@ -45,7 +46,7 @@ export default async function Layout(props: {
           <Suspense
             key={student.id}
             fallback={
-              <div className="py-2 px-4">
+              <div className="px-4 py-2">
                 <Skeleton className="h-8 w-full" />
               </div>
             }

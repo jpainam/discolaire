@@ -1,6 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { PlusCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -21,16 +27,13 @@ import {
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { PlusCircle } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStockUnit } from "../../../../../components/administration/inventory/CreateEditStockUnit";
+
 const schema = z.object({
   name: z.string().min(5),
   //currentStock: z.coerce.number().default(0),
@@ -198,7 +201,7 @@ export function CreateEditConsumable({
               </FormItem>
             )}
           />
-          <div className="flex flex-row items-center gap-2 justify-end">
+          <div className="flex flex-row items-center justify-end gap-2">
             <Button
               type="button"
               variant={"secondary"}

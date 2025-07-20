@@ -7,7 +7,7 @@ import { TimetableCategoryTable } from "./timetable-categories/TimetableCategory
 
 export default function Page() {
   return (
-    <div className="grid lg:grid-cols-3 gap-4 p-4">
+    <div className="grid gap-4 p-4 lg:grid-cols-3">
       <StudentContactRelationship />
       <div className="flex flex-col gap-4">
         <ClubTable />

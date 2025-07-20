@@ -1,5 +1,10 @@
 "use client";
 
+import React, { useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAtom } from "jotai";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,10 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@repo/ui/components/breadcrumb";
-import { useAtom } from "jotai";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+
 import { breadcrumbAtom } from "~/lib/atoms";
 
 export const Breadcrumbs = () => {

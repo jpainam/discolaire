@@ -1,5 +1,6 @@
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
+
 import { env } from "~/env";
 
 const connection = new IORedis(`${env.REDIS_URL}?family=0`, {

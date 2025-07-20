@@ -1,7 +1,9 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
+import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { getSession } from "~/auth/server";
 import { ContactDataTable } from "~/components/contacts/ContactDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -29,7 +31,7 @@ export default async function Page() {
         <Suspense
           key={"contacts"}
           fallback={
-            <div className="grid grid-cols-4 p-4 gap-4">
+            <div className="grid grid-cols-4 gap-4 p-4">
               {Array.from({ length: 16 }).map((_, i) => (
                 <Skeleton key={i} className="h-8" />
               ))}

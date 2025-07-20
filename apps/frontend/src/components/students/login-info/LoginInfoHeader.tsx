@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { MailIcon, MoreVertical } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
@@ -11,11 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useLocale } from "~/i18n";
 
-import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useLocale } from "~/i18n";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function LoginInfoHeader() {
@@ -23,7 +23,7 @@ export function LoginInfoHeader() {
   const Icon = sidebarIcons.login_info;
   const params = useParams<{ id: string }>();
   return (
-    <div className="flex flex-row gap-2 items-center bg-muted px-4 py-1 text-muted-foreground">
+    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 px-4 py-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("login_info")}</Label>
       <div className="ml-auto">

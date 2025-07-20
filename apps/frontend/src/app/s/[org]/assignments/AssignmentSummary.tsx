@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+
 import { getServerTranslations } from "~/i18n/server";
 
 export async function AssignmentSummary() {
@@ -18,11 +19,11 @@ export async function AssignmentSummary() {
           <CardTitle className="text-sm font-medium">
             {t("total_assignments")}
           </CardTitle>
-          <ListTodo className="h-4 w-4 text-muted-foreground" />
+          <ListTodo className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{10}</div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             {t("number_from_last_week", { n: "+2" })}
           </p>
         </CardContent>
@@ -32,11 +33,11 @@ export async function AssignmentSummary() {
           <CardTitle className="text-sm font-medium">
             {t("pending_submissions")}
           </CardTitle>
-          <Users className="h-4 w-4 text-muted-foreground" />
+          <Users className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">15</div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             {t("across_all_assignments")}
           </p>
         </CardContent>
@@ -46,13 +47,13 @@ export async function AssignmentSummary() {
           <CardTitle className="text-sm font-medium">
             {t("upcoming_due_date")}
           </CardTitle>
-          <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+          <CalendarIcon className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
             {format(new Date(), "MMM dd")}
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             {t("next_assignment_due")}
           </p>
         </CardContent>
@@ -62,11 +63,11 @@ export async function AssignmentSummary() {
           <CardTitle className="text-sm font-medium">
             {t("average_completion_rate")}
           </CardTitle>
-          <PieChart className="h-4 w-4 text-muted-foreground" />
+          <PieChart className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">15 %</div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             {t("across_all_assignments")}
           </p>
         </CardContent>

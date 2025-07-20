@@ -1,4 +1,3 @@
-import { cn } from "@repo/ui/lib/utils";
 import {
   ArrowDownLeft,
   ArrowRight,
@@ -9,6 +8,8 @@ import {
   SendHorizontal,
   Wallet,
 } from "lucide-react";
+
+import { cn } from "@repo/ui/lib/utils";
 
 interface AccountItem {
   id: string;
@@ -70,7 +71,7 @@ export default function List01({
   return (
     <div
       className={cn(
-        "w-full max-w-xl mx-auto",
+        "mx-auto w-full max-w-xl",
         "bg-white dark:bg-zinc-900/70",
         "border border-zinc-100 dark:border-zinc-800",
         "rounded-xl shadow-sm backdrop-blur-xl",
@@ -78,7 +79,7 @@ export default function List01({
       )}
     >
       {/* Total Balance Section */}
-      <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+      <div className="border-b border-zinc-100 p-4 dark:border-zinc-800">
         <p className="text-xs text-zinc-600 dark:text-zinc-400">
           Total Balance
         </p>
@@ -89,7 +90,7 @@ export default function List01({
 
       {/* Accounts List */}
       <div className="p-3">
-        <div className="flex items-center justify-between mb-2">
+        <div className="mb-2 flex items-center justify-between">
           <h2 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
             Your Accounts
           </h2>
@@ -101,14 +102,14 @@ export default function List01({
               key={account.id}
               className={cn(
                 "group flex items-center justify-between",
-                "p-2 rounded-lg",
+                "rounded-lg p-2",
                 "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
                 "transition-all duration-200",
               )}
             >
               <div className="flex items-center gap-2">
                 <div
-                  className={cn("p-1.5 rounded-lg", {
+                  className={cn("rounded-lg p-1.5", {
                     "bg-emerald-100 dark:bg-emerald-900/30":
                       account.type === "savings",
                     "bg-blue-100 dark:bg-blue-900/30":
@@ -118,16 +119,16 @@ export default function List01({
                   })}
                 >
                   {account.type === "savings" && (
-                    <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <Wallet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   )}
                   {account.type === "checking" && (
-                    <QrCode className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                    <QrCode className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                   )}
                   {account.type === "investment" && (
-                    <ArrowUpRight className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                    <ArrowUpRight className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                   )}
                   {account.type === "debt" && (
-                    <CreditCard className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
+                    <CreditCard className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
                   )}
                 </div>
                 <div>
@@ -153,13 +154,13 @@ export default function List01({
       </div>
 
       {/* Updated footer with four buttons */}
-      <div className="p-2 border-t border-zinc-100 dark:border-zinc-800">
+      <div className="border-t border-zinc-100 p-2 dark:border-zinc-800">
         <div className="grid grid-cols-4 gap-2">
           <button
             type="button"
             className={cn(
               "flex items-center justify-center gap-2",
-              "py-2 px-3 rounded-lg",
+              "rounded-lg px-3 py-2",
               "text-xs font-medium",
               "bg-zinc-900 dark:bg-zinc-50",
               "text-zinc-50 dark:text-zinc-900",
@@ -168,14 +169,14 @@ export default function List01({
               "transition-all duration-200",
             )}
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="h-3.5 w-3.5" />
             <span>Add</span>
           </button>
           <button
             type="button"
             className={cn(
               "flex items-center justify-center gap-2",
-              "py-2 px-3 rounded-lg",
+              "rounded-lg px-3 py-2",
               "text-xs font-medium",
               "bg-zinc-900 dark:bg-zinc-50",
               "text-zinc-50 dark:text-zinc-900",
@@ -184,14 +185,14 @@ export default function List01({
               "transition-all duration-200",
             )}
           >
-            <SendHorizontal className="w-3.5 h-3.5" />
+            <SendHorizontal className="h-3.5 w-3.5" />
             <span>Send</span>
           </button>
           <button
             type="button"
             className={cn(
               "flex items-center justify-center gap-2",
-              "py-2 px-3 rounded-lg",
+              "rounded-lg px-3 py-2",
               "text-xs font-medium",
               "bg-zinc-900 dark:bg-zinc-50",
               "text-zinc-50 dark:text-zinc-900",
@@ -200,14 +201,14 @@ export default function List01({
               "transition-all duration-200",
             )}
           >
-            <ArrowDownLeft className="w-3.5 h-3.5" />
+            <ArrowDownLeft className="h-3.5 w-3.5" />
             <span>Top-up</span>
           </button>
           <button
             type="button"
             className={cn(
               "flex items-center justify-center gap-2",
-              "py-2 px-3 rounded-lg",
+              "rounded-lg px-3 py-2",
               "text-xs font-medium",
               "bg-zinc-900 dark:bg-zinc-50",
               "text-zinc-50 dark:text-zinc-900",
@@ -216,7 +217,7 @@ export default function List01({
               "transition-all duration-200",
             )}
           >
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="h-3.5 w-3.5" />
             <span>More</span>
           </button>
         </div>

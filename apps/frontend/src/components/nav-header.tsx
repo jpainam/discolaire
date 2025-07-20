@@ -2,20 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import {
   RiContactsLine,
   RiHome9Line,
   RiIdCardLine,
   RiUserSettingsLine,
 } from "@remixicon/react";
+import { Home, Users2 } from "lucide-react";
+
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
 } from "@repo/ui/components/navigation-menu";
-import { Home, Users2 } from "lucide-react";
+
 import { useLocale } from "~/i18n";
 
 export function NavHeader() {

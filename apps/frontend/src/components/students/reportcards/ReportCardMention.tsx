@@ -1,3 +1,5 @@
+import { CheckIcon } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -6,9 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { CheckIcon } from "lucide-react";
-import { getServerTranslations } from "~/i18n/server";
 
+import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 
 export async function ReportCardMention({
@@ -38,8 +39,8 @@ export async function ReportCardMention({
             </TableCell>
             <TableCell className="min-w-[60px] text-center">
               {average >= 18 && (
-                <div className="flex justify-center items-center">
-                  <CheckIcon className="w-4 h-4" />
+                <div className="flex items-center justify-center">
+                  <CheckIcon className="h-4 w-4" />
                 </div>
               )}
             </TableCell>
@@ -50,8 +51,8 @@ export async function ReportCardMention({
             </TableCell>
             <TableCell className="text-center">
               {average >= 14 && (
-                <div className="flex justify-center items-center">
-                  <CheckIcon className="w-4 h-4" />
+                <div className="flex items-center justify-center">
+                  <CheckIcon className="h-4 w-4" />
                 </div>
               )}
             </TableCell>
@@ -62,8 +63,8 @@ export async function ReportCardMention({
             </TableCell>
             <TableCell className="text-center">
               {average >= 12 && (
-                <div className="flex justify-center items-center">
-                  <CheckIcon className="w-4 h-4" />
+                <div className="flex items-center justify-center">
+                  <CheckIcon className="h-4 w-4" />
                 </div>
               )}
             </TableCell>
@@ -74,8 +75,8 @@ export async function ReportCardMention({
             </TableCell>
             <TableCell>
               {average <= 9.99 && (
-                <div className="flex justify-center items-center">
-                  <CheckIcon className="w-4 h-4 self-center" />
+                <div className="flex items-center justify-center">
+                  <CheckIcon className="h-4 w-4 self-center" />
                 </div>
               )}
             </TableCell>
@@ -86,8 +87,8 @@ export async function ReportCardMention({
             </TableCell>
             <TableCell>
               {average <= 5.99 && (
-                <div className="flex justify-center items-center">
-                  <CheckIcon className="w-4 h-4 self-center" />
+                <div className="flex items-center justify-center">
+                  <CheckIcon className="h-4 w-4 self-center" />
                 </div>
               )}
             </TableCell>

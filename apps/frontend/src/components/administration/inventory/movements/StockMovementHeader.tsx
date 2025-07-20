@@ -1,5 +1,15 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  ChevronDown,
+  FileMinus,
+  FilePlus,
+  FunnelIcon,
+  MoreVerticalIcon,
+} from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -15,15 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  ChevronDown,
-  FileMinus,
-  FilePlus,
-  FunnelIcon,
-  MoreVerticalIcon,
-} from "lucide-react";
-import { toast } from "sonner";
+
 import { DatePicker } from "~/components/DatePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -46,12 +48,12 @@ export function StockMovementHeader() {
     trpc.inventory.consumables.queryOptions(),
   );
   return (
-    <div className="grid md:flex gap-4 px-4 flex-row items-center">
-      <div className="flex flex-row gap-1 items-center">
-        <FunnelIcon className="w-4 h-4" />
+    <div className="grid flex-row items-center gap-4 px-4 md:flex">
+      <div className="flex flex-row items-center gap-1">
+        <FunnelIcon className="h-4 w-4" />
         <Label>{t("filter")}</Label>
       </div>
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <Label>{t("from")}</Label>
         <DatePicker
           onChange={(val) => {
@@ -61,7 +63,7 @@ export function StockMovementHeader() {
           }}
         />
       </div>
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <Label>{t("to")}</Label>
         <DatePicker
           onChange={(val) => {
@@ -71,7 +73,7 @@ export function StockMovementHeader() {
           }}
         />
       </div>
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <Label>{t("consumable")}</Label>
         <Select
           onValueChange={(val) => {
@@ -90,7 +92,7 @@ export function StockMovementHeader() {
           </SelectContent>
         </Select>
       </div>
-      <div className="ml-auto flex flex-row gap-2 items-center">
+      <div className="ml-auto flex flex-row items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"default"} size={"sm"}>

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
+import { z } from "zod";
+
 import { db } from "@repo/db";
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
 import { sendEmail } from "@repo/utils";
-import { z } from "zod";
 
 import { getSession } from "~/auth/server";
 import { getFullName } from "~/utils";

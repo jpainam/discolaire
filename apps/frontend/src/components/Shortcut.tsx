@@ -1,5 +1,19 @@
 "use client";
 
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  BookmarkPlus,
+  Edit2,
+  Loader2Icon,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
+import { useDebouncedCallback } from "use-debounce";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,21 +32,8 @@ import {
 } from "@repo/ui/components/popover";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
-import {
-  BookmarkPlus,
-  Edit2,
-  Loader2Icon,
-  Search,
-  Trash2,
-  X,
-} from "lucide-react";
-import { usePathname } from "next/navigation";
-
 import { useSidebar } from "@repo/ui/components/sidebar";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useDebouncedCallback } from "use-debounce";
+
 import { env } from "~/env";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
@@ -134,7 +135,7 @@ export function Shortcut({ className }: { className?: string }) {
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         {isMobile ? (
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 flex-row">
+            <button className="flex flex-row items-center gap-2">
               <BookmarkPlus className="h-4 w-4" />
               <span>{t("shortcuts")}</span>
             </button>
@@ -151,8 +152,8 @@ export function Shortcut({ className }: { className?: string }) {
         )}
         <PopoverContent className="w-96 p-0" align="end">
           {shortcutsQuery.isPending ? (
-            <div className="flex justify-center items-center w-32">
-              <Loader2Icon className="animate-spin h-8 w-8" />
+            <div className="flex w-32 items-center justify-center">
+              <Loader2Icon className="h-8 w-8 animate-spin" />
             </div>
           ) : (
             <>
@@ -171,7 +172,7 @@ export function Shortcut({ className }: { className?: string }) {
               <Separator />
               <div className="p-4">
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
                   <Input
                     type="search"
                     placeholder={t("search") + "..."}
@@ -183,7 +184,7 @@ export function Shortcut({ className }: { className?: string }) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute right-1 top-1 h-7 w-7"
+                      className="absolute top-1 right-1 h-7 w-7"
                       onClick={() => debounced("")}
                     >
                       <X className="h-4 w-4" />
@@ -198,21 +199,21 @@ export function Shortcut({ className }: { className?: string }) {
                     {shortcuts.map((shortcut) => (
                       <li
                         key={shortcut.id}
-                        className="group flex items-center justify-between rounded-md py-2 hover:bg-muted"
+                        className="group hover:bg-muted flex items-center justify-between rounded-md py-2"
                       >
                         <a
                           rel="noopener noreferrer"
                           onClick={() => setIsOpen(false)}
-                          className="truncate w-72 text-sm"
+                          className="w-72 truncate text-sm"
                           target="_blank"
                           href={shortcut.url}
                         >
                           {shortcut.title}
-                          <span className="block truncate text-muted-foreground text-xs w-72">
+                          <span className="text-muted-foreground block w-72 truncate text-xs">
                             {shortcut.url}
                           </span>
                         </a>
-                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                           <Button
                             variant="ghost"
                             size="icon"
@@ -225,7 +226,7 @@ export function Shortcut({ className }: { className?: string }) {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-4 w-4 text-destructive hover:text-destructive/90"
+                            className="text-destructive hover:text-destructive/90 h-4 w-4"
                             onClick={() => {
                               toast.loading(t("deleting"), { id: 0 });
                               deleteShortcut.mutate(shortcut.id);
@@ -240,7 +241,7 @@ export function Shortcut({ className }: { className?: string }) {
                   </ul>
                 ) : (
                   <div className="flex h-32 items-center justify-center">
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       {searchQuery
                         ? t("no_shortcuts_found")
                         : t("no_shortcuts_yet")}

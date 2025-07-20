@@ -1,5 +1,5 @@
-import { getSession } from "~/auth/server";
 import type { ArtifactKind } from "~/components/ai/artifact";
+import { getSession } from "~/auth/server";
 import {
   deleteDocumentsByIdAfterTimestamp,
   getDocumentsById,

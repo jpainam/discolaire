@@ -16,10 +16,10 @@ import {
 } from "@repo/ui/components/form";
 import { Separator } from "@repo/ui/components/separator";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import { InputField } from "~/components/shared/forms/input-field";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 
 const appreciationFormSchema = z.object({
@@ -77,7 +77,7 @@ export function CreateEditAppreciation() {
             )}
           />
           <Separator />
-          <div className="ml-auto mt-4 flex flex-row gap-4">
+          <div className="mt-4 ml-auto flex flex-row gap-4">
             <Button
               onClick={() => {
                 closeModal();

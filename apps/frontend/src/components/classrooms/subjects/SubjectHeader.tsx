@@ -1,5 +1,7 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical, PlusIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
@@ -11,18 +13,16 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import FlatBadge from "~/components/FlatBadge";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
-
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditSubject } from "./CreateEditSubject";
@@ -67,7 +67,7 @@ export function SubjectHeader() {
   ] as FlatBadgeVariant[];
 
   return (
-    <div className="grid w-full grid-cols-1 flex-row items-center gap-2 border-b bg-muted px-4 py-1 text-muted-foreground md:flex">
+    <div className="bg-muted text-muted-foreground grid w-full grid-cols-1 flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       {Icon && <Icon className="hidden h-4 w-4 md:block" />}
       <Label className="hidden md:block">{t("subjects")}</Label>
       <div className="grid grid-cols-3 flex-row items-center gap-2 md:flex">
@@ -92,7 +92,7 @@ export function SubjectHeader() {
           {coeff} {t("coefficient")}
         </FlatBadge>
       </div>
-      <div className=" flex-row items-center gap-2 ml-auto flex">
+      <div className="ml-auto flex flex-row items-center gap-2">
         {canAddClassroomSubject && (
           <Button
             size={"sm"}

@@ -2,12 +2,15 @@
 
 import type { Table } from "@tanstack/react-table";
 import { useCallback } from "react";
-
 import {
   CheckCircledIcon,
   CrossCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ChevronDown, Loader2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
 import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -17,9 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, Loader2, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+
 import FlatBadge from "~/components/FlatBadge";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { useModal } from "~/hooks/use-modal";
@@ -146,7 +147,7 @@ export function TransactionDataTableAction({
           >
             <Trash2 />
             {t("delete")}
-            <Badge className="rounded-full w-5 h-5 text-xs">
+            <Badge className="h-5 w-5 rounded-full text-xs">
               {table.getSelectedRowModel().rows.length}
             </Badge>
           </Button>

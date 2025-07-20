@@ -39,7 +39,7 @@ export function SMSTemplateList({ templates }: { templates: SMSTemplate[] }) {
                       size={"icon"}
                       variant={"outline"}
                     >
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <Trash2 className="text-destructive h-4 w-4" />
                     </Button>
                   </div>
                 </TableCell>

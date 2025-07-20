@@ -1,3 +1,5 @@
+import { ArrowRight, DollarSign, TrendingUp, Users } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -5,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { ArrowRight, DollarSign, TrendingUp, Users } from "lucide-react";
 
 const metrics = [
   {
@@ -66,15 +67,15 @@ export function BusinessMetrics() {
               <CardTitle className="text-sm font-medium">
                 {metric.title}
               </CardTitle>
-              <metric.icon className="h-4 w-4 text-muted-foreground" />
+              <metric.icon className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">{metric.subtitle}</p>
+              <p className="text-muted-foreground text-xs">{metric.subtitle}</p>
               <div className="mt-2 space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span
                     // @ts-expect-error  fix it
-                    className={`px-2 py-1 rounded-full ${statusColors[metric.status]}`}
+                    className={`rounded-full px-2 py-1 ${statusColors[metric.status]}`}
                   >
                     {metric.status}
                   </span>
@@ -82,13 +83,13 @@ export function BusinessMetrics() {
                     {metric.current} / {metric.target} {metric.unit}
                   </span>
                 </div>
-                <div className="w-full bg-secondary rounded-full h-1.5">
+                <div className="bg-secondary h-1.5 w-full rounded-full">
                   <div
                     className="bg-primary h-1.5 rounded-full"
                     style={{ width: `${Math.min(metric.progress, 100)}%` }}
                   />
                 </div>
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex items-center justify-between text-sm">
                   <span className="font-medium">
                     {metric.unit}
                     {metric.target.toLocaleString()}

@@ -1,11 +1,4 @@
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
-import {
   ArrowDownLeft,
   ArrowUpLeft,
   BookText,
@@ -16,6 +9,15 @@ import {
   Hash,
   Waves,
 } from "lucide-react";
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Separator } from "@repo/ui/components/separator";
+
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
@@ -70,26 +72,26 @@ export default async function Page(props: GradeSheetPageProps) {
       //   borderTopColor: searchParams.color ?? "lightgray",
       // }}
     >
-      <div className="flex flex-row items-center justify-between gap-4 border-b bg-muted/50 px-4 py-3">
+      <div className="bg-muted/50 flex flex-row items-center justify-between gap-4 border-b px-4 py-3">
         {t("subject")}
         <span className="font-bold"> {searchParams.reportName}</span>
         {/* <Button variant={"ghost"} className="opacity-0"></Button> */}
       </div>
       <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <Captions className="h-4 w-4 stroke-1" /> {t("subject")}
           </span>
           <span> {searchParams.reportName}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <BookText className="h-4 w-4 stroke-1" /> {t("grade_sheet_name")}
           </span>
           <span>{searchParams.name}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <CalendarDays className="h-4 w-4 stroke-1" /> {t("date")}
           </span>
           <span>
@@ -100,21 +102,21 @@ export default async function Page(props: GradeSheetPageProps) {
       <Separator className="my-2" />
       <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <Dock className="h-4 w-4 stroke-1" />
             {t("grade_of_the_student")}
           </span>
           <span>{searchParams.grade || "N/A"}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <ArrowUpLeft className="h-4 w-4 stroke-1" />{" "}
             {t("highest_classroom_grade")}
           </span>
           <span>{searchParams.max || "N/A"}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <ArrowDownLeft className="h-4 w-4 stroke-1" />{" "}
             {t("lowest_classroom_grade")}
           </span>
@@ -124,27 +126,27 @@ export default async function Page(props: GradeSheetPageProps) {
       <Separator className="my-2" />
       <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <ClipboardList className="h-4 w-4 stroke-1" />
             {t("period_of_evaluation")}
           </span>
           <span>{searchParams.termName || "N/A"}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <Hash className="h-4 w-4 stroke-1" /> {t("coefficient")}
           </span>
           <span>{searchParams.coef || "N/A"}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="flex flex-row items-center gap-1 text-muted-foreground">
+          <span className="text-muted-foreground flex flex-row items-center gap-1">
             <Waves className="h-4 w-4 stroke-1" /> {t("average_of_classroom")}
           </span>
           <span>{searchParams.moy || "N/A"}</span>
         </li>
       </ul>
       <Separator className="my-2" />
-      <div className="grid grid-cols-1 px-4 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 px-4 md:grid-cols-3">
         <Card className="gap-2">
           <CardHeader>
             <CardTitle>
@@ -155,7 +157,7 @@ export default async function Page(props: GradeSheetPageProps) {
             <div className="text-xl font-bold text-blue-600">
               {((maleAbove10 * 100) / (maleCount || 1e-9)).toFixed(2)}%
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("out_of_participants", {
                 n1: maleAbove10,
                 n2: maleCount,
@@ -174,7 +176,7 @@ export default async function Page(props: GradeSheetPageProps) {
             <div className="text-xl font-bold text-pink-600">
               {((femaleAbove10 * 100) / (femaleCount || 1e-9)).toFixed(2)}%
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("out_of_participants", {
                 n1: femaleAbove10,
                 n2: femaleCount,
@@ -191,7 +193,7 @@ export default async function Page(props: GradeSheetPageProps) {
             <div className="text-xl font-bold text-green-600">
               {((above10 * 100) / (len || 1e-9)).toFixed(2)}%
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t("out_of_participants", {
                 n1: above10,
                 n2: len,

@@ -1,8 +1,10 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
+import Link from "next/link";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Eye,
   MoveRight,
@@ -11,7 +13,6 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
-import Link from "next/link";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -25,16 +26,15 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
 import FlatBadge from "~/components/FlatBadge";
+import { routes } from "~/configs/routes";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { routes } from "~/configs/routes";
-import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
 
@@ -78,7 +78,7 @@ export function getColumns({
         const classroom = row.original;
         return (
           <Link
-            className="hover:text-blue-600 line-clamp-1 hover:underline"
+            className="line-clamp-1 hover:text-blue-600 hover:underline"
             href={routes.classrooms.details(classroom.id)}
           >
             {classroom.name}
@@ -183,7 +183,7 @@ export function getColumns({
         const teacher = row.original.headTeacher;
         return teacher ? (
           <Link
-            className="hover:text-blue-600 hover:underline line-clamp-1 overflow-ellipsis"
+            className="line-clamp-1 overflow-ellipsis hover:text-blue-600 hover:underline"
             href={routes.staffs.details(teacher.id)}
           >
             {teacher.lastName}
@@ -335,7 +335,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
           <Button
             aria-label="Open menu"
             variant="ghost"
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex size-8 p-0"
           >
             <DotsHorizontalIcon className="size-4" aria-hidden="true" />
           </Button>

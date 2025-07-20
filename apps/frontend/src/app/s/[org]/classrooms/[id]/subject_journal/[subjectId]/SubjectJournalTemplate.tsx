@@ -1,7 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
@@ -12,12 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function SubjectJournalTemplate() {

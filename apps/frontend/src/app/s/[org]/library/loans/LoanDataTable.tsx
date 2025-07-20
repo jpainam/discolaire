@@ -1,7 +1,10 @@
 "use client";
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { useSuspenseQuery } from "@tanstack/react-query";
+
 import React from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+import { DataTable, useDataTable } from "@repo/ui/datatable";
+
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getBorrowBooksColumns } from "./LoanDataTableColumn";

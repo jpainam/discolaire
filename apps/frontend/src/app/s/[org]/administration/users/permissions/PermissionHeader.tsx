@@ -1,5 +1,7 @@
 "use client";
 
+import { LockKeyhole, MoreVertical } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -9,20 +11,21 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { LockKeyhole, MoreVertical } from "lucide-react";
+
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+
 export function PermissionHeader({ defaultValue }: { defaultValue: string }) {
   const { t } = useLocale();
   const router = useRouter();
   return (
-    <div className="flex flex-row justify-between px-4 py-2 border-b items-center gap-2">
+    <div className="flex flex-row items-center justify-between gap-2 border-b px-4 py-2">
       <div className="flex flex-row items-center gap-2">
-        <LockKeyhole className="w-4 h-4" />
+        <LockKeyhole className="h-4 w-4" />
         <Label>{t("permissions")}</Label>
       </div>
       <div className="flex flex-row items-center gap-2">

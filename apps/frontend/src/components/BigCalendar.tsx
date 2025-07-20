@@ -1,12 +1,16 @@
 "use client";
 
-import moment from "moment";
-import { useState } from "react";
 import type { View } from "react-big-calendar";
+import { useState } from "react";
+import moment from "moment";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
+
 import "react-big-calendar/lib/css/react-big-calendar.css";
+
 import { calendarEvents } from "~/data/calendar-events";
+
 import "./big-calendar.css";
+
 const localizer = momentLocalizer(moment);
 
 const BigCalendar = () => {

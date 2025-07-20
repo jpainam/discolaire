@@ -1,4 +1,13 @@
 "use client";
+
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { PencilIcon, PlusIcon, Trash } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Table,
@@ -8,19 +17,14 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { PencilIcon, PlusIcon, Trash } from "lucide-react";
-import { toast } from "sonner";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSchoolYearEventType } from "./CreateEditSchoolYearEventType";
+
 export function SchoolYearEventTypeTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
@@ -42,8 +46,8 @@ export function SchoolYearEventTypeTable() {
   );
   const { openModal } = useModal();
   return (
-    <div className="px-4 flex flex-col gap-4">
-      <div className="justify-end flex flex-row">
+    <div className="flex flex-col gap-4 px-4">
+      <div className="flex flex-row justify-end">
         <Button
           onClick={() => {
             openModal({
@@ -53,7 +57,7 @@ export function SchoolYearEventTypeTable() {
           }}
           size={"sm"}
         >
-          <PlusIcon className="w-4 h-4" />
+          <PlusIcon className="h-4 w-4" />
           {t("add")}
         </Button>
       </div>

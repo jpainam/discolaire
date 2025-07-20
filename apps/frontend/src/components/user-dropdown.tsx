@@ -1,3 +1,5 @@
+import { RiLogoutBoxLine, RiSettingsLine, RiTeamLine } from "@remixicon/react";
+
 import {
   Avatar,
   AvatarFallback,
@@ -13,8 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-
-import { RiLogoutBoxLine, RiSettingsLine, RiTeamLine } from "@remixicon/react";
 
 export default function UserDropdown() {
   return (
@@ -34,10 +34,10 @@ export default function UserDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
-          <span className="truncate text-sm font-medium text-foreground">
+          <span className="text-foreground truncate text-sm font-medium">
             Keith Kennedy
           </span>
-          <span className="truncate text-xs font-normal text-muted-foreground">
+          <span className="text-muted-foreground truncate text-xs font-normal">
             k.kennedy@originui.com
           </span>
         </DropdownMenuLabel>

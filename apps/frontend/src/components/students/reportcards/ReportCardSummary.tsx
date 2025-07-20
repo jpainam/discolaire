@@ -1,6 +1,6 @@
 import { Separator } from "@repo/ui/components/separator";
-import { getServerTranslations } from "~/i18n/server";
 
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 

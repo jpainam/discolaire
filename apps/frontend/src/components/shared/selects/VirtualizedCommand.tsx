@@ -1,8 +1,8 @@
 "use client";
 
+import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check, PlusIcon } from "lucide-react";
-import * as React from "react";
 
 import {
   Command,
@@ -13,9 +13,9 @@ import {
   CommandList,
   CommandSeparator,
 } from "@repo/ui/components/command";
-import { useLocale } from "~/i18n";
 
 import { AvatarState } from "~/components/AvatarState";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface Option {

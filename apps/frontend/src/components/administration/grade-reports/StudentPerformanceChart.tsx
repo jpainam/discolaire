@@ -1,5 +1,6 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -10,7 +11,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { useTRPC } from "~/trpc/react";
 
 export const description = "A line chart with dots";

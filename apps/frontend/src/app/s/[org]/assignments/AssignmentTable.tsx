@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -21,13 +22,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import { EmptyState } from "~/components/EmptyState";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 
 export function AssignmentTable() {
@@ -114,13 +114,13 @@ export function AssignmentTable() {
                       <>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          className="text-destructive focus:bg-[#FF666618] focus:text-destructive"
+                          className="text-destructive focus:text-destructive focus:bg-[#FF666618]"
                           onSelect={async () => {
                             const isConfirmed = await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
                               icon: (
-                                <Trash2 className="h-4 w-4 text-destructive" />
+                                <Trash2 className="text-destructive h-4 w-4" />
                               ),
                               alertDialogTitle: {
                                 className: "flex items-center gap-1",

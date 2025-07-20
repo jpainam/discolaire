@@ -4,6 +4,7 @@
 
 import { useCallback, useMemo } from "react";
 import useSWR from "swr";
+
 import type { UIArtifact } from "~/components/ai/artifact";
 
 export const initialArtifactData: UIArtifact = {

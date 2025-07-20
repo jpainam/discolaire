@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Select,
   SelectContent,
@@ -7,6 +8,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { cn } from "@repo/ui/lib/utils";
+
 export function TrimestreSelector({
   onChange,
   defaultValue,

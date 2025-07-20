@@ -1,5 +1,8 @@
 "use client";
 
+import { useCallback, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import {
   addMonths,
   format,
@@ -11,11 +14,10 @@ import {
   startOfWeek,
 } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
 import type {
   Culture,
   DateLocalizer,
@@ -24,11 +26,9 @@ import type {
   RbcView,
 } from "~/components/big-calendar";
 import BigCalendar, { dateFnsLocalizer } from "~/components/big-calendar";
+import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
-import { SkeletonLineGroup } from "~/components/skeletons/data-table";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import EventForm from "./EventForm";

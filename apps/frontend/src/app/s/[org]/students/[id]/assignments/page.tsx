@@ -1,9 +1,9 @@
 import { Separator } from "@repo/ui/components/separator";
-import { EmptyState } from "~/components/EmptyState";
-import { getServerTranslations } from "~/i18n/server";
 
+import { EmptyState } from "~/components/EmptyState";
 import { StudentAssignmentTable } from "~/components/students/assignments/StudentAssignementTable";
 import { StudentAssignmentHeader } from "~/components/students/assignments/StudentAssignmentHeader";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

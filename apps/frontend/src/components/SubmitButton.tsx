@@ -1,6 +1,7 @@
+import { Loader2 } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
-import { Loader2 } from "lucide-react";
 
 export function SubmitButton({
   children,
@@ -21,8 +22,8 @@ export function SubmitButton({
       className={cn(props.className, "relative")}
     >
       {isSubmitting ? (
-        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <Loader2 className="w-4 h-4 animate-spin" />
+        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Loader2 className="h-4 w-4 animate-spin" />
         </span>
       ) : (
         children

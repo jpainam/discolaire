@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
-import { getSession } from "~/auth/server";
 
+import { getSession } from "~/auth/server";
 import { NoPermission } from "~/components/no-permission";
 
 export default async function Layout({ children }: PropsWithChildren) {

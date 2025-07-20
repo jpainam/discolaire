@@ -1,12 +1,7 @@
 "use client";
 
 import type React from "react";
-
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Textarea } from "@repo/ui/components/textarea";
+import { useState } from "react";
 import {
   Archive,
   Edit,
@@ -19,7 +14,12 @@ import {
   Trash,
   Users,
 } from "lucide-react";
-import { useState } from "react";
+
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Textarea } from "@repo/ui/components/textarea";
 
 export default function EmailClient() {
   const [activeFolder, setActiveFolder] = useState("inbox");
@@ -37,9 +37,9 @@ export default function EmailClient() {
   };
 
   return (
-    <div className="flex  h-[600px] w-full  rounded-lg bg-background">
+    <div className="bg-background flex h-[600px] w-full rounded-lg">
       {/* Sidebar */}
-      <div className="w-56 border-r bg-muted/20 flex flex-col">
+      <div className="bg-muted/20 flex w-56 flex-col border-r">
         <div className="p-4">
           <Button
             className="w-full justify-start gap-2"
@@ -155,10 +155,10 @@ export default function EmailClient() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-1 flex-col">
         {composing ? (
-          <div className="flex-1 flex flex-col p-4">
-            <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-1 flex-col p-4">
+            <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">New Message</h2>
               <Button
                 variant="ghost"
@@ -168,8 +168,8 @@ export default function EmailClient() {
                 <Trash className="h-4 w-4" />
               </Button>
             </div>
-            <form onSubmit={handleSendEmail} className="flex-1 flex flex-col">
-              <div className="space-y-4 mb-4">
+            <form onSubmit={handleSendEmail} className="flex flex-1 flex-col">
+              <div className="mb-4 space-y-4">
                 <div>
                   <Input placeholder="To" />
                 </div>
@@ -179,7 +179,7 @@ export default function EmailClient() {
               </div>
               <Textarea
                 placeholder="Write your message here..."
-                className="flex-1 resize-none mb-4"
+                className="mb-4 flex-1 resize-none"
               />
               <div className="flex justify-end">
                 <Button type="submit" disabled={loading}>
@@ -298,7 +298,7 @@ interface NavItemProps {
 function NavItem({ icon, label, count, active, onClick }: NavItemProps) {
   return (
     <button
-      className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md ${
+      className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${
         active ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
       }`}
       onClick={onClick}
@@ -327,16 +327,16 @@ interface EmailItemProps {
 function EmailItem({ sender, subject, preview, time, unread }: EmailItemProps) {
   return (
     <div
-      className={`p-4 hover:bg-accent/50 cursor-pointer ${unread ? "bg-accent/20" : ""}`}
+      className={`hover:bg-accent/50 cursor-pointer p-4 ${unread ? "bg-accent/20" : ""}`}
     >
-      <div className="flex justify-between items-start mb-1">
+      <div className="mb-1 flex items-start justify-between">
         <h3 className={`text-sm ${unread ? "font-semibold" : "font-medium"}`}>
           {sender}
         </h3>
-        <span className="text-xs text-muted-foreground">{time}</span>
+        <span className="text-muted-foreground text-xs">{time}</span>
       </div>
       <h4 className={`text-sm ${unread ? "font-medium" : ""}`}>{subject}</h4>
-      <p className="text-xs text-muted-foreground line-clamp-1 mt-1">
+      <p className="text-muted-foreground mt-1 line-clamp-1 text-xs">
         {preview}
       </p>
     </div>

@@ -2,6 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
+
+import type { ComponentProps, MouseEventHandler, ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { XIcon } from "lucide-react";
+
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,9 +23,7 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { cn } from "@repo/ui/lib/utils";
-import { XIcon } from "lucide-react";
-import type { ComponentProps, MouseEventHandler, ReactNode } from "react";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+
 interface TagsContextType {
   value?: string;
   setValue?: (value: string) => void;
@@ -109,7 +112,7 @@ export const TagsTrigger = ({
     >
       <div className="flex flex-wrap items-center gap-1">
         {children}
-        <span className="px-2 py-px text-muted-foreground">
+        <span className="text-muted-foreground px-2 py-px">
           Select a tag...
         </span>
       </div>
@@ -135,7 +138,7 @@ export const TagsValue = ({
         // biome-ignore lint/a11y/noStaticElementInteractions: "This is a clickable badge"
         // biome-ignore lint/a11y/useKeyWithClickEvents: "This is a clickable badge"
         <div
-          className="size-auto cursor-pointer hover:text-muted-foreground"
+          className="hover:text-muted-foreground size-auto cursor-pointer"
           onClick={handleRemove}
         >
           <XIcon size={12} />

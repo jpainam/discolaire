@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@repo/ui/components/table";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, PlusCircleIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { EmptyState } from "~/components/EmptyState";
-import { useLocale } from "~/i18n";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -21,11 +12,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useModal } from "~/hooks/use-modal";
-import { useConfirm } from "~/providers/confirm-dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/components/table";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateEditTimetableCategory } from "~/components/classrooms/timetables/CreateEditTimetableCategory";
+import { EmptyState } from "~/components/EmptyState";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function TimetableCategoryTable() {

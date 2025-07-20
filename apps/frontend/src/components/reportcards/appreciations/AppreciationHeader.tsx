@@ -1,7 +1,8 @@
 "use client";
 
-import { ChevronDown, PrinterIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronDown, PrinterIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -15,16 +16,15 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ClassroomStudentSelector } from "~/components/shared/selects/ClassroomStudentSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 import { AppreciationCategoryList } from "./AppreciationCategoryList";
@@ -74,7 +74,7 @@ export function AppreciationHeader() {
       >
         {options.map((option) => (
           <ToggleGroupItem
-            className="rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground rounded-sm"
             value={option.value}
           >
             {option.iconLeft} {option.label}

@@ -11,8 +11,8 @@ import {
 } from "@repo/ui/components/breadcrumb";
 import { Separator } from "@repo/ui/components/separator";
 import { SidebarTrigger } from "@repo/ui/components/sidebar";
-import { useLocale } from "~/i18n";
 
+import { useLocale } from "~/i18n";
 import { pageHeaderBreadcrumbs } from "./menu";
 
 export function PageHeader() {

@@ -1,7 +1,10 @@
 "use client";
 
-import { BaselineIcon, SaveIcon, XIcon } from "lucide-react";
 import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { BaselineIcon, SaveIcon, XIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -26,14 +29,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -132,8 +132,8 @@ export function CreateEditAbsence({
   };
   return (
     <Form {...form}>
-      <form className="px-2 gap-4 mb-10" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-row mb-2 items-center justify-between gap-2 py-1">
+      <form className="mb-10 gap-4 px-2" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="mb-2 flex flex-row items-center justify-between gap-2 py-1">
           <div className="flex flex-row items-center gap-2">
             <BaselineIcon className="h-4 w-4" />
             <Label className="font-semibold">

@@ -19,9 +19,9 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-import { useLocale } from "~/i18n";
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function UserAddPermissionHeader() {
@@ -66,7 +66,7 @@ export function UserAddPermissionHeader() {
         </div>
       </div>
       <Card className="rounded-sm shadow-none">
-        <CardHeader className="border-b bg-muted/50 p-2 text-muted-foreground">
+        <CardHeader className="bg-muted/50 text-muted-foreground border-b p-2">
           <CardTitle>{t("permission_options")}</CardTitle>
           <CardDescription>
             Ajoutez un utilisateur à un groupe existant ou créez-en un nouveau.
@@ -114,7 +114,7 @@ function AddPermissionRadioItem({
       className={cn(
         "flex cursor-pointer flex-row gap-2 rounded-sm border p-4",
         isChecked &&
-          "border border-blue-500 bg-secondary text-secondary-foreground",
+          "bg-secondary text-secondary-foreground border border-blue-500",
       )}
     >
       <RadioGroupItem checked={isChecked} value={id} id={id} />

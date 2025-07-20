@@ -1,7 +1,9 @@
 import { Queue, QueueEvents } from "bullmq";
 
 import { logger } from "@repo/utils";
+
 import { getRedis } from "./redis-client";
+
 export const JobNames = {
   TRANSACTION_SUMMARY: "transaction-summary",
   NEW_GRADE_NOTIFICATION: "new-grade-notification",

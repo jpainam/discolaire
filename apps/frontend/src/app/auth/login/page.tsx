@@ -1,7 +1,7 @@
 "use client";
+
 // import type { Metadata } from "next";
 // import Link from "next/link";
-
 import { LoginForm } from "./LoginForm";
 
 // import { getServerTranslations } from "~/i18n/server";

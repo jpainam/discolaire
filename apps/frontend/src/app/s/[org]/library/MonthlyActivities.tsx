@@ -75,6 +75,7 @@
 import { useId } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/components/chart";
 import { Badge } from "@repo/ui/components/badge";
 import {
   Card,
@@ -84,9 +85,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
 import { cn } from "@repo/ui/lib/utils";
+
 import { CustomTooltipContent } from "~/components/charts-extra";
 import { useLocale } from "~/i18n";
 
@@ -138,7 +139,7 @@ export function MonthlyActivities({ className }: { className?: string }) {
       <CardHeader>
         <CardTitle>{t("monthly_activities")}</CardTitle>
         <CardDescription className="flex items-start gap-2">
-          <Badge className=" bg-emerald-500/24 text-emerald-500 border-none">
+          <Badge className="border-none bg-emerald-500/24 text-emerald-500">
             {total.toLocaleString()} emprunts
           </Badge>
         </CardDescription>
@@ -146,27 +147,27 @@ export function MonthlyActivities({ className }: { className?: string }) {
           <div className="flex items-center gap-2">
             <div
               aria-hidden="true"
-              className="size-1.5 shrink-0 rounded-xs bg-chart-4"
+              className="bg-chart-4 size-1.5 shrink-0 rounded-xs"
             ></div>
-            <div className="text-[13px]/3 text-muted-foreground/50">
+            <div className="text-muted-foreground/50 text-[13px]/3">
               {t("borrowed")}
             </div>
           </div>
           <div className="flex items-center gap-2">
             <div
               aria-hidden="true"
-              className="size-1.5 shrink-0 rounded-xs bg-chart-1"
+              className="bg-chart-1 size-1.5 shrink-0 rounded-xs"
             ></div>
-            <div className="text-[13px]/3 text-muted-foreground/50">
+            <div className="text-muted-foreground/50 text-[13px]/3">
               {t("returned")}
             </div>
           </div>
           <div className="flex items-center gap-2">
             <div
               aria-hidden="true"
-              className="size-1.5 shrink-0 rounded-xs bg-chart-3"
+              className="bg-chart-3 size-1.5 shrink-0 rounded-xs"
             ></div>
-            <div className="text-[13px]/3 text-muted-foreground/50">
+            <div className="text-muted-foreground/50 text-[13px]/3">
               {t("overdue")}
             </div>
           </div>

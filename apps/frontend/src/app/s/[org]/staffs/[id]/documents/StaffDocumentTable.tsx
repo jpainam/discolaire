@@ -1,4 +1,16 @@
 "use client";
+
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import i18next from "i18next";
+import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -15,16 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import i18next from "i18next";
-import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -103,12 +106,12 @@ export function StaffDocumentTable() {
                   <TableCell>{document.description}</TableCell>
                   <TableCell>{document.createdBy.name}</TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap  gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {document.attachments.map((attachment, index) => {
                         return (
                           <Link
                             href={`/api/download/documents/${attachment}`}
-                            className="underline text-blue-600 flex items-center gap-1"
+                            className="flex items-center gap-1 text-blue-600 underline"
                             target="_blank"
                             key={attachment}
                           >

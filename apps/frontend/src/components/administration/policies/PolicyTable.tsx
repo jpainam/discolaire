@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import {
   ChevronDownIcon,
@@ -9,7 +11,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -30,12 +31,11 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 import { selectedPoliciesAtom } from "./_selected_policies_atom";
 import { CreateEditPolicy } from "./CreateEditPolicy";
@@ -213,7 +213,7 @@ export function PolicyTable({
                                     const isConfirmed = await confirm({
                                       title: t("delete"),
                                       icon: (
-                                        <Trash2 className="size-4 text-destructive" />
+                                        <Trash2 className="text-destructive size-4" />
                                       ),
                                       alertDialogTitle: {
                                         className: "flex items-center gap-2",
@@ -240,7 +240,7 @@ export function PolicyTable({
                 {isExpanded(policy.id) && (
                   <TableRow>
                     <TableCell colSpan={8} className="bg-muted/50 p-4">
-                      <pre className="whitespace-pre-wrap text-sm">
+                      <pre className="text-sm whitespace-pre-wrap">
                         {JSON.stringify(policy.condition, null, 2)}
                       </pre>
                     </TableCell>

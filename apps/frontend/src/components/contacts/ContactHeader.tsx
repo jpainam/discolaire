@@ -1,7 +1,10 @@
 "use client";
 
-import { MoreVertical, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
+import { MoreVertical, PlusIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -10,17 +13,14 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
-import { useParams } from "next/navigation";
 import { authClient } from "~/auth/client";
 import { ContactSelector } from "~/components/shared/selects/ContactSelector";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
@@ -63,7 +63,7 @@ export function ContactHeader() {
   );
 
   return (
-    <div className="grid md:flex flex-row items-center gap-2 border-b px-4 py-1">
+    <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("contacts")}</Label>
       {/* <Button
         onClick={async () => {

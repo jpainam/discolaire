@@ -1,6 +1,13 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -14,6 +21,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
@@ -22,20 +30,12 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Switch } from "@repo/ui/components/switch";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@repo/ui/components/label";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { timezones } from "~/data/timezones";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
@@ -99,7 +99,7 @@ export function DefaultSettings() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="grid gap-4 xl:grid-cols-[1fr_40%]">
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <FormField
               disabled={disabled}
               control={form.control}
@@ -230,7 +230,7 @@ export function DefaultSettings() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Label className="flex justify-between items-center gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
+                    <Label className="flex items-center justify-between gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
                       <div className="flex flex-col gap-1">
                         <div className="font-medium">
                           {t("Classroom maximum size")}
@@ -264,7 +264,7 @@ export function DefaultSettings() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Label className="flex justify-between items-center gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
+                    <Label className="flex items-center justify-between gap-6 rounded-lg border p-4 has-[[data-state=checked]]:border-blue-600">
                       <div className="flex flex-col gap-1">
                         <div className="font-medium">{t("required_fees")}</div>
                         <div className="text-muted-foreground text-sm font-normal">

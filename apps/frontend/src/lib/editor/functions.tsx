@@ -1,16 +1,15 @@
 "use client";
 
-import { defaultMarkdownSerializer } from "prosemirror-markdown";
 import type { Node } from "prosemirror-model";
-import { DOMParser } from "prosemirror-model";
 import type { EditorView } from "prosemirror-view";
+import { defaultMarkdownSerializer } from "prosemirror-markdown";
+import { DOMParser } from "prosemirror-model";
 import { Decoration, DecorationSet } from "prosemirror-view";
 import { renderToString } from "react-dom/server";
 
-import { Markdown } from "~/components/ai/markdown";
-
-import { documentSchema } from "./config";
 import type { UISuggestion } from "./suggestions";
+import { Markdown } from "~/components/ai/markdown";
+import { documentSchema } from "./config";
 import { createSuggestionWidget } from "./suggestions";
 
 export const buildDocumentFromContent = (content: string) => {

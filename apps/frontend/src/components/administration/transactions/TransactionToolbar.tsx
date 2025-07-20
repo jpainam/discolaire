@@ -9,12 +9,11 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
-
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useLocale } from "~/i18n";
 
 export function TransactionToolbar() {
   const { t } = useLocale();
@@ -68,7 +67,7 @@ export function TransactionToolbar() {
   ];
 
   return (
-    <div className="flex max-w-fit items-center rounded-full bg-muted text-muted-foreground">
+    <div className="bg-muted text-muted-foreground flex max-w-fit items-center rounded-full">
       {menuTabs.map((link, _index) => {
         return (
           <TabMenu

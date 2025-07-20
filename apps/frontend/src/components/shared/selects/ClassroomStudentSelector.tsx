@@ -1,9 +1,10 @@
 "use client";
 
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,10 +21,9 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

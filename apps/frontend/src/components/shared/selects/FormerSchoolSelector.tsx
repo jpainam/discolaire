@@ -1,6 +1,10 @@
-import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -20,13 +24,9 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { decode } from "entities";
-import { useForm } from "react-hook-form";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import VirtualizedCommand from "./VirtualizedCommand";

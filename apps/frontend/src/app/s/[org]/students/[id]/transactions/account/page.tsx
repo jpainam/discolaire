@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Fragment } from "react";
+import Link from "next/link";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { TbTransactionDollar } from "react-icons/tb";
 
@@ -11,9 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { getServerTranslations } from "~/i18n/server";
 
 import { routes } from "~/configs/routes";
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -56,9 +56,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   let previousDate: Date | null = null;
 
   return (
-    <div className="px-4 mt-2">
+    <div className="mt-2 px-4">
       <div className="bg-background overflow-hidden rounded-md border">
-        <Table className="text-xs font-mono">
+        <Table className="font-mono text-xs">
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead className="w-[100px]">{t("date")}</TableHead>

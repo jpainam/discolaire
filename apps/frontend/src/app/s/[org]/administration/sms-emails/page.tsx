@@ -26,7 +26,7 @@ export default function Page() {
   //const balance = 40;
   return (
     <Card>
-      <CardHeader className="flex flex-col items-start border-b bg-muted/50 px-2 py-1">
+      <CardHeader className="bg-muted/50 flex flex-col items-start border-b px-2 py-1">
         <div className="flex w-full flex-row items-start">
           <SMSHistoryHeader />
         </div>

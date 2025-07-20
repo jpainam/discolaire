@@ -1,5 +1,5 @@
-import { format } from "date-fns";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 export function CalendarTimeline() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -20,12 +20,12 @@ export function CalendarTimeline() {
 
   return (
     <div
-      className="pointer-events-none absolute inset-x-0 z-50 border-t border-primary-600 dark:border-primary-700"
+      className="border-primary-600 dark:border-primary-700 pointer-events-none absolute inset-x-0 z-50 border-t"
       style={{ top: `${getCurrentTimePosition()}%` }}
     >
-      <div className="absolute -left-1.5 -top-1.5 size-3 rounded-full bg-primary-600 dark:bg-primary-700"></div>
+      <div className="bg-primary-600 dark:bg-primary-700 absolute -top-1.5 -left-1.5 size-3 rounded-full"></div>
 
-      <div className="absolute -left-18 flex w-16 -translate-y-1/2 justify-end bg-muted pr-1 text-xs font-medium text-muted-foreground dark:text-primary-700">
+      <div className="bg-muted text-muted-foreground dark:text-primary-700 absolute -left-18 flex w-16 -translate-y-1/2 justify-end pr-1 text-xs font-medium">
         {formatCurrentTime()}
       </div>
     </div>

@@ -1,7 +1,9 @@
 "use client";
 
-import { MoreVertical, Trash2 } from "lucide-react";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -13,18 +15,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useLocale } from "~/i18n";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { ReportFalseGrade } from "./ReportFalseGrade";
 
@@ -77,7 +77,7 @@ export function GradeDetailsHeader({
 
   return (
     <div className="flex flex-col gap-2 border-b">
-      <div className="flex items-center gap-4 border-t bg-muted/50 px-4 py-1">
+      <div className="bg-muted/50 flex items-center gap-4 border-t px-4 py-1">
         <ReportFalseGrade />
         {/* <TermIsClosed className="py-1" isClosed={isClosed} /> */}
         <div className="ml-auto flex flex-row items-center gap-4">
@@ -127,7 +127,7 @@ export function GradeDetailsHeader({
                       const isConfirmed = await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
-                        icon: <Trash2 className="size-6 text-destructive" />,
+                        icon: <Trash2 className="text-destructive size-6" />,
                         alertDialogTitle: {
                           className: "flex items-center gap-2",
                         },

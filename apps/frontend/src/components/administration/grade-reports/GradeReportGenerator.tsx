@@ -1,7 +1,9 @@
 "use client";
 
-import { FileText } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { FileText } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -21,8 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
+
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
@@ -31,6 +32,7 @@ import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { StatisticByCourseDialog } from "./StatisticByCourseDialog";
+
 const reportTypes = [
   { id: "001", label: "Roll of Honor" },
   { id: "002", label: "Grade report card" },
@@ -123,7 +125,7 @@ export function GradeReportGenerator() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <div className="grid xl:grid-cols-2 gap-4 mb-4">
+        <div className="mb-4 grid gap-4 xl:grid-cols-2">
           <div className="grid gap-2">
             <Label>{t("classrooms")}</Label>
             <ClassroomSelector

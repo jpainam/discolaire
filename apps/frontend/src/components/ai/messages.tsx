@@ -1,10 +1,12 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
-import type { Vote } from "@repo/db";
+import { memo } from "react";
 import equal from "fast-deep-equal";
 import { motion } from "framer-motion";
-import { memo } from "react";
-import { useMessages } from "~/hooks/use-messages";
+
+import type { Vote } from "@repo/db";
+
 import type { ChatMessage } from "~/lib/types";
+import { useMessages } from "~/hooks/use-messages";
 import { useDataStream } from "./data-stream-provider";
 import { Greeting } from "./greeting";
 import { PreviewMessage, ThinkingMessage } from "./message";
@@ -45,7 +47,7 @@ function PureMessages({
   return (
     <div
       ref={messagesContainerRef}
-      className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 relative"
+      className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-scroll pt-4"
     >
       {messages.length === 0 && <Greeting />}
 
@@ -76,7 +78,7 @@ function PureMessages({
 
       <motion.div
         ref={messagesEndRef}
-        className="shrink-0 min-w-[24px] min-h-[24px]"
+        className="min-h-[24px] min-w-[24px] shrink-0"
         onViewportLeave={onViewportLeave}
         onViewportEnter={onViewportEnter}
       />

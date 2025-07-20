@@ -1,7 +1,9 @@
 "use client";
 
-import { BellIcon, Loader2, TriangleAlert } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
+import { BellIcon, Loader2, TriangleAlert } from "lucide-react";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -10,10 +12,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import { useQuery } from "@tanstack/react-query";
-import { formatDistanceToNow } from "date-fns";
+
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const initialNotifications = [
   {
     id: 1,
@@ -123,7 +125,7 @@ export default function NotificationMenu({ userId }: { userId: string }) {
           {unreadCount > 0 && (
             <Badge
               variant="destructive"
-              className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs"
+              className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center p-0 text-xs"
             >
               {unreadCount}
             </Badge>
@@ -137,10 +139,10 @@ export default function NotificationMenu({ userId }: { userId: string }) {
 
       <PopoverContent align="end" className="w-80 p-1">
         {notificationQuery.isLoading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <Loader2 className="h-4 w-4 animate-spin" />
         ) : notificationQuery.data?.length == 0 ? (
-          <div className="flex justify-center gap-1 items-center h-20 text-muted-foreground text-sm">
-            <TriangleAlert className="w-4 h-4 " />
+          <div className="text-muted-foreground flex h-20 items-center justify-center gap-1 text-sm">
+            <TriangleAlert className="h-4 w-4" />
             {t("No notifications")}
           </div>
         ) : (

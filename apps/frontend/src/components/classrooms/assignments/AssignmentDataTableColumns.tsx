@@ -1,8 +1,12 @@
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import i18next from "i18next";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import i18next from "i18next";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -15,10 +19,6 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -204,7 +204,7 @@ function ActionsCell({
         <Button
           aria-label="Open menu"
           variant="ghost"
-          className="flex size-8 p-0 data-[state=open]:bg-muted"
+          className="data-[state=open]:bg-muted flex size-8 p-0"
         >
           <DotsHorizontalIcon className="size-4" aria-hidden="true" />
         </Button>

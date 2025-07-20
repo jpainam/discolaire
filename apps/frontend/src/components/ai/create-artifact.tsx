@@ -2,11 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { UseChatHelpers } from "@ai-sdk/react";
-import type { AiSuggestion } from "@repo/db";
 import type { DataUIPart } from "ai";
 import type { ComponentType, Dispatch, ReactNode, SetStateAction } from "react";
-import type { ChatMessage, CustomUIDataTypes } from "~/lib/types";
+
+import type { AiSuggestion } from "@repo/db";
+
 import type { UIArtifact } from "./artifact";
+import type { ChatMessage, CustomUIDataTypes } from "~/lib/types";
 
 export interface ArtifactActionContext<M = any> {
   content: string;

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { createContext, useContext, useState } from "react";
+
 import { etiquettes } from "~/components/event-calendar/big-calendar";
 
 interface CalendarContextType {

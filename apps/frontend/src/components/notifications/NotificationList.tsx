@@ -3,6 +3,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { useState } from "react";
+import { Bell, Check, Clock } from "lucide-react";
+
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -19,8 +22,6 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 import { cn } from "@repo/ui/lib/utils";
-import { Bell, Check, Clock } from "lucide-react";
-import { useState } from "react";
 
 // Sample notification data
 const notifications = {
@@ -98,10 +99,10 @@ function NotificationItem({
 }) {
   return (
     <div
-      className={`flex items-start gap-3 p-3 rounded-lg transition-colors hover:bg-muted/50 ${!isRead ? "bg-blue-50/50" : ""}`}
+      className={`hover:bg-muted/50 flex items-start gap-3 rounded-lg p-3 transition-colors ${!isRead ? "bg-blue-50/50" : ""}`}
     >
       <div
-        className={`mt-1 h-2 w-2 rounded-full flex-shrink-0 ${!isRead ? "bg-blue-500" : "bg-transparent"}`}
+        className={`mt-1 h-2 w-2 flex-shrink-0 rounded-full ${!isRead ? "bg-blue-500" : "bg-transparent"}`}
       />
       <div className="flex-1 space-y-1">
         <div className="flex items-center justify-between">
@@ -110,12 +111,12 @@ function NotificationItem({
           >
             {notification.title}
           </p>
-          <span className="text-xs text-muted-foreground flex items-center gap-1">
+          <span className="text-muted-foreground flex items-center gap-1 text-xs">
             <Clock className="h-3 w-3" />
             {formatDate(notification.date)}
           </span>
         </div>
-        <p className="text-xs text-muted-foreground line-clamp-2">
+        <p className="text-muted-foreground line-clamp-2 text-xs">
           {notification.message}
         </p>
       </div>
@@ -135,7 +136,7 @@ export function NotificationList({ className }: { className?: string }) {
           {unreadCount > 0 && (
             <Badge
               variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+              className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center p-0 text-xs"
             >
               {unreadCount}
             </Badge>
@@ -143,9 +144,9 @@ export function NotificationList({ className }: { className?: string }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
-        <div className="p-4 border-b">
+        <div className="border-b p-4">
           <h3 className="font-semibold">Notifications</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {unreadCount > 0
               ? `You have ${unreadCount} unread notifications`
               : "All caught up!"}
@@ -153,13 +154,13 @@ export function NotificationList({ className }: { className?: string }) {
         </div>
 
         <Tabs defaultValue="unread" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 m-2">
+          <TabsList className="m-2 grid w-full grid-cols-2">
             <TabsTrigger value="unread" className="relative">
               Unread
               {unreadCount > 0 && (
                 <Badge
                   variant="secondary"
-                  className="ml-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                  className="ml-2 flex h-5 w-5 items-center justify-center p-0 text-xs"
                 >
                   {unreadCount}
                 </Badge>
@@ -171,7 +172,7 @@ export function NotificationList({ className }: { className?: string }) {
           <TabsContent value="unread" className="m-0">
             <ScrollArea className="h-80">
               {notifications.unread.length > 0 ? (
-                <div className="p-2 space-y-1">
+                <div className="space-y-1 p-2">
                   {notifications.unread.map((notification) => (
                     <NotificationItem
                       key={notification.id}
@@ -181,9 +182,9 @@ export function NotificationList({ className }: { className?: string }) {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-32 text-center p-4">
-                  <Check className="h-8 w-8 text-green-500 mb-2" />
-                  <p className="text-sm text-muted-foreground">
+                <div className="flex h-32 flex-col items-center justify-center p-4 text-center">
+                  <Check className="mb-2 h-8 w-8 text-green-500" />
+                  <p className="text-muted-foreground text-sm">
                     No unread notifications
                   </p>
                 </div>
@@ -193,7 +194,7 @@ export function NotificationList({ className }: { className?: string }) {
 
           <TabsContent value="read" className="m-0">
             <ScrollArea className="h-80">
-              <div className="p-2 space-y-1">
+              <div className="space-y-1 p-2">
                 {notifications.read.map((notification) => (
                   <NotificationItem
                     key={notification.id}

@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ClassroomDataTable } from "~/components/classrooms/ClassroomDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";

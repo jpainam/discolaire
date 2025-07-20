@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import type * as RPNInput from "react-phone-number-input";
+import { useState } from "react";
 import flags from "react-phone-number-input/flags";
-import { useRouter } from "~/hooks/use-router";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,8 +11,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useLocale } from "~/i18n";
 
+import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export const LanguageSwitcher = ({ className }: { className?: string }) => {
@@ -34,7 +34,7 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
         <Button
           variant={"ghost"}
           size={"icon"}
-          className={cn("rounded-lg hover:bg-transparent size-7", className)}
+          className={cn("size-7 rounded-lg hover:bg-transparent", className)}
         >
           <RenderSwitchItem
             countryId={

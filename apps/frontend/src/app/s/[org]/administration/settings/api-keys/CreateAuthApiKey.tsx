@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { AlertTriangle, Check, Copy, Key } from "lucide-react";
+
 import { Alert, AlertDescription } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -9,12 +12,12 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { AlertTriangle, Check, Copy, Key } from "lucide-react";
-import { useState } from "react";
+
 import { createAuthApiKey } from "~/actions/signin";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+
 export function CreateAuthApiKey() {
   const { t } = useLocale();
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +109,7 @@ function ShowApiKey({ apiKey }: { apiKey: string }) {
             </Button>
           </div>
           {copied && (
-            <p className="text-sm text-green-600 flex items-center gap-1">
+            <p className="flex items-center gap-1 text-sm text-green-600">
               <Check className="h-3 w-3" />
               Copied to clipboard!
             </p>

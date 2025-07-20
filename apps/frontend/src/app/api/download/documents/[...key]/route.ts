@@ -4,10 +4,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/api/download/documents/[key]/route.ts
 
-import { GetObjectCommand } from "@aws-sdk/client-s3";
 import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 import type { Readable } from "stream";
+import { NextResponse } from "next/server";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
+
 import { env } from "~/env";
 import { minioClient, s3client } from "~/lib/s3-client";
 

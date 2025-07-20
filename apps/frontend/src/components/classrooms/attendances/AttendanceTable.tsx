@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@repo/ui/components/form";
@@ -16,10 +17,9 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
 import { AvatarState } from "~/components/AvatarState";
+import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

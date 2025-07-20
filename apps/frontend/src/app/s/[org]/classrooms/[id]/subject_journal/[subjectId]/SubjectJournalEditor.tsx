@@ -1,5 +1,13 @@
 "use client";
 
+import { useRef, useState } from "react";
+import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   CalendarDays,
   CalendarDaysIcon,
@@ -7,10 +15,12 @@ import {
   PaperclipIcon,
   X,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
+import { Calendar } from "@repo/ui/components/calendar";
 import {
   Form,
   FormControl,
@@ -20,6 +30,11 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -28,25 +43,10 @@ import {
 } from "@repo/ui/components/select";
 import { Switch } from "@repo/ui/components/switch";
 import { Textarea } from "@repo/ui/components/textarea";
+
+import { TiptapEditor } from "~/components/tiptap-editor";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar } from "@repo/ui/components/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui/components/popover";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { TiptapEditor } from "~/components/tiptap-editor";
 import { useTRPC } from "~/trpc/react";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 
@@ -161,7 +161,7 @@ export function SubjectJournalEditor() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="w-full flex-col flex gap-2 flex-1 overflow-y-auto rounded-lg py-2 px-4"
+        className="flex w-full flex-1 flex-col gap-2 overflow-y-auto rounded-lg px-4 py-2"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -219,7 +219,7 @@ export function SubjectJournalEditor() {
         />
 
         {/* <div className="mb-2 flex  items-center gap-2"> */}
-        <div className="flex flex-row items-center gap-4 text-muted-foreground">
+        <div className="text-muted-foreground flex flex-row items-center gap-4">
           <Select defaultValue="everyone">
             <SelectTrigger className="w-full md:w-[180px]">
               <SelectValue placeholder={t("select_a_recipient")} />
@@ -242,9 +242,9 @@ export function SubjectJournalEditor() {
             </div>
           )}
           {selectedFile && (
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-1 text-xs">
               <PaperclipIcon className="h-4 w-4" />
-              <span className="truncate max-w-[80%]">{selectedFile.name}</span>
+              <span className="max-w-[80%] truncate">{selectedFile.name}</span>
               <Button
                 variant="ghost"
                 size="icon"
@@ -276,7 +276,7 @@ export function SubjectJournalEditor() {
             type="button"
             variant="outline"
             size="icon"
-            className="mb-2 mr-2"
+            className="mr-2 mb-2"
           >
             <PaperclipIcon className="h-4 w-4" />
           </Button>
@@ -292,7 +292,7 @@ export function SubjectJournalEditor() {
                         type="button"
                         variant="outline"
                         size="icon"
-                        className="mb-2 mr-2"
+                        className="mr-2 mb-2"
                       >
                         <CalendarDaysIcon className="h-4 w-4" />
                       </Button>
@@ -319,7 +319,7 @@ export function SubjectJournalEditor() {
             type="button"
             variant="outline"
             size="icon"
-            className="mb-2 mr-2"
+            className="mr-2 mb-2"
             onClick={() => {
               openModal({
                 className: "w-96",
@@ -330,7 +330,7 @@ export function SubjectJournalEditor() {
           >
             <NotepadText className="h-4 w-4" />
           </Button>
-          <span className="mb-2 mr-2 text-sm">{t("send_as")}</span>
+          <span className="mr-2 mb-2 text-sm">{t("send_as")}</span>
           <Select defaultValue="app">
             <SelectTrigger className="mb-2 w-full md:w-[180px]">
               <SelectValue placeholder="Select notification type" />

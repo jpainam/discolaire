@@ -1,14 +1,14 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { Label } from "@repo/ui/components/label";
+
 import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
@@ -63,7 +63,7 @@ export function PhotoHeader() {
     }
   }, [addStudentPhotoMutation, params.id, uploadedFiles]);
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-secondary p-1 text-secondary-foreground">
+    <div className="bg-secondary text-secondary-foreground flex flex-row items-center gap-2 border-b p-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("photos")}</Label>
       <div className="ml-auto">

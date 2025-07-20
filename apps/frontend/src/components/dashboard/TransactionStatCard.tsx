@@ -3,11 +3,10 @@
  * @see https://v0.dev/t/AotrKkWo9MB
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-import { CircleArrowRight } from "lucide-react";
 import Link from "next/link";
+import { CircleArrowRight } from "lucide-react";
 
 import { getServerTranslations } from "~/i18n/server";
-
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 

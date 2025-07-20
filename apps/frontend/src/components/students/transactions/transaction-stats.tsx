@@ -1,12 +1,13 @@
-import { TransactionType } from "@repo/db";
-import { sumBy } from "lodash";
 import type { IconType } from "react-icons";
+import { sumBy } from "lodash";
 import {
   PiBank,
   PiCurrencyCircleDollar,
   PiFolder,
   PiMoneyBold,
 } from "react-icons/pi";
+
+import { TransactionType } from "@repo/db";
 
 import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
@@ -69,12 +70,12 @@ export async function TransactionStats({ studentId }: { studentId: string }) {
   ];
 
   return (
-    <div className="grid-cols-1 px-4 mt-2 grid gap-2 2xl:grid-cols-4">
+    <div className="mt-2 grid grid-cols-1 gap-2 px-4 2xl:grid-cols-4">
       {statData.map((stat, index: number) => {
         return (
           <div
             key={index}
-            className={cn("rounded-md border p-2 bg-muted hover:bg-secondary")}
+            className={cn("bg-muted hover:bg-secondary rounded-md border p-2")}
           >
             <div className="flex items-center gap-5">
               <span
@@ -84,7 +85,7 @@ export async function TransactionStats({ studentId }: { studentId: string }) {
                 <stat.icon className="h-auto w-[30px]" />
               </span>
               <div className="flex flex-col">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-muted-foreground text-sm">
                   {stat.title}
                 </span>
                 <span className="text-md font-semibold">

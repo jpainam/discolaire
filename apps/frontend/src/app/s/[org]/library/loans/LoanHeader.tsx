@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  BookOpen,
+  BookOpenCheck,
+  BookX,
+  MoreVertical,
+  PlusIcon,
+} from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -15,13 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import {
-  BookOpen,
-  BookOpenCheck,
-  BookX,
-  MoreVertical,
-  PlusIcon,
-} from "lucide-react";
+
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";
@@ -32,6 +34,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { BookSelector } from "../BookSelector";
 import { CreateEditLoan } from "./CreateEditLoan";
+
 export function LoanHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
@@ -39,7 +42,7 @@ export function LoanHeader() {
   const { openSheet } = useSheet();
   const canCreateLoan = useCheckPermission("library", PermissionAction.CREATE);
   return (
-    <div className="grid md:flex flex-row items-center gap-4 px-4 py-1 border-y">
+    <div className="grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
       <div className="flex flex-row items-center gap-2">
         <Label>{t("books")}</Label>
         <BookSelector
@@ -50,7 +53,7 @@ export function LoanHeader() {
           }}
         />
       </div>
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row items-center gap-2">
         <Label>{t("status")}</Label>
         <Select
           onValueChange={(val) => {
@@ -78,7 +81,7 @@ export function LoanHeader() {
           </SelectContent>
         </Select>
       </div>
-      <div className="ml-auto flex gap-2 flex-row items-center">
+      <div className="ml-auto flex flex-row items-center gap-2">
         {canCreateLoan && (
           <Button
             onClick={() => {

@@ -6,8 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { getServerTranslations } from "~/i18n/server";
 
+import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 import { getAppreciations } from "~/utils/appreciations";
 

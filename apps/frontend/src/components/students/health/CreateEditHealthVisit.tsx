@@ -2,6 +2,17 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  AlertCircleIcon,
+  FileIcon,
+  Trash2Icon,
+  UploadCloudIcon,
+  UploadIcon,
+  XIcon,
+} from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -25,22 +36,11 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Textarea } from "@repo/ui/components/textarea";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  AlertCircleIcon,
-  FileIcon,
-  Trash2Icon,
-  UploadCloudIcon,
-  UploadIcon,
-  XIcon,
-} from "lucide-react";
-import { useForm } from "react-hook-form";
 import { DatePicker } from "~/components/DatePicker";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFileIcon } from "~/utils/file-icon";
 
@@ -167,7 +167,7 @@ export function CreateEditHealthVisit({
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex flex-row items-center gap-2 border-b bg-muted/50 px-4 py-1">
+        <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
           <Label>{t("patient_visit_notes")}</Label>
           <div className="ml-auto flex items-center gap-2">
             <Button
@@ -189,7 +189,7 @@ export function CreateEditHealthVisit({
             </Button>
           </div>
         </div>
-        <span className="px-4 text-sm text-muted-foreground">
+        <span className="text-muted-foreground px-4 text-sm">
           {t("patient_visit_notes_description")}
         </span>
 
@@ -240,7 +240,7 @@ export function CreateEditHealthVisit({
             <FormField
               name="notify"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-2 space-y-0 pt-8">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-2 pt-8">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
@@ -357,7 +357,7 @@ export function CreateEditHealthVisit({
                     onDrop={handleDrop}
                     data-dragging={isDragging || undefined}
                     data-files={files.length > 0 || undefined}
-                    className="border-input data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 flex  flex-col items-center rounded-xl border border-dashed p-4 transition-colors not-data-[files]:justify-center has-[input:focus]:ring-[3px] data-[files]:hidden"
+                    className="border-input data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 flex flex-col items-center rounded-xl border border-dashed p-4 transition-colors not-data-[files]:justify-center has-[input:focus]:ring-[3px] data-[files]:hidden"
                   >
                     <input
                       {...getInputProps()}
@@ -392,8 +392,8 @@ export function CreateEditHealthVisit({
                     </div>
                   </div>
                   {files.length > 0 && (
-                    <div className="space-y-2 flex flex-col">
-                      <div className="flex ml-auto gap-2">
+                    <div className="flex flex-col space-y-2">
+                      <div className="ml-auto flex gap-2">
                         <Button
                           variant="outline"
                           size="sm"

@@ -1,4 +1,10 @@
 "use client";
+
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { Loader2Icon, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -23,13 +29,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useQuery } from "@tanstack/react-query";
-import { Loader2Icon, MoreVertical, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
+
 import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 export function ChatterTable() {
   const { t } = useLocale();
   const trpc = useTRPC();
@@ -58,7 +62,7 @@ export function ChatterTable() {
             {chatterQuery.isPending ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center">
-                  <Loader2Icon className="w-4 h-4 animate-spin" />
+                  <Loader2Icon className="h-4 w-4 animate-spin" />
                 </TableCell>
               </TableRow>
             ) : (
@@ -74,7 +78,7 @@ export function ChatterTable() {
                   </TableCell>
                   <TableCell className="py-0">{chatter.value}</TableCell>
                   <TableCell className="py-0"></TableCell>
-                  <TableCell className="text-right py-0">
+                  <TableCell className="py-0 text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant={"ghost"}>

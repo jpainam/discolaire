@@ -1,12 +1,15 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { TransactionDataTable } from "~/components/administration/transactions/TransactionDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { transactionSearchParams } from "~/utils/search-params";
 import { TransactionHeader } from "./TransactionHeader";
+
 interface PageProps {
   searchParams: Promise<SearchParams>;
 }
@@ -29,7 +32,7 @@ export default async function Page(props: PageProps) {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="py-2 px-4">
+              <div className="px-4 py-2">
                 <Skeleton className="h-8 w-1/2" />
               </div>
             }
@@ -40,7 +43,7 @@ export default async function Page(props: PageProps) {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="grid grid-cols-4 gap-4 ">
+              <div className="grid grid-cols-4 gap-4">
                 {Array.from({ length: 16 }).map((_, i) => (
                   <Skeleton key={i} className="h-8" />
                 ))}

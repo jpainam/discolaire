@@ -1,9 +1,10 @@
 "use client";
 
 import type { SyntheticEvent } from "react";
-import React from "react";
-
+import type { FileWithPath } from "react-dropzone";
 import type { Crop, PixelCrop } from "react-image-crop";
+import React from "react";
+import { CropIcon, Trash2Icon } from "lucide-react";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 
 import {
@@ -23,10 +24,10 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/dialog";
 
-import { CropIcon, Trash2Icon } from "lucide-react";
-import type { FileWithPath } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
+
 import { useLocale } from "~/i18n";
+
 type FileWithPreview = FileWithPath & {
   preview: string;
 };
@@ -115,34 +116,34 @@ export function ImageCropper({
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="p-0 gap-0">
+      <DialogContent className="gap-0 p-0">
         <DialogHeader>
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="p-2 size-full">
+        <div className="size-full p-2">
           <ReactCrop
             crop={crop}
             onChange={(_, percentCrop) => setCrop(percentCrop)}
             onComplete={(c) => onCropComplete(c)}
             aspect={aspect}
-            className="w-full "
+            className="w-full"
           >
             <Avatar className="size-full rounded-none">
               <AvatarImage
                 ref={imgRef}
-                className="size-full rounded-none "
+                className="size-full rounded-none"
                 alt="Image Cropper Shell"
                 src={selectedFile?.preview}
                 onLoad={onImageLoad}
               />
-              <AvatarFallback className="size-full  rounded-none">
+              <AvatarFallback className="size-full rounded-none">
                 Loading...
               </AvatarFallback>
             </Avatar>
           </ReactCrop>
         </div>
-        <DialogFooter className="p-4 pt-0 justify-center ">
+        <DialogFooter className="justify-center p-4 pt-0">
           <DialogClose asChild>
             <Button
               size={"sm"}

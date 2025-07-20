@@ -1,5 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
 import {
   ImageMinus,
   ImageUpIcon,
@@ -22,25 +30,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useModal } from "~/hooks/use-modal";
-import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
-import { useConfirm } from "~/providers/confirm-dialog";
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
+import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useMemo, useState } from "react";
 import {
   addDays,
   eachDayOfInterval,
@@ -12,13 +13,13 @@ import {
   startOfMonth,
   startOfWeek,
 } from "date-fns";
-import React, { useEffect, useMemo, useState } from "react";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+
 import type { CalendarEvent } from "~/components/event-calendar";
 import {
   DraggableEvent,

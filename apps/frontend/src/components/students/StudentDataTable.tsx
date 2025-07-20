@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
@@ -28,7 +28,7 @@ export function StudentDataTable() {
   });
 
   return (
-    <DataTable className="py-2 px-4 w-full" table={table}>
+    <DataTable className="w-full px-4 py-2" table={table}>
       <StudentDataTableActions table={table} />
       {/* <DataTableToolbar table={table}></DataTableToolbar> */}
     </DataTable>

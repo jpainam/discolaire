@@ -1,9 +1,9 @@
 "use client";
 
-import { RiCheckLine } from "@remixicon/react";
 import * as React from "react";
-import { useCalendarContext } from "~/components/event-calendar/calendar-context";
-import { etiquettes } from "./big-calendar";
+import Link from "next/link";
+import { RiCheckLine } from "@remixicon/react";
+import { ArrowLeft } from "lucide-react";
 
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -17,10 +17,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+
+import { useCalendarContext } from "~/components/event-calendar/calendar-context";
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
+import { etiquettes } from "./big-calendar";
 import SidebarCalendar from "./sidebar-calendar";
 
 // const data = {
@@ -38,7 +39,7 @@ export function EventSidebar({
   const { isColorVisible, toggleColorVisibility } = useCalendarContext();
   const { t } = useLocale();
   return (
-    <Sidebar {...props} className=" max-lg:p-3 lg:pe-1">
+    <Sidebar {...props} className="max-lg:p-3 lg:pe-1">
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
@@ -58,8 +59,8 @@ export function EventSidebar({
         <SidebarGroup>
           <SidebarCalendar />
         </SidebarGroup>
-        <SidebarGroup className="px-1 mt-3 pt-4 border-t">
-          <SidebarGroupLabel className="uppercase text-muted-foreground/65">
+        <SidebarGroup className="mt-3 border-t px-1 pt-4">
+          <SidebarGroupLabel className="text-muted-foreground/65 uppercase">
             Calendars
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -68,13 +69,13 @@ export function EventSidebar({
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
                     asChild
-                    className="relative rounded-md [&>svg]:size-auto justify-between has-focus-visible:border-ring has-focus-visible:ring-ring/50 has-focus-visible:ring-[3px]"
+                    className="has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative justify-between rounded-md has-focus-visible:ring-[3px] [&>svg]:size-auto"
                   >
                     <span>
-                      <span className="font-medium flex items-center justify-between gap-3">
+                      <span className="flex items-center justify-between gap-3 font-medium">
                         <Checkbox
                           id={item.id}
-                          className="sr-only peer"
+                          className="peer sr-only"
                           checked={isColorVisible(item.color)}
                           onCheckedChange={() =>
                             toggleColorVisibility(item.color)
@@ -87,7 +88,7 @@ export function EventSidebar({
                         />
                         <label
                           htmlFor={item.id}
-                          className="peer-not-data-[state=checked]:line-through peer-not-data-[state=checked]:text-muted-foreground/65 after:absolute after:inset-0"
+                          className="peer-not-data-[state=checked]:text-muted-foreground/65 peer-not-data-[state=checked]:line-through after:absolute after:inset-0"
                         >
                           {item.name}
                         </label>

@@ -11,7 +11,7 @@ export default function Layout({ children }: PropsWithChildren) {
       <div className="flex flex-1 flex-col overflow-hidden">
         <AssignmentToolbar />
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto">
           {children}
         </main>
       </div>

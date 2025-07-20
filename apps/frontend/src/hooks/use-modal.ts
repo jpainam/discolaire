@@ -1,8 +1,8 @@
 "use client";
 
-import { atom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
 import { useCallback } from "react";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 
 interface ModalTypes {
   view: React.ReactNode;

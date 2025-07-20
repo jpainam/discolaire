@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import StudentDetails from "~/components/students/profile/StudentDetails";
@@ -21,7 +23,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <Suspense
           key={params.id}
           fallback={
-            <div className="grid grid-cols-3 px-4 gap-4">
+            <div className="grid grid-cols-3 gap-4 px-4">
               {Array.from({ length: 9 }).map((_, i) => (
                 <Skeleton key={i} className="h-8" />
               ))}

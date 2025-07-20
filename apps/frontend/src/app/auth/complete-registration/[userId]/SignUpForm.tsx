@@ -1,5 +1,12 @@
 "use client";
 
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -18,16 +25,10 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useLocale } from "~/i18n";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
@@ -97,16 +98,16 @@ export function SignUpForm({
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary">
+    <div className="bg-secondary flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{t("Configure your account")}</CardTitle>
-          <CardDescription className="text-xs text-muted-foreground">
+          <CardDescription className="text-muted-foreground text-xs">
             {t("Please fill in the details of your account.")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center mb-2 text-xl font-bold">{name}</div>
+          <div className="mb-2 text-center text-xl font-bold">{name}</div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
@@ -158,7 +159,7 @@ export function SignUpForm({
         <CardFooter className="flex justify-center">
           <Button
             variant="link"
-            className="text-sm text-muted-foreground"
+            className="text-muted-foreground text-sm"
             onClick={() => router.push("/auth/login")}
           >
             {t("back_to_login")}

@@ -1,7 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import type { Fee } from "@prisma/client";
-import { Save, X } from "lucide-react";
 import type { SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -17,12 +18,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/components/form";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const createEditFeeSchema = z.object({
@@ -145,7 +145,7 @@ export function CreateEditFee({
           control={form.control}
           name="isRequired"
           render={({ field }) => (
-            <FormItem className="col-span-full flex flex-row items-center space-x-2 space-y-0 py-2">
+            <FormItem className="col-span-full flex flex-row items-center space-y-0 space-x-2 py-2">
               <FormControl>
                 <Checkbox
                   checked={field.value}
@@ -186,7 +186,7 @@ export function CreateEditFee({
             variant="outline"
             type="button"
           >
-            <X className="w-4 h-4" />
+            <X className="h-4 w-4" />
             {t("cancel")}
           </Button>
 

@@ -1,4 +1,16 @@
 "use client";
+
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import i18next from "i18next";
+import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -15,20 +27,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import i18next from "i18next";
-import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+
 export function StudentDocumentTable() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
@@ -109,13 +113,13 @@ export function StudentDocumentTable() {
                   <TableCell className="text-muted-foreground">
                     {document.createdBy.name}
                   </TableCell>
-                  <TableCell className="text-center ">
-                    <div className="flex flex-wrap  gap-2">
+                  <TableCell className="text-center">
+                    <div className="flex flex-wrap gap-2">
                       {document.attachments.map((attachment, index) => {
                         return (
                           <Link
                             href={`/api/download/documents/${attachment}`}
-                            className="underline text-blue-600 flex items-center gap-1"
+                            className="flex items-center gap-1 text-blue-600 underline"
                             target="_blank"
                             key={attachment}
                           >

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import { Artifact } from "~/components/ai/create-artifact";
-
 import { CopyIcon, RedoIcon, UndoIcon } from "lucide-react";
 import { toast } from "sonner";
+
+import { Artifact } from "~/components/ai/create-artifact";
 import { ImageEditor } from "~/components/ai/image-editor";
 
 export const imageArtifact = new Artifact({

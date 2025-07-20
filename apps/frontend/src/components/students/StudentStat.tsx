@@ -105,7 +105,7 @@ function StudentStatCard({
       <span className="text-sm font-bold">{n}</span>
       <span
         className={cn(
-          "my-1 rounded-lg bg-secondary px-2 py-1 text-sm text-secondary-foreground",
+          "bg-secondary text-secondary-foreground my-1 rounded-lg px-2 py-1 text-sm",
           className,
         )}
       >

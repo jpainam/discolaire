@@ -1,13 +1,13 @@
 "use client";
 
-import { School } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { School } from "lucide-react";
 
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useLocale } from "~/i18n";
 
-import { useQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -53,7 +53,7 @@ export function ClassroomStatistics({ className }: { className?: string }) {
                   {" "}
                   {cl.name}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {cl.size} {t("students")}
                 </p>
               </div>
@@ -63,7 +63,7 @@ export function ClassroomStatistics({ className }: { className?: string }) {
                 <p className="text-sm font-medium">
                   {t("boys")}: {cl.maleCount}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {((cl.maleCount / (cl.size || 1e9)) * 100).toFixed(1)}%
                 </p>
               </div>
@@ -71,7 +71,7 @@ export function ClassroomStatistics({ className }: { className?: string }) {
                 <p className="text-sm font-medium">
                   {t("girls")}: {cl.femaleCount}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {((cl.femaleCount / (cl.size || 1e9)) * 100).toFixed(1)}%
                 </p>
               </div>

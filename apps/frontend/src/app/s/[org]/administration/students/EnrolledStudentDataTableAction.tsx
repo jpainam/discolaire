@@ -5,6 +5,7 @@ import { PrinterIcon } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+
 import { useLocale } from "~/i18n";
 
 export function EnrolledStudentDataTableAction({

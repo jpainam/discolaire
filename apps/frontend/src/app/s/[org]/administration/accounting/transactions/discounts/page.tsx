@@ -1,7 +1,6 @@
+import { DiscountDataTable } from "~/components/administration/transactions/DiscountDataTable";
 import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
-
-import { DiscountDataTable } from "~/components/administration/transactions/DiscountDataTable";
 import { CURRENCY } from "~/lib/constants";
 import { caller } from "~/trpc/server";
 

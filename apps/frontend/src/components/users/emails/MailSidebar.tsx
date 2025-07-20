@@ -1,8 +1,5 @@
 "use client";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
 import {
   Archive,
   Edit,
@@ -13,6 +10,11 @@ import {
   Tag,
   Trash,
 } from "lucide-react";
+
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+
 import { useMailContext } from "./MailContextProvider";
 
 export function MailSidebar() {
@@ -37,10 +39,10 @@ export function MailSidebar() {
     setAttachedFiles([]);
   };
   return (
-    <div className="w-56 border-r bg-muted/20 flex flex-col h-full">
+    <div className="bg-muted/20 flex h-full w-56 flex-col border-r">
       <div className="p-4">
         <Button
-          className="justify-start gap-2 w-full"
+          className="w-full justify-start gap-2"
           onClick={handleComposeClick}
         >
           <Edit className="h-4 w-4" /> Compose
@@ -140,7 +142,7 @@ interface NavItemProps {
 function NavItem({ icon, label, count, active, onClick }: NavItemProps) {
   return (
     <button
-      className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md ${
+      className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${
         active ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
       }`}
       onClick={onClick}

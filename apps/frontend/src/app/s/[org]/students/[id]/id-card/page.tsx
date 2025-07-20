@@ -1,8 +1,10 @@
-import { Avatar, AvatarImage } from "@repo/ui/components/avatar";
-import { Card } from "@repo/ui/components/card";
-import { format } from "date-fns";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { format } from "date-fns";
+
+import { Avatar, AvatarImage } from "@repo/ui/components/avatar";
+import { Card } from "@repo/ui/components/card";
+
 import { randomAvatar } from "~/components/raw-images";
 import { IdCardBarCode } from "~/components/students/idcard/id-barcode";
 import { IdCardHeader } from "~/components/students/idcard/IdCardHeader";
@@ -26,28 +28,28 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   return (
     <div>
       <IdCardHeader />
-      <div className="mx-auto  grid md:grid-cols-2 p-4 gap-6">
+      <div className="mx-auto grid gap-6 p-4 md:grid-cols-2">
         {/* Front of the card */}
-        <Card className="card-face p-0 card-front rounded-xl overflow-hidden border-2 border-[#0a2d5e] shadow-md">
+        <Card className="card-face card-front overflow-hidden rounded-xl border-2 border-[#0a2d5e] p-0 shadow-md">
           {/* Header */}
-          <div className=" p-2 border-b-2 border-[#0a2d5e]">
-            <h2 className=" font-bold text-center text-lg sm:text-xl">
+          <div className="border-b-2 border-[#0a2d5e] p-2">
+            <h2 className="text-center text-lg font-bold sm:text-xl">
               {school.name}
             </h2>
           </div>
 
           {/* Blue band */}
-          <div className="bg-[#0a2d5e] p-2 flex justify-end">
-            <h3 className="text-white uppercase font-bold text-xl sm:text-2xl">
+          <div className="flex justify-end bg-[#0a2d5e] p-2">
+            <h3 className="text-xl font-bold text-white uppercase sm:text-2xl">
               {t("id_card")}
             </h3>
           </div>
 
           {/* Main content */}
-          <div className="bg-[#e6f0fa] dark:bg-[#121e29] h-full p-4 flex">
+          <div className="flex h-full bg-[#e6f0fa] p-4 dark:bg-[#121e29]">
             {/* Left column with photo and name */}
-            <div className="w-2/5 flex flex-col">
-              <div className=" rounded-md overflow-hidden mb-4 p-2">
+            <div className="flex w-2/5 flex-col">
+              <div className="mb-4 overflow-hidden rounded-md p-2">
                 {student.user?.avatar && (
                   <Avatar className="h-[150px] w-[150px] rounded-lg shadow-lg">
                     <AvatarImage src={student.user.avatar} alt="Avatar" />
@@ -65,18 +67,18 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
 
               {/* <div className="flex flex-col"> */}
-              <p className="text-[#0a2d5e] dark:text-[#c7d9f2] font-bold text-lg leading-tight">
+              <p className="text-lg leading-tight font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                 {getFullName(student)}
               </p>
 
               <div className="mt-auto">
-                <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-sm font-bold">
+                <p className="text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                   DATE DE
                 </p>
-                <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-sm font-bold">
+                <p className="text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                   NAISSANCE
                 </p>
-                <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-sm font-bold">
+                <p className="text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                   {student.dateOfBirth?.toLocaleDateString(i18n.language, {
                     timeZone: "UTC",
                     year: "numeric",
@@ -88,7 +90,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
 
             {/* Right column with details and barcode */}
-            <div className="w-3/5 pl-4 flex flex-col">
+            <div className="flex w-3/5 flex-col pl-4">
               <div className="font-mono text-[#0a2d5e] dark:text-[#c7d9f2]">
                 <p className="mb-2 uppercase">
                   {t("registration_number")}: {student.registrationNumber}
@@ -101,7 +103,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 </p>
               </div>
 
-              <div className="mt-auto flex justify-between items-end">
+              <div className="mt-auto flex items-end justify-between">
                 {/* Barcode */}
                 <div className="w-3/5">
                   <IdCardBarCode
@@ -113,7 +115,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 </div>
 
                 {/* School logo */}
-                <div className="w-2/5 p-1 rounded-md">
+                <div className="w-2/5 rounded-md p-1">
                   {school.logo && (
                     <Image
                       src={`/api/download/images/${school.logo}`}
@@ -130,28 +132,28 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         </Card>
 
         {/* Back of the card */}
-        <Card className="card-face p-0 card-back rounded-xl overflow-hidden border-2 border-[#0a2d5e] shadow-md">
+        <Card className="card-face card-back overflow-hidden rounded-xl border-2 border-[#0a2d5e] p-0 shadow-md">
           {/* Header */}
-          <div className="p-2 border-b-2 border-[#0a2d5e]">
-            <h2 className="font-bold text-center text-lg sm:text-xl">
+          <div className="border-b-2 border-[#0a2d5e] p-2">
+            <h2 className="text-center text-lg font-bold sm:text-xl">
               {school.name}
             </h2>
           </div>
 
           {/* Blue band */}
-          <div className="bg-[#0a2d5e] p-2 flex justify-center">
-            <h3 className="text-white font-bold text-xl sm:text-2xl">
+          <div className="flex justify-center bg-[#0a2d5e] p-2">
+            <h3 className="text-xl font-bold text-white sm:text-2xl">
               RÈGLEMENT INTÉRIEUR
             </h3>
           </div>
 
           {/* Main content */}
-          <div className="bg-[#e6f0fa] dark:bg-[#121e29] p-4">
+          <div className="bg-[#e6f0fa] p-4 dark:bg-[#121e29]">
             <div className="mb-4">
-              <h4 className="text-[#0a2d5e] dark:text-[#c7d9f2] font-bold text-sm mb-2">
+              <h4 className="mb-2 text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                 RÈGLES DE L'ÉTABLISSEMENT:
               </h4>
-              <ul className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs space-y-1 list-disc pl-4">
+              <ul className="list-disc space-y-1 pl-4 text-xs text-[#0a2d5e] dark:text-[#c7d9f2]">
                 <li>Cette carte doit être portée visiblement en tout temps</li>
                 <li>
                   La carte est strictement personnelle et non transférable
@@ -164,29 +166,29 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
 
             <div className="mb-4">
-              <h4 className="text-[#0a2d5e] dark:text-[#c7d9f2] font-bold text-sm mb-2">
+              <h4 className="mb-2 text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                 CONTACT:
               </h4>
-              <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs">
+              <p className="text-xs text-[#0a2d5e] dark:text-[#c7d9f2]">
                 BP 1234, Yaoundé, Cameroun
               </p>
-              <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs">
+              <p className="text-xs text-[#0a2d5e] dark:text-[#c7d9f2]">
                 Tel: (+237) 222 222 222
               </p>
-              <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs">
+              <p className="text-xs text-[#0a2d5e] dark:text-[#c7d9f2]">
                 Email: info@ipbwague.cm
               </p>
-              <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs">
+              <p className="text-xs text-[#0a2d5e] dark:text-[#c7d9f2]">
                 www.ipbwague.cm
               </p>
             </div>
 
-            <div className="flex justify-between items-end mt-4">
+            <div className="mt-4 flex items-end justify-between">
               <div className="w-1/2">
-                <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs font-bold mb-1">
+                <p className="mb-1 text-xs font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                   EN CAS DE PERTE:
                 </p>
-                <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs">
+                <p className="text-xs text-[#0a2d5e] dark:text-[#c7d9f2]">
                   Si vous trouvez cette carte, veuillez la retourner à l'adresse
                   ci-dessus ou appeler le numéro indiqué.
                 </p>
@@ -207,7 +209,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
 
             <div className="mt-4 border-t border-[#0a2d5e] pt-2">
-              <p className="text-[#0a2d5e] dark:text-[#c7d9f2] text-xs text-center font-bold">
+              <p className="text-center text-xs font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                 "Le chemin de la réussite scolaire / The road to academic
                 success"
               </p>

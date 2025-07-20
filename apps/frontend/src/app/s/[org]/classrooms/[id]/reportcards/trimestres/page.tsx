@@ -1,3 +1,8 @@
+import type { SearchParams } from "nuqs/server";
+import { Fragment } from "react";
+import Link from "next/link";
+import _ from "lodash";
+
 import { Separator } from "@repo/ui/components/separator";
 import {
   Table,
@@ -13,10 +18,7 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
-import _ from "lodash";
-import Link from "next/link";
-import type { SearchParams } from "nuqs/server";
-import { Fragment } from "react";
+
 import { AvatarState } from "~/components/AvatarState";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
@@ -61,7 +63,7 @@ export default async function Page(props: PageProps) {
   const { title } = getTitle({ trimestreId });
 
   return (
-    <div className="flex gap-2 flex-col mb-10">
+    <div className="mb-10 flex flex-col gap-2">
       <TrimestreHeader
         trimestreId={trimestreId}
         title={title}
@@ -121,7 +123,7 @@ export default async function Page(props: PageProps) {
                       </TableCell>
                       <TableCell rowSpan={2}>
                         <Link
-                          className=" hover:underline"
+                          className="hover:underline"
                           href={`/students/${student.id}/reportcards/trimestres?trimestreId=${searchParams.trimestreId}&studentId=${student.id}&classroomId=${params.id}`}
                         >
                           {student.lastName}
@@ -136,11 +138,11 @@ export default async function Page(props: PageProps) {
                       >
                         <div
                           className={cn(
-                            "rounded-2xl ",
+                            "rounded-2xl",
                             value.average > 10 &&
-                              "bg-green-600 text-green-100 p-1.5",
+                              "bg-green-600 p-1.5 text-green-100",
                             value.average < 10 &&
-                              "bg-red-600 text-red-100 p-1.5",
+                              "bg-red-600 p-1.5 text-red-100",
                           )}
                         >
                           {value.average.toFixed(2)}
@@ -175,7 +177,7 @@ export default async function Page(props: PageProps) {
                                 return (
                                   <TableCell
                                     className={cn(
-                                      "border-l  text-center",
+                                      "border-l text-center",
                                       g < 10
                                         ? "!bg-red-50 dark:!bg-red-800"
                                         : g < 15
@@ -223,7 +225,7 @@ export default async function Page(props: PageProps) {
                                 return (
                                   <TableCell
                                     className={cn(
-                                      "border-l  text-center",
+                                      "border-l text-center",
                                       g < 10
                                         ? "!bg-red-50 dark:!bg-red-800"
                                         : g < 15

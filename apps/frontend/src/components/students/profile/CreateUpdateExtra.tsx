@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { ActivitySquare } from "lucide-react";
 
 import {
@@ -19,11 +20,10 @@ import {
 } from "@repo/ui/components/form";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
+
 import type { Option } from "~/components/multiselect";
 import MultipleSelector from "~/components/multiselect";
 import { useLocale } from "~/i18n";
-
-import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 
 export function CreateUpdateExtra() {
@@ -77,7 +77,7 @@ export function CreateUpdateExtra() {
                   <FormLabel>{t("sports")}</FormLabel>
                   <FormControl>
                     {sportsQuery.isPending ? (
-                      <Skeleton className="w-full h-8" />
+                      <Skeleton className="h-8 w-full" />
                     ) : (
                       <MultipleSelector
                         commandProps={{
@@ -110,7 +110,7 @@ export function CreateUpdateExtra() {
                   <FormLabel>{t("clubs")}</FormLabel>
                   <FormControl>
                     {clubsQuery.isPending ? (
-                      <Skeleton className="w-full h-8" />
+                      <Skeleton className="h-8 w-full" />
                     ) : (
                       <MultipleSelector
                         commandProps={{

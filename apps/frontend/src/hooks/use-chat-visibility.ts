@@ -1,11 +1,13 @@
 "use client";
 
-import { VisibilityType } from "@repo/db";
 import { useMemo } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
-import { updateChatVisibility } from "~/components/ai/actions";
+
+import { VisibilityType } from "@repo/db";
+
 import type { ChatHistory } from "~/components/ai/sidebar-history";
+import { updateChatVisibility } from "~/components/ai/actions";
 import { getChatHistoryPaginationKey } from "~/components/ai/sidebar-history";
 
 export function useChatVisibility({

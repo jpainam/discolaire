@@ -1,7 +1,7 @@
 "use client";
 
-import { Globe, Lock } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Globe, Lock } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Switch } from "@repo/ui/components/switch";
+
 import { UserAppearance } from "./UserAppearance";
 
 export default function Page() {
@@ -70,7 +71,7 @@ export default function Page() {
                 <Label htmlFor="two-factor">
                   Two-Factor Authentication (2FA)
                 </Label>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Add an extra layer of security to your account.
                 </p>
               </div>
@@ -89,7 +90,7 @@ export default function Page() {
                     <p className="font-medium">
                       Current Device - Chrome on Windows
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Last active: Just now
                     </p>
                   </div>
@@ -102,7 +103,7 @@ export default function Page() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Mobile App - iOS</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Last active: 2 hours ago
                     </p>
                   </div>

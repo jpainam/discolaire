@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import i18next from "i18next";
 import { useQueryStates } from "nuqs";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";

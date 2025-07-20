@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
-import type { AiChat } from "@repo/db";
-import { VisibilityType } from "@repo/db";
 import { createUIMessageStream, JsonToSseTransformStream } from "ai";
 import { differenceInSeconds } from "date-fns";
+
+import type { AiChat } from "@repo/db";
+import { VisibilityType } from "@repo/db";
+
+import type { ChatMessage } from "~/lib/types";
 import { getSession } from "~/auth/server";
 import {
   getChatById,
@@ -11,7 +14,6 @@ import {
   getStreamIdsByChatId,
 } from "~/lib/ai/queries";
 import { ChatSDKError } from "~/lib/errors";
-import type { ChatMessage } from "~/lib/types";
 import { getStreamContext } from "../../route";
 
 export async function GET(

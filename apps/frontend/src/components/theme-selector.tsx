@@ -1,5 +1,7 @@
 "use client";
 
+import { useTheme } from "next-themes";
+
 import { Label } from "@repo/ui/components/label";
 import {
   Select,
@@ -9,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useTheme } from "next-themes";
+
 import { useLocale } from "~/i18n";
 import { useThemeConfig } from "~/providers/ActiveThemeProvider";
 import { defaultThemes } from "~/themes";
@@ -27,7 +29,7 @@ export function ThemeSelector() {
   }
 
   return (
-    <div className="hidden md:flex items-center gap-1">
+    <div className="hidden items-center gap-1 md:flex">
       <Label htmlFor="theme-selector" className="sr-only">
         Theme
       </Label>
@@ -35,7 +37,7 @@ export function ThemeSelector() {
         <SelectTrigger
           id="theme-selector"
           size="sm"
-          className="h-7 justify-start *:data-[slot=select-value]:w-12 "
+          className="h-7 justify-start *:data-[slot=select-value]:w-12"
         >
           <span className="text-muted-foreground hidden sm:block">
             {t("theme")}:

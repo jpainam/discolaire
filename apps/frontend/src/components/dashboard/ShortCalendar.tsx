@@ -1,4 +1,5 @@
 "use client";
+
 import { faker } from "@faker-js/faker";
 
 import {
@@ -7,6 +8,7 @@ import {
   CalendarItem,
   CalendarProvider,
 } from "~/components/users/UserCalendar";
+
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 const statuses = [
   { id: faker.string.uuid(), name: "Planned", color: "#6B7280" },

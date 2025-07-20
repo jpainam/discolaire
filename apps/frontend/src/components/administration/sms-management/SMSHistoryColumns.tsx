@@ -1,7 +1,8 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
-import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 import Link from "next/link";
+import i18next from "i18next";
+import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -12,11 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { useLocale } from "~/i18n";
 
-import i18next from "i18next";
-import { routes } from "~/configs/routes";
 import type { SMSHistory } from "~/types/sms";
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 
 export function fetchSmsHistoryColumns({
   t,
@@ -120,7 +120,7 @@ function ActionsCell({ row }: { row: Row<SMSHistory> }) {
           <Button
             aria-label="Open menu"
             variant={"ghost"}
-            className="flex size-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex size-8 p-0"
           >
             <MoreVertical aria-hidden="true" className="h-4 w-4" />
           </Button>

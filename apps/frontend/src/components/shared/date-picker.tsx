@@ -1,6 +1,20 @@
 "use client";
 
+import type { CaptionLabelProps, MonthGridProps } from "react-day-picker";
+import { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import {
+  eachMonthOfInterval,
+  eachYearOfInterval,
+  endOfYear,
+  format,
+  isAfter,
+  isBefore,
+  startOfYear,
+} from "date-fns";
+import { enUS, es, fr } from "date-fns/locale";
+import { CalendarIcon, ChevronDownIcon } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
@@ -13,21 +27,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import {
-  eachMonthOfInterval,
-  eachYearOfInterval,
-  endOfYear,
-  format,
-  isAfter,
-  isBefore,
-  startOfYear,
-} from "date-fns";
-import { enUS, es, fr } from "date-fns/locale";
-import { CalendarIcon, ChevronDownIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import type { CaptionLabelProps, MonthGridProps } from "react-day-picker";
-import { useLocale } from "~/i18n";
 
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface DatePickerProps {

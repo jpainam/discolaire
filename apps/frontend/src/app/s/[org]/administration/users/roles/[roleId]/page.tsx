@@ -7,8 +7,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-import { getServerTranslations } from "~/i18n/server";
 
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { PolicyDataTable } from "./PolicyDataTable";
 import { UserDataTable } from "./UserDataTable";

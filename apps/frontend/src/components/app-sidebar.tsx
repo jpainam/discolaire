@@ -1,16 +1,18 @@
 "use client";
 
-import type { Sidebar } from "@repo/ui/components/sidebar";
-import { usePathname } from "next/navigation";
 import * as React from "react";
+import { usePathname } from "next/navigation";
+
+import type { Sidebar } from "@repo/ui/components/sidebar";
+
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { MainSidebar } from "~/sidebars/main-sidebar";
 import { AdminSidebar } from "./administration/admin-sidebar";
+//import { TimetableSidebar } from "./timetables/TimetableSidebar";
+import { AiChatSidebar } from "./ai/AiChatSidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
-//import { TimetableSidebar } from "./timetables/TimetableSidebar";
-import { AiChatSidebar } from "./ai/AiChatSidebar";
 import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

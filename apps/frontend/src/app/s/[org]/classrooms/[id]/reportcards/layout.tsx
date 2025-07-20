@@ -4,7 +4,7 @@ import { ReportCardHeader } from "~/components/classrooms/reportcards/ReportCard
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="flex gap-2 w-full flex-col">
+    <div className="flex w-full flex-col gap-2">
       <ReportCardHeader />
       {children}
     </div>

@@ -1,13 +1,13 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import { Mail, SendIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { DropdownMenuItem } from "@repo/ui/components/dropdown-menu";
+
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "~/trpc/react";
 
 export function DropdownInvitation({

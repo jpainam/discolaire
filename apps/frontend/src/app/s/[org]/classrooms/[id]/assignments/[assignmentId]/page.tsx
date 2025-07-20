@@ -1,12 +1,4 @@
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
+import Link from "next/link";
 import i18next from "i18next";
 import {
   BookOpen,
@@ -17,7 +9,17 @@ import {
   Info,
   LinkIcon,
 } from "lucide-react";
-import Link from "next/link";
+
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Separator } from "@repo/ui/components/separator";
+
 import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
@@ -30,25 +32,25 @@ export default async function Page(props: {
   const { t } = await getServerTranslations();
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col px-4 border-b md:flex-row justify-between items-start md:items-center py-2">
+      <div className="flex flex-col items-start justify-between border-b px-4 py-2 md:flex-row md:items-center">
         <div>
           <h1 className="text-lg font-bold tracking-tight">
             {assignment.title}
           </h1>
-          <div className="flex items-center gap-2 mt-2">
+          <div className="mt-2 flex items-center gap-2">
             <Badge variant="outline" className="text-sm">
-              <BookOpen className="h-3 w-3 mr-1" />
+              <BookOpen className="mr-1 h-3 w-3" />
               {assignment.category.name}
             </Badge>
             <Badge variant="outline" className="text-sm">
-              <Info className="h-3 w-3 mr-1" />
+              <Info className="mr-1 h-3 w-3" />
               {assignment.subject.course.name}
             </Badge>
           </div>
         </div>
-        <div className="gap-2 flex items-center">
+        <div className="flex items-center gap-2">
           <Badge variant="secondary" className="text-sm">
-            <Calendar className="h-3 w-3 mr-1" />
+            <Calendar className="mr-1 h-3 w-3" />
             {assignment.dueDate.toLocaleDateString(i18next.language, {
               year: "numeric",
               month: "short",
@@ -59,11 +61,11 @@ export default async function Page(props: {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 px-4">
+      <div className="grid gap-6 px-4 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Info className="h-5 w-5 mr-2" />
+              <Info className="mr-2 h-5 w-5" />
               {t("description")}
             </CardTitle>
           </CardHeader>
@@ -72,7 +74,7 @@ export default async function Page(props: {
               dangerouslySetInnerHTML={{
                 __html: assignment.description ?? `<p>${t("no_data")}</p>`,
               }}
-              className="prose text-sm text-muted-foreground prose-sm dark:prose-invert"
+              className="prose text-muted-foreground prose-sm dark:prose-invert text-sm"
             ></div>
           </CardContent>
         </Card>
@@ -80,23 +82,23 @@ export default async function Page(props: {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Clock className="h-5 w-5 mr-2" />
+              <Clock className="mr-2 h-5 w-5" />
               Timeline
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <Calendar className="text-muted-foreground mr-2 h-4 w-4" />
                   <span className="text-sm font-medium">Visible Period</span>
                 </div>
                 <span className="text-sm">Oct 26, 2024 - Nov 02, 2024</span>
               </div>
               <Separator />
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <Calendar className="text-muted-foreground mr-2 h-4 w-4" />
                   <span className="text-sm font-medium">
                     Posted on Calendar
                   </span>
@@ -110,11 +112,11 @@ export default async function Page(props: {
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 px-4">
+      <div className="grid gap-6 px-4 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <FileText className="h-5 w-5 mr-2" />
+              <FileText className="mr-2 h-5 w-5" />
               Attachments
             </CardTitle>
           </CardHeader>
@@ -123,18 +125,18 @@ export default async function Page(props: {
               <li>
                 <Button variant="outline" className="w-full justify-start">
                   <Link href="#" className="flex items-center">
-                    <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                    <FileText className="mr-2 h-4 w-4 text-blue-500" />
                     <span className="text-sm">assignment_instructions.pdf</span>
-                    <Download className="h-4 w-4 ml-auto text-muted-foreground" />
+                    <Download className="text-muted-foreground ml-auto h-4 w-4" />
                   </Link>
                 </Button>
               </li>
               <li>
                 <Button variant="outline" className="w-full justify-start">
                   <Link href="#" className="flex items-center">
-                    <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                    <FileText className="mr-2 h-4 w-4 text-blue-500" />
                     <span className="text-sm">reference_material.docx</span>
-                    <Download className="h-4 w-4 ml-auto text-muted-foreground" />
+                    <Download className="text-muted-foreground ml-auto h-4 w-4" />
                   </Link>
                 </Button>
               </li>
@@ -145,7 +147,7 @@ export default async function Page(props: {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <LinkIcon className="h-5 w-5 mr-2" />
+              <LinkIcon className="mr-2 h-5 w-5" />
               Resources
             </CardTitle>
           </CardHeader>
@@ -154,7 +156,7 @@ export default async function Page(props: {
               <li>
                 <Button variant="outline" className="w-full justify-start">
                   <Link href="#" className="flex items-center">
-                    <LinkIcon className="h-4 w-4 mr-2 text-blue-500" />
+                    <LinkIcon className="mr-2 h-4 w-4 text-blue-500" />
                     <span className="text-sm">Research Resource 1</span>
                   </Link>
                 </Button>
@@ -162,7 +164,7 @@ export default async function Page(props: {
               <li>
                 <Button variant="outline" className="w-full justify-start">
                   <Link href="#" className="flex items-center">
-                    <LinkIcon className="h-4 w-4 mr-2 text-blue-500" />
+                    <LinkIcon className="mr-2 h-4 w-4 text-blue-500" />
                     <span className="text-sm">Additional Reading</span>
                   </Link>
                 </Button>

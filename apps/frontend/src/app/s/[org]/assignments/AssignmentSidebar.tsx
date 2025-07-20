@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Calendar as CalendarIcon,
   Layout,
@@ -5,7 +6,6 @@ import {
   PieChart,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 
 export function AssignmentSidebar() {
   const menuItems = [
@@ -16,7 +16,7 @@ export function AssignmentSidebar() {
     { label: "Calendar", icon: CalendarIcon },
   ];
   return (
-    <nav className="hidden w-64 flex-col overflow-y-auto border-r bg-muted/50 text-sm shadow-md md:flex">
+    <nav className="bg-muted/50 hidden w-64 flex-col overflow-y-auto border-r text-sm shadow-md md:flex">
       <ul className="space-y-2 p-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
@@ -24,7 +24,7 @@ export function AssignmentSidebar() {
             <li key={item.label}>
               <Link
                 href="#"
-                className="flex w-full flex-row items-center justify-start gap-2 rounded-md p-2 hover:bg-secondary"
+                className="hover:bg-secondary flex w-full flex-row items-center justify-start gap-2 rounded-md p-2"
               >
                 <Icon className="h-4 w-4" />
                 {item.label}

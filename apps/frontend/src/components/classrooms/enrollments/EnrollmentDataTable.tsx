@@ -1,12 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { EnrollmentDataTableActions } from "./EnrollmentDataTableActions";
 import { fetchEnrollmentColumns } from "./EnrollmentDataTableColumns";

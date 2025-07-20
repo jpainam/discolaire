@@ -6,20 +6,17 @@ import {
   parseISO,
   startOfWeek,
 } from "date-fns";
-
-import { useCalendar } from "~/components/calendar/calendar-context";
+import { fr } from "date-fns/locale";
 
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 
+import type { IEvent } from "~/components/calendar/interfaces";
+import { useCalendar } from "~/components/calendar/calendar-context";
+import { getEventBlockStyle, groupEvents } from "~/components/calendar/helpers";
 //import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 import { CalendarTimeline } from "~/components/calendar/week-and-day-view/calendar-time-line";
 import { EventBlock } from "~/components/calendar/week-and-day-view/event-block";
 import { WeekViewMultiDayEventsRow } from "~/components/calendar/week-and-day-view/week-view-multi-day-events-row";
-
-import { getEventBlockStyle, groupEvents } from "~/components/calendar/helpers";
-
-import { fr } from "date-fns/locale";
-import type { IEvent } from "~/components/calendar/interfaces";
 
 interface IProps {
   singleDayEvents: IEvent[];
@@ -35,7 +32,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center border-b py-4 text-sm text-t-quaternary sm:hidden">
+      <div className="text-t-quaternary flex flex-col items-center justify-center border-b py-4 text-sm sm:hidden">
         <p>Weekly view is not available on smaller devices.</p>
         <p>Please switch to daily or monthly view.</p>
       </div>
@@ -54,10 +51,10 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
               {weekDays.map((day, index) => (
                 <span
                   key={index}
-                  className="py-2 text-center text-xs font-medium text-t-quaternary"
+                  className="text-t-quaternary py-2 text-center text-xs font-medium"
                 >
                   {format(day, "EE", { locale: fr })}{" "}
-                  <span className="ml-1 font-semibold text-t-secondary">
+                  <span className="text-t-secondary ml-1 font-semibold">
                     {format(day, "d", { locale: fr })}
                   </span>
                 </span>
@@ -74,7 +71,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                 <div key={hour} className="relative" style={{ height: "96px" }}>
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
                     {index !== 0 && (
-                      <span className="text-xs text-t-quaternary">
+                      <span className="text-t-quaternary text-xs">
                         {format(new Date().setHours(hour), "hh a", {
                           locale: fr,
                         })}
@@ -114,10 +111,10 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                               alert("Add event 3");
                             }}
                           >
-                            <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-muted" />
+                            <div className="hover:bg-muted absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors" />
                           </button>
 
-                          <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+                          <div className="border-b-tertiary pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
 
                           <button
                             onClick={() => {
@@ -126,7 +123,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                               alert("Add event 4");
                             }}
                           >
-                            <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-muted" />
+                            <div className="hover:bg-muted absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors" />
                           </button>
                         </div>
                       ))}

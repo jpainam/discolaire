@@ -1,3 +1,7 @@
+import { Fragment } from "react";
+import Link from "next/link";
+import _, { sum } from "lodash";
+
 import {
   Table,
   TableBody,
@@ -7,11 +11,9 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-import _, { sum } from "lodash";
-import Link from "next/link";
-import { Fragment } from "react";
-import { EmptyState } from "~/components/EmptyState";
+
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
@@ -173,7 +175,7 @@ export default async function Page(props: {
                       );
                     })}
                     <TableRow
-                      className="bg-secondary border text-secondary-foreground"
+                      className="bg-secondary text-secondary-foreground border"
                       key={`recap-${groupId}`}
                     >
                       <TableCell

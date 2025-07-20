@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 "use client";
 
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { useAtomValue } from "jotai";
 import {
   CreditCardIcon,
@@ -10,7 +12,9 @@ import {
 } from "lucide-react";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
+import { useDebounce } from "use-debounce";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -26,16 +30,12 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import { useLocale } from "~/i18n";
 
-import type { RouterOutputs } from "@repo/api";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { FinanceBulkAction } from "./FinanceBulkAction";
 import { GridViewFinanceCard } from "./GridViewFinanceCard";
 import { ListViewFinance } from "./ListViewFinance";
@@ -93,8 +93,8 @@ export function ClassroomFinancialSituation({
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:flex flex-row items-center gap-2 border-b  px-4 py-1 ">
-        <HandCoins className="h-4 w-4 " />
+      <div className="grid grid-cols-1 flex-row items-center gap-2 border-b px-4 py-1 md:flex">
+        <HandCoins className="h-4 w-4" />
         <Label>{t("financial_situation")}</Label>
         <Input
           onChange={(v) => setQuery(v.target.value)}
@@ -110,7 +110,7 @@ export function ClassroomFinancialSituation({
           }}
           variant={"outline"}
           defaultValue={"all"}
-          className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
+          className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
         >
           <ToggleGroupItem value="all" aria-label="All">
             <WalletIcon /> {t("all")}
@@ -130,7 +130,7 @@ export function ClassroomFinancialSituation({
             onValueChange={(val) => {
               setView(val);
             }}
-            className="*:data-[slot=toggle-group-item]:px-3 rounded-sm"
+            className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
             variant={"outline"}
             type="single"
           >
@@ -150,7 +150,7 @@ export function ClassroomFinancialSituation({
               <FinanceBulkAction />
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
-                  <PDFIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <PDFIcon className="text-muted-foreground mr-2 h-4 w-4" />
                   <span>{t("pdf_export")}</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
@@ -240,7 +240,7 @@ export function ClassroomFinancialSituation({
               <DropdownMenuSeparator />
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
-                  <XMLIcon className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <XMLIcon className="text-muted-foreground mr-2 h-4 w-4" />
                   <span>{t("xml_export")}</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>

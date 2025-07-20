@@ -1,5 +1,8 @@
 "use client";
 
+import { notFound } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import i18next from "i18next";
 import {
   AlignStartHorizontal,
   Badge,
@@ -15,17 +18,14 @@ import {
   User,
   X,
 } from "lucide-react";
-import { notFound } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
+
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
-import { Label } from "@repo/ui/components/label";
-import { useQuery } from "@tanstack/react-query";
-import i18next from "i18next";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -66,19 +66,19 @@ export function TransactionDetails({
   return (
     <div className="grid gap-3 text-sm md:grid-cols-2">
       <div className="flex flex-row items-center gap-1">
-        <Badge className="w-4 h-4" />
+        <Badge className="h-4 w-4" />
         {/* <Label>{t("account")}:</Label> */}
         {getFullName(transactionQuery.data.student)}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <User className="w-4 h-4" />
+        <User className="h-4 w-4" />
         {/* <Label>{t("student")}:</Label> */}
-        <span className="overflow-hidden truncate">
+        <span className="truncate overflow-hidden">
           {getFullName(transactionQuery.data.student)}
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">
-        <DollarSign className="w-4 h-4" />
+        <DollarSign className="h-4 w-4" />
         {/* <Label>{t("amount")}:</Label> */}
         {transactionQuery.data.amount.toLocaleString(i18next.language, {
           maximumFractionDigits: 0,
@@ -88,14 +88,14 @@ export function TransactionDetails({
         })}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <File className="w-4 h-4" />
+        <File className="h-4 w-4" />
         {/* <Label>{t("description")}:</Label> */}
-        <span className="overflow-hidden truncate">
+        <span className="truncate overflow-hidden">
           {transactionQuery.data.description}
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">
-        <Clock className="w-4 h-4" />
+        <Clock className="h-4 w-4" />
         {/* <Label>{t("status")}:</Label> */}
         <FlatBadge
           variant={
@@ -110,35 +110,35 @@ export function TransactionDetails({
         </FlatBadge>
       </div>
       <div className="flex flex-row items-center gap-1">
-        <FileSliders className="w-4 h-4" />
+        <FileSliders className="h-4 w-4" />
         {/* <Label>{t("transactionRef")}:</Label> */}
         {transaction.transactionRef}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <AlignStartHorizontal className="w-4 h-4" />
+        <AlignStartHorizontal className="h-4 w-4" />
         {/* <Label>{t("transactionType")}:</Label> */}
         {transaction.transactionType}
       </div>
       <div className="flex flex-row items-center gap-1">
-        <CalendarDays className="w-4 h-4" />
+        <CalendarDays className="h-4 w-4" />
         {/* <Label>{t("createdAt")}:</Label> */}
         {fullDateFormatter.format(transaction.createdAt)}
       </div>
       {transaction.deletedAt && (
-        <div className="flex flex-row text-destructive items-center gap-1">
-          <CalendarDays className="w-4 h-4 " />
+        <div className="text-destructive flex flex-row items-center gap-1">
+          <CalendarDays className="h-4 w-4" />
           {t("deletedAt")}
         </div>
       )}
       {transaction.deletedAt && (
-        <div className="flex flex-row text-destructive items-center gap-1">
-          <Trash2 className="w-4 h-4 " />
+        <div className="text-destructive flex flex-row items-center gap-1">
+          <Trash2 className="h-4 w-4" />
           {/* <Label>{t("createdAt")}:</Label> */}
           {fullDateFormatter.format(transaction.deletedAt)}
         </div>
       )}
       <div className="col-span-full flex flex-row items-center gap-1">
-        <Library className="w-4 h-4" />
+        <Library className="h-4 w-4" />
         <Label>{t("observation")}</Label>
       </div>
 

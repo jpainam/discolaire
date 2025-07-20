@@ -1,10 +1,10 @@
-import { render } from "@react-email/render";
 import type { NextRequest } from "next/server";
+import { render } from "@react-email/render";
 
 import { FakeGradeReportEmail } from "@repo/transactional";
 
-import { caller } from "~/trpc/server";
 import { getSession } from "~/auth/server";
+import { caller } from "~/trpc/server";
 
 export async function GET(req: NextRequest) {
   try {

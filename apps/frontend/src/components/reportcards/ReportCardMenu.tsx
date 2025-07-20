@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { useLocale } from "~/i18n";
-
 import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function ReportCardMenu() {
@@ -19,7 +18,7 @@ export function ReportCardMenu() {
   ];
 
   return (
-    <div className="flex flex-row gap-4 border-b bg-muted px-4 py-2 text-sm text-muted-foreground">
+    <div className="bg-muted text-muted-foreground flex flex-row gap-4 border-b px-4 py-2 text-sm">
       {menuItems.map((item) => {
         const isActive = pathname === item.href;
         return (
@@ -27,7 +26,7 @@ export function ReportCardMenu() {
             key={item.href}
             className={cn(
               isActive
-                ? "border-b-2 border-blue-500 bg-secondary text-secondary-foreground"
+                ? "bg-secondary text-secondary-foreground border-b-2 border-blue-500"
                 : "",
             )}
             href={item.href}

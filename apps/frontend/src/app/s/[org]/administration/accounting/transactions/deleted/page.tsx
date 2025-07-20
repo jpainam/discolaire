@@ -1,7 +1,6 @@
+import { DeletedTransactionDataTable } from "~/components/administration/transactions/DeletedDataTable";
 import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
-
-import { DeletedTransactionDataTable } from "~/components/administration/transactions/DeletedDataTable";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: {

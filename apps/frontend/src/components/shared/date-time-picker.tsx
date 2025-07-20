@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import type { ChangeEventHandler } from "react";
+import { useState } from "react";
 import { format, setHours, setMinutes } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
-import type { ChangeEventHandler } from "react";
-import { useState } from "react";
 
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
@@ -15,8 +15,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import { useLocale } from "~/i18n";
 
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface DateTimePickerProps {

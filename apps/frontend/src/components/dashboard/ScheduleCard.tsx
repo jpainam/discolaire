@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "~/i18n";
+import { CalendarDays } from "lucide-react";
 
 import {
   Card,
@@ -9,9 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { CalendarDays } from "lucide-react";
+
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { DatePicker } from "../DatePicker";
+
 interface ScheduleItem {
   startTime: string;
   endTime: string;
@@ -89,7 +91,7 @@ export function ScheduleCard({ className }: { className?: string }) {
         {scheduleData.map((item, index) => {
           return (
             <div className="flex flex-row items-start gap-2" key={index}>
-              <div className="w-16 text-right text-xs text-secondary-foreground">
+              <div className="text-secondary-foreground w-16 text-right text-xs">
                 {item.startTime}
               </div>
               <div
@@ -97,10 +99,10 @@ export function ScheduleCard({ className }: { className?: string }) {
               ></div>
               <div className="flex flex-col gap-0">
                 <span className="text-semibold text-xs">{item.subject}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-muted-foreground text-xs">
                   {item.teacher}
                 </span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-muted-foreground text-xs">
                   {item.location}
                 </span>
               </div>

@@ -10,19 +10,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 import { CreateEditTerm } from "./CreateEditTerm";
 
 export function TermHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="px-4 flex justify-end items-center gap-2">
+    <div className="flex items-center justify-end gap-2 px-4">
       <Button
         onClick={() => {
           openModal({

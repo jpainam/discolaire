@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -17,11 +18,10 @@ import {
 } from "@repo/ui/components/card";
 import { Form } from "@repo/ui/components/form";
 import { Separator } from "@repo/ui/components/separator";
-import { useLocale } from "~/i18n";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authClient } from "~/auth/client";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({

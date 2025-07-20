@@ -1,9 +1,11 @@
 "use client";
 
-import { cn } from "@repo/ui/lib/utils";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { toast as sonnerToast } from "sonner";
+
+import { cn } from "@repo/ui/lib/utils";
+
 import { CheckCircleFillIcon, WarningIcon } from "./icons";
 
 const iconsByType: Record<"success" | "error", ReactNode> = {
@@ -41,12 +43,12 @@ function Toast(props: ToastProps) {
   }, [description]);
 
   return (
-    <div className="flex w-full toast-mobile:w-[356px] justify-center">
+    <div className="toast-mobile:w-[356px] flex w-full justify-center">
       <div
         data-testid="toast"
         key={id}
         className={cn(
-          "bg-zinc-100 p-3 rounded-lg w-full toast-mobile:w-fit flex flex-row gap-3",
+          "toast-mobile:w-fit flex w-full flex-row gap-3 rounded-lg bg-zinc-100 p-3",
           multiLine ? "items-start" : "items-center",
         )}
       >
@@ -59,7 +61,7 @@ function Toast(props: ToastProps) {
         >
           {iconsByType[type]}
         </div>
-        <div ref={descriptionRef} className="text-zinc-950 text-sm">
+        <div ref={descriptionRef} className="text-sm text-zinc-950">
           {description}
         </div>
       </div>

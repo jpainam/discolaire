@@ -1,18 +1,18 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
+
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { Badge } from "@repo/ui/components/badge";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 
 export function SubscriptionDataTableAction({
@@ -68,7 +68,7 @@ export function SubscriptionDataTableAction({
         >
           <Trash2 />
           {t("delete")}
-          <Badge className=" size-4">
+          <Badge className="size-4">
             {table.getSelectedRowModel().rows.length}
           </Badge>
         </Button>

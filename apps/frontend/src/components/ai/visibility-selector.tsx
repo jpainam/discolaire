@@ -1,5 +1,8 @@
 "use client";
 
+import type { ReactNode } from "react";
+import { useMemo, useState } from "react";
+
 import { VisibilityType } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -9,8 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { cn } from "@repo/ui/lib/utils";
-import type { ReactNode } from "react";
-import { useMemo, useState } from "react";
+
 import { useChatVisibility } from "~/hooks/use-chat-visibility";
 import {
   CheckCircleFillIcon,
@@ -64,14 +66,14 @@ export function VisibilitySelector({
       <DropdownMenuTrigger
         asChild
         className={cn(
-          "w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
+          "data-[state=open]:bg-accent data-[state=open]:text-accent-foreground w-fit",
           className,
         )}
       >
         <Button
           data-testid="visibility-selector"
           variant="outline"
-          className="hidden md:flex md:px-2 md:h-[34px]"
+          className="hidden md:flex md:h-[34px] md:px-2"
         >
           {selectedVisibility?.icon}
           {selectedVisibility?.label}
@@ -88,13 +90,13 @@ export function VisibilitySelector({
               await setVisibilityType(visibility.id);
               setOpen(false);
             }}
-            className="gap-4 group/item flex flex-row justify-between items-center"
+            className="group/item flex flex-row items-center justify-between gap-4"
             data-active={visibility.id === visibilityType}
           >
-            <div className="flex flex-col gap-1 items-start">
+            <div className="flex flex-col items-start gap-1">
               {visibility.label}
               {visibility.description && (
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   {visibility.description}
                 </div>
               )}

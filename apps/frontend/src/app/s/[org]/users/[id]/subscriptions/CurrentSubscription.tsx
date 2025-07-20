@@ -1,3 +1,5 @@
+import { Mail, MessageSquare, Phone } from "lucide-react";
+
 import { Badge } from "@repo/ui/components/badge";
 import {
   Card,
@@ -6,13 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { Mail, MessageSquare, Phone } from "lucide-react";
 
 export function CurrentSubscription() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div>
             <CardTitle>Current Subscription</CardTitle>
             <CardDescription>
@@ -82,7 +83,7 @@ function UsageCard({
             <span>{isUnlimited ? "Unlimited" : `${limit} total`}</span>
           </div>
           {!isUnlimited && (
-            <div className="h-2 bg-secondary rounded-full overflow-hidden">
+            <div className="bg-secondary h-2 overflow-hidden rounded-full">
               <div
                 className={`h-full ${percentage > 80 ? "bg-red-500" : "bg-primary"}`}
                 style={{ width: `${percentage}%` }}

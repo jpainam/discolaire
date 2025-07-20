@@ -1,6 +1,7 @@
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
 import Script from "next/script";
+
 import { getSession } from "~/auth/server";
 import { DataStreamProvider } from "~/components/ai/data-stream-provider";
 import { ErrorFallback } from "~/components/error-fallback";

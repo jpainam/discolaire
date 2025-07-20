@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient } from "~/trpc/server";
 
@@ -10,14 +12,14 @@ export default function Page() {
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
-            <div className="grid grid-cols-3 px-4 py-2 gap-3">
+            <div className="grid grid-cols-3 gap-3 px-4 py-2">
               {Array.from({ length: 3 }).map((_, i) => (
                 <Skeleton key={i} className="h-8" />
               ))}
             </div>
           }
         >
-          <div className="font-mono text-accent justify-center text-center flex items-center my-8">
+          <div className="text-accent my-8 flex items-center justify-center text-center font-mono">
             {" "}
             En cours d'implementation
           </div>

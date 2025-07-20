@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { Calendar } from "@repo/ui/components/calendar";
 import { cn } from "@repo/ui/lib/utils";
-import { useEffect, useState } from "react";
+
 import { useCalendarContext } from "~/components/event-calendar/calendar-context";
 
 interface SidebarCalendarProps {
@@ -29,7 +31,7 @@ export default function SidebarCalendar({ className }: SidebarCalendarProps) {
   };
 
   return (
-    <div className={cn("w-full flex justify-center", className)}>
+    <div className={cn("flex w-full justify-center", className)}>
       <Calendar
         mode="single"
         selected={currentDate}

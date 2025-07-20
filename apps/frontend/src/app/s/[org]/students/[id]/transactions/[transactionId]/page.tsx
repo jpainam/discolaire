@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import { Separator } from "@repo/ui/components/separator";
-import { getServerTranslations } from "~/i18n/server";
-
 import { Badge } from "@repo/ui/components/badge";
+import { Separator } from "@repo/ui/components/separator";
+
 import { routes } from "~/configs/routes";
+import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { numberToWords } from "~/lib/toword";
 import { caller } from "~/trpc/server";
@@ -47,7 +47,7 @@ export default async function Page(props: {
     <div>
       <TransactionDetailsHeader />
       <div className="px-4">
-        <div className="relative mx-auto w-full xl:w-1/2 overflow-hidden rounded-md border p-4">
+        <div className="relative mx-auto w-full overflow-hidden rounded-md border p-4 xl:w-1/2">
           {/* Watermark */}
 
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
@@ -86,7 +86,7 @@ export default async function Page(props: {
               <p className="text-lg font-bold">{transaction.transactionRef}</p>
             </div>
             <Separator className="mb-2" />
-            <div className="mb-2 gap-4 flex justify-between">
+            <div className="mb-2 flex justify-between gap-4">
               <div>
                 {/* <p>
               <span className="font-bold">Reçu de</span> : NYA TCHATAT

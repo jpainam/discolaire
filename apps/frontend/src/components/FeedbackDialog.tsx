@@ -1,6 +1,11 @@
 "use client";
 
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -10,12 +15,10 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Textarea } from "@repo/ui/components/textarea";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+
 const feedbackSchema = z.object({
   content: z.string().min(5),
 });

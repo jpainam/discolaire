@@ -3,13 +3,14 @@
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
 import type { Student } from "@repo/db";
-import { Card, CardContent } from "@repo/ui/components/card";
 import type { ChartConfig } from "@repo/ui/components/chart";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
+
 import { getServerTranslations } from "~/i18n/server";
 
 export async function RepeatingPie({ students }: { students: Student[] }) {

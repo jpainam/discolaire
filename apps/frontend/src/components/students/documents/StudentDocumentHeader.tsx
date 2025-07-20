@@ -4,17 +4,17 @@ import { FolderOpen, UploadCloudIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
-import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
+import { useModal } from "~/hooks/use-modal";
+import { useLocale } from "~/i18n";
 
 export function StudentDocumentHeader({ userId }: { userId: string }) {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex flex-row items-center gap-2 border-b bg-muted text-muted-foreground px-4 py-1">
-      <FolderOpen className="hidden md:block h-4 w-4" />
+    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-4 py-1">
+      <FolderOpen className="hidden h-4 w-4 md:block" />
       <Label className="hidden md:block">{t("documents")}</Label>
       <div className="ml-auto flex items-center gap-2">
         <Button

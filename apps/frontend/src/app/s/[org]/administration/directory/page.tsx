@@ -1,6 +1,6 @@
 import { Label } from "@repo/ui/components/label";
-import { getServerTranslations } from "~/i18n/server";
 
+import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import DirectoryHeader from "./DirectoryHeader";
 import { DirectoryTable } from "./DirectoryTable";

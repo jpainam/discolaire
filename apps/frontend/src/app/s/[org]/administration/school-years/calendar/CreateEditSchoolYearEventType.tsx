@@ -1,6 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -11,14 +16,12 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { SubmitButton } from "~/components/SubmitButton";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+
 const schema = z.object({
   name: z.string().min(1),
   color: z.string().min(1),
@@ -114,7 +117,7 @@ export function CreateEditSchoolYearEventType({
             </FormItem>
           )}
         />
-        <div className="flex flex-row justify-end gap-2 items-center">
+        <div className="flex flex-row items-center justify-end gap-2">
           <Button
             onClick={() => {
               closeModal();

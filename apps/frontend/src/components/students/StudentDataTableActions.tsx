@@ -1,18 +1,18 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { Trash2 } from "lucide-react";
 import { useEffect } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 
 type StudentGetAllProcedureOutput = NonNullable<
@@ -85,7 +85,7 @@ export function StudentDataTableActions({
         >
           <Trash2 />
           {t("delete")}
-          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground">
+          <span className="border-border bg-background text-muted-foreground ms-1 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
             {table.getSelectedRowModel().rows.length}
           </span>
         </Button>

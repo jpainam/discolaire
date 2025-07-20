@@ -1,5 +1,12 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -24,11 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
@@ -67,9 +70,9 @@ export function BookCategory() {
   );
 
   return (
-    <Card className="p-0 gap-0">
+    <Card className="gap-0 p-0">
       <CardHeader className="bg-muted/50 border-b p-2">
-        <CardTitle className="flex flex-row justify-between items-center">
+        <CardTitle className="flex flex-row items-center justify-between">
           {t("material_categories")}
           <div className="ml-auto">
             {canCreateCategory && (
@@ -96,7 +99,7 @@ export function BookCategory() {
             <TableHeader>
               <TableRow className="hover:bg-transparent">
                 <TableHead>{t("name")}</TableHead>
-                <TableHead className="text-right w-[50px]"></TableHead>
+                <TableHead className="w-[50px] text-right"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -112,7 +115,7 @@ export function BookCategory() {
                   <TableRow key={category.id}>
                     <TableCell>{category.name}</TableCell>
                     <TableCell className="text-right">
-                      <div className="flex flex-row gap-2 items-center">
+                      <div className="flex flex-row items-center gap-2">
                         {canUpdateCategory && (
                           <Button
                             onClick={() => {
@@ -228,7 +231,7 @@ function CreateEditCategory({
             </FormItem>
           )}
         />
-        <div className="flex flex-row mt-2 justify-end items-center gap-2">
+        <div className="mt-2 flex flex-row items-center justify-end gap-2">
           <Button size={"sm"}>{t("submit")}</Button>
           <Button
             type="button"

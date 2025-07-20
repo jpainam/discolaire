@@ -1,5 +1,6 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -8,7 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 

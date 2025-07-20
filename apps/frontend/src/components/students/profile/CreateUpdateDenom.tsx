@@ -24,11 +24,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useLocale } from "~/i18n";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
 import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
+import { useLocale } from "~/i18n";
 
 export function CreateUpdateDenom() {
   const { t } = useLocale();

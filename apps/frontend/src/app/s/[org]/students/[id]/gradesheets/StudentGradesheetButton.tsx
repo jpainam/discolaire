@@ -1,4 +1,7 @@
 "use client";
+
+import { MoreHorizontal, Pencil } from "lucide-react";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -6,8 +9,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { MoreHorizontal, Pencil } from "lucide-react";
+
 import { useLocale } from "~/i18n";
+
 export function StudentGradesheetButton({
   grade,
 }: {

@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -17,9 +18,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import { useLocale } from "~/i18n";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 

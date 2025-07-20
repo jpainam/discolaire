@@ -1,7 +1,7 @@
 "use client";
 
-import { MoreVertical } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
+import { MoreVertical } from "lucide-react";
 import { useQueryStates } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -13,15 +13,15 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 import { reportcardSearchParamsSchema } from "~/utils/search-params";
 import { sidebarIcons } from "../sidebar-icons";
 
@@ -37,7 +37,7 @@ export function ReportCardHeader() {
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.reportcards;
   return (
-    <div className="grid flex-row items-center gap-4 border-b bg-muted/40 px-4 py-1 md:flex">
+    <div className="bg-muted/40 grid flex-row items-center gap-4 border-b px-4 py-1 md:flex">
       {Icon && <Icon className="hidden h-4 w-4 md:block" />}
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector

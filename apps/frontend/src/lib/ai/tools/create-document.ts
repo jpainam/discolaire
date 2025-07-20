@@ -1,14 +1,15 @@
 import type { UIMessageStreamWriter } from "ai";
 import { tool } from "ai";
 import { z } from "zod";
-import { generateUUID } from "~/lib/utils";
 
 import type { Session } from "@repo/auth";
+
+import type { ChatMessage } from "~/lib/types";
 import {
   artifactKinds,
   documentHandlersByArtifactKind,
 } from "~/lib/artifacts/server";
-import type { ChatMessage } from "~/lib/types";
+import { generateUUID } from "~/lib/utils";
 
 interface CreateDocumentProps {
   session: Session;

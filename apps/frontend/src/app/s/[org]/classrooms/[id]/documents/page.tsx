@@ -1,5 +1,18 @@
 "use client";
 
+import { useState } from "react";
+import {
+  Download,
+  Eye,
+  FileCode,
+  FileSpreadsheet,
+  FileText,
+  FolderOpen,
+  ImageIcon,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
+
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -18,18 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import {
-  Download,
-  Eye,
-  FileCode,
-  FileSpreadsheet,
-  FileText,
-  FolderOpen,
-  ImageIcon,
-  Search,
-  SlidersHorizontal,
-} from "lucide-react";
-import { useState } from "react";
+
 import { useLocale } from "~/i18n";
 
 // Helper function to get the appropriate icon based on file type
@@ -136,12 +138,12 @@ export default function Page() {
   const { t } = useLocale();
 
   return (
-    <div className="flex flex-col mb-10">
-      <div className="flex flex-col md:flex-row gap-2 px-4 py-2 border-b items-start md:items-center ">
-        <FolderOpen className="w-4 h-4 hidden md:block" />
+    <div className="mb-10 flex flex-col">
+      <div className="flex flex-col items-start gap-2 border-b px-4 py-2 md:flex-row md:items-center">
+        <FolderOpen className="hidden h-4 w-4 md:block" />
         <Label className="hidden md:block">{t("documents")}</Label>
-        <div className="relative w-full md:w-64 md:ml-4">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="relative w-full md:ml-4 md:w-64">
+          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
           <Input
             placeholder={t("search") + "..."}
             className="pl-8"
@@ -150,7 +152,7 @@ export default function Page() {
           />
         </div>
 
-        <div className="ml-auto items-center flex gap-2 w-full md:w-auto">
+        <div className="ml-auto flex w-full items-center gap-2 md:w-auto">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full md:w-[180px]">
               <SelectValue placeholder="Category" />
@@ -180,7 +182,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 py-2 px-4 gap-x-4 gap-y-2">
+      <div className="grid gap-x-4 gap-y-2 px-4 py-2 md:grid-cols-2">
         {filteredDocuments.length > 0 ? (
           filteredDocuments.map((doc) => (
             <Card key={doc.id} className="overflow-hidden p-0">
@@ -189,8 +191,8 @@ export default function Page() {
                   <div className="flex items-center space-x-2">
                     {getFileIcon(doc.type)}
                     <div>
-                      <h3 className="font-medium text-sm">{doc.name}</h3>
-                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                      <h3 className="text-sm font-medium">{doc.name}</h3>
+                      <div className="text-muted-foreground flex items-center space-x-2 text-sm">
                         <span>
                           Shared on{" "}
                           {new Date(doc.dateShared).toLocaleDateString()}
@@ -216,7 +218,7 @@ export default function Page() {
             </Card>
           ))
         ) : (
-          <div className="text-center py-10">
+          <div className="py-10 text-center">
             <p className="text-muted-foreground">
               No documents found matching your search criteria.
             </p>

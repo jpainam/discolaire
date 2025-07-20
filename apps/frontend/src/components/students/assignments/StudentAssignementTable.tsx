@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { isSameDay } from "date-fns";
+import i18next from "i18next";
 import { Eye } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -15,13 +16,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
-import { useLocale } from "~/i18n";
-
-import i18next from "i18next";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { useLocale } from "~/i18n";
 
 type StudentAssignment = RouterOutputs["classroom"]["assignments"][number];
 export function StudentAssignmentTable({

@@ -1,12 +1,13 @@
 "use client";
 
+import { memo, useEffect, useRef } from "react";
 import { exampleSetup } from "prosemirror-example-setup";
 import { inputRules } from "prosemirror-inputrules";
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { memo, useEffect, useRef } from "react";
 
 import type { AiSuggestion } from "@repo/db";
+
 import {
   documentSchema,
   handleTransaction,
@@ -146,7 +147,7 @@ function PureEditor({
   }, [suggestions, content]);
 
   return (
-    <div className="relative prose dark:prose-invert" ref={containerRef} />
+    <div className="prose dark:prose-invert relative" ref={containerRef} />
   );
 }
 

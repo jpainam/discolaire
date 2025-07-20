@@ -1,19 +1,17 @@
+import { useMemo } from "react";
 import { formatDate } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useMemo } from "react";
 
-import { useCalendar } from "~/components/calendar/calendar-context";
-
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
+import type { IEvent } from "~/components/calendar/interfaces";
+import { useCalendar } from "~/components/calendar/calendar-context";
 import {
   getEventsCount,
   navigateDate,
   rangeText,
 } from "~/components/calendar/helpers";
-
-import { Badge } from "@repo/ui/components/badge";
-import type { IEvent } from "~/components/calendar/interfaces";
 import { useLocale } from "~/i18n";
 
 interface IProps {
@@ -39,7 +37,7 @@ export function DateNavigator({ events }: IProps) {
   return (
     <div className="space-y-0.5">
       <div className="flex items-center gap-2">
-        <span className="font-semibold text-sm">
+        <span className="text-sm font-semibold">
           {month} {year}
         </span>
         <Badge className="text-xs">
@@ -56,7 +54,7 @@ export function DateNavigator({ events }: IProps) {
           <ChevronLeft />
         </Button>
 
-        <p className="text-xs text-t-tertiary">
+        <p className="text-t-tertiary text-xs">
           {rangeText(view, selectedDate)}
         </p>
 

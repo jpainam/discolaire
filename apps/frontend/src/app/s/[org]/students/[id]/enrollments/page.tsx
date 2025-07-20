@@ -1,6 +1,8 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentEnrollmentHeader } from "~/components/students/enrollments/StudentEnrollmentHeader";
 import { StudentEnrollmentTable } from "~/components/students/enrollments/StudentEnrollmentTable";
@@ -34,7 +36,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <Suspense
           key={params.id}
           fallback={
-            <div className="py-2 px-4">
+            <div className="px-4 py-2">
               <Skeleton className="h-20" />
             </div>
           }

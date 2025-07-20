@@ -1,24 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { ScrollArea } from "@repo/ui/components/scroll-area";
 import {
   areIntervalsOverlapping,
   format,
   isWithinInterval,
   parseISO,
 } from "date-fns";
+import { fr } from "date-fns/locale";
 import { CalendarIcon, Clock, User } from "lucide-react";
-import { useCalendar } from "~/components/calendar/calendar-context";
 
+import { Calendar } from "@repo/ui/components/calendar";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+
+import type { IEvent } from "~/components/calendar/interfaces";
+import { useCalendar } from "~/components/calendar/calendar-context";
+import { getEventBlockStyle, groupEvents } from "~/components/calendar/helpers";
 //import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 import { CalendarTimeline } from "~/components/calendar/week-and-day-view/calendar-time-line";
 import { DayViewMultiDayEventsRow } from "~/components/calendar/week-and-day-view/day-view-multi-day-events-row";
 import { EventBlock } from "~/components/calendar/week-and-day-view/event-block";
-
-import { getEventBlockStyle, groupEvents } from "~/components/calendar/helpers";
-
-import { Calendar } from "@repo/ui/components/calendar";
-import { fr } from "date-fns/locale";
-import type { IEvent } from "~/components/calendar/interfaces";
 import { useLocale } from "~/i18n";
 
 interface IProps {
@@ -70,9 +69,9 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           {/* Day header */}
           <div className="relative z-20 flex border-b">
             <div className="w-18"></div>
-            <span className="flex-1 border-l py-2 text-center text-xs font-medium text-t-quaternary">
+            <span className="text-t-quaternary flex-1 border-l py-2 text-center text-xs font-medium">
               {format(selectedDate, "EE")}{" "}
-              <span className="font-semibold text-t-secondary">
+              <span className="text-t-secondary font-semibold">
                 {format(selectedDate, "d")}
               </span>
             </span>
@@ -87,7 +86,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                 <div key={hour} className="relative" style={{ height: "96px" }}>
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
                     {index !== 0 && (
-                      <span className="text-xs text-t-quaternary">
+                      <span className="text-t-quaternary text-xs">
                         {format(new Date().setHours(hour), "hh a", {
                           locale: fr,
                         })}
@@ -117,10 +116,10 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         //startTime={{ hour, minute: 0 }}
                       }}
                     >
-                      <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-muted" />
+                      <div className="hover:bg-muted absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors" />
                     </button>
 
-                    <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+                    <div className="border-b-tertiary pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
                     <button
                       onClick={() => {
                         alert("Add event");
@@ -128,7 +127,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         //startTime={{ hour, minute: 30 }}
                       }}
                     >
-                      <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-muted" />
+                      <div className="hover:bg-muted absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors" />
                     </button>
                   </div>
                 ))}
@@ -196,12 +195,12 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                 <span className="relative inline-flex size-2.5 rounded-full bg-green-600"></span>
               </span>
 
-              <p className="text-sm font-semibold text-t-secondary">
+              <p className="text-t-secondary text-sm font-semibold">
                 {t("Happening now")}
               </p>
             </div>
           ) : (
-            <p className="p-4 text-center text-sm italic text-t-tertiary">
+            <p className="text-t-tertiary p-4 text-center text-sm italic">
               {t("No appointments or consultations at the moment")}
             </p>
           )}
@@ -220,23 +219,23 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 
                       {user && (
                         <div className="flex items-center gap-1.5">
-                          <User className="size-4 text-t-quinary" />
-                          <span className="text-sm text-t-tertiary">
+                          <User className="text-t-quinary size-4" />
+                          <span className="text-t-tertiary text-sm">
                             {user.name}
                           </span>
                         </div>
                       )}
 
                       <div className="flex items-center gap-1.5">
-                        <CalendarIcon className="size-4 text-t-quinary" />
-                        <span className="text-sm text-t-tertiary">
+                        <CalendarIcon className="text-t-quinary size-4" />
+                        <span className="text-t-tertiary text-sm">
                           {format(new Date(), "MMM d, yyyy")}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-1.5">
-                        <Clock className="size-4 text-t-quinary" />
-                        <span className="text-sm text-t-tertiary">
+                        <Clock className="text-t-quinary size-4" />
+                        <span className="text-t-tertiary text-sm">
                           {format(parseISO(event.startDate), "hh:mm a")} -{" "}
                           {format(parseISO(event.endDate), "hh:mm a")}
                         </span>

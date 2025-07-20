@@ -4,25 +4,26 @@
 
 "use client";
 
+import type { Table } from "@tanstack/react-table";
+import { useEffect, useMemo } from "react";
+import { RiDeleteBinLine, RiFilter3Line } from "@remixicon/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import { Label } from "@repo/ui/components/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
-import type { Table } from "@tanstack/react-table";
-import { useEffect, useMemo } from "react";
-import { toast } from "sonner";
+
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
-
-import { RiDeleteBinLine, RiFilter3Line } from "@remixicon/react";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Label } from "@repo/ui/components/label";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 
 type ClassroomProcedureOutput = NonNullable<
@@ -122,7 +123,7 @@ export function ClassroomDataTableAction({
             aria-hidden="true"
           />
           {t("delete")}
-          <span className="-me-1 ms-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+          <span className="border-border bg-background text-muted-foreground/70 ms-1 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
             {table.getSelectedRowModel().rows.length}
           </span>
         </Button>
@@ -131,13 +132,13 @@ export function ClassroomDataTableAction({
         <PopoverTrigger asChild>
           <Button size={"sm"} variant="outline">
             <RiFilter3Line
-              className="size-5 -ms-1.5 text-muted-foreground/60"
+              className="text-muted-foreground/60 -ms-1.5 size-5"
               size={20}
               aria-hidden="true"
             />
             {t("filter")}
             {selectedStatuses.size > 0 && (
-              <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border border-border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+              <span className="border-border bg-background text-muted-foreground/70 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
                 {selectedStatuses.size}
               </span>
             )}
@@ -145,7 +146,7 @@ export function ClassroomDataTableAction({
         </PopoverTrigger>
         <PopoverContent className="w-auto min-w-36 p-3" align="end">
           <div className="space-y-3">
-            <div className="text-xs font-medium uppercase text-muted-foreground/60">
+            <div className="text-muted-foreground/60 text-xs font-medium uppercase">
               {t("cycle")}
             </div>
             <div className="space-y-3">
@@ -176,7 +177,7 @@ export function ClassroomDataTableAction({
                       className="flex grow justify-between gap-2 font-normal"
                     >
                       {label}{" "}
-                      <span className="ms-2 text-xs text-muted-foreground">
+                      <span className="text-muted-foreground ms-2 text-xs">
                         {statusCounts.get(value)}
                       </span>
                     </Label>

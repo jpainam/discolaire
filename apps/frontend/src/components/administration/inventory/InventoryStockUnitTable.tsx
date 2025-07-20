@@ -1,4 +1,13 @@
 "use client";
+
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { PencilIcon, PlusCircle, TrashIcon } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@repo/ui/components/button";
 import {
   Table,
@@ -8,13 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { PencilIcon, PlusCircle, TrashIcon } from "lucide-react";
-import { toast } from "sonner";
+
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -23,6 +26,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { useLocale } from "../../../i18n/index";
 import { CreateEditStockUnit } from "./CreateEditStockUnit";
+
 export function InventoryStockUnitTable() {
   const trpc = useTRPC();
   const { data: units } = useSuspenseQuery(trpc.inventory.units.queryOptions());
@@ -77,7 +81,7 @@ export function InventoryStockUnitTable() {
                         });
                       }}
                     >
-                      <PlusCircle className="w-3 h-3" />
+                      <PlusCircle className="h-3 w-3" />
                     </Button>
                   )}
                 </TableHead>

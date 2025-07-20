@@ -1,5 +1,8 @@
 "use client";
 
+import { useCallback } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
 import {
   Select,
   SelectContent,
@@ -7,8 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useCallback } from "react";
+
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";

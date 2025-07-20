@@ -1,7 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
 import {
@@ -11,11 +12,10 @@ import {
   AccordionTrigger,
 } from "@repo/ui/components/accordion";
 import { Separator } from "@repo/ui/components/separator";
-import FlatBadge from "~/components/FlatBadge";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 
-import i18next from "i18next";
+import FlatBadge from "~/components/FlatBadge";
 import { routes } from "~/configs/routes";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 
 interface BySubjectProps {
@@ -71,7 +71,7 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
             <AccordionTrigger className="text-md flex flex-row font-bold">
               <span>{subject.course.name}</span>
               <FlatBadge
-                className="ml-auto mr-4 w-[50px]"
+                className="mr-4 ml-auto w-[50px]"
                 variant={
                   subjectAvg < 10
                     ? "red"
@@ -145,13 +145,13 @@ function BySubjectItem({
         );
       }}
     >
-      <div className="mb-1 flex flex-col items-center rounded-md bg-secondary px-1 text-xs">
+      <div className="bg-secondary mb-1 flex flex-col items-center rounded-md px-1 text-xs">
         <div>{d}</div>
         <div>{m}</div>
       </div>
       <div className="flex flex-col">
         <div className="text-sm font-semibold">{grade.gradeSheet.name}</div>
-        <div className="tracking-tighter text-muted-foreground">
+        <div className="text-muted-foreground tracking-tighter">
           {grade.gradeSheet.term.name}
         </div>
       </div>

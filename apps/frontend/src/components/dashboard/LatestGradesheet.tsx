@@ -1,21 +1,22 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Rows3Icon } from "lucide-react";
 import { Bar, BarChart, XAxis } from "recharts";
 
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import type { ChartConfig } from "@repo/ui/components/chart";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Rows3Icon } from "lucide-react";
+
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
