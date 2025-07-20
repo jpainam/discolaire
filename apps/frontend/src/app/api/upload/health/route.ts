@@ -31,10 +31,13 @@ export async function POST(request: Request) {
 
     const destinations = [];
     const user = await caller.user.get(userId);
+
     for (const file of files) {
       const ext = file.name.split(".").pop();
       const key = randomUUID();
-      destinations.push(`healthvisits/${user.id}/${key}.${ext}`);
+      destinations.push(
+        `${user.school.code}/healthvisits/${user.id}/${key}.${ext}`,
+      );
     }
     const results = await uploadFiles({
       files: files,

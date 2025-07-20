@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     for (const file of files) {
       const ext = file.name.split(".").pop();
       const key = randomUUID();
-      destinations.push(`${user.profile}/${key}.${ext}`);
+      destinations.push(`${user.school.code}/${user.profile}/${key}.${ext}`);
     }
     const results = await uploadFiles({
       files: files,

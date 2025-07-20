@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     const { key, fullPath } = await uploadFile({
       file: file,
-      destination: `${school.id}.${ext}`,
+      destination: `${school.code}/${school.id}.${ext}`,
       bucket: env.S3_IMAGE_BUCKET_NAME,
     });
 

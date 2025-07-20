@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const ext = file.name.split(".").pop();
     const user = await caller.user.get(userId);
 
-    const key = `${user.profile}/${userId}.${ext}`;
+    const key = `${user.school.code}/${user.profile}/${userId}.${ext}`;
     const result = await uploadFile({
       file: file,
       bucket: env.S3_AVATAR_BUCKET_NAME,
