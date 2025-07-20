@@ -209,3 +209,13 @@ sudo -u postgres dropdb discolaire
 # Drop user
 
 sudo -u postgres dropuser discolaire
+
+https://template.openstatus.dev/dashboard/monitors/overview
+
+https://reui.io/blocks
+https://www.kibo-ui.com/components/banner
+https://www.sendsmsgate.com/fr/sms-gateway/cd/democratic-republic-of-the-congo/
+https://www.kibo-ui.com/components/dialog-stack
+https://reui.io/
+https://keenthemes.com/metronic/tailwind/react/demo1
+https://utilitiesinfo.conservice.com/

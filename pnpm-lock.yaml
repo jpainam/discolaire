@@ -55,7 +55,7 @@ catalogs:
       specifier: ^5.8.3
       version: 5.8.3
     zod:
-      specifier: ^3.25.67
+      specifier: 3.25.74
       version: 3.25.74
 
 importers:
@@ -943,9 +943,15 @@ importers:
       '@prisma/client':
         specifier: ^6.11.0
         version: 6.11.1(prisma@6.11.1(typescript@5.8.3))(typescript@5.8.3)
+      '@t3-oss/env-nextjs':
+        specifier: ^0.13.8
+        version: 0.13.8(typescript@5.8.3)(zod@3.25.74)
       mysql2:
         specifier: ^3.14.1
         version: 3.14.1
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.74
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
