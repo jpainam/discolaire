@@ -4,7 +4,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 import "./src/env";
 
 const config = {
-  output: "standalone",
+  // output: "standalone",
   // experimental: {
   //   nodeMiddleware: true,
   // },
