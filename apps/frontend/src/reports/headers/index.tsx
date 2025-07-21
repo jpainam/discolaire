@@ -9,7 +9,7 @@ export function getHeader(
   school: RouterOutputs["school"]["getSchool"],
   style?: Style,
 ) {
-  if (school.code == "csabrazzaville") {
+  if (school.code == "csac") {
     return <CSACongoHeader school={school} />;
   } else {
     return <IPBWHeader school={school} style={style} />;
