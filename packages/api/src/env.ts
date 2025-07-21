@@ -18,7 +18,6 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().min(1),
   },
   client: {
-    NEXT_PUBLIC_BASE_URL: z.string().min(1).url(),
     NEXT_PUBLIC_MINIO_URL: z.string().min(1).url(),
 
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]),
@@ -32,7 +31,6 @@ export const env = createEnv({
     MESSAGING_SECRET_KEY: process.env.MESSAGING_SECRET_KEY,
     REDIS_URL: process.env.REDIS_URL,
     NEXT_PUBLIC_DEPLOYMENT_ENV: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     UNKEY_ROOT_KEY: process.env.UNKEY_ROOT_KEY,
     AUTH_SECRET: process.env.AUTH_SECRET,
 

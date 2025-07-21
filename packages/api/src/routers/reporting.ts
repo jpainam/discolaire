@@ -1,8 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { submitReportJob } from "../services/reporting-service";
-import { schoolService } from "../services/school-service";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const reportingRouter = {
@@ -92,15 +90,8 @@ export const reportingRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      const school = await schoolService.get(ctx.schoolId);
-      return submitReportJob(input.endpoint, {
-        id: report.id,
-        school: school,
-        title: input.title,
-        type: input.type,
-        userId: ctx.session.user.id,
-        ...input.data,
-      });
+
+      return report;
     }),
   create: protectedProcedure
     .input(

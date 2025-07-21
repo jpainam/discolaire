@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import z from "zod";
 
 import { auth, getSession } from "~/auth/server";
-import { env } from "~/env";
 import { caller } from "~/trpc/server";
 
 const loginSchema = z.object({
@@ -82,14 +81,14 @@ export async function setCookieFromSignIn({ userId }: { userId: string }) {
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {
-  const isSecure =
-    env.NODE_ENV === "production" &&
-    env.NEXT_PUBLIC_BASE_URL.startsWith("https");
+  // const isSecure =
+  //   env.NODE_ENV === "production" &&
+  //   env.NEXT_PUBLIC_BASE_URL.startsWith("https");
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
   (await cookies()).set("x-school-year", schoolYearId, {
     expires: expiresInOneDay,
     httpOnly: true,
-    secure: isSecure, // 👈 allow over HTTP, Hosted locally
+    secure: false, //isSecure, // 👈 allow over HTTP, Hosted locally
     sameSite: "lax",
   });
 }
