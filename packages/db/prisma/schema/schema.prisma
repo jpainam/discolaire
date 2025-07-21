@@ -749,7 +749,7 @@ model ClassroomCycle {
     id         String      @id @default(cuid())
     name       String
     classrooms Classroom[]
-    school     School      @relation(fields: [schoolId], references: [id])
+    school     School      @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId   String
 }
 
