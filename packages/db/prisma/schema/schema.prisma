@@ -78,7 +78,7 @@ model Policy {
     condition   Json?
     roles       RolePolicy[]
     users       UserPolicy[]
-    school      School       @relation(fields: [schoolId], references: [id])
+    school      School       @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId    String
 }
 
@@ -408,7 +408,7 @@ model Staff {
     degree                    StaffDegree? @relation(fields: [degreeId], references: [id])
     classrooms                Classroom[]  @relation("seniorAdvisor")
     classrooms2               Classroom[]  @relation("headTeacher")
-    school                    School       @relation(fields: [schoolId], references: [id])
+    school                    School       @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId                  String
 }
 
@@ -705,7 +705,7 @@ model Course {
     isActive     Boolean        @default(true)
     ProgramTheme ProgramTheme[]
     subjects     Subject[]
-    school       School         @relation(fields: [schoolId], references: [id])
+    school       School         @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId     String
 }
 
@@ -734,7 +734,7 @@ model SchoolYear {
     ProgramTheme         ProgramTheme[]
     terms                Term[]
     transactions         Transaction[]
-    school               School                     @relation(fields: [schoolId], references: [id])
+    school               School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId             String
     timetableCategories  TimetableCategory[]
     inventoryConsumables InventoryConsumable[]
@@ -942,7 +942,7 @@ model Religion {
     createdAt   DateTime  @default(now()) @db.Timestamp(6)
     updatedAt   DateTime  @updatedAt
     students    Student[]
-    school      School    @relation(fields: [schoolId], references: [id])
+    school      School    @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId    String
 }
 
@@ -957,7 +957,7 @@ model Club {
     deputyId    String?
     deputy      User?         @relation("deputy", fields: [deputyId], references: [id])
     StudentClub StudentClub[]
-    school      School        @relation(fields: [schoolId], references: [id])
+    school      School        @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId    String
 }
 
@@ -995,7 +995,7 @@ model Sport {
     id       String         @id @default(cuid())
     name     String
     students StudentSport[]
-    school   School         @relation(fields: [schoolId], references: [id])
+    school   School         @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId String
 }
 

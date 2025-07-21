@@ -70,7 +70,7 @@ export function IPBWAnnual({
               fontSize: 7,
               backgroundColor: "#fff",
               color: "#000",
-              fontFamily: "Roboto",
+              fontFamily: "Helvetica",
             }}
           >
             <View style={{ flexDirection: "column" }}>

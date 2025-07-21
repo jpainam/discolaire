@@ -3,8 +3,6 @@ import { getMonth } from "date-fns";
 import { decode } from "entities";
 import QRCodeUtil from "qrcode";
 
-import "../fonts";
-
 import type { RouterOutputs } from "@repo/api";
 
 import { getHeader } from "../headers";
@@ -75,7 +73,7 @@ export async function AcccountStatement({
           fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         <View style={{ flexDirection: "column", marginBottom: 40 }}>
@@ -109,7 +107,7 @@ export async function AcccountStatement({
           </View>
           <View
             style={{
-              fontFamily: "RobotoMono",
+              fontFamily: "Times-Roman",
               borderTop: "1px solid black",
               borderBottom: "1px solid black",
               padding: 5,
@@ -150,7 +148,7 @@ export async function AcccountStatement({
               <View
                 style={{
                   flexDirection: "row",
-                  fontFamily: "RobotoMono",
+                  fontFamily: "Times-Roman",
                   fontWeight: "bold",
 
                   fontSize: 8,
@@ -194,7 +192,7 @@ export async function AcccountStatement({
                   style={{
                     flexDirection: "row",
                     fontSize: 8,
-                    fontFamily: "RobotoMono",
+                    fontFamily: "Times-Roman",
                     //letterSpacing: 0.01,
                   }}
                 >

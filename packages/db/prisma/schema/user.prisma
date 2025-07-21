@@ -36,7 +36,7 @@ model User {
     clubs                        Club[]                     @relation("president")
     clubs2                       Club[]                     @relation("deputy")
     schoolId                     String
-    school                       School                     @relation(fields: [schoolId], references: [id])
+    school                       School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     documents                    Document[]                 @relation("owner")
     documentCreatedBy            Document[]                 @relation("createdBy")
     subjectJournals              SubjectJournal[]           @relation("createdBy")
@@ -75,7 +75,7 @@ model Role {
     updatedBy   String?
     policies    RolePolicy[]
     roles       UserRole[]
-    school      School       @relation(fields: [schoolId], references: [id])
+    school      School       @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId    String
 }
 

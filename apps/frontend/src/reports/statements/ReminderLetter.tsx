@@ -30,7 +30,7 @@ export function ReminderLetter({
           fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         {reminders.map((reminder) => {

@@ -1,10 +1,7 @@
+import type { Style } from "@react-pdf/stylesheet";
 import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
-
-import "../fonts";
-
-import type { Style } from "@react-pdf/stylesheet";
 
 import { getHeader } from "../headers";
 
@@ -27,7 +24,7 @@ export function StudentPage({
           fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         <View style={{ flexDirection: "column", display: "flex", gap: 6 }}>

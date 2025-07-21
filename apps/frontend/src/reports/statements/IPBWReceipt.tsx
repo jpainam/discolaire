@@ -4,8 +4,6 @@ import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
 
-import "../fonts";
-
 import { getAssetUrl } from "../utils";
 
 const imageUrl = getAssetUrl("images");
@@ -42,7 +40,7 @@ export function IPBWReceipt({
           fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         {Array.from({ length: numberOfReceipts }).map((_, index) => {

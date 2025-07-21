@@ -1,7 +1,4 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
-
-import "../fonts";
-
 import _, { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
@@ -56,7 +53,7 @@ export function IPBWTrimestre({
           fontSize: 7,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         <View style={{ flexDirection: "column" }}>

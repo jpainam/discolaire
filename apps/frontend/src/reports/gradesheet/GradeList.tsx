@@ -1,11 +1,8 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
-
-import type { RouterOutputs } from "@repo/api";
-
-import "../fonts";
-
 //import { getServerTranslations } from "~/i18n/server";
 import { decode } from "entities";
+
+import type { RouterOutputs } from "@repo/api";
 
 import { getHeader } from "../headers";
 import { getAppreciations } from "../utils";
@@ -63,7 +60,7 @@ export function GradeList({
           fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         <View

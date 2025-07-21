@@ -2,8 +2,6 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
-import "../fonts";
-
 import { getHeader } from "../headers";
 
 export function TransactionList({
@@ -25,7 +23,7 @@ export function TransactionList({
           fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         <View style={{ flexDirection: "column", display: "flex", gap: 6 }}>

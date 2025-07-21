@@ -1,7 +1,5 @@
 import { Text, View } from "@react-pdf/renderer";
 
-import "../fonts";
-
 export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
   return (
     <View

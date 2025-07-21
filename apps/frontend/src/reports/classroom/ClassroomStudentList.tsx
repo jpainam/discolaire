@@ -2,8 +2,6 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
-import "../fonts";
-
 import { getHeader } from "../headers";
 
 //import { getServerTranslations } from "~/i18n/server";
@@ -29,7 +27,7 @@ export function ClassroomStudentList({
           fontSize: 10,
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Roboto",
+          fontFamily: "Helvetica",
         }}
       >
         <View
