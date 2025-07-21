@@ -163,7 +163,7 @@ model Classroom {
     subjects              Subject[]
     assignments           Assignment[]
     reportCards           ReportCard[]
-    school                School               @relation(fields: [schoolId], references: [id])
+    school                School               @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId              String
     createdById           String?
     createdBy             User?                @relation("ClassroomCreatedBy", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade)
@@ -220,7 +220,7 @@ model ClassroomLevel {
     name       String
     order      Int         @default(1)
     classrooms Classroom[]
-    school     School      @relation(fields: [schoolId], references: [id])
+    school     School      @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId   String
 }
 
@@ -757,7 +757,7 @@ model ClassroomSection {
     id         String      @id @default(cuid())
     name       String
     classrooms Classroom[]
-    school     School      @relation(fields: [schoolId], references: [id])
+    school     School      @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId   String
 }
 
