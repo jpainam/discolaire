@@ -2,8 +2,6 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod";
 
-import redisClient from "@repo/kv";
-
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
@@ -25,13 +23,6 @@ export const contactRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
-      // if (Array.isArray(input)) {
-      //   void Promise.all(
-      //     input.map((id) => redisClient.del(`contact:${id}:students`)),
-      //   );
-      // } else {
-      //   void redisClient.del(`contact:${input}:students`);
-      // }
       const contacts = await ctx.db.contact.findMany({
         where: {
           schoolId: ctx.schoolId,
@@ -177,12 +168,6 @@ export const contactRouter = {
         },
       });
       const studentIds = std.map((s) => s.studentId);
-      void redisClient.del(`contact:${input}:students`); // Clear old cache
-      void redisClient.sadd(`contact:${input}:students`, ...studentIds);
-
-      // const studentIds2 = await redisClient.smembers(
-      //   `contact:${input}:students`,
-      // );
 
       const students = await ctx.db.student.findMany({
         include: {

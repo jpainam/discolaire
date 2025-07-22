@@ -1,8 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import redisClient from "@repo/kv";
-
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -24,10 +22,6 @@ export const studentContactRouter = {
   delete: protectedProcedure
     .input(z.object({ contactId: z.string(), studentId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      void redisClient.srem(
-        `contact:${input.contactId}:students`,
-        input.studentId,
-      );
       return ctx.db.studentContact.delete({
         where: {
           studentId_contactId: {
@@ -89,18 +83,6 @@ export const studentContactRouter = {
               ...input.data,
             },
           ];
-      if (Array.isArray(input.contactId)) {
-        void Promise.all(
-          input.contactId.map((contId) =>
-            redisClient.sadd(`contact:${contId}:students`, input.studentId),
-          ),
-        );
-      } else {
-        void redisClient.sadd(
-          `contact:${input.contactId}:students`,
-          input.studentId,
-        );
-      }
       return ctx.db.studentContact.createMany({
         data: data,
       });
@@ -129,12 +111,7 @@ export const studentContactRouter = {
               ...input.data,
             },
           ];
-      void redisClient.sadd(
-        `contact:${input.contactId}:students`,
-        ...(Array.isArray(input.studentId)
-          ? input.studentId
-          : [input.studentId]),
-      );
+
       return ctx.db.studentContact.createMany({
         data: data,
       });
