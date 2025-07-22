@@ -97,6 +97,10 @@ export function initAuth(options: { secret: string | undefined }) {
 
       sendVerificationEmail: async ({ user, url, token }, _request) => {
         console.log(">>> sendVerificationEmail", user.email);
+        if (user.emailVerified) {
+          console.warn("User already verified, skipping email verification");
+          return;
+        }
         await sendEmail({
           from: "Discolaire <hi@discolaire.com>",
           to: user.email,
