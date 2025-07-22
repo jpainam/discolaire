@@ -25,7 +25,7 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "push": "pnpm with-env prisma db push --schema=prisma/schema",
-    "studio": "pnpm with-env prisma studio",
+    "studio": "pnpm with-env prisma studio --schema=prisma/schema",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --"
   },

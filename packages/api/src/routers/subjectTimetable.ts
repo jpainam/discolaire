@@ -33,11 +33,14 @@ export const subjectTimetableRouter = {
         schoolId: ctx.schoolId,
       };
       const events = [event];
+      let currentDate = input.start;
       if (input.isRepeating) {
-        while (event.start <= endDate) {
-          event.start = addDays(event.start, 7);
-          event.end = addDays(event.end, 7);
-          events.push({ ...event });
+        while (currentDate <= endDate) {
+          const newEvent = { ...event };
+          newEvent.start = addDays(event.start, 7);
+          newEvent.end = addDays(event.end, 7);
+          events.push(newEvent);
+          currentDate = addDays(currentDate, 7);
         }
       }
       return ctx.db.subjectTimetable.createMany({
@@ -92,7 +95,7 @@ export const subjectTimetableRouter = {
     .input(
       z.object({
         id: z.coerce.number(),
-        type: z.enum(["current", "before", "after"]),
+        type: z.enum(["current", "before", "after"]).default("current"),
       }),
     )
     .mutation(async ({ ctx, input }) => {
