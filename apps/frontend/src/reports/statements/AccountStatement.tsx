@@ -1,72 +1,63 @@
-import { Document, Font, Page, Text, View } from "@react-pdf/renderer";
-import { getMonth } from "date-fns";
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+import { Document, Page, Text, View } from "@react-pdf/renderer";
 import { decode } from "entities";
-import QRCodeUtil from "qrcode";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getServerTranslations } from "~/i18n/server";
 import { getHeader } from "../headers";
-
-// const CDN_URL = "https://discolaire-public.s3.eu-central-1.amazonaws.com";
-
-// Font.register({
-//   family: "GeistMono",
-//   fonts: [
-//     {
-//       src: `${CDN_URL}/fonts/GeistMono/GeistMono-Regular.ttf`,
-//       fontWeight: 400,
-//     },
-//     {
-//       src: `${CDN_URL}/fonts/GeistMono/GeistMono-Medium.ttf`,
-//       fontWeight: 500,
-//     },
-//   ],
-// });
-const CDN_URL = "https://cdn.midday.ai";
-
-Font.register({
-  family: "GeistMono",
-  fonts: [
-    {
-      src: `${CDN_URL}/fonts/GeistMono/ttf/GeistMono-Regular.ttf`,
-      fontWeight: 400,
-    },
-    {
-      src: `${CDN_URL}/fonts/GeistMono/ttf/GeistMono-Medium.ttf`,
-      fontWeight: 500,
-    },
-  ],
-});
 
 interface Props {
   student: NonNullable<RouterOutputs["student"]["get"]>;
-  transactions: RouterOutputs["studentAccount"]["getStatements"];
+  statements: RouterOutputs["studentAccount"]["getStatements"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }
 
 export async function AcccountStatement({
   student,
   school,
-  transactions,
+  statements,
 }: Props) {
-  // @ts-expect-error Fix this later
-  const _qrCode = await QRCodeUtil.toDataURL(
-    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    {
-      width: 40 * 3,
-      height: 40 * 3,
-      margin: 0,
-    },
-  );
-  let balance = 0;
-  let month = getMonth(new Date());
+  const { i18n } = await getServerTranslations();
 
-  //await new Promise((resolve) => setTimeout(resolve, 1000));
+  const formatAmount = (amount: number) =>
+    amount.toLocaleString(i18n.language, {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      style: "currency",
+      currency: "XOF",
+    });
+
+  const formatDate = (date: Date) =>
+    new Intl.DateTimeFormat(i18n.language, {
+      month: "short",
+      year: "2-digit",
+      day: "numeric",
+    }).format(date);
+
+  const periodTotals: Record<string, number> = {};
+  for (const item of statements) {
+    const key = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
+    const signedAmount =
+      item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
+    periodTotals[key] = (periodTotals[key] ?? 0) + signedAmount;
+  }
+
+  let runningBalance = 0;
+  let currentPeriodKey: string | null = null;
+  let previousDate: Date | null = null;
+
+  const totalBalance = statements.reduce(
+    (acc, item) =>
+      acc +
+      (item.type === "DEBIT" ? -Math.abs(item.amount) : Math.abs(item.amount)),
+    0,
+  );
 
   return (
     <Document>
       <Page
-        size={"A4"}
+        size="A4"
         style={{
           paddingVertical: 20,
           paddingHorizontal: 40,
@@ -84,6 +75,7 @@ export async function AcccountStatement({
               fontWeight: "bold",
               fontSize: 12,
               alignSelf: "center",
+              marginBottom: 10,
             }}
           >
             RELEVE DE COMPTE
@@ -91,122 +83,119 @@ export async function AcccountStatement({
 
           <View
             style={{
-              marginVertical: 15,
+              marginBottom: 10,
               flexDirection: "row",
               justifyContent: "space-between",
             }}
           >
-            <Text style={{ fontSize: 10, fontWeight: "bold" }}>
+            <Text style={{ fontWeight: "bold" }}>
               {decode(student.lastName ?? "")} {decode(student.firstName ?? "")}
             </Text>
-            <View style={{ flexDirection: "column", gap: 2 }}>
-              <Text>N° compte : ABADAV004528 </Text>
-              <Text>Date génération état : 25-Mar-25 </Text>
-              <Text>Période : 2022-2023</Text>
+            <View>
+              <Text>Matricule : {student.registrationNumber}</Text>
+              <Text>
+                Date génération état :{" "}
+                {new Date().toLocaleDateString(i18n.language)}
+              </Text>
+              <Text>
+                Période :{" "}
+                {`${new Date().getFullYear()}–${new Date().getFullYear() + 1}`}
+              </Text>
             </View>
           </View>
+
           <View
             style={{
-              fontFamily: "Times-Roman",
               borderTop: "1px solid black",
               borderBottom: "1px solid black",
-              padding: 5,
+              paddingVertical: 4,
+              flexDirection: "row",
               fontSize: 8,
-              flexDirection: "column",
+              fontFamily: "Times-Roman",
             }}
           >
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ width: "10%", alignItems: "center" }}>
-                <Text>Date</Text>
+            {[
+              { label: "Date", width: "10%" },
+              { label: "Réf.Caisse", width: "10%" },
+              { label: "Réf. transaction", width: "20%" },
+              { label: "Libellé", width: "30%" },
+              { label: "Débit", width: "10%" },
+              { label: "Crédit", width: "10%" },
+              { label: "Balance", width: "10%" },
+            ].map(({ label, width }) => (
+              <View key={label} style={{ width, alignItems: "center" }}>
+                <Text>{label}</Text>
               </View>
-              <View style={{ width: "10%", alignItems: "center" }}>
-                <Text>Réf.Caisse</Text>
-              </View>
-              <View style={{ width: "20%", alignItems: "center" }}>
-                <Text>Réf. transaction</Text>
-              </View>
-              <View style={{ width: "30%", alignItems: "center" }}>
-                <Text>Libellé</Text>
-              </View>
-              <View style={{ width: "10%", alignItems: "center" }}>
-                <Text>Débit</Text>
-              </View>
-              <View style={{ width: "10%", alignItems: "center" }}>
-                <Text>Crédit</Text>
-              </View>
-              <View style={{ width: "10%", alignItems: "center" }}>
-                <Text>Balance</Text>
-              </View>
-            </View>
+            ))}
           </View>
-          {transactions.map((transaction, index) => {
-            balance += transaction.amount;
-            const isNewMonth =
-              month !== getMonth(transaction.transactionDate) && index !== 0;
-            month = getMonth(transaction.transactionDate);
-            const content = isNewMonth ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  fontFamily: "Times-Roman",
-                  fontWeight: "bold",
 
-                  fontSize: 8,
-                }}
-              >
+          {statements.map((transaction, index) => {
+            const key = `${transaction.transactionDate.getFullYear()}-${transaction.transactionDate.getMonth()}`;
+            const subtotalRow = currentPeriodKey &&
+              key !== currentPeriodKey &&
+              previousDate && (
                 <View
+                  key={`subtotal-${currentPeriodKey}`}
                   style={{
-                    width: "40%",
-                  }}
-                ></View>
-                <View
-                  style={{
-                    width: "50%",
-                    paddingVertical: 2,
-                    backgroundColor: "#f0f0f0",
                     flexDirection: "row",
-                    borderTop: "1px solid black",
-                    borderBottom: "1px solid black",
+                    fontSize: 8,
+                    fontWeight: "bold",
+                    backgroundColor: "#f0f0f0",
+                    paddingVertical: 2,
                   }}
                 >
-                  <View style={{ width: "60%" }}>
-                    <Text>Total pour periode</Text>
+                  <View style={{ width: "40%" }} />
+                  <View style={{ width: "30%" }}>
+                    <Text>
+                      {new Intl.DateTimeFormat(i18n.language, {
+                        month: "numeric",
+                        year: "numeric",
+                      }).format(previousDate)}{" "}
+                      Total pour la période
+                    </Text>
                   </View>
-                  <View style={{ width: "20%" }}>
-                    <Text>{balance < 0 && balance}</Text>
+                  <View style={{ width: "10%" }}>
+                    <Text>
+                      {periodTotals[currentPeriodKey ?? ""] < 0
+                        ? formatAmount(
+                            Math.abs(periodTotals[currentPeriodKey ?? ""]),
+                          )
+                        : ""}
+                    </Text>
                   </View>
-                  <View style={{ width: "20%" }}>
-                    <Text>{balance >= 0 && balance}</Text>
+                  <View style={{ width: "10%" }}>
+                    <Text>
+                      {periodTotals[currentPeriodKey] > 0
+                        ? formatAmount(periodTotals[currentPeriodKey])
+                        : ""}
+                    </Text>
                   </View>
+                  <View style={{ width: "10%" }} />
                 </View>
-              </View>
-            ) : (
-              <></>
-            );
+              );
+
+            const signedAmount =
+              transaction.type === "DEBIT"
+                ? -Math.abs(transaction.amount)
+                : Math.abs(transaction.amount);
+            runningBalance += signedAmount;
+
+            previousDate = transaction.transactionDate;
+            currentPeriodKey = key;
 
             return (
-              <>
-                {content}
+              <View key={`row-${index}`}>
+                {subtotalRow}
                 <View
-                  key={`transaction-${index}`}
                   style={{
                     flexDirection: "row",
                     fontSize: 8,
                     fontFamily: "Times-Roman",
-                    //letterSpacing: 0.01,
+                    paddingVertical: 1,
                   }}
                 >
-                  <View
-                    key={index}
-                    style={{ flexDirection: "row", width: "10%" }}
-                  >
-                    <Text>
-                      {transaction.transactionDate.toLocaleDateString("fr", {
-                        month: "numeric",
-                        day: "2-digit",
-                        year: "2-digit",
-                      })}
-                    </Text>
+                  <View style={{ width: "10%" }}>
+                    <Text>{formatDate(transaction.transactionDate)}</Text>
                   </View>
                   <View style={{ width: "10%" }}>
                     <Text>{transaction.transactionRef.slice(0, 10)}</Text>
@@ -216,44 +205,59 @@ export async function AcccountStatement({
                       {transaction.id.slice(0, 4)} / {transaction.classroom}
                     </Text>
                   </View>
-                  <View
-                    style={{
-                      width: "30%",
-                      paddingVertical: 2,
-                      justifyContent: "center",
-                    }}
-                  >
+                  <View style={{ width: "30%" }}>
                     <Text>{transaction.description}</Text>
                   </View>
                   <View style={{ width: "10%" }}>
                     <Text>
-                      {transaction.type == "DEBIT" ? transaction.amount : ""}
+                      {transaction.type === "DEBIT"
+                        ? formatAmount(transaction.amount)
+                        : ""}
                     </Text>
                   </View>
                   <View style={{ width: "10%" }}>
                     <Text>
-                      {transaction.type == "CREDIT" ? transaction.amount : ""}
+                      {transaction.type !== "DEBIT"
+                        ? formatAmount(transaction.amount)
+                        : ""}
                     </Text>
                   </View>
                   <View style={{ width: "10%" }}>
-                    <Text>{balance}</Text>
+                    <Text>
+                      {formatAmount(Math.abs(runningBalance))}
+                      {runningBalance > 0 ? " cr" : ""}
+                    </Text>
                   </View>
                 </View>
-              </>
+              </View>
             );
           })}
-        </View>
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            justifyContent: "flex-end",
-          }}
-        >
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ flex: 1, marginRight: 10 }}>
-              {/* <QRCode data={qrCode} /> */}
+          {/* Final Total */}
+          <View
+            style={{
+              flexDirection: "row",
+              fontSize: 9,
+              fontWeight: "bold",
+              paddingTop: 4,
+              borderTop: "1px solid black",
+              marginTop: 8,
+            }}
+          >
+            <View style={{ width: "30%" }}>
+              <Text>
+                {decode(student.lastName ?? "")}{" "}
+                {decode(student.firstName ?? "")}
+              </Text>
+            </View>
+            <View style={{ width: "50%" }}>
+              <Text>Total général du compte</Text>
+            </View>
+            <View style={{ width: "20%" }}>
+              <Text>
+                {formatAmount(Math.abs(totalBalance))}
+                {totalBalance > 0 ? " cr" : ""}
+              </Text>
             </View>
           </View>
         </View>

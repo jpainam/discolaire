@@ -17,43 +17,50 @@ import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-
-  const { id } = params;
-
+export default async function Page({
+  params: paramsPromise,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await paramsPromise;
   const { t, i18n } = await getServerTranslations();
 
   const student = await caller.student.get(id);
-
   const statements = await caller.studentAccount.getStatements({
     studentId: id,
   });
 
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
-    month: "short",
-    year: "2-digit",
-    day: "numeric",
-  });
+  const formatAmount = (amount: number) =>
+    amount.toLocaleString(i18n.language, {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    });
 
-  const totalPeriodPerMonths: Record<string, number> = {};
-  statements.forEach((item) => {
-    const month = item.transactionDate.getMonth();
-    if (item.type == "DEBIT") {
-      totalPeriodPerMonths[month] =
-        (totalPeriodPerMonths[month] ?? 0) - item.amount;
-    } else {
-      totalPeriodPerMonths[month] =
-        (totalPeriodPerMonths[month] ?? 0) + item.amount;
-    }
-  });
+  const formatDate = (date: Date) =>
+    new Intl.DateTimeFormat(i18n.language, {
+      month: "short",
+      year: "2-digit",
+      day: "numeric",
+    }).format(date);
 
-  const balance = statements.reduce((acc, item) => {
-    return acc + (item.type == "DEBIT" ? -item.amount : item.amount);
-  }, 0);
-  let currentMonth: number | null = null;
+  const totalPeriodMap: Record<string, number> = {};
+  for (const item of statements) {
+    const key = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
+    const signedAmount =
+      item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
+    totalPeriodMap[key] = (totalPeriodMap[key] ?? 0) + signedAmount;
+  }
 
+  let currentBalance = 0;
+  let currentPeriodKey: string | null = null;
   let previousDate: Date | null = null;
+
+  const totalBalance = statements.reduce(
+    (acc, item) =>
+      acc +
+      (item.type === "DEBIT" ? -Math.abs(item.amount) : Math.abs(item.amount)),
+    0,
+  );
 
   return (
     <div className="mt-2 px-4">
@@ -71,30 +78,27 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {statements.map((item, index: number) => {
-              const amount = item.amount.toLocaleString(i18n.language, {
-                maximumFractionDigits: 0,
-                minimumFractionDigits: 0,
-              });
+            {statements.map((item, index) => {
+              const itemKey = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
+              const amount = formatAmount(item.amount);
+              const signedAmount =
+                item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
+              currentBalance += signedAmount;
 
-              const itemMonth = item.transactionDate.getMonth();
+              const showSubtotal =
+                currentPeriodKey !== null &&
+                currentPeriodKey !== itemKey &&
+                previousDate !== null;
 
-              let subtotal = null;
-              if (
-                currentMonth !== null &&
-                currentMonth !== itemMonth &&
-                previousDate
-              ) {
-                subtotal = (
-                  <SubTotal
-                    key={`subtotal-${currentMonth}`}
-                    totalperiod={totalPeriodPerMonths[currentMonth] ?? 0}
-                    previousDate={previousDate}
-                  />
-                );
-              }
+              const subtotal = showSubtotal ? (
+                <SubTotal
+                  key={`subtotal-${currentPeriodKey}`}
+                  totalperiod={totalPeriodMap[currentPeriodKey ?? ""] ?? 0}
+                  previousDate={previousDate ?? new Date()}
+                />
+              ) : null;
 
-              currentMonth = itemMonth;
+              currentPeriodKey = itemKey;
               previousDate = item.transactionDate;
 
               return (
@@ -102,12 +106,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   {subtotal}
                   <TableRow>
                     <TableCell className="text-muted-foreground">
-                      {dateFormat.format(item.transactionDate)}
+                      {formatDate(item.transactionDate)}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       <Link
                         href={
-                          item.operation == "fee"
+                          item.operation === "fee"
                             ? routes.classrooms.fees(`${item.id}`)
                             : routes.students.transactions.details(
                                 id,
@@ -121,7 +125,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       <div className="flex flex-row items-center gap-2">
-                        {item.operation == "fee" ? (
+                        {item.operation === "fee" ? (
                           <LiaFileInvoiceDollarSolid className="h-4 w-4" />
                         ) : (
                           <TbTransactionDollar className="h-4 w-4" />
@@ -131,40 +135,27 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                     </TableCell>
                     <TableCell>{item.description}</TableCell>
                     <TableCell className="text-muted-foreground">
-                      {item.type == "DEBIT" ? amount : ""}
+                      {item.type === "DEBIT" ? amount : ""}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {item.type !== "DEBIT" ? amount : ""}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {Math.abs(balance).toLocaleString(i18n.language, {
-                        maximumFractionDigits: 0,
-                        minimumFractionDigits: 0,
-                      })}
-                      {balance > 0 ? " cr" : ""}
+                      {formatAmount(Math.abs(currentBalance))}
+                      {currentBalance > 0 ? " cr" : ""}
                     </TableCell>
                   </TableRow>
                 </Fragment>
               );
             })}
-            {/* Add final subtotal if there are any statements */}
 
-            {/* {statements.length > 0 && previousDate && (
-          <SubTotal
-            key="final-subtotal"
-            totalperiod={totalperiod}
-            previousDate={previousDate}
-          />
-        )} */}
+            {/* Final row with student total */}
             <TableRow className="font-bold">
               <TableCell colSpan={2}>{getFullName(student)}</TableCell>
               <TableCell colSpan={4}>{t("total_for_account")}</TableCell>
               <TableCell>
-                {Math.abs(balance).toLocaleString(i18n.language, {
-                  maximumFractionDigits: 0,
-                  minimumFractionDigits: 0,
-                })}
-                {balance > 0 ? " cr" : ""}
+                {formatAmount(Math.abs(totalBalance))}
+                {totalBalance > 0 ? " cr" : ""}
               </TableCell>
             </TableRow>
           </TableBody>
@@ -182,22 +173,26 @@ async function SubTotal({
   previousDate: Date;
 }) {
   const { t, i18n } = await getServerTranslations();
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+
+  const dateLabel = new Intl.DateTimeFormat(i18n.language, {
     month: "numeric",
     year: "numeric",
-  });
-  const amount = Math.abs(totalperiod).toLocaleString(i18n.language, {
+  }).format(previousDate);
+
+  const formattedAmount = Math.abs(totalperiod).toLocaleString(i18n.language, {
     maximumFractionDigits: 0,
     minimumFractionDigits: 0,
   });
+
   return (
-    <TableRow className="font-sans font-bold">
+    <TableRow className="text-muted-foreground font-sans font-bold italic">
       <TableCell colSpan={3}></TableCell>
       <TableCell>
-        {dateFormat.format(previousDate)} {t("total_for_period")}
+        {dateLabel} {t("total_for_period")}
       </TableCell>
-      <TableCell>{totalperiod < 0 ? amount : ""}</TableCell>
-      <TableCell>{totalperiod > 0 ? amount : ""}</TableCell>
+      <TableCell>{totalperiod < 0 ? formattedAmount : ""}</TableCell>
+      <TableCell>{totalperiod > 0 ? formattedAmount : ""}</TableCell>
+      <TableCell />
     </TableRow>
   );
 }

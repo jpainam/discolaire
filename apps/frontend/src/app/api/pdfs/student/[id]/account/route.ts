@@ -24,7 +24,7 @@ export async function GET(
       await AcccountStatement({
         student: student,
         school: school,
-        transactions: data,
+        statements: data,
       }),
     );
 

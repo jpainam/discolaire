@@ -1,6 +1,8 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+import { TransactionStatus } from "@repo/db";
+
 import { protectedProcedure } from "../trpc";
 
 export const studentAccountRouter = {
@@ -20,7 +22,7 @@ export const studentAccountRouter = {
         },
         where: {
           dueDate: {
-            lt: new Date(),
+            lte: new Date(),
           },
           classroom: {
             enrollments: {
@@ -43,7 +45,7 @@ export const studentAccountRouter = {
       const transactions = await ctx.db.transaction.findMany({
         where: {
           deletedAt: null,
-          status: "VALIDATED",
+          status: TransactionStatus.VALIDATED,
           studentId: input.studentId,
         },
         orderBy: {
@@ -64,11 +66,11 @@ export const studentAccountRouter = {
       for (const fee of fees) {
         items.push({
           transactionDate: fee.dueDate,
-          id: fee.classroom.id, // This is not an mistake, we are using the classroom id as the transaction
+          id: fee.classroom.id, // This is not an mistake, we are using the classroom id as the id
           reference: `${fee.id}`,
-          classroom: fee.classroom.name,
+          classroom: fee.classroom.reportName,
           transactionRef:
-            `${fee.description?.substring(5)}${fee.id}`.toUpperCase(),
+            `${fee.description?.substring(8)}${fee.id}`.toUpperCase(),
           description: fee.description ?? "",
           type: "DEBIT",
           operation: "fee",
@@ -83,7 +85,7 @@ export const studentAccountRouter = {
           classroom:
             classrooms.find(
               (cl) => cl.schoolYearId === transaction.schoolYearId,
-            )?.name ?? "",
+            )?.reportName ?? "",
           transactionRef: (transaction.transactionRef ?? "").toUpperCase(),
           description: transaction.description ?? "",
           type: transaction.transactionType,
