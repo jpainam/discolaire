@@ -98,7 +98,7 @@ export function ByChronologicalOrder({
               </div>
             </div>
             <div className="ml-auto flex w-[100px] flex-col text-sm">
-              <span className="font-bold">{grade.grade}</span>
+              <span className="font-bold">{grade.grade.toFixed(2)}</span>
               <span className="text-muted-foreground text-xs">
                 {grade.gradeSheet.term.name}
               </span>

@@ -40,8 +40,7 @@ export function BySubject({ grades, minMaxMoy }: BySubjectProps) {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         computeSums[subjectId] ??= 0;
 
-        computeSums[subjectId] +=
-          grade.grade * (Number(grade.gradeSheet.weight) / 100.0);
+        computeSums[subjectId] += grade.grade * Number(grade.gradeSheet.weight);
       }
     });
     setSubjectSums(computeSums);
@@ -155,7 +154,7 @@ function BySubjectItem({
           {grade.gradeSheet.term.name}
         </div>
       </div>
-      <div className="ml-auto font-bold">{grade.grade}</div>
+      <div className="ml-auto font-bold">{grade.grade.toFixed(2)}</div>
     </div>
   );
 }
