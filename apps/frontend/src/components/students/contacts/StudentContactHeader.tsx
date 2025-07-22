@@ -73,7 +73,7 @@ export function StudentContactHeader() {
                   onSelect={() => {
                     openSheet({
                       title: t("create"),
-                      view: <CreateEditContact />,
+                      view: <CreateEditContact studentId={params.id} />,
                     });
                   }}
                 >

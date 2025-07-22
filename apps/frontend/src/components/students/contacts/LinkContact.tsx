@@ -55,7 +55,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
 
   const { closeModal } = useModal();
   const createStudentContactMutation = useMutation(
-    trpc.studentContact.create2.mutationOptions({
+    trpc.studentContact.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
         await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());

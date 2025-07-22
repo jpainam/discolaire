@@ -58,63 +58,32 @@ export const studentContactRouter = {
       },
     });
   }),
-  // TODO: merge create and create2
-  create2: protectedProcedure
-    .input(
-      z.object({
-        studentId: z.string(),
-        contactId: z.union([z.string(), z.array(z.string())]),
-        data: createUpdateSchema,
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const data = Array.isArray(input.contactId)
-        ? input.contactId.map((contId) => {
-            return {
-              contactId: contId,
-              studentId: input.studentId,
-              ...input.data,
-            };
-          })
-        : [
-            {
-              contactId: input.contactId,
-              studentId: input.studentId,
-              ...input.data,
-            },
-          ];
-      return ctx.db.studentContact.createMany({
-        data: data,
-      });
-    }),
   create: protectedProcedure
     .input(
       z.object({
-        contactId: z.string(),
+        contactId: z.union([z.string(), z.array(z.string())]),
         studentId: z.union([z.string(), z.array(z.string())]),
         data: createUpdateSchema,
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const data = Array.isArray(input.studentId)
-        ? input.studentId.map((studId) => {
-            return {
-              contactId: input.contactId,
-              studentId: studId,
-              ...input.data,
-            };
-          })
-        : [
-            {
-              contactId: input.contactId,
-              studentId: input.studentId,
-              ...input.data,
-            },
-          ];
+      const contactIds = Array.isArray(input.contactId)
+        ? input.contactId
+        : [input.contactId];
+      const studentIds = Array.isArray(input.studentId)
+        ? input.studentId
+        : [input.studentId];
 
-      return ctx.db.studentContact.createMany({
-        data: data,
-      });
+      // Prepare data combinations
+      const data = contactIds.flatMap((contactId) =>
+        studentIds.map((studentId) => ({
+          contactId,
+          studentId,
+          ...input.data,
+        })),
+      );
+
+      return ctx.db.studentContact.createMany({ data });
     }),
 
   update: protectedProcedure

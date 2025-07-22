@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -44,9 +44,13 @@ type ContactAllProcedureOutput = NonNullable<
 
 interface CreateEditContactProps {
   contact?: ContactAllProcedureOutput;
+  studentId?: string;
 }
 
-export default function CreateEditContact({ contact }: CreateEditContactProps) {
+export default function CreateEditContact({
+  contact,
+  studentId,
+}: CreateEditContactProps) {
   const { closeSheet } = useSheet();
   const form = useForm({
     resolver: zodResolver(createEditContactSchema),
@@ -65,11 +69,39 @@ export default function CreateEditContact({ contact }: CreateEditContactProps) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const createStudentContactMutation = useMutation(
+    trpc.studentContact.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
+        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const relationshipsQuery = useQuery(
+    trpc.studentContact.relationships.queryOptions(),
+  );
 
   const createContactMutation = useMutation(
     trpc.contact.create.mutationOptions({
-      onSuccess: async () => {
+      onSuccess: async (data) => {
         await queryClient.invalidateQueries(trpc.contact.pathFilter());
+
+        if (studentId && relationshipsQuery.data) {
+          const relationshipId = relationshipsQuery.data[0]?.id;
+          if (relationshipId) {
+            createStudentContactMutation.mutate({
+              contactId: data.id,
+              studentId: studentId,
+              data: {
+                relationshipId: relationshipId,
+              },
+            });
+          }
+        }
         toast.success(t("created_successfully"), { id: 0 });
         closeSheet();
       },
