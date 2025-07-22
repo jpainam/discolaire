@@ -156,17 +156,19 @@ export async function AcccountStatement({
                   </View>
                   <View style={{ width: "10%" }}>
                     <Text>
-                      {periodTotals[currentPeriodKey ?? ""] < 0
+                      {(periodTotals[currentPeriodKey ?? ""] ?? 0) < 0
                         ? formatAmount(
-                            Math.abs(periodTotals[currentPeriodKey ?? ""]),
+                            Math.abs(periodTotals[currentPeriodKey ?? ""] ?? 0),
                           )
                         : ""}
                     </Text>
                   </View>
                   <View style={{ width: "10%" }}>
                     <Text>
-                      {periodTotals[currentPeriodKey] > 0
-                        ? formatAmount(periodTotals[currentPeriodKey])
+                      {(periodTotals[currentPeriodKey ?? ""] ?? 0) > 0
+                        ? formatAmount(
+                            periodTotals[currentPeriodKey ?? ""] ?? 0,
+                          )
                         : ""}
                     </Text>
                   </View>
