@@ -24,7 +24,7 @@ export const subjectTimetableRouter = {
       });
       const endDate = schoolYear?.endDate ?? addMonths(new Date(), 9);
       const groupKey = uuidv4();
-      const event = {
+      let event = {
         start: input.start,
         end: input.end,
         groupKey: groupKey,
@@ -39,6 +39,7 @@ export const subjectTimetableRouter = {
           const newEvent = { ...event };
           newEvent.start = addDays(event.start, 7);
           newEvent.end = addDays(event.end, 7);
+          event = newEvent;
           events.push(newEvent);
           currentDate = addDays(currentDate, 7);
         }
