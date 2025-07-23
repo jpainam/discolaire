@@ -8,8 +8,6 @@ import { db } from "@repo/db";
 import ResetPassword from "@repo/transactional/emails/ResetPassword";
 import { sendEmail } from "@repo/utils";
 
-import { getSession } from "~/auth/server";
-
 z.config({
   customError: createErrorMap({
     includePath: true,
@@ -23,11 +21,12 @@ const schema = z.object({
   userId: z.string().min(1),
 });
 export async function POST(req: NextRequest) {
-  const session = await getSession();
+  // TOODO: Uncomment this when session management is implemented
+  // const session = await getSession();
 
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  // if (!session) {
+  //   return new Response("Unauthorized", { status: 401 });
+  // }
 
   try {
     const body = await req.json();
