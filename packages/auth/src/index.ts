@@ -15,11 +15,15 @@ import { completeRegistration, sendResetPassword } from "./utils";
 
 const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */
-export function initAuth(options: { secret: string | undefined }) {
+export function initAuth(options: {
+  secret: string | undefined;
+  baseUrl: string;
+}) {
   const config = {
     database: prismaAdapter(db, {
       provider: "postgresql",
     }),
+    baseURL: options.baseUrl,
     user: {
       // Prisma automically camelCases model names, so we use camelCase here
       modelName: "user",

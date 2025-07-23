@@ -9,6 +9,7 @@ import { env } from "~/env";
 
 export const auth = initAuth({
   secret: env.AUTH_SECRET,
+  baseUrl: env.NEXT_PUBLIC_BASE_URL,
 });
 
 export const getSession = cache(async () =>
