@@ -128,7 +128,7 @@ export const userRouter = {
       if (userExist && userExist.id !== input.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Username is already taken",
+          message: `Le nom utilisateur ${input.username} est déjà pris, choisissez-en un autre.`,
         });
       }
       if (input.password) {

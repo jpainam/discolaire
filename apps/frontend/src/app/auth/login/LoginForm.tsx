@@ -127,7 +127,12 @@ export function LoginForm() {
                     />
                     <div className="space-y-2">
                       <Label htmlFor="username">{t("username")}</Label>
-                      <Input placeholder="username" required name="username" />
+                      <Input
+                        placeholder="username"
+                        defaultValue={"marcel"}
+                        required
+                        name="username"
+                      />
                     </div>
                   </motion.div>
 
@@ -146,6 +151,7 @@ export function LoginForm() {
                       <Input
                         type="password"
                         required
+                        defaultValue="marcel1234"
                         className="border-border border"
                         name="password"
                       />

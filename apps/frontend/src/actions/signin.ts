@@ -4,6 +4,8 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import z from "zod";
 
+import { logger } from "@repo/utils";
+
 import { auth, getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
 
@@ -55,6 +57,7 @@ export async function signIn(
     await setSchoolYearCookie(schoolYear.id);
   } catch (error) {
     const err = error as Error;
+    logger.error(error);
     return {
       error: err.message,
       _nonce: crypto.randomUUID(),
