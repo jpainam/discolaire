@@ -15,14 +15,13 @@ import { Label } from "@repo/ui/components/label";
 
 import { createAuthApiKey } from "~/actions/signin";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 
 export function CreateAuthApiKey() {
   const { t } = useLocale();
   const [isLoading, setIsLoading] = useState(false);
   const { openModal } = useModal();
-  const router = useRouter();
+  //const router = useRouter();
 
   const createApiKey = async () => {
     setIsLoading(true);
@@ -32,7 +31,7 @@ export function CreateAuthApiKey() {
       view: <ShowApiKey apiKey={result.key} />,
     });
     setIsLoading(false);
-    router.refresh();
+    //router.refresh();
   };
   return (
     <Button
