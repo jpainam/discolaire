@@ -55,6 +55,7 @@ export default function Paage() {
       redirectTo: "/auth/password/reset",
     });
     if (error) {
+      console.error(error);
       setIsLoading(false);
       toast.error("Une erreur s'est produite");
       return;

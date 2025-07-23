@@ -24,7 +24,7 @@ const unProtectedRoutes = [
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (pathname.startsWith("/api/auth")) {
+  if (pathname.includes("/auth")) {
     return NextResponse.next();
   }
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
@@ -45,9 +45,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/s/")) {
     return NextResponse.rewrite(new URL("/404", request.url));
   }
-  if (pathname.includes("auth/")) {
-    return NextResponse.next();
-  }
+
   const url = new URL(request.url);
   url.pathname = `/s/default${pathname}`;
   return NextResponse.rewrite(url);
