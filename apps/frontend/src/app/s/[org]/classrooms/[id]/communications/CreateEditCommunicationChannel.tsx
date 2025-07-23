@@ -84,7 +84,7 @@ export function CreateEditCommunicationChannel({
     }),
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    toast.loading(t("Processing..."), { id: 0 });
+    toast.loading(t("Processing"), { id: 0 });
     const values = {
       name: data.name,
       description: data.description,

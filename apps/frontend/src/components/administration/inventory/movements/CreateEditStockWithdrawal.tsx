@@ -71,7 +71,7 @@ export function CreateEditStockWithdrawal({
   );
   const { t } = useLocale();
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    toast.loading(t("Processing..."), { id: 0 });
+    toast.loading(t("Processing"), { id: 0 });
     const values = {
       consumableId: data.consumableId,
       userId: data.userId,

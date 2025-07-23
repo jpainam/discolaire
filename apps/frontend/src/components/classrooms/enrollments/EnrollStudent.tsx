@@ -184,7 +184,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
           isLoading={createEnrollmentMutation.isPending}
           disabled={selectedIds.length === 0}
           onClick={() => {
-            toast.loading(t("Processing..."), { id: 0 });
+            toast.loading(t("Processing"), { id: 0 });
             createEnrollmentMutation.mutate({
               studentId: selectedIds,
               classroomId: classroomId,

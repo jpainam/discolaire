@@ -77,7 +77,7 @@ export function CreateEditAsset({
       serial: data.serial,
       note: data.note,
     };
-    toast.loading(t("Processing..."), { id: 0 });
+    toast.loading(t("Processing"), { id: 0 });
     if (asset) {
       updateAssetMutation.mutate({
         ...values,

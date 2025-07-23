@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
+import createNextIntlPlugin from "next-intl/plugin";
 
 import "./src/env";
 
@@ -72,9 +73,12 @@ const config = {
   },
 } satisfies NextConfig;
 
+const withNextIntl = createNextIntlPlugin();
+const withNextIntlConfig = withNextIntl(config);
+
 export default process.env.NEXT_PUBLIC_BASE_URL?.startsWith("http://")
-  ? config
-  : withSentryConfig(config, {
+  ? withNextIntlConfig
+  : withSentryConfig(withNextIntlConfig, {
       // For all available options, see:
       // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 

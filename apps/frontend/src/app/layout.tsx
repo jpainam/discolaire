@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { NextIntlClientProvider } from "next-intl";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { Toaster } from "@repo/ui/components/sonner";
@@ -10,6 +11,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import "./globals.css";
 
 import { cookies } from "next/headers";
+import { getLocale } from "next-intl/server";
 
 import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
@@ -18,7 +20,6 @@ import { env } from "~/env";
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //import { auth } from "@repo/auth";
-import { detectLanguage } from "~/i18n/server";
 import { ActiveThemeProvider } from "~/providers/ActiveThemeProvider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 
@@ -54,12 +55,12 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const activeThemeValue = cookieStore.get("active_theme")?.value ?? "caffeine";
   const isScaled = activeThemeValue.endsWith("-scaled");
 
-  const lng = await detectLanguage();
+  const lng = await getLocale();
   return (
     <I18nProvider language={lng}>
       <html
         // https://github.com/facebook/react/issues/11538#issuecomment-350110297
-        lang="en"
+        lang={lng}
         className="notranslate"
         translate="no"
         suppressHydrationWarning
@@ -89,29 +90,33 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             isScaled ? "theme-scaled" : "",
           )}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            enableColorScheme
-          >
-            <ActiveThemeProvider initialTheme={activeThemeValue}>
-              <NuqsAdapter>
-                <TRPCReactProvider>
-                  {/* <AuthProvider userPromise={userPromise}> */}
-                  <ConfirmDialogProvider>
-                    <ProgressBarProvider>{props.children}</ProgressBarProvider>
-                  </ConfirmDialogProvider>
-                  {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-                  {/* </AuthProvider> */}
-                </TRPCReactProvider>
-                <TailwindIndicator />
-                <Toaster richColors />
-                {/* <Analytics /> */}
-              </NuqsAdapter>
-            </ActiveThemeProvider>
-          </ThemeProvider>
+          <NextIntlClientProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+              enableColorScheme
+            >
+              <ActiveThemeProvider initialTheme={activeThemeValue}>
+                <NuqsAdapter>
+                  <TRPCReactProvider>
+                    {/* <AuthProvider userPromise={userPromise}> */}
+                    <ConfirmDialogProvider>
+                      <ProgressBarProvider>
+                        {props.children}
+                      </ProgressBarProvider>
+                    </ConfirmDialogProvider>
+                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+                    {/* </AuthProvider> */}
+                  </TRPCReactProvider>
+                  <TailwindIndicator />
+                  <Toaster richColors />
+                  {/* <Analytics /> */}
+                </NuqsAdapter>
+              </ActiveThemeProvider>
+            </ThemeProvider>
+          </NextIntlClientProvider>
         </body>
       </html>
     </I18nProvider>

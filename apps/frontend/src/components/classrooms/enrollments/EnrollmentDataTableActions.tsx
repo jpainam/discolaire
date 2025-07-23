@@ -1,7 +1,6 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import React from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
@@ -79,7 +78,7 @@ export function EnrollmentDataTableActions({
               },
             });
             if (isConfirmed) {
-              toast.loading(t("Processing..."), { id: 0 });
+              toast.loading(t("Processing"), { id: 0 });
               unenrollStudentsMutation.mutate({
                 studentId: selectedIds,
                 classroomId: params.id,

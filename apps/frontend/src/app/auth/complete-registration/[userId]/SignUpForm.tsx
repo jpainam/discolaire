@@ -103,7 +103,7 @@ export function SignUpForm({
         <CardHeader>
           <CardTitle>{t("Configure your account")}</CardTitle>
           <CardDescription className="text-muted-foreground text-xs">
-            {t("Please fill in the details of your account.")}
+            {t("Please fill in the details of your account")}
           </CardDescription>
         </CardHeader>
         <CardContent>

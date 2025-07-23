@@ -53,7 +53,7 @@ export function StudentSearchPage() {
             <div className="relative flex-1">
               <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
               <Input
-                placeholder={t("Enter a name, ID, or email to get started.")}
+                placeholder={t("Enter a name, ID, or email to get started")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -124,7 +124,7 @@ export function StudentSearchPage() {
           <Search className="mx-auto h-12 w-12" />
           <h3 className="mt-4">{t("Search for students")}</h3>
           <p className="text-muted-foreground mt-2 text-xs">
-            {t("Enter a name, ID, or email to get started.")}
+            {t("Enter a name, ID, or email to get started")}
           </p>
         </div>
       )}

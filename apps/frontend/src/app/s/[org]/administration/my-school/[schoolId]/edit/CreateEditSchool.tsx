@@ -84,7 +84,7 @@ export function CreateEditSchool({ school }: { school: School }) {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    toast.loading(t("Processing..."), { id: 0 });
+    toast.loading(t("Processing"), { id: 0 });
     if (!file) {
       updateSchoolMutation.mutate({ id: school.id, ...data });
       return;

@@ -77,7 +77,7 @@ export function ThemeSelector({ className }: { className?: string }) {
           </div>
           <Separator />
           <CommandList className="h-[500px] max-h-[70vh]">
-            <CommandEmpty>{t("No themes found.")}</CommandEmpty>
+            <CommandEmpty>{t("No themes found")}</CommandEmpty>
             {Object.keys(defaultThemes).length > 0 && (
               <CommandGroup>
                 {Object.entries(defaultThemes).map(([key, theme], index) => {

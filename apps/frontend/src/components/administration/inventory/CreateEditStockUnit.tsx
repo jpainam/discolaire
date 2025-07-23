@@ -38,7 +38,7 @@ export function CreateEditStockUnit({
     },
   });
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    toast.loading("Processing...", { id: 0 });
+    toast.loading("Processing", { id: 0 });
     if (id) {
       updateStockUnitMutation.mutate({
         id: id,

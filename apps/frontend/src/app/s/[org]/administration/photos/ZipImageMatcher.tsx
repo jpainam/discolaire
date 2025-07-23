@@ -267,7 +267,7 @@ export function ZipImageMatcher() {
               className="w-full"
             >
               {matchIdsMutation.isPending
-                ? "Processing..."
+                ? "Processing"
                 : "Match Files with IDs"}
               {!matchIdsMutation.isPending && (
                 <Upload className="ml-2 h-4 w-4" />
@@ -347,7 +347,7 @@ export function ZipImageMatcher() {
                   <h3 className="mb-2 font-medium">{t("No Results Yet")}</h3>
                   <p className="text-sm">
                     {t(
-                      "Upload a zip file and click 'Match Files with IDs' to see the results here.",
+                      "Upload a zip file and click 'Match Files with IDs' to see the results here",
                     )}
                   </p>
                 </div>

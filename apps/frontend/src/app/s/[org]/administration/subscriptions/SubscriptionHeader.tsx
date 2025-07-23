@@ -142,7 +142,7 @@ export function SubscriptionHeader() {
                         description: t("delete_confirmation"),
                       });
                       if (isConfirmed) {
-                        toast.loading(t("Processing..."), { id: 0 });
+                        toast.loading(t("Processing"), { id: 0 });
                         deleteSubscriptionMutation.mutate();
                       }
                     }}

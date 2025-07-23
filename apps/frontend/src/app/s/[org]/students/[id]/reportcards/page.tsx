@@ -87,7 +87,7 @@ export default async function Page(props: PageProps) {
               <TableHead className={cn(rowClassName)}>{t("coeff")}</TableHead>
               <TableHead className={cn(rowClassName)}>{t("total")}</TableHead>
               <TableHead className={cn(rowClassName)}>{t("rank")}</TableHead>
-              <TableHead className={cn(rowClassName)}>{t("Avg.C")}</TableHead>
+              <TableHead className={cn(rowClassName)}>{t("AvgC")}</TableHead>
               <TableHead className={cn(rowClassName)}>{t("min_max")}</TableHead>
               <TableHead>{t("appreciation")}</TableHead>
             </TableRow>

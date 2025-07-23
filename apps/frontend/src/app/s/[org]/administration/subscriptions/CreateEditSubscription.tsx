@@ -79,7 +79,7 @@ export function CreateEditSubscription({
     }),
   );
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    toast.loading(t("Processing..."), { id: 0 });
+    toast.loading(t("Processing"), { id: 0 });
     upsertSubscriptionMutation.mutate({
       userId: data.userId,
       plan: data.plan,

@@ -153,7 +153,7 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
                               },
                             });
                             if (isConfirmed) {
-                              toast.loading(t("Processing..."), { id: 0 });
+                              toast.loading(t("Processing"), { id: 0 });
                               deleteEnrollmentMutation.mutate(c.id);
                             }
                           }}

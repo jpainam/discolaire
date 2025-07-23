@@ -91,7 +91,7 @@ export function getColumns({
     {
       accessorKey: "prefix",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("civ.")} />
+        <DataTableColumnHeader column={column} title={t("civ")} />
       ),
       cell: ({ row }) => {
         const contact = row.original;

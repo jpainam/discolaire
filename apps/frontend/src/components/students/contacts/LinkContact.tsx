@@ -194,7 +194,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
               toast.error(t("please_select_relationship"));
               return;
             }
-            toast.loading(t("Processing..."), { id: 0 });
+            toast.loading(t("Processing"), { id: 0 });
             createStudentContactMutation.mutate({
               contactId: selectedContacts.map((contact) => contact.id),
               studentId: studentId,

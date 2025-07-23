@@ -57,7 +57,7 @@ export function ChangeAvatarButton(
 
   const handleUpload = useCallback(
     async (croppedImageUrl: string) => {
-      toast.loading(t("Processing..."), { id: 0 });
+      toast.loading(t("Processing"), { id: 0 });
       try {
         const croppedBlob = await (await fetch(croppedImageUrl)).blob();
         const formData = new FormData();

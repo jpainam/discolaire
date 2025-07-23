@@ -80,7 +80,7 @@ export function ClassroomLevelHeader() {
                 // },
               });
               if (isConfirm) {
-                toast.loading(t("Processing..."), { id: 0 });
+                toast.loading(t("Processing"), { id: 0 });
                 deleteClassroomLevelMutation.mutate(selectedLevels);
               }
             }}

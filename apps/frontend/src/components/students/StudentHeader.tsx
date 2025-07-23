@@ -139,7 +139,7 @@ export function StudentHeader() {
 
   const changeStudentStatus = useCallback(
     (status: StudentStatus) => {
-      toast.loading(t("Processing..."), { id: 0 });
+      toast.loading(t("Processing"), { id: 0 });
       studentStatusMutation.mutate({
         studentId: student.id,
         status,
