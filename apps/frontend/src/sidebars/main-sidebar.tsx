@@ -19,6 +19,7 @@ import {
   LibraryBigIcon,
   Users,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Sidebar,
@@ -41,7 +42,6 @@ import { SidebarLogo } from "~/components/sidebar-logo";
 import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function MainSidebar({
@@ -129,7 +129,8 @@ export function MainSidebar({
     },
   ];
 
-  const { t } = useLocale();
+  //const { t } = useLocale();
+  const t = useTranslations();
   const pathname = usePathname();
 
   const { openModal } = useModal();

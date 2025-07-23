@@ -20,6 +20,7 @@ import { env } from "~/env";
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //import { auth } from "@repo/auth";
+import { detectLanguage } from "~/i18n/server";
 import { ActiveThemeProvider } from "~/providers/ActiveThemeProvider";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 
@@ -55,12 +56,13 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const activeThemeValue = cookieStore.get("active_theme")?.value ?? "caffeine";
   const isScaled = activeThemeValue.endsWith("-scaled");
 
-  const lng = await getLocale();
+  const locale = await getLocale();
+  const lng = await detectLanguage();
   return (
     <I18nProvider language={lng}>
       <html
         // https://github.com/facebook/react/issues/11538#issuecomment-350110297
-        lang={lng}
+        lang={locale}
         className="notranslate"
         translate="no"
         suppressHydrationWarning

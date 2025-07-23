@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 
+import { setLanguageCookie } from "~/actions/signin";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
@@ -22,8 +23,9 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
   const { t, i18n } = useLocale();
   const [value, setValue] = useState<string>(i18n.language);
 
-  const onChangeLanguage = (value: string) => {
+  const onChangeLanguage = async (value: string) => {
     void i18n.changeLanguage(value);
+    await setLanguageCookie(value);
     setValue(value == "en" ? "US" : value == "fr" ? "FR" : "ES");
     router.refresh();
   };
@@ -48,22 +50,22 @@ export const LanguageSwitcher = ({ className }: { className?: string }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           className="flex items-center"
-          onSelect={() => {
-            onChangeLanguage("fr");
+          onSelect={async () => {
+            await onChangeLanguage("fr");
           }}
         >
           <RenderSwitchItem countryId="FR" text={t("french")} />
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => {
-            onChangeLanguage("en");
+          onSelect={async () => {
+            await onChangeLanguage("en");
           }}
         >
           <RenderSwitchItem countryId="US" text={t("english")} />
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => {
-            onChangeLanguage("es");
+          onSelect={async () => {
+            await onChangeLanguage("es");
           }}
         >
           <RenderSwitchItem countryId="ES" text={t("spanish")} />

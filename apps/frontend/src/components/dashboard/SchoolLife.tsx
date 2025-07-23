@@ -18,6 +18,7 @@ import {
   LifeBuoy,
   UsersIcon,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Badge } from "@repo/ui/components/badge";
 import {
@@ -39,7 +40,6 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { useIsMobile } from "~/hooks/use-mobile";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { Skeleton } from "../ui/skeleton";
 
@@ -94,7 +94,9 @@ export function SchoolLife({ className }: { className?: string }) {
       fri?: number;
     }[]
   >();
-  const { t, i18n } = useLocale();
+  //const { t, i18n } = useLocale();
+  const t = useTranslations();
+  const locale = useLocale();
 
   useEffect(() => {
     const absences = absenceQuery.data ?? [];
@@ -219,7 +221,7 @@ export function SchoolLife({ className }: { className?: string }) {
   const days = eachDayOfInterval({ start: startWeek, end: endWeek })
     .slice(1, 6) // Select Monday to Friday
     .map((date) => {
-      return date.toLocaleDateString(i18n.language, {
+      return date.toLocaleDateString(locale, {
         weekday: isMobile ? "narrow" : "short",
         //day: "2-digit",
       });
@@ -242,13 +244,13 @@ export function SchoolLife({ className }: { className?: string }) {
           <TableHeader>
             <TableRow className="bg-muted/50 border-y">
               <TableHead>
-                {startWeek.toLocaleDateString(i18n.language, {
+                {startWeek.toLocaleDateString(locale, {
                   //weekday: isMobile ? "narrow" : "short",
                   //month: "short",
                   day: "2-digit",
                 })}{" "}
                 -{" "}
-                {endWeek.toLocaleDateString(i18n.language, {
+                {endWeek.toLocaleDateString(locale, {
                   //weekday: isMobile ? "narrow" : "short",
                   month: "short",
                   day: "2-digit",
