@@ -84,7 +84,7 @@ export function CreateUpdateAddress() {
                   </FormLabel>
                   <FormControl>
                     <FormerSchoolSelector
-                      placeholder={t("formerSchool")}
+                      className="w-full"
                       onChange={field.onChange}
                       defaultValue={field.value}
                     />

@@ -14,6 +14,21 @@ export const formerShoolRouter = {
       },
     });
   }),
+  search: protectedProcedure
+    .input(z.object({ q: z.string().default("") }))
+    .query(({ ctx, input }) => {
+      const qq = `%${input.q}%`;
+      return ctx.db.formerSchool.findMany({
+        take: 10,
+        where: {
+          schoolId: ctx.schoolId,
+          name: {
+            contains: qq,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {

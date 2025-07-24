@@ -77,7 +77,7 @@ export function SearchCombobox({
 
   const handleOnSearchChange = useDebouncedCallback((e: string) => {
     onSearchChange?.(e);
-  }, 300);
+  }, 100);
 
   function setOpen(isOpen: boolean) {
     if (!isOpen) handleOnSearchChange("");

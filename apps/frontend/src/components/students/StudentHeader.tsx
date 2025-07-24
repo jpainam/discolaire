@@ -228,6 +228,7 @@ export function StudentHeader() {
             }
             value={value}
             label={label}
+            isLoading={studentsQuery.isLoading}
             onSelect={(value, label) => {
               setValue(value);
               setLabel(label ?? "");
