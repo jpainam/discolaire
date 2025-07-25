@@ -14,40 +14,40 @@ import {
   YAxis,
 } from "recharts";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@repo/ui/components/dialog";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
 } from "@repo/ui/components/drawer";
-import { Progress } from "@repo/ui/components/progress";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
+
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
+import { Progress } from "~/components/ui/progress";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Separator } from "@repo/ui/components/separator";
+} from "~/components/ui/select";
+import { Separator } from "~/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/tooltip";
 import { events } from "~/data/events-staff";
 import { useMediaQuery } from "~/hooks/use-media-query";
+import { cn } from "~/lib/utils";
 
 // Define the enhanced types
 interface EnhancedEvent {
@@ -152,7 +152,8 @@ export default function GanttChartRoadmap() {
         )
           return;
         grouped[event.type] ??= [];
-        grouped[event.type]?.push({
+        // @ts-expect-error TODO FIX THIS
+        grouped[event.type].push({
           title: event.title,
           start: periodStart,
           end: periodStart + 0.25,
@@ -255,6 +256,7 @@ export default function GanttChartRoadmap() {
   const baseWidth = 800;
   const timeScale = (baseWidth * zoomLevel) / (timeRange[1] - timeRange[0]);
 
+  // Selected event details
   let selectedEventDetails = null;
   if (selectedEvent) {
     const cat = Object.keys(categories)[selectedEvent.catIndex];
@@ -262,12 +264,35 @@ export default function GanttChartRoadmap() {
       selectedEventDetails = categories[cat][selectedEvent.evtIndex];
     }
   }
+  // selectedEventDetails =
+  //   selectedEvent !== null
+  //     ? categories[Object.keys(categories)[selectedEvent.catIndex]]?.[
+  //         selectedEvent.evtIndex
+  //       ]
+  //     : null;
 
   return (
     <TooltipProvider>
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-12 lg:flex-row">
         {/* Main Gantt Chart Section */}
         <div className="flex-1">
+          <motion.h1
+            className="text-foreground mb-2 text-3xl font-bold"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Gantt Chart Roadmap
+          </motion.h1>
+          <motion.p
+            className="text-muted-foreground mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            A timeline of events by category
+          </motion.p>
+
           {/* Controls */}
           <div className="mb-4 flex flex-wrap gap-4">
             <Select value={filterType} onValueChange={setFilterType}>

@@ -15,6 +15,7 @@ import { ClockRewind, MessageIcon } from "~/components/ai/icons";
 import { Editor } from "~/components/ai/text-editor";
 import { getSuggestions } from "../actions";
 
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 interface TextArtifactMetadata {
   suggestions: AiSuggestion[];
 }
@@ -82,7 +83,6 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
         <div className="flex flex-row px-4 py-8 md:p-20">
           <Editor
             content={content}
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             suggestions={metadata ? metadata.suggestions : []}
             isCurrentVersion={isCurrentVersion}
             currentVersionIndex={currentVersionIndex}
@@ -90,7 +90,7 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
             onSaveContent={onSaveContent}
           />
 
-          {metadata.suggestions.length > 0 ? (
+          {metadata?.suggestions && metadata.suggestions.length > 0 ? (
             <div className="h-dvh w-12 shrink-0 md:hidden" />
           ) : null}
         </div>
