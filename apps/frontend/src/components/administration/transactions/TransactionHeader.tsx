@@ -1,5 +1,6 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
 import { useQueryStates } from "nuqs";
 
@@ -12,6 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 
 import { DatePicker } from "~/components/DatePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -22,10 +30,15 @@ import { TransactionStatusSelector } from "~/components/shared/selects/Transacti
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+import { useTRPC } from "~/trpc/react";
 import { transactionSearchParamsSchema } from "~/utils/search-params";
 
 export function TransactionHeader() {
   const { t } = useLocale();
+  const trpc = useTRPC();
+  const { data: journals } = useSuspenseQuery(
+    trpc.accountingJournal.all.queryOptions(),
+  );
 
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
@@ -34,8 +47,27 @@ export function TransactionHeader() {
   const to = searchParams.to ?? undefined;
 
   return (
-    <div className="grid flex-row items-center gap-6 px-4 py-2 md:flex">
-      <div className="flex items-center gap-2">
+    <div className="grid flex-row items-center gap-4 px-4 py-2 md:flex">
+      <div className="flex flex-col gap-1">
+        <Label className="hidden md:block">{t("Accounting Journals")}</Label>
+        <Select
+          onValueChange={(val) => {
+            router.push(`?${createQueryString({ journalId: val })}`);
+          }}
+        >
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder={t("all")} />
+          </SelectTrigger>
+          <SelectContent>
+            {journals.map((journal) => (
+              <SelectItem key={journal.id} value={journal.id}>
+                {journal.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-1">
         <Label className="hidden md:block">{t("classroom")}</Label>
         <ClassroomSelector
           className="w-full md:w-[250px]"
@@ -44,7 +76,7 @@ export function TransactionHeader() {
           }}
         />
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-1">
         <Label className="hidden md:block"> {t("from")}</Label>
         <DatePicker
           defaultValue={from}
@@ -55,7 +87,7 @@ export function TransactionHeader() {
           }}
         />
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-1">
         <Label className="hidden md:block">{t("to")}</Label>
         <DatePicker
           defaultValue={to}
@@ -66,7 +98,7 @@ export function TransactionHeader() {
           }}
         />
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-1">
         <Label className="hidden md:block">{t("status")}</Label>
         <TransactionStatusSelector
           onChange={(val) => {
