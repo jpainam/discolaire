@@ -6,7 +6,7 @@ export const feeService = {
   getMontlyFees: async (schoolYearId: string) => {
     const fees = await db.fee.findMany({
       include: {
-        journal: true
+        journal: true,
       },
       where: {
         classroom: {

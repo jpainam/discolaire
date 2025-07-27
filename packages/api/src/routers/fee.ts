@@ -1,11 +1,8 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-
-
 import { feeService } from "../services/fee-service";
 import { protectedProcedure } from "../trpc";
-
 
 export const feeRouter = {
   delete: protectedProcedure
