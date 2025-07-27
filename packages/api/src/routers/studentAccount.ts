@@ -19,9 +19,9 @@ export const studentAccountRouter = {
         },
         include: {
           classroom: true,
+          journal: true,
         },
         where: {
-          isIncludedInBalance: true,
           dueDate: {
             lte: new Date(),
           },

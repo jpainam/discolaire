@@ -1,8 +1,11 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+
+
 import { feeService } from "../services/fee-service";
 import { protectedProcedure } from "../trpc";
+
 
 export const feeRouter = {
   delete: protectedProcedure
@@ -52,7 +55,7 @@ export const feeRouter = {
         classroomId: z.string().min(1),
         isActive: z.boolean().default(true),
         isRequired: z.boolean().default(false),
-        isIncludedInBalance: z.boolean().default(true),
+        journalId: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -64,7 +67,7 @@ export const feeRouter = {
           dueDate: input.dueDate,
           isRequired: input.isRequired,
           classroomId: input.classroomId,
-          isIncludedInBalance: input.isIncludedInBalance,
+          journalId: input.journalId,
         },
       });
     }),
@@ -78,7 +81,7 @@ export const feeRouter = {
         dueDate: z.coerce.date(),
         isRequired: z.boolean().default(false),
         isActive: z.boolean().default(true),
-        isIncludedInBalance: z.boolean().default(true),
+        journalId: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -92,7 +95,7 @@ export const feeRouter = {
           amount: input.amount,
           dueDate: input.dueDate,
           isRequired: input.isRequired,
-          isIncludedInBalance: input.isIncludedInBalance,
+          journalId: input.journalId,
         },
       });
     }),

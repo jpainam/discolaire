@@ -1,8 +1,8 @@
 import type { Fee } from "@prisma/client";
 import type { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Save, X } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader2, Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -18,6 +18,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/components/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 
 import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
@@ -31,7 +38,7 @@ const createEditFeeSchema = z.object({
   amount: z.coerce.number().min(1),
   dueDate: z.coerce.date(),
   isRequired: z.boolean().default(false),
-  isIncludedInBalance: z.boolean().default(true),
+  journalId: z.string().min(1),
 });
 
 export function CreateEditFee({
@@ -50,13 +57,14 @@ export function CreateEditFee({
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
       isRequired: fee?.isRequired ?? false,
-      isIncludedInBalance: fee?.isIncludedInBalance ?? true,
+      journalId: fee?.journalId ?? "",
     },
   });
 
   const { closeModal } = useModal();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
 
   const updateFeeMutation = useMutation(
     trpc.fee.update.mutationOptions({
@@ -96,7 +104,7 @@ export function CreateEditFee({
       isActive: true,
       classroomId: classroomId,
       isRequired: data.isRequired,
-      isIncludedInBalance: data.isIncludedInBalance,
+      journalId: data.journalId,
     };
     if (fee) {
       toast.loading(t("updating"), { id: 0 });
@@ -139,6 +147,40 @@ export function CreateEditFee({
                   onChange={(val) => field.onChange(val)}
                 />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="journalId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel></FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={t("Accounting Journals")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {journalQuery.isPending ? (
+                      <SelectItem value="loading" disabled>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </SelectItem>
+                    ) : (
+                      journalQuery.data?.map((journal) => (
+                        <SelectItem key={journal.id} value={journal.id}>
+                          {journal.name}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+
               <FormMessage />
             </FormItem>
           )}

@@ -5,8 +5,10 @@ import { db } from "@repo/db";
 export const feeService = {
   getMontlyFees: async (schoolYearId: string) => {
     const fees = await db.fee.findMany({
+      include: {
+        journal: true
+      },
       where: {
-        isIncludedInBalance: true,
         classroom: {
           schoolYearId: schoolYearId,
         },
@@ -32,9 +34,9 @@ export const feeService = {
     const fees = await db.fee.findMany({
       include: {
         classroom: true,
+        journal: true,
       },
       where: {
-        isIncludedInBalance: true,
         classroom: {
           schoolYearId: schoolYearId,
         },

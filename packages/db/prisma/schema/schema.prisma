@@ -513,22 +513,21 @@ model RequiredFeeTransaction {
 }
 
 model Fee {
-    id                  Int                      @id @default(autoincrement())
-    description         String?
-    code                String?
-    amount              Float
-    dueDate             DateTime                 @default(now()) @db.Timestamp(6)
-    createdAt           DateTime                 @default(now()) @db.Timestamp(6)
-    updatedAt           DateTime                 @updatedAt
-    createdBy           String?
-    updatedBy           String?
-    classroomId         String
-    isRequired          Boolean?                 @default(false)
-    isIncludedInBalance Boolean?                 @default(true)
-    classroom           Classroom                @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    requires            RequiredFeeTransaction[]
-    journalId           String?
-    journal             AccountingJournal?       @relation(fields: [journalId], references: [id])
+    id          Int                      @id @default(autoincrement())
+    description String?
+    code        String?
+    amount      Float
+    dueDate     DateTime                 @default(now()) @db.Timestamp(6)
+    createdAt   DateTime                 @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime                 @updatedAt
+    createdBy   String?
+    updatedBy   String?
+    classroomId String
+    isRequired  Boolean?                 @default(false)
+    classroom   Classroom                @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    requires    RequiredFeeTransaction[]
+    journalId   String?
+    journal     AccountingJournal?       @relation(fields: [journalId], references: [id])
 }
 
 model StudentContact {
