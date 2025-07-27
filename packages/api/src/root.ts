@@ -1,5 +1,6 @@
 import { absenceRouter } from "./routers/absence";
 import { accountingRouter } from "./routers/accounting";
+import { accountingJournal } from "./routers/accountingJournal";
 import { announcementRouter } from "./routers/announcement";
 import { appreciationRouter } from "./routers/appreciation";
 import { assignmentRouter } from "./routers/assignment";
@@ -92,6 +93,7 @@ export const appRouter = createTRPCRouter({
   classroomSection: classroomSectionRouter,
   user: userRouter,
   bible: bibleRouter,
+  accountingJournal: accountingJournal,
   subscription: subscriptionRouter,
   convocation: convocationRouter,
   student: studentRouter,

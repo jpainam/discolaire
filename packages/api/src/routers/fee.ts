@@ -52,6 +52,7 @@ export const feeRouter = {
         classroomId: z.string().min(1),
         isActive: z.boolean().default(true),
         isRequired: z.boolean().default(false),
+        isIncludedInBalance: z.boolean().default(true),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -63,6 +64,7 @@ export const feeRouter = {
           dueDate: input.dueDate,
           isRequired: input.isRequired,
           classroomId: input.classroomId,
+          isIncludedInBalance: input.isIncludedInBalance,
         },
       });
     }),
@@ -76,6 +78,7 @@ export const feeRouter = {
         dueDate: z.coerce.date(),
         isRequired: z.boolean().default(false),
         isActive: z.boolean().default(true),
+        isIncludedInBalance: z.boolean().default(true),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -89,6 +92,7 @@ export const feeRouter = {
           amount: input.amount,
           dueDate: input.dueDate,
           isRequired: input.isRequired,
+          isIncludedInBalance: input.isIncludedInBalance,
         },
       });
     }),

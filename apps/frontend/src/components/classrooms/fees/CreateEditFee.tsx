@@ -31,6 +31,7 @@ const createEditFeeSchema = z.object({
   amount: z.coerce.number().min(1),
   dueDate: z.coerce.date(),
   isRequired: z.boolean().default(false),
+  isIncludedInBalance: z.boolean().default(true),
 });
 
 export function CreateEditFee({
@@ -49,6 +50,7 @@ export function CreateEditFee({
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
       isRequired: fee?.isRequired ?? false,
+      isIncludedInBalance: fee?.isIncludedInBalance ?? true,
     },
   });
 
@@ -94,6 +96,7 @@ export function CreateEditFee({
       isActive: true,
       classroomId: classroomId,
       isRequired: data.isRequired,
+      isIncludedInBalance: data.isIncludedInBalance,
     };
     if (fee) {
       toast.loading(t("updating"), { id: 0 });

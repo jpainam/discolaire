@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { Switch } from "@repo/ui/components/switch";
 import {
   Table,
   TableBody,
@@ -29,6 +30,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
@@ -85,6 +91,7 @@ export function ClassroomFeeTable() {
               <TableHead>{t("status")}</TableHead>
               <TableHead>{t("required_fees")} ?</TableHead>
               <TableHead></TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -120,6 +127,16 @@ export function ClassroomFeeTable() {
                     <FlatBadge variant={fee.isRequired ? "red" : "green"}>
                       {fee.isRequired ? t("yes") : t("no")}
                     </FlatBadge>
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Switch />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Pris en compte dans le solde</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </TableCell>
                   <TableCell className="w-[50px]">
                     {canUpdateClassroomFee || canDeleteClassroomFee ? (

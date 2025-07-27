@@ -216,6 +216,11 @@ https://reui.io/blocks
 https://www.kibo-ui.com/components/banner
 https://www.sendsmsgate.com/fr/sms-gateway/cd/democratic-republic-of-the-congo/
 https://www.kibo-ui.com/components/dialog-stack
-https://reui.io/
+https://reui.io/blocks
 https://keenthemes.com/metronic/tailwind/react/demo1
 https://utilitiesinfo.conservice.com/
+
+PILL https://www.kibo-ui.com/components/pill
+https://www.kibo-ui.com/components/banner
+https://template.openstatus.dev/dashboard/settings/general
+https://www.shsfui.com/

@@ -84,6 +84,10 @@ export function AdminSidebar({
             url: "/administration/accounting/fees",
           },
           {
+            title: "Accounting Journals",
+            url: "/administration/accounting/journal",
+          },
+          {
             title: "Transactions",
             url: "/administration/accounting/transactions",
           },
