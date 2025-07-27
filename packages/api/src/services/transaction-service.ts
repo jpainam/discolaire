@@ -1,6 +1,9 @@
 import { db, TransactionType } from "@repo/db";
 
+
+
 import { studentService } from "./student-service";
+
 
 export const transactionService = {
   getReceiptInfo: async (transactionId: number) => {
@@ -21,6 +24,9 @@ export const transactionService = {
       throw new Error("Student not register in any class");
     }
     const fees = await db.fee.findMany({
+      include: {
+        journal: true,
+      },
       where: {
         classroomId: classroom.id,
       },

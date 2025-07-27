@@ -28,6 +28,9 @@ export async function sendPaymentReminder({
 
   const classroom = enrollment.classroom;
   const fee = await db.fee.findMany({
+    include: {
+      journal: true,
+    },
     where: {
       classroomId: classroom.id,
     },

@@ -122,7 +122,7 @@ export function CreateEditFee({
   return (
     <Form {...form}>
       <form
-        className="grid grid-cols-2 gap-2"
+        className="grid grid-cols-2 gap-x-2 gap-y-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="col-span-full flex flex-row gap-2">
@@ -151,61 +151,63 @@ export function CreateEditFee({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="journalId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("Accounting Journals")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {journalQuery.isPending ? (
-                      <SelectItem value="loading" disabled>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      </SelectItem>
-                    ) : (
-                      journalQuery.data?.map((journal) => (
-                        <SelectItem key={journal.id} value={journal.id}>
-                          {journal.name}
+        <div className="col-span-full grid grid-cols-2 gap-2">
+          <FormField
+            control={form.control}
+            name="journalId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel></FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("Accounting Journals")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {journalQuery.isPending ? (
+                        <SelectItem value="loading" disabled>
+                          <Loader2 className="h-4 w-4 animate-spin" />
                         </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
-              </FormControl>
+                      ) : (
+                        journalQuery.data?.map((journal) => (
+                          <SelectItem key={journal.id} value={journal.id}>
+                            {journal.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="isRequired"
-          render={({ field }) => (
-            <FormItem className="col-span-full flex flex-row items-center space-y-0 space-x-2 py-2">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>{t("required_fees")} ? </FormLabel>
-                <FormDescription className="text-sm">
-                  {t("required_fees_description")}
-                </FormDescription>
-              </div>
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="isRequired"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center space-y-0 space-x-2 py-2">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>{t("required_fees")} ? </FormLabel>
+                  <FormDescription className="text-sm">
+                    {t("required_fees_description")}
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
         {/* <FormField
           control={form.control}
           name="isActive"

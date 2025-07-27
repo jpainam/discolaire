@@ -1,8 +1,11 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+
+
 import { feeService } from "../services/fee-service";
 import { protectedProcedure } from "../trpc";
+
 
 export const feeRouter = {
   delete: protectedProcedure
@@ -36,6 +39,7 @@ export const feeRouter = {
       },
       include: {
         classroom: true,
+        journal: true,
       },
       orderBy: {
         dueDate: "asc",
@@ -104,6 +108,9 @@ export const feeRouter = {
   }),
   requiredFees: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.fee.findMany({
+      include: {
+        journal: true,
+      },
       where: {
         isRequired: true,
         classroom: {

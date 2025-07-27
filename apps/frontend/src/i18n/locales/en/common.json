@@ -842,7 +842,7 @@
   "password_reset_successful": "Password reset successful",
   "password_reset_successful_description": "Your password has been successfully reset. You can now log in with your new password.",
   "required_fees": "Required fees",
-  "required_fees_description": "This fee is required before the student can be enrolled",
+  "required_fees_description": "Required before enrollment",
   "resend": "Resend",
   "reset_password": "Reset Password",
   "reset": "Reset",

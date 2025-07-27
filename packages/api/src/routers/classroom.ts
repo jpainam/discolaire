@@ -141,6 +141,7 @@ export const classroomRouter = {
       },
       include: {
         classroom: true,
+        journal: true,
       },
       orderBy: {
         dueDate: "asc",
