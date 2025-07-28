@@ -1,8 +1,11 @@
-import { createLoader, parseAsArrayOf, parseAsFloat, parseAsIsoDate, parseAsString, parseAsStringLiteral } from "nuqs/server";
-
-
-
-
+import {
+  createLoader,
+  parseAsArrayOf,
+  parseAsFloat,
+  parseAsIsoDate,
+  parseAsString,
+  parseAsStringLiteral,
+} from "nuqs/server";
 
 // Describe your search params, and reuse this in useQueryStates / createSerializer:
 export const coordinatesSearchParams = {
