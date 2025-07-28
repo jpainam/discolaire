@@ -1,15 +1,13 @@
 import { db, TransactionType } from "@repo/db";
 
-
-
 import { studentService } from "./student-service";
-
 
 export const transactionService = {
   getReceiptInfo: async (transactionId: number) => {
     const transaction = await db.transaction.findUniqueOrThrow({
       include: {
         student: true,
+        journal: true,
       },
       where: {
         id: transactionId,
@@ -143,6 +141,7 @@ export async function getTransactionSummary({
       deletedAt: null,
     },
     include: {
+      journal: true,
       student: true,
     },
   });

@@ -512,6 +512,9 @@ export const studentRouter = {
 
   transactions: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.transaction.findMany({
+      include: {
+        journal: true,
+      },
       where: {
         studentId: input,
         deletedAt: null,

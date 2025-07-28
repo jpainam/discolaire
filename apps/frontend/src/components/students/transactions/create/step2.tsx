@@ -41,6 +41,7 @@ export function Step2() {
     studentContacts,
     requiredFeeIds,
     student,
+    journalId
   } = useCreateTransaction();
   const router = useRouter();
   const trpc = useTRPC();
@@ -81,7 +82,7 @@ export function Step2() {
       return;
     }
 
-    if (!amount || !description || !transactionType || !paymentMethod) {
+    if (!amount || !description || !transactionType || !paymentMethod || !journalId) {
       toast.error(t("missing_required_fields"));
       return;
     }
@@ -93,6 +94,7 @@ export function Step2() {
       transactionType: transactionType as TransactionType,
       requiredFeeIds: requiredFeeIds,
       amount: Number(amount),
+      journalId: journalId,
     });
   }
 

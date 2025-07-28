@@ -24,6 +24,12 @@ interface CreateTransactionContextProps {
   requiredFeeIds: number[];
   setRequiredFeeIds: (feeIds: number[]) => void;
   unpaidRequiredFees: RouterOutputs["student"]["unpaidRequiredFees"];
+  journalId: string | null;
+  setJournalId: (journalId: string) => void;
+  setJournal: (
+    journal: RouterOutputs["accountingJournal"]["get"] | null,
+  ) => void;
+  journal: RouterOutputs["accountingJournal"]["get"] | null;
 }
 
 export const CreateTransactionContext = createContext<
@@ -62,6 +68,10 @@ export const CreateTransactionContextProvider = ({
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [requiredFeeIds, setRequiredFeeIds] = useState<number[]>([]);
   const [notifications, setNotifications] = useState<string[]>([]);
+  const [journalId, setJournalId] = useState<string | null>(null);
+  const [journal, setJournal] = useState<
+    RouterOutputs["accountingJournal"]["get"] | null
+  >(null);
   return (
     <CreateTransactionContext.Provider
       value={{
@@ -83,6 +93,10 @@ export const CreateTransactionContextProvider = ({
         requiredFeeIds,
         unpaidRequiredFees,
         setRequiredFeeIds,
+        journalId,
+        setJournalId,
+        journal,
+        setJournal,
       }}
     >
       {children}

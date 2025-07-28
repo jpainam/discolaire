@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import i18next from "i18next";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -30,6 +31,7 @@ import {
 import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useSchool } from "~/providers/SchoolProvider";
+import { useTRPC } from "~/trpc/react";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 
 const makePaymentFormSchema = z.object({
@@ -37,6 +39,7 @@ const makePaymentFormSchema = z.object({
   description: z.string().min(1),
   transactionType: z.string().min(1),
   paymentMethod: z.string().min(1),
+  journalId: z.string().min(1),
 });
 
 export function Step1() {
@@ -47,11 +50,13 @@ export function Step1() {
     setDescription,
     transactionType,
     setTransactionType,
+    setJournalId,
     paymentMethod,
     setPaymentMethod,
     unpaidRequiredFees,
     requiredFeeIds,
     setRequiredFeeIds,
+    journalId,
   } = useCreateTransaction();
 
   const { school } = useSchool();
@@ -59,6 +64,7 @@ export function Step1() {
   const form = useForm({
     defaultValues: {
       amount: amount ?? 0,
+      journalId: journalId ?? "",
       description: description ?? "",
       transactionType: transactionType ?? "CREDIT",
       paymentMethod: paymentMethod ?? "",
@@ -66,6 +72,9 @@ export function Step1() {
     resolver: zodResolver(makePaymentFormSchema),
   });
   const { t } = useLocale();
+
+  const trpc = useTRPC();
+  const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
@@ -78,6 +87,7 @@ export function Step1() {
       }
     }
     setTransactionType(data.transactionType);
+    setJournalId(data.journalId);
     setPaymentMethod(data.paymentMethod);
     setAmount(data.amount);
     setDescription(data.description);
@@ -134,6 +144,41 @@ export function Step1() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4">
+            <FormField
+              control={form.control}
+              name="journalId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("Accounting Journals")}</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {journalQuery.isPending ? (
+                          <SelectItem value="_all" disabled>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          </SelectItem>
+                        ) : (
+                          journalQuery.data?.map((journal) => (
+                            <SelectItem key={journal.id} value={journal.id}>
+                              {journal.name}
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div></div>
             <FormField
               control={form.control}
               name="paymentMethod"

@@ -4,14 +4,18 @@ import { z } from "zod";
 import { protectedProcedure } from "../trpc";
 
 export const accountingJournal = {
+  get: protectedProcedure.input(z.string().min(1)).query(({ ctx, input }) => {
+    return ctx.db.accountingJournal.findUniqueOrThrow({
+      where: {
+        id: input,
+      },
+    });
+  }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.accountingJournal.findMany({
       where: {
         schoolYearId: ctx.schoolYearId,
         schoolId: ctx.schoolId,
-      },
-      orderBy: {
-        updatedAt: "desc",
       },
     });
   }),

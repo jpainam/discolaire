@@ -26,6 +26,7 @@ const createSchema = z.object({
   transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]),
   observation: z.string().optional(),
   requiredFeeIds: z.array(z.coerce.number()).optional(),
+  journalId: z.string().min(1)
 });
 
 export const transactionRouter = {
@@ -111,6 +112,7 @@ export const transactionRouter = {
       return ctx.db.transaction.findMany({
         take: input.limit,
         include: {
+          journal: true,
           student: {
             include: {
               user: true,
@@ -196,6 +198,7 @@ export const transactionRouter = {
     .query(async ({ ctx, input }) => {
       const t = await ctx.db.transaction.findUnique({
         include: {
+          journal: true,
           student: true,
         },
         where: {
@@ -340,6 +343,8 @@ export const transactionRouter = {
           description: input.description,
           createdById: ctx.session.user.id,
           receivedById: ctx.session.user.id,
+          journalId: input.journalId,
+          method: input.method,
         },
       });
       if (input.requiredFeeIds)

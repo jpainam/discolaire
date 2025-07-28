@@ -17,6 +17,7 @@ import { BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { TransactionType } from "@repo/db";
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -105,6 +106,7 @@ export function TransactionTable() {
               <TableHead>{t("description")}</TableHead>
               <TableHead>{t("amount")}</TableHead>
               <TableHead>{t("status")}</TableHead>
+              <TableHead></TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -172,6 +174,11 @@ export function TransactionTable() {
                   </TableCell>
                   <TableCell>
                     <TransactionStatus status={transaction.status} />
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary">
+                      {transaction.journal?.name}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     {(canUpdateTransaction || canDeleteTransaction) && (
