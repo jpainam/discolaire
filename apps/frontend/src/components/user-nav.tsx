@@ -2,6 +2,7 @@
 "use client";
 
 //import { signinout } from "~/app/auth/login/signin";
+import React from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { IconBell, IconCreditCard, IconUserCircle } from "@tabler/icons-react";
 import { Computer, LogOut, MoreVerticalIcon, Settings } from "lucide-react";
@@ -35,6 +36,7 @@ import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 
 export function UserNav({ className }: { className?: string }) {
+  const [mounted, setMounted] = React.useState(false);
   const { t } = useLocale();
   const router = useRouter();
   const { data: session } = authClient.useSession();
@@ -42,8 +44,15 @@ export function UserNav({ className }: { className?: string }) {
   //const pathname = usePathname();
 
   const user = session?.user;
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   if (!user) return null;
   const initials = user.name.charAt(0) + user.name.charAt(1);
+
+  if (!mounted) {
+    return <></>;
+  }
 
   return (
     <DropdownMenu>

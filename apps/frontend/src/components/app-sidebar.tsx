@@ -16,6 +16,7 @@ import { StaffSidebar } from "./staffs/StaffSidebar";
 import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [mounted, setMounted] = React.useState(false);
   const pathname = usePathname();
   const isHome =
     pathname === "/" ||
@@ -44,6 +45,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isAi = pathname.startsWith("/ai");
 
   //const isTimetable = pathname.startsWith("/timetables");
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) {
+    return <></>;
+  }
 
   return (
     <>

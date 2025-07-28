@@ -27,6 +27,7 @@ export const transactionService = {
       },
       where: {
         classroomId: classroom.id,
+        journalId: transaction.journalId,
       },
     });
     const totalFee = fees.reduce((acc, fee) => acc + fee.amount, 0);

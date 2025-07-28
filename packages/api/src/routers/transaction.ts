@@ -26,7 +26,7 @@ const createSchema = z.object({
   transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]),
   observation: z.string().optional(),
   requiredFeeIds: z.array(z.coerce.number()).optional(),
-  journalId: z.string().min(1)
+  journalId: z.string().min(1),
 });
 
 export const transactionRouter = {
