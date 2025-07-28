@@ -33,7 +33,7 @@ export function TransactionTabMenu() {
   if (canCreateTransaction) {
     menuTabs.push({
       name: t("create"),
-      href: routes.students.transactions.create(params.id),
+      href: `/students/${params.id}/transactions/create?step=step1`,
       icon: <PlusIcon className="h-4 w-4" />,
     });
   }

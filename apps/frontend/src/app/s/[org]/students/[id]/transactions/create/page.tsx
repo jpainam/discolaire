@@ -1,5 +1,4 @@
 import type { SearchParams } from "nuqs/server";
-import { notFound } from "next/navigation";
 
 import { Step1 } from "~/components/students/transactions/create/step1";
 import { Step2 } from "~/components/students/transactions/create/step2";
@@ -24,11 +23,7 @@ export default async function Page(props: PageProps) {
   }
   const fees = await caller.classroom.fees(params.id);
   const studentContacts = await caller.student.contacts(params.id);
-  if (searchParams.step === "step1") {
-    return (
-      <Step1 unpaidRequiredFees={unpaidRequiredFees} studentId={params.id} />
-    );
-  } else if (searchParams.step === "step2") {
+  if (searchParams.step === "step2") {
     return (
       <Step2
         studentContacts={studentContacts}
@@ -39,6 +34,8 @@ export default async function Page(props: PageProps) {
       />
     );
   } else {
-    notFound();
+    return (
+      <Step1 unpaidRequiredFees={unpaidRequiredFees} studentId={params.id} />
+    );
   }
 }

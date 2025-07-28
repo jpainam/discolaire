@@ -1,6 +1,5 @@
 import {
   createLoader,
-  parseAsArrayOf,
   parseAsFloat,
   parseAsIsoDate,
   parseAsString,
@@ -56,7 +55,7 @@ export const createTransactionSchemaStep1 = {
   transactionType: parseAsStringLiteral(["CREDIT", "DEBIT"]),
   paymentMethod: parseAsString,
   journalId: parseAsString,
-  requiredFeeIds: parseAsArrayOf(parseAsString).withDefault([]),
+  requiredFeeIds: parseAsString,
   studentId: parseAsString,
 };
 
@@ -64,15 +63,15 @@ export const createTransactionStep1 = createLoader(
   createTransactionSchemaStep1,
 );
 
-export const createTransactionSchemaStep2 = {
-  studentId: parseAsString,
-  classroomId: parseAsString,
-  contacts: parseAsArrayOf(parseAsString).withDefault([]),
-  fees: parseAsArrayOf(parseAsString).withDefault([]),
-  transactions: parseAsArrayOf(parseAsString).withDefault([]),
-  student: parseAsString,
-  unpaidRequiredFees: parseAsArrayOf(parseAsString).withDefault([]),
-};
+// export const createTransactionSchemaStep2 = {
+//   studentId: parseAsString,
+//   classroomId: parseAsString,
+//   contacts: parseAsArrayOf(parseAsString).withDefault([]),
+//   fees: parseAsArrayOf(parseAsString).withDefault([]),
+//   transactions: parseAsArrayOf(parseAsString).withDefault([]),
+//   student: parseAsString,
+//   unpaidRequiredFees: parseAsString,
+// };
 
 export const createTransactionSchema = {
   step: parseAsStringLiteral(["step1", "step2"]),

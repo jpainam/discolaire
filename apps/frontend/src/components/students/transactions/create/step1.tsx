@@ -92,6 +92,7 @@ export function Step1({
           paymentMethod: data.paymentMethod,
           journalId: data.journalId,
           studentId: studentId,
+          step: "step2",
           requiredFeeIds: JSON.stringify(requiredFeeIds),
         }),
     );

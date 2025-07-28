@@ -102,6 +102,7 @@ export function Step2({
       ],
     },
   });
+
   function onSubmit(data: z.infer<typeof step2Schema>) {
     if (!data.paymentReceived) {
       toast.warning(t("please_check_the_amount_received_box"));
@@ -124,12 +125,15 @@ export function Step2({
       return;
     }
     toast.loading(t("creating"), { id: 0 });
+
     createTransactionMutation.mutate({
       method: searchParams.paymentMethod,
       description: searchParams.description,
       studentId: searchParams.studentId,
       transactionType: searchParams.transactionType as TransactionType,
-      requiredFeeIds: searchParams.requiredFeeIds.map((id) => Number(id)),
+      requiredFeeIds: JSON.parse(
+        searchParams.requiredFeeIds ?? "[]",
+      ) as number[],
       amount: Number(searchParams.amount),
       journalId: searchParams.journalId,
     });
