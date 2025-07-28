@@ -4,12 +4,28 @@ import { getSession } from "~/auth/server";
 import { ClassroomFinancialSituation } from "~/components/classrooms/finances/ClassroomFinancialSituation";
 import { caller } from "~/trpc/server";
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ journal: string }>;
+}) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
+  if (!searchParams.journal) {
+    return (
+      <div className="my-8 flex items-center justify-center">
+        Veuillez selectionner un journal
+      </div>
+    );
+  }
   const { id } = params;
 
-  const fees = await caller.classroom.fees(id);
-  let balances = await caller.classroom.studentsBalance({ id });
+  const fees = (await caller.classroom.fees(id)).filter(
+    (fee) => fee.journalId === searchParams.journal,
+  );
+  let balances = await caller.classroom.studentsBalance({
+    id,
+    journalId: searchParams.journal,
+  });
   const session = await getSession();
   if (session?.user.profile == "student") {
     const student = await caller.student.getFromUserId(session.user.id);

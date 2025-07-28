@@ -150,13 +150,14 @@ export const classroomRouter = {
   }),
 
   studentsBalance: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.string(), journalId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
       const _result = await ctx.db.transaction.findMany({
         where: {
           schoolYearId: ctx.schoolYearId,
           status: TransactionStatus.VALIDATED,
           deletedAt: null,
+          journalId: input.journalId,
           student: {
             enrollments: {
               some: {
