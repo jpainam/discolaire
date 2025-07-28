@@ -3,7 +3,6 @@
 import { useCallback } from "react";
 import i18next from "i18next";
 import { useAtom } from "jotai";
-import { ArrowDownUp } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
@@ -122,9 +121,9 @@ export function GridViewFinanceCard({
           className="flex cursor-pointer flex-col items-center justify-between gap-2"
         >
           <span className="text-sm font-semibold">{t("balance")}</span>
-          <span>
+          {/* <span>
             <ArrowDownUp className="h-3 w-3" />
-          </span>
+          </span> */}
           <Badge
             variant={remaining < 0 ? "outline" : "default"}
             className={remaining < 0 ? "text-destructive" : ""}

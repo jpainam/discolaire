@@ -2,19 +2,30 @@
 
 import { useParams, useSearchParams } from "next/navigation";
 import { useAtomValue } from "jotai/react";
-import { CreditCardIcon, HandCoins, MoreVertical, WalletIcon } from "lucide-react";
+import {
+  CreditCardIcon,
+  HandCoins,
+  MoreVertical,
+  WalletIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
-
-
 import { Button } from "@repo/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@repo/ui/components/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-
-
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { FinanceBulkAction } from "~/components/classrooms/finances/FinanceBulkAction";
@@ -25,7 +36,6 @@ import { AccountingJournalSelector } from "~/components/shared/selects/Accountin
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
-
 
 export function ClassroomFinancialSituationHeader() {
   const { createQueryString } = useCreateQueryString();
