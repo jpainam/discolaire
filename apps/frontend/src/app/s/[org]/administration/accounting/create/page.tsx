@@ -1,7 +1,6 @@
 import type { SearchParams } from "nuqs/server";
 
 import { EmptyState } from "~/components/EmptyState";
-import { CreateTransaction } from "~/components/students/transactions/create/CreateTransaction";
 import { CreateTransactionContextProvider } from "~/components/students/transactions/create/CreateTransactionContextProvider";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
@@ -52,7 +51,7 @@ export default async function Page(props: PageProps) {
         unpaidRequiredFees={unpaidRequiredFees}
         classroom={classroom}
       >
-        <CreateTransaction />
+        <div>En cours de modification</div>
       </CreateTransactionContextProvider>
     </div>
   );

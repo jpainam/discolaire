@@ -1,10 +1,8 @@
-import {
-  createLoader,
-  parseAsFloat,
-  parseAsIsoDate,
-  parseAsString,
-  parseAsStringLiteral,
-} from "nuqs/server";
+import { createLoader, parseAsArrayOf, parseAsFloat, parseAsIsoDate, parseAsString, parseAsStringLiteral } from "nuqs/server";
+
+
+
+
 
 // Describe your search params, and reuse this in useQueryStates / createSerializer:
 export const coordinatesSearchParams = {
@@ -48,3 +46,32 @@ export const createTransactionSearchParamsSchema = {
 export const createTransactionSearchParams = createLoader(
   createTransactionSearchParamsSchema,
 );
+
+export const createTransactionSchemaStep1 = {
+  amount: parseAsFloat,
+  description: parseAsString,
+  transactionType: parseAsStringLiteral(["CREDIT", "DEBIT"]),
+  paymentMethod: parseAsString,
+  journalId: parseAsString,
+  requiredFeeIds: parseAsArrayOf(parseAsString).withDefault([]),
+  studentId: parseAsString,
+};
+
+export const createTransactionStep1 = createLoader(
+  createTransactionSchemaStep1,
+);
+
+export const createTransactionSchemaStep2 = {
+  studentId: parseAsString,
+  classroomId: parseAsString,
+  contacts: parseAsArrayOf(parseAsString).withDefault([]),
+  fees: parseAsArrayOf(parseAsString).withDefault([]),
+  transactions: parseAsArrayOf(parseAsString).withDefault([]),
+  student: parseAsString,
+  unpaidRequiredFees: parseAsArrayOf(parseAsString).withDefault([]),
+};
+
+export const createTransactionSchema = {
+  step: parseAsStringLiteral(["step1", "step2"]),
+};
+export const createTransactionLoader = createLoader(createTransactionSchema);

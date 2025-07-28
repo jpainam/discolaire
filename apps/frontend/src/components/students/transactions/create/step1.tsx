@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import i18next from "i18next";
@@ -8,31 +9,25 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+
+
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/select";
 
+
+
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
-import { useCreateTransaction } from "./CreateTransactionContextProvider";
+
 
 const makePaymentFormSchema = z.object({
   amount: z.coerce.number().min(1),
@@ -42,39 +37,33 @@ const makePaymentFormSchema = z.object({
   journalId: z.string().min(1),
 });
 
-export function Step1() {
-  const {
-    amount,
-    setAmount,
-    description,
-    setDescription,
-    transactionType,
-    setTransactionType,
-    setJournalId,
-    paymentMethod,
-    setPaymentMethod,
-    unpaidRequiredFees,
-    requiredFeeIds,
-    setRequiredFeeIds,
-    journalId,
-  } = useCreateTransaction();
-
+export function Step1({
+  unpaidRequiredFees,
+  studentId,
+}: {
+  unpaidRequiredFees: RouterOutputs["student"]["unpaidRequiredFees"];
+  studentId: string;
+}) {
   const { school } = useSchool();
 
   const form = useForm({
     defaultValues: {
-      amount: amount ?? 0,
-      journalId: journalId ?? "",
-      description: description ?? "",
-      transactionType: transactionType ?? "CREDIT",
-      paymentMethod: paymentMethod ?? "",
+      amount: 0,
+      journalId: "",
+      description: "",
+      transactionType: "CREDIT",
+      paymentMethod: "",
     },
     resolver: zodResolver(makePaymentFormSchema),
   });
   const { t } = useLocale();
 
+  const router = useRouter();
+  const { createQueryString } = useCreateQueryString();
+
   const trpc = useTRPC();
   const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
+  const [requiredFeeIds, setRequiredFeeIds] = useState<number[]>([]);
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
@@ -86,11 +75,18 @@ export function Step1() {
         return;
       }
     }
-    setTransactionType(data.transactionType);
-    setJournalId(data.journalId);
-    setPaymentMethod(data.paymentMethod);
-    setAmount(data.amount);
-    setDescription(data.description);
+    router.push(
+      "?" +
+        createQueryString({
+          amount: data.amount,
+          description: data.description,
+          transactionType: data.transactionType,
+          paymentMethod: data.paymentMethod,
+          journalId: data.journalId,
+          studentId: studentId,
+          requiredFeeIds: JSON.stringify(requiredFeeIds),
+        }),
+    );
   }
   const items: { label: string; value: string }[] = [
     { label: "credit", value: "CREDIT" },
@@ -114,9 +110,9 @@ export function Step1() {
                   checked={requiredFeeIds.includes(fee.id)}
                   onCheckedChange={(checked: boolean) => {
                     if (checked) {
-                      setRequiredFeeIds([...requiredFeeIds, fee.id]);
+                      void setRequiredFeeIds([...requiredFeeIds, fee.id]);
                     } else {
-                      setRequiredFeeIds(
+                      void setRequiredFeeIds(
                         requiredFeeIds.filter((i) => i !== fee.id),
                       );
                     }
