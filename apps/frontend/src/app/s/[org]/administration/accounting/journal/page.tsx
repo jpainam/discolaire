@@ -21,7 +21,7 @@ export default function Page() {
           fallback={
             <div>
               {Array.from({ length: 4 }).map((_, index) => (
-                <div className="grid grid-cols-3 gap-4 px-4 py-2">
+                <div key={index} className="grid grid-cols-3 gap-4 px-4 py-2">
                   <Skeleton key={index} className="h-10" />
                   <Skeleton key={index} className="h-10" />
                   <Skeleton key={index} className="h-10" />

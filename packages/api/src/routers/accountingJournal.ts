@@ -91,4 +91,60 @@ export const accountingJournal = {
       };
     });
   }),
+  syncOldFees: protectedProcedure.mutation(async ({ ctx }) => {
+    const tdJournal = await ctx.db.accountingJournal.findFirst({
+      where: {
+        name: "TD",
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+      },
+    });
+    const feeJournal = await ctx.db.accountingJournal.findFirst({
+      where: {
+        name: "Frais scolaires",
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+      },
+    });
+
+    if (feeJournal) {
+      await ctx.db.transaction.updateMany({
+        data: {
+          journalId: feeJournal.id,
+        },
+        where: {
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+      await ctx.db.fee.updateMany({
+        data: {
+          journalId: feeJournal.id,
+        },
+        where: {
+          code: {
+            not: "FRAI",
+          },
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+    }
+    if (tdJournal) {
+      await ctx.db.fee.updateMany({
+        data: {
+          journalId: tdJournal.id,
+        },
+        where: {
+          code: "FRAI",
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      });
+    }
+    return tdJournal;
+  }),
 } satisfies TRPCRouterRecord;

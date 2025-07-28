@@ -145,7 +145,11 @@ export function ClassroomFeeTable() {
                         <div className="flex flex-row items-center justify-end gap-0">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant={"ghost"} size={"icon"}>
+                              <Button
+                                className="size-7"
+                                variant={"ghost"}
+                                size={"icon"}
+                              >
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>

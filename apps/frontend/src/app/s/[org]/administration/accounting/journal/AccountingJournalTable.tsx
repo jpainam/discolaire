@@ -100,8 +100,9 @@ export function AccountingJournalTable() {
                           }}
                           variant="outline"
                           size="icon"
+                          className="size-7"
                         >
-                          <PencilIcon className="h-4 w-4" />
+                          <PencilIcon className="h-3 w-3" />
                         </Button>
                       )}
                       {canDeleteFees && (
@@ -118,8 +119,9 @@ export function AccountingJournalTable() {
                           }}
                           variant="destructive"
                           size="icon"
+                          className="size-7"
                         >
-                          <Trash className="h-4 w-4" />
+                          <Trash className="h-3 w-3" />
                         </Button>
                       )}
                     </div>
