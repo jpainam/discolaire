@@ -20,9 +20,10 @@ export default async function Layout(props: {
 
   let canReadClassroom = false;
   const session = await getSession();
+  const classroom = await caller.classroom.get(params.id);
   const schoolYearId = (await cookies()).get("x-school-year")?.value;
-  if (!session || !schoolYearId) {
-    redirect("/auth/login?redirect=/dashboard/classrooms/" + params.id);
+  if (!session || !schoolYearId || schoolYearId !== classroom.schoolYearId) {
+    redirect("/");
   }
   const { user } = session;
 

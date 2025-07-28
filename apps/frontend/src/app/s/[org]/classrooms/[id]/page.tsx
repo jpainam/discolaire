@@ -14,6 +14,7 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
+
   // const timetables = await caller.subjectTimetable.byClassroom({
   //   classroomId: params.id,
   //   currentDate: new Date(),

@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
+import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
@@ -70,6 +71,13 @@ export function AccountingJournalTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {journals.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center">
+                  <EmptyState className="my-8" title={t("no_data")} />
+                </TableCell>
+              </TableRow>
+            )}
             {journals.map((journal) => {
               return (
                 <TableRow key={journal.id}>

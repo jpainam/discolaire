@@ -66,6 +66,10 @@ export const accountingJournal = {
     }),
   stats: protectedProcedure.query(async ({ ctx }) => {
     const journalsWithCounts = await ctx.db.accountingJournal.findMany({
+      where: {
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+      },
       include: {
         _count: {
           select: {
@@ -82,6 +86,7 @@ export const accountingJournal = {
         description: journal.description,
         createdAt: journal.createdAt,
         feesCount: journal._count.fees,
+        schoolYearId: journal.schoolYearId,
         transactionsCount: journal._count.transactions,
       };
     });
