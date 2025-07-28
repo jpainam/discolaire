@@ -7,14 +7,17 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-
-
 import type { TransactionType } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
-
-
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@repo/ui/components/form";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -22,7 +25,6 @@ import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 import { Step2Details } from "./step2details";
-
 
 const step2Schema = z.object({
   paymentReceived: z.boolean(),
