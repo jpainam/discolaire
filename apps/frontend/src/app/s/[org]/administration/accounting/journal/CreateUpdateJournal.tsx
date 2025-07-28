@@ -142,7 +142,7 @@ export function CreateUpdateJournal({
             variant={"secondary"}
             type="button"
           >
-            <XIcon className="h-4 w-4" />
+            <XIcon className="h-3 w-3" />
             {t("cancel")}
           </Button>
           <Button
@@ -153,7 +153,7 @@ export function CreateUpdateJournal({
             size="sm"
             type="submit"
           >
-            <SaveIcon className="h-4 w-4" />
+            <SaveIcon className="h-3 w-3" />
             {t("submit")}
           </Button>
         </div>

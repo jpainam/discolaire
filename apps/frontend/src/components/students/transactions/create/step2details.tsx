@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { sumBy } from "lodash";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
@@ -20,7 +22,7 @@ import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 
-export default function Step2Details() {
+export function Step2Details() {
   const {
     fees,
     transactions,
@@ -30,12 +32,15 @@ export default function Step2Details() {
     classroom,
     studentContacts,
     notifications,
+    journalId,
     setNotifications,
   } = useCreateTransaction();
 
-  const total = sumBy(fees, "amount");
+  const filterredFees = fees.filter((f) => f.journalId === journalId);
+
+  const total = sumBy(filterredFees, "amount");
   const paid = transactions
-    .filter((t) => t.status == "VALIDATED")
+    .filter((t) => t.status == "VALIDATED" && t.journalId == journalId)
     .reduce(
       (acc, curr) =>
         acc + (curr.transactionType == "DEBIT" ? -curr.amount : curr.amount),

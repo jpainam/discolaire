@@ -9,5 +9,6 @@ export function CreateTransaction() {
     useCreateTransaction();
   const isStep2 =
     amount && description && transactionType && paymentMethod && journalId;
+
   return <>{isStep2 ? <Step2 /> : <Step1 />}</>;
 }
