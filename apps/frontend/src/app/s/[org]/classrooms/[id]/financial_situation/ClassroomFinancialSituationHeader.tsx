@@ -2,30 +2,19 @@
 
 import { useParams, useSearchParams } from "next/navigation";
 import { useAtomValue } from "jotai/react";
-import {
-  CreditCardIcon,
-  HandCoins,
-  MoreVertical,
-  WalletIcon,
-} from "lucide-react";
+import { CreditCardIcon, HandCoins, MoreVertical, WalletIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
+
+
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
+
+
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { FinanceBulkAction } from "~/components/classrooms/finances/FinanceBulkAction";
@@ -37,6 +26,7 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 
+
 export function ClassroomFinancialSituationHeader() {
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
@@ -44,6 +34,7 @@ export function ClassroomFinancialSituationHeader() {
   const router = useRouter();
   const t = useTranslations();
   const selectedStudents = useAtomValue(selectedStudentIdsAtom);
+  const journalId = searchParams.get("journal") ?? "";
 
   const ids = selectedStudents.join(",");
   const { openModal } = useModal();
@@ -126,7 +117,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=all&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=all&ids=${ids}`,
                         "_blank",
                       );
                     }}
@@ -142,7 +133,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=debit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=debit&ids=${ids}`,
                         "_blank",
                       );
                     }}
@@ -157,7 +148,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=credit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=credit&ids=${ids}`,
                         "_blank",
                       );
                     }}
@@ -216,7 +207,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=all&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=all&ids=${ids}`,
                         "_blank",
                       );
                     }}
@@ -231,7 +222,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=debit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=debit&ids=${ids}`,
                         "_blank",
                       );
                     }}
@@ -246,7 +237,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=csv&type=credit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=credit&ids=${ids}`,
                         "_blank",
                       );
                     }}

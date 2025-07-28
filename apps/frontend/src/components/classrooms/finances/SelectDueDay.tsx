@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { addDays } from "date-fns";
 import { PrinterIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -23,6 +24,8 @@ export function SelectDueDate({
   const { t } = useLocale();
   const [date, setDate] = useState<Date | null>(() => addDays(new Date(), 7));
   const { closeModal } = useModal();
+  const searchParams = useSearchParams();
+  const journalId = searchParams.get("journal") ?? "";
   return (
     <div className="flex flex-col gap-2">
       <DatePicker
@@ -39,7 +42,7 @@ export function SelectDueDate({
               return;
             }
             window.open(
-              `/api/pdfs/classroom/${classroomId}/reminder-letter?format=${format}&ids=${ids}&dueDate=${date.toISOString()}`,
+              `/api/pdfs/classroom/${classroomId}/reminder-letter?journalId=${journalId}&format=${format}&ids=${ids}&dueDate=${date.toISOString()}`,
               "_blank",
             );
             closeModal();
