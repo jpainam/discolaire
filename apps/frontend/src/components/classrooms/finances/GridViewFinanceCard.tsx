@@ -1,20 +1,17 @@
 "use client";
 
 import { useCallback } from "react";
-import Link from "next/link";
 import i18next from "i18next";
 import { useAtom } from "jotai";
-import { ArrowDownUp, AtSign, DollarSign, Phone, Users } from "lucide-react";
+import { ArrowDownUp } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 
 import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { routes } from "~/configs/routes";
 import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
@@ -87,7 +84,7 @@ export function GridViewFinanceCard({
               </SimpleTooltip>
             </div>
           </div>
-          <div className="flex flex-row gap-1">
+          {/* <div className="flex flex-row gap-1">
             <SimpleTooltip content={t("financial_situation")}>
               <Link href={routes.students.transactions.index(student.id)}>
                 <Button variant={"ghost"} className="h-6 w-6" size={"icon"}>
@@ -117,7 +114,7 @@ export function GridViewFinanceCard({
                 <Users />
               </Button>
             </SimpleTooltip>
-          </div>
+          </div> */}
         </div>
 
         <div

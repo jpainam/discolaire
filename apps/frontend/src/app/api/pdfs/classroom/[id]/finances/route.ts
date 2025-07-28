@@ -18,6 +18,7 @@ const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),
   type: z.enum(["all", "debit", "credit", "selected"]).default("all"),
   ids: z.string().optional(),
+  journalId: z.string().min(1),
 });
 
 export async function GET(
@@ -45,10 +46,12 @@ export async function GET(
 
     const school = await caller.school.getSchool();
 
-    const { format, ids } = parsedQuery.data;
+    const { format, ids, journalId } = parsedQuery.data;
 
-    const fees = await caller.classroom.fees(id);
-    let balances = await caller.classroom.studentsBalance({ id });
+    const fees = (await caller.classroom.fees(id)).filter((fee) => {
+      return fee.journalId === journalId;
+    });
+    let balances = await caller.classroom.studentsBalance({ id, journalId });
 
     if (session.user.profile == "student") {
       const student = await caller.student.getFromUserId(session.user.id);

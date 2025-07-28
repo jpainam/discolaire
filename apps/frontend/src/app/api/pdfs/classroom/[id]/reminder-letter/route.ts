@@ -14,6 +14,7 @@ import { getFullName } from "~/utils";
 const querySchema = z.object({
   ids: z.string().optional(),
   format: z.enum(["pdf", "csv"]).optional(),
+  journalId: z.string().min(1),
   dueDate: z.coerce
     .date()
     .optional()
@@ -42,15 +43,17 @@ export async function GET(
   try {
     const classroom = await caller.classroom.get(id);
     const school = await caller.school.getSchool();
-    const { ids, dueDate } = parsedQuery.data;
+    const { ids, dueDate, journalId } = parsedQuery.data;
 
-    const fees = await caller.classroom.fees(id);
+    const fees = (await caller.classroom.fees(id)).filter((fee) => {
+      return fee.journalId === journalId;
+    });
     const amountDue = sumBy(
       fees.filter((fee) => fee.dueDate <= new Date()),
       "amount",
     );
 
-    let students = await caller.classroom.studentsBalance({ id });
+    let students = await caller.classroom.studentsBalance({ id, journalId });
     if (ids) {
       const selectedIds = ids.split(",");
       students = students.filter((stud) =>

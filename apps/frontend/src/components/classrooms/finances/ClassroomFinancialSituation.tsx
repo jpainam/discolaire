@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import type { RouterOutputs } from "@repo/api";
-import { GridViewFinanceCard } from "./GridViewFinanceCard";
-import { ListViewFinance } from "./ListViewFinance";
 
 import { GridViewFinanceCard } from "./GridViewFinanceCard";
 import { ListViewFinance } from "./ListViewFinance";
