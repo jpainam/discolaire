@@ -161,7 +161,7 @@
   "amount": "Montant",
   "amountDue": "Montant dû",
   "amountPaid": "Montant versé",
-  "amountPaidSoFar": "Montant payé pour l'année académique",
+  "amountPaidSoFar": "Montant précedemment payé",
   "amount_details_confirmation": "En cochant cette case, vous certifiez que les détails (Reçu de, Pour, Montant et Reste) sont corrects.",
   "amount_due": "Montant dû",
   "amount_received": "Montant reçu",

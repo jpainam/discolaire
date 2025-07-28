@@ -21,7 +21,7 @@ export default async function Page(props: PageProps) {
   if (!classroom) {
     return <></>;
   }
-  const fees = await caller.classroom.fees(params.id);
+  const fees = await caller.classroom.fees(classroom.id);
   const studentContacts = await caller.student.contacts(params.id);
   if (searchParams.step === "step2") {
     return (
