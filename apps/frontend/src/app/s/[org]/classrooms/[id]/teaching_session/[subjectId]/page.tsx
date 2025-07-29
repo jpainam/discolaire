@@ -19,7 +19,7 @@ export default async function Page(props: {
   const session = await getSession();
 
   batchPrefetch([
-    trpc.subjectJournal.bySubject.queryOptions({
+    trpc.teachingSession.bySubject.queryOptions({
       subjectId: Number(params.subjectId),
       pageIndex: params.pageIndex ? Number(params.pageIndex) : 0,
       pageSize: params.pageSize ? Number(params.pageSize) : 10,

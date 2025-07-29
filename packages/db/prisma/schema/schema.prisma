@@ -683,18 +683,17 @@ model SubjectGroup {
 }
 
 model Course {
-    id           String         @id @default(uuid())
-    name         String
-    color        String
-    createdAt    DateTime       @default(now()) @db.Timestamp(6)
-    updatedAt    DateTime       @updatedAt
-    shortName    String
-    reportName   String
-    isActive     Boolean        @default(true)
-    ProgramTheme ProgramTheme[]
-    subjects     Subject[]
-    school       School         @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    schoolId     String
+    id         String    @id @default(uuid())
+    name       String
+    color      String
+    createdAt  DateTime  @default(now()) @db.Timestamp(6)
+    updatedAt  DateTime  @updatedAt
+    shortName  String
+    reportName String
+    isActive   Boolean   @default(true)
+    subjects   Subject[]
+    school     School    @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    schoolId   String
 }
 
 model SchoolYear {
@@ -718,7 +717,6 @@ model SchoolYear {
     classrooms           Classroom[]
     enrollments          Enrollment[]
     ProgramCategory      ProgramCategory[]
-    ProgramTheme         ProgramTheme[]
     terms                Term[]
     transactions         Transaction[]
     school               School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -778,20 +776,6 @@ model MenuItem {
     order    Int      @default(0)
     category String?
     isActive Boolean? @default(true)
-}
-
-model ProgramTheme {
-    id           Int        @id @default(autoincrement())
-    name         String
-    isActive     Boolean?   @default(true)
-    createdAt    DateTime   @default(now()) @db.Timestamp(6)
-    updatedAt    DateTime   @updatedAt
-    createdBy    String?
-    updatedBy    String?
-    courseId     String
-    schoolYearId String
-    course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
 model ProgramCategory {

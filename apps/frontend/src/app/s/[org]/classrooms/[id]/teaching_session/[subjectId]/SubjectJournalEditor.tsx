@@ -66,13 +66,13 @@ export function SubjectJournalEditor() {
   const queryClient = useQueryClient();
 
   const createSubjectJournal = useMutation(
-    trpc.subjectJournal.create.mutationOptions({
+    trpc.teachingSession.create.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.subjectJournal.all.pathFilter(),
+          trpc.teachingSession.all.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
         setSelectedFile(null);

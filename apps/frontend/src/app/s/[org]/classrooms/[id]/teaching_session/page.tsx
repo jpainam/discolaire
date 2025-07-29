@@ -16,7 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }
   const { t } = await getServerTranslations();
 
-  const journals = await caller.subjectJournal.all({ limit: 20 });
+  const journals = await caller.teachingSession.all({ limit: 20 });
   if (journals.length == 0) {
     return <EmptyState className="m-8" title={t("no_data")} />;
   }

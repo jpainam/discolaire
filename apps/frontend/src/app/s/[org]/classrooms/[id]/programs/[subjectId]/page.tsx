@@ -1,16 +1,11 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-
-
 import { Skeleton } from "@repo/ui/components/skeleton";
-
-
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { caller, HydrateClient } from "~/trpc/server";
 import { ProgramKanban } from "./ProgramKanban";
-
 
 export default async function Page(props: {
   params: Promise<{ subjectId: string }>;
