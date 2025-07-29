@@ -113,8 +113,8 @@ export function ClassroomSidebar({
         icon: CalendarDays,
       },
       {
-        name: "subject_journal",
-        url: `/classrooms/${params.id}/subject_journal`,
+        name: "teaching_session",
+        url: `/classrooms/${params.id}/teaching_session`,
         icon: NotepadTextDashed,
       },
     ],

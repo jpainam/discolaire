@@ -3,7 +3,15 @@
 import type { Dispatch, DragEvent, FormEvent, SetStateAction } from "react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Flame, Plus, Trash2 } from "lucide-react";
+import { Flame, MoreVertical, Plus, Trash2 } from "lucide-react";
+
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 
 interface ColumnProps {
   title: string;
@@ -15,6 +23,7 @@ interface ColumnProps {
 
 export const Column = ({
   title,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   headingColor,
   cards,
   column,
@@ -151,7 +160,14 @@ export const Column = ({
         }`}
       >
         {filteredCards.map((c) => {
-          return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
+          return (
+            <Card
+              key={c.id}
+              {...c}
+              setCards={setCards}
+              handleDragStart={handleDragStart}
+            />
+          );
         })}
         <DropIndicator beforeId={null} column={column} />
         <AddCard column={column} setCards={setCards} />
@@ -162,16 +178,17 @@ export const Column = ({
 
 type CardProps = CardType & {
   handleDragStart: (e: DragEvent, card: CardType) => void;
+  setCards: Dispatch<SetStateAction<CardType[]>>;
 };
 
-const Card = ({ title, id, column, handleDragStart }: CardProps) => {
+const Card = ({ title, id, column, handleDragStart, setCards }: CardProps) => {
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
       <motion.div
         layout
         layoutId={id}
-        className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-2 active:cursor-grabbing"
+        className="flex cursor-grab flex-row justify-between rounded border border-neutral-700 bg-neutral-800 p-2 active:cursor-grabbing"
       >
         <div
           draggable="true"
@@ -181,6 +198,29 @@ const Card = ({ title, id, column, handleDragStart }: CardProps) => {
         >
           <p className="text-xs text-neutral-100">{title}</p>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant={"ghost"} className="size-6">
+              <MoreVertical className="size-3" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onSelect={async () => {
+                await navigator.clipboard.writeText(title);
+              }}
+            >
+              Copier
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                setCards((pv) => pv.filter((c) => c.id !== id));
+              }}
+            >
+              Supprimer
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </motion.div>
     </>
   );

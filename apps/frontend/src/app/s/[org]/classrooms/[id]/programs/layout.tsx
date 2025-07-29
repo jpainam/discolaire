@@ -1,12 +1,21 @@
-import type { PropsWithChildren } from "react";
+import React from "react";
 
-import { SubjectProgramHeader } from "./SubjectProgramHeader";
+import { ProgramList } from "~/components/classrooms/programs/ProgramList";
 
-export default function Layout(props: PropsWithChildren) {
+export default async function Layout(props: {
+  params: Promise<{ id: string }>;
+  children: React.ReactNode;
+}) {
+  const params = await props.params;
+
+  const { id } = params;
+
+  const { children } = props;
+
   return (
-    <div className="flex flex-col gap-2">
-      <SubjectProgramHeader />
-      {props.children}
+    <div className="flex h-screen flex-col md:flex-row">
+      <ProgramList classroomId={id} />
+      <div className="flex-1">{children}</div>
     </div>
   );
 }

@@ -30,5 +30,5 @@ export const sidebarIcons: Record<string, LucideIcon> = {
   attendances: Contact,
   reportcards: Proportions,
   timetables: CalendarDays,
-  subject_journal: NotepadTextDashed,
+  teaching_session: NotepadTextDashed,
 };

@@ -1,9 +1,9 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -15,27 +15,22 @@ import { Label } from "@repo/ui/components/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
-import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
-import { useRouter } from "~/hooks/use-router";
 
-export function SubjectProgramHeader() {
+export function SubjectProgramHeader({
+  subject,
+}: {
+  subject: RouterOutputs["subject"]["get"];
+}) {
   const t = useTranslations();
-  const params = useParams<{ id: string }>();
-  const router = useRouter();
+
   return (
     <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label>{t("programs")}</Label>
-      <SubjectSelector
-        className="w-96"
-        onChange={(val) => {
-          router.push(`./${val}`);
-        }}
-        classroomId={params.id}
-      />
+      <Label>{subject.course.name}</Label>
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"}>
+            <Button size={"icon"} className="size-7" variant={"outline"}>
               <MoreVertical size={16} />
             </Button>
           </DropdownMenuTrigger>

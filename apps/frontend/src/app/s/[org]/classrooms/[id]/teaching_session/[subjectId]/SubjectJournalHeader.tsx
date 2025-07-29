@@ -59,7 +59,7 @@ export function SubjectJournalHeader() {
   );
   return (
     <div className="bg-muted/50 flex flex-row items-center justify-between border-b px-4 py-1">
-      <Label>{t("subject_journal")}</Label>
+      <Label>{t("teaching_session")}</Label>
       <Label className="font-bold">{subject.course.name}</Label>
       <div>
         <DropdownMenu>

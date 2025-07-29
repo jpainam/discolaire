@@ -70,7 +70,7 @@ export function SubjectJournalList() {
   );
   const paginate = (page: number) => {
     router.push(
-      `/classrooms/${params.id}/subject_journal/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`,
+      `/classrooms/${params.id}/teaching_session/${subject.id}?${createQueryString({ pageIndex: page, pageSize })}`,
     );
   };
 

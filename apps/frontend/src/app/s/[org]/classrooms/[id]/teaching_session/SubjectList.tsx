@@ -25,7 +25,7 @@ export function SubjectList({
       <ul>
         <li
           onClick={() => {
-            router.push(`/classrooms/${classroomId}/subject_journal`);
+            router.push(`/classrooms/${classroomId}/teaching_session`);
           }}
           className={cn(
             `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-2`,
@@ -45,7 +45,7 @@ export function SubjectList({
             key={index}
             onClick={() => {
               router.push(
-                `/classrooms/${classroomId}/subject_journal/${subject.id}`,
+                `/classrooms/${classroomId}/teaching_session/${subject.id}`,
               );
             }}
             className={cn(

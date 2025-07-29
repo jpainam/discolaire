@@ -107,8 +107,8 @@ export function SubjectTable() {
                       }}
                     ></div>
                     <Link
-                      href={`/classrooms/${params.id}/programs/${subject.id}`}
-                      className="hover:text-accent hover:underline"
+                      href={`/classrooms/${params.id}/subjects/${subject.id}`}
+                      className="hover:underline"
                     >
                       {subject.course.shortName.toUpperCase()} -{" "}
                       {subject.course.name}

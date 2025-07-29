@@ -107,7 +107,7 @@ export function SubjectJournalEditor() {
   const form = useForm({
     resolver: zodResolver(createSubjectJournalSchema),
     defaultValues: {
-      title: t("subject_journal_default_title", {
+      title: t("teaching_session_default_title", {
         date: dateFormat.format(new Date()),
       }),
       content: "",

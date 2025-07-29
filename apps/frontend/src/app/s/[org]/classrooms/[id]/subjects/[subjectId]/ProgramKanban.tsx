@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { BurnBarrel, Column } from "~/components/kanban";
+import { Column } from "~/components/kanban";
 
 export function ProgramKanban({
   programs,
@@ -22,7 +22,7 @@ export function ProgramKanban({
   >(programs);
 
   return (
-    <div className="flex h-full w-full gap-3 overflow-scroll p-12">
+    <div className="flex h-[calc(100vh-15rem)] w-full gap-3 overflow-scroll px-4 py-2">
       {categories.map((category) => {
         return (
           <Column
@@ -35,7 +35,7 @@ export function ProgramKanban({
           />
         );
       })}
-      <BurnBarrel setCards={setCards} />
+      {/* <BurnBarrel setCards={setCards} /> */}
     </div>
   );
 }
