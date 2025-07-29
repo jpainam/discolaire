@@ -214,6 +214,7 @@ async function getSubjects(classroomId: string) {
       order: "asc",
     },
     include: {
+      programs: true,
       course: {
         select: {
           id: true,

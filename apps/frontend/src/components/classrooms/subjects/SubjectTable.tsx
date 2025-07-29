@@ -28,6 +28,7 @@ import {
 } from "@repo/ui/components/table";
 
 import { authClient } from "~/auth/client";
+import { Badge } from "~/components/base-badge";
 import { EmptyState } from "~/components/EmptyState";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -113,6 +114,15 @@ export function SubjectTable() {
                       {subject.course.shortName.toUpperCase()} -{" "}
                       {subject.course.name}
                     </Link>
+                    {subject.programs.length == 0 ? (
+                      <Badge variant="warning" appearance="light">
+                        0 programmes
+                      </Badge>
+                    ) : (
+                      <Badge variant="success" appearance="light">
+                        {subject.programs.length} programmes
+                      </Badge>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
