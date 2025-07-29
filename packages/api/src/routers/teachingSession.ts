@@ -1,5 +1,4 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { protectedProcedure } from "../trpc";
@@ -10,9 +9,8 @@ const createSubjectJournalSchema = z.object({
   publishDate: z.coerce.date(),
   subjectId: z.coerce.number(),
   attachment: z.string().optional(),
-  status: z.enum(["APPROVED", "PENDING", "REJECTED"]).default("PENDING"),
 });
-export const subjectJournalRouter = {
+export const teachingSessionRouter = {
   all: protectedProcedure
     .input(
       z.object({
@@ -20,7 +18,7 @@ export const subjectJournalRouter = {
       }),
     )
     .query(({ ctx, input }) => {
-      return ctx.db.subjectJournal.findMany({
+      return ctx.db.teachingSession.findMany({
         orderBy: {
           createdAt: "asc",
         },
@@ -35,7 +33,6 @@ export const subjectJournalRouter = {
           },
         },
         where: {
-          schoolId: ctx.schoolId,
           subject: {
             classroom: {
               schoolYearId: ctx.schoolYearId,
@@ -47,10 +44,9 @@ export const subjectJournalRouter = {
   clearAll: protectedProcedure
     .input(z.object({ subjectId: z.coerce.number() }))
     .mutation(({ ctx, input }) => {
-      return ctx.db.subjectJournal.deleteMany({
+      return ctx.db.teachingSession.deleteMany({
         where: {
           subjectId: input.subjectId,
-          schoolId: ctx.schoolId,
         },
       });
     }),
@@ -64,7 +60,7 @@ export const subjectJournalRouter = {
     )
     .query(({ ctx, input }) => {
       const offset = input.pageIndex * input.pageSize;
-      return ctx.db.subjectJournal.findMany({
+      return ctx.db.teachingSession.findMany({
         skip: offset,
         take: input.pageSize,
         orderBy: {
@@ -80,36 +76,18 @@ export const subjectJournalRouter = {
       });
     }),
   delete: protectedProcedure
-    .input(z.coerce.number())
+    .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.subjectJournal.findUniqueOrThrow({
-        where: {
-          id: input,
-          schoolId: ctx.schoolId,
-        },
-      });
-
-      return ctx.db.subjectJournal.delete({
+      return ctx.db.teachingSession.delete({
         where: {
           id: input,
         },
       });
     }),
   update: protectedProcedure
-    .input(createSubjectJournalSchema.extend({ id: z.coerce.number() }))
+    .input(createSubjectJournalSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const s = await ctx.db.subjectJournal.findUnique({
-        where: {
-          id: input.id,
-        },
-      });
-      if (!s || s.schoolId !== ctx.schoolId) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Subject journal not found",
-        });
-      }
-      return ctx.db.subjectJournal.update({
+      return ctx.db.teachingSession.update({
         where: {
           id: input.id,
         },
@@ -119,32 +97,22 @@ export const subjectJournalRouter = {
   create: protectedProcedure
     .input(createSubjectJournalSchema)
     .mutation(({ ctx, input }) => {
-      return ctx.db.subjectJournal.create({
+      return ctx.db.teachingSession.create({
         data: {
           ...input,
           createdById: ctx.session.user.id,
-          schoolId: ctx.schoolId,
         },
       });
     }),
-  get: protectedProcedure
-    .input(z.coerce.number())
-    .query(async ({ ctx, input }) => {
-      const subjectJournal = await ctx.db.subjectJournal.findUnique({
-        where: {
-          id: input,
-        },
-        include: {
-          createdBy: true,
-          subject: true,
-        },
-      });
-      if (!subjectJournal || subjectJournal.schoolId !== ctx.schoolId) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Subject journal not found",
-        });
-      }
-      return subjectJournal;
-    }),
+  get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.teachingSession.findUniqueOrThrow({
+      where: {
+        id: input,
+      },
+      include: {
+        createdBy: true,
+        subject: true,
+      },
+    });
+  }),
 } satisfies TRPCRouterRecord;

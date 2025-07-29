@@ -39,7 +39,7 @@ model User {
     school                       School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     documents                    Document[]                 @relation("owner")
     documentCreatedBy            Document[]                 @relation("createdBy")
-    subjectJournals              SubjectJournal[]           @relation("createdBy")
+    teachingSessions             TeachingSession[]          @relation("createdBy")
     borrowedBooks                BorrowedBook[]
     healthVisits                 HealthVisit[]
     logActivities                LogActivity[]

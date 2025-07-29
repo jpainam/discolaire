@@ -115,11 +115,10 @@ export function initAuth(options: {
       },
     },
     advanced: {
-      // crossSubDomainCookies: {
-      //   enabled: true,
-      //   // eslint-disable-next-line turbo/no-undeclared-env-vars
-      //   domain: `.${process.env.PUBLIC_DOMAIN}`, // your domain
-      // },
+      crossSubDomainCookies: {
+        enabled: env.NODE_ENV === "production",
+        domain: `discolaire.com`, // your domain
+      },
     },
     plugins: [
       admin(),

@@ -14,6 +14,7 @@ import {
   LifeBuoy,
   PrinterIcon,
   SchoolIcon,
+  ScrollTextIcon,
   Send,
   Settings,
   Users,
@@ -191,6 +192,11 @@ export function AdminSidebar({
     ],
   };
   const others = [
+    {
+      name: "academy",
+      url: "/administration/academy",
+      icon: ScrollTextIcon,
+    },
     {
       name: "inventory",
       url: "/administration/inventory",
