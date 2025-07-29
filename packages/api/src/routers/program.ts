@@ -2,6 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
 import { protectedProcedure } from "../trpc";
+import { generateStringColor } from "../utils";
 
 export const programRouter = {
   categories: protectedProcedure.query(async ({ ctx }) => {
@@ -29,14 +30,13 @@ export const programRouter = {
     .input(
       z.object({
         title: z.string().min(1),
-        color: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.programCategory.create({
         data: {
           title: input.title,
-          color: input.color,
+          color: generateStringColor(),
           schoolYearId: ctx.schoolYearId,
         },
       });
@@ -46,7 +46,6 @@ export const programRouter = {
       z.object({
         id: z.string(),
         title: z.string().min(1),
-        color: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -56,7 +55,7 @@ export const programRouter = {
         },
         data: {
           title: input.title,
-          color: input.color,
+          color: generateStringColor(),
         },
       });
     }),

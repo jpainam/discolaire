@@ -5,7 +5,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Pencil, PlusCircle, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -28,6 +28,7 @@ export function ProgramCategoryTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { openModal } = useModal();
+
   const confirm = useConfirm();
   const deleteCategory = useMutation(
     trpc.program.deleteCategory.mutationOptions({
@@ -61,10 +62,10 @@ export function ProgramCategoryTable() {
                       view: <CreateUpdateProgramCategory />,
                     });
                   }}
-                  size="icon"
-                  className="size-7"
+                  size="sm"
                 >
-                  <PlusCircle className="h-3 w-3" />
+                  <Plus className="h-3 w-3" />
+                  {t("add")}
                 </Button>
               </TableHead>
             </TableRow>

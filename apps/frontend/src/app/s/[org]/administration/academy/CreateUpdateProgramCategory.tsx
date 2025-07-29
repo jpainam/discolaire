@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -20,13 +21,10 @@ import {
 import { Input } from "@repo/ui/components/input";
 
 import { useModal } from "~/hooks/use-modal";
-import { generateStringColor } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
-const randColor = generateStringColor();
 const formSchema = z.object({
   title: z.string().min(1),
-  color: z.string().min(1),
 });
 
 export function CreateUpdateProgramCategory({
@@ -38,11 +36,11 @@ export function CreateUpdateProgramCategory({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: category?.title ?? "",
-      color: category?.color ?? randColor,
     },
   });
   const t = useTranslations();
   const { closeModal } = useModal();
+  const router = useRouter();
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -56,6 +54,7 @@ export function CreateUpdateProgramCategory({
           trpc.program.categories.pathFilter(),
         );
         toast.success(t("created_successfully"), { id: 0 });
+        router.refresh(); // to update the random color
         closeModal();
       },
     }),
@@ -78,7 +77,6 @@ export function CreateUpdateProgramCategory({
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const data = {
       title: values.title,
-      color: values.color,
     };
     if (category) {
       updateCategory.mutate({
@@ -92,7 +90,10 @@ export function CreateUpdateProgramCategory({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col space-y-5"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -107,21 +108,8 @@ export function CreateUpdateProgramCategory({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="color"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("color")}</FormLabel>
-              <FormControl>
-                <Input type="color" {...field} />
-              </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center justify-end gap-2">
           <Button
             type="button"
             onClick={() => {
