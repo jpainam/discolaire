@@ -106,10 +106,13 @@ export function SubjectTable() {
                         backgroundColor: subject.course.color,
                       }}
                     ></div>
-                    <div>
+                    <Link
+                      href={`/classrooms/${params.id}/programs/${subject.id}`}
+                      className="hover:text-accent hover:underline"
+                    >
                       {subject.course.shortName.toUpperCase()} -{" "}
                       {subject.course.name}
-                    </div>
+                    </Link>
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
