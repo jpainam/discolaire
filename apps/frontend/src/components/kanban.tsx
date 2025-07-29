@@ -129,10 +129,12 @@ export const Column = ({
     <div className="w-56 shrink-0">
       <div className="mb-3 flex items-center justify-between">
         <h3
-          style={{
-            color: headingColor,
-          }}
-          className={`font-medium`}
+          style={
+            {
+              //color: headingColor,
+            }
+          }
+          className={`text-xs font-medium`}
         >
           {title}
         </h3>
@@ -169,7 +171,7 @@ const Card = ({ title, id, column, handleDragStart }: CardProps) => {
       <motion.div
         layout
         layoutId={id}
-        className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
+        className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-2 active:cursor-grabbing"
       >
         <div
           draggable="true"
@@ -177,7 +179,7 @@ const Card = ({ title, id, column, handleDragStart }: CardProps) => {
             handleDragStart(e, { title, id, column })
           }
         >
-          <p className="text-sm text-neutral-100">{title}</p>
+          <p className="text-xs text-neutral-100">{title}</p>
         </div>
       </motion.div>
     </>
@@ -228,7 +230,7 @@ export const BurnBarrel = ({
       onDrop={handleDragEnd}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
-      className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
+      className={`mt-10 grid h-20 w-20 shrink-0 place-content-center rounded border text-3xl ${
         active
           ? "border-red-800 bg-red-800/20 text-red-500"
           : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
@@ -276,18 +278,18 @@ const AddCard = ({ column, setCards }: AddCardProps) => {
             onChange={(e) => setText(e.target.value)}
             autoFocus
             placeholder="Add new task..."
-            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
+            className="w-full rounded border p-2 text-sm placeholder-violet-300 focus:outline-0"
           />
           <div className="mt-1.5 flex items-center justify-end gap-1.5">
             <button
               onClick={() => setAdding(false)}
-              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+              className="text-muted-foreground hover:text-muted-foreground/50 px-3 py-1.5 text-xs transition-colors"
             >
               Close
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+              className="bg-muted/50 text-muted-foreground/95 hover:bg-muted flex items-center gap-1.5 rounded px-3 py-1.5 text-xs transition-colors"
             >
               <span>Add</span>
               <Plus size={16} />
@@ -298,7 +300,7 @@ const AddCard = ({ column, setCards }: AddCardProps) => {
         <motion.button
           layout
           onClick={() => setAdding(true)}
-          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+          className="text-muted-foreground hover:text-muted-foreground/50 flex w-full items-center gap-1.5 px-3 py-1.5 text-xs transition-colors"
         >
           <span>Add card</span>
           <Plus size={16} />

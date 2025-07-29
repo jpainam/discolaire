@@ -23,9 +23,10 @@ export function SubjectProgramHeader() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
       <Label>{t("programs")}</Label>
       <SubjectSelector
+        className="w-96"
         onChange={(val) => {
           router.push(`./${val}`);
         }}
@@ -38,7 +39,7 @@ export function SubjectProgramHeader() {
               <MoreVertical size={16} />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <PDFIcon />
               {t("pdf_export")}
