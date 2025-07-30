@@ -106,30 +106,41 @@ export const accountingJournal = {
         schoolYearId: ctx.schoolYearId,
       },
     });
-
-    if (feeJournal) {
-      await ctx.db.transaction.updateMany({
-        data: {
-          journalId: feeJournal.id,
-        },
-        where: {
+    await ctx.db.fee.updateMany({
+      data: {
+        journalId: "cmdq3d5yk00030h631oh9in56",
+      },
+      where: {
+        classroom: {
+          schoolId: ctx.schoolId,
           schoolYearId: ctx.schoolYearId,
         },
-      });
-      await ctx.db.fee.updateMany({
-        data: {
-          journalId: feeJournal.id,
-        },
-        where: {
-          code: {
-            not: "FRAI",
-          },
-          classroom: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          },
-        },
-      });
+      },
+    });
+    if (feeJournal) {
+      console.log("Updating fees with journal ID:", feeJournal.id);
+      // await ctx.db.transaction.updateMany({
+      //   data: {
+      //     journalId: feeJournal.id,
+      //   },
+      //   where: {
+      //     schoolYearId: ctx.schoolYearId,
+      //   },
+      // });
+      // await ctx.db.fee.updateMany({
+      //   data: {
+      //     journalId: feeJournal.id,
+      //   },
+      //   where: {
+      //     code: {
+      //       not: "FRAI",
+      //     },
+      //     classroom: {
+      //       schoolId: ctx.schoolId,
+      //       schoolYearId: ctx.schoolYearId,
+      //     },
+      //   },
+      // });
     }
     if (tdJournal) {
       await ctx.db.fee.updateMany({
