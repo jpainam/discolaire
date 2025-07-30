@@ -11,13 +11,14 @@ import { Label } from "@repo/ui/components/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
-import { trpc } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 import { CreateUpdateJournal } from "./CreateUpdateJournal";
 
 export function AccountingJournalHeader() {
   const canCreateFees = useCheckPermission("fee", PermissionAction.CREATE);
   const { openModal } = useModal();
   const t = useTranslations();
+  const trpc = useTRPC();
   const queryClient = useQueryClient();
 
   const updateOldFees = useMutation(
