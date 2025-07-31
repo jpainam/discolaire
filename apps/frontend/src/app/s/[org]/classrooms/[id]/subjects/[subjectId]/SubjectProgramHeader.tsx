@@ -30,7 +30,7 @@ export function SubjectProgramHeader({
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"}  variant={"outline"}>
+            <Button size={"icon"} variant={"outline"}>
               <MoreVertical size={16} />
             </Button>
           </DropdownMenuTrigger>

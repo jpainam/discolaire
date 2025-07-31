@@ -147,7 +147,7 @@ export function CreateUpdateSubjectProgram({
             </FormItem>
           )}
         />
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex w-full flex-row items-center gap-2">
           <FormField
             control={form.control}
             name="requiredSessionCount"
@@ -159,7 +159,7 @@ export function CreateUpdateSubjectProgram({
                     onValueChange={field.onChange}
                     defaultValue={field.value.toString()}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-1/2">
                       <SelectValue placeholder="Nombre de sessions" />
                     </SelectTrigger>
                     <SelectContent>
@@ -183,13 +183,13 @@ export function CreateUpdateSubjectProgram({
                 <FormLabel></FormLabel>
                 <FormControl>
                   {categoriesQuery.isPending ? (
-                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-1/2" />
                   ) : (
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-1/2">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
