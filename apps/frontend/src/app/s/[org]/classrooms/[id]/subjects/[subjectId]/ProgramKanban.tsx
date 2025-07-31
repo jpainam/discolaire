@@ -4,16 +4,11 @@ import * as React from "react";
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-
-
 import type { RouterOutputs } from "@repo/api";
-
-
 
 import { Kanban, KanbanBoard, KanbanOverlay } from "~/components/kanban";
 import { useTRPC } from "~/trpc/react";
 import { ProgramKanbanColumn } from "./ProgramKanbanColumn";
-
 
 interface SubjectProgramItem {
   id: string;
