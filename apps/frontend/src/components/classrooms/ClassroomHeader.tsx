@@ -76,7 +76,11 @@ export function ClassroomHeader() {
         router.push(`${pathname}/${params.id}/?${createQueryString({})}`);
         return;
       }
-      const newPath = pathname.replace(params.id, value);
+      const newPathname =
+        pathname.split("/").length > 4
+          ? pathname.split("/").slice(0, -1).join("/")
+          : pathname;
+      const newPath = newPathname.replace(params.id, value);
       router.push(`${newPath}/?${createQueryString({})}`);
     } else {
       router.push(routes.classrooms.details(value));
