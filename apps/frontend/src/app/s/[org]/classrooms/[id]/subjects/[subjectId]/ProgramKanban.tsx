@@ -6,19 +6,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import type { RouterOutputs } from "@repo/api";
 
+import type { SubjectProgramItem } from "./program_kanban";
 import { Kanban, KanbanBoard, KanbanOverlay } from "~/components/kanban";
 import { useTRPC } from "~/trpc/react";
 import { ProgramKanbanColumn } from "./ProgramKanbanColumn";
-
-interface SubjectProgramItem {
-  id: string;
-  title: string;
-  coverage: number;
-  description: string | null;
-  requiredSessionCount: number;
-  lastSession?: RouterOutputs["program"]["get"]["objectives"][number];
-  categoryId: string;
-}
 
 export function ProgramKanban({
   categories,
@@ -47,6 +38,7 @@ export function ProgramKanban({
       subjectGroups[categoryId].push({
         id: program.id,
         title: program.title,
+        sessionsCount: program.objectives.length,
         coverage:
           program.objectives.length == 0
             ? 0

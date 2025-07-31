@@ -8,21 +8,11 @@ import { useTranslations } from "next-intl";
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 
+import type { SubjectProgramItem } from "./program_kanban";
 import { KanbanColumn, KanbanColumnContent } from "~/components/kanban";
 import { useModal } from "~/hooks/use-modal";
 import { CreateUpdateSubjectProgram } from "./CreateUpdateSubjectProgram";
 import { ProgramKanbanCard } from "./ProgramKanbanCard";
-import { Badge } from "./rich-badge";
-
-interface SubjectProgramItem {
-  id: string;
-  title: string;
-  coverage: number;
-  description: string | null;
-  requiredSessionCount: number;
-  lastSession?: RouterOutputs["program"]["get"]["objectives"][number];
-  categoryId: string;
-}
 
 interface SubjectProgramColumnProps
   extends Omit<React.ComponentProps<typeof KanbanColumn>, "children"> {
@@ -52,7 +42,7 @@ export function ProgramKanbanColumn({
           <span className="text-sm font-semibold">
             {categories.find((cat) => cat.id == value)?.title}
           </span>
-          <Badge variant="secondary">{subjectPrograms.length}</Badge>
+          {/* <Badge variant="secondary">{subjectPrograms.length}</Badge> */}
         </div>
         <Button
           onClick={() => {

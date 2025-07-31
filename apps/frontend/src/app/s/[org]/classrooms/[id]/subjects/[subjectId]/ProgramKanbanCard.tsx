@@ -7,7 +7,6 @@ import { CopyIcon, MoreVertical, Pencil, Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -15,31 +14,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Progress } from "@repo/ui/components/progress";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
 
+import type { SubjectProgramItem } from "./program_kanban";
 import { KanbanItem, KanbanItemHandle } from "~/components/kanban";
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateUpdateSubjectProgram } from "./CreateUpdateSubjectProgram";
 import { Badge } from "./rich-badge";
-
-interface SubjectProgramItem {
-  id: string;
-  title: string;
-  coverage: number;
-  description: string | null;
-  requiredSessionCount: number;
-  lastSession?: RouterOutputs["program"]["get"]["objectives"][number];
-  categoryId: string;
-}
 
 interface SubjectProgramCardProps
   extends Omit<React.ComponentProps<typeof KanbanItem>, "value" | "children"> {
@@ -140,7 +122,7 @@ export function ProgramKanbanCard({
                   }}
                 >
                   <Pencil />
-                  {t("update")}
+                  {t("edit")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={async () => {
@@ -169,31 +151,12 @@ export function ProgramKanbanCard({
         )}
         <div className="text-muted-foreground flex items-center justify-between text-xs">
           <div className="flex items-center gap-1">
-            {/* <Avatar className="size-4">
-                <AvatarImage src={task.assigneeAvatar} />
-                <AvatarFallback>{task.assignee.charAt(0)}</AvatarFallback>
-              </Avatar> */}
-            <span>Session</span>
-            <Select
-            // onValueChange={(value) => {
-            //   alert(`Selected: ${value}`);
-            // }}
-            >
-              <SelectTrigger
-                size="sm"
-                className="h-7 justify-start border-none shadow-none *:data-[slot=select-value]:w-fit"
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">0</SelectItem>
-                <SelectItem value="dark">1</SelectItem>
-                <SelectItem value="system">2</SelectItem>
-              </SelectContent>
-            </Select>
-            <span className="line-clamp-1">
-              <Progress className="h-8 bg-red-500" value={50} />
-            </span>
+            Sessions requis/effectuées:{" "}
+            <Badge variant="secondary" appearance={"light"}>
+              {subjectProgram.requiredSessionCount} /
+              {subjectProgram.sessionsCount}{" "}
+            </Badge>
+            <span className="line-clamp-1"></span>
           </div>
 
           {subjectProgram.lastSession && (
