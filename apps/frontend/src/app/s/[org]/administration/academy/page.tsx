@@ -13,8 +13,8 @@ import {
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { AcademyStatCard } from "./AcademyStatCard";
-import { ProgramCategoryTable } from "./ProgramCategoryTable";
 import { CourseCoverageOverview } from "./CourseCoverageOverview";
+import { ProgramCategoryTable } from "./ProgramCategoryTable";
 
 export default function Page() {
   batchPrefetch([trpc.program.categories.queryOptions()]);
