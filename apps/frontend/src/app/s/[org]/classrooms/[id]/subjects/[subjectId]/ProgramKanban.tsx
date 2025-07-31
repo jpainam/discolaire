@@ -216,7 +216,9 @@ function SubjectProgramColumn({
               title: t("create"),
               view: (
                 <CreateUpdateSubjectProgram
+                  description={null}
                   categoryId={category.id}
+                  requiredSessionCount={1}
                   subjectId={Number(params.subjectId)}
                 />
               ),
@@ -268,6 +270,9 @@ export function ProgramKanban({
 
   React.useEffect(() => {
     const subjectGroups: Record<string, SubjectProgramItem[]> = {};
+    categories.forEach((category) => {
+      subjectGroups[category.id] = [];
+    });
     subjectPrograms.forEach((program) => {
       const category = program.category.title;
       subjectGroups[category] ??= [];
@@ -275,7 +280,9 @@ export function ProgramKanban({
         id: program.id,
         title: program.title,
         coverage:
-          (program.requiredSessionCount / program.objectives.length) * 100,
+          program.objectives.length == 0
+            ? 0
+            : (program.requiredSessionCount / program.objectives.length) * 100,
         description: program.description,
         requiredSessionCount: program.requiredSessionCount,
         lastSession: program.objectives.at(-1),
@@ -283,7 +290,7 @@ export function ProgramKanban({
       });
     });
     setColumns(subjectGroups);
-  }, [subjectPrograms]);
+  }, [categories, subjectPrograms]);
 
   return (
     <div className="p-5">

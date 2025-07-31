@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
 
 import { useModal } from "~/hooks/use-modal";
@@ -32,6 +33,7 @@ import { useTRPC } from "~/trpc/react";
 const formSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
+  categoryId: z.string().min(1),
   requiredSessionCount: z.coerce.number().positive().default(0),
 });
 
@@ -55,10 +57,12 @@ export function CreateUpdateSubjectProgram({
     defaultValues: {
       title: title ?? "",
       description: description ?? "",
+      categoryId: categoryId,
       requiredSessionCount: requiredSessionCount,
     },
   });
   const trpc = useTRPC();
+  const categoriesQuery = useQuery(trpc.program.categories.queryOptions());
   const { closeModal } = useModal();
   const t = useTranslations();
   const updateSubjectProgram = useMutation(
@@ -81,7 +85,7 @@ export function CreateUpdateSubjectProgram({
       title: values.title,
       description: values.description,
       requiredSessionCount: values.requiredSessionCount,
-      categoryId: categoryId,
+      categoryId: values.categoryId,
     };
     if (id) {
       updateSubjectProgram.mutate({
@@ -113,7 +117,7 @@ export function CreateUpdateSubjectProgram({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6"
+        className="flex flex-col gap-4"
       >
         <FormField
           control={form.control}
@@ -143,44 +147,83 @@ export function CreateUpdateSubjectProgram({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="requiredSessionCount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nombre de session requis</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value.toString()}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Nombre de sessions" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 20 }, (_, i) => (
-                      <SelectItem key={i} value={i.toString()}>
-                        {i}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex flex-row items-center gap-2">
+          <FormField
+            control={form.control}
+            name="requiredSessionCount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nombre de session requis</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value.toString()}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Nombre de sessions" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 10 }, (_, i) => (
+                        <SelectItem key={i} value={i.toString()}>
+                          {i}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel></FormLabel>
+                <FormControl>
+                  {categoriesQuery.isPending ? (
+                    <Skeleton className="h-8 w-full" />
+                  ) : (
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categoriesQuery.data?.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <div className="ml-auto flex flex-row items-center gap-2">
           <Button
             type="button"
             variant="secondary"
+            className="w-fit"
             size="sm"
             onClick={() => {
               closeModal();
             }}
-          ></Button>
+          >
+            {t("cancel")}
+          </Button>
+          <Button className="w-fit" size="sm" type="submit">
+            {t("submit")}
+          </Button>
         </div>
-        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
