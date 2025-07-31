@@ -74,6 +74,18 @@ export const programRouter = {
       },
     });
   }),
+  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    return ctx.db.program.findUniqueOrThrow({
+      include: {
+        subject: true,
+        objectives: true,
+        category: true,
+      },
+      where: {
+        id: input,
+      },
+    });
+  }),
   bySubject: protectedProcedure
     .input(z.object({ subjectId: z.coerce.number() }))
     .query(async ({ ctx, input }) => {
@@ -112,15 +124,4 @@ export const programRouter = {
         },
       });
     }),
-
-  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    return ctx.db.program.findUnique({
-      include: {
-        category: true,
-      },
-      where: {
-        id: input,
-      },
-    });
-  }),
 } satisfies TRPCRouterRecord;

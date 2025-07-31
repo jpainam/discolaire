@@ -33,14 +33,14 @@ export default async function Page(props: {
             }
           >
             <ProgramKanban
-              categories={categories}
-              programs={programs.map((program) => {
-                return {
-                  title: program.title,
-                  id: program.id.toString(),
-                  column: program.category.id,
-                };
-              })}
+            // categories={categories}
+            // programs={programs.map((program) => {
+            //   return {
+            //     title: program.title,
+            //     id: program.id.toString(),
+            //     column: program.category.id,
+            //   };
+            // })}
             />
           </Suspense>
         </ErrorBoundary>

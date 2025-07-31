@@ -789,13 +789,15 @@ model ProgramCategory {
 }
 
 model Program {
-    id         String                   @id @default(cuid())
-    title      String
-    subjectId  Int
-    categoryId String
-    category   ProgramCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-    subject    Subject                  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    objectives TeachingSessionProgram[]
+    id                   String                   @id @default(cuid())
+    title                String
+    description          String?
+    subjectId            Int
+    requiredSessionCount Int                      @default(1)
+    categoryId           String
+    category             ProgramCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    subject              Subject                  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    objectives           TeachingSessionProgram[]
 }
 
 model TeachingSessionProgram {
