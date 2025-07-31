@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVertical } from "lucide-react";
+import { FileTextIcon, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
@@ -24,28 +24,33 @@ export function SubjectProgramHeader({
   const t = useTranslations();
 
   return (
-    <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
-      <Label>{t("programs")}</Label>
-      <Label>{subject.course.name}</Label>
-      <div className="ml-auto">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size={"icon"} variant={"outline"}>
-              <MoreVertical size={16} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <PDFIcon />
-              {t("pdf_export")}
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <XMLIcon />
-              {t("xml_export")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+    <div className="bg-muted/50 flex flex-row items-center justify-between gap-2 border-b px-4 py-1">
+      <div className="flex items-center gap-1">
+        <FileTextIcon className="h-4 w-4" />
+        <Label>{t("programs")}</Label>
       </div>
+      <div className="flex items-center gap-2">
+        <Label>Cours: {subject.course.name}</Label>
+        <Label>Prof. {subject.teacher?.lastName}</Label>
+      </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size={"icon"} className="size-7" variant={"outline"}>
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>
+            <PDFIcon />
+            {t("pdf_export")}
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <XMLIcon />
+            {t("xml_export")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

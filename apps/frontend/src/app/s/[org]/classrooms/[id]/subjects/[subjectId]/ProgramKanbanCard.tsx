@@ -82,7 +82,7 @@ export function ProgramKanbanCard({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                  onSeeked={() => {
+                  onSelect={() => {
                     openModal({
                       title: t("create"),
                       view: (

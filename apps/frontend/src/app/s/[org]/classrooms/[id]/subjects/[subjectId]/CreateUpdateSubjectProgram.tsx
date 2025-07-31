@@ -220,7 +220,14 @@ export function CreateUpdateSubjectProgram({
           >
             {t("cancel")}
           </Button>
-          <Button className="w-fit" size="sm" type="submit">
+          <Button
+            isLoading={
+              createSubjectProgram.isPending || updateSubjectProgram.isPending
+            }
+            className="w-fit"
+            size="sm"
+            type="submit"
+          >
             {t("submit")}
           </Button>
         </div>

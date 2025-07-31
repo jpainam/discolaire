@@ -35,10 +35,16 @@ export function ProgramKanbanColumn({
     <KanbanColumn
       value={value}
       {...props}
-      className="bg-secondary/30 rounded-md border p-2.5 shadow-xs"
+      className="bg-secondary/20 rounded-md border p-2 shadow-xs"
     >
       <div className="mb-2.5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
+          <div
+            className="h-[8px] w-[40px] rounded-sm"
+            style={{
+              backgroundColor: categories.find((cat) => cat.id == value)?.color,
+            }}
+          />
           <span className="text-sm font-semibold">
             {categories.find((cat) => cat.id == value)?.title}
           </span>

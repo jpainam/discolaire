@@ -53,7 +53,7 @@ export function ProgramKanban({
   }, [categories, subjectPrograms]);
 
   return (
-    <div className="p-5">
+    <div className="px-4">
       <Kanban
         value={columns}
         onValueChange={setColumns}
