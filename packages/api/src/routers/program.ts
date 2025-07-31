@@ -79,6 +79,7 @@ export const programRouter = {
       include: {
         subject: true,
         objectives: true,
+
         category: true,
       },
       where: {
@@ -95,6 +96,12 @@ export const programRouter = {
         },
         include: {
           category: true,
+          objectives: {
+            include: {
+              session: true,
+              program: true,
+            },
+          },
         },
       });
     }),
@@ -121,6 +128,68 @@ export const programRouter = {
           id: {
             in: Array.isArray(input) ? input : [input],
           },
+        },
+      });
+    }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1),
+        description: z.string().optional(),
+        requiredSessionCount: z.number().positive().default(1),
+        subjectId: z.coerce.number(),
+        categoryId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.program.create({
+        data: {
+          title: input.title,
+          description: input.description,
+          requiredSessionCount: input.requiredSessionCount,
+          subjectId: input.subjectId,
+          categoryId: input.categoryId,
+        },
+      });
+    }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().min(1),
+        description: z.string().optional(),
+        requiredSessionCount: z.number().positive().default(1),
+        categoryId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.program.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          title: input.title,
+          description: input.description,
+          requiredSessionCount: input.requiredSessionCount,
+          categoryId: input.categoryId,
+        },
+      });
+    }),
+
+  changeCategory: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        categoryId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.program.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          categoryId: input.categoryId,
         },
       });
     }),

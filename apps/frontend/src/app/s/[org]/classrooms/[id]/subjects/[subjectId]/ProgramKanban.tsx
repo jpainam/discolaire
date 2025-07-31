@@ -1,9 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { CopyIcon, MoreVertical, Pencil, PlusIcon, Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-import { Badge } from "@repo/ui/components/badge";
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -29,52 +32,55 @@ import {
   KanbanItemHandle,
   KanbanOverlay,
 } from "~/components/kanban";
+import { useModal } from "~/hooks/use-modal";
+import { useTRPC } from "~/trpc/react";
+import { CreateUpdateSubjectProgram } from "./CreateUpdateSubjectProgram";
+import { Badge } from "./rich-badge";
 
-interface Task {
+interface SubjectProgramItem {
   id: string;
   title: string;
-  priority: "low" | "medium" | "high";
-  description?: string;
-  assignee?: string;
-  assigneeAvatar?: string;
-  dueDate?: string;
+  coverage: number;
+  description: string | null;
+  requiredSessionCount: number;
+  lastSession?: RouterOutputs["program"]["get"]["objectives"][number];
+  categoryId: string;
 }
 
-const COLUMN_TITLES: Record<string, string> = {
-  backlog: "Backlog",
-  inProgress: "In Progress",
-  review: "Review",
-  done: "Done",
-  done1: "Done",
-  done2: "Done",
-};
-
-interface TaskCardProps
+interface SubjectProgramCardProps
   extends Omit<React.ComponentProps<typeof KanbanItem>, "value" | "children"> {
-  task: Task;
+  subjectProgram: SubjectProgramItem;
   asHandle?: boolean;
 }
 
-function TaskCard({ task, asHandle, ...props }: TaskCardProps) {
+function SubjectProgramCard({
+  subjectProgram,
+  asHandle,
+  ...props
+}: SubjectProgramCardProps) {
+  const { openModal } = useModal();
+  const t = useTranslations();
+  const params = useParams<{ subjectId: string }>();
   const cardContent = (
     <div className="bg-card rounded-md border px-2 py-1 shadow-xs">
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-2">
-          <span className="line-clamp-1 text-xs font-medium">{task.title}</span>
+          <span className="line-clamp-1 text-xs font-medium">
+            {subjectProgram.title}
+          </span>
           <div className="flex items-center gap-1">
             <Badge
-              variant={"secondary"}
-              // variant={
-              //   task.priority === "high"
-              //     ? "destructive"
-              //     : task.priority === "medium"
-              //       ? "primary"
-              //       : "warning"
-              // }
-              // appearance="outline"
+              variant={
+                subjectProgram.coverage < 20
+                  ? "destructive"
+                  : subjectProgram.coverage < 75
+                    ? "warning"
+                    : "primary"
+              }
+              appearance="outline"
               className="pointer-events-none h-5 shrink-0 rounded-sm px-1.5 text-[11px] capitalize"
             >
-              {task.priority}
+              {subjectProgram.coverage}%
             </Badge>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -85,54 +91,75 @@ function TaskCard({ task, asHandle, ...props }: TaskCardProps) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>
                   <CopyIcon />
-                  Copier
+                  {t("copy")}
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openModal({
+                      title: t("update"),
+                      view: (
+                        <CreateUpdateSubjectProgram
+                          id={subjectProgram.id}
+                          title={subjectProgram.title}
+                          description={subjectProgram.description}
+                          requiredSessionCount={
+                            subjectProgram.requiredSessionCount
+                          }
+                          categoryId={subjectProgram.categoryId}
+                          subjectId={Number(params.subjectId)}
+                        />
+                      ),
+                    });
+                  }}
+                >
                   <Pencil />
-                  Modifier
+                  {t("update")}
                 </DropdownMenuItem>
                 <DropdownMenuItem variant="destructive">
                   <Trash />
-                  Supprimer
+                  {t("delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
-        <div className="text-muted-foreground text-xs"> description</div>
+        {subjectProgram.description && (
+          <div className="text-muted-foreground text-xs">
+            {subjectProgram.description}
+          </div>
+        )}
         <div className="text-muted-foreground flex items-center justify-between text-xs">
-          {task.assignee && (
-            <div className="flex items-center gap-1">
-              {/* <Avatar className="size-4">
+          <div className="flex items-center gap-1">
+            {/* <Avatar className="size-4">
                 <AvatarImage src={task.assigneeAvatar} />
                 <AvatarFallback>{task.assignee.charAt(0)}</AvatarFallback>
               </Avatar> */}
-              <span>Session</span>
-              <Select
-              // onValueChange={(value) => {
-              //   alert(`Selected: ${value}`);
-              // }}
+            <span>Session</span>
+            <Select
+            // onValueChange={(value) => {
+            //   alert(`Selected: ${value}`);
+            // }}
+            >
+              <SelectTrigger
+                size="sm"
+                className="h-7 justify-start border-none shadow-none *:data-[slot=select-value]:w-fit"
               >
-                <SelectTrigger
-                  size="sm"
-                  className="h-7 justify-start border-none shadow-none *:data-[slot=select-value]:w-fit"
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">0</SelectItem>
-                  <SelectItem value="dark">1</SelectItem>
-                  <SelectItem value="system">2</SelectItem>
-                </SelectContent>
-              </Select>
-              <span className="line-clamp-1">
-                <Progress className="h-8 bg-red-500" value={50} />
-              </span>
-            </div>
-          )}
-          {task.dueDate && (
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">0</SelectItem>
+                <SelectItem value="dark">1</SelectItem>
+                <SelectItem value="system">2</SelectItem>
+              </SelectContent>
+            </Select>
+            <span className="line-clamp-1">
+              <Progress className="h-8 bg-red-500" value={50} />
+            </span>
+          </div>
+
+          {subjectProgram.lastSession && (
             <time className="text-[10px] whitespace-nowrap tabular-nums">
-              {task.dueDate}
+              {JSON.stringify(subjectProgram.lastSession)}
             </time>
           )}
         </div>
@@ -141,7 +168,7 @@ function TaskCard({ task, asHandle, ...props }: TaskCardProps) {
   );
 
   return (
-    <KanbanItem value={task.id} {...props}>
+    <KanbanItem value={subjectProgram.id} {...props}>
       {asHandle ? (
         <KanbanItemHandle>{cardContent}</KanbanItemHandle>
       ) : (
@@ -151,13 +178,23 @@ function TaskCard({ task, asHandle, ...props }: TaskCardProps) {
   );
 }
 
-interface TaskColumnProps
+interface SubjectProgramColumnProps
   extends Omit<React.ComponentProps<typeof KanbanColumn>, "children"> {
-  tasks: Task[];
+  subjectPrograms: SubjectProgramItem[];
+  categories: RouterOutputs["program"]["categories"];
   isOverlay?: boolean;
 }
 
-function TaskColumn({ value, tasks, isOverlay, ...props }: TaskColumnProps) {
+function SubjectProgramColumn({
+  value,
+  subjectPrograms,
+  categories,
+  isOverlay,
+  ...props
+}: SubjectProgramColumnProps) {
+  const { openModal } = useModal();
+  const t = useTranslations();
+  const params = useParams<{ subjectId: string }>();
   return (
     <KanbanColumn
       value={value}
@@ -166,10 +203,29 @@ function TaskColumn({ value, tasks, isOverlay, ...props }: TaskColumnProps) {
     >
       <div className="mb-2.5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="text-sm font-semibold">{COLUMN_TITLES[value]}</span>
-          <Badge variant="secondary">{tasks.length}</Badge>
+          <span className="text-sm font-semibold">
+            {categories.find((cat) => cat.id == value)?.title}
+          </span>
+          <Badge variant="secondary">{subjectPrograms.length}</Badge>
         </div>
-        <Button variant={"ghost"} className="size-7" size="icon">
+        <Button
+          onClick={() => {
+            const category = categories.find((cat) => cat.id == value);
+            if (!category) return;
+            openModal({
+              title: t("create"),
+              view: (
+                <CreateUpdateSubjectProgram
+                  categoryId={category.id}
+                  subjectId={Number(params.subjectId)}
+                />
+              ),
+            });
+          }}
+          variant={"ghost"}
+          className="size-7"
+          size="icon"
+        >
           <PlusIcon />
         </Button>
         {/* <KanbanColumnHandle asChild>
@@ -182,115 +238,52 @@ function TaskColumn({ value, tasks, isOverlay, ...props }: TaskColumnProps) {
         value={value}
         className="flex flex-col gap-2.5 p-0.5"
       >
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} asHandle={!isOverlay} />
+        {subjectPrograms.map((subjectProgram) => (
+          <SubjectProgramCard
+            key={subjectProgram.id}
+            subjectProgram={subjectProgram}
+            asHandle={!isOverlay}
+          />
         ))}
       </KanbanColumnContent>
     </KanbanColumn>
   );
 }
 
-export function ProgramKanban() {
-  const [columns, setColumns] = React.useState<Record<string, Task[]>>({
-    backlog: [
-      {
-        id: "1",
-        title: "Add authentication",
-        priority: "high",
-        assignee: "John Doe",
-        assigneeAvatar: "https://randomuser.me/api/portraits/men/1.jpg",
-        dueDate: "Jan 10, 2025",
-      },
-      {
-        id: "2",
-        title: "Create API endpoints",
-        priority: "medium",
-        assignee: "Jane Smith",
-        assigneeAvatar: "https://randomuser.me/api/portraits/women/2.jpg",
-        dueDate: "Jan 15, 2025",
-      },
-      {
-        id: "3",
-        title: "Write documentation",
-        priority: "low",
-        assignee: "Bob Johnson",
-        assigneeAvatar: "https://randomuser.me/api/portraits/men/3.jpg",
-        dueDate: "Jan 20, 2025",
-      },
-    ],
-    inProgress: [
-      {
-        id: "4",
-        title: "Design system updates",
-        priority: "high",
-        assignee: "Alice Brown",
-        assigneeAvatar: "https://randomuser.me/api/portraits/women/4.jpg",
-        dueDate: "Aug 25, 2025",
-      },
-      {
-        id: "5",
-        title: "Implement dark mode",
-        priority: "medium",
-        assignee: "Charlie Wilson",
-        assigneeAvatar: "https://randomuser.me/api/portraits/men/5.jpg",
-        dueDate: "Aug 25, 2025",
-      },
-    ],
-    done: [
-      {
-        id: "7",
-        title: "Setup project",
-        priority: "high",
-        assignee: "Eve Davis",
-        assigneeAvatar: "https://randomuser.me/api/portraits/women/6.jpg",
-        dueDate: "Sep 25, 2025",
-      },
-      {
-        id: "8",
-        title: "Initial commit",
-        priority: "low",
-        assignee: "Frank White",
-        assigneeAvatar: "https://randomuser.me/api/portraits/men/7.jpg",
-        dueDate: "Sep 20, 2025",
-      },
-    ],
-    done1: [
-      {
-        id: "9",
-        title: "Setup project",
-        priority: "high",
-        assignee: "Eve Davis",
-        assigneeAvatar: "https://randomuser.me/api/portraits/women/6.jpg",
-        dueDate: "Sep 25, 2025",
-      },
-      {
-        id: "10",
-        title: "Initial commit",
-        priority: "low",
-        assignee: "Frank White",
-        assigneeAvatar: "https://randomuser.me/api/portraits/men/7.jpg",
-        dueDate: "Sep 20, 2025",
-      },
-    ],
-    done2: [
-      {
-        id: "11",
-        title: "Setup project",
-        priority: "high",
-        assignee: "Eve Davis",
-        assigneeAvatar: "https://randomuser.me/api/portraits/women/6.jpg",
-        dueDate: "Sep 25, 2025",
-      },
-      {
-        id: "12",
-        title: "Initial commit",
-        priority: "low",
-        assignee: "Frank White",
-        assigneeAvatar: "https://randomuser.me/api/portraits/men/7.jpg",
-        dueDate: "Sep 20, 2025",
-      },
-    ],
-  });
+export function ProgramKanban({
+  categories,
+}: {
+  categories: RouterOutputs["program"]["categories"];
+}) {
+  const trpc = useTRPC();
+  const params = useParams<{ subjectId: string }>();
+  const { data: subjectPrograms } = useSuspenseQuery(
+    trpc.program.bySubject.queryOptions({
+      subjectId: Number(params.subjectId),
+    }),
+  );
+  const [columns, setColumns] = React.useState<
+    Record<string, SubjectProgramItem[]>
+  >({});
+
+  React.useEffect(() => {
+    const subjectGroups: Record<string, SubjectProgramItem[]> = {};
+    subjectPrograms.forEach((program) => {
+      const category = program.category.title;
+      subjectGroups[category] ??= [];
+      subjectGroups[category].push({
+        id: program.id,
+        title: program.title,
+        coverage:
+          (program.requiredSessionCount / program.objectives.length) * 100,
+        description: program.description,
+        requiredSessionCount: program.requiredSessionCount,
+        lastSession: program.objectives.at(-1),
+        categoryId: program.category.id,
+      });
+    });
+    setColumns(subjectGroups);
+  }, [subjectPrograms]);
 
   return (
     <div className="p-5">
@@ -300,8 +293,13 @@ export function ProgramKanban() {
         getItemValue={(item) => item.id}
       >
         <KanbanBoard className="grid grid-cols-3 gap-2">
-          {Object.entries(columns).map(([columnValue, tasks]) => (
-            <TaskColumn key={columnValue} value={columnValue} tasks={tasks} />
+          {Object.entries(columns).map(([columnValue, subjectPrograms]) => (
+            <SubjectProgramColumn
+              key={columnValue}
+              categories={categories}
+              value={columnValue}
+              subjectPrograms={subjectPrograms}
+            />
           ))}
         </KanbanBoard>
         <KanbanOverlay>

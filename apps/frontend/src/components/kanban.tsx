@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -390,7 +387,7 @@ function KanbanColumn({
 
   const style = {
     transition,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
     transform: CSS.Translate.toString(transform),
   } as React.CSSProperties;
 
@@ -407,7 +404,7 @@ function KanbanColumn({
         style={style}
         className={cn(
           "group/kanban-column flex flex-col",
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
           isSortableDragging && "opacity-50",
           disabled && "opacity-50",
           className,
@@ -487,7 +484,7 @@ function KanbanItem({
 
   const style = {
     transition,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
     transform: CSS.Translate.toString(transform),
   } as React.CSSProperties;
 
@@ -506,7 +503,6 @@ function KanbanItem({
         style={style}
         {...attributes}
         className={cn(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           isSortableDragging && "opacity-50",
           disabled && "opacity-50",
           className,
