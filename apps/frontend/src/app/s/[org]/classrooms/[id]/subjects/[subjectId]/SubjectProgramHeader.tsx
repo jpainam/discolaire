@@ -41,11 +41,25 @@ export function SubjectProgramHeader({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              window.open(
+                `/api/pdfs/classroom/${subject.classroomId}/subjects/${subject.id}?format=pdf&doc=program`,
+                "_blank",
+              );
+            }}
+          >
             <PDFIcon />
             {t("pdf_export")}
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              window.open(
+                `/api/pdfs/classroom/${subject.classroomId}/subjects/${subject.id}?format=csv&doc=program`,
+                "_blank",
+              );
+            }}
+          >
             <XMLIcon />
             {t("xml_export")}
           </DropdownMenuItem>
