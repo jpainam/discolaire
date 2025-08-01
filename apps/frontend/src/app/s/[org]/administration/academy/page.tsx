@@ -39,7 +39,7 @@ export default async function Page() {
               size={16}
               aria-hidden="true"
             />
-            {t("Academy")}
+            {t("academy")}
           </TabsTrigger>
           <TabsTrigger
             value="tab-2"

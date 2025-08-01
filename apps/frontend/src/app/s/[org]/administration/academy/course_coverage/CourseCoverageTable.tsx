@@ -5,15 +5,24 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-
-
 import { Button } from "@repo/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@repo/ui/components/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Input } from "@repo/ui/components/input";
 import { Progress } from "@repo/ui/components/progress";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
-
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
 import { Badge } from "~/components/base-badge";
@@ -21,7 +30,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useTRPC } from "~/trpc/react";
-
 
 export function CourseCoverageTable() {
   const trpc = useTRPC();
@@ -135,7 +143,12 @@ export function CourseCoverageTable() {
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
-                  <Link href={`/classrooms/${p.classroomId}`} className="hover:underline">{p.classroom}</Link>
+                  <Link
+                    href={`/classrooms/${p.classroomId}`}
+                    className="hover:underline"
+                  >
+                    {p.classroom}
+                  </Link>
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
                   <Badge
