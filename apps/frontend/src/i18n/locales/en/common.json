@@ -1014,6 +1014,7 @@
   "send_as": "Send as",
   "will_post_on": "Will post on {{date}}",
   "template": "Template",
+  "categories": "Categories",
   "page": "Page",
   "select_a_recipient": "Select a recipient",
   "thePasswordIsCaseSensitive": "The password is case sensitive",

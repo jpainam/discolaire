@@ -16,6 +16,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { AcademyStatCard } from "./AcademyStatCard";
 import { CourseCoverageHeader } from "./course_coverage/CourseCoverageHeader";
+import { CourseCoveragePieChart } from "./course_coverage/CourseCoveragePieChart";
 import { CourseCoverageTable } from "./course_coverage/CourseCoverageTable";
 import { CourseCoverageOverview } from "./CourseCoverageOverview";
 import { ProgramCategoryTable } from "./ProgramCategoryTable";
@@ -86,8 +87,10 @@ export default async function Page() {
                 </Suspense>
               </ErrorBoundary>
             </div>
+            <div className="pt-4">
+              <CourseCoveragePieChart />
+            </div>
           </div>
-          <div>This is the for stats</div>
         </HydrateClient>
       </TabsContent>
       <TabsContent value="tab-3">
