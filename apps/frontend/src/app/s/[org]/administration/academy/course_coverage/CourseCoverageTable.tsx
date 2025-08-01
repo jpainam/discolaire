@@ -1,26 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+
+
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@repo/ui/components/dropdown-menu";
 import { Input } from "@repo/ui/components/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@repo/ui/components/table";
+import { Progress } from "@repo/ui/components/progress";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
+
+
 
 import { AvatarState } from "~/components/AvatarState";
 import { Badge } from "~/components/base-badge";
@@ -28,6 +21,7 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useTRPC } from "~/trpc/react";
+
 
 export function CourseCoverageTable() {
   const trpc = useTRPC();
@@ -100,8 +94,9 @@ export function CourseCoverageTable() {
             <TableRow className="bg-muted/50">
               <TableHead>{t("subject")}</TableHead>
               <TableHead>{t("classroom")}</TableHead>
-              <TableHead>{t("program")}</TableHead>
-              <TableHead>{t("coverage")}</TableHead>
+              <TableHead>{t("Program")}</TableHead>
+              <TableHead>{t("Coverage")}</TableHead>
+              <TableHead>{t("Sessions")}</TableHead>
               <TableHead className="text-center">{t("sessions")}</TableHead>
 
               <TableHead className="w-12"></TableHead>
@@ -113,7 +108,13 @@ export function CourseCoverageTable() {
                 <TableCell className="py-1">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
-                      <span> {p.course}</span>
+                      <Link
+                        href={`/classrooms/${p.classroomId}/${p.subjectId}`}
+                        className="hover:underline"
+                      >
+                        {" "}
+                        {p.course}
+                      </Link>
                       <Badge
                         variant="info"
                         appearance="light"
@@ -124,21 +125,70 @@ export function CourseCoverageTable() {
                     </div>
                     <div className="text-muted-foreground flex items-center gap-1">
                       <AvatarState className="size-4" />
-                      <span className="text-xs">{p.teacher}</span>
+                      <Link
+                        href={`/staffs/${p.teacherId}`}
+                        className="text-xs hover:underline"
+                      >
+                        {p.teacher}
+                      </Link>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
-                  {p.classroom}
+                  <Link href={`/classrooms/${p.classroomId}`} className="hover:underline">{p.classroom}</Link>
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
-                  {p.programs.length}
+                  <Badge
+                    variant={
+                      p.programs.length == 0
+                        ? "destructive"
+                        : p.programs.length < 5
+                          ? "warning"
+                          : "success"
+                    }
+                    appearance="outline"
+                  >
+                    {p.programs.length}
+                  </Badge>
                 </TableCell>
 
                 <TableCell className="py-1 font-medium">
-                  {p.programs.length} / {p.sessions.length}
+                  <Badge variant="destructive" appearance="outline">
+                    {p.programs.length} / {p.sessions.length}
+                  </Badge>
                 </TableCell>
-                <TableCell>{p.sessions.length}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      p.sessions.length == 0
+                        ? "destructive"
+                        : p.sessions.length < 5
+                          ? "warning"
+                          : "success"
+                    }
+                    appearance="outline"
+                  >
+                    {p.sessions.length}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Progress
+                      value={
+                        p.sessions.length == 0
+                          ? 0
+                          : p.programs.length / p.sessions.length
+                      }
+                      className="w-16"
+                    />
+                    <span className="text-sm">
+                      {p.sessions.length == 0
+                        ? 0
+                        : (p.programs.length * 100) / p.sessions.length}
+                      %
+                    </span>
+                  </div>
+                </TableCell>
 
                 <TableCell className="py-1">
                   <div className="flex justify-end">

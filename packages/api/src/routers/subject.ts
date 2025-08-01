@@ -158,6 +158,7 @@ export const subjectRouter = {
         }),
         teacher:
           `${p.teacher?.prefix} ${p.teacher?.firstName} ${p.teacher?.lastName}`.trim(),
+        teacherId: p.teacher?.id ?? "",
         classroom: p.classroom.reportName,
         classroomId: p.classroom.id,
         sessions: p.sessions.map((session) => {
