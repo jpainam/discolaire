@@ -115,4 +115,56 @@ export const subjectRouter = {
         },
       });
     }),
+
+  subjectPrograms: protectedProcedure.query(async ({ ctx }) => {
+    const programs = await ctx.db.subject.findMany({
+      where: {
+        classroom: {
+          schoolYearId: ctx.schoolYearId,
+          schoolId: ctx.schoolId,
+        },
+      },
+      include: {
+        classroom: {
+          include: {
+            level: true,
+          },
+        },
+        course: true,
+        teacher: true,
+        programs: true,
+        sessions: {
+          include: {
+            objectives: {
+              include: {
+                program: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return programs.map((p) => {
+      return {
+        subjectId: p.id,
+        course: p.course.name,
+        courseCode: p.course.shortName,
+        programs: p.programs.map((program) => {
+          return {
+            id: program.id,
+            requiredSessionCount: program.requiredSessionCount,
+            categoryId: program.categoryId,
+          };
+        }),
+        classroom: p.classroom.name,
+        classroomId: p.classroom.id,
+        sessions: p.sessions.map((session) => {
+          return {
+            id: session.id,
+            categoryIds: session.objectives.map((o) => o.program.categoryId),
+          };
+        }),
+      };
+    });
+  }),
 } satisfies TRPCRouterRecord;
