@@ -116,7 +116,7 @@ export const subjectRouter = {
       });
     }),
 
-  subjectPrograms: protectedProcedure.query(async ({ ctx }) => {
+  programs: protectedProcedure.query(async ({ ctx }) => {
     const programs = await ctx.db.subject.findMany({
       where: {
         classroom: {

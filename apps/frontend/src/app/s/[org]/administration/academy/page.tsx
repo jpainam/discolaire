@@ -13,6 +13,7 @@ import {
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { AcademyStatCard } from "./AcademyStatCard";
+import { CourseCoverageDataTable } from "./course_coverage/CourseCoverageDataTable";
 import { CourseCoverageOverview } from "./CourseCoverageOverview";
 import { ProgramCategoryTable } from "./ProgramCategoryTable";
 
@@ -65,9 +66,13 @@ export default function Page() {
         </div>
       </TabsContent>
       <TabsContent value="tab-2">
-        <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
-          Content for Tab 2
-        </p>
+        <HydrateClient>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<div>Loading...</div>}>
+              <CourseCoverageDataTable />
+            </Suspense>
+          </ErrorBoundary>
+        </HydrateClient>
       </TabsContent>
       <TabsContent value="tab-3">
         <HydrateClient>
