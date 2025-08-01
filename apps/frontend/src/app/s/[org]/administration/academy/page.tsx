@@ -13,12 +13,16 @@ import {
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { AcademyStatCard } from "./AcademyStatCard";
-import { CourseCoverageDataTable } from "./course_coverage/CourseCoverageDataTable";
+import { CourseCoverageHeader } from "./course_coverage/CourseCoverageHeader";
+import { CourseCoverageTable } from "./course_coverage/CourseCoverageTable";
 import { CourseCoverageOverview } from "./CourseCoverageOverview";
 import { ProgramCategoryTable } from "./ProgramCategoryTable";
 
 export default function Page() {
-  batchPrefetch([trpc.program.categories.queryOptions()]);
+  batchPrefetch([
+    trpc.program.categories.queryOptions(),
+    trpc.subject.programs.queryOptions(),
+  ]);
   return (
     <Tabs defaultValue="tab-1">
       <ScrollArea>
@@ -67,11 +71,18 @@ export default function Page() {
       </TabsContent>
       <TabsContent value="tab-2">
         <HydrateClient>
-          <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense fallback={<div>Loading...</div>}>
-              <CourseCoverageDataTable />
-            </Suspense>
-          </ErrorBoundary>
+          <div className="grid grid-cols-3 gap-2 px-4">
+            <div className="col-span-2 flex flex-col gap-2">
+              <CourseCoverageHeader />
+              <ErrorBoundary errorComponent={ErrorFallback}>
+                <Suspense fallback={<div>Loading...</div>}>
+                  {/* <CourseCoverageDataTable /> */}
+                  <CourseCoverageTable />
+                </Suspense>
+              </ErrorBoundary>
+            </div>
+          </div>
+          <div>This is the for stats</div>
         </HydrateClient>
       </TabsContent>
       <TabsContent value="tab-3">

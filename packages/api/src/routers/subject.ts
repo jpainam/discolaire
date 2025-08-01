@@ -156,7 +156,9 @@ export const subjectRouter = {
             categoryId: program.categoryId,
           };
         }),
-        classroom: p.classroom.name,
+        teacher:
+          `${p.teacher?.prefix} ${p.teacher?.firstName} ${p.teacher?.lastName}`.trim(),
+        classroom: p.classroom.reportName,
         classroomId: p.classroom.id,
         sessions: p.sessions.map((session) => {
           return {

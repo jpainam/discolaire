@@ -1,15 +1,12 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Eye } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { AvatarState } from "~/components/AvatarState";
+import { Badge } from "~/components/base-badge";
 
 type SubjectProcedureOutput = RouterOutputs["subject"]["programs"][number];
 
@@ -26,29 +26,6 @@ export function useColumn(): {
   const t = useTranslations();
   const columns: ColumnDef<SubjectProcedureOutput, unknown>[] = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
       accessorKey: "course",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("subject")} />
@@ -56,23 +33,29 @@ export function useColumn(): {
       cell: ({ row }) => {
         const p = row.original;
         return (
-          <Link
-            className="line-clamp-1 hover:text-blue-600 hover:underline"
-            href={"#"}
-          >
-            {p.course}
-          </Link>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <span> {p.course}</span>
+              <Badge className="h-7 text-xs" variant="info" appearance="light">
+                {p.courseCode}
+              </Badge>
+            </div>
+            <div className="text-muted-foreground flex items-center gap-1">
+              <AvatarState className="size-4" />
+              <span className="text-xs">{p.teacher}</span>
+            </div>
+          </div>
         );
       },
     },
     {
-      accessorKey: "code",
+      accessorKey: "classroom",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("code")} />
+        <DataTableColumnHeader column={column} title={t("classroom")} />
       ),
       cell: ({ row }) => {
         const p = row.original;
-        return <Badge variant="secondary">{p.courseCode}</Badge>;
+        return <div>{p.classroom}</div>;
       },
     },
 
@@ -81,6 +64,7 @@ export function useColumn(): {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("program")} />
       ),
+      size: 28,
       cell: ({ row }) => {
         const p = row.original;
         return <div>{p.programs.length}</div>;
@@ -91,6 +75,7 @@ export function useColumn(): {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("coverage")} />
       ),
+      size: 28,
       cell: ({ row }) => {
         const p = row.original;
         return (
@@ -105,6 +90,7 @@ export function useColumn(): {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("sessions")} />
       ),
+      size: 28,
       cell: ({ row }) => {
         const p = row.original;
         return <div>{p.sessions.length}</div>;
