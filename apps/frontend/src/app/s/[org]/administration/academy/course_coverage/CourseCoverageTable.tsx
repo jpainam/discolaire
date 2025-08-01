@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
+import { MailIcon, MoreVertical, Search, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
@@ -219,17 +219,8 @@ export function CourseCoverageTable() {
                         <DropdownMenuItem
                         // disabled={isClosed}
                         >
-                          <Pencil />
-                          {t("edit")}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-
-                        <DropdownMenuItem
-                          //disabled={isClosed}
-                          variant="destructive"
-                        >
-                          <FlagOff className="size-4" />
-                          {t("mark_absent")}
+                          <MailIcon />
+                          {t("send_reminder")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

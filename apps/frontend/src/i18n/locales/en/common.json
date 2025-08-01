@@ -1015,6 +1015,7 @@
   "will_post_on": "Will post on {{date}}",
   "template": "Template",
   "categories": "Categories",
+  "send_reminder": "Send Reminder",
   "page": "Page",
   "select_a_recipient": "Select a recipient",
   "thePasswordIsCaseSensitive": "The password is case sensitive",
