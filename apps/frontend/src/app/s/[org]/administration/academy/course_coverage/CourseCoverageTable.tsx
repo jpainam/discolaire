@@ -120,7 +120,6 @@ export function CourseCoverageTable() {
                         href={`/classrooms/${p.classroomId}/subjects/${p.subjectId}`}
                         className="hover:underline"
                       >
-           
                         {p.course}
                       </Link>
                       <Badge
