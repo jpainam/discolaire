@@ -117,10 +117,10 @@ export function CourseCoverageTable() {
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
                       <Link
-                        href={`/classrooms/${p.classroomId}/${p.subjectId}`}
+                        href={`/classrooms/${p.classroomId}/subjects/${p.subjectId}`}
                         className="hover:underline"
                       >
-                        {" "}
+           
                         {p.course}
                       </Link>
                       <Badge

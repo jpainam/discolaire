@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { BoxIcon, HouseIcon, PanelsTopLeftIcon } from "lucide-react";
+import { BoxIcon, PanelsTopLeftIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
@@ -14,11 +14,10 @@ import {
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { AcademyStatCard } from "./AcademyStatCard";
 import { CourseCoverageHeader } from "./course_coverage/CourseCoverageHeader";
 import { CourseCoveragePieChart } from "./course_coverage/CourseCoveragePieChart";
+import { CourseCoverageSummary } from "./course_coverage/CourseCoverageSummary";
 import { CourseCoverageTable } from "./course_coverage/CourseCoverageTable";
-import { CourseCoverageOverview } from "./CourseCoverageOverview";
 import { ProgramCategoryTable } from "./ProgramCategoryTable";
 
 export default async function Page() {
@@ -31,7 +30,7 @@ export default async function Page() {
     <Tabs defaultValue="tab-1">
       <ScrollArea>
         <TabsList className="bg-background h-auto -space-x-px p-0 shadow-xs rtl:space-x-reverse">
-          <TabsTrigger
+          {/* <TabsTrigger
             value="tab-1"
             className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
           >
@@ -41,7 +40,7 @@ export default async function Page() {
               aria-hidden="true"
             />
             {t("academy")}
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger
             value="tab-2"
             className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative w-fit overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
@@ -67,12 +66,12 @@ export default async function Page() {
         </TabsList>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-      <TabsContent value="tab-1" className="gap-0 p-0">
+      {/* <TabsContent value="tab-1" className="gap-0 p-0">
         <div className="flex flex-col px-4">
           <AcademyStatCard />
           <CourseCoverageOverview />
         </div>
-      </TabsContent>
+      </TabsContent> */}
       <TabsContent value="tab-2">
         <HydrateClient>
           <div className="grid grid-cols-3 gap-2 px-4">
@@ -88,6 +87,7 @@ export default async function Page() {
               </ErrorBoundary>
             </div>
             <div className="pt-4">
+              <CourseCoverageSummary />
               <CourseCoveragePieChart />
             </div>
           </div>
