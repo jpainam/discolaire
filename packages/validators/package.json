@@ -18,7 +18,7 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "zod": "catalog:",
-    "zod-validation-error": "^3.5.2"
+    "zod-validation-error": "^3.5.3"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
