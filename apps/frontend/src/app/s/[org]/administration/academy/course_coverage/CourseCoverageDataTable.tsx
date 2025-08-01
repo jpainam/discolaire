@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { parseAsString, useQueryStates } from "nuqs";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
@@ -10,13 +11,22 @@ import { useColumn } from "./CourseCoverageDataTableColumn";
 
 export function CourseCoverageDataTable() {
   const trpc = useTRPC();
-  const { data: classrooms } = useSuspenseQuery(
-    trpc.subject.programs.queryOptions(),
+  const [{ classroomId, staffId, categoryId }] = useQueryStates({
+    classroomId: parseAsString.withDefault(""),
+    staffId: parseAsString.withDefault(""),
+    categoryId: parseAsString.withDefault(""),
+  });
+  const { data: programs } = useSuspenseQuery(
+    trpc.subject.programs.queryOptions({
+      classroomId,
+      staffId,
+      categoryId,
+    }),
   );
   const { columns } = useColumn();
 
   const { table } = useDataTable({
-    data: classrooms,
+    data: programs,
     columns: columns,
   });
 

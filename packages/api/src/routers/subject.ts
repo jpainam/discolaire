@@ -1,5 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
+import { decode } from "entities";
 import { z } from "zod";
 
 import { protectedProcedure } from "../trpc";
@@ -171,8 +172,9 @@ export const subjectRouter = {
                 categoryId: program.categoryId,
               };
             }),
-          teacher:
+          teacher: decode(
             `${p.teacher?.prefix} ${p.teacher?.firstName} ${p.teacher?.lastName}`.trim(),
+          ),
           teacherId: p.teacher?.id ?? "",
           classroom: p.classroom.reportName,
           classroomId: p.classroom.id,
@@ -189,6 +191,34 @@ export const subjectRouter = {
             };
           }),
         };
+      });
+    }),
+  getCourseCoverage: protectedProcedure
+    .input(z.coerce.number())
+    .query(async ({ ctx, input }) => {
+      return ctx.db.subject.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          classroom: {
+            include: {
+              level: true,
+            },
+          },
+          course: true,
+          teacher: true,
+          programs: true,
+          sessions: {
+            include: {
+              objectives: {
+                include: {
+                  program: true,
+                },
+              },
+            },
+          },
+        },
       });
     }),
 } satisfies TRPCRouterRecord;

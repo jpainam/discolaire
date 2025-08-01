@@ -96,7 +96,15 @@ export default async function Page(props: PageProps) {
                 <CourseCoverageHeader />
               </Suspense>
               <ErrorBoundary errorComponent={ErrorFallback}>
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense
+                  fallback={
+                    <div className="grid grid-cols-4 gap-2">
+                      {Array.from({ length: 32 }).map((_, index) => (
+                        <Skeleton key={index} className="h-8" />
+                      ))}
+                    </div>
+                  }
+                >
                   {/* <CourseCoverageDataTable /> */}
                   <CourseCoverageTable />
                 </Suspense>

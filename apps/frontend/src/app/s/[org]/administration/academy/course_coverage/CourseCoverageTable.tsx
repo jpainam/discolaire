@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { MailIcon, MoreVertical, Search, Trash2 } from "lucide-react";
+import {
+  MailIcon,
+  MoreHorizontal,
+  MoreVertical,
+  Search,
+  Trash2,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsString, useQueryStates } from "nuqs";
 
@@ -30,7 +36,9 @@ import { Badge } from "~/components/base-badge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
+import { CourseCoverageDetails } from "./CourseCoverageDetails";
 
 export function CourseCoverageTable() {
   const trpc = useTRPC();
@@ -46,6 +54,7 @@ export function CourseCoverageTable() {
       categoryId,
     }),
   );
+  const { openSheet } = useSheet();
 
   const t = useTranslations();
 
@@ -123,7 +132,16 @@ export function CourseCoverageTable() {
           </TableHeader>
           <TableBody>
             {programs.slice(0, 20).map((p, index) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                className="hover:bg-muted/50 cursor-pointer"
+                onClick={() => {
+                  openSheet({
+                    title: p.course,
+                    view: <CourseCoverageDetails subjectId={p.subjectId} />,
+                  });
+                }}
+              >
                 <TableCell className="w-[4px] p-1">
                   <div
                     style={{
@@ -230,7 +248,7 @@ export function CourseCoverageTable() {
                           variant="ghost"
                           className="size-7"
                         >
-                          <MoreVertical />
+                          <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">

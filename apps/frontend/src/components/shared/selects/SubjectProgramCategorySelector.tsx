@@ -28,7 +28,16 @@ export function SubjectProgramCategorySelector({
   const trpc = useTRPC();
   const categoriesQuery = useQuery(trpc.program.categories.queryOptions());
   return (
-    <Select onValueChange={onChangeAction} defaultValue={defaultValue}>
+    <Select
+      onValueChange={(val) => {
+        if (val === "all") {
+          onChangeAction?.("");
+        } else {
+          onChangeAction?.(val);
+        }
+      }}
+      defaultValue={defaultValue}
+    >
       <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder={t("select_an_option")} />
       </SelectTrigger>
@@ -38,11 +47,14 @@ export function SubjectProgramCategorySelector({
             <Loader2 className="h-4 w-4 animate-spin" />
           </SelectItem>
         ) : (
-          categoriesQuery.data?.map((cat) => (
-            <SelectItem key={cat.id} value={cat.id}>
-              {cat.title}
-            </SelectItem>
-          ))
+          <>
+            <SelectItem value="all">{t("all")}</SelectItem>
+            {categoriesQuery.data?.map((cat) => (
+              <SelectItem key={cat.id} value={cat.id}>
+                {cat.title}
+              </SelectItem>
+            ))}
+          </>
         )}
       </SelectContent>
     </Select>
