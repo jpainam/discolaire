@@ -1,7 +1,9 @@
+import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { BoxIcon, PanelsTopLeftIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { createLoader, parseAsString } from "nuqs/server";
 
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -20,10 +22,24 @@ import { CourseCoverageSummary } from "./course_coverage/CourseCoverageSummary";
 import { CourseCoverageTable } from "./course_coverage/CourseCoverageTable";
 import { ProgramCategoryTable } from "./ProgramCategoryTable";
 
-export default async function Page() {
+const academySearchSchema = {
+  classroomId: parseAsString.withDefault(""),
+  staffId: parseAsString.withDefault(""),
+  categoryId: parseAsString.withDefault(""),
+};
+const academySearchParams = createLoader(academySearchSchema);
+interface PageProps {
+  searchParams: Promise<SearchParams>;
+}
+export default async function Page(props: PageProps) {
+  const searchParams = await academySearchParams(props.searchParams);
   batchPrefetch([
     trpc.program.categories.queryOptions(),
-    trpc.subject.programs.queryOptions(),
+    trpc.subject.programs.queryOptions({
+      classroomId: searchParams.classroomId,
+      staffId: searchParams.staffId,
+      categoryId: searchParams.categoryId,
+    }),
   ]);
   const t = await getTranslations();
   return (
@@ -42,7 +58,7 @@ export default async function Page() {
             {t("academy")}
           </TabsTrigger> */}
           <TabsTrigger
-            value="tab-2"
+            value="tab-1"
             className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative w-fit overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
           >
             <PanelsTopLeftIcon
@@ -53,7 +69,7 @@ export default async function Page() {
             {t("Coverage")}
           </TabsTrigger>
           <TabsTrigger
-            value="tab-3"
+            value="tab-2"
             className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
           >
             <BoxIcon
@@ -72,10 +88,10 @@ export default async function Page() {
           <CourseCoverageOverview />
         </div>
       </TabsContent> */}
-      <TabsContent value="tab-2">
+      <TabsContent value="tab-1">
         <HydrateClient>
-          <div className="grid grid-cols-3 gap-2 px-4">
-            <div className="col-span-2 flex flex-col gap-2">
+          <div className="grid grid-cols-4 gap-2 px-4">
+            <div className="col-span-3 flex flex-col gap-2">
               <Suspense fallback={<Skeleton className="h-8" />}>
                 <CourseCoverageHeader />
               </Suspense>
@@ -93,7 +109,7 @@ export default async function Page() {
           </div>
         </HydrateClient>
       </TabsContent>
-      <TabsContent value="tab-3">
+      <TabsContent value="tab-2">
         <HydrateClient>
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<div>Loading...</div>}>

@@ -116,58 +116,79 @@ export const subjectRouter = {
       });
     }),
 
-  programs: protectedProcedure.query(async ({ ctx }) => {
-    const programs = await ctx.db.subject.findMany({
-      where: {
-        classroom: {
-          schoolYearId: ctx.schoolYearId,
-          schoolId: ctx.schoolId,
-        },
-      },
-      include: {
-        classroom: {
-          include: {
-            level: true,
+  programs: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().optional(),
+        staffId: z.string().optional(),
+        categoryId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const programs = await ctx.db.subject.findMany({
+        where: {
+          classroom: {
+            schoolYearId: ctx.schoolYearId,
+            schoolId: ctx.schoolId,
+            ...(input.classroomId ? { id: input.classroomId } : {}),
           },
+          ...(input.staffId ? { teacherId: input.staffId } : {}),
         },
-        course: true,
-        teacher: true,
-        programs: true,
-        sessions: {
-          include: {
-            objectives: {
-              include: {
-                program: true,
+        include: {
+          classroom: {
+            include: {
+              level: true,
+            },
+          },
+          course: true,
+          teacher: true,
+          programs: true,
+          sessions: {
+            include: {
+              objectives: {
+                include: {
+                  program: true,
+                },
               },
             },
           },
         },
-      },
-    });
-    return programs.map((p) => {
-      return {
-        subjectId: p.id,
-        course: p.course.name,
-        courseCode: p.course.shortName,
-        programs: p.programs.map((program) => {
-          return {
-            id: program.id,
-            requiredSessionCount: program.requiredSessionCount,
-            categoryId: program.categoryId,
-          };
-        }),
-        teacher:
-          `${p.teacher?.prefix} ${p.teacher?.firstName} ${p.teacher?.lastName}`.trim(),
-        teacherId: p.teacher?.id ?? "",
-        classroom: p.classroom.reportName,
-        classroomId: p.classroom.id,
-        sessions: p.sessions.map((session) => {
-          return {
-            id: session.id,
-            categoryIds: session.objectives.map((o) => o.program.categoryId),
-          };
-        }),
-      };
-    });
-  }),
+      });
+      return programs.map((p) => {
+        return {
+          subjectId: p.id,
+          course: p.course.name,
+          courseColor: p.course.color,
+          courseCode: p.course.shortName,
+          programs: p.programs
+            .filter((program) =>
+              input.categoryId ? program.categoryId == input.categoryId : true,
+            )
+            .map((program) => {
+              return {
+                id: program.id,
+                requiredSessionCount: program.requiredSessionCount,
+                categoryId: program.categoryId,
+              };
+            }),
+          teacher:
+            `${p.teacher?.prefix} ${p.teacher?.firstName} ${p.teacher?.lastName}`.trim(),
+          teacherId: p.teacher?.id ?? "",
+          classroom: p.classroom.reportName,
+          classroomId: p.classroom.id,
+          sessions: p.sessions.map((session) => {
+            return {
+              id: session.id,
+              categoryIds: session.objectives
+                .filter((o) =>
+                  input.categoryId
+                    ? o.program.categoryId == input.categoryId
+                    : true,
+                )
+                .map((o) => o.program.categoryId),
+            };
+          }),
+        };
+      });
+    }),
 } satisfies TRPCRouterRecord;

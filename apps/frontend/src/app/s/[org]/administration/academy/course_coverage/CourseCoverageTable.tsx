@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { MailIcon, MoreVertical, Search, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsString, useQueryStates } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -33,14 +34,23 @@ import { useTRPC } from "~/trpc/react";
 
 export function CourseCoverageTable() {
   const trpc = useTRPC();
+  const [{ classroomId, staffId, categoryId }] = useQueryStates({
+    classroomId: parseAsString.withDefault(""),
+    staffId: parseAsString.withDefault(""),
+    categoryId: parseAsString.withDefault(""),
+  });
   const { data: programs } = useSuspenseQuery(
-    trpc.subject.programs.queryOptions(),
+    trpc.subject.programs.queryOptions({
+      classroomId,
+      staffId,
+      categoryId,
+    }),
   );
 
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="mb-4 flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <div className="relative w-full md:w-64">
           <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
@@ -97,9 +107,10 @@ export function CourseCoverageTable() {
         </div>
       </div>
       <div className="bg-background overflow-hidden rounded-md border">
-        <Table>
+        <Table className="overflow-hidden">
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead className="w-[4px]"></TableHead>
               <TableHead>{t("subject")}</TableHead>
               <TableHead>{t("classroom")}</TableHead>
               <TableHead>{t("Program")}</TableHead>
@@ -113,6 +124,14 @@ export function CourseCoverageTable() {
           <TableBody>
             {programs.slice(0, 20).map((p, index) => (
               <TableRow key={index}>
+                <TableCell className="w-[4px] p-1">
+                  <div
+                    style={{
+                      backgroundColor: p.courseColor,
+                    }}
+                    className="h-10 w-[4px] rounded-sm"
+                  />
+                </TableCell>
                 <TableCell className="py-1">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
