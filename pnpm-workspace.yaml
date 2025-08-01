@@ -3,22 +3,22 @@ packages:
   - packages/*
 
 catalog:
-  '@tanstack/react-query': 5.81.5
+  '@tanstack/react-query': 5.84.0
   '@trpc/client': ^11.4.3
   '@trpc/react-query': ^11.4.3
   '@trpc/tanstack-react-query': ^11.4.3
   '@trpc/server': ^11.4.3
-  '@types/node': ^22.15.34
-  eslint: ^9.30.0
-  framer-motion: 12.23.0
+  '@types/node': ^22.17.0
+  eslint: ^9.32.0
+  framer-motion: 12.23.12
   prettier: ^3.6.2
-  next: 15.3.4
+  next: 15.4.5
   tailwindcss: ^4.1.11
-  typescript: ^5.8.3
-  zod: 3.25.74
-  react: 19.1.0
-  react-dom: 19.1.0
-  '@types/react': ~19.1.8
-  '@types/react-dom': ^19.1.6
+  typescript: ^5.9.2
+  zod: 3.25.76
+  react: 19.1.1
+  react-dom: 19.1.1
+  '@types/react': ~19.1.9
+  '@types/react-dom': ^19.1.7
 
 nodeLinker: hoisted
