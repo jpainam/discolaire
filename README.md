@@ -103,7 +103,12 @@ pnpm db:push
 https://github.com/vercel/turborepo/issues/9016
 
 # Bugs
-
+- turbo repo channel closed
+```bash
+ × Failed to connect to daemon.
+  ╰─▶ server is unavailable: channel closed
+```
+Solve by running `npx turbo daemon restart`
 - `Invalid create() Unique constraint failed on the fields: (id)` https://github.com/prisma/prisma/discussions/5256
 
 ```bash
