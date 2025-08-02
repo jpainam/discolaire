@@ -27,8 +27,8 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@react-email/components": "^0.4.0",
-    "@react-email/preview-server": "^4.2.6",
-    "react-email": "^4.2.6"
+    "@react-email/preview-server": "^4.2.7",
+    "react-email": "^4.2.7"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

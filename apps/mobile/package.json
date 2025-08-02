@@ -39,7 +39,7 @@
     "expo-symbols": "~0.4.5",
     "expo-system-ui": "~5.0.10",
     "expo-web-browser": "~14.2.0",
-    "lucide-react-native": "^0.535.0",
+    "lucide-react-native": "^0.536.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-native": "0.80.2",
