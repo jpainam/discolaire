@@ -47,6 +47,7 @@ export function CourseCoverageTable() {
     staffId: parseAsString.withDefault(""),
     categoryId: parseAsString.withDefault(""),
   });
+
   const { data: programs } = useSuspenseQuery(
     trpc.subject.programs.queryOptions({
       classroomId,
@@ -138,6 +139,8 @@ export function CourseCoverageTable() {
                 onClick={() => {
                   openSheet({
                     title: p.course,
+                    className: "w-96",
+                    description: p.teacher,
                     view: <CourseCoverageDetails subjectId={p.subjectId} />,
                   });
                 }}
@@ -168,7 +171,7 @@ export function CourseCoverageTable() {
                       </Badge>
                     </div>
                     <div className="text-muted-foreground flex items-center gap-1">
-                      <AvatarState className="size-4" />
+                      <AvatarState pos={p.teacher.length} className="size-4" />
                       <Link
                         href={`/staffs/${p.teacherId}`}
                         className="text-xs hover:underline"

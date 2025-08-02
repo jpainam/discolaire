@@ -193,27 +193,24 @@ export const subjectRouter = {
         };
       });
     }),
-  getCourseCoverage: protectedProcedure
+  getCoverage: protectedProcedure
     .input(z.coerce.number())
     .query(async ({ ctx, input }) => {
-      return ctx.db.subject.findUnique({
+      return ctx.db.programCategory.findMany({
         where: {
-          id: input,
-        },
-        include: {
-          classroom: {
-            include: {
-              level: true,
+          schoolYearId: ctx.schoolYearId,
+          programs: {
+            some: {
+              subjectId: input,
             },
           },
-          course: true,
-          teacher: true,
-          programs: true,
-          sessions: {
+        },
+        include: {
+          programs: {
             include: {
               objectives: {
                 include: {
-                  program: true,
+                  session: true,
                 },
               },
             },

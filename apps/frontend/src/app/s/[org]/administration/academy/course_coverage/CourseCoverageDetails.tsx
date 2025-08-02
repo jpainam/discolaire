@@ -1,6 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { PlayCircle } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   Accordion,
@@ -8,51 +10,156 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@repo/ui/components/accordion";
+import { Badge } from "@repo/ui/components/badge";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { Progress } from "@repo/ui/components/progress";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useTRPC } from "~/trpc/react";
 
+const getCoverageBadgeVariant = (coverage: number) => {
+  if (coverage >= 60) return "default";
+  if (coverage >= 40) return "secondary";
+  return "destructive";
+};
+
 export function CourseCoverageDetails({ subjectId }: { subjectId: number }) {
   const trpc = useTRPC();
+  const t = useTranslations();
+  const locale = useLocale();
   const coverageQuery = useQuery(
-    trpc.subject.getCourseCoverage.queryOptions(subjectId),
+    trpc.subject.getCoverage.queryOptions(subjectId),
   );
+
   if (coverageQuery.isLoading) {
     return (
       <div className="grid grid-cols-1 gap-2 px-2">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: 10 }).map((_, index) => (
           <Skeleton key={index} className="h-8" />
         ))}
       </div>
     );
   }
   const coverages = coverageQuery.data ?? [];
+
   return (
-    <Accordion
-      type="single"
-      collapsible
-      className="w-full"
-      defaultValue="item-1"
-    >
-      {coverages.map((coverage, index) => {
-        return (
-          <AccordionItem value={`item-${index}`} key={index}>
-            <AccordionTrigger>Product Information</AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-              <p>
-                Our flagship product combines cutting-edge technology with sleek
-                design. Built with premium materials, it offers unparalleled
-                performance and reliability.
-              </p>
-              <p>
-                Key features include advanced processing capabilities, and an
-                intuitive user interface designed for both beginners and
-                experts.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-        );
-      })}
-    </Accordion>
+    <div className="overflow-auto px-2">
+      <div className="bg-muted/50 rounded-lg p-2">
+        <div className="flex w-full justify-between gap-2 text-xs">
+          <div className="flex items-center gap-1">
+            <div className="h-3 w-3 rounded bg-green-500"></div>
+            <span>40% Complete</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="h-3 w-3 rounded bg-yellow-500"></div>
+            <span>60% Started</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="h-3 w-3 rounded bg-red-500"></div>
+            <span>20% Non started</span>
+          </div>
+        </div>
+      </div>
+      <Accordion type="multiple" className="w-full">
+        {coverages.map(
+          (coverage, index) => {
+            return (
+              <AccordionItem value={coverage.id} key={index}>
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <div className="flex w-full flex-col gap-2">
+                    <div className="text-md font-bold">{coverage.title}</div>
+                    <div className="flex flex-row items-center gap-2">
+                      <Badge variant="secondary">
+                        {coverage.programs.length} {t("programs")}
+                      </Badge>
+                      <Badge variant="secondary">0 {t("sessions")}</Badge>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4 pt-2">
+                    {coverage.programs.map((program) => {
+                      const co =
+                        (program.objectives.length == 0
+                          ? 0
+                          : program.requiredSessionCount /
+                            program.objectives.length) * 100;
+                      return (
+                        <Card
+                          key={program.id}
+                          className="gap-0 rounded-sm px-0 py-2 shadow-sm"
+                        >
+                          <CardHeader className="px-2">
+                            <CardTitle className="line-clamp-1">
+                              {program.title}
+                            </CardTitle>
+                            <CardDescription className="flex items-center gap-2">
+                              <Progress value={co} className="h-2 flex-1" />
+                              <span className="text-muted-foreground min-w-fit text-xs">
+                                {program.objectives.length} sessions
+                              </span>
+                            </CardDescription>
+                            <CardAction>
+                              <Badge
+                                variant={getCoverageBadgeVariant(co)}
+                                className="h-7 text-xs"
+                              >
+                                {co}% Complete
+                              </Badge>
+                            </CardAction>
+                          </CardHeader>
+                          <CardContent className="pt-0">
+                            <div className="grid gap-2">
+                              {program.objectives.map((objective, index) => (
+                                <div
+                                  key={index}
+                                  className="hover:bg-muted/50 border-border/50 flex items-start gap-3 rounded-md border p-3 text-sm transition-colors"
+                                >
+                                  <PlayCircle className="text-muted-foreground mt-0.5 h-4 w-4 flex-shrink-0" />
+                                  <div className="min-w-0 flex-1">
+                                    <div className="mb-1 flex items-center justify-between gap-2">
+                                      <h5 className="text-foreground font-medium">
+                                        {objective.session.title}
+                                      </h5>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {objective.session.publishDate.toLocaleDateString(
+                                          locale,
+                                          {
+                                            month: "short",
+                                            day: "numeric",
+                                            year: "numeric",
+                                          },
+                                        )}
+                                      </Badge>
+                                    </div>
+                                    <p className="text-muted-foreground text-xs leading-relaxed">
+                                      {objective.session.content}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            );
+          },
+        )}
+      </Accordion>
+    </div>
   );
 }
