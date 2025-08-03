@@ -1,6 +1,8 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import {
   AlertTriangle,
   CheckCircle,
@@ -19,11 +21,22 @@ import {
   MetricCardButton,
   MetricCardGroup,
   MetricCardHeader,
+  MetricCardSkeleton,
   MetricCardTitle,
   MetricCardValue,
 } from "~/components/metric-card";
+import { useTRPC } from "~/trpc/react";
 
-export function StudentAttendanceSummary() { 
+export function StudentAttendanceSummary() {
+  const trpc = useTRPC();
+  const [termId] = useQueryState("termId");
+  const params = useParams<{ id: string }>();
+  const attendanceQuery = useQuery(
+    trpc.attendance.studentSummary.queryOptions({
+      studentId: params.id,
+      termId: termId ?? undefined,
+    }),
+  );
   const [status, setStatus] = useQueryState("status", {
     defaultValue: "all",
   });
@@ -94,19 +107,22 @@ export function StudentAttendanceSummary() {
                 <Icon className="size-4" />
               </MetricCardHeader>
 
-              <MetricCardValue className="flex items-center justify-between">
-                {metric.value}
-
-                {metric.justified && (
-                  <Badge
-                    variant="secondary"
-                    appearance={"light"}
-                    className="ml-2"
-                  >
-                    {metric.justified} {t("justified")}
-                  </Badge>
-                )}
-              </MetricCardValue>
+              {attendanceQuery.isPending ? (
+                <MetricCardValue className="flex items-center justify-between">
+                  {metric.value}
+                  {metric.justified && (
+                    <Badge
+                      variant="secondary"
+                      appearance={"light"}
+                      className="ml-2"
+                    >
+                      {metric.justified} {t("justified")}
+                    </Badge>
+                  )}
+                </MetricCardValue>
+              ) : (
+                <MetricCardSkeleton className="h-6 w-12" />
+              )}
             </MetricCardButton>
           );
         })}

@@ -77,7 +77,7 @@ export function AbsenceTable() {
                     </Link>
                   </TableCell>
                   <TableCell className="py-0">{absence.value}</TableCell>
-                  <TableCell className="py-0">{absence.justified}</TableCell>
+                  <TableCell className="py-0">0</TableCell>
                   <TableCell className="py-0 text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

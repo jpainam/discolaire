@@ -18,34 +18,34 @@ model AbsenceJustification {
     id          Int      @id @default(autoincrement())
     absenceId   Int
     absence     Absence  @relation(fields: [absenceId], references: [id], onDelete: Cascade)
-    value       Int
+    value       Int      @default(0) // 0 for not justified, 1 for justified
     createdAt   DateTime @default(now())
     createdById String
     reason      String
 }
 
 model Lateness {
-    id             Int                    @id @default(autoincrement())
+    id             Int                     @id @default(autoincrement())
     studentId      String
-    student        Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    student        Student                 @relation(fields: [studentId], references: [id], onDelete: Cascade)
     date           DateTime
     termId         String
-    duration       Int
-    createdAt      DateTime               @default(now())
-    updatedAt      DateTime               @updatedAt
+    duration       String // duration in HH:mm format
+    createdAt      DateTime                @default(now())
+    updatedAt      DateTime                @updatedAt
     createdById    String
-    term           Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
+    term           Term                    @relation(fields: [termId], references: [id], onDelete: Cascade)
     attachments    String[]
     reason         String?
     updatedById    String?
-    justifications LatenssJustification[]
+    justifications LatenessJustification[]
 }
 
-model LatenssJustification {
+model LatenessJustification {
     id          Int      @id @default(autoincrement())
     latenessId  Int
     lateness    Lateness @relation(fields: [latenessId], references: [id], onDelete: Cascade)
-    value       Int
+    value       String
     createdAt   DateTime @default(now())
     createdById String
     reason      String

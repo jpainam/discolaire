@@ -43,30 +43,33 @@ export const latenessRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
+        termIds: z.array(z.string()).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const lateness = await ctx.db.lateness.findMany({
+      const termIds =
+        input.termIds ??
+        (await ctx.db.term
+          .findMany({
+            select: { id: true },
+            where: {
+              schoolId: ctx.schoolId,
+              schoolYearId: ctx.schoolYearId,
+            },
+          })
+          .then((terms) => terms.map((term) => term.id)));
+      return ctx.db.lateness.findMany({
         include: {
           student: true,
+          justifications: true,
         },
         where: {
           studentId: input.studentId,
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
+          termId: {
+            in: termIds,
           },
         },
       });
-
-      return {
-        value: lateness.reduce((acc, curr) => acc + curr.duration, 0),
-        total: lateness.length,
-        justified: lateness.reduce(
-          (acc, curr) => acc + (curr.justified ?? 0),
-          0,
-        ),
-      };
     }),
   byClassroom: protectedProcedure
     .input(
@@ -118,17 +121,28 @@ export const latenessRouter = {
         if (!student.late) {
           continue;
         }
-        return ctx.db.lateness.create({
+        const lateness = await ctx.db.lateness.create({
           data: {
             termId: input.termId,
             studentId: student.id,
             date: input.date,
-            justified: student.justify ?? 0,
+
             createdById: ctx.session.user.id,
-            duration: Number(student.late),
+            duration: student.late,
           },
         });
+        if (student.justify) {
+          await ctx.db.latenessJustification.create({
+            data: {
+              latenessId: lateness.id,
+              reason: "",
+              value: student.justify.toString(),
+              createdById: ctx.session.user.id,
+            },
+          });
+        }
       }
+      return true;
     }),
   byStudent: protectedProcedure
     .input(
@@ -160,7 +174,7 @@ export const latenessRouter = {
       z.object({
         termId: z.string().min(1),
         date: z.coerce.date().default(() => new Date()),
-        duration: z.coerce.number(),
+        duration: z.string().min(1),
         studentId: z.string().min(1),
       }),
     )
@@ -181,12 +195,11 @@ export const latenessRouter = {
       z.object({
         id: z.coerce.number(),
         termId: z.string().min(1),
-        duration: z.coerce.number(),
-        justify: z.coerce.number().optional(),
+        duration: z.string().min(1),
         reason: z.string().optional().default(""),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(({ ctx, input }) => {
       return ctx.db.lateness.update({
         where: {
           id: input.id,
@@ -195,7 +208,6 @@ export const latenessRouter = {
           termId: input.termId,
           duration: input.duration,
           reason: input.reason,
-          justified: input.justify ?? 0,
           updatedById: ctx.session.user.id,
         },
       });

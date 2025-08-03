@@ -28,7 +28,7 @@ import { useTRPC } from "~/trpc/react";
 const schema = z.object({
   termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
-  duration: z.coerce.number(),
+  duration: z.string().min(1),
   justify: z.coerce.number().optional(),
   reason: z.string().optional(),
 });
@@ -42,8 +42,8 @@ export function CreateEditLateness({
     defaultValues: {
       date: lateness?.date ?? new Date(),
       termId: lateness?.termId ? `${lateness.termId}` : "",
-      duration: lateness?.duration ?? 0,
-      justify: lateness?.justified ?? 0,
+      duration: lateness?.duration ?? "",
+      justify: 0,
       reason: lateness?.reason ?? "",
     },
   });
@@ -78,9 +78,10 @@ export function CreateEditLateness({
   const params = useParams<{ id: string }>();
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof schema>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const values = {
       studentId: params.id,
-      duration: Number(data.duration), //parseInt(data.hours) * 60 + parseInt(data.minutes),
+      duration: data.duration,
       termId: data.termId,
       date: data.date,
       reason: data.reason,
@@ -88,10 +89,10 @@ export function CreateEditLateness({
     };
     if (lateness) {
       toast.loading(t("updating"), { id: 0 });
-      updateLatenessMutation.mutate({ ...values, id: lateness.id });
+      //updateLatenessMutation.mutate({ ...values, id: lateness.id });
     } else {
       toast.loading(t("creating"), { id: 0 });
-      createLatenessMutation.mutate(values);
+      //createLatenessMutation.mutate(values);
     }
   };
   return (

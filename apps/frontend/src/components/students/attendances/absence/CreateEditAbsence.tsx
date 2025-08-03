@@ -24,14 +24,12 @@ import { DatePicker } from "~/components/DatePicker";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-import { getErrorMessage } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
   value: z.coerce.number().default(1),
-  justify: z.coerce.number().default(0),
   notify: z.boolean().default(true),
 });
 export function CreateEditAbsence({
@@ -45,7 +43,7 @@ export function CreateEditAbsence({
       date: absence?.date ?? new Date(),
       value: absence?.value ?? 1,
       termId: absence?.termId ? `${absence.termId}` : "",
-      justify: absence?.justified ?? 0,
+
       notify: true,
     },
   });
@@ -83,7 +81,7 @@ export function CreateEditAbsence({
     const values = {
       studentId: params.id,
       value: data.value,
-      justify: data.justify,
+
       termId: data.termId,
     };
     if (absence) {
@@ -92,23 +90,23 @@ export function CreateEditAbsence({
     } else {
       toast.loading(t("creating"), { id: 0 });
       createAbsenceMutation.mutate(values, {
-        onSuccess: (att) => {
-          if (data.notify) {
-            fetch("/api/emails/attendance", {
-              method: "POST",
-              body: JSON.stringify({ id: att.id, type: "absence" }),
-            })
-              .then((res) => {
-                if (res.ok) {
-                  toast.success(t("sent_successfully"), { id: 0 });
-                } else {
-                  toast.error(t("error_sending"), { id: 0 });
-                }
-              })
-              .catch((error) => {
-                toast.error(getErrorMessage(error), { id: 0 });
-              });
-          }
+        onSuccess: () => {
+          // if (data.notify) {
+          //   fetch("/api/emails/attendance", {
+          //     method: "POST",
+          //     body: JSON.stringify({ id: att.id, type: "absence" }),
+          //   })
+          //     .then((res) => {
+          //       if (res.ok) {
+          //         toast.success(t("sent_successfully"), { id: 0 });
+          //       } else {
+          //         toast.error(t("error_sending"), { id: 0 });
+          //       }
+          //     })
+          //     .catch((error) => {
+          //       toast.error(getErrorMessage(error), { id: 0 });
+          //     });
+          // }
         },
       });
     }
@@ -162,7 +160,7 @@ export function CreateEditAbsence({
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="justify"
             render={({ field }) => (
@@ -180,7 +178,7 @@ export function CreateEditAbsence({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
         <FormField
           control={form.control}

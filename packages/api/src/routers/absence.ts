@@ -45,30 +45,33 @@ export const absenceRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
+        termIds: z.array(z.string()).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const absences = await ctx.db.absence.findMany({
+      const termIds =
+        input.termIds ??
+        (await ctx.db.term
+          .findMany({
+            select: { id: true },
+            where: {
+              schoolId: ctx.schoolId,
+              schoolYearId: ctx.schoolYearId,
+            },
+          })
+          .then((terms) => terms.map((term) => term.id)));
+      return ctx.db.absence.findMany({
         include: {
           student: true,
+          justifications: true,
         },
         where: {
           studentId: input.studentId,
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
+          termId: {
+            in: termIds,
           },
         },
       });
-
-      return {
-        total: absences.reduce((acc, curr) => acc + curr.value, 0),
-        value: absences.reduce((acc, curr) => acc + curr.value, 0),
-        justified: absences.reduce(
-          (acc, curr) => acc + (curr.justified ?? 0),
-          0,
-        ),
-      };
     }),
   byClassroom: protectedProcedure
     .input(
@@ -121,13 +124,18 @@ export const absenceRouter = {
     }),
   deleteJustification: protectedProcedure
     .input(z.coerce.number())
-    .mutation(({ ctx, input }) => {
-      return ctx.db.absence.update({
-        data: {
-          justified: null,
-        },
+    .mutation(async ({ ctx, input }) => {
+      const absence = await ctx.db.absence.findUnique({
         where: {
           id: input,
+        },
+      });
+      if (!absence) {
+        throw new Error("Absence not found");
+      }
+      return ctx.db.absenceJustification.deleteMany({
+        where: {
+          absenceId: input,
         },
       });
     }),
@@ -158,9 +166,18 @@ export const absenceRouter = {
             date: new Date(),
             createdById: ctx.session.user.id,
             value: student.absence,
-            justified: student.justify ?? 0,
           },
         });
+        if (student.justify) {
+          await ctx.db.absenceJustification.create({
+            data: {
+              absenceId: absence.id,
+              reason: "",
+              value: student.justify,
+              createdById: ctx.session.user.id,
+            },
+          });
+        }
         absences.push(absence);
       }
       return absences;
@@ -176,16 +193,25 @@ export const absenceRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.absence.create({
+      const absence = await ctx.db.absence.create({
         data: {
           termId: input.termId,
           studentId: input.studentId,
           date: input.date,
           createdById: ctx.session.user.id,
           value: input.value,
-          justified: input.justify ?? 0,
         },
       });
+      if (input.justify) {
+        await ctx.db.absenceJustification.create({
+          data: {
+            absenceId: absence.id,
+            reason: "",
+            value: input.justify,
+            createdById: ctx.session.user.id,
+          },
+        });
+      }
     }),
   update: protectedProcedure
     .input(
@@ -197,16 +223,30 @@ export const absenceRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.absence.update({
+      const absence = await ctx.db.absence.update({
         where: {
           id: input.id,
         },
         data: {
           termId: input.termId,
           value: input.value,
-          justified: input.justify,
         },
       });
+      if (input.justify) {
+        await ctx.db.absenceJustification.deleteMany({
+          where: {
+            absenceId: absence.id,
+          },
+        });
+        await ctx.db.absenceJustification.create({
+          data: {
+            absenceId: absence.id,
+            reason: "",
+            value: input.justify,
+            createdById: ctx.session.user.id,
+          },
+        });
+      }
     }),
   delete: protectedProcedure
     .input(z.number())

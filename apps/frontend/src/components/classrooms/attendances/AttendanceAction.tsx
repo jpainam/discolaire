@@ -60,7 +60,7 @@ export function AttendanceAction({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {attendance && attendance.justified && (
+        {attendance && (
           <DropdownMenuItem
             variant="destructive"
             className="dark:data-[variant=destructive]:focus:bg-destructive/10"
@@ -72,39 +72,38 @@ export function AttendanceAction({
             {t("delete_justification")}
           </DropdownMenuItem>
         )}
-        {(type == "lateness" || type == "absence") &&
-          !attendance?.justified && (
-            <DropdownMenuItem
-            // onSelect={() => {
-            //   if (type == "lateness" && attendance) {
-            //     const lateness = attendance as LatenessType;
-            //     openModal({
-            //       title: t("justify_lateness"),
-            //       description: (
-            //         <>
-            //           {t("lateness")}: {lateness.duration.toString()}
-            //         </>
-            //       ),
-            //       view: <CreateEditLateness lateness={lateness} />,
-            //     });
-            //   } else if (type == "absence" && attendance) {
-            //     const absence = attendance as AbsenceType;
-            //     openModal({
-            //       title: t("justify_absence"),
-            //       description: (
-            //         <>
-            //           {t("absence")}: {absence.value.toString()}
-            //         </>
-            //       ),
-            //       view: <JustifyAbsence absence={absence} />,
-            //     });
-            //   }
-            // }}
-            >
-              <Columns4 />
-              {t("justify")}
-            </DropdownMenuItem>
-          )}
+        {(type == "lateness" || type == "absence") && (
+          <DropdownMenuItem
+          // onSelect={() => {
+          //   if (type == "lateness" && attendance) {
+          //     const lateness = attendance as LatenessType;
+          //     openModal({
+          //       title: t("justify_lateness"),
+          //       description: (
+          //         <>
+          //           {t("lateness")}: {lateness.duration.toString()}
+          //         </>
+          //       ),
+          //       view: <CreateEditLateness lateness={lateness} />,
+          //     });
+          //   } else if (type == "absence" && attendance) {
+          //     const absence = attendance as AbsenceType;
+          //     openModal({
+          //       title: t("justify_absence"),
+          //       description: (
+          //         <>
+          //           {t("absence")}: {absence.value.toString()}
+          //         </>
+          //       ),
+          //       view: <JustifyAbsence absence={absence} />,
+          //     });
+          //   }
+          // }}
+          >
+            <Columns4 />
+            {t("justify")}
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem>
           <MailCheckIcon />
           {t("notify")}

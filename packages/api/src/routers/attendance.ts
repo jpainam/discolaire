@@ -139,7 +139,7 @@ export const attendanceRouter = {
         termId: z.string().optional(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       const termIds = input.termId
         ? [input.termId]
         : await ctx.db.term
@@ -155,11 +155,10 @@ export const attendanceRouter = {
             .then((terms) => terms.map((term) => term.id));
       const absences = await ctx.db.absence.findMany({
         include: {
-          justification: true,
+          justifications: true,
         },
         where: {
           studentId: input.studentId,
-
           termId: {
             in: termIds,
           },
@@ -174,6 +173,9 @@ export const attendanceRouter = {
         },
       });
       const latenesses = await ctx.db.lateness.findMany({
+        include: {
+          justifications: true,
+        },
         where: {
           studentId: input.studentId,
           termId: { in: termIds },
@@ -191,5 +193,53 @@ export const attendanceRouter = {
           termId: { in: termIds },
         },
       });
+      return [
+        {
+          value: absences
+            .reduce((acc, absence) => acc + absence.value, 0)
+            .toString(),
+          type: "absence",
+          justified: absences
+            .map((a) => a.justifications)
+            .flat()
+            .reduce((acc, j) => acc + j.value, 0),
+        },
+        {
+          value: chatters.length.toString(),
+          type: "chatter",
+          justified: 0,
+        },
+        {
+          value: latenesses
+            .reduce(
+              (acc, lateness) => acc + getLatenessValue(lateness.duration),
+              0,
+            )
+            .toString(),
+          type: "lateness",
+          justified: latenesses
+            .map((c) => c.justifications)
+            .flat()
+            .reduce((acc, l) => acc + getLatenessValue(l.value), 0),
+        },
+        {
+          value: exclusions.length.toString(),
+          type: "exclusion",
+          justified: 0,
+        },
+        {
+          value: consignes.length.toString(),
+          type: "consigne",
+          justified: 0,
+        },
+      ];
     }),
 } satisfies TRPCRouterRecord;
+
+function getLatenessValue(value: string) {
+  if (!value.includes(":")) {
+    return parseInt(value, 10);
+  }
+  const [hours, minutes] = value.split(":").map(Number);
+  return (hours ?? 0) * 60 + (minutes ?? 0);
+}
