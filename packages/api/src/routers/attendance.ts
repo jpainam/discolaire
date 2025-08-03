@@ -6,60 +6,56 @@ import { protectedProcedure } from "../trpc";
 export const attendanceRouter = {
   delete: protectedProcedure
     .input(
-      z.array(
-        z.object({
-          id: z.coerce.number(),
-          type: z.enum([
-            "absence",
-            "lateness",
-            "consigne",
-            "exclusion",
-            "chatter",
-          ]),
-        }),
-      ),
+      z.object({
+        id: z.coerce.number(),
+        type: z.enum([
+          "absence",
+          "lateness",
+          "consigne",
+          "exclusion",
+          "chatter",
+        ]),
+      }),
     )
-    .mutation(({ ctx, input }) => {
-      return input.map(async (attend) => {
-        switch (attend.type) {
-          case "absence":
-            await ctx.db.absence.delete({
-              where: {
-                id: attend.id,
-              },
-            });
-            break;
-          case "lateness":
-            await ctx.db.lateness.delete({
-              where: {
-                id: attend.id,
-              },
-            });
-            break;
-          case "consigne":
-            await ctx.db.consigne.delete({
-              where: {
-                id: attend.id,
-              },
-            });
-            break;
-          case "exclusion":
-            await ctx.db.exclusion.delete({
-              where: {
-                id: attend.id,
-              },
-            });
-            break;
-          case "chatter":
-            await ctx.db.chatter.delete({
-              where: {
-                id: attend.id,
-              },
-            });
-            break;
-        }
-        return true;
-      });
+    .mutation(async ({ ctx, input }) => {
+      switch (input.type) {
+        case "absence":
+          await ctx.db.absence.delete({
+            where: {
+              id: input.id,
+            },
+          });
+          break;
+        case "lateness":
+          await ctx.db.lateness.delete({
+            where: {
+              id: input.id,
+            },
+          });
+          break;
+        case "consigne":
+          await ctx.db.consigne.delete({
+            where: {
+              id: input.id,
+            },
+          });
+          break;
+        case "exclusion":
+          await ctx.db.exclusion.delete({
+            where: {
+              id: input.id,
+            },
+          });
+          break;
+        case "chatter":
+          await ctx.db.chatter.delete({
+            where: {
+              id: input.id,
+            },
+          });
+          break;
+      }
+      return true;
     }),
   deletePeriodic: protectedProcedure
     .input(

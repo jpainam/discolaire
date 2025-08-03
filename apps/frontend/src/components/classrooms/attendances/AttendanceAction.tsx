@@ -40,6 +40,7 @@ export function AttendanceAction({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const deleteAttendance = useMutation(
     trpc.attendance.delete.mutationOptions({
       onSuccess: async () => {
@@ -121,7 +122,7 @@ export function AttendanceAction({
             });
             if (isConfirmed) {
               toast.loading(t("deleting"), { id: 0 });
-              deleteAttendance.mutate([{ id: attendanceId, type: type }]);
+              //deleteAttendance.mutate([{ id: attendanceId, type: type }]);
             }
           }}
           variant="destructive"

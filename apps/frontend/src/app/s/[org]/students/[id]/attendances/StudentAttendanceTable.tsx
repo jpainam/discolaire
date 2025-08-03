@@ -9,20 +9,11 @@ import {
   Clock,
   FileText,
   MessageSquare,
-  MoreHorizontal,
   UserX,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -36,6 +27,7 @@ import { Badge } from "~/components/base-badge";
 import { EmptyState } from "~/components/EmptyState";
 import { getLatenessValue } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+import { StudentAttendanceTableDropdown } from "./StudentAttendanceTableDropdown";
 
 export interface AttendanceRecord {
   id: number;
@@ -236,8 +228,7 @@ export function StudentAttendanceTable() {
                     >
                       {record.justified ? (
                         <>
-                          {record.justified}
-                          {t("justified")}
+                          {record.justified} {t("justified")}
                         </>
                       ) : (
                         t("non_justified")
@@ -246,22 +237,10 @@ export function StudentAttendanceTable() {
                   </TableCell>
 
                   <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"} className="size-7">
-                          <MoreHorizontal />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem>{t("justify")}</DropdownMenuItem>
-                        <DropdownMenuItem>{t("edit")}</DropdownMenuItem>
-                        <DropdownMenuItem>
-                          {t("notify_parents")}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>{t("delete")}</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <StudentAttendanceTableDropdown
+                      id={record.id}
+                      type={record.type}
+                    />
                   </TableCell>
                 </TableRow>
               ))
