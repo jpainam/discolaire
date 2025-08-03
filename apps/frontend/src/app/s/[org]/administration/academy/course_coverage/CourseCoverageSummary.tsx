@@ -12,15 +12,6 @@ import {
   TriangleAlert,
 } from "lucide-react";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components//dropdown-menu";
-import { Progress } from "@repo/ui/components//progress";
-import { Separator } from "@repo/ui/components//separator";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -30,6 +21,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { Progress } from "@repo/ui/components/progress";
+import { Separator } from "@repo/ui/components/separator";
 import { cn } from "@repo/ui/lib/utils";
 
 import { Badge } from "~/components/base-badge";
