@@ -205,11 +205,6 @@ export const attendanceRouter = {
             .reduce((acc, j) => acc + j.value, 0),
         },
         {
-          value: chatters.length.toString(),
-          type: "chatter",
-          justified: 0,
-        },
-        {
           value: latenesses
             .reduce(
               (acc, lateness) => acc + getLatenessValue(lateness.duration),
@@ -223,13 +218,19 @@ export const attendanceRouter = {
             .reduce((acc, l) => acc + getLatenessValue(l.value), 0),
         },
         {
-          value: exclusions.length.toString(),
-          type: "exclusion",
+          value: consignes.length.toString(),
+          type: "consigne",
           justified: 0,
         },
         {
-          value: consignes.length.toString(),
-          type: "consigne",
+          value: chatters.length.toString(),
+          type: "chatter",
+          justified: 0,
+        },
+
+        {
+          value: exclusions.length.toString(),
+          type: "exclusion",
           justified: 0,
         },
       ];
