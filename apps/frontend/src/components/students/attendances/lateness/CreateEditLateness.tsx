@@ -7,26 +7,21 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 
-import { DatePicker } from "~/components/DatePicker";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
+
 const schema = z.object({
-  termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
   duration: z.string().min(1),
   justify: z.coerce.number().optional(),
@@ -34,14 +29,15 @@ const schema = z.object({
 });
 export function CreateEditLateness({
   lateness,
+  termId,
 }: {
   lateness?: RouterOutputs["lateness"]["all"][number];
+  termId: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       date: lateness?.date ?? new Date(),
-      termId: lateness?.termId ? `${lateness.termId}` : "",
       duration: lateness?.duration ?? "",
       justify: 0,
       reason: lateness?.reason ?? "",
@@ -53,7 +49,8 @@ export function CreateEditLateness({
   const createLatenessMutation = useMutation(
     trpc.lateness.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.lateness.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.attendance.pathFilter());
+        await queryClient.invalidateQueries(trpc.lateness.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
@@ -78,21 +75,20 @@ export function CreateEditLateness({
   const params = useParams<{ id: string }>();
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const values = {
       studentId: params.id,
       duration: data.duration,
-      termId: data.termId,
+      termId: termId,
       date: data.date,
       reason: data.reason,
       justify: data.justify,
     };
     if (lateness) {
       toast.loading(t("updating"), { id: 0 });
-      //updateLatenessMutation.mutate({ ...values, id: lateness.id });
+      updateLatenessMutation.mutate({ ...values, id: lateness.id });
     } else {
       toast.loading(t("creating"), { id: 0 });
-      //createLatenessMutation.mutate(values);
+      createLatenessMutation.mutate(values);
     }
   };
   return (
@@ -100,26 +96,21 @@ export function CreateEditLateness({
       <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
-          name="termId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("terms")}</FormLabel>
-              <FormControl>
-                <TermSelector {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="date"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t("date")}</FormLabel>
               <FormControl>
-                <DatePicker defaultValue={field.value} {...field} />
+                <Input
+                  type="datetime-local"
+                  onChange={(e) => {
+                    const newDate = e.target.value
+                      ? new Date(e.target.value)
+                      : null;
+
+                    field.onChange(newDate);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -133,15 +124,18 @@ export function CreateEditLateness({
             <FormItem>
               <FormLabel>{t("duration")}</FormLabel>
               <FormControl>
-                <Input type="number" {...field} />
+                <Input {...field} />
               </FormControl>
+              <FormDescription>
+                nombre de retards ou format heure:minute (ex: 00:30)
+              </FormDescription>
 
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-row items-center justify-end gap-4">
           <Button
             onClick={() => {
               closeModal();

@@ -127,7 +127,7 @@ export function StudentAttendanceHeader() {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   disabled={!termId}
-                  onClick={() => {
+                  onSelect={() => {
                     if (!termId) {
                       toast.warning("Veuillez sélectionner une période.");
                       return;
@@ -142,10 +142,14 @@ export function StudentAttendanceHeader() {
                   {t("absence")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => {
+                  onSelect={() => {
+                    if (!termId) {
+                      toast.warning("Veuillez sélectionner une période.");
+                      return;
+                    }
                     openModal({
                       title: `${t("add")} - ${t("lateness")}`,
-                      view: <CreateEditLateness />,
+                      view: <CreateEditLateness termId={termId} />,
                     });
                   }}
                 >
