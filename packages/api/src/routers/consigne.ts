@@ -1,7 +1,10 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+
+
 import { protectedProcedure } from "../trpc";
+
 
 export const consigneRouter = {
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
@@ -65,24 +68,34 @@ export const consigneRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
+        termIds: z.array(z.string()).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const consignes = await ctx.db.consigne.findMany({
+      const termIds =
+        input.termIds ??
+        (await ctx.db.term
+          .findMany({
+            where: {
+              schoolId: ctx.schoolId,
+              schoolYearId: ctx.schoolYearId,
+            },
+            select: {
+              id: true,
+            },
+          })
+          .then((terms) => terms.map((term) => term.id)));
+      return ctx.db.consigne.findMany({
+        include: {
+          term: true,
+        },
         where: {
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
+          termId: {
+            in: termIds,
           },
           studentId: input.studentId,
         },
       });
-
-      return {
-        value: consignes.reduce((acc, curr) => acc + curr.duration, 0),
-        total: consignes.length,
-        justified: 0,
-      };
     }),
   byStudent: protectedProcedure
     .input(

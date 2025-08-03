@@ -105,23 +105,35 @@ export const exclusionRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
+        termIds: z.array(z.string()).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const exclusion = await ctx.db.exclusion.findMany({
+      const termIds =
+        input.termIds ??
+        (await ctx.db.term
+          .findMany({
+            where: {
+              schoolId: ctx.schoolId,
+              schoolYearId: ctx.schoolYearId,
+            },
+            select: {
+              id: true,
+            },
+          })
+          .then((terms) => terms.map((term) => term.id)));
+
+      return ctx.db.exclusion.findMany({
+        include: {
+          term: true,
+        },
         where: {
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
+          termId: {
+            in: termIds,
           },
           studentId: input.studentId,
         },
       });
-      return {
-        value: exclusion.length,
-        total: exclusion.length,
-        justified: 0,
-      };
     }),
   byStudent: protectedProcedure
     .input(

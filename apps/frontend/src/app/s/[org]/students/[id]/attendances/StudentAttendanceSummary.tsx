@@ -5,17 +5,29 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, CheckCircle, Clock, FileText, ListFilter, MessageSquare, UserX } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  FileText,
+  ListFilter,
+  MessageSquare,
+  UserX,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-
-
 import type { metricCardVariants } from "~/components/metric-card";
 import { Badge } from "~/components/base-badge";
-import { MetricCardButton, MetricCardGroup, MetricCardHeader, MetricCardSkeleton, MetricCardTitle, MetricCardValue } from "~/components/metric-card";
+import {
+  MetricCardButton,
+  MetricCardGroup,
+  MetricCardHeader,
+  MetricCardSkeleton,
+  MetricCardTitle,
+  MetricCardValue,
+} from "~/components/metric-card";
 import { useTRPC } from "~/trpc/react";
-
 
 const attendanceToIcon: Record<string, LucideIcon> = {
   absence: UserX,

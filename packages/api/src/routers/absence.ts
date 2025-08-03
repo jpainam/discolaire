@@ -64,6 +64,7 @@ export const absenceRouter = {
         include: {
           student: true,
           justifications: true,
+          term: true,
         },
         where: {
           studentId: input.studentId,

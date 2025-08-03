@@ -1,7 +1,10 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+
+
 import { protectedProcedure } from "../trpc";
+
 
 export const chatterRouter = {
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
@@ -95,23 +98,35 @@ export const chatterRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
+        termIds: z.array(z.string()).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const chatters = await ctx.db.chatter.findMany({
+      const termIds =
+        input.termIds ??
+        (await ctx.db.term
+          .findMany({
+            where: {
+              schoolId: ctx.schoolId,
+              schoolYearId: ctx.schoolYearId,
+            },
+            select: {
+              id: true,
+            },
+          })
+          .then((terms) => terms.map((term) => term.id)));
+
+      return ctx.db.chatter.findMany({
+        include: {
+          term: true,
+        },
         where: {
           studentId: input.studentId,
-          term: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
+          termId: {
+            in: termIds,
           },
         },
       });
-      return {
-        value: chatters.reduce((acc, curr) => acc + curr.value, 0),
-        total: chatters.length,
-        justified: 0,
-      };
     }),
   byStudent: protectedProcedure
     .input(
