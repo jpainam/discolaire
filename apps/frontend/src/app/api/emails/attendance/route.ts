@@ -1,6 +1,5 @@
 import { render } from "@react-email/render";
-import i18next from "i18next";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { db } from "@repo/db";
 import {
@@ -10,16 +9,11 @@ import {
   ExclusionEmail,
   LatenessEmail,
 } from "@repo/transactional";
+import { logger } from "@repo/utils";
 
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
-
-const dateFormat = Intl.DateTimeFormat(i18next.language, {
-  month: "short",
-  weekday: "short",
-  day: "numeric",
-});
 
 const schema = z.object({
   id: z.coerce.number(),
@@ -32,12 +26,13 @@ export async function POST(req: Request) {
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const reqBody = await req.json();
     const result = schema.safeParse(reqBody);
     if (!result.success) {
-      const error = result.error.errors.map((e) => e.message).join(", ");
-      return new Response(error, { status: 400 });
+      const pretty = z.prettifyError(result.error);
+      return new Response(pretty, { status: 400 });
     }
     const { id, type } = result.data;
     let emailData: { title: string; body: string; studentId: string } | null =
@@ -60,14 +55,14 @@ export async function POST(req: Request) {
         emailData = await getExclusionEmail(id);
         break;
       default:
-        return new Response("Invalid type", { status: 400 });
+        return new Response(`Invalid type`, { status: 400 });
     }
 
     const { title, body, studentId } = emailData;
     await completeSend(title, body, studentId);
     return new Response("OK", { status: 200 });
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     return new Response(`An error occurred`, { status: 500 });
   }
 }
@@ -113,7 +108,7 @@ async function getAbsenceEmail(id: number) {
   const body = await render(
     AbsenceEmail({
       studentName: student.lastName ?? student.firstName ?? "",
-      date: dateFormat.format(absence.date),
+      date: absence.date,
       school: {
         id: school.id,
         logo: school.logo,
@@ -159,7 +154,7 @@ async function getConsigneEmail(id: number) {
   const body = await render(
     ConsigneEmail({
       title: title,
-      date: dateFormat.format(consigne.date),
+      date: consigne.date,
       motif: consigne.task,
       studentName: student.lastName ?? student.firstName ?? "",
       school: {
@@ -184,7 +179,7 @@ async function getLatenessEmail(id: number) {
   const body = await render(
     LatenessEmail({
       title: title,
-      date: dateFormat.format(lateness.date),
+      date: lateness.date,
       studentName: student.lastName ?? student.firstName ?? "",
       school: {
         id: school.id,
@@ -210,8 +205,8 @@ async function getExclusionEmail(id: number) {
     ExclusionEmail({
       title: title,
       motif: exclusion.reason,
-      startDate: dateFormat.format(exclusion.startDate),
-      endDate: dateFormat.format(exclusion.endDate),
+      startDate: exclusion.startDate,
+      endDate: exclusion.endDate,
       studentName: student.lastName ?? student.firstName ?? "",
       school: {
         id: school.id,

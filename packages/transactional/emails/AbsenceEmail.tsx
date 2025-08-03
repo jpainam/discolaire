@@ -27,14 +27,14 @@ const defaultSchool = {
 interface Props {
   title: string;
   studentName: string;
-  date: string;
+  date: Date;
   school: School;
 }
 
 export const AbsenceEmail = ({
   title = "Absence de Dupont Pierre",
 
-  date = "Ven, 2 juin",
+  date = new Date(),
   school = defaultSchool,
   studentName = "Dupont Pierre",
 }: Props) => {
@@ -59,8 +59,8 @@ export const AbsenceEmail = ({
             <span className="font-medium">Madame/Monsieur</span>
             <Text className="text-[#121212]">
               Nous vous informons que votre enfant, {studentName}, est absent(e)
-              aujourdh'hui, {date}. Merci de bien vouloir nous tenir informé de
-              la raison de cette absence.
+              aujourdh'hui, {date.toLocaleDateString()}. Merci de bien vouloir
+              nous tenir informé de la raison de cette absence.
             </Text>
             <Text className="text-[#121212]">
               Cordialement, <br />

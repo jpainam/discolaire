@@ -26,7 +26,7 @@ const defaultSchool = {
 };
 interface Props {
   title: string;
-  date: string;
+  date: Date;
   studentName: string;
   school: School;
 }
@@ -34,7 +34,7 @@ interface Props {
 export const LatenessEmail = ({
   title = "Notification de retard de Doe Joe",
   school = defaultSchool,
-  date = "ven, 12 Juin",
+  date = new Date(),
   studentName = "Dupont Pierre",
 }: Props) => {
   return (
@@ -58,7 +58,7 @@ export const LatenessEmail = ({
             <span className="font-medium">Madame/Monsieur</span>
             <Text className="text-[#121212]">
               Nous souhaitons vous informer que votre enfant, {studentName}, est
-              arrivé(e) en retard en classe le {date}.
+              arrivé(e) en retard en classe le {date.toLocaleDateString()}.
               <br />
               Nous vous encourageons à veuillez à ce que votre enfant arrive à
               l'heure afin de favoriser son apprentissage et le bon déroulement

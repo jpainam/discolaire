@@ -26,7 +26,7 @@ const defaultSchool = {
 };
 interface Props {
   title: string;
-  date: string;
+  date: Date;
   motif: string;
   studentName: string;
   school: School;
@@ -35,7 +35,7 @@ interface Props {
 export const ConsigneEmail = ({
   title = "Notification de consigne de votre enfant",
   school = defaultSchool,
-  date = "ven, 12 Juin",
+  date = new Date(),
   motif = "comportement inapproprié",
   studentName = "Dupont Pierre",
 }: Props) => {
@@ -60,7 +60,7 @@ export const ConsigneEmail = ({
             <span className="font-medium">Madame/Monsieur</span>
             <Text className="text-[#121212]">
               Nous vous informons que votre enfant, {studentName}, a été placé
-              en consigne le {date} en raison de:{" "}
+              en consigne le {date.toLocaleDateString()} en raison de:{" "}
             </Text>
             <Text className="text-center text-[#121212]">
               <b>{motif} </b>

@@ -26,8 +26,8 @@ const defaultSchool = {
 };
 interface Props {
   title: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   motif: string;
   studentName: string;
   school: School;
@@ -37,8 +37,8 @@ export const ExclusionEmail = ({
   title = "Notification d'exclusion temporaire de Dupont Pierre",
   school = defaultSchool,
   motif = "non respect du reglèment intérieur",
-  startDate = "ven, 15 juin",
-  endDate = "Merc, 21 Juin",
+  startDate = new Date(),
+  endDate = new Date(),
   studentName = "Dupont Pierre",
 }: Props) => {
   return (
@@ -63,7 +63,8 @@ export const ExclusionEmail = ({
             <Text className="text-[#121212]">
               Nous vous informons que votre enfant, {studentName}, a fait
               l'objet d'une exclusion temporaire de l'établissement à compter du
-              {startDate} jusqu'au {endDate}. Cette décision a été prise en
+              {startDate.toLocaleDateString()} jusqu'au{" "}
+              {endDate.toLocaleDateString()}. Cette décision a été prise en
               raison de {motif}.
               <br />
               Nous vous invitons à rencontrer l'équipe éducative afin de
