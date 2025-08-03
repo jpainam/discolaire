@@ -2,6 +2,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { LogActivityTable } from "~/components/LogActivityTable";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
+import { ShortCalendar } from "./ShortCalendar";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -15,6 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   return (
     <div className="flex flex-col p-2">
       <LogActivityTable logs={logs} />
+      <ShortCalendar />
     </div>
   );
 }

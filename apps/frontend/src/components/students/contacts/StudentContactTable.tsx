@@ -164,7 +164,11 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                       {canUpdateStudentContact && (
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Button variant={"ghost"} size={"icon"}>
+                            <Button
+                              className="size-7"
+                              variant={"ghost"}
+                              size={"icon"}
+                            >
                               <FileHeart className="h-4 w-4" />
                             </Button>
                           </PopoverTrigger>
@@ -190,7 +194,11 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                       )}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant={"ghost"} size={"icon"}>
+                          <Button
+                            className="size-7"
+                            variant={"ghost"}
+                            size={"icon"}
+                          >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>

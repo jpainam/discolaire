@@ -216,7 +216,7 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"} size={"icon"}>
+          <Button className="size-7" variant={"ghost"} size={"icon"}>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

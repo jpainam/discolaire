@@ -101,7 +101,7 @@ export default function StudentDetails() {
           {t("dateOfExit")}
         </span>
         <span>
-          {" "}
+      
           {student.dateOfExit && dateFormat.format(student.dateOfExit)}
         </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
@@ -127,7 +127,7 @@ export default function StudentDetails() {
           {t("formerSchool")}
         </span>
         <span className="line-clamp-1 overflow-ellipsis">
-          {student.formerSchool?.name ?? "N/A"}
+          {decode(student.formerSchool?.name ?? "N/A")}
         </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
           <BookHeart className="h-4 w-4 stroke-1" /> {t("hobbies")}

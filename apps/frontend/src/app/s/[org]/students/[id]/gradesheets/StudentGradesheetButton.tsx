@@ -13,6 +13,7 @@ import {
 import { useLocale } from "~/i18n";
 
 export function StudentGradesheetButton({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   grade,
 }: {
   grade: {
@@ -27,7 +28,6 @@ export function StudentGradesheetButton({
   };
 }) {
   const { t } = useLocale();
-  console.log(grade);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
