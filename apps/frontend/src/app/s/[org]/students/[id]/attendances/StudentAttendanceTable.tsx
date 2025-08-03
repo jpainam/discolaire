@@ -34,6 +34,7 @@ import {
 
 import { Badge } from "~/components/base-badge";
 import { EmptyState } from "~/components/EmptyState";
+import { getLatenessValue } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 export interface AttendanceRecord {
@@ -43,7 +44,7 @@ export interface AttendanceRecord {
   term: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   details: any;
-  justified: boolean;
+  justified: number;
 }
 
 const formatDetails = (record: AttendanceRecord) => {
@@ -140,7 +141,8 @@ export function StudentAttendanceTable() {
       date: absence.date,
       term: absence.term.name,
       details: { numberOfAbsences: absence.value },
-      justified: absence.justifications.length > 0,
+      justified:
+        absence.justifications.reduce((acc, j) => acc + j.value, 0) || 0,
     })),
     ...latenesses.map((lateness) => ({
       id: lateness.id,
@@ -148,7 +150,11 @@ export function StudentAttendanceTable() {
       date: lateness.date,
       term: lateness.term.name,
       details: { duration: lateness.duration },
-      justified: lateness.justifications.length > 0,
+      justified:
+        lateness.justifications.reduce(
+          (acc, j) => acc + getLatenessValue(j.value),
+          0,
+        ) || 0,
     })),
     ...consignes.map((consigne) => ({
       id: consigne.id,
@@ -156,7 +162,7 @@ export function StudentAttendanceTable() {
       date: consigne.date,
       term: consigne.term.name,
       details: { task: consigne.task, duration: consigne.duration },
-      justified: false, // Consignes are not justified
+      justified: 0, // Consignes are not justified
     })),
     ...chatters.map((chatter) => ({
       id: chatter.id,
@@ -164,7 +170,7 @@ export function StudentAttendanceTable() {
       date: chatter.date,
       term: chatter.term.name,
       details: { numberOfChatter: chatter.value },
-      justified: false,
+      justified: 0,
     })),
     ...exclusions.map((exclusion) => ({
       id: exclusion.id,
@@ -176,7 +182,7 @@ export function StudentAttendanceTable() {
         endDate: exclusion.endDate,
         reason: exclusion.reason,
       },
-      justified: false, // Exclusions are not justified
+      justified: 0, // Exclusions are not justified
     })),
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
@@ -227,7 +233,16 @@ export function StudentAttendanceTable() {
                     <Badge
                       variant={record.justified ? "success" : "destructive"}
                       appearance={"light"}
-                    ></Badge>
+                    >
+                      {record.justified ? (
+                        <>
+                          {record.justified}
+                          {t("justified")}
+                        </>
+                      ) : (
+                        t("non_justified")
+                      )}
+                    </Badge>
                   </TableCell>
 
                   <TableCell className="text-right">

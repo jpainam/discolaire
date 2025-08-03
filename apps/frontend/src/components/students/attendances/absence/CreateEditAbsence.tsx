@@ -21,39 +21,43 @@ import {
 import { Input } from "@repo/ui/components/input";
 
 import { DatePicker } from "~/components/DatePicker";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
-  termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
   value: z.coerce.number().default(1),
   notify: z.boolean().default(true),
+  justify: z.coerce.number().default(0),
 });
 export function CreateEditAbsence({
   absence,
+  termId,
 }: {
   absence?: RouterOutputs["absence"]["all"][number];
+  termId: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       date: absence?.date ?? new Date(),
       value: absence?.value ?? 1,
-      termId: absence?.termId ? `${absence.termId}` : "",
 
+      justify: 0,
       notify: true,
     },
   });
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+
   const createAbsenceMutation = useMutation(
     trpc.absence.create.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.attendance.pathFilter());
+        await queryClient.invalidateQueries(trpc.absence.pathFilter());
+
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
@@ -81,52 +85,21 @@ export function CreateEditAbsence({
     const values = {
       studentId: params.id,
       value: data.value,
-
-      termId: data.termId,
+      justify: data.justify,
+      date: data.date,
+      termId: termId,
     };
     if (absence) {
       toast.loading(t("updating"), { id: 0 });
       updateAbsenceMutation.mutate({ ...values, id: absence.id });
     } else {
       toast.loading(t("creating"), { id: 0 });
-      createAbsenceMutation.mutate(values, {
-        onSuccess: () => {
-          // if (data.notify) {
-          //   fetch("/api/emails/attendance", {
-          //     method: "POST",
-          //     body: JSON.stringify({ id: att.id, type: "absence" }),
-          //   })
-          //     .then((res) => {
-          //       if (res.ok) {
-          //         toast.success(t("sent_successfully"), { id: 0 });
-          //       } else {
-          //         toast.error(t("error_sending"), { id: 0 });
-          //       }
-          //     })
-          //     .catch((error) => {
-          //       toast.error(getErrorMessage(error), { id: 0 });
-          //     });
-          // }
-        },
-      });
+      createAbsenceMutation.mutate(values);
     }
   };
   return (
     <Form {...form}>
       <form className="grid gap-2" onSubmit={form.handleSubmit(handleSubmit)}>
-        <FormField
-          control={form.control}
-          name="termId"
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>{t("terms")}</FormLabel>
-              <FormControl>
-                <TermSelector {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="date"
@@ -160,7 +133,7 @@ export function CreateEditAbsence({
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="justify"
             render={({ field }) => (
@@ -178,7 +151,7 @@ export function CreateEditAbsence({
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
         </div>
         <FormField
           control={form.control}

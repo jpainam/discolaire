@@ -13,6 +13,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -125,12 +126,15 @@ export function StudentAttendanceHeader() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                  //disabled={!classroomId}
+                  disabled={!termId}
                   onClick={() => {
-                    //if (!classroomId) return;
+                    if (!termId) {
+                      toast.warning("Veuillez sélectionner une période.");
+                      return;
+                    }
                     openModal({
                       title: `${t("add")} - ${t("absence")}`,
-                      view: <CreateEditAbsence />,
+                      view: <CreateEditAbsence termId={termId} />,
                     });
                   }}
                 >
