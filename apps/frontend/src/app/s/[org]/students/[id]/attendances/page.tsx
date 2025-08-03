@@ -1,14 +1,9 @@
 import { Suspense } from "react";
 
-
-
 import { Skeleton } from "@repo/ui/components/skeleton";
-
-
 
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentAttendanceTable } from "./StudentAttendanceTable";
-
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

@@ -29,6 +29,12 @@ export default async function Layout(props: {
       <EmptyState className="my-8" title={t("student_not_registered_yet")} />
     );
   }
+  const grades = await caller.student.grades({
+    id: params.id,
+  });
+  if (grades.length === 0) {
+    return <EmptyState className="my-8" title={t("no_data")} />;
+  }
   //const searchParams = await props.searchParams;
   //const term = searchParams?.term;
   batchPrefetch([

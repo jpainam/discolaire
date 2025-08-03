@@ -9,12 +9,20 @@ import {
   Clock,
   FileText,
   MessageSquare,
+  MoreHorizontal,
   UserX,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -24,54 +32,19 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
+import { Badge } from "~/components/base-badge";
+import { EmptyState } from "~/components/EmptyState";
 import { useTRPC } from "~/trpc/react";
 
-type AttendanceType =
-  | "absence"
-  | "lateness"
-  | "consigne"
-  | "chatter"
-  | "exclusion";
 export interface AttendanceRecord {
-  id: string;
-  type: AttendanceType;
-  date: string;
+  id: number;
+  type: string;
+  date: Date;
   term: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   details: any;
   justified: boolean;
 }
-
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case "justified":
-      return (
-        <Badge
-          variant="default"
-          className="bg-green-100 text-green-800 hover:bg-green-100"
-        >
-          Justified
-        </Badge>
-      );
-    case "pending":
-      return (
-        <Badge
-          variant="default"
-          className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
-        >
-          Pending
-        </Badge>
-      );
-    case "not_justified":
-      return <Badge variant="destructive">Not Justified</Badge>;
-    default:
-      return <Badge variant="secondary">Unknown</Badge>;
-  }
-};
-
-const canJustify = (record: AttendanceRecord) => {
-  return ["absence", "lateness", "exclusion"].includes(record.type);
-};
 
 const formatDetails = (record: AttendanceRecord) => {
   switch (record.type) {
@@ -106,11 +79,6 @@ const formatDetails = (record: AttendanceRecord) => {
       return "N/A";
   }
 };
-
-interface AttendanceTableProps {
-  data: AttendanceRecord[];
-  onJustify: (record: AttendanceRecord) => void;
-}
 
 const getTypeIcon = (type: string) => {
   switch (type) {
@@ -171,7 +139,7 @@ export function StudentAttendanceTable() {
       type: "absence",
       date: absence.date,
       term: absence.term.name,
-      details: { numberOfAbsences: absence.justifications.length },
+      details: { numberOfAbsences: absence.value },
       justified: absence.justifications.length > 0,
     })),
     ...latenesses.map((lateness) => ({
@@ -195,8 +163,8 @@ export function StudentAttendanceTable() {
       type: "chatter",
       date: chatter.date,
       term: chatter.term.name,
-      details: { numberOfChatter: chatter.justifications.length },
-      justified: chatter.justifications.length > 0,
+      details: { numberOfChatter: chatter.value },
+      justified: false,
     })),
     ...exclusions.map((exclusion) => ({
       id: exclusion.id,
@@ -210,28 +178,82 @@ export function StudentAttendanceTable() {
       },
       justified: false, // Exclusions are not justified
     })),
-  ];
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>{t("type")}</TableHead>
-          <TableHead>{t("date")}</TableHead>
-          <TableHead>{t("term")}</TableHead>
-          <TableHead>{t("details")}</TableHead>
-          <TableHead>{t("status")}</TableHead>
-          <TableHead className="text-right"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">INV001</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell>Credit Card</TableCell>
-          <TableCell className="text-right">.00</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <div className="px-4">
+      <div className="bg-background overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead>{t("type")}</TableHead>
+              <TableHead>{t("date")}</TableHead>
+              <TableHead>{t("term")}</TableHead>
+              <TableHead>{t("details")}</TableHead>
+              <TableHead>{t("status")}</TableHead>
+              <TableHead className="text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center">
+                  <EmptyState className="my-8" />
+                </TableCell>
+              </TableRow>
+            ) : (
+              data.map((record) => (
+                <TableRow key={record.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {getTypeIcon(record.type)}
+                      <span className="font-medium capitalize">
+                        {record.type}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {format(new Date(record.date), "MMM dd, yyyy")}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{record.term}</Badge>
+                  </TableCell>
+                  <TableCell className="max-w-xs">
+                    <div className="truncate" title={formatDetails(record)}>
+                      {formatDetails(record)}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={record.justified ? "success" : "destructive"}
+                      appearance={"light"}
+                    ></Badge>
+                  </TableCell>
+
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant={"ghost"} className="size-7">
+                          <MoreHorizontal />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem>{t("justify")}</DropdownMenuItem>
+                        <DropdownMenuItem>{t("edit")}</DropdownMenuItem>
+                        <DropdownMenuItem>
+                          {t("notify_parents")}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>{t("delete")}</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }

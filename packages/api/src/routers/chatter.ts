@@ -1,10 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-
-
 import { protectedProcedure } from "../trpc";
-
 
 export const chatterRouter = {
   get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
