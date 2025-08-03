@@ -101,7 +101,6 @@ export default function StudentDetails() {
           {t("dateOfExit")}
         </span>
         <span>
-      
           {student.dateOfExit && dateFormat.format(student.dateOfExit)}
         </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">

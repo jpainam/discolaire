@@ -16,7 +16,7 @@ import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 interface TermSelectorProps {
-  onChange?: (value?: string | null) => void;
+  onChange?: (value: string | null) => void;
   placeholder?: string;
   className?: string;
   defaultValue?: string | null;
@@ -36,7 +36,7 @@ export function TermSelector({
 
   const handleChange = useCallback(
     (value: string | null) => {
-      onChange?.(value == "all" ? undefined : value);
+      onChange?.(value == "all" ? null : value);
     },
     [onChange],
   );

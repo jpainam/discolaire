@@ -132,4 +132,64 @@ export const attendanceRouter = {
         }),
       ]);
     }),
+  studentSummary: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        termId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const termIds = input.termId
+        ? [input.termId]
+        : await ctx.db.term
+            .findMany({
+              where: {
+                schoolId: ctx.schoolId,
+                schoolYearId: ctx.schoolYearId,
+              },
+              select: {
+                id: true,
+              },
+            })
+            .then((terms) => terms.map((term) => term.id));
+      const absences = await ctx.db.absence.findMany({
+        include: {
+          justification: true,
+        },
+        where: {
+          studentId: input.studentId,
+
+          termId: {
+            in: termIds,
+          },
+        },
+      });
+      const chatters = await ctx.db.chatter.findMany({
+        where: {
+          studentId: input.studentId,
+          termId: {
+            in: termIds,
+          },
+        },
+      });
+      const latenesses = await ctx.db.lateness.findMany({
+        where: {
+          studentId: input.studentId,
+          termId: { in: termIds },
+        },
+      });
+      const exclusions = await ctx.db.exclusion.findMany({
+        where: {
+          studentId: input.studentId,
+          termId: { in: termIds },
+        },
+      });
+      const consignes = await ctx.db.consigne.findMany({
+        where: {
+          studentId: input.studentId,
+          termId: { in: termIds },
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

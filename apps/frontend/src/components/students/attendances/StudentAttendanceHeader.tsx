@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   BaselineIcon,
   ChevronDown,
@@ -12,6 +12,7 @@ import {
   ShieldAlertIcon,
   Trash2,
 } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -22,6 +23,13 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 
 import { PreventAbsence } from "~/components/attendances/PreventAbsence";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -37,16 +45,12 @@ import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
 import { CreateEditExclusion } from "./exclusion/CreateEditExclusion";
 import { CreateEditLateness } from "./lateness/CreateEditLateness";
 
-export function StudentAttendanceHeader({
-  studentId,
-  classroomId,
-}: {
-  studentId: string;
-  classroomId?: string;
-}) {
+export function StudentAttendanceHeader() {
+  const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const { openModal } = useModal();
-  const searchParams = useSearchParams();
+  const [termId, setTermId] = useQueryState("termId");
+  const [attendanceType, setAttendanceType] = useQueryState("attendanceType");
 
   const canCreateAttendance = useCheckPermission(
     "attendance",
@@ -64,12 +68,31 @@ export function StudentAttendanceHeader({
       {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}
 
       <TermSelector
-        defaultValue={searchParams.get("term")}
-        className="md:w-[300px]"
+        defaultValue={termId}
+        className="md:w-1/5"
         onChange={(val) => {
-          console.log(val);
+          void setTermId(val);
         }}
       />
+      <Label>{t("attendance_type")}</Label>
+      <Select
+        defaultValue={attendanceType ?? "all"}
+        onValueChange={(val) => {
+          void setAttendanceType(val == "all" ? null : val);
+        }}
+      >
+        <SelectTrigger className="w-1/5">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">{t("attendance_type")}</SelectItem>
+          <SelectItem value="absence">{t("absence")}</SelectItem>
+          <SelectItem value="chatter">{t("chatter")}</SelectItem>
+          <SelectItem value="consigne">{t("consigne")}</SelectItem>
+          <SelectItem value="exclusion">{t("exclusion")}</SelectItem>
+          <SelectItem value="lateness">{t("lateness")}</SelectItem>
+        </SelectContent>
+      </Select>
       <div className="ml-auto flex flex-row items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -83,7 +106,7 @@ export function StudentAttendanceHeader({
               onSelect={() => {
                 openModal({
                   title: t("prevent_an_absence"),
-                  view: <PreventAbsence studentId={studentId} />,
+                  view: <PreventAbsence studentId={params.id} />,
                 });
               }}
             >
@@ -102,9 +125,9 @@ export function StudentAttendanceHeader({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                  disabled={!classroomId}
+                  //disabled={!classroomId}
                   onClick={() => {
-                    if (!classroomId) return;
+                    //if (!classroomId) return;
                     openModal({
                       title: `${t("add")} - ${t("absence")}`,
                       view: <CreateEditAbsence />,
