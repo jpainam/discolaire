@@ -23,6 +23,10 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
+import type {
+  AttendanceRecord,
+  AttendanceRecordType,
+} from "~/components/students/attendances/student-attendance-record";
 import { Badge } from "~/components/base-badge";
 import { EmptyState } from "~/components/EmptyState";
 import { useSheet } from "~/hooks/use-sheet";
@@ -30,22 +34,6 @@ import { getLatenessValue } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { StudentAttendanceDetails } from "./StudentAttendanceDetails";
 import { StudentAttendanceTableDropdown } from "./StudentAttendanceTableDropdown";
-
-type AttendanceRecordType =
-  | "absence"
-  | "chatter"
-  | "consigne"
-  | "exclusion"
-  | "lateness";
-export interface AttendanceRecord {
-  id: number;
-  type: AttendanceRecordType;
-  date: Date;
-  term: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  details: any;
-  justified: number;
-}
 
 const formatDetails = (record: AttendanceRecord) => {
   switch (record.type) {
@@ -210,24 +198,23 @@ export function StudentAttendanceTable() {
               </TableRow>
             ) : (
               data.map((record) => (
-                <TableRow
-                  key={record.id}
-                  onClick={() => {
-                    openSheet({
-                      title: t("attendance_details"),
-
-                      view: (
-                        <StudentAttendanceDetails
-                          type={record.type}
-                          id={record.id}
-                        />
-                      ),
-                    });
-                  }}
-                  className="hover:bg-muted/50 cursor-pointer"
-                >
+                <TableRow key={record.id}>
                   <TableCell>
-                    <div className="flex items-center gap-2">
+                    <div
+                      className="flex cursor-pointer items-center gap-2 hover:underline"
+                      onClick={() => {
+                        openSheet({
+                          title: t("attendance_details"),
+
+                          view: (
+                            <StudentAttendanceDetails
+                              type={record.type}
+                              id={record.id}
+                            />
+                          ),
+                        });
+                      }}
+                    >
                       {getTypeIcon(record.type)}
                       <span className="font-medium capitalize">
                         {record.type}
@@ -261,10 +248,7 @@ export function StudentAttendanceTable() {
                   </TableCell>
 
                   <TableCell className="text-right">
-                    <StudentAttendanceTableDropdown
-                      id={record.id}
-                      type={record.type}
-                    />
+                    <StudentAttendanceTableDropdown record={record} />
                   </TableCell>
                 </TableRow>
               ))

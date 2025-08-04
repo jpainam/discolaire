@@ -273,6 +273,23 @@ export const attendanceRouter = {
         },
       ];
     }),
+  justify: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        type: z.enum([
+          "absence",
+          "lateness",
+          "consigne",
+          "exclusion",
+          "chatter",
+        ]),
+      }),
+    )
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .mutation(async ({ ctx, input }) => {
+      // This mutation is a placeholder for future justification logic.
+    }),
 } satisfies TRPCRouterRecord;
 
 function getLatenessValue(value: string) {

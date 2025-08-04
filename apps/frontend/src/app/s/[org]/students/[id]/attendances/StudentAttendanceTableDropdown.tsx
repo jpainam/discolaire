@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
 import {
   BadgeCheck,
   MailIcon,
@@ -20,15 +21,16 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 
+import type { AttendanceRecord } from "~/components/students/attendances/student-attendance-record";
+import { CreateEditJustification } from "~/components/students/attendances/CreateEditJustification";
+import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function StudentAttendanceTableDropdown({
-  id,
-  type,
+  record,
 }: {
-  id: number;
-  type: string;
+  record: AttendanceRecord;
 }) {
   const confirm = useConfirm();
   const trpc = useTRPC();
@@ -50,6 +52,7 @@ export function StudentAttendanceTableDropdown({
       },
     }),
   );
+  const { openModal } = useModal();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -58,7 +61,21 @@ export function StudentAttendanceTableDropdown({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            openModal({
+              title:
+                record.justified > 0
+                  ? "Update Justification"
+                  : "Add Justification",
+              description: (
+                <>{`Provide justification for the ${record.type} record from{" "}
+                        ${format(new Date(record.date), "MMMM dd, yyyy")}`}</>
+              ),
+              view: <CreateEditJustification record={record} />,
+            });
+          }}
+        >
           <BadgeCheck />
           {t("justify")}
         </DropdownMenuItem>
@@ -80,13 +97,8 @@ export function StudentAttendanceTableDropdown({
             if (isConfirmed) {
               toast.loading(t("deleting"), { id: 0 });
               deleteAttendanceMutation.mutate({
-                id: id,
-                type: type as
-                  | "absence"
-                  | "lateness"
-                  | "consigne"
-                  | "exclusion"
-                  | "chatter",
+                id: record.id,
+                type: record.type,
               });
             }
           }}
