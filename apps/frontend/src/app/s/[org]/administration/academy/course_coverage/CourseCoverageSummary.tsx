@@ -1,5 +1,6 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   CheckCircle,
   MoreHorizontal,
@@ -11,7 +12,10 @@ import {
   TrendingUp,
   TriangleAlert,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { parseAsString, useQueryStates } from "nuqs";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -33,29 +37,54 @@ import { Separator } from "@repo/ui/components/separator";
 import { cn } from "@repo/ui/lib/utils";
 
 import { Badge } from "~/components/base-badge";
+import { useTRPC } from "~/trpc/react";
 
 export function CourseCoverageSummary() {
+  const trpc = useTRPC();
+  const [{ classroomId, staffId, categoryId }] = useQueryStates({
+    classroomId: parseAsString.withDefault(""),
+    staffId: parseAsString.withDefault(""),
+    categoryId: parseAsString.withDefault(""),
+  });
+  const { data: categories } = useSuspenseQuery(
+    trpc.program.categories.queryOptions(),
+  );
+
+  const { data: coverage } = useSuspenseQuery(
+    trpc.subject.getPrograms.queryOptions({
+      classroomId,
+      staffId,
+      categoryId,
+    }),
+  );
+  console.log("coverage", coverage);
+  const t = useTranslations();
+
+  const summary = getCoverageNumber(coverage);
+  const overallProgress =
+    summary.completedCount / (summary.totalPrograms || 1e9);
+
   const performance = [
     {
-      label: "Deals Closed",
-      value: 27,
-      trend: 12,
+      label: t("completed"),
+      value: summary.completedCount,
+      trend: summary.completedPercentage,
       trendDir: "up",
     },
     {
-      label: "Revenue",
-      value: "$182.4k",
-      trend: 6,
+      label: t("in_progress"),
+      value: summary.startedCount,
+      trend: summary.startedPercentage,
       trendDir: "up",
     },
     {
-      label: "Conversion",
-      value: "72%",
-      trend: 3,
+      label: t("not_started"),
+      value: summary.notStartedCount,
+      trend: summary.notStartedPercentage,
       trendDir: "down",
     },
   ];
-  const pipelineProgress = 76;
+
   const activity = [
     {
       text: "Closed deal with FinSight Inc.",
@@ -83,9 +112,9 @@ export function CourseCoverageSummary() {
       <Card className="w-full">
         <CardHeader className="">
           <CardTitle className="flex flex-col gap-1">
-            <span>Staff Performance</span>
+            <span>Couverture</span>
             <span className="text-muted-foreground text-xs font-normal">
-              Sales Manager
+              Resumé de la couverture des programmes
             </span>
           </CardTitle>
           <CardAction>
@@ -126,7 +155,9 @@ export function CourseCoverageSummary() {
           {/* Q3 Performance */}
           <div>
             <div className="text-accent-foreground mb-2.5 text-sm font-medium">
-              Q3 Performance
+              {categoryId
+                ? categories.find((c) => (c.id = categoryId))?.title
+                : t("Coverage")}
             </div>
             <div className="grid grid-cols-3 gap-2">
               {performance.map((item) => (
@@ -168,13 +199,13 @@ export function CourseCoverageSummary() {
           <div>
             <div className="mb-2.5 flex items-center justify-between">
               <span className="text-foreground text-sm font-medium">
-                Pipeline Progress
+                {t("overall_progress")}
               </span>
               <span className="text-foreground text-xs font-semibold">
-                {pipelineProgress}%
+                {overallProgress * 100}%
               </span>
             </div>
-            <Progress value={pipelineProgress} className="bg-muted" />
+            <Progress value={overallProgress} className="bg-muted" />
           </div>
 
           <Separator />
@@ -182,7 +213,7 @@ export function CourseCoverageSummary() {
           {/* Recent Activity */}
           <div>
             <div className="text-foreground mb-2.5 text-sm font-medium">
-              Recent Activity
+              {t("Recent Activities")}
             </div>
             <ul className="space-y-2">
               {activity.map((a, i) => (
@@ -219,4 +250,47 @@ export function CourseCoverageSummary() {
       </Card>
     </div>
   );
+}
+
+function getCoverageNumber(values: RouterOutputs["subject"]["getPrograms"]) {
+  let completedCount = 0;
+  let startedCount = 0;
+  let notStartedCount = 0;
+  let totalPrograms = 0;
+
+  for (const value of values) {
+    totalPrograms += value.programs.length;
+    for (const program of value.programs) {
+      const actualSessions = program.objectives.length;
+      const requiredSessions = program.requiredSessionCount;
+
+      if (actualSessions === 0) {
+        notStartedCount++;
+      } else if (actualSessions >= requiredSessions) {
+        completedCount++;
+      } else {
+        startedCount++;
+      }
+    }
+  }
+
+  const completedPercentage = totalPrograms
+    ? (completedCount / totalPrograms) * 100
+    : 0;
+  const startedPercentage = totalPrograms
+    ? (startedCount / totalPrograms) * 100
+    : 0;
+  const notStartedPercentage = totalPrograms
+    ? (notStartedCount / totalPrograms) * 100
+    : 0;
+
+  return {
+    totalPrograms,
+    completedCount,
+    startedCount,
+    notStartedCount,
+    completedPercentage: parseFloat(completedPercentage.toFixed(2)),
+    startedPercentage: parseFloat(startedPercentage.toFixed(2)),
+    notStartedPercentage: parseFloat(notStartedPercentage.toFixed(2)),
+  };
 }

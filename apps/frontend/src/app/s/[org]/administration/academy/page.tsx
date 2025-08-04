@@ -111,7 +111,11 @@ export default async function Page(props: PageProps) {
               </ErrorBoundary>
             </div>
             <div className="pt-4">
-              <CourseCoverageSummary />
+              <ErrorBoundary errorComponent={ErrorFallback}>
+                <Suspense fallback={<Skeleton className="h-1/6 w-full" />}>
+                  <CourseCoverageSummary  />
+                </Suspense>
+              </ErrorBoundary>
               <CourseCoveragePieChart />
             </div>
           </div>

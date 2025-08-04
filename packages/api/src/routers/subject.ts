@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { decode } from "entities";
 import { z } from "zod";
 
+import { getPrograms } from "../services/subject-service";
 import { protectedProcedure } from "../trpc";
 
 export const subjectRouter = {
@@ -216,6 +217,24 @@ export const subjectRouter = {
             },
           },
         },
+      });
+    }),
+
+  getPrograms: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().optional(),
+        staffId: z.string().optional(),
+        categoryId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return getPrograms({
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+        classroomId: input.classroomId,
+        categoryId: input.categoryId,
+        staffId: input.staffId,
       });
     }),
 } satisfies TRPCRouterRecord;
