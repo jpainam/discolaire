@@ -25,17 +25,27 @@ export const teachingSessionRouter = {
         take: input.limit,
         include: {
           createdBy: true,
-          subject: {
+          programSessions: {
             include: {
-              course: true,
-              teacher: true,
+              program: {
+                include: {
+                  subject: true,
+                },
+              },
             },
           },
         },
         where: {
-          subject: {
-            classroom: {
-              schoolYearId: ctx.schoolYearId,
+          programSessions: {
+            some: {
+              program: {
+                subject: {
+                  classroom: {
+                    schoolYearId: ctx.schoolYearId,
+                    schoolId: ctx.schoolId,
+                  },
+                },
+              },
             },
           },
         },
@@ -68,7 +78,6 @@ export const teachingSessionRouter = {
         },
         include: {
           createdBy: true,
-          subject: true,
         },
         where: {
           subjectId: input.subjectId,
@@ -111,7 +120,6 @@ export const teachingSessionRouter = {
       },
       include: {
         createdBy: true,
-        subject: true,
       },
     });
   }),

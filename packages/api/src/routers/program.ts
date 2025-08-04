@@ -78,8 +78,11 @@ export const programRouter = {
     return ctx.db.program.findUniqueOrThrow({
       include: {
         subject: true,
-        objectives: true,
-
+        teachingSessions: {
+          include: {
+            session: true,
+          },
+        },
         category: true,
       },
       where: {
@@ -96,10 +99,9 @@ export const programRouter = {
         },
         include: {
           category: true,
-          objectives: {
+          teachingSessions: {
             include: {
               session: true,
-              program: true,
             },
           },
         },

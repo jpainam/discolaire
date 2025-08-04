@@ -38,6 +38,7 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 import { CourseCoverageDetails } from "./CourseCoverageDetails";
 
 export function CourseCoverageTable() {
@@ -138,17 +139,16 @@ export function CourseCoverageTable() {
                 className="hover:bg-muted/50 cursor-pointer"
                 onClick={() => {
                   openSheet({
-                    title: p.course,
-                    className: "w-96",
-                    description: p.teacher,
-                    view: <CourseCoverageDetails subjectId={p.subjectId} />,
+                    title: p.course.name,
+                    description: getFullName(p.teacher),
+                    view: <CourseCoverageDetails subjectId={p.id} />,
                   });
                 }}
               >
                 <TableCell className="w-[4px] p-1">
                   <div
                     style={{
-                      backgroundColor: p.courseColor,
+                      backgroundColor: p.course.color,
                     }}
                     className="h-10 w-[4px] rounded-sm"
                   />
@@ -157,26 +157,29 @@ export function CourseCoverageTable() {
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
                       <Link
-                        href={`/classrooms/${p.classroomId}/subjects/${p.subjectId}`}
+                        href={`/classrooms/${p.classroomId}/subjects/${p.id}`}
                         className="hover:underline"
                       >
-                        {p.course}
+                        {p.course.name}
                       </Link>
                       <Badge
                         variant="info"
                         appearance="light"
                         className="h-5 text-[10px]"
                       >
-                        {p.courseCode}
+                        {p.course.shortName}
                       </Badge>
                     </div>
                     <div className="text-muted-foreground flex items-center gap-1">
-                      <AvatarState pos={p.teacher.length} className="size-4" />
+                      <AvatarState
+                        pos={getFullName(p.teacher).length}
+                        className="size-4"
+                      />
                       <Link
                         href={`/staffs/${p.teacherId}`}
                         className="text-xs hover:underline"
                       >
-                        {p.teacher}
+                        {getFullName(p.teacher)}
                       </Link>
                     </div>
                   </div>
@@ -186,7 +189,7 @@ export function CourseCoverageTable() {
                     href={`/classrooms/${p.classroomId}`}
                     className="hover:underline"
                   >
-                    {p.classroom}
+                    {p.classroom.reportName}
                   </Link>
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
@@ -206,38 +209,39 @@ export function CourseCoverageTable() {
 
                 <TableCell className="py-1 font-medium">
                   <Badge variant="destructive" appearance="outline">
-                    {p.programs.length} / {p.sessions.length}
+                    {p.programs.length}
                   </Badge>
                 </TableCell>
                 <TableCell>
                   <Badge
-                    variant={
-                      p.sessions.length == 0
-                        ? "destructive"
-                        : p.sessions.length < 5
-                          ? "warning"
-                          : "success"
-                    }
+                    // variant={
+                    //   p.sessions.length == 0
+                    //     ? "destructive"
+                    //     : p.sessions.length < 5
+                    //       ? "warning"
+                    //       : "success"
+                    // }
                     appearance="outline"
                   >
-                    {p.sessions.length}
+                    0
                   </Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Progress
                       value={
-                        p.sessions.length == 0
-                          ? 0
-                          : p.programs.length / p.sessions.length
+                        5
+                        // p.sessions.length == 0
+                        //   ? 0
+                        //   : p.programs.length / p.sessions.length
                       }
                       className="w-16"
                     />
                     <span className="text-sm">
-                      {p.sessions.length == 0
+                      {/* {p.sessions.length == 0
                         ? 0
-                        : (p.programs.length * 100) / p.sessions.length}
-                      %
+                        : (p.programs.length * 100) / p.sessions.length} */}
+                      5 %
                     </span>
                   </div>
                 </TableCell>

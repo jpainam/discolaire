@@ -38,14 +38,15 @@ export function ProgramKanban({
       subjectGroups[categoryId].push({
         id: program.id,
         title: program.title,
-        sessionsCount: program.objectives.length,
+        sessionsCount: program.teachingSessions.length,
         coverage:
-          program.objectives.length == 0
+          program.teachingSessions.length == 0
             ? 0
-            : (program.requiredSessionCount / program.objectives.length) * 100,
+            : (program.requiredSessionCount / program.teachingSessions.length) *
+              100,
         description: program.description,
         requiredSessionCount: program.requiredSessionCount,
-        lastSession: program.objectives.at(-1),
+        lastSession: program.teachingSessions.at(-1),
         categoryId: program.category.id,
       });
     });

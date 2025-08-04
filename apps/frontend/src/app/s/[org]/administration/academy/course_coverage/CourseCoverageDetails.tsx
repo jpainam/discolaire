@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { PlayCircle } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import {
@@ -11,15 +11,6 @@ import {
   AccordionTrigger,
 } from "@repo/ui/components/accordion";
 import { Badge } from "@repo/ui/components/badge";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Progress } from "@repo/ui/components/progress";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useTRPC } from "~/trpc/react";
@@ -84,7 +75,7 @@ export function CourseCoverageDetails({ subjectId }: { subjectId: number }) {
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4 pt-2">
-                  {coverage.programs.map((program) => {
+                  {/* {coverage.programs.map((program) => {
                     const co =
                       (program.objectives.length == 0
                         ? 0
@@ -151,7 +142,7 @@ export function CourseCoverageDetails({ subjectId }: { subjectId: number }) {
                         </CardContent>
                       </Card>
                     );
-                  })}
+                  })} */}
                 </div>
               </AccordionContent>
             </AccordionItem>

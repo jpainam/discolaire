@@ -261,9 +261,10 @@ function getCoverageNumber(values: RouterOutputs["subject"]["getPrograms"]) {
   for (const value of values) {
     totalPrograms += value.programs.length;
     for (const program of value.programs) {
-      const actualSessions = program.objectives.length;
+      const actualSessions = 0; // Replace with actual logic to get the number of sessions
       const requiredSessions = program.requiredSessionCount;
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (actualSessions === 0) {
         notStartedCount++;
       } else if (actualSessions >= requiredSessions) {

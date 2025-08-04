@@ -17,6 +17,7 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 
 import { AvatarState } from "~/components/AvatarState";
 import { Badge } from "~/components/base-badge";
+import { getFullName } from "~/utils";
 
 type SubjectProcedureOutput = RouterOutputs["subject"]["programs"][number];
 
@@ -35,14 +36,14 @@ export function useColumn(): {
         return (
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-              <span> {p.course}</span>
+              <span> {p.course.reportName}</span>
               <Badge className="h-7 text-xs" variant="info" appearance="light">
-                {p.courseCode}
+                {p.course.shortName}
               </Badge>
             </div>
             <div className="text-muted-foreground flex items-center gap-1">
               <AvatarState className="size-4" />
-              <span className="text-xs">{p.teacher}</span>
+              <span className="text-xs">{getFullName(p.teacher)}</span>
             </div>
           </div>
         );
@@ -55,7 +56,7 @@ export function useColumn(): {
       ),
       cell: ({ row }) => {
         const p = row.original;
-        return <div>{p.classroom}</div>;
+        return <div>{p.classroom.reportName}</div>;
       },
     },
 
@@ -78,11 +79,7 @@ export function useColumn(): {
       size: 28,
       cell: ({ row }) => {
         const p = row.original;
-        return (
-          <div>
-            {p.programs.length} / {p.sessions.length}
-          </div>
-        );
+        return <div>{p.programs.length}</div>;
       },
     },
     {
@@ -93,7 +90,7 @@ export function useColumn(): {
       size: 28,
       cell: ({ row }) => {
         const p = row.original;
-        return <div>{p.sessions.length}</div>;
+        return <div>{p.programs.length}</div>;
       },
     },
 

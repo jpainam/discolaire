@@ -7,6 +7,6 @@ export interface SubjectProgramItem {
   description: string | null;
   requiredSessionCount: number;
   sessionsCount: number;
-  lastSession?: RouterOutputs["program"]["get"]["objectives"][number];
+  lastSession?: RouterOutputs["program"]["get"]["teachingSessions"][number];
   categoryId: string;
 }

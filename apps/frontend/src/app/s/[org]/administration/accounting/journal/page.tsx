@@ -22,9 +22,9 @@ export default function Page() {
             <div>
               {Array.from({ length: 4 }).map((_, index) => (
                 <div key={index} className="grid grid-cols-3 gap-4 px-4 py-2">
-                  <Skeleton key={index} className="h-10" />
-                  <Skeleton key={index} className="h-10" />
-                  <Skeleton key={index} className="h-10" />
+                  <Skeleton className="h-10" />
+                  <Skeleton className="h-10" />
+                  <Skeleton className="h-10" />
                 </div>
               ))}
             </div>

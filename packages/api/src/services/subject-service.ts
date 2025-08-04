@@ -43,18 +43,9 @@ export function getPrograms({
       teacher: true,
       programs: {
         include: {
-          objectives: {
+          teachingSessions: {
             include: {
-              program: true,
-            },
-          },
-        },
-      },
-      sessions: {
-        include: {
-          objectives: {
-            include: {
-              program: true,
+              session: true,
             },
           },
         },

@@ -1,6 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
-import { decode } from "entities";
 import { z } from "zod";
 
 import { getPrograms } from "../services/subject-service";
@@ -126,8 +125,8 @@ export const subjectRouter = {
         categoryId: z.string().optional(),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      const programs = await ctx.db.subject.findMany({
+    .query(({ ctx, input }) => {
+      return ctx.db.subject.findMany({
         where: {
           classroom: {
             schoolYearId: ctx.schoolYearId,
@@ -135,6 +134,13 @@ export const subjectRouter = {
             ...(input.classroomId ? { id: input.classroomId } : {}),
           },
           ...(input.staffId ? { teacherId: input.staffId } : {}),
+          ...(input.categoryId
+            ? {
+                programs: {
+                  some: { categoryId: input.categoryId },
+                },
+              }
+            : {}),
         },
         include: {
           classroom: {
@@ -144,54 +150,16 @@ export const subjectRouter = {
           },
           course: true,
           teacher: true,
-          programs: true,
-          sessions: {
+          programs: {
             include: {
-              objectives: {
+              teachingSessions: {
                 include: {
-                  program: true,
+                  session: true,
                 },
               },
             },
           },
         },
-      });
-      return programs.map((p) => {
-        return {
-          subjectId: p.id,
-          course: p.course.name,
-          courseColor: p.course.color,
-          courseCode: p.course.shortName,
-          programs: p.programs
-            .filter((program) =>
-              input.categoryId ? program.categoryId == input.categoryId : true,
-            )
-            .map((program) => {
-              return {
-                id: program.id,
-                requiredSessionCount: program.requiredSessionCount,
-                categoryId: program.categoryId,
-              };
-            }),
-          teacher: decode(
-            `${p.teacher?.prefix} ${p.teacher?.firstName} ${p.teacher?.lastName}`.trim(),
-          ),
-          teacherId: p.teacher?.id ?? "",
-          classroom: p.classroom.reportName,
-          classroomId: p.classroom.id,
-          sessions: p.sessions.map((session) => {
-            return {
-              id: session.id,
-              categoryIds: session.objectives
-                .filter((o) =>
-                  input.categoryId
-                    ? o.program.categoryId == input.categoryId
-                    : true,
-                )
-                .map((o) => o.program.categoryId),
-            };
-          }),
-        };
       });
     }),
   getCoverage: protectedProcedure
@@ -209,7 +177,7 @@ export const subjectRouter = {
         include: {
           programs: {
             include: {
-              objectives: {
+              teachingSessions: {
                 include: {
                   session: true,
                 },

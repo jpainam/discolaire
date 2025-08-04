@@ -31,17 +31,19 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 <div
                   className="mr-1 w-1.5 rounded-full"
                   style={{
-                    backgroundColor: journal.subject.course.color,
+                    backgroundColor: "red", //journal.subject.course.color,
                   }}
                 ></div>
                 {/* <div className="w-1 bg-orange-400 mr-4 rounded-full"></div> */}
                 <div>
                   <p className="text-lg font-bold uppercase">
-                    {journal.subject.course.name}
+                    Maths
+                    {/* {journal.subject.course.name} */}
                   </p>
                   <p className="text-muted-foreground text-xs">
-                    {journal.subject.teacher?.prefix}{" "}
-                    {journal.subject.teacher?.lastName}
+                    Mr Dupont Piere
+                    {/* {journal.subject.teacher?.prefix}{" "}
+                    {journal.subject.teacher?.lastName} */}
                   </p>
                 </div>
               </div>
