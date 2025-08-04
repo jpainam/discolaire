@@ -20,21 +20,21 @@ import {
 import { Textarea } from "@repo/ui/components/textarea";
 
 import { DatePicker } from "~/components/DatePicker";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
-  termId: z.string().min(1),
   startDate: z.coerce.date().default(() => new Date()),
   endDate: z.coerce.date(),
   reason: z.string().min(1),
 });
 export function CreateEditExclusion({
   exclusion,
+  termId,
 }: {
   exclusion?: RouterOutputs["exclusion"]["all"][number];
+  termId: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
@@ -42,7 +42,6 @@ export function CreateEditExclusion({
       startDate: exclusion?.startDate ?? new Date(),
       endDate: exclusion?.endDate ?? new Date(),
       reason: exclusion?.reason ?? "",
-      termId: exclusion?.termId ? `${exclusion.termId}` : "",
     },
   });
 
@@ -82,7 +81,7 @@ export function CreateEditExclusion({
       startDate: data.startDate,
       endDate: data.endDate,
       reason: data.reason,
-      termId: data.termId,
+      termId: termId,
     };
     if (exclusion) {
       toast.loading(t("updating"), { id: 0 });
@@ -95,20 +94,6 @@ export function CreateEditExclusion({
   return (
     <Form {...form}>
       <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
-        <FormField
-          control={form.control}
-          name="termId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("terms")}</FormLabel>
-              <FormControl>
-                <TermSelector {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="grid grid-cols-2 gap-2">
           <FormField
             control={form.control}
@@ -150,14 +135,14 @@ export function CreateEditExclusion({
             <FormItem>
               <FormLabel>{t("reason")}</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea className="resize-none" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-row items-center justify-end gap-2">
           <Button
             onClick={() => {
               closeModal();
@@ -166,7 +151,7 @@ export function CreateEditExclusion({
             size={"sm"}
             type={"button"}
           >
-            {t("cancel")}
+            {t("close")}
           </Button>
           <Button
             isLoading={
@@ -176,7 +161,7 @@ export function CreateEditExclusion({
             size={"sm"}
             type={"submit"}
           >
-            {t("submit")}
+            {exclusion ? t("edit") : t("add")}
           </Button>
         </div>
       </form>

@@ -1,36 +1,18 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import {
-  BaselineIcon,
-  ChevronDown,
-  DiameterIcon,
-  LineChart,
-  MoreVertical,
-  NewspaperIcon,
-  ShapesIcon,
-  ShieldAlertIcon,
-  Trash2,
-} from "lucide-react";
+import { BaselineIcon, ChevronDown, DiameterIcon, LineChart, MoreVertical, NewspaperIcon, ShapesIcon, ShieldAlertIcon, Trash2 } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
+
+
 import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/select";
+
+
 
 import { PreventAbsence } from "~/components/attendances/PreventAbsence";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -45,6 +27,7 @@ import { CreateEditChatter } from "./chatter/CreateEditChatter";
 import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
 import { CreateEditExclusion } from "./exclusion/CreateEditExclusion";
 import { CreateEditLateness } from "./lateness/CreateEditLateness";
+
 
 export function StudentAttendanceHeader() {
   const params = useParams<{ id: string }>();
@@ -133,7 +116,7 @@ export function StudentAttendanceHeader() {
                       return;
                     }
                     openModal({
-                      title: `${t("add")} - ${t("absence")}`,
+                      title: t("absence"),
                       view: <CreateEditAbsence termId={termId} />,
                     });
                   }}
@@ -148,7 +131,7 @@ export function StudentAttendanceHeader() {
                       return;
                     }
                     openModal({
-                      title: `${t("add")} - ${t("lateness")}`,
+                      title: t("lateness"),
                       view: <CreateEditLateness termId={termId} />,
                     });
                   }}
@@ -157,10 +140,15 @@ export function StudentAttendanceHeader() {
                   {t("lateness")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => {
+                  disabled={!termId}
+                  onSelect={() => {
+                    if(!termId) {
+                      toast.warning("Veuillez sélectionner une période.");
+                      return;
+                    }
                     openModal({
-                      title: `${t("add")} - ${t("chatter")}`,
-                      view: <CreateEditChatter />,
+                      title: t("chatter"),
+                      view: <CreateEditChatter termId={termId} />,
                     });
                   }}
                 >
@@ -168,11 +156,15 @@ export function StudentAttendanceHeader() {
                   {t("chatter")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => {
+                  disabled={!termId}
+                  onSelect={() => {
+                    if (!termId) {
+                      toast.warning("Veuillez sélectionner une période.");
+                      return;
+                    }
                     openModal({
-                      title: `${t("add")} - ${t("consigne")}`,
-
-                      view: <CreateEditConsigne />,
+                      title: t("consigne"),
+                      view: <CreateEditConsigne termId={termId} />,
                     });
                   }}
                 >
@@ -180,11 +172,16 @@ export function StudentAttendanceHeader() {
                   {t("consigne")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => {
+                  disabled={!termId}
+                  onSelect={() => {
+                    if (!termId) {
+                      toast.warning("Veuillez sélectionner une période.");
+                      return;
+                    }
                     openModal({
-                      title: `${t("add")} - ${t("exclusion")}`,
-                      className: "w-[600px]",
-                      view: <CreateEditExclusion />,
+                      title: t("exclusion"),
+
+                      view: <CreateEditExclusion termId={termId} />,
                     });
                   }}
                 >

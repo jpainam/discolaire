@@ -166,7 +166,7 @@ export function CreateEditAbsence({
             </FormItem>
           )}
         />
-        <div className="mt-2 grid grid-cols-2 gap-2">
+        <div className="flex flex-row items-center justify-end gap-2">
           <Button
             onClick={() => {
               closeModal();
@@ -175,7 +175,7 @@ export function CreateEditAbsence({
             size={"sm"}
             type={"button"}
           >
-            {t("cancel")}
+            {t("close")}
           </Button>
           <Button
             isLoading={
@@ -184,7 +184,7 @@ export function CreateEditAbsence({
             size={"sm"}
             type={"submit"}
           >
-            {t("submit")}
+            {absence ? t("edit") : t("add")}
           </Button>
         </div>
       </form>

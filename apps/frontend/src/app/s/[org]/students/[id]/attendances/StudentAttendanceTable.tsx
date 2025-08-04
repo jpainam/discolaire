@@ -25,13 +25,21 @@ import {
 
 import { Badge } from "~/components/base-badge";
 import { EmptyState } from "~/components/EmptyState";
+import { useSheet } from "~/hooks/use-sheet";
 import { getLatenessValue } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+import { StudentAttendanceDetails } from "./StudentAttendanceDetails";
 import { StudentAttendanceTableDropdown } from "./StudentAttendanceTableDropdown";
 
+type AttendanceRecordType =
+  | "absence"
+  | "chatter"
+  | "consigne"
+  | "exclusion"
+  | "lateness";
 export interface AttendanceRecord {
   id: number;
-  type: string;
+  type: AttendanceRecordType;
   date: Date;
   term: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,6 +100,7 @@ const getTypeIcon = (type: string) => {
 
 export function StudentAttendanceTable() {
   const t = useTranslations();
+  const { openSheet } = useSheet();
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const [termId] = useQueryState("termId");
@@ -129,7 +138,7 @@ export function StudentAttendanceTable() {
   const data: AttendanceRecord[] = [
     ...absences.map((absence) => ({
       id: absence.id,
-      type: "absence",
+      type: "absence" as AttendanceRecordType,
       date: absence.date,
       term: absence.term.name,
       details: { numberOfAbsences: absence.value },
@@ -138,7 +147,7 @@ export function StudentAttendanceTable() {
     })),
     ...latenesses.map((lateness) => ({
       id: lateness.id,
-      type: "lateness",
+      type: "lateness" as AttendanceRecordType,
       date: lateness.date,
       term: lateness.term.name,
       details: { duration: lateness.duration },
@@ -150,7 +159,7 @@ export function StudentAttendanceTable() {
     })),
     ...consignes.map((consigne) => ({
       id: consigne.id,
-      type: "consigne",
+      type: "consigne" as AttendanceRecordType,
       date: consigne.date,
       term: consigne.term.name,
       details: { task: consigne.task, duration: consigne.duration },
@@ -158,7 +167,7 @@ export function StudentAttendanceTable() {
     })),
     ...chatters.map((chatter) => ({
       id: chatter.id,
-      type: "chatter",
+      type: "chatter" as AttendanceRecordType,
       date: chatter.date,
       term: chatter.term.name,
       details: { numberOfChatter: chatter.value },
@@ -166,7 +175,7 @@ export function StudentAttendanceTable() {
     })),
     ...exclusions.map((exclusion) => ({
       id: exclusion.id,
-      type: "exclusion",
+      type: "exclusion" as AttendanceRecordType,
       date: exclusion.startDate,
       term: exclusion.term.name,
       details: {
@@ -201,7 +210,22 @@ export function StudentAttendanceTable() {
               </TableRow>
             ) : (
               data.map((record) => (
-                <TableRow key={record.id}>
+                <TableRow
+                  key={record.id}
+                  onClick={() => {
+                    openSheet({
+                      title: t("attendance_details"),
+
+                      view: (
+                        <StudentAttendanceDetails
+                          type={record.type}
+                          id={record.id}
+                        />
+                      ),
+                    });
+                  }}
+                  className="hover:bg-muted/50 cursor-pointer"
+                >
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {getTypeIcon(record.type)}

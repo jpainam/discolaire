@@ -20,27 +20,26 @@ import {
 import { Input } from "@repo/ui/components/input";
 
 import { DatePicker } from "~/components/DatePicker";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
-  termId: z.string().min(1),
   date: z.coerce.date().default(() => new Date()),
   value: z.coerce.number().default(1),
 });
 export function CreateEditChatter({
   chatter,
+  termId,
 }: {
   chatter?: RouterOutputs["chatter"]["all"][number];
+  termId: string;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       date: chatter?.date ?? new Date(),
       value: chatter?.value ?? 1,
-      termId: chatter?.termId ? `${chatter.termId}` : "",
     },
   });
 
@@ -77,7 +76,7 @@ export function CreateEditChatter({
     const values = {
       studentId: params.id,
       value: data.value,
-      termId: data.termId,
+      termId: termId,
     };
     if (chatter) {
       toast.loading(t("updating"), { id: 0 });
@@ -90,19 +89,6 @@ export function CreateEditChatter({
   return (
     <Form {...form}>
       <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
-        <FormField
-          control={form.control}
-          name="termId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("terms")}</FormLabel>
-              <FormControl>
-                <TermSelector {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="date"
@@ -138,7 +124,7 @@ export function CreateEditChatter({
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-row items-center justify-end gap-2">
           <Button
             onClick={() => {
               closeModal();
@@ -147,7 +133,7 @@ export function CreateEditChatter({
             size={"sm"}
             type={"button"}
           >
-            {t("cancel")}
+            {t("close")}
           </Button>
           <Button
             isLoading={
@@ -156,7 +142,7 @@ export function CreateEditChatter({
             size={"sm"}
             type={"submit"}
           >
-            {t("submit")}
+            {t("add")}
           </Button>
         </div>
       </form>

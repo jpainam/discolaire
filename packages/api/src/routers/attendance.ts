@@ -4,6 +4,48 @@ import { z } from "zod";
 import { protectedProcedure } from "../trpc";
 
 export const attendanceRouter = {
+  get: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        type: z.enum([
+          "absence",
+          "lateness",
+          "consigne",
+          "exclusion",
+          "chatter",
+        ]),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      switch (input.type) {
+        case "absence":
+          return ctx.db.absence.findUniqueOrThrow({
+            where: { id: input.id },
+            include: { justifications: true, student: true, term: true },
+          });
+        case "lateness":
+          return ctx.db.lateness.findUniqueOrThrow({
+            where: { id: input.id },
+            include: { justifications: true, student: true, term: true },
+          });
+        case "consigne":
+          return ctx.db.consigne.findUniqueOrThrow({
+            where: { id: input.id },
+            include: { student: true, term: true },
+          });
+        case "exclusion":
+          return ctx.db.exclusion.findUniqueOrThrow({
+            where: { id: input.id },
+            include: { student: true, term: true },
+          });
+        case "chatter":
+          return ctx.db.chatter.findUniqueOrThrow({
+            where: { id: input.id },
+            include: { student: true, term: true },
+          });
+      }
+    }),
   delete: protectedProcedure
     .input(
       z.object({
