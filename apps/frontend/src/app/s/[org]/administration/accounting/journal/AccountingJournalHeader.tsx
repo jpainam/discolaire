@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -58,7 +57,7 @@ export function AccountingJournalHeader() {
             {t("add")}
           </Button>
         )}
-        {/* {canCreateFees && (
+        {canCreateFees && (
           <Button
             isLoading={updateOldFees.isPending}
             onClick={() => {
@@ -69,7 +68,7 @@ export function AccountingJournalHeader() {
           >
             Synchroniser
           </Button>
-        )} */}
+        )}
       </div>
     </div>
   );

@@ -92,33 +92,21 @@ export const accountingJournal = {
     });
   }),
   syncOldFees: protectedProcedure.mutation(async ({ ctx }) => {
-    const tdJournal = await ctx.db.accountingJournal.findFirst({
+    const journals = await ctx.db.accountingJournal.findMany({
       where: {
-        name: "TD",
         schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
       },
     });
-    const feeJournal = await ctx.db.accountingJournal.findFirst({
-      where: {
-        name: "Frais scolaires",
-        schoolId: ctx.schoolId,
-        schoolYearId: ctx.schoolYearId,
-      },
-    });
-    // await ctx.db.fee.updateMany({
-    //   data: {
-    //     journalId: "cmdq3d5yk00030h631oh9in56",
-    //   },
-    //   where: {
-    //     classroom: {
-    //       schoolId: ctx.schoolId,
-    //       schoolYearId: ctx.schoolYearId,
-    //     },
-    //   },
-    // });
+    const tdJournal = journals.find(
+      (j) => j.name.toLowerCase().trim() === "td",
+    );
+    const feeJournal = journals.find(
+      (j) => j.name.toLowerCase().trim() != "td",
+    );
+
     if (feeJournal) {
-      //console.log("Updating fees with journal ID:", feeJournal.id);
+      console.log("Updating fees with journal ID:", feeJournal.id);
       await ctx.db.transaction.updateMany({
         data: {
           journalId: feeJournal.id,
@@ -132,9 +120,6 @@ export const accountingJournal = {
           journalId: feeJournal.id,
         },
         where: {
-          code: {
-            not: "FRAI",
-          },
           classroom: {
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
@@ -143,6 +128,7 @@ export const accountingJournal = {
       });
     }
     if (tdJournal) {
+      console.log("Updating fees with journal ID:", tdJournal.id);
       await ctx.db.fee.updateMany({
         data: {
           journalId: tdJournal.id,
