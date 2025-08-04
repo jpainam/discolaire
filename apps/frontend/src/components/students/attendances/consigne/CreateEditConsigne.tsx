@@ -140,7 +140,7 @@ export function CreateEditConsigne({
             </FormItem>
           )}
         />
-        <div className="flex flex-row items-center gap-2 justify-end">
+        <div className="flex flex-row items-center justify-end gap-2">
           <Button
             onClick={() => {
               closeModal();
