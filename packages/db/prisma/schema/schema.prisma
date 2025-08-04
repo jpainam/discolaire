@@ -669,7 +669,6 @@ model Subject {
     teacher        Staff?             @relation(fields: [teacherId], references: [id])
     assignments    Assignment[]
     timetables     SubjectTimetable[]
-    sessions       TeachingSession[]  @relation("subject")
 
     @@unique([courseId, teacherId, classroomId])
 }
@@ -797,7 +796,7 @@ model Program {
     categoryId           String
     category             ProgramCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     subject              Subject                  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    objectives           TeachingSessionProgram[]
+    teachingSessions     TeachingSessionProgram[]
 }
 
 model TeachingSessionProgram {
@@ -810,17 +809,16 @@ model TeachingSessionProgram {
 }
 
 model TeachingSession {
-    id          String                   @id @default(cuid())
-    subjectId   Int
-    title       String
-    content     String
-    createdById String
-    attachment  String?
-    createdAt   DateTime                 @default(now()) @db.Timestamp(6)
-    publishDate DateTime                 @default(now()) @db.Timestamp(6)
-    createdBy   User                     @relation("createdBy", fields: [createdById], references: [id])
-    subject     Subject                  @relation("subject", fields: [subjectId], references: [id], onDelete: Cascade)
-    objectives  TeachingSessionProgram[]
+    id              String                   @id @default(cuid())
+    subjectId       Int
+    title           String
+    content         String
+    createdById     String
+    attachment      String?
+    createdAt       DateTime                 @default(now()) @db.Timestamp(6)
+    publishDate     DateTime                 @default(now()) @db.Timestamp(6)
+    createdBy       User                     @relation("createdBy", fields: [createdById], references: [id])
+    programSessions TeachingSessionProgram[]
 }
 
 model SMSTemplate {
