@@ -1,49 +1,49 @@
 model Absence {
-    id             Int                    @id @default(autoincrement())
-    date           DateTime
-    value          Int
-    termId         String
-    term           Term                   @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    studentId      String
-    student        Student                @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    type           String                 @default("daily") // daily, hourly, periodically, weekly, monthly
-    createdAt      DateTime               @default(now())
-    createdById    String
-    attachments    String[]
-    reason         String?
-    justifications AbsenceJustification[]
+    id            Int                   @id @default(autoincrement())
+    date          DateTime
+    value         Int
+    termId        String
+    term          Term                  @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    studentId     String
+    student       Student               @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    type          String                @default("daily")
+    createdAt     DateTime              @default(now())
+    createdById   String
+    attachments   String[]
+    reason        String?
+    justification AbsenceJustification?
 }
 
 model AbsenceJustification {
     id          Int      @id @default(autoincrement())
-    absenceId   Int
+    absenceId   Int      @unique
     absence     Absence  @relation(fields: [absenceId], references: [id], onDelete: Cascade)
-    value       Int      @default(0) // 0 for not justified, 1 for justified
+    value       Int      @default(0)
     createdAt   DateTime @default(now())
     createdById String
     reason      String
 }
 
 model Lateness {
-    id             Int                     @id @default(autoincrement())
-    studentId      String
-    student        Student                 @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    date           DateTime
-    termId         String
-    duration       String // duration in HH:mm format
-    createdAt      DateTime                @default(now())
-    updatedAt      DateTime                @updatedAt
-    createdById    String
-    term           Term                    @relation(fields: [termId], references: [id], onDelete: Cascade)
-    attachments    String[]
-    reason         String?
-    updatedById    String?
-    justifications LatenessJustification[]
+    id            Int                    @id @default(autoincrement())
+    studentId     String
+    student       Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    date          DateTime
+    termId        String
+    duration      String // duration in HH:mm format
+    createdAt     DateTime               @default(now())
+    updatedAt     DateTime               @updatedAt
+    createdById   String
+    updatedById   String?
+    term          Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
+    attachments   String[]
+    reason        String?
+    justification LatenessJustification?
 }
 
 model LatenessJustification {
     id          Int      @id @default(autoincrement())
-    latenessId  Int
+    latenessId  Int      @unique
     lateness    Lateness @relation(fields: [latenessId], references: [id], onDelete: Cascade)
     value       String
     createdAt   DateTime @default(now())

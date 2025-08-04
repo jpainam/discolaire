@@ -63,7 +63,7 @@ export const absenceRouter = {
       return ctx.db.absence.findMany({
         include: {
           student: true,
-          justifications: true,
+          justification: true,
           term: true,
         },
         where: {

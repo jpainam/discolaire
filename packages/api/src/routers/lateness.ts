@@ -61,7 +61,7 @@ export const latenessRouter = {
       return ctx.db.lateness.findMany({
         include: {
           student: true,
-          justifications: true,
+          justification: true,
           term: true,
         },
         where: {

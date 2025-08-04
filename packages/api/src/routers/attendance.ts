@@ -22,12 +22,12 @@ export const attendanceRouter = {
         case "absence":
           return ctx.db.absence.findUniqueOrThrow({
             where: { id: input.id },
-            include: { justifications: true, student: true, term: true },
+            include: { justification: true, student: true, term: true },
           });
         case "lateness":
           return ctx.db.lateness.findUniqueOrThrow({
             where: { id: input.id },
-            include: { justifications: true, student: true, term: true },
+            include: { justification: true, student: true, term: true },
           });
         case "consigne":
           return ctx.db.consigne.findUniqueOrThrow({
@@ -193,7 +193,7 @@ export const attendanceRouter = {
             .then((terms) => terms.map((term) => term.id));
       const absences = await ctx.db.absence.findMany({
         include: {
-          justifications: true,
+          justification: true,
         },
         where: {
           studentId: input.studentId,
@@ -212,7 +212,7 @@ export const attendanceRouter = {
       });
       const latenesses = await ctx.db.lateness.findMany({
         include: {
-          justifications: true,
+          justification: true,
         },
         where: {
           studentId: input.studentId,
@@ -237,10 +237,10 @@ export const attendanceRouter = {
             .reduce((acc, absence) => acc + absence.value, 0)
             .toString(),
           type: "absence",
-          justified: absences
-            .map((a) => a.justifications)
-            .flat()
-            .reduce((acc, j) => acc + j.value, 0),
+          justified: absences.reduce(
+            (acc, j) => acc + (j.justification?.value ?? 0),
+            0,
+          ),
         },
         {
           value: latenesses
@@ -250,10 +250,12 @@ export const attendanceRouter = {
             )
             .toString(),
           type: "lateness",
-          justified: latenesses
-            .map((c) => c.justifications)
-            .flat()
-            .reduce((acc, l) => acc + getLatenessValue(l.value), 0),
+          justified: latenesses.reduce(
+            (acc, l) =>
+              acc +
+              (l.justification ? getLatenessValue(l.justification.value) : 0),
+            0,
+          ),
         },
         {
           value: consignes.length.toString(),

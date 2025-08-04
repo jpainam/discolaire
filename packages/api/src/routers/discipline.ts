@@ -175,7 +175,7 @@ async function getDiscipline({
 }) {
   const absences = await db.absence.findMany({
     include: {
-      justifications: true,
+      justification: true,
     },
     where: {
       studentId: {
@@ -192,7 +192,7 @@ async function getDiscipline({
       termId: termId,
     },
     include: {
-      justifications: true,
+      justification: true,
     },
   });
   const consignes = await db.consigne.findMany({
@@ -229,10 +229,7 @@ async function getDiscipline({
     if (student) {
       student.absence++;
 
-      student.justifiedAbsence += absence.justifications.reduce(
-        (acc, justification) => acc + justification.value,
-        0,
-      );
+      student.justifiedAbsence += absence.justification?.value ?? 0;
     }
   }
   for (const late of lateness) {
@@ -240,10 +237,9 @@ async function getDiscipline({
     if (student) {
       student.lateness++;
 
-      student.justifiedLateness += late.justifications.reduce(
-        (acc, justification) => acc + getLatenessValue(justification.value),
-        0,
-      );
+      student.justifiedLateness += late.justification
+        ? getLatenessValue(late.justification.value)
+        : 0;
     }
   }
   for (const consigne of consignes) {

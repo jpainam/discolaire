@@ -130,8 +130,7 @@ export function StudentAttendanceTable() {
       date: absence.date,
       term: absence.term.name,
       details: { numberOfAbsences: absence.value },
-      justified:
-        absence.justifications.reduce((acc, j) => acc + j.value, 0) || 0,
+      justified: absence.justification?.value ?? 0,
     })),
     ...latenesses.map((lateness) => ({
       id: lateness.id,
@@ -139,11 +138,9 @@ export function StudentAttendanceTable() {
       date: lateness.date,
       term: lateness.term.name,
       details: { duration: lateness.duration },
-      justified:
-        lateness.justifications.reduce(
-          (acc, j) => acc + getLatenessValue(j.value),
-          0,
-        ) || 0,
+      justified: lateness.justification
+        ? getLatenessValue(lateness.justification.value)
+        : 0,
     })),
     ...consignes.map((consigne) => ({
       id: consigne.id,
