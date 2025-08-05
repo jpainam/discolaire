@@ -130,7 +130,7 @@ export function CreateEditLateness({
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                nombre de retards ou format heure:minute (ex: 00:30)
+                Nombre de retards ou format heure:minute (ex: 00:30)
               </FormDescription>
 
               <FormMessage />
