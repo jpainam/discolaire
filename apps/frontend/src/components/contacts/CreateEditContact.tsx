@@ -15,7 +15,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
@@ -37,7 +36,6 @@ const createEditContactSchema = z.object({
   phoneNumber2: z.string().optional(),
   address: z.string().optional(),
   observation: z.string().optional(),
-  email: z.string().email().optional().or(z.literal("")),
 });
 
 type ContactAllProcedureOutput = NonNullable<
@@ -66,7 +64,6 @@ export default function CreateEditContact({
       phoneNumber2: contact?.phoneNumber2 ?? "",
       address: contact?.address ?? "",
       observation: contact?.observation ?? "",
-      email: contact?.user?.email ?? "",
     },
   });
   const { t } = useLocale();
@@ -137,7 +134,6 @@ export default function CreateEditContact({
       phoneNumber2: data.phoneNumber2,
       address: data.address,
       observation: data.observation,
-      email: data.email,
     };
     if (contact) {
       toast.loading(t("updating"), { id: 0 });
@@ -192,19 +188,6 @@ export default function CreateEditContact({
             name="firstName"
             className="col-span-2"
             label={t("firstName")}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>{t("email")}</FormLabel>
-                <FormControl>
-                  <Input type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
           />
 
           <InputField name="occupation" label={t("occupation")} />
