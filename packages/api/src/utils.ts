@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // export const generateToken = (user: { id: string }) => {
 //   const payload = {
 //     sub: user.id,
@@ -6,10 +7,16 @@
 //   };
 //   return jwt.sign(payload, env.AUTH_SECRET);
 // };
-
 import { Queue } from "bullmq";
+import { decode } from "entities";
 
 import connection from "@repo/kv";
+
+type Person = {
+  firstName?: string | null;
+  lastName?: string | null;
+  middleName?: string | null;
+} & Record<string, any>;
 
 export function generateStringColor(): string {
   const letters = "0123456789ABCDEF";
@@ -43,4 +50,22 @@ export function getCookieValue(headers: Headers, name: string): string | null {
   );
 
   return cookies[name] ?? null;
+}
+
+export function getFullName(pperson?: any): string {
+  if (!pperson) {
+    return "";
+  }
+  const person = pperson as Person;
+  let fullName = "";
+  if ("lastName" in person && person.lastName) {
+    fullName += " " + person.lastName;
+  }
+  if ("middleName" in person && person.middleName) {
+    fullName += " " + person.middleName;
+  }
+  if ("firstName" in person && person.firstName) {
+    fullName += " " + person.firstName;
+  }
+  return decode(fullName);
 }

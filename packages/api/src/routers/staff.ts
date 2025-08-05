@@ -3,10 +3,10 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
-import { getFullName } from "../../../../apps/frontend/src/utils/index";
 import { staffService } from "../services";
 import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
+import { getFullName } from "../utils";
 
 const createUpdateSchema = z.object({
   prefix: z.string(),

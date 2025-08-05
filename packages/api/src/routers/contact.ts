@@ -1,9 +1,11 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";
+import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -18,6 +20,7 @@ const createUpdateSchema = z.object({
   phoneNumber1: z.string().min(1),
   address: z.string().optional(),
   phoneNumber2: z.string().optional(),
+  email: z.string().email().optional().or(z.literal("")),
 });
 export const contactRouter = {
   delete: protectedProcedure
@@ -295,8 +298,8 @@ export const contactRouter = {
     }),
   create: protectedProcedure
     .input(createUpdateSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.contact.create({
+    .mutation(async ({ ctx, input }) => {
+      const contact = await ctx.db.contact.create({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
@@ -312,6 +315,18 @@ export const contactRouter = {
           schoolId: ctx.schoolId,
         },
       });
+      if (input.email) {
+        await createUser({
+          email: input.email,
+          entityId: contact.id,
+          schoolId: ctx.schoolId,
+          name: `${input.firstName} ${input.lastName}`,
+          username: uuidv4(),
+          profile: "contact",
+          authApi: ctx.authApi,
+        });
+      }
+      return contact;
     }),
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
