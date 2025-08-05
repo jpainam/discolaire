@@ -63,6 +63,7 @@ export function EnrollmentDataTableActions({
       {table.getSelectedRowModel().rows.length > 0 && canUnEnrollStudent && (
         <Button
           variant="destructive"
+          size={"sm"}
           onClick={async () => {
             const isConfirmed = await confirm({
               title: t("unenroll"),

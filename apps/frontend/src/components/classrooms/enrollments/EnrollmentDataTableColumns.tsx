@@ -77,15 +77,13 @@ export function fetchEnrollmentColumns({
       cell: ({ row }) => {
         const student = row.original;
         return (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
             <AvatarState
+              className="size-6"
               pos={getFullName(student).length}
               avatar={student.user?.avatar}
             />
-            <Link
-              href={`/students/${student.id}`}
-              className="font-medium hover:underline"
-            >
+            <Link href={`/students/${student.id}`} className="hover:underline">
               {getFullName(student)}
             </Link>
           </div>
