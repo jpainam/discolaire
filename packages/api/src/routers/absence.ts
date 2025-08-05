@@ -1,6 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+import { sendAttendanceEmail } from "../services/attendance-service";
 import { protectedProcedure } from "../trpc";
 
 export const absenceRouter = {
@@ -191,6 +192,7 @@ export const absenceRouter = {
         value: z.coerce.number(),
         justify: z.coerce.number().optional(),
         studentId: z.string().min(1),
+        notify: z.boolean().default(false),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -203,6 +205,9 @@ export const absenceRouter = {
           value: input.value,
         },
       });
+      if (input.notify) {
+        await sendAttendanceEmail(absence.id, "absence");
+      }
       if (input.justify) {
         await ctx.db.absenceJustification.create({
           data: {
@@ -221,6 +226,7 @@ export const absenceRouter = {
         termId: z.string().min(1),
         value: z.coerce.number(),
         justify: z.coerce.number().default(0),
+        notify: z.boolean().default(false),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -233,6 +239,9 @@ export const absenceRouter = {
           value: input.value,
         },
       });
+      if (input.notify) {
+        await sendAttendanceEmail(absence.id, "absence");
+      }
       if (input.justify) {
         await ctx.db.absenceJustification.deleteMany({
           where: {

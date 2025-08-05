@@ -9,7 +9,7 @@ import {
   ExclusionEmail,
   LatenessEmail,
 } from "@repo/transactional";
-import { logger } from "@repo/utils";
+import { logger, sendEmail } from "@repo/utils";
 
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
@@ -75,11 +75,14 @@ async function completeSend(title: string, body: string, studentId: string) {
 
   const contactEmails = studentContacts
     .map((c) => c.contact.user?.email)
-    .filter((v) => v != null);
-  await caller.messaging.sendEmail({
-    subject: title,
+    .filter((v): v is string => !!v && v !== "");
+
+  await sendEmail({
+    from: "Discolaire <hi@discolaire.com>",
     to: contactEmails,
-    body: body,
+    subject: title,
+    html: body,
+    text: body.replace(/<[^>]+>/g, ""), // Simple text fallback
   });
 }
 

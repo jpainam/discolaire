@@ -43,7 +43,6 @@ export function CreateEditAbsence({
     defaultValues: {
       date: absence?.date ?? new Date(),
       value: absence?.value ?? 1,
-
       justify: 0,
       notify: true,
     },
@@ -86,6 +85,7 @@ export function CreateEditAbsence({
       studentId: params.id,
       value: data.value,
       justify: data.justify,
+      notify: data.notify,
       date: data.date,
       termId: termId,
     };
