@@ -114,12 +114,12 @@ export function initAuth(options: {
         });
       },
     },
-    advanced: {
-      crossSubDomainCookies: {
-        enabled: env.NODE_ENV === "production",
-        domain: `discolaire.com`, // your domain
-      },
-    },
+    // advanced: {
+    //   crossSubDomainCookies: {
+    //     enabled: env.NODE_ENV === "production",
+    //     domain: `discolaire.com`, // your domain
+    //   },
+    // },
     plugins: [
       admin(),
       username(),
@@ -131,7 +131,11 @@ export function initAuth(options: {
       expo(),
       nextCookies(),
     ],
-    //trustedOrigins: ["expo://", env.NEXT_PUBLIC_BASE_URL],
+    trustedOrigins: [
+      "expo://",
+      env.NEXT_PUBLIC_BASE_URL,
+      "http://localhost:3000",
+    ],
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);
