@@ -93,7 +93,7 @@ export function CreateEditExclusion({
   };
   return (
     <Form {...form}>
-      <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="grid grid-cols-2 gap-2">
           <FormField
             control={form.control}

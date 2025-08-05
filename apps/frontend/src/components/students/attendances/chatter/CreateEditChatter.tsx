@@ -88,7 +88,7 @@ export function CreateEditChatter({
   };
   return (
     <Form {...form}>
-      <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="date"
