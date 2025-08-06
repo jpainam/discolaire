@@ -5,7 +5,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import { TransactionStats } from "~/components/students/transactions/transaction-stats";
+import { StudentTransactionSummary } from "~/components/students/transactions/StudentTransactionSummary";
 import { TransactionTable } from "~/components/students/transactions/TransactionTable";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
@@ -27,7 +27,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
             }
           >
-            <TransactionStats studentId={params.id} />
+            {/* <TransactionStats studentId={params.id} /> */}
+            <StudentTransactionSummary studentId={params.id} />
           </Suspense>
         </ErrorBoundary>
 
