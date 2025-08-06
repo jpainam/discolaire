@@ -43,6 +43,7 @@ export function EnrollmentHeader() {
   );
   const { t } = useLocale();
   const { openModal } = useModal();
+  const { schoolYear } = useSchool();
 
   const { data: session } = authClient.useSession();
   const { school } = useSchool();
@@ -147,7 +148,7 @@ export function EnrollmentHeader() {
             <Button
               variant="default"
               size="sm"
-              disabled={false}
+              disabled={!schoolYear.isActive}
               onClick={() => {
                 if (
                   !school.allowOverEnrollment &&

@@ -141,6 +141,7 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
                           variant="destructive"
+                          disabled={!c.schoolYear.isActive}
                           onSelect={async () => {
                             const isConfirmed = await confirm({
                               title: t("delete"),

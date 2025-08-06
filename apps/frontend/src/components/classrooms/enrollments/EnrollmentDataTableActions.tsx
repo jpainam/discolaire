@@ -3,7 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Trash2 } from "lucide-react";
+import { Trash, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -21,10 +21,12 @@ type ClassroomStudentProcedureOutput = NonNullable<
 
 interface EnrollmentToolbarActionsProps {
   table: Table<ClassroomStudentProcedureOutput>;
+  isActive: boolean;
 }
 
 export function EnrollmentDataTableActions({
   table,
+  isActive,
 }: EnrollmentToolbarActionsProps) {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
@@ -63,6 +65,7 @@ export function EnrollmentDataTableActions({
       {table.getSelectedRowModel().rows.length > 0 && canUnEnrollStudent && (
         <Button
           variant="destructive"
+          disabled={!isActive}
           size={"sm"}
           onClick={async () => {
             const isConfirmed = await confirm({
@@ -87,10 +90,10 @@ export function EnrollmentDataTableActions({
             }
           }}
         >
-          <Trash2 />
+          <Trash />
           {t("unenroll")}
-          <span className="border-border bg-background text-muted-foreground/70 ms-1 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
-            {table.getSelectedRowModel().rows.length}
+          <span className="ml-1">
+            ({table.getSelectedRowModel().rows.length})
           </span>
         </Button>
       )}

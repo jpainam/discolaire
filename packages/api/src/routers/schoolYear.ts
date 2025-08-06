@@ -59,7 +59,7 @@ export const schoolYearRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.schoolYear.update({
+      const ch = await ctx.db.schoolYear.update({
         where: {
           id: input.id,
         },
@@ -72,6 +72,8 @@ export const schoolYearRouter = {
           isActive: input.isActive,
         },
       });
+      
+      return ch;
     }),
   create: protectedProcedure
     .input(

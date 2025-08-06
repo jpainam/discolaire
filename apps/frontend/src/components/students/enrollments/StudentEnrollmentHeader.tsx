@@ -17,6 +17,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { EnrollStudentModal } from "./EnrollStudentModal";
 
@@ -28,6 +29,7 @@ export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
   );
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();
+  const { schoolYear } = useSchool();
 
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
   const isEnrolled = !!student.classroom;
@@ -40,6 +42,7 @@ export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
         {!isEnrolled && canEnroll && (
           <Button
             size={"sm"}
+            disabled={!schoolYear.isActive}
             onClick={() => {
               openModal({
                 title: t("enrollment"),
@@ -48,7 +51,7 @@ export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
                 view: <EnrollStudentModal studentId={params.id} />,
               });
             }}
-            variant="outline"
+            variant="default"
           >
             <ChevronRight />
             {t("enroll")}

@@ -36,8 +36,10 @@ type ClassroomStudentProcedureOutput =
 
 export function fetchEnrollmentColumns({
   t,
+  isActive,
 }: {
   t: TFunction<string, unknown>;
+  isActive: boolean;
 }): ColumnDef<ClassroomStudentProcedureOutput>[] {
   const dateFormater = Intl.DateTimeFormat(i18next.language, {
     year: "numeric",
@@ -175,7 +177,7 @@ export function fetchEnrollmentColumns({
       id: "actions",
       cell: ({ row }) => {
         const student = row.original;
-        return ActionCell({ student });
+        return ActionCell({ student, isActive });
       },
       size: 60,
       enableSorting: false,
@@ -184,7 +186,13 @@ export function fetchEnrollmentColumns({
   ];
 }
 
-function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
+function ActionCell({
+  student,
+  isActive,
+}: {
+  student: ClassroomStudentProcedureOutput;
+  isActive: boolean;
+}) {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const router = useRouter();
@@ -231,9 +239,8 @@ function ActionCell({ student }: { student: ClassroomStudentProcedureOutput }) {
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                disabled={!canDeleteEnrollment}
+                disabled={!isActive}
                 variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("unenroll") + " " + student.lastName,

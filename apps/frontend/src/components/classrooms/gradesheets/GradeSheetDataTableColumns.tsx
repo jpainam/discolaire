@@ -234,7 +234,7 @@ export function fetchGradeSheetColumns({
       size: 60,
       cell: ({ row }) => {
         const weight = row.original.weight;
-        return <div>{weight || 0} %</div>;
+        return <div>{(weight || 0) * 100} %</div>;
       },
     },
     {
@@ -320,6 +320,7 @@ function ActionCells({
           </DropdownMenuItem>
           {canUpdateGradesheet && (
             <DropdownMenuItem
+              disabled={!gradesheet.isActive || !gradesheet.term.isActive}
               onSelect={() => {
                 router.push(
                   routes.classrooms.gradesheets.edit(
@@ -337,9 +338,12 @@ function ActionCells({
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                disabled={deleteGradeSheetMutation.isPending}
+                disabled={
+                  deleteGradeSheetMutation.isPending ||
+                  !gradesheet.isActive ||
+                  !gradesheet.term.isActive
+                }
                 variant="destructive"
-                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                 onSelect={async () => {
                   const isConfirmed = await confirm({
                     title: t("delete"),
