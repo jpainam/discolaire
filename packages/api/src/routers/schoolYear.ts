@@ -72,7 +72,7 @@ export const schoolYearRouter = {
           isActive: input.isActive,
         },
       });
-      
+
       return ch;
     }),
   create: protectedProcedure
