@@ -22,11 +22,13 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
+import { useSchool } from "~/providers/SchoolProvider";
 
 export function GradeSheetHeader() {
   const params = useParams<{ id: string }>();
 
   const [term, setTerm] = useQueryState("term");
+  const { schoolYear } = useSchool();
   const [subject, setSubject] = useQueryState("subject");
   const { t } = useLocale();
   const router = useRouter();
@@ -64,6 +66,7 @@ export function GradeSheetHeader() {
       <div className="ml-auto flex flex-row items-center gap-2">
         {canCreateGradeSheet && (
           <Button
+            disabled={!schoolYear.isActive}
             onClick={() => {
               router.push(routes.classrooms.gradesheets.create(params.id));
             }}
