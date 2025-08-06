@@ -3,6 +3,7 @@ import type { TFunction } from "i18next";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
 import i18next from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -137,7 +138,7 @@ export function fetchGradeSheetColumns({
             className="hover:text-blue-500 hover:underline"
             href={teacher?.id ? routes.staffs.details(teacher.id) : "#"}
           >
-            {teacher?.lastName}
+            {decode(teacher?.lastName ?? "")}
           </Link>
         );
       },

@@ -31,16 +31,18 @@ export default async function Page(props: PageProps) {
   return (
     <div className="flex flex-col">
       <ClassroomCreateGradeSheetHeader />
-      <div className="grid h-screen grid-cols-[1fr_300px] gap-4 divide-x">
-        {searchParams.termId && searchParams.subjectId && (
+
+      {searchParams.termId && searchParams.subjectId && (
+        <div className="grid h-screen grid-cols-4 gap-4 divide-x">
           <CreateGradeSheet
+            className="col-span-3"
             subjectId={searchParams.subjectId}
             termId={searchParams.termId}
             students={students}
           />
-        )}
-        <div>Info des saisie precedente</div>
-      </div>
+          <div>Info des saisie precedente</div>
+        </div>
+      )}
     </div>
   );
 }

@@ -59,7 +59,7 @@ export function ClassroomGradeChart({
   const countp05 = grades.filter((g) => g.grade >= 8 && g.grade < 10).length;
   const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 overflow-hidden">
       <Card className="px-0">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">

@@ -8,9 +8,7 @@ const registrationSearchParamsSchema = {
   token: parseAsString,
 };
 
- const registrationSearchParams = createLoader(
-  registrationSearchParamsSchema,
-);
+const registrationSearchParams = createLoader(registrationSearchParamsSchema);
 
 interface PageProps {
   searchParams: Promise<SearchParams>;

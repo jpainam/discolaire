@@ -223,7 +223,10 @@ export function CreateEditSchoolYear({
             {t("cancel")}
           </Button>
           <Button
-            isLoading={createSchoolYearMutation.isPending}
+            isLoading={
+              createSchoolYearMutation.isPending ||
+              updateSchoolYearMutation.isPending
+            }
             variant={"default"}
             size={"sm"}
             type="submit"

@@ -1,13 +1,6 @@
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import i18next from "i18next";
-import {
-  Award,
-  BookOpen,
-  Calendar,
-  TrendingUp,
-  TriangleAlert,
-  Users,
-} from "lucide-react";
+import { Award, BookOpen, Calendar, TrendingUp, Users } from "lucide-react";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -67,10 +60,11 @@ export default async function Page(props: {
       (grade) => grade.grade >= 10 && grade.student.gender == "female",
     ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isClosed = gradesheet.term.endDate < new Date();
 
   return (
-    <div className="flex w-full flex-col gap-2 px-4 py-2">
+    <div className="flex flex-col gap-2 px-4 py-2">
       <Card className="p-0">
         <CardContent className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -140,7 +134,7 @@ export default async function Page(props: {
           </div>
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="px-0 py-2">
           <CardContent>
             <div className="text-sm font-medium">{t("evaluated_students")}</div>
@@ -210,7 +204,7 @@ export default async function Page(props: {
         </Card>
       </div>
       {/* <GradeDetailsHeader gradesheet={gradesheet} grades={allGrades} /> */}
-      {isClosed && (
+      {/* {isClosed && (
         <div className="rounded-md border border-amber-500/50 px-4 py-3 text-amber-600">
           <p className="text-sm">
             <TriangleAlert
@@ -221,10 +215,14 @@ export default async function Page(props: {
             {t("this_term_is_closed")}
           </p>
         </div>
-      )}
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_25%]">
+      )} */}
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <ClassroomGradeList gradesheet={gradesheet} grades={grades} />
+          <ClassroomGradeList
+            className="col-span-3"
+            gradesheet={gradesheet}
+            grades={grades}
+          />
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <ClassroomGradeChart grades={grades} />

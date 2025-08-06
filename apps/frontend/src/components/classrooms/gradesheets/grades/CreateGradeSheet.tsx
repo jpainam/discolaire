@@ -11,26 +11,16 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@repo/ui/components/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
+
+
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
@@ -39,6 +29,7 @@ import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+
 
 const createGradeSchema = z.object({
   weight: z.coerce.number().nonnegative(),
@@ -57,10 +48,12 @@ export function CreateGradeSheet({
   students,
   subjectId,
   termId,
+  className
 }: {
   students: RouterOutputs["classroom"]["students"];
   subjectId: number;
   termId: string;
+  className?: string;
 }) {
   const { t } = useLocale();
 
@@ -128,6 +121,7 @@ export function CreateGradeSheet({
   const { createQueryString } = useCreateQueryString();
 
   return (
+    <div className={className}>
     <Form {...form}>
       <form
         className="flex w-full flex-col"
@@ -225,30 +219,31 @@ export function CreateGradeSheet({
                     key={st.id}
                     className="hover:bg-green-50 hover:text-green-700 hover:ring-green-600/20 dark:hover:bg-green-700/10 dark:hover:text-green-50"
                   >
-                    <TableCell>{index + 1}.</TableCell>
-                    <TableCell>
+                    <TableCell className="py-0">{index + 1}.</TableCell>
+                    <TableCell className="py-0">
                       <AvatarState
+                        className="h-5 w-5"
                         avatar={st.user?.avatar}
                         pos={getFullName(st).length}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-0">
                       <Link
-                        className="text-xs hover:text-blue-600 hover:underline"
+                        className="hover:text-blue-600 hover:underline"
                         href={routes.students.details(st.id)}
                       >
                         {decode(st.lastName ?? "")}
                       </Link>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-0">
                       <Link
-                        className="text-xs hover:text-blue-600 hover:underline"
+                        className="hover:text-blue-600 hover:underline"
                         href={routes.students.details(st.id)}
                       >
                         {decode(st.firstName ?? "")}
                       </Link>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-1">
                       <Input
                         value={st.id}
                         className="hidden"
@@ -282,7 +277,7 @@ export function CreateGradeSheet({
                         )}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-0">
                       <FormField
                         control={form.control}
                         name={`grades.${index}.absent`}
@@ -308,7 +303,7 @@ export function CreateGradeSheet({
                         )}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-0">
                       {/* {watchValue.grade && getAppreciations(Number(watchValue.grade))} */}
                     </TableCell>
                   </TableRow>
@@ -319,5 +314,6 @@ export function CreateGradeSheet({
         </div>
       </form>
     </Form>
+    </div>
   );
 }
