@@ -2,9 +2,11 @@
 
 import { useCallback, useRef } from "react";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
+import { SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,11 +31,8 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
-import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
@@ -42,10 +41,6 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 const createGradeSchema = z.object({
-  notifyParents: z.boolean().default(true),
-  notifyStudents: z.boolean().default(true),
-  termId: z.string().min(1),
-  subjectId: z.string().min(1),
   weight: z.coerce.number().nonnegative(),
   name: z.string().min(1),
   scale: z.coerce.number().nonnegative(),
@@ -60,10 +55,15 @@ const createGradeSchema = z.object({
 
 export function CreateGradeSheet({
   students,
+  subjectId,
+  termId,
 }: {
   students: RouterOutputs["classroom"]["students"];
+  subjectId: number;
+  termId: string;
 }) {
   const { t } = useLocale();
+
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>, rowIndex: number) => {
@@ -79,14 +79,9 @@ export function CreateGradeSheet({
     },
     [], // No dependencies, so this function is only created once
   );
-  const searchParams = useSearchParams();
   const form = useForm({
     resolver: zodResolver(createGradeSchema),
     defaultValues: {
-      notifyParents: true,
-      notifyStudents: true,
-      termId: searchParams.get("term") ?? "",
-      subjectId: searchParams.get("subject") ?? "",
       weight: 100,
       name: t("harmonized_grade"),
       scale: 20,
@@ -119,8 +114,8 @@ export function CreateGradeSheet({
     toast.loading(t("creating"), { id: 0 });
     const values = {
       ...data,
-      termId: data.termId,
-      subjectId: Number(data.subjectId),
+      termId: termId,
+      subjectId: subjectId,
       grades: data.grades.map((grade) => ({
         ...grade,
         grade: isNaN(Number(grade.grade)) ? undefined : Number(grade.grade),
@@ -135,254 +130,192 @@ export function CreateGradeSheet({
   return (
     <Form {...form}>
       <form
-        className="flex w-full flex-col gap-2"
+        className="flex w-full flex-col"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid flex-row gap-2 border-b px-2 md:flex">
-          <div className="grid w-[75%] grid-cols-1 items-center gap-x-4 gap-y-2 border-r p-2 md:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="termId"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <FormLabel>{t("term")} </FormLabel>
-                  <FormControl>
-                    <TermSelector {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="subjectId"
-              render={({ field }) => (
-                <FormItem className="w-full space-y-0">
-                  <FormLabel>{t("subject")}</FormLabel>
-                  <FormControl>
-                    <SubjectSelector
-                      onChange={field.onChange}
-                      classroomId={params.id}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <div className="grid grid-cols-2 gap-4 p-1 px-4 md:grid-cols-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="gap-1">
+                <FormLabel>{t("Label")}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t("Label")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("grade_name")}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
+          <FormField
+            control={form.control}
+            name="scale"
+            render={({ field }) => (
+              <FormItem className="gap-1">
+                <FormLabel>{t("scale")}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t("scale")} type="number" {...field} />
+                </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-              <FormField
-                control={form.control}
-                name="scale"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("scale")}</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name={"weight"}
-                render={({ field }) => (
-                  <FormItem className={cn("space-y-0")}>
-                    <FormLabel>{t("weight")} (0-100)</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="number" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col justify-between gap-4 py-2">
-            <div className="flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="notifyParents"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel>{t("notify_parents")}</FormLabel>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="notifyStudents"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel>{t("notify_students")}</FormLabel>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                type="button"
-                variant={"outline"}
-                onClick={() => {
-                  router.push(
-                    routes.classrooms.gradesheets.index(params.id) +
-                      "?" +
-                      createQueryString({}),
-                  );
-                }}
-              >
-                {t("cancel")}
-              </Button>
-              <Button
-                isLoading={createGradesheetMutation.isPending}
-                type="submit"
-              >
-                {t("submit")}
-              </Button>
-            </div>
+          <FormField
+            control={form.control}
+            name={"weight"}
+            render={({ field }) => (
+              <FormItem className="gap-1">
+                <FormLabel>{t("weight")} 0--100</FormLabel>
+                <FormControl>
+                  <Input placeholder={t("weight")} {...field} type="number" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="mt-4 grid grid-cols-2 items-center gap-2">
+            <Button
+              type="button"
+              size={"sm"}
+              className="w-fit"
+              variant={"outline"}
+              onClick={() => {
+                router.push(
+                  routes.classrooms.gradesheets.index(params.id) +
+                    "?" +
+                    createQueryString({}),
+                );
+              }}
+            >
+              <XIcon />
+              {t("cancel")}
+            </Button>
+            <Button
+              size={"sm"}
+              className="w-fit"
+              isLoading={createGradesheetMutation.isPending}
+              type="submit"
+            >
+              <SaveIcon />
+              {t("submit")}
+            </Button>
           </div>
         </div>
-        <div className="px-4">
-          <div className="bg-background overflow-hidden rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/50">
-                  <TableHead className="w-[10px]"></TableHead>
-                  <TableHead className="w-[10px]"></TableHead>
-                  <TableHead>{t("lastName")}</TableHead>
-                  <TableHead>{t("firstName")}</TableHead>
-                  <TableHead>{t("grade")}</TableHead>
-                  <TableHead>{t("absence")}</TableHead>
-                  <TableHead>{t("appreciation")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {students.map((st, index) => {
-                  return (
-                    <TableRow
-                      key={st.id}
-                      className="hover:bg-green-50 hover:text-green-700 hover:ring-green-600/20 dark:hover:bg-green-700/10 dark:hover:text-green-50"
-                    >
-                      <TableCell>{index + 1}.</TableCell>
-                      <TableCell>
-                        <AvatarState
-                          avatar={st.user?.avatar}
-                          pos={getFullName(st).length}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          className="hover:text-blue-600 hover:underline"
-                          href={routes.students.details(st.id)}
-                        >
-                          {getFullName(st)}
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          className="hover:text-blue-600 hover:underline"
-                          href={routes.students.details(st.id)}
-                        >
-                          {st.firstName}
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          value={st.id}
-                          className="hidden"
-                          {...form.register(`grades.${index}.studentId`)}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`grades.${index}.grade`}
-                          render={({ field }) => (
-                            <FormItem className="space-y-0">
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  maxLength={6}
-                                  size={6}
-                                  // step=".01"
-                                  // type="number"
 
-                                  className="h-8 w-[150px] text-sm"
-                                  ref={(el) => {
-                                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                                    inputRefs.current[index] = el!; // TODO: Fix this shouldn't use null assession
-                                  }}
-                                  onKeyDown={(event) =>
-                                    handleKeyDown(event, index)
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormField
-                          control={form.control}
-                          name={`grades.${index}.absent`}
-                          render={({ field }) => (
-                            <FormItem className="space-y-0">
-                              <FormControl>
-                                <Checkbox
-                                  defaultChecked={true}
-                                  checked={
-                                    form.watch(`grades.${index}.grade`)
-                                      ? false
-                                      : true
-                                  }
-                                  onCheckedChange={(checked: boolean) => {
-                                    console.log("checked change", checked);
-                                    field.onChange(checked);
-                                  }}
-                                />
-                              </FormControl>
+        <div className="bg-background overflow-hidden border-y text-xs">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead className="w-[10px]"></TableHead>
+                <TableHead className="w-[10px]"></TableHead>
+                <TableHead>{t("lastName")}</TableHead>
+                <TableHead>{t("firstName")}</TableHead>
+                <TableHead>{t("grade")}</TableHead>
+                <TableHead>{t("absence")}</TableHead>
+                <TableHead>{t("appreciation")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {students.map((st, index) => {
+                return (
+                  <TableRow
+                    key={st.id}
+                    className="hover:bg-green-50 hover:text-green-700 hover:ring-green-600/20 dark:hover:bg-green-700/10 dark:hover:text-green-50"
+                  >
+                    <TableCell>{index + 1}.</TableCell>
+                    <TableCell>
+                      <AvatarState
+                        avatar={st.user?.avatar}
+                        pos={getFullName(st).length}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        className="text-xs hover:text-blue-600 hover:underline"
+                        href={routes.students.details(st.id)}
+                      >
+                        {decode(st.lastName ?? "")}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        className="text-xs hover:text-blue-600 hover:underline"
+                        href={routes.students.details(st.id)}
+                      >
+                        {decode(st.firstName ?? "")}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        value={st.id}
+                        className="hidden"
+                        {...form.register(`grades.${index}.studentId`)}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`grades.${index}.grade`}
+                        render={({ field }) => (
+                          <FormItem className="space-y-0">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                maxLength={6}
+                                size={6}
+                                // step=".01"
+                                // type="number"
 
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        {/* {watchValue.grade && getAppreciations(Number(watchValue.grade))} */}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
+                                className="h-8 w-[150px] text-sm"
+                                ref={(el) => {
+                                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                                  inputRefs.current[index] = el!; // TODO: Fix this shouldn't use null assession
+                                }}
+                                onKeyDown={(event) =>
+                                  handleKeyDown(event, index)
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormField
+                        control={form.control}
+                        name={`grades.${index}.absent`}
+                        render={({ field }) => (
+                          <FormItem className="space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                defaultChecked={true}
+                                checked={
+                                  form.watch(`grades.${index}.grade`)
+                                    ? false
+                                    : true
+                                }
+                                onCheckedChange={(checked: boolean) => {
+                                  console.log("checked change", checked);
+                                  field.onChange(checked);
+                                }}
+                              />
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      {/* {watchValue.grade && getAppreciations(Number(watchValue.grade))} */}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </div>
       </form>
     </Form>

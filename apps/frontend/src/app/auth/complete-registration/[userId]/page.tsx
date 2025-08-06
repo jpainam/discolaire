@@ -8,7 +8,7 @@ const registrationSearchParamsSchema = {
   token: parseAsString,
 };
 
-export const registrationSearchParams = createLoader(
+ const registrationSearchParams = createLoader(
   registrationSearchParamsSchema,
 );
 
