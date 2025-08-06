@@ -17,7 +17,7 @@ new Worker(
   backupQueueName,
   async () => {
     const filename = `backup-${new Date().toISOString()}.sql`;
-    const backupPath = "~/backups";
+    const backupPath = "../../../backups";
 
     await fs.mkdir(backupPath, { recursive: true });
 

@@ -53,3 +53,5 @@ dist/
 dump.rdb
 
 env.example
+
+backups/
