@@ -8,9 +8,24 @@ import parser from "cron-parser";
 import { db } from "@repo/db";
 import { logger } from "@repo/utils";
 
-import { jobQueue } from "./queue";
+import { backupQueue, jobQueue } from "./queue";
 
 export const name = "jobs";
+
+async function scheduleBackup() {
+  logger.info("[Scheduler] Scheduling DB backup job");
+  await backupQueue.add(
+    "pg_backup",
+    {},
+    {
+      repeat: {
+        //pattern: "0 12,18 * * *", // 12 PM and 6 PM daily
+        pattern: "* * * * *", // Every minute for testing
+      },
+      jobId: "scheduled-db-backup", // prevents duplicates
+    },
+  );
+}
 
 export async function initializeJobs() {
   await jobQueue.obliterate();
@@ -63,6 +78,7 @@ export async function initializeJobs() {
   }
 
   logger.info("[Scheduler] Jobs initialized successfully");
+  await scheduleBackup();
 }
 
 function isValidCron(cron: string): boolean {
@@ -74,6 +90,8 @@ function isValidCron(cron: string): boolean {
   }
 }
 
+// All jobs need to be exported for the worker to pick them up
+export * from "./db-backup.worker";
 export * from "./grade-notification.worker";
 export * from "./log.worker";
 export * from "./transaction-summary.worker";

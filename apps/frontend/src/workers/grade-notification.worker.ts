@@ -18,7 +18,7 @@ const newGradeSchema = z.object({
   gradeSheetId: z.coerce.number(),
 });
 const connection = getRedis();
-logger.info("[Worker] Initializing new grade notification worker");
+logger.info("[Worker] Grade notification worker initialized");
 new Worker(
   jobQueueName,
   async (job) => {

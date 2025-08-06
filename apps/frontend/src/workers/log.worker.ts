@@ -5,13 +5,13 @@ import { fromError } from "zod-validation-error/v4";
 import { db } from "@repo/db";
 import { logActivitySchema } from "@repo/validators";
 
-import { logQueue } from "./queue";
+import { logQueue, logQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 
 const connection = getRedis();
 
 new Worker(
-  "log-queue",
+  logQueueName,
   async (job) => {
     if (job.name == "log-action") {
       try {

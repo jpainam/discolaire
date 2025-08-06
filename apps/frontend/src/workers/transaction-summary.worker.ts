@@ -26,7 +26,7 @@ const dataSchema = z.object({
 });
 
 const connection = getRedis();
-logger.info("[Worker] Initializing transaction summary worker");
+logger.info("[Worker] Transaction summary worker initialized");
 new Worker(
   jobQueueName,
   async (job) => {

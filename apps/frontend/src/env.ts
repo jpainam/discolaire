@@ -17,6 +17,7 @@ export const env = createEnv({
    */
   server: {
     AUTH_SECRET: z.string().min(1),
+    DATABASE_URL: z.string(),
     S3_ACCESS_KEY_ID: z.string().min(10),
     S3_REGION: z.string().min(2),
     S3_BUCKET_NAME: z.string().min(2),
@@ -48,6 +49,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    DATABASE_URL: process.env.DATABASE_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
     S3_IMAGE_BUCKET_NAME: process.env.S3_IMAGE_BUCKET_NAME,
