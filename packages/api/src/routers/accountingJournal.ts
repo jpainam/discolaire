@@ -211,4 +211,57 @@ export const accountingJournal = {
     }
     return fees.length;
   }),
+
+  deplacer: protectedProcedure.mutation(async ({ ctx }) => {
+    const required = await ctx.db.requiredFeeTransaction.findMany({
+      include: {
+        fee: {
+          include: {
+            journal: true,
+          },
+        },
+      },
+      where: {
+        fee: {
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      },
+    });
+
+    const data = required.map((enr) => {
+      const currentDate = Date.now();
+      return {
+        transactionRef:
+          `${enr.fee.journal?.name ?? "TD"}-${enr.studentId.substring(0, 3)}${currentDate}`.toUpperCase(),
+        amount: enr.fee.amount,
+        description: `${enr.fee.description}`,
+        studentId: enr.studentId,
+        transactionType: TransactionType.CREDIT,
+        status: enr.status.toUpperCase() as TransactionStatus,
+        receivedById: enr.createdById,
+        isPrinted: true,
+        printedById: enr.createdById,
+        method: "CASH",
+        journalId: enr.fee.journalId,
+        createdById: enr.createdById,
+        schoolYearId: ctx.schoolYearId,
+        createdAt: enr.createdAt,
+      };
+    });
+    await ctx.db.transaction.createMany({
+      data,
+    });
+    const ids = required.map((r) => r.id);
+    await ctx.db.requiredFeeTransaction.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return ids.length;
+  }),
 } satisfies TRPCRouterRecord;

@@ -49,6 +49,20 @@ export function AccountingJournalHeader() {
     }),
   );
 
+  const deplacerMutation = useMutation(
+    trpc.accountingJournal.deplacer.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        toast.success("Transactions moved successfully", { id: 0 });
+        await queryClient.invalidateQueries(
+          trpc.accountingJournal.pathFilter(),
+        );
+      },
+    }),
+  );
+
   const handleSync = () => {
     toast.loading("syncing_fees", { id: 0 });
     updateOldFees.mutate();
@@ -91,6 +105,15 @@ export function AccountingJournalHeader() {
           }}
         >
           Inserer TD
+        </Button>
+        <Button
+          size="sm"
+          onClick={() => {
+            toast.loading("Moving transactions", { id: 0 });
+            deplacerMutation.mutate();
+          }}
+        >
+          Deplacer
         </Button>
       </div>
     </div>
