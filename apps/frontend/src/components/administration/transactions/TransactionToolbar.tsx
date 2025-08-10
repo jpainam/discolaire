@@ -2,7 +2,6 @@
 
 import {
   ArrowLeftRight,
-  Euro,
   //HandCoins,
   Percent,
   Sigma,
@@ -32,14 +31,14 @@ export function TransactionToolbar() {
       href:
         routes.administration.transactions + "/totals?" + createQueryString({}),
     },
-    {
-      icon: <Euro className="h-4 w-4" />,
-      name: t("required_fees"),
-      href:
-        routes.administration.transactions +
-        "/required?" +
-        createQueryString({}),
-    },
+    // {
+    //   icon: <Euro className="h-4 w-4" />,
+    //   name: t("required_fees"),
+    //   href:
+    //     routes.administration.transactions +
+    //     "/required?" +
+    //     createQueryString({}),
+    // },
     {
       icon: <Percent className="h-4 w-4" />,
       name: t("discounts"),
