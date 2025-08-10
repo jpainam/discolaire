@@ -10,6 +10,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { TransactionType } from "@repo/db";
 
+import { Badge } from "~/components/base-badge";
 import {
   MetricCard,
   MetricCardGroup,
@@ -47,47 +48,83 @@ export async function StudentTransactionSummary({
   const totalFees = sumBy(fees, "amount");
   const totalDue = totalFees - totalPaid - totalDiscount + totalDebit;
 
-  const feesGroupedByJournal = fees.reduce<Record<string, number>>(
-    (acc, fee) => {
-      const key = fee.journalId ?? "default";
-      acc[key] = (acc[key] ?? 0) + fee.amount;
-      return acc;
-    },
-    {},
-  );
+  const feesByJournal = fees.reduce<Record<string, number>>((acc, fee) => {
+    const id = fee.journalId ?? "default";
+    acc[id] = (acc[id] ?? 0) + fee.amount;
+    return acc;
+  }, {});
+
+  // 2) Sum transactions per journal *once*
+  interface Totals {
+    credit: number;
+    debit: number;
+    discount: number;
+  }
+  const txByJournal = transactions.reduce<Record<string, Totals>>((acc, t) => {
+    const id = t.journalId ?? "default";
+    const bucket = acc[id] ?? (acc[id] = { credit: 0, debit: 0, discount: 0 });
+    if (t.transactionType === TransactionType.CREDIT) bucket.credit += t.amount;
+    else if (t.transactionType === TransactionType.DEBIT)
+      bucket.debit += t.amount;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    else if (t.transactionType === TransactionType.DISCOUNT)
+      bucket.discount += t.amount;
+    return acc;
+  }, {});
+
   const locale = await getLocale();
   const t = await getTranslations();
 
   return (
     <div className="mt-2 px-4">
-      <MetricCardGroup className="md:grid-cols-3 lg:grid-cols-6">
-        {Object.entries(feesGroupedByJournal).map(
-          ([journalId, amount], index) => {
-            const title =
-              journals.find((j) => j.id === journalId)?.name ?? "Autres";
-            return (
-              <MetricCard key={index} variant={"default"}>
-                <MetricCardHeader className="flex items-center justify-between gap-2">
-                  <MetricCardTitle className="truncate">
-                    {title}
-                  </MetricCardTitle>
-                  <Banknote className="size-4" />
-                </MetricCardHeader>
+      <MetricCardGroup className="gap-2 md:grid-cols-3 lg:grid-cols-6">
+        {Object.entries(feesByJournal).map(([journalId, feeAmount], index) => {
+          const title =
+            journals.find((j) => j.id === journalId)?.name ?? "Autres";
+          const {
+            credit = 0,
+            debit = 0,
+            discount = 0,
+          } = txByJournal[journalId] ?? {};
+
+          const due = credit + discount - debit - feeAmount;
+
+          return (
+            <MetricCard key={index} variant={"default"}>
+              <MetricCardHeader className="flex items-center justify-between gap-2">
+                <MetricCardTitle className="truncate uppercase">
+                  {title}
+                </MetricCardTitle>
+                <Banknote className="size-4" />
+              </MetricCardHeader>
+              <div className="flex flex-row flex-wrap items-center gap-1">
                 <MetricCardValue>
-                  {amount.toLocaleString(locale, {
+                  {feeAmount.toLocaleString(locale, {
                     style: "currency",
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
                     currency: CURRENCY,
                   })}
                 </MetricCardValue>
-              </MetricCard>
-            );
-          },
-        )}
+                <Badge
+                  //className="text-[8px]"
+                  appearance={"outline"}
+                  variant={due < 0 ? "destructive" : "success"}
+                >
+                  {due.toLocaleString(locale, {
+                    style: "currency",
+                    maximumFractionDigits: 0,
+                    minimumFractionDigits: 0,
+                    currency: CURRENCY,
+                  })}
+                </Badge>
+              </div>
+            </MetricCard>
+          );
+        })}
         <MetricCard variant={"success"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">
+            <MetricCardTitle className="truncate uppercase">
               {t("amountPaid")}
             </MetricCardTitle>
             <BanknoteArrowDown className="size-4" />
@@ -103,7 +140,7 @@ export async function StudentTransactionSummary({
         </MetricCard>
         <MetricCard variant={"warning"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">
+            <MetricCardTitle className="truncate uppercase">
               {t("discount")}
             </MetricCardTitle>
             <BanknoteX className="size-4" />
@@ -119,7 +156,7 @@ export async function StudentTransactionSummary({
         </MetricCard>
         <MetricCard variant={"destructive"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">
+            <MetricCardTitle className="truncate uppercase">
               {t("amountDue")}
             </MetricCardTitle>
             <BanknoteArrowUp className="size-4" />
@@ -135,7 +172,7 @@ export async function StudentTransactionSummary({
         </MetricCard>
         <MetricCard variant={"success"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">
+            <MetricCardTitle className="truncate uppercase">
               {t("transactionsCompleted")}
             </MetricCardTitle>
             <HandCoins className="size-4" />

@@ -19,7 +19,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="grid grid-cols-4 gap-4 px-4">
+              <div className="grid grid-cols-4 gap-4 px-4 py-2">
                 <Skeleton className="h-16 w-full" />
                 <Skeleton className="h-16 w-full" />
                 <Skeleton className="h-16 w-full" />

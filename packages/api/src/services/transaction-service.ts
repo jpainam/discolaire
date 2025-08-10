@@ -36,6 +36,7 @@ export const transactionService = {
         studentId: transaction.studentId,
         deletedAt: null,
         schoolYearId: transaction.schoolYearId,
+        journalId: transaction.journalId,
       },
     });
     const paid = transactions.reduce((acc, t) => acc + t.amount, 0);

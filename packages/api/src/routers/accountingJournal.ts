@@ -1,6 +1,8 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
+import { TransactionStatus, TransactionType } from "@repo/db";
+
 import { protectedProcedure } from "../trpc";
 
 export const accountingJournal = {
@@ -143,5 +145,70 @@ export const accountingJournal = {
       });
     }
     return tdJournal;
+  }),
+  insertTDTransactions: protectedProcedure.mutation(async ({ ctx }) => {
+    const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
+      where: {
+        id: ctx.schoolYearId,
+      },
+    });
+    const fees = await ctx.db.fee.findMany({
+      include: {
+        journal: true,
+      },
+      where: {
+        classroom: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        },
+        journal: {
+          name: "TD",
+        },
+      },
+    });
+    const journalIds = fees
+      .map((fee) => fee.journalId)
+      .filter((f) => f !== null);
+    await ctx.db.transaction.deleteMany({
+      where: {
+        journalId: {
+          in: journalIds,
+        },
+        transactionType: TransactionType.CREDIT,
+        schoolYearId: ctx.schoolYearId,
+      },
+    });
+    for (const fee of fees) {
+      const enrollments = await ctx.db.enrollment.findMany({
+        where: {
+          classroomId: fee.classroomId,
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+      const data = enrollments.map((enr) => {
+        const currentDate = Date.now();
+        return {
+          transactionRef:
+            `${fee.journal?.name ?? "TD"}-${enr.studentId.substring(0, 3)}${currentDate}`.toUpperCase(),
+          amount: fee.amount,
+          description: `${fee.description} - Automatique`,
+          studentId: enr.studentId,
+          transactionType: TransactionType.CREDIT,
+          status: TransactionStatus.VALIDATED,
+          receivedById: ctx.session.user.id,
+          isPrinted: true,
+          printedById: ctx.session.user.id,
+          method: "CASH",
+          journalId: fee.journalId,
+          createdById: ctx.session.user.id,
+          schoolYearId: ctx.schoolYearId,
+          createdAt: schoolYear.startDate,
+        };
+      });
+      await ctx.db.transaction.createMany({
+        data,
+      });
+    }
+    return fees.length;
   }),
 } satisfies TRPCRouterRecord;

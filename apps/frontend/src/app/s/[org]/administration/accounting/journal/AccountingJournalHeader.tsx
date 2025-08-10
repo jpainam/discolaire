@@ -29,7 +29,21 @@ export function AccountingJournalHeader() {
       onSuccess: async () => {
         toast.success("Frais synced successfully", { id: 0 });
         await queryClient.invalidateQueries(
-          trpc.accountingJournal.stats.pathFilter(),
+          trpc.accountingJournal.pathFilter(),
+        );
+      },
+    }),
+  );
+
+  const insertTDMutation = useMutation(
+    trpc.accountingJournal.insertTDTransactions.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async (r) => {
+        toast.success(`${r} transactions inserted successfully`, { id: 0 });
+        await queryClient.invalidateQueries(
+          trpc.accountingJournal.pathFilter(),
         );
       },
     }),
@@ -69,6 +83,15 @@ export function AccountingJournalHeader() {
             Synchroniser
           </Button>
         )}
+        <Button
+          size={"sm"}
+          onClick={() => {
+            toast.loading("Inserting TD transactions", { id: 0 });
+            insertTDMutation.mutate();
+          }}
+        >
+          Inserer TD
+        </Button>
       </div>
     </div>
   );

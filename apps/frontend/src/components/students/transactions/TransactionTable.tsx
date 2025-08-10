@@ -13,11 +13,10 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import i18next from "i18next";
-import { BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
+import { Banknote, BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { TransactionType } from "@repo/db";
-import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -43,6 +42,8 @@ import {
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
+import { Pill, PillAvatar, PillIcon, PillIndicator } from "~/components/pill";
+import { randomAvatar } from "~/components/raw-images";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -54,6 +55,7 @@ import { DeleteTransaction } from "./DeleteTransaction";
 
 export function TransactionTable() {
   const params = useParams<{ id: string }>();
+  const avatar = randomAvatar(0);
   const { t, i18n } = useLocale();
   const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
     day: "numeric",
@@ -105,7 +107,7 @@ export function TransactionTable() {
               <TableHead>{t("createdAt")}</TableHead>
               <TableHead>{t("description")}</TableHead>
               <TableHead>{t("amount")}</TableHead>
-              <TableHead>{t("status")}</TableHead>
+              {/* <TableHead>{t("status")}</TableHead> */}
               <TableHead></TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -172,13 +174,41 @@ export function TransactionTable() {
                       minimumFractionDigits: 0,
                     })}
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <TransactionStatus status={transaction.status} />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
-                    <Badge variant="secondary">
+                    <div className="flex items-center gap-2">
+                      {/* <Badge variant="secondary">
                       {transaction.journal?.name}
-                    </Badge>
+                    </Badge> */}
+                      <Pill>
+                        <PillIcon icon={Banknote} />
+                        {transaction.journal?.name}
+                      </Pill>
+                      <Pill>
+                        <PillIndicator
+                          pulse
+                          variant={
+                            transaction.status == "VALIDATED"
+                              ? "success"
+                              : "error"
+                          }
+                        />
+                        {t(transaction.status)}
+                      </Pill>
+                      <Pill>
+                        <PillAvatar
+                          fallback="JP"
+                          src={
+                            avatar
+                              ? `/api/download/avatars/${avatar}`
+                              : undefined
+                          }
+                        />
+                        @haydenbleasel
+                      </Pill>
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     {(canUpdateTransaction || canDeleteTransaction) && (

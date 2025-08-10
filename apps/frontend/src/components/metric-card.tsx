@@ -123,10 +123,12 @@ const badgeVariants = cva("px-1.5 font-mono text-[10px]", {
 export function MetricCardBadge({
   value,
   decimal = 1,
+  suffix = "%",
   className,
   ...props
 }: React.ComponentProps<typeof Badge> & {
   value: number;
+  suffix?: string;
   decimal?: number;
 }) {
   const round = 10 ** decimal; // 10^1 = 10 (1 decimal), 10^2 = 100 (2 decimals), etc.
@@ -147,7 +149,8 @@ export function MetricCardBadge({
           {percentage < 0 ? <ChevronDown className="mr-px size-2.5" /> : null}
         </span>
       ) : null}
-      {Math.abs(percentage)}%
+      {Math.abs(percentage)}
+      {suffix}
     </Badge>
   );
 }
