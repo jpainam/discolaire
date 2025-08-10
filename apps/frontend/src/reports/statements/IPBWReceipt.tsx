@@ -126,7 +126,9 @@ export function IPBWReceipt({
                   </View>
                 </View>
                 <View style={{ flexDirection: "column", gap: 4 }}>
-                  <Text> {classroom.name}</Text>
+                  <Text>
+                    {classroom.name} / {transaction.journal?.name}
+                  </Text>
                   <View
                     style={{
                       fontWeight: "bold",

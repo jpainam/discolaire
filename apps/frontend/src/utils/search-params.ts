@@ -55,7 +55,6 @@ export const createTransactionSchemaStep1 = {
   transactionType: parseAsStringLiteral(["CREDIT", "DEBIT"]),
   paymentMethod: parseAsString,
   journalId: parseAsString,
-  requiredFeeIds: parseAsString,
   studentId: parseAsString,
 };
 

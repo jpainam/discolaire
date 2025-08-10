@@ -41,6 +41,9 @@ export const schoolRouter = {
   }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.school.findUniqueOrThrow({
+      include: {
+        requiredJournals: true,
+      },
       where: {
         id: input,
       },
@@ -99,6 +102,7 @@ export const schoolRouter = {
         allowOverEnrollment: z.boolean().default(true),
         currency: z.string().min(1),
         numberOfReceipts: z.coerce.number().min(1),
+        requiredJournals: z.string().array().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -111,11 +115,25 @@ export const schoolRouter = {
         currency: input.currency,
       } as Prisma.SchoolUpdateInput;
 
-      return ctx.db.school.update({
+      const school = await ctx.db.school.update({
         where: {
           id: input.schoolId,
         },
         data: data,
       });
+      if (input.requiredJournals) {
+        await ctx.db.requiredAccountingJournal.deleteMany({
+          where: {
+            schoolId: input.schoolId,
+          },
+        });
+        await ctx.db.requiredAccountingJournal.createMany({
+          data: input.requiredJournals.map((journal) => ({
+            schoolId: input.schoolId,
+            journalId: journal,
+          })),
+        });
+      }
+      return school;
     }),
 } satisfies TRPCRouterRecord;

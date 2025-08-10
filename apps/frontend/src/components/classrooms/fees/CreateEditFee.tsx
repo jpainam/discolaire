@@ -8,11 +8,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -37,7 +35,6 @@ const createEditFeeSchema = z.object({
   description: z.string().min(1),
   amount: z.coerce.number().min(1),
   dueDate: z.coerce.date(),
-  isRequired: z.boolean().default(false),
   journalId: z.string().min(1),
 });
 
@@ -56,7 +53,6 @@ export function CreateEditFee({
       description: fee?.description ?? "",
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
-      isRequired: fee?.isRequired ?? false,
       journalId: fee?.journalId ?? "",
     },
   });
@@ -103,7 +99,6 @@ export function CreateEditFee({
       dueDate: data.dueDate,
       isActive: true,
       classroomId: classroomId,
-      isRequired: data.isRequired,
       journalId: data.journalId,
     };
     if (fee) {
@@ -183,27 +178,6 @@ export function CreateEditFee({
                 </FormControl>
 
                 <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="isRequired"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center space-y-0 space-x-2 py-2">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>{t("required_fees")} ? </FormLabel>
-                  <FormDescription className="text-sm">
-                    {t("required_fees_description")}
-                  </FormDescription>
-                </div>
               </FormItem>
             )}
           />

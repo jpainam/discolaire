@@ -50,10 +50,7 @@ export function FeeHeader() {
       filteredFees = fees.filter((fee) => fee.classroomId === classroomId);
     }
     const total = filteredFees.reduce((acc, fee) => acc + fee.amount, 0);
-    const required = filteredFees
-      .filter((f) => f.isRequired)
-      .reduce((acc, fee) => acc + fee.amount, 0);
-    setSums({ total, required });
+    setSums({ total, required: 0 });
   }, [classroomId, fees]);
 
   return (

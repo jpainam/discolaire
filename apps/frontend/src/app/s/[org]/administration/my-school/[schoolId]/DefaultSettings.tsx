@@ -2,15 +2,13 @@
 
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,
@@ -38,6 +36,7 @@ import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
+import { MultiSelectCombobox } from "./multi-selector";
 
 const defaultSettingsSchema = z.object({
   defaultCountryId: z.string().min(1),
@@ -47,14 +46,18 @@ const defaultSettingsSchema = z.object({
   currency: z.string().min(1).default("CFA"),
   timezone: z.string().min(1).default("UTC"),
   allowOverEnrollment: z.boolean().default(true),
+  requiredJournals: z.array(z.string()).optional(),
 });
-export function DefaultSettings() {
+export function DefaultSettings({
+  school,
+}: {
+  school: RouterOutputs["school"]["get"];
+}) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
-  const { data: school } = useSuspenseQuery(
-    trpc.school.get.queryOptions(params.schoolId),
-  );
+
+  const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
 
   const queryClient = useQueryClient();
 
@@ -68,6 +71,8 @@ export function DefaultSettings() {
       allowOverEnrollment: school.allowOverEnrollment ?? true,
       currency: school.currency,
       timezone: school.timezone,
+      requiredJournals:
+        school.requiredJournals?.map((req) => req.journalId) ?? [],
     },
   });
   const router = useRouter();
@@ -90,6 +95,7 @@ export function DefaultSettings() {
     updateDefaultSettings.mutate({
       ...data,
       schoolId: params.schoolId,
+      requiredJournals: data.requiredJournals ?? [],
     });
   };
 
@@ -146,6 +152,7 @@ export function DefaultSettings() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="applyRequiredFee"
@@ -215,6 +222,42 @@ export function DefaultSettings() {
                         <SelectItem value="3">3</SelectItem>
                       </SelectContent>
                     </Select>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="requiredJournals"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("required_fees")}</FormLabel>
+                  <FormControl>
+                    {journalQuery.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <MultiSelectCombobox
+                        label={t("required_fees")}
+                        options={(journalQuery.data ?? []).map((journal) => ({
+                          label: journal.name,
+                          value: journal.id,
+                        }))}
+                        value={field.value}
+                        onChange={(val) => field.onChange(val)}
+                        renderItem={(option) => option.label}
+                        renderSelectedItem={(value: string[]) => {
+                          if (value.length === 0) return "";
+                          if (value.length === 1) {
+                            return journalQuery.data?.find(
+                              (p) => p.id === value[0],
+                            )?.name;
+                          }
+                          return `${value.length} journals selected`;
+                        }}
+                      />
+                    )}
                   </FormControl>
 
                   <FormMessage />

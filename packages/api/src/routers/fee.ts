@@ -52,7 +52,6 @@ export const feeRouter = {
         dueDate: z.coerce.date(),
         classroomId: z.string().min(1),
         isActive: z.boolean().default(true),
-        isRequired: z.boolean().default(false),
         journalId: z.string().min(1),
       }),
     )
@@ -63,7 +62,6 @@ export const feeRouter = {
           description: input.description,
           amount: input.amount,
           dueDate: input.dueDate,
-          isRequired: input.isRequired,
           classroomId: input.classroomId,
           journalId: input.journalId,
         },
@@ -77,7 +75,6 @@ export const feeRouter = {
         description: z.string().min(1),
         amount: z.coerce.number().min(1),
         dueDate: z.coerce.date(),
-        isRequired: z.boolean().default(false),
         isActive: z.boolean().default(true),
         journalId: z.string().min(1),
       }),
@@ -92,7 +89,6 @@ export const feeRouter = {
           description: input.description,
           amount: input.amount,
           dueDate: input.dueDate,
-          isRequired: input.isRequired,
           journalId: input.journalId,
         },
       });
@@ -103,18 +99,5 @@ export const feeRouter = {
   trend: protectedProcedure.query(async ({ ctx }) => {
     return feeService.getAmountTrend(ctx.schoolYearId);
   }),
-  requiredFees: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.fee.findMany({
-      include: {
-        journal: true,
-      },
-      where: {
-        isRequired: true,
-        classroom: {
-          schoolYearId: ctx.schoolYearId,
-          schoolId: ctx.schoolId,
-        },
-      },
-    });
-  }),
+  
 } satisfies TRPCRouterRecord;

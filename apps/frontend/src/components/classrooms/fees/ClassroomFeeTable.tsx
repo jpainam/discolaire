@@ -85,7 +85,7 @@ export function ClassroomFeeTable() {
               <TableHead>{t("amount")}</TableHead>
               <TableHead>{t("due_date")}</TableHead>
               <TableHead>{t("status")}</TableHead>
-              <TableHead>{t("required_fees")} ?</TableHead>
+             
               <TableHead>Journal</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -132,11 +132,7 @@ export function ClassroomFeeTable() {
                         <FlatBadge variant={"yellow"}>{t("current")}</FlatBadge>
                       )}
                     </TableCell>
-                    <TableCell className="w-[150px] text-center">
-                      <FlatBadge variant={fee.isRequired ? "red" : "green"}>
-                        {fee.isRequired ? t("yes") : t("no")}
-                      </FlatBadge>
-                    </TableCell>
+                    
                     <TableCell>
                       <Badge variant="secondary">{fee.journal?.name}</Badge>
                     </TableCell>

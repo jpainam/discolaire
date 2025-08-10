@@ -7,6 +7,7 @@ import { z } from "zod";
 import type { Prisma } from "@repo/db";
 
 import { checkPermission } from "../permission";
+import { getUnpaidFeeDescription } from "../services/accounting-service";
 import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
 import { isRepeating, studentService } from "../services/student-service";
@@ -538,7 +539,7 @@ export const studentRouter = {
           message: "Classroom not found",
         });
       }
-      return studentService.getUnpaidRequiredFees(input, classroom.id);
+      return getUnpaidFeeDescription(input, classroom.id);
     }),
 
   disable: protectedProcedure

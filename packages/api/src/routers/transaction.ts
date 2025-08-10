@@ -25,7 +25,6 @@ const createSchema = z.object({
 
   transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]),
   observation: z.string().optional(),
-  requiredFeeIds: z.array(z.coerce.number()).optional(),
   journalId: z.string().min(1),
 });
 
@@ -347,12 +346,7 @@ export const transactionRouter = {
           method: input.method,
         },
       });
-      if (input.requiredFeeIds)
-        await transactionService.createRequiredFee({
-          studentId: input.studentId,
-          createdById: ctx.session.user.id,
-          feeIds: input.requiredFeeIds,
-        });
+
       void notificationQueue.add("notification", {
         type: "transaction",
         id: result.id,
@@ -449,60 +443,6 @@ export const transactionRouter = {
         increased: true,
         percentage: 4.4,
       };
-    }),
-
-  required: protectedProcedure
-    .input(
-      z.object({
-        limit: z.number().optional().default(20),
-        classroomId: z.string().optional(),
-        from: z.coerce.date().optional(),
-        to: z.coerce.date().optional().default(new Date()),
-        status: z.string().optional(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return ctx.db.requiredFeeTransaction.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: input.limit,
-        where: {
-          fee: {
-            classroom: {
-              schoolYearId: ctx.schoolYearId,
-              ...(input.classroomId
-                ? {
-                    id: input.classroomId,
-                  }
-                : {}),
-            },
-          },
-          ...(input.from
-            ? {
-                createdAt: {
-                  gte: input.from,
-                  lte: input.to,
-                },
-              }
-            : {}),
-          ...(input.status
-            ? {
-                status: {
-                  equals: input.status as TransactionStatus,
-                },
-              }
-            : {}),
-        },
-        include: {
-          student: true,
-          fee: {
-            include: {
-              classroom: true,
-            },
-          },
-        },
-      });
     }),
 
   getTransactionSummary: protectedProcedure

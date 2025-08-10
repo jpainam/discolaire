@@ -131,9 +131,6 @@ export function Step2({
       description: searchParams.description,
       studentId: searchParams.studentId,
       transactionType: searchParams.transactionType as TransactionType,
-      requiredFeeIds: JSON.parse(
-        searchParams.requiredFeeIds ?? "[]",
-      ) as number[],
       amount: Number(searchParams.amount),
       journalId: searchParams.journalId,
     });

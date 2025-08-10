@@ -508,7 +508,6 @@ model Fee {
     createdBy   String?
     updatedBy   String?
     classroomId String
-    isRequired  Boolean?                 @default(false)
     classroom   Classroom                @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     requires    RequiredFeeTransaction[]
     journalId   String?
@@ -574,34 +573,34 @@ model Country {
 }
 
 model School {
-    id                    String                     @id @default(cuid())
-    code                  String                     @unique
+    id                    String                      @id @default(cuid())
+    code                  String                      @unique
     name                  String
     authorization         String?
     ministry              String?
     department            String?
     region                String?
-    defaultLocale         String                     @default("fr")
+    defaultLocale         String                      @default("fr")
     city                  String?
     headmaster            String?
     phoneNumber1          String?
     phoneNumber2          String?
     email                 String?
     website               String?
-    numberOfReceipts      Int?                       @default(1)
+    numberOfReceipts      Int?                        @default(1)
     logo                  String?
-    createdAt             DateTime                   @default(now()) @db.Timestamp(6)
-    updatedAt             DateTime                   @updatedAt
-    isActive              Boolean                    @default(true)
+    createdAt             DateTime                    @default(now()) @db.Timestamp(6)
+    updatedAt             DateTime                    @updatedAt
+    isActive              Boolean                     @default(true)
     address               String?
-    timezone              String                     @default("Africa/Brazzaville")
+    timezone              String                      @default("Africa/Brazzaville")
     defaultCountryId      String?
-    registrationPrefix    String                     @default("1")
-    requestSunPlusNo      Boolean?                   @default(true)
-    allowOverEnrollment   Boolean?                   @default(true)
-    applyRequiredFee      ApplyRequiredFee           @default(NO)
-    includeRequiredFee    Boolean?                   @default(false)
-    hasQuarterlyReports   Boolean                    @default(true)
+    registrationPrefix    String                      @default("1")
+    requestSunPlusNo      Boolean?                    @default(true)
+    allowOverEnrollment   Boolean?                    @default(true)
+    applyRequiredFee      ApplyRequiredFee            @default(NO)
+    includeRequiredFee    Boolean?                    @default(false)
+    hasQuarterlyReports   Boolean                     @default(true)
     contacts              Contact[]
     users                 User[]
     students              Student[]
@@ -632,9 +631,20 @@ model School {
     schoolYearEvents      SchoolYearEvent[]
     schoolYearEventTypes  SchoolYearEventType[]
     logActivities         LogActivity[]
-    AppreciationRuleSet   AppreciationRuleSet?       @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    AppreciationRuleSet   AppreciationRuleSet?        @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     appreciationRuleSetId String?
-    AccountingJournals    AccountingJournal[]
+    accountingJournals    AccountingJournal[]
+    requiredJournals      RequiredAccountingJournal[]
+}
+
+model RequiredAccountingJournal {
+    id        String            @id @default(cuid())
+    journalId String
+    journal   AccountingJournal @relation(fields: [journalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    schoolId  String
+    school    School            @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@unique([journalId, schoolId])
 }
 
 model FormerSchool {

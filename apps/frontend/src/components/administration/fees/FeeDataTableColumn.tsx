@@ -146,20 +146,6 @@ export function fetchFeesColumns({
       },
     },
     {
-      accessorKey: "isRequired",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("required_fees")} />
-      ),
-      cell: ({ row }) => {
-        const fee = row.original;
-        return (
-          <FlatBadge variant={fee.isRequired ? "red" : "green"}>
-            {fee.isRequired ? t("yes") : t("no")}
-          </FlatBadge>
-        );
-      },
-    },
-    {
       id: "actions",
       cell: ({ row }) => <ActionCell fee={row.original} />,
       size: 60,

@@ -164,7 +164,7 @@ export default async function Page(props: {
           <CardContent>
             <ErrorBoundary errorComponent={ErrorFallback}>
               <Suspense fallback={<Skeleton className="h-20" />}>
-                <DefaultSettings />
+                <DefaultSettings school={school} />
               </Suspense>
             </ErrorBoundary>
           </CardContent>

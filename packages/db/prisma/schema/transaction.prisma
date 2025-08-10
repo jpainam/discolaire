@@ -27,17 +27,18 @@ model Transaction {
 }
 
 model AccountingJournal {
-    id           String        @id @default(cuid())
-    name         String
-    transactions Transaction[]
-    createdAt    DateTime      @default(now()) @db.Timestamp(6)
-    updatedAt    DateTime      @updatedAt
-    schoolYearId String
-    schoolId     String
-    school       School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-    schoolYear   SchoolYear    @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    description  String?
-    fees         Fee[]
+    id               String                      @id @default(cuid())
+    name             String
+    transactions     Transaction[]
+    createdAt        DateTime                    @default(now()) @db.Timestamp(6)
+    updatedAt        DateTime                    @updatedAt
+    schoolYearId     String
+    schoolId         String
+    school           School                      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    schoolYear       SchoolYear                  @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    description      String?
+    fees             Fee[]
+    requiredJournals RequiredAccountingJournal[]
 }
 
 enum TransactionStatus {

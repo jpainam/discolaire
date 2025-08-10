@@ -166,22 +166,7 @@ export const studentService = {
     });
     return grades;
   },
-  getUnpaidRequiredFees: async (studentId: string, classroomId: string) => {
-    const requiredFees = await db.fee.findMany({
-      where: {
-        classroomId: classroomId,
-        isRequired: true,
-      },
-    });
 
-    const paidRequiredFees = await db.requiredFeeTransaction.findMany({
-      where: {
-        studentId: studentId,
-      },
-    });
-    const paidRequiredFeeIds = paidRequiredFees.map((fee) => fee.feeId);
-    return requiredFees.filter((fee) => !paidRequiredFeeIds.includes(fee.id));
-  },
   delete: async (studentIds: string | string[], schoolId: string) => {
     const students = await db.student.findMany({
       where: {

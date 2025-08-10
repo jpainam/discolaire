@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import i18next from "i18next";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -11,7 +9,6 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
@@ -21,7 +18,6 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
@@ -33,7 +29,6 @@ import {
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
-import { CURRENCY } from "~/lib/constants";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 
@@ -71,14 +66,13 @@ export function Step1({
 
   const trpc = useTRPC();
   const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
-  const [requiredFeeIds, setRequiredFeeIds] = useState<number[]>([]);
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
-      const missingFees = unpaidRequiredFees.filter(
-        (fee) => !requiredFeeIds.includes(fee.id),
-      );
-      if (missingFees.length !== 0) {
+      if (
+        unpaidRequiredFees.unpaid !== 0 &&
+        !unpaidRequiredFees.journalIds.includes(data.journalId)
+      ) {
         toast.error(t("required_fee_warning"));
         return;
       }
@@ -93,7 +87,6 @@ export function Step1({
           journalId: data.journalId,
           studentId: studentId,
           step: "step2",
-          requiredFeeIds: JSON.stringify(requiredFeeIds),
         }),
     );
   }
@@ -105,47 +98,6 @@ export function Step1({
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
-      {school.applyRequiredFee !== "NO" && unpaidRequiredFees.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <Label>{t("required_fees")}</Label>
-          {unpaidRequiredFees.map((fee, index) => {
-            return (
-              <div
-                key={`unpaid-${fee.id}`}
-                className="flex items-center space-x-2"
-              >
-                <Checkbox
-                  id={`requiredfee-${index}`}
-                  checked={requiredFeeIds.includes(fee.id)}
-                  onCheckedChange={(checked: boolean) => {
-                    if (checked) {
-                      void setRequiredFeeIds([...requiredFeeIds, fee.id]);
-                    } else {
-                      void setRequiredFeeIds(
-                        requiredFeeIds.filter((i) => i !== fee.id),
-                      );
-                    }
-                  }}
-                />
-                <Label
-                  htmlFor={`requiredfee-${index}`}
-                  className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {fee.description} (
-                  {fee.amount.toLocaleString(i18next.language, {
-                    style: "currency",
-                    currency: CURRENCY,
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                  })}
-                  )
-                </Label>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4">
