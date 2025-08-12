@@ -10,20 +10,22 @@ const flatBadgeVariants = cva(
   {
     variants: {
       variant: {
-        gray: "border-gray-500 bg-gray-100 text-gray-600 dark:bg-gray-900/20",
-        red: "border-red-500 bg-red-100 text-red-600 dark:bg-red-900/20",
+        gray: "border-gray-200 bg-gray-100 text-gray-700 dark:border-gray-800 dark:bg-gray-950/50 dark:text-gray-400",
+        red: "border-red-200 bg-red-100 text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-400",
         orange:
-          "border-orange-500 bg-orange-100 text-orange-600 dark:bg-orange-900/20",
+          "border-orange-200 bg-orange-100 text-orange-700 dark:border-orange-800 dark:bg-orange-950/50 dark:text-orange-400",
         yellow:
-          "border-yellow-500 bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20",
+          "border-yellow-200 bg-yellow-100 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950/50 dark:text-yellow-400",
+        amber:
+          "border-amber-200 bg-amber-100 text-amber-700 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-400",
         green:
-          "border-green-500 bg-green-100 text-green-600 dark:bg-green-900/20",
-        blue: "border-blue-500 bg-blue-100 text-blue-600 dark:bg-blue-900/20",
+          "border-green-200 bg-green-100 text-green-700 dark:border-green-800 dark:bg-green-950/50 dark:text-green-400",
+        blue: "border-blue-200 bg-blue-100 text-blue-700 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-400",
         indigo:
-          "border-indigo-500 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/20",
+          "border-indigo-200 bg-indigo-100 text-indigo-700 dark:border-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-400",
         purple:
-          "border-purple-500 bg-purple-100 text-purple-600 dark:bg-purple-900/20",
-        pink: "border-pink-500 bg-pink-100 text-pink-600 dark:bg-pink-900/20",
+          "border-purple-200 bg-purple-100 text-purple-700 dark:border-purple-800 dark:bg-purple-950/50 dark:text-purple-400",
+        pink: "border-pink-200 bg-pink-100 text-pink-700 dark:border-pink-800 dark:bg-pink-950/50 dark:text-pink-400",
       },
     },
     defaultVariants: {
@@ -42,7 +44,10 @@ export default function FlatBadge({
   ...props
 }: FlatBadgeProps) {
   return (
-    <div className={cn(flatBadgeVariants({ variant }), className)} {...props} />
+    <span
+      className={cn(flatBadgeVariants({ variant }), className)}
+      {...props}
+    />
   );
 }
 export type FlatBadgeVariant =
@@ -53,4 +58,6 @@ export type FlatBadgeVariant =
   | "blue"
   | "indigo"
   | "purple"
-  | "pink";
+  | "pink"
+  | "orange"
+  | "amber";
