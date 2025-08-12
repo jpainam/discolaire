@@ -2,21 +2,16 @@
 
 import { useMemo } from "react";
 
-
-
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-
-
 
 import { useLocale } from "~/i18n";
 import { EnrolledStudentDataTableAction } from "./EnrolledStudentDataTableAction";
 import { fetchStudentColumns } from "./EnrolledStudentDataTableColumn";
 
-
 export function EnrolledStudentDataTable({
   students,
-  newStudent
+  newStudent,
 }: {
   students: RouterOutputs["student"]["all"];
   newStudent: boolean;
