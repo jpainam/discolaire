@@ -72,10 +72,10 @@ export default async function Page() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <TabsContent value="tab-1">
-        <EnrolledStudentDataTable students={enrolled} />
+        <EnrolledStudentDataTable newStudent={false} students={enrolled} />
       </TabsContent>
       <TabsContent value="tab-2">
-        <EnrolledStudentDataTable students={newStudents} />
+        <EnrolledStudentDataTable newStudent={true} students={newStudents} />
       </TabsContent>
       <TabsContent value="tab-3">
         <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
