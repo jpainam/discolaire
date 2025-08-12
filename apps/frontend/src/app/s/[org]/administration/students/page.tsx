@@ -15,8 +15,11 @@ import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  const enrolled = await caller.enrollment.enrolled({});
-  const newStudents = enrolled.filter((std) => std.enrollments.length === 1);
+  //const enrolled = await caller.enrollment.enrolled({});
+  const schoolYear = await caller.schoolYear.getCurrent();
+  const allstudent = await caller.student.all({limit: 10000});
+  const enrolled = allstudent.filter(a => a.classroom?.schoolYearId === schoolYear.id);
+  const newStudents = enrolled.filter((std) => std.isNew);
   return (
     <Tabs defaultValue="tab-1">
       <ScrollArea>
@@ -60,7 +63,7 @@ export default async function Page() {
               className="bg-primary/15 ms-1.5 min-w-5 px-1 transition-opacity group-data-[state=inactive]:opacity-50"
               variant="secondary"
             >
-              3
+              Pas encore
             </Badge>
           </TabsTrigger>
         </TabsList>
@@ -74,7 +77,7 @@ export default async function Page() {
       </TabsContent>
       <TabsContent value="tab-3">
         <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
-          Content for Tab 3
+          En cours d'implémentation. Veuillez patienter.
         </p>
       </TabsContent>
     </Tabs>

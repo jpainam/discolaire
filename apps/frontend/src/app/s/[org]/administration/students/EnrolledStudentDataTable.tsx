@@ -12,7 +12,7 @@ import { fetchStudentColumns } from "./EnrolledStudentDataTableColumn";
 export function EnrolledStudentDataTable({
   students,
 }: {
-  students: RouterOutputs["enrollment"]["enrolled"];
+  students: RouterOutputs["student"]["all"];
 }) {
   const { t } = useLocale();
 

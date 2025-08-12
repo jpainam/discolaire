@@ -16,7 +16,7 @@ export function fetchStudentColumns({
   t,
 }: {
   t: TFunction<string, unknown>;
-}): ColumnDef<RouterOutputs["enrollment"]["enrolled"][number]>[] {
+}): ColumnDef<RouterOutputs["student"]["all"][number]>[] {
   const dateFormater = Intl.DateTimeFormat(i18next.language, {
     year: "numeric",
     month: "short",

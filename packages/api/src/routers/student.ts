@@ -74,6 +74,11 @@ export const studentRouter = {
         .optional(),
     )
     .query(async ({ ctx, input }) => {
+      const currentYear = await ctx.db.schoolYear.findFirstOrThrow({
+        where: {
+          schoolId: ctx.schoolId,
+        },
+      });
       if (ctx.session.user.profile === "student") {
         const student = await studentService.getFromUserId(ctx.session.user.id);
         const stud = await studentService.get(
@@ -106,6 +111,7 @@ export const studentRouter = {
           enrollments: {
             include: {
               classroom: true,
+              schoolYear: true,
             },
           },
         },
@@ -121,10 +127,21 @@ export const studentRouter = {
             enr.classroom.schoolYearId !== ctx.schoolYearId &&
             enr.classroom.levelId === currentEnrollment?.classroom.levelId,
         );
+        const previousEnrollment = student.enrollments.find(
+          (enr) =>
+            enr.schoolYearId !== currentYear.id &&
+            enr.schoolYear.name < currentYear.name,
+        );
 
         return {
           ...student,
           isRepeating: previousSameLevel,
+          isNew: !previousEnrollment,
+          lastSchoolYear: student.enrollments.sort(
+            (a, b) =>
+              b.schoolYear.startDate.getTime() -
+              a.schoolYear.startDate.getTime(),
+          )[0]?.schoolYear,
           classroom: currentEnrollment?.classroom,
         };
       });

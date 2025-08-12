@@ -71,8 +71,7 @@ export function DefaultSettings({
       allowOverEnrollment: school.allowOverEnrollment ?? true,
       currency: school.currency,
       timezone: school.timezone,
-      requiredJournals:
-        school.requiredJournals?.map((req) => req.journalId) ?? [],
+      requiredJournals: school.requiredJournals.map((req) => req.journalId),
     },
   });
   const router = useRouter();

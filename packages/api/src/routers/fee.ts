@@ -99,5 +99,4 @@ export const feeRouter = {
   trend: protectedProcedure.query(async ({ ctx }) => {
     return feeService.getAmountTrend(ctx.schoolYearId);
   }),
-  
 } satisfies TRPCRouterRecord;

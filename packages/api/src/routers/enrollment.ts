@@ -46,6 +46,7 @@ export const enrollmentRouter = {
       const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
         where: { id: input.schoolYearId ?? ctx.schoolYearId },
       });
+
       const data = await ctx.db.student.findMany({
         include: {
           formerSchool: true,
@@ -65,13 +66,6 @@ export const enrollmentRouter = {
           enrollments: {
             some: {
               schoolYearId: input.schoolYearId ?? ctx.schoolYearId,
-            },
-            none: {
-              schoolYear: {
-                name: {
-                  gt: schoolYear.name,
-                },
-              },
             },
           },
         },
