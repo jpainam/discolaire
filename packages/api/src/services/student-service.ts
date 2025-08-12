@@ -5,6 +5,9 @@ import { classroomService } from "./classroom-service";
 
 export const studentService = {
   get: async (studentId: string, schoolYearId: string, schoolId: string) => {
+    const currentYear = await db.schoolYear.findUniqueOrThrow({
+      where: { id: schoolYearId },
+    });
     await db.student.update({
       where: {
         id: studentId,
@@ -42,6 +45,7 @@ export const studentService = {
         enrollments: {
           include: {
             classroom: true,
+            schoolYear: true,
           },
         },
         user: {
@@ -64,9 +68,20 @@ export const studentService = {
           enr.classroom.levelId === currentEnrollment?.classroom.levelId,
       );
 
+    const previousEnrollment = student.enrollments.find(
+      (enr) =>
+        enr.schoolYear.id !== schoolYearId &&
+        enr.schoolYear.name < currentYear.name,
+    );
+
     return {
       ...student,
       isRepeating,
+      isNew: !previousEnrollment,
+      lastSchoolYear: student.enrollments.sort(
+        (a, b) =>
+          b.schoolYear.startDate.getTime() - a.schoolYear.startDate.getTime(),
+      )[0]?.schoolYear,
       classroom: currentEnrollment?.classroom,
     };
   },

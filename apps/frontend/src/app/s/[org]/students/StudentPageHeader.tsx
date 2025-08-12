@@ -64,7 +64,7 @@ export function StudentPageHeader() {
   return (
     <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("students")}</Label>
-      
+
       <SearchCombobox
         className="w-full lg:w-1/3"
         items={
