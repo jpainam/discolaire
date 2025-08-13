@@ -4,20 +4,28 @@ export async function getUnpaidFeeDescription(
   studentId: string,
   classroomId: string,
 ) {
-  const student = await db.student.findUniqueOrThrow({
+  const classroom = await db.classroom.findUniqueOrThrow({
     where: {
-      id: studentId,
+      id: classroomId,
     },
   });
+  const requiredJournals = await db.requiredAccountingJournal.findMany({
+    where: {
+      schoolId: classroom.schoolId,
+      journal: {
+        schoolYearId: classroom.schoolYearId,
+      },
+    },
+    include: {
+      journal: true,
+    },
+  });
+  const journalIds = requiredJournals.map((journal) => journal.journalId);
   const fees = await db.fee.findMany({
     where: {
       classroomId: classroomId,
-      journal: {
-        requiredJournals: {
-          some: {
-            schoolId: student.schoolId,
-          },
-        },
+      journalId: {
+        in: journalIds,
       },
     },
     include: {
@@ -25,11 +33,10 @@ export async function getUnpaidFeeDescription(
     },
   });
   const amountDue = fees.reduce((acc, fee) => acc + fee.amount, 0);
-  const journalIds = fees
-    .map((fee) => fee.journalId)
-    .filter((id) => id !== null);
+
   const transactions = await db.transaction.findMany({
     where: {
+      studentId: studentId,
       journalId: {
         in: journalIds,
       },
