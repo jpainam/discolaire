@@ -13,7 +13,13 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import i18next from "i18next";
-import { Banknote, BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  Banknote,
+  BookCopy,
+  CheckCircle,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { TransactionType } from "@repo/db";
@@ -343,26 +349,17 @@ export function TransactionStatus({ status }: { status: string }) {
   } else if (status === "CANCELED") {
     variant = "red";
   } else if (status === "PENDING") {
-    variant = "yellow";
+    variant = "amber";
   }
 
   return (
-    <FlatBadge className="gap-2" variant={variant as FlatBadgeVariant}>
+    <FlatBadge className="gap-1" variant={variant as FlatBadgeVariant}>
       {status === "CANCELED" ? (
-        <CrossCircledIcon
-          className="text-muted-foreground size-4"
-          aria-hidden="true"
-        />
+        <CrossCircledIcon className="size-3.5" aria-hidden="true" />
       ) : status === "VALIDATED" ? (
-        <CheckCircledIcon
-          className="text-muted-foreground size-4"
-          aria-hidden="true"
-        />
+        <CheckCircle className="size-3.5" aria-hidden="true" />
       ) : (
-        <StopwatchIcon
-          className="text-muted-foreground size-4"
-          aria-hidden="true"
-        />
+        <StopwatchIcon className="size-3.5" aria-hidden="true" />
       )}
       <span className="capitalize">{t(status)}</span>
     </FlatBadge>
