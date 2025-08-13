@@ -162,7 +162,7 @@ export const accountingJournal = {
           schoolYearId: ctx.schoolYearId,
         },
         journal: {
-          name: "TD",
+          name: { contains: "%TD%", mode: "insensitive" },
         },
       },
     });

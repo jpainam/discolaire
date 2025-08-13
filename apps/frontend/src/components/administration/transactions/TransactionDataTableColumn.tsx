@@ -79,6 +79,7 @@ export const fetchTransactionColumns = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
+      size: 80,
       cell: ({ row }) => {
         const transaction = row.original;
 
@@ -137,6 +138,7 @@ export const fetchTransactionColumns = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("status")} />
       ),
+      size: 80,
       cell: ({ row }) => {
         const status = row.original.status;
         return <TransactionStatus status={status} />;
@@ -146,6 +148,7 @@ export const fetchTransactionColumns = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("amount")} />
       ),
+      size: 100,
       cell: ({ row }) => {
         const amount = row.original.amount;
         return (
@@ -210,7 +213,7 @@ function ActionCell({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} size={"icon"}>
+        <Button variant={"ghost"} size={"icon"} className="size-7">
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
