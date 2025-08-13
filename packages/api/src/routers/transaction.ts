@@ -100,6 +100,7 @@ export const transactionRouter = {
         to: z.coerce.date().optional().default(new Date()),
         status: z.string().optional(),
         classroomId: z.string().optional(),
+        journalId: z.string().optional(),
         transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]).optional(),
       }),
     )
@@ -124,6 +125,9 @@ export const transactionRouter = {
             { deletedAt: null },
             ...(input.transactionType
               ? [{ transactionType: { equals: input.transactionType } }]
+              : [{}]),
+            ...(input.journalId
+              ? [{ journalId: { equals: input.journalId } }]
               : [{}]),
             ...(input.from
               ? [

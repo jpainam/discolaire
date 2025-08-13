@@ -23,6 +23,7 @@ export default async function Page(props: PageProps) {
       from: searchParams.from ? new Date(searchParams.from) : undefined,
       to: searchParams.to ? new Date(searchParams.to) : undefined,
       classroomId: searchParams.classroomId ?? undefined,
+      journalId: searchParams.journalId ?? undefined,
     }),
   );
 

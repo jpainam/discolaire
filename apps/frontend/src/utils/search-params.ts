@@ -26,6 +26,7 @@ export const transactionSearchParamsSchema = {
   to: parseAsIsoDate,
   status: parseAsString,
   classroomId: parseAsString,
+  journalId: parseAsString,
 };
 
 export const transactionSearchParams = createLoader(
