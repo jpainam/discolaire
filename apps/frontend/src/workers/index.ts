@@ -19,8 +19,8 @@ async function scheduleBackup() {
     {},
     {
       repeat: {
-        //pattern: "0 12,18 * * *", // 12 PM and 6 PM daily
-        pattern: "* * * * *", // Every minute for testing
+        pattern: "0 12,18 * * *", // 12 PM and 6 PM daily
+        //pattern: "* * * * *", // Every minute for testing
       },
       jobId: "scheduled-db-backup", // prevents duplicates
     },
