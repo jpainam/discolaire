@@ -230,6 +230,7 @@ export const accountingJournal = {
         },
       },
     });
+    console.log("Required transactions to move:", required.length);
 
     const data = required.map((enr) => {
       const currentDate = Date.now();
@@ -251,17 +252,18 @@ export const accountingJournal = {
         createdAt: enr.createdAt,
       };
     });
-    await ctx.db.transaction.createMany({
+    const x = await ctx.db.transaction.createMany({
       data,
     });
+    console.log("Inserted transactions:", x.count);
     const ids = required.map((r) => r.id);
-    await ctx.db.requiredFeeTransaction.deleteMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-    });
+    // await ctx.db.requiredFeeTransaction.deleteMany({
+    //   where: {
+    //     id: {
+    //       in: ids,
+    //     },
+    //   },
+    // });
     return ids.length;
   }),
 } satisfies TRPCRouterRecord;
