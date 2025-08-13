@@ -20,7 +20,8 @@ const searchSchema = z.object({
     .default("pdf"),
   from: z.coerce.date().optional(),
   to: z.coerce.date().optional(),
-  classroom: z.string().optional(),
+  classroomId: z.string().optional(),
+  journalId: z.string().optional(),
   status: z.enum(["VALIDATED", "PENDING", "CANCELED"]).optional(),
 });
 export async function GET(req: NextRequest) {
@@ -43,13 +44,14 @@ export async function GET(req: NextRequest) {
     return new Response(error, { status: 400 });
   }
 
-  const { format, status, from, to, classroom } = result.data;
+  const { format, status, from, to, classroomId, journalId } = result.data;
 
   const transactions = await caller.transaction.all({
     status: status,
     from: from,
     to: to,
-    classroomId: classroom,
+    classroomId: classroomId,
+    journalId: journalId,
   });
 
   const school = await caller.school.getSchool();

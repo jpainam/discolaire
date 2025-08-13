@@ -10,6 +10,7 @@ export default async function Page(props: {
     to?: string;
     status?: string;
     classroom?: string;
+    journalId?: string;
   }>;
 }) {
   const searchParams = await props.searchParams;
@@ -20,6 +21,7 @@ export default async function Page(props: {
     from: searchParams.from ? new Date(searchParams.from) : undefined,
     to: searchParams.to ? new Date(searchParams.to) : undefined,
     classroomId: searchParams.classroom,
+    journalId: searchParams.journalId,
     transactionType: "DISCOUNT",
   });
 

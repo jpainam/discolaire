@@ -20,6 +20,7 @@ export function TransactionHeader() {
       from: searchParams.from ?? undefined,
       to: searchParams.to ?? undefined,
       classroomId: searchParams.classroomId ?? undefined,
+      journalId: searchParams.journalId ?? undefined,
     }),
   );
   const { t } = useLocale();

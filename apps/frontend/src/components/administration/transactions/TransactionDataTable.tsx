@@ -18,14 +18,16 @@ export function TransactionDataTable() {
   const from = searchParams.get("from");
   const to = searchParams.get("to");
   const status = searchParams.get("status");
-  const classroom = searchParams.get("classroom");
+  const classroomId = searchParams.get("classroomId");
+  const journalId = searchParams.get("journalId");
 
   const { data: transactions } = useSuspenseQuery(
     trpc.transaction.all.queryOptions({
       status: status ?? undefined,
       from: from ? new Date(from) : undefined,
       to: to ? new Date(to) : undefined,
-      classroomId: classroom ?? undefined,
+      classroomId: classroomId ?? undefined,
+      journalId: journalId ?? undefined,
     }),
   );
   const { t } = useLocale();
