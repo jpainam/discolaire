@@ -69,9 +69,9 @@ async function toExcel({
       .join(", ");
     return {
       registrationNumber: student.registrationNumber,
-      "First Name": student.firstName,
-      "Last Name": student.lastName,
-      Gender: t(`${student.gender}`),
+      Prénom: student.firstName,
+      Nom: student.lastName,
+      Sexe: t(`${student.gender}`),
       isRepeating: student.isRepeating ? t("yes") : t("no"),
       classroom: student.classroom?.name,
       religion: student.religion?.name,
@@ -80,9 +80,9 @@ async function toExcel({
       Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
-      "Date of Birth":
+      "Date de naissance":
         student.dateOfBirth && dateFormat.format(student.dateOfBirth),
-      placeOfBirth: student.placeOfBirth,
+      "Lieu de naissance": student.placeOfBirth,
       dateOfEntry:
         student.dateOfEntry && dateFormat.format(student.dateOfEntry),
       Parents: contactNames,
