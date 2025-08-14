@@ -160,12 +160,16 @@ export const schoolYearRouter = {
       where: { id: ctx.schoolYearId },
     });
 
-    return ctx.db.schoolYear.findFirst({
+    const previous = await ctx.db.schoolYear.findFirst({
       where: {
         schoolId: current.schoolId,
         startDate: { lt: current.startDate },
       },
       orderBy: { startDate: "desc" },
     });
+    if (!previous) {
+      return current;
+    }
+    return previous;
   }),
 } satisfies TRPCRouterRecord;

@@ -25,44 +25,84 @@ export async function StudentStatAdmin() {
     schoolYearId: previousYear.id,
     limit: 10000,
   });
+  const previousNew = previousStudents.filter((std) => std.isNew);
+  const previousMale = previousStudents.filter((std) => std.gender == "male");
+  const previousFemale = previousStudents.filter(
+    (std) => std.gender == "female",
+  );
 
   const newStudents = enrolled.filter((std) => std.isNew);
   const stats = [
     {
       title: "Tous les élèves",
       value: enrolled.length,
-      delta: 15.1,
-      lastMonth: 105922,
-      positive: true,
+      delta:
+        previousStudents.length === 0
+          ? 0
+          : Number(
+              (
+                ((enrolled.length - previousStudents.length) /
+                  previousStudents.length) *
+                100
+              ).toFixed(1),
+            ),
+      lastMonth: previousStudents.length,
+      positive: enrolled.length >= previousStudents.length,
       prefix: "",
       suffix: "",
     },
     {
       title: "Nouveaux élèves",
       value: newStudents.length,
-      delta: -2.0,
-      lastMonth: 2002098,
-      positive: false,
+      delta:
+        previousStudents.length === 0
+          ? 0
+          : Number(
+              (
+                ((newStudents.length - previousNew.length) /
+                  previousStudents.length) *
+                100
+              ).toFixed(1),
+            ),
+      lastMonth: previousNew.length,
+      positive: newStudents.length >= previousNew.length,
       prefix: "",
       suffix: "",
     },
     {
       title: "Garcons",
       value: maleCount,
-      delta: 0.4,
-      lastMonth: 97800000,
-      positive: true,
-      prefix: "$",
-      suffix: "M",
-      format: (v: number) => `$${(v / 1_000_000).toFixed(1)}M`,
-      lastFormat: (v: number) => `$${(v / 1_000_000).toFixed(1)}M`,
+      delta:
+        previousMale.length === 0
+          ? 0
+          : Number(
+              (
+                ((maleCount - previousMale.length) / previousMale.length) *
+                100
+              ).toFixed(1),
+            ),
+      lastMonth: previousMale.length,
+      positive: maleCount >= previousMale.length,
+      prefix: "",
+      suffix: "",
+      //format: (v: number) => `$${(v / 1_000_000).toFixed(1)}M`,
+      //lastFormat: (v: number) => `$${(v / 1_000_000).toFixed(1)}M`,
     },
     {
       title: "Filles",
       value: femaleCount,
-      delta: 3.7,
-      lastMonth: 46480,
-      positive: true,
+      delta:
+        previousFemale.length === 0
+          ? 0
+          : Number(
+              (
+                ((femaleCount - previousFemale.length) /
+                  previousFemale.length) *
+                100
+              ).toFixed(1),
+            ),
+      lastMonth: previousFemale.length,
+      positive: femaleCount >= previousFemale.length,
       prefix: "",
       suffix: "",
     },
@@ -79,9 +119,10 @@ export async function StudentStatAdmin() {
           <CardContent className="gap-2">
             <div className="flex items-center gap-2.5">
               <span className="text-foreground text-2xl font-medium tracking-tight">
-                {stat.format
+                {/*stat.format
                   ? stat.format(stat.value)
-                  : stat.prefix + formatNumber(stat.value) + stat.suffix}
+                  : stat.prefix + formatNumber(stat.value) + stat.suffix*/}
+                {stat.prefix + formatNumber(stat.value) + stat.suffix}
               </span>
               <Badge
                 variant={stat.positive ? "success" : "destructive"}
@@ -94,9 +135,10 @@ export async function StudentStatAdmin() {
             <div className="text-muted-foreground mt-2 border-t pt-2.5 text-xs">
               L'année dernière:{" "}
               <span className="text-foreground font-medium">
-                {stat.lastFormat
+                {/* {stat.lastFormat
                   ? stat.lastFormat(stat.lastMonth)
-                  : stat.prefix + formatNumber(stat.lastMonth) + stat.suffix}
+                  : stat.prefix + formatNumber(stat.lastMonth) + stat.suffix} */}
+                {stat.prefix + formatNumber(stat.lastMonth) + stat.suffix}
               </span>
             </div>
           </CardContent>
