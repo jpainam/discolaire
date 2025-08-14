@@ -129,12 +129,12 @@ export function SchoolYearTable() {
                     >
                       {schoolYear.isActive ? (
                         <>
-                          <FaUnlockAlt className="mr-2 h-4 w-4" />
+                          <FaUnlockAlt className="mr-1 h-4 w-4" />
                           {t("no")}
                         </>
                       ) : (
                         <>
-                          <FaLock className="mr-2 h-4 w-4" />
+                          <FaLock className="mr-1 h-4 w-4" />
                           {t("yes")}
                         </>
                       )}

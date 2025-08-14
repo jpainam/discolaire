@@ -130,6 +130,7 @@ export async function getEnrollStudents({
       dateOfEntry: true,
       residence: true,
       phoneNumber: true,
+      placeOfBirth: true,
       isRepeating: true,
       dateOfBirth: true,
       // keep only what you use; add more fields if you really need them
