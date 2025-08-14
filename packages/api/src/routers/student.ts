@@ -9,6 +9,7 @@ import type { Prisma } from "@repo/db";
 import { checkPermission } from "../permission";
 import { getUnpaidFeeDescription } from "../services/accounting-service";
 import { contactService } from "../services/contact-service";
+import { getEnrollStudents } from "../services/enrollment-service";
 import { staffService } from "../services/staff-service";
 import { isRepeating, studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
@@ -74,78 +75,20 @@ export const studentRouter = {
         .optional(),
     )
     .query(async ({ ctx, input }) => {
-      const currentYear = await ctx.db.schoolYear.findFirstOrThrow({
-        where: {
-          schoolId: ctx.schoolId,
-        },
-      });
+      const studentIds: string[] = [];
       if (ctx.session.user.profile === "student") {
         const student = await studentService.getFromUserId(ctx.session.user.id);
-        const stud = await studentService.get(
-          student.id,
-          ctx.schoolYearId,
-          ctx.schoolId,
-        );
-        return [stud];
-      }
-      const studentIds: string[] = [];
-      if (ctx.session.user.profile === "contact") {
+        studentIds.push(student.id);
+      } else if (ctx.session.user.profile === "contact") {
         const contact = await contactService.getFromUserId(ctx.session.user.id);
         const studentContacts = await contactService.getStudents(contact.id);
         studentIds.push(...studentContacts.map((sc) => sc.studentId));
       }
-      const data = await ctx.db.student.findMany({
-        take: input?.limit ?? 50,
-        orderBy: {
-          lastAccessed: "desc",
-        },
-        where: {
-          schoolId: ctx.schoolId,
-          ...(studentIds.length > 0 ? { id: { in: studentIds } } : {}),
-        },
-        include: {
-          formerSchool: true,
-          religion: true,
-          user: true,
-          country: true,
-          enrollments: {
-            include: {
-              classroom: true,
-              schoolYear: true,
-            },
-          },
-        },
+      return getEnrollStudents({
+        schoolYearId: ctx.schoolYearId,
+        limit: input?.limit,
+        studentIds,
       });
-
-      const students = data.map((student) => {
-        const currentEnrollment = student.enrollments.find(
-          (enr) => enr.classroom.schoolYearId === ctx.schoolYearId,
-        );
-
-        const previousSameLevel = student.enrollments.some(
-          (enr) =>
-            enr.classroom.schoolYearId !== ctx.schoolYearId &&
-            enr.classroom.levelId === currentEnrollment?.classroom.levelId,
-        );
-        const previousEnrollment = student.enrollments.find(
-          (enr) =>
-            enr.schoolYearId !== currentYear.id &&
-            enr.schoolYear.name < currentYear.name,
-        );
-
-        return {
-          ...student,
-          isRepeating: previousSameLevel,
-          isNew: !previousEnrollment,
-          lastSchoolYear: student.enrollments.sort(
-            (a, b) =>
-              b.schoolYear.startDate.getTime() -
-              a.schoolYear.startDate.getTime(),
-          )[0]?.schoolYear,
-          classroom: currentEnrollment?.classroom,
-        };
-      });
-      return students;
     }),
   search: protectedProcedure
     .input(

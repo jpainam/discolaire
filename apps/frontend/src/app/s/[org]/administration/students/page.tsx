@@ -15,12 +15,7 @@ import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  //const enrolled = await caller.enrollment.enrolled({});
-  const schoolYear = await caller.schoolYear.getCurrent();
-  const allstudent = await caller.student.all({ limit: 10000 });
-  const enrolled = allstudent.filter(
-    (a) => a.classroom?.schoolYearId === schoolYear.id,
-  );
+  const enrolled = await caller.student.all({ limit: 10000 });
   const newStudents = enrolled.filter((std) => std.isNew);
   return (
     <Tabs defaultValue="tab-1">

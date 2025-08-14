@@ -25,13 +25,9 @@ export async function GET(req: NextRequest) {
       obj[key] = value;
     }
 
-    const schoolYear = await caller.schoolYear.getCurrent();
-    const allstudent = await caller.student.all({ limit: 10000 });
-    const students = allstudent.filter(
-      (a) => a.classroom?.schoolYearId === schoolYear.id,
-    );
+    const enrolled = await caller.student.all({ limit: 10000 });
     //const students = enrolled.filter((std) => std.isNew);
-    const { blob, headers } = await toExcel({ students });
+    const { blob, headers } = await toExcel({ students: enrolled });
     return new Response(blob, { headers });
   } catch (error) {
     console.error(error);
