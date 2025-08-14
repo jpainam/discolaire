@@ -155,4 +155,17 @@ export const schoolYearRouter = {
       }
       return ctx.db.schoolYear.delete({ where: { id: input } });
     }),
+  getPrevious: protectedProcedure.query(async ({ ctx }) => {
+    const current = await ctx.db.schoolYear.findUniqueOrThrow({
+      where: { id: ctx.schoolYearId },
+    });
+
+    return ctx.db.schoolYear.findFirst({
+      where: {
+        schoolId: current.schoolId,
+        startDate: { lt: current.startDate },
+      },
+      orderBy: { startDate: "desc" },
+    });
+  }),
 } satisfies TRPCRouterRecord;

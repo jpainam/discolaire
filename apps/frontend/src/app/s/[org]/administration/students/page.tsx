@@ -19,8 +19,8 @@ export default async function Page() {
   const newStudents = enrolled.filter((std) => std.isNew);
   return (
     <Tabs defaultValue="tab-1">
-      <ScrollArea>
-        <TabsList>
+      <ScrollArea className="px-4">
+        <TabsList className="">
           <TabsTrigger value="tab-1">
             <CircleUserRound
               className="-ms-0.5 me-1.5 opacity-60"
