@@ -55,9 +55,10 @@ export function fetchStudentColumns({
       cell: ({ row }) => {
         const student = row.original;
         return (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <AvatarState
               pos={getFullName(student).length}
+              className="h-6 w-6"
               avatar={student.user?.avatar}
             />
             <Link href={`/students/${student.id}`} className="hover:underline">
@@ -100,6 +101,18 @@ export function fetchStudentColumns({
           <div className="text-muted-foreground">
             {student.dateOfBirth && dateFormater.format(student.dateOfBirth)}
           </div>
+        );
+      },
+    },
+    {
+      accessorKey: "placeOfBirth",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("placeOfBirth")} />
+      ),
+      cell: ({ row }) => {
+        const student = row.original;
+        return (
+          <div className="text-muted-foreground">{student.placeOfBirth}</div>
         );
       },
     },
