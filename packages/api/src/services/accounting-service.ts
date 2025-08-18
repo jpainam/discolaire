@@ -32,6 +32,14 @@ export async function getUnpaidFeeDescription(
       journal: true,
     },
   });
+  if (fees.length === 0) {
+    return {
+      paid: 0,
+      unpaid: 0,
+      journalIds: journalIds,
+      journal: fees.map((fee) => fee.journal?.name).join(", "),
+    };
+  }
   const amountDue = fees.reduce((acc, fee) => acc + fee.amount, 0);
 
   const transactions = await db.transaction.findMany({
