@@ -40,7 +40,11 @@ export default async function Page(props: PageProps) {
     );
   } else {
     return (
-      <Step1 fees={fees} unpaidRequiredFees={unpaidRequiredFees} studentId={params.id} />
+      <Step1
+        fees={fees}
+        unpaidRequiredFees={unpaidRequiredFees}
+        studentId={params.id}
+      />
     );
   }
 }
