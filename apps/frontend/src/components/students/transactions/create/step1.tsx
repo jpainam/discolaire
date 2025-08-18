@@ -1,8 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -30,7 +29,6 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
-import { useTRPC } from "~/trpc/react";
 
 const makePaymentFormSchema = z.object({
   amount: z.coerce.number().min(1),
@@ -43,18 +41,20 @@ const makePaymentFormSchema = z.object({
 export function Step1({
   unpaidRequiredFees,
   studentId,
-  fees,
+  defaultJournalId,
+  journals,
 }: {
   unpaidRequiredFees: RouterOutputs["student"]["unpaidRequiredFees"];
   studentId: string;
-  fees: RouterOutputs["classroom"]["fees"];
+  defaultJournalId: string;
+  journals: RouterOutputs["accountingJournal"]["all"];
 }) {
   const { school } = useSchool();
 
   const form = useForm({
     defaultValues: {
       amount: 0,
-      journalId: "",
+      journalId: defaultJournalId,
       description: "",
       transactionType: "CREDIT",
       paymentMethod: "",
@@ -65,10 +65,6 @@ export function Step1({
 
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
-
-  const trpc = useTRPC();
-  const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
-  const journalIdsFromFees = fees.map((fee) => fee.journalId);
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
@@ -119,19 +115,11 @@ export function Step1({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {journalQuery.isPending ? (
-                          <SelectItem value="_all" disabled>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {journals.map((journal) => (
+                          <SelectItem key={journal.id} value={journal.id}>
+                            {journal.name}
                           </SelectItem>
-                        ) : (
-                          journalQuery.data
-                            ?.filter((j) => journalIdsFromFees.includes(j.id))
-                            .map((journal) => (
-                              <SelectItem key={journal.id} value={journal.id}>
-                                {journal.name}
-                              </SelectItem>
-                            ))
-                        )}
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>

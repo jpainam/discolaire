@@ -26,8 +26,18 @@ export default async function Page(props: PageProps) {
       <EmptyState title={t("student_not_registered_yet")} className="my-8" />
     );
   }
-  const fees = await caller.classroom.fees(classroom.id);
+  let fees = await caller.classroom.fees(classroom.id);
   const studentContacts = await caller.student.contacts(params.id);
+  const journals = await caller.accountingJournal.all();
+  if (unpaidRequiredFees.unpaid == 0) {
+    fees = fees.filter(
+      (j) =>
+        j.journalId && !unpaidRequiredFees.journalIds.includes(j.journalId),
+    );
+  }
+  const journalIdsFromFees = fees.map((fee) => fee.journalId);
+  const defaultJournalId =
+    journalIdsFromFees.length > 0 ? journalIdsFromFees[0] : journals[0]?.id;
   if (searchParams.step === "step2") {
     return (
       <Step2
@@ -41,7 +51,8 @@ export default async function Page(props: PageProps) {
   } else {
     return (
       <Step1
-        fees={fees}
+        defaultJournalId={defaultJournalId ?? ""}
+        journals={journals.filter((j) => journalIdsFromFees.includes(j.id))}
         unpaidRequiredFees={unpaidRequiredFees}
         studentId={params.id}
       />
