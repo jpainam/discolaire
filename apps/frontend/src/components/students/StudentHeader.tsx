@@ -196,7 +196,7 @@ export function StudentHeader() {
   };
 
   return (
-    <div className="bg-muted/50 flex gap-2 border-b px-4 py-1">
+    <div className="bg-muted flex gap-2 border-b px-4 py-1">
       <AvatarState
         className="my-0 hidden h-full w-[100px] rounded-md md:flex"
         pos={getFullName(student).length}
