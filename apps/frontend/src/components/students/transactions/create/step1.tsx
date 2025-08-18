@@ -43,9 +43,11 @@ const makePaymentFormSchema = z.object({
 export function Step1({
   unpaidRequiredFees,
   studentId,
+  fees,
 }: {
   unpaidRequiredFees: RouterOutputs["student"]["unpaidRequiredFees"];
   studentId: string;
+  fees: RouterOutputs["classroom"]["fees"];
 }) {
   const { school } = useSchool();
 
@@ -66,6 +68,7 @@ export function Step1({
 
   const trpc = useTRPC();
   const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
+  const journalIdsFromFees = fees.map((fee) => fee.journalId);
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
@@ -121,11 +124,13 @@ export function Step1({
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           </SelectItem>
                         ) : (
-                          journalQuery.data?.map((journal) => (
-                            <SelectItem key={journal.id} value={journal.id}>
-                              {journal.name}
-                            </SelectItem>
-                          ))
+                          journalQuery.data
+                            ?.filter((j) => journalIdsFromFees.includes(j.id))
+                            .map((journal) => (
+                              <SelectItem key={journal.id} value={journal.id}>
+                                {journal.name}
+                              </SelectItem>
+                            ))
                         )}
                       </SelectContent>
                     </Select>
