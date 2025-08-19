@@ -1,12 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Eye, FileHeart, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  Eye,
+  FileHeart,
+  MoreHorizontal,
+  Trash2,
+  UserCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@repo/ui/components/badge";
@@ -38,12 +43,14 @@ import { RelationshipSelector } from "~/components/shared/selects/RelationshipSe
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+import { StudentContactDetails } from "./StudentContactDetails";
 
 export function StudentContactTable({ studentId }: { studentId: string }) {
   const { t } = useLocale();
@@ -93,6 +100,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
     "contact",
     PermissionAction.DELETE,
   );
+  const { openSheet } = useSheet();
 
   return (
     <div className="px-4">
@@ -135,14 +143,31 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                 <TableRow key={`${contact.id}-${index}`}>
                   <TableCell className="flex items-center justify-start gap-1">
                     <AvatarState pos={index} avatar={contact.user?.avatar} />
-                    <Link
+                    {/* <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
                         "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
                       )}
                     >
                       {getFullName(contact)}
-                    </Link>
+                    </Link> */}
+                    <div
+                      className="cursor-pointer hover:underline"
+                      onClick={() => {
+                        openSheet({
+                          view: (
+                            <StudentContactDetails
+                              studentId={c.studentId}
+                              contactId={c.contactId}
+                              studentContact={c}
+                            />
+                          ),
+                        });
+                      }}
+                    >
+                      {" "}
+                      {getFullName(contact)}
+                    </div>
                   </TableCell>
                   <TableCell>{relationship?.name}</TableCell>
                   {/* <TableCell>{contact.email ?? "N/A"}</TableCell> */}
@@ -210,7 +235,15 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                               );
                             }}
                           >
-                            <Eye /> {t("details")}
+                            <Eye /> {t("Open relationship")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              router.push(`/contacts/${c.contactId}`);
+                            }}
+                          >
+                            <UserCircle />
+                            {t("Open contact")}
                           </DropdownMenuItem>
                           <DropdownInvitation
                             entityId={c.contact.id}

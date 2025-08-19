@@ -21,13 +21,14 @@ import {
 import { PiChurchDuotone } from "react-icons/pi";
 
 import { Separator } from "@repo/ui/components/separator";
+import { cn } from "@repo/ui/lib/utils";
 
 import House from "~/components/icons/house";
 import { routes } from "~/configs/routes";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
-export default function StudentDetails() {
+export default function StudentDetails({ className }: { className?: string }) {
   const params = useParams<{ id: string }>();
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
@@ -46,7 +47,7 @@ export default function StudentDetails() {
   });
 
   return (
-    <div className="flex flex-col gap-2 py-2 text-sm">
+    <div className={cn("flex flex-col gap-2 py-2 text-sm", className)}>
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="text-muted-foreground flex flex-row items-center gap-1">
           <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
