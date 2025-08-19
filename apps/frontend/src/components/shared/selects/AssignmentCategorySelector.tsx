@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Select,
@@ -10,18 +11,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function AssignmentCategorySelector({
   defaultValue,
+  className,
   onChange,
 }: {
   defaultValue?: string;
+  className?: string;
   onChange?: (value: string) => void;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const assignmentCategoriesQuery = useQuery(
     trpc.assignment.categories.queryOptions(),
@@ -33,8 +36,8 @@ export function AssignmentCategorySelector({
       }}
       defaultValue={defaultValue}
     >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder={t("select_an_option")} />
+      <SelectTrigger className={cn("w-full", className)}>
+        <SelectValue placeholder={t("Select a category")} />
       </SelectTrigger>
       <SelectContent>
         {assignmentCategoriesQuery.isPending && (

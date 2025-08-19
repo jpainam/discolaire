@@ -41,6 +41,7 @@ interface ClassroomSelectorProps {
 
 export function SubjectSelector({
   searchPlaceholder,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   placeholder,
   className,
   classroomId,
@@ -90,6 +91,7 @@ export function SubjectSelector({
     return null;
   }
   if (!subjects) return null;
+  const selected = subjects.find((subject) => subject.id.toString() === value);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -99,9 +101,7 @@ export function SubjectSelector({
           aria-expanded={open}
           className={cn("w-full justify-between", className)}
         >
-          {value
-            ? items.find((it) => it.value === value)?.label
-            : (placeholder ?? t("select_an_option"))}
+          {selected?.course.name ?? t("Select a subject")}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

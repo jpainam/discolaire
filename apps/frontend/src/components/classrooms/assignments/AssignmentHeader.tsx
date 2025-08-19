@@ -1,7 +1,8 @@
 "use client";
 
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { MoreVertical, PlusIcon } from "lucide-react";
+import { parseAsIsoDate, useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,7 +19,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
@@ -29,10 +29,13 @@ export function AssignmentHeader() {
   const router = useRouter();
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
-  const searchParams = useSearchParams();
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
-  const { createQueryString } = useCreateQueryString();
+  //const searchParams = useSearchParams();
+  //const from = searchParams.get("from");
+  //const to = searchParams.get("to");
+  ///const { createQueryString } = useCreateQueryString();
+  const [from, setFrom] = useQueryState("from", parseAsIsoDate);
+  const [to, setTo] = useQueryState("to", parseAsIsoDate);
+  const [termId, setTermId] = useQueryState("termId");
 
   const Icon = sidebarIcons.assignments;
   const canCreateAssignment = useCheckPermission(
@@ -47,8 +50,9 @@ export function AssignmentHeader() {
           <Label className="hidden md:block">{t("assignments")}</Label>
         </div>
         <TermSelector
+          defaultValue={termId}
           onChange={(val) => {
-            router.push(`?${createQueryString({ termId: val })}`);
+            void setTermId(val ?? null);
           }}
           className="w-64"
         />
@@ -59,9 +63,7 @@ export function AssignmentHeader() {
               defaultValue={from ? new Date(from) : undefined}
               className="w-56"
               onChange={(val) => {
-                router.push(
-                  `?${createQueryString({ from: val?.toLocaleDateString() })}`,
-                );
+                void setFrom(val);
               }}
             />
           </div>
@@ -71,9 +73,7 @@ export function AssignmentHeader() {
               defaultValue={to ? new Date(to) : undefined}
               className="w-56"
               onChange={(val) => {
-                router.push(
-                  `?${createQueryString({ to: val?.toLocaleDateString() })}`,
-                );
+                void setTo(val);
               }}
             />
           </div>

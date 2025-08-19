@@ -62,7 +62,7 @@ export function StaffSelector({
             className,
           )}
         >
-          {value ? getFullName(selected) : t("select_an_option")}
+          {selected ? getFullName(selected) : t("Select a staff")}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -86,8 +86,8 @@ export function StaffSelector({
                   key={staff.id}
                   value={staff.id}
                   onSelect={() => {
-                    setValue(staff.id);
-                    onSelect?.(staff.id);
+                    setValue(staff.id === value ? "" : staff.id);
+                    onSelect?.(staff.id === value ? "" : staff.id);
                     setOpen(false);
                   }}
                 >
