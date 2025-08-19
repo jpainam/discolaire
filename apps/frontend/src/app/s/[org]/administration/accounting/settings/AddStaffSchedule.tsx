@@ -107,7 +107,10 @@ export function AddStaffSchedule({
             <FormItem className="space-y-0">
               <FormLabel>{t("staff")}</FormLabel>
               <FormControl>
-                <StaffSelector onChange={(val) => field.onChange(val)} />
+                <StaffSelector
+                  defaultValue={field.value}
+                  onSelect={(val) => field.onChange(val)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

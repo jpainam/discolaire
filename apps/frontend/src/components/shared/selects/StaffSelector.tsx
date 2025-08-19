@@ -1,8 +1,8 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import * as React from "react";
+import { useEffect } from "react";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,104 +18,92 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
-import { showErrorToast } from "~/lib/handle-error";
-import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
-interface StaffSelectorProps {
+interface Props {
+  defaultValue: string;
   className?: string;
   disabled?: boolean;
-  placeholder?: string;
-  defaultValue?: string;
-  onChange?: (value: string) => void;
-  searchPlaceholder?: string;
+  onSelect?: (staffId: string) => void;
 }
 
-export const StaffSelector = ({
-  className,
-  disabled = false,
-  onChange,
-  placeholder,
-  searchPlaceholder,
+export function StaffSelector({
   defaultValue,
-}: StaffSelectorProps) => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState<string | undefined>(defaultValue);
-  const { t } = useLocale();
+  onSelect,
+  disabled,
+  className,
+}: Props) {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(defaultValue);
+  const trpc = useTRPC();
+  const staffQuery = useQuery(trpc.staff.all.queryOptions());
 
   useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
-  const trpc = useTRPC();
-  const {
-    data: staffs,
-    isPending,
-    isError,
-    error,
-  } = useQuery(trpc.staff.all.queryOptions());
+    if (value !== defaultValue) {
+      setValue(defaultValue);
+    }
+  }, [defaultValue, value]);
 
-  if (isError) {
-    showErrorToast(error);
-    return null;
-  }
-  if (isPending) {
-    return <div className="w-[300px]"></div>;
-  }
+  const selected = staffQuery.data?.find((staff) => staff.id === value);
+  const t = useTranslations();
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal={false}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
+          variant="outline"
           disabled={disabled}
-          className={cn(`w-full justify-between`, className)}
+          aria-expanded={open}
+          className={cn(
+            "w-full justify-between truncate font-normal",
+            className,
+          )}
         >
-          <div className="flex w-full gap-1">
-            <p className="text-foreground">
-              {value
-                ? getFullName(staffs.find((staff) => staff.id === value))
-                : (placeholder ?? t("select_an_option"))}
-            </p>
-          </div>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          {value ? getFullName(selected) : t("select_an_option")}
+          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        style={{ width: "var(--radix-popover-trigger-width)" }}
         className="p-0"
-        side="bottom"
         align="start"
+        portal={false}
+        style={{ width: "var(--radix-popover-trigger-width)" }}
       >
-        <Command>
+        <Command loop>
           <CommandInput
-            placeholder={searchPlaceholder ?? t("search_for_an_option")}
+            placeholder={t("search")}
+            className="h-9 px-2"
+            autoComplete="off"
           />
-          <CommandList>
-            <CommandEmpty>{t("not_found")}</CommandEmpty>
-            <CommandGroup>
-              {staffs.map((staff) => (
+          <CommandEmpty>{t("no_data")}</CommandEmpty>
+          <CommandGroup>
+            <CommandList className="max-h-[230px] overflow-y-auto pt-2">
+              {staffQuery.data?.map((staff) => (
                 <CommandItem
                   key={staff.id}
-                  className="flex w-full cursor-pointer items-center justify-between space-x-2"
+                  value={staff.id}
                   onSelect={() => {
                     setValue(staff.id);
+                    onSelect?.(staff.id);
                     setOpen(false);
-                    onChange?.(staff.id);
                   }}
                 >
-                  <span>{getFullName(staff)}</span>
-                  {value === staff.id && (
-                    <Check className="text-brand" strokeWidth={2} size={16} />
-                  )}
+                  {getFullName(staff)}
+                  <CheckIcon
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      value === staff.id ? "opacity-100" : "opacity-0",
+                    )}
+                  />
                 </CommandItem>
               ))}
-            </CommandGroup>
-          </CommandList>
+            </CommandList>
+          </CommandGroup>
         </Command>
       </PopoverContent>
     </Popover>
   );
-};
+}

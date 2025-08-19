@@ -139,8 +139,8 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
                 <FormLabel>{t("teacher")}</FormLabel>
                 <FormControl>
                   <StaffSelector
-                    defaultValue={subject?.teacherId ?? undefined}
-                    onChange={field.onChange}
+                    defaultValue={field.value}
+                    onSelect={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />

@@ -162,8 +162,7 @@ export function CreateEditClassroom({
               <FormItem className="space-y-0">
                 <FormLabel>{t("senior_advisor")}</FormLabel>
                 <StaffSelector
-                  placeholder={t("choose_senior_advisor")}
-                  onChange={field.onChange}
+                  onSelect={field.onChange}
                   defaultValue={field.value || ""}
                 />
 
@@ -178,8 +177,7 @@ export function CreateEditClassroom({
               <FormItem className="space-y-0">
                 <FormLabel>{t("head_teacher")}</FormLabel>
                 <StaffSelector
-                  placeholder={t("choose_head_teacher")}
-                  onChange={field.onChange}
+                  onSelect={field.onChange}
                   defaultValue={field.value || ""}
                 />
                 <FormMessage />

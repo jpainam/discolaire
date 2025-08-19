@@ -40,7 +40,8 @@ export function StaffDetailHeader() {
         <Label className="hidden md:block">{t("staffs")}</Label>
         <StaffSelector
           className="w-full lg:w-1/2 2xl:w-[350px]"
-          onChange={(val) => {
+          defaultValue={params.id}
+          onSelect={(val) => {
             router.push(`/staffs/${val}`);
           }}
         />

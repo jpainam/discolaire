@@ -36,7 +36,7 @@ export function CourseCoverageHeader() {
         <Label>{t("teachers")}</Label>
         <StaffSelector
           defaultValue={staffId}
-          onChange={(val) => {
+          onSelect={(val) => {
             router.push(`?` + createQueryString({ staffId: val }));
           }}
         />
