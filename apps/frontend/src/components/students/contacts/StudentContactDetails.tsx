@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -19,12 +18,10 @@ import { useTranslations } from "next-intl";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
 import { AvatarState } from "~/components/AvatarState";
 import { EmptyState } from "~/components/EmptyState";
 import { StudentContactRelationship } from "~/components/students/contacts/StudentContactRelationship";
-import { StudentSiblingTable } from "~/components/students/contacts/StudentSiblingTable";
 import { routes } from "~/configs/routes";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -143,11 +140,11 @@ export function StudentContactDetails({
         </div>
         <div className="flex flex-col gap-2">
           <StudentContactRelationship studentContact={studentContact} />
-          <Suspense
+          {/* <Suspense
             fallback={<DataTableSkeleton rowCount={2} columnCount={2} />}
           >
             <StudentSiblingTable studentContact={studentContact} />
-          </Suspense>
+          </Suspense> */}
         </div>
       </div>
     </div>
