@@ -46,6 +46,7 @@ export async function sendPaymentReminder({
   const transactions = await db.transaction.findMany({
     where: {
       studentId: student.id,
+      deletedAt: null,
       schoolYearId: schoolYearId,
     },
   });

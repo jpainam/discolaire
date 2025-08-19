@@ -45,6 +45,7 @@ export async function getUnpaidFeeDescription(
   const transactions = await db.transaction.findMany({
     where: {
       studentId: studentId,
+      deletedAt: null,
       journalId: {
         in: journalIds,
       },
