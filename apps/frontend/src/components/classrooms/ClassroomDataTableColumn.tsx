@@ -330,7 +330,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
 
   return (
     <div className="flex justify-end">
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             aria-label="Open menu"
