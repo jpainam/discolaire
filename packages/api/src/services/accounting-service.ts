@@ -63,7 +63,7 @@ export async function getUnpaidFeeDescription(
 
   return {
     paid: total,
-    unpaid: amountDue - total,
+    unpaid: amountDue - total < 0 ? 0 : amountDue - total,
     journalIds: journalIds,
     journal: fees.map((fee) => fee.journal?.name).join(", "),
   };
