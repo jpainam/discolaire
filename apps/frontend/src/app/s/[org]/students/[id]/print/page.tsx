@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { Download, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
@@ -26,32 +27,40 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { StudentCertificate } from "~/components/students/print/StudentCertificate";
+import { StudentPrintButton } from "~/components/students/print/StudentPrintButton";
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Categories for organizing the exports
   const categories = [
-    { id: "student", name: "Student" },
-    { id: "academic", name: "Academic" },
+    { id: "student", name: "student" },
+    { id: "academic", name: "academy" },
     { id: "administration", name: "Administration" },
     { id: "communication", name: "Communication" },
-    { id: "settings", name: "Settings" },
+    { id: "settings", name: "settings" },
   ];
 
+  const params = useParams<{ id: string }>();
   // All export options with their categories
   const exportOptions = [
     {
       id: 100,
       name: "Certificat de scolarité",
-      content: StudentCertificate,
+      content: <StudentCertificate label="Certificat de scolarité" id="100" />,
 
       category: "students",
     },
     {
       id: 101,
-      name: "List of New Students",
-      content: StudentCertificate,
+      name: "Profil de l'élève",
+      content: (
+        <StudentPrintButton
+          label="Profil de l'élève"
+          id="101"
+          url={`/api/pdfs/student/${params.id}`}
+        />
+      ),
       category: "students",
     },
   ];
@@ -134,14 +143,7 @@ export default function DataExportPage() {
         <TabsContent value="all" className="mt-0">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredOptions.map((option) => {
-              const Content = option.content;
-              return (
-                <Content
-                  id={option.id.toString()}
-                  label={option.name}
-                  key={option.id}
-                />
-              );
+              return <>{option.content}</>;
             })}
           </div>
         </TabsContent>
