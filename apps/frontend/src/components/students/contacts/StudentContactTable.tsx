@@ -8,7 +8,9 @@ import {
 import {
   Eye,
   FileHeart,
+  HeartIcon,
   MoreHorizontal,
+  Phone,
   Trash2,
   UserCircle,
 } from "lucide-react";
@@ -38,6 +40,7 @@ import {
 } from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
+import { Pill, PillIcon } from "~/components/pill";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { routes } from "~/configs/routes";
@@ -109,9 +112,9 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead>{t("relationship")}</TableHead>
+              <TableHead></TableHead>
               {/* <TableHead>{t("email")}</TableHead> */}
-              <TableHead>{t("phone")}</TableHead>
+              {/* <TableHead>{t("phone")}</TableHead> */}
               <TableHead>{t("status")}</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -142,7 +145,11 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
               return (
                 <TableRow key={`${contact.id}-${index}`}>
                   <TableCell className="flex items-center justify-start gap-1">
-                    <AvatarState pos={index} avatar={contact.user?.avatar} />
+                    <AvatarState
+                      className="h-7 w-7"
+                      pos={index}
+                      avatar={contact.user?.avatar}
+                    />
                     {/* <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
                       className={cn(
@@ -152,7 +159,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                       {getFullName(contact)}
                     </Link> */}
                     <div
-                      className="cursor-pointer hover:underline"
+                      className="cursor-pointer text-xs hover:underline"
                       onClick={() => {
                         openSheet({
                           view: (
@@ -165,13 +172,23 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
                         });
                       }}
                     >
-                      {" "}
                       {getFullName(contact)}
                     </div>
                   </TableCell>
-                  <TableCell>{relationship?.name}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Pill>
+                        <PillIcon className="text-red-500" icon={HeartIcon} />
+                        {relationship?.name}
+                      </Pill>
+                      <Pill>
+                        <PillIcon className="text-blue-500" icon={Phone} />
+                        {contact.phoneNumber1}
+                      </Pill>
+                    </div>
+                  </TableCell>
                   {/* <TableCell>{contact.email ?? "N/A"}</TableCell> */}
-                  <TableCell>{contact.phoneNumber1} </TableCell>
+                  {/* <TableCell>{contact.phoneNumber1} </TableCell> */}
                   <TableCell>
                     <Badge variant="outline" className="gap-1.5">
                       <span

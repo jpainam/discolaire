@@ -35,7 +35,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <div>Autre details sur les notes</div>
+          <div>A summary of student grades</div>
         </ErrorBoundary>
       </div>
       <div className="grid grid-cols-2 gap-4 py-2">
@@ -52,7 +52,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <div>Autre details sur les notes</div>
+          <div>A summary of other items</div>
         </ErrorBoundary>
       </div>
     </HydrateClient>

@@ -18,6 +18,7 @@ import {
   Mail,
   NotebookPen,
   NotepadTextDashed,
+  PrinterIcon,
   User,
   Users,
 } from "lucide-react";
@@ -106,6 +107,11 @@ export function StudentSidebar({
         name: "timetables",
         icon: CalendarDays,
         url: `/students/${params.id}/timetables`,
+      },
+      {
+        name: "print",
+        icon: PrinterIcon,
+        url: `/students/${params.id}/print`,
       },
 
       {
