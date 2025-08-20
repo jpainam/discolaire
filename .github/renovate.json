@@ -5,7 +5,7 @@
     "group:allNonMajor"
   ],
   "schedule": [
-    "before 7am on the first day of the month"
+    "* * 1 */3 *"
   ],
   "ignoreDeps": [
     "@hookform/resolvers"
