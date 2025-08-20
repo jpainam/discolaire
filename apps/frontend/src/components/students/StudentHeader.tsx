@@ -41,7 +41,6 @@ import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db";
-import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -71,6 +70,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
+import { Badge } from "../base-badge";
 import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -241,7 +241,7 @@ export function StudentHeader() {
           />
         )}
 
-        <div className="flex flex-row items-center gap-1">
+        <div className="flex flex-row items-center gap-2">
           {canEditStudent && (
             <Button
               disabled={!canEditStudent}
@@ -560,7 +560,7 @@ export function StudentHeader() {
             </Badge>
           )}
           {student.classroom ? (
-            <Badge variant="outline" className="gap-1.5">
+            <Badge variant="success" appearance={"outline"} className="gap-1.5">
               <span
                 className="size-1.5 rounded-full bg-emerald-500"
                 aria-hidden="true"
@@ -577,7 +577,7 @@ export function StudentHeader() {
             </Badge>
           )}
           {student.classroom && (
-            <Badge variant="outline" className="gap-1.5">
+            <Badge variant="info" appearance={"outline"} className="gap-1.5">
               <SquareEqual
                 className="-ms-0.5 opacity-60"
                 size={12}
