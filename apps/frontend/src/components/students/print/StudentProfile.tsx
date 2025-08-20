@@ -1,9 +1,7 @@
-
 import { useParams } from "next/navigation";
 import { Download } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
-
 
 export function StudentCertificate({
   label,
