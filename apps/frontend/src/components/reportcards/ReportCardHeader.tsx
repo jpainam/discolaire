@@ -39,8 +39,8 @@ export function ReportCardHeader() {
       <Label className="hidden md:flex">{t("classrooms")}</Label>
       <ClassroomSelector
         defaultValue={classroomId}
-        onChange={(val) => {
-          void setClassroomId(val ?? null);
+        onSelect={(val) => {
+          void setClassroomId(val == "" ? null : val);
         }}
         className="w-[300px]"
       />

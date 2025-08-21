@@ -73,8 +73,9 @@ export function StudentSearchPage() {
           <div className="grid max-w-4xl grid-cols-1 gap-4 lg:grid-cols-3">
             <ClassroomSelector
               className="w-full"
-              onChange={(val) => {
-                setSelectedClassroom(val ?? "");
+              defaultValue={selectedClassroom}
+              onSelect={(val) => {
+                setSelectedClassroom(val);
               }}
             />
 

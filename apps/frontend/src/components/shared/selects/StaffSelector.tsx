@@ -49,6 +49,7 @@ export function StaffSelector({
 
   const selected = staffQuery.data?.find((staff) => staff.id === value);
   const t = useTranslations();
+  const staffs = staffQuery.data ?? [];
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -72,7 +73,17 @@ export function StaffSelector({
         portal={false}
         style={{ width: "var(--radix-popover-trigger-width)" }}
       >
-        <Command loop>
+        <Command
+          filter={(value, search) => {
+            const item = staffs.find((it) => it.id === value);
+            if (
+              getFullName(item).toLowerCase().includes(search.toLowerCase())
+            ) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
           <CommandInput
             placeholder={t("search")}
             className="h-9 px-2"

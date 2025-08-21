@@ -48,7 +48,13 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
         closeModal();
       },
       onError: (error) => {
-        toast.error(error.message, { id: 0 });
+        toast.error(error.message, {
+          id: 0,
+          position: "top-center",
+          duration: 5000,
+          className: "w-[300px]",
+        });
+        //toast.error(error.message, { id: 0 });
       },
     }),
   );
@@ -74,7 +80,10 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <ClassroomSelector onChange={field.onChange} />
+                <ClassroomSelector
+                  defaultValue={field.value}
+                  onSelect={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

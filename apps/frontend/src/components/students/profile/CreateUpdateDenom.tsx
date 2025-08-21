@@ -152,7 +152,12 @@ export function CreateUpdateDenom() {
                   <FormItem className="flex-1">
                     <FormLabel>{t("classroom")}</FormLabel>
                     <FormControl>
-                      <ClassroomSelector className="w-full" {...field} />
+                      <ClassroomSelector
+                        onSelect={field.onChange}
+                        defaultValue={field.value}
+                        className="w-full"
+                        {...field}
+                      />
                     </FormControl>
 
                     <FormMessage />

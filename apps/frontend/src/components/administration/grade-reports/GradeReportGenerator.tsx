@@ -129,7 +129,8 @@ export function GradeReportGenerator() {
           <div className="grid gap-2">
             <Label>{t("classrooms")}</Label>
             <ClassroomSelector
-              onChange={(val) => {
+              defaultValue={selectedClass ?? ""}
+              onSelect={(val) => {
                 setSelectedClass(val);
               }}
             />

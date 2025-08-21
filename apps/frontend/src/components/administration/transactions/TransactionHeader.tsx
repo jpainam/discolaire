@@ -71,7 +71,8 @@ export function TransactionHeader() {
         <Label className="hidden md:block">{t("classroom")}</Label>
         <ClassroomSelector
           className="w-full md:w-[250px]"
-          onChange={(val) => {
+          defaultValue={searchParams.classroomId ?? ""}
+          onSelect={(val) => {
             router.push(`?${createQueryString({ classroomId: val })}`);
           }}
         />

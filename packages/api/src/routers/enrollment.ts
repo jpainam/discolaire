@@ -1,11 +1,16 @@
 import type { TRPCRouterRecord } from "@trpc/server";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
   enrollmentService,
   getEnrollStudents,
 } from "../services/enrollment-service";
-import { isRepeating, studentService } from "../services/student-service";
+import {
+  getOverallBalance,
+  isRepeating,
+  studentService,
+} from "../services/student-service";
 import { protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = {
@@ -96,6 +101,20 @@ export const enrollmentRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const studentIds = Array.isArray(input.studentId)
+        ? input.studentId
+        : [input.studentId];
+
+      for (const studentId of studentIds) {
+        const { name, balance } = await getOverallBalance({ studentId });
+        if (balance < 0) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Impossible d'inscrire ${name}. avec une balance négative de: ${balance}`,
+          });
+        }
+      }
+
       const data = Array.isArray(input.studentId)
         ? input.studentId.map((studId) => {
             return {
@@ -236,5 +255,10 @@ export const enrollmentRouter = {
         limit: input.limit,
         studentIds: [],
       });
+    }),
+  canEnroll: protectedProcedure
+    .input(z.object({ studentId: z.string() }))
+    .query(async ({ input }) => {
+      return getOverallBalance({ studentId: input.studentId });
     }),
 } satisfies TRPCRouterRecord;

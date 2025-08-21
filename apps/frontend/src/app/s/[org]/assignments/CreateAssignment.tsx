@@ -21,8 +21,9 @@ export function CreateAssignment() {
       <Label>{t("classrooms")}</Label>
       <ClassroomSelector
         className="col-span-2"
-        onChange={(val) => {
-          setClassroomId(val ?? null);
+        defaultValue={classroomId ?? ""}
+        onSelect={(val) => {
+          setClassroomId(val == "" ? null : val);
         }}
       />
       <div className="col-span-2 h-4"></div>

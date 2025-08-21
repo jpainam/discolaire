@@ -120,8 +120,8 @@ export const transactionRouter = {
           },
         },
         where: {
+          schoolYearId: ctx.schoolYearId,
           AND: [
-            { schoolYearId: ctx.schoolYearId },
             { deletedAt: null },
             ...(input.transactionType
               ? [{ transactionType: { equals: input.transactionType } }]

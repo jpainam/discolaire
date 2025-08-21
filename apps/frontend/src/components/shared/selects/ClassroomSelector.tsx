@@ -1,8 +1,8 @@
-"use client";
-
 import * as React from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { useEffect } from "react";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -18,63 +18,63 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
-import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
-interface ClassroomSelectorProps {
-  searchPlaceholder?: string;
-  placeholder?: string;
+interface Props {
+  defaultValue: string;
   className?: string;
-  defaultValue?: string;
   disabled?: boolean;
-  size?: "tiny" | "small";
-  onChange?: (value: string | null | undefined) => void;
+  onSelect?: (classroomId: string) => void;
 }
 
 export function ClassroomSelector({
-  searchPlaceholder,
-  placeholder,
-  className,
-  //size = "tiny",
-  disabled = false,
   defaultValue,
-  onChange,
-}: ClassroomSelectorProps) {
+  onSelect,
+  disabled,
+  className,
+}: Props) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(defaultValue);
-
-  const { t } = useLocale();
   const trpc = useTRPC();
-  const { data: classrooms } = useSuspenseQuery(
-    trpc.classroom.all.queryOptions(),
+  const classroomQuery = useQuery(trpc.classroom.all.queryOptions());
+
+  useEffect(() => {
+    if (value !== defaultValue) {
+      setValue(defaultValue);
+    }
+  }, [defaultValue, value]);
+
+  const selected = classroomQuery.data?.find(
+    (classroom) => classroom.id === value,
   );
+  const t = useTranslations();
+  const classrooms = classroomQuery.data ?? [];
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal={false}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
           disabled={disabled}
           aria-expanded={open}
-          className={cn("justify-between", className)}
+          className={cn(
+            "w-full justify-between truncate font-normal",
+            className,
+          )}
         >
-          {classrooms.find((it) => it.id === value)?.name ??
-            placeholder ??
-            t("select_an_option")}{" "}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 justify-end opacity-50" />
+          {selected ? selected.name : t("Select a classroom")}
+          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        style={{ width: "var(--radix-popover-trigger-width)" }}
         className="p-0"
-        side="bottom"
         align="start"
+        portal={false}
+        style={{ width: "var(--radix-popover-trigger-width)" }}
       >
         <Command
-          //className="rounded-lg border shadow-md"
           filter={(value, search) => {
             const item = classrooms.find((it) => it.id === value);
             if (item?.name.toLowerCase().includes(search.toLowerCase())) {
@@ -84,30 +84,34 @@ export function ClassroomSelector({
           }}
         >
           <CommandInput
-            placeholder={searchPlaceholder ?? t("search_for_an_option")}
+            placeholder={t("search")}
+            className="h-9 px-2"
+            autoComplete="off"
           />
-          <CommandList className="max-h-[300px] overflow-y-auto">
-            <CommandEmpty>{t("select_an_option")}</CommandEmpty>
-            <CommandGroup>
-              {classrooms.map((item) => (
+          <CommandEmpty>{t("no_data")}</CommandEmpty>
+          <CommandGroup>
+            <CommandList className="max-h-[230px] overflow-y-auto pt-2">
+              {classrooms.map((classroom) => (
                 <CommandItem
-                  key={item.id}
-                  className="flex w-full cursor-pointer items-center justify-between space-x-2"
-                  value={item.id}
-                  onSelect={(currentValue) => {
-                    onChange?.(currentValue == value ? null : currentValue);
-                    setValue(currentValue === value ? "" : currentValue);
+                  key={classroom.id}
+                  value={classroom.id}
+                  onSelect={() => {
+                    setValue(classroom.id === value ? "" : classroom.id);
+                    onSelect?.(classroom.id === value ? "" : classroom.id);
                     setOpen(false);
                   }}
                 >
-                  <span>{item.name}</span>
-                  {value === item.id && (
-                    <Check className="text-brand" strokeWidth={2} size={16} />
-                  )}
+                  {classroom.name}
+                  <CheckIcon
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      value === classroom.id ? "opacity-100" : "opacity-0",
+                    )}
+                  />
                 </CommandItem>
               ))}
-            </CommandGroup>
-          </CommandList>
+            </CommandList>
+          </CommandGroup>
         </Command>
       </PopoverContent>
     </Popover>

@@ -925,6 +925,7 @@
   "row_selected": "fila(s) seleccionada(s)",
   "rows_per_page": "Filas por página",
   "schedule_date": "Fecha programada",
+  "Select a classroom": "Seleccione un aula",
   "scheduling": "Programación",
   "schoolId": "ID de la escuela",
   "reference": "Referencia",
@@ -935,7 +936,6 @@
   "select_a_subject": "Seleccione una asignatura",
   "total_for_period": "Total para el período",
   "schoolYear": "Año escolar",
-  
   "school_id_card": "Tarjeta de identificación escolar",
   "school_name": "Nombre de la escuela",
   "Coverage": "Cobertura",

@@ -85,8 +85,8 @@ export function AppreciationHeader() {
       <Label className="hidden md:flex">{t("classrooms")}</Label>
       <ClassroomSelector
         className="md:w-[300px]"
-        defaultValue={classroomId ?? undefined}
-        onChange={(val) => {
+        defaultValue={classroomId ?? ""}
+        onSelect={(val) => {
           router.push(
             routes.reportcards.appreciations +
               "/?" +

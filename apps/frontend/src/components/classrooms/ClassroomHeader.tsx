@@ -112,7 +112,7 @@ export function ClassroomHeader() {
       <ClassroomSelector
         className="w-full md:w-[400px]"
         defaultValue={params.id}
-        onChange={(value) => {
+        onSelect={(value) => {
           if (value) handleClassroomChange(value);
         }}
       />

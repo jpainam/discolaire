@@ -59,7 +59,7 @@ export function FeeHeader() {
       <ClassroomSelector
         className="w-full md:w-[300px]"
         defaultValue={classroomId ?? ""}
-        onChange={(val) => {
+        onSelect={(val) => {
           router.push("?" + createQueryString({ classroomId: val }));
         }}
       />

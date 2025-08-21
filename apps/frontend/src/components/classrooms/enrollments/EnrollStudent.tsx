@@ -40,6 +40,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  //const router = useRouter();
 
   const unenrollStudentsQuery = useQuery(
     trpc.enrollment.unenrolled.queryOptions({
@@ -61,7 +62,13 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
         toast.success(t("enrolled_successfully"), { id: 0 });
       },
       onError: (error) => {
-        toast.error(error.message, { id: 0 });
+        toast.error(error.message, {
+          id: 0,
+          position: "top-center",
+          duration: 5000,
+          className: "w-[300px]",
+        });
+        //toast.error(error.message, { id: 0 });
       },
     }),
   );

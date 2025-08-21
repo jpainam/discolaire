@@ -1,6 +1,7 @@
-import { db } from "@repo/db";
+import { db, TransactionType } from "@repo/db";
 import redisClient from "@repo/kv";
 
+import { getFullName } from "../utils";
 import { classroomService } from "./classroom-service";
 
 export const studentService = {
@@ -304,4 +305,61 @@ export async function isRepeating(studentId: string, schoolYearId: string) {
     ).length > 0;
   void redisClient.set(key, isRepeating ? "true" : "false");
   return isRepeating;
+}
+
+export async function getOverallBalance({ studentId }: { studentId: string }) {
+  const student = await db.student.findUniqueOrThrow({
+    where: {
+      id: studentId,
+    },
+  });
+  const enrollments = await db.enrollment.findMany({
+    where: {
+      studentId: studentId,
+    },
+  });
+  const classroomIds = enrollments.map((enr) => enr.classroomId);
+  const requiredJournals = await db.requiredAccountingJournal.findMany({
+    where: {
+      schoolId: student.schoolId,
+    },
+  });
+  const requiredJournalIds = requiredJournals.map((j) => j.journalId);
+  const fees = await db.fee.findMany({
+    where: {
+      classroomId: {
+        in: classroomIds,
+      },
+      journalId: {
+        notIn: requiredJournalIds,
+      },
+      dueDate: {
+        lte: new Date(),
+      },
+    },
+  });
+  const transactions = await db.transaction.findMany({
+    where: {
+      studentId: studentId,
+      journalId: {
+        notIn: requiredJournalIds,
+      },
+      status: "VALIDATED",
+      deletedAt: null,
+    },
+  });
+  const debit = transactions
+    .filter((t) => t.transactionType === TransactionType.DEBIT)
+    .reduce((acc, t) => acc + t.amount, 0);
+  const credit = transactions
+    .filter((t) => t.transactionType === TransactionType.CREDIT)
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const discount = transactions
+    .filter((t) => t.transactionType === TransactionType.DISCOUNT)
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const feesTotal = fees.reduce((acc, fee) => acc + fee.amount, 0);
+  const balance = credit + discount - (debit + feesTotal);
+  return { name: getFullName(student), balance: balance };
 }

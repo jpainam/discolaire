@@ -265,11 +265,11 @@ export default function EventForm({
                   <FormControl>
                     <ClassroomSelector
                       className="w-full"
-                      onChange={(value) => {
+                      onSelect={(value) => {
                         field.onChange(value);
                         setValue("subject", "");
                       }}
-                      defaultValue={watchedClassroomId ?? undefined}
+                      defaultValue={watchedClassroomId ?? ""}
                     />
                   </FormControl>
                   <FormMessage />
