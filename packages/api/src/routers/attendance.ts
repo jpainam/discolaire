@@ -296,7 +296,7 @@ export const attendanceRouter = {
 
 function getLatenessValue(value: string) {
   if (!value.includes(":")) {
-    return parseInt(value, 10);
+    return parseInt(value);
   }
   const [hours, minutes] = value.split(":").map(Number);
   return (hours ?? 0) * 60 + (minutes ?? 0);

@@ -158,8 +158,8 @@ export function StudentAttendanceSummary() {
 
               {!attendanceQuery.isPending ? (
                 <MetricCardValue className="flex items-center justify-between">
-                  {metric.value}
-                  {metric.justified && (
+                  <span>{metric.value}</span>
+                  {metric.justified != 0 && (
                     <Badge
                       variant="secondary"
                       appearance={"light"}
