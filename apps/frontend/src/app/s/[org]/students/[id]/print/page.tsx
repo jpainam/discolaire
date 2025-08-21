@@ -31,6 +31,10 @@ import { StudentPrintButton } from "~/components/students/print/StudentPrintButt
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [format, setFormat] = useQueryState("format", {
+    defaultValue: "pdf",
+  });
+  const [termId, setTermId] = useQueryState("termId");
 
   // Categories for organizing the exports
   const categories = [
@@ -63,6 +67,17 @@ export default function DataExportPage() {
       ),
       category: "students",
     },
+    {
+      id: 102,
+      name: "Relevé de notes",
+      content: (
+        <StudentPrintButton
+          label="Relevé de notes"
+          id="102"
+          url={`/api/pdfs/student/${params.id}/transcripts?format=${format}`}
+        />
+      ),
+    },
   ];
 
   // Filter export options based on search query
@@ -81,10 +96,6 @@ export default function DataExportPage() {
     // Implementation would connect to the actual export functionality
   };
 
-  const [format, setFormat] = useQueryState("format", {
-    defaultValue: "pdf",
-  });
-  const [termId, setTermId] = useQueryState("termId");
   const t = useTranslations();
 
   return (

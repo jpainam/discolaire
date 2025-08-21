@@ -142,6 +142,7 @@ export function StudentAttendanceHeader() {
                   {t("absence")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  disabled={!termId}
                   onSelect={() => {
                     if (!termId) {
                       toast.warning("Veuillez sélectionner une période.");
