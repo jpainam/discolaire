@@ -32,6 +32,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
+import { syncTransactionIds } from "~/actions/sync_transaction_ids";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -95,6 +96,11 @@ export function SubscriptionHeader() {
       unlimited: totals.unlimitedEmail,
     },
   ];
+
+  const syncTransactions = async () => {
+    await syncTransactionIds();
+    toast.success(t("sync_success"), { id: 0 });
+  };
   return (
     <div className="px-4 py-2">
       <div className="flex items-center justify-between">
@@ -114,6 +120,15 @@ export function SubscriptionHeader() {
               {t("create")}
             </Button>
           )}
+          <Button
+            size={"sm"}
+            onClick={async () => {
+              toast.loading(t("Processing"), { id: 0 });
+              await syncTransactions();
+            }}
+          >
+            Sync transactions
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size={"icon"} variant={"outline"} className="size-8">
