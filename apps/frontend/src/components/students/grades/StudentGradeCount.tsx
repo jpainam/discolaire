@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Notebook, NotepadText, Rows3Icon } from "lucide-react";
+import {
+  Notebook,
+  NotepadText,
+  ProportionsIcon,
+  Rows3Icon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
@@ -35,6 +40,7 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
   const [minGrade, setMinGrade] = useState(0);
   const [averageGrade, setAverageGrade] = useState(0);
   const [total, setTotal] = useState(0);
+  const [successRate, setSuccessRate] = useState(0);
   const [p18, setP18] = useState(0);
   const [p14, setP14] = useState(0);
   const [p10, setP10] = useState(0);
@@ -61,6 +67,8 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
     setAverageGrade(
       grades.reduce((acc, g) => acc + g.grade, 0) / grades.length,
     );
+    const successCount = grades.filter((g) => g.grade >= 10).length;
+    setSuccessRate(successCount > 0 ? (successCount / grades.length) * 100 : 0);
   }, [allgrades, termId]);
 
   return (
@@ -185,6 +193,15 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
           <MetricCardValue>
             {isFinite(averageGrade) ? averageGrade.toFixed(2) : "N/A"}
           </MetricCardValue>
+        </MetricCard>
+        <MetricCard variant={"default"}>
+          <MetricCardHeader className="flex items-center justify-between gap-2">
+            <MetricCardTitle className="truncate">
+              Taux de réussite
+            </MetricCardTitle>
+            <ProportionsIcon className="size-4" />
+          </MetricCardHeader>
+          <MetricCardValue>{successRate.toFixed(2)}%</MetricCardValue>
         </MetricCard>
       </MetricCardGroup>
     </div>
