@@ -64,7 +64,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <div>A summary of other items</div>
+          <div></div>
         </ErrorBoundary>
       </div>
     </HydrateClient>
