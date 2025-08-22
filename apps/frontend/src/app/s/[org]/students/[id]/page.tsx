@@ -5,6 +5,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
+import { StudentGradeCount } from "~/components/students/grades/StudentGradeCount";
 import StudentDetails from "~/components/students/profile/StudentDetails";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
@@ -15,6 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.siblings.queryOptions(params.id),
     trpc.student.get.queryOptions(params.id),
     trpc.student.contacts.queryOptions(params.id),
+    trpc.student.grades.queryOptions({ id: params.id }),
   ]);
 
   return (
@@ -35,7 +37,17 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <div>A summary of student grades</div>
+          <Suspense
+            fallback={
+              <div className="flex flex-col gap-4 pt-2 pr-2">
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </div>
+            }
+          >
+            <StudentGradeCount studentId={params.id} />
+          </Suspense>
         </ErrorBoundary>
       </div>
       <div className="grid grid-cols-2 gap-4 py-2">
