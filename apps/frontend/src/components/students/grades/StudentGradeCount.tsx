@@ -164,21 +164,27 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
             <MetricCardTitle className="truncate">Note maximum</MetricCardTitle>
             <NotepadText className="size-4" />
           </MetricCardHeader>
-          <MetricCardValue>{maxGrade.toFixed(2)}</MetricCardValue>
+          <MetricCardValue>
+            {isFinite(maxGrade) ? maxGrade.toFixed(2) : "N/A"}
+          </MetricCardValue>
         </MetricCard>
         <MetricCard variant={"destructive"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
             <MetricCardTitle className="truncate">Note mininum</MetricCardTitle>
             <Notebook className="size-4" />
           </MetricCardHeader>
-          <MetricCardValue>{minGrade.toFixed(2)}</MetricCardValue>
+          <MetricCardValue>
+            {isFinite(minGrade) ? minGrade.toFixed(2) : "N/A"}
+          </MetricCardValue>
         </MetricCard>
         <MetricCard variant={"warning"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
             <MetricCardTitle className="truncate">Note moyenne</MetricCardTitle>
             <Rows3Icon className="size-4" />
           </MetricCardHeader>
-          <MetricCardValue>{averageGrade.toFixed(2)}</MetricCardValue>
+          <MetricCardValue>
+            {isFinite(averageGrade) ? averageGrade.toFixed(2) : "N/A"}
+          </MetricCardValue>
         </MetricCard>
       </MetricCardGroup>
     </div>
