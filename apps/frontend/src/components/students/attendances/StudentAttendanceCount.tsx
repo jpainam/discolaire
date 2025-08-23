@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { CheckCircle, TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
+import type { RouterOutputs } from "@repo/api";
 import { Progress } from "@repo/ui/components/progress";
 import { Separator } from "@repo/ui/components/separator";
 import { cn } from "@repo/ui/lib/utils";
@@ -13,64 +15,148 @@ import { Badge } from "~/components/base-badge";
 import { getLatenessValue } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
-export function StudentAttendanceCount({ studentId }: { studentId: string }) {
+export function StudentAttendanceCount({
+  terms,
+  studentId,
+}: {
+  terms: RouterOutputs["term"]["all"];
+  studentId: string;
+}) {
   const trpc = useTRPC();
   const [termId] = useQueryState("termId");
   const { data: absence } = useSuspenseQuery(
     trpc.absence.byStudent.queryOptions({
       studentId,
-      termId,
     }),
   );
   const { data: late } = useSuspenseQuery(
     trpc.lateness.byStudent.queryOptions({
       studentId,
-      termId,
     }),
   );
   const { data: chatter } = useSuspenseQuery(
     trpc.chatter.byStudent.queryOptions({
       studentId,
-      termId,
     }),
   );
   const { data: consigne } = useSuspenseQuery(
     trpc.consigne.byStudent.queryOptions({
       studentId,
-      termId: termId ?? undefined,
     }),
   );
 
   const t = useTranslations();
-
-  const performance = [
+  const [performance, setPerformance] = useState<
+    { label: string; value: number; trend: number; trendDir: "up" | "down" }[]
+  >([
     {
       label: t("absence"),
-      value: absence.map((ab) => ab.value).reduce((a, b) => a + b, 0),
+      value: 0,
       trend: 0,
       trendDir: "up",
     },
     {
       label: t("late"),
-      value: late
-        .map((l) => getLatenessValue(l.duration))
-        .reduce((a, b) => a + b, 0),
+      value: 0,
       trend: 0,
       trendDir: "up",
     },
     {
       label: t("chatter"),
-      value: chatter.map((c) => c.value).reduce((a, b) => a + b, 0),
+      value: 0,
       trend: 0,
       trendDir: "down",
     },
     {
       label: t("consigne"),
-      value: consigne.map((c) => c.duration).reduce((a, b) => a + b, 0),
+      value: 0,
       trend: 0,
       trendDir: "up",
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    let allAbsence = absence;
+    let allChatter = chatter;
+    let allConsigne = consigne;
+    let allLate = late;
+    let prevAbsence = 0;
+    let prevChatter = 0;
+    let prevConsigne = 0;
+    let prevLate = 0;
+    if (!termId) {
+      allAbsence = absence.filter((a) => a.termId === termId);
+      allChatter = chatter.filter((c) => c.termId === termId);
+      allConsigne = consigne.filter((c) => c.termId === termId);
+      allLate = late.filter((l) => l.termId === termId);
+    }
+    const orderedTerms = terms.sort((a, b) => a.order - b.order);
+    const currentTermIndex = orderedTerms.findIndex((t) => t.id === termId);
+    let prevTermId = null;
+    if (currentTermIndex > 0) {
+      const prevTerm = orderedTerms[currentTermIndex - 1];
+      if (prevTerm) prevTermId = prevTerm.id;
+    }
+    if (prevTermId) {
+      const prevAbs = absence.filter((a) => a.termId === prevTermId);
+      const prevChat = chatter.filter((c) => c.termId === prevTermId);
+      const prevCons = consigne.filter((c) => c.termId === prevTermId);
+      const prevL = late.filter((l) => l.termId === prevTermId);
+      prevAbsence = prevAbs.map((ab) => ab.value).reduce((a, b) => a + b, 0);
+      prevChatter = prevChat.map((c) => c.value).reduce((a, b) => a + b, 0);
+      prevConsigne = prevCons.map((c) => c.duration).reduce((a, b) => a + b, 0);
+      prevLate = prevL
+        .map((l) => getLatenessValue(l.duration))
+        .reduce((a, b) => a + b, 0);
+    }
+    const countAbsence = allAbsence
+      .map((ab) => ab.value)
+      .reduce((a, b) => a + b, 0);
+    const countConsigne = allConsigne
+      .map((c) => c.duration)
+      .reduce((a, b) => a + b, 0);
+    const countChatter = allChatter
+      .map((c) => c.value)
+      .reduce((a, b) => a + b, 0);
+    const countLate = allLate
+      .map((l) => getLatenessValue(l.duration))
+      .reduce((a, b) => a + b, 0);
+
+    setPerformance([
+      {
+        label: t("absence"),
+        value: countAbsence,
+        trend: prevAbsence
+          ? Math.round(((countAbsence - prevAbsence) / prevAbsence) * 100)
+          : 0,
+        trendDir: countAbsence - prevAbsence >= 0 ? "up" : "down",
+      },
+      {
+        label: t("late"),
+        value: countLate,
+        trend: prevLate
+          ? Math.round(((countLate - prevLate) / prevLate) * 100)
+          : 0,
+        trendDir: countLate - prevLate >= 0 ? "up" : "down",
+      },
+      {
+        label: t("chatter"),
+        value: countChatter,
+        trend: prevChatter
+          ? Math.round(((countChatter - prevChatter) / prevChatter) * 100)
+          : 0,
+        trendDir: countChatter - prevChatter >= 0 ? "up" : "down",
+      },
+      {
+        label: t("consigne"),
+        value: countConsigne,
+        trend: prevConsigne
+          ? Math.round(((countConsigne - prevConsigne) / prevConsigne) * 100)
+          : 0,
+        trendDir: countConsigne - prevConsigne >= 0 ? "up" : "down",
+      },
+    ]);
+  }, [absence, chatter, consigne, late, t, termId, terms]);
 
   const activity = [
     {

@@ -8,7 +8,7 @@ import { StudentAttendanceCount } from "~/components/students/attendances/Studen
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import { StudentGradeCount } from "~/components/students/grades/StudentGradeCount";
 import StudentDetails from "~/components/students/profile/StudentDetails";
-import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -23,6 +23,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.chatter.byStudent.queryOptions({ studentId: params.id }),
     trpc.consigne.byStudent.queryOptions({ studentId: params.id }),
   ]);
+  const terms = await caller.term.all();
 
   return (
     <HydrateClient>
@@ -64,7 +65,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
             }
           >
-            <StudentAttendanceCount studentId={params.id} />
+            <StudentAttendanceCount terms={terms} studentId={params.id} />
           </Suspense>
         </ErrorBoundary>
       </div>
