@@ -104,7 +104,7 @@ export const absenceRouter = {
     }),
   byStudent: protectedProcedure
     .input(
-      z.object({ studentId: z.string().min(1), termId: z.string().optional() }),
+      z.object({ studentId: z.string().min(1), termId: z.string().nullish() }),
     )
     .query(async ({ ctx, input }) => {
       return ctx.db.absence.findMany({

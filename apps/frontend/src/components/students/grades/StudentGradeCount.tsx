@@ -8,16 +8,7 @@ import {
   ProportionsIcon,
   Rows3Icon,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
-
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
 
 import {
   MetricCard,
@@ -30,7 +21,6 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useTRPC } from "~/trpc/react";
 
 export function StudentGradeCount({ studentId }: { studentId: string }) {
-  const t = useTranslations();
   const trpc = useTRPC();
   const { data: allgrades } = useSuspenseQuery(
     trpc.student.grades.queryOptions({ id: studentId }),
@@ -72,22 +62,17 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
   }, [allgrades, termId]);
 
   return (
-    <div className="flex flex-col gap-4 pt-2 pr-2">
-      <Card className="gap-4">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">{t("grades")}</CardTitle>
-          <CardAction>
+    <div className="flex flex-col gap-4 py-2 pr-2">
+      <div className="gap-4">
+        <div>
+          <div className="space-y-2">
             <TermSelector
-              className="w-48"
+              className="w-full"
               defaultValue={termId}
               onChange={(val) => {
                 void setTermId(val);
               }}
             />
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
@@ -164,8 +149,8 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
       <MetricCardGroup className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
         <MetricCard variant={"success"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">

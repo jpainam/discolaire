@@ -98,7 +98,7 @@ export const consigneRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
-        termId: z.string().optional(),
+        termId: z.string().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
