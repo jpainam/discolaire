@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { CheckCircle, TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -15,6 +15,13 @@ import { Badge } from "~/components/base-badge";
 import { getLatenessValue } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
+interface PerfItem {
+  label: string;
+  value: number;
+  trendPct: number | null; // null => n/a
+  trendDir: "up" | "down";
+}
+
 export function StudentAttendanceCount({
   terms,
   studentId,
@@ -24,169 +31,155 @@ export function StudentAttendanceCount({
 }) {
   const trpc = useTRPC();
   const [termId] = useQueryState("termId");
-  const { data: absence } = useSuspenseQuery(
-    trpc.absence.byStudent.queryOptions({
-      studentId,
-    }),
-  );
-  const { data: late } = useSuspenseQuery(
-    trpc.lateness.byStudent.queryOptions({
-      studentId,
-    }),
-  );
-  const { data: chatter } = useSuspenseQuery(
-    trpc.chatter.byStudent.queryOptions({
-      studentId,
-    }),
-  );
-  const { data: consigne } = useSuspenseQuery(
-    trpc.consigne.byStudent.queryOptions({
-      studentId,
-    }),
-  );
-
   const t = useTranslations();
-  const [performance, setPerformance] = useState<
-    { label: string; value: number; trend: number; trendDir: "up" | "down" }[]
-  >([
-    {
-      label: t("absence"),
-      value: 0,
-      trend: 0,
-      trendDir: "up",
-    },
-    {
-      label: t("late"),
-      value: 0,
-      trend: 0,
-      trendDir: "up",
-    },
-    {
-      label: t("chatter"),
-      value: 0,
-      trend: 0,
-      trendDir: "down",
-    },
-    {
-      label: t("consigne"),
-      value: 0,
-      trend: 0,
-      trendDir: "up",
-    },
-  ]);
 
-  useEffect(() => {
-    let allAbsence = absence;
-    let allChatter = chatter;
-    let allConsigne = consigne;
-    let allLate = late;
-    let prevAbsence = 0;
-    let prevChatter = 0;
-    let prevConsigne = 0;
-    let prevLate = 0;
-    if (!termId) {
-      allAbsence = absence.filter((a) => a.termId === termId);
-      allChatter = chatter.filter((c) => c.termId === termId);
-      allConsigne = consigne.filter((c) => c.termId === termId);
-      allLate = late.filter((l) => l.termId === termId);
-    }
-    const orderedTerms = terms.sort((a, b) => a.order - b.order);
-    const currentTermIndex = orderedTerms.findIndex((t) => t.id === termId);
-    let prevTermId = null;
-    if (currentTermIndex > 0) {
-      const prevTerm = orderedTerms[currentTermIndex - 1];
-      if (prevTerm) prevTermId = prevTerm.id;
-    }
-    if (prevTermId) {
-      const prevAbs = absence.filter((a) => a.termId === prevTermId);
-      const prevChat = chatter.filter((c) => c.termId === prevTermId);
-      const prevCons = consigne.filter((c) => c.termId === prevTermId);
-      const prevL = late.filter((l) => l.termId === prevTermId);
-      prevAbsence = prevAbs.map((ab) => ab.value).reduce((a, b) => a + b, 0);
-      prevChatter = prevChat.map((c) => c.value).reduce((a, b) => a + b, 0);
-      prevConsigne = prevCons.map((c) => c.duration).reduce((a, b) => a + b, 0);
-      prevLate = prevL
-        .map((l) => getLatenessValue(l.duration))
-        .reduce((a, b) => a + b, 0);
-    }
-    const countAbsence = allAbsence
-      .map((ab) => ab.value)
-      .reduce((a, b) => a + b, 0);
-    const countConsigne = allConsigne
-      .map((c) => c.duration)
-      .reduce((a, b) => a + b, 0);
-    const countChatter = allChatter
-      .map((c) => c.value)
-      .reduce((a, b) => a + b, 0);
-    const countLate = allLate
-      .map((l) => getLatenessValue(l.duration))
-      .reduce((a, b) => a + b, 0);
+  // Fetches (suspense guarantees data presence)
+  const { data: absence = [] } = useSuspenseQuery(
+    trpc.absence.byStudent.queryOptions({ studentId }),
+  );
+  const { data: late = [] } = useSuspenseQuery(
+    trpc.lateness.byStudent.queryOptions({ studentId }),
+  );
+  const { data: chatter = [] } = useSuspenseQuery(
+    trpc.chatter.byStudent.queryOptions({ studentId }),
+  );
+  const { data: consigne = [] } = useSuspenseQuery(
+    trpc.consigne.byStudent.queryOptions({ studentId }),
+  );
 
-    setPerformance([
-      {
-        label: t("absence"),
-        value: countAbsence,
-        trend: prevAbsence
-          ? Math.round(((countAbsence - prevAbsence) / prevAbsence) * 100)
-          : 0,
-        trendDir: countAbsence - prevAbsence >= 0 ? "up" : "down",
-      },
-      {
-        label: t("late"),
-        value: countLate,
-        trend: prevLate
-          ? Math.round(((countLate - prevLate) / prevLate) * 100)
-          : 0,
-        trendDir: countLate - prevLate >= 0 ? "up" : "down",
-      },
-      {
-        label: t("chatter"),
-        value: countChatter,
-        trend: prevChatter
-          ? Math.round(((countChatter - prevChatter) / prevChatter) * 100)
-          : 0,
-        trendDir: countChatter - prevChatter >= 0 ? "up" : "down",
-      },
-      {
-        label: t("consigne"),
-        value: countConsigne,
-        trend: prevConsigne
-          ? Math.round(((countConsigne - prevConsigne) / prevConsigne) * 100)
-          : 0,
-        trendDir: countConsigne - prevConsigne >= 0 ? "up" : "down",
-      },
-    ]);
-  }, [absence, chatter, consigne, late, t, termId, terms]);
+  // ---------- Helpers ----------
+  const sum = (nums: number[]) => nums.reduce((a, b) => a + b, 0);
+
+  const orderedTerms = useMemo(
+    () => [...terms].sort((a, b) => a.order - b.order),
+    [terms],
+  );
+
+  // Current term index:
+  //  - if a termId is selected, use it
+  //  - otherwise assume the last term (highest order) as "current" for comparisons
+  const currentTermIndex = useMemo(() => {
+    if (termId) return orderedTerms.findIndex((t) => t.id === termId);
+    return orderedTerms.length ? orderedTerms.length - 1 : -1;
+  }, [orderedTerms, termId]);
+
+  const prevTermId = useMemo(() => {
+    if (currentTermIndex > 0)
+      return orderedTerms[currentTermIndex - 1]?.id ?? null;
+    return null;
+  }, [currentTermIndex, orderedTerms]);
+
+  // Filter to selected term if any (otherwise include all)
+  const filtered = useMemo(() => {
+    const byTerm = <T extends { termId: string }>(arr: T[]) =>
+      termId ? arr.filter((x) => x.termId === termId) : arr;
+
+    const prevByTerm = <T extends { termId: string }>(arr: T[]) =>
+      prevTermId ? arr.filter((x) => x.termId === prevTermId) : [];
+
+    return {
+      // current
+      absence: byTerm(absence),
+      late: byTerm(late),
+      chatter: byTerm(chatter),
+      consigne: byTerm(consigne),
+      // previous
+      prevAbsence: prevByTerm(absence),
+      prevLate: prevByTerm(late),
+      prevChatter: prevByTerm(chatter),
+      prevConsigne: prevByTerm(consigne),
+    };
+  }, [absence, late, chatter, consigne, termId, prevTermId]);
+
+  // Aggregate current and previous values
+  const totals = useMemo(() => {
+    const countAbsence = sum(filtered.absence.map((ab) => ab.value));
+    const countChatter = sum(filtered.chatter.map((c) => c.value));
+    const countConsigne = sum(filtered.consigne.map((c) => c.duration)); // assuming minutes
+    const countLate = sum(
+      filtered.late.map((l) => getLatenessValue(l.duration)),
+    );
+
+    const prevAbsence = sum(filtered.prevAbsence.map((ab) => ab.value));
+    const prevChatter = sum(filtered.prevChatter.map((c) => c.value));
+    const prevConsigne = sum(filtered.prevConsigne.map((c) => c.duration));
+    const prevLate = sum(
+      filtered.prevLate.map((l) => getLatenessValue(l.duration)),
+    );
+
+    return {
+      current: { countAbsence, countChatter, countConsigne, countLate },
+      prev: { prevAbsence, prevChatter, prevConsigne, prevLate },
+    };
+  }, [filtered]);
+
+  const trendPct = (curr: number, prev: number): number | null => {
+    if (!prev || prev === 0) return null;
+    return Math.round(((curr - prev) / prev) * 100);
+  };
+
+  // Build performance cards (note: for these metrics, an "up" trend is *bad*; we keep the arrow but color reflects dir)
+  const performance: PerfItem[] = useMemo(() => {
+    const items: { key: keyof typeof totals.current; label: string }[] = [
+      { key: "countAbsence", label: t("absence") },
+      { key: "countLate", label: t("late") },
+      { key: "countChatter", label: t("chatter") },
+      { key: "countConsigne", label: t("consigne") },
+    ];
+
+    return items.map(({ key, label }) => {
+      const curr = totals.current[key];
+      const prevKey =
+        key === "countAbsence"
+          ? "prevAbsence"
+          : key === "countLate"
+            ? "prevLate"
+            : key === "countChatter"
+              ? "prevChatter"
+              : "prevConsigne";
+      const prev = totals.prev[prevKey];
+
+      const pct = trendPct(curr, prev);
+      const dir: "up" | "down" = curr - prev >= 0 ? "up" : "down";
+
+      return { label, value: curr, trendPct: pct, trendDir: dir };
+    });
+  }, [t, totals]);
+
+  // You can compute a real attendance rate if you have "scheduled days" or "present days".
+  // For now, we leave the placeholder 50% but keep it in one place.
+  const attendanceRate = 50;
 
   const activity = [
     {
       text: "Closed deal with FinSight Inc.",
       date: "Today",
-      state: "secondary",
+      state: "secondary" as const,
       color: "text-green-500",
     },
     {
       text: "3 new leads added to Pipeline.",
       date: "Yesterday",
-      state: "secondary",
+      state: "secondary" as const,
       color: "text-green-500",
     },
     {
       text: "Follow-up scheduled.",
       date: "2 days ago",
-      state: "destructive",
+      state: "destructive" as const,
       color: "text-destructive",
     },
   ];
 
   return (
     <div className="flex items-center justify-center pt-2 pr-2">
-      {/* Card */}
       <div className="w-full">
         <div className="space-y-5">
-          {/* Q3 Performance */}
+          {/* Attendance Overview */}
           <div>
-            <div className="mb-2.5 text-sm font-medium">{t("attendance")}</div>
+            <div className="mb-2.5 text-sm font-medium">
+              {t("attendance")} {terms.find((t) => t.id == termId)?.name}
+            </div>
             <div className="grid grid-cols-4 gap-1">
               {performance.map((item) => (
                 <div
@@ -204,17 +197,23 @@ export function StudentAttendanceCount({
                     className={cn(
                       "flex items-center gap-0.5 text-xs font-semibold",
                       item.trendDir === "up"
-                        ? "text-green-500"
-                        : "text-destructive",
+                        ? "text-destructive"
+                        : "text-green-500",
                     )}
+                    title={
+                      item.trendPct === null
+                        ? t("No previous term to compare")
+                        : `${item.trendPct > 0 ? "+" : ""}${item.trendPct}%`
+                    }
                   >
                     {item.trendDir === "up" ? (
                       <TrendingUp className="h-3 w-3" />
                     ) : (
                       <TrendingDown className="h-3 w-3" />
                     )}
-                    {item.trendDir === "up" ? "+" : "-"}
-                    {item.trend}%
+                    {item.trendPct === null
+                      ? "n/a"
+                      : `${item.trendPct > 0 ? "+" : ""}${item.trendPct}%`}
                   </span>
                 </div>
               ))}
@@ -223,22 +222,22 @@ export function StudentAttendanceCount({
 
           <Separator />
 
-          {/* Pipeline Progress */}
+          {/* Attendance Rate */}
           <div>
             <div className="mb-2.5 flex items-center justify-between">
               <span className="text-foreground text-sm font-medium">
                 {t("Attendance rate")}
               </span>
               <span className="text-foreground text-xs font-semibold">
-                {0.5 * 100}%
+                {attendanceRate}%
               </span>
             </div>
-            <Progress value={50} className="bg-muted" />
+            <Progress value={attendanceRate} className="bg-muted" />
           </div>
 
           <Separator />
 
-          {/* Recent Activity */}
+          {/* Recent Activity (replace with your domain data or remove) */}
           <div>
             <div className="text-foreground mb-2.5 text-sm font-medium">
               {t("Recent Activities")}
