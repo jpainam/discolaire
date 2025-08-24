@@ -17,7 +17,8 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
-import FlatBadge from "~/components/FlatBadge";
+import { Badge } from "~/components/base-badge";
+import { Pill, PillAvatar } from "~/components/pill";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { TransactionDetails } from "./TransactionDetails";
@@ -62,15 +63,16 @@ export const getDeletedDataTableColumn = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("createdAt")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const transaction = row.original;
 
         return (
           <div>
             {transaction.createdAt.toLocaleDateString(i18next.language, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
+              year: "2-digit",
+              month: "2-digit",
+              day: "2-digit",
             })}
           </div>
         );
@@ -114,47 +116,54 @@ export const getDeletedDataTableColumn = ({
         <DataTableColumnHeader column={column} title={t("description")} />
       ),
       cell: ({ row }) => {
-        return <div>{row.original.description}</div>;
-      },
-    }),
-    columnHelper.accessor("status", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("status")} />
-      ),
-      cell: () => {
-        return (
-          <FlatBadge className="gap-2" variant={"red"}>
-            <CrossCircledIcon
-              className="text-muted-foreground size-4"
-              aria-hidden="true"
-            />
-            <span className="capitalize">{t("deleted")}</span>
-          </FlatBadge>
-        );
+        return <div className="line-clamp-1">{row.original.description}</div>;
       },
     }),
     columnHelper.accessor("deletedAt", {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("deletedAt")} />
       ),
+      size: 80,
+      cell: ({ row }) => {
+        const transaction = row.original;
+        return (
+          <Badge appearance={"outline"} variant={"destructive"}>
+            <CrossCircledIcon
+              className="size-4 text-red-500"
+              aria-hidden="true"
+            />
+            {transaction.deletedAt?.toLocaleDateString(i18next.language, {
+              year: "2-digit",
+              month: "short",
+              day: "2-digit",
+            })}
+          </Badge>
+        );
+      },
+    }),
+    columnHelper.accessor("deletedBy", {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("Deleted by")} />
+      ),
+      size: 80,
       cell: ({ row }) => {
         const transaction = row.original;
 
         return (
-          <div>
-            {transaction.deletedAt?.toLocaleDateString(i18next.language, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-          </div>
+          <Pill>
+            <PillAvatar fallback="JP" src="" />
+
+            {transaction.deletedBy?.slice(0, 5)}
+          </Pill>
         );
       },
     }),
+
     columnHelper.accessor("amount", {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("amount")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const amount = row.original.amount;
         return (
@@ -166,6 +175,19 @@ export const getDeletedDataTableColumn = ({
               maximumFractionDigits: 0,
             })}
           </div>
+        );
+      },
+    }),
+    columnHelper.accessor("description", {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("description")} />
+      ),
+      cell: ({ row }) => {
+        const transaction = row.original;
+        return (
+          <Badge variant={"secondary"} className="line-clamp-1 truncate">
+            {transaction.observation}
+          </Badge>
         );
       },
     }),
@@ -191,25 +213,27 @@ function ActionCell({
 
   const { openModal } = useModal();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} size={"icon"}>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onSelect={() => {
-            openModal({
-              title: t("details"),
-              view: <TransactionDetails transactionId={transaction.id} />,
-            });
-          }}
-        >
-          <Eye />
-          {t("details")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex justify-end">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"ghost"} size={"icon"} className="size-7">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onSelect={() => {
+              openModal({
+                title: t("details"),
+                view: <TransactionDetails transactionId={transaction.id} />,
+              });
+            }}
+          >
+            <Eye />
+            {t("details")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

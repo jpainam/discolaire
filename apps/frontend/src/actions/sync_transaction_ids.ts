@@ -66,6 +66,7 @@ export async function syncTransactionIds() {
     console.log(">>>>> updated", transaction.id);
   }
   console.log(">>>>> Sync completed");
+  return transactions.length;
 }
 
 export async function updateFeesDate() {
@@ -79,7 +80,7 @@ export async function updateFeesDate() {
     },
     where: {
       dueDate: {
-        lte: new Date("2000-12-30"),
+        lte: new Date("2010-12-30"),
       },
     },
   });
@@ -97,4 +98,5 @@ export async function updateFeesDate() {
     });
     console.log(">>>>> Updated fee", fee.id, "to year", year);
   }
+  return fees.length;
 }

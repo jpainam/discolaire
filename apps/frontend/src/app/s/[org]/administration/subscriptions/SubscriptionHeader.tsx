@@ -101,12 +101,12 @@ export function SubscriptionHeader() {
   ];
 
   const syncTransactions = async () => {
-    await syncTransactionIds();
-    toast.success(t("sync_success"), { id: 0 });
+    const r = await syncTransactionIds();
+    toast.success(`${r} transactions updated`, { id: 0 });
   };
   const updateFees = async () => {
-    await updateFeesDate();
-    toast.success(t("update_success"), { id: 0 });
+    const r = await updateFeesDate();
+    toast.success(`${r} fees updated`, { id: 0 });
   };
   return (
     <div className="px-4 py-2">

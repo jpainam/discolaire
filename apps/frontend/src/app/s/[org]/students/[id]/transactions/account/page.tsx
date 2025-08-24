@@ -40,7 +40,7 @@ export default async function Page({
   const formatDate = (date: Date) =>
     new Intl.DateTimeFormat(i18n.language, {
       month: "short",
-      year: "2-digit",
+      year: "numeric",
       day: "numeric",
     }).format(date);
 
@@ -69,7 +69,7 @@ export default async function Page({
         <Table className="font-mono text-xs">
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="w-[100px]">{t("date")}</TableHead>
+              <TableHead className="w-[120px]">{t("date")}</TableHead>
               <TableHead>{t("transactionRef")}</TableHead>
               <TableHead>{t("reference")}</TableHead>
               <TableHead>{t("description")}</TableHead>
