@@ -32,6 +32,7 @@ export async function syncTransactionIds() {
       ],
     },
   });
+  console.log(">>>>> Found", transactions.length, "transactions to update");
   for (const transaction of transactions) {
     const _createdById = staffs.find(
       (s) => s.id == transaction.createdById,
@@ -65,4 +66,35 @@ export async function syncTransactionIds() {
     console.log(">>>>> updated", transaction.id);
   }
   console.log(">>>>> Sync completed");
+}
+
+export async function updateFeesDate() {
+  const fees = await db.fee.findMany({
+    include: {
+      classroom: {
+        include: {
+          schoolYear: true,
+        },
+      },
+    },
+    where: {
+      dueDate: {
+        lte: new Date("2000-12-30"),
+      },
+    },
+  });
+  console.log(">>>>> Found", fees.length, "fees to update");
+  for (const fee of fees) {
+    const schoolYear = fee.classroom.schoolYear;
+    const year = schoolYear.startDate.getFullYear();
+    await db.fee.update({
+      where: {
+        id: fee.id,
+      },
+      data: {
+        dueDate: new Date(year, 5, 1),
+      },
+    });
+    console.log(">>>>> Updated fee", fee.id, "to year", year);
+  }
 }

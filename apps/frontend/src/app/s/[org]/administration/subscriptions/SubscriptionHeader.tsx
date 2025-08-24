@@ -32,7 +32,10 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
-import { syncTransactionIds } from "~/actions/sync_transaction_ids";
+import {
+  syncTransactionIds,
+  updateFeesDate,
+} from "~/actions/sync_transaction_ids";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -101,6 +104,10 @@ export function SubscriptionHeader() {
     await syncTransactionIds();
     toast.success(t("sync_success"), { id: 0 });
   };
+  const updateFees = async () => {
+    await updateFeesDate();
+    toast.success(t("update_success"), { id: 0 });
+  };
   return (
     <div className="px-4 py-2">
       <div className="flex items-center justify-between">
@@ -128,6 +135,15 @@ export function SubscriptionHeader() {
             }}
           >
             Sync transactions
+          </Button>
+          <Button
+            onClick={async () => {
+              toast.loading(t("Processing"), { id: 0 });
+              await updateFees();
+            }}
+            size={"sm"}
+          >
+            Update 2000 Fees
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
