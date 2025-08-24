@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { Document, Page, Text, View } from "@react-pdf/renderer";
 import { decode } from "entities";
@@ -187,7 +188,7 @@ export async function AcccountStatement({
 
             return (
               <View key={`row-${index}`}>
-                {subtotalRow}
+                {/* {subtotalRow} */}
                 <View
                   style={{
                     flexDirection: "row",

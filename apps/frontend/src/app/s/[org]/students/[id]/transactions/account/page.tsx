@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment } from "react";
 import Link from "next/link";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
@@ -103,7 +104,7 @@ export default async function Page({
 
               return (
                 <Fragment key={`${item.transactionRef}-${index}`}>
-                  {subtotal}
+                  {/* {subtotal} */}
                   <TableRow>
                     <TableCell className="text-muted-foreground">
                       {formatDate(item.transactionDate)}
