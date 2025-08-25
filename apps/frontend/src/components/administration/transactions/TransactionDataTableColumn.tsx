@@ -140,7 +140,7 @@ export const fetchTransactionColumns = ({
       ),
       size: 80,
       cell: ({ row }) => {
-        const trans = row.original;
+        //const trans = row.original;
         const status = row.original.status;
         // const user =
         //   status === "VALIDATED" ? trans.receivedBy : row.original.createdBy;

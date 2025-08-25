@@ -49,7 +49,6 @@ import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { Pill, PillAvatar, PillIcon, PillIndicator } from "~/components/pill";
-import { randomAvatar } from "~/components/raw-images";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -61,7 +60,6 @@ import { DeleteTransaction } from "./DeleteTransaction";
 
 export function TransactionTable() {
   const params = useParams<{ id: string }>();
-  const avatar = randomAvatar(0);
   const { t, i18n } = useLocale();
   const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
     day: "numeric",
@@ -209,7 +207,7 @@ export function TransactionTable() {
                       <Pill>
                         <PillAvatar
                           fallback={
-                            name ? name?.slice(0, 2).toUpperCase() : "N/A"
+                            name ? name.slice(0, 2).toUpperCase() : "N/A"
                           }
                           src={
                             avatar
