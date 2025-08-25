@@ -149,7 +149,7 @@ export const fetchTransactionColumns = ({
             <TransactionStatus status={status} />
             {user && (
               <Badge className="w-fit" variant={"secondary"}>
-                {user.name ?? user.username}
+                {user.username}
               </Badge>
             )}
           </div>
