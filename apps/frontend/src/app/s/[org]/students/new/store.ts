@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+
+
 import type { Parent, StudentData } from "./validation";
+
 
 interface StudentStore {
   currentStep: number;
@@ -24,12 +27,14 @@ interface StudentStore {
 }
 
 const initialStudentData: Partial<StudentData> = {
-  nationality: "Cameroon",
-  academicYear: "2024-2025",
+  countryId: "CM",
+  dateOfEntry: new Date(),
+  dateOfExit: undefined,
+  isRepeating: false,
+  formerSchoolId: "",
   status: "ACTIVE",
-  baptized: "No",
-  repeating: "No",
-  isNew: "Yes",
+  isNew: true,
+  externalAccountingNo: "",
 };
 
 export const useStudentStore = create<StudentStore>()(

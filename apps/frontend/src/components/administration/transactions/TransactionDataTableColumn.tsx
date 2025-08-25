@@ -211,103 +211,110 @@ function ActionCell({
 
   const { openModal } = useModal();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} size={"icon"} className="size-7">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onSelect={() => {
-            openModal({
-              title: t("details"),
-              view: <TransactionDetails transactionId={transaction.id} />,
-            });
-          }}
-        >
-          <Eye />
-          {t("details")}
-        </DropdownMenuItem>
-        {canUpdateTransaction && (
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <BookCopy className="text-muted-foreground mr-2 h-4 w-4" />
-              {t("status")}
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup
-                value={transaction.status}
-                onValueChange={(value) => {
-                  if (["PENDING", "CANCELED", "VALIDATED"].includes(value)) {
-                    const v = value as "PENDING" | "CANCELED" | "VALIDATED";
-                    toast.loading(t("updating"), { id: 0 });
-                    updateTransactionMutation.mutate({
-                      transactionId: transaction.id,
-                      status: v,
-                    });
-                  } else {
-                    toast.error(t("invalid_status"), { id: 0 });
-                  }
-                }}
-              >
-                <DropdownMenuRadioItem
-                  value={"VALIDATED"}
-                  className="capitalize"
+    <div className="flex justify-end">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"ghost"} size={"icon"} className="size-7">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onSelect={() => {
+              openModal({
+                title: t("details"),
+                view: <TransactionDetails transactionId={transaction.id} />,
+              });
+            }}
+          >
+            <Eye />
+            {t("details")}
+          </DropdownMenuItem>
+          {canUpdateTransaction && (
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <BookCopy className="text-muted-foreground mr-2 h-4 w-4" />
+                {t("status")}
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuRadioGroup
+                  value={transaction.status}
+                  onValueChange={(value) => {
+                    if (["PENDING", "CANCELED", "VALIDATED"].includes(value)) {
+                      const v = value as "PENDING" | "CANCELED" | "VALIDATED";
+                      toast.loading(t("updating"), { id: 0 });
+                      updateTransactionMutation.mutate({
+                        transactionId: transaction.id,
+                        status: v,
+                      });
+                    } else {
+                      toast.error(t("invalid_status"), { id: 0 });
+                    }
+                  }}
                 >
-                  <FlatBadge variant={"green"}>
-                    <CheckCircledIcon
-                      className="text-muted-foreground mr-2 size-4"
-                      aria-hidden="true"
-                    />
-                    {t("validate")}
-                  </FlatBadge>
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem
-                  value={"CANCELED"}
-                  className="capitalize"
-                >
-                  <FlatBadge variant={"red"}>
-                    <CrossCircledIcon
-                      className="text-muted-foreground mr-2 size-4"
-                      aria-hidden="true"
-                    />
-                    {t("cancel")}
-                  </FlatBadge>
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value={"PENDING"} className="capitalize">
-                  <FlatBadge variant={"yellow"}>
-                    <StopwatchIcon
-                      className="text-muted-foreground mr-2 size-4"
-                      aria-hidden="true"
-                    />
-                    {t("pending")}
-                  </FlatBadge>
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-        )}
+                  <DropdownMenuRadioItem
+                    value={"VALIDATED"}
+                    className="capitalize"
+                  >
+                    <FlatBadge variant={"green"}>
+                      <CheckCircledIcon
+                        className="text-muted-foreground mr-2 size-4"
+                        aria-hidden="true"
+                      />
+                      {t("validate")}
+                    </FlatBadge>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem
+                    value={"CANCELED"}
+                    className="capitalize"
+                  >
+                    <FlatBadge variant={"red"}>
+                      <CrossCircledIcon
+                        className="text-muted-foreground mr-2 size-4"
+                        aria-hidden="true"
+                      />
+                      {t("cancel")}
+                    </FlatBadge>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem
+                    value={"PENDING"}
+                    className="capitalize"
+                  >
+                    <FlatBadge variant={"yellow"}>
+                      <StopwatchIcon
+                        className="text-muted-foreground mr-2 size-4"
+                        aria-hidden="true"
+                      />
+                      {t("pending")}
+                    </FlatBadge>
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          )}
 
-        {canDeleteTransaction && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                openModal({
-                  title: t("delete"),
-                  view: <DeleteTransaction transactionIds={[transaction.id]} />,
-                });
-              }}
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              <Trash2 />
-              {t("delete")}
-            </DropdownMenuItem>
-          </>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+          {canDeleteTransaction && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  openModal({
+                    title: t("delete"),
+                    view: (
+                      <DeleteTransaction transactionIds={[transaction.id]} />
+                    ),
+                  });
+                }}
+                variant="destructive"
+                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+              >
+                <Trash2 />
+                {t("delete")}
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

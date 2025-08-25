@@ -8,9 +8,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
+
+
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -21,6 +25,7 @@ import { CreateUpdateDenom } from "./CreateUpdateDenom";
 import { CreateUpdateExtra } from "./CreateUpdateExtra";
 import { CreateUpdateProfile } from "./CreateUpdateProfile";
 
+
 const createUpdateStudentSchema = z.object({
   id: z.string().optional(),
   registrationNumber: z.string().optional(),
@@ -29,7 +34,7 @@ const createUpdateStudentSchema = z.object({
   religionId: z.string().min(1),
   dateOfBirth: z.coerce.date(),
   placeOfBirth: z.string().min(1),
-  sunPlusNo: z.string().optional(),
+  externalAccountingNo: z.string().optional(),
   isBaptized: z.boolean().optional().default(false),
   isNew: z.boolean().optional().default(true),
   gender: z.string().min(1),
@@ -83,7 +88,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       phoneNumber: student.phoneNumber ?? "",
       isRepeating: student.isRepeating ? ("yes" as const) : ("no" as const),
       isNew: student.isNew,
-      sunPlusNo: student.sunPlusNo ?? "",
+      externalAccountingNo: student.externalAccountingNo ?? "",
       countryId: student.countryId ?? "",
       dateOfExit: student.dateOfExit
         ? toZonedTime(student.dateOfExit, "UTC")

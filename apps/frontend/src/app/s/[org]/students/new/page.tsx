@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowLeft,
   ArrowRight,
@@ -14,6 +15,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
+import { StudentStatus } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
 import { Progress } from "@repo/ui/components/progress";
@@ -33,33 +35,137 @@ import { Step2 } from "./Step2";
 import { Step3 } from "./Step3";
 import { Step4 } from "./Step4";
 import { Step5 } from "./Step5";
+import { useStudentStore } from "./store";
+import {
+  academicInfoSchema,
+  basicInfoSchema,
+  contactInfoSchema,
+} from "./validation";
 
 export default function Page() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const form = useForm();
+  const {
+    currentStep,
+    studentData,
+    selectedParents,
+    setCurrentStep,
+    updateStudentData,
+    addParent,
+    removeParent,
+    markStepComplete,
+    isStepComplete,
+    canProceedToStep,
+    resetForm,
+  } = useStudentStore();
+
+  const t = useTranslations();
 
   const STEPS = [
-    { id: 1, title: "Basic Information", description: "", icon: User },
+    {
+      id: 1,
+      title: t("Basic Information"),
+      description: "",
+      icon: User,
+      schema: basicInfoSchema,
+    },
     {
       id: 2,
-      title: "Academic Details",
+      title: t("Academic Details"),
       description: "",
       icon: Building,
+      schema: academicInfoSchema,
     },
     {
       id: 3,
       title: "Contact Address",
       description: "",
       icon: Home,
+      schema: contactInfoSchema,
     },
     { id: 4, title: "Parents Guardians", description: "", icon: Users },
     { id: 5, title: "Review Submit", description: "", icon: Check },
   ];
+
+  const getCurrentSchema = () => {
+    const step = STEPS.find((s) => s.id === currentStep);
+    return step?.schema;
+  };
+
+  const form = useForm({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    resolver: getCurrentSchema() ? zodResolver(getCurrentSchema()!) : undefined,
+    defaultValues: {
+      registrationNumber: "",
+      id: "",
+      tags: [],
+      firstName: "",
+      lastName: "",
+      dateOfBirth: new Date(),
+      placeOfBirth: "",
+      gender: "male",
+      residence: "",
+      phoneNumber: "",
+      isRepeating: "no" as const,
+      isNew: true,
+      countryId: "",
+      classroomId: "",
+      externalAccountingNo: "",
+      dateOfExit: undefined,
+      dateOfEntry: new Date(),
+      formerSchoolId: "",
+      observation: "",
+      religionId: "",
+      isBaptized: false,
+      status: StudentStatus.ACTIVE,
+      clubs: [],
+      sports: [],
+    },
+  });
+
   const progress = (currentStep / STEPS.length) * 100;
-  const t = useTranslations();
+
+  const nextStep = async () => {
+    const schema = getCurrentSchema();
+    if (schema) {
+      const isValid = await form.trigger();
+      if (!isValid) return;
+
+      const formData = form.getValues();
+      //updateStudentData(formData);
+      markStepComplete(currentStep);
+    }
+
+    if (currentStep < STEPS.length) {
+      setCurrentStep(currentStep + 1);
+      //form.reset(studentData);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      //.reset(studentData);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      console.log("[v0] Submitting student data:", {
+        studentData,
+        selectedParents,
+      });
+      // Here you would typically send data to your API
+      alert("Student successfully added!");
+      resetForm();
+    } catch (error) {
+      console.error("[v0] Submission error:", error);
+    }
+  };
+
   return (
     <Form {...form}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col">
           <div className="bg-muted/50 flex flex-row items-center justify-between border-b px-4 py-2">
             <h1 className="text-lg font-semibold">New Student Registration</h1>
@@ -68,7 +174,7 @@ export default function Page() {
                 variant="outline"
                 size={"sm"}
                 type="button"
-                onClick={() => setCurrentStep((prev) => prev - 1)}
+                onClick={() => prevStep()}
                 disabled={currentStep === 1}
               >
                 <ArrowLeft />
@@ -78,7 +184,7 @@ export default function Page() {
                 <Button
                   size={"sm"}
                   type="button"
-                  onClick={() => setCurrentStep((prev) => prev + 1)}
+                  onClick={() => nextStep()}
                   disabled={currentStep >= STEPS.length}
                 >
                   Next step
@@ -112,6 +218,8 @@ export default function Page() {
             >
               {STEPS.map(({ id, title, description, icon }, index) => {
                 const Icon = icon;
+                const isCompleted = isStepComplete(id);
+                const canAccess = canProceedToStep(id);
                 const bgColor =
                   id == currentStep
                     ? "bg-blue-100 dark:text-blue-100 text-blue-700 dark:bg-blue-900"
@@ -135,9 +243,10 @@ export default function Page() {
                       <div className="text-center md:-order-1 md:text-left">
                         <StepperTitle className="flex items-center gap-1.5">
                           <Icon className={cn("h-5 w-5", bgColor)} />
-                          {title.split(" ")[0]}
+                          {title}
+                          {/* {title.split(" ")[0]}
                           <br />
-                          {title.split(" ")[1]}
+                          {title.split(" ")[1]} */}
                         </StepperTitle>
                         <StepperDescription className="max-sm:hidden">
                           {description}

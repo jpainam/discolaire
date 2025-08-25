@@ -4,7 +4,11 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod";
 
+
+
 import type { Prisma } from "@repo/db";
+
+
 
 import { checkPermission } from "../permission";
 import { getUnpaidFeeDescription } from "../services/accounting-service";
@@ -13,6 +17,7 @@ import { getEnrollStudents } from "../services/enrollment-service";
 import { staffService } from "../services/staff-service";
 import { isRepeating, studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
+
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
   const qq = `%${q}%`;
@@ -44,7 +49,7 @@ const createUpdateSchema = z.object({
   placeOfBirth: z.string().min(1),
   gender: z.string().min(1),
   residence: z.string().optional(),
-  sunPlusNo: z.string().optional(),
+  externalAccountingNo: z.string().optional(),
   phoneNumber: z.string().optional(),
   formerSchoolId: z.string().min(1),
   isRepeating: z.boolean().optional().default(false),
@@ -191,7 +196,7 @@ export const studentRouter = {
           dateOfBirth: fromZonedTime(input.dateOfBirth, "UTC"),
           placeOfBirth: input.placeOfBirth,
           gender: input.gender,
-          sunPlusNo: input.sunPlusNo,
+          externalAccountingNo: input.externalAccountingNo,
           residence: input.residence,
           isNew: input.isNew,
           isRepeating: input.isRepeating,
@@ -285,7 +290,7 @@ export const studentRouter = {
           gender: input.gender,
           isRepeating: input.isRepeating,
           isNew: input.isNew,
-          sunPlusNo: input.sunPlusNo,
+          externalAccountingNo: input.externalAccountingNo,
           residence: input.residence,
           phoneNumber: input.phoneNumber,
           formerSchoolId: input.formerSchoolId,

@@ -5,30 +5,18 @@ import { User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
+
+
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/select";
+
+
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { useSchool } from "~/providers/SchoolProvider";
+
 
 export function Step1() {
   const form = useFormContext();
@@ -39,7 +27,7 @@ export function Step1() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <User className="h-5 w-5" />
-          Basic Student Information
+          {t("Basic Information")}
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -171,10 +159,10 @@ export function Step1() {
         {school.requestSunPlusNo && (
           <FormField
             control={form.control}
-            name="sunPlusNo"
+            name="externalAccountingNo"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("sun_plus_no")}</FormLabel>
+                <FormLabel>{t("External account number")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

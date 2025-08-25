@@ -7,9 +7,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+
+
 import { StudentStatus } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
+
+
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -20,6 +24,7 @@ import { CreateUpdateDenom } from "./CreateUpdateDenom";
 import { CreateUpdateExtra } from "./CreateUpdateExtra";
 import { CreateUpdateProfile } from "./CreateUpdateProfile";
 
+
 const createUpdateStudentSchema = z.object({
   id: z.string().optional(),
   registrationNumber: z.string().optional(),
@@ -28,7 +33,7 @@ const createUpdateStudentSchema = z.object({
   religionId: z.string().min(1),
   dateOfBirth: z.coerce.date(),
   placeOfBirth: z.string().min(1),
-  sunPlusNo: z.string().optional(),
+  externalAccountingNo: z.string().optional(),
   isBaptized: z.boolean().optional().default(false),
   isNew: z.boolean().optional().default(true),
   gender: z.string().min(1),
@@ -83,7 +88,7 @@ export function CreateStudent() {
       isNew: true,
       countryId: "",
       classroom: "",
-      sunPlusNo: "",
+      externalAccountingNo: "",
       dateOfExit: undefined,
       dateOfEntry: new Date(),
       formerSchoolId: "",

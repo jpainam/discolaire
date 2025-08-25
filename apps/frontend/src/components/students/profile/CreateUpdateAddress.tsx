@@ -48,7 +48,7 @@ export function CreateUpdateAddress() {
           <div className="flex flex-col gap-3 md:flex-row">
             {school.requestSunPlusNo && (
               <InputField
-                name="sunPlusNo"
+                name="externalAccountingNo"
                 className="flex-1"
                 placeholder={t("sun_plus_no")}
                 label={t("sun_plus_no")}

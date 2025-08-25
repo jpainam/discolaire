@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+
+
+
+
 export const parentSchema = z.object({
   id: z.string().optional(),
   civility: z.string().min(1, "Civility is required"),
@@ -17,24 +21,26 @@ export const parentSchema = z.object({
 });
 
 export const basicInfoSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  middleName: z.string().optional(),
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
-  placeOfBirth: z.string().min(2, "Place of birth is required"),
-  gender: z.string().min(1, "Gender is required"),
-  nationality: z.string().min(1, "Nationality is required"),
-  regNo: z.string().min(1, "Registration number is required"),
-  studentId: z.string().min(1, "Student ID is required"),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  dateOfBirth: z.coerce.date(),
+  placeOfBirth: z.string().min(1),
+  gender: z.enum(["male", "female"]),
+  countryId: z.string().min(1),
+  registrationNumber: z.string().optional(),
+  externalAccountingNo: z.string().optional().default(""),
 });
 
 export const academicInfoSchema = z.object({
-  classroom: z.string().min(1, "Classroom is required"),
-  academicYear: z.string().min(1, "Academic year is required"),
-  admissionDate: z.string().min(1, "Admission date is required"),
-  formerSchool: z.string().optional(),
-  gradeLevel: z.string().min(1, "Grade level is required"),
-  section: z.string().optional(),
+  classroomId: z.string().optional().default(""),
+  dateOfEntry: z.coerce.date().optional().default(new Date()),
+  dateOfExit: z.coerce.date().optional(),
+  isRepeating: z.boolean().default(false),
+  isNew: z.boolean().default(true),
+  status: z
+    .enum(["ACTIVE", "INACTIVE", "GRADUATED", "EXPELLED"])
+    .default("ACTIVE"),
+  formerSchoolId: z.string().optional().default(""),
 });
 
 export const contactInfoSchema = z.object({
@@ -47,9 +53,6 @@ export const contactInfoSchema = z.object({
 
 export const membershipInfoSchema = z.object({
   religion: z.string().optional(),
-  baptized: z.string().min(1, "Baptized status is required"),
-  repeating: z.string().min(1, "Repeating status is required"),
-  isNew: z.string().min(1, "New student status is required"),
   status: z.string().min(1, "Status is required"),
   bloodType: z.string().optional(),
   allergies: z.string().optional(),

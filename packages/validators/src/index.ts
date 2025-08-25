@@ -1,6 +1,10 @@
 import { createErrorMap } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
+
+
+
+
 z.config({
   customError: createErrorMap({
     includePath: true,
@@ -22,7 +26,7 @@ export const createUpdateStudentSchema = z.object({
   religionId: z.string().min(1),
   dateOfBirth: z.coerce.date(),
   placeOfBirth: z.string().min(1),
-  sunPlusNo: z.string().optional(),
+  externalAccountingNo: z.string().optional(),
   isBaptized: z.boolean().optional().default(false),
   isNew: z.boolean().optional().default(true),
   gender: z.string().min(1),

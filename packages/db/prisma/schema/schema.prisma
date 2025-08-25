@@ -414,64 +414,64 @@ model Document {
 }
 
 model Student {
-    id                 String                   @id @default(uuid())
-    registrationNumber String?
-    isActive           Boolean                  @default(true)
-    firstName          String?
-    lastName           String?
-    dateOfBirth        DateTime?                @db.Date
-    bloodType          String?
-    placeOfBirth       String?
-    photos             String[]                 @default([])
-    residence          String?
-    status             StudentStatus            @default(ACTIVE)
-    gender             String?
-    religionId         String?
-    isBaptized         Boolean                  @default(false)
-    isRepeating        Boolean                  @default(false)
-    isNew              Boolean                  @default(false)
-    phoneNumber        String?
-    parentDivorced     Boolean                  @default(false)
-    dateOfEntry        DateTime?                @db.Date
-    dateOfExit         DateTime?                @db.Date
-    dateOfWithdraw     DateTime?                @db.Date
-    lastAccessed       DateTime                 @default(now()) @db.Timestamp(6)
-    observation        String?
-    sunPlusNo          String?
-    countryId          String?
-    userId             String?
-    tags               Json?
-    createdAt          DateTime                 @default(now()) @db.Timestamp(6)
-    updatedAt          DateTime                 @updatedAt
-    createdById        String?
-    formerSchoolId     String?
-    achievements       String[]                 @default([])
-    hobbies            String[]                 @default([])
-    socialMedias       String[]                 @default([])
-    enrollments        Enrollment[]
-    grades             Grade[]
-    country            Country?                 @relation(fields: [countryId], references: [id])
-    formerSchool       FormerSchool?            @relation(fields: [formerSchoolId], references: [id])
-    user               User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
-    transactions       Transaction[]
-    studentContacts    StudentContact[]
-    siblings           StudentSibling[]         @relation("sibling")
-    siblings2          StudentSibling[]         @relation("student")
-    classrooms         Classroom[]              @relation("classroomLeader")
-    reportCards        ReportCard[]
-    religion           Religion?                @relation(fields: [religionId], references: [id])
-    sports             StudentSport[]
-    clubs              StudentClub[]
-    preventedAbsences  PreventedAbsence[]
-    school             School                   @relation(fields: [schoolId], references: [id])
-    schoolId           String
-    absences           Absence[]
-    latenesses         Lateness[]
-    consignes          Consigne[]
-    chatters           Chatter[]
-    exclusions         Exclusion[]
-    requiredFees       RequiredFeeTransaction[]
-    convocations       Convocation[]
+    id                   String                   @id @default(uuid())
+    registrationNumber   String?
+    isActive             Boolean                  @default(true)
+    firstName            String?
+    lastName             String?
+    dateOfBirth          DateTime?                @db.Date
+    bloodType            String?
+    placeOfBirth         String?
+    photos               String[]                 @default([])
+    residence            String?
+    status               StudentStatus            @default(ACTIVE)
+    gender               String?
+    religionId           String?
+    isBaptized           Boolean                  @default(false)
+    isRepeating          Boolean                  @default(false)
+    isNew                Boolean                  @default(false)
+    phoneNumber          String?
+    parentDivorced       Boolean                  @default(false)
+    dateOfEntry          DateTime?                @db.Date
+    dateOfExit           DateTime?                @db.Date
+    dateOfWithdraw       DateTime?                @db.Date
+    lastAccessed         DateTime                 @default(now()) @db.Timestamp(6)
+    observation          String?
+    externalAccountingNo String?
+    countryId            String?
+    userId               String?
+    tags                 Json?
+    createdAt            DateTime                 @default(now()) @db.Timestamp(6)
+    updatedAt            DateTime                 @updatedAt
+    createdById          String?
+    formerSchoolId       String?
+    achievements         String[]                 @default([])
+    hobbies              String[]                 @default([])
+    socialMedias         String[]                 @default([])
+    enrollments          Enrollment[]
+    grades               Grade[]
+    country              Country?                 @relation(fields: [countryId], references: [id])
+    formerSchool         FormerSchool?            @relation(fields: [formerSchoolId], references: [id])
+    user                 User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
+    transactions         Transaction[]
+    studentContacts      StudentContact[]
+    siblings             StudentSibling[]         @relation("sibling")
+    siblings2            StudentSibling[]         @relation("student")
+    classrooms           Classroom[]              @relation("classroomLeader")
+    reportCards          ReportCard[]
+    religion             Religion?                @relation(fields: [religionId], references: [id])
+    sports               StudentSport[]
+    clubs                StudentClub[]
+    preventedAbsences    PreventedAbsence[]
+    school               School                   @relation(fields: [schoolId], references: [id])
+    schoolId             String
+    absences             Absence[]
+    latenesses           Lateness[]
+    consignes            Consigne[]
+    chatters             Chatter[]
+    exclusions           Exclusion[]
+    requiredFees         RequiredFeeTransaction[]
+    convocations         Convocation[]
 }
 
 model StudentSibling {

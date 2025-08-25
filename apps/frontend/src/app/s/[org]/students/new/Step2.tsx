@@ -6,32 +6,20 @@ import { useParams } from "next/navigation";
 import { Building } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useFormContext,
-} from "@repo/ui/components/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
+
+
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/select";
+
+
 
 import { DatePicker } from "~/components/DatePicker";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
 import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
+
 
 export function Step2() {
   const params = useParams<{ id: string }>();
@@ -169,6 +157,19 @@ export function Step2() {
               <FormLabel>{t("dateOfExit")}</FormLabel>
               <FormControl>
                 <DatePicker defaultValue={field.value} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="externalAccountingNo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("External account number")}</FormLabel>
+              <FormControl>
+                <Input defaultValue={field.value} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
