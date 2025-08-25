@@ -1,14 +1,9 @@
 import type { Style } from "@react-pdf/stylesheet";
 import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
 
-
-
 import type { RouterOutputs } from "@repo/api";
 
-
-
 import { getHeader } from "../headers";
-
 
 export function StudentPage({
   student,
@@ -104,7 +99,10 @@ export function StudentPage({
             <Item label="Religion" value={student.religion?.name} />
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
-            <Item label={"No. Sun+"} value={student.externalAccountingNo} />
+            <Item
+              label={"Numbero comptable externe"}
+              value={student.externalAccountingNo}
+            />
             <Item label="Ancienne école" value={student.formerSchool?.name} />
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>

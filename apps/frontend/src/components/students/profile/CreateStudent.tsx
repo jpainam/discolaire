@@ -7,13 +7,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-
-
 import { StudentStatus } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
-
-
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -23,7 +19,6 @@ import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";
 import { CreateUpdateExtra } from "./CreateUpdateExtra";
 import { CreateUpdateProfile } from "./CreateUpdateProfile";
-
 
 const createUpdateStudentSchema = z.object({
   id: z.string().optional(),

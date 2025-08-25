@@ -5,18 +5,30 @@ import { User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
 
-
-
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/select";
-
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { useSchool } from "~/providers/SchoolProvider";
-
 
 export function Step1() {
   const form = useFormContext();
