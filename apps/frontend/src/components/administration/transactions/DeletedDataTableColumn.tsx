@@ -141,7 +141,7 @@ export const getDeletedDataTableColumn = ({
         );
       },
     }),
-    columnHelper.accessor("deletedBy", {
+    columnHelper.accessor("deletedById", {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("Deleted by")} />
       ),
@@ -153,7 +153,7 @@ export const getDeletedDataTableColumn = ({
           <Pill>
             <PillAvatar fallback="JP" src="" />
 
-            {transaction.deletedBy?.slice(0, 5)}
+            {transaction.deletedById?.slice(0, 5)}
           </Pill>
         );
       },

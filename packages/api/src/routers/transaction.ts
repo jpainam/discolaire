@@ -237,7 +237,7 @@ export const transactionRouter = {
         },
         data: {
           deletedAt: new Date(),
-          deletedBy: ctx.session.user.id,
+          deletedById: ctx.session.user.id,
           observation: input.observation,
         },
       });
