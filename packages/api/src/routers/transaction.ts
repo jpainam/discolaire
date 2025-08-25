@@ -59,6 +59,7 @@ export const transactionRouter = {
       return ctx.db.transaction.findMany({
         include: {
           student: true,
+          deletedBy: true,
         },
         where: {
           AND: [

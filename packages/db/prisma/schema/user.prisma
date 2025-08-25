@@ -56,6 +56,10 @@ model User {
     notifications                UserNotification[]
     enrollmentCreatedBy          Enrollment[]               @relation("EnrollmentCreatedBy")
     classroomCreatedBy           Classroom[]                @relation("ClassroomCreatedBy")
+    transactionCreatedBy         Transaction[]              @relation("TransactionCreatedBy")
+    transactionReceivedBy        Transaction[]              @relation("TransactionReceivedBy")
+    transactionPrintedBy         Transaction[]              @relation("TransactionPrintedBy")
+    transactionDeletedBy         Transaction[]              @relation("TransactionDeletedBy")
     chats                        AiChat[]
     aiDocuments                  AiDocument[]
     aiSuggestions                AiSuggestion[]

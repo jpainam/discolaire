@@ -24,6 +24,10 @@ model Transaction {
     schoolYear      SchoolYear         @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
     journal         AccountingJournal? @relation(fields: [journalId], references: [id])
     journalId       String?
+    createdBy       User?              @relation("TransactionCreatedBy", fields: [createdById], references: [id])
+    receivedBy      User?              @relation("TransactionReceivedBy", fields: [receivedById], references: [id])
+    printedBy       User?              @relation("TransactionPrintedBy", fields: [printedById], references: [id])
+    deletedBy       User?              @relation("TransactionDeletedBy", fields: [deletedById], references: [id])
 }
 
 model AccountingJournal {

@@ -3,6 +3,7 @@ import type { TFunction } from "i18next";
 import Link from "next/link";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
+import { decode } from "entities";
 import i18next from "i18next";
 import { Eye, MoreHorizontal } from "lucide-react";
 
@@ -148,12 +149,13 @@ export const getDeletedDataTableColumn = ({
       size: 80,
       cell: ({ row }) => {
         const transaction = row.original;
+        const per = transaction.deletedBy;
 
         return (
           <Pill>
             <PillAvatar fallback="JP" src="" />
 
-            {transaction.deletedById?.slice(0, 5)}
+            {decode(per?.lastName ?? per?.firstName ?? "")}
           </Pill>
         );
       },
