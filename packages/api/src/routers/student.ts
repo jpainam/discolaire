@@ -478,6 +478,9 @@ export const studentRouter = {
     return ctx.db.transaction.findMany({
       include: {
         journal: true,
+        createdBy: true,
+        receivedBy: true,
+        deletedBy: true,
       },
       where: {
         studentId: input,

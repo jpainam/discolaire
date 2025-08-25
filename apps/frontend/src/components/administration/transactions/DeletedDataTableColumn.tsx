@@ -144,18 +144,22 @@ export const getDeletedDataTableColumn = ({
     }),
     columnHelper.accessor("deletedById", {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("Deleted by")} />
+        <DataTableColumnHeader column={column} title={""} />
       ),
       size: 80,
       cell: ({ row }) => {
         const transaction = row.original;
-        const per = transaction.deletedBy;
+        const user = transaction.deletedBy;
+        const name = user?.name ?? user?.username ?? "N/A";
 
         return (
           <Pill>
-            <PillAvatar fallback="JP" src="" />
+            <PillAvatar
+              fallback={name.slice(0, 2).toUpperCase()}
+              src={user?.avatar ?? undefined}
+            />
 
-            {decode(per?.lastName ?? per?.firstName ?? "")}
+            {decode(user?.name ?? user?.username ?? "")}
           </Pill>
         );
       },

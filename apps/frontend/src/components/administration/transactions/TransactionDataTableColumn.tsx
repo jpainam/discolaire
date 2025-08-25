@@ -140,8 +140,15 @@ export const fetchTransactionColumns = ({
       ),
       size: 80,
       cell: ({ row }) => {
+        const trans = row.original;
         const status = row.original.status;
-        return <TransactionStatus status={status} />;
+        // const user =
+        //   status === "VALIDATED" ? trans.receivedBy : row.original.createdBy;
+        return (
+          <div>
+            <TransactionStatus status={status} />
+          </div>
+        );
       },
     }),
     columnHelper.accessor("amount", {

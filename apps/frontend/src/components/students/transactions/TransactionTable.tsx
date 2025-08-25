@@ -128,6 +128,9 @@ export function TransactionTable() {
             )}
 
             {transactions.map((transaction) => {
+              const createdBy = transaction.createdBy;
+              const name = createdBy?.name ?? createdBy?.username;
+              const avatar = createdBy?.avatar;
               return (
                 <TableRow key={transaction.id}>
                   <TableCell>
@@ -205,14 +208,16 @@ export function TransactionTable() {
                       </Pill>
                       <Pill>
                         <PillAvatar
-                          fallback="JP"
+                          fallback={
+                            name ? name?.slice(0, 2).toUpperCase() : "N/A"
+                          }
                           src={
                             avatar
                               ? `/api/download/avatars/${avatar}`
                               : undefined
                           }
                         />
-                        @haydenbleasel
+                        <span className="capitalize">{name}</span>
                       </Pill>
                     </div>
                   </TableCell>

@@ -114,6 +114,9 @@ export const transactionRouter = {
         take: input.limit,
         include: {
           journal: true,
+          createdBy: true,
+          receivedBy: true,
+          deletedBy: true,
           student: {
             include: {
               user: true,
