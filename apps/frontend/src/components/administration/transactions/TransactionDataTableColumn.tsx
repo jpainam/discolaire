@@ -29,6 +29,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
+import { Badge } from "~/components/base-badge";
 import FlatBadge from "~/components/FlatBadge";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
@@ -38,7 +39,6 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
-import { Badge } from "~/components/base-badge";
 
 type TransactionAllProcedureOutput = NonNullable<
   RouterOutputs["transaction"]["all"]
@@ -143,11 +143,15 @@ export const fetchTransactionColumns = ({
       cell: ({ row }) => {
         const trans = row.original;
         const status = row.original.status;
-         const user = trans.updatedBy2;
+        const user = trans.updatedBy2;
         return (
-          <div>
+          <div className="flex flex-row gap-1">
             <TransactionStatus status={status} />
-            <Badge variant={'secondary'} ></Badge>
+            {user && (
+              <Badge className="w-fit" variant={"secondary"}>
+                {user.name ?? user.username}
+              </Badge>
+            )}
           </div>
         );
       },
