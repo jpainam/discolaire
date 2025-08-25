@@ -13,6 +13,7 @@ model Transaction {
     isPrinted       Boolean?           @default(false)
     printedAt       DateTime?          @db.Timestamp(6)
     printedById     String?
+    updatedById     String?
     updatedBy       String?
     observation     String?
     deletedAt       DateTime?          @db.Timestamp(6)
@@ -28,6 +29,7 @@ model Transaction {
     receivedBy      User?              @relation("TransactionReceivedBy", fields: [receivedById], references: [id])
     printedBy       User?              @relation("TransactionPrintedBy", fields: [printedById], references: [id])
     deletedBy       User?              @relation("TransactionDeletedBy", fields: [deletedById], references: [id])
+    updatedBy2      User?              @relation("TransactionUpdatedBy", fields: [updatedById], references: [id])
 }
 
 model AccountingJournal {

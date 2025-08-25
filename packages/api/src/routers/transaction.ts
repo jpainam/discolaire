@@ -115,6 +115,7 @@ export const transactionRouter = {
         include: {
           journal: true,
           createdBy: true,
+          updatedBy2: true,
           receivedBy: true,
           deletedBy: true,
           student: {
@@ -188,6 +189,7 @@ export const transactionRouter = {
           },
           data: {
             status: input.status,
+            updatedById: ctx.session.user.id,
           },
         });
       }
@@ -197,6 +199,7 @@ export const transactionRouter = {
         },
         data: {
           status: input.status,
+          updatedById: ctx.session.user.id,
         },
       });
     }),
@@ -242,6 +245,7 @@ export const transactionRouter = {
         data: {
           deletedAt: new Date(),
           deletedById: ctx.session.user.id,
+          updatedById: ctx.session.user.id,
           observation: input.observation,
         },
       });
@@ -352,6 +356,7 @@ export const transactionRouter = {
           receivedById: ctx.session.user.id,
           journalId: input.journalId,
           method: input.method,
+          updatedById: ctx.session.user.id,
         },
       });
 

@@ -38,6 +38,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
+import { Badge } from "~/components/base-badge";
 
 type TransactionAllProcedureOutput = NonNullable<
   RouterOutputs["transaction"]["all"]
@@ -140,13 +141,13 @@ export const fetchTransactionColumns = ({
       ),
       size: 80,
       cell: ({ row }) => {
-        //const trans = row.original;
+        const trans = row.original;
         const status = row.original.status;
-        // const user =
-        //   status === "VALIDATED" ? trans.receivedBy : row.original.createdBy;
+         const user = trans.updatedBy2;
         return (
           <div>
             <TransactionStatus status={status} />
+            <Badge variant={'secondary'} ></Badge>
           </div>
         );
       },

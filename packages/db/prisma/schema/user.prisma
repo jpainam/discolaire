@@ -60,6 +60,7 @@ model User {
     transactionReceivedBy        Transaction[]              @relation("TransactionReceivedBy")
     transactionPrintedBy         Transaction[]              @relation("TransactionPrintedBy")
     transactionDeletedBy         Transaction[]              @relation("TransactionDeletedBy")
+    transactionUpdatedBy         Transaction[]              @relation("TransactionUpdatedBy")
     chats                        AiChat[]
     aiDocuments                  AiDocument[]
     aiSuggestions                AiSuggestion[]
