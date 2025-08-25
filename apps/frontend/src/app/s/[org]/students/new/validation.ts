@@ -29,22 +29,22 @@ export const basicInfoSchema = z.object({
 
 export const academicInfoSchema = z.object({
   classroomId: z.string().optional().default(""),
-  dateOfEntry: z.coerce.date().optional().default(new Date()),
+  dateOfEntry: z.coerce.date().default(new Date()),
   dateOfExit: z.coerce.date().optional(),
   isRepeating: z.boolean().default(false),
   isNew: z.boolean().default(true),
   status: z
     .enum(["ACTIVE", "INACTIVE", "GRADUATED", "EXPELLED"])
     .default("ACTIVE"),
-  formerSchoolId: z.string().optional().default(""),
+  formerSchoolId: z.string().min(1),
 });
 
 export const contactInfoSchema = z.object({
-  phoneNumber: z.string().min(8, "Phone number must be at least 8 digits"),
-  email: z.string().email("Invalid email address").optional().or(z.literal("")),
-  address: z.string().min(5, "Address must be at least 5 characters"),
-  city: z.string().min(2, "City is required"),
-  postalCode: z.string().optional(),
+  phoneNumber: z.string().optional().default(""),
+  email: z.string().email().optional().or(z.literal("")),
+  //residence: z.string().min(1),
+  city: z.string().optional().default(""),
+  postalCode: z.string().optional().default(""),
 });
 
 export const membershipInfoSchema = z.object({

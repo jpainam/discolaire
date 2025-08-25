@@ -20,7 +20,6 @@ import {
   FormMessage,
   useFormContext,
 } from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
 import {
   Select,
   SelectContent,
@@ -41,9 +40,9 @@ export function Step2() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Building className="h-5 w-5" />
-          Academic Information
+        <CardTitle className="text-md flex items-center gap-2">
+          <Building className="h-4 w-4" />
+          {t("Academic Information")}
         </CardTitle>
       </CardHeader>
       <CardContent className="gird-cols-1 grid gap-4 md:grid-cols-3">
@@ -73,8 +72,14 @@ export function Step2() {
               <FormLabel>{t("repeating")}</FormLabel>
               <FormControl>
                 <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  onValueChange={(val) => {
+                    if (val === "yes") {
+                      field.onChange(true);
+                    } else {
+                      field.onChange(false);
+                    }
+                  }}
+                  defaultValue={field.value ? "yes" : "no"}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder={t("select_an_option")} />
@@ -170,19 +175,6 @@ export function Step2() {
               <FormLabel>{t("dateOfExit")}</FormLabel>
               <FormControl>
                 <DatePicker defaultValue={field.value} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="externalAccountingNo"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("External account number")}</FormLabel>
-              <FormControl>
-                <Input defaultValue={field.value} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

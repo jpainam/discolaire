@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { Home } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
 
@@ -19,7 +19,6 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
 import {
   Select,
   SelectContent,
@@ -38,49 +37,44 @@ export function Step3() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Home className="h-5 w-5" />
-          Contact & Address Information
+        <CardTitle className="text-md flex items-center gap-2">
+          <MapPin className="h-4 w-4" />
+          {t("Contact & Address")}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name=""
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel></FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div>
-            <Label htmlFor="phoneNumber">Phone Number *</Label>
-            <Input
-              id="phoneNumber"
-              {...form.register("phoneNumber")}
-              placeholder="Phone Number"
-            />
-          </div>
-          <div>
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              id="email"
-              type="email"
-              {...form.register("email")}
-              placeholder="Email (optional)"
-            />
-          </div>
-        </div>
-
+      <CardContent className="gird-cols-1 grid gap-4 md:grid-cols-3">
         <FormField
           control={form.control}
-          name=""
+          name="phoneNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("Phone number")}</FormLabel>
+              <FormControl>
+                <Input placeholder="Phone number" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("email")}</FormLabel>
+              <FormControl>
+                <Input placeholder="Email (optional)" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* <FormField
+          control={form.control}
+          name="residence"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t("residence")}</FormLabel>
@@ -90,27 +84,11 @@ export function Step3() {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
+        <Separator className="col-span-full" />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <Label htmlFor="city">City *</Label>
-            <Input id="city" {...form.register("city")} placeholder="City" />
-          </div>
-          <div>
-            <Label htmlFor="postalCode">Postal Code</Label>
-            <Input
-              id="postalCode"
-              {...form.register("postalCode")}
-              placeholder="Postal Code (optional)"
-            />
-          </div>
-        </div>
-
-        <Separator />
-
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Additional Information</h3>
+        <div className="col-span-full space-y-4">
+          <h2 className="text-md font-semibold">Additional Information</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <FormField
               control={form.control}
@@ -135,7 +113,7 @@ export function Step3() {
               name="bloodType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel></FormLabel>
+                  <FormLabel>{t("Blood Type")}</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange}>
                       <SelectTrigger>

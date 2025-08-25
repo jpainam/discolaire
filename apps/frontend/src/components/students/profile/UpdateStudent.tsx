@@ -85,6 +85,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
       isNew: student.isNew,
       externalAccountingNo: student.externalAccountingNo ?? "",
       countryId: student.countryId ?? "",
+      bloodType: student.bloodType ?? "",
       dateOfExit: student.dateOfExit
         ? toZonedTime(student.dateOfExit, "UTC")
         : undefined,

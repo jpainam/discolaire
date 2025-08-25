@@ -53,6 +53,7 @@ const createUpdateSchema = z.object({
   isBaptized: z.boolean().optional().default(false),
   religionId: z.string().optional(),
   dateOfEntry: z.coerce.date().optional(),
+  bloodType: z.string().optional().default(""),
   dateOfExit: z.coerce.date().optional(),
   tags: z.array(z.string()).optional(),
   observation: z.string().optional(),
@@ -210,6 +211,7 @@ export const studentRouter = {
           observation: input.observation,
           status: input.status,
           hobbies: input.hobbies,
+          bloodType: input.bloodType,
           createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,
         },
@@ -292,6 +294,7 @@ export const studentRouter = {
           countryId: input.countryId,
           isBaptized: input.isBaptized,
           religionId: input.religionId,
+          bloodType: input.bloodType,
           dateOfEntry: input.dateOfEntry
             ? fromZonedTime(input.dateOfEntry, "UTC")
             : undefined,
