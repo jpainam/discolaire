@@ -7,7 +7,6 @@ import {
   ArrowRight,
   Building,
   Check,
-  MapPin,
   SaveIcon,
   User,
   Users,
@@ -34,13 +33,8 @@ import { Step1 } from "./Step1";
 import { Step2 } from "./Step2";
 import { Step3 } from "./Step3";
 import { Step4 } from "./Step4";
-import { Step5 } from "./Step5";
 import { useStudentStore } from "./store";
-import {
-  academicInfoSchema,
-  basicInfoSchema,
-  contactInfoSchema,
-} from "./validation";
+import { academicInfoSchema, basicInfoSchema } from "./validation";
 
 export default function Page() {
   const {
@@ -74,15 +68,15 @@ export default function Page() {
       icon: Building,
       schema: academicInfoSchema,
     },
-    {
-      id: 3,
-      title: "Contact & Address",
-      description: "",
-      icon: MapPin,
-      schema: contactInfoSchema,
-    },
-    { id: 4, title: "Parents Guardians", description: "", icon: Users },
-    { id: 5, title: "Review Submit", description: "", icon: Check },
+    // {
+    //   id: 3,
+    //   title: "Contact & Address",
+    //   description: "",
+    //   icon: MapPin,
+    //   schema: contactInfoSchema,
+    // },
+    { id: 3, title: "Parents Guardians", description: "", icon: Users },
+    { id: 4, title: "Review Submit", description: "", icon: Check },
   ];
 
   const getCurrentSchema = () => {
@@ -262,9 +256,9 @@ export default function Page() {
             </Stepper>
             {currentStep == 1 && <Step1 />}
             {currentStep == 2 && <Step2 />}
+            {/* {currentStep == 3 && <Step3 />} */}
             {currentStep == 3 && <Step3 />}
             {currentStep == 4 && <Step4 />}
-            {currentStep == 5 && <Step5 />}
           </div>
         </div>
       </form>

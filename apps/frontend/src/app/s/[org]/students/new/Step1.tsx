@@ -26,8 +26,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { Separator } from "@repo/ui/components/separator";
+import { Textarea } from "@repo/ui/components/textarea";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
+import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
 import { useSchool } from "~/providers/SchoolProvider";
 
 export function Step1() {
@@ -168,6 +171,109 @@ export function Step1() {
             </FormItem>
           )}
         />
+        <Separator className="col-span-full" />
+
+        <div className="col-span-full space-y-4">
+          <h2 className="text-md font-semibold">Additional Information</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="religionId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel></FormLabel>
+                  <FormControl>
+                    <ReligionSelector
+                      onChange={field.onChange}
+                      defaultValue={field.value}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="bloodType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("Blood Type")}</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Blood Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="A+">A+</SelectItem>
+                        <SelectItem value="A-">A-</SelectItem>
+                        <SelectItem value="B+">B+</SelectItem>
+                        <SelectItem value="B-">B-</SelectItem>
+                        <SelectItem value="AB+">AB+</SelectItem>
+                        <SelectItem value="AB-">AB-</SelectItem>
+                        <SelectItem value="O+">O+</SelectItem>
+                        <SelectItem value="O-">O-</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <FormField
+              control={form.control}
+              name="isBaptized"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>{t("baptized")} ?</FormLabel>
+                  <FormControl>
+                    <Select
+                      defaultValue={field.value ? "yes" : "no"}
+                      onValueChange={(val) => {
+                        field.onChange(val === "yes");
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("baptized")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="yes">{t("yes")}</SelectItem>
+                        <SelectItem value="no">{t("no")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div>
+            <FormField
+              control={form.control}
+              name="allergies"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Allergies & Medical Conditions</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id="allergies"
+                      {...field}
+                      placeholder="List any allergies or medical conditions (optional)"
+                      rows={2}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
         {school.requestSunPlusNo && (
           <FormField
             control={form.control}

@@ -25,6 +25,11 @@ export const basicInfoSchema = z.object({
   countryId: z.string().min(1),
   registrationNumber: z.string().optional(),
   externalAccountingNo: z.string().optional().default(""),
+  phoneNumber: z.string().optional().default(""),
+  email: z.string().email().optional().or(z.literal("")),
+  residence: z.string().min(1),
+  city: z.string().optional().default(""),
+  postalCode: z.string().optional().default(""),
 });
 
 export const academicInfoSchema = z.object({
@@ -37,14 +42,6 @@ export const academicInfoSchema = z.object({
     .enum(["ACTIVE", "INACTIVE", "GRADUATED", "EXPELLED"])
     .default("ACTIVE"),
   formerSchoolId: z.string().min(1),
-});
-
-export const contactInfoSchema = z.object({
-  phoneNumber: z.string().optional().default(""),
-  email: z.string().email().optional().or(z.literal("")),
-  //residence: z.string().min(1),
-  city: z.string().optional().default(""),
-  postalCode: z.string().optional().default(""),
 });
 
 export const membershipInfoSchema = z.object({
@@ -63,7 +60,6 @@ export const membershipInfoSchema = z.object({
 export const studentSchema = z.object({
   ...basicInfoSchema.shape,
   ...academicInfoSchema.shape,
-  ...contactInfoSchema.shape,
   ...membershipInfoSchema.shape,
 });
 
@@ -71,5 +67,4 @@ export type Parent = z.infer<typeof parentSchema>;
 export type StudentData = z.infer<typeof studentSchema>;
 export type BasicInfo = z.infer<typeof basicInfoSchema>;
 export type AcademicInfo = z.infer<typeof academicInfoSchema>;
-export type ContactInfo = z.infer<typeof contactInfoSchema>;
 export type MembershipInfo = z.infer<typeof membershipInfoSchema>;
