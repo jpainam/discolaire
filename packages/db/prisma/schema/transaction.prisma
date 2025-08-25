@@ -16,7 +16,7 @@ model Transaction {
     updatedBy       String?
     observation     String?
     deletedAt       DateTime?          @db.Timestamp(6)
-    deletedBy       String?
+    deletedById     String?
     status          TransactionStatus  @default(PENDING)
     schoolYearId    String
     studentId       String
