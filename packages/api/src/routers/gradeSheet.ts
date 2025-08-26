@@ -238,6 +238,8 @@ export const gradeSheetRouter = {
         FROM "Grade" AS g
         JOIN "GradeSheet" AS gs
           ON g."gradeSheetId" = gs.id
+        JOIN "Term" AS t 
+          ON gs."termId" = t.id AND t."schoolYearId" = ${ctx.schoolYearId}
         GROUP BY bin
         ORDER BY bin;
       `;
