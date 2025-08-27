@@ -10,22 +10,10 @@ import { getSession } from "~/auth/server";
 import { getFullName } from "~/utils";
 
 const schema = z.object({
-  schoolId: z.string(),
   userId: z.string(),
-  transactions: z.array(
-    z.object({
-      id: z.coerce.number(),
-      description: z.string().optional(),
-      student: z.object({
-        lastName: z.string().default(""),
-        firstName: z.string().default(""),
-      }),
-      createdAt: z.coerce.date(),
-      amount: z.coerce.number(),
-      status: z.string(),
-      deletedAt: z.coerce.date().nullable(),
-    }),
-  ),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
+  schoolYearId: z.string(),
 });
 export async function POST(req: Request) {
   try {
@@ -39,12 +27,29 @@ export async function POST(req: Request) {
       const error = result.error.errors.map((e) => e.message).join(", ");
       return new Response(error, { status: 400 });
     }
-    const { schoolId, userId, transactions } = result.data;
-    const school = await db.school.findUniqueOrThrow({
+    const { userId, schoolYearId, startDate, endDate } = result.data;
+    const transactions = await db.transaction.findMany({
+      include: {
+        student: true,
+        createdBy: true,
+        updatedBy2: true,
+      },
       where: {
-        id: schoolId,
+        AND: [
+          { schoolYearId: schoolYearId },
+          {
+            createdAt: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
+
     const user = await db.user.findUniqueOrThrow({
       where: {
         id: userId,
@@ -55,6 +60,12 @@ export async function POST(req: Request) {
         status: 400,
       });
     }
+
+    const school = await db.school.findUniqueOrThrow({
+      where: {
+        id: user.schoolId,
+      },
+    });
 
     const plainText = await render(
       TransactionsSummary({

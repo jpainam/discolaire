@@ -56,31 +56,9 @@ new Worker(
         },
       });
       const interval = parser.parseExpression(cron);
-
       const startDate = interval.prev().toDate();
-
       const endDate = new Date();
-      const transactions = await db.transaction.findMany({
-        include: {
-          student: true,
-          createdBy: true,
-          updatedBy2: true,
-        },
-        where: {
-          AND: [
-            { schoolYearId: schoolYearId },
-            {
-              createdAt: {
-                gte: startDate,
-                lte: endDate,
-              },
-            },
-          ],
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+
       const response = await fetch(
         `${env.NEXT_PUBLIC_BASE_URL}/api/emails/transaction/summary`,
         {
@@ -88,11 +66,15 @@ new Worker(
           headers: {
             "Content-Type": "application/json",
             "x-api-key": env.DISCOLAIRE_API_KEY,
+            Cookie: `x-school-year=${schoolYearId}`,
           },
+
           body: JSON.stringify({
             schoolId: school.id,
             userId: user.id,
-            transactions: transactions,
+            schoolYearId: schoolYearId,
+            startDate: startDate,
+            endDate: endDate,
           }),
         },
       );
