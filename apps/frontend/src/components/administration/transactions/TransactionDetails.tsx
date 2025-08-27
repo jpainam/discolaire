@@ -66,7 +66,10 @@ export function TransactionDetails({
   const transaction = transactionQuery.data;
   return (
     <div className="grid gap-3 text-sm md:grid-cols-2">
-      <Link href={`/students/${transaction.studentId}`} className="line-clamp-1 flex flex-row items-center gap-1 underline hover:text-blue-600">
+      <Link
+        href={`/students/${transaction.studentId}`}
+        className="line-clamp-1 flex flex-row items-center gap-1 underline hover:text-blue-600"
+      >
         <UserIcon className="h-4 w-4" />
         {/* <Label>{t("account")}:</Label> */}
         <span className="truncate overflow-hidden">
