@@ -8,7 +8,7 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { AccountingJournalHeader } from "./AccountingJournalHeader";
 import { AccountingJournalTable } from "./AccountingJournalTable";
 
-export default function Page() {
+export function AccountingJournal() {
   batchPrefetch([
     trpc.accountingJournal.all.queryOptions(),
     trpc.accountingJournal.stats.queryOptions(),

@@ -57,7 +57,7 @@ export function AccountingJournalTable() {
   const canUpdateFees = useCheckPermission("fee", PermissionAction.UPDATE);
   const canDeleteFees = useCheckPermission("fee", PermissionAction.DELETE);
   return (
-    <div className="px-4 py-2">
+    <div>
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
@@ -107,6 +107,10 @@ export function AccountingJournalTable() {
                       )}
                       {canDeleteFees && (
                         <Button
+                          disabled={
+                            journal.feesCount > 0 ||
+                            journal.transactionsCount > 0
+                          }
                           onClick={async () => {
                             const isConfirmed = await confirm({
                               title: t("delete"),

@@ -84,18 +84,15 @@ export function AdminSidebar({
             title: "school_fees",
             url: "/administration/accounting/fees",
           },
-          {
-            title: "Accounting Journals",
-            url: "/administration/accounting/journal",
-          },
+
           {
             title: "Transactions",
             url: "/administration/accounting/transactions",
           },
-          {
-            title: "Sasie des operations",
-            url: "/administration/accounting/create",
-          },
+          // {
+          //   title: "Sasie des operations",
+          //   url: "/administration/accounting/create",
+          // },
           {
             title: "settings",
             url: "/administration/accounting/settings",

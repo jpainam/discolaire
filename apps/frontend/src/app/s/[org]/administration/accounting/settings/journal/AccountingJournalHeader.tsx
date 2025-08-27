@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -68,7 +69,7 @@ export function AccountingJournalHeader() {
     updateOldFees.mutate();
   };
   return (
-    <div className="flex flex-row items-center justify-between gap-2 px-4 py-2">
+    <div className="flex flex-row items-center justify-between gap-2 pb-2">
       <Label>{t("Accounting Journals")}</Label>
       <div className="flex items-center justify-end gap-2">
         {canCreateFees && (
@@ -85,7 +86,7 @@ export function AccountingJournalHeader() {
             {t("add")}
           </Button>
         )}
-        {canCreateFees && (
+        {/* {canCreateFees && (
           <Button
             isLoading={updateOldFees.isPending}
             onClick={() => {
@@ -114,7 +115,7 @@ export function AccountingJournalHeader() {
           }}
         >
           Deplacer
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

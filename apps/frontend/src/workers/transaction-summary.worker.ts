@@ -1,6 +1,5 @@
 import { Worker } from "bullmq";
 import parser from "cron-parser";
-import { subMonths } from "date-fns";
 import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
@@ -8,7 +7,7 @@ import { db } from "@repo/db";
 import { logger } from "@repo/utils";
 
 import { env } from "~/env";
-import { JobNames, jobQueueName } from "./queue";
+import { JobNames, jobQueue, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 
 z.config({
@@ -64,13 +63,15 @@ new Worker(
       const transactions = await db.transaction.findMany({
         include: {
           student: true,
+          createdBy: true,
+          updatedBy2: true,
         },
         where: {
           AND: [
             { schoolYearId: schoolYearId },
             {
               createdAt: {
-                gte: subMonths(startDate, 3),
+                gte: startDate,
                 lte: endDate,
               },
             },
@@ -108,3 +109,76 @@ new Worker(
   },
   { connection },
 );
+
+function isValidCron(cron: string): boolean {
+  try {
+    parser.parseExpression(cron);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function scheduleTransactionSummaryNofication() {
+  const tasks = await db.scheduleTask.findMany({
+    where: {
+      name: "transaction-summary",
+    },
+  });
+  for (const task of tasks) {
+    if (!isValidCron(task.cron)) {
+      logger.error(
+        `Invalid cron pattern for task ${task.id} ${task.name}: ${task.cron}`,
+      );
+      continue;
+    }
+    const { staffId } = task.data as { staffId?: string | undefined };
+    if (!staffId) {
+      logger.error(`No staffId found for task ${task.id} ${task.name}`);
+      continue;
+    }
+    const staff = await db.staff.findUnique({
+      where: {
+        id: staffId,
+      },
+    });
+    if (!staff?.userId) {
+      logger.error(
+        `No userId found for staff ${staffId} for task ${task.id} ${task.name}`,
+      );
+      continue;
+    }
+    const school = await db.school.findUniqueOrThrow({
+      where: {
+        id: task.schoolId,
+      },
+    });
+    const values = {
+      name: task.name,
+      schoolYearId: task.schoolYearId,
+      schoolId: task.schoolId,
+      userId: staff.userId,
+      cron: task.cron,
+      taskId: task.id,
+    };
+    const parsed = dataSchema.safeParse(values);
+    if (!parsed.success) {
+      const validationError = fromError(parsed.error);
+      logger.error(
+        `Invalid job data for task ${task.id} ${task.name}: ${validationError.message}`,
+      );
+      continue;
+    }
+    const data = parsed.data;
+    await jobQueue.add(JobNames.TRANSACTION_SUMMARY, data, {
+      repeat: {
+        pattern: task.cron,
+        tz: school.timezone,
+      },
+      jobId: `${task.id}-${staffId}-${task.name}`, // prevents duplicates
+    });
+    logger.info(
+      `[Scheduler] Transaction Summary, taskId: ${task.id}, cron ${task.cron}`,
+    );
+  }
+}

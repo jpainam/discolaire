@@ -56,7 +56,7 @@ export function AddStaffSchedule({
   const createScheduleTask = useMutation(
     trpc.scheduleTask.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.scheduleTask.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.scheduleTask.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
@@ -68,7 +68,7 @@ export function AddStaffSchedule({
   const updateScheduleTask = useMutation(
     trpc.scheduleTask.update.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.scheduleTask.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.scheduleTask.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
         closeModal();
       },
@@ -99,7 +99,7 @@ export function AddStaffSchedule({
 
   return (
     <Form {...form}>
-      <form className="grid gap-2" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="grid gap-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="staffId"
@@ -128,7 +128,7 @@ export function AddStaffSchedule({
                   onValueChange={(val) => field.onChange(val)}
                   defaultValue={"0 18 * * *"}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder={t("frequence")} />
                   </SelectTrigger>
                   <SelectContent>
