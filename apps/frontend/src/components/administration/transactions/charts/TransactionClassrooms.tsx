@@ -87,7 +87,7 @@ export function TransactionClassrooms() {
                 <BarChart accessibilityLayer data={data}>
                   <CartesianGrid vertical={false} />
                   <XAxis
-                    dataKey="shortName"
+                    dataKey="classroom"
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}

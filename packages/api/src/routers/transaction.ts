@@ -1,6 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
-import { subDays, subMonths } from "date-fns";
+import { addDays, subDays, subMonths } from "date-fns";
 import { z } from "zod";
 
 import type { TransactionStatus, TransactionType } from "@repo/db";
@@ -396,11 +396,13 @@ export const transactionRouter = {
   stats: protectedProcedure
     .input(
       z.object({
-        from: z.coerce.date().optional().default(subDays(new Date(), 7)),
-        to: z.coerce.date().optional().default(new Date()),
+        from: z.coerce.date().nullish().default(subDays(new Date(), 7)),
+        to: z.coerce.date().nullish().default(addDays(new Date(), 1)),
       }),
     )
     .query(async ({ ctx, input }) => {
+      const from = input.from ?? subDays(new Date(), 7);
+      const to = input.to ?? addDays(new Date(), 1);
       const currentFees = await ctx.db.fee.aggregate({
         _sum: {
           amount: true,
@@ -427,8 +429,8 @@ export const transactionRouter = {
         },
         where: {
           createdAt: {
-            gte: input.from,
-            lte: input.to,
+            gte: from,
+            lte: to,
           },
           deletedAt: null,
           status: "PENDING",
@@ -441,8 +443,8 @@ export const transactionRouter = {
         },
         where: {
           createdAt: {
-            gte: input.from,
-            lte: input.to,
+            gte: from,
+            lte: to,
           },
           deletedAt: {
             not: null,

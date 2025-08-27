@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { parseAsIsoDateTime, useQueryState } from "nuqs";
-import { toast } from "sonner";
+import { parseAsIsoDate, useQueryState } from "nuqs";
 
 import ContainersIcon from "~/components/icons/containers";
 import ExpenseIcon from "~/components/icons/expenses";
@@ -18,13 +17,13 @@ import { useTRPC } from "~/trpc/react";
 export function TransactionTotals() {
   const { t } = useLocale();
 
-  const [from, _] = useQueryState("from", parseAsIsoDateTime);
-  const [to, __] = useQueryState("to", parseAsIsoDateTime);
+  const [from, _] = useQueryState("from", parseAsIsoDate);
+  const [to, __] = useQueryState("to", parseAsIsoDate);
   const trpc = useTRPC();
   const transactionsStats = useQuery(
     trpc.transaction.stats.queryOptions({
-      from: from ?? undefined,
-      to: to ?? undefined,
+      from: from,
+      to: to,
     }),
   );
 
@@ -37,32 +36,29 @@ export function TransactionTotals() {
       />
     );
   }
-  if (transactionsStats.isError) {
-    toast.error(transactionsStats.error.message);
-    return;
-  }
-  const stats = transactionsStats.data;
+
+  const stats = transactionsStats.data ;
   const percentage = 4;
   return (
     <div className="mt-2 grid w-full grid-cols-4 gap-4 py-1 text-sm">
       <TransactionStatCard
         title={t("totalCurrentFees")}
         icon={<RevenueUpIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats.totalFee}
+        totalFee={stats?.totalFee}
         subtitle={t("sinceLastMonth")}
         percentage={percentage}
       />
       <TransactionStatCard
         title={t("totalCompletedAmount")}
         icon={<SalesIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats.totalCompleted}
+        totalFee={stats?.totalCompleted}
         percentage={percentage}
         subtitle={t("sinceLastMonth")}
       />
       <TransactionStatCard
         title={t("totalUnvalidatedAmount")}
         icon={<ExpenseIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats.totalInProgress}
+        totalFee={stats?.totalInProgress}
         percentage={percentage}
         subtitle={t("sinceLastMonth")}
       />
@@ -70,7 +66,7 @@ export function TransactionTotals() {
         <TransactionStatCard
           title={t("totalTransactionDeleted")}
           icon={<ContainersIcon className="h-[45px] w-[45px]" />}
-          totalFee={stats.totalDeleted}
+          totalFee={stats?.totalDeleted}
           percentage={percentage}
           subtitle={t("sinceLastMonth")}
         />
