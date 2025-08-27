@@ -23,7 +23,11 @@ export function TabMenu({
   const pathname = usePathname();
   const isActive = pathname == href.split("?")[0];
   return (
-    <Link href={href} className="relative z-5">
+    <Link
+      href={href}
+      className="relative z-5"
+      aria-current={isActive ? "page" : undefined}
+    >
       <div
         className={cn(
           "text-muted-foreground flex flex-row items-center gap-2 rounded-full px-4 py-1.5 text-sm transition-all",
