@@ -6,7 +6,7 @@ import superjson from "superjson";
 import { authClient } from "./auth";
 
 import { getBaseUrl } from "./base-url";
-import { getSchoolYear, getToken } from "./session-store";
+import { getSchoolYear, getToken, setSchoolYear } from "./session-store";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +34,8 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
         headers() {
           const headers = new Map<string, string>();
           headers.set("x-trpc-source", "expo-react");
+          // TODO Temporary setting up a default school year
+          setSchoolYear("cmcw47cfx0001rz9rbf924zvb");
           const schoolYear = getSchoolYear();
 
           const cookies =

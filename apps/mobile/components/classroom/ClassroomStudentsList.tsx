@@ -25,7 +25,7 @@ export default function ClassroomStudentsList({
   classroomId: string;
 }) {
   const { data: students, isPending } = useQuery(
-    trpc.classroom.students.queryOptions(classroomId),
+    trpc.classroom.students.queryOptions(classroomId)
   );
 
   const router = useRouter();
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   studentName: {
     fontFamily: "Inter-SemiBold",
-    fontSize: 16,
+    fontSize: 12,
     color: Colors[theme].colors.text.primary,
     marginBottom: 2,
   },

@@ -6,3 +6,6 @@ export function getFullName(val: any) {
     `${val?.firstName ?? ""} ${val?.middleName ?? ""} ${val?.lastName ?? ""}`,
   );
 }
+
+
+export const CURRENCY = "XOF"

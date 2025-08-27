@@ -13,10 +13,11 @@ import { Colors } from "~/constants/theme";
 import { useQuery } from "@tanstack/react-query";
 import {
   CircleAlert as AlertCircle,
+  Banknote,
   CircleCheck as CheckCircle,
   Clock,
-  DollarSign,
 } from "lucide-react-native";
+import { CURRENCY } from "~/utils";
 import type { RouterOutputs } from "~/utils/api";
 import { trpc } from "~/utils/api";
 import { ThemedView } from "../ThemedView";
@@ -27,7 +28,7 @@ export default function ClassroomFees({
   classroomId: string;
 }) {
   const { data: fees, isPending } = useQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
+    trpc.classroom.fees.queryOptions(classroomId)
   );
 
   const theme = useColorScheme() ?? "light";
@@ -127,7 +128,14 @@ export default function ClassroomFees({
         </Text>
       </View>
       <View style={styles.feeAmount}>
-        <Text style={styles.amountText}>${item.amount.toFixed(2)}</Text>
+        <Text style={styles.amountText}>
+          {item.amount.toLocaleString("fr", {
+            style: "currency",
+            currency: CURRENCY,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+        </Text>
         <View style={styles.statusContainer}>
           {getStatusIcon("paid")}
           <Text
@@ -144,21 +152,42 @@ export default function ClassroomFees({
     <View style={styles.container}>
       <View style={styles.summaryContainer}>
         <View style={styles.summaryCard}>
-          <DollarSign size={20} color={Colors[theme].colors.primary[500]} />
-          <Text style={styles.summaryTitle}>Total Fees</Text>
-          <Text style={styles.summaryAmount}>${totalFees.toFixed(2)}</Text>
+          <Banknote size={20} color={Colors[theme].colors.primary[500]} />
+          <Text style={styles.summaryTitle}>Frais</Text>
+          <Text style={styles.summaryAmount}>
+            {totalFees.toLocaleString("fr", {
+              style: "currency",
+              currency: CURRENCY,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
+          </Text>
         </View>
 
         <View style={[styles.summaryCard, styles.paidCard]}>
           <CheckCircle size={20} color={Colors[theme].colors.success[500]} />
-          <Text style={styles.summaryTitle}>Paid</Text>
-          <Text style={styles.summaryAmount}>${paidFees.toFixed(2)}</Text>
+          <Text style={styles.summaryTitle}>Payé</Text>
+          <Text style={styles.summaryAmount}>
+            {paidFees.toLocaleString("fr", {
+              style: "currency",
+              currency: CURRENCY,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
+          </Text>
         </View>
 
         <View style={[styles.summaryCard, styles.pendingCard]}>
           <Clock size={20} color={Colors[theme].colors.warning[500]} />
-          <Text style={styles.summaryTitle}>Pending</Text>
-          <Text style={styles.summaryAmount}>${pendingFees.toFixed(2)}</Text>
+          <Text style={styles.summaryTitle}>Restant</Text>
+          <Text style={styles.summaryAmount}>
+            {pendingFees.toLocaleString("fr", {
+              style: "currency",
+              currency: CURRENCY,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
+          </Text>
         </View>
       </View>
 
@@ -222,7 +251,7 @@ const styles = StyleSheet.create({
   },
   summaryAmount: {
     fontFamily: "Inter-Bold",
-    fontSize: 16,
+    fontSize: 12,
     color: Colors[theme].colors.text.primary,
   },
   sectionTitle: {
@@ -247,13 +276,13 @@ const styles = StyleSheet.create({
   },
   feeName: {
     fontFamily: "Inter-SemiBold",
-    fontSize: 15,
+    fontSize: 12,
     color: Colors[theme].colors.text.primary,
     marginBottom: 4,
   },
   feeDate: {
     fontFamily: "Inter-Regular",
-    fontSize: 13,
+    fontSize: 10,
     color: Colors[theme].colors.text.tertiary,
   },
   feeAmount: {
@@ -261,7 +290,7 @@ const styles = StyleSheet.create({
   },
   amountText: {
     fontFamily: "Inter-SemiBold",
-    fontSize: 16,
+    fontSize: 12,
     color: Colors[theme].colors.text.primary,
     marginBottom: 4,
   },
@@ -271,7 +300,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontFamily: "Inter-Medium",
-    fontSize: 12,
+    fontSize: 10,
     marginLeft: 4,
   },
   listContent: {

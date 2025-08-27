@@ -19,13 +19,9 @@ import { useClassroomFilterStore } from "~/stores/classroom";
 import { trpc } from "~/utils/api";
 
 export default function Screen() {
-  const { data, isPending, isRefetching, refetch } = useQuery({
-    ...trpc.classroom.all.queryOptions(),
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    enabled: true, // or false if you want full control
-  });
+  const { data, isPending, isRefetching, refetch } = useQuery(
+    trpc.classroom.all.queryOptions()
+  );
   const { query, setQuery, setCycle, setSection, section, cycle } =
     useClassroomFilterStore();
   const theme = useColorScheme() ?? "light";

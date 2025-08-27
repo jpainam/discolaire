@@ -23,7 +23,7 @@ export default function ClassroomSubjects({
   classroomId: string;
 }) {
   const { data: subjects, isPending } = useQuery(
-    trpc.classroom.subjects.queryOptions(classroomId),
+    trpc.classroom.subjects.queryOptions(classroomId)
   );
 
   const renderSubjectItem = ({
@@ -42,7 +42,7 @@ export default function ClassroomSubjects({
       </View>
 
       <View style={styles.subjectInfo}>
-        <Text style={styles.subjectName}>{item.course.shortName}</Text>
+        <Text style={styles.subjectName}>{item.course.name}</Text>
 
         <View style={styles.subjectDetails}>
           <View style={styles.detailItem}>
