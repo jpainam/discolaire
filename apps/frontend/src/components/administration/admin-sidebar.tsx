@@ -97,10 +97,6 @@ export function AdminSidebar({
             url: "/administration/accounting/create",
           },
           {
-            title: "Groupes",
-            url: "/administration/accounting/groups",
-          },
-          {
             title: "settings",
             url: "/administration/accounting/settings",
           },

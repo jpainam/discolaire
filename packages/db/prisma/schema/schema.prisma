@@ -15,22 +15,6 @@ model RecipientGroup {
     recipients Recipient[]
 }
 
-enum AccountingGroupType {
-    AMOUNT  @map("amount")
-    PERCENT @map("percent")
-}
-
-model AccountingGroup {
-    id           String              @id @default(cuid())
-    name         String
-    schoolYearId String
-    type         AccountingGroupType @default(AMOUNT)
-    value        Float               @default(1)
-    createdAt    DateTime            @default(now()) @db.Timestamp(6)
-    updatedAt    DateTime            @updatedAt
-    createdById  String?
-}
-
 model Feedback {
     id          Int      @id @default(autoincrement())
     content     String

@@ -1,5 +1,4 @@
 import { absenceRouter } from "./routers/absence";
-import { accountingRouter } from "./routers/accounting";
 import { accountingJournal } from "./routers/accountingJournal";
 import { announcementRouter } from "./routers/announcement";
 import { appreciationRouter } from "./routers/appreciation";
@@ -126,7 +125,6 @@ export const appRouter = createTRPCRouter({
   enrollment: enrollmentRouter,
   appreciation: appreciationRouter,
   reportCard: reportCardRouter,
-  accounting: accountingRouter,
   announcement: announcementRouter,
   logActivity: logActivityRouter,
   recipient: recipientRouter,
