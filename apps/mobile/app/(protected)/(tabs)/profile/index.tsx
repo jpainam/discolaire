@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Appearance,
   ScrollView,
@@ -9,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { AuthContext } from "~/components/AuthProvider";
 import { Avatar } from "~/components/Avatar";
 import BoxedIcon from "~/components/BoxedIcon";
 import { ThemedText } from "~/components/ThemedText";
@@ -23,6 +23,7 @@ export default function Screen() {
     pushNotifications: false,
   });
   const { data: session } = authClient.useSession();
+  const authContext = useContext(AuthContext);
 
   const theme = useColorScheme() ?? "light";
 
@@ -136,8 +137,7 @@ export default function Screen() {
       <ThemedView>
         <TouchableOpacity
           onPress={async () => {
-            await authClient.signOut();
-            router.push("/auth/login");
+            await authContext.logOut();
           }}
           style={[styles.rowWrapper, styles.rowLast]}
         >
