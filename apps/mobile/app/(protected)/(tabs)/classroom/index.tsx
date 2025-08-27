@@ -20,7 +20,7 @@ import { trpc } from "~/utils/api";
 
 export default function Screen() {
   const { data, isPending, isRefetching, refetch } = useQuery(
-    trpc.classroom.all.queryOptions()
+    trpc.classroom.all.queryOptions(),
   );
   const { query, setQuery, setCycle, setSection, section, cycle } =
     useClassroomFilterStore();

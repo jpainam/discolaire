@@ -23,7 +23,7 @@ export default function ClassroomSubjects({
   classroomId: string;
 }) {
   const { data: subjects, isPending } = useQuery(
-    trpc.classroom.subjects.queryOptions(classroomId)
+    trpc.classroom.subjects.queryOptions(classroomId),
   );
 
   const renderSubjectItem = ({

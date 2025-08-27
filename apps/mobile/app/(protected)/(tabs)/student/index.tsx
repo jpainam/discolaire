@@ -54,7 +54,6 @@ function SearchStudent() {
     refetch,
   } = useQuery(trpc.student.search.queryOptions({ query }));
 
-
   const borderColor = useThemeColor({}, "border");
   const theme = useColorScheme() ?? "light";
 

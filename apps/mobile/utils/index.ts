@@ -7,5 +7,4 @@ export function getFullName(val: any) {
   );
 }
 
-
-export const CURRENCY = "XOF"
+export const CURRENCY = "XOF";

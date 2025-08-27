@@ -329,6 +329,7 @@ export const transactionRouter = {
 
       return {
         classroom: classroom.name,
+        reportName: classroom.reportName,
         paid: totalPaid,
         revenue: totalFee * enrollmentsIds.length,
         remaining: Math.abs(totalFee * enrollmentsIds.length - totalPaid),

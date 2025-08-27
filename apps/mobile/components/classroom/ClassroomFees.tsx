@@ -28,7 +28,7 @@ export default function ClassroomFees({
   classroomId: string;
 }) {
   const { data: fees, isPending } = useQuery(
-    trpc.classroom.fees.queryOptions(classroomId)
+    trpc.classroom.fees.queryOptions(classroomId),
   );
 
   const theme = useColorScheme() ?? "light";

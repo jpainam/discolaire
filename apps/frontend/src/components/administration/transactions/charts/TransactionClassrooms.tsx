@@ -4,19 +4,14 @@ import React, { useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import _ from "lodash";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import type { ChartConfig } from "@repo/ui/components/chart";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
@@ -27,7 +22,7 @@ import { useTRPC } from "~/trpc/react";
 
 type TransactionQuotaProcedureOutput = NonNullable<
   RouterOutputs["transaction"]["quotas"]
->[number];
+>;
 
 export function TransactionClassrooms() {
   const { t } = useLocale();
@@ -54,7 +49,7 @@ export function TransactionClassrooms() {
   );
 
   const [filteredData, setFilteredData] = React.useState<
-    TransactionQuotaProcedureOutput[][]
+    TransactionQuotaProcedureOutput[]
   >([]);
 
   useEffect(() => {
@@ -78,33 +73,21 @@ export function TransactionClassrooms() {
       </div>
     );
   }
-  if (transactionsQuotaQuery.isError) {
-    toast.error(transactionsQuotaQuery.error.message);
-    return;
-  }
 
   return (
-    <div className="grid items-end gap-8 md:grid-cols-2">
+    <div className="grid items-end gap-8 md:grid-cols-1">
       {filteredData.map((data, index) => {
         return (
           <Card key={index} className="rounded-sm shadow-none">
-            <CardHeader className="p-0">
-              <div className="flex flex-1 flex-col px-6 py-2">
-                <CardTitle className="text-md">
-                  {t("classroom_transaction_quotas")} ({index + 1})
-                </CardTitle>
-                <CardDescription></CardDescription>
-              </div>
-            </CardHeader>
             <CardContent className="p-0">
               <ChartContainer
-                className="h-[300px] w-full p-0"
+                className="h-[200px] w-full p-0"
                 config={chartConfig}
               >
                 <BarChart accessibilityLayer data={data}>
                   <CartesianGrid vertical={false} />
                   <XAxis
-                    dataKey="classroom"
+                    dataKey="shortName"
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
@@ -120,6 +103,7 @@ export function TransactionClassrooms() {
                       />
                     }
                   />
+                  <ChartLegend content={<ChartLegendContent />} />
                   <Bar
                     dataKey="revenue"
                     fill="var(--color-revenue)"
