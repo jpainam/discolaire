@@ -56,6 +56,5 @@ cd apps/mobile
 npx expo start
 ```
 
-
 pn run ios
 pn run ios --reset-cache

@@ -20,7 +20,7 @@ import { authClient } from "~/utils/auth";
 export default function Screen() {
   const { data: session } = authClient.useSession();
   if (!session) {
-    return <Redirect href="/login" />;
+    return <Redirect href="/auth/login" />;
   }
   if (session.user.profile === "student") {
     return <OnlyStudent />;

@@ -137,7 +137,7 @@ export default function Screen() {
         <TouchableOpacity
           onPress={async () => {
             await authClient.signOut();
-            router.push("/auth");
+            router.push("/auth/login");
           }}
           style={[styles.rowWrapper, styles.rowLast]}
         >
