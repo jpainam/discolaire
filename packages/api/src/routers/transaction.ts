@@ -210,6 +210,11 @@ export const transactionRouter = {
         include: {
           journal: true,
           student: true,
+          createdBy: true,
+          updatedBy2: true,
+          receivedBy: true,
+          deletedBy: true,
+          printedBy: true,
         },
         where: {
           id: input,

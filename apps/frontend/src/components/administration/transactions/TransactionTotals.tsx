@@ -37,7 +37,7 @@ export function TransactionTotals() {
     );
   }
 
-  const stats = transactionsStats.data ;
+  const stats = transactionsStats.data;
   const percentage = 4;
   return (
     <div className="mt-2 grid w-full grid-cols-4 gap-4 py-1 text-sm">

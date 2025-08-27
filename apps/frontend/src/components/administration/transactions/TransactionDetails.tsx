@@ -1,21 +1,22 @@
 "use client";
 
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import i18next from "i18next";
 import {
   AlignStartHorizontal,
-  Badge,
+  Banknote,
   CalendarDays,
   Clock,
-  DollarSign,
   File,
   FileSliders,
   Library,
   Loader,
   Printer,
   Trash2,
-  User,
+  UserIcon,
+  UserSquare,
   X,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -65,20 +66,23 @@ export function TransactionDetails({
   const transaction = transactionQuery.data;
   return (
     <div className="grid gap-3 text-sm md:grid-cols-2">
-      <div className="flex flex-row items-center gap-1">
-        <Badge className="h-4 w-4" />
+      <Link href={`/students/${transaction.studentId}`} className="line-clamp-1 flex flex-row items-center gap-1 underline hover:text-blue-600">
+        <UserIcon className="h-4 w-4" />
         {/* <Label>{t("account")}:</Label> */}
-        {getFullName(transactionQuery.data.student)}
-      </div>
-      <div className="flex flex-row items-center gap-1">
-        <User className="h-4 w-4" />
-        {/* <Label>{t("student")}:</Label> */}
         <span className="truncate overflow-hidden">
-          {getFullName(transactionQuery.data.student)}
+          {getFullName(transaction.student)}
+        </span>
+      </Link>
+      <div className="flex flex-row items-center gap-1">
+        <UserSquare className="h-4 w-4" />
+        {/* <Label>{t("student")}:</Label> */}
+        <span>{t("created_by")}</span>
+        <span className="truncate overflow-hidden">
+          {transaction.createdBy?.name}
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">
-        <DollarSign className="h-4 w-4" />
+        <Banknote className="h-4 w-4" />
         {/* <Label>{t("amount")}:</Label> */}
         {transactionQuery.data.amount.toLocaleString(i18next.language, {
           maximumFractionDigits: 0,
@@ -109,11 +113,14 @@ export function TransactionDetails({
           {t(transactionQuery.data.status.toLowerCase())}
         </FlatBadge>
       </div>
-      <div className="flex flex-row items-center gap-1">
+      <Link
+        href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
+        className="flex flex-row items-center gap-1 underline hover:text-blue-600"
+      >
         <FileSliders className="h-4 w-4" />
         {/* <Label>{t("transactionRef")}:</Label> */}
         {transaction.transactionRef}
-      </div>
+      </Link>
       <div className="flex flex-row items-center gap-1">
         <AlignStartHorizontal className="h-4 w-4" />
         {/* <Label>{t("transactionType")}:</Label> */}
