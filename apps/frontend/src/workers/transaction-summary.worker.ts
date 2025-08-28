@@ -155,6 +155,7 @@ export async function scheduleTransactionSummaryNofication() {
     await jobQueue.add(JobNames.TRANSACTION_SUMMARY, data, {
       repeat: {
         pattern: task.cron,
+        //pattern: "* * * * *", // Every minute for testing
         tz: school.timezone,
       },
       jobId: `${task.id}-${staffId}-${task.name}`, // prevents duplicates
