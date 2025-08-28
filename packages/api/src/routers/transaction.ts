@@ -97,7 +97,7 @@ export const transactionRouter = {
     .input(
       z.object({
         from: z.coerce.date().optional(),
-        limit: z.number().optional().default(50),
+        limit: z.number().optional().default(200),
         to: z.coerce.date().optional().default(new Date()),
         status: z.string().optional(),
         classroomId: z.string().optional(),
