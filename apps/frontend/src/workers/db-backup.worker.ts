@@ -21,7 +21,7 @@ new Worker(
 
     await fs.mkdir(backupPath, { recursive: true });
 
-    const cmd = `pg_dump --dbname='${env.DATABASE_URL}' --file=${backupPath}/${filename}`;
+    const cmd = `pg_dump --dbname='${env.DATABASE_URL}' --file=${backupPath}/${filename} --format=c`;
 
     logger.info("Starting DB backup...");
 
