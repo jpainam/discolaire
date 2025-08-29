@@ -176,5 +176,8 @@
     "tailwindcss": "^4.1.11",
     "typescript": "catalog:"
   },
+  "engines": {
+    "node": ">=23.9.0"
+  },
   "prettier": "@repo/prettier-config"
 }
