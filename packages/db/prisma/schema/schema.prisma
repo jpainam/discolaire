@@ -723,6 +723,7 @@ model SchoolYear {
     events               SchoolYearEvent[]
     userNotifications    UserNotification[]
     accountingJournals   AccountingJournal[]
+    scheduleDivisions    ScheduleDivision[]
 }
 
 model ClassroomCycle {

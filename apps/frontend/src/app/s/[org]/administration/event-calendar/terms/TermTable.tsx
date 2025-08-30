@@ -52,7 +52,7 @@ export function TermTable() {
     }),
   );
   return (
-    <div className="px-4">
+    <div className="">
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>

@@ -202,7 +202,7 @@ export function AdminSidebar({
     },
     {
       name: "schoolYear",
-      url: "/administration/school-years",
+      url: "/administration/event-calendar",
       icon: CalendarDays,
     },
     {

@@ -12,7 +12,7 @@ export function SchoolYearCalendar() {
   const { viewMode, eventTypes } = useSchoolYearCalendarContext();
 
   return (
-    <div className="space-y-4 px-4">
+    <div className="space-y-2">
       <SchoolYearCalendarHeader />
 
       <div className="bg-card rounded-lg border shadow">

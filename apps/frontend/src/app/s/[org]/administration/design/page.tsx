@@ -21,6 +21,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { CardStats } from "~/components/administration/CardStats";
 import { BusinessMetrics } from "./business-metrics";
+import { ManageData } from "./conarapp";
 import List01 from "./list-01";
 import List02 from "./list-02";
 import List03 from "./list-03";
@@ -286,6 +287,7 @@ export default function Page() {
           </AlertDescription>
         </Alert>
       </div>
+      <ManageData />
     </div>
   );
 }

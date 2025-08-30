@@ -22,7 +22,7 @@ export function TermHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   return (
-    <div className="flex items-center justify-end gap-2 px-4">
+    <div className="flex items-center justify-end gap-2">
       <Button
         onClick={() => {
           openModal({
