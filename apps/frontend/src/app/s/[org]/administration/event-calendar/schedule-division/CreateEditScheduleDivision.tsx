@@ -1,109 +1,215 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { useForm, useFormContext } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 
-const DAYS_OF_WEEK = [
-  { key: "lundi", label: "Lundi" },
-  { key: "mardi", label: "Mardi" },
-  { key: "mercredi", label: "Mercredi" },
-  { key: "jeudi", label: "Jeudi" },
-  { key: "vendredi", label: "Vendredi" },
-  { key: "samedi", label: "Samedi" },
-];
+import { useModal } from "~/hooks/use-modal";
+import { useTRPC } from "~/trpc/react";
+
+const formSchema = z.object({
+  name: z.string().min(1),
+  startTime: z.coerce.date(),
+  endTime: z.coerce.date(),
+  monday: z.boolean().default(false),
+  tuesday: z.boolean().default(false),
+  wednesday: z.boolean().default(false),
+  thursday: z.boolean().default(false),
+  friday: z.boolean().default(false),
+  saturday: z.boolean().default(false),
+  sunday: z.boolean().default(false),
+});
 
 export function CreateEditScheduleDivision({
   slot,
 }: {
   slot?: RouterOutputs["scheduleDivision"]["all"][number];
 }) {
-  {
-    /* {isEditing === "new" ? "Ajouter un Créneau" : } */
-  }
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: slot?.name ?? "",
+      startTime: slot?.startTime ?? new Date(),
+      endTime: slot?.endTime ?? new Date(),
+      monday: slot?.monday ?? false,
+      tuesday: slot?.tuesday ?? false,
+      wednesday: slot?.wednesday ?? false,
+      thursday: slot?.thursday ?? false,
+      friday: slot?.friday ?? false,
+      saturday: slot?.saturday ?? false,
+      sunday: slot?.sunday ?? false,
+    },
+  });
+  const trpc = useTRPC();
+  const { closeModal } = useModal();
+  const queryClient = useQueryClient();
+  const createScheduleDivisionMutation = useMutation(
+    trpc.scheduleDivision.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.scheduleDivision.pathFilter());
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }),
+  );
+  const updateScheduleDivisionMutation = useMutation(
+    trpc.scheduleDivision.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.scheduleDivision.pathFilter());
+        closeModal();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }),
+  );
 
-  const handleSave = () => {
-    if (
-      editingSlot.startTime &&
-      editingSlot.endTime &&
-      editingSlot.days &&
-      editingSlot.days.length > 0
-    ) {
-      if (isEditing === "new") {
-        const newSlot: TimeSlot = {
-          id: Date.now().toString(),
-          startTime: editingSlot.startTime,
-          endTime: editingSlot.endTime,
-          days: editingSlot.days,
-        };
-        setTimeSlots([...timeSlots, newSlot]);
-      } else {
-        setTimeSlots(
-          timeSlots.map((slot) =>
-            slot.id === isEditing
-              ? ({ ...slot, ...editingSlot } as TimeSlot)
-              : slot,
-          ),
-        );
-      }
-      setIsEditing(null);
-      setEditingSlot({ startTime: "", endTime: "", days: [] });
+  const t = useTranslations();
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    if (slot) {
+      updateScheduleDivisionMutation.mutate({
+        id: slot.id,
+        ...values,
+      });
+    } else {
+      createScheduleDivisionMutation.mutate(values);
     }
   };
+
   return (
-    <div className="space-y-6">
-      {/* Time Selection */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div>
-          <label className="mb-2 block text-sm font-medium">Début</label>
-          <Input
-            type="datetime-local"
-            value={editingSlot.startTime || ""}
-            onChange={(e) => handleTimeChange("startTime", e.target.value)}
-            className="w-full"
+    <Form {...form}>
+      <form
+        className="flex flex-col gap-6"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("Label")}</FormLabel>
+              <FormControl>
+                <Input placeholder={t("Label")} {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="startTime"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("startTime")}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="datetime-local"
+                    onChange={(event) => field.onChange(event.target.value)}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="endTime"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("startTime")}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="datetime-local"
+                    onChange={(event) => field.onChange(event.target.value)}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium">Fin</label>
-          <Input
-            type="datetime-local"
-            value={editingSlot.endTime || ""}
-            onChange={(e) => handleTimeChange("endTime", e.target.value)}
-            className="w-full"
-          />
+        <div className="grid grid-cols-4 gap-4">
+          <DayCheckBox name="monday" />
+          <DayCheckBox name="tuesday" />
+          <DayCheckBox name="wednesday" />
+          <DayCheckBox name="thursday" />
+          <DayCheckBox name="friday" />
+          <DayCheckBox name="saturday" />
+          <DayCheckBox name="sunday" />
         </div>
-      </div>
 
-      {/* Days Selection */}
-      <div>
-        <label className="mb-3 block text-sm font-medium">
-          Jours de la semaine
-        </label>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          {DAYS_OF_WEEK.map((day) => (
-            <div key={day.key} className="flex items-center space-x-2">
-              <Checkbox
-                id={day.key}
-                checked={editingSlot.days?.includes(day.key) || false}
-                onCheckedChange={(checked) =>
-                  handleDayToggle(day.key, checked as boolean)
-                }
-              />
-              <label htmlFor={day.key} className="text-sm font-medium">
-                {day.label}
-              </label>
-            </div>
-          ))}
+        <div className="flex justify-end gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              closeModal();
+            }}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            size={"sm"}
+            isLoading={
+              createScheduleDivisionMutation.isPending ||
+              updateScheduleDivisionMutation.isPending
+            }
+            type="submit"
+          >
+            {t("submit")}
+          </Button>
         </div>
-      </div>
+      </form>
+    </Form>
+  );
+}
 
-      {/* Action Buttons */}
-      <div className="flex justify-end gap-2">
-        <Button variant="outline" onClick={handleCancel}>
-          Annuler
-        </Button>
-        <Button onClick={handleSave}>
-          {isEditing === "new" ? "Ajouter" : "Sauvegarder"}
-        </Button>
-      </div>
-    </div>
+function DayCheckBox({ name }: { name: string }) {
+  const form = useFormContext();
+  const t = useTranslations();
+  return (
+    <FormField
+      control={form.control}
+      name=""
+      render={({ field }) => (
+        <FormItem className="flex flex-row items-center gap-2">
+          <FormControl>
+            <Checkbox
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              checked={field.value}
+              onCheckedChange={(checked) => {
+                return field.onChange(!!checked);
+              }}
+            />
+          </FormControl>
+          <FormLabel>{t(name)}</FormLabel>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }

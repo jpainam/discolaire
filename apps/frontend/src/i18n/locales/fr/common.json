@@ -321,6 +321,8 @@
   "class_section": "Section",
   "classroom": "Classe",
   "classroomGraph": "Graphs classe",
+  "startTime": "Heure de début",
+  "endTime": "Heure de fin",
   "classroomLeader": "Chef de classe",
   "classroomReportCard": "Bulletin de la classe",
   "classroom_council": "Conseil de classe",

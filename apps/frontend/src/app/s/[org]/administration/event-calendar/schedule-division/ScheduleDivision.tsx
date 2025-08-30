@@ -9,6 +9,7 @@ import { Edit, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -21,13 +22,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditScheduleDivision } from "./CreateEditScheduleDivision";
-
-interface TimeSlot {
-  id: string;
-  startTime: string;
-  endTime: string;
-  days: string[];
-}
 
 const DAYS_OF_WEEK = [
   { key: "lundi", label: "Lundi" },
@@ -111,16 +105,12 @@ export function ScheduleDivision() {
                       slot.saturday,
                       slot.sunday,
                     ].map((day, index) => (
-                      <span
+                      <Badge
                         key={index}
-                        className={`rounded px-2 py-1 text-sm ${
-                          day
-                            ? "bg-accent text-accent-foreground"
-                            : "bg-muted text-muted-foreground"
-                        }`}
+                        variant={day ? "default" : "secondary"}
                       >
-                        {DAYS_OF_WEEK[index].label}
-                      </span>
+                        {DAYS_OF_WEEK[index]?.label}
+                      </Badge>
                     ))}
                   </div>
                 </div>

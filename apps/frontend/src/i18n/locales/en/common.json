@@ -287,6 +287,8 @@
   "class_name_report_description": "As shown in report and grades",
   "class_section": "Section",
   "classroom": "Classroom",
+  "startTime": "Start Time",
+  "endTime": "End Time",
   "classroomGraph": "Classroom Graph",
   "classroomLeader": "Classroom Leader",
   "classroomReportCard": "Classroom Report Card",
