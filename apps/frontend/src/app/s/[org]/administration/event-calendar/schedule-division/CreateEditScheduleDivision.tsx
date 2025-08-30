@@ -70,6 +70,11 @@ export function CreateEditScheduleDivision({
       },
     }),
   );
+  // const formatDate = (date: Date | null) =>
+  //   date instanceof Date && !isNaN(date.getTime())
+  //     ? date.toISOString().split("T")[0]
+  //     : "";
+
   const updateScheduleDivisionMutation = useMutation(
     trpc.scheduleDivision.update.mutationOptions({
       onSuccess: async () => {
@@ -125,7 +130,7 @@ export function CreateEditScheduleDivision({
                 <FormControl>
                   <Input
                     type="datetime-local"
-                    defaultValue={field.value.toISOString().slice(0, 16)}
+                    // defaultValue={formatDate(field.value)}
                     onChange={(event) => field.onChange(event.target.value)}
                   />
                 </FormControl>
@@ -143,7 +148,7 @@ export function CreateEditScheduleDivision({
                 <FormControl>
                   <Input
                     type="datetime-local"
-                    defaultValue={field.value.toISOString().slice(0, 16)}
+                    // defaultValue={formatDate(field.value)}
                     onChange={(event) => field.onChange(event.target.value)}
                   />
                 </FormControl>
