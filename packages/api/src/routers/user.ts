@@ -152,6 +152,14 @@ export const userRouter = {
               updatedAt: new Date(),
             },
           });
+          if (input.email)
+            await ctx.authApi.forgetPassword({
+              body: {
+                email: input.email,
+                redirectTo: `/auth/complete-registration/${input.id}`,
+              },
+              headers: await headers(),
+            });
         }
         await ctx.authApi.setUserPassword({
           body: {
