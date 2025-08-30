@@ -1,6 +1,8 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { headers } from "next/headers";
 import { TRPCError } from "@trpc/server";
+import { hashPassword } from "better-auth/crypto";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import {
@@ -15,7 +17,7 @@ export const userRouter = {
   search: protectedProcedure
     .input(
       z.object({
-        limit: z.number().optional().default(30),
+        limit: z.number().optional().default(130),
         query: z.string().optional().default(""),
       }),
     )
@@ -132,6 +134,25 @@ export const userRouter = {
         });
       }
       if (input.password) {
+        const account = await ctx.db.account.findFirst({
+          where: {
+            userId: input.id,
+            providerId: "credential",
+          },
+        });
+        if (!account) {
+          await ctx.db.account.create({
+            data: {
+              id: uuidv4(),
+              userId: input.id,
+              accountId: input.id,
+              providerId: "credential",
+              password: await hashPassword(input.password),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          });
+        }
         await ctx.authApi.setUserPassword({
           body: {
             userId: input.id,
