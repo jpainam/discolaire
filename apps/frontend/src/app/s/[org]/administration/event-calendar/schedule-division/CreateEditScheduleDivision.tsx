@@ -125,6 +125,7 @@ export function CreateEditScheduleDivision({
                 <FormControl>
                   <Input
                     type="datetime-local"
+                    defaultValue={field.value.toISOString().slice(0, 16)}
                     onChange={(event) => field.onChange(event.target.value)}
                   />
                 </FormControl>
@@ -142,6 +143,7 @@ export function CreateEditScheduleDivision({
                 <FormControl>
                   <Input
                     type="datetime-local"
+                    defaultValue={field.value.toISOString().slice(0, 16)}
                     onChange={(event) => field.onChange(event.target.value)}
                   />
                 </FormControl>
@@ -194,16 +196,14 @@ function DayCheckBox({ name }: { name: string }) {
   return (
     <FormField
       control={form.control}
-      name=""
+      name={name}
       render={({ field }) => (
         <FormItem className="flex flex-row items-center gap-2">
           <FormControl>
             <Checkbox
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               checked={field.value}
-              onCheckedChange={(checked) => {
-                return field.onChange(!!checked);
-              }}
+              onCheckedChange={(checked) => field.onChange(checked === true)}
             />
           </FormControl>
           <FormLabel>{t(name)}</FormLabel>
