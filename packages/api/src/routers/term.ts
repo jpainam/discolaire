@@ -13,6 +13,9 @@ const createEditTermSchema = z.object({
 export const termRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.term.findMany({
+      include: {
+        schoolYear: true,
+      },
       orderBy: {
         startDate: "asc",
       },

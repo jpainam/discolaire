@@ -100,7 +100,7 @@ export function TermTable() {
                       {term.isActive ? t("yes") : t("no")}
                     </FlatBadge>
                   </TableCell>
-                  <TableCell className="py-0">{term.schoolYearId}</TableCell>
+                  <TableCell className="py-0">{term.schoolYear.name}</TableCell>
                   <TableCell className="py-0 text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

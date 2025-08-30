@@ -36,6 +36,9 @@ export default async function Page() {
   batchPrefetch([
     trpc.schoolYearEvent.all.queryOptions(),
     trpc.schoolYearEvent.eventTypes.queryOptions(),
+    trpc.scheduleDivision.all.queryOptions(),
+    trpc.term.all.queryOptions(),
+    trpc.schoolYear.all.queryOptions(),
   ]);
 
   return (

@@ -59,7 +59,7 @@ export function ScheduleDivision() {
   return (
     <div className="flex flex-col gap-4">
       <ScheduleDivisionHeader />
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {schedules.map((slot) => (
           <Card key={slot.id} className="gap-2 shadow-sm">
             <CardHeader>
@@ -85,6 +85,7 @@ export function ScheduleDivision() {
               <CardAction className="space-x-2">
                 <Button
                   variant="outline"
+                  className="size-7"
                   size="icon"
                   onClick={() => {
                     openModal({
@@ -98,6 +99,7 @@ export function ScheduleDivision() {
                 <Button
                   variant="destructive"
                   size="icon"
+                  className="size-7"
                   onClick={async () => {
                     const isConfirmed = await confirm({
                       title: t("delete"),
@@ -109,7 +111,7 @@ export function ScheduleDivision() {
                     }
                   }}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3 w-3" />
                 </Button>
               </CardAction>
             </CardHeader>
