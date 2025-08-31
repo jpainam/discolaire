@@ -27,26 +27,9 @@
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.14.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "@sentry/cli",
-      "@tailwindcss/oxide",
-      "bcrypt",
-      "core-js-pure",
-      "esbuild",
-      "msgpackr-extract",
-      "prisma",
-      "sharp",
-      "unrs-resolver"
-    ],
-    "ignoredBuiltDependencies": [
-      "@tsparticles/engine"
-    ]
-  },
   "engines": {
-    "node": ">=23"
+    "node": ">=22.14.0",
+    "pnpm": ">=9.6.0"
   },
   "prisma": {
     "schema": "packages/db/prisma/schema",
