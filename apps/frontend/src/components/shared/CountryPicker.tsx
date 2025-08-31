@@ -108,8 +108,8 @@ export function CountryPicker({
                     key={country}
                     onSelect={() => {
                       setValue(country);
-                      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                      onChange && onChange(country);
+
+                      onChange?.(country);
                       setOpen(false);
                     }}
                   >

@@ -68,7 +68,7 @@ export function CreateEditAppreciationCategory({
       <div className="ml-auto pb-1">
         {category && (
           <XIcon
-            onClick={() => onCompleted && onCompleted()}
+            onClick={() => onCompleted?.()}
             className="hover:text-muted-foreground h-4 w-4 cursor-pointer"
           />
         )}

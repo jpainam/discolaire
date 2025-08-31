@@ -30,7 +30,7 @@ new Worker(
       logger.info(`Backup successful: ${filename}`);
       // Optional: upload to S3 or other storage
     } catch (err) {
-      logger.error("Backup failed:", err);
+      console.error("Backup failed:", err);
     }
   },
   { connection },

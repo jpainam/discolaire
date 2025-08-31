@@ -21,7 +21,7 @@ export function DataTableColumnHeader<TData, TValue>({
   return (
     <div
       className={cn(
-        "flex h-full cursor-pointer items-center gap-2 select-none",
+        "flex h-full cursor-pointer select-none items-center gap-2",
         className,
       )}
       onClick={column.getToggleSortingHandler()}
