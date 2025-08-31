@@ -422,6 +422,7 @@ model Student {
     lastAccessed         DateTime                 @default(now()) @db.Timestamp(6)
     observation          String?
     externalAccountingNo String?
+    allergies            String?
     countryId            String?
     userId               String?
     tags                 Json?

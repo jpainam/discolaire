@@ -50,7 +50,7 @@ export function ContactHeader() {
               }}
             >
               <PlusIcon />
-              {t("add")}
+              {t("Add a parent")}
             </Button>
           )}
           <DropdownMenu>

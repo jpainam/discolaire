@@ -1,21 +1,5 @@
 import { z } from "zod";
 
-export const parentSchema = z.object({
-  id: z.string().optional(),
-  civility: z.string().min(1, "Civility is required"),
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  occupation: z.string().optional(),
-  employer: z.string().optional(),
-  phone1: z.string().min(8, "Phone number must be at least 8 digits"),
-  phone2: z.string().optional(),
-  email: z.string().email("Invalid email address").optional().or(z.literal("")),
-  address: z.string().min(5, "Address must be at least 5 characters"),
-  relationship: z.string().min(1, "Relationship is required"),
-  emergencyContact: z.boolean().default(false),
-  observation: z.string().optional(),
-});
-
 export const basicInfoSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
@@ -28,6 +12,7 @@ export const basicInfoSchema = z.object({
   phoneNumber: z.string().optional().default(""),
   email: z.string().email().optional().or(z.literal("")),
   residence: z.string().min(1),
+  allergies: z.string().optional().default(""),
   city: z.string().optional().default(""),
   postalCode: z.string().optional().default(""),
 });
@@ -63,7 +48,6 @@ export const studentSchema = z.object({
   ...membershipInfoSchema.shape,
 });
 
-export type Parent = z.infer<typeof parentSchema>;
 export type StudentData = z.infer<typeof studentSchema>;
 export type BasicInfo = z.infer<typeof basicInfoSchema>;
 export type AcademicInfo = z.infer<typeof academicInfoSchema>;

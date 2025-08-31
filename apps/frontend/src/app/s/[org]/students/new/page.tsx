@@ -41,6 +41,9 @@ export default function Page() {
     currentStep,
     studentData,
     selectedParents,
+    setStep1IsValid,
+    setStep2IsValid,
+    setStep3IsValid,
     setCurrentStep,
     updateStudentData,
     addParent,
@@ -75,7 +78,7 @@ export default function Page() {
     //   icon: MapPin,
     //   schema: contactInfoSchema,
     // },
-    { id: 3, title: "Parents Guardians", description: "", icon: Users },
+    { id: 3, title: t("Parents Guardians"), description: "", icon: Users },
     { id: 4, title: "Review Submit", description: "", icon: Check },
   ];
 
@@ -93,7 +96,7 @@ export default function Page() {
       tags: [],
       firstName: "",
       lastName: "",
-      dateOfBirth: new Date(),
+      dateOfBirth: undefined,
       placeOfBirth: "",
       gender: "male",
       residence: "",
@@ -106,6 +109,7 @@ export default function Page() {
       dateOfExit: undefined,
       dateOfEntry: new Date(),
       formerSchoolId: "",
+      allergies: "",
       observation: "",
       religionId: "",
       isBaptized: false,
@@ -228,9 +232,18 @@ export default function Page() {
                   >
                     <StepperTrigger
                       type="button"
+                      // onClick={async () => {
+                      //   const schema = getCurrentSchema();
+                      //   if (schema) {
+                      //     const isValid = await form.trigger();
+                      //     if (!isValid) return;
+                      //     markStepComplete(currentStep);
+                      //   }
+                      // }}
                       className={cn(
                         "gap-4 rounded-lg border px-3 py-2 max-md:flex-col",
                         bgColor,
+                        //!isCompleted && "bg-red-500",
                       )}
                     >
                       <StepperIndicator />
