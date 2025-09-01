@@ -214,7 +214,7 @@ export function Step1() {
             control={form.control}
             name="isBaptized"
             render={({ field }) => (
-              <FormItem className="flex-1">
+              <FormItem>
                 <FormLabel>{t("baptized")} ?</FormLabel>
                 <FormControl>
                   <Select
@@ -247,7 +247,7 @@ export function Step1() {
               <FormControl>
                 <Select onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("Select Blood Type")} />
+                    <SelectValue placeholder={t("Select")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="A+">A+</SelectItem>
