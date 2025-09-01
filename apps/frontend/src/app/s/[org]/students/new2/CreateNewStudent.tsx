@@ -57,15 +57,12 @@ export function CreateNewStudent() {
   const {
     currentStep,
     studentData,
-    selectedParents,
     setCurrentStep,
     updateStudentData,
-    addParent,
-    removeParent,
     markStepComplete,
-    isStepComplete,
-    canProceedToStep,
-    resetForm,
+    // isStepComplete,
+    // canProceedToStep,
+    // resetForm,
   } = useStudentStore();
 
   const getCurrentSchema = () => {

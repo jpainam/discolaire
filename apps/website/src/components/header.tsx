@@ -58,7 +58,7 @@ export function Header() {
         </div>
       </header>
 
-      <nav className="container-full sticky top-0 z-50 flex w-full justify-center gap-15 border-b border-hidden border-zinc-800/50 py-3 backdrop-blur-lg transition-all duration-300 lg:gap-20 lg:border lg:py-4">
+      <nav className="container-full gap-15 sticky top-0 z-50 flex w-full justify-center border-b border-hidden border-zinc-800/50 py-3 backdrop-blur-lg transition-all duration-300 lg:gap-20 lg:border lg:py-4">
         {navItems.map((item) => (
           <Link
             key={item.name}

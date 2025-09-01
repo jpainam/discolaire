@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
@@ -27,17 +28,37 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
 
+import type { Option } from "~/components/multiselect";
 import { DatePicker } from "~/components/DatePicker";
+import MultipleSelector from "~/components/multiselect";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
 import { useSchool } from "~/providers/SchoolProvider";
+import { useTRPC } from "~/trpc/react";
 
 export function Step1() {
   const form = useFormContext();
   const t = useTranslations();
   const { school } = useSchool();
+  const trpc = useTRPC();
+  const clubsQuery = useQuery(trpc.setting.clubs.queryOptions());
+  const sportsQuery = useQuery(trpc.setting.sports.queryOptions());
+  const sportOptions: Option[] = sportsQuery.data
+    ? sportsQuery.data.map((sport) => ({
+        label: sport.name,
+        value: sport.id,
+      }))
+    : [];
+
+  const clubOptions: Option[] = clubsQuery.data
+    ? clubsQuery.data.map((club) => ({
+        label: club.name,
+        value: club.id,
+      }))
+    : [];
   return (
     <Card className="gap-2">
       <CardHeader>
@@ -252,34 +273,99 @@ export function Step1() {
             )}
           />
         </div>
-
-        <FormField
-          control={form.control}
-          name="bloodType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("Blood Type")}</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("Select Blood Type")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="A+">A+</SelectItem>
-                    <SelectItem value="A-">A-</SelectItem>
-                    <SelectItem value="B+">B+</SelectItem>
-                    <SelectItem value="B-">B-</SelectItem>
-                    <SelectItem value="AB+">AB+</SelectItem>
-                    <SelectItem value="AB-">AB-</SelectItem>
-                    <SelectItem value="O+">O+</SelectItem>
-                    <SelectItem value="O-">O-</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="bloodType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Blood Type")}</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("Select Blood Type")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="A+">A+</SelectItem>
+                      <SelectItem value="A-">A-</SelectItem>
+                      <SelectItem value="B+">B+</SelectItem>
+                      <SelectItem value="B-">B-</SelectItem>
+                      <SelectItem value="AB+">AB+</SelectItem>
+                      <SelectItem value="AB-">AB-</SelectItem>
+                      <SelectItem value="O+">O+</SelectItem>
+                      <SelectItem value="O-">O-</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="clubs"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>{t("clubs")}</FormLabel>
+                <FormControl>
+                  {clubsQuery.isPending ? (
+                    <Skeleton className="h-8 w-full" />
+                  ) : (
+                    <MultipleSelector
+                      commandProps={{
+                        label: t("select_options"),
+                      }}
+                      value={field.value}
+                      defaultOptions={clubOptions}
+                      //options={clubOptions}
+                      onChange={(values) => {
+                        field.onChange(values);
+                      }}
+                      hidePlaceholderWhenSelected
+                      emptyIndicator={
+                        <p className="text-center text-sm">{t("no_results")}</p>
+                      }
+                    />
+                  )}
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="sports"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>{t("sports")}</FormLabel>
+                <FormControl>
+                  {sportsQuery.isPending ? (
+                    <Skeleton className="h-8 w-full" />
+                  ) : (
+                    <MultipleSelector
+                      commandProps={{
+                        label: t("select_options"),
+                      }}
+                      value={field.value}
+                      defaultOptions={sportOptions}
+                      //options={sportOptions}
+                      onChange={(values) => {
+                        field.onChange(values);
+                      }}
+                      hidePlaceholderWhenSelected
+                      emptyIndicator={
+                        <p className="text-center text-sm">{t("no_results")}</p>
+                      }
+                    />
+                  )}
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="col-span-full grid gap-4 md:grid-cols-2">
           <FormField
