@@ -39,7 +39,7 @@ export function Step1() {
   const t = useTranslations();
   const { school } = useSchool();
   return (
-    <Card>
+    <Card className="gap-2">
       <CardHeader>
         <CardTitle className="text-md flex items-center gap-2">
           <User className="h-4 w-4" />
@@ -105,19 +105,34 @@ export function Step1() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="residence"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("address")}</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="residence"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("address")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("phoneNumber")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -266,7 +281,7 @@ export function Step1() {
           )}
         />
 
-        <div className="col-span-full space-y-4">
+        <div className="col-span-full grid gap-4 md:grid-cols-2">
           <FormField
             control={form.control}
             name="allergies"
@@ -279,6 +294,26 @@ export function Step1() {
                     className="resize-none"
                     {...field}
                     placeholder={t("List any allergies or medical conditions")}
+                    rows={2}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="observation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("Observation")}</FormLabel>
+                <FormControl>
+                  <Textarea
+                    id="observation"
+                    className="resize-none"
+                    {...field}
+                    placeholder={"Observation..."}
                     rows={2}
                   />
                 </FormControl>
