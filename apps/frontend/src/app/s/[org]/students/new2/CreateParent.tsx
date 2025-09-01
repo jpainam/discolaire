@@ -9,21 +9,31 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 
-import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 
 const createEditContactSchema = z.object({
   prefix: z.string().optional(),
@@ -32,17 +42,16 @@ const createEditContactSchema = z.object({
   occupation: z.string().optional(),
   employer: z.string().optional(),
   phoneNumber1: z.string().min(1),
-  phoneNumber2: z.string().optional(),
   address: z.string().optional(),
   observation: z.string().optional(),
+  emergencyContact: z.boolean().optional().default(true),
 });
 
-export default function CreateParent({
+export function CreateParent({
   setParentIdAction,
 }: {
-  setParentIdAction: (id: string, relationshipId: string) => void;
+  setParentIdAction: (id: string, name: string, relationshipId: string) => void;
 }) {
-  const { closeSheet } = useSheet();
   const form = useForm({
     resolver: zodResolver(createEditContactSchema),
     defaultValues: {
@@ -52,7 +61,7 @@ export default function CreateParent({
       occupation: "",
       employer: "",
       phoneNumber1: "",
-      phoneNumber2: "",
+      emergencyContact: true,
       address: "",
       observation: "",
     },
@@ -60,20 +69,10 @@ export default function CreateParent({
   const { t } = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const createStudentContactMutation = useMutation(
-    trpc.studentContact.create.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.contact.students.pathFilter());
-        await queryClient.invalidateQueries(trpc.student.contacts.pathFilter());
-        toast.success(t("created_successfully"), { id: 0 });
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+  const { closeModal } = useModal();
+
   const relationshipsQuery = useQuery(
-    trpc.studentContact.relationships.queryOptions(),
+    trpc.contactRelationship.all.queryOptions(),
   );
   const [relationshipId, setRelationshipId] = useState<string | null>(null);
 
@@ -81,9 +80,11 @@ export default function CreateParent({
     trpc.contact.create.mutationOptions({
       onSuccess: async (data) => {
         await queryClient.invalidateQueries(trpc.contact.pathFilter());
-        if (relationshipId) setParentIdAction(data.id, relationshipId);
+        if (relationshipId) {
+          setParentIdAction(data.id, getFullName(data), relationshipId);
+        }
         toast.success(t("created_successfully"), { id: 0 });
-        closeSheet();
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -99,7 +100,6 @@ export default function CreateParent({
       occupation: data.occupation,
       employer: data.employer,
       phoneNumber1: data.phoneNumber1,
-      phoneNumber2: data.phoneNumber2,
       address: data.address,
       observation: data.observation,
     };
@@ -111,86 +111,164 @@ export default function CreateParent({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-6"
+        className="grid grid-cols-1 gap-4 md:grid-cols-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <FormField
-            control={form.control}
-            name="prefix"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("civility")}</FormLabel>
-                <FormControl>
-                  <PrefixSelector
-                    onChange={field.onChange}
-                    defaultValue={field.value}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("lastName")}</FormLabel>
-                <FormControl>
-                  <Input onChange={field.onChange} defaultValue={field.value} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("firstName")}</FormLabel>
-                <FormControl>
-                  <Input onChange={field.onChange} defaultValue={field.value} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={form.control}
+          name="prefix"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("civility")}</FormLabel>
+              <FormControl>
+                <PrefixSelector
+                  className="w-full"
+                  onChange={field.onChange}
+                  defaultValue={field.value}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("lastName")}</FormLabel>
+              <FormControl>
+                <Input onChange={field.onChange} defaultValue={field.value} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="firstName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("firstName")}</FormLabel>
+              <FormControl>
+                <Input onChange={field.onChange} defaultValue={field.value} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex flex-col gap-2">
+          <Label>{t("relationship")}</Label>
+          <Select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t("relationship")} />
+            </SelectTrigger>
+            <SelectContent>
+              {relationshipsQuery.isPending ? (
+                <SelectItem value="-">Loading...</SelectItem>
+              ) : (
+                relationshipsQuery.data?.map((relationship) => (
+                  <SelectItem
+                    key={relationship.id}
+                    value={relationship.id.toString()}
+                  >
+                    {relationship.name}
+                  </SelectItem>
+                ))
+              )}
+            </SelectContent>
+          </Select>
         </div>
-        <div>
-          <InputField
-            name="firstName"
-            className="col-span-2"
-            label={t("firstName")}
-          />
+        <FormField
+          control={form.control}
+          name="phoneNumber1"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("phoneNumber")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-          <InputField name="occupation" label={t("occupation")} />
-          <InputField name="employer" label={t("employer")} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="occupation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("occupation")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-          <InputField name="phoneNumber1" label={t("phoneNumber") + "1"} />
-          <InputField name="phoneNumber2" label={t("phoneNumber") + "2"} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="employer"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("employer")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-          <InputField
-            name="address"
-            className="col-span-2"
-            label={t("address")}
-          />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("address")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-          <FormField
-            control={form.control}
-            name="observation"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>{t("observation")}</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder={t("observation")}
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="observation"
+          render={({ field }) => (
+            <FormItem className="col-span-full">
+              <FormLabel>{t("observation")}</FormLabel>
+              <FormControl>
+                <Textarea className="resize-none" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="emergencyContact"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center space-x-2">
+              <FormControl>
+                <Checkbox
+                  onCheckedChange={(checked) =>
+                    field.onChange(checked === true)
+                  }
+                />
+              </FormControl>
+              <FormLabel>{t("emergencyContact")}</FormLabel>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex items-center justify-end gap-2">
           <Button
@@ -202,7 +280,14 @@ export default function CreateParent({
             {t("submit")}
           </Button>
 
-          <Button type="button" variant="outline" size={"sm"}>
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            type="button"
+            variant="outline"
+            size={"sm"}
+          >
             {t("close")}
           </Button>
         </div>

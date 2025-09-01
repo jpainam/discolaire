@@ -47,7 +47,7 @@ export function DataTablePagination<TData>({
             ))}
           </SelectContent>
         </Select>
-        <p className="text-sm font-medium whitespace-nowrap">rows per page</p>
+        <p className="whitespace-nowrap text-sm font-medium">rows per page</p>
       </div>
       <div className="flex items-center space-x-2">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">

@@ -16,20 +16,23 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Separator } from "@repo/ui/components/separator";
 
-import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+import { CreateParent } from "./CreateParent";
+import { useStudentStore } from "./store";
 
 export function Step3() {
   const trpc = useTRPC();
   const [query, setQuery] = useState("");
+  const { addParent } = useStudentStore();
 
   const debounce = useDebouncedCallback((value: string) => {
     setQuery(value);
   }, 300);
-  const { openSheet } = useSheet();
+
+  const { openModal } = useModal();
   const parentSearchQuery = useQuery(
     trpc.contact.search.queryOptions({ query }),
   );
@@ -62,8 +65,18 @@ export function Step3() {
           />
           <Button
             onClick={() => {
-              openSheet({
-                view: <CreateEditContact />,
+              openModal({
+                view: (
+                  <CreateParent
+                    setParentIdAction={(id, name, relationship) => {
+                      addParent({
+                        parentId: id,
+                        name: name,
+                        relationshipId: relationship,
+                      });
+                    }}
+                  />
+                ),
               });
             }}
             type="button"

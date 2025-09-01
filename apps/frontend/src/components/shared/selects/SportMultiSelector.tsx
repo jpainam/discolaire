@@ -4,18 +4,24 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown, X } from "lucide-react";
 
-
-
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@repo/ui/components/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/components/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@repo/ui/components/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 import { cn } from "@repo/ui/lib/utils";
 
-
-
 import { useTRPC } from "~/trpc/react";
-
 
 interface Option {
   id: string;

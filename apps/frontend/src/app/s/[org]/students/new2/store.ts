@@ -14,7 +14,11 @@ interface StudentStore {
   // Actions
   setCurrentStep: (step: number) => void;
   updateStudentData: (data: Partial<StudentData>) => void;
-  addParent: (data: { parentId: string; name: string }) => void;
+  addParent: (data: {
+    parentId: string;
+    name: string;
+    relationshipId: string;
+  }) => void;
   removeParent: (parentId: string) => void;
   //updateParent: (parentId: string, updates: Partial<string>) => void;
   markStepComplete: (step: number) => void;
@@ -71,7 +75,11 @@ export const useStudentStore = create<StudentStore>()(
         set((state) => ({
           selectedParents: [
             ...state.selectedParents,
-            { id: parent.parentId, name: parent.name },
+            {
+              id: parent.parentId,
+              name: parent.name,
+              relationshipId: parent.relationshipId,
+            },
           ],
         })),
 
