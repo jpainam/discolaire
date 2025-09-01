@@ -4,15 +4,14 @@ import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
 
-
-
 import { Badge } from "@repo/ui/components/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import { Separator } from "@repo/ui/components/separator";
-
-
-
-
 
 export function Step4() {
   const form = useFormContext();

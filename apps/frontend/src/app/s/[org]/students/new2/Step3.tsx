@@ -6,21 +6,21 @@ import { Plus, Search, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useDebouncedCallback } from "use-debounce";
 
-
-
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
 import { Separator } from "@repo/ui/components/separator";
-
-
 
 import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-
 
 export function Step3() {
   const trpc = useTRPC();
