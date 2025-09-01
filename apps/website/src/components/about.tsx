@@ -44,7 +44,7 @@ export default function AboutPage() {
       <section className="relative flex h-[25vh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-10" />
         <div className="absolute inset-0" />
-        <div className="relative z-20 container text-center">
+        <div className="container relative z-20 text-center">
           <h1 className="mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-4xl font-bold text-transparent md:text-6xl">
             About Discolaire
           </h1>
@@ -132,7 +132,7 @@ export default function AboutPage() {
             <Card className="border-zinc-800/30 bg-zinc-900/20 backdrop-blur-sm">
               <CardContent className="p-8">
                 <Quote className="mb-6 h-10 w-10 text-zinc-600" />
-                <p className="mb-8 text-xl text-zinc-400 italic">
+                <p className="mb-8 text-xl italic text-zinc-400">
                   {testimonials[activeTestimonial]?.quote ??
                     "No testimonial available."}
                 </p>
