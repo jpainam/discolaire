@@ -5,7 +5,7 @@ export function SectionThree() {
     <section className="relative mb-12">
       <div className="container overflow-hidden p-8 md:p-10 md:pb-0">
         <div className="flex flex-col md:flex-row md:space-x-12">
-          <div className="mt-6 md:mb-8 md:mr-8 md:max-w-[40%]">
+          <div className="mt-6 md:mr-8 md:mb-8 md:max-w-[40%]">
             <h3 className="mb-4 text-xl font-medium md:text-2xl">
               Time track your projects
             </h3>
@@ -52,7 +52,7 @@ export function SectionThree() {
             src={"/time-tracker.png"}
             height={400}
             width={400}
-            className="-mb-[32px] mt-8 object-contain md:-mb-[1px] md:mt-0"
+            className="mt-8 -mb-[32px] object-contain md:mt-0 md:-mb-[1px]"
             quality={100}
             alt="Tracker"
           />
