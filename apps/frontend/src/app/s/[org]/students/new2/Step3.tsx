@@ -6,20 +6,21 @@ import { Plus, Search, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useDebouncedCallback } from "use-debounce";
 
+
+
 import { Button } from "@repo/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
 import { Separator } from "@repo/ui/components/separator";
 
+
+
 import CreateEditContact from "~/components/contacts/CreateEditContact";
+import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+
 
 export function Step3() {
   const trpc = useTRPC();
@@ -33,6 +34,7 @@ export function Step3() {
     trpc.contact.search.queryOptions({ query }),
   );
   const t = useTranslations();
+  const [relationshipId, setRelationshipId] = useState<string | null>(null);
   return (
     <Card>
       <CardHeader>
@@ -42,14 +44,34 @@ export function Step3() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="relative flex-1">
-          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-          <Input
-            placeholder={t("search")}
-            value={query}
-            onChange={(e) => debounce(e.target.value)}
-            className="pl-10"
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+          <div className="relative flex-1">
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+            <Input
+              placeholder={t("search")}
+              value={query}
+              onChange={(e) => debounce(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <RelationshipSelector
+            defaultValue={relationshipId}
+            onChange={(val) => {
+              setRelationshipId(val);
+            }}
           />
+          <Button
+            onClick={() => {
+              openSheet({
+                view: <CreateEditContact />,
+              });
+            }}
+            type="button"
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            {t("Add a parent")}
+          </Button>
         </div>
 
         <div className="max-h-48 overflow-y-auto rounded-lg border">
@@ -99,18 +121,6 @@ export function Step3() {
 
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">{}</h3>
-          <Button
-            onClick={() => {
-              openSheet({
-                view: <CreateEditContact />,
-              });
-            }}
-            type="button"
-            className="gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            {t("Add a parent")}
-          </Button>
         </div>
 
         {/* {selectedParents.length > 0 && (
