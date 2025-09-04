@@ -65,7 +65,7 @@ export function FeaturesSection3() {
     <div className="relative z-10 mx-auto max-w-7xl py-7">
       {/* Hero Section */}
       <section className="py-16 text-center text-white">
-        <h1 className="mb-4 bg-gradient-to-r from-green-500 to-purple-500 bg-clip-text text-4xl font-bold text-transparent uppercase">
+        <h1 className="mb-4 bg-gradient-to-r from-green-500 to-purple-500 bg-clip-text text-4xl font-bold uppercase text-transparent">
           Discolaire School Management System
         </h1>
         <p className="mt-2 text-lg font-bold text-zinc-400">

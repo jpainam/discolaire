@@ -3,31 +3,31 @@ packages:
   - packages/*
 
 catalog:
-  '@tanstack/react-query': ^5.80.7
-  '@trpc/client': ^11.4.0
-  '@trpc/server': ^11.4.0
-  '@trpc/tanstack-react-query': ^11.4.0
-  '@types/react-dom': ^19.1.5
+  "@tanstack/react-query": ^5.80.7
+  "@trpc/client": ^11.4.0
+  "@trpc/server": ^11.4.0
+  "@trpc/tanstack-react-query": ^11.4.0
+  "@types/react-dom": ^19.1.5
   eslint: ^9.28.0
   prettier: ^3.5.3
-  react: 19.0.0
-  react-dom: 19.0.0
+  react: 19.1.0
+  react-dom: 19.1.0
   tailwindcss: ^3.4.15
   typescript: ^5.8.3
   zod: ^3.25.49
 
 catalogs:
   react19:
-    '@types/react': ^19.1.6
-    '@types/react-dom': ^19.1.5
-    react: 19.0.0
-    react-dom: 19.0.0
+    "@types/react": ^19.1.6
+    "@types/react-dom": ^19.1.5
+    react: 19.1.0
+    react-dom: 19.1.0
 
 onlyBuiltDependencies:
-  - '@prisma/client'
-  - '@prisma/engines'
-  - '@sentry/cli'
-  - '@tailwindcss/oxide'
+  - "@prisma/client"
+  - "@prisma/engines"
+  - "@sentry/cli"
+  - "@tailwindcss/oxide"
   - core-js-pure
   - esbuild
   - msgpackr-extract
