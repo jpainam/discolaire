@@ -129,7 +129,7 @@ export const studentRouter = {
           schoolId: ctx.schoolId,
           enrollments: {
             some: {
-              schoolYearId: ctx.schoolYearId,
+              //schoolYearId: ctx.schoolYearId,
               classroom: {
                 ...(input.classroomId ? { id: input.classroomId } : {}),
               },
