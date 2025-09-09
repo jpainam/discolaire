@@ -608,18 +608,28 @@ export function StudentHeader() {
           {student.isRepeating && (
             <FlatBadge variant={"red"}>{t("repeating")}</FlatBadge>
           )}
-          <Badge variant="outline" className="gap-1">
-            {student.status == StudentStatus.ACTIVE ? (
+          {student.status == StudentStatus.ACTIVE && (
+            <Badge variant={"outline"} className="gap-1">
               <CheckIcon
-                className="text-emerald-500"
+                //className="text-emerald-500"
                 size={12}
                 aria-hidden="true"
               />
-            ) : (
-              <XIcon className="text-yellow-500" size={12} aria-hidden="true" />
-            )}
-            {t(`${student.status.toLowerCase()}`)}
-          </Badge>
+
+              {t(`${student.status.toLowerCase()}`)}
+            </Badge>
+          )}
+          {student.status != StudentStatus.ACTIVE && (
+            <Badge
+              appearance={"outline"}
+              variant={"destructive"}
+              className="gap-1"
+            >
+              <XIcon size={12} aria-hidden="true" />
+
+              {t(`${student.status.toLowerCase()}`)}
+            </Badge>
+          )}
           <FlatBadge
             variant={student.gender == "female" ? "pink" : "blue"}
             className="flex flex-row items-center gap-1"
