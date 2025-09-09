@@ -11,6 +11,8 @@ import i18next from "i18next";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
+import { StudentStatus } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -36,11 +38,15 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
+export function StudentEnrollmentTable({
+  student,
+}: {
+  student: RouterOutputs["student"]["get"];
+}) {
   const { t } = useLocale();
   const trpc = useTRPC();
   const { data: enrollments } = useSuspenseQuery(
-    trpc.student.enrollments.queryOptions(studentId),
+    trpc.student.enrollments.queryOptions(student.id),
   );
   const confirm = useConfirm();
   const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
@@ -76,6 +82,8 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
   if (enrollments.length === 0) {
     return <EmptyState className="my-2" />;
   }
+
+  const disabled = student.status !== StudentStatus.ACTIVE;
   return (
     <div className="m-2 rounded-md border">
       <Table>
@@ -141,7 +149,7 @@ export function StudentEnrollmentTable({ studentId }: { studentId: string }) {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
                           variant="destructive"
-                          disabled={!c.schoolYear.isActive}
+                          disabled={!c.schoolYear.isActive || disabled}
                           onSelect={async () => {
                             const isConfirmed = await confirm({
                               title: t("delete"),

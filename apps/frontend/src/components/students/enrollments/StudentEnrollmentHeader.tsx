@@ -1,9 +1,10 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRightLeft, ChevronRight, MoreVertical } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
+import { StudentStatus } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -18,21 +19,22 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
-import { useTRPC } from "~/trpc/react";
 import { EnrollStudentModal } from "./EnrollStudentModal";
 
-export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
+export function StudentEnrollmentHeader({
+  student,
+}: {
+  student: RouterOutputs["student"]["get"];
+}) {
   const { t } = useLocale();
-  const trpc = useTRPC();
-  const { data: student } = useSuspenseQuery(
-    trpc.student.get.queryOptions(studentId),
-  );
+
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();
   const { schoolYear } = useSchool();
 
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
   const isEnrolled = !!student.classroom;
+  const disabled = student.status !== StudentStatus.ACTIVE;
 
   return (
     <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-4 py-1">
@@ -42,7 +44,7 @@ export function StudentEnrollmentHeader({ studentId }: { studentId: string }) {
         {!isEnrolled && canEnroll && (
           <Button
             size={"sm"}
-            disabled={!schoolYear.isActive}
+            disabled={!schoolYear.isActive || disabled}
             onClick={() => {
               openModal({
                 title: t("enrollment"),

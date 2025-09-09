@@ -169,6 +169,7 @@ export const enrollmentRouter = {
         },
         where: {
           schoolId: ctx.schoolId,
+          status: "ACTIVE",
           enrollments: {
             none: {
               schoolYearId: ctx.schoolYearId,

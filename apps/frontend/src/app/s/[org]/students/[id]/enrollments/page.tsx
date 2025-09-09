@@ -6,7 +6,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentEnrollmentHeader } from "~/components/students/enrollments/StudentEnrollmentHeader";
 import { StudentEnrollmentTable } from "~/components/students/enrollments/StudentEnrollmentTable";
-import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -17,6 +17,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.get.queryOptions(id),
     trpc.student.enrollments.queryOptions(id),
   ]);
+  const queryClient =  getQueryClient();
+  const student = await queryClient.fetchQuery(
+    trpc.student.get.queryOptions(id),
+  );
 
   return (
     <HydrateClient>
@@ -29,7 +33,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StudentEnrollmentHeader studentId={params.id} />
+          <StudentEnrollmentHeader student={student} />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
@@ -41,7 +45,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StudentEnrollmentTable studentId={params.id} />
+          <StudentEnrollmentTable student={student} />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
