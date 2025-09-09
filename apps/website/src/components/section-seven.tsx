@@ -24,7 +24,7 @@ export function SectionSeven() {
         Le chemin vers la réussite commence ici
       </p>
       <TypewriterEffectSmooth words={words} />
-      <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+      <div className="flex flex-col space-y-4 space-x-0 md:flex-row md:space-y-0 md:space-x-4">
         <button className="h-10 w-40 rounded-xl border border-transparent bg-black text-sm text-white dark:border-white">
           Nous contacter
         </button>
