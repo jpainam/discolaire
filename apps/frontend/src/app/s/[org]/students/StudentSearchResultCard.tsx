@@ -92,7 +92,7 @@ export function StudentSearchResultCard({
                       className="size-1.5 rounded-full bg-emerald-500"
                       aria-hidden="true"
                     ></span>
-                    {t(`${student.status.toUpperCase()}`)}
+                    {t(`${student.status.toLowerCase()}`)}
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="gap-1.5">
@@ -100,7 +100,7 @@ export function StudentSearchResultCard({
                       className="size-1.5 rounded-full bg-red-500"
                       aria-hidden="true"
                     ></span>
-                    {t(`${student.status.toUpperCase()}`)}
+                    {t(`${student.status.toLowerCase()}`)}
                   </Badge>
                 )}
               </div>

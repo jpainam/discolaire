@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -32,6 +33,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
+import { syncEleveExclus } from "~/actions/sync_eleve_exclus";
 import {
   syncTransactionIds,
   updateFeesDate,
@@ -108,6 +110,11 @@ export function SubscriptionHeader() {
     const r = await updateFeesDate();
     toast.success(`${r} fees updated`, { id: 0 });
   };
+
+  const updateStudentStatus = async () => {
+    const r = await syncEleveExclus();
+    toast.success(`${r} students updated`, { id: 0 });
+  };
   return (
     <div className="px-4 py-2">
       <div className="flex items-center justify-between">
@@ -127,7 +134,7 @@ export function SubscriptionHeader() {
               {t("create")}
             </Button>
           )}
-          <Button
+          {/* <Button
             size={"sm"}
             onClick={async () => {
               toast.loading(t("Processing"), { id: 0 });
@@ -135,8 +142,17 @@ export function SubscriptionHeader() {
             }}
           >
             Sync transactions
-          </Button>
+          </Button> */}
           <Button
+            size={"sm"}
+            onClick={async () => {
+              toast.loading(t("Processing"), { id: 0 });
+              await updateStudentStatus();
+            }}
+          >
+            Update expelled students
+          </Button>
+          {/* <Button
             onClick={async () => {
               toast.loading(t("Processing"), { id: 0 });
               await updateFees();
@@ -144,7 +160,7 @@ export function SubscriptionHeader() {
             size={"sm"}
           >
             Update 2000 Fees
-          </Button>
+          </Button> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size={"icon"} variant={"outline"} className="size-8">
