@@ -233,3 +233,5 @@ PILL https://www.kibo-ui.com/components/pill
 https://www.kibo-ui.com/components/banner
 https://template.openstatus.dev/dashboard/settings/general
 https://www.shsfui.com/
+
+pg_restore --dbname "postgres://postgres:postgres@localhost:5432/ipbw3" --no-owner backup.sql

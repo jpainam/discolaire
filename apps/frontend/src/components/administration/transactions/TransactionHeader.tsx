@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { DatePicker } from "~/components/DatePicker";
+import DateRangePicker from "~/components/date-range-picker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -78,27 +78,19 @@ export function TransactionHeader() {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <Label className="hidden md:block"> {t("from")}</Label>
-        <DatePicker
-          defaultValue={from}
-          onChange={(val) => {
+        <Label className="hidden md:block">{t("Date range")}</Label>
+        <DateRangePicker
+          defaultValue={
+            from && to ? { from: new Date(from), to: new Date(to) } : undefined
+          }
+          onSelectAction={(val) => {
             router.push(
-              `?${createQueryString({ from: val?.toLocaleDateString() })}`,
+              `?${createQueryString({ from: val?.from?.toISOString(), to: val?.to?.toISOString() })}`,
             );
           }}
         />
       </div>
-      <div className="flex flex-col gap-1">
-        <Label className="hidden md:block">{t("to")}</Label>
-        <DatePicker
-          defaultValue={to}
-          onChange={(val) => {
-            router.push(
-              `?${createQueryString({ to: val?.toLocaleDateString() })}`,
-            );
-          }}
-        />
-      </div>
+
       <div className="flex flex-col gap-1">
         <Label className="hidden md:block">{t("status")}</Label>
         <TransactionStatusSelector

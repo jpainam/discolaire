@@ -293,9 +293,11 @@
   "List any allergies or medical conditions": "List any allergies or medical conditions",
   "classroomGraph": "Classroom Graph",
   "Blood Type": "Blood Type",
-
+  "Date range": "Date Range",
   "Parents Guardians": "Parents / Guardians",
   "Add a parent": "Add a parent",
+  "Last year": "Last year",
+  "Yesterday": "Yesterday",
   "classroomLeader": "Classroom Leader",
   "classroomReportCard": "Classroom Report Card",
   "classroom_council": "Classroom Council",

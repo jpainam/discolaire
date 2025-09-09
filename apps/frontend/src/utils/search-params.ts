@@ -1,7 +1,7 @@
 import {
   createLoader,
   parseAsFloat,
-  parseAsIsoDate,
+  parseAsIsoDateTime,
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
@@ -22,8 +22,8 @@ export const reportcardSearchParams = createLoader(
   reportcardSearchParamsSchema,
 );
 export const transactionSearchParamsSchema = {
-  from: parseAsIsoDate,
-  to: parseAsIsoDate,
+  from: parseAsIsoDateTime,
+  to: parseAsIsoDateTime,
   status: parseAsString,
   classroomId: parseAsString,
   journalId: parseAsString,
