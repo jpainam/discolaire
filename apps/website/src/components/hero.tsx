@@ -10,9 +10,9 @@ export function Hero() {
       className="relative -mx-4 overflow-hidden px-4 py-20 md:mx-0 md:py-28 lg:py-36"
     >
       {/* Background decorative elements */}
-      <div className="absolute top-0 left-0 z-0 h-full w-full overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
-        <div className="absolute right-1/3 bottom-1/3 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl"></div>
+      <div className="absolute left-0 top-0 z-0 h-full w-full overflow-hidden">
+        <div className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div className="absolute bottom-1/3 right-1/3 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl"></div>
       </div>
 
       <div className="relative z-10">

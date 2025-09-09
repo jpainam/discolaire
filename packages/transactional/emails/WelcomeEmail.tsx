@@ -72,7 +72,7 @@ const WelcomeEmail = ({
             </Section>
 
             {/* Header */}
-            <Heading className="mt-[16px] mb-[24px] text-center text-[24px] font-bold text-gray-600">
+            <Heading className="mb-[24px] mt-[16px] text-center text-[24px] font-bold text-gray-600">
               {t("welcome_to_discolaire")}
             </Heading>
 

@@ -100,7 +100,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="absolute top-[75px] left-[8px] z-20 h-[20px] w-[35px]"
+                    className="absolute left-[8px] top-[75px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 1))}
                   >
                     <span className="sr-only">Overview</span>
@@ -119,7 +119,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="absolute top-[105px] left-[8px] z-20 h-[20px] w-[35px]"
+                    className="absolute left-[8px] top-[105px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 5))}
                   >
                     <span className="sr-only">Transactions</span>
@@ -138,7 +138,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="absolute top-[135px] left-[8px] z-20 h-[20px] w-[35px]"
+                    className="absolute left-[8px] top-[135px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 3))}
                   >
                     <span className="sr-only">Inbox</span>
@@ -157,7 +157,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="absolute top-[170px] left-[8px] z-20 h-[20px] w-[35px]"
+                    className="absolute left-[8px] top-[170px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 2))}
                   >
                     <span className="sr-only">Tracker</span>
@@ -176,7 +176,7 @@ export const CardStack = ({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="absolute top-[230px] left-[8px] z-20 h-[20px] w-[35px]"
+                    className="absolute left-[8px] top-[230px] z-20 h-[20px] w-[35px]"
                     onClick={() => onChangeCard(cards.find((c) => c.id === 4))}
                   >
                     <span className="sr-only">Vault</span>

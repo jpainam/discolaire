@@ -40,7 +40,7 @@ export default function FAQsection() {
       {/* Hero Section */}
       <section className="relative flex h-[20vh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg?height=600&width=1200')] bg-cover bg-center opacity-30" />
-        <div className="relative z-20 container text-center">
+        <div className="container relative z-20 text-center">
           <h1 className="mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-3xl font-bold text-transparent md:text-6xl">
             Frequently Asked Questions
           </h1>
@@ -51,7 +51,7 @@ export default function FAQsection() {
       </section>
 
       {/* FAQ Section */}
-      <section className="flex justify-center py-15">
+      <section className="py-15 flex justify-center">
         <div className="container max-w-4xl">
           <div className="space-y-6">
             {faqs.map((faq, index) => (
@@ -78,7 +78,7 @@ export default function FAQsection() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="border-t border-zinc-800 px-6 pt-4 pb-6 text-zinc-300">
+                      <div className="border-t border-zinc-800 px-6 pb-6 pt-4 text-zinc-300">
                         {faq.answer}
                       </div>
                     </motion.div>
@@ -91,7 +91,7 @@ export default function FAQsection() {
       </section>
 
       {/* Contact Section */}
-      <section className="flex justify-center py-13">
+      <section className="py-13 flex justify-center">
         <div className="container max-w-2xl text-center">
           <h2 className="mb-4 text-2xl font-bold">Still have questions?</h2>
           <p className="mb-8 text-zinc-300">
