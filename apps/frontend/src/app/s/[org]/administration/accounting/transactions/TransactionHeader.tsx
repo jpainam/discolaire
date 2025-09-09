@@ -49,6 +49,7 @@ export function TransactionHeader() {
       <FlatBadge variant={"indigo"}>
         {t("totals")} : {moneyFormatter.format(totals)}
       </FlatBadge>
+
       <FlatBadge variant={"green"}>
         {t("validated")} : {moneyFormatter.format(validated)}
       </FlatBadge>

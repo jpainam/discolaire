@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { MoreVertical } from "lucide-react";
 import { useQueryStates } from "nuqs";
 
@@ -84,9 +85,13 @@ export function TransactionHeader() {
             from && to ? { from: new Date(from), to: new Date(to) } : undefined
           }
           onSelectAction={(val) => {
-            router.push(
-              `?${createQueryString({ from: val?.from?.toISOString(), to: val?.to?.toISOString() })}`,
-            );
+            if (val?.from && val.to) {
+              router.push(
+                `?${createQueryString({ from: format(val.from, "yyyy-MM-dd"), to: format(val.to, "yyyy-MM-dd") })}`,
+              );
+            } else {
+              router.push(`?${createQueryString({ from: null, to: null })}`);
+            }
           }}
         />
       </div>

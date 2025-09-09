@@ -139,7 +139,7 @@ export const transactionRouter = {
                   {
                     createdAt: {
                       gte: input.from,
-                      lte: input.to,
+                      lt: addDays(input.to, 1),
                     },
                   },
                 ]

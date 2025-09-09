@@ -1285,7 +1285,7 @@ importers:
         specifier: catalog:react19
         version: 19.1.0
       react-day-picker:
-        specifier: ^9.8.1
+        specifier: ^9.9.0
         version: 9.9.0(react@19.1.0)
       react-dom:
         specifier: catalog:react19

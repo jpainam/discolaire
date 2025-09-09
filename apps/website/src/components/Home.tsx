@@ -325,7 +325,7 @@ export default function Home() {
               <div className="space-y-12">
                 <div className="relative grid gap-6 md:grid-cols-2">
                   <div className="md:text-right">
-                    <div className="bg-primary absolute left-1/2 top-6 h-4 w-4 -translate-x-1/2 rounded-full" />
+                    <div className="bg-primary absolute top-6 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full" />
                     <h3 className="text-xl font-bold">The Beginning</h3>
                     <p className="mt-2 text-zinc-400">
                       Founded by a group of educators and technologists who saw
@@ -338,7 +338,7 @@ export default function Home() {
                 </div>
                 <div className="relative grid gap-6 md:grid-cols-2">
                   <div className="md:text-right">
-                    <div className="bg-primary absolute left-1/2 top-6 h-4 w-4 -translate-x-1/2 rounded-full" />
+                    <div className="bg-primary absolute top-6 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full" />
                     <h3 className="text-xl font-bold">
                       First School Partnership
                     </h3>
@@ -353,7 +353,7 @@ export default function Home() {
                 </div>
                 <div className="relative grid gap-6 md:grid-cols-2">
                   <div className="md:text-right">
-                    <div className="bg-primary absolute left-1/2 top-6 h-4 w-4 -translate-x-1/2 rounded-full" />
+                    <div className="bg-primary absolute top-6 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full" />
                     <h3 className="text-xl font-bold">Rapid Growth</h3>
                     <p className="mt-2 text-zinc-400">
                       Expanded to over 30 schools across the country, helping
