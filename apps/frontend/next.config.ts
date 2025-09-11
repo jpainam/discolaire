@@ -5,7 +5,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 import "./src/env";
 
 const config = {
-  // output: "standalone",
+  output: "standalone",
   // experimental: {
   //   nodeMiddleware: true,
   // },

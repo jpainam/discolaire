@@ -128,6 +128,10 @@ SELECT setval(pg_get_serial_sequence('"Section"', 'id'), coalesce(max(id) + 1, 1
 | --------- | ---- |
 | Messaging | 6000 |
 
+# Docker
+
+`docker build -f apps/frontend/Dockerfile .`
+
 # Docker - no more space
 
 https://depot.dev/blog/docker-clear-cache
