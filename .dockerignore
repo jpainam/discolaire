@@ -6,3 +6,8 @@ README.md
 .next
 docker
 .git
+
+.env
+*.env
+**/.env
+**/.env.*

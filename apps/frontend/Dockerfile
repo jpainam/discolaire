@@ -1,22 +1,17 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:23.11.1-alpine AS base
+FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
-
-ENV NODE_OPTIONS="--max-old-space-size=6144"
-
-
 # Install dependencies based on the preferred package manager
 COPY pnpm-workspace.yaml package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
-COPY . .
-RUN npm install -g pnpm
-# Use the lockfile to install dependencies
-RUN pnpm install 
+RUN corepack enable pnpm && pnpm i --frozen-lockfile
+
 
 
 # Rebuild the source code only when needed
@@ -30,9 +25,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
-RUN pnpm --filter frontend build
+RUN corepack enable pnpm && pnpm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
