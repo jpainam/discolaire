@@ -32,7 +32,7 @@ COPY . .
 
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
-RUN pnpm run build
+RUN pnpm --filter frontend build
 
 # Production image, copy all the files and run next
 FROM base AS runner
