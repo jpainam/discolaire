@@ -1,7 +1,9 @@
 version: "3.9"
 services:
   frontend:
-    build: ./apps/frontend
+    build:
+      dockerfile: apps/frontend/Dockerfile
+      context: .
     env_file:
       - ./.env
     ports:
