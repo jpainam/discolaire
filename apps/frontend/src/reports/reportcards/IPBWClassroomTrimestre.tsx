@@ -36,8 +36,7 @@ export function IPBWClassroomTrimestre({
   const values = Array.from(globalRanks.values());
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   const primaryContactsMap = new Map(
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    contacts.filter((c) => c.studentId != null).map((c) => [c.studentId, c]),
+    contacts.filter((c) => c.studentId).map((c) => [c.studentId, c]),
   );
   const groups = _.groupBy(subjects, "subjectGroupId");
   const averages = values.map((g) => g.average);

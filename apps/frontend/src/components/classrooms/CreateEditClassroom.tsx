@@ -28,14 +28,10 @@ type ClassroomAllProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]
 >[number];
 
-type ClassroomGetProcedureOutput = NonNullable<
-  RouterOutputs["classroom"]["get"]
->;
-
 export function CreateEditClassroom({
   classroom,
 }: {
-  classroom?: ClassroomAllProcedureOutput | ClassroomGetProcedureOutput;
+  classroom?: ClassroomAllProcedureOutput;
 }) {
   const { t } = useLocale();
   const updateClassroomSchema = z.object({

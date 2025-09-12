@@ -66,9 +66,7 @@ export async function StudentTransactionSummary({
     if (t.transactionType === TransactionType.CREDIT) bucket.credit += t.amount;
     else if (t.transactionType === TransactionType.DEBIT)
       bucket.debit += t.amount;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    else if (t.transactionType === TransactionType.DISCOUNT)
-      bucket.discount += t.amount;
+    else bucket.discount += t.amount;
     return acc;
   }, {});
 

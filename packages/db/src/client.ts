@@ -1,10 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-export const db = globalForPrisma.prisma ?? new PrismaClient();
+export const db = globalForPrisma.prisma;
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;

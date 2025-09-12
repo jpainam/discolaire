@@ -3,9 +3,7 @@
  * It does not contain any job processing logic.
  * The actual job processing logic is in the worker folders.
  */
-
-import { logger } from "@repo/utils";
-
+import { logger } from "~/utils/logger";
 import { backupQueue } from "./queue";
 import { scheduleTransactionSummaryNofication } from "./transaction-summary.worker";
 

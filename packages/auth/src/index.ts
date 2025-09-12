@@ -8,10 +8,9 @@ import { nextCookies } from "better-auth/next-js";
 import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
 
 import { db } from "@repo/db";
-import { sendEmail } from "@repo/utils";
 
 import { authEnv } from "../env";
-import { completeRegistration, sendResetPassword } from "./utils";
+import { completeRegistration, sendEmail, sendResetPassword } from "./utils";
 
 const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */

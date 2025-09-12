@@ -3,10 +3,10 @@ import { Worker } from "bullmq";
 import { fromError } from "zod-validation-error/v4";
 
 import { db } from "@repo/db";
-import { logActivitySchema } from "@repo/validators";
 
 import { logQueue, logQueueName } from "./queue";
 import { getRedis } from "./redis-client";
+import { logActivitySchema } from "./validation-schema";
 
 const connection = getRedis();
 

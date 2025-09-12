@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Fragment, useState } from "react";
@@ -87,8 +86,7 @@ export function AppreciationList({
                       setOpenIdItem(null);
                     }}
                     category={category}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    appreciation={appreciation as any}
+                    //appreciation={appreciation}
                   />
                 ) : (
                   <div

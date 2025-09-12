@@ -28,8 +28,6 @@
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/kv": "workspace:*",
-    "@repo/utils": "workspace:*",
-    "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@trpc/server": "catalog:",
     "@unkey/ratelimit": "^2.0.1",

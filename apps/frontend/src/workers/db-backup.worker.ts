@@ -3,9 +3,8 @@ import fs from "fs/promises";
 import { promisify } from "util";
 import { Worker } from "bullmq";
 
-import { logger } from "@repo/utils";
-
 import { env } from "~/env";
+import { logger } from "~/utils/logger";
 import { backupQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 

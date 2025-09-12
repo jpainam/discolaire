@@ -4,9 +4,9 @@ import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
 import { db } from "@repo/db";
-import { logger } from "@repo/utils";
 
 import { env } from "~/env";
+import { logger } from "~/utils/logger";
 import { JobNames, jobQueue, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 

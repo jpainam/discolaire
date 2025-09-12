@@ -6,7 +6,8 @@ import { z } from "zod/v4";
 
 import { db } from "@repo/db";
 import ResetPassword from "@repo/transactional/emails/ResetPassword";
-import { sendEmail } from "@repo/utils";
+
+import { sendEmail } from "~/utils/send-email";
 
 z.config({
   customError: createErrorMap({

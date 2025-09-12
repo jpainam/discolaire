@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import { useParams } from "next/navigation";
@@ -386,15 +385,12 @@ export function CreateEditAssignment({
                         >
                           <FormControl>
                             <Checkbox
-                              checked={(field.value ?? []).includes(item.value)}
+                              checked={field.value.includes(item.value)}
                               onCheckedChange={(checked) => {
                                 return checked
-                                  ? field.onChange([
-                                      ...(field.value ?? []),
-                                      item.value,
-                                    ])
+                                  ? field.onChange([...field.value, item.value])
                                   : field.onChange(
-                                      (field.value ?? []).filter(
+                                      field.value.filter(
                                         (value) => value !== item.value,
                                       ),
                                     );

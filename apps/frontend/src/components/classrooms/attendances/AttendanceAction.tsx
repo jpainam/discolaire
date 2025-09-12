@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -23,17 +22,17 @@ import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
-type AbsenceType = RouterOutputs["absence"]["byClassroom"][number];
+//type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
+//type AbsenceType = RouterOutputs["absence"]["byClassroom"][number];
 
 export function AttendanceAction({
   type,
   attendanceId,
-  attendance,
+  //attendance,
 }: {
   type: "absence" | "lateness" | "chatter" | "consigne" | "exclusion";
   attendanceId: number;
-  attendance?: AbsenceType | LatenessType;
+  //attendance?: AbsenceType  ;
 }) {
   const { t } = useLocale();
   const confirm = useConfirm();
@@ -61,18 +60,17 @@ export function AttendanceAction({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {attendance && (
-          <DropdownMenuItem
-            variant="destructive"
-            className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            onSelect={() => {
-              console.log("Viewing details of attendance", attendanceId);
-            }}
-          >
-            <Columns4 />
-            {t("delete_justification")}
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuItem
+          variant="destructive"
+          className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+          onSelect={() => {
+            console.log("Viewing details of attendance", attendanceId);
+          }}
+        >
+          <Columns4 />
+          {t("delete_justification")}
+        </DropdownMenuItem>
+
         {(type == "lateness" || type == "absence") && (
           <DropdownMenuItem
           // onSelect={() => {

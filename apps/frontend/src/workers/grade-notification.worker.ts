@@ -3,8 +3,8 @@ import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
 import { db } from "@repo/db";
-import { logger } from "@repo/utils";
 
+import { logger } from "~/utils/logger";
 import { JobNames, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 

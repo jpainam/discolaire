@@ -42,9 +42,7 @@ const updateBookSchema = z.object({
 export function CreateEditBook({
   book,
 }: {
-  book?:
-    | RouterOutputs["book"]["recentlyUsed"][number]
-    | RouterOutputs["book"]["get"];
+  book?: RouterOutputs["book"]["recentlyUsed"][number];
 }) {
   const { t } = useLocale();
 

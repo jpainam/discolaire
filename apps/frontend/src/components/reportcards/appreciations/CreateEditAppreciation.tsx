@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
 import { Textarea } from "@repo/ui/components/textarea";
 
 import type { Appreciation, AppreciationCategory } from "~/types/appreciation";
@@ -16,7 +17,7 @@ export function CreateEditAppreciation({
   appreciation,
 }: {
   category?: AppreciationCategory;
-  appreciation?: Appreciation;
+  appreciation?: RouterOutputs["appreciation"]["all"][number] | Appreciation;
   onCompleted?: () => void;
 }) {
   const [value, setValue] = useState(category?.name);

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -273,7 +272,7 @@ const DocumentContent = ({ document }: { document: AiDocument }) => {
             <SpreadsheetEditor {...commonProps} />
           </div>
         </div>
-      ) : document.kind === DocumentKind.IMAGE ? (
+      ) : (
         <ImageEditor
           title={document.title}
           content={document.content}
@@ -282,7 +281,7 @@ const DocumentContent = ({ document }: { document: AiDocument }) => {
           status={artifact.status}
           isInline={true}
         />
-      ) : null}
+      )}
     </div>
   );
 };

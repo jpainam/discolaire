@@ -2,7 +2,7 @@ import type { Attachment } from "resend";
 import { nanoid } from "nanoid";
 import { Resend } from "resend";
 
-import { env } from "./env";
+import { env } from "../env";
 
 export const resend = new Resend(env.RESEND_API_KEY);
 
@@ -57,6 +57,3 @@ export async function sendEmail({
     return data;
   }
 }
-
-export { getAppreciationFn } from "./appreciations";
-export { logger } from "./logger";

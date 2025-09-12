@@ -4,10 +4,9 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import z from "zod";
 
-import { logger } from "@repo/utils";
-
 import { auth, getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
+import { logger } from "~/utils/logger";
 
 const loginSchema = z.object({
   username: z.string().min(1),

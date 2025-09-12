@@ -9,7 +9,6 @@ import {
   ShieldAlertIcon,
 } from "lucide-react";
 
-import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
 import { cn } from "@repo/ui/lib/utils";
 
@@ -20,8 +19,8 @@ import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
-type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
-type AbsenceType = RouterOutputs["absence"]["byClassroom"][number];
+//type LatenessType = RouterOutputs["lateness"]["byClassroom"][number];
+//type AbsenceType = RouterOutputs["absence"]["byClassroom"][number];
 export default async function Page(props: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ type?: string; term?: string; date?: Date }>;
@@ -51,7 +50,7 @@ export default async function Page(props: {
     justification?: number | null;
     description: string;
     date: Date;
-    attendance?: AbsenceType | LatenessType;
+    //attendance?: AbsenceType;
   }[] = [
     ...absences.map((absence) => ({
       id: absence.id,
@@ -61,7 +60,7 @@ export default async function Page(props: {
       justification: 0,
       description: absence.value.toString(),
       date: absence.date,
-      attendance: absence,
+      //attendance: absence,
     })),
     ...lates.map((late) => ({
       id: late.id,
@@ -71,7 +70,7 @@ export default async function Page(props: {
       justification: 0,
       description: late.duration.toString(),
       date: late.date,
-      attendance: late,
+      //attendance: late,
     })),
     ...consignes.map((consigne) => ({
       id: consigne.id,
@@ -221,7 +220,7 @@ export default async function Page(props: {
           <div className="ml-auto">
             <AttendanceAction
               type={attendance.type}
-              attendance={attendance.attendance}
+              //attendance={attendance.attendance}
               attendanceId={attendance.id}
             />
           </div>

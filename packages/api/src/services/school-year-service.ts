@@ -2,7 +2,6 @@
 import { addYears } from "date-fns";
 
 import { db } from "@repo/db";
-import { logger } from "@repo/utils";
 
 export const schoolYearService = {
   create: async ({
@@ -69,7 +68,7 @@ export const schoolYearService = {
             schoolYearId: newYear.id,
           },
         });
-        logger.info(`Classroom ${cl.name} created`);
+        console.info(`Classroom ${cl.name} created`);
         // fees
         const fees = await db.fee.findMany({
           where: {
@@ -84,7 +83,7 @@ export const schoolYearService = {
         await db.fee.createMany({
           data: allFees,
         });
-        logger.info(`Fees for classroom ${cl.name} created`);
+        console.info(`Fees for classroom ${cl.name} created`);
         // subjects
         const subjects = await db.subject.findMany({
           where: {

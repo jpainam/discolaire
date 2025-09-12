@@ -1,4 +1,3 @@
-
 import type { NextPageContext } from "next";
 
 function ErrorPage({ statusCode }: { statusCode?: number }) {

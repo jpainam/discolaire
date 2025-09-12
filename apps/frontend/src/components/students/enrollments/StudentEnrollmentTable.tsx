@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import Link from "next/link";
@@ -101,27 +100,25 @@ export function StudentEnrollmentTable({
         </TableHeader>
         <TableBody>
           {enrollments.map((c) => {
-            const createdAt = fullDateFormatter.format(
-              c.createdAt ?? new Date(),
-            );
+            const createdAt = fullDateFormatter.format(c.createdAt);
             const enrollmentStartDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentStartDate ?? new Date(),
+              c.schoolYear.enrollmentStartDate ?? new Date(),
             );
             const enrolmmentEndDate = fullDateFormatter.format(
-              c.schoolYear?.enrollmentEndDate ?? new Date(),
+              c.schoolYear.enrollmentEndDate ?? new Date(),
             );
 
             return (
               <TableRow key={c.id}>
                 <TableCell className="items-center justify-center">
-                  {c.schoolYear?.name}
+                  {c.schoolYear.name}
                 </TableCell>
                 <TableCell className="items-center justify-center">
                   <Link
                     className="hover:text-blue-600 hover:underline"
-                    href={routes.classrooms.details(c.classroomId ?? "#")}
+                    href={routes.classrooms.details(c.classroomId)}
                   >
-                    {c.classroom?.name}
+                    {c.classroom.name}
                   </Link>
                 </TableCell>
                 <TableCell>{createdAt}</TableCell>

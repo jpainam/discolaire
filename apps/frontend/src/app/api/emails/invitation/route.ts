@@ -6,9 +6,9 @@ import { z } from "zod/v4";
 
 import { db } from "@repo/db";
 import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
-import { sendEmail } from "@repo/utils";
 
 import { getSession } from "~/auth/server";
+import { sendEmail } from "~/utils/send-email";
 
 z.config({
   customError: createErrorMap({

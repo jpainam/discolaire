@@ -1,7 +1,6 @@
 import { Queue, QueueEvents } from "bullmq";
 
-import { logger } from "@repo/utils";
-
+import { logger } from "~/utils/logger";
 import { getRedis } from "./redis-client";
 
 export const JobNames = {
@@ -33,12 +32,12 @@ jobQueue.on("error", (error) => {
 });
 
 jobQueue.on("waiting", (job) => {
-  console.log(`Job ${job} added`);
+  console.log(`Job ${job.name} added`);
 });
 
 logQueue.on("error", (error) => {
   logger.error(`Log queue error: ${error}`);
 });
 logQueue.on("waiting", (job) => {
-  console.log(`Log job ${job} added`);
+  console.log(`Log job ${job.name} added`);
 });

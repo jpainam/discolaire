@@ -4,10 +4,10 @@ import { z } from "zod";
 
 import { db } from "@repo/db";
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
-import { sendEmail } from "@repo/utils";
 
 import { getSession } from "~/auth/server";
 import { getFullName } from "~/utils";
+import { sendEmail } from "~/utils/send-email";
 
 const schema = z.object({
   userId: z.string(),
