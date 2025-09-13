@@ -11,8 +11,8 @@
     "dev": "turbo watch dev --continue",
     "dev:next": "turbo watch dev -F @repo/frontend...",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "postinstall": "pnpm lint:ws && pnpm run generate",
-    "generate": "pnpm --filter @repo/db prisma generate",
+    "postinstall": "pnpm lint:ws && pnpm db:generate",
+    "db:generate": "pnpm --filter @repo/db generate",
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
@@ -33,7 +33,6 @@
     "pnpm": ">=9.6.0"
   },
   "prisma": {
-    "schema": "packages/db/prisma/schema",
     "seed": "ts-node packages/db/src/seed.ts"
   }
 }

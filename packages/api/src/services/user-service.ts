@@ -2,7 +2,6 @@ import { headers } from "next/headers";
 import { generateRandomString } from "better-auth/crypto";
 
 import type { Auth } from "@repo/auth";
-import type { Prisma } from "@repo/db";
 import { db } from "@repo/db";
 
 export const userService = {
@@ -46,7 +45,8 @@ export const userService = {
     return db.user.update({
       where: { id: userId },
       data: {
-        permissions: updatedPermissions as unknown as Prisma.JsonArray,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+        permissions: updatedPermissions as any,
       },
     });
   },

@@ -4,14 +4,6 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "exports": {
-    "./emails/*": {
-      "types": "./dist/emails/*.d.ts",
-      "default": "./emails/*.tsx"
-    },
-    "./services/*": "./services/*.ts",
-    ".": "./index.ts"
-  },
   "workspaces": [
     ".react-email"
   ],
@@ -28,12 +20,14 @@
   "dependencies": {
     "@react-email/components": "^0.4.0",
     "@react-email/preview-server": "^4.2.6",
+    "minimatch": "^10.0.3",
     "react-email": "^4.2.6"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/minimatch": "^6.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

@@ -1,6 +1,6 @@
 "use client";
 
-import type { Fee } from "@prisma/client";
+import type { Fee } from "@repo/db";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

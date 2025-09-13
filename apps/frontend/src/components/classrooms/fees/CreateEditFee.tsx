@@ -1,4 +1,3 @@
-import type { Fee } from "@prisma/client";
 import type { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -7,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import type { Fee } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,

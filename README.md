@@ -240,3 +240,5 @@ https://template.openstatus.dev/dashboard/settings/general
 https://www.shsfui.com/
 
 pg_restore --dbname "postgres://postgres:postgres@localhost:5432/ipbw3" --no-owner backup.sql
+
+`pn db:generate`, after `pn db:push`

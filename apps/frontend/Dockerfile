@@ -1,5 +1,5 @@
-FROM node:20-alpine AS base
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+FROM node:24-alpine AS base
+
 RUN apk add --no-cache libc6-compat
 
 FROM base AS builder
@@ -23,6 +23,8 @@ ENV TURBO_TOKEN=$TURBO_TOKEN
 
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
+COPY .npmrc .npmrc
+
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
