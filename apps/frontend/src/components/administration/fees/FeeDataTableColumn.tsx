@@ -1,6 +1,5 @@
 "use client";
 
-import type { Fee } from "@repo/db";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +8,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import type { Fee } from "@repo/db";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
