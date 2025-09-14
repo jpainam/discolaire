@@ -59,9 +59,6 @@ USER nextjs
 COPY --from=installer /app/apps/frontend/next.config.ts .
 COPY --from=installer /app/apps/frontend/package.json .
 
-RUN ls -lha /
-RUN ls -lha /app
-RUN ls -lha /app/apps
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=installer --chown=nextjs:nodejs /app/apps/frontend/.next/standalone ./

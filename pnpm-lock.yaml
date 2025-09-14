@@ -1124,6 +1124,9 @@ importers:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.5.1
         version: 4.7.0(prettier@3.6.2)
+      minimatch:
+        specifier: ^10.0.3
+        version: 10.0.3
       prettier:
         specifier: 'catalog:'
         version: 3.6.2
@@ -1134,6 +1137,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/minimatch':
+        specifier: ^6.0.0
+        version: 6.0.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
