@@ -27,14 +27,16 @@ COPY .npmrc .npmrc
 
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
+
 
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
 ## This would be useful for browser environment variables that are actually baked at build time and you aren't passing them in otherwise.
-# COPY .env .env  
+# COPY .env .env 
+RUN pnpm --filter @repo/db generate
 RUN CI=true SKIP_ENV_VALIDATION=true turbo run build --filter=@repo/frontend...
 
 FROM base AS runner
