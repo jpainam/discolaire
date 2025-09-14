@@ -13,12 +13,14 @@
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.8",
     "ioredis": "^5.7.0",
+    "minimatch": "^10.0.3",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/minimatch": "^6.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
