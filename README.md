@@ -130,7 +130,7 @@ SELECT setval(pg_get_serial_sequence('"Section"', 'id'), coalesce(max(id) + 1, 1
 
 # Docker
 
-`docker build -f apps/frontend/Dockerfile .`
+`docker build -f apps/frontend/Dockerfile . --progress=plain --no-cache`
 `docker compose up --build`
 
 # Docker - no more space

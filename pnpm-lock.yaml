@@ -828,6 +828,9 @@ importers:
       mime-types:
         specifier: ^3.0.1
         version: 3.0.1
+      minimatch:
+        specifier: ^10.0.3
+        version: 10.0.3
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
@@ -862,6 +865,9 @@ importers:
       '@types/mime-types':
         specifier: ^3.0.1
         version: 3.0.1
+      '@types/minimatch':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -947,6 +953,9 @@ importers:
       '@t3-oss/env-nextjs':
         specifier: ^0.13.8
         version: 0.13.8(typescript@5.9.2)(zod@3.25.76)
+      minimatch:
+        specifier: ^10.0.3
+        version: 10.0.3
       mysql2:
         specifier: ^3.14.3
         version: 3.14.5
@@ -963,6 +972,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/minimatch':
+        specifier: ^6.0.0
+        version: 6.0.0
       dotenv:
         specifier: ^17.2.2
         version: 17.2.2
@@ -1134,6 +1146,9 @@ importers:
       '@react-email/preview-server':
         specifier: ^4.2.6
         version: 4.2.11(@opentelemetry/api@1.9.0)(postcss@8.5.6)(ts-node@10.9.2(@types/node@22.18.3)(typescript@5.9.2))
+      minimatch:
+        specifier: ^10.0.3
+        version: 10.0.3
       react-email:
         specifier: ^4.2.6
         version: 4.2.11
@@ -1147,6 +1162,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/minimatch':
+        specifier: ^6.0.0
+        version: 6.0.0
       eslint:
         specifier: 'catalog:'
         version: 9.35.0(jiti@2.5.1)
@@ -17837,7 +17855,7 @@ snapshots:
 
   '@types/minimatch@6.0.0':
     dependencies:
-      minimatch: 9.0.5
+      minimatch: 10.0.3
 
   '@types/ms@2.1.0': {}
 
