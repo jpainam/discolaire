@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { Eye, MoreHorizontal, Trash2, Users2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -22,9 +22,11 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 
 import { AvatarState } from "~/components/AvatarState";
 import FlatBadge from "~/components/FlatBadge";
+import { StudentContactListSheet } from "~/components/students/contacts/StudentContactListSheet";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -91,7 +93,6 @@ export function fetchEnrollmentColumns({
           </div>
         );
       },
-      size: 400,
       enableHiding: false,
     },
 
@@ -112,6 +113,18 @@ export function fetchEnrollmentColumns({
         );
       },
       size: 110,
+    },
+    {
+      accessorKey: "placeOfBirth",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("placeOfBirth")} />
+      ),
+      cell: ({ row }) => {
+        const student = row.original;
+        return (
+          <div className="text-muted-foreground">{student.placeOfBirth}</div>
+        );
+      },
     },
 
     {
@@ -159,6 +172,7 @@ export function fetchEnrollmentColumns({
           </FlatBadge>
         );
       },
+      size: 30,
     },
     // {
     //   id: "phone",
@@ -216,6 +230,7 @@ function ActionCell({
       },
     }),
   );
+  const { openSheet } = useSheet();
 
   const confirm = useConfirm();
   return (
@@ -234,6 +249,18 @@ function ActionCell({
             }}
           >
             <Eye className="h-4 w-4" /> {t("details")}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onSelect={() => {
+              openSheet({
+                title: t("parents"),
+                view: <StudentContactListSheet studentId={student.id} />,
+              });
+            }}
+          >
+            <Users2 />
+            {t("parents")}
           </DropdownMenuItem>
           {canDeleteEnrollment && (
             <>
