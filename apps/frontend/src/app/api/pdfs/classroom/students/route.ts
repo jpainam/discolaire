@@ -87,8 +87,9 @@ async function toExcel({
       Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
-      "Date of Birth":
+      "Date de naissance":
         student.dateOfBirth && dateFormat.format(student.dateOfBirth),
+      "Lieu de Naissance": student.placeOfBirth,
       dateOfEntry:
         student.dateOfEntry && dateFormat.format(student.dateOfEntry),
     };
