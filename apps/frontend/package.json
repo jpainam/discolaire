@@ -14,8 +14,10 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@ai-sdk/react": "2.0.0-beta.6",
-    "@ai-sdk/xai": "2.0.0-beta.2",
+    "@ai-sdk/gateway": "^1.0.15",
+    "@ai-sdk/provider": "2.0.0",
+    "@ai-sdk/react": "2.0.26",
+    "@ai-sdk/xai": "2.0.13",
     "@base-ui-components/react": "1.0.0-beta.2",
     "@bprogress/next": "^3.2.12",
     "@codemirror/lang-python": "^6.2.1",
@@ -87,7 +89,7 @@
     "@vercel/blob": "^1.1.1",
     "@vercel/functions": "^2.2.6",
     "accept-language": "^3.0.20",
-    "ai": "5.0.0-beta.6",
+    "ai": "5.0.26",
     "bullmq": "^5.56.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
