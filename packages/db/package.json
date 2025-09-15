@@ -22,10 +22,10 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
-    "@prisma/client": "^6.13.0",
+    "@prisma/client": "^6.16.1",
     "@t3-oss/env-nextjs": "^0.13.8",
     "minimatch": "^10.0.3",
-    "mysql2": "^3.14.3",
+    "mysql2": "^3.14.5",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -37,7 +37,7 @@
     "dotenv-cli": "^10.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prisma": "^6.13.0",
+    "prisma": "^6.16.1",
     "typescript": "catalog:"
   }
 }
