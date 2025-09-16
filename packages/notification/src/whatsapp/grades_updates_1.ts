@@ -1,4 +1,4 @@
-import { db } from "@repo/db";
+import { db } from "../utils";
 
 export async function grades_updates_1({
   gradesheetId,

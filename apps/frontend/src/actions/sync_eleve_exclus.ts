@@ -1,7 +1,6 @@
 "use server";
 
-import { db } from "@repo/db";
-
+import { db } from "~/lib/db";
 import { studentIdMap } from "./student_id_map";
 
 const exclus: { elevee: number; dateExclusion: string }[] = [

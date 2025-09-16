@@ -40,7 +40,7 @@ import {
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,

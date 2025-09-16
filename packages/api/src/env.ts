@@ -3,6 +3,7 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
+    DATABASE_URL: z.string(),
     MESSAGING_SERVICE_URL: z.string(),
     MESSAGING_SECRET_KEY: z.string(),
     // AWS S3
@@ -24,6 +25,7 @@ export const env = createEnv({
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]),
   },
   runtimeEnv: {
+    DATABASE_URL: process.env.DATABASE_URL,
     DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,

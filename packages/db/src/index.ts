@@ -1,38 +1,23 @@
-// export { db } from "./client";
-// export * from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./generated/client/client";
 
-//import { PrismaClient } from "../generated/client";
+export interface GetDbParams {
+  connectionString: string;
+}
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+export function getDb({ connectionString }: GetDbParams): PrismaClient {
+  const pool = new PrismaPg({ connectionString });
+  const prisma = new PrismaClient({ adapter: pool });
 
-export const db = globalForPrisma.prisma ?? new PrismaClient();
+  return prisma;
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
-export * from "@prisma/client";
-export { Prisma } from "@prisma/client";
-// export {
-//   DocumentKind,
-//   StudentStatus,
-//   TransactionStatus,
-//   TransactionType,
-//   VisibilityType,
-// } from "../generated/client";
-// export type {
-//   AiChat,
-//   AiDocument,
-//   AiSuggestion,
-//   Contact,
-//   Policy,
-//   Prisma,
-//   PrismaClient,
-//   School,
-//   SchoolYear,
-//   Staff,
-//   Student,
-//   User,
-//   Vote,
-// } from "../generated/client";
+// This export is needed to avoid the TypeScript error:
+// ```
+// The inferred type of 'prisma' cannot be named without a reference to '../node_modules/@repo/database/src/generated/prisma/client'.
+// This is likely not portable. A type annotation is necessary.ts(2742)
+// ```
+export type { Prisma, PrismaClient } from "./generated/client/client";
+export * from "./generated/client/enums";
+export * from "./generated/client/internal/prismaNamespace";

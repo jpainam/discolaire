@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import {

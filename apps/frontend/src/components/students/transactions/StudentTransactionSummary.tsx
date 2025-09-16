@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { TransactionType } from "@repo/db";
+import { TransactionType } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
 import {

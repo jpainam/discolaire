@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import type { TransactionType } from "@repo/db";
+import type { TransactionType } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,

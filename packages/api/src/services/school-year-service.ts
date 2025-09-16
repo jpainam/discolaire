@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { addYears } from "date-fns";
 
-import { db } from "@repo/db";
+import { db } from "../db";
 
 export const schoolYearService = {
   create: async ({

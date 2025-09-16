@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import type { $Enums } from "@repo/db";
+import type { $Enums } from "@repo/db/client";
 
 import { protectedProcedure } from "../trpc";
 

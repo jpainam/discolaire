@@ -10,7 +10,7 @@ import cx from "classnames";
 import equal from "fast-deep-equal";
 import { AnimatePresence, motion } from "framer-motion";
 
-import type { Vote } from "@repo/db";
+import type { Vote } from "@repo/db/client";
 import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,

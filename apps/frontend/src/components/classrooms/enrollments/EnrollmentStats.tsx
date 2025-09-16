@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import type { Student } from "@repo/db";
+import type { Student } from "@repo/db/client";
 
 import { useLocale } from "~/i18n";
 

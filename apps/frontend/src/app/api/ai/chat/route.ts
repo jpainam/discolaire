@@ -17,7 +17,8 @@ import {
 } from "ai";
 import { createResumableStreamContext } from "resumable-stream";
 
-import type { Prisma, VisibilityType } from "@repo/db";
+import type { Prisma } from "@repo/db";
+import type { VisibilityType } from "@repo/db/enums";
 
 import type { PostRequestBody } from "./schema";
 import type { ChatModel } from "~/lib/ai/models";

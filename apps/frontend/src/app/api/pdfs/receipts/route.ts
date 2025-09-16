@@ -2,10 +2,9 @@ import type { NextRequest } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
 import { z } from "zod";
 
-import { db } from "@repo/db";
-
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
+import { db } from "~/lib/db";
 import { numberToWords } from "~/lib/toword";
 import { getReceipt } from "~/reports/statements/receipt";
 import { caller } from "~/trpc/server";

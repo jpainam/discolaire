@@ -10,7 +10,7 @@ import {
 } from "@radix-ui/react-icons";
 import { SelectTrigger } from "@radix-ui/react-select";
 
-import type { Student } from "@repo/db";
+import type { Student } from "@repo/db/client";
 import { Button } from "@repo/ui/components/button";
 import {
   Select,

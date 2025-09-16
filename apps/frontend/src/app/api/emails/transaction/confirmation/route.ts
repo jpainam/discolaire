@@ -2,11 +2,11 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
 
-import { db } from "@repo/db";
 import TransactionConfirmation from "@repo/transactional/emails/TransactionConfirmation";
 
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
+import { db } from "~/lib/db";
 import { resend } from "~/lib/resend";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";

@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { TransactionType } from "@repo/db";
+import { TransactionType } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,

@@ -6,7 +6,7 @@ import { inputRules } from "prosemirror-inputrules";
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 
-import type { AiSuggestion } from "@repo/db";
+import type { AiSuggestion } from "@repo/db/client";
 
 import {
   documentSchema,

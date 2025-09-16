@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronUp } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import type { User } from "@repo/db";
+import type { User } from "@repo/db/client";
 import {
   DropdownMenu,
   DropdownMenuContent,

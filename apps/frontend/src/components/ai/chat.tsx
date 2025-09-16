@@ -11,7 +11,8 @@ import useSWR, { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
 
 import type { Session } from "@repo/auth";
-import type { VisibilityType, Vote } from "@repo/db";
+import type { Vote } from "@repo/db/client";
+import type { VisibilityType } from "@repo/db/enums";
 
 import type { Attachment, ChatMessage } from "~/lib/types";
 import { useArtifactSelector } from "~/hooks/use-artifact";

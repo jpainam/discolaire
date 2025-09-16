@@ -6,7 +6,7 @@
 import { CopyIcon, PenIcon, RedoIcon, UndoIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import type { AiSuggestion } from "@repo/db";
+import type { AiSuggestion } from "@repo/db/client";
 
 import { Artifact } from "~/components/ai/create-artifact";
 import { DiffView } from "~/components/ai/diffview";

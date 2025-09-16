@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import useSWRInfinite from "swr/infinite";
 
-import type { AiChat } from "@repo/db";
+import type { AiChat } from "@repo/db/server";
 import {
   AlertDialog,
   AlertDialogAction,

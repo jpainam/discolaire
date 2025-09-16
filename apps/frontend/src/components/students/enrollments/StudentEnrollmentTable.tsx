@@ -11,7 +11,7 @@ import { MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,

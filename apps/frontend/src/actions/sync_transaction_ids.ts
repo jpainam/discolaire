@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@repo/db";
+import { db } from "~/lib/db";
 
 export async function syncTransactionIds() {
   const staffs = await db.staff.findMany({

@@ -9,7 +9,7 @@ import { Plugin, PluginKey } from "prosemirror-state";
 import { DecorationSet } from "prosemirror-view";
 import { createRoot } from "react-dom/client";
 
-import type { AiSuggestion } from "@repo/db";
+import type { AiSuggestion } from "@repo/db/client";
 
 import type { ArtifactKind } from "~/components/ai/artifact";
 import { Suggestion as PreviewSuggestion } from "~/components/ai/suggestion";

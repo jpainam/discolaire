@@ -1,7 +1,7 @@
 import type { InferUITool, UIDataTypes, UIMessage, UITools } from "ai";
 import { z } from "zod";
 
-import type { AiSuggestion } from "@repo/db";
+import type { AiSuggestion } from "@repo/db/client";
 
 import type { createDocument } from "./ai/tools/create-document";
 import type { getWeather } from "./ai/tools/get-weather";

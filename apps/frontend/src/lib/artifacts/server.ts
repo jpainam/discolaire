@@ -1,7 +1,7 @@
 import type { UIMessageStreamWriter } from "ai";
 
 import type { Session } from "@repo/auth";
-import type { AiDocument } from "@repo/db";
+import type { AiDocument } from "@repo/db/server";
 
 import type { ChatMessage } from "../types";
 import type { ArtifactKind } from "~/components/ai/artifact";

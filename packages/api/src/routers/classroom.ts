@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { TransactionStatus, TransactionType } from "@repo/db";
+import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { checkPermission } from "../permission";
 import { classroomService } from "../services/classroom-service";

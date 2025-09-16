@@ -1,4 +1,6 @@
-import { db, TransactionType } from "@repo/db";
+import { TransactionType } from "@repo/db/enums";
+
+import { db } from "../db";
 
 export async function getUnpaidFeeDescription(
   studentId: string,

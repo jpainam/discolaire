@@ -3,7 +3,7 @@
 import type { PropsWithChildren } from "react";
 import { createContext, useContext, useMemo } from "react";
 
-import type { School, SchoolYear } from "@repo/db";
+import type { School, SchoolYear } from "@repo/db/client";
 
 interface SchoolContextProps {
   school: School;

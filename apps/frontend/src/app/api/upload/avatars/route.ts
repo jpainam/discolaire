@@ -1,7 +1,6 @@
-import { db } from "@repo/db";
-
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
+import { db } from "~/lib/db";
 import { deleteFile, uploadFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 

@@ -1,6 +1,5 @@
-import { db } from "@repo/db";
-
 import { env } from "../env";
+import { db } from "../utils";
 
 export async function sendPaymentReminder({
   studentId,

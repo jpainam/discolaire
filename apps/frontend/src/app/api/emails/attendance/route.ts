@@ -1,7 +1,6 @@
 import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
-import { db } from "@repo/db";
 import {
   AbsenceEmail,
   ChatterEmail,
@@ -12,6 +11,7 @@ import {
 
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
+import { db } from "~/lib/db";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
 import { sendEmail } from "~/utils/send-email";

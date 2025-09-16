@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
 "use client";
@@ -9,7 +8,7 @@ import { motion } from "framer-motion";
 import { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
 
-import type { AiDocument } from "@repo/db";
+import type { AiDocument } from "@repo/db/client";
 import { Button } from "@repo/ui/components/button";
 
 import { useArtifact } from "~/hooks/use-artifact";

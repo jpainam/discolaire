@@ -1,6 +1,6 @@
 "use client";
 
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 import {
   Select,
   SelectContent,

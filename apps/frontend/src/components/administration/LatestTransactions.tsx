@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { TransactionType } from "@repo/db";
+import { TransactionType } from "@repo/db/enums";
 import {
   Card,
   CardAction,

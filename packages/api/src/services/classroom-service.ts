@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { db } from "@repo/db";
+import { db } from "../db";
 
 async function get(classroomId: string, schoolId: string) {
   const classroom = await db.classroom.findUniqueOrThrow({

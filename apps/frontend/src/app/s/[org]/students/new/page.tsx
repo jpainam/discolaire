@@ -14,7 +14,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
 import { Progress } from "@repo/ui/components/progress";

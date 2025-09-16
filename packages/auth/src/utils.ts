@@ -2,6 +2,8 @@ import type { Attachment } from "resend";
 import { nanoid } from "nanoid";
 import { Resend } from "resend";
 
+import { getDb } from "@repo/db";
+
 import { authEnv } from "../env";
 
 const env = authEnv();
@@ -127,3 +129,5 @@ export async function sendEmail({
     return data;
   }
 }
+
+export const db = getDb({ connectionString: env.DATABASE_URL });

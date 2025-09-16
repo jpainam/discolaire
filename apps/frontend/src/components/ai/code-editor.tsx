@@ -7,7 +7,7 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view";
 import { basicSetup } from "codemirror";
 
-import type { AiSuggestion } from "@repo/db";
+import type { AiSuggestion } from "@repo/db/client";
 
 interface EditorProps {
   content: string;

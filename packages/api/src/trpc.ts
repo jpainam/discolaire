@@ -12,8 +12,8 @@ import { z, ZodError } from "zod/v4";
 
 import type { Auth, Session } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
-import { db } from "@repo/db";
 
+import { db } from "./db";
 import { PubSubLogger } from "./pubsub-logger";
 import { getPermissions } from "./services/user-service";
 import { getCookieValue } from "./utils";

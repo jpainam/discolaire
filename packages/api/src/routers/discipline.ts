@@ -2,8 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { db } from "@repo/db";
-
+import { db } from "../db";
 import { classroomService } from "../services/classroom-service";
 import { protectedProcedure } from "../trpc";
 

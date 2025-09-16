@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
 

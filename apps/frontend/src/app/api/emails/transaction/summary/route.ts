@@ -2,10 +2,10 @@
 import { render } from "@react-email/render";
 import { z } from "zod";
 
-import { db } from "@repo/db";
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
 
 import { getSession } from "~/auth/server";
+import { db } from "~/lib/db";
 import { getFullName } from "~/utils";
 import { sendEmail } from "~/utils/send-email";
 

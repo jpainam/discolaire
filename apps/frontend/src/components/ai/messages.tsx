@@ -3,7 +3,7 @@ import { memo } from "react";
 import equal from "fast-deep-equal";
 import { motion } from "framer-motion";
 
-import type { Vote } from "@repo/db";
+import type { Vote } from "@repo/db/client";
 
 import type { ChatMessage } from "~/lib/types";
 import { useMessages } from "~/hooks/use-messages";

@@ -2,7 +2,8 @@ import { headers } from "next/headers";
 import { generateRandomString } from "better-auth/crypto";
 
 import type { Auth } from "@repo/auth";
-import { db } from "@repo/db";
+
+import { db } from "../db";
 
 export const userService = {
   updatePermission: async ({

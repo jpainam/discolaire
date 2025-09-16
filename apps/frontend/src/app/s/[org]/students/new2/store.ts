@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 
 import type { StudentData } from "./validation";
 

@@ -1,9 +1,8 @@
 "use server";
 
-import { db } from "@repo/db";
-
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
+import { db } from "~/lib/db";
 import { numberToWords } from "~/lib/toword";
 import { caller } from "~/trpc/server";
 

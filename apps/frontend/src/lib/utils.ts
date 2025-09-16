@@ -11,7 +11,7 @@ import i18next from "i18next";
 import { customAlphabet } from "nanoid";
 import { twMerge } from "tailwind-merge";
 
-import type { AiDocument, AiMessage } from "@repo/db";
+import type { AiDocument, AiMessage } from "@repo/db/server";
 
 import type { ErrorCode } from "./errors";
 import type { ChatMessage, ChatTools, CustomUIDataTypes } from "./types";

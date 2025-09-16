@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
-import { db } from "@repo/db";
 import ResetPassword from "@repo/transactional/emails/ResetPassword";
 
+import { db } from "~/lib/db";
 import { sendEmail } from "~/utils/send-email";
 
 z.config({

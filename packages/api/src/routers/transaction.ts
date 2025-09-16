@@ -3,7 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { addDays, subDays, subMonths } from "date-fns";
 import { z } from "zod";
 
-import type { TransactionStatus, TransactionType } from "@repo/db";
+import type { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { classroomService } from "../services/classroom-service";
 import {

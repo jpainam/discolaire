@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { ArrowRightLeft, ChevronRight, MoreVertical } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import { StudentStatus } from "@repo/db";
+import { StudentStatus } from "@repo/db/enums";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,

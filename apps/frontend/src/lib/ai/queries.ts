@@ -1,9 +1,11 @@
 import "server-only";
 
-import type { AiMessage, AiSuggestion, User, VisibilityType } from "@repo/db";
-import { db, DocumentKind } from "@repo/db";
+import type { VisibilityType } from "@repo/db/enums";
+import type { AiMessage, AiSuggestion, User } from "@repo/db/server";
+import { DocumentKind } from "@repo/db";
 
 import type { ArtifactKind } from "~/components/ai/artifact";
+import { db } from "~/lib/db";
 import { ChatSDKError } from "../errors";
 
 export async function getUser(email: string): Promise<User> {

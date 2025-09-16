@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { useMemo } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
 
-import { VisibilityType } from "@repo/db";
+import { VisibilityType } from "@repo/db/enums";
 
 import type { ChatHistory } from "~/components/ai/sidebar-history";
 import { updateChatVisibility } from "~/components/ai/actions";
@@ -20,7 +21,6 @@ export function useChatVisibility({
   const { mutate, cache } = useSWRConfig();
   const history = cache.get("/api/ai/history")?.data as ChatHistory | undefined;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { data: localVisibility, mutate: setLocalVisibility } = useSWR(
     `${chatId}-visibility`,
     null,

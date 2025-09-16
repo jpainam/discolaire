@@ -1,8 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 
-import { db } from "@repo/db";
-
+import { db } from "../db";
 import { getAllAssets, getAllConsumables } from "../services/inventory-service";
 import { protectedProcedure } from "../trpc";
 

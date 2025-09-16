@@ -1,6 +1,7 @@
-import { db, TransactionType } from "@repo/db";
+import { TransactionType } from "@repo/db/enums";
 import redisClient from "@repo/kv";
 
+import { db } from "../db";
 import { getFullName } from "../utils";
 import { classroomService } from "./classroom-service";
 

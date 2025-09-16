@@ -1,4 +1,4 @@
-import { db } from "@repo/db";
+import { db } from "../db";
 
 export const staffService = {
   getFromUserId: async (userId: string) => {

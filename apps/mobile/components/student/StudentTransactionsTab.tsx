@@ -1,5 +1,5 @@
 import type { RouterOutputs } from "@repo/api";
-import { TransactionType } from "@repo/db";
+import { TransactionType } from "@repo/db/enums";
 
 import { useQuery } from "@tanstack/react-query";
 import {

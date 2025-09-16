@@ -5,7 +5,7 @@ import type { UseChatHelpers } from "@ai-sdk/react";
 import type { DataUIPart } from "ai";
 import type { ComponentType, Dispatch, ReactNode, SetStateAction } from "react";
 
-import type { AiSuggestion } from "@repo/db";
+import type { AiSuggestion } from "@repo/db/client";
 
 import type { UIArtifact } from "./artifact";
 import type { ChatMessage, CustomUIDataTypes } from "~/lib/types";

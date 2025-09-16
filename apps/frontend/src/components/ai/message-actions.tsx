@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { useCopyToClipboard } from "usehooks-ts";
 
-import type { Vote } from "@repo/db";
+import type { Vote } from "@repo/db/client";
 import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,

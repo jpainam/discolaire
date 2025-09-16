@@ -1,9 +1,12 @@
 import { Queue } from "bullmq";
 import { decode } from "entities";
 
-import { db } from "@repo/db";
+import { getDb } from "@repo/db";
 import redisClient from "@repo/kv";
 
+import { env } from "./env";
+
+export const db = getDb({ connectionString: env.DATABASE_URL });
 export async function getContactPhoneNumberFromStudent(studentId: string) {
   const parents = await db.studentContact.findMany({
     where: {

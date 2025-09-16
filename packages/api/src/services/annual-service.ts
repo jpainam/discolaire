@@ -1,5 +1,4 @@
-import { db } from "@repo/db";
-
+import { db } from "../db";
 import { getGrades } from "./reportcard-service";
 
 export async function getAnnualReport({

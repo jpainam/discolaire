@@ -2,8 +2,7 @@
 import { Worker } from "bullmq";
 import { fromError } from "zod-validation-error/v4";
 
-import { db } from "@repo/db";
-
+import { db } from "~/lib/db";
 import { logQueue, logQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 import { logActivitySchema } from "./validation-schema";

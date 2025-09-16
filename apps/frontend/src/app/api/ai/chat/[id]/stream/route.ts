@@ -3,8 +3,8 @@
 import { createUIMessageStream, JsonToSseTransformStream } from "ai";
 import { differenceInSeconds } from "date-fns";
 
-import type { AiChat } from "@repo/db";
-import { VisibilityType } from "@repo/db";
+import type { AiChat } from "@repo/db/server";
+import { VisibilityType } from "@repo/db/enums";
 
 import type { ChatMessage } from "~/lib/types";
 import { getSession } from "~/auth/server";

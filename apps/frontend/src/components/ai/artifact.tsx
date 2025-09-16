@@ -8,7 +8,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import useSWR, { useSWRConfig } from "swr";
 import { useDebounceCallback, useWindowSize } from "usehooks-ts";
 
-import type { AiDocument, VisibilityType, Vote } from "@repo/db";
+import type { AiDocument, Vote } from "@repo/db/client";
+import type { VisibilityType } from "@repo/db/enums";
 import { useSidebar } from "@repo/ui/components/sidebar";
 
 import type { Attachment, ChatMessage } from "~/lib/types";

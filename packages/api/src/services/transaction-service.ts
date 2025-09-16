@@ -1,5 +1,6 @@
-import { db, TransactionType } from "@repo/db";
+import { TransactionType } from "@repo/db/enums";
 
+import { db } from "../db";
 import { studentService } from "./student-service";
 
 export const transactionService = {

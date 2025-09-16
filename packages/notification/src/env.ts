@@ -8,11 +8,13 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().min(1),
     WHATSAPP_API_TOKEN: z.string().min(1),
     WHATSAPP_BUSINESS_PHONE_NUMBER_ID: z.string().min(1),
+    DATABASE_URL: z.string().min(1),
   },
   client: {},
   runtimeEnv: {
     ...process.env,
     NODE_ENV: process.env.NODE_ENV,
+    DATABASE_URL: process.env.DATABASE_URL,
     WHATSAPP_API_TOKEN: process.env.WHATSAPP_API_TOKEN,
     WHATSAPP_BUSINESS_PHONE_NUMBER_ID:
       process.env.WHATSAPP_BUSINESS_PHONE_NUMBER_ID,

@@ -1,8 +1,8 @@
 import { memo } from "react";
 import Link from "next/link";
 
-import type { AiChat } from "@repo/db";
-import { VisibilityType } from "@repo/db";
+import type { AiChat } from "@repo/db/server";
+import { VisibilityType } from "@repo/db/enums";
 import {
   DropdownMenu,
   DropdownMenuContent,

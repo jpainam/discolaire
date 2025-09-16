@@ -3,7 +3,7 @@ import { streamObject, tool } from "ai";
 import { z } from "zod";
 
 import type { Session } from "@repo/auth";
-import type { AiSuggestion } from "@repo/db";
+import type { AiSuggestion } from "@repo/db/client";
 
 import type { ChatMessage } from "~/lib/types";
 import { getDocumentById, saveSuggestions } from "~/lib/ai/queries";

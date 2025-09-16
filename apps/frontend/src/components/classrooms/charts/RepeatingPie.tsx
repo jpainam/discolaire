@@ -2,7 +2,7 @@
 
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
-import type { Student } from "@repo/db";
+import type { Student } from "@repo/db/client";
 import type { ChartConfig } from "@repo/ui/components/chart";
 import { Card, CardContent } from "@repo/ui/components/card";
 import {

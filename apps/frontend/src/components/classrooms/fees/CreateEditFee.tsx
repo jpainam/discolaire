@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { Fee } from "@repo/db";
+import type { Fee } from "@repo/db/client";
 import { Button } from "@repo/ui/components/button";
 import {
   Form,

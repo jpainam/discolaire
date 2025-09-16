@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { db } from "@repo/db";
+import { db } from "../db";
 
 export const gradeSheetService = {
   allPercentile: async ({
