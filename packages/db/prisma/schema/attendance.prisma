@@ -146,3 +146,20 @@ model SubjectTimetable {
 
     @@unique([start, end, subjectId])
 }
+
+model PeriodicAttendance {
+    id                String   @id @default(cuid())
+    absence           Int      @default(0)
+    justifiedAbsence  Int      @default(0)
+    lateness          Int      @default(0)
+    justifiedLateness Int      @default(0)
+    chatter           Int      @default(0)
+    consigne          Int      @default(0)
+    studentId         String
+    student           Student  @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    termId            String
+    term              Term     @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
+    createdById       String
+}
