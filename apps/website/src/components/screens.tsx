@@ -48,7 +48,7 @@ export function Screens() {
   ];
 
   return (
-    <div className="relative mt-[50px] pt-12 pb-24 md:mt-[120px]">
+    <div className="relative mt-[50px] pb-24 pt-12 md:mt-[120px]">
       <div className="relative z-10 flex flex-col items-center">
         <div className="pb-16 text-center">
           <h3 className="from-primary to-primary/70 bg-gradient-to-r bg-clip-text text-4xl font-medium text-transparent md:text-6xl">

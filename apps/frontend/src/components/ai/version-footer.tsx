@@ -63,7 +63,7 @@ export const VersionFooter = ({
                 `/api/ai/document?id=${artifact.documentId}&timestamp=${getDocumentTimestampByIndex(
                   documents,
                   currentVersionIndex,
-                )}`,
+                ).toDateString()}`,
                 {
                   method: "DELETE",
                 },
