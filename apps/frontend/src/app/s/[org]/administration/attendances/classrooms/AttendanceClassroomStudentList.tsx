@@ -18,6 +18,7 @@ import { getFullName } from "~/utils";
 
 export function AttendanceClassroomStudentList({
   classroomId,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   termId,
 }: {
   classroomId: string;
