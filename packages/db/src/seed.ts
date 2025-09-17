@@ -1,5 +1,5 @@
 //import { faker } from "@faker-js/faker";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./generated/client/client";
 
 // import appreciations from "./shared/appreciation.ts"; workaround for ts-node issue with import
 
