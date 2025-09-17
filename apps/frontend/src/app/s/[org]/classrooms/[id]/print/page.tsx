@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Download, Search } from "lucide-react";
+import { useParams } from "next/navigation";
+import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import {
   Select,
@@ -21,60 +22,61 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 
+import { PrintButtonClassroomStudentList } from "~/components/classrooms/print/PrintButtonClassroomStudentList";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { useLocale } from "~/i18n";
+import { StudentPrintButton } from "~/components/students/print/StudentPrintButton";
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [format, setFormat] = useQueryState("format", {
+    defaultValue: "pdf",
+  });
+  const [termId, setTermId] = useQueryState("termId");
 
   // Categories for organizing the exports
   const categories = [
-    { id: "students", name: "Students" },
-    { id: "academic", name: "Academic" },
+    { id: "academic", name: "academy" },
     { id: "administration", name: "Administration" },
     { id: "communication", name: "Communication" },
-    { id: "settings", name: "Settings" },
+    { id: "settings", name: "settings" },
   ];
 
+  const params = useParams<{ id: string }>();
   // All export options with their categories
   const exportOptions = [
-    { id: 100, name: "List of Students", category: "students" },
-    { id: 101, name: "List of New Students", category: "students" },
-    { id: 102, name: "List of Subjects", category: "academic" },
-    { id: 103, name: "Financial Situation", category: "administration" },
-    { id: 104, name: "List of Teachers", category: "administration" },
-    { id: 105, name: "List of Courses", category: "academic" },
-    { id: 106, name: "Schedules", category: "academic" },
-    { id: 107, name: "List of Exams", category: "academic" },
-    { id: 108, name: "List of Grades", category: "academic" },
-    { id: 109, name: "List of Absences", category: "students" },
-    { id: 110, name: "List of Late Arrivals", category: "students" },
-    { id: 111, name: "List of Sanctions", category: "students" },
-    { id: 112, name: "List of Rewards", category: "students" },
-    { id: 113, name: "List of Events", category: "administration" },
-    { id: 114, name: "List of Tasks", category: "administration" },
-    { id: 115, name: "List of Documents", category: "administration" },
-    { id: 116, name: "List of Parameters", category: "settings" },
-    { id: 117, name: "List of Users", category: "administration" },
-    { id: 118, name: "List of Roles", category: "administration" },
-    { id: 119, name: "List of Permissions", category: "administration" },
-    { id: 120, name: "List of Groups", category: "students" },
-    { id: 121, name: "List of Notifications", category: "communication" },
-    { id: 122, name: "List of Messages", category: "communication" },
-    { id: 123, name: "List of Conversations", category: "communication" },
-    { id: 124, name: "Messaging Settings", category: "settings" },
-    { id: 125, name: "Notification Settings", category: "settings" },
-    { id: 126, name: "Security Settings", category: "settings" },
-    { id: 127, name: "Application Settings", category: "settings" },
-    { id: 128, name: "School Settings", category: "settings" },
-    { id: 129, name: "School Year Settings", category: "settings" },
-    { id: 130, name: "Class Settings", category: "settings" },
-    { id: 131, name: "Classroom Settings", category: "settings" },
-    { id: 132, name: "Course Settings", category: "settings" },
-    { id: 133, name: "Exam Settings", category: "settings" },
-    { id: 134, name: "Grade Settings", category: "settings" },
-    { id: 135, name: "Absence Settings", category: "settings" },
-    { id: 136, name: "General Parameters", category: "settings" },
+    {
+      name: "Liste des élèves",
+      content: (
+        <PrintButtonClassroomStudentList
+          classroomId={params.id}
+          format={format}
+        />
+      ),
+      category: "classroom",
+    },
+    {
+      name: "Situation financière",
+      content: (
+        <StudentPrintButton
+          label="Profil de l'élève"
+          id="101"
+          url={`/api/pdfs/student/${params.id}`}
+        />
+      ),
+      category: "classroom",
+    },
+    {
+      name: "Relevé de notes",
+      content: (
+        <StudentPrintButton
+          label="Relevé de notes"
+          id="102"
+          url={`/api/pdfs/student/${params.id}/transcripts?format=${format}`}
+        />
+      ),
+    },
   ];
 
   // Filter export options based on search query
@@ -87,20 +89,11 @@ export default function DataExportPage() {
     return filteredOptions.filter((option) => option.category === category);
   };
 
-  // Function to handle export
-  const handleExport = (id: number, name: string) => {
-    console.log(`Exporting ${name} (ID: ${id})`);
-    // Implementation would connect to the actual export functionality
-  };
-
-  const [format, setFormat] = useQueryState("format", {
-    defaultValue: "csv",
-  });
-  const { t } = useLocale();
+  const t = useTranslations();
 
   return (
-    <div className="container mx-auto px-4 py-3">
-      <div className="mb-4 flex flex-col gap-4 md:flex-row">
+    <div className="flex flex-col gap-2 px-4 py-2">
+      <div className="flex flex-col gap-4 md:flex-row">
         <div className="relative flex-1">
           <Search className="text-muted-foreground absolute top-3 left-3 h-4 w-4" />
           <Input
@@ -110,15 +103,25 @@ export default function DataExportPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <TermSelector className="w-full md:w-[250px]" />
+        <TermSelector
+          defaultValue={termId}
+          onChange={setTermId}
+          className="w-full md:w-1/4"
+        />
 
         <Select defaultValue={format} onValueChange={setFormat}>
-          <SelectTrigger className="w-full md:w-[180px]">
+          <SelectTrigger className="w-full md:w-[130px]">
             <SelectValue placeholder="Export format" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="pdf">PDF</SelectItem>
-            <SelectItem value="csv">Excel</SelectItem>
+            <SelectItem value="pdf">
+              <PDFIcon />
+              PDF
+            </SelectItem>
+            <SelectItem value="csv">
+              <XMLIcon />
+              Excel
+            </SelectItem>
           </SelectContent>
         </Select>
 
@@ -131,36 +134,21 @@ export default function DataExportPage() {
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger value="all">
-            All <Badge variant="secondary">{filteredOptions.length}</Badge>
+            {t("all")}
+            <Badge variant="secondary">{filteredOptions.length}</Badge>
           </TabsTrigger>
           {categories.map((category) => (
             <TabsTrigger key={category.id} value={category.id}>
-              {category.name}
+              {t(category.name)}
             </TabsTrigger>
           ))}
         </TabsList>
 
         <TabsContent value="all" className="mt-0">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredOptions.map((option) => (
-              <div
-                key={option.id}
-                className="bg-muted flex items-center justify-between overflow-hidden rounded-md border p-2"
-              >
-                <div>
-                  <p className="text-muted-foreground text-sm">#{option.id}</p>
-                  <p className="text-sm">{option.name}</p>
-                </div>
-                <Button
-                  variant="ghost"
-                  className="size-8"
-                  size="icon"
-                  onClick={() => handleExport(option.id, option.name)}
-                >
-                  <Download className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
+            {filteredOptions.map((option) => {
+              return <>{option.content}</>;
+            })}
           </div>
         </TabsContent>
 
@@ -168,25 +156,7 @@ export default function DataExportPage() {
           <TabsContent key={category.id} value={category.id} className="mt-0">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {getOptionsByCategory(category.id).map((option) => (
-                <div
-                  key={option.id}
-                  className="bg-muted flex items-center justify-between overflow-hidden rounded-md border p-2"
-                >
-                  <div>
-                    <p className="text-muted-foreground text-sm">
-                      #{option.id}
-                    </p>
-                    <p className="text-sm">{option.name}</p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="size-8"
-                    onClick={() => handleExport(option.id, option.name)}
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </div>
+                <>{option.content}</>
               ))}
             </div>
           </TabsContent>

@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { Download, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import {
   Select,
@@ -52,7 +51,6 @@ export default function DataExportPage() {
       id: 100,
       name: "Certificat de scolarité",
       content: <StudentCertificate label="Certificat de scolarité" id="100" />,
-
       category: "students",
     },
     {
@@ -88,12 +86,6 @@ export default function DataExportPage() {
   // Function to get options by category
   const getOptionsByCategory = (category: string) => {
     return filteredOptions.filter((option) => option.category === category);
-  };
-
-  // Function to handle export
-  const handleExport = (id: number, name: string) => {
-    console.log(`Exporting ${name} (ID: ${id})`);
-    // Implementation would connect to the actual export functionality
   };
 
   const t = useTranslations();
@@ -163,25 +155,7 @@ export default function DataExportPage() {
           <TabsContent key={category.id} value={category.id} className="mt-0">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {getOptionsByCategory(category.id).map((option) => (
-                <div
-                  key={option.id}
-                  className="bg-muted flex items-center justify-between overflow-hidden rounded-md border p-2"
-                >
-                  <div>
-                    <p className="text-muted-foreground text-sm">
-                      #{option.id}
-                    </p>
-                    <p className="text-sm">{option.name}</p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="size-8"
-                    onClick={() => handleExport(option.id, option.name)}
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </div>
+                <>{option.content}</>
               ))}
             </div>
           </TabsContent>
@@ -190,21 +164,3 @@ export default function DataExportPage() {
     </div>
   );
 }
-
-// export default function Page() {
-//   return (
-//     <div>
-//       List des impression comme
-//       <ul>
-//         <li>
-//           Situation des eleves debiteurs Situation financiere du 18 Mars 2025.
-//           No, Matricule, Noms et Prenom, classes, total frais, total payé, Reste
-//         </li>
-//         ouvrir un dialog box Famille nombreuse, preciser le nombre d'enfant
-//         (obligatoire), la classe (optional)
-//         <li>Impression 2</li>
-//         <li>Impression 3</li>
-//       </ul>
-//     </div>
-//   );
-// }
