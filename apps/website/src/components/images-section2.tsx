@@ -12,7 +12,7 @@ export function ImagesSection2() {
         className=""
       >
         <div className="max-w-xs">
-          <h2 className="text-balance text-left text-base font-semibold tracking-[-0.015em] text-white md:text-xl lg:text-3xl">
+          <h2 className="text-left text-base font-semibold tracking-[-0.015em] text-balance text-white md:text-xl lg:text-3xl">
             Gippity AI powers the entire universe
           </h2>
           <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -25,11 +25,11 @@ export function ImagesSection2() {
           width={500}
           height={500}
           alt="linear demo image"
-          className="absolute -bottom-10 -right-4 rounded-2xl object-contain grayscale filter lg:-right-[40%]"
+          className="absolute -right-4 -bottom-10 rounded-2xl object-contain grayscale filter lg:-right-[40%]"
         />
       </WobbleCard>
       <WobbleCard containerClassName="col-span-1 min-h-[300px]">
-        <h2 className="max-w-80 text-balance text-left text-base font-semibold tracking-[-0.015em] text-white md:text-xl lg:text-3xl">
+        <h2 className="max-w-80 text-left text-base font-semibold tracking-[-0.015em] text-balance text-white md:text-xl lg:text-3xl">
           No shirt, no shoes, no weapons.
         </h2>
         <p className="mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200">
@@ -38,7 +38,7 @@ export function ImagesSection2() {
       </WobbleCard>
       <WobbleCard containerClassName="col-span-1 lg:col-span-3 bg-blue-900 min-h-[500px] lg:min-h-[600px] xl:min-h-[300px]">
         <div className="max-w-sm">
-          <h2 className="max-w-sm text-balance text-left text-base font-semibold tracking-[-0.015em] text-white md:max-w-lg md:text-xl lg:text-3xl">
+          <h2 className="max-w-sm text-left text-base font-semibold tracking-[-0.015em] text-balance text-white md:max-w-lg md:text-xl lg:text-3xl">
             Signup for blazing-fast cutting-edge state of the art Gippity AI
             wrapper today!
           </h2>
@@ -52,7 +52,7 @@ export function ImagesSection2() {
           width={500}
           height={500}
           alt="linear demo image"
-          className="absolute -bottom-10 -right-10 rounded-2xl object-contain md:-right-[40%] lg:-right-[20%]"
+          className="absolute -right-10 -bottom-10 rounded-2xl object-contain md:-right-[40%] lg:-right-[20%]"
         />
       </WobbleCard>
     </div>

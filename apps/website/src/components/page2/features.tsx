@@ -31,7 +31,7 @@ export default function Features() {
   return (
     <section className="container space-y-16 py-24 md:py-32">
       <div className="mx-auto max-w-[58rem] text-center">
-        <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
+        <h2 className="text-3xl leading-[1.1] font-bold sm:text-3xl md:text-5xl">
           Cutting-Edge Solutions
         </h2>
         <p className="text-muted-foreground mt-4 sm:text-lg">

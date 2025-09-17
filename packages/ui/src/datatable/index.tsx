@@ -164,7 +164,7 @@ export function DataTable<TData>({
                     style={{ width: `${header.getSize()}px` }}
                     key={`${header.id}-${index}`}
                     colSpan={header.colSpan}
-                    className="bg-sidebar border-border relative h-9 select-none border-y first:rounded-l-lg first:border-l last:rounded-r-lg last:border-r"
+                    className="bg-sidebar border-border relative h-9 border-y select-none first:rounded-l-lg first:border-l last:rounded-r-lg last:border-r"
                   >
                     {header.isPlaceholder
                       ? null
