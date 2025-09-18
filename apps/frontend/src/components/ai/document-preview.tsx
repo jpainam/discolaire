@@ -10,7 +10,7 @@ import equal from "fast-deep-equal";
 import useSWR from "swr";
 
 import type { AiDocument } from "@repo/db/client";
-import { DocumentKind } from "@repo/db";
+import { DocumentKind } from "@repo/db/enums";
 
 import type { ArtifactKind, UIArtifact } from "./artifact";
 import { useArtifact } from "~/hooks/use-artifact";
