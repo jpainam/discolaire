@@ -33,7 +33,7 @@ COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
 
 # Install dependencies using pnpm, using a cache for faster builds
-RUN --mount=type=cache,id=pnpm-store,target=~/.pnpm-store pnpm install --frozen-lockfile --ignore-scripts
+RUN --mount=type=cache,id=pnpm-store,target=~/.pnpm-store pnpm install --ignore-scripts
 
 # # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
