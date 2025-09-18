@@ -4,8 +4,15 @@
 //import { signinout } from "~/app/auth/login/signin";
 import React from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { IconBell, IconCreditCard, IconUserCircle } from "@tabler/icons-react";
-import { Computer, LogOut, MoreVerticalIcon, Settings } from "lucide-react";
+import {
+  BellIcon,
+  CaptionsIcon,
+  CircleUser,
+  Computer,
+  LogOut,
+  MoreVerticalIcon,
+  Settings,
+} from "lucide-react";
 
 import {
   Avatar,
@@ -147,7 +154,7 @@ export function UserNav({ className }: { className?: string }) {
               if (user.id) router.push(routes.users.details(user.id));
             }}
           >
-            <IconUserCircle className="h-4 w-4" />
+            <CircleUser className="h-4 w-4" />
             <span>{t("profile")}</span>
           </DropdownMenuItem>
 
@@ -162,7 +169,7 @@ export function UserNav({ className }: { className?: string }) {
           <DropdownMenuItem
             onSelect={() => router.push(`/users/${user.id}/subscriptions`)}
           >
-            <IconCreditCard />
+            <CaptionsIcon />
             {t("subscriptions")}
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -176,7 +183,7 @@ export function UserNav({ className }: { className?: string }) {
           <DropdownMenuItem
             onSelect={() => router.push(`/users/${user.id}/notifications`)}
           >
-            <IconBell />
+            <BellIcon />
             {t("notifications")}
           </DropdownMenuItem>
         </DropdownMenuGroup>

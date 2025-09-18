@@ -242,3 +242,6 @@ https://www.shsfui.com/
 pg_restore --dbname "postgres://postgres:postgres@localhost:5432/ipbw3" --no-owner backup.sql
 
 `pn db:generate`, after `pn db:push`
+
+
+git rm -r --cached <file_path>
