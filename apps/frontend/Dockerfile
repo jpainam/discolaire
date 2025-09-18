@@ -33,7 +33,7 @@ COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
 
 # Install dependencies using pnpm, using a cache for faster builds
-RUN --mount=type=cache,id=pnpm-store,target=~/.pnpm-store pnpm install --no-frozen-lockfile --ignore-scripts
+RUN --mount=type=cache,id=pnpm-store,target=~/.pnpm-store pnpm install --ignore-scripts
 
 # # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
@@ -43,7 +43,7 @@ ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN CI=true SKIP_ENV_VALIDATION=true turbo build --filter=@repo/frontend
-RUN CI=true pnpm prune --prod --no-optional
+#RUN CI=true pnpm prune --prod --no-optional
 
 # # Cleanup: Remove source files that are not needed
 RUN rm -rf ./**/*/src
