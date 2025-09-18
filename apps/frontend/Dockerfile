@@ -43,7 +43,7 @@ ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN CI=true SKIP_ENV_VALIDATION=true turbo build --filter=@repo/frontend
-RUN pnpm prune --prod --no-optional
+RUN CI=true pnpm prune --prod --no-optional
 
 # # Cleanup: Remove source files that are not needed
 RUN rm -rf ./**/*/src
