@@ -31,8 +31,5 @@
   "engines": {
     "node": ">=22.19.0",
     "pnpm": ">=9.15.9"
-  },
-  "prisma": {
-    "seed": "ts-node packages/db/src/seed.ts"
   }
 }

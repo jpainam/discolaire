@@ -18,7 +18,7 @@
     "lint": "eslint",
     "push": "pnpm with-env prisma db push --schema=prisma/schema",
     "studio": "pnpm with-env prisma studio --schema=prisma/schema",
-    "generate": "pnpm with-env prisma generate --schema=prisma/schema",
+    "generate": "pnpm with-env prisma generate",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --"
   },

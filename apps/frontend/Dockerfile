@@ -65,7 +65,7 @@ ENV NODE_ENV="production"
 COPY --from=builder /app/ .     
 
 COPY apps/frontend/public apps/frontend/.next/standalone/public
-RUN mkdir -p apps/frontend/.next/standalone/public/_next/static
-RUN cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/public/_next/static
+#RUN mkdir -p apps/frontend/.next/standalone/public/_next/static
+#RUN cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/public/_next/static
 
 CMD node apps/frontend/.next/standalone/server.js
