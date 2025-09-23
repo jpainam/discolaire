@@ -76,4 +76,6 @@ RUN if [ -d "apps/frontend/.next/static" ]; then \
     cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/public/_next/static/ || true; \
     fi
 
+EXPOSE 3000
+ENV PORT=3000
 CMD ["node", "apps/frontend/.next/standalone/server.js"]
