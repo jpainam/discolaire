@@ -1,88 +1,62 @@
 FROM node:23.11.1-alpine AS base
-WORKDIR /app
 
-# # # Install necessary packages
-RUN apk update && apk add --no-cache libc6-compat openssh git
+RUN apk update
+RUN apk add --no-cache libc6-compat 
 
-ENV NODE_OPTIONS="--max-old-space-size=6144"
-
-# # # Install pnpm and turbo globally define you specific version according to the package.json
-RUN npm install -g pnpm turbo  
+RUN npm install pnpm@ turbo --global
 RUN pnpm config set store-dir ~/.pnpm-store
 
-# # #############################################################
-# # # Stage 1 - Pruning unnecessary files                       #
-# # #############################################################
-
+# Prune projects
 FROM base AS pruner
 
-# Copy all files to the container and Prune files that are not needed for the specified project
-COPY . .
-RUN npx turbo prune --scope=@repo/frontend --docker
 
-# # #############################################################
-# # # Stage 2 - Installing dependencies and building            #
-# # #############################################################
-
-FROM base AS builder
 WORKDIR /app
-# # Copy lockfile and package.json's of isolated subworkspace
+COPY . .
+RUN turbo prune --scope=@repo/frontend --docker
+
+# Build the project
+FROM base AS builder
+
+WORKDIR /app
+
+# Copy lockfile and package.json's of isolated subworkspace
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
 
-# Install dependencies using pnpm, using a cache for faster builds
-RUN --mount=type=cache,id=pnpm-store,target=~/.pnpm-store pnpm install --ignore-scripts
+# First install the dependencies (as they change less often)
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfile --ignore-scripts
 
-# # Copy source code of isolated subworkspace
+# Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 
-RUN pnpm prisma generate --schema=packages/db/prisma/schema
+
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1
-
+RUN cd packages/db && \
+  pnpm prisma generate --schema=./prisma/schema
+  
 RUN CI=true SKIP_ENV_VALIDATION=true turbo build --filter=@repo/frontend
-#RUN CI=true pnpm prune --prod --no-optional
+# Clean and regenerate with explicit binary target
 
-# # Cleanup: Remove source files that are not needed
-RUN rm -rf ./**/*/src
-RUN rm -rf apps/frontend/.next/standalone/node_modules
-
-
-# # #############################################################
-# # # Stage 3 - Run the application                             #
-# # #############################################################
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optional
 
 FROM base AS runner
 
-WORKDIR /app/
+WORKDIR /app
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-ENV NODE_ENV="production"
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/standalone ./next/standalone
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/static ./next/standalone/apps/app/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/public ./next/standalone/apps/app/public
 
-# Copy built files from the builder stage
-# COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/ .     
-
-# Create necessary directories and copy static files
-RUN mkdir -p apps/frontend/.next/standalone/public/_next/static
-
-# Copy public folder if it exists
-RUN if [ -d "apps/frontend/public" ]; then \
-    cp -r apps/frontend/public/* apps/frontend/.next/standalone/public/ || true; \
-    fi
-
-# Copy Next.js static files if they exist
-RUN if [ -d "apps/frontend/.next/static" ]; then \
-    cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/public/_next/static/ || true; \
-    fi
+COPY --from=builder --chown=nextjs:nodejs /app/packages/db/generated ./next/standalone/apps/frontend/generated
+USER nextjs
 
 EXPOSE 3000
 ENV PORT=3000
 
-
-# Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-USER nextjs
-
-CMD ["node", "apps/frontend/.next/standalone/server.js"]
+ENV HOSTNAME="0.0.0.0"
+CMD ["node", "next/standalone/apps/frontend/server.js"]
