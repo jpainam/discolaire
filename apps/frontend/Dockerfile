@@ -1,4 +1,3 @@
-# Base stage with Alpine image
 FROM node:23.11.1-alpine AS base
 WORKDIR /app
 
@@ -64,8 +63,17 @@ ENV NODE_ENV="production"
 # COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/ .     
 
-COPY apps/frontend/public apps/frontend/.next/standalone/public
-#RUN mkdir -p apps/frontend/.next/standalone/public/_next/static
-#RUN cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/public/_next/static
+# Create necessary directories and copy static files
+RUN mkdir -p apps/frontend/.next/standalone/public/_next/static
 
-CMD node apps/frontend/.next/standalone/server.js
+# Copy public folder if it exists
+RUN if [ -d "apps/frontend/public" ]; then \
+    cp -r apps/frontend/public/* apps/frontend/.next/standalone/public/ || true; \
+    fi
+
+# Copy Next.js static files if they exist
+RUN if [ -d "apps/frontend/.next/static" ]; then \
+    cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/public/_next/static/ || true; \
+    fi
+
+CMD ["node", "apps/frontend/.next/standalone/server.js"]
