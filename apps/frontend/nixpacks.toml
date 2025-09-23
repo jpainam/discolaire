@@ -1,4 +1,3 @@
-buildImage = 'ghcr.io/railwayapp/nixpacks:latest'
-
-[phases.setup]
-  nixpkgsArchive = '11cb3517b3af6af300dd6c055aeda73c9bf52c48'
+[deploy.envs]
+NODE_ENV = "production"
+NIXPACKS_NODE_VERSION = 23
