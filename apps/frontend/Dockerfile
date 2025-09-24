@@ -42,31 +42,6 @@ RUN pnpm prisma generate --schema=packages/db/prisma/schema
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Set environment variables for build
-ENV RESEND_API_KEY="dummy-key-for-build"
-ENV AUTH_SECRET="dummy-auth-secret"
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-ENV DISCOLAIRE_API_KEY="dummy-api-key"
-ENV S3_ACCESS_KEY_ID="dummy"
-ENV S3_SECRET_ACCESS_KEY="dummy"
-ENV S3_REGION="us-east-1"
-ENV S3_BUCKET_NAME="dummy"
-ENV S3_AVATAR_BUCKET_NAME="dummy"
-ENV S3_IMAGE_BUCKET_NAME="dummy"
-ENV S3_DOCUMENT_BUCKET_NAME="dummy"
-ENV WHATSAPP_VERIFY_TOKEN="dummy"
-ENV WHATSAPP_API_TOKEN="dummy"
-ENV REDIS_URL="redis://localhost:6379"
-ENV SUPER_ADMIN_USERNAME="admin"
-ENV NEXT_PUBLIC_BASE_URL="http://localhost:3000"
-ENV NEXT_PUBLIC_DEPLOYMENT_ENV="production"
-ENV NEXT_PUBLIC_MINIO_URL="http://localhost:9000"
-ENV NEXT_PUBLIC_PROSPECT_SERVICE_URL="http://localhost:3001"
-ENV NEXT_PUBLIC_LIBRARY_SERVICE_URL="http://localhost:3002"
-ENV MESSAGING_SERVICE_URL="http://localhost:3003"
-ENV MESSAGING_SECRET_KEY="dummy"
-ENV NOVU_API_KEY="dummy"
-ENV WHATSAPP_BUSINESS_PHONE_NUMBER_ID="dummy"
 
 RUN CI=true SKIP_ENV_VALIDATION=true turbo build --filter=@repo/frontend
 #RUN CI=true pnpm prune --prod --no-optional
