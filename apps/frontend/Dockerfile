@@ -1,54 +1,106 @@
-# ---------- Base ----------
-FROM node:22-alpine AS base
-ENV NEXT_TELEMETRY_DISABLED=1 TURBO_TELEMETRY_DISABLED=1
-RUN apk add --no-cache libc6-compat openssl
-RUN npm i -g pnpm turbo
+# Base stage with Alpine image
+FROM node:23.11.1-alpine AS base
+WORKDIR /app
+
+# # # Install necessary packages
+RUN apk update && apk add --no-cache libc6-compat openssh git
+
+ENV NODE_OPTIONS="--max-old-space-size=6144"
+
+# # # Install pnpm and turbo globally define you specific version according to the package.json
+RUN npm install -g pnpm turbo  
 RUN pnpm config set store-dir ~/.pnpm-store
 
-# ---------- Pruner ----------
-FROM base AS pruner
-WORKDIR /app
-COPY . .
-# Keep only what's needed for @repo/frontend
-RUN turbo prune --scope=@repo/frontend --docker
+# # #############################################################
+# # # Stage 1 - Pruning unnecessary files                       #
+# # #############################################################
 
-# ---------- Builder ----------
+FROM base AS pruner
+
+# Copy all files to the container and Prune files that are not needed for the specified project
+COPY . .
+RUN npx turbo prune --scope=@repo/frontend --docker
+
+# # #############################################################
+# # # Stage 2 - Installing dependencies and building            #
+# # #############################################################
+
 FROM base AS builder
 WORKDIR /app
-
-# Copy pruned workspace manifests first (better caching)
+# # Copy lockfile and package.json's of isolated subworkspace
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
 
-# Install deps for the pruned workspace (dev deps included for build)
-RUN --mount=type=cache,id=pnpm,target=/root/.pnpm-store \
-    pnpm install --frozen-lockfile --ignore-scripts
+# Install dependencies using pnpm, using a cache for faster builds
+RUN --mount=type=cache,id=pnpm-store,target=~/.pnpm-store pnpm install --ignore-scripts
 
-# Bring in the pruned source
+# # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 
-# Prisma client (if used by the app at runtime)
-RUN if [ -d packages/db/prisma ]; then cd packages/db && pnpm prisma generate --schema=./prisma/schema; fi
+RUN pnpm prisma generate --schema=packages/db/prisma/schema
+ENV TURBO_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Normal build (no Next standalone)
-ENV NODE_ENV=production
-# Use your preferred build: turbo or direct filter
-# RUN CI=true SKIP_ENV_VALIDATION=true turbo run build --filter=@repo/frontend
-RUN CI=true SKIP_ENV_VALIDATION=true pnpm --filter=@repo/frontend build
+# Set environment variables for build
+ENV RESEND_API_KEY="dummy-key-for-build"
+ENV AUTH_SECRET="dummy-auth-secret"
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+ENV DISCOLAIRE_API_KEY="dummy-api-key"
+ENV S3_ACCESS_KEY_ID="dummy"
+ENV S3_SECRET_ACCESS_KEY="dummy"
+ENV S3_REGION="us-east-1"
+ENV S3_BUCKET_NAME="dummy"
+ENV S3_AVATAR_BUCKET_NAME="dummy"
+ENV S3_IMAGE_BUCKET_NAME="dummy"
+ENV S3_DOCUMENT_BUCKET_NAME="dummy"
+ENV WHATSAPP_VERIFY_TOKEN="dummy"
+ENV WHATSAPP_API_TOKEN="dummy"
+ENV REDIS_URL="redis://localhost:6379"
+ENV SUPER_ADMIN_USERNAME="admin"
+ENV NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+ENV NEXT_PUBLIC_DEPLOYMENT_ENV="production"
+ENV NEXT_PUBLIC_MINIO_URL="http://localhost:9000"
+ENV NEXT_PUBLIC_PROSPECT_SERVICE_URL="http://localhost:3001"
+ENV NEXT_PUBLIC_LIBRARY_SERVICE_URL="http://localhost:3002"
+ENV MESSAGING_SERVICE_URL="http://localhost:3003"
+ENV MESSAGING_SECRET_KEY="dummy"
+ENV NOVU_API_KEY="dummy"
+ENV WHATSAPP_BUSINESS_PHONE_NUMBER_ID="dummy"
 
-# ---------- Runner ----------
-FROM node:22-alpine AS runner
-ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
-WORKDIR /app/apps/frontend
+RUN CI=true SKIP_ENV_VALIDATION=true turbo build --filter=@repo/frontend
+#RUN CI=true pnpm prune --prod --no-optional
 
-RUN npm i -g pnpm dotenv-cli
-RUN addgroup -S nodejs -g 1001 && adduser -S nextjs -u 1001
+# # Cleanup: Remove source files that are not needed
+RUN rm -rf ./**/*/src
+RUN rm -rf apps/frontend/.next/standalone/node_modules
 
-COPY --from=builder --chown=nextjs:nodejs /app ./
 
-USER nextjs
-EXPOSE 3000
-ENV PORT=3000
+# # #############################################################
+# # # Stage 3 - Run the application                             #
+# # #############################################################
 
-CMD ["pnpm", "start"]
+FROM base AS runner
+
+WORKDIR /app/
+
+ENV NODE_ENV="production"
+
+# Copy built files from the builder stage
+# COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/ .     
+
+# Create necessary directories and copy static files
+RUN mkdir -p apps/frontend/.next/standalone/apps/frontend/.next/public/_next/static
+
+# Copy public folder if it exists
+RUN if [ -d "apps/frontend/public" ]; then \
+    cp -r apps/frontend/public/* apps/frontend/.next/standalone/apps/frontend/.next/public/ || true; \
+    fi
+
+# Copy Next.js static files if they exist
+RUN if [ -d "apps/frontend/.next/static" ]; then \
+    cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/apps/frontend/.next/public/_next/static/ || true; \
+    fi
+
+CMD ["node", "apps/frontend/.next/standalone/apps/frontend/server.js"]

@@ -40,7 +40,7 @@ async function toExcel({
 }: {
   students: RouterOutputs["student"]["all"];
 }) {
-  const { t, i18n } = await getServerTranslations();
+  const { t } = await getServerTranslations();
   const studentIds = students.map((student) => student.id);
   const contacts = await db.studentContact.findMany({
     where: {
@@ -52,12 +52,12 @@ async function toExcel({
       contact: true,
     },
   });
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    timeZone: "UTC",
-  });
+  // const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  //   year: "numeric",
+  //   month: "2-digit",
+  //   day: "2-digit",
+  //   timeZone: "UTC",
+  // });
   const rows = students.map((student) => {
     const studentContacts = contacts.filter((c) => c.studentId === student.id);
     const contactNames = studentContacts
@@ -80,11 +80,9 @@ async function toExcel({
       Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
-      "Date de naissance":
-        student.dateOfBirth && dateFormat.format(student.dateOfBirth),
+      "Date de naissance": student.dateOfBirth,
       "Lieu de naissance": student.placeOfBirth,
-      dateOfEntry:
-        student.dateOfEntry && dateFormat.format(student.dateOfEntry),
+      dateOfEntry: student.dateOfEntry,
       Parents: contactNames,
       "Parent Phones": contactPhones,
     };
