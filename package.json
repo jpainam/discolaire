@@ -13,6 +13,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "pnpm lint:ws && pnpm db:generate",
     "db:generate": "pnpm --filter @repo/db generate",
+    "start": "pnpm --filter @repo/frontend start",
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "dotenv": "^17.2.2",
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "turbo": "^2.5.6",
