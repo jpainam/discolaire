@@ -37,6 +37,20 @@ ENV NODE_OPTIONS="--max-old-space-size=8192"
 # RUN --mount=type=secret,id=env \
 #    set -a; . /run/secrets/env; set +a;
 RUN pnpm prisma generate --schema=/app/packages/db/prisma/schema
+
+ARG AUTH_SECRET
+ARG DISCOLAIRE_API_KEY
+ARG RESEND_API_KEY
+ARG DATABASE_URL
+ARG NEXT_PUBLIC_BASE_URL
+
+
+ENV AUTH_SECRET=$AUTH_SECRET
+ENV DISCOLAIRE_API_KEY=$DISCOLAIRE_API_KEY
+ENV RESEND_API_KEY=$RESEND_API_KEY
+ENV DATABASE_URL=$DATABASE_URL
+ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
+
 RUN pnpm build --filter=@repo/frontend
 
 # Production image, copy all the files and run next
