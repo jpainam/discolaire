@@ -1,81 +1,67 @@
-# Base stage with Alpine image
-FROM node:23.11.1-alpine AS base
-WORKDIR /app
+# syntax=docker.io/docker/dockerfile:1
 
-# # # Install necessary packages
-RUN apk update && apk add --no-cache libc6-compat openssh git
+FROM node:23-alpine AS base
 
 ENV NODE_OPTIONS="--max-old-space-size=6144"
+# Install dependencies only when needed
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 
-# # # Install pnpm and turbo globally define you specific version according to the package.json
-RUN npm install -g pnpm turbo  
-RUN pnpm config set store-dir ~/.pnpm-store
+# Install dependencies based on the preferred package manager
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+RUN  corepack enable pnpm && pnpm i --frozen-lockfile --ignore-scripts
 
-# # #############################################################
-# # # Stage 1 - Pruning unnecessary files                       #
-# # #############################################################
 
-FROM base AS pruner
-
-# Copy all files to the container and Prune files that are not needed for the specified project
-COPY . .
-RUN npx turbo prune --scope=@repo/frontend --docker
-
-# # #############################################################
-# # # Stage 2 - Installing dependencies and building            #
-# # #############################################################
-
+# Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
-# # Copy lockfile and package.json's of isolated subworkspace
-COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
-COPY --from=pruner /app/out/json/ .
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 
-# Install dependencies using pnpm, using a cache for faster builds
-RUN --mount=type=cache,id=pnpm-store,target=~/.pnpm-store pnpm install --ignore-scripts
+#RUN pnpm prisma generate --schema=packages/db/prisma/schema
 
-# # Copy source code of isolated subworkspace
-COPY --from=pruner /app/out/full/ .
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
 
-RUN pnpm prisma generate --schema=packages/db/prisma/schema
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_DISABLE_SOURCEMAPS=1
 
+RUN corepack enable pnpm 
+RUN pnpm i --ignore-scripts 
+ENV NODE_OPTIONS="--max-old-space-size=6144"
+RUN --mount=type=secret,id=env \
+    set -a; . /run/secrets/env; set +a;
+RUN CI=true SKIP_ENV_VALIDATION=true pnpm build --filter=@repo/frontend
 
-RUN CI=true SKIP_ENV_VALIDATION=true turbo build --filter=@repo/frontend
-#RUN CI=true pnpm prune --prod --no-optional
-
-# # Cleanup: Remove source files that are not needed
-RUN rm -rf ./**/*/src
-RUN rm -rf apps/frontend/.next/standalone/node_modules
-
-
-# # #############################################################
-# # # Stage 3 - Run the application                             #
-# # #############################################################
-
+# Production image, copy all the files and run next
 FROM base AS runner
+WORKDIR /app
 
-WORKDIR /app/
+ENV NODE_ENV=production
+# Uncomment the following line in case you want to disable telemetry during runtime.
+# ENV NEXT_TELEMETRY_DISABLED=1
 
-ENV NODE_ENV="production"
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy built files from the builder stage
-# COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/ .     
+COPY --from=builder /app/apps/frontend/public ./public
 
-# Create necessary directories and copy static files
-RUN mkdir -p apps/frontend/.next/standalone/apps/frontend/.next/public/_next/static
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/standalone/apps/frontend ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/static ./.next/static
 
-# Copy public folder if it exists
-RUN if [ -d "apps/frontend/public" ]; then \
-    cp -r apps/frontend/public/* apps/frontend/.next/standalone/apps/frontend/.next/public/ || true; \
-    fi
+USER nextjs
 
-# Copy Next.js static files if they exist
-RUN if [ -d "apps/frontend/.next/static" ]; then \
-    cp -r apps/frontend/.next/static/* apps/frontend/.next/standalone/apps/frontend/.next/public/_next/static/ || true; \
-    fi
+EXPOSE 3000
 
-CMD ["node", "apps/frontend/.next/standalone/apps/frontend/server.js"]
+ENV PORT=3000
+
+# server.js is created by next build from the standalone output
+# https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
+ENV HOSTNAME="0.0.0.0"
+CMD ["node", "server.js"]

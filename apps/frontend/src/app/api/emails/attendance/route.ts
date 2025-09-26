@@ -8,13 +8,13 @@ import {
   ExclusionEmail,
   LatenessEmail,
 } from "@repo/transactional";
+import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
 import { db } from "~/lib/db";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
-import { sendEmail } from "~/utils/send-email";
 
 const schema = z.object({
   id: z.coerce.number(),

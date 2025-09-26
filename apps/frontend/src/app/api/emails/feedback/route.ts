@@ -6,9 +6,9 @@ import { nanoid } from "nanoid";
 import { z } from "zod";
 
 import FeedbackEmail from "@repo/transactional/emails/FeedbackEmail";
+import { resend } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
-import { resend } from "~/lib/resend";
 import { caller } from "~/trpc/server";
 
 const schema = z.object({

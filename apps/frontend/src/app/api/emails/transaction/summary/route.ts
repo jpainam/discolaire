@@ -3,11 +3,11 @@ import { render } from "@react-email/render";
 import { z } from "zod";
 
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
+import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { db } from "~/lib/db";
 import { getFullName } from "~/utils";
-import { sendEmail } from "~/utils/send-email";
 
 const schema = z.object({
   userId: z.string(),

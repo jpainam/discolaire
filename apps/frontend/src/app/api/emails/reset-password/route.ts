@@ -5,9 +5,9 @@ import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
 import ResetPassword from "@repo/transactional/emails/ResetPassword";
+import { sendEmail } from "@repo/utils/resend";
 
 import { db } from "~/lib/db";
-import { sendEmail } from "~/utils/send-email";
 
 z.config({
   customError: createErrorMap({

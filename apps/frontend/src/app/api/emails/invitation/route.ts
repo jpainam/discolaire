@@ -5,10 +5,10 @@ import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
 import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
+import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { db } from "~/lib/db";
-import { sendEmail } from "~/utils/send-email";
 
 z.config({
   customError: createErrorMap({

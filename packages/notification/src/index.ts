@@ -1,9 +1,7 @@
 import { Novu } from "@novu/api";
-import { Resend } from "resend";
 
 import { env } from "./env";
 
-export const resend = new Resend(env.RESEND_API_KEY);
 const novu = new Novu({ secretKey: env.NOVU_API_KEY });
 export { novu };
 const API_ENDPOINT = "https://api.novu.co/v1";

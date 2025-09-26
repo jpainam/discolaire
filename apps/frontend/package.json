@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
+  "prettier": "@repo/prettier-config",
   "dependencies": {
     "@ai-sdk/gateway": "^1.0.23",
     "@ai-sdk/provider": "2.0.0",
@@ -72,6 +73,7 @@
     "@repo/notification": "workspace:*",
     "@repo/transactional": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@sanity/diff-match-patch": "^3.2.0",
     "@sentry/nextjs": "^9.46.0",
     "@t3-oss/env-nextjs": "^0.13.8",
@@ -177,6 +179,5 @@
     "prettier": "catalog:",
     "tailwindcss": "^4.1.13",
     "typescript": "catalog:"
-  },
-  "prettier": "@repo/prettier-config"
+  }
 }

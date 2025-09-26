@@ -40,7 +40,10 @@ export function AttendanceClassroomStudentList({
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("isRepeating")}</TableHead>
               <TableHead>{t("gender")}</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>Absences</TableHead>
+              <TableHead>Consignes</TableHead>
+              <TableHead>Retards</TableHead>
+              <TableHead>Bavardages</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

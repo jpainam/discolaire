@@ -11,7 +11,7 @@ import {
 } from "@repo/ui/components/tabs";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import { AttendanceClassroom } from "./classrooms/AttendanceClassroom";
+import { PeriodicAttendance } from "./periodic/PeriodicAttendance";
 
 export default async function Layout(props: PropsWithChildren) {
   const t = await getTranslations();
@@ -29,7 +29,7 @@ export default async function Layout(props: PropsWithChildren) {
             value="tab-2"
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground dark:data-[state=active]:bg-primary dark:data-[state=active]:text-primary-foreground rounded-full data-[state=active]:shadow-none"
           >
-            {t("classrooms")}
+            Saisie Périodique
           </TabsTrigger>
           <TabsTrigger
             value="tab-3"
@@ -55,7 +55,7 @@ export default async function Layout(props: PropsWithChildren) {
       <TabsContent value="tab-2">
         <Suspense fallback={<div>Loading...</div>}>
           <ErrorBoundary errorComponent={ErrorFallback}>
-            <AttendanceClassroom />
+            <PeriodicAttendance />
           </ErrorBoundary>
         </Suspense>
       </TabsContent>
