@@ -93,6 +93,8 @@ RUN pnpm build --filter=@repo/frontend
 FROM base AS runner
 WORKDIR /app
 
+RUN apk add --no-cache curl
+
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED=1
@@ -124,7 +126,7 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-RUN apk add --no-cache curl
+
 HEALTHCHECK --interval=5m --timeout=3s --start-period=60s --retries=3 \
    CMD curl -fsS http://127.0.0.1:3000/ || exit 1
 
