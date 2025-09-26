@@ -124,4 +124,8 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
+
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl -f http://localhost:3000/ || exit 1
+
 CMD ["node", "apps/frontend/server.js"]
