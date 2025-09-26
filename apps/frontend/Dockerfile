@@ -37,7 +37,7 @@ ENV NODE_OPTIONS="--max-old-space-size=8192"
 # RUN --mount=type=secret,id=env \
 #    set -a; . /run/secrets/env; set +a;
 RUN pnpm prisma generate --schema=/app/packages/db/prisma/schema
-RUN CI=true SKIP_ENV_VALIDATION=true pnpm build --filter=@repo/frontend
+RUN pnpm build --filter=@repo/frontend
 
 # Production image, copy all the files and run next
 FROM base AS runner
