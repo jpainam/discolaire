@@ -6,7 +6,7 @@ import { Resend } from "resend";
 
 //import { env } from "./env";
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+export const resend = new Resend("re_RkygusjQ_TRHFxSgeUrstmHDy26Wfixsj");
 
 export async function sendEmail({
   from,
