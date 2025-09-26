@@ -97,15 +97,23 @@ ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup -S -g 1001 nodejs \
+ && adduser  -S -D -H -u 1001 -G nodejs nextjs
 
-COPY --from=builder /app/apps/frontend/public ./public
+# COPY --from=builder /app/apps/frontend/public ./public
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/standalone/apps/frontend ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/static ./.next/static
+# # Automatically leverage output traces to reduce image size
+# # https://nextjs.org/docs/advanced-features/output-file-tracing
+# COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/standalone/apps/frontend ./
+# COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/static ./.next/static
+
+COPY --from=builder  --chown=nextjs:nodejs /app/apps/frontend/.next/standalone ./
+COPY --from=builder  --chown=nextjs:nodejs /app/apps/frontend/.next/static ./apps/frontend/.next/static
+COPY --from=builder  --chown=nextjs:nodejs /app/apps/frontend/public ./apps/frontend/public
+
+RUN find /app -type d -exec chmod 755 {} \; \
+ && find /app -type f -exec chmod 644 {} \; \
+ && chmod 755 /app/apps/frontend/server.js
 
 USER nextjs
 
@@ -116,4 +124,4 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+CMD ["node", "apps/frontend/server.js"]
