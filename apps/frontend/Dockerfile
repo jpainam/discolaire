@@ -33,8 +33,8 @@ ENV NEXT_DISABLE_SOURCEMAPS=1
 RUN corepack enable pnpm 
 RUN pnpm i --ignore-scripts 
 ENV NODE_OPTIONS="--max-old-space-size=6144"
-RUN --mount=type=secret,id=env \
-    set -a; . /run/secrets/env; set +a;
+# RUN --mount=type=secret,id=env \
+#    set -a; . /run/secrets/env; set +a;
 RUN CI=true SKIP_ENV_VALIDATION=true pnpm build --filter=@repo/frontend
 
 # Production image, copy all the files and run next
