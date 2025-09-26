@@ -1,4 +1,5 @@
-'server-only';
+"server-only";
+
 import type { Attachment } from "resend";
 import { nanoid } from "nanoid";
 import { Resend } from "resend";
