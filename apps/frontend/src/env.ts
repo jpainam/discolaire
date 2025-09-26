@@ -41,8 +41,6 @@ export const env = createEnv({
     NEXT_PUBLIC_BASE_URL: z.string().url(),
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.string().default("local"),
     NEXT_PUBLIC_MINIO_URL: z.string().url(),
-    NEXT_PUBLIC_PROSPECT_SERVICE_URL: z.string().url(),
-    NEXT_PUBLIC_LIBRARY_SERVICE_URL: z.string().url(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -63,10 +61,6 @@ export const env = createEnv({
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     REDIS_URL: process.env.REDIS_URL,
-    NEXT_PUBLIC_PROSPECT_SERVICE_URL:
-      process.env.NEXT_PUBLIC_PROSPECT_SERVICE_URL,
-    NEXT_PUBLIC_LIBRARY_SERVICE_URL:
-      process.env.NEXT_PUBLIC_LIBRARY_SERVICE_URL,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // AWS S3
