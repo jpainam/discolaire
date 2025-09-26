@@ -20,7 +20,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-#RUN pnpm prisma generate --schema=packages/db/prisma/schema
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -35,6 +34,7 @@ RUN pnpm i --ignore-scripts
 ENV NODE_OPTIONS="--max-old-space-size=6144"
 # RUN --mount=type=secret,id=env \
 #    set -a; . /run/secrets/env; set +a;
+RUN pnpm prisma generate --schema=/app/packages/db/prisma/schema
 RUN CI=true SKIP_ENV_VALIDATION=true pnpm build --filter=@repo/frontend
 
 # Production image, copy all the files and run next
