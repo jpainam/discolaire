@@ -2,7 +2,8 @@
 
 FROM node:23-alpine AS base
 
-ENV NODE_OPTIONS="--max-old-space-size=6144"
+#ENV NODE_OPTIONS="--max-old-space-size=6144"
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -31,7 +32,8 @@ ENV NEXT_DISABLE_SOURCEMAPS=1
 
 RUN corepack enable pnpm 
 RUN pnpm i --ignore-scripts 
-ENV NODE_OPTIONS="--max-old-space-size=6144"
+#ENV NODE_OPTIONS="--max-old-space-size=6144"
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 # RUN --mount=type=secret,id=env \
 #    set -a; . /run/secrets/env; set +a;
 RUN pnpm prisma generate --schema=/app/packages/db/prisma/schema
