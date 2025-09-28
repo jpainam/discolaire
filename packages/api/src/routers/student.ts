@@ -733,4 +733,15 @@ export const studentRouter = {
         },
       });
     }),
+  excluded: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.student.findMany({
+      include: {
+        user: true,
+        formerSchool: true,
+      },
+      where: {
+        status: "EXPELLED",
+      },
+    });
+  }),
 } satisfies TRPCRouterRecord;

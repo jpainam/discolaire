@@ -12,11 +12,13 @@ import {
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";
+import { ExcludedStudentDataTable } from "./excluded/ExcludedStudentDataTable";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
   const enrolled = await caller.student.all({ limit: 10000 });
   const newStudents = enrolled.filter((std) => std.isNew);
+  const excluded = await caller.student.excluded();
   return (
     <Tabs defaultValue="tab-1">
       <ScrollArea className="px-4">
@@ -60,7 +62,7 @@ export default async function Page() {
               className="bg-primary/15 ms-1.5 min-w-5 px-1 transition-opacity group-data-[state=inactive]:opacity-50"
               variant="secondary"
             >
-              Pas encore
+              {excluded.length}
             </Badge>
           </TabsTrigger>
         </TabsList>
@@ -73,9 +75,7 @@ export default async function Page() {
         <EnrolledStudentDataTable newStudent={true} students={newStudents} />
       </TabsContent>
       <TabsContent value="tab-3">
-        <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
-          En cours d'implémentation. Veuillez patienter.
-        </p>
+        <ExcludedStudentDataTable students={excluded} />
       </TabsContent>
     </Tabs>
   );

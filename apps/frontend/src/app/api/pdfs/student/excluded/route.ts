@@ -25,9 +25,9 @@ export async function GET(req: NextRequest) {
       obj[key] = value;
     }
 
-    const enrolled = await caller.student.all({ limit: 10000 });
-    //const students = enrolled.filter((std) => std.isNew);
-    const { blob, headers } = await toExcel({ students: enrolled });
+    const students = await caller.student.excluded();
+
+    const { blob, headers } = await toExcel({ students: students });
     return new Response(blob, { headers });
   } catch (error) {
     console.error(error);
@@ -38,9 +38,9 @@ export async function GET(req: NextRequest) {
 async function toExcel({
   students,
 }: {
-  students: RouterOutputs["student"]["all"];
+  students: RouterOutputs["student"]["excluded"];
 }) {
-  const { t, i18n } = await getServerTranslations();
+  const { t } = await getServerTranslations();
   const studentIds = students.map((student) => student.id);
   const contacts = await db.studentContact.findMany({
     where: {
@@ -52,7 +52,12 @@ async function toExcel({
       contact: true,
     },
   });
-
+  // const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  //   year: "numeric",
+  //   month: "2-digit",
+  //   day: "2-digit",
+  //   timeZone: "UTC",
+  // });
   const rows = students.map((student) => {
     const studentContacts = contacts.filter((c) => c.studentId === student.id);
     const contactNames = studentContacts
@@ -66,15 +71,15 @@ async function toExcel({
       registrationNumber: student.registrationNumber,
       Prénom: student.firstName,
       Nom: student.lastName,
-      Gender: t(`${student.gender}`),
+      Sexe: t(`${student.gender}`),
       isRepeating: student.isRepeating ? t("yes") : t("no"),
-      classroom: student.classroom?.name,
-      religion: student.religion?.name,
+
       formerSchool: student.formerSchool?.name,
       Residence: student.residence,
       Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
+      Observation: student.observation,
       "Date de naissance": student.dateOfBirth,
       "Lieu de naissance": student.placeOfBirth,
       dateOfEntry: student.dateOfEntry,
@@ -84,7 +89,7 @@ async function toExcel({
   });
   const worksheet = XLSX.utils.json_to_sheet(rows);
   const workbook = XLSX.utils.book_new();
-  const sheetName = getSheetName(t("students"));
+  const sheetName = getSheetName(t("excluded_students"));
   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
   const u8 = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
