@@ -314,7 +314,7 @@ export const Keypad = () => {
           <span className="block"> = </span>
         </KBtn>
         <KBtn
-          className="w-10 items-end justify-end pb-[2px] pr-[4px]"
+          className="w-10 items-end justify-end pr-[4px] pb-[2px]"
           childrenClassName="items-end"
         >
           delete
@@ -419,7 +419,7 @@ export const Keypad = () => {
           <span className="block">{`'`}</span>
         </KBtn>
         <KBtn
-          className="w-[2.85rem] items-end justify-end pb-[2px] pr-[4px]"
+          className="w-[2.85rem] items-end justify-end pr-[4px] pb-[2px]"
           childrenClassName="items-end"
         >
           return
@@ -468,7 +468,7 @@ export const Keypad = () => {
           <span className="block">{`/`}</span>
         </KBtn>
         <KBtn
-          className="w-[3.65rem] items-end justify-end pb-[2px] pr-[4px]"
+          className="w-[3.65rem] items-end justify-end pr-[4px] pb-[2px]"
           childrenClassName="items-end"
         >
           shift

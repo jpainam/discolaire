@@ -40,7 +40,7 @@ async function toExcel({
 }: {
   students: RouterOutputs["student"]["all"];
 }) {
-  const { t, i18n } = await getServerTranslations();
+  const { t } = await getServerTranslations();
   const studentIds = students.map((student) => student.id);
   const contacts = await db.studentContact.findMany({
     where: {

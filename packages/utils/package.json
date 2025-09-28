@@ -2,6 +2,7 @@
   "prettier": "@repo/prettier-config",
   "name": "@repo/utils",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "exports": {
     ".": "./src/index.ts",
