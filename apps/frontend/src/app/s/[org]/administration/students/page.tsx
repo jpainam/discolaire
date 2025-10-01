@@ -1,4 +1,9 @@
-import { BoxIcon, CircleUserRound, PanelsTopLeftIcon } from "lucide-react";
+import {
+  BoxIcon,
+  CircleUserRound,
+  ImportIcon,
+  PanelsTopLeftIcon,
+} from "lucide-react";
 
 import { Badge } from "@repo/ui/components/badge";
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
@@ -13,6 +18,7 @@ import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";
 import { ExcludedStudentDataTable } from "./excluded/ExcludedStudentDataTable";
+import { ImportStudentContainer } from "./import/ImportStudentContainer";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
@@ -65,6 +71,14 @@ export default async function Page() {
               {excluded.length}
             </Badge>
           </TabsTrigger>
+          <TabsTrigger value="tab-4" className="group">
+            <ImportIcon
+              className="-ms-0.5 me-1.5 opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            Export/Import
+          </TabsTrigger>
         </TabsList>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
@@ -76,6 +90,9 @@ export default async function Page() {
       </TabsContent>
       <TabsContent value="tab-3">
         <ExcludedStudentDataTable students={excluded} />
+      </TabsContent>
+      <TabsContent value="tab-4" className="h-full w-full px-6">
+        <ImportStudentContainer />
       </TabsContent>
     </Tabs>
   );
