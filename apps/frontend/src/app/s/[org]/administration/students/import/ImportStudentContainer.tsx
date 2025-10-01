@@ -14,7 +14,7 @@ export function ImportStudentContainer() {
       orientation="vertical"
       className="w-full flex-row p-0"
     >
-      <TabsList className="flex-col rounded-none border-l">
+      <TabsList className="mt-5 flex-col rounded-none bg-transparent">
         <TabsTrigger
           value="tab-1"
           className="data-[state=active]:after:bg-primary relative w-full justify-start rounded-none after:absolute after:inset-y-0 after:start-0 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
@@ -29,7 +29,7 @@ export function ImportStudentContainer() {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="tab-1" className="bg-red-500 p-0">
+      <TabsContent value="tab-1" className="pt-2">
         <ImportStudentRegistrationNumber />
       </TabsContent>
       <TabsContent value="tab-2">

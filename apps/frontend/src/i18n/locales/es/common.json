@@ -546,7 +546,6 @@
   "edit": "Editar",
   "create_classroom_description": "Create la información de la clase, incluyendo el nivel, el profesor principal y la capacidad",
   "edit_classroom_description": "Modifique la información de la clase, incluyendo el nivel, el profesor principal y la capacidad",
-  "edit_grade_description": "Editar la calificación de {{name}}",
   "educationLevel": "Nivel educativo",
   "effect": "Efecto",
   "effectif": "Efectivo",

@@ -33,7 +33,7 @@ export default async function Page(props: PageProps) {
       <ClassroomCreateGradeSheetHeader />
 
       {searchParams.termId && searchParams.subjectId && (
-        <div className="grid h-screen grid-cols-4 gap-4 divide-x">
+        <div className="grid grid-cols-4 gap-4 divide-x">
           <CreateGradeSheet
             className="col-span-3"
             subjectId={searchParams.subjectId}

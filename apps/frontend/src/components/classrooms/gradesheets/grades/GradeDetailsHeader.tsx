@@ -43,7 +43,7 @@ export function GradeDetailsHeader({
 
   const confirm = useConfirm();
   const router = useRouter();
-  const isClosed = gradesheet.term.endDate < new Date();
+  const isClosed = !gradesheet.term.isActive;
 
   useEffect(() => {
     if (isClosed) {

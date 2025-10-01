@@ -32,6 +32,7 @@ import { gradeRouter } from "./routers/grade";
 import { gradeAppreciationRouter } from "./routers/gradeAppreciation";
 import { gradeSheetRouter } from "./routers/gradeSheet";
 import { healthRouter } from "./routers/health";
+import { importStudentRouter } from "./routers/importStudent";
 import { inventoryRouter } from "./routers/inventory";
 import { inventoryUsageRouter } from "./routers/inventoryUsage";
 import { latenessRouter } from "./routers/lateness";
@@ -145,6 +146,7 @@ export const appRouter = createTRPCRouter({
   lateness: latenessRouter,
   absence: absenceRouter,
   chatter: chatterRouter,
+  importStudent: importStudentRouter,
   discipline: disciplineRouter,
   timetableCategory: timetableCategoryRouter,
 });

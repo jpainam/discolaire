@@ -8,7 +8,9 @@ import { Label } from "@repo/ui/components/label";
 
 import FlatBadge from "~/components/FlatBadge";
 import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { getAppreciations } from "~/utils/appreciations";
 
 export function TrimestreHeader({
@@ -26,6 +28,10 @@ export function TrimestreHeader({
 }) {
   const { createQueryString } = useCreateQueryString();
   const { t } = useLocale();
+  const canCreateReportCard = useCheckPermission(
+    "reportcard",
+    PermissionAction.CREATE,
+  );
 
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
   return (
@@ -49,24 +55,26 @@ export function TrimestreHeader({
       <FlatBadge variant={"gray"}>
         {t("appreciation")} : {getAppreciations(average)}
       </FlatBadge>
-      <Button
-        className="ml-auto"
-        onClick={() => {
-          const url =
-            `/api/pdfs/reportcards/ipbw/trimestres?` +
-            createQueryString({
-              trimestreId: trimestreId,
-              classroomId: classroom.id,
-              format: "pdf",
-            });
-          window.open(url, "_blank");
-        }}
-        variant={"default"}
-        size={"sm"}
-      >
-        <Printer />
-        {t("print")}
-      </Button>
+      {canCreateReportCard && (
+        <Button
+          className="ml-auto"
+          onClick={() => {
+            const url =
+              `/api/pdfs/reportcards/ipbw/trimestres?` +
+              createQueryString({
+                trimestreId: trimestreId,
+                classroomId: classroom.id,
+                format: "pdf",
+              });
+            window.open(url, "_blank");
+          }}
+          variant={"default"}
+          size={"sm"}
+        >
+          <Printer />
+          {t("print")}
+        </Button>
+      )}
     </div>
   );
 }

@@ -28,6 +28,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 import { getAppreciations } from "~/utils/appreciations";
 import { EditGradeStudent } from "./EditGradeStudent";
 
@@ -189,7 +190,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const isClosed = grade.gradeSheet.term.endDate < new Date();
+  const isClosed = !grade.gradeSheet.term.isActive;
 
   const markGradeAbsent = useMutation(
     trpc.grade.update.mutationOptions({
@@ -235,9 +236,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
                 }
                 openModal({
                   title: t("edit"),
-                  description: t("edit_grade_description", {
-                    name: `${st.lastName} ${st.firstName}`,
-                  }),
+                  description: getFullName(st),
 
                   view: (
                     <EditGradeStudent

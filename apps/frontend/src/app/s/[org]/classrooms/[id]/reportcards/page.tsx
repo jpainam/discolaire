@@ -24,6 +24,8 @@ import { AvatarState } from "~/components/AvatarState";
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
+import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -66,6 +68,10 @@ export default async function Page(props: {
   // });
 
   const { t } = await getServerTranslations();
+  const canCreateReportCard = await checkPermission(
+    "reportcart",
+    PermissionAction.CREATE,
+  );
   return (
     <div className="mb-10 flex w-full flex-col gap-2 text-sm">
       <div className="grid flex-row items-center gap-4 px-4 md:flex">
@@ -90,16 +96,18 @@ export default async function Page(props: {
         <FlatBadge variant={"gray"}>
           {t("appreciation")} : {getAppreciations(average)}
         </FlatBadge>
-        <Link
-          className="ml-auto"
-          href={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
-          target="_blank"
-        >
-          <Button size={"sm"}>
-            <Printer />
-            {t("print")}
-          </Button>
-        </Link>
+        {canCreateReportCard && (
+          <Link
+            className="ml-auto"
+            href={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
+            target="_blank"
+          >
+            <Button size={"sm"}>
+              <Printer />
+              {t("print")}
+            </Button>
+          </Link>
+        )}
       </div>
       <Separator />
       <div className="px-4">

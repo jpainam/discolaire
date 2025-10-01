@@ -84,37 +84,25 @@ export const gradeSheetRouter = {
           termId: input.termId,
         },
       });
-      let errorMessage = "";
-      gradeExists.forEach((grade) => {
-        if (grade.weight == 100 && input.weight == 100) {
-          errorMessage = "Grade with 100% weight already exists";
-        }
-      });
-      if (errorMessage) {
+
+      const currentWeight = gradeExists.reduce(
+        (acc, grade) => acc + grade.weight,
+        0,
+      );
+      const scaleInputWeight = input.weight / 100.0;
+      if (currentWeight + scaleInputWeight > 1) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: errorMessage,
+          message: `Le poids total ne peut pas dépasser 100%. Le total actuel est de ${currentWeight}%.`,
         });
       }
-      // Update previous grade weight to sum to remaining weight
-      const remainingWeight = 100 - input.weight;
-      await Promise.all(
-        gradeExists.map(async (grade) => {
-          return ctx.db.gradeSheet.update({
-            data: {
-              weight: grade.weight * (remainingWeight / 100),
-            },
-            where: {
-              id: grade.id,
-            },
-          });
-        }),
-      );
+      let errorMessage = "";
+
       const sheet = await ctx.db.gradeSheet.create({
         data: {
           name: input.name,
           scale: input.scale,
-          weight: input.weight,
+          weight: input.weight / 100.0,
           createdBy: { connect: { id: ctx.session.user.id } },
           subject: { connect: { id: input.subjectId } },
           term: { connect: { id: input.termId } },
@@ -124,7 +112,7 @@ export const gradeSheetRouter = {
       const grades: Prisma.GradeCreateManyInput[] = input.grades.map(
         (grade) => {
           if (grade.grade && grade.grade > input.scale) {
-            errorMessage = "Grade cannot be greater than scale";
+            errorMessage = `La note ne peut pas dépasser l'échelle de ${input.scale}.`;
           }
           return {
             grade: grade.grade ?? 0,

@@ -55,14 +55,18 @@ export function ReportCardHeader() {
         className="w-[300px]"
         defaultValue={trimestreId ?? undefined}
         onChange={(val) => {
-          const url =
-            `/classrooms/${params.id}/reportcards/trimestres?` +
-            createQueryString({
-              trimestreId: val,
-              classroomId: params.id,
-              format: "pdf",
-            });
-          router.push(url);
+          if (val == "ann") {
+            router.push(`/classrooms/${params.id}/reportcards/annual`);
+          } else {
+            const url =
+              `/classrooms/${params.id}/reportcards/trimestres?` +
+              createQueryString({
+                trimestreId: val,
+                classroomId: params.id,
+                format: "pdf",
+              });
+            router.push(url);
+          }
         }}
       />
       <div className="flex flex-row items-center gap-2 md:ml-auto">

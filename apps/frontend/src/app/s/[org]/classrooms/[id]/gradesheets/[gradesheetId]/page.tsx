@@ -42,26 +42,31 @@ export default async function Page(props: {
     ...grades.filter((g) => !g.isAbsent).map((grade) => grade.grade),
   );
   const grades10 = grades.filter((grade) => grade.grade >= 10).length;
-  const len = grades.filter((grade) => !grade.isAbsent).length || 1e9;
-  const average = grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
+  const len = grades.filter((grade) => !grade.isAbsent).length;
+  const average =
+    len == 0 ? 0 : grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
   const maleCount = grades.filter(
     (grade) => !grade.isAbsent && grade.student.gender == "male",
   ).length;
   const males10Rate =
-    grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
-    ).length / (maleCount == 0 ? 1e9 : maleCount);
+    maleCount == 0
+      ? 0
+      : grades.filter(
+          (grade) => grade.grade >= 10 && grade.student.gender == "male",
+        ).length / maleCount;
 
   const femaleCount = grades.filter(
     (grade) => !grade.isAbsent && grade.student.gender == "female",
   ).length;
   const females10Rate =
-    grades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
-    ).length / (femaleCount == 0 ? 1e9 : femaleCount);
+    femaleCount == 0
+      ? 0
+      : grades.filter(
+          (grade) => grade.grade >= 10 && grade.student.gender == "female",
+        ).length / femaleCount;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const isClosed = gradesheet.term.endDate < new Date();
+  const isClosed = !gradesheet.term.isActive;
 
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
@@ -197,7 +202,7 @@ export default async function Page(props: {
             <div className="flex items-center space-x-2">
               <Progress value={(grades10 * 100) / len} />
               <span className="text-sm font-medium">
-                {((grades10 * 100) / len).toFixed(2)}%
+                {len == 0 ? 0 : ((grades10 * 100) / len).toFixed(2)}%
               </span>
             </div>
           </CardContent>

@@ -66,21 +66,43 @@ export function CreateGradeSheet({
 }) {
   const { t } = useLocale();
 
-  const inputRefs = useRef<HTMLInputElement[]>([]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const setInputRef = useCallback((el: HTMLInputElement | null, i: number) => {
+    inputRefs.current[i] = el;
+  }, []);
+
+  const moveFocus = (i: number, delta: number) => {
+    const next = Math.min(Math.max(i + delta, 0), inputRefs.current.length - 1);
+    const el = inputRefs.current[next];
+    if (el) {
+      el.focus();
+      // optional: select content when focusing
+      requestAnimationFrame(() => el.select());
+    }
+  };
+
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>, rowIndex: number) => {
-      if (event.key === "ArrowDown") {
-        if (rowIndex < inputRefs.current.length - 1) {
-          inputRefs.current[rowIndex + 1]?.focus();
-        }
-      } else if (event.key === "ArrowUp") {
-        if (rowIndex > 0) {
-          inputRefs.current[rowIndex - 1]?.focus();
-        }
+    (e: React.KeyboardEvent<HTMLInputElement>, i: number) => {
+      // prevent native number spin & form submit
+      if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter") {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      if (e.key === "ArrowDown" || e.key === "Enter") {
+        moveFocus(i, +1);
+      } else if (e.key === "ArrowUp") {
+        moveFocus(i, -1);
       }
     },
-    [], // No dependencies, so this function is only created once
+    [],
   );
+
+  // (Optional) stop mouse wheel from changing number inputs
+  const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
+    (e.target as HTMLInputElement).blur();
+  };
+
   const form = useForm({
     resolver: zodResolver(createGradeSchema),
     defaultValues: {
@@ -135,6 +157,17 @@ export function CreateGradeSheet({
         <form
           className="flex w-full flex-col"
           onSubmit={form.handleSubmit(onSubmit)}
+          onKeyDown={(e) => {
+            if (
+              e.key === "Enter" &&
+              (e.target as HTMLElement).tagName !== "TEXTAREA" &&
+              !(e.target as HTMLInputElement).type
+                .toLowerCase()
+                .includes("submit")
+            ) {
+              e.preventDefault(); // no implicit submit on Enter
+            }
+          }}
         >
           <div className="grid grid-cols-2 gap-4 p-1 px-4 md:grid-cols-4">
             <FormField
@@ -256,6 +289,7 @@ export function CreateGradeSheet({
                         <Input
                           value={st.id}
                           className="hidden"
+                          autoComplete="off"
                           {...form.register(`grades.${index}.studentId`)}
                         />
                         <FormField
@@ -267,18 +301,15 @@ export function CreateGradeSheet({
                                 <Input
                                   {...field}
                                   maxLength={6}
+                                  autoComplete="off"
+                                  inputMode="numeric"
                                   size={6}
                                   // step=".01"
-                                  // type="number"
-
+                                  type="number"
                                   className="h-8 w-[150px] text-sm"
-                                  ref={(el) => {
-                                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                                    inputRefs.current[index] = el!; // TODO: Fix this shouldn't use null assession
-                                  }}
-                                  onKeyDown={(event) =>
-                                    handleKeyDown(event, index)
-                                  }
+                                  ref={(el) => setInputRef(el, index)}
+                                  onKeyDown={(e) => handleKeyDown(e, index)}
+                                  onWheel={handleWheel}
                                 />
                               </FormControl>
                               <FormMessage />

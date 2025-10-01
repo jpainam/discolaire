@@ -3,6 +3,7 @@ import type { TFunction } from "i18next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
 import i18next from "i18next";
 import { Eye, MoreHorizontal, Trash2, Users2 } from "lucide-react";
 import { toast } from "sonner";
@@ -112,17 +113,20 @@ export function fetchEnrollmentColumns({
           </div>
         );
       },
-      size: 110,
+      size: 40,
     },
     {
       accessorKey: "placeOfBirth",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("placeOfBirth")} />
       ),
+      size: 80,
       cell: ({ row }) => {
         const student = row.original;
         return (
-          <div className="text-muted-foreground">{student.placeOfBirth}</div>
+          <div className="text-muted-foreground">
+            {decode(student.placeOfBirth ?? "")}
+          </div>
         );
       },
     },
@@ -132,6 +136,7 @@ export function fetchEnrollmentColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("dateOfBirth")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const student = row.original;
         return (
@@ -146,6 +151,7 @@ export function fetchEnrollmentColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("isRepeating")} />
       ),
+      size: 45,
       cell: ({ row }) => {
         const student = row.original;
         const v = student.isRepeating ? t("yes") : t("no");
@@ -172,7 +178,7 @@ export function fetchEnrollmentColumns({
           </FlatBadge>
         );
       },
-      size: 30,
+      size: 45,
     },
     // {
     //   id: "phone",
@@ -193,7 +199,7 @@ export function fetchEnrollmentColumns({
         const student = row.original;
         return ActionCell({ student, isActive });
       },
-      size: 60,
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },

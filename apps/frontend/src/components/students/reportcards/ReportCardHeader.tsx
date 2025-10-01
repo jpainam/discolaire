@@ -73,40 +73,43 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
           }}
         />
       </div>
-      {canPrintReportCard && (
-        <div className="ml-auto flex flex-row items-center gap-0">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size={"icon"} className="size-8" variant={"outline"}>
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem disabled={!termId && !trimestreId}>
-                <MailIcon />
-                {t("notify_parents")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                disabled={!termId && !trimestreId}
-                onSelect={() => {
-                  let url = `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${termId}`;
-                  if (pathname.includes("/trimestres") && trimestreId) {
-                    url = `/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${trimestreId}`;
-                  }
-                  window.open(url, "_blank");
-                }}
-              >
-                <PDFIcon />
-                {t("pdf_export")}
-              </DropdownMenuItem>
-              <DropdownMenuItem disabled={!termId && !trimestreId}>
-                <XMLIcon />
-                {t("xml_export")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      )}
+
+      <div className="ml-auto flex flex-row items-center gap-0">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size={"icon"} className="size-8" variant={"outline"}>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem disabled={!termId && !trimestreId}>
+              <MailIcon />
+              {t("notify_parents")}
+            </DropdownMenuItem>
+            {canPrintReportCard && (
+              <>
+                <DropdownMenuItem
+                  disabled={!termId && !trimestreId}
+                  onSelect={() => {
+                    let url = `/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${termId}`;
+                    if (pathname.includes("/trimestres") && trimestreId) {
+                      url = `/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${trimestreId}`;
+                    }
+                    window.open(url, "_blank");
+                  }}
+                >
+                  <PDFIcon />
+                  {t("pdf_export")}
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled={!termId && !trimestreId}>
+                  <XMLIcon />
+                  {t("xml_export")}
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

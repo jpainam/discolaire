@@ -44,6 +44,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 import { getAppreciations } from "~/utils/appreciations";
 
 export function ClassroomGradeList({
@@ -90,7 +91,7 @@ export function ClassroomGradeList({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const isClosed = gradesheet.term.endDate < new Date();
+  const isClosed = !gradesheet.term.isActive;
 
   const markGradeAbsent = useMutation(
     trpc.grade.update.mutationOptions({
@@ -308,10 +309,7 @@ export function ClassroomGradeList({
                               }
                               openModal({
                                 title: t("edit"),
-                                description: t("edit_grade_description", {
-                                  name: `${st.lastName} ${st.firstName}`,
-                                }),
-
+                                description: getFullName(st),
                                 view: (
                                   <EditGradeStudent
                                     gradeId={g.id}
