@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.8",
-    "ioredis": "^5.7.0",
+    "ioredis": "^5.8.0",
     "minimatch": "^10.0.3",
     "server-only": "^0.0.1"
   },
