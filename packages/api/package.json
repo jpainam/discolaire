@@ -55,7 +55,7 @@
     "@types/lodash": "^4.17.20",
     "@types/mime-types": "^3.0.1",
     "@types/minimatch": "^6.0.0",
-    "@types/uuid": "^10.0.0",
+    "@types/uuid": "^11.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
