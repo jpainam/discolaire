@@ -139,7 +139,7 @@ export const fetchTransactionColumns = ({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("status")} />
       ),
-      size: 80,
+      size: 120,
       cell: ({ row }) => {
         const trans = row.original;
         const status = row.original.status;
@@ -181,7 +181,7 @@ export const fetchTransactionColumns = ({
       cell: ({ row }: { row: Row<TransactionAllProcedureOutput> }) => (
         <ActionCell transaction={row.original} />
       ),
-      size: 60,
+      size: 28,
       enableSorting: false,
       enableHiding: false,
     },
