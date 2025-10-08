@@ -14,7 +14,7 @@ export function getReceipt({
   info: RouterOutputs["transaction"]["getReceiptInfo"];
   school: RouterOutputs["school"]["getSchool"];
 }) {
-  if (school.code == "csabrazzaville") {
+  if (school.code == "csac") {
     return CSACongoReceipt({
       transaction: transaction,
       amountInWords: amountInWords,

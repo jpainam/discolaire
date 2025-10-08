@@ -89,10 +89,10 @@ export function AdminSidebar({
             title: "Transactions",
             url: "/administration/accounting/transactions",
           },
-          // {
-          //   title: "Sasie des operations",
-          //   url: "/administration/accounting/create",
-          // },
+          {
+            title: "Compte Caisse",
+            url: "/administration/accounting/funds",
+          },
           {
             title: "settings",
             url: "/administration/accounting/settings",

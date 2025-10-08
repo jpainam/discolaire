@@ -34,7 +34,7 @@ const appreciationService: Record<
 > & { default: (grade?: number, scale?: number) => string } = {
   ipbw: getAppreciationsIpbw,
   demo: getAppreciationsIpbw,
-  csabrazzaville: getAppreciationsCSACONGO,
+  csac: getAppreciationsCSACONGO,
   default: getAppreciationsIpbw,
 };
 

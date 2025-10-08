@@ -28,6 +28,7 @@ import { exclusionRouter } from "./routers/exclusion";
 import { feeRouter } from "./routers/fee";
 import { feedbackRouter } from "./routers/feedback";
 import { formerShoolRouter } from "./routers/formerSchool";
+import { fundRouter } from "./routers/fund";
 import { gradeRouter } from "./routers/grade";
 import { gradeAppreciationRouter } from "./routers/gradeAppreciation";
 import { gradeSheetRouter } from "./routers/gradeSheet";
@@ -139,6 +140,7 @@ export const appRouter = createTRPCRouter({
   policy: policyRouter,
   attendance: attendanceRouter,
   messaging: messagingRouter,
+  fund: fundRouter,
   transaction: transactionRouter,
   reporting: reportingRouter,
   teachingSession: teachingSessionRouter,
