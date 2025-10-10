@@ -53,13 +53,16 @@ export function TransactionHeader() {
         <Label className="hidden md:block">{t("Accounting Journals")}</Label>
         <Select
           onValueChange={(val) => {
-            router.push(`?${createQueryString({ journalId: val })}`);
+            router.push(
+              `?${createQueryString({ journalId: val === "all" ? null : val })}`,
+            );
           }}
         >
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder={t("all")} />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">{t("all")}</SelectItem>
             {journals.map((journal) => (
               <SelectItem key={journal.id} value={journal.id}>
                 {journal.name}

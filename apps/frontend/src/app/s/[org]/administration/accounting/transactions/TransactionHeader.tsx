@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -14,29 +15,27 @@ export function TransactionHeader() {
   const trpc = useTRPC();
 
   const [searchParams] = useQueryStates(transactionSearchParamsSchema);
-  const { data: transactions } = useSuspenseQuery(
-    trpc.transaction.all.queryOptions({
-      status: searchParams.status ?? undefined,
-      from: searchParams.from ?? undefined,
-      to: searchParams.to ?? undefined,
-      classroomId: searchParams.classroomId ?? undefined,
-      journalId: searchParams.journalId ?? undefined,
+  // const { data: transactions } = useSuspenseQuery(
+  //   trpc.transaction.all.queryOptions({
+  //     status: searchParams.status ?? undefined,
+  //     from: searchParams.from ?? undefined,
+  //     to: searchParams.to ?? undefined,
+  //     classroomId: searchParams.classroomId ?? undefined,
+  //     journalId: searchParams.journalId ?? undefined,
+  //   }),
+  // );
+
+  const { data: stats, isPending } = useSuspenseQuery(
+    trpc.transaction.stats.queryOptions({
+      from: searchParams.from,
+      to: searchParams.to,
+      classroomId: searchParams.classroomId,
+      journalId: searchParams.journalId,
     }),
   );
+
   const { t } = useLocale();
-  const totals = transactions.reduce((acc, curr) => acc + curr.amount, 0);
-  const validated = transactions.reduce(
-    (acc, curr) => acc + (curr.status == "VALIDATED" ? curr.amount : 0),
-    0,
-  );
-  const canceled = transactions.reduce(
-    (acc, curr) => acc + (curr.status == "CANCELED" ? curr.amount : 0),
-    0,
-  );
-  const pending = transactions.reduce(
-    (acc, curr) => acc + (curr.status == "PENDING" ? curr.amount : 0),
-    0,
-  );
+
   const { school } = useSchool();
   const moneyFormatter = new Intl.NumberFormat(i18next.language, {
     style: "currency",
@@ -46,19 +45,28 @@ export function TransactionHeader() {
   });
   return (
     <div className="grid flex-row items-center gap-4 py-2 md:flex">
-      <FlatBadge variant={"indigo"}>
-        {t("totals")} : {moneyFormatter.format(totals)}
-      </FlatBadge>
+      {stats && !isPending ? (
+        <>
+          <FlatBadge variant={"indigo"}>
+            {t("totals")} :{" "}
+            {moneyFormatter.format(
+              stats.totalCompleted + stats.totalInProgress,
+            )}
+          </FlatBadge>
 
-      <FlatBadge variant={"green"}>
-        {t("validated")} : {moneyFormatter.format(validated)}
-      </FlatBadge>
-      <FlatBadge variant={"blue"}>
-        {t("pending")} : {moneyFormatter.format(pending)}
-      </FlatBadge>
-      <FlatBadge variant={"red"}>
-        {t("canceled")} : {moneyFormatter.format(canceled)}
-      </FlatBadge>
+          <FlatBadge variant={"green"}>
+            {t("validated")} : {moneyFormatter.format(stats.totalCompleted)}
+          </FlatBadge>
+          <FlatBadge variant={"blue"}>
+            {t("pending")} : {moneyFormatter.format(stats.totalInProgress)}
+          </FlatBadge>
+          <FlatBadge variant={"red"}>
+            {t("deleted")} : {moneyFormatter.format(stats.totalDeleted)}
+          </FlatBadge>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

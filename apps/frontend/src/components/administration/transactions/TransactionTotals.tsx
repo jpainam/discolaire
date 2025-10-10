@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { parseAsIsoDate, useQueryState } from "nuqs";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryStates } from "nuqs";
 
 import ContainersIcon from "~/components/icons/containers";
 import ExpenseIcon from "~/components/icons/expenses";
@@ -13,21 +14,23 @@ import { routes } from "~/configs/routes";
 import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
+import { transactionSearchParamsSchema } from "~/utils/search-params";
 
 export function TransactionTotals() {
   const { t } = useLocale();
 
-  const [from, _] = useQueryState("from", parseAsIsoDate);
-  const [to, __] = useQueryState("to", parseAsIsoDate);
+  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
   const trpc = useTRPC();
-  const transactionsStats = useQuery(
+  const { data: stats, isPending } = useSuspenseQuery(
     trpc.transaction.stats.queryOptions({
-      from: from,
-      to: to,
+      from: searchParams.from,
+      to: searchParams.to,
+      classroomId: searchParams.classroomId,
+      journalId: searchParams.journalId,
     }),
   );
 
-  if (transactionsStats.isPending) {
+  if (isPending) {
     return (
       <SkeletonLineGroup
         skeletonClassName="h-16 rounded-md w-full"
@@ -37,36 +40,45 @@ export function TransactionTotals() {
     );
   }
 
-  const stats = transactionsStats.data;
   const percentage = 4;
+  if (!stats) {
+    return <div></div>;
+  }
   return (
-    <div className="mt-2 grid w-full grid-cols-4 gap-4 py-1 text-sm">
-      <TransactionStatCard
-        title={t("totalCurrentFees")}
+    <div className="mt-2 grid w-full grid-cols-1 gap-4 py-1 text-sm md:grid-cols-3 lg:grid-cols-4">
+      {/* <TransactionStatCard
+        title={t("fees")}
         icon={<RevenueUpIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats?.totalFee}
+        totalFee={stats.totalFee}
+        subtitle={t("sinceLastMonth")}
+        percentage={percentage}
+      /> */}
+      <TransactionStatCard
+        title={t("totals")}
+        icon={<RevenueUpIcon className="h-[45px] w-[45px]" />}
+        totalFee={stats.totalCompleted + stats.totalInProgress}
         subtitle={t("sinceLastMonth")}
         percentage={percentage}
       />
       <TransactionStatCard
-        title={t("totalCompletedAmount")}
+        title={t("validated")}
         icon={<SalesIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats?.totalCompleted}
+        totalFee={stats.totalCompleted}
         percentage={percentage}
         subtitle={t("sinceLastMonth")}
       />
       <TransactionStatCard
-        title={t("totalUnvalidatedAmount")}
+        title={t("pending")}
         icon={<ExpenseIcon className="h-[45px] w-[45px]" />}
-        totalFee={stats?.totalInProgress}
+        totalFee={stats.totalInProgress}
         percentage={percentage}
         subtitle={t("sinceLastMonth")}
       />
       <Link href={routes.administration.deleteTransactions}>
         <TransactionStatCard
-          title={t("totalTransactionDeleted")}
+          title={t("deleted")}
           icon={<ContainersIcon className="h-[45px] w-[45px]" />}
-          totalFee={stats?.totalDeleted}
+          totalFee={stats.totalDeleted}
           percentage={percentage}
           subtitle={t("sinceLastMonth")}
         />
@@ -90,38 +102,21 @@ function TransactionStatCard({
   title,
 }: TransactionStatCardProps) {
   const { i18n } = useLocale();
-  console.log("totalFee", percentage);
-  console.log(subtitle);
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-row items-center gap-4">
-        {icon}
-        <div className="flex flex-col">
-          <div>{title}</div>
-          <p className="font-lexend text-md font-semibold">
-            {totalFee?.toLocaleString(i18n.language, {
-              style: "currency",
-              currency: CURRENCY,
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-            }) ?? 0}
-          </p>
-        </div>
+    <div className="bg-muted flex flex-row items-center gap-4 rounded-xl border p-2">
+      {icon}
+      <div className="flex flex-col">
+        <div>{title}</div>
+        <p className="font-lexend text-md font-semibold">
+          {totalFee?.toLocaleString(i18n.language, {
+            style: "currency",
+            currency: CURRENCY,
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+          }) ?? 0}
+        </p>
       </div>
-      {/* <div className="flex items-center leading-none text-gray-500">
-        <span
-          className={cn(
-            "inline-flex items-center font-medium",
-            percentage > 0 ? "text-green-500" : "text-red-500"
-          )}
-        >
-          {" "}
-          <TrendingUpIcon className="text-green ml-1 h-4 w-4" />
-          {percentage > 0 ? "+" : ""}
-          {percentage}%
-        </span>
-        <span className="ml-1 inline-flex">{subtitle}</span>
-      </div> */}
     </div>
   );
 }

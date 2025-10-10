@@ -7,7 +7,9 @@ import type { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { classroomService } from "../services/classroom-service";
 import {
+  getTransactionStats,
   getTransactionSummary,
+  getTransactionTrends,
   transactionService,
 } from "../services/transaction-service";
 import { protectedProcedure } from "../trpc";
@@ -372,98 +374,41 @@ export const transactionRouter = {
       });
       return result;
     }),
-  trends: protectedProcedure.query(async ({ ctx }) => {
-    const result = await ctx.db.transaction.groupBy({
-      where: {
+  trends: protectedProcedure
+    .input(
+      z.object({
+        from: z.coerce.date().nullable(),
+        to: z.coerce.date().nullable(),
+        classroomId: z.string().nullable(),
+        journalId: z.string().nullable(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return getTransactionTrends({
+        from: input.from,
+        to: input.to,
+        classroomId: input.classroomId,
+        journalId: input.journalId,
         schoolYearId: ctx.schoolYearId,
-        deletedAt: null,
-      },
-      by: ["createdAt"],
-      _sum: {
-        amount: true,
-      },
-    });
-    const resultMap: Record<string, number> = {};
-    const dateFormat = Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    });
-    result.forEach((item) => {
-      const key = dateFormat.format(item.createdAt);
-      resultMap[key] = (resultMap[key] ?? 0) + (item._sum.amount ?? 0);
-    });
-    return Object.keys(resultMap).map((item) => ({
-      date: item,
-      amount: resultMap[item],
-    }));
-  }),
+      });
+    }),
   stats: protectedProcedure
     .input(
       z.object({
         from: z.coerce.date().nullish().default(subDays(new Date(), 7)),
         to: z.coerce.date().nullish().default(addDays(new Date(), 1)),
+        classroomId: z.string().nullable(),
+        journalId: z.string().nullable(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const from = input.from ?? subDays(new Date(), 7);
-      const to = input.to ?? addDays(new Date(), 1);
-      const currentFees = await ctx.db.fee.aggregate({
-        _sum: {
-          amount: true,
-        },
-        where: {
-          classroom: {
-            schoolYearId: ctx.schoolYearId,
-          },
-        },
+      return getTransactionStats({
+        from: input.from,
+        to: input.to,
+        classroomId: input.classroomId,
+        journalId: input.journalId,
+        schoolYearId: ctx.schoolYearId,
       });
-      const totalCompleted = await ctx.db.transaction.aggregate({
-        _sum: {
-          amount: true,
-        },
-        where: {
-          schoolYearId: ctx.schoolYearId,
-          deletedAt: null,
-          status: "VALIDATED",
-        },
-      });
-      const totalInProgress = await ctx.db.transaction.aggregate({
-        _sum: {
-          amount: true,
-        },
-        where: {
-          createdAt: {
-            gte: from,
-            lte: to,
-          },
-          deletedAt: null,
-          status: "PENDING",
-        },
-      });
-
-      const totalDeleted = await ctx.db.transaction.aggregate({
-        _sum: {
-          amount: true,
-        },
-        where: {
-          createdAt: {
-            gte: from,
-            lte: to,
-          },
-          deletedAt: {
-            not: null,
-          },
-        },
-      });
-      return {
-        totalFee: currentFees._sum.amount ?? 0,
-        totalCompleted: totalCompleted._sum.amount ?? 0,
-        totalInProgress: totalInProgress._sum.amount ?? 0,
-        totalDeleted: totalDeleted._sum.amount ?? 0,
-        increased: true,
-        percentage: 4.4,
-      };
     }),
 
   getTransactionSummary: protectedProcedure

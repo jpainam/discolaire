@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import _ from "lodash";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryStates } from "nuqs";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -17,10 +17,9 @@ import {
 } from "@repo/ui/components/chart";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
 import { useLocale } from "~/i18n";
-import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
+import { transactionSearchParamsSchema } from "~/utils/search-params";
 
 export function TransactionTrendChart() {
   const { t } = useLocale();
@@ -36,22 +35,20 @@ export function TransactionTrendChart() {
     } satisfies ChartConfig;
   }, [t]);
 
-  const searchParams = useSearchParams();
-  // const status = searchParams.get("status");
-  // const from = searchParams.get("from");
-  // const to = searchParams.get("to");
+  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
   const trpc = useTRPC();
-  const transactionsTrendQuery = useQuery(
-    trpc.transaction.trends.queryOptions(),
+  const transactionsTrendQuery = useSuspenseQuery(
+    trpc.transaction.trends.queryOptions({
+      from: searchParams.from,
+      to: searchParams.to,
+      classroomId: searchParams.classroomId,
+      journalId: searchParams.journalId,
+    }),
   );
 
-  const [filteredData, setFilteredData] = React.useState<
-    { date: string; amount?: number }[]
-  >([]);
+  //const [totalAmount, setTotalAmount] = React.useState(0);
 
-  const [totalAmount, setTotalAmount] = React.useState(0);
-
-  const timeRange = searchParams.get("timeRange");
+  //const timeRange = searchParams.get("timeRange");
   // const timeRanges = [
   //   { label: t("schoolYear"), value: "All" },
   //   { label: t("last_3_months"), value: "90" },
@@ -59,21 +56,24 @@ export function TransactionTrendChart() {
   //   { label: t("last_7_days"), value: "7" },
   // ];
 
-  React.useEffect(() => {
-    if (!transactionsTrendQuery.data) return;
-    const transactions = transactionsTrendQuery.data;
-    const f = transactions.filter((item) => {
-      if (!timeRange) return true;
-      const date = new Date(item.date);
-      const now = new Date();
-      now.setDate(now.getDate() - Number(timeRange));
-      return date >= now;
-    });
+  // React.useEffect(() => {
+  //   if (!transactionsTrendQuery.data) return;
+  //   const transactions = transactionsTrendQuery.data;
+  //   const f = transactions.filter((item) => {
+  //     if (!timeRange) return true;
+  //     const date = new Date(item.date);
+  //     const now = new Date();
+  //     now.setDate(now.getDate() - Number(timeRange));
+  //     return date >= now;
+  //   });
 
-    setTotalAmount(_.sumBy(f, "amount"));
-    setFilteredData(f);
-  }, [timeRange, transactionsTrendQuery.data]);
-
+  //   setTotalAmount(_.sumBy(f, "amount"));
+  //   setFilteredData(f);
+  // }, [timeRange, transactionsTrendQuery.data]);
+  const data: {
+    date: string;
+    amount: number;
+  }[] = transactionsTrendQuery.data ?? [];
   if (transactionsTrendQuery.isPending) {
     return (
       <div className="flex w-full flex-row gap-4 p-2">
@@ -82,15 +82,18 @@ export function TransactionTrendChart() {
       </div>
     );
   }
-  if (transactionsTrendQuery.isError) {
-    showErrorToast(transactionsTrendQuery.error);
-    return;
+  if (data.length === 0) {
+    return (
+      <Card className="border-none p-0 shadow-none">
+        <CardContent className="p-2">
+          <div className="text-muted-foreground flex h-[250px] w-full items-center justify-center">
+            {t("no_data")}
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (transactionsTrendQuery.data.length == 0 || !filteredData) {
-    return <EmptyState />;
-  }
-  console.log(totalAmount);
+
   return (
     <Card className="border-none p-0 shadow-none">
       {/* <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
@@ -160,7 +163,7 @@ export function TransactionTrendChart() {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={transactionsTrendQuery.data ?? []}>
             <defs>
               <linearGradient id="fillAmount" x1="0" y1="0" x2="0" y2="1">
                 <stop
