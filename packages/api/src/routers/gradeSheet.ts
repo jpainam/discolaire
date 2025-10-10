@@ -157,31 +157,42 @@ export const gradeSheetRouter = {
     });
   }),
 
-  all: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.gradeSheet.findMany({
-      where: {
-        subject: {
-          classroom: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
+  all: protectedProcedure
+    .input(
+      z
+        .object({
+          termId: z.string().nullable(),
+          subjectId: z.number().nullable(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.gradeSheet.findMany({
+        where: {
+          subject: {
+            classroom: {
+              schoolId: ctx.schoolId,
+              schoolYearId: ctx.schoolYearId,
+            },
           },
+          ...(input?.termId ? { termId: input.termId } : {}),
+          ...(input?.subjectId ? { subjectId: input.subjectId } : {}),
         },
-      },
-      include: {
-        subject: {
-          include: {
-            course: true,
-            teacher: true,
+        include: {
+          subject: {
+            include: {
+              course: true,
+              teacher: true,
+            },
           },
+          term: true,
+          grades: true,
         },
-        term: true,
-        grades: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }),
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
   grades: protectedProcedure
     .input(z.coerce.number())
     .query(async ({ ctx, input }) => {
@@ -290,5 +301,24 @@ export const gradeSheetRouter = {
     .input(z.object({ subjectId: z.coerce.number() }))
     .query(({ input }) => {
       return gradeReportTracker({ subjectId: input.subjectId });
+    }),
+  updateCreated: protectedProcedure
+    .input(
+      z.object({
+        id: z.coerce.number(),
+        scale: z.coerce.number().nonnegative(),
+        weight: z.coerce.number().nonnegative(),
+        title: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.gradeSheet.update({
+        where: { id: input.id },
+        data: {
+          scale: input.scale,
+          weight: input.weight / 100.0,
+          name: input.title,
+        },
+      });
     }),
 } satisfies TRPCRouterRecord;

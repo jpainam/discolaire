@@ -7,6 +7,7 @@ import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 import { ClassroomCreateGradeSheetHeader } from "./ClassroomCreateGradeSheetHeader";
+import { PreviousCreatedGradeSheet } from "./PreviousCreatedGradeSheet";
 import { createGradeSheetSearchSchema } from "./search-params";
 
 interface PageProps {
@@ -33,14 +34,14 @@ export default async function Page(props: PageProps) {
       <ClassroomCreateGradeSheetHeader />
 
       {searchParams.termId && searchParams.subjectId && (
-        <div className="grid grid-cols-4 gap-4 divide-x">
+        <div className="grid grid-cols-4 gap-2 divide-x">
           <CreateGradeSheet
             className="col-span-3"
             subjectId={searchParams.subjectId}
             termId={searchParams.termId}
             students={students}
           />
-          <div>Info des saisie precedente</div>
+          <PreviousCreatedGradeSheet />
         </div>
       )}
     </div>
