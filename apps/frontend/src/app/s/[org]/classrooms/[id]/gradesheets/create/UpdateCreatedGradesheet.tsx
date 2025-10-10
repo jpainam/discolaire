@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
+import { Button } from "@repo/ui/components/button";
 import {
   Form,
   FormControl,
@@ -17,6 +18,7 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 
+import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
@@ -45,16 +47,19 @@ export function UpdateCreatedGradesheet({
   });
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const { closeModal } = useModal();
   const updateCreatedGradesheet = useMutation(
     trpc.gradeSheet.updateCreated.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.gradeSheet.pathFilter());
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message);
       },
     }),
   );
+
   const onSubmit = (data: z.infer<typeof schema>) => {
     updateCreatedGradesheet.mutate({
       id: gradeSheetId,
@@ -110,6 +115,25 @@ export function UpdateCreatedGradesheet({
               </FormItem>
             )}
           />
+        </div>
+        <div className="flex flex-row items-center justify-end gap-2">
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            type="button"
+            size="sm"
+            variant={"secondary"}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            isLoading={updateCreatedGradesheet.isPending}
+            type="submit"
+            size="sm"
+          >
+            {t("submit")}
+          </Button>
         </div>
       </form>
     </Form>

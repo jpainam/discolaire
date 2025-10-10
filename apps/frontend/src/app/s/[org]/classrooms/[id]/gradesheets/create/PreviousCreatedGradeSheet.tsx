@@ -36,22 +36,20 @@ export function PreviousCreatedGradeSheet() {
 
   if (createdGradesheetQuery.isPending) {
     return (
-      <div className="p-4">
+      <div className="pt-2 pr-2">
         <Skeleton className="h-96 w-full" />
       </div>
     );
   }
-  if (
-    !createdGradesheetQuery.data ||
-    createdGradesheetQuery.data.length === 0
-  ) {
+  const gradesheets = createdGradesheetQuery.data;
+  if (!gradesheets || gradesheets.length === 0) {
     return (
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4 pt-4 pr-4">
         <EmptyState title={"Aucune notes précédentes<"} />
       </div>
     );
   }
-  const gradesheets = createdGradesheetQuery.data;
+
   return (
     <div className="flex flex-col gap-4 pt-2 pr-2">
       {gradesheets.map((gs) => {
