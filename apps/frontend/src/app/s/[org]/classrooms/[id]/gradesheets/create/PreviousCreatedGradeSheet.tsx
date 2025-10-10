@@ -1,9 +1,11 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { PencilIcon } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Eye, MoreHorizontal, PencilIcon, Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -14,11 +16,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { Badge } from "~/components/base-badge";
 import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { createGradeSheetSearchSchema } from "./search-params";
 import { UpdateCreatedGradesheet } from "./UpdateCreatedGradesheet";
@@ -77,6 +90,7 @@ export function PreviousCreatedGradeSheet() {
             minGrade={minGrade}
             avgGrade={avgGrade}
             scale={gs.scale}
+            isClosed={!gs.term.isActive}
             subject={gs.subject.course.name}
             prof={`${gs.subject.teacher?.prefix} ${gs.subject.teacher?.firstName ?? ""} ${
               gs.subject.teacher?.lastName ?? ""
@@ -100,6 +114,7 @@ function CreatedGradesheetCard({
   avgGrade,
   scale,
   weight,
+  isClosed,
 }: {
   title: string;
   id: number;
@@ -112,9 +127,29 @@ function CreatedGradesheetCard({
   avgGrade: number;
   scale: number;
   weight: number;
+  isClosed: boolean;
 }) {
   const t = useTranslations();
   const { openModal } = useModal();
+  const canDeleteGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.DELETE,
+  );
+  const trpc = useTRPC();
+  const params = useParams<{ id: string }>();
+  const router = useRouter();
+  const deleteGradesheetMutation = useMutation(
+    trpc.gradeSheet.delete.mutationOptions({
+      onSuccess: () => {
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.push(`/classrooms/${params.id}/gradesheets`);
+      },
+      onError: (err) => {
+        toast.error(err.message, { id: 0 });
+      },
+    }),
+  );
+  const confirm = useConfirm();
   return (
     <Card>
       <CardHeader>
@@ -126,26 +161,61 @@ function CreatedGradesheetCard({
           </div>
         </CardDescription>
         <CardAction>
-          <Button
-            onClick={() => {
-              openModal({
-                title: "Modifier la fiche de notes",
-                view: (
-                  <UpdateCreatedGradesheet
-                    gradeSheetId={id}
-                    title={title}
-                    scale={scale}
-                    weight={weight * 100}
-                  />
-                ),
-              });
-            }}
-            variant={"outline"}
-            size={"icon"}
-            className="size-7"
-          >
-            <PencilIcon className="h-4 w-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"outline"} size={"sm"} className="size-7">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onSelect={() => {
+                  router.push(`/classrooms/${params.id}/gradesheets/${id}`);
+                }}
+              >
+                <Eye className="h-4 w-4" />
+                {t("details")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={isClosed || !canDeleteGradesheet}
+                onSelect={() => {
+                  openModal({
+                    title: "Modifier la fiche de notes",
+                    view: (
+                      <UpdateCreatedGradesheet
+                        gradeSheetId={id}
+                        title={title}
+                        scale={scale}
+                        weight={weight * 100}
+                      />
+                    ),
+                  });
+                }}
+              >
+                <PencilIcon className="h-4 w-4" />
+                {t("edit")}
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-destructive"
+                disabled={!canDeleteGradesheet || isClosed}
+                onSelect={async () => {
+                  const isConfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirmed) {
+                    toast.loading(t("deleting"), { id: 0 });
+                    deleteGradesheetMutation.mutate(id);
+                  }
+                }}
+              >
+                <Trash className="text-destructive h-4 w-4" />
+                {t("delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-wrap items-center gap-2">
