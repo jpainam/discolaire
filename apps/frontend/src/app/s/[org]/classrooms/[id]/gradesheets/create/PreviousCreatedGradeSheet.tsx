@@ -51,7 +51,8 @@ export function PreviousCreatedGradeSheet() {
   }
 
   return (
-    <div className="flex flex-col gap-4 pt-2 pr-2">
+    <div className="flex flex-col items-center gap-4 pt-2 pr-2">
+      <div className="font-bold font-medium">Notes Précèdentes</div>
       {gradesheets.map((gs) => {
         const total = gs.grades.length;
         const graded =
