@@ -1,9 +1,14 @@
 import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { TransactionClassrooms } from "~/components/administration/transactions/charts/TransactionClassrooms";
 import { TransactionTrendChart } from "~/components/administration/transactions/charts/TransactionTrendChart";
 import { TransactionTotals } from "~/components/administration/transactions/TransactionTotals";
-import { batchPrefetch, trpc } from "~/trpc/server";
+import { ErrorFallback } from "~/components/error-fallback";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { transactionSearchParams } from "~/utils/search-params";
 
 interface PageProps {
@@ -26,12 +31,36 @@ export default async function Page(props: PageProps) {
     }),
   ]);
   return (
-    <div className="mb-8 flex flex-col gap-2 px-4">
-      <TransactionTotals />
-      {/* <Separator /> */}
-      <TransactionTrendChart />
-      {/* <Separator /> */}
-      <TransactionClassrooms />
-    </div>
+    <HydrateClient>
+      <div className="mb-8 flex flex-col gap-2 px-4">
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="grid w-full grid-cols-5 gap-4">
+                <Skeleton className="h-16" />
+                <Skeleton className="h-16" />
+                <Skeleton className="h-16" />
+                <Skeleton className="h-16" />
+                <Skeleton className="h-16" />
+              </div>
+            }
+          >
+            <TransactionTotals />
+          </Suspense>
+        </ErrorBoundary>
+        {/* <Separator /> */}
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense fallback={<Skeleton className="h-[250px] w-full" />}>
+            <TransactionTrendChart />
+          </Suspense>
+        </ErrorBoundary>
+        {/* <Separator /> */}
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense fallback={<Skeleton className="h-[250px] w-full" />}>
+            <TransactionClassrooms />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+    </HydrateClient>
   );
 }

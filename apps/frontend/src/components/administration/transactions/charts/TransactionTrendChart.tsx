@@ -70,10 +70,7 @@ export function TransactionTrendChart() {
   //   setTotalAmount(_.sumBy(f, "amount"));
   //   setFilteredData(f);
   // }, [timeRange, transactionsTrendQuery.data]);
-  const data: {
-    date: string;
-    amount: number;
-  }[] = transactionsTrendQuery.data ?? [];
+  const data = transactionsTrendQuery.data;
   if (transactionsTrendQuery.isPending) {
     return (
       <div className="flex w-full flex-row gap-4 p-2">
@@ -163,7 +160,7 @@ export function TransactionTrendChart() {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={transactionsTrendQuery.data ?? []}>
+          <AreaChart data={data}>
             <defs>
               <linearGradient id="fillAmount" x1="0" y1="0" x2="0" y2="1">
                 <stop
