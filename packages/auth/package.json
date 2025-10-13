@@ -34,7 +34,7 @@
     "devDependencies": {
         "@repo/eslint-config": "workspace:*",
         "@repo/prettier-config": "workspace:*",
-        "@repo/typescript-config": "workspace:*",
+        "@repo/tsconfig": "workspace:*",
         "@types/jsonwebtoken": "^9.0.10",
         "eslint": "catalog:",
         "prettier": "catalog:",

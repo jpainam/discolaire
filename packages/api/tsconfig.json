@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/internal-package.json",
+  "extends": "@repo/tsconfig/compiled-package.json",
   "include": ["src"],
   "exclude": ["node_modules"]
 }

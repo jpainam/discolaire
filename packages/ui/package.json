@@ -76,7 +76,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
     "@turbo/gen": "^2.5.8",
     "@types/minimatch": "^6.0.0",
     "@types/react": "catalog:react19",

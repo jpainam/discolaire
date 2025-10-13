@@ -162,11 +162,11 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:^",
     "@repo/prettier-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "^4.1.14",
     "@types/json-logic-js": "^2.0.8",
     "@types/mime-types": "^3.0.1",
-    "@types/node": "^22.18.8",
+    "@types/node": "^22.18.10",
     "@types/papaparse": "^5.3.16",
     "@types/qrcode": "^1.5.5",
     "@types/react": "catalog:react19",

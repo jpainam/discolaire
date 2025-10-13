@@ -1,12 +1,11 @@
 {
   "name": "@repo/eslint-config",
   "private": true,
-  "version": "0.3.0",
   "type": "module",
   "exports": {
-    "./base": "./base.js",
-    "./nextjs": "./nextjs.js",
-    "./react": "./react.js"
+    "./base": "./base.ts",
+    "./nextjs": "./nextjs.ts",
+    "./react": "./react.ts"
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo node_modules",
@@ -15,20 +14,19 @@
   },
   "dependencies": {
     "@eslint/compat": "^1.4.0",
+    "@eslint/js": "catalog:",
     "@next/eslint-plugin-next": "^15.5.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-hooks": "^7.0.0",
     "eslint-plugin-turbo": "^2.5.8",
-    "minimatch": "^10.0.3",
-    "typescript-eslint": "^8.45.0"
+    "typescript-eslint": "^8.46.0"
   },
   "devDependencies": {
     "@repo/prettier-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@types/eslint__js": "8.42.3",
-    "@types/minimatch": "^6.0.0",
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^22.18.10",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
