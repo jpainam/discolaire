@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
 @import "tw-animate-css";
+@import "@repo/tailwind-config/theme";
+@import "../themes/presets.css";
+
+@source '../../../../packages/ui/src/**/*.{ts,tsx}';
+
 /*@import "./node_modules/react-grid-layout/css/styles.css";
 @import "./node_modules/react-resizable/css/styles.css";*/
 
 @custom-variant dark (&:is(.dark *));
-
-@import "../themes/presets.css";
 
 :root {
   --radius: 0.625rem;
