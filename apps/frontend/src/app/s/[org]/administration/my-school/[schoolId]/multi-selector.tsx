@@ -1,5 +1,6 @@
 // React and hooks imports
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 // Third-party component imports
 import { Check, ChevronsUpDown, ListFilter, X } from "lucide-react";
 

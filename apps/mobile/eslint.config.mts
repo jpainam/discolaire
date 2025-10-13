@@ -5,8 +5,8 @@ import { reactConfig } from "@repo/eslint-config/react";
 
 export default defineConfig(
   {
-    ignores: ["dist/**"],
+    ignores: [".expo/**", "expo-plugins/**"],
   },
   baseConfig,
-  reactConfig,
+  reactConfig
 );

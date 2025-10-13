@@ -39,6 +39,7 @@ export function ActiveThemeProvider({
         document.body.classList.remove(className);
       });
     document.body.classList.add(`theme-${activeTheme}`);
+    document.body.classList.add("theme-scaled");
     // if (activeTheme.endsWith("-scaled")) {
     //   document.body.classList.add("theme-scaled");
     // }

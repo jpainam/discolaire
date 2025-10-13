@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React from "react";
+import type React from "react";
 import { useFormContext } from "react-hook-form";
 
 import { Checkbox } from "@repo/ui/components/checkbox";

@@ -43,8 +43,8 @@ export function PolicyDataTable({ roleId }: { roleId: string }) {
   );
 
   useEffect(() => {
-    if (!rolePoliciesQuery.data) return;
-    const policyIds = rolePoliciesQuery.data.map((policy) => policy.policyId);
+    const policyIds =
+      rolePoliciesQuery.data?.map((policy) => policy.policyId) ?? [];
     setSelectedPolicies(policyIds);
   }, [rolePoliciesQuery.data]);
 

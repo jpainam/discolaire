@@ -1,7 +1,8 @@
 "use client";
 
 import type { Variants } from "framer-motion";
-import React, {
+import type React from "react";
+import {
   createContext,
   useContext,
   useEffect,

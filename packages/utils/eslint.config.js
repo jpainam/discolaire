@@ -1,9 +1,10 @@
-import baseConfig from "@repo/eslint-config/base";
+import { defineConfig } from "eslint/config";
 
-/** @type {import('typescript-eslint').Config} */
-export default [
+import { baseConfig } from "@repo/eslint-config/base";
+
+export default defineConfig(
   {
     ignores: ["dist/**"],
   },
-  ...baseConfig,
-];
+  baseConfig,
+);

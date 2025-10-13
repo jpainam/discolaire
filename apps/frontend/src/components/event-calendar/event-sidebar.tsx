@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import type * as React from "react";
 import Link from "next/link";
 import { RiCheckLine } from "@remixicon/react";
 import { ArrowLeft } from "lucide-react";

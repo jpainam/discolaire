@@ -1,5 +1,4 @@
 import type { Table } from "@tanstack/react-table";
-import * as React from "react";
 import { RiDeleteBinLine } from "@remixicon/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";

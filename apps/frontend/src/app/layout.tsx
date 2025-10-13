@@ -54,7 +54,6 @@ export const viewport: Viewport = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const activeThemeValue = cookieStore.get("active_theme")?.value ?? "caffeine";
-  const isScaled = activeThemeValue.endsWith("-scaled");
 
   const locale = await getLocale();
   const lng = await detectLanguage();
@@ -89,7 +88,6 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           className={cn(
             "bg-background overscroll-none font-sans antialiased",
             activeThemeValue ? `theme-${activeThemeValue}` : "",
-            isScaled ? "theme-scaled" : "",
           )}
         >
           <NextIntlClientProvider>

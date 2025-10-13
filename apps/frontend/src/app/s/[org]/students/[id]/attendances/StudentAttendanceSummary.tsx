@@ -105,9 +105,7 @@ export function StudentAttendanceSummary() {
   });
 
   useEffect(() => {
-    if (!attendanceQuery.data) return;
-
-    const v = attendanceQuery.data;
+    const v = attendanceQuery.data ?? [];
     const d = v.map((item) => {
       return {
         title: item.type,

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { ComponentPropsWithRef, ReactNode } from "react";
-import React, {
+import type React from "react";
+import {
   createContext,
   memo,
   useCallback,

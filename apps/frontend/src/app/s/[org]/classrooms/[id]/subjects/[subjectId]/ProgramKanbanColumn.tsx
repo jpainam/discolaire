@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import type * as React from "react";
 import { useParams } from "next/navigation";
 import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";

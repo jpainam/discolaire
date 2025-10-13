@@ -1,4 +1,5 @@
-import React, { Suspense } from "react";
+import type React from "react";
+import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import {
   BookOpenCheck,

@@ -72,10 +72,6 @@ export function ClassroomGradeList({
     useState<RouterOutputs["gradeSheet"]["grades"]>(grades);
 
   useEffect(() => {
-    if (!query || query.trim() === "") {
-      setFiltered(grades);
-      return;
-    }
     const lowerQuery = query.toLowerCase();
     const filteredGrades = grades.filter((g) => {
       const student = g.student;
