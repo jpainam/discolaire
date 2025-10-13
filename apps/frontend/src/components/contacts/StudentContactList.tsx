@@ -26,7 +26,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { LinkStudent } from "./LinkStudent";
 
 export default function StudentContactList({

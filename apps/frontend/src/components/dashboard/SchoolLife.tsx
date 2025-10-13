@@ -29,6 +29,7 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -41,7 +42,6 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { useIsMobile } from "~/hooks/use-mobile";
 import { useTRPC } from "~/trpc/react";
-import { Skeleton } from "../ui/skeleton";
 
 const groupByWeekday = (items: { date: Date; value: number }[]) => {
   return items.reduce(

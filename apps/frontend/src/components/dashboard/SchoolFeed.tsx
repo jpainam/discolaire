@@ -7,10 +7,9 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardTitle,
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
-
-import { CardTitle } from "../ui/card";
 
 interface AccountItem {
   id: string;
