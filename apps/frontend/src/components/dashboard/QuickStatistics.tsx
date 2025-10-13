@@ -153,8 +153,8 @@ export async function QuickStatistics() {
   return (
     <div className="col-span-full grid grow grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat, index) => (
-        <Card key={index} className="">
-          <CardHeader className="border-0">
+        <Card key={index} className="gap-0 py-2">
+          <CardHeader className="border-0 px-4">
             <CardTitle className="text-muted-foreground text-sm font-medium">
               {stat.title}
             </CardTitle>
@@ -188,7 +188,7 @@ export async function QuickStatistics() {
                 </DropdownMenu>
               </CardAction> */}
           </CardHeader>
-          <CardContent className="space-y-2.5">
+          <CardContent className="space-y-0 px-4 py-2">
             <div className="flex items-center gap-2.5">
               <span className="text-foreground text-2xl font-medium tracking-tight">
                 {stat.value.toLocaleString()}

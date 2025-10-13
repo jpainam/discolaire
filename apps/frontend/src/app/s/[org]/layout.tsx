@@ -57,6 +57,12 @@ export default async function Layout({
       //   "--sidebar-width": "14rem",
       //   "--sidebar-width-mobile": "16rem",
       // }}
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 64)",
+          "--header-height": "calc(var(--spacing) * 12 + 1px)",
+        } as React.CSSProperties
+      }
       defaultOpen={defaultOpen}
     >
       <SchoolContextProvider
