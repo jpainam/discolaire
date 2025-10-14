@@ -1,10 +1,10 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -47,7 +47,7 @@ export function CreateEditBook({
   const { t } = useLocale();
 
   const form = useForm({
-    resolver: zodResolver(updateBookSchema),
+    resolver: standardSchemaResolver(updateBookSchema),
     defaultValues: {
       title: book?.title ?? "",
       description: book?.description ?? "",

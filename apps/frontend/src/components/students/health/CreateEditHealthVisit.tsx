@@ -2,7 +2,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AlertCircleIcon,
@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import {
@@ -71,7 +71,7 @@ export function CreateEditHealthVisit({
   const queryClient = useQueryClient();
 
   const form = useForm({
-    resolver: zodResolver(createEditVisitSchema),
+    resolver: standardSchemaResolver(createEditVisitSchema),
     defaultValues: {
       date: healthVisit?.date ?? new Date(),
       notify: true,

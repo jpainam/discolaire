@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -68,7 +68,7 @@ export function CreateStudent() {
   const { t } = useLocale();
 
   const form = useForm({
-    resolver: zodResolver(createUpdateStudentSchema),
+    resolver: standardSchemaResolver(createUpdateStudentSchema),
     defaultValues: {
       registrationNumber: "",
       id: "",

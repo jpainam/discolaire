@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -42,7 +42,7 @@ export function ReinitializePassword() {
   const { data: session, isPending } = useSession();
   const disabled = isPending ? true : session?.user.id !== params.id;
   const form = useForm({
-    resolver: zodResolver(passwordFormSchema),
+    resolver: standardSchemaResolver(passwordFormSchema),
     disabled,
     defaultValues: {
       oldPassword: "",

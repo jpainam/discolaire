@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -55,7 +55,7 @@ export function StudentContactRelationship({
   const disabled =
     session?.user.profile === "student" || session?.user.profile === "contact";
   const form = useForm<z.infer<typeof editRelationshipSchema>>({
-    resolver: zodResolver(editRelationshipSchema),
+    resolver: standardSchemaResolver(editRelationshipSchema),
     disabled: disabled,
     defaultValues: {
       primaryContact: studentContact.primaryContact ?? false,

@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -172,7 +172,7 @@ function CreateEditCategory({
   category?: { name: string; id: string };
 }) {
   const form = useForm({
-    resolver: zodResolver(createEditCategorySchema),
+    resolver: standardSchemaResolver(createEditCategorySchema),
     defaultValues: {
       name: category?.name ?? "",
     },

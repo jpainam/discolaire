@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
@@ -38,7 +38,7 @@ export function StatisticByCourseDialog({ format }: { format: "pdf" | "csv" }) {
       courseId: "",
       termId: "",
     },
-    resolver: zodResolver(schema),
+    resolver: standardSchemaResolver(schema),
   });
   const trpc = useTRPC();
   const courseQuery = useQuery(trpc.course.used.queryOptions());

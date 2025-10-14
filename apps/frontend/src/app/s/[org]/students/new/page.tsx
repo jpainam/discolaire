@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
   ArrowLeft,
   ArrowRight,
@@ -88,10 +88,13 @@ export default function Page() {
   };
 
   const form = useForm({
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    resolver: getCurrentSchema() ? zodResolver(getCurrentSchema()!) : undefined,
+    resolver: getCurrentSchema()
+      ? // @ts-expect-error TODO Working on it
+        standardSchemaResolver(getCurrentSchema()!)
+      : undefined,
     defaultValues: {
       registrationNumber: "",
+      // @ts-expect-error TODO working on it
       id: "",
       tags: [],
       firstName: "",

@@ -1,12 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -62,7 +62,7 @@ export function DefaultSettings({
   const queryClient = useQueryClient();
 
   const form = useForm({
-    resolver: zodResolver(defaultSettingsSchema),
+    resolver: standardSchemaResolver(defaultSettingsSchema),
     defaultValues: {
       defaultCountryId: school.defaultCountryId ?? "",
       applyRequiredFee: school.applyRequiredFee,
@@ -243,7 +243,7 @@ export function DefaultSettings({
                           label: journal.name,
                           value: journal.id,
                         }))}
-                        value={field.value}
+                        value={field.value ?? [""]}
                         onChange={(val) => field.onChange(val)}
                         renderItem={(option) => option.label}
                         renderSelectedItem={(value: string[]) => {

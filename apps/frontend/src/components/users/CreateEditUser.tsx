@@ -1,4 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -39,7 +39,7 @@ export function CreateEditUser({
   type: "staff" | "contact" | "student";
 }) {
   const form = useForm({
-    resolver: zodResolver(createEditUserSchema),
+    resolver: standardSchemaResolver(createEditUserSchema),
     defaultValues: {
       username: username ?? "",
       password: "",

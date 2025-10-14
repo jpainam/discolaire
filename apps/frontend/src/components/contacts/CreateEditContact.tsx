@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -53,7 +53,7 @@ export default function CreateEditContact({
 }: CreateEditContactProps) {
   const { closeSheet } = useSheet();
   const form = useForm({
-    resolver: zodResolver(createEditContactSchema),
+    resolver: standardSchemaResolver(createEditContactSchema),
     defaultValues: {
       prefix: contact?.prefix ?? "",
       lastName: contact?.lastName ?? "",

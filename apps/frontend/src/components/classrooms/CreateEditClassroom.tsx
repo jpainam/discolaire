@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -51,7 +51,7 @@ export function CreateEditClassroom({
   const { data: sections } = useQuery(trpc.classroomSection.all.queryOptions());
 
   const form = useForm({
-    resolver: zodResolver(updateClassroomSchema),
+    resolver: standardSchemaResolver(updateClassroomSchema),
     defaultValues: {
       name: classroom?.name ?? "",
       maxSize: classroom?.maxSize ?? 0,

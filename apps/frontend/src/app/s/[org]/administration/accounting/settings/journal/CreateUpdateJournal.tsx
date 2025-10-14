@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SaveIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -35,7 +35,7 @@ export function CreateUpdateJournal({
   item?: RouterOutputs["accountingJournal"]["stats"][number];
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       name: item?.name ?? "",
       description: item?.description ?? "",

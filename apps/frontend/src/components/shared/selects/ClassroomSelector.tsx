@@ -41,10 +41,8 @@ export function ClassroomSelector({
   const classroomQuery = useQuery(trpc.classroom.all.queryOptions());
 
   useEffect(() => {
-    if (value !== defaultValue) {
-      setValue(defaultValue);
-    }
-  }, [defaultValue, value]);
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   const selected = classroomQuery.data?.find(
     (classroom) => classroom.id === value,

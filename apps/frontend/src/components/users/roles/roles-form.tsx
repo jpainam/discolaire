@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
@@ -60,7 +60,7 @@ const defaultValues: Partial<DisplayFormValues> = {
 
 export function DisplayForm() {
   const form = useForm<DisplayFormValues>({
-    resolver: zodResolver(displayFormSchema),
+    resolver: standardSchemaResolver(displayFormSchema),
     defaultValues,
   });
 

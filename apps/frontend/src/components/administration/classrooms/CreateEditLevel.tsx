@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -34,7 +34,7 @@ export function CreateEditLevel({
   order?: number;
 }) {
   const form = useForm({
-    resolver: zodResolver(createLevelSchema),
+    resolver: standardSchemaResolver(createLevelSchema),
     defaultValues: {
       name: name ?? "",
       order: order ? `${order}` : "0",

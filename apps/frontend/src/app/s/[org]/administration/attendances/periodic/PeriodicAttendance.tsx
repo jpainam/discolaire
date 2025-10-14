@@ -1,9 +1,9 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
-import z from "zod";
+import z from "zod/v4";
 
 import { Form } from "@repo/ui/components/form";
 
@@ -26,7 +26,7 @@ const formSchema = z.object({
 export function PeriodicAttendance() {
   const form = useForm({
     defaultValues: { students: [] },
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
   });
   const searchParams = useSearchParams();
 

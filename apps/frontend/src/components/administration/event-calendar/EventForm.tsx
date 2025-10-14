@@ -3,11 +3,11 @@
 "use client";
 
 import type { SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -112,8 +112,8 @@ export default function EventForm({
   const isUpdateEvent = event !== undefined;
 
   //const parsedCalendarData = parseCalendarEventData(event);
-  const form = useForm<EventFormInput>({
-    resolver: zodResolver(eventFormSchema),
+  const form = useForm({
+    resolver: standardSchemaResolver(eventFormSchema),
     defaultValues: {
       calendarType: event?.calendarTypeId ? `${event.calendarTypeId}` : "",
       title: event?.title ?? "",
@@ -127,6 +127,7 @@ export default function EventForm({
 
   const { register, setValue, handleSubmit, watch, clearErrors } = form;
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedCalendarType = watch("calendarType");
   const watchedStartDate = watch("startDate");
   const watchedEndDate = watch("endDate");

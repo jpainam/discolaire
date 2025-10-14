@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -38,7 +38,7 @@ export function CreateEditPolicy({ policy }: { policy?: Policy }) {
   const { t } = useLocale();
   const { closeModal } = useModal();
   const form = useForm<z.infer<typeof createEditPolicySchema>>({
-    resolver: zodResolver(createEditPolicySchema),
+    resolver: standardSchemaResolver(createEditPolicySchema),
     defaultValues: {
       name: policy?.name ?? "",
       description: policy?.description ?? "",

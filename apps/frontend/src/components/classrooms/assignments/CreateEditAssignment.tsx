@@ -1,11 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addDays } from "date-fns";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -65,8 +66,9 @@ export function CreateEditAssignment({
   assignment?: AssignemntGetProcedureOutput;
 }) {
   const params = useParams<{ id: string }>();
+
   const form = useForm({
-    resolver: zodResolver(assignmentSchema),
+    resolver: standardSchemaResolver(assignmentSchema),
     defaultValues: {
       id: assignment?.id ?? "",
       subjectId: assignment?.subjectId ?? 0,
@@ -79,7 +81,7 @@ export function CreateEditAssignment({
       post: assignment?.post ?? true,
       notify: assignment?.notify ?? false,
       from: assignment?.from ?? new Date(),
-      to: assignment?.to ?? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      to: assignment?.to ?? addDays(new Date(), 7),
       visibles: assignment?.visibles ?? [],
     },
   });
@@ -385,12 +387,15 @@ export function CreateEditAssignment({
                         >
                           <FormControl>
                             <Checkbox
-                              checked={field.value.includes(item.value)}
+                              checked={field.value?.includes(item.value)}
                               onCheckedChange={(checked) => {
                                 return checked
-                                  ? field.onChange([...field.value, item.value])
+                                  ? field.onChange([
+                                      ...(field.value ?? []),
+                                      item.value,
+                                    ])
                                   : field.onChange(
-                                      field.value.filter(
+                                      field.value?.filter(
                                         (value) => value !== item.value,
                                       ),
                                     );

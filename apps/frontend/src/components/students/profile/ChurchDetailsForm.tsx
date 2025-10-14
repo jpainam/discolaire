@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
@@ -43,7 +43,7 @@ export function ChurchDetailsForm() {
       isBaptized: false,
       dateOfBaptism: new Date(),
     },
-    resolver: zodResolver(schema),
+    resolver: standardSchemaResolver(schema),
   });
 
   const onSubmit = (data: FormValues) => {

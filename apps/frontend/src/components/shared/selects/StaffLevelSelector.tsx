@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -144,7 +144,7 @@ const createLevelSchema = z.object({
 });
 function CreateStaffLevel() {
   const form = useForm({
-    resolver: zodResolver(createLevelSchema),
+    resolver: standardSchemaResolver(createLevelSchema),
     defaultValues: {
       name: "",
     },

@@ -56,6 +56,7 @@ export function CountryPicker({
     if (!schoolQuery.data) return;
     if (!defaultValue) {
       if (schoolQuery.data.defaultCountryId) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setValue(schoolQuery.data.defaultCountryId);
         onChange?.(schoolQuery.data.defaultCountryId);
       }

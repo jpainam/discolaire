@@ -2,13 +2,13 @@
 
 //import dynamic from "next/dynamic";
 import { useParams, usePathname } from "next/navigation";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 //import { html_content } from "./editor-content";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -45,6 +45,7 @@ import { useTRPC } from "~/trpc/react";
 // });
 
 const programFormSchema = z.object({
+  id: z.coerce.number(),
   content: z.string().min(1, { message: "Content is required" }),
 });
 
@@ -64,7 +65,7 @@ export function CreateEditProgram({
       content: subject.program ?? defaultContent ?? "",
       id: subject.id,
     },
-    resolver: zodResolver(programFormSchema),
+    resolver: standardSchemaResolver(programFormSchema),
   });
   const trpc = useTRPC();
   const queryClient = useQueryClient();

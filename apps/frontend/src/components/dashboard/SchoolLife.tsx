@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -83,22 +83,10 @@ export function SchoolLife({ className }: { className?: string }) {
   );
   const isMobile = useIsMobile();
 
-  const [data, setData] = useState<
-    {
-      category: string;
-      icon: React.ReactNode;
-      mon?: number;
-      tue?: number;
-      wed?: number;
-      thu?: number;
-      fri?: number;
-    }[]
-  >();
-  //const { t, i18n } = useLocale();
   const t = useTranslations();
   const locale = useLocale();
 
-  useEffect(() => {
+  const data = useMemo(() => {
     const absences = absenceQuery.data ?? [];
     const absenceCounts = groupByWeekday(
       absences.map((a) => ({ date: a.date, value: a.value })),
@@ -120,7 +108,7 @@ export function SchoolLife({ className }: { className?: string }) {
       convocations.map((c) => ({ date: c.date, value: 1 })),
     );
 
-    const summary = [
+    return [
       {
         category: t("Absents"),
         icon: <UsersIcon className="text-primary h-4 w-4" />,
@@ -167,8 +155,6 @@ export function SchoolLife({ className }: { className?: string }) {
         fri: convocationCounts[4],
       },
     ];
-
-    setData(summary);
   }, [
     absenceQuery.data,
     lateQuery.data,

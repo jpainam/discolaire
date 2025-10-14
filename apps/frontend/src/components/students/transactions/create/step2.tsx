@@ -13,7 +13,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import type { TransactionType } from "@repo/db/enums";
@@ -49,6 +49,7 @@ import { createTransactionSchemaStep1 } from "~/utils/search-params";
 const step2Schema = z.object({
   paymentReceived: z.boolean().default(false),
   paymentCorrectness: z.boolean().default(false),
+  notifications: z.array(z.string()).default([]),
 });
 
 export function Step2({
@@ -97,7 +98,7 @@ export function Step2({
       paymentReceived: false,
       paymentCorrectness: false,
       notifications: [
-        searchParams.studentId,
+        searchParams.studentId ?? "",
         ...studentContacts.map((c) => c.contactId),
       ],
     },

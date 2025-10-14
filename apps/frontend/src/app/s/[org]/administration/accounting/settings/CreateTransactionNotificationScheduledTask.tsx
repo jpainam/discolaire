@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -44,7 +44,7 @@ export function AddStaffSchedule({
 }) {
   const { closeModal } = useModal();
   const form = useForm({
-    resolver: zodResolver(addStaffScheduleSchema),
+    resolver: standardSchemaResolver(addStaffScheduleSchema),
     defaultValues: {
       cron: scheduleTask?.cron ?? "0 18 * * *",
       staffId: staffId ?? "",

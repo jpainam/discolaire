@@ -3,13 +3,13 @@
 import { useCallback, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -104,7 +104,7 @@ export function CreateGradeSheet({
   };
 
   const form = useForm({
-    resolver: zodResolver(createGradeSchema),
+    resolver: standardSchemaResolver(createGradeSchema),
     defaultValues: {
       weight: 100,
       name: t("harmonized_grade"),
@@ -327,6 +327,7 @@ export function CreateGradeSheet({
                                 <Checkbox
                                   defaultChecked={true}
                                   checked={
+                                    // eslint-disable-next-line react-hooks/incompatible-library
                                     form.watch(`grades.${index}.grade`)
                                       ? false
                                       : true

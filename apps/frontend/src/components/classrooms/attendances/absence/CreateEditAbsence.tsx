@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BaselineIcon, SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -61,7 +61,7 @@ export function CreateEditAbsence({
   const { t } = useLocale();
 
   const form = useForm({
-    resolver: zodResolver(attendanceSchema),
+    resolver: standardSchemaResolver(attendanceSchema),
     defaultValues: {
       notifyParents: true,
       notifyStudents: true,

@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subMonths } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
@@ -65,7 +65,7 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
   const { closeSheet } = useSheet();
 
   const form = useForm({
-    resolver: zodResolver(staffCreateEditSchema),
+    resolver: standardSchemaResolver(staffCreateEditSchema),
     defaultValues: {
       prefix: staff?.prefix ?? "",
       firstName: staff?.firstName ?? "",

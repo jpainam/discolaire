@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 //import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -58,7 +58,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function ProfileForm() {
   const form = useForm({
-    resolver: zodResolver(profileFormSchema),
+    resolver: standardSchemaResolver(profileFormSchema),
     defaultValues: {
       bio: "I own a computer.",
       username: "shadcn",

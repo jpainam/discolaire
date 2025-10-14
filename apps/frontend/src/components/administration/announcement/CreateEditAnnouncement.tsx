@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -55,7 +55,7 @@ export function CreateEditAnnouncement({
   type UpdateNoticeBoardValues = z.infer<typeof noticeBoardSchema>;
 
   const form = useForm<UpdateNoticeBoardValues>({
-    resolver: zodResolver(noticeBoardSchema),
+    resolver: standardSchemaResolver(noticeBoardSchema),
     defaultValues: {
       id: noticeBoard?.id ?? 0, // Generate a unique ID if not provided
       title: noticeBoard?.title ?? "",
@@ -71,6 +71,7 @@ export function CreateEditAnnouncement({
   const { watch } = form;
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/incompatible-library
     const subscription = watch((value, { name, type }) =>
       console.log(value, name, type),
     );

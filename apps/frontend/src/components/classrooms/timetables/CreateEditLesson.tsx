@@ -2,13 +2,13 @@
 
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isBefore } from "date-fns";
 import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -61,7 +61,7 @@ export function CreateEditLesson({
   };
 
   const form = useForm({
-    resolver: zodResolver(createEditTimetable),
+    resolver: standardSchemaResolver(createEditTimetable),
     defaultValues: {
       startDate: lesson?.start ?? new Date(),
       startTime: lesson ? formatTimeForInput(lesson.start) : "08:00",
@@ -91,6 +91,7 @@ export function CreateEditLesson({
     return t;
   }, []);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchStartTime = form.watch("startTime");
 
   const filteredEndTimes = useMemo(() => {

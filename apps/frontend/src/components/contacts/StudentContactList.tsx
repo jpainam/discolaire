@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { cn } from "@repo/ui/lib/utils";
 
 import { EmptyState } from "~/components/EmptyState";
@@ -26,7 +27,6 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { routes } from "../../configs/routes";
 import { AvatarState } from "../AvatarState";
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { LinkStudent } from "./LinkStudent";
 
 export default function StudentContactList({

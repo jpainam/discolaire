@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -26,7 +26,7 @@ const createSportSchema = z.object({
 });
 export function CreateEditSport({ id, name }: { id?: string; name?: string }) {
   const form = useForm({
-    resolver: zodResolver(createSportSchema),
+    resolver: standardSchemaResolver(createSportSchema),
     defaultValues: {
       name: name ?? "",
     },

@@ -1,11 +1,11 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -34,7 +34,7 @@ export function CreateEditGradeAppreciation({
   gradeAppreciation?: RouterOutputs["gradeAppreciation"]["all"][number];
 }) {
   const form = useForm({
-    resolver: zodResolver(createEditAppreciationSchema),
+    resolver: standardSchemaResolver(createEditAppreciationSchema),
     defaultValues: {
       min: gradeAppreciation?.minGrade ?? 0,
       max: gradeAppreciation?.maxGrade ?? 0,

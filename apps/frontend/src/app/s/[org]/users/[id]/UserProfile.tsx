@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
   useMutation,
   useQueryClient,
@@ -48,7 +48,7 @@ export function UserProfile() {
     trpc.user.get.queryOptions(params.id),
   );
   const form = useForm({
-    resolver: zodResolver(usernameSchema),
+    resolver: standardSchemaResolver(usernameSchema),
     defaultValues: {
       name: user.name,
       email: user.email,

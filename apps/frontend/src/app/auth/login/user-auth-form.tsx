@@ -5,7 +5,7 @@
 // import { useSearchParams } from "next/navigation";
 // import * as React from "react";
 
-// import { zodResolver } from "@hookform/resolvers/zod";
+// import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 // import { Button } from "@repo/ui/components/button";
 // import {
 //   Form,
@@ -35,7 +35,7 @@
 //       username: "",
 //       password: "",
 //     },
-//     resolver: zodResolver(schema),
+//     resolver: standardSchemaResolver(schema),
 //   });
 //   const searchParams = useSearchParams();
 //   const redirect = searchParams.get("redirect");

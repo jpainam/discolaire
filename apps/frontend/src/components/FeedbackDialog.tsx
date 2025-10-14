@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -28,7 +28,7 @@ export function FeedBackDialog() {
     defaultValues: {
       content: "",
     },
-    resolver: zodResolver(feedbackSchema),
+    resolver: standardSchemaResolver(feedbackSchema),
   });
   const { closeModal } = useModal();
   const [isLoading, setIsLoading] = React.useState(false);

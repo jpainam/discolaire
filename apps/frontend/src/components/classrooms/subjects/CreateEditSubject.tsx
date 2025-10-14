@@ -1,11 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -47,7 +47,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   const queryClient = useQueryClient();
 
   const form = useForm({
-    resolver: zodResolver(createEditSubjectSchema),
+    resolver: standardSchemaResolver(createEditSubjectSchema),
     defaultValues: {
       courseId: subject?.courseId.toString() ?? "",
       teacherId: subject?.teacherId?.toString() ?? "",

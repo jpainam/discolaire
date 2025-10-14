@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useForm, useFormContext } from "react-hook-form";
@@ -42,7 +42,7 @@ export function CreateEditScheduleDivision({
   slot?: RouterOutputs["scheduleDivision"]["all"][number];
 }) {
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       name: slot?.name ?? "",
       startTime: slot?.startTime ?? new Date(),

@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { useForm } from "react-hook-form";
@@ -27,7 +27,7 @@ const createSchoolSchema = z.object({
 });
 export function CreateEditSchool({ id, name }: { id?: string; name?: string }) {
   const form = useForm({
-    resolver: zodResolver(createSchoolSchema),
+    resolver: standardSchemaResolver(createSchoolSchema),
     defaultValues: {
       name: name ? decode(name) : "",
     },

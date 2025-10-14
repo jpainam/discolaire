@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FileIcon, Trash2, UploadIcon, XIcon } from "lucide-react";
 import { useDropzone } from "react-dropzone";
@@ -46,7 +46,7 @@ export function CreateEditDocument({
   userId: string;
 }) {
   const form = useForm({
-    resolver: zodResolver(createEditDocumentSchema),
+    resolver: standardSchemaResolver(createEditDocumentSchema),
     defaultValues: {
       title: title ?? "",
       description: description ?? "",

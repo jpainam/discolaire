@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Paperclip } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -42,7 +42,7 @@ const preventSchema = z.object({
 export function PreventAbsence({ studentId }: { studentId: string }) {
   const { closeModal } = useModal();
   const form = useForm({
-    resolver: zodResolver(preventSchema),
+    resolver: standardSchemaResolver(preventSchema),
     defaultValues: {
       from: new Date().toISOString(),
       to: new Date().toISOString(),

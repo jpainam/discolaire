@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
   useMutation,
   useQueryClient,
@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
@@ -105,7 +105,7 @@ export function SubjectJournalEditor() {
     day: "numeric",
   });
   const form = useForm({
-    resolver: zodResolver(createSubjectJournalSchema),
+    resolver: standardSchemaResolver(createSubjectJournalSchema),
     defaultValues: {
       title: t("teaching_session_default_title", {
         date: dateFormat.format(new Date()),
@@ -160,6 +160,7 @@ export function SubjectJournalEditor() {
   return (
     <Form {...form}>
       <form
+        // eslint-disable-next-line react-hooks/refs
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex w-full flex-1 flex-col gap-2 overflow-y-auto rounded-lg px-4 py-2"
       >

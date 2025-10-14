@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import i18next from "i18next";
@@ -39,19 +38,14 @@ export function FeeHeader() {
   const { createQueryString } = useCreateQueryString();
   const { openModal } = useModal();
 
-  const [sums, setSums] = useState<{ total: number; required: number }>({
-    total: 0,
-    required: 0,
-  });
+  const filteredFees = classroomId
+    ? fees.filter((fee) => fee.classroomId === classroomId)
+    : [...fees];
 
-  useEffect(() => {
-    let filteredFees = [...fees];
-    if (classroomId) {
-      filteredFees = fees.filter((fee) => fee.classroomId === classroomId);
-    }
-    const total = filteredFees.reduce((acc, fee) => acc + fee.amount, 0);
-    setSums({ total, required: 0 });
-  }, [classroomId, fees]);
+  const sums = {
+    total: filteredFees.reduce((acc, fee) => acc + fee.amount, 0),
+    required: 0,
+  };
 
   return (
     <div className="flex flex-row items-center gap-4 border-b px-4 py-1">

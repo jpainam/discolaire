@@ -1,10 +1,10 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -34,7 +34,7 @@ const createEditTermSchema = z.object({
 });
 export function CreateEditTerm({ term }: { term?: Term }) {
   const form = useForm({
-    resolver: zodResolver(createEditTermSchema),
+    resolver: standardSchemaResolver(createEditTermSchema),
     defaultValues: {
       name: term?.name ?? "",
       startDate: term?.startDate ?? new Date(),

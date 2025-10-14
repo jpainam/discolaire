@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toZonedTime } from "date-fns-tz";
 import { SaveIcon, XIcon } from "lucide-react";
@@ -37,6 +37,7 @@ const createUpdateStudentSchema = z.object({
   phoneNumber: z.string().optional(),
   formerSchoolId: z.string().min(1),
   countryId: z.string().min(1),
+  bloodType: z.string().optional(),
   dateOfEntry: z.coerce.date().optional(),
   dateOfExit: z.coerce.date().optional(),
   //tags: z.array(z.string()).optional(),
@@ -69,7 +70,7 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
   const { t } = useLocale();
 
   const form = useForm({
-    resolver: zodResolver(createUpdateStudentSchema),
+    resolver: standardSchemaResolver(createUpdateStudentSchema),
     defaultValues: {
       id: student.id,
       //tags: student.tags ?? [],

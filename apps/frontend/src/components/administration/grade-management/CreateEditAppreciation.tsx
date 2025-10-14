@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -31,7 +31,7 @@ type AppreciationFormValues = z.infer<typeof appreciationFormSchema>;
 export function CreateEditAppreciation() {
   const { closeModal } = useModal();
   const form = useForm<AppreciationFormValues>({
-    resolver: zodResolver(appreciationFormSchema),
+    resolver: standardSchemaResolver(appreciationFormSchema),
     defaultValues: {
       name: "",
       content: "",

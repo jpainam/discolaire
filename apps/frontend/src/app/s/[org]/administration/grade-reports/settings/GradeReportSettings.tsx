@@ -1,10 +1,10 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { SettingsIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -54,7 +54,7 @@ export function GradeReportSettings() {
   });
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       options: periodes.map((p) => ({
         termId: p.id,

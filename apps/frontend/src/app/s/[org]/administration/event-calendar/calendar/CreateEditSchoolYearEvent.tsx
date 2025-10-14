@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
   useMutation,
   useQueryClient,
@@ -46,7 +46,7 @@ export function CreateEditSchoolYearEvent({
   event?: RouterOutputs["schoolYearEvent"]["all"][number];
 }) {
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: standardSchemaResolver(schema),
     defaultValues: {
       name: event?.name ?? "",
       date: event?.date ?? new Date(),
@@ -133,7 +133,7 @@ export function CreateEditSchoolYearEvent({
                 <FormLabel>{t("Event date")}</FormLabel>
                 <FormControl>
                   <DatePicker
-                    defaultValue={field.value}
+                    //defaultValue={""}
                     onChange={(v) => field.onChange(v)}
                   />
                 </FormControl>

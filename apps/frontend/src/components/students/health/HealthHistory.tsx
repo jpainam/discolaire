@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
   useMutation,
   useQueryClient,
@@ -105,7 +105,7 @@ export function HealthHistory({ studentId }: { studentId: string }) {
     }),
   );
   const form = useForm({
-    resolver: zodResolver(schemaForm),
+    resolver: standardSchemaResolver(schemaForm),
     defaultValues: {
       hasAdd: issue?.hasAdd ?? false,
       addNotes: issue?.addNotes ?? "",

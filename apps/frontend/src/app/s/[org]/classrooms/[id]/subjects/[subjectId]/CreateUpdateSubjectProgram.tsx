@@ -1,11 +1,11 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
+import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -52,8 +52,8 @@ export function CreateUpdateSubjectProgram({
   subjectId: number;
   requiredSessionCount: number;
 }) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       title: title ?? "",
       description: description ?? "",
@@ -157,7 +157,7 @@ export function CreateUpdateSubjectProgram({
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value.toString()}
+                    defaultValue={field.value?.toString()}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Nombre de sessions" />

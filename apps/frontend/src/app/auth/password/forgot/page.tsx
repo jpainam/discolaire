@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Loader, Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -35,13 +35,13 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-export default function Paage() {
+export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: "",
     },

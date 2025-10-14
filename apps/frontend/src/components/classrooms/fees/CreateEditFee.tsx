@@ -1,10 +1,10 @@
 import type { SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Save, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { Fee } from "@repo/db/client";
 import { Button } from "@repo/ui/components/button";
@@ -47,7 +47,7 @@ export function CreateEditFee({
 }) {
   const { t } = useLocale();
   const form = useForm<z.infer<typeof createEditFeeSchema>>({
-    resolver: zodResolver(createEditFeeSchema),
+    resolver: standardSchemaResolver(createEditFeeSchema),
     defaultValues: {
       code: fee?.code ?? "",
       description: fee?.description ?? "",

@@ -47,6 +47,13 @@ export function ClassroomLevelTable() {
     { id: string; name: string; order: number }[]
   >([]);
 
+  useEffect(() => {
+    if (classroomLevelsQuery.data) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setItems(classroomLevelsQuery.data);
+    }
+  }, [classroomLevelsQuery.data]);
+
   const debounced = useDebouncedCallback((value) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const levelWithOrders = value.map(
@@ -60,12 +67,6 @@ export function ClassroomLevelTable() {
 
     updateLevelOrder.mutate(levelWithOrders);
   }, 1000);
-
-  useEffect(() => {
-    if (classroomLevelsQuery.data) {
-      setItems(classroomLevelsQuery.data);
-    }
-  }, [classroomLevelsQuery.data]);
 
   const { openModal } = useModal();
   return (

@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import {
   Form,
@@ -36,7 +36,7 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 export function AppearanceForm() {
   const { setTheme, resolvedTheme } = useTheme();
   const form = useForm<AppearanceFormValues>({
-    resolver: zodResolver(appearanceFormSchema),
+    resolver: standardSchemaResolver(appearanceFormSchema),
     defaultValues: {
       theme: resolvedTheme as "light" | "dark",
     },

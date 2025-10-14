@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -44,7 +44,7 @@ export function CreateEditCommunicationChannel({
 }) {
   const params = useParams<{ id: string }>();
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: standardSchemaResolver(schema),
     defaultValues: {
       name: channel?.name ?? "",
       description: channel?.description ?? "",

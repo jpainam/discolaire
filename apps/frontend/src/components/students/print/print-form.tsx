@@ -1,8 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import { Button } from "@repo/ui/components/button";
 import { Form } from "@repo/ui/components/form";
@@ -47,7 +47,7 @@ export default function PrintForm() {
   const { t } = useLocale();
 
   const form = useForm({
-    resolver: zodResolver(printFormSchema),
+    resolver: standardSchemaResolver(printFormSchema),
     defaultValues: {
       type: "pdf" as const,
       print: "absences",

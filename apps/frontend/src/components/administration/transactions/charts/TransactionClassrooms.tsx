@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import _ from "lodash";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
@@ -48,15 +48,10 @@ export function TransactionClassrooms() {
     trpc.transaction.quotas.queryOptions(),
   );
 
-  const [filteredData, setFilteredData] = React.useState<
-    TransactionQuotaProcedureOutput[]
-  >([]);
-
-  useEffect(() => {
-    if (!transactionsQuotaQuery.data) return;
+  const filteredData = useMemo(() => {
+    if (!transactionsQuotaQuery.data) return [];
     const transactions = transactionsQuotaQuery.data;
-    const divided = _.chunk(transactions, Math.ceil(transactions.length / 4));
-    setFilteredData(divided);
+    return _.chunk(transactions, Math.ceil(transactions.length / 4));
   }, [transactionsQuotaQuery.data]);
 
   if (transactionsQuotaQuery.isPending) {
