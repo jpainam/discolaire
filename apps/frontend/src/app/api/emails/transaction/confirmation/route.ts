@@ -27,8 +27,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
-      const error = result.error.errors.map((e) => e.message).join(", ");
-      return new Response(error, { status: 400 });
+      const error = z.treeifyError(result.error).errors;
+      return new Response(JSON.stringify(error), { status: 400 });
     }
     const { transactionId, studentId, remaining, createdBy, status } =
       result.data;

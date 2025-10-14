@@ -27,15 +27,8 @@ export async function GET(req: NextRequest) {
     classroomId: classId,
   });
   if (!result.success) {
-    const errors = result.error.errors.map((error) => ({
-      path: error.path.join("."),
-      message: error.message,
-    }));
-
-    return Response.json(
-      { error: "Invalid request body", errors },
-      { status: 400 },
-    );
+    const error = z.treeifyError(result.error).errors;
+    return new Response(JSON.stringify(error), { status: 400 });
   }
 
   const { studentId, termId, classroomId } = result.data;

@@ -1,13 +1,19 @@
+;
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
+
+
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
 import { sendEmail } from "@repo/utils/resend";
+
+
 
 import { getSession } from "~/auth/server";
 import { db } from "~/lib/db";
 import { getFullName } from "~/utils";
+
 
 const schema = z.object({
   userId: z.string(),
@@ -24,8 +30,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
-      const error = result.error.errors.map((e) => e.message).join(", ");
-      return new Response(error, { status: 400 });
+      const error = z.treeifyError(result.error).errors;
+      return new Response(JSON.stringify(error), { status: 400 });
     }
     const { userId, schoolYearId, startDate, endDate } = result.data;
     const transactions = await db.transaction.findMany({
