@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, PlusCircleIcon, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";

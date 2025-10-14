@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";

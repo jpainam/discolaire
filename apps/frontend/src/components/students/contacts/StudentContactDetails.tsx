@@ -16,7 +16,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 import { Form } from "@repo/ui/components/form";

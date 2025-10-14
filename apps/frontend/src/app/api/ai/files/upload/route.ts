@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
 

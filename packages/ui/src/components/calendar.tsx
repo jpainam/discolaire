@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import type * as React from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 

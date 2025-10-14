@@ -1,6 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { schoolYearService } from "../services/school-year-service";
 import { protectedProcedure, publicProcedure } from "../trpc";

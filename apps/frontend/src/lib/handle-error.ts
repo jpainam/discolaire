@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export function getErrorMessage(err: unknown) {
   if (err instanceof z.ZodError) {

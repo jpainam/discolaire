@@ -3,7 +3,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import FeedbackEmail from "@repo/transactional/emails/FeedbackEmail";
 import { resend } from "@repo/utils/resend";

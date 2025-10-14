@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 

@@ -1,6 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { addMonths } from "date-fns";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { protectedProcedure } from "../trpc";
 

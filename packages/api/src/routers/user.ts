@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { TRPCError } from "@trpc/server";
 import { hashPassword } from "better-auth/crypto";
 import { v4 as uuidv4 } from "uuid";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import {
   createUser,

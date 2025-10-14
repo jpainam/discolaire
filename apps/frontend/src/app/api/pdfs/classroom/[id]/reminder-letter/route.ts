@@ -4,7 +4,7 @@ import { renderToStream } from "@react-pdf/renderer";
 import { addDays } from "date-fns";
 import i18next from "i18next";
 import { sumBy } from "lodash";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
 import ReminderLetter from "~/reports/statements/ReminderLetter";

@@ -1,5 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { $Enums } from "@repo/db/client";
 

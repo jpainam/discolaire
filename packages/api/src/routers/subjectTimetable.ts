@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { addDays, addMonths, subMonths } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { protectedProcedure } from "../trpc";
 

@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { addDays, subDays, subMonths } from "date-fns";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { TransactionStatus, TransactionType } from "@repo/db/enums";
 

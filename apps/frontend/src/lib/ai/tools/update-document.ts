@@ -1,6 +1,6 @@
 import type { UIMessageStreamWriter } from "ai";
 import { tool } from "ai";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { Session } from "@repo/auth";
 

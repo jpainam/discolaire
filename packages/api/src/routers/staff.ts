@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { staffService } from "../services";
 import { createUser } from "../services/user-service";

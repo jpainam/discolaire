@@ -1,6 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { contactService } from "../services/contact-service";
 import { studentService } from "../services/student-service";

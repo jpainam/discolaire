@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { nanoid } from "nanoid";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import TransactionConfirmation from "@repo/transactional/emails/TransactionConfirmation";
 import { resend } from "@repo/utils/resend";

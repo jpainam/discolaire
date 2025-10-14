@@ -2,7 +2,7 @@
 //   name: z.string().min(1),
 // });
 import type { TRPCRouterRecord } from "@trpc/server";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { protectedProcedure } from "../trpc";
 

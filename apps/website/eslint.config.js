@@ -1,16 +1,17 @@
-import baseConfig, { restrictEnvAccess } from "@repo/eslint-config/base";
-import nextjsConfig from "@repo/eslint-config/nextjs";
-import reactConfig from "@repo/eslint-config/react";
+import { defineConfig } from "eslint/config";
 
-/** @type {import('typescript-eslint').Config} */
-export default [
+import { baseConfig, restrictEnvAccess } from "@repo/eslint-config/base";
+import { nextjsConfig } from "@repo/eslint-config/nextjs";
+import { reactConfig } from "@repo/eslint-config/react";
+
+export default defineConfig(
   {
     ignores: [".next/**"],
   },
-  ...baseConfig,
-  ...reactConfig,
-  ...nextjsConfig,
-  ...restrictEnvAccess,
+  baseConfig,
+  reactConfig,
+  nextjsConfig,
+  restrictEnvAccess,
   {
     rules: {
       "@typescript-eslint/no-unsafe-assignment": "off",
@@ -19,4 +20,4 @@ export default [
       "@typescript-eslint/no-unsafe-argument": "off",
     },
   },
-];
+);

@@ -13,7 +13,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 import type { TransactionType } from "@repo/db/enums";
