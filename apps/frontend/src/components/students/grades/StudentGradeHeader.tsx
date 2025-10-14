@@ -93,6 +93,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
           coeffSum += grade.coefficient ?? 0;
         }
       });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setClassroomAvg(gradeSum / (coeffSum || 1e9));
     } else {
       setClassroomAvg(null);
@@ -110,6 +111,7 @@ export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
           coeffSum += grade.gradeSheet.subject.coefficient;
         }
       });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStudentAvg(gradeSum / (coeffSum || 1e9));
     } else {
       setStudentAvg(null);

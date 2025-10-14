@@ -42,10 +42,8 @@ export function StaffSelector({
   const staffQuery = useQuery(trpc.staff.all.queryOptions());
 
   useEffect(() => {
-    if (value !== defaultValue) {
-      setValue(defaultValue);
-    }
-  }, [defaultValue, value]);
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   const selected = staffQuery.data?.find((staff) => staff.id === value);
   const t = useTranslations();

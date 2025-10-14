@@ -25,12 +25,14 @@ export function useMessages({
   useEffect(() => {
     if (chatId) {
       scrollToBottom("instant");
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHasSentMessage(false);
     }
   }, [chatId, scrollToBottom]);
 
   useEffect(() => {
     if (status === "submitted") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHasSentMessage(true);
     }
   }, [status]);

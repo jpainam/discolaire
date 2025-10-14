@@ -55,6 +55,7 @@ const VirtualizedCommand = ({
   const parentRef = React.useRef(null);
   const { t } = useLocale();
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: filteredOptions.length,
     getScrollElement: () => parentRef.current,
@@ -185,6 +186,7 @@ export function ClassroomStudentSelector({
           (item) => item.id === defaultValue,
         );
         if (dValue)
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setSelectedOption({ label: getFullName(dValue), value: dValue.id });
       }
       setOptions(

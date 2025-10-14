@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   Notebook,
@@ -26,17 +26,19 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
     trpc.student.grades.queryOptions({ id: studentId }),
   );
   const [termId, setTermId] = useQueryState("termId");
-  const [maxGrade, setMaxGrade] = useState(0);
-  const [minGrade, setMinGrade] = useState(0);
-  const [averageGrade, setAverageGrade] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [successRate, setSuccessRate] = useState(0);
-  const [p18, setP18] = useState(0);
-  const [p14, setP14] = useState(0);
-  const [p10, setP10] = useState(0);
-  const [p05, setP05] = useState(0);
-  const [p00, setP00] = useState(0);
-  useEffect(() => {
+
+  const {
+    maxGrade,
+    minGrade,
+    averageGrade,
+    total,
+    successRate,
+    p18,
+    p14,
+    p10,
+    p05,
+    p00,
+  } = useMemo(() => {
     let grades = allgrades;
     if (termId) {
       grades = allgrades.filter((g) => g.gradeSheet.termId === termId);
@@ -46,19 +48,32 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
     const countp10 = grades.filter((g) => g.grade >= 10 && g.grade < 14).length;
     const countp05 = grades.filter((g) => g.grade >= 8 && g.grade < 10).length;
     const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
-    setP18(countp18);
-    setP14(countp14);
-    setP10(countp10);
-    setP05(countp05);
-    setP00(countp00);
-    setTotal(grades.length);
-    setMaxGrade(Math.max(...grades.map((g) => g.grade)));
-    setMinGrade(Math.min(...grades.map((g) => g.grade)));
-    setAverageGrade(
-      grades.reduce((acc, g) => acc + g.grade, 0) / grades.length,
-    );
+    const totalGrades = grades.length;
+    const maxGrade =
+      totalGrades > 0 ? Math.max(...grades.map((g) => g.grade)) : 0;
+    const minGrade =
+      totalGrades > 0 ? Math.min(...grades.map((g) => g.grade)) : 0;
+    const averageGrade =
+      totalGrades > 0
+        ? grades.reduce((acc, g) => acc + g.grade, 0) / totalGrades
+        : 0;
     const successCount = grades.filter((g) => g.grade >= 10).length;
-    setSuccessRate(successCount > 0 ? (successCount / grades.length) * 100 : 0);
+    const successRate =
+      successCount > 0 && totalGrades > 0
+        ? (successCount / totalGrades) * 100
+        : 0;
+    return {
+      maxGrade,
+      minGrade,
+      averageGrade,
+      total: totalGrades,
+      successRate,
+      p18: countp18,
+      p14: countp14,
+      p10: countp10,
+      p05: countp05,
+      p00: countp00,
+    };
   }, [allgrades, termId]);
 
   return (

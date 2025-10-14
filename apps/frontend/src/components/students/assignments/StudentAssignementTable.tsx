@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { isSameDay } from "date-fns";
 import i18next from "i18next";
 import { Eye } from "lucide-react";
@@ -30,14 +29,9 @@ export function StudentAssignmentTable({
   assignments: StudentAssignment[];
 }) {
   const [term] = useQueryState("term", parseAsString);
-  const [items, setItems] = useState(assignments);
-  useEffect(() => {
-    if (!term) {
-      setItems(assignments);
-      return;
-    }
-    setItems(assignments.filter((item) => item.termId === term));
-  }, [assignments, term]);
+  const items = term
+    ? assignments.filter((item) => item.termId === term)
+    : assignments;
 
   const { t } = useLocale();
 

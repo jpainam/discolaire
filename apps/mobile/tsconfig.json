@@ -5,10 +5,12 @@
     "checkJs": false,
     "moduleSuffixes": [".ios", ".android", ".native", ""],
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./*"]
     }
   },
   "include": [
+    "**/*.ts",
+    "**/*.tsx",
     "src",
     "*.ts",
     "*.js",

@@ -76,7 +76,7 @@ export const reportingRouter = {
         endpoint: z.string().min(1),
         title: z.string().min(1),
         type: z.enum(["pdf", "excel"]).default("pdf"),
-        data: z.record(z.any()),
+        data: z.record(z.string(), z.any()),
       }),
     )
     .mutation(async ({ ctx, input }) => {

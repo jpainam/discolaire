@@ -56,6 +56,7 @@ export function ChangeAvatarButton(
   const { t } = useLocale();
 
   const handleUpload = useCallback(
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     async (croppedImageUrl: string) => {
       toast.loading(t("Processing"), { id: 0 });
       try {

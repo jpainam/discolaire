@@ -1,7 +1,8 @@
 "use client";
 
 import type { JSX } from "react";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
 
 import { cn } from "~/lib/utils";

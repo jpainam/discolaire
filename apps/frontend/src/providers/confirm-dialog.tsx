@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { ComponentPropsWithRef, ReactNode } from "react";
 import type React from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 import {
   createContext,
   memo,
@@ -341,6 +341,7 @@ export const useConfirm = () => {
   const { confirm, updateConfig } = context;
 
   const enhancedConfirm = confirm;
+  // eslint-disable-next-line react-hooks/immutability
   enhancedConfirm.updateConfig = updateConfig;
 
   return enhancedConfirm as ConfirmFunction & {

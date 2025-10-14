@@ -181,6 +181,7 @@ export async function AcccountStatement({
               transaction.type === "DEBIT"
                 ? -Math.abs(transaction.amount)
                 : Math.abs(transaction.amount);
+            // eslint-disable-next-line react-hooks/immutability
             runningBalance += signedAmount;
 
             previousDate = transaction.transactionDate;
