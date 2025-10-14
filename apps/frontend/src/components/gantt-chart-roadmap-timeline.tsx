@@ -14,37 +14,37 @@ import {
   YAxis,
 } from "recharts";
 
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@repo/ui/components/dialog";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
 } from "@repo/ui/components/drawer";
+import { Progress } from "@repo/ui/components/progress";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
-
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
-import { Progress } from "~/components/ui/progress";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select";
-import { Separator } from "~/components/ui/separator";
+} from "@repo/ui/components/select";
+import { Separator } from "@repo/ui/components/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
+} from "@repo/ui/components/tooltip";
+
 import { events } from "~/data/events-staff";
 import { useMediaQuery } from "~/hooks/use-media-query";
 import { cn } from "~/lib/utils";

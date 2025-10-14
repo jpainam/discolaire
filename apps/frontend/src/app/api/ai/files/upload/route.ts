@@ -43,11 +43,8 @@ export async function POST(request: Request) {
     const validatedFile = FileSchema.safeParse({ file });
 
     if (!validatedFile.success) {
-      const errorMessage = validatedFile.error.errors
-        .map((error) => error.message)
-        .join(", ");
-
-      return NextResponse.json({ error: errorMessage }, { status: 400 });
+      const error = z.treeifyError(validatedFile.error).errors;
+      return new Response(JSON.stringify(error), { status: 400 });
     }
 
     // Get filename from formData since Blob doesn't have name property
