@@ -15,7 +15,7 @@
   },
   "scripts": {
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "prettier": "@repo/prettier-config",

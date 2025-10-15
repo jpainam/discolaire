@@ -58,7 +58,7 @@ export function PreviousCreatedGradeSheet() {
   if (!gradesheets || gradesheets.length === 0) {
     return (
       <div className="flex flex-col gap-4 pt-4 pr-4">
-        <EmptyState title={"Aucune notes précédentes<"} />
+        <EmptyState title={"Aucune notes précédentes"} />
       </div>
     );
   }

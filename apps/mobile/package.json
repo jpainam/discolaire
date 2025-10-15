@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "format": "prettier --check . --ignore-path ../../.gitignore --ignore-path .prettierignore",
     "ios": "expo start --ios",
-    "lint": "eslint",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config",
     "start": "expo start",
     "typecheck": "tsc --noEmit",
     "web": "expo start --web"

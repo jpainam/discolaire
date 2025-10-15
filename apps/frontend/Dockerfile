@@ -127,7 +127,7 @@ ENV PORT=3000
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
 
-HEALTHCHECK --interval=5m --timeout=3s --start-period=60s --retries=3 \
-   CMD curl -fsS http://127.0.0.1:3000/ || exit 1
+# HEALTHCHECK --interval=5m --timeout=3s --start-period=60s --retries=3 \
+#    CMD curl -fsS http://127.0.0.1:3000/ || exit 1
 
 CMD ["node", "apps/frontend/server.js"]
