@@ -1,54 +1,69 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useForm } from "react-hook-form";
-import z from "zod/v4";
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
 
-import { Form } from "@repo/ui/components/form";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@repo/ui/components/input-group";
+import { Label } from "@repo/ui/components/label";
 
-import { AttendanceClassroom } from "./AttendanceClassroom";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { AttendanceClassroomStudentList } from "./AttendanceClassroomStudentList";
 
-const formSchema = z.object({
-  students: z.array(
-    z.object({
-      id: z.string(),
-      absences: z.number().min(0).max(100).default(0),
-      justifiedAbsences: z.number().min(0).max(100).default(0),
-      consignes: z.number().min(0).max(100).default(0),
-      retards: z.number().min(0).max(100).default(0),
-      justifiedRetards: z.number().min(0).max(100).default(0),
-      bavardages: z.number().min(0).max(100).default(0),
-    }),
-  ),
-});
 export function PeriodicAttendance() {
-  const form = useForm({
-    defaultValues: { students: [] },
-    resolver: standardSchemaResolver(formSchema),
-  });
-  const searchParams = useSearchParams();
+  const [classroomId, setClassroomId] = useQueryState("classroomId");
+  const [termId, setTermId] = useQueryState("termId");
+  const t = useTranslations();
+  const [query, setQuery] = useState("");
 
-  const classroomId = searchParams.get("classroomId");
-  const termId = searchParams.get("termId");
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-  };
   return (
-    <Form {...form}>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <AttendanceClassroom />
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-row items-center gap-4 px-4">
+        <div className="flex flex-row items-center gap-2">
+          <Label>{t("classrooms")}</Label>
+          <ClassroomSelector
+            className="w-96"
+            defaultValue={classroomId ?? ""}
+            onSelect={(val) => {
+              setClassroomId(val);
+            }}
+          />
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <Label>{t("terms")}</Label>
+          <TermSelector
+            className="w-96"
+            defaultValue={termId}
+            onChange={(val) => {
+              setTermId(val);
+            }}
+          />
+        </div>
+        <InputGroup className="w-56">
+          <InputGroupInput
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("search")}
+          />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+
+      <div>
         {classroomId && termId && (
           <AttendanceClassroomStudentList
             classroomId={classroomId}
             termId={termId}
           />
         )}
-      </form>
-    </Form>
+      </div>
+    </div>
   );
 }
