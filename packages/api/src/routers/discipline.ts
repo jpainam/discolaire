@@ -202,6 +202,14 @@ async function getDiscipline({
       termId: termId,
     },
   });
+  const chatters = await db.chatter.findMany({
+    where: {
+      studentId: {
+        in: studentIds,
+      },
+      termId: termId,
+    },
+  });
   const disciplines = new Map<
     string,
     {
@@ -211,6 +219,7 @@ async function getDiscipline({
       lateness: number;
       justifiedLateness: number;
       consigne: number;
+      chatter: number;
     }
   >();
   for (const studentId of studentIds) {
@@ -221,12 +230,13 @@ async function getDiscipline({
       lateness: 0,
       justifiedLateness: 0,
       consigne: 0,
+      chatter: 0,
     });
   }
   for (const absence of absences) {
     const student = disciplines.get(absence.studentId);
     if (student) {
-      student.absence++;
+      student.absence += absence.value;
 
       student.justifiedAbsence += absence.justification?.value ?? 0;
     }
@@ -245,6 +255,12 @@ async function getDiscipline({
     const student = disciplines.get(consigne.studentId);
     if (student) {
       student.consigne++;
+    }
+  }
+  for (const chatter of chatters) {
+    const student = disciplines.get(chatter.studentId);
+    if (student) {
+      student.chatter += chatter.value;
     }
   }
   return disciplines;

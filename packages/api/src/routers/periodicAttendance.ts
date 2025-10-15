@@ -35,12 +35,12 @@ export const periodicAttendanceRouter = {
         attendances: z.array(
           z.object({
             studentId: z.string().min(1),
-            absence: z.coerce.number().optional(),
-            justifiedAbsence: z.number().optional(),
-            lateness: z.number().optional(),
-            justifiedLateness: z.number().optional(),
-            consigne: z.number().optional(),
-            chatter: z.number().optional(),
+            absence: z.coerce.number(),
+            justifiedAbsence: z.coerce.number(),
+            lateness: z.coerce.number(),
+            justifiedLateness: z.coerce.number(),
+            consigne: z.coerce.number(),
+            chatter: z.coerce.number(),
           }),
         ),
         termId: z.string().min(1),
