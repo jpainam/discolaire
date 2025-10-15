@@ -1,13 +1,15 @@
-import { createJiti } from "jiti";
+//import { createJiti } from "jiti";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const jiti = createJiti(import.meta.url);
+//const jiti = createJiti(import.meta.url);
 
 // Import env files to validate at build time. Use jiti so we can load .ts files in here.
-await jiti.import("./src/env");
+//await jiti.import("./src/env");
+import "./src/env";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  output: "standalone",
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     "@repo/api",
