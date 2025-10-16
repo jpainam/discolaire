@@ -86,7 +86,7 @@ export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
       </View>
       <View
         style={{
-          width: W[7],
+          //width: W[7],
           justifyContent: "center",
 
           paddingHorizontal: 2,

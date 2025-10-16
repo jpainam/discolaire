@@ -1,6 +1,8 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
+import { Prisma } from "@repo/db";
+
 import { classroomService } from "../services/classroom-service";
 import { protectedProcedure } from "../trpc";
 
@@ -18,7 +20,7 @@ export const periodicAttendanceRouter = {
         const students = await classroomService.getStudents(input.classroomId);
         studentIds.push(...students.map((st) => st.id));
       }
-      return ctx.db.periodicAttendance.findMany({
+      const attendances = await ctx.db.periodicAttendance.findMany({
         where: {
           ...(input.termId ? { termId: input.termId } : {}),
           ...(input.classroomId ? { studentId: { in: studentIds } } : {}),
@@ -27,6 +29,18 @@ export const periodicAttendanceRouter = {
             schoolYearId: ctx.schoolYearId,
           },
         },
+      });
+      return attendances.map((at) => {
+        const d = at.data as Prisma.JsonObject;
+        return {
+          ...at,
+          absence: Number(d.absence ?? 0),
+          justifiedAbsence: Number(d.justifiedAbsence ?? 0),
+          lateness: Number(d.lateness ?? 0),
+          justifiedLateness: Number(d.justifiedLateness ?? 0),
+          chatter: Number(d.chatter ?? 0),
+          consigne: Number(d.consigne ?? 0),
+        };
       });
     }),
   create: protectedProcedure
@@ -69,14 +83,17 @@ export const periodicAttendanceRouter = {
             a.justifiedLateness,
         )
         .map((at) => {
-          return {
-            studentId: at.studentId,
+          const d = {
             absence: at.absence ?? 0,
             justifiedAbsence: at.justifiedAbsence ?? 0,
             lateness: at.lateness,
             justifiedLateness: at.justifiedLateness,
             chatter: at.chatter ?? 0,
             consigne: at.consigne ?? 0,
+          } as Prisma.JsonObject;
+          return {
+            studentId: at.studentId,
+            data: d,
             createdById: ctx.session.user.id,
             termId: input.termId,
           };

@@ -291,51 +291,6 @@ export const attendanceRouter = {
         },
       });
     }),
-  createPeriodic: protectedProcedure
-    .input(
-      z.object({
-        termId: z.string().min(1),
-        attendances: z.array(
-          z.object({
-            studentId: z.string().min(1),
-            absence: z.number().min(0).default(0),
-            justifiedAbsence: z.number().min(0).default(0),
-            lateness: z.number().default(0),
-            justifiedLateness: z.number().min(0).default(0),
-            consigne: z.number().min(0).default(0),
-            chatter: z.number().min(0).default(0),
-          }),
-        ),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      const { termId, attendances } = input;
-      const data = [];
-      for (const a of attendances) {
-        if (
-          a.absence != 0 ||
-          a.justifiedAbsence != 0 ||
-          a.lateness != 0 ||
-          a.justifiedLateness != 0 ||
-          a.consigne != 0 ||
-          a.chatter != 0
-        )
-          data.push({
-            termId,
-            studentId: a.studentId,
-            absence: a.absence,
-            justifiedAbsence: a.justifiedAbsence,
-            lateness: a.lateness,
-            justifiedLateness: a.justifiedLateness,
-            consigne: a.consigne,
-            chatter: a.chatter,
-            createdById: ctx.session.user.id,
-          });
-      }
-      return ctx.db.periodicAttendance.createMany({
-        data: data,
-      });
-    }),
   // deletePeriodic: protectedProcedure
   //   .input(
   //     z.object({
