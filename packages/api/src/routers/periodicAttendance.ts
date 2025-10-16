@@ -59,7 +59,15 @@ export const periodicAttendanceRouter = {
         },
       });
       const data = input.attendances
-        .filter((a) => a.absence || a.chatter || a.consigne || a.lateness)
+        .filter(
+          (a) =>
+            a.absence ||
+            a.chatter ||
+            a.consigne ||
+            a.lateness ||
+            a.justifiedAbsence ||
+            a.justifiedLateness,
+        )
         .map((at) => {
           return {
             studentId: at.studentId,

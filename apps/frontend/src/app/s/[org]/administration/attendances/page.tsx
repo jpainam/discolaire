@@ -9,7 +9,6 @@ export default async function Page(props: {
   searchParams: Promise<{ category: string }>;
 }) {
   const searchParams = await props.searchParams;
-  console.log(searchParams.category);
   return (
     <div className="grid flex-col gap-4 p-4 md:flex">
       <AttendanceStats />

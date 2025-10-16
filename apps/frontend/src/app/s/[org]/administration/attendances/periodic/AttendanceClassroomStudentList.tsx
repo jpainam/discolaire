@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -20,22 +21,30 @@ import {
 } from "@repo/ui/components/table";
 
 import { Badge } from "~/components/base-badge";
+import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
-const formSchema = z.object({
-  attendances: z.array(
-    z.object({
-      studentId: z.string(),
-      absence: z.string().default(""),
-      justifiedAbsence: z.string().default(""),
-      consigne: z.string().default(""),
-      lateness: z.string().default(""),
-      justifiedLateness: z.string().default(""),
-      chatter: z.string().default(""),
-    }),
-  ),
+const toNonNegInt = z.preprocess(
+  (v) => (v === "" || v == null ? 0 : v),
+  z.coerce.number().int().nonnegative(),
+);
+
+const attendanceItemSchema = z.object({
+  studentId: z.string().min(1),
+  absence: toNonNegInt.default(0),
+  justifiedAbsence: toNonNegInt.default(0),
+  consigne: toNonNegInt.default(0),
+  lateness: toNonNegInt.default(0),
+  justifiedLateness: toNonNegInt.default(0),
+  chatter: toNonNegInt.default(0),
 });
+
+const formSchema = z.object({
+  attendances: z.array(attendanceItemSchema),
+});
+
+//type FormValues = z.infer<typeof formSchema>;
 
 export function AttendanceClassroomStudentList({
   classroomId,
@@ -48,11 +57,15 @@ export function AttendanceClassroomStudentList({
   const studentQuery = useQuery(
     trpc.classroom.students.queryOptions(classroomId),
   );
+
+  const router = useRouter();
+
   const t = useTranslations();
   const createPeriodic = useMutation(
     trpc.periodicAttendance.create.mutationOptions({
       onSuccess: () => {
         toast.success(t("created_successfully"), { id: 0 });
+        router.push("/administration/attendances");
       },
       onError: (e) => {
         toast.error(e.message, { id: 0 });
@@ -87,69 +100,114 @@ export function AttendanceClassroomStudentList({
     },
     validators: {
       onSubmit: ({ value }) => {
-        const result = formSchema.safeParse(value);
-        if (!result.success) {
-          return {
-            error: result.error.flatten().fieldErrors,
-          };
+        const parsed = formSchema.safeParse(value);
+        if (!parsed.success) {
+          return { error: parsed.error.flatten().fieldErrors };
         }
       },
     },
+
     onSubmit: ({ value }) => {
-      const values = [];
-      for (const at of value.attendances) {
-        if (
-          !at.absence &&
-          !at.chatter &&
-          !at.consigne &&
-          !at.lateness &&
-          !at.justifiedAbsence &&
-          !at.justifiedLateness
-        ) {
-          continue;
-        }
-        const errorMessage = "Incorrect number";
-        if (at.absence && !isFinite(parseInt(at.absence))) {
-          toast.error(errorMessage);
-          return;
-        }
-        if (at.justifiedAbsence && !isFinite(parseInt(at.justifiedAbsence))) {
-          toast.error(errorMessage);
-          return;
-        }
-        if (at.chatter && !isFinite(parseInt(at.chatter))) {
-          toast.error(errorMessage);
-          return;
-        }
-        if (at.consigne && !isFinite(parseInt(at.consigne))) {
-          toast.error(errorMessage);
-          return;
-        }
-        if (at.lateness && !isFinite(parseInt(at.lateness))) {
-          toast.error(errorMessage);
-          return;
-        }
-        if (at.justifiedLateness && !isFinite(parseInt(at.justifiedLateness))) {
-          toast.error(errorMessage);
-          return;
-        }
-        values.push({
-          studentId: at.studentId,
-          absence: parseInt(at.absence),
-          absenceJustified: parseInt(at.justifiedAbsence),
-          chatter: parseInt(at.chatter),
-          consigne: parseInt(at.consigne),
-          lateness: parseInt(at.lateness),
-          justifiedLateness: parseInt(at.justifiedLateness),
-        });
+      const parsed = formSchema.safeParse(value);
+      if (!parsed.success) {
+        toast.error(t("validation_error"));
+        return;
       }
+      const payload = parsed.data.attendances
+        // Only send rows where at least one count > 0
+        .filter(
+          (a) =>
+            a.absence ||
+            a.justifiedAbsence ||
+            a.consigne ||
+            a.lateness ||
+            a.justifiedLateness ||
+            a.chatter,
+        )
+        .map((a) => ({
+          studentId: a.studentId,
+          absence: a.absence,
+          justifiedAbsence: a.justifiedAbsence,
+          chatter: a.chatter,
+          consigne: a.consigne,
+          lateness: a.lateness,
+          justifiedLateness: a.justifiedLateness,
+        }));
       createPeriodic.mutate({
         termId: termId,
         classroomId: classroomId,
-        attendances: values,
+        attendances: payload,
       });
     },
   });
+
+  useEffect(() => {
+    const students = studentQuery.data ?? [];
+    form.setFieldValue(
+      "attendances",
+      students.map((st) => {
+        return {
+          studentId: st.id,
+          absence: "",
+          justifiedAbsence: "",
+          chatter: "",
+          consigne: "",
+          lateness: "",
+          justifiedLateness: "",
+        };
+      }),
+    );
+  }, [form, studentQuery.data]);
+
+  const students = studentQuery.data ?? [];
+  const periodicMap = useMemo(() => {
+    const m = new Map<
+      string,
+      {
+        absence: number;
+        justifiedAbsence: number;
+        lateness: number;
+        justifiedLateness: number;
+        consigne: number;
+        chatter: number;
+      }
+    >();
+    (periodicAttendanceQuery.data ?? []).forEach((at) => {
+      m.set(at.studentId, {
+        absence: at.absence,
+        justifiedAbsence: at.justifiedAbsence,
+        lateness: at.lateness,
+        justifiedLateness: at.justifiedLateness,
+        consigne: at.consigne,
+        chatter: at.chatter,
+      });
+    });
+    return m;
+  }, [periodicAttendanceQuery.data]);
+  const attendanceMap = useMemo(() => {
+    const m = new Map<
+      string,
+      {
+        absence: number;
+        justifiedAbsence: number;
+        lateness: number;
+        justifiedLateness: number;
+        consigne: number;
+        chatter: number;
+      }
+    >();
+    (attendanceQuery.data ?? []).forEach((at) => {
+      m.set(at.studentId, {
+        absence: at.absence,
+        justifiedAbsence: at.justifiedAbsence,
+        lateness: at.lateness,
+        justifiedLateness: at.justifiedLateness,
+        consigne: at.consigne,
+        chatter: at.chatter,
+      });
+    });
+    return m;
+  }, [attendanceQuery.data]);
 
   if (periodicAttendanceQuery.isPending || studentQuery.isPending) {
     return (
@@ -158,58 +216,13 @@ export function AttendanceClassroomStudentList({
       </div>
     );
   }
-  const students = studentQuery.data ?? [];
-  const periodic = periodicAttendanceQuery.data ?? [];
-  const periodicMap = new Map<
-    string,
-    {
-      absence: number;
-      justifiedAbsence: number;
-      lateness: number;
-      justifiedLateness: number;
-      consigne: number;
-      chatter: number;
-    }
-  >();
-  periodic.forEach((at) => {
-    periodicMap.set(at.studentId, {
-      absence: at.absence,
-      justifiedAbsence: at.justifiedAbsence,
-      lateness: at.lateness,
-      justifiedLateness: at.justifiedLateness,
-      chatter: at.chatter,
-      consigne: at.consigne,
-    });
-  });
-  const attendanceMap = new Map<
-    string,
-    {
-      absence: number;
-      justifiedAbsence: number;
-      lateness: number;
-      justifiedLateness: number;
-      consigne: number;
-      chatter: number;
-    }
-  >();
-  const attendance = attendanceQuery.data ?? [];
-  attendance.forEach((at) => {
-    attendanceMap.set(at.studentId, {
-      absence: at.absence,
-      justifiedAbsence: at.justifiedAbsence,
-      lateness: at.lateness,
-      justifiedLateness: at.justifiedLateness,
-      chatter: at.chatter,
-      consigne: at.consigne,
-    });
-  });
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        form.handleSubmit();
+        await form.handleSubmit();
       }}
-      className="px-4 pb-8"
+      className="flex flex-col gap-4 px-4 pb-8"
     >
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
@@ -229,7 +242,7 @@ export function AttendanceClassroomStudentList({
           <TableBody>
             {students.map((student, index) => {
               const disc = attendanceMap.get(student.id);
-              const perio = periodicMap.get(student.id);
+              const periodic = periodicMap.get(student.id);
               return (
                 <TableRow key={student.id}>
                   <TableCell className="font-medium">
@@ -264,6 +277,10 @@ export function AttendanceClassroomStudentList({
                   </TableCell>
                   <TableCell>
                     <Input
+                      defaultValue={
+                        periodic?.absence != 0 ? periodic?.absence : undefined
+                      }
+                      type="number"
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].absence`,
@@ -274,6 +291,12 @@ export function AttendanceClassroomStudentList({
                   </TableCell>
                   <TableCell>
                     <Input
+                      type="number"
+                      defaultValue={
+                        periodic?.justifiedAbsence != 0
+                          ? periodic?.justifiedAbsence
+                          : undefined
+                      }
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].justifiedAbsence`,
@@ -284,6 +307,10 @@ export function AttendanceClassroomStudentList({
                   </TableCell>
                   <TableCell>
                     <Input
+                      defaultValue={
+                        periodic?.lateness != 0 ? periodic?.lateness : undefined
+                      }
+                      type="number"
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].lateness`,
@@ -294,6 +321,12 @@ export function AttendanceClassroomStudentList({
                   </TableCell>
                   <TableCell>
                     <Input
+                      defaultValue={
+                        periodic?.justifiedLateness != 0
+                          ? periodic?.justifiedLateness
+                          : undefined
+                      }
+                      type="number"
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].justifiedLateness`,
@@ -304,6 +337,10 @@ export function AttendanceClassroomStudentList({
                   </TableCell>
                   <TableCell>
                     <Input
+                      defaultValue={
+                        periodic?.chatter != 0 ? periodic?.chatter : undefined
+                      }
+                      type="number"
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].chatter`,
@@ -314,6 +351,10 @@ export function AttendanceClassroomStudentList({
                   </TableCell>
                   <TableCell>
                     <Input
+                      defaultValue={
+                        periodic?.consigne != 0 ? periodic?.consigne : undefined
+                      }
+                      type="number"
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].consigne`,
@@ -332,7 +373,9 @@ export function AttendanceClassroomStudentList({
         <Button type="reset" variant={"secondary"}>
           {t("cancel")}
         </Button>
-        <Button type="submit">{t("cancel")}</Button>
+        <Button isLoading={createPeriodic.isPending} type="submit">
+          {t("submit")}
+        </Button>
       </div>
     </form>
   );
