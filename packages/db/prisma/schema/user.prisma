@@ -64,6 +64,7 @@ model User {
     chats                        AiChat[]
     aiDocuments                  AiDocument[]
     aiSuggestions                AiSuggestion[]
+    attendances                  Attendance[]               @relation("attendanceCreatedBy")
 
     @@unique([email])
     @@unique([username])

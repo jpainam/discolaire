@@ -309,27 +309,22 @@ model Event {
 }
 
 model Term {
-    id                  String               @id @default(cuid())
-    name                String
-    schoolYearId        String
-    order               Int
-    startDate           DateTime             @default(now()) @db.Timestamp(6)
-    endDate             DateTime             @default(now()) @db.Timestamp(6)
-    isActive            Boolean             @default(true)
-    observation         String?
-    gradeSheets         GradeSheet[]
-    schoolYear          SchoolYear           @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    reportCards         ReportCard[]
-    assignments         Assignment[]
-    School              School               @relation(fields: [schoolId], references: [id])
-    schoolId            String
-    absences            Absence[]
-    latenesses          Lateness[]
-    exclusions          Exclusion[]
-    consignes           Consigne[]
-    chatters            Chatter[]
-    convocations        Convocation[]
-    periodicAttendances PeriodicAttendance[]
+    id           String        @id @default(cuid())
+    name         String
+    schoolYearId String
+    order        Int
+    startDate    DateTime      @default(now()) @db.Timestamp(6)
+    endDate      DateTime      @default(now()) @db.Timestamp(6)
+    isActive     Boolean       @default(true)
+    observation  String?
+    gradeSheets  GradeSheet[]
+    schoolYear   SchoolYear    @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    reportCards  ReportCard[]
+    assignments  Assignment[]
+    School       School        @relation(fields: [schoolId], references: [id])
+    schoolId     String
+    convocations Convocation[]
+    Attendance   Attendance[]
 }
 
 model ContactRelationship {
@@ -449,17 +444,11 @@ model Student {
     religion             Religion?                @relation(fields: [religionId], references: [id])
     sports               StudentSport[]
     clubs                StudentClub[]
-    preventedAbsences    PreventedAbsence[]
     school               School                   @relation(fields: [schoolId], references: [id])
     schoolId             String
-    absences             Absence[]
-    latenesses           Lateness[]
-    consignes            Consigne[]
-    chatters             Chatter[]
-    exclusions           Exclusion[]
     requiredFees         RequiredFeeTransaction[]
     convocations         Convocation[]
-    periodicAttendances  PeriodicAttendance[]
+    Attendance           Attendance[]
 }
 
 model StudentSibling {

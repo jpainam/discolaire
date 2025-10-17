@@ -1,111 +1,3 @@
-model Absence {
-    id            Int                   @id @default(autoincrement())
-    date          DateTime
-    value         Int
-    termId        String
-    term          Term                  @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    studentId     String
-    student       Student               @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    type          String                @default("daily")
-    createdAt     DateTime              @default(now())
-    createdById   String
-    attachments   String[]
-    reason        String?
-    justification AbsenceJustification?
-}
-
-model AbsenceJustification {
-    id          Int      @id @default(autoincrement())
-    absenceId   Int      @unique
-    absence     Absence  @relation(fields: [absenceId], references: [id], onDelete: Cascade)
-    value       Int      @default(0)
-    createdAt   DateTime @default(now())
-    createdById String
-    reason      String
-}
-
-model Lateness {
-    id            Int                    @id @default(autoincrement())
-    studentId     String
-    student       Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    date          DateTime
-    termId        String
-    duration      String // duration in HH:mm format
-    createdAt     DateTime               @default(now())
-    updatedAt     DateTime               @updatedAt
-    createdById   String
-    updatedById   String?
-    term          Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
-    attachments   String[]
-    reason        String?
-    justification LatenessJustification?
-}
-
-model LatenessJustification {
-    id          Int      @id @default(autoincrement())
-    latenessId  Int      @unique
-    lateness    Lateness @relation(fields: [latenessId], references: [id], onDelete: Cascade)
-    value       String
-    createdAt   DateTime @default(now())
-    createdById String
-    reason      String
-}
-
-model Chatter {
-    id          Int      @id @default(autoincrement())
-    date        DateTime
-    value       Int
-    termId      String
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
-    studentId   String
-    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    type        String   @default("daily") // daily, hourly, periodically, weekly, monthly
-    createdAt   DateTime @default(now())
-    createdById String
-}
-
-model Consigne {
-    id          Int      @id @default(autoincrement())
-    studentId   String
-    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    termId      String
-    date        DateTime
-    task        String
-    duration    Int
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
-    createdById String
-    createdAt   DateTime @default(now())
-}
-
-model Exclusion {
-    id          Int      @id @default(autoincrement())
-    studentId   String
-    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    termId      String
-    startDate   DateTime
-    endDate     DateTime
-    reason      String
-    createdAt   DateTime @default(now())
-    createdById String
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
-}
-
-model PreventedAbsence {
-    id           Int       @id @default(autoincrement())
-    studentId    String
-    from         DateTime
-    to           DateTime
-    attachments  String[]
-    reason       String
-    comment      String?
-    student      Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    createdAt    DateTime  @default(now())
-    createdById  String
-    status       String    @default("pending") // pending, accepted, rejected
-    approvedById String?
-    approvedAt   DateTime?
-}
-
 model Convocation {
     id          Int      @id @default(autoincrement())
     studentId   String
@@ -147,14 +39,21 @@ model SubjectTimetable {
     @@unique([start, end, subjectId])
 }
 
-model PeriodicAttendance {
-    id          String   @id @default(cuid())
+enum AttendanceType {
+    PERIODIC
+    DAILY
+}
+
+model Attendance {
+    id          Int            @id @default(autoincrement())
+    type        AttendanceType
     data        Json
     studentId   String
-    student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    student     Student        @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     termId      String
-    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    createdById String
+    term        Term           @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+    createdById String?
+    createdBy   User?          @relation("attendanceCreatedBy", fields: [createdById], references: [id], onUpdate: Cascade)
 }

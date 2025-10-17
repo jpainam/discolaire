@@ -1,25 +1,13 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { getTrimesterTermIds } from "../services/attendance-service";
-import { classroomService } from "../services/classroom-service";
 import {
-  accumulateDisciplineForTerms,
-  aggregateAllTermsForYear,
-  aggregateTermMetrics,
-} from "../services/discipline-service";
+  getDisciplineForTerms,
+  getTrimesterTermIds,
+} from "../services/attendance-service";
 import { protectedProcedure } from "../trpc";
 
 export const disciplineRouter = {
-  annual: protectedProcedure
-    .input(
-      z.object({
-        classroomId: z.string().min(1),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return aggregateAllTermsForYear(input.classroomId, ctx.schoolYearId);
-    }),
   sequence: protectedProcedure
     .input(
       z.object({
@@ -28,15 +16,14 @@ export const disciplineRouter = {
       }),
     )
     .query(async ({ input }) => {
-      const students = await classroomService.getStudents(input.classroomId);
-      const studentIds = students.map((s) => s.id);
-      return aggregateTermMetrics({
-        studentIds,
+      const result = await getDisciplineForTerms({
         classroomId: input.classroomId,
-        termId: input.termId,
+        termIds: [input.termId],
       });
+      return result;
     }),
 
+  // Trimestre = two terms
   trimestre: protectedProcedure
     .input(
       z.object({
@@ -49,13 +36,12 @@ export const disciplineRouter = {
         input.trimestreId,
         ctx.schoolYearId,
       );
-      const students = await classroomService.getStudents(input.classroomId);
-      const studentIds = students.map((s) => s.id);
 
-      return accumulateDisciplineForTerms({
-        studentIds,
+      const result = await getDisciplineForTerms({
         classroomId: input.classroomId,
         termIds: [seq1, seq2],
       });
+
+      return result;
     }),
 } satisfies TRPCRouterRecord;

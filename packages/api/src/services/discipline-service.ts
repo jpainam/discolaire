@@ -3,6 +3,7 @@ import { getPeriodicAttendance } from "../services/attendance-service";
 import { classroomService } from "./classroom-service";
 
 export type DisciplineMetrics = {
+  studentId: string;
   absence: number;
   justifiedAbsence: number;
   lateness: number;
@@ -13,6 +14,7 @@ export type DisciplineMetrics = {
 
 const emptyMetrics = (): DisciplineMetrics => ({
   absence: 0,
+  studentId: "",
   justifiedAbsence: 0,
   lateness: 0,
   justifiedLateness: 0,
@@ -180,6 +182,7 @@ const add = (
   a?: Partial<DisciplineMetrics>,
   b?: Partial<DisciplineMetrics>,
 ): DisciplineMetrics => ({
+  studentId: a?.studentId ?? b?.studentId ?? "",
   absence: (a?.absence ?? 0) + (b?.absence ?? 0),
   justifiedAbsence: (a?.justifiedAbsence ?? 0) + (b?.justifiedAbsence ?? 0),
   lateness: (a?.lateness ?? 0) + (b?.lateness ?? 0),
@@ -213,10 +216,7 @@ export async function aggregateAllTermsForYear(
   );
 
   // Sum across all terms, and keep studentId in the value (to match your original shape)
-  const disciplines = new Map<
-    string,
-    DisciplineMetrics & { studentId: string }
-  >();
+  const disciplines = new Map<string, DisciplineMetrics>();
 
   for (const id of studentIds) {
     const total = perTermMaps.reduce<DisciplineMetrics>(

@@ -84,12 +84,12 @@ export const periodicAttendanceRouter = {
         )
         .map((at) => {
           const d = {
-            absence: at.absence ?? 0,
-            justifiedAbsence: at.justifiedAbsence ?? 0,
+            absence: at.absence,
+            justifiedAbsence: at.justifiedAbsence,
             lateness: at.lateness,
             justifiedLateness: at.justifiedLateness,
-            chatter: at.chatter ?? 0,
-            consigne: at.consigne ?? 0,
+            chatter: at.chatter,
+            consigne: at.consigne,
           } as Prisma.JsonObject;
           return {
             studentId: at.studentId,
