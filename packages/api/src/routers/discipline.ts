@@ -8,6 +8,26 @@ import {
 import { protectedProcedure } from "../trpc";
 
 export const disciplineRouter = {
+  annual: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const terms = await ctx.db.term.findMany({
+        where: {
+          schoolYearId: ctx.schoolYearId,
+        },
+      });
+      const termIds = terms.map((t) => t.id);
+      const result = await getDisciplineForTerms({
+        classroomId: input.classroomId,
+        termIds: termIds,
+      });
+      return result;
+    }),
+
   sequence: protectedProcedure
     .input(
       z.object({

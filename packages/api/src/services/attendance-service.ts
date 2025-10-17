@@ -15,6 +15,7 @@ export function attendanceToData(data: Prisma.JsonValue) {
     consigne: Number(d.consigne ?? 0),
     late: Number(d.late ?? 0),
     justifiedLate: Number(d.justifiedLate ?? 0),
+    exclusion: Number(d.exclusion ?? 0),
   };
 }
 function addTotals(
@@ -25,6 +26,7 @@ function addTotals(
     late: number;
     justifiedLate: number;
     consigne: number;
+    exclusion: number;
   },
   b: {
     absence: number;
@@ -33,6 +35,7 @@ function addTotals(
     late: number;
     justifiedLate: number;
     consigne: number;
+    exclusion: number;
   },
 ) {
   return {
@@ -42,6 +45,7 @@ function addTotals(
     late: a.late + b.late,
     justifiedLate: a.justifiedLate + b.justifiedLate,
     consigne: a.consigne + b.consigne,
+    exclusion: a.exclusion + b.exclusion,
   };
 }
 
@@ -62,6 +66,7 @@ export async function getDisciplineForTerms(opts: {
       late: number;
       justifiedLate: number;
       consigne: number;
+      exclusion: number;
     }
   >();
   for (const id of studentIds)
@@ -72,6 +77,7 @@ export async function getDisciplineForTerms(opts: {
       late: 0,
       justifiedLate: 0,
       consigne: 0,
+      exclusion: 0,
     });
 
   const rows = await db.attendance.findMany({
@@ -93,6 +99,7 @@ export async function getDisciplineForTerms(opts: {
       late: 0,
       justifiedLate: 0,
       consigne: 0,
+      exclusion: 0,
     };
     totalsByStudent.set(row.studentId, addTotals(prev, parsed));
   }

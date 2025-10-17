@@ -1,4 +1,3 @@
-import { absenceRouter } from "./routers/absence";
 import { accountingJournal } from "./routers/accountingJournal";
 import { announcementRouter } from "./routers/announcement";
 import { appreciationRouter } from "./routers/appreciation";
@@ -7,13 +6,11 @@ import { attendanceRouter } from "./routers/attendance";
 import { bibleRouter } from "./routers/bible";
 import { bookRouter } from "./routers/book";
 import { calendarEventRouter } from "./routers/calendarEvent";
-import { chatterRouter } from "./routers/chatter";
 import { classroomRouter } from "./routers/classroom";
 import { classroomCycleRouter } from "./routers/classroomCycle";
 import { classroomLevelRouter } from "./routers/classroomLevel";
 import { classroomSectionRouter } from "./routers/classroomSection";
 import { communicationChannelRouter } from "./routers/communicationChannel";
-import { consigneRouter } from "./routers/consigne";
 import { contactRouter } from "./routers/contact";
 import { contactRelationshipRouter } from "./routers/contactRelationship";
 import { convocationRouter } from "./routers/convocation";
@@ -24,7 +21,6 @@ import { disciplineRouter } from "./routers/discipline";
 import { documentRouter } from "./routers/document";
 import { emailRouter } from "./routers/email";
 import { enrollmentRouter } from "./routers/enrollment";
-import { exclusionRouter } from "./routers/exclusion";
 import { feeRouter } from "./routers/fee";
 import { feedbackRouter } from "./routers/feedback";
 import { formerShoolRouter } from "./routers/formerSchool";
@@ -36,13 +32,11 @@ import { healthRouter } from "./routers/health";
 import { importStudentRouter } from "./routers/importStudent";
 import { inventoryRouter } from "./routers/inventory";
 import { inventoryUsageRouter } from "./routers/inventoryUsage";
-import { latenessRouter } from "./routers/lateness";
 import { libraryRouter } from "./routers/library";
 import { logActivityRouter } from "./routers/logActivity";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
-import { periodicAttendanceRouter } from "./routers/periodicAttendance";
 import { permissionRouter } from "./routers/permission";
 import { photoRouter } from "./routers/photo";
 import { policyRouter } from "./routers/policy";
@@ -97,7 +91,6 @@ export const appRouter = createTRPCRouter({
   classroomSection: classroomSectionRouter,
   user: userRouter,
   bible: bibleRouter,
-  periodicAttendance: periodicAttendanceRouter,
   accountingJournal: accountingJournal,
   subscription: subscriptionRouter,
   convocation: convocationRouter,
@@ -110,7 +103,6 @@ export const appRouter = createTRPCRouter({
   school: schoolRouter,
   email: emailRouter,
   inventoryUsage: inventoryUsageRouter,
-  consigne: consigneRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,
   communicationChannel: communicationChannelRouter,
@@ -129,7 +121,6 @@ export const appRouter = createTRPCRouter({
   health: healthRouter,
   role: roleRouter,
   shortcut: shortcutRouter,
-  exclusion: exclusionRouter,
   enrollment: enrollmentRouter,
   appreciation: appreciationRouter,
   reportCard: reportCardRouter,
@@ -147,9 +138,6 @@ export const appRouter = createTRPCRouter({
   reporting: reportingRouter,
   teachingSession: teachingSessionRouter,
   subjectTimetable: subjectTimetableRouter,
-  lateness: latenessRouter,
-  absence: absenceRouter,
-  chatter: chatterRouter,
   importStudent: importStudentRouter,
   discipline: disciplineRouter,
   timetableCategory: timetableCategoryRouter,

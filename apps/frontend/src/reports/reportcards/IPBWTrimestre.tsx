@@ -425,8 +425,8 @@ export function IPBWTrimestre({
             discipline={{
               absence: disc?.absence ?? 0,
               justifiedAbsence: disc?.justifiedAbsence ?? 0,
-              lateness: disc?.lateness ?? 0,
-              justifiedLateness: disc?.justifiedLateness ?? 0,
+              lateness: disc?.late ?? 0,
+              justifiedLateness: disc?.justifiedLate ?? 0,
               consigne: disc?.consigne ?? 0,
             }}
           />
