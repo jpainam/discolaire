@@ -1,4 +1,3 @@
-import { CreateEditChatter } from "~/components/classrooms/attendances/chatter/CreateEditChatter";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
@@ -13,11 +12,11 @@ export default async function Page(props: {
 
   return (
     <div className="flex flex-col gap-2 p-4">
-      <CreateEditChatter
+      {/* <CreateEditChatter
         termId={termId}
         classroomId={classroomId}
         students={students}
-      />
+      /> */}
     </div>
   );
 }

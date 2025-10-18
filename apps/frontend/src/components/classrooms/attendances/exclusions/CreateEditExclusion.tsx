@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { SaveIcon, ShieldAlertIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -74,22 +74,7 @@ export function CreateEditExclusion({
   const queryClient = useQueryClient();
 
   const router = useRouter();
-  const createExclusion = useMutation(
-    trpc.exclusion.createClassroom.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.exclusion.byClassroom.pathFilter(),
-        );
-        toast.success(t("added_successfully"), { id: 0 });
-        router.push(
-          `/classrooms/${classroomId}/attendances?type=exclusion&term=${termId}`,
-        );
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
       toast.error(t("select_term"));
@@ -120,10 +105,10 @@ export function CreateEditExclusion({
           };
         })
         .filter((student) => student.from && student.to);
-      createExclusion.mutate({
-        termId: termId,
-        students: exclusions,
-      });
+      // createExclusion.mutate({
+      //   termId: termId,
+      //   students: exclusions,
+      // });
     }
   };
   return (
@@ -151,7 +136,7 @@ export function CreateEditExclusion({
                   {t("cancel")}
                 </Button>
                 <Button
-                  isLoading={createExclusion.isPending}
+                  //isLoading={createExclusion.isPending}
                   size={"sm"}
                   variant={"default"}
                 >

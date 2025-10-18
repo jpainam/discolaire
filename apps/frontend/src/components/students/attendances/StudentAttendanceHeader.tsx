@@ -40,10 +40,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { CreateEditChatter } from "./chatter/CreateEditChatter";
-import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
-import { CreateEditExclusion } from "./exclusion/CreateEditExclusion";
-import { CreateEditLateness } from "./lateness/CreateEditLateness";
 
 export function StudentAttendanceHeader() {
   const params = useParams<{ id: string }>();
@@ -147,10 +143,6 @@ export function StudentAttendanceHeader() {
                       toast.warning("Veuillez sélectionner une période.");
                       return;
                     }
-                    openModal({
-                      title: t("lateness"),
-                      view: <CreateEditLateness termId={termId} />,
-                    });
                   }}
                 >
                   <DiameterIcon />
@@ -163,10 +155,10 @@ export function StudentAttendanceHeader() {
                       toast.warning("Veuillez sélectionner une période.");
                       return;
                     }
-                    openModal({
-                      title: t("chatter"),
-                      view: <CreateEditChatter termId={termId} />,
-                    });
+                    // openModal({
+                    //   title: t("chatter"),
+                    //   view: <CreateEditChatter termId={termId} />,
+                    // });
                   }}
                 >
                   <NewspaperIcon />
@@ -179,10 +171,10 @@ export function StudentAttendanceHeader() {
                       toast.warning("Veuillez sélectionner une période.");
                       return;
                     }
-                    openModal({
-                      title: t("consigne"),
-                      view: <CreateEditConsigne termId={termId} />,
-                    });
+                    // openModal({
+                    //   title: t("consigne"),
+                    //   view: <CreateEditConsigne termId={termId} />,
+                    // });
                   }}
                 >
                   <ShapesIcon />
@@ -195,11 +187,11 @@ export function StudentAttendanceHeader() {
                       toast.warning("Veuillez sélectionner une période.");
                       return;
                     }
-                    openModal({
-                      title: t("exclusion"),
+                    // openModal({
+                    //   title: t("exclusion"),
 
-                      view: <CreateEditExclusion termId={termId} />,
-                    });
+                    //   view: <CreateEditExclusion termId={termId} />,
+                    // });
                   }}
                 >
                   <ShieldAlertIcon />

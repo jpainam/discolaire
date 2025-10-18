@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { NewspaperIcon, SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -72,22 +72,7 @@ export function CreateEditChatter({
   const queryClient = useQueryClient();
 
   const router = useRouter();
-  const createChatter = useMutation(
-    trpc.chatter.createClassroom.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.chatter.byClassroom.pathFilter(),
-        );
-        toast.success(t("added_successfully"), { id: 0 });
-        router.push(
-          `/classrooms/${classroomId}/attendances?type=chatter&term=${termId}`,
-        );
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
       toast.error(t("select_term"));
@@ -116,10 +101,10 @@ export function CreateEditChatter({
           };
         })
         .filter((student) => student.chatter != "");
-      createChatter.mutate({
-        termId: termId,
-        students: lates,
-      });
+      // createChatter.mutate({
+      //   termId: termId,
+      //   students: lates,
+      // });
     }
   };
   return (
@@ -147,7 +132,7 @@ export function CreateEditChatter({
                   {t("cancel")}
                 </Button>
                 <Button
-                  isLoading={createChatter.isPending}
+                  //isLoading={createChatter.isPending}
                   size={"sm"}
                   variant={"default"}
                 >
