@@ -65,22 +65,7 @@ export function CreateEditConsigne({
   const queryClient = useQueryClient();
 
   const router = useRouter();
-  const createAbsence = useMutation(
-    trpc.absence.createClassroom.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.absence.byClassroom.pathFilter(),
-        );
-        toast.success(t("added_successfully"), { id: 0 });
-        router.push(
-          `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
-        );
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+  
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
       toast.error(t("select_term"));
@@ -113,10 +98,7 @@ export function CreateEditConsigne({
           };
         })
         .filter((student) => student.absence > 0);
-      createAbsence.mutate({
-        termId: termId,
-        students: absences,
-      });
+      
     }
   };
   return (
@@ -149,7 +131,7 @@ export function CreateEditConsigne({
               {t("cancel")}
             </Button>
             <Button
-              isLoading={createAbsence.isPending}
+              //isLoading={createAbsence.isPending}
               size={"sm"}
               variant={"default"}
             >

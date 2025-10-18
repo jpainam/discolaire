@@ -72,22 +72,7 @@ export function CreateEditLateness({
   const queryClient = useQueryClient();
 
   const router = useRouter();
-  const createLateness = useMutation(
-    trpc.lateness.createClassroom.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.absence.byClassroom.pathFilter(),
-        );
-        toast.success(t("added_successfully"), { id: 0 });
-        router.push(
-          `/classrooms/${classroomId}/attendances?type=lateness&term=${termId}`,
-        );
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+  
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
       toast.error(t("select_term"));
@@ -118,10 +103,7 @@ export function CreateEditLateness({
           };
         })
         .filter((student) => student.late != "");
-      createLateness.mutate({
-        termId: termId,
-        students: lates,
-      });
+     
     }
   };
   return (
@@ -149,7 +131,7 @@ export function CreateEditLateness({
                   {t("cancel")}
                 </Button>
                 <Button
-                  isLoading={createLateness.isPending}
+                  //isLoading={createLateness.isPending}
                   size={"sm"}
                   variant={"default"}
                 >

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Paperclip } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import { Button } from "@repo/ui/components/button";
@@ -58,22 +57,6 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const createPreventedAbsence = useMutation(
-    trpc.absence.createPreventAbsence.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.absence.byStudent.pathFilter(),
-        );
-        setIsLoading(false);
-        toast.success(t("created_successfully"), { id: 0 });
-        closeModal();
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
-
   const { t } = useLocale();
   const onSubmit = async (data: z.infer<typeof preventSchema>) => {
     setIsLoading(true);
@@ -92,7 +75,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
       from: new Date(data.from),
       to: new Date(data.to),
     };
-    createPreventedAbsence.mutate(values);
+    //createPreventedAbsence.mutate(values);
   };
   return (
     <Form {...form}>
@@ -195,11 +178,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
           >
             {t("cancel")}
           </Button>
-          <Button
-            size={"sm"}
-            isLoading={isLoading || createPreventedAbsence.isPending}
-            type="submit"
-          >
+          <Button size={"sm"} isLoading={isLoading} type="submit">
             {t("submit")}
           </Button>
         </div>

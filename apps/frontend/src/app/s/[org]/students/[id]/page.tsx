@@ -4,7 +4,6 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import { StudentAttendanceCount } from "~/components/students/attendances/StudentAttendanceCount";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import { StudentGradeCount } from "~/components/students/grades/StudentGradeCount";
 import StudentDetails from "~/components/students/profile/StudentDetails";
@@ -18,10 +17,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.get.queryOptions(params.id),
     trpc.student.contacts.queryOptions(params.id),
     trpc.student.grades.queryOptions({ id: params.id }),
-    trpc.absence.byStudent.queryOptions({ studentId: params.id }),
-    trpc.lateness.byStudent.queryOptions({ studentId: params.id }),
-    trpc.chatter.byStudent.queryOptions({ studentId: params.id }),
-    trpc.consigne.byStudent.queryOptions({ studentId: params.id }),
+    trpc.attendance.student.queryOptions({ studentId: params.id }),
   ]);
   const terms = await caller.term.all();
 
@@ -65,7 +61,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
             }
           >
-            <StudentAttendanceCount terms={terms} studentId={params.id} />
+            {/* <StudentAttendanceCount terms={terms} studentId={params.id} /> */}
           </Suspense>
         </ErrorBoundary>
       </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { BaselineIcon, SaveIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -76,22 +76,7 @@ export function CreateEditAbsence({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const createAbsence = useMutation(
-    trpc.absence.createClassroom.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.absence.byClassroom.pathFilter(),
-        );
-        toast.success(t("added_successfully"), { id: 0 });
-        router.push(
-          `${routes.classrooms.attendances.index(classroomId)}?type=absence&term=${termId}`,
-        );
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+
   const onSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (!termId) {
       toast.error(t("select_term"));
@@ -124,10 +109,6 @@ export function CreateEditAbsence({
           };
         })
         .filter((student) => student.absence > 0);
-      createAbsence.mutate({
-        termId: termId,
-        students: absences,
-      });
     }
   };
   return (
@@ -191,7 +172,7 @@ export function CreateEditAbsence({
               {t("cancel")}
             </Button>
             <Button
-              isLoading={createAbsence.isPending}
+              //isLoading={createAbsence.isPending}
               size={"sm"}
               variant={"default"}
             >

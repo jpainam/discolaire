@@ -8,19 +8,7 @@ import { StudentAttendanceTable } from "./StudentAttendanceTable";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   batchPrefetch([
-    trpc.absence.studentSummary.queryOptions({
-      studentId: params.id,
-    }),
-    trpc.lateness.studentSummary.queryOptions({
-      studentId: params.id,
-    }),
-    trpc.consigne.studentSummary.queryOptions({
-      studentId: params.id,
-    }),
-    trpc.exclusion.studentSummary.queryOptions({
-      studentId: params.id,
-    }),
-    trpc.chatter.studentSummary.queryOptions({
+    trpc.attendance.student.queryOptions({
       studentId: params.id,
     }),
   ]);

@@ -12,7 +12,6 @@ import {
   UserX,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useQueryState } from "nuqs";
 
 import {
   Table,
@@ -23,51 +22,10 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import type {
-  AttendanceRecord,
-  AttendanceRecordType,
-} from "~/components/students/attendances/student-attendance-record";
 import { Badge } from "~/components/base-badge";
 import { EmptyState } from "~/components/EmptyState";
 import { useSheet } from "~/hooks/use-sheet";
-import { getLatenessValue } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
-import { StudentAttendanceDetails } from "./StudentAttendanceDetails";
-import { StudentAttendanceTableDropdown } from "./StudentAttendanceTableDropdown";
-
-const formatDetails = (record: AttendanceRecord) => {
-  switch (record.type) {
-    case "absence": {
-      const absenceDetails = record.details as { numberOfAbsences: number };
-      return `${absenceDetails.numberOfAbsences} absence(s)`;
-    }
-    case "lateness": {
-      const latenessDetails = record.details as { duration: number };
-      return `${latenessDetails.duration} minutes late`;
-    }
-    case "consigne": {
-      const consigneDetails = record.details as {
-        task: string;
-        duration: number;
-      };
-      return `${consigneDetails.duration}min - ${consigneDetails.task}`;
-    }
-    case "chatter": {
-      const chatterDetails = record.details as { numberOfChatter: number };
-      return `${chatterDetails.numberOfChatter} chatter(s)`;
-    }
-    case "exclusion": {
-      const exclusionDetails = record.details as {
-        startDate: string;
-        endDate: string;
-        reason: string;
-      };
-      return `${format(new Date(exclusionDetails.startDate), "MMM dd")} - ${format(new Date(exclusionDetails.endDate), "MMM dd")}: ${exclusionDetails.reason}`;
-    }
-    default:
-      return "N/A";
-  }
-};
 
 const getTypeIcon = (type: string) => {
   switch (type) {
@@ -91,86 +49,11 @@ export function StudentAttendanceTable() {
   const { openSheet } = useSheet();
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
-  const [termId] = useQueryState("termId");
-  const { data: absences } = useSuspenseQuery(
-    trpc.absence.studentSummary.queryOptions({
+  const { data: attendances } = useSuspenseQuery(
+    trpc.attendance.student.queryOptions({
       studentId: params.id,
-      termIds: termId ? [termId] : undefined,
     }),
   );
-  const { data: latenesses } = useSuspenseQuery(
-    trpc.lateness.studentSummary.queryOptions({
-      studentId: params.id,
-      termIds: termId ? [termId] : undefined,
-    }),
-  );
-  const { data: consignes } = useSuspenseQuery(
-    trpc.consigne.studentSummary.queryOptions({
-      studentId: params.id,
-      termIds: termId ? [termId] : undefined,
-    }),
-  );
-  const { data: chatters } = useSuspenseQuery(
-    trpc.chatter.studentSummary.queryOptions({
-      studentId: params.id,
-      termIds: termId ? [termId] : undefined,
-    }),
-  );
-  const { data: exclusions } = useSuspenseQuery(
-    trpc.exclusion.studentSummary.queryOptions({
-      studentId: params.id,
-      termIds: termId ? [termId] : undefined,
-    }),
-  );
-
-  const data: AttendanceRecord[] = [
-    ...absences.map((absence) => ({
-      id: absence.id,
-      type: "absence" as AttendanceRecordType,
-      date: absence.date,
-      term: absence.term.name,
-      details: { numberOfAbsences: absence.value },
-      justified: absence.justification?.value ?? 0,
-    })),
-    ...latenesses.map((lateness) => ({
-      id: lateness.id,
-      type: "lateness" as AttendanceRecordType,
-      date: lateness.date,
-      term: lateness.term.name,
-      details: { duration: lateness.duration },
-      justified: lateness.justification
-        ? getLatenessValue(lateness.justification.value)
-        : 0,
-    })),
-    ...consignes.map((consigne) => ({
-      id: consigne.id,
-      type: "consigne" as AttendanceRecordType,
-      date: consigne.date,
-      term: consigne.term.name,
-      details: { task: consigne.task, duration: consigne.duration },
-      justified: 0, // Consignes are not justified
-    })),
-    ...chatters.map((chatter) => ({
-      id: chatter.id,
-      type: "chatter" as AttendanceRecordType,
-      date: chatter.date,
-      term: chatter.term.name,
-      details: { numberOfChatter: chatter.value },
-      justified: 0,
-    })),
-    ...exclusions.map((exclusion) => ({
-      id: exclusion.id,
-      type: "exclusion" as AttendanceRecordType,
-      date: exclusion.startDate,
-      term: exclusion.term.name,
-      details: {
-        startDate: exclusion.startDate,
-        endDate: exclusion.endDate,
-        reason: exclusion.reason,
-      },
-      justified: 0, // Exclusions are not justified
-    })),
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <div className="px-4">
@@ -187,29 +70,28 @@ export function StudentAttendanceTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.length === 0 ? (
+            {attendances.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center">
                   <EmptyState className="my-8" />
                 </TableCell>
               </TableRow>
             ) : (
-              data.map((record) => (
+              attendances.map((record) => (
                 <TableRow key={record.id}>
                   <TableCell>
                     <div
                       className="flex cursor-pointer items-center gap-2 hover:underline"
                       onClick={() => {
-                        openSheet({
-                          title: t("attendance_details"),
-
-                          view: (
-                            <StudentAttendanceDetails
-                              type={record.type}
-                              id={record.id}
-                            />
-                          ),
-                        });
+                        // openSheet({
+                        //   title: t("attendance_details"),
+                        //   view: (
+                        //     <StudentAttendanceDetails
+                        //       type={record.type}
+                        //       id={record.id}
+                        //     />
+                        //   ),
+                        // });
                       }}
                     >
                       {getTypeIcon(record.type)}
@@ -219,24 +101,26 @@ export function StudentAttendanceTable() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {format(new Date(record.date), "MMM dd, yyyy")}
+                    {format(record.createdAt, "MMM dd, yyyy")}
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline">{record.term}</Badge>
+                    <Badge variant="outline">{record.term.name}</Badge>
                   </TableCell>
                   <TableCell className="max-w-xs">
-                    <div className="truncate" title={formatDetails(record)}>
+                    {/* <div className="truncate" title={formatDetails(record)}>
                       {formatDetails(record)}
-                    </div>
+                    </div> */}
                   </TableCell>
                   <TableCell>
                     <Badge
-                      variant={record.justified ? "success" : "destructive"}
+                      variant={
+                        record.justifiedAbsence ? "success" : "destructive"
+                      }
                       appearance={"light"}
                     >
-                      {record.justified ? (
+                      {record.justifiedAbsence ? (
                         <>
-                          {record.justified} {t("justified")}
+                          {record.justifiedAbsence} {t("justified")}
                         </>
                       ) : (
                         t("non_justified")
@@ -245,7 +129,7 @@ export function StudentAttendanceTable() {
                   </TableCell>
 
                   <TableCell className="text-right">
-                    <StudentAttendanceTableDropdown record={record} />
+                    {/* <StudentAttendanceTableDropdown record={record} /> */}
                   </TableCell>
                 </TableRow>
               ))

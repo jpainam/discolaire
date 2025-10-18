@@ -1,4 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
+import { addDays, subDays } from "date-fns";
 import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
@@ -12,17 +13,25 @@ export const attendanceRouter = {
   all: protectedProcedure
     .input(
       z.object({
-        classroomId: z.string(),
+        classroomId: z.string().optional(),
         termId: z.string().optional(),
+        from: z.coerce.date().optional(),
+        to: z.coerce.date().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const students = await classroomService.getStudents(input.classroomId);
-      const studentIds = students.map((st) => st.id);
+      const studentIds: string[] = [];
+      if (input.classroomId) {
+        const students = await classroomService.getStudents(input.classroomId);
+        studentIds.push(...students.map((st) => st.id));
+      }
       const attendances = await ctx.db.attendance.findMany({
         include: {
           student: true,
           term: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
         where: {
           term: {
@@ -33,6 +42,8 @@ export const attendanceRouter = {
             in: studentIds,
           },
           ...(input.termId ? { termId: input.termId } : {}),
+          ...(input.from ? { createdAt: { gte: subDays(input.from, 1) } } : {}),
+          ...(input.to ? { createdAt: { lte: addDays(input.to, 1) } } : {}),
         },
       });
       return attendances.map((a) => {
@@ -143,6 +154,10 @@ export const attendanceRouter = {
     )
     .query(async ({ ctx, input }) => {
       const attendances = await ctx.db.attendance.findMany({
+        include: {
+          term: true,
+          student: true,
+        },
         where: {
           studentId: input.studentId,
           ...(input.termId ? { termId: { in: input.termId } } : {}),

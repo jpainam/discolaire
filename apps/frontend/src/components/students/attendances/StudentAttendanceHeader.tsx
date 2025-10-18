@@ -40,7 +40,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
-import { CreateEditAbsence } from "./absence/CreateEditAbsence";
 import { CreateEditChatter } from "./chatter/CreateEditChatter";
 import { CreateEditConsigne } from "./consigne/CreateEditConsigne";
 import { CreateEditExclusion } from "./exclusion/CreateEditExclusion";
@@ -132,10 +131,10 @@ export function StudentAttendanceHeader() {
                       toast.warning("Veuillez sélectionner une période.");
                       return;
                     }
-                    openModal({
-                      title: t("absence"),
-                      view: <CreateEditAbsence termId={termId} />,
-                    });
+                    // openModal({
+                    //   title: t("absence"),
+                    //   view: <CreateEditAbsence termId={termId} />,
+                    // });
                   }}
                 >
                   <BaselineIcon />

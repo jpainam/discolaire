@@ -66,18 +66,10 @@ export function SchoolLife({ className }: { className?: string }) {
     endOfWeek(new Date(), { weekStartsOn: 0 }),
   );
 
-  const absenceQuery = useQuery(
-    trpc.absence.all.queryOptions({ from: startWeek, to: endWeek }),
+  const attendanceQuery = useQuery(
+    trpc.attendance.all.queryOptions({ from: startWeek, to: endWeek }),
   );
-  const lateQuery = useQuery(
-    trpc.lateness.all.queryOptions({ from: startWeek, to: endWeek }),
-  );
-  const convocationQuery = useQuery(
-    trpc.convocation.all.queryOptions({ from: startWeek, to: endWeek }),
-  );
-  const exclusionQuery = useQuery(
-    trpc.exclusion.all.queryOptions({ from: startWeek, to: endWeek }),
-  );
+
   const visitQuery = useQuery(
     trpc.health.allvisits.queryOptions({ from: startWeek, to: endWeek }),
   );
@@ -87,25 +79,25 @@ export function SchoolLife({ className }: { className?: string }) {
   const locale = useLocale();
 
   const data = useMemo(() => {
-    const absences = absenceQuery.data ?? [];
+    const attendances = attendanceQuery.data ?? [];
     const absenceCounts = groupByWeekday(
-      absences.map((a) => ({ date: a.date, value: a.value })),
+      attendances.map((a) => ({ date: a.createdAt, value: a.absence })),
     );
-    const lates = lateQuery.data ?? [];
+
     const latenessCounts = groupByWeekday(
-      lates.map((l) => ({ date: l.date, value: 1 })),
+      attendances.map((l) => ({ date: l.createdAt, value: 1 })),
     );
     const visits = visitQuery.data ?? [];
     const visitCounts = groupByWeekday(
       visits.map((v) => ({ date: v.date, value: 1 })),
     );
-    const exclusions = exclusionQuery.data ?? [];
+
     const exclusionCounts = groupByWeekday(
-      exclusions.map((e) => ({ date: e.startDate, value: 1 })),
+      attendances.map((e) => ({ date: e.createdAt, value: 1 })),
     );
-    const convocations = convocationQuery.data ?? [];
+
     const convocationCounts = groupByWeekday(
-      convocations.map((c) => ({ date: c.date, value: 1 })),
+      attendances.map((c) => ({ date: c.createdAt, value: 1 })),
     );
 
     return [
@@ -155,14 +147,7 @@ export function SchoolLife({ className }: { className?: string }) {
         fri: convocationCounts[4],
       },
     ];
-  }, [
-    absenceQuery.data,
-    lateQuery.data,
-    visitQuery.data,
-    exclusionQuery.data,
-    convocationQuery.data,
-    t,
-  ]);
+  }, [attendanceQuery.data, visitQuery.data, t]);
 
   // {
   //   category: "Punitions notifiées",
@@ -250,11 +235,7 @@ export function SchoolLife({ className }: { className?: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {absenceQuery.isPending ||
-            lateQuery.isPending ||
-            visitQuery.isPending ||
-            exclusionQuery.isPending ||
-            convocationQuery.isPending ? (
+            {visitQuery.isPending ? (
               <TableRow>
                 <TableCell colSpan={6}>
                   <div className="grid grid-cols-4 gap-4">
