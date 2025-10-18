@@ -95,8 +95,7 @@
     "MESSAGING_SECRET_KEY",
     "MESSAGING_SERVICE_URL",
     "XAI_API_KEY",
-    "BLOB_READ_WRITE_TOKEN",
-    "SENTRY_AUTH_TOKEN"
+    "BLOB_READ_WRITE_TOKEN"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",
@@ -105,7 +104,6 @@
     "VERCEL",
     "VERCEL_ENV",
     "VERCEL_URL",
-    "npm_lifecycle_event",
-    "SENTRY_AUTH_TOKEN"
+    "npm_lifecycle_event"
   ]
 }
