@@ -4,13 +4,13 @@ import { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import z from "zod";
 
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -35,9 +35,10 @@ const attendanceItemSchema = z.object({
   absence: toNonNegInt.default(0),
   justifiedAbsence: toNonNegInt.default(0),
   consigne: toNonNegInt.default(0),
-  lateness: toNonNegInt.default(0),
-  justifiedLateness: toNonNegInt.default(0),
+  late: toNonNegInt.default(0),
+  justifiedLate: toNonNegInt.default(0),
   chatter: toNonNegInt.default(0),
+  exclusion: toNonNegInt.default(0),
 });
 
 const formSchema = z.object({
@@ -46,7 +47,7 @@ const formSchema = z.object({
 
 //type FormValues = z.infer<typeof formSchema>;
 
-export function CreatePeriodicAttendance({
+export function CreateClassroomAttendance({
   classroomId,
   termId,
 }: {
@@ -62,7 +63,7 @@ export function CreatePeriodicAttendance({
 
   const t = useTranslations();
   const createPeriodic = useMutation(
-    trpc.periodicAttendance.create.mutationOptions({
+    trpc.attendance.create.mutationOptions({
       onSuccess: () => {
         toast.success(t("created_successfully"), { id: 0 });
         router.push(`/classrooms/${classroomId}/attendances`);
@@ -72,14 +73,9 @@ export function CreatePeriodicAttendance({
       },
     }),
   );
+
   const attendanceQuery = useQuery(
-    trpc.discipline.sequence.queryOptions({
-      classroomId,
-      termId,
-    }),
-  );
-  const periodicAttendanceQuery = useQuery(
-    trpc.periodicAttendance.all.queryOptions({
+    trpc.attendance.all.queryOptions({
       classroomId,
       termId,
     }),
@@ -92,9 +88,10 @@ export function CreatePeriodicAttendance({
           absence: "",
           justifiedAbsence: "",
           consigne: "",
-          lateness: "",
-          justifiedLateness: "",
+          late: "",
+          justifiedLate: "",
           chatter: "",
+          exclusion: "",
         },
       ],
     },
@@ -120,9 +117,10 @@ export function CreatePeriodicAttendance({
             a.absence ||
             a.justifiedAbsence ||
             a.consigne ||
-            a.lateness ||
-            a.justifiedLateness ||
-            a.chatter,
+            a.late ||
+            a.justifiedLate ||
+            a.chatter ||
+            a.exclusion,
         )
         .map((a) => ({
           studentId: a.studentId,
@@ -130,8 +128,9 @@ export function CreatePeriodicAttendance({
           justifiedAbsence: a.justifiedAbsence,
           chatter: a.chatter,
           consigne: a.consigne,
-          lateness: a.lateness,
-          justifiedLateness: a.justifiedLateness,
+          lateness: a.late,
+          justifiedLateness: a.justifiedLate,
+          exclusion: a.exclusion,
         }));
       createPeriodic.mutate({
         termId: termId,
@@ -152,67 +151,49 @@ export function CreatePeriodicAttendance({
           justifiedAbsence: "",
           chatter: "",
           consigne: "",
-          lateness: "",
-          justifiedLateness: "",
+          late: "",
+          justifiedLate: "",
+          exclusion: "",
         };
       }),
     );
   }, [form, studentQuery.data]);
 
   const students = studentQuery.data ?? [];
-  const periodicMap = useMemo(() => {
-    const m = new Map<
-      string,
-      {
-        absence: number;
-        justifiedAbsence: number;
-        lateness: number;
-        justifiedLateness: number;
-        consigne: number;
-        chatter: number;
-      }
-    >();
-    (periodicAttendanceQuery.data ?? []).forEach((at) => {
-      m.set(at.studentId, {
-        absence: at.absence,
-        justifiedAbsence: at.justifiedAbsence,
-        lateness: at.lateness,
-        justifiedLateness: at.justifiedLateness,
-        consigne: at.consigne,
-        chatter: at.chatter,
-      });
-    });
-    return m;
-  }, [periodicAttendanceQuery.data]);
+
   const attendanceMap = useMemo(() => {
     const m = new Map<
       string,
       {
         absence: number;
         justifiedAbsence: number;
-        lateness: number;
-        justifiedLateness: number;
+        late: number;
+        justifiedLate: number;
         consigne: number;
         chatter: number;
+        exclusion: number;
       }
     >();
     (attendanceQuery.data ?? []).forEach((at) => {
       m.set(at.studentId, {
         absence: at.absence,
         justifiedAbsence: at.justifiedAbsence,
-        lateness: at.lateness,
-        justifiedLateness: at.justifiedLateness,
+        late: at.late,
+        justifiedLate: at.justifiedLate,
         consigne: at.consigne,
         chatter: at.chatter,
+        exclusion: at.exclusion,
       });
     });
     return m;
   }, [attendanceQuery.data]);
 
-  if (periodicAttendanceQuery.isPending || studentQuery.isPending) {
+  if (attendanceQuery.isPending || studentQuery.isPending) {
     return (
-      <div className="h-screen w-full items-center justify-center">
-        <Loader className="h-8 w-8 animate-spin" />
+      <div className="grid grid-cols-4 gap-4 p-4">
+        {Array.from({ length: 32 }).map((_, index) => {
+          return <Skeleton key={index} className="h-8 w-full" />;
+        })}
       </div>
     );
   }
@@ -237,12 +218,12 @@ export function CreatePeriodicAttendance({
               <TableHead>Ret.Just</TableHead>
               <TableHead>Bavardages</TableHead>
               <TableHead>Consignes</TableHead>
+              <TableHead>Excusions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {students.map((student, index) => {
-              const disc = attendanceMap.get(student.id);
-              const periodic = periodicMap.get(student.id);
+              const at = attendanceMap.get(student.id);
               return (
                 <TableRow key={student.id}>
                   <TableCell className="font-medium">
@@ -252,15 +233,7 @@ export function CreatePeriodicAttendance({
                     >
                       {getFullName(student)}
                     </Link>
-                    {disc && (
-                      <div className="flex flex-row items-center gap-2 px-2">
-                        {disc.absence != 0 && (
-                          <Badge variant={"secondary"}>
-                            Absence: {disc.absence}
-                          </Badge>
-                        )}
-                      </div>
-                    )}
+                    {at && <ExistingAttendanceSummary at={at} />}
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -277,9 +250,6 @@ export function CreatePeriodicAttendance({
                   </TableCell>
                   <TableCell>
                     <Input
-                      defaultValue={
-                        periodic?.absence != 0 ? periodic?.absence : undefined
-                      }
                       type="number"
                       onChange={(e) => {
                         form.setFieldValue(
@@ -292,11 +262,6 @@ export function CreatePeriodicAttendance({
                   <TableCell>
                     <Input
                       type="number"
-                      defaultValue={
-                        periodic?.justifiedAbsence != 0
-                          ? periodic?.justifiedAbsence
-                          : undefined
-                      }
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].justifiedAbsence`,
@@ -307,13 +272,10 @@ export function CreatePeriodicAttendance({
                   </TableCell>
                   <TableCell>
                     <Input
-                      defaultValue={
-                        periodic?.lateness != 0 ? periodic?.lateness : undefined
-                      }
                       type="number"
                       onChange={(e) => {
                         form.setFieldValue(
-                          `attendances[${index}].lateness`,
+                          `attendances[${index}].late`,
                           e.target.value,
                         );
                       }}
@@ -321,15 +283,10 @@ export function CreatePeriodicAttendance({
                   </TableCell>
                   <TableCell>
                     <Input
-                      defaultValue={
-                        periodic?.justifiedLateness != 0
-                          ? periodic?.justifiedLateness
-                          : undefined
-                      }
                       type="number"
                       onChange={(e) => {
                         form.setFieldValue(
-                          `attendances[${index}].justifiedLateness`,
+                          `attendances[${index}].justifiedLate`,
                           e.target.value,
                         );
                       }}
@@ -337,9 +294,6 @@ export function CreatePeriodicAttendance({
                   </TableCell>
                   <TableCell>
                     <Input
-                      defaultValue={
-                        periodic?.chatter != 0 ? periodic?.chatter : undefined
-                      }
                       type="number"
                       onChange={(e) => {
                         form.setFieldValue(
@@ -351,13 +305,21 @@ export function CreatePeriodicAttendance({
                   </TableCell>
                   <TableCell>
                     <Input
-                      defaultValue={
-                        periodic?.consigne != 0 ? periodic?.consigne : undefined
-                      }
                       type="number"
                       onChange={(e) => {
                         form.setFieldValue(
                           `attendances[${index}].consigne`,
+                          e.target.value,
+                        );
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      onChange={(e) => {
+                        form.setFieldValue(
+                          `attendances[${index}].exclusion`,
                           e.target.value,
                         );
                       }}
@@ -378,5 +340,50 @@ export function CreatePeriodicAttendance({
         </Button>
       </div>
     </form>
+  );
+}
+
+function ExistingAttendanceSummary({
+  at,
+}: {
+  at: {
+    absence: number;
+    justifiedAbsence: number;
+    late: number;
+    justifiedLate: number;
+    consigne: number;
+    chatter: number;
+    exclusion: number;
+  };
+}) {
+  return (
+    <div className="flex flex-row items-center gap-2 px-2">
+      {at.absence != 0 && (
+        <Badge size={"xs"} appearance={"outline"} variant={"destructive"}>
+          Absence: {at.absence}{" "}
+          {at.justifiedAbsence && <> / {at.justifiedAbsence}</>}
+        </Badge>
+      )}
+      {at.late != 0 && (
+        <Badge size={"xs"} appearance={"outline"} variant={"warning"}>
+          Retards: {at.late} {at.justifiedLate && <> / {at.justifiedLate}</>}
+        </Badge>
+      )}
+      {at.chatter != 0 && (
+        <Badge size={"xs"} appearance={"outline"} variant={"primary"}>
+          Bavardages: {at.chatter}
+        </Badge>
+      )}
+      {at.consigne != 0 && (
+        <Badge size={"xs"} appearance={"outline"} variant={"info"}>
+          Consignes: {at.consigne}
+        </Badge>
+      )}
+      {at.exclusion != 0 && (
+        <Badge size={"xs"} appearance={"outline"} variant={"destructive"}>
+          Exclusion: {at.exclusion}
+        </Badge>
+      )}
+    </div>
   );
 }

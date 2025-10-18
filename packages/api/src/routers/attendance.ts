@@ -9,27 +9,40 @@ import { classroomService } from "../services/classroom-service";
 import { protectedProcedure } from "../trpc";
 
 export const attendanceRouter = {
-  all: protectedProcedure.query(async ({ ctx }) => {
-    const attendances = await ctx.db.attendance.findMany({
-      include: {
-        student: true,
-        term: true,
-      },
-      where: {
-        term: {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
+  all: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string(),
+        termId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const students = await classroomService.getStudents(input.classroomId);
+      const studentIds = students.map((st) => st.id);
+      const attendances = await ctx.db.attendance.findMany({
+        include: {
+          student: true,
+          term: true,
         },
-      },
-    });
-    return attendances.map((a) => {
-      const d = attendanceToData(a.data);
-      return {
-        ...a,
-        ...d,
-      };
-    });
-  }),
+        where: {
+          term: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+          studentId: {
+            in: studentIds,
+          },
+          ...(input.termId ? { termId: input.termId } : {}),
+        },
+      });
+      return attendances.map((a) => {
+        const d = attendanceToData(a.data);
+        return {
+          ...a,
+          ...d,
+        };
+      });
+    }),
   get: protectedProcedure
     .input(z.coerce.number())
     .query(async ({ ctx, input }) => {
