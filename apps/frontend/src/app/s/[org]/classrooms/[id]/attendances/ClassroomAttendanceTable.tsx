@@ -306,6 +306,7 @@ const AttendanceRowView = memo(function AttendanceRowView({
                 description: t("delete_confirmation"),
               });
               if (isConfirmed) {
+                toast.loading(t("Processing"), { id: 0 });
                 onDelete(record.id);
               }
             }}

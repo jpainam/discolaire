@@ -25,13 +25,13 @@ const toNonNegInt = z.preprocess(
   z.coerce.number().int().nonnegative(),
 );
 const formSchema = z.object({
-  absence: toNonNegInt.default(0),
-  justifiedAbsence: toNonNegInt.default(0),
-  consigne: toNonNegInt.default(0),
-  late: toNonNegInt.default(0),
-  justifiedLate: toNonNegInt.default(0),
-  chatter: toNonNegInt.default(0),
-  exclusion: toNonNegInt.default(0),
+  absence: toNonNegInt,
+  justifiedAbsence: toNonNegInt,
+  consigne: toNonNegInt,
+  late: toNonNegInt,
+  justifiedLate: toNonNegInt,
+  chatter: toNonNegInt,
+  exclusion: toNonNegInt,
 });
 export function ClassroomEditAttendance({
   attendance,
@@ -117,6 +117,7 @@ export function ClassroomEditAttendance({
                 <Input
                   id={field.name}
                   type="number"
+                  min={0}
                   name={field.name}
                   value={Number(field.state.value)}
                   onChange={(e) => field.handleChange(Number(e.target.value))}
@@ -140,6 +141,7 @@ export function ClassroomEditAttendance({
                 <Input
                   id={field.name}
                   type="number"
+                  min={0}
                   name={field.name}
                   value={Number(field.state.value)}
                   onChange={(e) => field.handleChange(Number(e.target.value))}
@@ -167,6 +169,7 @@ export function ClassroomEditAttendance({
                 <Input
                   id={field.name}
                   type="number"
+                  min={0}
                   name={field.name}
                   value={Number(field.state.value)}
                   onChange={(e) => field.handleChange(Number(e.target.value))}
@@ -193,6 +196,7 @@ export function ClassroomEditAttendance({
                   id={field.name}
                   type="number"
                   name={field.name}
+                  min={0}
                   value={Number(field.state.value)}
                   onChange={(e) => field.handleChange(Number(e.target.value))}
                   aria-invalid={isInvalid}
@@ -217,6 +221,7 @@ export function ClassroomEditAttendance({
                 <Input
                   id={field.name}
                   type="number"
+                  min={0}
                   name={field.name}
                   value={Number(field.state.value)}
                   onChange={(e) => field.handleChange(Number(e.target.value))}
@@ -240,6 +245,7 @@ export function ClassroomEditAttendance({
                 <Input
                   id={field.name}
                   type="number"
+                  min={0}
                   name={field.name}
                   value={Number(field.state.value)}
                   onChange={(e) => field.handleChange(Number(e.target.value))}
@@ -265,6 +271,7 @@ export function ClassroomEditAttendance({
                 <Input
                   id={field.name}
                   type="number"
+                  min={0}
                   name={field.name}
                   value={Number(field.state.value)}
                   onChange={(e) => field.handleChange(Number(e.target.value))}
