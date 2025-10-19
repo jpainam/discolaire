@@ -204,8 +204,8 @@ export default async function Page(props: PageProps) {
         <ReportCardMention average={globalRank.average} id={params.id} />
         <ReportCardDiscipline
           absence={disc?.absence ?? 0}
-          lateness={disc?.lateness ?? 0}
-          justifiedLateness={disc?.justifiedLateness ?? 0}
+          lateness={disc?.late ?? 0}
+          justifiedLateness={disc?.justifiedLate ?? 0}
           consigne={disc?.consigne ?? 0}
           justifiedAbsence={disc?.justifiedAbsence ?? 0}
           id={params.id}

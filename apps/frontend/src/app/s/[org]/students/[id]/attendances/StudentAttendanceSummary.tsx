@@ -2,7 +2,7 @@
 
 import type { VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -95,39 +95,13 @@ export function StudentAttendanceSummary() {
     }[]
   >(defaultMetrics);
   const attendanceQuery = useQuery(
-    trpc.attendance.studentSummary.queryOptions({
+    trpc.attendance.student.queryOptions({
       studentId: params.id,
-      termId: searchParams.get("termId") ?? undefined,
     }),
   );
   const [status, setStatus] = useQueryState("status", {
     defaultValue: "all",
   });
-
-  useEffect(() => {
-    const v = attendanceQuery.data ?? [];
-    const d = v.map((item) => {
-      return {
-        title: item.type,
-        value: item.value.toString(),
-        variant:
-          item.type === "absence"
-            ? "destructive"
-            : item.type === "lateness"
-              ? "warning"
-              : item.type === "consigne"
-                ? "success"
-                : item.type === "chatter"
-                  ? "primary"
-                  : "destructive",
-        status: item.type.toLowerCase(),
-        justified: item.justified,
-        icon: attendanceToIcon[item.type] ?? UserX,
-      };
-    });
-
-    setMetrics(d);
-  }, [attendanceQuery.data]);
 
   const t = useTranslations();
   return (

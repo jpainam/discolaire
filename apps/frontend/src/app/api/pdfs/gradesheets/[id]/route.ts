@@ -20,13 +20,13 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } },
+  { params }: { params: Promise<{ id: number }> },
 ) {
   const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
-  const { id } = params;
+  const { id } = await params;
   if (!id) {
     return NextResponse.json({ message: "No ID provided", status: 400 });
   }
