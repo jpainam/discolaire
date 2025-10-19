@@ -55,7 +55,7 @@ export function ClassroomAttendanceHeader() {
           </Button>
         )}
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button size={"icon-sm"}>
               <MoreVertical />
             </Button>

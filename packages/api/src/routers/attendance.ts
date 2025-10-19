@@ -90,7 +90,7 @@ export const attendanceRouter = {
             studentId: z.string().min(1),
             absence: z.coerce.number(),
             justifiedAbsence: z.coerce.number(),
-            lateness: z.coerce.number(),
+            late: z.coerce.number(),
             justifiedLate: z.coerce.number(),
             consigne: z.coerce.number(),
             chatter: z.coerce.number(),
@@ -118,7 +118,7 @@ export const attendanceRouter = {
             a.absence ||
             a.chatter ||
             a.consigne ||
-            a.lateness ||
+            a.late ||
             a.justifiedAbsence ||
             a.justifiedLate,
         )
@@ -126,7 +126,7 @@ export const attendanceRouter = {
           const d = {
             absence: at.absence,
             justifiedAbsence: at.justifiedAbsence,
-            lateness: at.lateness,
+            late: at.late,
             justifiedLate: at.justifiedLate,
             chatter: at.chatter,
             consigne: at.consigne,
