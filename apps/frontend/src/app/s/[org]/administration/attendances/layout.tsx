@@ -1,6 +1,4 @@
 import type { PropsWithChildren } from "react";
-import { Suspense } from "react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { getTranslations } from "next-intl/server";
 
 import {
@@ -9,9 +7,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/ui/components/tabs";
-
-import { ErrorFallback } from "~/components/error-fallback";
-import { PeriodicAttendance } from "./periodic/PeriodicAttendance";
 
 export default async function Layout(props: PropsWithChildren) {
   const t = await getTranslations();
@@ -52,13 +47,7 @@ export default async function Layout(props: PropsWithChildren) {
         </TabsList>
       </TabsList>
       <TabsContent value="tab-1">{props.children}</TabsContent>
-      <TabsContent value="tab-2">
-        <Suspense fallback={<div>Loading...</div>}>
-          <ErrorBoundary errorComponent={ErrorFallback}>
-            <PeriodicAttendance />
-          </ErrorBoundary>
-        </Suspense>
-      </TabsContent>
+      <TabsContent value="tab-2"></TabsContent>
       <TabsContent value="tab-3">
         <p className="text-muted-foreground p-4 text-center text-xs">
           Content for Tab 3

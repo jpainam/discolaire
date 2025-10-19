@@ -15,6 +15,7 @@ import type { PrismaClient } from "@repo/db";
 
 import { db } from "./db";
 import { PubSubLogger } from "./pubsub-logger";
+import { logQueue } from "./queue";
 import { getPermissions } from "./services/user-service";
 import { getCookieValue } from "./utils";
 
@@ -159,6 +160,7 @@ export const protectedProcedure = t.procedure
         pubsub: new PubSubLogger(
           ctx.session.user.id,
           ctx.session.user.schoolId,
+          logQueue,
         ),
       },
     });

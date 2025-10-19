@@ -7,10 +7,7 @@
 //   };
 //   return jwt.sign(payload, env.AUTH_SECRET);
 // };
-import { Queue } from "bullmq";
 import { decode } from "entities";
-
-import connection from "@repo/kv";
 
 type Person = {
   firstName?: string | null;
@@ -28,8 +25,6 @@ export function generateStringColor(): string {
 }
 
 // Define queues
-
-export const notificationQueue = new Queue("notification", { connection });
 
 export function roundToTwo(num: number): number {
   return Math.round((num + Number.EPSILON) * 100) / 100;

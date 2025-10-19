@@ -5,6 +5,7 @@ import { z } from "zod/v4";
 
 import type { TransactionStatus, TransactionType } from "@repo/db/enums";
 
+import { notificationQueue } from "../queue";
 import { classroomService } from "../services/classroom-service";
 import {
   getTransactionStats,
@@ -13,7 +14,6 @@ import {
   transactionService,
 } from "../services/transaction-service";
 import { protectedProcedure } from "../trpc";
-import { notificationQueue } from "../utils";
 
 const createSchema = z.object({
   amount: z.number(),

@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Queue } from "bullmq";
+import type { Queue } from "bullmq";
 import { z } from "zod/v4";
-
-import connection from "@repo/kv";
-
-export const logQueue = new Queue("log-queue", { connection });
 
 export const eventSchema = z.object({
   type: z.union([
@@ -20,10 +16,12 @@ export const eventSchema = z.object({
 export class PubSubLogger {
   private userId: string;
   private schoolId: string;
+  private logQueue: Queue;
 
-  constructor(userId: string, schoolId: string) {
+  constructor(userId: string, schoolId: string, q: Queue) {
     this.userId = userId;
     this.schoolId = schoolId;
+    this.logQueue = q;
   }
 
   async publish(entity: string, payload: z.infer<typeof eventSchema>) {
@@ -35,7 +33,7 @@ export class PubSubLogger {
       data: { id, metadata },
     } = parsed.data;
 
-    await logQueue.add("log-action", {
+    await this.logQueue.add("log-action", {
       userId: this.userId,
       action: type.toLowerCase(),
       schoolId: this.schoolId,

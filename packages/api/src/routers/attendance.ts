@@ -91,7 +91,7 @@ export const attendanceRouter = {
             absence: z.coerce.number(),
             justifiedAbsence: z.coerce.number(),
             lateness: z.coerce.number(),
-            justifiedLateness: z.coerce.number(),
+            justifiedLate: z.coerce.number(),
             consigne: z.coerce.number(),
             chatter: z.coerce.number(),
             exclusion: z.coerce.number(),
@@ -120,14 +120,14 @@ export const attendanceRouter = {
             a.consigne ||
             a.lateness ||
             a.justifiedAbsence ||
-            a.justifiedLateness,
+            a.justifiedLate,
         )
         .map((at) => {
           const d = {
             absence: at.absence,
             justifiedAbsence: at.justifiedAbsence,
             lateness: at.lateness,
-            justifiedLateness: at.justifiedLateness,
+            justifiedLate: at.justifiedLate,
             chatter: at.chatter,
             consigne: at.consigne,
             exclusion: at.exclusion,
