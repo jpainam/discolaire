@@ -33,6 +33,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
+import { sync_attendance } from "~/actions/sync_attendance";
 import { syncEleveExclus } from "~/actions/sync_eleve_exclus";
 import {
   syncTransactionIds,
@@ -115,6 +116,10 @@ export function SubscriptionHeader() {
     const r = await syncEleveExclus();
     toast.success(`${r} students updated`, { id: 0 });
   };
+  const updateAttendance = async () => {
+    const r = await sync_attendance();
+    toast.success(`${r} attendance updated`, { id: 0 });
+  };
   return (
     <div className="px-4 py-2">
       <div className="flex items-center justify-between">
@@ -144,6 +149,14 @@ export function SubscriptionHeader() {
             Sync transactions
           </Button> */}
           <Button
+            onClick={async () => {
+              toast.loading(t("Processing"), { id: 0 });
+              await updateAttendance();
+            }}
+          >
+            Sync attendance
+          </Button>
+          {/* <Button
             size={"sm"}
             onClick={async () => {
               toast.loading(t("Processing"), { id: 0 });
@@ -151,7 +164,7 @@ export function SubscriptionHeader() {
             }}
           >
             Update expelled students
-          </Button>
+          </Button> */}
           {/* <Button
             onClick={async () => {
               toast.loading(t("Processing"), { id: 0 });
