@@ -138,12 +138,6 @@ export function ClassroomAttendanceTable({
     }),
   );
 
-  const onEdit = useCallback((id: number) => {
-    // TODO: open edit drawer/modal
-    // e.g., router.push(`/attendance/${id}/edit`);
-    console.log("edit", id);
-  }, []);
-
   const onDelete = useCallback(
     (id: number) => {
       deleteMutation.mutate(id);
@@ -194,7 +188,6 @@ export function ClassroomAttendanceTable({
                   key={record.id}
                   record={record}
                   dateFmt={dateFmt}
-                  onEdit={onEdit}
                   onDelete={onDelete}
                 />
               ))}
@@ -209,12 +202,11 @@ export function ClassroomAttendanceTable({
 const AttendanceRowView = memo(function AttendanceRowView({
   record,
   dateFmt,
-  onEdit,
+
   onDelete,
 }: {
   record: AttendanceRow;
   dateFmt: Intl.DateTimeFormat;
-  onEdit: (id: number) => void;
   onDelete: (id: number) => void;
 }) {
   const total = getTotalIssues(record);
@@ -296,7 +288,8 @@ const AttendanceRowView = memo(function AttendanceRowView({
           <Button
             onClick={() => {
               openModal({
-                title: `Update the attendance for ${record.student.lastName}`,
+                title: `Modifier la présence ${record.student.lastName}`,
+                description: record.term.name,
                 view: <ClassroomEditAttendance attendance={record} />,
               });
             }}

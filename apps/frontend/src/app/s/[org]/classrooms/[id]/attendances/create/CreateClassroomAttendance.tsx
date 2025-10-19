@@ -128,8 +128,8 @@ export function CreateClassroomAttendance({
           justifiedAbsence: a.justifiedAbsence,
           chatter: a.chatter,
           consigne: a.consigne,
-          lateness: a.late,
-          justifiedLateness: a.justifiedLate,
+          late: a.late,
+          justifiedLate: a.justifiedLate,
           exclusion: a.exclusion,
         }));
       createPeriodic.mutate({
