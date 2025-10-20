@@ -157,6 +157,14 @@ export function SubscriptionHeader() {
             Sync attendance
           </Button>
           {/* <Button
+            onClick={async () => {
+              const r = await find_missing_transaction2();
+              console.log(r);
+            }}
+          >
+            50 Derniere transactions
+          </Button> */}
+          {/* <Button
             size={"sm"}
             onClick={async () => {
               toast.loading(t("Processing"), { id: 0 });

@@ -14,13 +14,20 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Pencil, Search, Trash2 } from "lucide-react";
+import { Mail, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
@@ -294,43 +301,54 @@ const AttendanceRowView = memo(function AttendanceRowView({
       </TableCell>
 
       <TableCell className="text-right">
-        <div className="flex justify-end gap-2">
-          {canUpdateAttendance && (
-            <Button
-              onClick={() => {
-                openModal({
-                  title: `Modifier la présence ${record.student.lastName}`,
-                  description: record.term.name,
-                  view: <ClassroomEditAttendance attendance={record} />,
-                });
-              }}
-              variant="ghost"
-              size="icon"
-              aria-label="Edit record"
-            >
-              <Pencil className="h-4 w-4" />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"ghost"} size={"icon-sm"}>
+              <MoreVertical />
             </Button>
-          )}
-          {canDeleteAttendance && (
-            <Button
-              onClick={async () => {
-                const isConfirmed = await confirm({
-                  title: t("delete"),
-                  description: t("delete_confirmation"),
-                });
-                if (isConfirmed) {
-                  toast.loading(t("Processing"), { id: 0 });
-                  onDelete(record.id);
-                }
-              }}
-              variant="ghost"
-              size="icon"
-              aria-label="Delete record"
-            >
-              <Trash2 className="text-destructive h-4 w-4" />
-            </Button>
-          )}
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <Mail />
+              {t("notify")}
+            </DropdownMenuItem>
+            {canUpdateAttendance && (
+              <DropdownMenuItem
+                onSelect={() => {
+                  openModal({
+                    title: `Modifier la présence ${record.student.lastName}`,
+                    description: record.term.name,
+                    view: <ClassroomEditAttendance attendance={record} />,
+                  });
+                }}
+              >
+                <Pencil />
+                {t("edit")}
+              </DropdownMenuItem>
+            )}
+            {canDeleteAttendance && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("Processing"), { id: 0 });
+                      onDelete(record.id);
+                    }
+                  }}
+                >
+                  <Trash2 />
+                  {t("delete")}
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </TableCell>
     </TableRow>
   );

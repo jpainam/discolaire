@@ -1,13 +1,15 @@
-import { createLoader, SearchParams } from "nuqs/server";
+import type { SearchParams } from "nuqs/server";
+import { createLoader, parseAsString } from "nuqs/server";
 
-import { attendanceSearchSchema } from "../query-params";
 import { CreateClassroomAttendance } from "./CreateClassroomAttendance";
 
 interface PageProps {
   searchParams: Promise<SearchParams>;
   params: Promise<{ id: string }>;
 }
-
+const attendanceSearchSchema = {
+  termId: parseAsString,
+};
 const attendanceSearchParams = createLoader(attendanceSearchSchema);
 export default async function Page(props: PageProps) {
   const params = await props.params;

@@ -128,6 +128,39 @@ export const attendanceRouter = {
       });
     }),
 
+  createStudent: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string(),
+        termId: z.string(),
+        absence: z.coerce.number().default(0),
+        justifiedAbsence: z.coerce.number().default(0),
+        late: z.coerce.number().default(0),
+        justifiedLate: z.coerce.number().default(0),
+        exclusion: z.coerce.number().default(0),
+        consigne: z.coerce.number().default(0),
+        chatter: z.coerce.number().default(0),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.attendance.create({
+        data: {
+          studentId: input.studentId,
+          termId: input.termId,
+          type: AttendanceType.PERIODIC,
+          data: {
+            absence: input.absence,
+            justifiedAbsence: input.justifiedAbsence,
+            late: input.late,
+            justifiedLate: input.justifiedLate,
+            exclusion: input.exclusion,
+            consigne: input.consigne,
+            chatter: input.chatter,
+          },
+        },
+      });
+    }),
+
   create: protectedProcedure
     .input(
       z.object({
