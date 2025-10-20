@@ -37,6 +37,8 @@ import {
 
 import { Badge } from "~/components/base-badge";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -214,6 +216,14 @@ const AttendanceRowView = memo(function AttendanceRowView({
   const confirm = useConfirm();
   const t = useTranslations();
   const { openModal } = useModal();
+  const canDeleteAttendance = useCheckPermission(
+    "attendance",
+    PermissionAction.DELETE,
+  );
+  const canUpdateAttendance = useCheckPermission(
+    "attendance",
+    PermissionAction.UPDATE,
+  );
 
   // pre-format once
   const created =
@@ -285,37 +295,41 @@ const AttendanceRowView = memo(function AttendanceRowView({
 
       <TableCell className="text-right">
         <div className="flex justify-end gap-2">
-          <Button
-            onClick={() => {
-              openModal({
-                title: `Modifier la présence ${record.student.lastName}`,
-                description: record.term.name,
-                view: <ClassroomEditAttendance attendance={record} />,
-              });
-            }}
-            variant="ghost"
-            size="icon"
-            aria-label="Edit record"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button
-            onClick={async () => {
-              const isConfirmed = await confirm({
-                title: t("delete"),
-                description: t("delete_confirmation"),
-              });
-              if (isConfirmed) {
-                toast.loading(t("Processing"), { id: 0 });
-                onDelete(record.id);
-              }
-            }}
-            variant="ghost"
-            size="icon"
-            aria-label="Delete record"
-          >
-            <Trash2 className="text-destructive h-4 w-4" />
-          </Button>
+          {canUpdateAttendance && (
+            <Button
+              onClick={() => {
+                openModal({
+                  title: `Modifier la présence ${record.student.lastName}`,
+                  description: record.term.name,
+                  view: <ClassroomEditAttendance attendance={record} />,
+                });
+              }}
+              variant="ghost"
+              size="icon"
+              aria-label="Edit record"
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+          )}
+          {canDeleteAttendance && (
+            <Button
+              onClick={async () => {
+                const isConfirmed = await confirm({
+                  title: t("delete"),
+                  description: t("delete_confirmation"),
+                });
+                if (isConfirmed) {
+                  toast.loading(t("Processing"), { id: 0 });
+                  onDelete(record.id);
+                }
+              }}
+              variant="ghost"
+              size="icon"
+              aria-label="Delete record"
+            >
+              <Trash2 className="text-destructive h-4 w-4" />
+            </Button>
+          )}
         </div>
       </TableCell>
     </TableRow>

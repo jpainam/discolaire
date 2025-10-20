@@ -5,8 +5,10 @@ import { z } from "zod/v4";
 import type { Prisma } from "@repo/db";
 import { AttendanceType } from "@repo/db";
 
+import { studentService } from "../services";
 import { attendanceToData } from "../services/attendance-service";
 import { classroomService } from "../services/classroom-service";
+import { contactService } from "../services/contact-service";
 import { protectedProcedure } from "../trpc";
 
 export const attendanceRouter = {
@@ -21,10 +23,22 @@ export const attendanceRouter = {
     )
     .query(async ({ ctx, input }) => {
       const studentIds: string[] = [];
-      if (input.classroomId) {
-        const students = await classroomService.getStudents(input.classroomId);
-        studentIds.push(...students.map((st) => st.id));
+      if (ctx.session.user.profile === "student") {
+        const student = await studentService.getFromUserId(ctx.session.user.id);
+        studentIds.push(student.id);
+      } else if (ctx.session.user.profile === "contact") {
+        const contact = await contactService.getFromUserId(ctx.session.user.id);
+        const studs = await contactService.getStudents(contact.id);
+        studentIds.push(...studs.map((s) => s.studentId));
+      } else {
+        if (input.classroomId) {
+          const students = await classroomService.getStudents(
+            input.classroomId,
+          );
+          studentIds.push(...students.map((st) => st.id));
+        }
       }
+
       const attendances = await ctx.db.attendance.findMany({
         include: {
           student: true,
@@ -134,16 +148,6 @@ export const attendanceRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const students = await classroomService.getStudents(input.classroomId);
-      const studentIds = students.map((st) => st.id);
-      await ctx.db.attendance.deleteMany({
-        where: {
-          termId: input.termId,
-          studentId: {
-            in: studentIds,
-          },
-        },
-      });
       const data = input.attendances
         .filter(
           (a) =>
@@ -152,7 +156,8 @@ export const attendanceRouter = {
             a.consigne ||
             a.late ||
             a.justifiedAbsence ||
-            a.justifiedLate,
+            a.justifiedLate ||
+            a.exclusion,
         )
         .map((at) => {
           const d = {

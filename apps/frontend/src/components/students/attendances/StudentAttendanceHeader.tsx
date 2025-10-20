@@ -24,13 +24,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
 
 import { PreventAbsence } from "~/components/attendances/PreventAbsence";
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -46,7 +39,6 @@ export function StudentAttendanceHeader() {
   const { t } = useLocale();
   const { openModal } = useModal();
   const [termId, setTermId] = useQueryState("termId");
-  const [attendanceType, setAttendanceType] = useQueryState("attendanceType");
 
   const canCreateAttendance = useCheckPermission(
     "attendance",
@@ -70,25 +62,7 @@ export function StudentAttendanceHeader() {
           void setTermId(val);
         }}
       />
-      <Label>{t("attendance_type")}</Label>
-      <Select
-        defaultValue={attendanceType ?? "all"}
-        onValueChange={(val) => {
-          void setAttendanceType(val == "all" ? null : val);
-        }}
-      >
-        <SelectTrigger className="w-1/5">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">{t("attendance_type")}</SelectItem>
-          <SelectItem value="absence">{t("absence")}</SelectItem>
-          <SelectItem value="chatter">{t("chatter")}</SelectItem>
-          <SelectItem value="consigne">{t("consigne")}</SelectItem>
-          <SelectItem value="exclusion">{t("exclusion")}</SelectItem>
-          <SelectItem value="lateness">{t("lateness")}</SelectItem>
-        </SelectContent>
-      </Select>
+
       <div className="ml-auto flex flex-row items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -16,7 +16,9 @@ import {
 import { Label } from "@repo/ui/components/label";
 
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { PermissionAction } from "~/permissions";
 
 export function ClassroomAttendanceHeader() {
   const [termId, setTermId] = useQueryState("termId", {
@@ -26,6 +28,10 @@ export function ClassroomAttendanceHeader() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
+  const canCreateAttendance = useCheckPermission(
+    "attendance",
+    PermissionAction.CREATE,
+  );
 
   return (
     <div className="bg-muted grid flex-row items-center gap-4 border-b px-4 py-1 md:flex">
@@ -40,7 +46,7 @@ export function ClassroomAttendanceHeader() {
         />
       </div>
       <div className="ml-auto flex flex-row items-center gap-2">
-        {!pathname.includes("create") && (
+        {!pathname.includes("create") && canCreateAttendance && (
           <Button
             disabled={!termId}
             onClick={() => {
