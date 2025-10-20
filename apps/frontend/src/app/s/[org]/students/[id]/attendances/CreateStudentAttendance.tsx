@@ -139,7 +139,7 @@ export function CreateStudentAttendance({
           return (
             <Field data-invalid={isInvalid}>
               <FieldContent>
-                <FieldLabel htmlFor={field.name}>Absences</FieldLabel>
+                <FieldLabel htmlFor={field.name}>{t("terms")}</FieldLabel>
               </FieldContent>
               <TermSelector
                 onChange={(val) => {
@@ -152,186 +152,181 @@ export function CreateStudentAttendance({
           );
         }}
       />
-      <FieldGroup>
-        <form.Field
-          name="absence"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Absences</FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  name={field.name}
-                  value={Number(field.state.value)}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-        <form.Field
-          name="late"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Retards</FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  name={field.name}
-                  value={Number(field.state.value)}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-      </FieldGroup>
-      <FieldGroup>
-        <form.Field
-          name="justifiedAbsence"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>
-                    Absences justifiées
-                  </FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  name={field.name}
-                  value={Number(field.state.value)}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-        <form.Field
-          name="justifiedLate"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>
-                    Retards justifiés
-                  </FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  type="number"
-                  name={field.name}
-                  min={0}
-                  value={Number(field.state.value)}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-      </FieldGroup>
-      <FieldGroup>
-        <form.Field
-          name="chatter"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Bavardages</FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  name={field.name}
-                  value={Number(field.state.value)}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-        <form.Field
-          name="exclusion"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Exclusion</FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  name={field.name}
-                  value={Number(field.state.value)}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-      </FieldGroup>
-      <FieldGroup>
-        <form.Field
-          name="consigne"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Consigne</FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  name={field.name}
-                  value={Number(field.state.value)}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-      </FieldGroup>
+
+      <form.Field
+        name="absence"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Absences</FieldLabel>
+              </FieldContent>
+              <Input
+                id={field.name}
+                type="number"
+                min={0}
+                name={field.name}
+                value={Number(field.state.value)}
+                onChange={(e) => field.handleChange(Number(e.target.value))}
+                aria-invalid={isInvalid}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+      <form.Field
+        name="late"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Retards</FieldLabel>
+              </FieldContent>
+              <Input
+                id={field.name}
+                type="number"
+                min={0}
+                name={field.name}
+                value={Number(field.state.value)}
+                onChange={(e) => field.handleChange(Number(e.target.value))}
+                aria-invalid={isInvalid}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="justifiedAbsence"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>
+                  Absences justifiées
+                </FieldLabel>
+              </FieldContent>
+              <Input
+                id={field.name}
+                type="number"
+                min={0}
+                name={field.name}
+                value={Number(field.state.value)}
+                onChange={(e) => field.handleChange(Number(e.target.value))}
+                aria-invalid={isInvalid}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+      <form.Field
+        name="justifiedLate"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Retards justifiés</FieldLabel>
+              </FieldContent>
+              <Input
+                id={field.name}
+                type="number"
+                name={field.name}
+                min={0}
+                value={Number(field.state.value)}
+                onChange={(e) => field.handleChange(Number(e.target.value))}
+                aria-invalid={isInvalid}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="chatter"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Bavardages</FieldLabel>
+              </FieldContent>
+              <Input
+                id={field.name}
+                type="number"
+                min={0}
+                name={field.name}
+                value={Number(field.state.value)}
+                onChange={(e) => field.handleChange(Number(e.target.value))}
+                aria-invalid={isInvalid}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+      <form.Field
+        name="exclusion"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Exclusion</FieldLabel>
+              </FieldContent>
+              <Input
+                id={field.name}
+                type="number"
+                min={0}
+                name={field.name}
+                value={Number(field.state.value)}
+                onChange={(e) => field.handleChange(Number(e.target.value))}
+                aria-invalid={isInvalid}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="consigne"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Consigne</FieldLabel>
+              </FieldContent>
+              <Input
+                id={field.name}
+                type="number"
+                min={0}
+                name={field.name}
+                value={Number(field.state.value)}
+                onChange={(e) => field.handleChange(Number(e.target.value))}
+                aria-invalid={isInvalid}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
       <form.Field
         name="notify"
         children={(field) => {
@@ -339,7 +334,7 @@ export function CreateStudentAttendance({
             field.state.meta.isTouched && !field.state.meta.isValid;
           return (
             <>
-              <FieldGroup data-slot="checkbox-group">
+              <FieldGroup className="col-span-full" data-slot="checkbox-group">
                 <Field orientation="horizontal" data-invalid={isInvalid}>
                   <Checkbox
                     id={field.name}
@@ -359,7 +354,7 @@ export function CreateStudentAttendance({
           );
         }}
       />
-      ;
+
       <div className="col-span-full flex flex-row items-center justify-end gap-2">
         <Button
           onClick={() => {
@@ -370,7 +365,7 @@ export function CreateStudentAttendance({
         >
           {t("cancel")}
         </Button>
-        <Button type="submit">{t("update")}</Button>
+        <Button type="submit">{attendance ? t("update") : t("submit")}</Button>
       </div>
     </form>
   );

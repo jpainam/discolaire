@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import type { metricCardVariants } from "~/components/metric-card";
 import { Badge } from "~/components/base-badge";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -84,7 +86,7 @@ export default async function Layout(
   return (
     <div className="flex flex-col gap-2">
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense>
+        <Suspense fallback={<Skeleton className="h-8 w-full" />}>
           <StudentAttendanceHeader />
         </Suspense>
       </ErrorBoundary>

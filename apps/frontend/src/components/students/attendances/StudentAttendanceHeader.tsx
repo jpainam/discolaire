@@ -2,18 +2,13 @@
 
 import { useParams } from "next/navigation";
 import {
-  BaselineIcon,
   ChevronDown,
-  DiameterIcon,
   LineChart,
   MoreVertical,
-  NewspaperIcon,
-  ShapesIcon,
-  ShieldAlertIcon,
+  PlusIcon,
   Trash2,
 } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -25,6 +20,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
+import { CreateStudentAttendance } from "~/app/s/[org]/students/[id]/attendances/CreateStudentAttendance";
 import { PreventAbsence } from "~/components/attendances/PreventAbsence";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -51,9 +47,6 @@ export function StudentAttendanceHeader() {
         <LineChart className="h-4 w-4" />
         <Label>{t("attendances")}</Label>
       </div>
-      {/* <Label className="hidden md:block">{t("attendances")}</Label> */}
-      {/* <div className="w-[15px] hidden md:block"></div> */}
-      {/* <FlatBadge>Total justified records: 2 out of 5</FlatBadge> */}
 
       <TermSelector
         defaultValue={termId}
@@ -85,122 +78,46 @@ export function StudentAttendanceHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
         {canCreateAttendance && (
-          <>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size={"sm"}>
-                  {t("add")}
-                  <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  disabled={!termId}
-                  onSelect={() => {
-                    if (!termId) {
-                      toast.warning("Veuillez sélectionner une période.");
-                      return;
-                    }
-                    // openModal({
-                    //   title: t("absence"),
-                    //   view: <CreateEditAbsence termId={termId} />,
-                    // });
-                  }}
-                >
-                  <BaselineIcon />
-                  {t("absence")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  disabled={!termId}
-                  onSelect={() => {
-                    if (!termId) {
-                      toast.warning("Veuillez sélectionner une période.");
-                      return;
-                    }
-                  }}
-                >
-                  <DiameterIcon />
-                  {t("lateness")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  disabled={!termId}
-                  onSelect={() => {
-                    if (!termId) {
-                      toast.warning("Veuillez sélectionner une période.");
-                      return;
-                    }
-                    // openModal({
-                    //   title: t("chatter"),
-                    //   view: <CreateEditChatter termId={termId} />,
-                    // });
-                  }}
-                >
-                  <NewspaperIcon />
-                  {t("chatter")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  disabled={!termId}
-                  onSelect={() => {
-                    if (!termId) {
-                      toast.warning("Veuillez sélectionner une période.");
-                      return;
-                    }
-                    // openModal({
-                    //   title: t("consigne"),
-                    //   view: <CreateEditConsigne termId={termId} />,
-                    // });
-                  }}
-                >
-                  <ShapesIcon />
-                  {t("consigne")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  disabled={!termId}
-                  onSelect={() => {
-                    if (!termId) {
-                      toast.warning("Veuillez sélectionner une période.");
-                      return;
-                    }
-                    // openModal({
-                    //   title: t("exclusion"),
-
-                    //   view: <CreateEditExclusion termId={termId} />,
-                    // });
-                  }}
-                >
-                  <ShieldAlertIcon />
-                  {t("exclusion")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant={"outline"} className="size-8" size={"icon"}>
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <PDFIcon />
-                  {t("pdf_export")}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <XMLIcon />
-                  {t("xml_export")}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  variant="destructive"
-                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                >
-                  <Trash2 />
-                  {t("clear_all")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
+          <Button
+            size={"sm"}
+            onClick={() => {
+              openModal({
+                title: "Saisie d'une présence",
+                description: "Veuillez choisir la séquence",
+                view: <CreateStudentAttendance />,
+              });
+            }}
+          >
+            <PlusIcon />
+            {t("add")}
+          </Button>
         )}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <PDFIcon />
+              {t("pdf_export")}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <XMLIcon />
+              {t("xml_export")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+            >
+              <Trash2 />
+              {t("clear_all")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
