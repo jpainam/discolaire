@@ -36,13 +36,13 @@ import {
 } from "@repo/ui/components/table";
 
 import { Badge } from "~/components/base-badge";
+import { ClassroomEditAttendance } from "~/components/classrooms/attendances/ClassroomEditAttendance";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { ClassroomEditAttendance } from "./ClassroomEditAttendance";
 
 type AttendanceRow = RouterOutputs["attendance"]["all"][number];
 
@@ -173,7 +173,7 @@ export function ClassroomAttendanceTable({
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[80px]">Date</TableHead>
-                <TableHead>Student</TableHead>
+                <TableHead>Nom&Prenom</TableHead>
                 <TableHead>Term</TableHead>
                 <TableHead className="text-center">Absences</TableHead>
                 <TableHead className="text-center">Retards</TableHead>
