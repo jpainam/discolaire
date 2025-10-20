@@ -2,6 +2,7 @@
 
 import {
   ArrowLeftRight,
+  HandCoins,
   //HandCoins,
   Percent,
   Sigma,
@@ -55,14 +56,11 @@ export function TransactionToolbar() {
         "/deleted?" +
         createQueryString({}),
     },
-    // {
-    //   icon: <HandCoins className="h-4 w-4" />,
-    //   name: t("moratoriums"),
-    //   href:
-    //     routes.administration.transactions +
-    //     "/moratoriums?" +
-    //     createQueryString({}),
-    // },
+    {
+      icon: <HandCoins className="h-4 w-4" />,
+      name: "Ancien systems",
+      href: `/administration/accounting/transactions/old`,
+    },
   ];
 
   return (
