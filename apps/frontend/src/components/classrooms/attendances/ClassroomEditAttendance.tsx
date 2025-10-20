@@ -293,7 +293,9 @@ export function ClassroomEditAttendance({
         >
           {t("cancel")}
         </Button>
-        <Button type="submit">{t("update")}</Button>
+        <Button isLoading={updateAttendanceMutation.isPending} type="submit">
+          {t("update")}
+        </Button>
       </div>
     </form>
   );

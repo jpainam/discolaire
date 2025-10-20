@@ -365,7 +365,15 @@ export function CreateStudentAttendance({
         >
           {t("cancel")}
         </Button>
-        <Button type="submit">{attendance ? t("update") : t("submit")}</Button>
+        <Button
+          isLoading={
+            createAttendanceMutation.isPending ||
+            updateAttendanceMutation.isPending
+          }
+          type="submit"
+        >
+          {attendance ? t("update") : t("submit")}
+        </Button>
       </div>
     </form>
   );
