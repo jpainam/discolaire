@@ -9,15 +9,14 @@ import { Label } from "@repo/ui/components/label";
 
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
 import { createGradeSheetSearchSchema } from "./search-params";
 
 export function ClassroomCreateGradeSheetHeader() {
   const params = useParams<{ id: string }>();
-  const [searchParams] = useQueryStates(createGradeSheetSearchSchema);
-  const { createQueryString } = useCreateQueryString();
-  const router = useRouter();
+  const [searchParams, setSearchParams] = useQueryStates(
+    createGradeSheetSearchSchema,
+  );
+
   const t = useTranslations();
 
   return (
@@ -28,7 +27,9 @@ export function ClassroomCreateGradeSheetHeader() {
           className="w-64"
           defaultValue={searchParams.termId?.toString()}
           onChange={(val) => {
-            router.push("?" + createQueryString({ termId: val }));
+            void setSearchParams({
+              termId: val,
+            });
           }}
         />
       </div>
@@ -38,7 +39,9 @@ export function ClassroomCreateGradeSheetHeader() {
           className="w-96"
           defaultValue={searchParams.subjectId?.toString()}
           onChange={(val) => {
-            router.push("?" + createQueryString({ subjectId: val }));
+            void setSearchParams({
+              subjectId: val ? Number(val) : null,
+            });
           }}
           classroomId={params.id}
         />
@@ -48,9 +51,9 @@ export function ClassroomCreateGradeSheetHeader() {
         <Checkbox
           defaultChecked={searchParams.notifyParents}
           onCheckedChange={(checked) => {
-            router.push(
-              "?" + createQueryString({ notifyParents: checked ? "true" : "" }),
-            );
+            void setSearchParams({
+              notifyParents: checked ? true : false,
+            });
           }}
         />
         <Label>{t("notify_parents")}</Label>
@@ -59,12 +62,9 @@ export function ClassroomCreateGradeSheetHeader() {
         <Checkbox
           defaultChecked={searchParams.notifyStudents}
           onCheckedChange={(checked) => {
-            router.push(
-              "?" +
-                createQueryString({
-                  notifyStudents: checked ? "true" : "",
-                }),
-            );
+            void setSearchParams({
+              notifyStudents: checked ? true : false,
+            });
           }}
         />
 

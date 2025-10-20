@@ -203,7 +203,7 @@ export function Shortcut({ className }: { className?: string }) {
                     size={"sm"}
                     onClick={() => {
                       openModal({
-                        title: "Saisie de note - raccourci",
+                        title: "Saisie de note - raccourcis",
                         description: "Choisir les options et valider",
                         view: <CreateGradesheetShortcut />,
                       });

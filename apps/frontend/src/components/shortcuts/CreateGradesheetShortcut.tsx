@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
@@ -19,14 +20,14 @@ import { SubjectSelector } from "../shared/selects/SubjectSelector";
 import { TermSelector } from "../shared/selects/TermSelector";
 
 export function CreateGradesheetShortcut() {
-  const [classroomId, setClassroomId] = useState<string | null>();
-  const [termId, setTermId] = useState<string | null>();
-  const [subjectId, setSubjectId] = useState<string | null>();
+  const [classroomId, setClassroomId] = useState<string | null>(null);
+  const [termId, setTermId] = useState<string | null>(null);
+  const [subjectId, setSubjectId] = useState<string | null>(null);
   const t = useTranslations();
   const { closeModal } = useModal();
   const router = useRouter();
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-6">
       <div className="flex flex-col gap-2">
         <Label>{t("classrooms")}</Label>
         <ClassroomSelector
@@ -44,13 +45,13 @@ export function CreateGradesheetShortcut() {
           }}
         />
       </div>
-      <div className="gap col-span-full flex flex-col">
+      <div className="gap col-span-full flex flex-col gap-2">
         <Label>{t("subjects")}</Label>
         {classroomId ? (
           <SubjectSelector
             classroomId={classroomId}
             onChange={(val) => {
-              setSubjectId(val);
+              setSubjectId(val ?? null);
             }}
           />
         ) : (
@@ -75,6 +76,10 @@ export function CreateGradesheetShortcut() {
         <Button
           disabled={!classroomId || !termId || !subjectId}
           onClick={() => {
+            if (!classroomId || !termId || !subjectId) {
+              toast.warning("Choisir tous les options");
+              return;
+            }
             router.push(
               `/classrooms/${classroomId}/gradesheets/create?termId=${termId}&subjectId=${subjectId}`,
             );
