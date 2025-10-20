@@ -14,7 +14,15 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Mail, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
+import {
+  Bell,
+  CheckCircle2,
+  Mail,
+  MoreVertical,
+  Pencil,
+  Search,
+  Trash2,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -183,6 +191,7 @@ export function StudentAttendanceTable() {
                 <TableHead className="text-center">Consignes</TableHead>
                 <TableHead className="text-center">Exclusions</TableHead>
                 <TableHead className="text-center">Status</TableHead>
+                <TableHead></TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -226,6 +235,25 @@ const AttendanceRowView = memo(function AttendanceRowView({
     "attendance",
     PermissionAction.UPDATE,
   );
+
+  const handleSendNotification = async (id: number) => {
+    try {
+      toast.loading(t("sending"), { id: 0 });
+      const response = await fetch(`/api/emails/attendances/${id}`, {
+        method: "POST",
+      });
+      if (!response.ok) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const err = await response.json();
+        toast.error("Une erreur s'est produite", { id: 0 });
+        console.error(err);
+      } else {
+        toast.success(t("sent_successfully"), { id: 0 });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // pre-format once
   const created =
@@ -278,6 +306,23 @@ const AttendanceRowView = memo(function AttendanceRowView({
         <Badge variant={sev.variant} appearance="outline">
           {sev.label}
         </Badge>
+      </TableCell>
+      <TableCell className="text-right">
+        {record.notificationSent ? (
+          <div className="flex items-center justify-center gap-1 text-green-600">
+            <CheckCircle2 className="h-4 w-4" />
+            <span className="text-xs">{t("Sent")}</span>
+          </div>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSendNotification(record.id)}
+          >
+            <Bell className="h-3 w-3" />
+            {t("Send")}
+          </Button>
+        )}
       </TableCell>
 
       <TableCell className="text-right">

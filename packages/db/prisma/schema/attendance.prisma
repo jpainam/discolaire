@@ -45,15 +45,16 @@ enum AttendanceType {
 }
 
 model Attendance {
-    id          Int            @id @default(autoincrement())
-    type        AttendanceType
-    data        Json
-    studentId   String
-    student     Student        @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    termId      String
-    term        Term           @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    createdAt   DateTime       @default(now())
-    updatedAt   DateTime       @updatedAt
-    createdById String?
-    createdBy   User?          @relation("attendanceCreatedBy", fields: [createdById], references: [id], onUpdate: Cascade)
+    id               Int            @id @default(autoincrement())
+    type             AttendanceType
+    data             Json
+    studentId        String
+    student          Student        @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    termId           String
+    term             Term           @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt        DateTime       @default(now())
+    updatedAt        DateTime       @updatedAt
+    createdById      String?
+    createdBy        User?          @relation("attendanceCreatedBy", fields: [createdById], references: [id], onUpdate: Cascade)
+    notificationSent Boolean        @default(false)
 }
