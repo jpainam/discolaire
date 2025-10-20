@@ -37,7 +37,7 @@ import {
 
 import { authClient } from "~/auth/client";
 import { FeedBackDialog } from "~/components/FeedbackDialog";
-import { Shortcut } from "~/components/Shortcut";
+import { Shortcut } from "~/components/shortcuts/Shortcut";
 import { SidebarLogo } from "~/components/sidebar-logo";
 import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";

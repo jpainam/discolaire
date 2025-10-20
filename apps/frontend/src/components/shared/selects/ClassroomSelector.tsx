@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
+import { decode } from "entities";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
@@ -62,7 +63,7 @@ export function ClassroomSelector({
             className,
           )}
         >
-          {selected ? selected.name : t("Select a classroom")}
+          {selected ? decode(selected.name) : t("Select a classroom")}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -99,7 +100,7 @@ export function ClassroomSelector({
                     setOpen(false);
                   }}
                 >
-                  {classroom.name}
+                  {decode(classroom.name)}
                   <CheckIcon
                     className={cn(
                       "ml-auto h-4 w-4",

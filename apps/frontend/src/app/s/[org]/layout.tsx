@@ -17,7 +17,7 @@ import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { ModeSwitcher } from "~/components/mode-switcher";
 import NotificationMenu from "~/components/notifications/NotificationMenu";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
-import { Shortcut } from "~/components/Shortcut";
+import { Shortcut } from "~/components/shortcuts/Shortcut";
 import { ThemeSelector } from "~/components/ThemeSelector";
 import { TopRightButtons } from "~/components/TopRightButtons";
 import { UserNav } from "~/components/user-nav";

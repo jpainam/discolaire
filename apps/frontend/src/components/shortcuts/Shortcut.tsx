@@ -7,6 +7,7 @@ import {
   BookmarkPlus,
   Edit2,
   Loader2Icon,
+  NotebookPen,
   Search,
   Trash2,
   X,
@@ -35,9 +36,11 @@ import { Separator } from "@repo/ui/components/separator";
 import { useSidebar } from "@repo/ui/components/sidebar";
 
 import { env } from "~/env";
+import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import { SimpleTooltip } from "./simple-tooltip";
+import { SimpleTooltip } from "../simple-tooltip";
+import { CreateGradesheetShortcut } from "./CreateGradesheetShortcut";
 
 type Shortcut = RouterOutputs["shortcut"]["search"][number];
 
@@ -130,6 +133,7 @@ export function Shortcut({ className }: { className?: string }) {
   const { isMobile } = useSidebar();
 
   const shortcuts = shortcutsQuery.data ?? [];
+  const { openModal } = useModal();
   return (
     <div className={className}>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -194,6 +198,21 @@ export function Shortcut({ className }: { className?: string }) {
                 </div>
               </div>
               <ScrollArea className="h-[300px] px-4">
+                <div className="flex flex-col gap-2">
+                  <Button
+                    size={"sm"}
+                    onClick={() => {
+                      openModal({
+                        title: "Saisie de note - raccourci",
+                        description: "Choisir les options et valider",
+                        view: <CreateGradesheetShortcut />,
+                      });
+                    }}
+                  >
+                    <NotebookPen />
+                    Saisie de notes
+                  </Button>
+                </div>
                 {shortcuts.length > 0 ? (
                   <ul className="space-y-2 pb-4">
                     {shortcuts.map((shortcut) => (
