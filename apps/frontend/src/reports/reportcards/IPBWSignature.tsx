@@ -1,6 +1,15 @@
 import { Text, View } from "@react-pdf/renderer";
 
-export function IPBWSignature({ cycle }: { cycle?: string }) {
+import { getTranslation } from "./translation";
+
+export function IPBWSignature({
+  cycle,
+  lang,
+}: {
+  cycle?: string;
+  lang: "fr" | "en";
+}) {
+  const t = getTranslation(lang);
   return (
     <View
       style={{
@@ -20,7 +29,7 @@ export function IPBWSignature({ cycle }: { cycle?: string }) {
           justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}> Parents</Text>
+        <Text style={{ paddingVertical: 2 }}> {t("Parents")}</Text>
       </View>
       <View
         style={{
@@ -30,7 +39,7 @@ export function IPBWSignature({ cycle }: { cycle?: string }) {
           justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}>Prof. Principal</Text>
+        <Text style={{ paddingVertical: 2 }}>{t("Prof. Principal")}</Text>
       </View>
 
       <View
@@ -43,14 +52,15 @@ export function IPBWSignature({ cycle }: { cycle?: string }) {
       >
         <Text style={{ paddingVertical: 2 }}>
           {" "}
-          Directeur des Etudes {cycle}
+          {t(`Directeur des Etudes ${cycle}`)}
         </Text>
       </View>
     </View>
   );
 }
 
-export function IPBWSignatureTrimestre() {
+export function IPBWSignatureTrimestre({ lang }: { lang: "fr" | "en" }) {
+  const t = getTranslation(lang);
   return (
     <View
       style={{
@@ -70,7 +80,7 @@ export function IPBWSignatureTrimestre() {
           justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}> Parents</Text>
+        <Text style={{ paddingVertical: 2 }}> {t("Parents")}</Text>
       </View>
       <View
         style={{
@@ -80,7 +90,7 @@ export function IPBWSignatureTrimestre() {
           justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}>Prof. Principal</Text>
+        <Text style={{ paddingVertical: 2 }}>{t("Prof. Principal")}</Text>
       </View>
 
       <View
@@ -91,7 +101,9 @@ export function IPBWSignatureTrimestre() {
           justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}>Le Chef d'établissement</Text>
+        <Text style={{ paddingVertical: 2 }}>
+          {t("Le Chef d'établissement")}
+        </Text>
       </View>
     </View>
   );

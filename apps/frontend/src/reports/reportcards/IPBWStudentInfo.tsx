@@ -9,6 +9,7 @@ export function IPBWStudentInfo({
   student,
   contact,
   classroom,
+  lang,
 }: {
   student: {
     firstName: string | null;
@@ -20,10 +21,11 @@ export function IPBWStudentInfo({
     isRepeating: boolean;
     registrationNumber: string | null;
   };
+  lang: "fr" | "en";
   classroom: RouterOutputs["classroom"]["get"];
   contact: RouterOutputs["student"]["getPrimaryContact"];
 }) {
-  const t = getTranslation(classroom.section?.name);
+  const t = getTranslation(lang);
   let naiss =
     student.dateOfBirth &&
     Intl.DateTimeFormat(classroom.section?.name == "ANG" ? "en" : "fr", {

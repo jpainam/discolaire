@@ -1,19 +1,24 @@
 import type { Style } from "@react-pdf/stylesheet";
 import { Text, View } from "@react-pdf/renderer";
 
+import { getTranslation } from "./translation";
+
 export function IPBWDiscipline({
   discipline,
   style,
+  lang,
 }: {
   style: Style;
+  lang: "fr" | "en";
   discipline: {
     absence: number;
-    lateness: number;
-    justifiedLateness: number;
+    late: number;
+    justifiedLate: number;
     consigne: number;
     justifiedAbsence: number;
   };
 }) {
+  const t = getTranslation(lang);
   return (
     <View
       style={{
@@ -31,17 +36,21 @@ export function IPBWDiscipline({
           paddingVertical: 1,
         }}
       >
-        <Text style={{ paddingLeft: 4 }}>Discipline</Text>
+        <Text style={{ paddingLeft: 4 }}>{t("Discipline")}</Text>
       </View>
 
-      <SummaryItem name="Total absences" value={discipline.absence} />
-      <SummaryItem name="Justifiees" value={discipline.justifiedAbsence} />
+      <SummaryItem name={t("Total absences")} value={discipline.absence} />
+      <SummaryItem name={t("Justifiées")} value={discipline.justifiedAbsence} />
       <SummaryItem
-        name="Non justifiees"
+        name={t("Non justifiées")}
         value={discipline.absence - discipline.justifiedAbsence}
       />
-      <SummaryItem name="Retards" value={discipline.lateness} />
-      <SummaryItem name="Consigne" lastRow={true} value={discipline.consigne} />
+      <SummaryItem name={t("Retards")} value={discipline.late} />
+      <SummaryItem
+        name={t("Consignes")}
+        lastRow={true}
+        value={discipline.consigne}
+      />
     </View>
   );
 }

@@ -22,6 +22,7 @@ export function IPBWClassroomTrimestre({
   contacts,
   schoolYear,
   disciplines,
+  lang,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   students: RouterOutputs["classroom"]["students"];
@@ -32,6 +33,7 @@ export function IPBWClassroomTrimestre({
   contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["trimestre"];
+  lang: "fr" | "en";
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
@@ -108,6 +110,7 @@ export function IPBWClassroomTrimestre({
                   placeOfBirth: student.placeOfBirth,
                   registrationNumber: student.registrationNumber,
                 }}
+                lang={lang}
                 classroom={classroom}
                 contact={contact}
               />
@@ -444,10 +447,11 @@ export function IPBWClassroomTrimestre({
                 discipline={{
                   absence: disc?.absence ?? 0,
                   justifiedAbsence: disc?.justifiedAbsence ?? 0,
-                  lateness: disc?.late ?? 0,
-                  justifiedLateness: disc?.justifiedLate ?? 0,
+                  late: disc?.late ?? 0,
+                  justifiedLate: disc?.justifiedLate ?? 0,
                   consigne: disc?.consigne ?? 0,
                 }}
+                lang={lang}
                 effectif={classroom.size}
                 average={value.average}
                 successRate={successRate}
@@ -458,7 +462,7 @@ export function IPBWClassroomTrimestre({
                 }}
                 rank={`${value.rank}`}
               />
-              <IPBWSignatureTrimestre />
+              <IPBWSignatureTrimestre lang={lang} />
             </View>
           </Page>
         );

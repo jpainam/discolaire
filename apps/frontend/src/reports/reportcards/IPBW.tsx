@@ -24,6 +24,7 @@ export function IPBW({
   title,
   schoolYear,
   disciplines,
+  lang,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   student: RouterOutputs["student"]["get"];
@@ -34,6 +35,7 @@ export function IPBW({
   contact: RouterOutputs["student"]["getPrimaryContact"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["sequence"];
+  lang: "fr" | "en";
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const studentReport = studentsReport.get(student.id);
@@ -46,7 +48,7 @@ export function IPBW({
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
   const disc = disciplines.get(student.id);
-  const t = getTranslation(classroom.section?.name);
+  const t = getTranslation(lang);
   return (
     <Document>
       <Page
@@ -100,6 +102,7 @@ export function IPBW({
             }}
             classroom={classroom}
             contact={contact}
+            lang={lang}
           />
 
           <View
@@ -110,7 +113,7 @@ export function IPBW({
               flexDirection: "column",
             }}
           >
-            <IPBWTableHeader W={W} section={classroom.section?.name} />
+            <IPBWTableHeader W={W} lang={lang} />
             {Object.keys(groups).map((groupId: string, index: number) => {
               const items = groups[Number(groupId)]?.sort(
                 (a, b) => a.order - b.order,
@@ -262,7 +265,9 @@ export function IPBW({
                         justifyContent: "center",
                       }}
                     >
-                      <Text style={{ paddingLeft: 4 }}>{group?.name}</Text>
+                      <Text style={{ paddingLeft: 4 }}>
+                        {t(group?.name ?? "")}
+                      </Text>
                     </View>
                     <View
                       style={{
@@ -303,7 +308,7 @@ export function IPBW({
                       }}
                     >
                       <Text>
-                        MOY :{" "}
+                        {t("MOY")} :{" "}
                         {(
                           sum(
                             items.map(
@@ -326,8 +331,8 @@ export function IPBW({
             discipline={{
               absence: disc?.absence ?? 0,
               justifiedAbsence: disc?.justifiedAbsence ?? 0,
-              lateness: disc?.late ?? 0,
-              justifiedLateness: disc?.justifiedLate ?? 0,
+              late: disc?.late ?? 0,
+              justifiedLate: disc?.justifiedLate ?? 0,
               consigne: disc?.consigne ?? 0,
             }}
             average={globalRank.average}
@@ -339,6 +344,7 @@ export function IPBW({
                 averages.reduce((acc, val) => acc + val, 0) / averages.length,
             }}
             rank={globalRank.aequoRank}
+            lang={lang}
           />
           <View
             style={{
@@ -349,8 +355,8 @@ export function IPBW({
               paddingTop: 4,
             }}
           >
-            <IPBWNotationSystem />
-            <IPBWSignature cycle={classroom.cycle?.name} />
+            <IPBWNotationSystem lang={lang} />
+            <IPBWSignature cycle={classroom.cycle?.name} lang={lang} />
           </View>
         </View>
       </Page>

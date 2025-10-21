@@ -20,6 +20,7 @@ export function IPBWAnnual({
   contacts,
   schoolYear,
   disciplines,
+  lang,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   studentId?: string;
@@ -34,6 +35,7 @@ export function IPBWAnnual({
     | RouterOutputs["student"]["getPrimaryContact"][];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["annual"];
+  lang: "fr" | "en";
 }) {
   const { studentsReport, summary: _summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
@@ -111,6 +113,7 @@ export function IPBWAnnual({
                   placeOfBirth: student.placeOfBirth,
                   registrationNumber: student.registrationNumber,
                 }}
+                lang={lang}
                 classroom={classroom}
                 contact={contact}
               />
@@ -438,8 +441,8 @@ export function IPBWAnnual({
                 discipline={{
                   absence: disc?.absence ?? 0,
                   justifiedAbsence: disc?.justifiedAbsence ?? 0,
-                  lateness: disc?.late ?? 0,
-                  justifiedLateness: disc?.justifiedLate ?? 0,
+                  late: disc?.late ?? 0,
+                  justifiedLate: disc?.justifiedLate ?? 0,
                   consigne: disc?.consigne ?? 0,
                 }}
                 effectif={classroom.size}
@@ -450,6 +453,7 @@ export function IPBWAnnual({
                   max: Math.max(...averages),
                   average: average,
                 }}
+                lang={lang}
                 rank={`${value.rank}`}
               />
               <IPBWSignatureAnnual />

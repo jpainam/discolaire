@@ -23,6 +23,7 @@ export function IPBWTrimestre({
   trimestreId,
   schoolYear,
   disciplines,
+  lang,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   student: RouterOutputs["student"]["get"];
@@ -33,6 +34,7 @@ export function IPBWTrimestre({
   contact: RouterOutputs["student"]["getPrimaryContact"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["trimestre"];
+  lang: "fr" | "en";
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const studentReport = studentsReport.get(student.id);
@@ -96,6 +98,7 @@ export function IPBWTrimestre({
               placeOfBirth: student.placeOfBirth,
               registrationNumber: student.registrationNumber,
             }}
+            lang={lang}
             classroom={classroom}
             contact={contact}
           />
@@ -424,12 +427,13 @@ export function IPBWTrimestre({
               average:
                 averages.reduce((acc, val) => acc + val, 0) / averages.length,
             }}
+            lang={lang}
             rank={globalRank.rank + ""}
             discipline={{
               absence: disc?.absence ?? 0,
               justifiedAbsence: disc?.justifiedAbsence ?? 0,
-              lateness: disc?.late ?? 0,
-              justifiedLateness: disc?.justifiedLate ?? 0,
+              late: disc?.late ?? 0,
+              justifiedLate: disc?.justifiedLate ?? 0,
               consigne: disc?.consigne ?? 0,
             }}
           />
@@ -442,8 +446,8 @@ export function IPBWTrimestre({
               paddingTop: 4,
             }}
           >
-            <IPBWNotationSystem />
-            <IPBWSignatureTrimestre />
+            <IPBWNotationSystem lang={lang} />
+            <IPBWSignatureTrimestre lang={lang} />
           </View>
         </View>
       </Page>

@@ -4,12 +4,12 @@ import { getTranslation } from "./translation";
 
 export function IPBWTableHeader({
   W,
-  section,
+  lang,
 }: {
   W: number[] | string[];
-  section?: string;
+  lang: "fr" | "en";
 }) {
-  const t = getTranslation(section);
+  const t = getTranslation(lang);
   return (
     <View
       style={{
@@ -101,7 +101,7 @@ export function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> {t("Appreciation")}</Text>
+        <Text> {t("Appréciation")}</Text>
       </View>
     </View>
   );

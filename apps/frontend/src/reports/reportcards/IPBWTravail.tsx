@@ -3,8 +3,18 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Text, View } from "@react-pdf/renderer";
 
 import { FontAwesomeIcon } from "../components/FontAwesomeIcon";
+import { getTranslation } from "./translation";
 
-export function IPBWTravail({ grade, style }: { grade: number; style: Style }) {
+export function IPBWTravail({
+  grade,
+  style,
+  lang,
+}: {
+  grade: number;
+  style: Style;
+  lang: "fr" | "en";
+}) {
+  const t = getTranslation(lang);
   return (
     <View
       style={{
@@ -23,14 +33,14 @@ export function IPBWTravail({ grade, style }: { grade: number; style: Style }) {
           paddingVertical: 1,
         }}
       >
-        <Text style={{ paddingLeft: 4 }}>Travail</Text>
+        <Text style={{ paddingLeft: 4 }}>{t("Travail")}</Text>
       </View>
 
-      <SummaryItem name="Felicitations" value={grade >= 18} />
-      <SummaryItem name="Encouragements" value={grade >= 14} />
-      <SummaryItem name="Tableau d'honneur" value={grade >= 12} />
-      <SummaryItem name="Avertissement" value={grade <= 9.99} />
-      <SummaryItem name="Blâme" value={grade <= 5} lastRow={true} />
+      <SummaryItem name={t("Félicitations")} value={grade >= 18} />
+      <SummaryItem name={t("Encouragements")} value={grade >= 14} />
+      <SummaryItem name={t("Tableau d'honneur")} value={grade >= 12} />
+      <SummaryItem name={t("Avertissement")} value={grade <= 9.99} />
+      <SummaryItem name={t("Blâme")} value={grade <= 5} lastRow={true} />
     </View>
   );
 }

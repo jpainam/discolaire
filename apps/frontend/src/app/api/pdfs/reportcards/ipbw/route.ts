@@ -124,15 +124,17 @@ async function indvidualReportCard({
     classroomId: classroom.id,
     termId,
   });
+  const lang = classroom.section?.name == "ANG" ? "en" : ("fr" as const);
 
   const stream = await renderToStream(
     IPBW({
       school,
       disciplines: disciplines,
       student,
+      lang: lang,
       classroom,
       title:
-        classroom.section?.name == "FRA"
+        lang == "fr"
           ? `BULLETIN SCOLAIRE : ${term.name}`
           : `MONTHLY PROGRESS REPORT CARD N° ${term.order + 1}`,
       subjects,

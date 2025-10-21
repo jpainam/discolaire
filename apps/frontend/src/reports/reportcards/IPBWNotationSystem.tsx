@@ -41,10 +41,52 @@ const notations: {
     description: "Compétences Non Acquises",
   },
 ];
+const en_notations: {
+  interval: string;
+  notation: string;
+  description: string;
+}[] = [
+  {
+    interval: "[18.00; 20.00[",
+    notation: "A+",
+    description: "Skills Highly Mastered",
+  },
+  {
+    interval: "[16.00; 18.00[",
+    notation: "A",
+    description: "Skills Highly Mastered",
+  },
+  {
+    interval: "[15.00; 16.00[",
+    notation: "B+",
+    description: "Skills Well Mastered",
+  },
+  {
+    interval: "[14.00; 15.00[",
+    notation: "B",
+    description: "Skills Well Mastered",
+  },
+  {
+    interval: "[12.00; 14.00[",
+    notation: "C+",
+    description: "Skills Acquired",
+  },
+  {
+    interval: "[10.00; 12.00[",
+    notation: "C",
+    description: "Skills Acquired",
+  },
+  {
+    interval: "[00.00; 10.00[",
+    notation: "D",
+    description: "Skills Not Acquired",
+  },
+];
 
 const W = [30, 10, 60];
 
-export function IPBWNotationSystem() {
+export function IPBWNotationSystem({ lang }: { lang: "fr" | "en" }) {
+  const N = lang == "en" ? en_notations : notations;
   return (
     <View
       style={{
@@ -54,7 +96,7 @@ export function IPBWNotationSystem() {
         border: "1px solid black",
       }}
     >
-      {notations.map((n, index) => {
+      {N.map((n, index) => {
         return (
           <View
             style={{

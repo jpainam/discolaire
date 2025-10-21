@@ -46,6 +46,7 @@ async function classroomReportCard({ classroomId }: { classroomId: string }) {
   const subjects = await caller.classroom.subjects(classroomId);
   const classroom = await caller.classroom.get(classroomId);
   const disciplines = await caller.discipline.annual({ classroomId });
+  const lang = classroom.section?.name == "ANG" ? "en" : ("fr" as const);
   const stream = await renderToStream(
     IPBWAnnual({
       school,
@@ -55,6 +56,7 @@ async function classroomReportCard({ classroomId }: { classroomId: string }) {
       subjects,
       report,
       contacts,
+      lang,
       schoolYear: classroom.schoolYear,
     }),
   );
@@ -91,6 +93,7 @@ async function indvidualReportCard({ studentId }: { studentId: string }) {
   const disciplines = await caller.discipline.annual({
     classroomId: student.classroom.id,
   });
+  const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
   const stream = await renderToStream(
     IPBWAnnual({
@@ -100,6 +103,7 @@ async function indvidualReportCard({ studentId }: { studentId: string }) {
       disciplines,
       subjects,
       report,
+      lang,
       contacts: [contact],
       schoolYear: classroom.schoolYear,
     }),

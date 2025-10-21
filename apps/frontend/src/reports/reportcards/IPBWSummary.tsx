@@ -3,6 +3,7 @@ import { Text, View } from "@react-pdf/renderer";
 import { getAppreciations } from "~/utils/appreciations";
 import { IPBWDiscipline } from "./IPBWDiscipline";
 import { IPBWTravail } from "./IPBWTravail";
+import { getTranslation } from "./translation";
 
 export function IPBWSummary({
   average,
@@ -10,16 +11,18 @@ export function IPBWSummary({
   effectif,
   successRate,
   discipline,
+  lang,
   rank,
 }: {
   average: number;
   rank: string;
   effectif: number;
   successRate: number;
+  lang: "fr" | "en";
   discipline: {
     absence: number;
-    lateness: number;
-    justifiedLateness: number;
+    late: number;
+    justifiedLate: number;
     consigne: number;
     justifiedAbsence: number;
   };
@@ -29,10 +32,15 @@ export function IPBWSummary({
     average: number;
   };
 }) {
+  const t = getTranslation(lang);
   return (
     <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
-      <IPBWTravail grade={average} style={{ width: "20%" }} />
-      <IPBWDiscipline discipline={discipline} style={{ width: "20%" }} />
+      <IPBWTravail lang={lang} grade={average} style={{ width: "20%" }} />
+      <IPBWDiscipline
+        lang={lang}
+        discipline={discipline}
+        style={{ width: "20%" }}
+      />
       <View
         style={{
           width: "20%",
@@ -51,11 +59,11 @@ export function IPBWSummary({
         >
           <Text style={{ paddingLeft: 4 }}>Performance</Text>
         </View>
-        <SummaryItem name="Moy.Max" value={summary.max.toFixed(2)} />
-        <SummaryItem name="Moy.Min" value={summary.min.toFixed(2)} />
-        <SummaryItem name="Moy.Cl" value={summary.average.toFixed(2)} />
+        <SummaryItem name={t("Moy.Max")} value={summary.max.toFixed(2)} />
+        <SummaryItem name={t("Moy.Min")} value={summary.min.toFixed(2)} />
+        <SummaryItem name={t("Moy.Cl")} value={summary.average.toFixed(2)} />
         <SummaryItem
-          name="Taux de reussite"
+          name={t("Taux de reussite")}
           value={(successRate * 100).toFixed(2) + "%"}
         />
         <View
@@ -73,7 +81,12 @@ export function IPBWSummary({
           value={getAppreciations(summary.avg)}
         /> */}
       </View>
-      <SummaryResult effectif={effectif} rank={rank} average={average} />
+      <SummaryResult
+        effectif={effectif}
+        rank={rank}
+        average={average}
+        lang={lang}
+      />
     </View>
   );
 }
@@ -117,11 +130,14 @@ function SummaryResult({
   average,
   effectif,
   rank,
+  lang,
 }: {
   average: number;
   rank: string;
   effectif: number;
+  lang: "fr" | "en";
 }) {
+  const t = getTranslation(lang);
   return (
     <View
       style={{
@@ -145,7 +161,7 @@ function SummaryResult({
             fontWeight: "bold",
           }}
         >
-          Resume des resultats
+          {t("Résume des resultats")}
         </Text>
       </View>
       <View
@@ -164,7 +180,7 @@ function SummaryResult({
             fontWeight: "bold",
           }}
         >
-          <Text> Moyenne</Text>
+          <Text> {t("Moyenne")}</Text>
         </View>
         <View
           style={{
@@ -193,7 +209,7 @@ function SummaryResult({
             fontWeight: "bold",
           }}
         >
-          <Text> Rang</Text>
+          <Text> {t("Rang")}</Text>
         </View>
         <View
           style={{
@@ -224,7 +240,7 @@ function SummaryResult({
             paddingVertical: 2,
           }}
         >
-          <Text> Appreciation</Text>
+          <Text> {t("Appréciation")}</Text>
         </View>
         <View
           style={{
@@ -252,7 +268,7 @@ function SummaryResult({
             textTransform: "uppercase",
           }}
         >
-          <Text> Observation</Text>
+          <Text> {t("Observation")}</Text>
         </View>
       </View>
       <View

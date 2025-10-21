@@ -22,6 +22,7 @@ export function IPBWClassroom({
   contacts,
   schoolYear,
   disciplines,
+  lang,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
   students: RouterOutputs["classroom"]["students"];
@@ -32,6 +33,7 @@ export function IPBWClassroom({
   contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["sequence"];
+  lang: "fr" | "en";
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
@@ -106,6 +108,7 @@ export function IPBWClassroom({
                   placeOfBirth: student.placeOfBirth,
                   registrationNumber: student.registrationNumber,
                 }}
+                lang={lang}
                 classroom={classroom}
                 contact={contact}
               />
@@ -117,7 +120,7 @@ export function IPBWClassroom({
                   flexDirection: "column",
                 }}
               >
-                <IPBWTableHeader W={W} />
+                <IPBWTableHeader W={W} lang={lang} />
                 {Object.keys(groups).map((groupId: string, index: number) => {
                   const items = groups[Number(groupId)]?.sort(
                     (a, b) => a.order - b.order,
@@ -346,10 +349,11 @@ export function IPBWClassroom({
                 discipline={{
                   absence: disc?.absence ?? 0,
                   justifiedAbsence: disc?.justifiedAbsence ?? 0,
-                  lateness: disc?.late ?? 0,
-                  justifiedLateness: disc?.justifiedLate ?? 0,
+                  late: disc?.late ?? 0,
+                  justifiedLate: disc?.justifiedLate ?? 0,
                   consigne: disc?.consigne ?? 0,
                 }}
+                lang={lang}
                 average={value.average}
                 successRate={successRate}
                 summary={{
@@ -359,7 +363,7 @@ export function IPBWClassroom({
                 }}
                 rank={value.aequoRank}
               />
-              <IPBWSignature cycle={classroom.cycle?.name} />
+              <IPBWSignature lang={lang} cycle={classroom.cycle?.name} />
             </View>
           </Page>
         );
