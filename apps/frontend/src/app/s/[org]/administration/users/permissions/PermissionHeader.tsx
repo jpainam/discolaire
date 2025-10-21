@@ -1,6 +1,7 @@
 "use client";
 
 import { LockKeyhole, MoreVertical } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -16,12 +17,11 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 
-export function PermissionHeader({ defaultValue }: { defaultValue: string }) {
+export function PermissionHeader() {
   const { t } = useLocale();
-  const router = useRouter();
+  const [userId, setUserId] = useQueryState("userId");
   return (
     <div className="flex flex-row items-center justify-between gap-2 border-b px-4 py-2">
       <div className="flex flex-row items-center gap-2">
@@ -32,16 +32,16 @@ export function PermissionHeader({ defaultValue }: { defaultValue: string }) {
         <Label>{t("user")}</Label>
         <UserSelector
           className="w-96"
-          defaultValue={defaultValue}
+          defaultValue={userId ?? ""}
           onChange={(val) => {
-            router.push(`/administration/users/permissions?userId=${val}`);
+            void setUserId(val ?? null);
           }}
         />
       </div>
       <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="size-8" variant="outline" size={"icon"}>
+            <Button variant="outline" size={"icon-sm"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { decode } from "entities";
 
 import { cn } from "@repo/ui/lib/utils";
 
@@ -40,7 +41,7 @@ export function UserSelector({
       }
       disabled={disabled}
       value={value}
-      label={label}
+      label={decode(label)}
       onSelect={(value, label) => {
         setValue(value);
         setLabel(label ?? "");

@@ -2,6 +2,7 @@
 
 import type { ALIGN_OPTIONS } from "@radix-ui/react-popper";
 import * as React from "react";
+import { decode } from "entities";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -150,7 +151,7 @@ export function SearchCombobox({
                       }}
                       disabled={isSelected}
                     >
-                      {item.label}
+                      {decode(item.label)}
                       <Check
                         className={cn(
                           "ml-auto h-4 w-4",
