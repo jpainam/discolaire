@@ -63,7 +63,7 @@ export function IPBWNotationSystem() {
               flexDirection: "row",
               display: "flex",
             }}
-            key={index}
+            key={`notations-${index}`}
           >
             <View
               style={{
@@ -100,7 +100,6 @@ export function IPBWNotationSystem() {
                   paddingHorizontal: 2,
                 }}
               >
-                {" "}
                 {n.description}
               </Text>
             </View>

@@ -38,7 +38,7 @@ export default async function Layout(
   );
   const t = await getTranslations();
   const sum = (a: number[]) => {
-    return a.reduce((a, b) => a + b);
+    return a.reduce((a, b) => a + b, 0);
   };
   const metrics = [
     {
