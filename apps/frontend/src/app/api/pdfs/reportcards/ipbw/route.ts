@@ -65,6 +65,7 @@ async function classroomReportCard({
     classroomId,
     termId,
   });
+  const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
   const stream = await renderToStream(
     IPBWClassroom({
@@ -79,6 +80,7 @@ async function classroomReportCard({
       subjects,
       report,
       contacts,
+      lang,
       schoolYear: classroom.schoolYear,
     }),
   );

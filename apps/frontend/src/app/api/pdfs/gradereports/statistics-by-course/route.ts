@@ -8,9 +8,9 @@ import type { RouterOutputs } from "@repo/api";
 
 import { getSession } from "~/auth/server";
 import { StatisticByCourse } from "~/reports/gradereports/StatisticByCourse";
-import { getAppreciations } from "~/reports/utils";
 import { caller } from "~/trpc/server";
 import { xlsxType } from "~/utils";
+import { getAppreciations } from "~/utils/appreciations";
 
 const searchSchema = z.object({
   termId: z.string().min(1),
