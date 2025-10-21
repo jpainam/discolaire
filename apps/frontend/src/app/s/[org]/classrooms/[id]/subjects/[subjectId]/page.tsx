@@ -39,6 +39,7 @@ export default async function Page(props: {
           >
             <ProgramKanban
               categories={categories}
+              defaultSubjectId={subject.id}
               // programs={programs.map((program) => {
               //   return {
               //     title: program.title,

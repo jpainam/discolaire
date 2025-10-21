@@ -164,6 +164,21 @@ export const defaultThemes = {
       border: "#586e75",
     },
   },
+  tangerine: {
+    label: "Tangerine",
+    dark: {
+      primary: "#e05d38",
+      accent: "#2a3656",
+      secondary: "#2a303e",
+      border: "#3d4354",
+    },
+    light: {
+      primary: "#e05d38",
+      accent: "#d6e4f0",
+      border: "#dcdfe2",
+      secondary: "#f3f4f6",
+    },
+  },
   twitter: {
     label: "Twitter",
     light: {

@@ -1,16 +1,17 @@
 "use client";
 
 //import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 //import { html_content } from "./editor-content";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -45,29 +46,38 @@ import { useTRPC } from "~/trpc/react";
 // });
 
 const programFormSchema = z.object({
-  id: z.coerce.number(),
   content: z.string().min(1, { message: "Content is required" }),
 });
 
 export function CreateEditProgram({
-  defaultContent,
-  subject,
+  defaultSubjectId,
 }: {
-  defaultContent?: string;
-  subject: RouterOutputs["subject"]["get"];
+  defaultSubjectId: number;
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const trpc = useTRPC();
+  const [subjectId] = useQueryState(
+    "subjectId",
+    parseAsInteger.withDefault(defaultSubjectId),
+  );
   const params = useParams<{ id: string }>();
+  const subjectQuery = useQuery(trpc.subject.get.queryOptions(subjectId));
 
   const form = useForm({
     defaultValues: {
-      content: subject.program ?? defaultContent ?? "",
-      id: subject.id,
+      content: "",
     },
     resolver: standardSchemaResolver(programFormSchema),
   });
-  const trpc = useTRPC();
+
+  useEffect(() => {
+    const s = subjectQuery.data;
+    if (!s) {
+      return;
+    }
+  }, [subjectQuery.data]);
+
   const queryClient = useQueryClient();
 
   const canUpdateSubject = useCheckPermission(
@@ -91,7 +101,7 @@ export function CreateEditProgram({
     toast.loading(t("updating"), { id: 0 });
     updateSubjectProgram.mutate({
       content: data.content,
-      id: subject.id,
+      id: subjectId,
     });
   };
 
@@ -105,12 +115,14 @@ export function CreateEditProgram({
       >
         <div className="bg-muted/50 flex flex-row justify-end gap-4 border-b px-4 py-1">
           <div className="flex flex-row items-center gap-2">
-            <Label className="hidden md:block">{subject.course.name}</Label>
+            <Label className="hidden md:block">
+              {subjectQuery.data?.course.name}
+            </Label>
             <FlatBadge variant={"green"}>
-              {t("coeff")}: {subject.coefficient}
+              {t("coeff")}: {subjectQuery.data?.coefficient}
             </FlatBadge>
             <FlatBadge variant={"blue"}>
-              {t("teacher")}: {subject.teacher?.lastName}
+              {t("teacher")}: {subjectQuery.data?.teacher?.lastName}
             </FlatBadge>
           </div>
 
@@ -157,7 +169,7 @@ export function CreateEditProgram({
                 <DropdownMenuItem
                   onSelect={() => {
                     window.open(
-                      `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subject.id}`,
+                      `/api/pdfs/classroom/${params.id}/programs?format=pdf&subjectId=${subjectId}`,
                       "_blank",
                     );
                   }}
@@ -180,7 +192,7 @@ export function CreateEditProgram({
                 <DropdownMenuItem
                   onSelect={() => {
                     window.open(
-                      `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subject.id}`,
+                      `/api/pdfs/classroom/${params.id}/programs?format=csv&subjectId=${subjectId}`,
                       "_blank",
                     );
                   }}
@@ -197,10 +209,10 @@ export function CreateEditProgram({
             <div
               className="prose prose-sm max-w-none"
               dangerouslySetInnerHTML={{
-                __html: subject.program ?? "",
+                __html: subjectQuery.data?.program ?? "",
               }}
             ></div>
-            {!subject.program && (
+            {!subjectQuery.data?.program && (
               <EmptyState title={t("no_data")} className="my-8" />
             )}
           </>

@@ -1,11 +1,10 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -14,8 +13,8 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
   const subjectsQuery = useQuery(
     trpc.classroom.subjects.queryOptions(classroomId),
   );
-  const router = useRouter();
-  const params = useParams<{ subjectId: string }>();
+
+  const [subjectId, setSubjectId] = useQueryState("subjectId", parseAsInteger);
   if (subjectsQuery.isPending) {
     return (
       <div className="flex w-[350px] flex-col gap-2 p-2">
@@ -35,12 +34,12 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
           <li
             key={index}
             onClick={() => {
-              router.push(`/classrooms/${classroomId}/programs/${subject.id}`);
+              void setSubjectId(subject.id);
             }}
             className={cn(
               `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-2`,
-              subject.id === Number(params.subjectId)
-                ? "bg-secondary text-secondary-foreground font-bold"
+              subject.id === subjectId
+                ? "bg-secondary text-secondary-foreground"
                 : "",
             )}
           >

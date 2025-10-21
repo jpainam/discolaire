@@ -1,26 +1,34 @@
 "use client";
 
 import * as React from "react";
-import { useParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { parseAsInteger, useQueryState } from "nuqs";
+
+
 
 import type { RouterOutputs } from "@repo/api";
+
+
 
 import type { SubjectProgramItem } from "./program_kanban";
 import { Kanban, KanbanBoard, KanbanOverlay } from "~/components/kanban";
 import { useTRPC } from "~/trpc/react";
 import { ProgramKanbanColumn } from "./ProgramKanbanColumn";
 
+
 export function ProgramKanban({
   categories,
+  defaultSubjectId,
 }: {
   categories: RouterOutputs["program"]["categories"];
+  defaultSubjectId: number
 }) {
   const trpc = useTRPC();
-  const params = useParams<{ subjectId: string }>();
-  const { data: subjectPrograms } = useSuspenseQuery(
+
+  const [subjectId] = useQueryState("subjectId", parseAsInteger.withDefault(defaultSubjectId));
+  const subjectProgramsQuery = useQuery(
     trpc.program.bySubject.queryOptions({
-      subjectId: Number(params.subjectId),
+      subjectId: subjectId,
     }),
   );
   const [columns, setColumns] = React.useState<
@@ -32,7 +40,7 @@ export function ProgramKanban({
     categories.forEach((category) => {
       subjectGroups[category.id] = [];
     });
-    subjectPrograms.forEach((program) => {
+    subjectProgramsQuery.data?.forEach((program) => {
       const categoryId = program.category.id;
       subjectGroups[categoryId] ??= [];
       subjectGroups[categoryId].push({
@@ -51,7 +59,7 @@ export function ProgramKanban({
       });
     });
     setColumns(subjectGroups);
-  }, [categories, subjectPrograms]);
+  }, [categories, subjectProgramsQuery.data]);
 
   return (
     <div className="px-4">
