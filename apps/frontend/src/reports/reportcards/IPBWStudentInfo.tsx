@@ -17,6 +17,7 @@ export function IPBWStudentInfo({
     placeOfBirth?: string | null;
     avatar?: string | null;
     isRepeating: boolean;
+    registrationNumber: string | null;
   };
   classroom: RouterOutputs["classroom"]["get"];
   contact: RouterOutputs["student"]["getPrimaryContact"];
@@ -123,7 +124,7 @@ export function IPBWStudentInfo({
           <InfoItem
             style={{ borderBottom: "1px solid black", width: "30%" }}
             label={"Identifiant Unique"}
-            value="HIWJU34"
+            value={student.registrationNumber ?? ""}
           />
           <InfoItem
             label={"Redoublant"}

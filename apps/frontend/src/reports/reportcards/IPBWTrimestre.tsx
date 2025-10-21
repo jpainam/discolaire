@@ -6,6 +6,7 @@ import type { RouterOutputs } from "@repo/api";
 import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
 import { getTitle } from "../utils";
+import { IPBWNotationSystem } from "./IPBWNotationSystem";
 import { IPBWSignatureTrimestre } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
@@ -93,6 +94,7 @@ export function IPBWTrimestre({
               isRepeating: student.isRepeating,
               dateOfBirth: student.dateOfBirth,
               placeOfBirth: student.placeOfBirth,
+              registrationNumber: student.registrationNumber,
             }}
             classroom={classroom}
             contact={contact}
@@ -185,7 +187,7 @@ export function IPBWTrimestre({
                             justifyContent: "center",
                           }}
                         >
-                          <Text> {grade ? grade.average : ""}</Text>
+                          <Text> {grade ? grade.average?.toFixed(2) : ""}</Text>
                         </View>
                         <View
                           style={{
@@ -431,7 +433,18 @@ export function IPBWTrimestre({
               consigne: disc?.consigne ?? 0,
             }}
           />
-          <IPBWSignatureTrimestre />
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 2,
+              width: "100%",
+              display: "flex",
+              paddingTop: 4,
+            }}
+          >
+            <IPBWNotationSystem />
+            <IPBWSignatureTrimestre />
+          </View>
         </View>
       </Page>
     </Document>

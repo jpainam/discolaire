@@ -57,10 +57,9 @@ export function IPBWSignatureTrimestre() {
         flexDirection: "row",
         gap: 2,
         display: "flex",
-        paddingTop: 4,
         fontWeight: "bold",
-        fontSize: 9,
-        width: "100%",
+        fontSize: 8,
+        width: "80%",
       }}
     >
       <View
@@ -68,7 +67,7 @@ export function IPBWSignatureTrimestre() {
           width: "30%",
           border: "1px solid black",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
         <Text style={{ paddingVertical: 2 }}> Parents</Text>
@@ -78,7 +77,7 @@ export function IPBWSignatureTrimestre() {
           width: "30%",
           border: "1px solid black",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
         <Text style={{ paddingVertical: 2 }}>Prof. Principal</Text>
@@ -89,7 +88,7 @@ export function IPBWSignatureTrimestre() {
           width: "40%",
           border: "1px solid black",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
         <Text style={{ paddingVertical: 2 }}>Le Chef d'établissement</Text>

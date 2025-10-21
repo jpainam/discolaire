@@ -106,6 +106,7 @@ export function IPBWClassroomTrimestre({
                   isRepeating: student.isRepeating,
                   dateOfBirth: student.dateOfBirth,
                   placeOfBirth: student.placeOfBirth,
+                  registrationNumber: student.registrationNumber,
                 }}
                 classroom={classroom}
                 contact={contact}
