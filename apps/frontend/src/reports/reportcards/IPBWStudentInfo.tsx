@@ -1,8 +1,9 @@
 import type { Style } from "@react-pdf/types";
 import { Image, Text, View } from "@react-pdf/renderer";
-import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
+
+import { getTranslation } from "./translation";
 
 export function IPBWStudentInfo({
   student,
@@ -22,14 +23,15 @@ export function IPBWStudentInfo({
   classroom: RouterOutputs["classroom"]["get"];
   contact: RouterOutputs["student"]["getPrimaryContact"];
 }) {
+  const t = getTranslation(classroom.section?.name);
   let naiss =
     student.dateOfBirth &&
-    Intl.DateTimeFormat(i18next.language, {
+    Intl.DateTimeFormat(classroom.section?.name == "ANG" ? "en" : "fr", {
       day: "numeric",
       month: "long",
       year: "numeric",
     }).format(student.dateOfBirth);
-  naiss += " à " + student.placeOfBirth;
+  naiss += "  " + t("à") + " " + student.placeOfBirth;
   return (
     <View
       style={{
@@ -84,10 +86,14 @@ export function IPBWStudentInfo({
         >
           <InfoItem
             style={{ width: "60%" }}
-            label={"Nom et Prénoms"}
+            label={t("Nom et Prénoms")}
             value={student.lastName + " " + student.firstName}
           />
-          <InfoItem label={"Classe"} value={classroom.name} lastColumn={true} />
+          <InfoItem
+            label={t("Classe")}
+            value={classroom.name}
+            lastColumn={true}
+          />
         </View>
         {/* Datenaiss & Gender & Effectif */}
         <View
@@ -99,16 +105,16 @@ export function IPBWStudentInfo({
         >
           <InfoItem
             style={{ width: "60%" }}
-            label={"Date et lieu de naissance"}
+            label={t("Date et lieu de naissance")}
             value={naiss?.toString() ?? ""}
           />
           <InfoItem
             style={{ width: "15%" }}
-            label={"Genre"}
+            label={t("Genre")}
             value={student.gender == "female" ? "F" : "M"}
           />
           <InfoItem
-            label={"Effectif"}
+            label={t("Effectif")}
             value={classroom.size.toString()}
             lastColumn={true}
           />
@@ -123,20 +129,20 @@ export function IPBWStudentInfo({
         >
           <InfoItem
             style={{ borderBottom: "1px solid black", width: "30%" }}
-            label={"Identifiant Unique"}
+            label={t("Identifiant Unique")}
             value={student.registrationNumber ?? ""}
           />
           <InfoItem
-            label={"Redoublant"}
+            label={t("Redoublant")}
             style={{
               borderBottom: "1px solid black",
               width: "30%",
             }}
-            value={student.isRepeating ? "OUI" : "NON"}
+            value={student.isRepeating ? t("OUI") : t("NON")}
           />
           <InfoItem
             lastColumn={true}
-            label={"Professeur Principal"}
+            label={t("Professeur Principal")}
             value={""}
           />
         </View>
@@ -149,7 +155,7 @@ export function IPBWStudentInfo({
           }}
         >
           <InfoItem
-            label={"Parents / Tuteurs"}
+            label={t("Parents / Tuteurs")}
             style={{ width: "60%" }}
             value={contact?.contact.lastName ?? ""}
           />

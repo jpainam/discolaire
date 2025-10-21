@@ -1,6 +1,15 @@
 import { Text, View } from "@react-pdf/renderer";
 
-export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
+import { getTranslation } from "./translation";
+
+export function IPBWTableHeader({
+  W,
+  section,
+}: {
+  W: number[] | string[];
+  section?: string;
+}) {
+  const t = getTranslation(section);
   return (
     <View
       style={{
@@ -22,7 +31,7 @@ export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           paddingHorizontal: 2,
         }}
       >
-        <Text>Matieres</Text>
+        <Text>{t("Matières")}</Text>
       </View>
       <View
         style={{
@@ -32,7 +41,7 @@ export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           paddingHorizontal: 2,
         }}
       >
-        <Text>Note</Text>
+        <Text>{t("Note")}</Text>
       </View>
       <View
         style={{
@@ -62,7 +71,7 @@ export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           paddingHorizontal: 2,
         }}
       >
-        <Text> Rang</Text>
+        <Text> {t("Rang")}</Text>
       </View>
       <View
         style={{
@@ -72,7 +81,7 @@ export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           paddingHorizontal: 2,
         }}
       >
-        <Text> Moy.C</Text>
+        <Text> {t("Moy.C")}</Text>
       </View>
       <View
         style={{
@@ -82,7 +91,7 @@ export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           paddingHorizontal: 2,
         }}
       >
-        <Text> Min/Max</Text>
+        <Text> {t("Min/Max")}</Text>
       </View>
       <View
         style={{
@@ -92,7 +101,7 @@ export function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           paddingHorizontal: 2,
         }}
       >
-        <Text> Appreciation</Text>
+        <Text> {t("Appreciation")}</Text>
       </View>
     </View>
   );

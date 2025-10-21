@@ -10,6 +10,7 @@ import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
+import { getTranslation } from "./translation";
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
 
@@ -36,6 +37,7 @@ export function IPBW({
 }) {
   const { studentsReport, summary, globalRanks } = report;
   const studentReport = studentsReport.get(student.id);
+
   const globalRank = globalRanks.get(student.id);
   if (!studentReport || !globalRank) return <></>;
   const groups = _.groupBy(subjects, "subjectGroupId");
@@ -44,6 +46,7 @@ export function IPBW({
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
   const disc = disciplines.get(student.id);
+  const t = getTranslation(classroom.section?.name);
   return (
     <Document>
       <Page
@@ -81,7 +84,7 @@ export function IPBW({
                 fontSize: 9,
               }}
             >
-              Année scolaire {schoolYear.name}
+              {t("Année scolaire")} {schoolYear.name}
             </Text>
           </View>
           <IPBWStudentInfo
@@ -107,7 +110,7 @@ export function IPBW({
               flexDirection: "column",
             }}
           >
-            <IPBWTableHeader W={W} />
+            <IPBWTableHeader W={W} section={classroom.section?.name} />
             {Object.keys(groups).map((groupId: string, index: number) => {
               const items = groups[Number(groupId)]?.sort(
                 (a, b) => a.order - b.order,
