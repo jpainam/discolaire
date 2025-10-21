@@ -3,8 +3,8 @@ import _, { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
-import { getAppreciations } from "../utils";
 import { IPBWSignatureAnnual } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";

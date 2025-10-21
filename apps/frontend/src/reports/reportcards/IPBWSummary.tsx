@@ -1,6 +1,6 @@
 import { Text, View } from "@react-pdf/renderer";
 
-import { getAppreciations } from "../utils";
+import { getAppreciations } from "~/utils/appreciations";
 import { IPBWDiscipline } from "./IPBWDiscipline";
 import { IPBWTravail } from "./IPBWTravail";
 

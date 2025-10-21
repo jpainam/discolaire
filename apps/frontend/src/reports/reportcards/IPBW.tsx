@@ -3,8 +3,9 @@ import _, { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
-import { getAppreciations } from "../utils";
+import { IPBWNotationSystem } from "./IPBWNotationSystem";
 import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
@@ -335,7 +336,18 @@ export function IPBW({
             }}
             rank={globalRank.aequoRank}
           />
-          <IPBWSignature cycle={classroom.cycle?.name} />
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 2,
+              width: "100%",
+              display: "flex",
+              paddingTop: 4,
+            }}
+          >
+            <IPBWNotationSystem />
+            <IPBWSignature cycle={classroom.cycle?.name} />
+          </View>
         </View>
       </Page>
     </Document>

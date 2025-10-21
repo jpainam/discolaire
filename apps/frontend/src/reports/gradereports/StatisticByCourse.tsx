@@ -7,8 +7,8 @@ import type { RouterOutputs } from "@repo/api";
 //import { getServerTranslations } from "~/i18n/server";
 
 import { caller } from "~/trpc/server";
+import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
-import { getAppreciations } from "../utils";
 
 export async function StatisticByCourse({
   stats,

@@ -4,10 +4,10 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getAppreciations } from "~/utils/appreciations";
 //import { getServerTranslations } from "~/i18n/server";
 
 import { getHeader } from "../headers";
-import { getAppreciations } from "../utils";
 
 export function RollOfHonor({
   school,

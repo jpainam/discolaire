@@ -3,8 +3,9 @@ import _, { sum } from "lodash";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
-import { getAppreciations, getTitle } from "../utils";
+import { getTitle } from "../utils";
 import { IPBWSignatureTrimestre } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";

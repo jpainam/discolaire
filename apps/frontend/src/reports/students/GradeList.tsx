@@ -2,8 +2,8 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
-import { getAppreciations } from "../utils";
 
 export function GradeList({
   student,
