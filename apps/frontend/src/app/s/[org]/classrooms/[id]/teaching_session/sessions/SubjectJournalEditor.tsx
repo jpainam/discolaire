@@ -74,9 +74,7 @@ export function SubjectJournalEditor({
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.teachingSession.all.pathFilter(),
-        );
+        await queryClient.invalidateQueries(trpc.teachingSession.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         setSelectedFile(null);
         if (fileInputRef.current) {

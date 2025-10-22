@@ -45,9 +45,7 @@ export function SubjectJournalHeader({
   const deleteSubjectJournal = useMutation(
     trpc.teachingSession.clearAll.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.teachingSession.all.pathFilter(),
-        );
+        await queryClient.invalidateQueries(trpc.teachingSession.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
 
@@ -101,11 +99,11 @@ export function SubjectJournalHeader({
                   onSelect={async () => {
                     const isConfirmed = await confirm({
                       title: t("clear_all"),
-                      description: t("delete_description"),
-                      icon: <Trash2 className="text-destructive" />,
-                      alertDialogTitle: {
-                        className: "flex items-center gap-2",
-                      },
+                      description: t("delete_confirmation"),
+                      // icon: <Trash2 className="text-destructive" />,
+                      // alertDialogTitle: {
+                      //   className: "flex items-center gap-2",
+                      // },
                     });
                     if (isConfirmed) {
                       toast.loading(t("deleting"), { id: 0 });

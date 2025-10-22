@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -23,6 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import { getFileBasename, isRichText } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -62,7 +59,7 @@ export function SubjectJournalList({
     }),
   );
 
-  const { data: journals } = useSuspenseQuery(
+  const journalsQuery = useQuery(
     trpc.teachingSession.bySubject.queryOptions({
       subjectId: subjectId,
       pageIndex,
@@ -89,97 +86,103 @@ export function SubjectJournalList({
     day: "numeric",
   });
   return (
-    <div className="flex flex-col gap-2 px-4 py-2">
-      {journals.map((journal) => (
-        <div key={journal.id} className="bg-muted/50 rounded-md border p-2">
-          <div className="flex items-start justify-between">
-            <span className="text-sm font-semibold">{journal.title}</span>
-            <p className="text-muted-foreground text-xs">
-              {journal.createdBy.name} -{" "}
-              {dateFormat.format(journal.publishDate)}
-            </p>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant={"ghost"} size={"icon"} className="size-8">
-                  <MoreHorizontal />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  variant="destructive"
-                  onSelect={async () => {
-                    const isConfirmed = await confirm({
-                      title: t("delete"),
-                      description: t("delete_confirmation"),
-                    });
-                    if (isConfirmed) {
-                      toast.loading(t("deleting"), { id: 0 });
-                      deleteSubjectJournal.mutate(journal.id);
-                    }
-                  }}
-                >
-                  <Trash2 />
-                  {t("delete")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            {/* {getStatusBadge(journal.status)} */}
+    <ScrollArea className="h-[calc(100vh-20rem)]">
+      <div className="flex flex-col gap-2 px-4 py-2">
+        {journalsQuery.data?.map((journal) => (
+          <div key={journal.id} className="bg-muted/50 rounded-md border p-2">
+            <div className="flex items-start justify-between">
+              <span className="text-sm font-semibold">{journal.title}</span>
+              <p className="text-muted-foreground text-xs">
+                {journal.createdBy.name} -{" "}
+                {dateFormat.format(journal.publishDate)}
+              </p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant={"ghost"} size={"icon"} className="size-8">
+                    <MoreHorizontal />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteSubjectJournal.mutate(journal.id);
+                      }
+                    }}
+                  >
+                    <Trash2 />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {/* {getStatusBadge(journal.status)} */}
+            </div>
+
+            {isRichText(journal.content) ? (
+              <div
+                className="prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{
+                  __html: journal.content,
+                }}
+              ></div>
+            ) : (
+              <p className="text-sm">{journal.content}</p>
+            )}
+
+            {journal.attachment && (
+              <Button
+                variant={"link"}
+                onClick={() => {
+                  if (journal.attachment)
+                    window.open(journal.attachment, "_blank");
+                }}
+              >
+                <span className="max-w-[80%] truncate">
+                  {getFileBasename(journal.attachment)}
+                </span>
+                <DownloadIcon className="h-4 w-4" />
+              </Button>
+            )}
           </div>
-
-          {isRichText(journal.content) ? (
-            <div
-              className="prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: journal.content,
-              }}
-            ></div>
-          ) : (
-            <p className="text-sm">{journal.content}</p>
-          )}
-
-          {journal.attachment && (
-            <Button
-              variant={"link"}
-              onClick={() => {
-                if (journal.attachment)
-                  window.open(journal.attachment, "_blank");
-              }}
-            >
-              <span className="max-w-[80%] truncate">
-                {getFileBasename(journal.attachment)}
-              </span>
-              <DownloadIcon className="h-4 w-4" />
-            </Button>
-          )}
+        ))}
+        <div className="flex items-center justify-between pb-4">
+          <Button
+            size={"sm"}
+            onClick={() => {
+              void setPageIndex(() => pageIndex - 1);
+            }}
+            disabled={pageIndex === 1}
+            variant="outline"
+          >
+            <ChevronLeftIcon className="h-4 w-4" />
+            {t("previous")}
+          </Button>
+          <span className="text-xs">
+            {t("page")} {pageIndex} of{" "}
+            {Math.ceil((journalsQuery.data?.length ?? 0) / pageSize)}
+          </span>
+          <Button
+            size={"sm"}
+            onClick={() => {
+              void setPageIndex(() => pageIndex + 1);
+            }}
+            disabled={
+              pageIndex ===
+              Math.ceil((journalsQuery.data?.length ?? 0) / pageSize)
+            }
+            variant="outline"
+          >
+            {t("next")}
+            <ChevronRightIcon className="ml-2 h-4 w-4" />
+          </Button>
         </div>
-      ))}
-      <div className="flex items-center justify-between pb-4">
-        <Button
-          size={"sm"}
-          onClick={() => {
-            void setPageIndex(() => pageIndex - 1);
-          }}
-          disabled={pageIndex === 1}
-          variant="outline"
-        >
-          <ChevronLeftIcon className="h-4 w-4" />
-          {t("previous")}
-        </Button>
-        <span className="text-xs">
-          {t("page")} {pageIndex} of {Math.ceil(journals.length / pageSize)}
-        </span>
-        <Button
-          size={"sm"}
-          onClick={() => {
-            void setPageIndex(() => pageIndex + 1);
-          }}
-          disabled={pageIndex === Math.ceil(journals.length / pageSize)}
-          variant="outline"
-        >
-          {t("next")}
-          <ChevronRightIcon className="ml-2 h-4 w-4" />
-        </Button>
       </div>
-    </div>
+    </ScrollArea>
   );
 }

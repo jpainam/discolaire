@@ -1,5 +1,6 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
@@ -19,11 +20,13 @@ import {
   TableProperties,
   Users,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -48,27 +51,41 @@ export function ClassroomSidebar({
         icon: TableProperties,
       },
       {
-        name: "enrollments",
-        url: `/classrooms/${params.id}/enrollments`,
-        icon: Users,
-      },
-
-      {
-        name: "fees",
+        name: "School fees",
         url: `/classrooms/${params.id}/fees`,
         icon: Receipt,
       },
-      {
-        name: "financial_situation",
-        url: `/classrooms/${params.id}/financial_situation`,
-        icon: HandCoins,
-      },
+
       {
         name: "documents",
         url: `/classrooms/${params.id}/documents`,
         icon: FolderOpen,
       },
 
+      {
+        name: "financial_situation",
+        url: `/classrooms/${params.id}/financial_situation`,
+        icon: HandCoins,
+      },
+    ],
+    school_life: [
+      {
+        name: "attendances",
+        url: `/classrooms/${params.id}/attendances`,
+        icon: Contact,
+      },
+      {
+        name: "timetables",
+        url: `/classrooms/${params.id}/timetables`,
+        icon: CalendarDays,
+      },
+    ],
+    academy: [
+      {
+        name: "enrollments",
+        url: `/classrooms/${params.id}/enrollments`,
+        icon: Users,
+      },
       {
         name: "assignments",
         url: `/classrooms/${params.id}/assignments`,
@@ -81,36 +98,26 @@ export function ClassroomSidebar({
       },
 
       {
-        name: "print",
-        url: `/classrooms/${params.id}/print`,
-        icon: Printer,
-      },
-
-      {
         name: "subjects",
         url: `/classrooms/${params.id}/subjects`,
         icon: Captions,
       },
 
       {
-        name: "attendances",
-        url: `/classrooms/${params.id}/attendances`,
-        icon: Contact,
-      },
-      {
         name: "reportcards",
         url: `/classrooms/${params.id}/reportcards`,
         icon: Proportions,
       },
-      {
-        name: "timetables",
-        url: `/classrooms/${params.id}/timetables`,
-        icon: CalendarDays,
-      },
+
       {
         name: "teaching_session",
         url: `/classrooms/${params.id}/teaching_session`,
         icon: BookText,
+      },
+      {
+        name: "print",
+        url: `/classrooms/${params.id}/print`,
+        icon: Printer,
       },
     ],
   };
@@ -127,7 +134,7 @@ export function ClassroomSidebar({
   }
 
   const { t } = useLocale();
-  const pathname = usePathname();
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -146,33 +153,48 @@ export function ClassroomSidebar({
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-
-        <SidebarGroup>
-          {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
-          <SidebarMenu>
-            {data.information.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={t(item.name)}
-                  //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
-                  isActive={pathname === item.url}
-                >
-                  <Link href={item.url}>
-                    <item.icon
-                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                    //size={22}
-                    //aria-hidden="true"
-                    />
-                    <span>{t(item.name)}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+        <MenuSideGroup label="Information" items={data.information} />
+        <MenuSideGroup label="academy" items={data.academy} />
+        <MenuSideGroup label="school_life" items={data.school_life} />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+function MenuSideGroup({
+  items,
+  label,
+}: {
+  items: { name: string; url: string; icon: LucideIcon }[];
+  label: string;
+}) {
+  const t = useTranslations();
+  const pathname = usePathname();
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>
+      <SidebarMenu>
+        {items.map((item) => (
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton
+              asChild
+              tooltip={t(item.name)}
+              //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
+              isActive={pathname === item.url}
+            >
+              <Link href={item.url}>
+                <item.icon
+                //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
+                //size={22}
+                //aria-hidden="true"
+                />
+                <span>{t(item.name)}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
   );
 }
