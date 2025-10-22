@@ -1,9 +1,10 @@
 "use client";
 
 import type * as React from "react";
-import { useParams } from "next/navigation";
 import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsInteger, useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -30,7 +31,7 @@ export function ProgramKanbanColumn({
 }: SubjectProgramColumnProps) {
   const { openModal } = useModal();
   const t = useTranslations();
-  const params = useParams<{ subjectId: string }>();
+  const [subjectId] = useQueryState("subjectId", parseAsInteger);
   return (
     <KanbanColumn
       value={value}
@@ -54,6 +55,10 @@ export function ProgramKanbanColumn({
           onClick={() => {
             const category = categories.find((cat) => cat.id == value);
             if (!category) return;
+            if (!subjectId) {
+              toast.warning("Veuillez choisir un enseignement");
+              return;
+            }
             openModal({
               title: t("create"),
               view: (
@@ -61,7 +66,7 @@ export function ProgramKanbanColumn({
                   description={null}
                   categoryId={category.id}
                   requiredSessionCount={1}
-                  subjectId={Number(params.subjectId)}
+                  subjectId={subjectId}
                 />
               ),
             });

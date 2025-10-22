@@ -12,7 +12,6 @@ import {
   FolderOpen,
   HandCoins,
   NotebookPen,
-  NotepadTextDashed,
   Printer,
   Proportions,
   Receipt,
@@ -92,11 +91,7 @@ export function ClassroomSidebar({
         url: `/classrooms/${params.id}/subjects`,
         icon: Captions,
       },
-      {
-        name: "programs",
-        url: `/classrooms/${params.id}/programs`,
-        icon: BookText,
-      },
+
       {
         name: "attendances",
         url: `/classrooms/${params.id}/attendances`,
@@ -115,7 +110,7 @@ export function ClassroomSidebar({
       {
         name: "teaching_session",
         url: `/classrooms/${params.id}/teaching_session`,
-        icon: NotepadTextDashed,
+        icon: BookText,
       },
     ],
   };

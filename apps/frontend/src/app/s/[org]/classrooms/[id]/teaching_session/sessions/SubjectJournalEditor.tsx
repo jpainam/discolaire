@@ -1,13 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CalendarDays,
   CalendarDaysIcon,
@@ -15,6 +10,7 @@ import {
   PaperclipIcon,
   X,
 } from "lucide-react";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -41,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { Switch } from "@repo/ui/components/switch";
 import { Textarea } from "@repo/ui/components/textarea";
 
@@ -55,13 +52,19 @@ const createSubjectJournalSchema = z.object({
   content: z.string().min(1),
   publishDate: z.coerce.date().default(() => new Date()),
 });
-export function SubjectJournalEditor() {
+export function SubjectJournalEditor({
+  defaultSubjectId,
+}: {
+  defaultSubjectId: number;
+}) {
   const trpc = useTRPC();
   const { t, i18n } = useLocale();
-  const params = useParams<{ subjectId: string }>();
-  const { data: subject } = useSuspenseQuery(
-    trpc.subject.get.queryOptions(Number(params.subjectId)),
+  const [subjectId] = useQueryState(
+    "subjectId",
+    parseAsInteger.withDefault(defaultSubjectId),
   );
+
+  const subjectQuery = useQuery(trpc.subject.get.queryOptions(subjectId));
 
   const queryClient = useQueryClient();
 
@@ -121,7 +124,7 @@ export function SubjectJournalEditor() {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("file", selectedFile, selectedFile.name);
-      formData.append("subjectId", `${subject.id}`);
+      formData.append("subjectId", `${subjectId}`);
       const response = await fetch("/api/upload/subject-journal", {
         method: "POST",
         body: formData,
@@ -146,7 +149,7 @@ export function SubjectJournalEditor() {
       title: data.title,
       content: data.content,
       publishDate: data.publishDate,
-      subjectId: subject.id,
+      subjectId: subjectId,
       status: "PENDING" as const,
       attachment: attachment,
     };
@@ -166,12 +169,16 @@ export function SubjectJournalEditor() {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div
-              style={{ backgroundColor: subject.course.color }}
-              className="mr-2 flex h-10 w-10 items-center justify-center rounded-full font-bold"
-            >
-              {subject.course.name.substring(0, 2).toUpperCase()}
-            </div>
+            {subjectQuery.isPending ? (
+              <Skeleton className="mr-2 h-10 w-10 rounded-full" />
+            ) : (
+              <div
+                style={{ backgroundColor: subjectQuery.data?.course.color }}
+                className="mr-2 flex h-10 w-10 items-center justify-center rounded-full font-bold"
+              >
+                {subjectQuery.data?.course.name.substring(0, 2).toUpperCase()}
+              </div>
+            )}
             <div className="flex items-center">
               <FormField
                 control={form.control}

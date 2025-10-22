@@ -1,12 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical, Trash2 } from "lucide-react";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -18,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -28,12 +25,18 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-export function SubjectJournalHeader() {
+export function SubjectJournalHeader({
+  defaultSubjectId,
+}: {
+  defaultSubjectId: number;
+}) {
   const trpc = useTRPC();
-  const params = useParams<{ subjectId: string }>();
-  const { data: subject } = useSuspenseQuery(
-    trpc.subject.get.queryOptions(Number(params.subjectId)),
+  const [subjectId] = useQueryState(
+    "subjectId",
+    parseAsInteger.withDefault(defaultSubjectId),
   );
+
+  const subjectQuery = useQuery(trpc.subject.get.queryOptions(subjectId));
 
   const { t } = useLocale();
   const confirm = useConfirm();
@@ -57,11 +60,32 @@ export function SubjectJournalHeader() {
     "subject",
     PermissionAction.DELETE,
   );
+  const subject = subjectQuery.data;
   return (
-    <div className="bg-muted/50 flex flex-row items-center justify-between border-b px-4 py-1">
-      <Label>{t("teaching_session")}</Label>
-      <Label className="font-bold">{subject.course.name}</Label>
-      <div>
+    <div className="bg-muted/50 flex flex-row items-center justify-between border-y px-4 py-2">
+      {subjectQuery.isPending ? (
+        <Skeleton className="h-8 w-96" />
+      ) : (
+        <Label>
+          {subject?.teacher?.prefix} {subject?.teacher?.lastName}{" "}
+          {subject?.teacher?.firstName}
+        </Label>
+      )}
+      {subjectQuery.isPending ? (
+        <Skeleton className="h-8 w-56" />
+      ) : (
+        <Label className="font-bold">{subjectQuery.data?.course.name}</Label>
+      )}
+      <div className="flex flex-row items-center gap-2">
+        <Button size={"sm"} variant={"secondary"}>
+          <PDFIcon />
+          {t("pdf_export")}
+        </Button>
+        <Button size={"sm"} variant={"secondary"}>
+          <XMLIcon />
+          {t("xml_export")}
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="size-8" size={"icon"}>
@@ -70,23 +94,6 @@ export function SubjectJournalHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownHelp />
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onSelect={() => {
-                toast.warning(t("not_implemented"), { id: 0 });
-              }}
-            >
-              <XMLIcon />
-              {t("xml_export")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={() => {
-                toast.warning(t("not_implemented"), { id: 0 });
-              }}
-            >
-              <PDFIcon />
-              {t("pdf_export")}
-            </DropdownMenuItem>
             {canDeleteSubject && (
               <>
                 <DropdownMenuSeparator />
@@ -102,7 +109,7 @@ export function SubjectJournalHeader() {
                     });
                     if (isConfirmed) {
                       toast.loading(t("deleting"), { id: 0 });
-                      deleteSubjectJournal.mutate({ subjectId: subject.id });
+                      deleteSubjectJournal.mutate({ subjectId: subjectId });
                     }
                   }}
                   variant="destructive"

@@ -1,31 +1,31 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { parseAsInteger, useQueryState } from "nuqs";
 
-
-
 import type { RouterOutputs } from "@repo/api";
-
-
 
 import type { SubjectProgramItem } from "./program_kanban";
 import { Kanban, KanbanBoard, KanbanOverlay } from "~/components/kanban";
 import { useTRPC } from "~/trpc/react";
+import { EmptyCard } from "~/uploads/EmptyCard";
 import { ProgramKanbanColumn } from "./ProgramKanbanColumn";
-
 
 export function ProgramKanban({
   categories,
   defaultSubjectId,
 }: {
   categories: RouterOutputs["program"]["categories"];
-  defaultSubjectId: number
+  defaultSubjectId: number;
 }) {
   const trpc = useTRPC();
 
-  const [subjectId] = useQueryState("subjectId", parseAsInteger.withDefault(defaultSubjectId));
+  const [subjectId] = useQueryState(
+    "subjectId",
+    parseAsInteger.withDefault(defaultSubjectId),
+  );
   const subjectProgramsQuery = useQuery(
     trpc.program.bySubject.queryOptions({
       subjectId: subjectId,
@@ -61,6 +61,22 @@ export function ProgramKanban({
     setColumns(subjectGroups);
   }, [categories, subjectProgramsQuery.data]);
 
+  if (categories.length == 0) {
+    return (
+      <EmptyCard
+        title="Aucune catégories"
+        description="Créer certaines catégories dans administration/académie"
+        action={
+          <Link
+            className="text-sm hover:underline"
+            href={`/administration/academy`}
+          >
+            Créer
+          </Link>
+        }
+      />
+    );
+  }
   return (
     <div className="px-4">
       <Kanban

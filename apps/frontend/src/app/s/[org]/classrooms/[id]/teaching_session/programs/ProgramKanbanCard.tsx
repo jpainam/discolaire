@@ -1,10 +1,10 @@
 "use client";
 
 import type * as React from "react";
-import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CopyIcon, MoreVertical, Pencil, Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -36,10 +36,11 @@ export function ProgramKanbanCard({
 }: SubjectProgramCardProps) {
   const { openModal } = useModal();
   const t = useTranslations();
-  const params = useParams<{ subjectId: string }>();
+
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const confirm = useConfirm();
+  const [subjectId] = useQueryState("subjectId", parseAsInteger);
   const deleteSubjectProgram = useMutation(
     trpc.program.delete.mutationOptions({
       onSuccess: async () => {
@@ -83,6 +84,11 @@ export function ProgramKanbanCard({
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onSelect={() => {
+                    if (!subjectId) {
+                      toast.warning("Veuillez choisir un enseignement");
+                      return;
+                    }
+
                     openModal({
                       title: t("create"),
                       view: (
@@ -93,7 +99,7 @@ export function ProgramKanbanCard({
                             subjectProgram.requiredSessionCount
                           }
                           categoryId={subjectProgram.categoryId}
-                          subjectId={Number(params.subjectId)}
+                          subjectId={subjectId}
                         />
                       ),
                     });
@@ -104,6 +110,10 @@ export function ProgramKanbanCard({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
+                    if (!subjectId) {
+                      toast.warning("Veuillez choisir un enseignement");
+                      return;
+                    }
                     openModal({
                       title: t("update"),
                       view: (
@@ -115,7 +125,7 @@ export function ProgramKanbanCard({
                             subjectProgram.requiredSessionCount
                           }
                           categoryId={subjectProgram.categoryId}
-                          subjectId={Number(params.subjectId)}
+                          subjectId={subjectId}
                         />
                       ),
                     });

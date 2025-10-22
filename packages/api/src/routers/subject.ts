@@ -36,6 +36,7 @@ export const subjectRouter = {
           subjectGroup: true,
           teacher: {
             select: {
+              prefix: true,
               id: true,
               firstName: true,
               lastName: true,

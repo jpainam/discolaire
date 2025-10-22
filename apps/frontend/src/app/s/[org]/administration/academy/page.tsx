@@ -77,7 +77,7 @@ export default async function Page(props: PageProps) {
               size={16}
               aria-hidden="true"
             />
-            Packages
+            {t("settings")}
           </TabsTrigger>
         </TabsList>
         <ScrollBar orientation="horizontal" />
