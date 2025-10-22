@@ -21,9 +21,7 @@ import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 
 export function ClassroomAttendanceHeader() {
-  const [termId, setTermId] = useQueryState("termId", {
-    shallow: false,
-  });
+  const [termId, setTermId] = useQueryState("termId");
   const t = useTranslations();
   const router = useRouter();
   const params = useParams<{ id: string }>();

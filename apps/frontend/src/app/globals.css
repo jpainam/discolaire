@@ -3,6 +3,7 @@
 @import "tw-animate-css";
 @import "@repo/tailwind-config/theme";
 @import "../themes/presets.css";
+@import "../themes/supabase.css";
 
 @source '../../../../packages/ui/src/**/*.{ts,tsx}';
 

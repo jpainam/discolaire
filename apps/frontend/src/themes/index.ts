@@ -179,6 +179,21 @@ export const defaultThemes = {
       secondary: "#f3f4f6",
     },
   },
+  supabase: {
+    label: "Supabase",
+    dark: {
+      primary: "#006239",
+      accent: "#313131",
+      border: "#292929",
+      secondary: "#242424",
+    },
+    light: {
+      primary: "#72e3ad",
+      accent: "#ededed",
+      border: "#dfdfdf",
+      secondary: "#fdfdfd",
+    },
+  },
   twitter: {
     label: "Twitter",
     light: {

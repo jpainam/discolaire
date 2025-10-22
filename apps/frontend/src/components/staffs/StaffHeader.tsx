@@ -37,14 +37,14 @@ export function StaffHeader() {
   return (
     <>
       <header className="bg-background border-b px-4 py-2">
-        <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 items-center justify-between md:flex">
           <div>
             <h1 className="text-xl font-bold">{t("Staff Management")}</h1>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground hidden text-sm md:flex">
               {t("staff_management_description")}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="grid grid-cols-1 items-center gap-3 md:flex">
             <StaffEffectif staffs={staffs} />
             {canCreateStaff && (
               <Button

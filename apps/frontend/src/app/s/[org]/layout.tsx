@@ -99,7 +99,7 @@ export default async function Layout({
                 />
                 <Shortcut className="hidden md:flex" />
                 <ModeSwitcher />
-                <LanguageSwitcher />
+                <LanguageSwitcher className="hidden md:flex" />
                 <Separator
                   orientation="vertical"
                   className="mr-1 hidden w-px data-[orientation=vertical]:h-6 md:block"

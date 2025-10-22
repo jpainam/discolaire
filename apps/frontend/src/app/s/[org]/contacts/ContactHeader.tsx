@@ -28,14 +28,14 @@ export function ContactHeader() {
   //const canReadStudent = useCheckPermission("student", PermissionAction.READ);
   return (
     <header className="bg-background border-b px-4 py-2">
-      <div className="flex items-center justify-between">
+      <div className="grid grid-cols-1 items-center justify-between gap-2 md:flex">
         <div>
           <h1 className="text-xl font-bold">{t("Contact Management")}</h1>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground hidden text-sm md:flex">
             {t("contact_title_description")}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="grid grid-cols-2 items-center gap-3 md:flex">
           {canCreateContact && (
             <Button
               size={"sm"}

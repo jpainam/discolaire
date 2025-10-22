@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
@@ -64,10 +65,13 @@ export function SubjectJournalHeader({
       {subjectQuery.isPending ? (
         <Skeleton className="h-8 w-96" />
       ) : (
-        <Label>
+        <Link
+          className="text-sm leading-none font-medium hover:underline"
+          href={`/staffs/${subject?.teacherId}`}
+        >
           {subject?.teacher?.prefix} {subject?.teacher?.lastName}{" "}
           {subject?.teacher?.firstName}
-        </Label>
+        </Link>
       )}
       {subjectQuery.isPending ? (
         <Skeleton className="h-8 w-56" />

@@ -15,7 +15,7 @@ export function StaffEffectif({
   const { t } = useLocale();
   const COLORS = ["#6741D9", "#E0C6FD", "#FFBC75", "#FF7272"];
   return (
-    <div className="flex flex-row items-center gap-4 text-sm">
+    <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm md:flex">
       <Detail color={COLORS[0]} value={total} text={t("total")} />
       <Detail color={COLORS[2]} value={males} text={t("male")} />
       <Detail color={COLORS[3]} value={females} text={t("female")} />
