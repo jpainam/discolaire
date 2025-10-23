@@ -241,4 +241,46 @@ export const attendanceRouter = {
         };
       });
     }),
+  count: protectedProcedure
+    .input(
+      z.object({
+        schoolYearId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const schyid = input.schoolYearId ?? ctx.schoolYearId;
+      const attendances = await ctx.db.attendance.findMany({
+        where: {
+          term: {
+            schoolYearId: schyid,
+          },
+        },
+      });
+      let absence = 0;
+      let chatter = 0;
+      let justifiedAbsence = 0;
+      let justifiedLate = 0;
+      let consigne = 0;
+      let exclusion = 0;
+      let late = 0;
+      for (const att of attendances) {
+        const d = attendanceToData(att.data);
+        absence += d.absence;
+        chatter += d.chatter;
+        exclusion += d.exclusion;
+        justifiedAbsence += d.justifiedAbsence;
+        justifiedLate += d.justifiedLate;
+        late += d.late;
+        consigne += d.consigne;
+      }
+      return {
+        absence,
+        chatter,
+        consigne,
+        justifiedAbsence,
+        justifiedLate,
+        exclusion,
+        late,
+      };
+    }),
 } satisfies TRPCRouterRecord;

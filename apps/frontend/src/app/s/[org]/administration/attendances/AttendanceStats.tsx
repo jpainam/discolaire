@@ -1,4 +1,5 @@
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import { getLocale } from "next-intl/server";
 
 import {
   Card,
@@ -8,63 +9,176 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 
-import FlatBadge from "~/components/FlatBadge";
+import { Badge } from "~/components/base-badge";
 import { getServerTranslations } from "~/i18n/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 
 export async function AttendanceStats() {
   const { t } = await getServerTranslations();
+  const queryClient = getQueryClient();
+  const count = await queryClient.fetchQuery(
+    trpc.attendance.count.queryOptions({}),
+  );
+  const prevSchoolYear = await queryClient.fetchQuery(
+    trpc.schoolYear.getPrevious.queryOptions(),
+  );
+  const prevCount = await queryClient.fetchQuery(
+    trpc.attendance.count.queryOptions({ schoolYearId: prevSchoolYear.id }),
+  );
+  const locale = await getLocale();
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-5">
       <Card>
         <CardHeader>
-          <CardTitle>{t("total_absences")}</CardTitle>
-          <CardDescription>+150 depuis les 30jrs</CardDescription>
+          <CardTitle>
+            {count.absence.toLocaleString(locale)} {t("absences")}
+          </CardTitle>
+          <CardDescription>
+            {prevCount.absence.toLocaleString(locale)} comparé à l'année
+            dernière
+          </CardDescription>
         </CardHeader>
         <CardFooter>
-          {/* <Badge variant="outline">
-            <TrendingUpIcon />
-            +12.5%
-          </Badge> */}
-          <FlatBadge className="gap-2" variant="green">
-            <TrendingUpIcon className="h-4 w-4" />
-            +12.5%
-          </FlatBadge>
+          <Badge
+            variant={
+              prevCount.absence < count.absence ? "destructive" : "success"
+            }
+            appearance="outline"
+          >
+            {prevCount.absence < count.absence ? (
+              <TrendingUpIcon />
+            ) : (
+              <TrendingDownIcon />
+            )}
+            {count.absence == 0
+              ? 0
+              : (
+                  (Math.abs(prevCount.absence - count.absence) /
+                    count.absence) *
+                  100
+                ).toFixed(2)}
+          </Badge>
         </CardFooter>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>{t("all_lates")}</CardTitle>
-          <CardDescription>-12 depuis le mois dernier</CardDescription>
+          <CardTitle>
+            {count.late.toLocaleString(locale)} {t("late")}
+          </CardTitle>
+          <CardDescription>
+            {prevCount.late} comparé à l'année dernière
+          </CardDescription>
         </CardHeader>
         <CardFooter>
-          <FlatBadge className="gap-2" variant="indigo">
-            <TrendingDownIcon className="h-4 w-4" />
-            -20%
-          </FlatBadge>
+          <Badge
+            variant={prevCount.late < count.late ? "destructive" : "success"}
+            appearance="outline"
+          >
+            {prevCount.late < count.late ? (
+              <TrendingUpIcon />
+            ) : (
+              <TrendingDownIcon />
+            )}
+            {count.late == 0
+              ? 0
+              : (
+                  (Math.abs(prevCount.late - count.late) / count.late) *
+                  100
+                ).toFixed(2)}
+          </Badge>
         </CardFooter>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>{t("all_exclusions")}</CardTitle>
-          <CardDescription>+2 depuis le mois dernier</CardDescription>
+          <CardTitle>
+            {count.exclusion} {t("exclusions")}
+          </CardTitle>
+          <CardDescription>
+            {prevCount.exclusion} comparé à l'année dernière
+          </CardDescription>
         </CardHeader>
         <CardFooter>
-          <FlatBadge className="gap-2" variant="pink">
-            <TrendingUpIcon className="h-4 w-4" />
-            +12.5%
-          </FlatBadge>
+          <Badge
+            variant={
+              prevCount.exclusion < count.exclusion ? "destructive" : "success"
+            }
+            appearance="outline"
+          >
+            {prevCount.exclusion < count.exclusion ? (
+              <TrendingUpIcon />
+            ) : (
+              <TrendingDownIcon />
+            )}
+            {count.exclusion == 0
+              ? 0
+              : (
+                  (Math.abs(prevCount.exclusion - count.exclusion) /
+                    count.exclusion) *
+                  100
+                ).toFixed(2)}
+          </Badge>
         </CardFooter>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>{t("all_consignes")}</CardTitle>
-          <CardDescription>+12 depuis le mois dernier</CardDescription>
+          <CardTitle>
+            {count.consigne} {t("consigne")}
+          </CardTitle>
+          <CardDescription>
+            {prevCount.consigne} comparé à l'année dernière
+          </CardDescription>
         </CardHeader>
         <CardFooter>
-          <FlatBadge className="gap-2" variant="yellow">
-            <TrendingUpIcon className="h-4 w-4" />
-            +4.5%
-          </FlatBadge>
+          <Badge
+            variant={
+              prevCount.consigne < count.consigne ? "destructive" : "success"
+            }
+            appearance="outline"
+          >
+            {prevCount.consigne < count.consigne ? (
+              <TrendingUpIcon />
+            ) : (
+              <TrendingDownIcon />
+            )}
+            {count.consigne == 0
+              ? 0
+              : (
+                  (Math.abs(prevCount.consigne - count.consigne) /
+                    count.consigne) *
+                  100
+                ).toFixed(2)}
+          </Badge>
+        </CardFooter>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            {count.chatter} {t("chatter")}
+          </CardTitle>
+          <CardDescription>
+            {prevCount.chatter} comparé à l'année dernière
+          </CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Badge
+            variant={
+              prevCount.chatter < count.chatter ? "destructive" : "success"
+            }
+            appearance="outline"
+          >
+            {prevCount.chatter < count.chatter ? (
+              <TrendingUpIcon />
+            ) : (
+              <TrendingDownIcon />
+            )}
+            {count.chatter == 0
+              ? 0
+              : (
+                  (Math.abs(prevCount.chatter - count.chatter) /
+                    count.chatter) *
+                  100
+                ).toFixed(2)}
+          </Badge>
         </CardFooter>
       </Card>
     </div>

@@ -21,12 +21,6 @@ export default async function Layout(props: PropsWithChildren) {
             {t("dashboard")}
           </TabsTrigger>
           <TabsTrigger
-            value="tab-2"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground dark:data-[state=active]:bg-primary dark:data-[state=active]:text-primary-foreground rounded-full data-[state=active]:shadow-none"
-          >
-            Saisie Périodique
-          </TabsTrigger>
-          <TabsTrigger
             value="tab-3"
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground dark:data-[state=active]:bg-primary dark:data-[state=active]:text-primary-foreground rounded-full data-[state=active]:shadow-none"
           >
