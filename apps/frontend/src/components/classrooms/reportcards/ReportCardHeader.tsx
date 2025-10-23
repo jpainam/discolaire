@@ -20,8 +20,10 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { reportcardSearchParamsSchema } from "~/utils/search-params";
 import { sidebarIcons } from "../sidebar-icons";
 
@@ -32,6 +34,10 @@ export function ReportCardHeader() {
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
   const { termId, trimestreId } = searchParams;
   const pathname = usePathname();
+  const canCreateReportCard = useCheckPermission(
+    "repordcard",
+    PermissionAction.CREATE,
+  );
 
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -79,19 +85,21 @@ export function ReportCardHeader() {
           <DropdownMenuContent align="end">
             <DropdownHelp />
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              disabled={!termId && !trimestreId}
-              onSelect={() => {
-                let url = `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`;
-                if (pathname.includes("/trimestres")) {
-                  url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${trimestreId}&classroomId=${params.id}&format=pdf`;
-                }
-                window.open(url, "_blank");
-              }}
-            >
-              <PDFIcon />
-              {t("pdf_export")}
-            </DropdownMenuItem>
+            {canCreateReportCard && (
+              <DropdownMenuItem
+                disabled={!termId && !trimestreId}
+                onSelect={() => {
+                  let url = `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`;
+                  if (pathname.includes("/trimestres")) {
+                    url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${trimestreId}&classroomId=${params.id}&format=pdf`;
+                  }
+                  window.open(url, "_blank");
+                }}
+              >
+                <PDFIcon />
+                {t("pdf_export")}
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem>
               <XMLIcon />
               {t("xml_export")}

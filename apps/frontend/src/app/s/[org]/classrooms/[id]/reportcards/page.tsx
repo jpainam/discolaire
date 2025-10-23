@@ -69,7 +69,7 @@ export default async function Page(props: {
 
   const { t } = await getServerTranslations();
   const canCreateReportCard = await checkPermission(
-    "reportcart",
+    "reportcard",
     PermissionAction.CREATE,
   );
   return (
