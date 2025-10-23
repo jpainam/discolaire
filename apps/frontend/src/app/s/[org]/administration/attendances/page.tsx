@@ -1,17 +1,51 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
+
+import { ErrorFallback } from "~/components/error-fallback";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { AttendanceChart } from "./AttendanceChart";
+import { AttendanceDataTable } from "./AttendanceDataTable";
 import { AttendanceStats } from "./AttendanceStats";
 
-export default async function Page(props: {
-  searchParams: Promise<{ category: string }>;
-}) {
-  const searchParams = await props.searchParams;
+export default function Page() {
+  batchPrefetch([
+    trpc.attendance.all.queryOptions({}),
+    trpc.attendance.chart.queryOptions(),
+  ]);
   return (
-    <div className="grid flex-col gap-4 p-4 md:flex">
-      <AttendanceStats />
-      <AttendanceChart />
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
-        A large table of attendance DATABASE
+    <HydrateClient>
+      <div className="flex flex-col gap-4 px-4">
+        <AttendanceStats />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="gap2 grid grid-cols-4">
+                <Skeleton className="h-20" />
+                <Skeleton className="h-20" />
+                <Skeleton className="h-20" />
+                <Skeleton className="h-20" />
+              </div>
+            }
+          >
+            <AttendanceChart />
+          </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-4 gap-4">
+                {Array.from({ length: 8 }).map((_, index) => {
+                  return <Skeleton key={index} className="h-8" />;
+                })}
+              </div>
+            }
+          >
+            <AttendanceDataTable />
+          </Suspense>
+        </ErrorBoundary>
       </div>
-    </div>
+    </HydrateClient>
   );
 }

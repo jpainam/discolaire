@@ -2,7 +2,13 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  LockIcon,
+  LockOpen,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -39,6 +45,17 @@ export function TermTable() {
   const confirm = useConfirm();
 
   const queryClient = useQueryClient();
+  const updateTermActiveMutation = useMutation(
+    trpc.term.lock.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.term.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+    }),
+  );
 
   const deleteTermMutation = useMutation(
     trpc.term.delete.mutationOptions({
@@ -62,6 +79,7 @@ export function TermTable() {
               <TableHead>{t("End date")}</TableHead>
               <TableHead>{t("is_active")}</TableHead>
               <TableHead>{t("school_year")}</TableHead>
+              <TableHead>{t("isActive")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -101,6 +119,23 @@ export function TermTable() {
                     </FlatBadge>
                   </TableCell>
                   <TableCell className="py-0">{term.schoolYear.name}</TableCell>
+                  <TableCell>
+                    <Button
+                      size={"sm"}
+                      //isLoading={updateTermActiveMutation.isPending}
+                      onClick={() => {
+                        toast.loading(t("Processing"), { id: 0 });
+                        updateTermActiveMutation.mutate({
+                          id: term.id,
+                          isActive: !term.isActive,
+                        });
+                      }}
+                      variant={term.isActive ? "secondary" : "destructive"}
+                    >
+                      {term.isActive ? <LockIcon /> : <LockOpen />}
+                      {term.isActive ? t("Lock") : t("Unlock")}
+                    </Button>
+                  </TableCell>
                   <TableCell className="py-0 text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -119,6 +154,18 @@ export function TermTable() {
                         >
                           <Pencil />
                           {t("edit")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            toast.loading(t("Processing"), { id: 0 });
+                            updateTermActiveMutation.mutate({
+                              id: term.id,
+                              isActive: !term.isActive,
+                            });
+                          }}
+                        >
+                          {term.isActive ? <LockIcon /> : <LockOpen />}
+                          {term.isActive ? t("Lock") : t("Unlock")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem

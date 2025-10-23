@@ -65,4 +65,21 @@ export const termRouter = {
       },
     });
   }),
+  lock: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isActive: z.coerce.boolean(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.term.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isActive: input.isActive,
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

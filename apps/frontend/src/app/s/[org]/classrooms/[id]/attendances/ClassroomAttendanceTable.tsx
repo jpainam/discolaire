@@ -66,7 +66,14 @@ function useCollator(locale: string) {
 }
 
 function getTotalIssues(a: AttendanceRow) {
-  return a.absence + a.chatter + a.exclusion + a.late;
+  return (
+    a.absence +
+    a.chatter +
+    a.exclusion +
+    a.late -
+    a.justifiedAbsence -
+    a.justifiedLate
+  );
 }
 
 function getSeverity(total: number) {

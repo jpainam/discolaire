@@ -1,5 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { addDays, subDays } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
@@ -16,9 +16,10 @@ export const attendanceRouter = {
     .input(
       z.object({
         classroomId: z.string().optional(),
-        termId: z.string().optional(),
+        termId: z.string().nullish(),
         from: z.coerce.date().optional(),
         to: z.coerce.date().optional(),
+        limit: z.coerce.number().default(1000),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -44,6 +45,7 @@ export const attendanceRouter = {
           student: true,
           term: true,
         },
+        take: input.limit,
         orderBy: {
           createdAt: "desc",
         },
@@ -52,9 +54,13 @@ export const attendanceRouter = {
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           },
-          studentId: {
-            in: studentIds,
-          },
+          ...(studentIds.length == 0
+            ? {}
+            : {
+                studentId: {
+                  in: studentIds,
+                },
+              }),
           ...(input.termId ? { termId: input.termId } : {}),
           ...(input.from ? { createdAt: { gte: subDays(input.from, 1) } } : {}),
           ...(input.to ? { createdAt: { lte: addDays(input.to, 1) } } : {}),
@@ -283,4 +289,56 @@ export const attendanceRouter = {
         late,
       };
     }),
+  chart: protectedProcedure.query(async ({ ctx }) => {
+    const data = await ctx.db.attendance.findMany({
+      where: {
+        term: {
+          schoolYearId: ctx.schoolYearId,
+        },
+      },
+    });
+    const attendances = data.map((a) => {
+      const d = attendanceToData(a.data);
+      return {
+        createdAt: a.createdAt,
+        ...d,
+      };
+    });
+    const grouped = new Map<
+      string,
+      {
+        absence: number;
+        chatter: number;
+        consigne: number;
+        exclusion: number;
+        late: number;
+        justifiedAbsence: number;
+        justifiedLate: number;
+      }
+    >();
+    for (const item of attendances) {
+      const dateKey = format(item.createdAt, "yyyy-MM-dd");
+
+      const current = grouped.get(dateKey) ?? {
+        absence: 0,
+        chatter: 0,
+        consigne: 0,
+        exclusion: 0,
+        late: 0,
+        justifiedAbsence: 0,
+        justifiedLate: 0,
+      };
+
+      grouped.set(dateKey, {
+        absence: current.absence + item.absence,
+        chatter: current.chatter + item.chatter,
+        late: current.late + item.late,
+        exclusion: current.exclusion + item.exclusion,
+        consigne: current.consigne + item.consigne,
+        justifiedAbsence: current.justifiedAbsence + item.justifiedAbsence,
+        justifiedLate: current.justifiedLate + item.justifiedLate,
+      });
+    }
+    return Array.from(grouped, ([date, values]) => ({ date, ...values }));
+  }),
 } satisfies TRPCRouterRecord;
