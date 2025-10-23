@@ -4,7 +4,7 @@ import { Colors } from "~/constants/theme";
 
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Check, ClipboardList, Clock, X } from "lucide-react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Appearance,
@@ -25,7 +25,7 @@ export default function ClassroomAssignments({
   classroomId: string;
 }) {
   const { data: assignments, isPending } = useQuery(
-    trpc.classroom.assignments.queryOptions(classroomId),
+    trpc.classroom.assignments.queryOptions(classroomId)
   );
   const [filter, setFilter] = useState<
     "all" | "upcoming" | "completed" | "past-due"

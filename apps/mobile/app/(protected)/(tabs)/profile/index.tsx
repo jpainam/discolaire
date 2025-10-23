@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Appearance,
   ScrollView,

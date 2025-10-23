@@ -57,13 +57,11 @@ export function AppreciationTable({ reports }: { reports: any[] }) {
   );
 
   useEffect(() => {
-    if (remarksQuery.data) {
-      const map: Record<string, ReportCardType> = {};
-      remarksQuery.data.forEach((remark) => {
-        map[remark.studentId] = remark;
-      });
-      setRemarkMaps(map);
-    }
+    const map: Record<string, ReportCardType> = {};
+    remarksQuery.data?.forEach((remark) => {
+      map[remark.studentId] = remark;
+    });
+    setRemarkMaps(map);
   }, [remarksQuery.data]);
 
   const upsertStudentRemarkMutation = useMutation(

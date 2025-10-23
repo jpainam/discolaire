@@ -8,7 +8,7 @@ import {
   Users,
 } from "lucide-react-native";
 import type { JSX } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Appearance,
@@ -38,7 +38,7 @@ export default function ClassroomDetailsScreen() {
   const [activeTab, setActiveTab] = useState<TabName>("students");
 
   const { data: classroom, isPending } = useQuery(
-    trpc.classroom.get.queryOptions(id),
+    trpc.classroom.get.queryOptions(id)
   );
   const theme = useColorScheme() ?? "light";
   //const { top } = useSafeAreaInsets();

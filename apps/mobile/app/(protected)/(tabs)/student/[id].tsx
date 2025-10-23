@@ -8,7 +8,7 @@ import {
   UserCircle,
   UserRound,
 } from "lucide-react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Appearance,
@@ -38,7 +38,7 @@ export default function StudentProfileScreen() {
   const [activeTab, setActiveTab] = useState<TabType>("info");
 
   const { data: student, isPending } = useQuery(
-    trpc.student.get.queryOptions(id),
+    trpc.student.get.queryOptions(id)
   );
 
   if (!student) {
