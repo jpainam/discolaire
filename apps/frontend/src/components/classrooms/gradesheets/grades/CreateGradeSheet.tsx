@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
-import { SaveIcon, XIcon } from "lucide-react";
+import { SaveIcon, TriangleAlert, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -58,13 +58,16 @@ export function CreateGradeSheet({
   subjectId,
   termId,
   className,
+  term,
 }: {
   students: RouterOutputs["classroom"]["students"];
+  term: RouterOutputs["term"]["all"][number];
   subjectId: number;
   termId: string;
   className?: string;
 }) {
   const { t } = useLocale();
+  const trpc = useTRPC();
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const setInputRef = useCallback((el: HTMLInputElement | null, i: number) => {
@@ -117,7 +120,7 @@ export function CreateGradeSheet({
     },
   });
   const router = useRouter();
-  const trpc = useTRPC();
+
   const queryClient = useQueryClient();
 
   const createGradesheetMutation = useMutation(
@@ -153,6 +156,18 @@ export function CreateGradeSheet({
 
   return (
     <div className={className}>
+      {!term.isActive && (
+        <div className="mx-4 mb-2 rounded-md border border-amber-500/50 px-4 py-3 text-amber-600">
+          <p className="text-sm">
+            <TriangleAlert
+              className="me-3 -mt-0.5 inline-flex opacity-60"
+              size={16}
+              aria-hidden="true"
+            />
+            {t("this_term_is_closed")}
+          </p>
+        </div>
+      )}
       <Form {...form}>
         <form
           className="flex w-full flex-col"
@@ -231,11 +246,13 @@ export function CreateGradeSheet({
               </Button>
               <Button
                 size={"sm"}
+                disabled={!term.isActive}
                 className="w-fit"
                 isLoading={createGradesheetMutation.isPending}
                 type="submit"
               >
                 <SaveIcon />
+
                 {t("submit")}
               </Button>
             </div>

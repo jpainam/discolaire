@@ -1,7 +1,7 @@
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
-import { caller } from "~/trpc/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 import { ClassroomCreateGradesheet } from "./ClassroomCreateGradsheet";
 
 interface PageProps {
@@ -18,7 +18,11 @@ export default async function Page(props: PageProps) {
   if (!canCreateGradeSheet) {
     return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   }
+  const queryClient = getQueryClient();
+  const terms = await queryClient.fetchQuery(trpc.term.all.queryOptions());
 
-  const students = await caller.classroom.students(params.id);
-  return <ClassroomCreateGradesheet students={students} />;
+  const students = await queryClient.fetchQuery(
+    trpc.classroom.students.queryOptions(params.id),
+  );
+  return <ClassroomCreateGradesheet terms={terms} students={students} />;
 }

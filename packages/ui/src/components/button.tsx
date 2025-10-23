@@ -56,7 +56,8 @@ function Button({
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-      disabled={isLoading}
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      disabled={props.disabled || isLoading}
     >
       {isLoading && <LoaderCircleIcon className="animate-spin" />}
       {props.children}

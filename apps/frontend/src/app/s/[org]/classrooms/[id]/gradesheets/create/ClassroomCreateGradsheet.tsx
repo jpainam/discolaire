@@ -13,8 +13,10 @@ import { createGradeSheetSearchSchema } from "./search-params";
 
 export function ClassroomCreateGradesheet({
   students,
+  terms,
 }: {
   students: RouterOutputs["classroom"]["students"];
+  terms: RouterOutputs["term"]["all"];
 }) {
   const [searchParams] = useQueryStates(createGradeSheetSearchSchema);
 
@@ -22,22 +24,27 @@ export function ClassroomCreateGradesheet({
     "gradesheet",
     PermissionAction.CREATE,
   );
+  const selectedTerm = terms.find((t) => t.id == searchParams.termId);
 
   return (
     <div className="flex flex-col">
       <ClassroomCreateGradeSheetHeader />
 
-      {canCreateGradeSheet && searchParams.termId && searchParams.subjectId && (
-        <div className="grid grid-cols-4 gap-2 divide-x">
-          <CreateGradeSheet
-            className="col-span-3"
-            subjectId={searchParams.subjectId}
-            termId={searchParams.termId}
-            students={students}
-          />
-          <PreviousCreatedGradeSheet />
-        </div>
-      )}
+      {canCreateGradeSheet &&
+        selectedTerm &&
+        searchParams.termId &&
+        searchParams.subjectId && (
+          <div className="grid grid-cols-4 gap-2 divide-x">
+            <CreateGradeSheet
+              className="col-span-3 py-2"
+              subjectId={searchParams.subjectId}
+              termId={searchParams.termId}
+              term={selectedTerm}
+              students={students}
+            />
+            <PreviousCreatedGradeSheet />
+          </div>
+        )}
     </div>
   );
 }
