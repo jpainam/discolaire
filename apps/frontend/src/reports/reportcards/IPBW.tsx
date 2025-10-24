@@ -54,7 +54,7 @@ export function IPBW({
       <Page
         size={"A4"}
         style={{
-          paddingVertical: 20,
+          paddingVertical: 15,
           paddingHorizontal: 40,
           fontSize: 7,
           backgroundColor: "#fff",
@@ -294,7 +294,7 @@ export function IPBW({
                             (subject) =>
                               studentReport.studentCourses.find(
                                 (c) => c.subjectId === subject.id,
-                              )?.total,
+                              )?.total ?? 0,
                           ),
                         ).toFixed(1)}
                       </Text>
@@ -315,7 +315,7 @@ export function IPBW({
                               (subject) =>
                                 studentReport.studentCourses.find(
                                   (c) => c.subjectId === subject.id,
-                                )?.total,
+                                )?.total ?? 0,
                             ),
                           ) / (coeff || 1)
                         ).toFixed(2)}

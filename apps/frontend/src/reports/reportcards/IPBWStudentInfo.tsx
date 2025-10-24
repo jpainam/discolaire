@@ -46,8 +46,8 @@ export function IPBWStudentInfo({
       {student.avatar ? (
         <Image
           style={{
-            width: 70,
-            height: 60,
+            width: 60,
+            height: 50,
           }}
           src={{
             uri: student.avatar,
@@ -61,7 +61,7 @@ export function IPBWStudentInfo({
           style={{
             width: 70,
             fontWeight: "bold",
-            height: 75,
+            height: 70,
             border: "1px solid gray",
             justifyContent: "center",
             textAlign: "center",

@@ -62,7 +62,7 @@ export function IPBWClassroom({
             size={"A4"}
             key={`page-${index}-${key}`}
             style={{
-              paddingVertical: 20,
+              paddingVertical: 15,
               paddingHorizontal: 40,
               fontSize: 7,
               backgroundColor: "#fff",
@@ -333,7 +333,7 @@ export function IPBWClassroom({
                                   (subject) =>
                                     studentReport.studentCourses.find(
                                       (c) => c.subjectId === subject.id,
-                                    )?.total,
+                                    )?.total ?? 0,
                                 ),
                               ) / (coeff || 1)
                             ).toFixed(2)}

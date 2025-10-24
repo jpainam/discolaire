@@ -172,7 +172,7 @@ export default async function Page(props: PageProps) {
                           (subject) =>
                             studentReport.studentCourses.find(
                               (c) => c.subjectId === subject.id,
-                            )?.total,
+                            )?.total ?? 0,
                         ),
                       ).toFixed(1)}{" "}
                       /{" "}
