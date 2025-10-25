@@ -38,21 +38,25 @@ export async function ReportCardPerformance({
         <TableBody>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("Moy.Max")}</TableCell>
-            <TableCell className="min-w-[60px]">{max.toFixed(2)}</TableCell>
+            <TableCell className="min-w-[60px]">
+              {isFinite(max) ? max.toFixed(2) : "-"}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("Moy.Min")}</TableCell>
-            <TableCell>{min.toFixed(2)}</TableCell>
+            <TableCell>{isFinite(min) ? min.toFixed(2) : "-"}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("Moy.Class")}</TableCell>
-            <TableCell>{avg.toFixed(2)}</TableCell>
+            <TableCell>{isFinite(avg) ? avg.toFixed(2) : "-"}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>
               {t("success_rate")}
             </TableCell>
-            <TableCell>{(successRate * 100).toFixed(2)}%</TableCell>
+            <TableCell>
+              {((isFinite(successRate) ? successRate : 0) * 100).toFixed(2)}%
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("mention")}</TableCell>

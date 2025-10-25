@@ -1,10 +1,7 @@
 import Link from "next/link";
-import { Printer } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 //import { ReportCardTable } from "~/components/classrooms/reportcards/ReportCardTable2";
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
 import {
   Table,
   TableBody,
@@ -21,13 +18,10 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
+import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { EmptyState } from "~/components/EmptyState";
-import FlatBadge from "~/components/FlatBadge";
 import { getServerTranslations } from "~/i18n/server";
-import { PermissionAction } from "~/permissions";
-import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
-import { getAppreciations } from "~/utils/appreciations";
 
 export default async function Page(props: {
   searchParams: Promise<{ termId: string }>;
@@ -68,50 +62,20 @@ export default async function Page(props: {
   // });
 
   const { t } = await getServerTranslations();
-  const canCreateReportCard = await checkPermission(
-    "reportcard",
-    PermissionAction.CREATE,
-  );
+
   return (
     <div className="mb-10 flex w-full flex-col gap-2 text-sm">
-      <div className="grid flex-row items-center gap-4 px-4 md:flex">
-        <Label className="font-bold uppercase">
-          BULLETIN SCOLAIRE : {term.name}
-        </Label>
-        <FlatBadge variant={"green"}>
-          {t("Moy.Max")} :{Math.max(...averages).toFixed(2)}
-        </FlatBadge>
-        <FlatBadge variant={"red"}>
-          {t("Moy.Min")} : {Math.min(...averages).toFixed(2)}
-        </FlatBadge>
-        <FlatBadge variant={"blue"}>
-          {t("Moy.Class")} : {average.toFixed(2)}
-        </FlatBadge>
-        <FlatBadge variant={"yellow"}>
-          {t("success_rate")} : {(successRate * 100).toFixed(2)}%
-        </FlatBadge>
-        <FlatBadge variant={"indigo"}>
-          {t("effectif")} : {classroom.size}
-        </FlatBadge>
-        <FlatBadge variant={"gray"}>
-          {t("appreciation")} : {getAppreciations(average)}
-        </FlatBadge>
-        {canCreateReportCard && (
-          <Link
-            className="ml-auto"
-            href={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
-            target="_blank"
-          >
-            <Button size={"sm"}>
-              <Printer />
-              {t("print")}
-            </Button>
-          </Link>
-        )}
-      </div>
-      <Separator />
-      <div className="px-4">
-        <div className="bg-background overflow-hidden rounded-md border">
+      <ReportCardActionHeader
+        title={`BULLETIN SCOLAIRE : ${term.name}`}
+        maxAvg={Math.max(...averages)}
+        minAvg={Math.min(...averages)}
+        avg={average}
+        successRate={successRate}
+        classroomSize={classroom.size}
+      />
+
+      <div>
+        <div className="bg-background overflow-hidden">
           <Table className="text-xs">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
@@ -203,30 +167,49 @@ export default async function Page(props: {
             </TableBody>
           </Table>
         </div>
-
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Min.Avg</TableHead>
-              <TableHead>Max.Avg</TableHead>
-              <TableHead>{t("average")}</TableHead>
-              <TableHead>{t("success_rate")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>{Math.min(...averages).toFixed(2)}</TableCell>
-              <TableCell>{Math.max(...averages).toFixed(2)}</TableCell>
-              <TableCell>
-                {(
-                  averages.reduce((acc, val) => acc + val, 0) / averages.length
-                ).toFixed(2)}
-              </TableCell>
-              <TableCell>{(successRate * 100).toFixed(2)}%</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <BottomSummary averages={averages} successRate={successRate} />
       </div>
     </div>
+  );
+}
+
+function BottomSummary({
+  averages,
+  successRate,
+}: {
+  averages: number[];
+  successRate: number;
+}) {
+  const avg = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+  const t = useTranslations();
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Min.Avg</TableHead>
+          <TableHead>Max.Avg</TableHead>
+          <TableHead>{t("average")}</TableHead>
+          <TableHead>{t("success_rate")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>
+            {isFinite(Math.min(...averages))
+              ? Math.min(...averages).toFixed(2)
+              : "-"}
+          </TableCell>
+          <TableCell>
+            {isFinite(Math.max(...averages))
+              ? Math.max(...averages).toFixed(2)
+              : "-"}
+          </TableCell>
+          <TableCell>{isFinite(avg) ? avg.toFixed(2) : "-"}</TableCell>
+          <TableCell>
+            {isFinite(successRate) ? (successRate * 100).toFixed(2) + "%" : "-"}
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
   );
 }
