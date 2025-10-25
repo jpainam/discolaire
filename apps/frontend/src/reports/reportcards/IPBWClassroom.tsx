@@ -5,10 +5,12 @@ import type { RouterOutputs } from "@repo/api";
 
 import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
+import { IPBWNotationSystem } from "./IPBWNotationSystem";
 import { IPBWSignature } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
+import { getTranslation } from "./translation";
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
 
@@ -46,6 +48,7 @@ export function IPBWClassroom({
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+  const t = getTranslation(lang);
 
   return (
     <Document>
@@ -94,7 +97,7 @@ export function IPBWClassroom({
                     fontSize: 9,
                   }}
                 >
-                  Année scolaire {schoolYear.name}
+                  {t("Année scolaire")} {schoolYear.name}
                 </Text>
               </View>
               <IPBWStudentInfo
@@ -326,7 +329,7 @@ export function IPBWClassroom({
                           }}
                         >
                           <Text>
-                            MOY :{" "}
+                            {t("MOY")} :{" "}
                             {(
                               sum(
                                 items.map(
@@ -363,7 +366,18 @@ export function IPBWClassroom({
                 }}
                 rank={value.aequoRank}
               />
-              <IPBWSignature lang={lang} cycle={classroom.cycle?.name} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 2,
+                  width: "100%",
+                  display: "flex",
+                  paddingTop: 4,
+                }}
+              >
+                <IPBWNotationSystem lang={lang} />
+                <IPBWSignature cycle={classroom.cycle?.name} lang={lang} />
+              </View>
             </View>
           </Page>
         );
