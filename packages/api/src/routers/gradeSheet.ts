@@ -93,7 +93,7 @@ export const gradeSheetRouter = {
       if (currentWeight + scaleInputWeight > 1) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `Le poids total ne peut pas dépasser 100%. Le total actuel est de ${currentWeight}%.`,
+          message: `Le poids total ne peut pas dépasser 100%. Le total actuel est de ${currentWeight * 100}%.`,
         });
       }
       let errorMessage = "";
