@@ -12,6 +12,7 @@ import {
   Contact,
   FolderOpen,
   HandCoins,
+  ImportIcon,
   NotebookPen,
   Printer,
   Proportions,
@@ -113,6 +114,11 @@ export function ClassroomSidebar({
         name: "teaching_session",
         url: `/classrooms/${params.id}/teaching_session`,
         icon: BookText,
+      },
+      {
+        name: "import_export",
+        url: `/classrooms/${params.id}/import_export`,
+        icon: ImportIcon,
       },
       {
         name: "print",
