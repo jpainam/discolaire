@@ -1,6 +1,9 @@
+import { Suspense } from "react";
 import Link from "next/link";
+import { CircleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { Skeleton } from "@repo/ui/components/skeleton";
 //import { ReportCardTable } from "~/components/classrooms/reportcards/ReportCardTable2";
 import {
   Table,
@@ -21,7 +24,7 @@ import { AvatarState } from "~/components/AvatarState";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { EmptyState } from "~/components/EmptyState";
 import { getServerTranslations } from "~/i18n/server";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: {
   searchParams: Promise<{ termId: string }>;
@@ -74,6 +77,9 @@ export default async function Page(props: {
         classroomSize={classroom.size}
         pdfHref={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
       />
+      <Suspense fallback={<Skeleton className="h-10 w-full" />}>
+        <CheckSubjectScale termId={termId} classroomId={params.id} />
+      </Suspense>
 
       <div>
         <div className="bg-background overflow-hidden">
@@ -212,5 +218,51 @@ function BottomSummary({
         </TableRow>
       </TableBody>
     </Table>
+  );
+}
+
+async function CheckSubjectScale({
+  termId,
+  classroomId,
+}: {
+  termId: string;
+  classroomId: string;
+}) {
+  const queryClient = getQueryClient();
+  const allweights = await queryClient.fetchQuery(
+    trpc.gradeSheet.subjectWeight.queryOptions({
+      classroomId,
+      termId: [termId],
+    }),
+  );
+  const subjects = await queryClient.fetchQuery(
+    trpc.classroom.subjects.queryOptions(classroomId),
+  );
+
+  const areNot100percent = allweights.filter((s) => !s.weight || s.weight < 1);
+  if (areNot100percent.length == 0) {
+    return <></>;
+  }
+  return (
+    <div className="px-4">
+      <div className="rounded-md border border-red-500/50 px-4 py-3 text-red-600">
+        <p className="text-sm">
+          <CircleAlert
+            className="me-3 -mt-0.5 inline-flex opacity-60"
+            size={16}
+            aria-hidden="true"
+          />
+          Les cours suivants n'ont pas un poids de 100%:
+          {areNot100percent.map((a, index) => {
+            const subject = subjects.find((s) => s.id == a.subjectId);
+            return (
+              <span className="px-2" key={index}>
+                {subject?.course.shortName}
+              </span>
+            );
+          })}
+        </p>
+      </div>
+    </div>
   );
 }

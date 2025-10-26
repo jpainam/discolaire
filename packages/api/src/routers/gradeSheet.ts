@@ -321,4 +321,31 @@ export const gradeSheetRouter = {
         },
       });
     }),
+  subjectWeight: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string(),
+        termId: z.string().array(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const scales = await ctx.db.gradeSheet.groupBy({
+        by: ["subjectId"],
+        _sum: { weight: true },
+        where: {
+          termId: {
+            in: input.termId,
+          },
+          subject: {
+            classroomId: input.classroomId,
+          },
+        },
+      });
+      return scales.map((s) => {
+        return {
+          subjectId: s.subjectId,
+          weight: s._sum.weight,
+        };
+      });
+    }),
 } satisfies TRPCRouterRecord;
