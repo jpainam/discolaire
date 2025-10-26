@@ -6,6 +6,7 @@ import type { RouterOutputs } from "@repo/api";
 import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
 import { getTitle } from "../utils";
+import { IPBWNotationSystem } from "./IPBWNotationSystem";
 import { IPBWSignatureTrimestre } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
@@ -462,7 +463,18 @@ export function IPBWClassroomTrimestre({
                 }}
                 rank={`${value.rank}`}
               />
-              <IPBWSignatureTrimestre lang={lang} />
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 2,
+                  width: "100%",
+                  display: "flex",
+                  paddingTop: 4,
+                }}
+              >
+                <IPBWNotationSystem lang={lang} />
+                <IPBWSignatureTrimestre lang={lang} />
+              </View>
             </View>
           </Page>
         );

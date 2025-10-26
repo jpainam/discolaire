@@ -20,10 +20,10 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
+import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { trimestreSearchParams } from "~/utils/search-params";
-import { TrimestreHeader } from "./TrimestreHeader";
 
 interface PageProps {
   searchParams: Promise<SearchParams>;
@@ -62,15 +62,20 @@ export default async function Page(props: PageProps) {
   const successRate = successCount / averages.length;
   const { title } = getTitle({ trimestreId });
 
+  const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+
   return (
     <div className="mb-10 flex flex-col gap-2">
-      <TrimestreHeader
-        trimestreId={trimestreId}
+      <ReportCardActionHeader
         title={title}
+        maxAvg={Math.max(...averages)}
+        minAvg={Math.min(...averages)}
+        avg={average}
         successRate={successRate}
-        averages={averages}
-        classroom={classroom}
+        classroomSize={classroom.size}
+        pdfHref={`/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${trimestreId}&classroomId=${classroom.id}&format=pdf`}
       />
+
       <Separator />
       <div className="px-4">
         <div className="bg-background overflow-hidden rounded-md border">

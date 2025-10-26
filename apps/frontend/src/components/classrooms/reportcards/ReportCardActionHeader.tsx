@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
@@ -21,6 +19,7 @@ export function ReportCardActionHeader({
   avg,
   successRate,
   classroomSize,
+  pdfHref,
 }: {
   title: string;
   maxAvg: number;
@@ -28,11 +27,10 @@ export function ReportCardActionHeader({
   avg: number;
   successRate: number;
   classroomSize: number;
+  pdfHref: string;
 }) {
   const t = useTranslations();
-  //const router = useRouter();
-  const params = useParams<{ id: string }>();
-  const [termId] = useQueryState("termId");
+
   const canCreateReportCard = useCheckPermission(
     "reportcard",
     PermissionAction.CREATE,
@@ -64,7 +62,8 @@ export function ReportCardActionHeader({
         {canCreateReportCard && (
           <Link
             className="ml-auto"
-            href={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
+            //href={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
+            href={pdfHref}
             target="_blank"
           >
             <Button variant={"secondary"} size={"sm"}>

@@ -14,6 +14,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
@@ -21,7 +22,7 @@ import { ReportCardMention } from "~/components/students/reportcards/ReportCardM
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
 import { ReportCardSummary } from "~/components/students/reportcards/ReportCardSummary";
 import { getServerTranslations } from "~/i18n/server";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 import { reportcardSearchParams } from "~/utils/search-params";
 
@@ -34,6 +35,7 @@ export default async function Page(props: PageProps) {
   const params = await props.params;
   const { t } = await getServerTranslations();
   const { id } = params;
+  const queryClient = getQueryClient();
   const student = await caller.student.get(id);
   if (!student.classroom) {
     return (
@@ -57,6 +59,10 @@ export default async function Page(props: PageProps) {
     termId: termId,
   });
   const disc = disciplines.get(params.id);
+  const classroom = await queryClient.fetchQuery(
+    trpc.classroom.get.queryOptions(student.classroom.id),
+  );
+  const term = await queryClient.fetchQuery(trpc.term.get.queryOptions(termId));
 
   const subjects = await caller.classroom.subjects(student.classroom.id);
   const groups = _.groupBy(subjects, "subjectGroupId");
@@ -74,8 +80,17 @@ export default async function Page(props: PageProps) {
   const rowClassName = "border text-center py-0";
 
   return (
-    <div className="mb-10 flex w-full flex-col gap-2 px-4">
-      <div className="bg-background overflow-hidden rounded-md border">
+    <div className="mb-10 flex w-full flex-col gap-2">
+      <ReportCardActionHeader
+        title={`BULLETIN SCOLAIRE : ${term.name}`}
+        maxAvg={Math.max(...averages)}
+        minAvg={Math.min(...averages)}
+        avg={average}
+        successRate={successRate}
+        classroomSize={classroom.size}
+        pdfHref={`/api/pdfs/reportcards/ipbw/?studentId=${params.id}&termId=${termId}`}
+      />
+      <div className="overflow-hidden">
         <Table className="text-xs">
           <TableHeader>
             <TableRow className="hover:bg-transparent">

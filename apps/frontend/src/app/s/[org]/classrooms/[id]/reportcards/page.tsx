@@ -72,6 +72,7 @@ export default async function Page(props: {
         avg={average}
         successRate={successRate}
         classroomSize={classroom.size}
+        pdfHref={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
       />
 
       <div>

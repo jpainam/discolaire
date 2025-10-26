@@ -13,6 +13,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { EmptyState } from "~/components/EmptyState";
 import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
@@ -22,7 +23,6 @@ import { ReportCardSummary } from "~/components/students/reportcards/ReportCardS
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
-import { TrimestreHeader } from "./TrimestreHeader";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -76,13 +76,16 @@ export default async function Page(props: {
 
   return (
     <div className="flex flex-col gap-2">
-      <TrimestreHeader
-        trimestreId={trimestreId}
-        studentId={params.id}
+      <ReportCardActionHeader
         title={title}
-        classroomId={classroom.id}
+        maxAvg={Math.max(...averages)}
+        minAvg={Math.min(...averages)}
+        avg={average}
+        successRate={successRate}
+        classroomSize={classroom.size}
+        pdfHref={`/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${trimestreId}`}
       />
-      <div className="px-4">
+      <div>
         <div className="bg-background overflow-hidden rounded-md">
           <Table>
             <TableHeader>
