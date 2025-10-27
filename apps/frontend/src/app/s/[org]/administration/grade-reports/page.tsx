@@ -36,7 +36,7 @@ export default async function Page() {
   ]);
   return (
     <HydrateClient>
-      <div>
+      <div className="flex flex-col gap-2">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <Card className="lg:col-span-4">
             <CardHeader>

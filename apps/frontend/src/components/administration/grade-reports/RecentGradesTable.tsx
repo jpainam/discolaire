@@ -1,5 +1,6 @@
 import Link from "next/link";
 import i18next from "i18next";
+import { getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -10,12 +11,14 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { getServerTranslations } from "~/i18n/server";
-import { caller } from "~/trpc/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 
 export async function RecentGradesTable() {
-  const { t } = await getServerTranslations();
-  const grades = await caller.gradeSheet.getLatestGradesheet({ limit: 5 });
+  const t = await getTranslations();
+  const queryClient = getQueryClient();
+  const grades = await queryClient.fetchQuery(
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 5 }),
+  );
   const latest: {
     id: number;
     subject: string;
@@ -59,7 +62,7 @@ export async function RecentGradesTable() {
             <TableHead>{t("classroom")}</TableHead>
             <TableHead>{t("subject")}</TableHead>
             {/* <TableHead className="text-right">{t("Min")}</TableHead> */}
-            <TableHead className="text-right">{t("Moy.")}</TableHead>
+            <TableHead className="text-right">{t("Moy")}</TableHead>
             <TableHead className="text-right">% {">= 10"}</TableHead>
             <TableHead className="text-right">{t("date")}</TableHead>
           </TableRow>
