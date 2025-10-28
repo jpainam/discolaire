@@ -1,5 +1,4 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { addMonths, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
 import { protectedProcedure } from "../trpc";
@@ -17,30 +16,32 @@ export const subjectTimetableRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      for (const weekday of input.weekdays) {
-        await ctx.db.subjectTimetable.upsert({
-          where: {
-            subjectId_weekday_start_end: {
-              subjectId: input.subjectId,
-              weekday,
+      await Promise.all(
+        input.weekdays.map((weekday) => {
+          return ctx.db.subjectTimetable.upsert({
+            where: {
+              subjectId_weekday_start_end: {
+                subjectId: input.subjectId,
+                weekday,
+                start: input.start,
+                end: input.end,
+              },
+            },
+            update: {
+              validFrom: new Date(),
+              validTo: null,
+            },
+            create: {
               start: input.start,
               end: input.end,
+              weekday,
+              validFrom: new Date(),
+              subjectId: input.subjectId,
+              createdById: ctx.session.user.id,
             },
-          },
-          update: {
-            validFrom: new Date(), // optional: reset start of validity
-            validTo: null, // reopen if it was closed
-          },
-          create: {
-            start: input.start,
-            end: input.end,
-            weekday,
-            validFrom: new Date(),
-            subjectId: input.subjectId,
-            createdById: ctx.session.user.id,
-          },
-        });
-      }
+          });
+        }),
+      );
     }),
 
   // "what's active right now" for a given subject
@@ -88,11 +89,16 @@ export const subjectTimetableRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        from: z.coerce.date().optional().default(subMonths(new Date(), 4)),
-        to: z.coerce.date().optional().default(addMonths(new Date(), 4)),
+        from: z.coerce.date().optional(),
+        to: z.coerce.date().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
+      const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
+        where: { id: ctx.schoolYearId },
+      });
+      const start = input.from ?? schoolYear.startDate;
+      const end = input.to ?? schoolYear.endDate;
       const lessons = await ctx.db.subjectTimetable.findMany({
         include: {
           subject: {
@@ -106,10 +112,8 @@ export const subjectTimetableRouter = {
           subject: {
             classroomId: input.classroomId,
           },
-
-          // overlap test: [validFrom, validTo) intersects [from, to]
-          validFrom: { lt: input.to },
-          OR: [{ validTo: null }, { validTo: { gt: input.from } }],
+          validFrom: { lt: end },
+          OR: [{ validTo: null }, { validTo: { gt: start } }],
         },
         orderBy: [{ weekday: "asc" }, { start: "asc" }],
       });

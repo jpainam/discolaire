@@ -1,9 +1,4 @@
-import type {
-  CoreAssistantMessage,
-  CoreToolMessage,
-  UIMessage,
-  UIMessagePart,
-} from "ai";
+import type { CoreAssistantMessage, CoreToolMessage, UIMessage, UIMessagePart } from "ai";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
 import { formatISO } from "date-fns";
@@ -11,11 +6,16 @@ import i18next from "i18next";
 import { customAlphabet } from "nanoid";
 import { twMerge } from "tailwind-merge";
 
+
+
 import type { AiDocument, AiMessage } from "@repo/db/server";
+
+
 
 import type { ErrorCode } from "./errors";
 import type { ChatMessage, ChatTools, CustomUIDataTypes } from "./types";
 import { ChatSDKError } from "./errors";
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -221,4 +221,15 @@ export function getLatenessValue(value: string) {
   }
   const [hours, minutes] = value.split(":").map(Number);
   return (hours ?? 0) * 60 + (minutes ?? 0);
+}
+
+
+
+export function getWeekdayName(dayNumber: number, locale = "en-US"): string {
+  // Create a reference date where Sunday = 0
+  const referenceDate = new Date(1970, 0, 4 + dayNumber); // Jan 4, 1970 is a Sunday
+
+  return new Intl.DateTimeFormat(locale, { weekday: "long" }).format(
+    referenceDate,
+  );
 }

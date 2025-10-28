@@ -30,6 +30,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { getWeekdayName } from "~/lib/utils";
 
 export function ClassroomSubjectTimetable({
   subjectId,
@@ -224,7 +225,7 @@ export function ClassroomSubjectTimetable({
             closeSheet();
           }}
           variant={"outline"}
-          size={"sm"}
+          //size={"sm"}
         >
           {t("close")}
         </Button>
@@ -233,11 +234,3 @@ export function ClassroomSubjectTimetable({
   );
 }
 
-function getWeekdayName(dayNumber: number, locale = "en-US"): string {
-  // Create a reference date where Sunday = 0
-  const referenceDate = new Date(1970, 0, 4 + dayNumber); // Jan 4, 1970 is a Sunday
-
-  return new Intl.DateTimeFormat(locale, { weekday: "long" }).format(
-    referenceDate,
-  );
-}
