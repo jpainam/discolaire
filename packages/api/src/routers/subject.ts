@@ -206,4 +206,16 @@ export const subjectRouter = {
         staffId: input.staffId,
       });
     }),
+  timetables: protectedProcedure
+    .input(z.coerce.number())
+    .query(({ ctx, input }) => {
+      return ctx.db.subjectTimetable.findMany({
+        orderBy: {
+          start: "asc",
+        },
+        where: {
+          subjectId: input,
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

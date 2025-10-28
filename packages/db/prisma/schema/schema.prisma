@@ -601,7 +601,6 @@ model School {
     documents             Document[]
     degrees               StaffDegree[]
     relationships         ContactRelationship[]
-    timetableCategories   TimetableCategory[]
     inventoryAssets       InventoryAsset[]
     inventoryConsumables  InventoryConsumable[]
     stockMovements        InventoryStockMovement[]
@@ -708,7 +707,6 @@ model SchoolYear {
     transactions         Transaction[]
     school               School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId             String
-    timetableCategories  TimetableCategory[]
     inventoryConsumables InventoryConsumable[]
     consumableUsages     InventoryConsumableUsage[]
     stockMovements       InventoryStockMovement[]

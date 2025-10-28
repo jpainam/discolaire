@@ -65,6 +65,7 @@ model User {
     aiDocuments                  AiDocument[]
     aiSuggestions                AiSuggestion[]
     attendances                  Attendance[]               @relation("attendanceCreatedBy")
+    subjectTimetables            SubjectTimetable[]         @relation("SubjectTimetableCreatedBy")
 
     @@unique([email])
     @@unique([username])

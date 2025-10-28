@@ -7,7 +7,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { LinkIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -38,9 +38,10 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+import { ClassroomSubjectTimetable } from "./ClassroomSubjectTimetable";
 import { CreateEditSubject } from "./CreateEditSubject";
 
-export function SubjectTable() {
+export function ClassroomSubjectTable() {
   const params = useParams<{ id: string }>();
   const { t } = useLocale();
   const trpc = useTRPC();
@@ -49,6 +50,7 @@ export function SubjectTable() {
   const { data: subjects } = useSuspenseQuery(
     trpc.classroom.subjects.queryOptions(params.id),
   );
+
   const confirm = useConfirm();
   const canDeleteClassroomSubject = useCheckPermission(
     "subject",
@@ -85,6 +87,7 @@ export function SubjectTable() {
               <TableHead>{t("coeff")}</TableHead>
               <TableHead>{t("group")}</TableHead>
               <TableHead>{t("order")}</TableHead>
+              <TableHead>{t("timetable")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -147,6 +150,24 @@ export function SubjectTable() {
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {subject.order}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => {
+                      openSheet({
+                        title: "Emploi du. temps",
+                        description: `${subject.course.name} - ${subject.teacher?.prefix} ${subject.teacher?.lastName}`,
+                        view: (
+                          <ClassroomSubjectTimetable subjectId={subject.id} />
+                        ),
+                      });
+                    }}
+                    variant={"secondary"}
+                    size={"sm"}
+                  >
+                    <LinkIcon />
+                    Voir emplois du temps
+                  </Button>
                 </TableCell>
                 <TableCell className="py-0 text-right">
                   {(canEditClassroomSubject || canDeleteClassroomSubject) && (
