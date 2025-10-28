@@ -3,7 +3,6 @@ import { ClubTable } from "./clubs/ClubTable";
 import { ReligionTable } from "./religions/ReligionTable";
 import { SportTable } from "./sports/SportTable";
 import { StaffLevelTable } from "./staff-levels/StaffLevelTable";
-import { TimetableCategoryTable } from "./timetable-categories/TimetableCategoryTable";
 
 export default function Page() {
   return (
@@ -13,7 +12,6 @@ export default function Page() {
         <ClubTable />
         <SportTable />
         <ReligionTable />
-        <TimetableCategoryTable />
       </div>
       <StaffLevelTable />
     </div>

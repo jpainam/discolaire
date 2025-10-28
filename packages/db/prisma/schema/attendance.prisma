@@ -13,20 +13,21 @@ model Convocation {
 
 model SubjectTimetable {
     id          Int            @id @default(autoincrement())
+    weekday     Int // 0=Sun, 1=Mon ... 7=Sun
     start       String
     end         String
     subjectId   Int
     schoolId    String
-    from        DateTime       @default(now())
-    to          DateTime?
+    validFrom   DateTime       @default(now()) // when this rule started being true (inclusive)
+    validTo     DateTime? // when it stopped (exclusive). null = still active
     category    TimetableGroup @default(SUBJECT)
     subject     Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
     createdById String?
     createdBy   User?          @relation("SubjectTimetableCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
 
     @@unique([start, end, subjectId])
-    @@index([from])
-    @@index([to])
+    @@index([validFrom])
+    @@index([validTo])
 }
 
 enum TimetableGroup {

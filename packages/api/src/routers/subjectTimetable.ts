@@ -1,51 +1,45 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { addDays, addMonths, subMonths } from "date-fns";
-import { v4 as uuidv4 } from "uuid";
+import { addDays, addMonths, subDays, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
 import { protectedProcedure } from "../trpc";
 
-const createEditLessonSchema = z.object({
-  start: z.coerce.date(),
-  categoryId: z.string().min(1),
-  isRepeating: z.boolean().default(false),
-  subjectId: z.coerce.number().nonnegative(),
-  end: z.coerce.date(),
-  startDate: z.coerce.date(),
-});
 export const subjectTimetableRouter = {
   create: protectedProcedure
-    .input(createEditLessonSchema)
+    .input(
+      z.object({
+        start: z.string(),
+        end: z.string(),
+        subjectId: z.coerce.number(),
+        weekday: z.coerce.number(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      const schoolYear = await ctx.db.schoolYear.findUnique({
-        where: {
-          id: ctx.schoolYearId,
+      return ctx.db.subjectTimetable.create({
+        data: {
+          start: input.start,
+          end: input.end,
+          weekday: input.weekday, // 0 = Sun
+          validFrom: new Date(),
+          subjectId: input.subjectId,
+          schoolId: ctx.schoolId,
         },
       });
-      const endDate = schoolYear?.endDate ?? addMonths(new Date(), 9);
-      const groupKey = uuidv4();
-      let event = {
-        start: input.start,
-        end: input.end,
-        groupKey: groupKey,
-        subjectId: input.subjectId,
-        categoryId: input.categoryId,
-        schoolId: ctx.schoolId,
-      };
-      const events = [event];
-      let currentDate = input.start;
-      if (input.isRepeating) {
-        while (currentDate <= endDate) {
-          const newEvent = { ...event };
-          newEvent.start = addDays(event.start, 7);
-          newEvent.end = addDays(event.end, 7);
-          event = newEvent;
-          events.push(newEvent);
-          currentDate = addDays(currentDate, 7);
-        }
-      }
-      return ctx.db.subjectTimetable.createMany({
-        data: events,
+    }),
+  all: protectedProcedure
+    .input(
+      z.object({
+        subjectId: z.coerce.number(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      const today = addDays(new Date(), 1);
+      return ctx.db.subjectTimetable.findMany({
+        orderBy: [{ weekday: "asc" }, { start: "asc" }],
+        where: {
+          OR: [{ validTo: null }, { validTo: { gt: today } }],
+          subjectId: input.subjectId,
+        },
       });
     }),
   clearByClassroom: protectedProcedure
@@ -79,12 +73,11 @@ export const subjectTimetableRouter = {
           },
         },
         where: {
-          start: {
+          validFrom: {
             gte: input.from,
           },
-          end: {
-            lte: input.to,
-          },
+          OR: [{ validTo: { lte: input.to } }, { validTo: null }],
+
           subject: {
             classroomId: input.classroomId,
           },
@@ -93,39 +86,14 @@ export const subjectTimetableRouter = {
       return lessons;
     }),
   delete: protectedProcedure
-    .input(
-      z.object({
-        id: z.coerce.number(),
-        type: z.enum(["current", "before", "after"]).default("current"),
-      }),
-    )
+    .input(z.coerce.number())
     .mutation(async ({ ctx, input }) => {
-      if (input.type === "current") {
-        return ctx.db.subjectTimetable.delete({
-          where: {
-            id: input.id,
-          },
-        });
-      }
-      const event = await ctx.db.subjectTimetable.findUniqueOrThrow({
-        where: {
-          id: input.id,
+      return ctx.db.subjectTimetable.update({
+        data: {
+          validTo: subDays(new Date(), 1),
         },
-      });
-      return ctx.db.subjectTimetable.deleteMany({
         where: {
-          groupKey: event.groupKey,
-          ...(input.type == "before"
-            ? {
-                start: {
-                  lte: event.start,
-                },
-              }
-            : {
-                start: {
-                  gt: event.start,
-                },
-              }),
+          id: input,
         },
       });
     }),

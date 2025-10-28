@@ -3,9 +3,8 @@
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isBefore } from "date-fns";
-import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -25,18 +24,15 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { DatePicker } from "~/components/DatePicker";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditTimetableCategory } from "./CreateEditTimetableCategory";
 
 const createEditTimetable = z.object({
   startTime: z.string().min(1),
@@ -73,7 +69,6 @@ export function CreateEditLesson({
     },
   });
   const trpc = useTRPC();
-  const categoryQuery = useQuery(trpc.timetableCategory.all.queryOptions());
   const queryClient = useQueryClient();
 
   const { t } = useLocale();
@@ -112,8 +107,6 @@ export function CreateEditLesson({
       },
     }),
   );
-
-  const { openModal } = useModal();
 
   const handleSubmit = (data: z.infer<typeof createEditTimetable>) => {
     if (!data.subjectId) {
@@ -176,52 +169,6 @@ export function CreateEditLesson({
               </FormItem>
             )}
           />
-
-          {categoryQuery.isPending ? (
-            <Skeleton className="h-8" />
-          ) : (
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("category")}</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(val) => {
-                        if (val === "-1") {
-                          openModal({
-                            title: t("create"),
-                            view: <CreateEditTimetableCategory />,
-                          });
-                        } else {
-                          field.onChange(val);
-                        }
-                      }}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t("category")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categoryQuery.data?.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                        <SelectSeparator />
-                        <SelectItem value="-1">
-                          <PlusIcon className="h-4 w-4" />
-                          {t("create")}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
         </div>
 
         <div className="grid grid-cols-2 gap-x-4">

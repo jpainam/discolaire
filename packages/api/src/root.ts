@@ -63,7 +63,6 @@ import { subjectTimetableRouter } from "./routers/subjectTimetable";
 import { subscriptionRouter } from "./routers/subscription";
 import { teachingSessionRouter } from "./routers/teachingSession";
 import { termRouter } from "./routers/term";
-import { timetableCategoryRouter } from "./routers/timetableCategory";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
 import { userRouter } from "./routers/user";
@@ -140,7 +139,6 @@ export const appRouter = createTRPCRouter({
   subjectTimetable: subjectTimetableRouter,
   importStudent: importStudentRouter,
   discipline: disciplineRouter,
-  timetableCategory: timetableCategoryRouter,
 });
 
 // export type definition of API
