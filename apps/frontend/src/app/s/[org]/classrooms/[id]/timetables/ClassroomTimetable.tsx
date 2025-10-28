@@ -39,8 +39,8 @@ export function ClassroomTimetable() {
       events={events.map((e, index) => {
         return {
           id: e.id,
-          startDate: e.start.toISOString(),
-          endDate: e.end.toISOString(),
+          //startDate: e.start.toISOString(),
+          //endDate: e.end.toISOString(),
           title: e.subject.course.shortName,
           color: tmpColors[index % tmpColors.length], //e.subject.course.color,
           description: "",

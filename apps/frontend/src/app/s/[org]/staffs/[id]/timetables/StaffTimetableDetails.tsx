@@ -13,7 +13,7 @@ export function StaffTimetableDetails({
 }: {
   event: RouterOutputs["subjectTimetable"]["byClassroom"][number];
 }) {
-  const { t, i18n } = useLocale();
+  const { t } = useLocale();
 
   const { closeModal } = useModal();
 
@@ -36,20 +36,20 @@ export function StaffTimetableDetails({
         {t("start_time")}
       </div>
       <div>
-        {event.start.toLocaleDateString(i18n.language, {
+        {/* {event.start.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.start.toLocaleTimeString(i18n.language)}
+        - {event.start.toLocaleTimeString(i18n.language)} */}
       </div>
       <div className="text-muted-foreground flex flex-row items-center gap-2">
         <CalendarDays className="h-4 w-4" />
         {t("end_time")}
       </div>
       <div>
-        {event.end.toLocaleDateString(i18n.language, {
+        {/* {event.end.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.end.toLocaleTimeString(i18n.language)}
+        - {event.end.toLocaleTimeString(i18n.language)} */}
       </div>
 
       <Button
