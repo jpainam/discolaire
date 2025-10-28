@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { CalendarDays, Trash } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Empty,
   EmptyContent,
@@ -15,13 +16,19 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@repo/ui/components/empty";
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldTitle,
+} from "@repo/ui/components/field";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function ClassroomSubjectTimetable({
@@ -30,14 +37,16 @@ export function ClassroomSubjectTimetable({
   subjectId: number;
 }) {
   const trpc = useTRPC();
-  const timetableQuery = useQuery(
-    trpc.subject.timetables.queryOptions(subjectId),
-  );
+  const subjectQuery = useQuery(trpc.subject.get.queryOptions(subjectId));
   const [slotStart, setSlotStart] = useState("");
   const [slotEnd, setSlotEnd] = useState("");
+  const [weekdays, setWeekdays] = useState<number[]>([1]);
   const t = useTranslations();
   const { closeSheet } = useSheet();
-  const { openModal } = useModal();
+
+  const confirm = useConfirm();
+  const locale = useLocale();
+
   const queryClient = useQueryClient();
   const deleteTimetableSlot = useMutation(
     trpc.subjectTimetable.delete.mutationOptions({
@@ -46,6 +55,10 @@ export function ClassroomSubjectTimetable({
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subjectTimetable.pathFilter());
+        await queryClient.invalidateQueries(trpc.subject.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.classroom.subjects.pathFilter(),
+        );
         toast.success(t("deleted_successfully"), { id: 0 });
       },
     }),
@@ -57,6 +70,10 @@ export function ClassroomSubjectTimetable({
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subjectTimetable.pathFilter());
+        await queryClient.invalidateQueries(trpc.subject.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.classroom.subjects.pathFilter(),
+        );
         toast.success(t("created_successfully"), { id: 0 });
       },
     }),
@@ -65,13 +82,16 @@ export function ClassroomSubjectTimetable({
     if (slotStart && slotEnd) {
       createTimetableSlot.mutate({
         subjectId: subjectId,
-      })
+        start: slotStart,
+        end: slotEnd,
+        weekdays: weekdays,
+      });
       setSlotStart("");
       setSlotEnd("");
     }
   };
 
-  if (timetableQuery.isPending) {
+  if (subjectQuery.isPending) {
     return (
       <div className="grid grid-cols-1 gap-4 p-4">
         {Array.from({ length: 8 }).map((_, index) => (
@@ -80,7 +100,7 @@ export function ClassroomSubjectTimetable({
       </div>
     );
   }
-  const timetables = timetableQuery.data;
+  const timetables = subjectQuery.data?.timetables;
   // if (!timetables || timetables.length == 0) {
   //   return (
 
@@ -90,7 +110,7 @@ export function ClassroomSubjectTimetable({
     <div className="flex flex-1 flex-col gap-4 overflow-hidden">
       <div className="flex gap-2 px-4">
         <div className="flex flex-1 flex-col gap-2">
-          <Label htmlFor="start-time">Start Time</Label>
+          <Label htmlFor="start-time">{t("start_time")}</Label>
           <Input
             id="start-time"
             type="time"
@@ -99,7 +119,7 @@ export function ClassroomSubjectTimetable({
           />
         </div>
         <div className="flex flex-1 flex-col gap-2">
-          <Label htmlFor="end-time">End Time</Label>
+          <Label htmlFor="end-time">{t("end_time")}</Label>
           <Input
             id="end-time"
             type="time"
@@ -108,14 +128,48 @@ export function ClassroomSubjectTimetable({
           />
         </div>
         <div className="flex items-end">
-          <Button onClick={handleAddTimeSlot}>
-            <Plus className="h-4 w-4" />
+          <Button
+            //isLoading={createTimetableSlot.isPending}
+            onClick={handleAddTimeSlot}
+          >
+            {/* <Plus className="h-4 w-4" /> */}
             {t("add")}
           </Button>
         </div>
       </div>
+      <FieldGroup>
+        <FieldGroup className="flex flex-row flex-wrap gap-2 px-4 [--radius:9999rem]">
+          {[0, 1, 2, 3, 4, 5, 6].map((option) => (
+            <FieldLabel
+              htmlFor={option.toString()}
+              key={option}
+              className="!w-fit"
+            >
+              <Field
+                orientation="horizontal"
+                className="gap-1.5 overflow-hidden !px-3 !py-1.5 transition-all duration-100 ease-linear group-has-data-[state=checked]/field-label:!px-2"
+              >
+                <Checkbox
+                  value={option.toString()}
+                  id={option.toString()}
+                  onCheckedChange={(checked) => {
+                    if (!checked) {
+                      setWeekdays((w) => w.filter((day) => day !== option));
+                    } else {
+                      setWeekdays((w) => [...w, option]);
+                    }
+                  }}
+                  defaultChecked={weekdays.includes(option)}
+                  className="-ml-6 -translate-x-1 rounded-full transition-all duration-100 ease-linear data-[state=checked]:ml-0 data-[state=checked]:translate-x-0"
+                />
+                <FieldTitle>{getWeekdayName(option, locale)}</FieldTitle>
+              </Field>
+            </FieldLabel>
+          ))}
+        </FieldGroup>
+      </FieldGroup>
       <Separator />
-      <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto p-4">
+      <div className="grid flex-1 auto-rows-min gap-2 overflow-y-auto px-4">
         {!timetables ||
           (timetables.length == 0 && (
             <Empty>
@@ -132,28 +186,36 @@ export function ClassroomSubjectTimetable({
             </Empty>
           ))}
         <div className="space-y-2">
-          {timeSlots.map((slot) => (
+          {timetables?.map((slot) => (
             <div
               key={slot.id}
-              className="flex items-center justify-between rounded-lg border p-3"
+              className="flex items-center justify-between rounded-lg border p-2 text-sm"
             >
+              <span className="font-bold capitalize">
+                {getWeekdayName(slot.weekday, locale)}
+              </span>
               <span className="font-medium">
-                {slot.startTime} - {slot.endTime}
+                {slot.start} - {slot.end}
               </span>
               <Button
                 variant="ghost"
-                size="sm"
-                onClick={() => deleteTimeSlot(slot.id)}
+                className="hover:text-destructive"
+                size="icon-sm"
+                onClick={async () => {
+                  const isconfirmed = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isconfirmed) {
+                    toast.loading(t("Processing"), { id: 0 });
+                    deleteTimetableSlot.mutate(slot.id);
+                  }
+                }}
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash />
               </Button>
             </div>
           ))}
-          {timeSlots.length === 0 && (
-            <p className="text-muted-foreground py-4 text-center text-sm">
-              No time slots added yet
-            </p>
-          )}
         </div>
       </div>
       <div className={"mt-auto flex flex-col gap-2 p-4"}>
@@ -168,5 +230,14 @@ export function ClassroomSubjectTimetable({
         </Button>
       </div>
     </div>
+  );
+}
+
+function getWeekdayName(dayNumber: number, locale = "en-US"): string {
+  // Create a reference date where Sunday = 0
+  const referenceDate = new Date(1970, 0, 4 + dayNumber); // Jan 4, 1970 is a Sunday
+
+  return new Intl.DateTimeFormat(locale, { weekday: "long" }).format(
+    referenceDate,
   );
 }

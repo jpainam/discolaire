@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { addDays, isSameDay, subDays } from "date-fns";
+import { addDays, subDays } from "date-fns";
 import {
   CalendarCogIcon,
   CalendarDaysIcon,
@@ -42,7 +42,6 @@ import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditLesson } from "./timetables/CreateEditLesson";
 
 export default function TopTimetable() {
   const params = useParams<{ id: string }>();
@@ -166,7 +165,7 @@ export default function TopTimetable() {
               onClick={() => {
                 openModal({
                   title: t("add"),
-                  view: <CreateEditLesson />,
+                  view: <></>,
                 });
               }}
               size={"sm"}
@@ -198,8 +197,7 @@ function TopTimetableCard({
   today: Date;
   period: RouterOutputs["subjectTimetable"]["byClassroom"][number];
 }) {
-  const { i18n } = useLocale();
-
+  console.log(today);
   return (
     <div
       onClick={() => {
@@ -208,11 +206,11 @@ function TopTimetableCard({
       key={period.id}
       className={cn(
         "hover:bg-muted/50 mx-1 w-full cursor-pointer rounded-sm border p-2",
-        today > period.end
-          ? "bg-muted opacity-50"
-          : isSameDay(period.start, today)
-            ? "bg-red-600"
-            : "bg-card",
+        // today > period.end
+        //   ? "bg-muted opacity-50"
+        //   : isSameDay(period.start, today)
+        //     ? "bg-red-600"
+        //     : "bg-card",
       )}
     >
       <div className="mb-2 flex items-start justify-between">
@@ -225,27 +223,27 @@ function TopTimetableCard({
           </span>
         </div>
         <div className="text-xs font-extralight">
-          {period.start.toLocaleDateString(i18n.language, {
+          {/* {period.start.toLocaleDateString(i18n.language, {
             weekday: "short",
             day: "2-digit",
             month: "short",
-          })}
+          })} */}
         </div>
       </div>
       <div className="text-muted-foreground flex justify-between text-sm">
         <FlatBadge variant={"green"}>
           <Clock2Icon className="mr-2 h-4 w-4" />
-          {period.start.toLocaleTimeString(i18n.language, {
+          {/* {period.start.toLocaleTimeString(i18n.language, {
             hour: "2-digit",
             minute: "2-digit",
-          })}
+          })} */}
         </FlatBadge>
         <FlatBadge variant={"pink"}>
           <Clock3Icon className="mr-2 h-4 w-4" />
-          {period.end.toLocaleTimeString(i18n.language, {
+          {/* {period.end.toLocaleTimeString(i18n.language, {
             hour: "2-digit",
             minute: "2-digit",
-          })}
+          })} */}
         </FlatBadge>
       </div>
     </div>

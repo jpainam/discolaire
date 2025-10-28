@@ -215,6 +215,18 @@ async function getSubjects(classroomId: string) {
     },
     include: {
       programs: true,
+      timetables: {
+        where: {
+          OR: [
+            { validTo: null },
+            {
+              validTo: {
+                gt: new Date(),
+              },
+            },
+          ],
+        },
+      },
       course: {
         select: {
           id: true,
@@ -306,7 +318,6 @@ async function getStudents(classroomId: string) {
   return withIsRepeating;
 }
 
-
 export const classroomService = {
   get,
   getAll,
@@ -316,4 +327,3 @@ export const classroomService = {
   getSubjects,
   getStudents,
 };
-

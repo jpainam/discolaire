@@ -10,7 +10,6 @@ import type { TCalendarView } from "~/components/calendar/types";
 import { DateNavigator } from "~/components/calendar/header/date-navigator";
 import { TodayButton } from "~/components/calendar/header/today-button";
 import { UserSelect } from "~/components/calendar/header/user-select";
-import { CreateEditLesson } from "~/components/classrooms/timetables/CreateEditLesson";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useCalendar } from "../calendar-context";
@@ -161,7 +160,7 @@ export function CalendarHeader({ events }: IProps) {
             onClick={() => {
               openModal({
                 title: t("add"),
-                view: <CreateEditLesson />,
+                view: <></>,
               });
             }}
             size="sm"

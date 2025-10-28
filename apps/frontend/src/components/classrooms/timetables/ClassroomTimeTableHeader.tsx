@@ -24,7 +24,6 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditLesson } from "./CreateEditLesson";
 
 export function ClassroomTimeTableHeader() {
   const { t } = useLocale();
@@ -63,7 +62,7 @@ export function ClassroomTimeTableHeader() {
             onClick={() => {
               openModal({
                 title: t("add"),
-                view: <CreateEditLesson />,
+                view: <></>,
               });
             }}
             variant={"default"}

@@ -34,6 +34,18 @@ export const subjectRouter = {
         include: {
           course: true,
           subjectGroup: true,
+          timetables: {
+            where: {
+              OR: [
+                { validTo: null },
+                {
+                  validTo: {
+                    gt: new Date(),
+                  },
+                },
+              ],
+            },
+          },
           teacher: {
             select: {
               prefix: true,
@@ -204,18 +216,6 @@ export const subjectRouter = {
         classroomId: input.classroomId,
         categoryId: input.categoryId,
         staffId: input.staffId,
-      });
-    }),
-  timetables: protectedProcedure
-    .input(z.coerce.number())
-    .query(({ ctx, input }) => {
-      return ctx.db.subjectTimetable.findMany({
-        orderBy: {
-          start: "asc",
-        },
-        where: {
-          subjectId: input,
-        },
       });
     }),
 } satisfies TRPCRouterRecord;

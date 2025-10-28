@@ -126,6 +126,12 @@ export function ClassroomSubjectTable() {
                         {subject.programs.length} programmes
                       </Badge>
                     )}
+                    {subject.timetables.length > 0 && (
+                      <Badge variant={"success"} appearance={"light"}>
+                        {" "}
+                        {subject.timetables.length} {t("timetable")}
+                      </Badge>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground">

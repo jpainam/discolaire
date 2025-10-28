@@ -1,58 +1,89 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { addDays, addMonths, subDays, subMonths } from "date-fns";
+import { addMonths, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
 import { protectedProcedure } from "../trpc";
+
+const timeRegex = /^\d{2}:\d{2}$/;
 
 export const subjectTimetableRouter = {
   create: protectedProcedure
     .input(
       z.object({
-        start: z.string(),
-        end: z.string(),
+        start: z.string().regex(timeRegex),
+        end: z.string().regex(timeRegex),
         subjectId: z.coerce.number(),
-        weekday: z.coerce.number(),
+        weekdays: z.coerce.number().int().min(0).max(6).array(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.subjectTimetable.create({
-        data: {
-          start: input.start,
-          end: input.end,
-          weekday: input.weekday, // 0 = Sun
-          validFrom: new Date(),
-          subjectId: input.subjectId,
-          schoolId: ctx.schoolId,
-        },
-      });
+      for (const weekday of input.weekdays) {
+        await ctx.db.subjectTimetable.upsert({
+          where: {
+            subjectId_weekday_start_end: {
+              subjectId: input.subjectId,
+              weekday,
+              start: input.start,
+              end: input.end,
+            },
+          },
+          update: {
+            validFrom: new Date(), // optional: reset start of validity
+            validTo: null, // reopen if it was closed
+          },
+          create: {
+            start: input.start,
+            end: input.end,
+            weekday,
+            validFrom: new Date(),
+            subjectId: input.subjectId,
+            createdById: ctx.session.user.id,
+          },
+        });
+      }
     }),
+
+  // "what's active right now" for a given subject
   all: protectedProcedure
     .input(
       z.object({
         subjectId: z.coerce.number(),
+        at: z.coerce.date().optional(), // allow checking past state too
       }),
     )
     .query(({ ctx, input }) => {
-      const today = addDays(new Date(), 1);
+      const targetDate = input.at ?? new Date();
+
       return ctx.db.subjectTimetable.findMany({
         orderBy: [{ weekday: "asc" }, { start: "asc" }],
         where: {
-          OR: [{ validTo: null }, { validTo: { gt: today } }],
           subjectId: input.subjectId,
+          validFrom: { lte: targetDate },
+          OR: [{ validTo: null }, { validTo: { gt: targetDate } }],
         },
       });
     }),
+
+  // "close" every active row in a classroom going forward
   clearByClassroom: protectedProcedure
     .input(z.object({ classroomId: z.string().min(1) }))
-    .mutation(({ ctx, input }) => {
-      return ctx.db.subjectTimetable.deleteMany({
+    .mutation(async ({ ctx, input }) => {
+      const now = new Date();
+
+      return ctx.db.subjectTimetable.updateMany({
+        data: {
+          validTo: now,
+        },
         where: {
           subject: {
             classroomId: input.classroomId,
           },
+          OR: [{ validTo: null }, { validTo: { gt: now } }],
         },
       });
     }),
+
+  // "get all lessons that overlap a window"
   byClassroom: protectedProcedure
     .input(
       z.object({
@@ -62,7 +93,6 @@ export const subjectTimetableRouter = {
       }),
     )
     .query(async ({ ctx, input }) => {
-      // take -3/+3 month from the currentDate
       const lessons = await ctx.db.subjectTimetable.findMany({
         include: {
           subject: {
@@ -73,24 +103,27 @@ export const subjectTimetableRouter = {
           },
         },
         where: {
-          validFrom: {
-            gte: input.from,
-          },
-          OR: [{ validTo: { lte: input.to } }, { validTo: null }],
-
           subject: {
             classroomId: input.classroomId,
           },
+
+          // overlap test: [validFrom, validTo) intersects [from, to]
+          validFrom: { lt: input.to },
+          OR: [{ validTo: null }, { validTo: { gt: input.from } }],
         },
+        orderBy: [{ weekday: "asc" }, { start: "asc" }],
       });
+
       return lessons;
     }),
+
+  // soft delete one entry
   delete: protectedProcedure
     .input(z.coerce.number())
     .mutation(async ({ ctx, input }) => {
       return ctx.db.subjectTimetable.update({
         data: {
-          validTo: subDays(new Date(), 1),
+          validTo: new Date(), // stop being active now
         },
         where: {
           id: input,

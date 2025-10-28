@@ -17,14 +17,13 @@ import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditLesson } from "./CreateEditLesson";
 
 export function LessonDetails({
   event,
 }: {
   event: RouterOutputs["subjectTimetable"]["byClassroom"][number];
 }) {
-  const { t, i18n } = useLocale();
+  const { t } = useLocale();
   const confirm = useConfirm();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -63,20 +62,20 @@ export function LessonDetails({
         {t("start_time")}
       </div>
       <div>
-        {event.start.toLocaleDateString(i18n.language, {
+        {/* {event.start.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.start.toLocaleTimeString(i18n.language)}
+        - {event.start.toLocaleTimeString(i18n.language)} */}
       </div>
       <div className="text-muted-foreground flex flex-row items-center">
         <CalendarDays className="mr-2 h-4 w-4" />
         {t("end_time")}
       </div>
       <div>
-        {event.end.toLocaleDateString(i18n.language, {
+        {/* {event.end.toLocaleDateString(i18n.language, {
           timeZone: "UTC",
         })}{" "}
-        - {event.end.toLocaleTimeString(i18n.language)}
+        - {event.end.toLocaleTimeString(i18n.language)} */}
       </div>
 
       <Button
@@ -107,7 +106,7 @@ export function LessonDetails({
         onClick={() => {
           openModal({
             title: t("update"),
-            view: <CreateEditLesson lesson={event} />,
+            view: <></>,
           });
         }}
       >

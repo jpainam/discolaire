@@ -17,7 +17,6 @@ model SubjectTimetable {
     start       String
     end         String
     subjectId   Int
-    schoolId    String
     validFrom   DateTime       @default(now()) // when this rule started being true (inclusive)
     validTo     DateTime? // when it stopped (exclusive). null = still active
     category    TimetableGroup @default(SUBJECT)
@@ -25,7 +24,7 @@ model SubjectTimetable {
     createdById String?
     createdBy   User?          @relation("SubjectTimetableCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
 
-    @@unique([start, end, subjectId])
+    @@unique([subjectId, weekday, start, end])
     @@index([validFrom])
     @@index([validTo])
 }
