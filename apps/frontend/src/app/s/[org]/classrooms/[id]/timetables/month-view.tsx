@@ -2,6 +2,12 @@
 
 import { useLocale } from "next-intl";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
+
 import { cn, getWeekdayName } from "~/lib/utils";
 
 interface Event {
@@ -98,7 +104,7 @@ export function MonthView({ currentDate, events }: MonthViewProps) {
       </div>
 
       {/* Calendar grid */}
-      <div className="border-border bg-border grid flex-1 grid-cols-7 gap-px border">
+      <div className="border-border bg-border grid flex-1 grid-cols-7 gap-px border-y">
         {days.map((day, index) => {
           const dayEvents = getEventsForDay(day.fullDate);
           const today = isToday(day.fullDate);
@@ -147,9 +153,38 @@ export function MonthView({ currentDate, events }: MonthViewProps) {
                   </div>
                 ))}
                 {dayEvents.length > 3 && (
-                  <div className="text-muted-foreground px-2 text-xs">
-                    +{dayEvents.length - 3} more
-                  </div>
+                  <Popover>
+                    <PopoverTrigger>
+                      <div className="text-muted-foreground px-2 text-xs">
+                        +{dayEvents.length - 3} de plus...
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      {dayEvents.map((event, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className={cn(
+                              "flex flex-row items-center justify-between truncate rounded px-2 py-1 text-xs font-medium",
+                            )}
+                          >
+                            <div>
+                              {event.start.toLocaleTimeString(locale, {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}{" "}
+                              -{" "}
+                              {event.end.toLocaleTimeString(locale, {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}{" "}
+                            </div>
+                            <div>{event.title}</div>
+                          </div>
+                        );
+                      })}
+                    </PopoverContent>
+                  </Popover>
                 )}
               </div>
             </div>

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { addDays, startOfWeek } from "date-fns";
+import { addDays, isSameDay, startOfWeek } from "date-fns";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { DayView } from "./day-view";
@@ -30,6 +29,7 @@ type ViewType = "month" | "week" | "day";
 
 export function ClassroomTimetable() {
   const [currentDate, setCurrentDate] = useState(new Date());
+
   const [view, setView] = useState<ViewType>("month");
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
@@ -130,12 +130,16 @@ export function ClassroomTimetable() {
           </Select>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={navigateToday}>
-              {t("Today")}
-            </Button>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" onClick={navigatePrevious}>
                 <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={isSameDay(currentDate, today) ? "default" : "ghost"}
+                size="sm"
+                onClick={navigateToday}
+              >
+                {t("Today")}
               </Button>
               <Button variant="ghost" size="icon" onClick={navigateNext}>
                 <ChevronRight className="h-4 w-4" />
@@ -148,26 +152,26 @@ export function ClassroomTimetable() {
 
           <div className="bg-muted flex gap-1 rounded-lg p-1">
             <Button
-              variant={view === "month" ? "secondary" : "ghost"}
+              variant={view === "month" ? "default" : "ghost"}
               size="sm"
               onClick={() => setView("month")}
-              className={cn(view === "month" && "bg-background shadow-sm")}
+              //className={cn(view === "month" && "bg-background shadow-sm")}
             >
               {t("Month")}
             </Button>
             <Button
-              variant={view === "week" ? "secondary" : "ghost"}
+              variant={view === "week" ? "default" : "ghost"}
               size="sm"
               onClick={() => setView("week")}
-              className={cn(view === "week" && "bg-background shadow-sm")}
+              //className={cn(view === "week" && "bg-background shadow-sm")}
             >
               {t("Week")}
             </Button>
             <Button
-              variant={view === "day" ? "secondary" : "ghost"}
+              variant={view === "day" ? "default" : "ghost"}
               size="sm"
               onClick={() => setView("day")}
-              className={cn(view === "day" && "bg-background shadow-sm")}
+              //className={cn(view === "day" && "bg-background shadow-sm")}
             >
               {t("Day")}
             </Button>

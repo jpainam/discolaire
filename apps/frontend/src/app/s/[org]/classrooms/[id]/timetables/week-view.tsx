@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "next-intl";
+
 import { cn } from "~/lib/utils";
 
 interface Event {
@@ -28,8 +30,8 @@ export function WeekView({ currentDate, events }: WeekViewProps) {
     return date;
   });
 
-  // Generate hours (6 AM to 10 PM)
-  const hours = Array.from({ length: 17 }, (_, i) => i + 6);
+  // Generate hours (7 AM to 10 PM)
+  const hours = Array.from({ length: 17 }, (_, i) => i + 7);
 
   const isToday = (date: Date) => {
     const today = new Date();
@@ -50,12 +52,15 @@ export function WeekView({ currentDate, events }: WeekViewProps) {
       );
     });
   };
+  const locale = useLocale();
 
-  const formatHour = (hour: number) => {
-    if (hour === 0) return "12 AM";
-    if (hour === 12) return "12 PM";
-    if (hour > 12) return `${hour - 12} PM`;
-    return `${hour} AM`;
+  const formatHour = (hour: number, locale: string) => {
+    const date = new Date();
+    date.setHours(hour, 0, 0, 0);
+    return new Intl.DateTimeFormat(locale, {
+      hour: "numeric",
+      //hour12: true,
+    }).format(date);
   };
 
   const getEventPosition = (event: Event) => {
@@ -72,79 +77,85 @@ export function WeekView({ currentDate, events }: WeekViewProps) {
   };
 
   return (
-    <div className="flex h-full flex-col p-6">
-      <div className="border-border flex flex-1 overflow-auto rounded-lg border">
-        {/* Time column */}
-        <div className="border-border bg-card w-20 flex-shrink-0 border-r">
-          <div className="border-border h-16 border-b" />
-          {hours.map((hour) => (
-            <div key={hour} className="border-border h-16 border-b px-2 py-1">
-              <span className="text-muted-foreground text-xs">
-                {formatHour(hour)}
-              </span>
-            </div>
-          ))}
-        </div>
+    <div className="border-border flex flex-1 overflow-auto rounded-lg">
+      {/* Time column */}
+      <div className="border-border bg-card w-20 flex-shrink-0 border-r">
+        <div className="border-border h-16 border-b" />
+        {hours.map((hour) => (
+          <div key={hour} className="border-border h-16 border-b px-2 py-1">
+            <span className="text-muted-foreground text-xs">
+              {formatHour(hour, locale)}
+            </span>
+          </div>
+        ))}
+      </div>
 
-        {/* Days columns */}
-        <div className="flex flex-1">
-          {weekDays.map((day, dayIndex) => {
-            const dayEvents = getEventsForDay(day);
-            const today = isToday(day);
+      {/* Days columns */}
+      <div className="flex flex-1">
+        {weekDays.map((day, dayIndex) => {
+          const dayEvents = getEventsForDay(day);
+          const today = isToday(day);
 
-            return (
-              <div
-                key={dayIndex}
-                className="border-border flex-1 border-r last:border-r-0"
-              >
-                {/* Day header */}
-                <div className="border-border bg-card flex h-16 flex-col items-center justify-center border-b">
-                  <div className="text-muted-foreground text-xs font-medium">
-                    {day.toLocaleDateString("en-US", { weekday: "short" })}
-                  </div>
-                  <div
-                    className={cn(
-                      "mt-1 flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium",
-                      today && "bg-primary text-primary-foreground",
-                    )}
-                  >
-                    {day.getDate()}
-                  </div>
+          return (
+            <div
+              key={dayIndex}
+              className="border-border flex-1 border-r last:border-r-0"
+            >
+              {/* Day header */}
+              <div className="border-border bg-card flex h-16 flex-col items-center justify-center border-b">
+                <div className="text-muted-foreground text-xs font-medium">
+                  {day.toLocaleDateString(locale, { weekday: "short" })}
                 </div>
-
-                {/* Time slots */}
-                <div className="bg-card relative">
-                  {hours.map((hour) => (
-                    <div key={hour} className="border-border h-16 border-b" />
-                  ))}
-
-                  {/* Events */}
-                  {dayEvents.map((event) => {
-                    const { top, height } = getEventPosition(event);
-                    return (
-                      <div
-                        key={event.id}
-                        className={cn(
-                          "absolute right-1 left-1 rounded px-2 py-1 text-xs font-medium text-white",
-                          event.color,
-                        )}
-                        style={{ top: `${top}px`, height: `${height}px` }}
-                      >
-                        <div className="font-semibold">{event.title}</div>
-                        <div className="text-xs opacity-90">
-                          {event.start.toLocaleTimeString("en-US", {
-                            hour: "numeric",
-                            minute: "2-digit",
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div
+                  className={cn(
+                    "mt-1 flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium",
+                    today && "bg-primary text-primary-foreground",
+                  )}
+                >
+                  {day.getDate()}
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              {/* Time slots */}
+              <div className="bg-card relative">
+                {hours.map((hour) => (
+                  <div key={hour} className="border-border h-16 border-b" />
+                ))}
+
+                {/* Events */}
+                {dayEvents.map((event) => {
+                  const { top, height } = getEventPosition(event);
+                  return (
+                    <div
+                      key={event.id}
+                      className={cn(
+                        "absolute right-1 left-1 rounded px-2 py-1 text-xs font-medium text-white",
+                      )}
+                      style={{
+                        top: `${top}px`,
+                        height: `${height}px`,
+                        backgroundColor: event.color,
+                      }}
+                    >
+                      <div className="font-semibold">{event.title}</div>
+                      <div className="text-xs opacity-90">
+                        {event.start.toLocaleTimeString(locale, {
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}{" "}
+                        -{" "}
+                        {event.end.toLocaleTimeString(locale, {
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
