@@ -247,7 +247,7 @@ export function SchoolLife({ className }: { className?: string }) {
               </TableRow>
             ) : (
               <>
-                {data?.map((row) => {
+                {data.map((row) => {
                   const Icon = row.icon;
                   return (
                     <TableRow

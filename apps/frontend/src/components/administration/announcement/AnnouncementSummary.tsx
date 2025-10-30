@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Label } from "@repo/ui/components/label";
 
@@ -12,28 +12,22 @@ import { useTRPC } from "~/trpc/react";
 export function AnnouncementSummary() {
   const { t } = useLocale();
   const trpc = useTRPC();
-  const announcementsQuery = useQuery(trpc.announcement.all.queryOptions());
-  const [activeNotices, setActiveNotices] = useState(0);
-  const [futureNotices, setFutureNotices] = useState(0);
-  const [expiredNotices, setExpiredNotices] = useState(0);
+  const { data: noticeboards } = useSuspenseQuery(
+    trpc.announcement.all.queryOptions(),
+  );
+  const [today] = useState(() => new Date());
 
-  useEffect(() => {
-    if (!announcementsQuery.data) return;
-    const noticeboards = announcementsQuery.data;
-    const now = new Date();
-    setActiveNotices(
-      noticeboards.filter(
-        (nb) => new Date(nb.from) <= now && now <= new Date(nb.to),
-      ).length,
-    );
-    setFutureNotices(
-      noticeboards.filter((nb) => new Date(nb.from) > now).length,
-    );
-    setExpiredNotices(
-      noticeboards.filter((nb) => new Date(nb.to) < now).length,
-    );
-  }, [announcementsQuery.data]);
+  const activeNotices = noticeboards.filter(
+    (nb) => new Date(nb.from) <= today && today <= new Date(nb.to),
+  ).length;
 
+  const futureNotices = noticeboards.filter(
+    (nb) => new Date(nb.from) > today,
+  ).length;
+
+  const expiredNotices = noticeboards.filter(
+    (nb) => new Date(nb.to) < today,
+  ).length;
   return (
     <>
       <Label>{t("Notice Summary")}:</Label>

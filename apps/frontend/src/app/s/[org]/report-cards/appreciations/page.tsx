@@ -1,7 +1,5 @@
 import { Separator } from "@repo/ui/components/separator";
 
-import { AppreciationHeader } from "~/components/reportcards/appreciations/AppreciationHeader";
-
 // interface AppreciationProps {
 //   searchParams: {
 //     type: "subjects" | "students";
@@ -12,7 +10,6 @@ import { AppreciationHeader } from "~/components/reportcards/appreciations/Appre
 export default function Page() {
   return (
     <div className="flex flex-col">
-      <AppreciationHeader />
       <Separator />
       {/* {reports ? (
         <AppreciationTable reports={reports} />

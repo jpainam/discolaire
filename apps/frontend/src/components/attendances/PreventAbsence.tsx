@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useQueryClient } from "@tanstack/react-query";
 import { Paperclip } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
@@ -28,7 +27,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useUpload } from "~/hooks/use-upload";
 import { useLocale } from "~/i18n";
-import { useTRPC } from "~/trpc/react";
 import { FileUploader } from "~/uploads/file-uploader";
 
 const preventSchema = z.object({
@@ -54,8 +52,6 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
   const { unstable_onUpload: onUpload } = useUpload();
   const [files, setFiles] = React.useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
 
   const { t } = useLocale();
   const onSubmit = async (data: z.infer<typeof preventSchema>) => {
@@ -75,6 +71,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
       from: new Date(data.from),
       to: new Date(data.to),
     };
+    console.log(values);
     //createPreventedAbsence.mutate(values);
   };
   return (
