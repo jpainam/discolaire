@@ -69,9 +69,9 @@ export function WeekView({ currentDate, events }: WeekViewProps) {
     const endHour = event.end.getHours();
     const endMinute = event.end.getMinutes();
 
-    const top = ((startHour - 6) * 60 + startMinute) * (64 / 60); // 64px per hour
+    const top = ((startHour - 7) * 60 + startMinute) * (50 / 60); // 64px per hour
     const height =
-      ((endHour - startHour) * 60 + (endMinute - startMinute)) * (64 / 60);
+      ((endHour - startHour) * 60 + (endMinute - startMinute)) * (50 / 60);
 
     return { top, height };
   };
@@ -79,7 +79,7 @@ export function WeekView({ currentDate, events }: WeekViewProps) {
   return (
     <div className="border-border flex flex-1 overflow-auto rounded-lg">
       {/* Time column */}
-      <div className="border-border bg-card w-20 flex-shrink-0 border-r">
+      <div className="border-border w-20 flex-shrink-0 border-r">
         <div className="border-border h-16 border-b" />
         {hours.map((hour) => (
           <div key={hour} className="border-border h-16 border-b px-2 py-1">
@@ -102,7 +102,7 @@ export function WeekView({ currentDate, events }: WeekViewProps) {
               className="border-border flex-1 border-r last:border-r-0"
             >
               {/* Day header */}
-              <div className="border-border bg-card flex h-16 flex-col items-center justify-center border-b">
+              <div className="border-border flex h-16 flex-col items-center justify-center border-b">
                 <div className="text-muted-foreground text-xs font-medium">
                   {day.toLocaleDateString(locale, { weekday: "short" })}
                 </div>
@@ -135,6 +135,7 @@ export function WeekView({ currentDate, events }: WeekViewProps) {
                         top: `${top}px`,
                         height: `${height}px`,
                         backgroundColor: event.color,
+                        opacity: 0.9,
                       }}
                     >
                       <div className="font-semibold">{event.title}</div>
