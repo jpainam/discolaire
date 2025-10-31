@@ -32,7 +32,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditStockUnit } from "../../../../../components/administration/inventory/CreateEditStockUnit";
+import { CreateEditStockUnit } from "../../../../components/administration/inventory/CreateEditStockUnit";
 
 const schema = z.object({
   name: z.string().min(5),

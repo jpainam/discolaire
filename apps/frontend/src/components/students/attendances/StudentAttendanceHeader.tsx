@@ -20,7 +20,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
-import { CreateStudentAttendance } from "~/app/s/[org]/students/[id]/attendances/CreateStudentAttendance";
+import { CreateStudentAttendance } from "~/app/(dashboard)/students/[id]/attendances/CreateStudentAttendance";
 import { PreventAbsence } from "~/components/attendances/PreventAbsence";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";

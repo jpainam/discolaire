@@ -2,7 +2,6 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
 
-// Define which paths should skip the middleware
 export const config = {
   //runtime: "nodejs",
   matcher: [
@@ -10,7 +9,6 @@ export const config = {
   ],
 };
 
-// These routes don't require auth
 const unProtectedRoutes = [
   "/auth",
   "/gabari",
@@ -24,31 +22,32 @@ const unProtectedRoutes = [
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (pathname.includes("/auth")) {
+
+  // allow auth routes
+  if (pathname.startsWith("/auth")) {
     return NextResponse.next();
   }
+
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
     pathname.startsWith(route),
   );
+
   const schoolYearId = request.cookies.get("x-school-year")?.value;
-  if (isProtectedRoute && !schoolYearId) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
   const session = getSessionCookie(request);
   // const session = await auth.api.getSession({
   //   headers: await headers(),
   // });
 
-  if (isProtectedRoute && !session) {
+  if (isProtectedRoute && (!schoolYearId || !session)) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
+
   if (pathname.startsWith("/s/")) {
     return NextResponse.rewrite(new URL("/404", request.url));
   }
+  return NextResponse.next();
 
-  const url = new URL(request.url);
-  url.pathname = `/s/default${pathname}`;
-  return NextResponse.rewrite(url);
-  //return NextResponse.rewrite(new URL(`/s/default${pathname}`, request.url));
-  //return NextResponse.next();
+  // const url = new URL(request.url);
+  // url.pathname = `/s/default${pathname}`;
+  // return NextResponse.rewrite(url);
 }
