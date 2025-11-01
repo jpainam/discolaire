@@ -41,13 +41,5 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute && (!schoolYearId || !session)) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-
-  if (pathname.startsWith("/s/")) {
-    return NextResponse.rewrite(new URL("/404", request.url));
-  }
   return NextResponse.next();
-
-  // const url = new URL(request.url);
-  // url.pathname = `/s/default${pathname}`;
-  // return NextResponse.rewrite(url);
 }

@@ -1,15 +1,30 @@
-import { PrismaPg } from "@prisma/adapter-pg";
-
 import { PrismaClient } from "./generated/client/client";
+
+const globalForPrisma = globalThis as unknown as {
+  prismaTenants?: Map<string, PrismaClient>;
+};
+
+globalForPrisma.prismaTenants ??= new Map();
 
 export interface GetDbParams {
   connectionString: string;
 }
 
 export function getDb({ connectionString }: GetDbParams): PrismaClient {
-  const pool = new PrismaPg({ connectionString });
-  const prisma = new PrismaClient({ adapter: pool });
+  const cache = globalForPrisma.prismaTenants;
+  if (!cache) {
+    throw new Error(">>>>> Unable to create globalForPrisma");
+  }
+  if (cache.has(connectionString)) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return cache.get(connectionString)!;
+  }
+  //const pool = new PrismaPg({ connectionString: `${connectionString}::csac` });
 
+  const prisma = new PrismaClient({
+    datasourceUrl: connectionString,
+  });
+  cache.set(`${connectionString}::csac`, prisma);
   return prisma;
 }
 
