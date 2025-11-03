@@ -1,6 +1,5 @@
 "use client";
 
-import { useAtomValue } from "jotai";
 import { MailIcon, SendHorizonal, SendIcon } from "lucide-react";
 
 import {
@@ -11,14 +10,12 @@ import {
   DropdownMenuSubTrigger,
 } from "@repo/ui/components/dropdown-menu";
 
-import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import SendNotificationDialog from "./SendNotificationDialog";
 
 export function FinanceBulkAction() {
-  const selectedStudents = useAtomValue(selectedStudentIdsAtom);
   const { openModal } = useModal();
   const { t } = useLocale();
   return (
@@ -30,7 +27,7 @@ export function FinanceBulkAction() {
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
           <DropdownMenuItem
-            disabled={selectedStudents.length == 0}
+            //disabled={selectedStudents.length == 0}
             onSelect={() => {
               openModal({
                 description: t("compose_and_schedule_email_sms"),
@@ -42,9 +39,10 @@ export function FinanceBulkAction() {
           >
             <SendIcon className="mr-2 h-4 w-4" />
             {t("current_selection")}{" "}
-            <FlatBadge variant={"pink"} className="ml-2 rounded-full">
-              {selectedStudents.length}
-            </FlatBadge>
+            <FlatBadge
+              variant={"pink"}
+              className="ml-2 rounded-full"
+            ></FlatBadge>
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {

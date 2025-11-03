@@ -1,7 +1,6 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
-import { useAtomValue } from "jotai/react";
 import {
   CreditCardIcon,
   HandCoins,
@@ -9,6 +8,7 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
@@ -27,26 +27,22 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
-import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { FinanceBulkAction } from "~/components/classrooms/finances/FinanceBulkAction";
 import { SelectDueDate } from "~/components/classrooms/finances/SelectDueDay";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
 
 export function ClassroomFinancialSituationHeader() {
-  const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
   const params = useParams<{ id: string }>();
-  const router = useRouter();
-  const t = useTranslations();
-  const selectedStudents = useAtomValue(selectedStudentIdsAtom);
-  const journalId = searchParams.get("journal") ?? "";
 
-  const ids = selectedStudents.join(",");
+  const t = useTranslations();
+  const [journalId, setJournalId] = useQueryState("journalId");
+  const [view, setView] = useQueryState("view");
+  const [situation, setSituation] = useQueryState("situation");
+
   const { openModal } = useModal();
 
   const options = [
@@ -59,6 +55,7 @@ export function ClassroomFinancialSituationHeader() {
       label: <PiGridFour className="h-6 w-6" />,
     },
   ];
+  const ids: string[] = [];
 
   return (
     <div className="grid grid-cols-1 flex-row items-center gap-2 border-b px-4 py-1 md:flex">
@@ -68,14 +65,14 @@ export function ClassroomFinancialSituationHeader() {
         className="w-64"
         defaultValue={searchParams.get("journal") ?? ""}
         onChange={(val) => {
-          router.push("?" + createQueryString({ journal: val }));
+          void setJournalId(val);
         }}
       />
       <ToggleGroup
         type="single"
         size="sm"
         onValueChange={(val) => {
-          router.push("?" + createQueryString({ type: val }));
+          void setSituation(val);
         }}
         variant={"outline"}
         defaultValue={"all"}
@@ -97,7 +94,7 @@ export function ClassroomFinancialSituationHeader() {
           size={"sm"}
           defaultValue={searchParams.get("view") ?? "grid"}
           onValueChange={(val) => {
-            router.push("?" + createQueryString({ view: val }));
+            void setView(val);
           }}
           className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
           variant={"outline"}
@@ -132,13 +129,7 @@ export function ClassroomFinancialSituationHeader() {
                       );
                     }}
                   >
-                    <span>
-                      {" "}
-                      {t("financial_situation")}{" "}
-                      {selectedStudents.length > 0
-                        ? `(${selectedStudents.length})`
-                        : null}
-                    </span>
+                    <span> {t("financial_situation")} </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
@@ -148,12 +139,7 @@ export function ClassroomFinancialSituationHeader() {
                       );
                     }}
                   >
-                    <span>
-                      {t("theDebtorList")}{" "}
-                      {selectedStudents.length > 0
-                        ? `(${selectedStudents.length})`
-                        : null}
-                    </span>
+                    <span>{t("theDebtorList")} </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
@@ -163,12 +149,7 @@ export function ClassroomFinancialSituationHeader() {
                       );
                     }}
                   >
-                    <span>
-                      {t("theCreditorList")}{" "}
-                      {selectedStudents.length > 0
-                        ? `(${selectedStudents.length})`
-                        : null}
-                    </span>
+                    <span>{t("theCreditorList")} </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
@@ -178,19 +159,13 @@ export function ClassroomFinancialSituationHeader() {
                           <SelectDueDate
                             format="pdf"
                             classroomId={params.id}
-                            ids={ids}
+                            ids={""}
                           />
                         ),
                       });
                     }}
                   >
-                    <span>
-                      {" "}
-                      {t("reminder_letter")}{" "}
-                      {selectedStudents.length > 0
-                        ? `(${selectedStudents.length})`
-                        : null}
-                    </span>
+                    <span> {t("reminder_letter")} </span>
                   </DropdownMenuItem>
                   {/* <DropdownMenuItem
                     onSelect={() => {
@@ -222,12 +197,7 @@ export function ClassroomFinancialSituationHeader() {
                       );
                     }}
                   >
-                    <span>
-                      {t("financial_situation")}{" "}
-                      {selectedStudents.length > 0
-                        ? `(${selectedStudents.length})`
-                        : null}
-                    </span>
+                    <span>{t("financial_situation")} </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
@@ -237,12 +207,7 @@ export function ClassroomFinancialSituationHeader() {
                       );
                     }}
                   >
-                    <span>
-                      {t("theDebtorList")}{" "}
-                      {selectedStudents.length > 0
-                        ? `(${selectedStudents.length})`
-                        : null}
-                    </span>
+                    <span>{t("theDebtorList")} </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
@@ -252,12 +217,7 @@ export function ClassroomFinancialSituationHeader() {
                       );
                     }}
                   >
-                    <span>
-                      {t("theCreditorList")}{" "}
-                      {selectedStudents.length > 0
-                        ? `(${selectedStudents.length})`
-                        : null}
-                    </span>
+                    <span>{t("theCreditorList")} </span>
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>

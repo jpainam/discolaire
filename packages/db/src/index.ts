@@ -24,7 +24,7 @@ export function getDb({ connectionString }: GetDbParams): PrismaClient {
   const prisma = new PrismaClient({
     datasourceUrl: connectionString,
   });
-  cache.set(`${connectionString}::csac`, prisma);
+  cache.set(connectionString, prisma);
   return prisma;
 }
 

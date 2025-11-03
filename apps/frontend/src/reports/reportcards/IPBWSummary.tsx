@@ -57,7 +57,7 @@ export function IPBWSummary({
             paddingVertical: 1,
           }}
         >
-          <Text style={{ paddingLeft: 4 }}>Performance</Text>
+          <Text style={{ paddingLeft: 2 }}>Performance</Text>
         </View>
         <SummaryItem name={t("Moy.Max")} value={summary.max.toFixed(2)} />
         <SummaryItem name={t("Moy.Min")} value={summary.min.toFixed(2)} />
@@ -157,7 +157,7 @@ function SummaryResult({
         <Text
           style={{
             textTransform: "uppercase",
-            paddingLeft: 4,
+            paddingLeft: 2,
             fontWeight: "bold",
           }}
         >

@@ -1,148 +1,103 @@
 "use client";
 
-import { useCallback } from "react";
-import i18next from "i18next";
-import { useAtom } from "jotai";
+import Link from "next/link";
+import { CheckCircleIcon, CircleXIcon, MoreVertical } from "lucide-react";
+import { useLocale } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Badge } from "@repo/ui/components/badge";
-import { Card, CardContent } from "@repo/ui/components/card";
+import { Button } from "@repo/ui/components/button";
+import {
+  Card,
+  CardAction,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 
-import { selectedStudentIdsAtom } from "~/atoms/transactions";
 import { AvatarState } from "~/components/AvatarState";
-import { SimpleTooltip } from "~/components/simple-tooltip";
-import { useLocale } from "~/i18n";
+import { Pill, PillStatus } from "~/components/pill";
 import { CURRENCY } from "~/lib/constants";
-import { cn } from "~/lib/utils";
 import { getFullName } from "~/utils";
-
-type StudentAccountWithBalance = NonNullable<
-  RouterOutputs["classroom"]["studentsBalance"]
->[number];
 
 export function GridViewFinanceCard({
   studentBalance,
   amountDue,
   type,
 }: {
-  amountDue: number;
+  amountDue: Record<string, number>;
   type: string;
-  studentBalance: StudentAccountWithBalance;
+  studentBalance: RouterOutputs["classroom"]["studentsBalance"][number];
 }) {
-  const [selectedStudents, setSelectedStudents] = useAtom(
-    selectedStudentIdsAtom,
-  );
-
-  const student = studentBalance;
-  const balance = studentBalance.balance;
-
-  const handleClick = useCallback(() => {
-    setSelectedStudents((students) =>
-      students.includes(student.id)
-        ? students.filter((id) => id !== student.id)
-        : [...students, student.id],
-    );
-  }, [setSelectedStudents, student.id]);
-
-  const { t } = useLocale();
-  const remaining = balance - amountDue;
-
-  if (type == "credit" && remaining < 0) {
-    return null;
-  }
-  if (type == "debit" && remaining > 0) {
-    return null;
-  }
+  const locale = useLocale();
+  console.log(type);
   return (
-    <Card
-      className={cn(
-        "hover:bg-muted rounded-sm p-2 shadow-none hover:shadow-md",
-        selectedStudents.includes(student.id) && "bg-muted border-green-600",
-      )}
-    >
-      <CardContent className="flex flex-row items-start p-0">
-        <AvatarState
-          className="h-[25px] w-[25px]"
-          pos={getFullName(student).length}
-          avatar={student.user?.avatar}
-        />
-
-        <div className="flex w-full flex-col justify-between gap-2 px-2">
-          <div
-            onClick={handleClick}
-            className="flex w-full cursor-pointer flex-col"
-          >
-            <div className="flex w-full flex-row items-center justify-between text-xs">
-              {student.registrationNumber}
-            </div>
-            <div className="flex flex-row items-center justify-between pr-4">
-              <SimpleTooltip content={getFullName(student)}>
-                <span className="line-clamp-1 text-xs">
-                  {getFullName(student)}
-                </span>
-              </SimpleTooltip>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex flex-row items-center gap-2">
+          <AvatarState
+            className="h-[35px] w-[35px]"
+            pos={getFullName(studentBalance).length}
+            avatar={studentBalance.user.avatar}
+          />
+          <div className="flex flex-col gap-2">
+            <Link
+              className="hover:underline"
+              href={`/students/${studentBalance.studentId}`}
+            >
+              {getFullName(studentBalance)}
+            </Link>
+            <div className="flex flex-row items-center gap-2">
+              {studentBalance.balances.map((b, index) => {
+                const remaining = b.balance - (amountDue[b.journalId] ?? 0);
+                // if (type == "credit" && remaining < 0) {
+                //   return <></>;
+                // }
+                // if (type == "debit" && remaining > 0) {
+                //   return <></>;
+                // }
+                return (
+                  <Pill
+                    key={index}
+                    className={remaining < 0 ? "text-destructive" : ""}
+                  >
+                    <PillStatus>
+                      {remaining < 0 ? (
+                        <CircleXIcon size={12} className="text-destructive" />
+                      ) : (
+                        <CheckCircleIcon className="text-green-500" size={12} />
+                      )}
+                      {b.journal.name}
+                    </PillStatus>
+                    {remaining.toLocaleString(locale, {
+                      currency: CURRENCY,
+                      maximumFractionDigits: 0,
+                      minimumFractionDigits: 0,
+                    })}{" "}
+                    {CURRENCY}
+                  </Pill>
+                );
+              })}
             </div>
           </div>
-          {/* <div className="flex flex-row gap-1">
-            <SimpleTooltip content={t("financial_situation")}>
-              <Link href={routes.students.transactions.index(student.id)}>
-                <Button variant={"ghost"} className="h-6 w-6" size={"icon"}>
-                  <DollarSign />
-                </Button>
-              </Link>
-            </SimpleTooltip>
-            <SimpleTooltip content={student.phoneNumber ?? "@phone"}>
-              <Button variant={"ghost"} size={"icon"} className="h-6 w-6">
-                <Phone />
+        </CardTitle>
+        <CardAction>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size={"icon-sm"} variant={"ghost"}>
+                <MoreVertical />
               </Button>
-            </SimpleTooltip>
-            <SimpleTooltip content={student.user?.email ?? "@email"}>
-              <Button variant={"ghost"} size={"icon"} className="h-6 w-6">
-                <AtSign />
-              </Button>
-            </SimpleTooltip>
-            <SimpleTooltip content={t("contacts")}>
-              <Button
-                variant={"ghost"}
-                size={"icon"}
-                className="h-6 w-6"
-                onClick={() => {
-                  console.log(routes.students.contacts(student.id));
-                }}
-              >
-                <Users />
-              </Button>
-            </SimpleTooltip>
-          </div> */}
-        </div>
-
-        <div
-          onClick={handleClick}
-          className="flex cursor-pointer flex-col items-center justify-between gap-2"
-        >
-          <span className="text-sm font-semibold">{t("balance")}</span>
-          {/* <span>
-            <ArrowDownUp className="h-3 w-3" />
-          </span> */}
-          <Badge
-            variant={remaining < 0 ? "outline" : "default"}
-            className={remaining < 0 ? "text-destructive" : ""}
-          >
-            {remaining.toLocaleString(i18next.language, {
-              currency: CURRENCY,
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-            })}{" "}
-            {CURRENCY}
-          </Badge>
-          {/* <FlatBadge
-            className="flex w-28 items-center justify-center text-xs"
-            variant={remaining < 0 ? "red" : remaining > 0 ? "green" : "indigo"}
-          >
-            {moneyFormatter.format(remaining)}
-          </FlatBadge> */}
-        </div>
-      </CardContent>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Notification</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardAction>
+      </CardHeader>
     </Card>
   );
 }

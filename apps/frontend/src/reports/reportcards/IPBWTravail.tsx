@@ -33,7 +33,7 @@ export function IPBWTravail({
           paddingVertical: 1,
         }}
       >
-        <Text style={{ paddingLeft: 4 }}>{t("Travail")}</Text>
+        <Text style={{ paddingLeft: 2 }}>{t("Travail")}</Text>
       </View>
 
       <SummaryItem name={t("Félicitations")} value={grade >= 18} />
