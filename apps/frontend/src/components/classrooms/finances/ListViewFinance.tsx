@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircleIcon } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
+import { Badge } from "@repo/ui/components/badge";
 import {
   Table,
   TableBody,
@@ -14,30 +14,40 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
+import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
-import { Pill, PillStatus } from "~/components/pill";
+import { routes } from "~/configs/routes";
+import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
+
+type StudentAccountWithBalance = NonNullable<
+  RouterOutputs["classroom"]["studentsBalance"]
+>;
 
 export function ListViewFinance({
   students,
   amountDue,
   type,
 }: {
-  students: RouterOutputs["classroom"]["studentsBalance"];
-  amountDue: Record<string, number>;
+  students: StudentAccountWithBalance;
+  amountDue: number;
   type: string;
 }) {
-  const t = useTranslations();
-  const locale = useLocale();
+  const { t, i18n } = useLocale();
 
+  const total = students.reduce(
+    (acc, stud) => acc + (stud.balance - amountDue),
+    0,
+  );
   return (
     <div className="px-4 py-2">
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead className="w-[40px]"></TableHead>
               <TableHead className="w-[50px]"></TableHead>
               <TableHead className="w-[100px]">
                 {t("registrationNumber")}
@@ -48,13 +58,21 @@ export function ListViewFinance({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {students.map((stud, index) => {
+            {students.map((stud) => {
+              const remaining = stud.balance - amountDue;
+              if (type == "credit" && remaining < 0) {
+                return null;
+              }
+              if (type == "debit" && remaining > 0) {
+                return null;
+              }
               return (
-                <TableRow key={index}>
+                <TableRow key={stud.id}>
+                  <TableCell></TableCell>
                   <TableCell>
                     <AvatarState
                       pos={getFullName(stud).length}
-                      avatar={stud.user.avatar}
+                      avatar={stud.user?.avatar}
                     />
                   </TableCell>
                   <TableCell className="text-muted-foreground">
@@ -63,42 +81,33 @@ export function ListViewFinance({
                   <TableCell>
                     <Link
                       className="hover:text-blue-600 hover:underline"
-                      href={`/students/${stud.studentId}`}
+                      href={routes.students.details(stud.id)}
                     >
                       {getFullName(stud)}
                     </Link>
                   </TableCell>
                   <TableCell>
-                    {stud.balances.map((b, index2) => {
-                      const remaining =
-                        b.balance - (amountDue[b.journalId] ?? 0);
-                      if (type == "credit" && remaining < 0) {
-                        return <></>;
-                      }
-                      if (type == "debit" && remaining > 0) {
-                        return <></>;
-                      }
-                      return (
-                        <Pill
-                          key={index2}
-                          className={remaining < 0 ? "text-destructive" : ""}
-                        >
-                          <PillStatus>
-                            <CheckCircleIcon
-                              className="text-emerald-500"
-                              size={12}
-                            />
-                            {b.journal.name}
-                          </PillStatus>
-                          {remaining.toLocaleString(locale, {
-                            currency: CURRENCY,
-                            maximumFractionDigits: 0,
-                            minimumFractionDigits: 0,
-                          })}{" "}
-                          {CURRENCY}
-                        </Pill>
-                      );
-                    })}
+                    <Badge
+                      variant={remaining < 0 ? "outline" : "default"}
+                      className={remaining < 0 ? "text-destructive" : ""}
+                    >
+                      {remaining.toLocaleString(i18next.language, {
+                        currency: CURRENCY,
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}{" "}
+                      {CURRENCY}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="w-32">
+                    <div
+                      className={cn(
+                        "text-primary-foreground w-fit rounded-sm px-2 text-center",
+                        remaining < 0 ? "bg-red-500" : "bg-green-500",
+                      )}
+                    >
+                      {remaining < 0 ? "#D#" : "#C#"}
+                    </div>
                   </TableCell>
                 </TableRow>
               );
@@ -108,12 +117,12 @@ export function ListViewFinance({
             <TableRow>
               <TableCell colSpan={4}>{t("total")}</TableCell>
               <TableCell className="text-right">
-                {/* {total.toLocaleString(i18n.language, {
+                {total.toLocaleString(i18n.language, {
                   style: "currency",
                   currency: CURRENCY,
                   maximumFractionDigits: 0,
                   minimumFractionDigits: 0,
-                })} */}
+                })}
               </TableCell>
               <TableCell></TableCell>
             </TableRow>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
@@ -54,35 +53,35 @@ export async function GET(
       "amount",
     );
 
-    //let students = await caller.classroom.studentsBalance({ id, journalId });
-    // if (ids) {
-    //   const selectedIds = ids.split(",");
-    //   students = students.filter((stud) =>
-    //     selectedIds.includes(stud.studentId),
-    //   );
-    // }
-    // const reminders = students
-    //   .filter((stud) => stud.balance - amountDue < 0)
-    //   .map((stud) => {
-    //     return {
-    //       studentName: getFullName(stud),
-    //       amount: (amountDue - stud.balance).toLocaleString(i18next.language, {
-    //         style: "currency",
-    //         maximumFractionDigits: 0,
-    //         minimumFractionDigits: 0,
-    //         currency: school.currency,
-    //       }),
-    //     };
-    //   });
+    let students = await caller.classroom.studentsBalance({ id, journalId });
+    if (ids) {
+      const selectedIds = ids.split(",");
+      students = students.filter((stud) =>
+        selectedIds.includes(stud.studentId),
+      );
+    }
+    const reminders = students
+      .filter((stud) => stud.balance - amountDue < 0)
+      .map((stud) => {
+        return {
+          studentName: getFullName(stud),
+          amount: (amountDue - stud.balance).toLocaleString(i18next.language, {
+            style: "currency",
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+            currency: school.currency,
+          }),
+        };
+      });
 
-    // const stream = await renderToStream(
-    //   ReminderLetter({
-    //     school: school,
-    //     dueDate: dueDate,
-    //     reminders: reminders,
-    //     classroom: classroom.name,
-    //   }),
-    // );
+    const stream = await renderToStream(
+      ReminderLetter({
+        school: school,
+        dueDate: dueDate,
+        reminders: reminders,
+        classroom: classroom.name,
+      }),
+    );
 
     //const blob = await new Response(stream).blob();
 
@@ -91,9 +90,8 @@ export async function GET(
       "Cache-Control": "no-store, max-age=0",
     };
 
-    
-    //return new Response(stream, { headers });
-    return new Response("Ok", {status: 200});
+    // @ts-expect-error TODO: fix this
+    return new Response(stream, { headers });
   } catch (error) {
     console.error(error);
     return new Response(String(error), { status: 500 });

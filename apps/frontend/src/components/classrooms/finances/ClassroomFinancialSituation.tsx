@@ -1,56 +1,41 @@
 "use client";
 
-import { parseAsString, useQueryState } from "nuqs";
-
-
+import { useSearchParams } from "next/navigation";
 
 import type { RouterOutputs } from "@repo/api";
-
-
 
 import { GridViewFinanceCard } from "./GridViewFinanceCard";
 import { ListViewFinance } from "./ListViewFinance";
 
-
 export function ClassroomFinancialSituation({
   balances,
-  fees,
+  amountDue,
 }: {
   balances: RouterOutputs["classroom"]["studentsBalance"];
-  fees: RouterOutputs['classroom']['fees'];
+  amountDue: number;
 }) {
-  const [view] = useQueryState("view", parseAsString.withDefault("grid"));
-  const [situation] = useQueryState(
-    "situation",
-    parseAsString.withDefault("all"),
-  );
+  const searchParams = useSearchParams();
 
-  const amountDueByJournal = fees.reduce<Record<string, number>>((acc, fee) => {
-    const key = fee.journalId ?? "unknown"; 
-    if (fee.dueDate <= new Date()) {
-      acc[key] = (acc[key] ?? 0) + fee.amount;
-    }
-    return acc;
-  }, {});
-
+  const view = searchParams.get("view") ?? "grid";
+  const type = searchParams.get("type") ?? "all";
 
   return (
     <div>
       {view === "list" ? (
         <ListViewFinance
-          type={situation}
-          amountDue={amountDueByJournal}
+          type={type}
+          amountDue={amountDue}
           students={balances}
         />
       ) : (
         <div className="grid gap-4 p-2 text-sm md:grid-cols-2 xl:md:grid-cols-3">
-          {balances.map((balance, index) => {
+          {balances.map((balance) => {
             return (
               <GridViewFinanceCard
-                type={situation}
-                amountDue={amountDueByJournal}
+                type={type}
+                amountDue={amountDue}
                 studentBalance={balance}
-                key={index}
+                key={balance.id}
               />
             );
           })}

@@ -15,11 +15,9 @@ import { useLocale } from "~/i18n";
 export function SelectDueDate({
   classroomId,
   format,
-  ids,
 }: {
   classroomId: string;
   format: "pdf" | "csv";
-  ids: string;
 }) {
   const { t } = useLocale();
   const [date, setDate] = useState<Date | null>(() => addDays(new Date(), 7));
@@ -42,7 +40,7 @@ export function SelectDueDate({
               return;
             }
             window.open(
-              `/api/pdfs/classroom/${classroomId}/reminder-letter?journalId=${journalId}&format=${format}&ids=${ids}&dueDate=${date.toISOString()}`,
+              `/api/pdfs/classroom/${classroomId}/reminder-letter?journalId=${journalId}&format=${format}&dueDate=${date.toISOString()}`,
               "_blank",
             );
             closeModal();

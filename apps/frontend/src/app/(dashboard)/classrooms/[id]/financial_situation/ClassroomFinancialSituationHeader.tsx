@@ -8,7 +8,6 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useQueryState } from "nuqs";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
@@ -32,16 +31,18 @@ import { SelectDueDate } from "~/components/classrooms/finances/SelectDueDay";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
+import { useRouter } from "~/hooks/use-router";
 
 export function ClassroomFinancialSituationHeader() {
+  const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();
   const params = useParams<{ id: string }>();
-
+  const router = useRouter();
   const t = useTranslations();
-  const [journalId, setJournalId] = useQueryState("journalId");
-  const [view, setView] = useQueryState("view");
-  const [situation, setSituation] = useQueryState("situation");
+
+  const journalId = searchParams.get("journal") ?? "";
 
   const { openModal } = useModal();
 
@@ -55,7 +56,6 @@ export function ClassroomFinancialSituationHeader() {
       label: <PiGridFour className="h-6 w-6" />,
     },
   ];
-  const ids: string[] = [];
 
   return (
     <div className="grid grid-cols-1 flex-row items-center gap-2 border-b px-4 py-1 md:flex">
@@ -65,14 +65,14 @@ export function ClassroomFinancialSituationHeader() {
         className="w-64"
         defaultValue={searchParams.get("journal") ?? ""}
         onChange={(val) => {
-          void setJournalId(val);
+          router.push("?" + createQueryString({ journal: val }));
         }}
       />
       <ToggleGroup
         type="single"
         size="sm"
         onValueChange={(val) => {
-          void setSituation(val);
+          router.push("?" + createQueryString({ type: val }));
         }}
         variant={"outline"}
         defaultValue={"all"}
@@ -94,7 +94,7 @@ export function ClassroomFinancialSituationHeader() {
           size={"sm"}
           defaultValue={searchParams.get("view") ?? "grid"}
           onValueChange={(val) => {
-            void setView(val);
+            router.push("?" + createQueryString({ view: val }));
           }}
           className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
           variant={"outline"}
@@ -124,7 +124,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=all&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=all`,
                         "_blank",
                       );
                     }}
@@ -134,7 +134,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=debit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=debit`,
                         "_blank",
                       );
                     }}
@@ -144,7 +144,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=credit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=credit`,
                         "_blank",
                       );
                     }}
@@ -156,28 +156,13 @@ export function ClassroomFinancialSituationHeader() {
                       openModal({
                         title: t("due_date"),
                         view: (
-                          <SelectDueDate
-                            format="pdf"
-                            classroomId={params.id}
-                            ids={""}
-                          />
+                          <SelectDueDate format="pdf" classroomId={params.id} />
                         ),
                       });
                     }}
                   >
                     <span> {t("reminder_letter")} </span>
                   </DropdownMenuItem>
-                  {/* <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?format=pdf&type=selected`,
-                        "_blank"
-                      );
-                    }}
-                    disabled={selectedStudents.length == 0}
-                  >
-                    {t("currentSelection")} ({selectedStudents.length})
-                  </DropdownMenuItem> */}
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
@@ -192,7 +177,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=all&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=all`,
                         "_blank",
                       );
                     }}
@@ -202,7 +187,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=debit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=debit`,
                         "_blank",
                       );
                     }}
@@ -212,7 +197,7 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=credit&ids=${ids}`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=credit`,
                         "_blank",
                       );
                     }}

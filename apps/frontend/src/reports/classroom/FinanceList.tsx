@@ -166,13 +166,13 @@ export function FinanceList({
               </View>
             </View>
             {students.map((student, index) => {
-              //const remaining = student.balance - amountDue;
-              // if (type == "credit" && remaining < 0) {
-              //   return null;
-              // }
-              // if (type == "debit" && remaining > 0) {
-              //   return null;
-              // }
+              const remaining = student.balance - amountDue;
+              if (type == "credit" && remaining < 0) {
+                return null;
+              }
+              if (type == "debit" && remaining > 0) {
+                return null;
+              }
               return (
                 <View
                   key={index}
@@ -206,7 +206,7 @@ export function FinanceList({
                       alignItems: "center",
                     }}
                   >
-                    {/* <Text>{student.isRepeating ? "OUI" : "NON"}</Text> */}
+                    <Text>{student.isRepeating ? "OUI" : "NON"}</Text>
                   </View>
                   <View
                     style={{
@@ -215,7 +215,7 @@ export function FinanceList({
                       alignItems: "center",
                     }}
                   >
-                    {/* <Text>{student.balance}</Text> */}
+                    <Text>{student.balance}</Text>
                   </View>
                   <View
                     style={{
@@ -224,9 +224,9 @@ export function FinanceList({
                       alignItems: "center",
                     }}
                   >
-                    {/* <Text>{-1 * remaining}</Text> */}
+                    <Text>{-1 * remaining}</Text>
                   </View>
-                  {/* <View
+                  <View
                     style={{
                       width: "5%",
                       backgroundColor:
@@ -240,7 +240,7 @@ export function FinanceList({
                     <Text>
                       {remaining < 0 ? "#D#" : remaining > 0 ? "#C#" : "#C#"}
                     </Text>
-                  </View> */}
+                  </View>
                 </View>
               );
             })}

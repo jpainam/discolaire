@@ -1,5 +1,7 @@
+import { endOfDay, format, startOfDay, subDays } from "date-fns";
+
 import type { Prisma } from "@repo/db";
-import { TransactionType } from "@repo/db/enums";
+import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { db } from "../db";
 import { classroomService } from "./classroom-service";
@@ -285,4 +287,70 @@ export async function getTransactionTrends({
     date: item,
     amount: resultMap[item],
   }));
+}
+
+export async function getLastDaysDailySummary({
+  schoolYearId,
+  days,
+}: {
+  schoolYearId: string;
+  days: number;
+}) {
+  const to = endOfDay(new Date());
+  const from = startOfDay(subDays(to, days)); // 60 days window (today + prior 59)
+
+  const transactions = await db.transaction.findMany({
+    where: {
+      createdAt: { gte: from, lte: to },
+
+      schoolYearId,
+    },
+    select: {
+      amount: true,
+      createdAt: true,
+      status: true, // PENDING / VALIDATED
+      transactionType: true, // CREDIT / DEBIT / DISCOUNT
+      deletedAt: true, // null or Date
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
+  const daysMap = new Map<
+    string,
+    {
+      date: string; // 'yyyy-MM-dd'
+      pending: number; // CREDIT only, status=PENDING, non-deleted
+      validated: number; // CREDIT only, status=VALIDATED, non-deleted
+      deleted: number; // ALL types when deletedAt != null
+    }
+  >();
+
+  for (const t of transactions) {
+    const key = format(t.createdAt, "yyyy-MM-dd");
+    let bucket = daysMap.get(key);
+    if (!bucket) {
+      bucket = { date: key, pending: 0, validated: 0, deleted: 0 };
+      daysMap.set(key, bucket);
+    }
+
+    if (t.deletedAt) {
+      // Count all types for deleted
+      bucket.deleted += t.amount;
+      continue;
+    }
+
+    // Non-deleted: only CREDIT contributes to pending/validated
+    if (t.transactionType === TransactionType.CREDIT) {
+      if (t.status === TransactionStatus.PENDING) {
+        bucket.pending += t.amount;
+      } else if (t.status === TransactionStatus.VALIDATED) {
+        bucket.validated += t.amount;
+      }
+    }
+  }
+
+  // Convert to array, drop zero-only days, and sort ascending
+  return Array.from(daysMap.values())
+    .filter((d) => d.pending !== 0 || d.validated !== 0 || d.deleted !== 0)
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 }

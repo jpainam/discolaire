@@ -8,6 +8,7 @@ import type { TransactionStatus, TransactionType } from "@repo/db/enums";
 import { notificationQueue } from "../queue";
 import { classroomService } from "../services/classroom-service";
 import {
+  getLastDaysDailySummary,
   getTransactionStats,
   getTransactionSummary,
   getTransactionTrends,
@@ -424,6 +425,14 @@ export const transactionRouter = {
         to: input.to,
         schoolYearId: ctx.schoolYearId,
         schoolId: ctx.schoolId,
+      });
+    }),
+  getLastDaysDailySummary: protectedProcedure
+    .input(z.object({ number_of_days: z.coerce.number().default(60) }))
+    .query(({ ctx, input }) => {
+      return getLastDaysDailySummary({
+        schoolYearId: ctx.schoolYearId,
+        days: input.number_of_days,
       });
     }),
 } satisfies TRPCRouterRecord;

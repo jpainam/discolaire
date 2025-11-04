@@ -150,9 +150,9 @@ export const classroomRouter = {
   }),
 
   studentsBalance: protectedProcedure
-    .input(z.string())
+    .input(z.object({ id: z.string(), journalId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
-      let students = await classroomService.getStudents(input);
+      let students = await classroomService.getStudents(input.id);
       if (ctx.session.user.profile === "student") {
         students = students.filter(
           (student) => student.userId === ctx.session.user.id,
@@ -166,70 +166,54 @@ export const classroomRouter = {
         );
       }
       const studentIds = students.map((std) => std.id);
-      const transactions = await ctx.db.transaction.findMany({
+      const _result = await ctx.db.transaction.findMany({
         where: {
           schoolYearId: ctx.schoolYearId,
           status: TransactionStatus.VALIDATED,
           deletedAt: null,
+          journalId: input.journalId,
           student: {
             id: {
               in: studentIds,
             },
             enrollments: {
               some: {
-                classroomId: input,
+                classroomId: input.id,
               },
             },
           },
         },
         orderBy: {
-          journalId: "asc",
+          student: {
+            lastName: "asc",
+          },
         },
         include: {
           student: {
-            include: { user: true },
+            include: {
+              user: true,
+            },
           },
         },
       });
-
-      const studentBalances: Record<string, Record<string, number>> = {};
-
-      const journals = await ctx.db.accountingJournal.findMany({
-        where: {
-          schoolYearId: ctx.schoolYearId,
-          schoolId: ctx.schoolId,
-        },
+      const balances: Record<string, number> = {};
+      _result.forEach((transaction) => {
+        const key = transaction.student.id;
+        balances[key] ??= 0;
+        balances[key] +=
+          transaction.transactionType == TransactionType.DEBIT
+            ? -transaction.amount
+            : transaction.amount;
       });
 
-      for (const t of transactions) {
-        const journalId = t.journalId ?? "unknown";
-
-        const studentId = t.student.id;
-
-        studentBalances[studentId] ??= {};
-        studentBalances[studentId][journalId] ??= 0;
-
-        studentBalances[studentId][journalId] +=
-          t.transactionType === TransactionType.DEBIT ? -t.amount : t.amount;
-      }
-
-      const result = students.map((student) => ({
-        firstName: student.firstName,
-        lastName: student.lastName,
-        registrationNumber: student.registrationNumber,
-        user: {
-          avatar: student.user?.avatar,
-        },
-        studentId: student.id,
-
-        balances: journals.map((j) => ({
-          journalId: j.id,
-          journal: j,
-          balance: studentBalances[student.id]?.[j.id] ?? 0,
-        })),
-      }));
-
-      return result;
+      return students.map((student) => {
+        const balance = balances[student.id] ?? 0;
+        return {
+          ...student,
+          studentId: student.id,
+          balance: balance,
+        };
+      });
     }),
   teachers: protectedProcedure
     .input(z.string())
