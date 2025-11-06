@@ -10,8 +10,10 @@ import { SubjectSessionColumn } from "./SubjectSessionColumn";
 export function SubjectSessionBoard({
   className,
   subjectId,
+  columnClassName,
 }: {
   className?: string;
+  columnClassName?: string;
   subjectId: number;
 }) {
   const trpc = useTRPC();
@@ -28,7 +30,7 @@ export function SubjectSessionBoard({
       ) : (
         <div className={className}>
           {terms.map((t, index) => (
-            <SubjectSessionColumn key={index} term={t} subjectId={subjectId} />
+            <SubjectSessionColumn className={columnClassName} key={index} term={t} subjectId={subjectId} />
           ))}
         </div>
       )}

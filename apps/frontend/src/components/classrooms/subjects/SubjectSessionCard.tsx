@@ -35,7 +35,7 @@ export function SubjectSessionCard({
   };
   const StatusIcon = BacklogIcon; //task.status.icon;
   const hasProgress = program.journals.length > 0;
-  const requiredSession = program.requiredSessionCount;
+
   const sessionDone = sum(program.journals.map((j) => j.sessionCount));
   const isCompleted =
     program.isCompleted ||
@@ -110,15 +110,13 @@ export function SubjectSessionCard({
 
             <div className="border-border flex items-center gap-1.5 rounded-sm border px-2 py-1">
               <MessageSquare className="size-3" />
-              <span>0</span>
+              <span>{program.journals.length}</span>
             </div>
-            {/* attachments */}
 
             <div className="border-border flex items-center gap-1.5 rounded-sm border px-2 py-1">
               <FileText className="size-3" />
-              <span>0</span>
+              <span>{program.journals.filter((j) => j.attachment).length}</span>
             </div>
-            {/* links */}
 
             <div className="border-border flex items-center gap-1.5 rounded-sm border px-2 py-1">
               <Link className="size-3" />
