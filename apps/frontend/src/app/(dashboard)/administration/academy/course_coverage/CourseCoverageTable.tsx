@@ -43,17 +43,17 @@ import { CourseCoverageDetails } from "./CourseCoverageDetails";
 
 export function CourseCoverageTable() {
   const trpc = useTRPC();
-  const [{ classroomId, staffId, categoryId }] = useQueryStates({
-    classroomId: parseAsString.withDefault(""),
-    staffId: parseAsString.withDefault(""),
-    categoryId: parseAsString.withDefault(""),
+  const [{ classroomId, teacherId, termId }] = useQueryStates({
+    classroomId: parseAsString,
+    teacherId: parseAsString,
+    termId: parseAsString,
   });
 
   const { data: programs } = useSuspenseQuery(
-    trpc.subject.programs.queryOptions({
+    trpc.subjectProgram.all.queryOptions({
       classroomId,
-      staffId,
-      categoryId,
+      teacherId,
+      termId,
     }),
   );
   const { openSheet } = useSheet();
@@ -139,16 +139,16 @@ export function CourseCoverageTable() {
                 className="hover:bg-muted/50 cursor-pointer"
                 onClick={() => {
                   openSheet({
-                    title: p.course.name,
-                    description: getFullName(p.teacher),
-                    view: <CourseCoverageDetails subjectId={p.id} />,
+                    title: p.subject.course.name,
+                    description: getFullName(p.subject.teacher),
+                    view: <CourseCoverageDetails subjectId={p.subjectId} />,
                   });
                 }}
               >
                 <TableCell className="w-[4px] p-1">
                   <div
                     style={{
-                      backgroundColor: p.course.color,
+                      backgroundColor: p.subject.course.color,
                     }}
                     className="h-10 w-[4px] rounded-sm"
                   />
@@ -157,59 +157,59 @@ export function CourseCoverageTable() {
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
                       <Link
-                        href={`/classrooms/${p.classroomId}/subjects/${p.id}`}
+                        href={`/classrooms/${p.subject.classroomId}/subjects/${p.id}`}
                         className="hover:underline"
                       >
-                        {p.course.name}
+                        {p.subject.course.name}
                       </Link>
                       <Badge
                         variant="info"
                         appearance="light"
                         className="h-5 text-[10px]"
                       >
-                        {p.course.shortName}
+                        {p.subject.course.shortName}
                       </Badge>
                     </div>
                     <div className="text-muted-foreground flex items-center gap-1">
                       <AvatarState
-                        pos={getFullName(p.teacher).length}
+                        pos={getFullName(p.subject.teacher).length}
                         className="size-4"
                       />
                       <Link
-                        href={`/staffs/${p.teacherId}`}
+                        href={`/staffs/${p.subject.teacherId}`}
                         className="text-xs hover:underline"
                       >
-                        {getFullName(p.teacher)}
+                        {getFullName(p.subject.teacher)}
                       </Link>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
                   <Link
-                    href={`/classrooms/${p.classroomId}`}
+                    href={`/classrooms/${p.subject.classroomId}`}
                     className="hover:underline"
                   >
-                    {p.classroom.reportName}
+                    {p.subject.classroom.reportName}
                   </Link>
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
                   <Badge
                     variant={
-                      p.programs.length == 0
+                      p.journals.length == 0
                         ? "destructive"
-                        : p.programs.length < 5
+                        : p.journals.length < 5
                           ? "warning"
                           : "success"
                     }
                     appearance="outline"
                   >
-                    {p.programs.length}
+                    {p.journals.length}
                   </Badge>
                 </TableCell>
 
                 <TableCell className="py-1 font-medium">
                   <Badge variant="destructive" appearance="outline">
-                    {p.programs.length}
+                    {p.journals.length}
                   </Badge>
                 </TableCell>
                 <TableCell>

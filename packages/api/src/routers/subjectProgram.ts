@@ -4,20 +4,39 @@ import { z } from "zod/v4";
 import { protectedProcedure } from "../trpc";
 
 export const subjectProgramRouter = {
-  all: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.subjectProgram.findMany({
-      where: {
-        term: {
-          schoolYearId: ctx.schoolYearId,
+  all: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().nullish(),
+        termId: z.string().nullish(),
+        teacherId: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.subjectProgram.findMany({
+        where: {
+          ...(input.termId ? { termId: input.termId } : {}),
+          term: {
+            schoolYearId: ctx.schoolYearId,
+          },
+          subject: {
+            ...(input.teacherId ? { teacherId: input.teacherId } : {}),
+            ...(input.classroomId ? { classroomId: input.classroomId } : {}),
+          },
         },
-      },
-      include: {
-        term: true,
-        subject: true,
-        journals: true,
-      },
-    });
-  }),
+        include: {
+          term: true,
+          subject: {
+            include: {
+              classroom: true,
+              course: true,
+              teacher: true,
+            },
+          },
+          journals: true,
+        },
+      });
+    }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.subjectProgram.findUniqueOrThrow({
       include: {
@@ -117,6 +136,25 @@ export const subjectProgramRouter = {
           priority: input.priority,
           requiredSessionCount: input.requiredSessionCount,
           termId: input.termId,
+        },
+      });
+    }),
+  classroom: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string(),
+        teacherId: z.string().optional(),
+        termId: z.string().optional(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.subjectProgram.findMany({
+        where: {
+          subject: {
+            ...(input.teacherId ? { teacherId: input.teacherId } : {}),
+            classroomId: input.classroomId,
+          },
+          ...(input.termId ? { termId: input.termId } : {}),
         },
       });
     }),

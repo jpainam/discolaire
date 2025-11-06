@@ -41,7 +41,7 @@ export async function GET(
   try {
     const classroom = await caller.classroom.get(id);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const programs = await caller.program.bySubject({
+    const programs = await caller.subjectProgram.programs({
       subjectId: parseInt(subjectId),
     });
 

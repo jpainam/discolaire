@@ -8,7 +8,7 @@ export function CourseCoverageDataTableAction({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   table,
 }: {
-  table: Table<RouterOutputs["subject"]["programs"][number]>;
+  table: Table<RouterOutputs["subjectProgram"]["all"][number]>;
 }) {
   return <div>Action</div>;
 }

@@ -22,9 +22,9 @@ import { CourseCoverageSummary } from "./course_coverage/CourseCoverageSummary";
 import { CourseCoverageTable } from "./course_coverage/CourseCoverageTable";
 
 const academySearchSchema = {
-  classroomId: parseAsString.withDefault(""),
-  staffId: parseAsString.withDefault(""),
-  categoryId: parseAsString.withDefault(""),
+  classroomId: parseAsString,
+  teacherId: parseAsString,
+  termId: parseAsString,
 };
 const academySearchParams = createLoader(academySearchSchema);
 interface PageProps {
@@ -34,10 +34,10 @@ export default async function Page(props: PageProps) {
   const searchParams = await academySearchParams(props.searchParams);
   batchPrefetch([
     trpc.term.all.queryOptions(),
-    trpc.subject.programs.queryOptions({
+    trpc.subjectProgram.all.queryOptions({
       classroomId: searchParams.classroomId,
-      staffId: searchParams.staffId,
-      categoryId: searchParams.categoryId,
+      teacherId: searchParams.teacherId,
+      termId: searchParams.termId,
     }),
   ]);
   const t = await getTranslations();

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 
 import {
@@ -11,7 +10,6 @@ import {
   AccordionTrigger,
 } from "@repo/ui/components/accordion";
 import { Badge } from "@repo/ui/components/badge";
-import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useTRPC } from "~/trpc/react";
 
@@ -25,20 +23,20 @@ export function CourseCoverageDetails({ subjectId }: { subjectId: number }) {
   const trpc = useTRPC();
   const t = useTranslations();
   const locale = useLocale();
-  const coverageQuery = useQuery(
-    trpc.subject.getCoverage.queryOptions(subjectId),
-  );
+  // const coverageQuery = useQuery(
+  //   trpc.subject.getCoverage.queryOptions(subjectId),
+  // );
 
-  if (coverageQuery.isLoading) {
-    return (
-      <div className="grid grid-cols-1 gap-2 px-2">
-        {Array.from({ length: 10 }).map((_, index) => (
-          <Skeleton key={index} className="h-8" />
-        ))}
-      </div>
-    );
-  }
-  const coverages = coverageQuery.data ?? [];
+  // if (coverageQuery.isLoading) {
+  //   return (
+  //     <div className="grid grid-cols-1 gap-2 px-2">
+  //       {Array.from({ length: 10 }).map((_, index) => (
+  //         <Skeleton key={index} className="h-8" />
+  //       ))}
+  //     </div>
+  //   );
+  // }
+  // const coverages = coverageQuery.data ?? [];
 
   return (
     <div className="overflow-auto px-2">
@@ -59,16 +57,14 @@ export function CourseCoverageDetails({ subjectId }: { subjectId: number }) {
         </div>
       </div>
       <Accordion type="multiple" className="w-full">
-        {coverages.map((coverage, index) => {
+        {[1, 2, 3].map((coverage, index) => {
           return (
-            <AccordionItem value={coverage.id} key={index}>
+            <AccordionItem value={index.toString()} key={index}>
               <AccordionTrigger className="text-left hover:no-underline">
                 <div className="flex w-full flex-col gap-2">
-                  <div className="text-md font-bold">{coverage.title}</div>
+                  <div className="text-md font-bold">{coverage}</div>
                   <div className="flex flex-row items-center gap-2">
-                    <Badge variant="secondary">
-                      {coverage.programs.length} {t("programs")}
-                    </Badge>
+                    <Badge variant="secondary">0 {t("programs")}</Badge>
                     <Badge variant="secondary">0 {t("sessions")}</Badge>
                   </div>
                 </div>

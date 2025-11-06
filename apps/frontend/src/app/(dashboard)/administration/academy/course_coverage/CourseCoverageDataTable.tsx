@@ -11,16 +11,16 @@ import { useColumn } from "./CourseCoverageDataTableColumn";
 
 export function CourseCoverageDataTable() {
   const trpc = useTRPC();
-  const [{ classroomId, staffId, categoryId }] = useQueryStates({
-    classroomId: parseAsString.withDefault(""),
-    staffId: parseAsString.withDefault(""),
-    categoryId: parseAsString.withDefault(""),
+  const [{ classroomId, teacherId, termId }] = useQueryStates({
+    classroomId: parseAsString,
+    teacherId: parseAsString,
+    termId: parseAsString,
   });
   const { data: programs } = useSuspenseQuery(
-    trpc.subject.programs.queryOptions({
+    trpc.subjectProgram.all.queryOptions({
       classroomId,
-      staffId,
-      categoryId,
+      teacherId,
+      termId,
     }),
   );
   const { columns } = useColumn();
