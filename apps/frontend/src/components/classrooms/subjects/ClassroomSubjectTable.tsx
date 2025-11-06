@@ -124,34 +124,30 @@ export function ClassroomSubjectTable() {
                       {subject.course.shortName.toUpperCase()} -{" "}
                       {subject.course.name}
                     </Link>
-                    {subject.programs.length == 0 ? (
-                      <Button
-                        onClick={() => {
-                          openSheet({
-                            title: `Programme ${subject.course.name} `,
-                            description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
-                            view: (
-                              <div className="h-full w-full overflow-x-auto">
-                                <SubjectSessionBoard
-                                  columnClassName="flex h-full w-[300px] flex-1 shrink-0 flex-col  lg:w-[360px]"
-                                  className="flex h-full min-w-max gap-3 overflow-hidden px-2 pb-2"
-                                  subjectId={subject.id}
-                                />
-                              </div>
-                            ),
-                            className: "min-w-3/4 w-full sm:max-w-5xl w-3/4",
-                          });
-                        }}
-                        size={"sm"}
-                        variant={"default"}
-                      >
-                        0 programmes <ExternalLink />
-                      </Button>
-                    ) : (
-                      <Badge variant="success" appearance="light">
-                        {subject.programs.length} programmes
-                      </Badge>
-                    )}
+
+                    <Button
+                      onClick={() => {
+                        openSheet({
+                          title: `Programme ${subject.course.name} `,
+                          description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
+                          view: (
+                            <div className="h-full w-full overflow-x-auto">
+                              <SubjectSessionBoard
+                                columnClassName="flex h-full w-[300px] flex-1 shrink-0 flex-col  lg:w-[360px]"
+                                className="flex h-full min-w-max gap-3 overflow-hidden px-2 pb-2"
+                                subjectId={subject.id}
+                              />
+                            </div>
+                          ),
+                          className: "min-w-3/4 w-full sm:max-w-5xl w-3/4",
+                        });
+                      }}
+                      size={"sm"}
+                      variant={"default"}
+                    >
+                      {subject.programs.length} programmes <ExternalLink />
+                    </Button>
+
                     {subject.timetables.length > 0 && (
                       <Badge variant={"success"} appearance={"light"}>
                         {" "}

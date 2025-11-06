@@ -4,13 +4,11 @@ import {
   Calendar,
   CheckCircle,
   FileText,
-  Hexagon,
-  InfoIcon,
   Link,
   MessageSquare,
-  Stars,
+  MoreVertical,
 } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 import type { RouterOutputs } from "@repo/api";
@@ -20,9 +18,28 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@repo/ui/components/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 
 import "react-circular-progressbar/dist/styles.css";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+
+import { useModal } from "~/hooks/use-modal";
+import { cn } from "~/lib/utils";
+import { useConfirm } from "~/providers/confirm-dialog";
+import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
+import { CreateUpdateSubjectSession } from "./CreateUpdateSubjectSession";
 import { BacklogIcon } from "./statuses";
 
 export function SubjectSessionCard({
@@ -41,9 +58,28 @@ export function SubjectSessionCard({
     program.isCompleted ||
     (sessionDone == program.requiredSessionCount && hasProgress);
   const locale = useLocale();
+  const t = useTranslations();
+  const confirm = useConfirm();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const deleteSubjectSessionMutation = useMutation(
+    trpc.subjectProgram.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    }),
+  );
+
+  const { openModal } = useModal();
+  const term = program.term;
+  const subject = program.subject;
 
   return (
-    <div className="bg-background border-border shrink-0 overflow-hidden rounded-lg border">
+    <div className="bg-background group border-border shrink-0 overflow-hidden rounded-lg border">
       {/* Main content */}
       <div className="px-3 py-2.5">
         {/* Title with status icon */}
@@ -54,24 +90,77 @@ export function SubjectSessionCard({
           <h3 className="flex-1 text-sm leading-tight font-medium">
             {program.title}
           </h3>
-          {program.priority === PriorityEnum.URGENT && !isCompleted && (
-            <Stars className="size-4 shrink-0 text-pink-500" />
-          )}
-          {program.priority === PriorityEnum.HIGH && !isCompleted && (
-            <InfoIcon className="size-4 shrink-0 text-red-500" />
-          )}
-          {program.priority === PriorityEnum.MEDIUM && !isCompleted && (
-            <Hexagon className="size-4 shrink-0 text-cyan-500" />
-          )}
-          {isCompleted && (
-            <CheckCircle className="size-4 shrink-0 text-green-500" />
-          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className="invisible size-7 opacity-0 transition group-hover:visible group-hover:opacity-100"
+              asChild
+            >
+              <Button variant={"ghost"} className="h-6 w-6">
+                <MoreVertical className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>{t("details")}</DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  openModal({
+                    // className: "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                    title: `Programme ${subject.course.name}`,
+                    description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
+                    view: (
+                      <CreateUpdateSubjectSession
+                        termId={term.id}
+                        program={program}
+                        subjectId={program.subjectId}
+                      />
+                    ),
+                  });
+                }}
+              >
+                {t("edit")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={async () => {
+                  const isConfirm = await confirm({
+                    title: t("delete"),
+                    description: t("delete_confirmation"),
+                  });
+                  if (isConfirm) {
+                    toast.loading(t("Processing"), { id: 0 });
+                    deleteSubjectSessionMutation.mutate(program.id);
+                  }
+                }}
+                variant="destructive"
+              >
+                {t("delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Description */}
         <p className="text-muted-foreground mb-3 line-clamp-2 text-xs">
           {program.description}
         </p>
+        <div className="flex flex-wrap gap-1.5">
+          <Badge
+            variant="secondary"
+            className={cn(
+              "px-1.5 py-0.5 text-[10px] font-medium",
+              program.priority == PriorityEnum.LOW &&
+                "bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400",
+              program.priority == PriorityEnum.URGENT &&
+                "bg-pink-100 text-pink-700 dark:bg-pink-950/50 dark:text-pink-400",
+              program.priority == PriorityEnum.MEDIUM &&
+                "bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-400",
+              program.priority == PriorityEnum.HIGH &&
+                "bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-400",
+            )}
+          >
+            {t(program.priority)}
+          </Badge>
+        </div>
 
         {/* Labels */}
         {/* {task.labels.length > 0 && (
@@ -123,7 +212,7 @@ export function SubjectSessionCard({
               <span>0</span>
             </div>
 
-            {hasProgress && (
+            {program.requiredSessionCount > 0 && (
               <div className="border-border flex items-center gap-1.5 rounded-sm border px-2 py-1">
                 {isCompleted ? (
                   <CheckCircle className="size-3 text-green-500" />

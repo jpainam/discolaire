@@ -40,6 +40,13 @@ export const subjectProgramRouter = {
     .query(({ ctx, input }) => {
       return ctx.db.subjectProgram.findMany({
         include: {
+          term: true,
+          subject: {
+            include: {
+              course: true,
+              teacher: true,
+            },
+          },
           journals: true,
           createdBy: true,
         },
@@ -90,6 +97,7 @@ export const subjectProgramRouter = {
         title: z.string().min(1),
         description: z.string().optional(),
         requiredSessionCount: z.number().positive().default(1),
+        priority: z.enum(["MEDIUM", "HIGH", "URGENT", "LOW"]),
         termId: z.string(),
       }),
     )
@@ -101,6 +109,7 @@ export const subjectProgramRouter = {
         data: {
           title: input.title,
           description: input.description,
+          priority: input.priority,
           requiredSessionCount: input.requiredSessionCount,
           termId: input.termId,
         },

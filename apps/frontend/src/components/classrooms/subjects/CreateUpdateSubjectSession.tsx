@@ -50,10 +50,10 @@ export function CreateUpdateSubjectSession({
 }) {
   const form = useForm({
     defaultValues: {
-      content: "",
-      title: "",
-      priority: "MEDIUM",
-      sessionCount: 2,
+      content: program?.description ?? "",
+      title: program?.title ?? "",
+      priority: program?.priority ?? "MEDIUM",
+      sessionCount: program?.requiredSessionCount ?? 2,
     },
     resolver: zodResolver(formSchema),
   });
@@ -100,6 +100,7 @@ export function CreateUpdateSubjectSession({
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     const values = {
       title: data.title,
+      description: data.content,
       subjectId: subjectId,
       priority: data.priority,
       termId: termId,
@@ -179,7 +180,10 @@ export function CreateUpdateSubjectSession({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Select onValueChange={(val) => field.onChange(val)}>
+                  <Select
+                    defaultValue={program?.priority ?? undefined}
+                    onValueChange={(val) => field.onChange(val)}
+                  >
                     <SelectTrigger className="w-[100px]">
                       <SelectValue placeholder={t("Priority")} />
                     </SelectTrigger>
@@ -201,7 +205,12 @@ export function CreateUpdateSubjectSession({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Select onValueChange={(val) => field.onChange(val)}>
+                  <Select
+                    defaultValue={
+                      program?.requiredSessionCount.toString() ?? undefined
+                    }
+                    onValueChange={(val) => field.onChange(val)}
+                  >
                     <SelectTrigger className="w-[130px]">
                       <SelectValue placeholder={t("Session count")} />
                     </SelectTrigger>
@@ -250,7 +259,12 @@ export function CreateUpdateSubjectSession({
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={createProgramMutation.isPending} size={"sm"}>
+          <Button
+            isLoading={
+              createProgramMutation.isPending || updateProgramMutation.isPending
+            }
+            size={"sm"}
+          >
             {t("submit")}
           </Button>
         </div>
