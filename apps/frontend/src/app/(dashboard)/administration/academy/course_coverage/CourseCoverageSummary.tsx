@@ -15,7 +15,6 @@ import {
 import { useTranslations } from "next-intl";
 import { parseAsString, useQueryStates } from "nuqs";
 
-import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -46,41 +45,28 @@ export function CourseCoverageSummary() {
     staffId: parseAsString.withDefault(""),
     categoryId: parseAsString.withDefault(""),
   });
-  const { data: categories } = useSuspenseQuery(
-    trpc.program.categories.queryOptions(),
-  );
+  console.log(classroomId, staffId);
+  const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
 
-  const { data: coverage } = useSuspenseQuery(
-    trpc.subject.getPrograms.queryOptions({
-      classroomId,
-      staffId,
-      categoryId,
-    }),
-  );
-  console.log("coverage", coverage);
   const t = useTranslations();
-
-  const summary = getCoverageNumber(coverage);
-  const overallProgress =
-    summary.completedCount / (summary.totalPrograms || 1e9);
 
   const performance = [
     {
       label: t("completed"),
-      value: summary.completedCount,
-      trend: summary.completedPercentage,
+      value: 0,
+      trend: 0,
       trendDir: "up",
     },
     {
       label: t("in_progress"),
-      value: summary.startedCount,
-      trend: summary.startedPercentage,
+      value: 0,
+      trend: 0,
       trendDir: "up",
     },
     {
       label: t("not_started"),
-      value: summary.notStartedCount,
-      trend: summary.notStartedPercentage,
+      value: 0,
+      trend: 0,
       trendDir: "down",
     },
   ];
@@ -156,7 +142,7 @@ export function CourseCoverageSummary() {
           <div>
             <div className="text-accent-foreground mb-2.5 text-sm font-medium">
               {categoryId
-                ? categories.find((c) => (c.id = categoryId))?.title
+                ? terms.find((c) => (c.id = categoryId))?.name
                 : t("Coverage")}
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -202,10 +188,10 @@ export function CourseCoverageSummary() {
                 {t("overall_progress")}
               </span>
               <span className="text-foreground text-xs font-semibold">
-                {overallProgress * 100}%
+                {5 * 100}%
               </span>
             </div>
-            <Progress value={overallProgress} className="bg-muted" />
+            <Progress value={5} className="bg-muted" />
           </div>
 
           <Separator />
@@ -250,48 +236,4 @@ export function CourseCoverageSummary() {
       </Card>
     </div>
   );
-}
-
-function getCoverageNumber(values: RouterOutputs["subject"]["getPrograms"]) {
-  let completedCount = 0;
-  let startedCount = 0;
-  let notStartedCount = 0;
-  let totalPrograms = 0;
-
-  for (const value of values) {
-    totalPrograms += value.programs.length;
-    for (const program of value.programs) {
-      const actualSessions = 0; // Replace with actual logic to get the number of sessions
-      const requiredSessions = program.requiredSessionCount;
-
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (actualSessions === 0) {
-        notStartedCount++;
-      } else if (actualSessions >= requiredSessions) {
-        completedCount++;
-      } else {
-        startedCount++;
-      }
-    }
-  }
-
-  const completedPercentage = totalPrograms
-    ? (completedCount / totalPrograms) * 100
-    : 0;
-  const startedPercentage = totalPrograms
-    ? (startedCount / totalPrograms) * 100
-    : 0;
-  const notStartedPercentage = totalPrograms
-    ? (notStartedCount / totalPrograms) * 100
-    : 0;
-
-  return {
-    totalPrograms,
-    completedCount,
-    startedCount,
-    notStartedCount,
-    completedPercentage: parseFloat(completedPercentage.toFixed(2)),
-    startedPercentage: parseFloat(startedPercentage.toFixed(2)),
-    notStartedPercentage: parseFloat(notStartedPercentage.toFixed(2)),
-  };
 }

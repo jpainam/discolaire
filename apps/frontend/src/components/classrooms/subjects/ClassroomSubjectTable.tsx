@@ -131,7 +131,12 @@ export function ClassroomSubjectTable() {
                             title: `Programme ${subject.course.name} `,
                             description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
                             view: (
-                              <SubjectSessionBoard subjectId={subject.id} />
+                              <div className="h-full w-full overflow-x-auto">
+                                <SubjectSessionBoard
+                                  className="flex h-full min-w-max gap-3 overflow-hidden px-2 pb-2"
+                                  subjectId={subject.id}
+                                />
+                              </div>
                             ),
                             className: "min-w-3/4 w-full sm:max-w-5xl w-3/4",
                           });

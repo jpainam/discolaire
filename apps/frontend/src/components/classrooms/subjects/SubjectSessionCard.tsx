@@ -14,7 +14,7 @@ import { useLocale } from "next-intl";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 import type { RouterOutputs } from "@repo/api";
-import { SubjectSessionPriority } from "@repo/db/enums";
+import { PriorityEnum } from "@repo/db/enums";
 import {
   Avatar,
   AvatarFallback,
@@ -26,13 +26,20 @@ import "react-circular-progressbar/dist/styles.css";
 import { BacklogIcon } from "./statuses";
 
 export function SubjectSessionCard({
-  session,
+  program,
 }: {
-  session: RouterOutputs["subjectSession"]["sessions"][number];
+  program: RouterOutputs["subjectProgram"]["programs"][number];
 }) {
+  const sum = (a: number[]) => {
+    return a.reduce((a, b) => a + b, 0);
+  };
   const StatusIcon = BacklogIcon; //task.status.icon;
-  const hasProgress = session.total > 0;
-  const isCompleted = session.completed === session.total && hasProgress;
+  const hasProgress = program.journals.length > 0;
+  const requiredSession = program.requiredSessionCount;
+  const sessionDone = sum(program.journals.map((j) => j.sessionCount));
+  const isCompleted =
+    program.isCompleted ||
+    (sessionDone == program.requiredSessionCount && hasProgress);
   const locale = useLocale();
 
   return (
@@ -45,17 +52,17 @@ export function SubjectSessionCard({
             <StatusIcon />
           </div>
           <h3 className="flex-1 text-sm leading-tight font-medium">
-            {session.title}
+            {program.title}
           </h3>
-          {session.priority === SubjectSessionPriority.URGENT &&
-            !isCompleted && <Stars className="size-4 shrink-0 text-pink-500" />}
-          {session.priority === SubjectSessionPriority.HIGH && !isCompleted && (
+          {program.priority === PriorityEnum.URGENT && !isCompleted && (
+            <Stars className="size-4 shrink-0 text-pink-500" />
+          )}
+          {program.priority === PriorityEnum.HIGH && !isCompleted && (
             <InfoIcon className="size-4 shrink-0 text-red-500" />
           )}
-          {session.priority === SubjectSessionPriority.MEDIUM &&
-            !isCompleted && (
-              <Hexagon className="size-4 shrink-0 text-cyan-500" />
-            )}
+          {program.priority === PriorityEnum.MEDIUM && !isCompleted && (
+            <Hexagon className="size-4 shrink-0 text-cyan-500" />
+          )}
           {isCompleted && (
             <CheckCircle className="size-4 shrink-0 text-green-500" />
           )}
@@ -63,7 +70,7 @@ export function SubjectSessionCard({
 
         {/* Description */}
         <p className="text-muted-foreground mb-3 line-clamp-2 text-xs">
-          {session.description}
+          {program.description}
         </p>
 
         {/* Labels */}
@@ -93,7 +100,7 @@ export function SubjectSessionCard({
             <div className="border-border flex items-center gap-1.5 rounded-sm border px-2 py-1">
               <Calendar className="size-3" />
               <span>
-                {session.updatedAt.toLocaleDateString(locale, {
+                {program.updatedAt.toLocaleDateString(locale, {
                   day: "2-digit",
                   month: "short",
                 })}
@@ -125,7 +132,7 @@ export function SubjectSessionCard({
                 ) : (
                   <div className="size-3">
                     <CircularProgressbar
-                      value={(session.completed / session.total) * 100}
+                      value={(sessionDone / program.requiredSessionCount) * 100}
                       strokeWidth={12}
                       styles={buildStyles({
                         pathColor: "#10b981",
@@ -136,7 +143,7 @@ export function SubjectSessionCard({
                   </div>
                 )}
                 <span>
-                  {session.completed}/{session.total}
+                  {sessionDone}/{program.requiredSessionCount}
                 </span>
               </div>
             )}
@@ -147,11 +154,11 @@ export function SubjectSessionCard({
           <div className="flex -space-x-2">
             <Avatar className="border-background size-5 border-2">
               <AvatarImage
-                src={session.createdBy.avatar ?? undefined}
-                alt={session.createdBy.name}
+                src={program.createdBy.avatar ?? undefined}
+                alt={program.createdBy.name}
               />
               <AvatarFallback className="text-[10px]">
-                {session.createdBy.name
+                {program.createdBy.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}

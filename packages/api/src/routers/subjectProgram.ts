@@ -30,6 +30,25 @@ export const subjectProgramRouter = {
       },
     });
   }),
+  programs: protectedProcedure
+    .input(
+      z.object({
+        subjectId: z.coerce.number(),
+        termId: z.string(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.subjectProgram.findMany({
+        include: {
+          journals: true,
+          createdBy: true,
+        },
+        where: {
+          subjectId: input.subjectId,
+          termId: input.termId,
+        },
+      });
+    }),
 
   delete: protectedProcedure
     .input(z.string())
@@ -60,6 +79,7 @@ export const subjectProgramRouter = {
           requiredSessionCount: input.requiredSessionCount,
           subjectId: input.subjectId,
           termId: input.termId,
+          createdById: ctx.session.user.id,
         },
       });
     }),

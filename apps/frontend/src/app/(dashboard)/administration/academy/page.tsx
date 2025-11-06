@@ -20,7 +20,6 @@ import { CourseCoverageHeader } from "./course_coverage/CourseCoverageHeader";
 import { CourseCoveragePieChart } from "./course_coverage/CourseCoveragePieChart";
 import { CourseCoverageSummary } from "./course_coverage/CourseCoverageSummary";
 import { CourseCoverageTable } from "./course_coverage/CourseCoverageTable";
-import { ProgramCategoryTable } from "./ProgramCategoryTable";
 
 const academySearchSchema = {
   classroomId: parseAsString.withDefault(""),
@@ -34,7 +33,7 @@ interface PageProps {
 export default async function Page(props: PageProps) {
   const searchParams = await academySearchParams(props.searchParams);
   batchPrefetch([
-    trpc.program.categories.queryOptions(),
+    trpc.term.all.queryOptions(),
     trpc.subject.programs.queryOptions({
       classroomId: searchParams.classroomId,
       staffId: searchParams.staffId,
@@ -122,13 +121,7 @@ export default async function Page(props: PageProps) {
         </HydrateClient>
       </TabsContent>
       <TabsContent value="tab-2">
-        <HydrateClient>
-          <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense fallback={<div>Loading...</div>}>
-              <ProgramCategoryTable />
-            </Suspense>
-          </ErrorBoundary>
-        </HydrateClient>
+        <div>Content 2</div>
       </TabsContent>
     </Tabs>
   );

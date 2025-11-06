@@ -14,10 +14,10 @@ import {
 
 import { getSession } from "~/auth/server";
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
+import { SubjectSessionBoard } from "~/components/classrooms/subjects/SubjectSessionBoard";
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
-import { ProgramKanban } from "./programs/ProgramKanban";
 import { SubjectJournalEditor } from "./sessions/SubjectJournalEditor";
 import { SubjectJournalHeader } from "./sessions/SubjectJournalHeader";
 import { SubjectJournalList } from "./sessions/SubjectJournalList";
@@ -44,9 +44,7 @@ export default async function Page(props: PageProps) {
   );
 
   const subjectId = searchParams.subjectId ?? subjects[0]?.id;
-  const categories = await queryClient.fetchQuery(
-    trpc.program.categories.queryOptions(),
-  );
+  //const categories = await queryClient.fetchQuery(trpc.term.all.queryOptions());
 
   return (
     <Tabs defaultValue="teaching_session">
@@ -109,16 +107,9 @@ export default async function Page(props: PageProps) {
                 </div>
               }
             >
-              <ProgramKanban
-                categories={categories}
-                defaultSubjectId={subjectId}
-                // programs={programs.map((program) => {
-                //   return {
-                //     title: program.title,
-                //     id: program.id.toString(),
-                //     column: program.category.id,
-                //   };
-                // })}
+              <SubjectSessionBoard
+                className="grid grid-cols-3 gap-4 px-4 py-2"
+                subjectId={subjectId}
               />
             </Suspense>
           </ErrorBoundary>

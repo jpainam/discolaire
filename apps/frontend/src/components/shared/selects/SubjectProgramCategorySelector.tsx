@@ -26,7 +26,7 @@ export function SubjectProgramCategorySelector({
 }) {
   const t = useTranslations();
   const trpc = useTRPC();
-  const categoriesQuery = useQuery(trpc.program.categories.queryOptions());
+  const categoriesQuery = useQuery(trpc.term.all.queryOptions());
   return (
     <Select
       onValueChange={(val) => {
@@ -51,7 +51,7 @@ export function SubjectProgramCategorySelector({
             <SelectItem value="all">{t("all")}</SelectItem>
             {categoriesQuery.data?.map((cat) => (
               <SelectItem key={cat.id} value={cat.id}>
-                {cat.title}
+                {cat.name}
               </SelectItem>
             ))}
           </>

@@ -7,12 +7,18 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { useTRPC } from "~/trpc/react";
 import { SubjectSessionColumn } from "./SubjectSessionColumn";
 
-export function SubjectSessionBoard({ subjectId }: { subjectId: number }) {
+export function SubjectSessionBoard({
+  className,
+  subjectId,
+}: {
+  className?: string;
+  subjectId: number;
+}) {
   const trpc = useTRPC();
   const termQuery = useQuery(trpc.term.all.queryOptions());
   const terms = termQuery.data ?? [];
   return (
-    <div className="h-full w-full overflow-x-auto">
+    <>
       {termQuery.isPending ? (
         <div className="grid grid-cols-4 gap-4 px-2">
           {Array.from({ length: 16 }).map((_, index) => (
@@ -20,12 +26,12 @@ export function SubjectSessionBoard({ subjectId }: { subjectId: number }) {
           ))}
         </div>
       ) : (
-        <div className="flex h-full min-w-max gap-3 overflow-hidden px-2 pb-2">
+        <div className={className}>
           {terms.map((t, index) => (
             <SubjectSessionColumn key={index} term={t} subjectId={subjectId} />
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }

@@ -3,14 +3,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontal, Plus } from "lucide-react";
 
+
+
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+
+
 
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { CreateUpdateSubjectSession } from "./CreateUpdateSubjectSession";
 import { BacklogIcon } from "./statuses";
 import { SubjectSessionCard } from "./SubjectSessionCard";
+
 
 export function SubjectSessionColumn({
   term,
@@ -21,10 +26,10 @@ export function SubjectSessionColumn({
 }) {
   const StatusIcon = BacklogIcon;
   const trpc = useTRPC();
-  const sessionsQuery = useQuery(
-    trpc.subjectSession.sessions.queryOptions({ termId: term.id, subjectId }),
+  const programsQuery = useQuery(
+    trpc.subjectProgram.programs.queryOptions({ termId: term.id, subjectId }),
   );
-  const sessions = sessionsQuery.data;
+  const programs = programsQuery.data;
   const { openModal } = useModal();
   return (
     <div className="flex h-full w-[300px] flex-1 shrink-0 flex-col lg:w-[360px]">
@@ -60,8 +65,8 @@ export function SubjectSessionColumn({
 
         {/* Tasks list */}
         <div className="flex h-full flex-col gap-3 overflow-y-auto">
-          {sessions?.map((sess, index) => (
-            <SubjectSessionCard key={index} session={sess} />
+          {programs?.map((program, index) => (
+            <SubjectSessionCard key={index} program={program} />
           ))}
 
           <Button

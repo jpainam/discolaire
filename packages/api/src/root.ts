@@ -57,10 +57,10 @@ import { studentAccountRouter } from "./routers/studentAccount";
 import { studentContactRouter } from "./routers/studentContact";
 import { subjectRouter } from "./routers/subject";
 import { subjectGroupRouter } from "./routers/subjectGroup";
+import { subjectJournalRouter } from "./routers/subjectJournal";
 import { subjectProgramRouter } from "./routers/subjectProgram";
 import { subjectTimetableRouter } from "./routers/subjectTimetable";
 import { subscriptionRouter } from "./routers/subscription";
-import { teachingSessionRouter } from "./routers/subjectJournal";
 import { termRouter } from "./routers/term";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
@@ -132,7 +132,7 @@ export const appRouter = createTRPCRouter({
   fund: fundRouter,
   transaction: transactionRouter,
   reporting: reportingRouter,
-  teachingSession: teachingSessionRouter,
+  subjectJournal: subjectJournalRouter,
   subjectTimetable: subjectTimetableRouter,
   importStudent: importStudentRouter,
   discipline: disciplineRouter,

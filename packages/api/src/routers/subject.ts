@@ -2,7 +2,6 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { getPrograms } from "../services/subject-service";
 import { protectedProcedure } from "../trpc";
 
 export const subjectRouter = {
@@ -127,95 +126,6 @@ export const subjectRouter = {
             in: Array.isArray(input) ? input : [input],
           },
         },
-      });
-    }),
-
-  programs: protectedProcedure
-    .input(
-      z.object({
-        classroomId: z.string().optional(),
-        staffId: z.string().optional(),
-        categoryId: z.string().optional(),
-      }),
-    )
-    .query(({ ctx, input }) => {
-      return ctx.db.subject.findMany({
-        where: {
-          classroom: {
-            schoolYearId: ctx.schoolYearId,
-            schoolId: ctx.schoolId,
-            ...(input.classroomId ? { id: input.classroomId } : {}),
-          },
-          ...(input.staffId ? { teacherId: input.staffId } : {}),
-          ...(input.categoryId
-            ? {
-                programs: {
-                  some: { categoryId: input.categoryId },
-                },
-              }
-            : {}),
-        },
-        include: {
-          classroom: {
-            include: {
-              level: true,
-            },
-          },
-          course: true,
-          teacher: true,
-          programs: {
-            include: {
-              teachingSessions: {
-                include: {
-                  session: true,
-                },
-              },
-            },
-          },
-        },
-      });
-    }),
-  getCoverage: protectedProcedure
-    .input(z.coerce.number())
-    .query(async ({ ctx, input }) => {
-      return ctx.db.programCategory.findMany({
-        where: {
-          schoolYearId: ctx.schoolYearId,
-          programs: {
-            some: {
-              subjectId: input,
-            },
-          },
-        },
-        include: {
-          programs: {
-            include: {
-              teachingSessions: {
-                include: {
-                  session: true,
-                },
-              },
-            },
-          },
-        },
-      });
-    }),
-
-  getPrograms: protectedProcedure
-    .input(
-      z.object({
-        classroomId: z.string().optional(),
-        staffId: z.string().optional(),
-        categoryId: z.string().optional(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return getPrograms({
-        schoolId: ctx.schoolId,
-        schoolYearId: ctx.schoolYearId,
-        classroomId: input.classroomId,
-        categoryId: input.categoryId,
-        staffId: input.staffId,
       });
     }),
 } satisfies TRPCRouterRecord;
