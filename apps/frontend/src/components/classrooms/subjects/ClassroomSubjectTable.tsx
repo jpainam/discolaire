@@ -7,7 +7,13 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { LinkIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  ExternalLink,
+  LinkIcon,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -40,6 +46,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { ClassroomSubjectTimetable } from "./ClassroomSubjectTimetable";
 import { CreateEditSubject } from "./CreateEditSubject";
+import { SubjectSessionBoard } from "./SubjectSessionBoard";
 
 export function ClassroomSubjectTable() {
   const params = useParams<{ id: string }>();
@@ -118,9 +125,22 @@ export function ClassroomSubjectTable() {
                       {subject.course.name}
                     </Link>
                     {subject.programs.length == 0 ? (
-                      <Badge variant="warning" appearance="light">
-                        0 programmes
-                      </Badge>
+                      <Button
+                        onClick={() => {
+                          openSheet({
+                            title: `Programme ${subject.course.name} `,
+                            description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
+                            view: (
+                              <SubjectSessionBoard subjectId={subject.id} />
+                            ),
+                            className: "min-w-3/4 w-full sm:max-w-5xl w-3/4",
+                          });
+                        }}
+                        size={"sm"}
+                        variant={"default"}
+                      >
+                        0 programmes <ExternalLink />
+                      </Button>
                     ) : (
                       <Badge variant="success" appearance="light">
                         {subject.programs.length} programmes

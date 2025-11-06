@@ -39,7 +39,6 @@ import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { permissionRouter } from "./routers/permission";
 import { photoRouter } from "./routers/photo";
 import { policyRouter } from "./routers/policy";
-import { programRouter } from "./routers/program";
 import { recipientRouter } from "./routers/recipient";
 import { religionRouter } from "./routers/religion";
 import { reportCardRouter } from "./routers/reportCard";
@@ -58,9 +57,10 @@ import { studentAccountRouter } from "./routers/studentAccount";
 import { studentContactRouter } from "./routers/studentContact";
 import { subjectRouter } from "./routers/subject";
 import { subjectGroupRouter } from "./routers/subjectGroup";
+import { subjectProgramRouter } from "./routers/subjectProgram";
 import { subjectTimetableRouter } from "./routers/subjectTimetable";
 import { subscriptionRouter } from "./routers/subscription";
-import { teachingSessionRouter } from "./routers/teachingSession";
+import { teachingSessionRouter } from "./routers/subjectJournal";
 import { termRouter } from "./routers/term";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
@@ -125,7 +125,6 @@ export const appRouter = createTRPCRouter({
   logActivity: logActivityRouter,
   recipient: recipientRouter,
   schoolYear: schoolYearRouter,
-  program: programRouter,
   menu: menuRouter,
   policy: policyRouter,
   attendance: attendanceRouter,
@@ -137,6 +136,7 @@ export const appRouter = createTRPCRouter({
   subjectTimetable: subjectTimetableRouter,
   importStudent: importStudentRouter,
   discipline: disciplineRouter,
+  subjectProgram: subjectProgramRouter,
 });
 
 // export type definition of API

@@ -309,22 +309,23 @@ model Event {
 }
 
 model Term {
-    id           String        @id @default(cuid())
+    id           String           @id @default(cuid())
     name         String
     schoolYearId String
     order        Int
-    startDate    DateTime      @default(now()) @db.Timestamp(6)
-    endDate      DateTime      @default(now()) @db.Timestamp(6)
-    isActive     Boolean       @default(true)
+    startDate    DateTime         @default(now()) @db.Timestamp(6)
+    endDate      DateTime         @default(now()) @db.Timestamp(6)
+    isActive     Boolean          @default(true)
     observation  String?
     gradeSheets  GradeSheet[]
-    schoolYear   SchoolYear    @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolYear   SchoolYear       @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
     reportCards  ReportCard[]
     assignments  Assignment[]
-    School       School        @relation(fields: [schoolId], references: [id])
+    School       School           @relation(fields: [schoolId], references: [id])
     schoolId     String
     convocations Convocation[]
     Attendance   Attendance[]
+    programs     SubjectProgram[]
 }
 
 model ContactRelationship {
@@ -639,49 +640,6 @@ model FormerSchool {
     schoolId     String
 }
 
-model Subject {
-    id             Int                @id @default(autoincrement())
-    courseId       String
-    teacherId      String?
-    classroomId    String
-    subjectGroupId Int?
-    program        String?
-    order          Int                @default(1)
-    coefficient    Float              @default(1)
-    gradeSheets    GradeSheet[]
-    programs       Program[]
-    classroom      Classroom          @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    course         Course             @relation(fields: [courseId], references: [id])
-    subjectGroup   SubjectGroup?      @relation(fields: [subjectGroupId], references: [id])
-    teacher        Staff?             @relation(fields: [teacherId], references: [id])
-    assignments    Assignment[]
-    timetables     SubjectTimetable[]
-
-    @@unique([courseId, teacherId, classroomId])
-}
-
-model SubjectGroup {
-    id       Int       @id @default(autoincrement())
-    name     String
-    subjects Subject[]
-    school   School    @relation(fields: [schoolId], references: [id])
-    schoolId String
-}
-
-model Course {
-    id         String    @id @default(uuid())
-    name       String
-    color      String
-    createdAt  DateTime  @default(now()) @db.Timestamp(6)
-    updatedAt  DateTime  @updatedAt
-    shortName  String
-    reportName String
-    isActive   Boolean   @default(true)
-    subjects   Subject[]
-    school     School    @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    schoolId   String
-}
-
 model SchoolYear {
     id                   String                     @id @default(cuid())
     observation          String?
@@ -702,7 +660,6 @@ model SchoolYear {
     enrollmentEndDate    DateTime?                  @default(now()) @db.Timestamp(6)
     classrooms           Classroom[]
     enrollments          Enrollment[]
-    ProgramCategory      ProgramCategory[]
     terms                Term[]
     transactions         Transaction[]
     school               School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -762,50 +719,6 @@ model MenuItem {
     order    Int      @default(0)
     category String?
     isActive Boolean? @default(true)
-}
-
-model ProgramCategory {
-    id           String     @id @default(cuid())
-    title        String
-    color        String
-    isActive     Boolean    @default(true)
-    schoolYearId String
-    programs     Program[]
-    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-}
-
-model Program {
-    id                   String                   @id @default(cuid())
-    title                String
-    description          String?
-    subjectId            Int
-    requiredSessionCount Int                      @default(1)
-    categoryId           String
-    category             ProgramCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-    subject              Subject                  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    teachingSessions     TeachingSessionProgram[]
-}
-
-model TeachingSessionProgram {
-    sessionId String
-    programId String
-    session   TeachingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-    program   Program         @relation(fields: [programId], references: [id], onDelete: Cascade)
-
-    @@id([sessionId, programId])
-}
-
-model TeachingSession {
-    id              String                   @id @default(cuid())
-    subjectId       Int
-    title           String
-    content         String
-    createdById     String
-    attachment      String?
-    createdAt       DateTime                 @default(now()) @db.Timestamp(6)
-    publishDate     DateTime                 @default(now()) @db.Timestamp(6)
-    createdBy       User                     @relation("createdBy", fields: [createdById], references: [id])
-    programSessions TeachingSessionProgram[]
 }
 
 model SMSTemplate {

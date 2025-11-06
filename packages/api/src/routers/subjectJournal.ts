@@ -7,10 +7,12 @@ const createSubjectJournalSchema = z.object({
   title: z.string().min(1),
   content: z.string().min(1),
   publishDate: z.coerce.date(),
+  sessionCount: z.coerce.number(),
   subjectId: z.coerce.number(),
+  programId: z.string(),
   attachment: z.string().optional(),
 });
-export const teachingSessionRouter = {
+export const subjectJournalRouter = {
   all: protectedProcedure
     .input(
       z.object({
@@ -18,33 +20,20 @@ export const teachingSessionRouter = {
       }),
     )
     .query(({ ctx, input }) => {
-      return ctx.db.teachingSession.findMany({
+      return ctx.db.subjectJournal.findMany({
         orderBy: {
           createdAt: "asc",
         },
         take: input.limit,
         include: {
           createdBy: true,
-          programSessions: {
-            include: {
-              program: {
-                include: {
-                  subject: true,
-                },
-              },
-            },
-          },
+          program: true,
         },
         where: {
-          programSessions: {
-            some: {
-              program: {
-                subject: {
-                  classroom: {
-                    schoolYearId: ctx.schoolYearId,
-                    schoolId: ctx.schoolId,
-                  },
-                },
+          program: {
+            subject: {
+              classroom: {
+                schoolYearId: ctx.schoolYearId,
               },
             },
           },
@@ -54,7 +43,7 @@ export const teachingSessionRouter = {
   clearAll: protectedProcedure
     .input(z.object({ subjectId: z.coerce.number() }))
     .mutation(({ ctx, input }) => {
-      return ctx.db.teachingSession.deleteMany({
+      return ctx.db.subjectJournal.deleteMany({
         where: {
           subjectId: input.subjectId,
         },
@@ -70,7 +59,7 @@ export const teachingSessionRouter = {
     )
     .query(({ ctx, input }) => {
       const offset = input.pageIndex * input.pageSize;
-      return ctx.db.teachingSession.findMany({
+      return ctx.db.subjectJournal.findMany({
         skip: offset,
         take: input.pageSize,
         orderBy: {
@@ -87,7 +76,7 @@ export const teachingSessionRouter = {
   delete: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.teachingSession.delete({
+      return ctx.db.subjectJournal.delete({
         where: {
           id: input,
         },
@@ -96,7 +85,7 @@ export const teachingSessionRouter = {
   update: protectedProcedure
     .input(createSubjectJournalSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.teachingSession.update({
+      return ctx.db.subjectJournal.update({
         where: {
           id: input.id,
         },
@@ -106,15 +95,21 @@ export const teachingSessionRouter = {
   create: protectedProcedure
     .input(createSubjectJournalSchema)
     .mutation(({ ctx, input }) => {
-      return ctx.db.teachingSession.create({
+      return ctx.db.subjectJournal.create({
         data: {
-          ...input,
+          subjectId: input.subjectId,
+          title: input.title,
+          content: input.content,
+          programId: input.programId,
+          publishDate: input.publishDate,
+          sessionCount: input.sessionCount,
           createdById: ctx.session.user.id,
+          attachment: input.attachment,
         },
       });
     }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.teachingSession.findUniqueOrThrow({
+    return ctx.db.subjectJournal.findUniqueOrThrow({
       where: {
         id: input,
       },
