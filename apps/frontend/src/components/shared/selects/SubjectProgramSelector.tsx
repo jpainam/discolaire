@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import {
   Select,
@@ -29,13 +30,14 @@ export function SubjectProgramSelector({
     trpc.subjectProgram.programs.queryOptions({ subjectId }),
   );
   const programs = programQuery.data;
+  const t = useTranslations();
   return (
     <Select
       defaultValue={defaultValue}
       onValueChange={(val) => onSelectAction?.(val)}
     >
       <SelectTrigger className={cn("w-full", className)}>
-        <SelectValue placeholder="Theme" />
+        <SelectValue placeholder={t("course_coverage")} />
       </SelectTrigger>
       <SelectContent>
         {programs?.map((p, index) => (
