@@ -7,46 +7,47 @@ import { Label } from "@repo/ui/components/label";
 
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
-import { SubjectProgramCategorySelector } from "~/components/shared/selects/SubjectProgramCategorySelector";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
 
 export function CourseCoverageHeader() {
-  const router = useRouter();
   const t = useTranslations();
-  const { createQueryString } = useCreateQueryString();
+
   //const searchParams = useSearchParams();
-  const [{ classroomId, staffId, categoryId }] = useQueryStates({
-    classroomId: parseAsString.withDefault(""),
-    staffId: parseAsString.withDefault(""),
-    categoryId: parseAsString.withDefault(""),
+  const [{ classroomId, teacherId, termId }, setSearchParams] = useQueryStates({
+    classroomId: parseAsString,
+    teacherId: parseAsString,
+    termId: parseAsString,
   });
   return (
     <div className="grid gap-4 lg:grid-cols-3">
       <div className="flex flex-col gap-1">
         <Label>{t("classrooms")}</Label>
         <ClassroomSelector
-          defaultValue={classroomId}
+          defaultValue={classroomId ?? ""}
           onSelect={(val) => {
-            router.push(`?` + createQueryString({ classroomId: val }));
+            void setSearchParams({
+              classroomId: val,
+            });
           }}
         />
       </div>
       <div className="flex flex-col gap-1">
         <Label>{t("teachers")}</Label>
         <StaffSelector
-          defaultValue={staffId}
+          defaultValue={teacherId ?? ""}
           onSelect={(val) => {
-            router.push(`?` + createQueryString({ staffId: val }));
+            void setSearchParams({
+              teacherId: val,
+            });
           }}
         />
       </div>
       <div className="flex flex-col gap-1">
-        <Label>{t("categories")}</Label>
-        <SubjectProgramCategorySelector
-          defaultValue={categoryId}
-          onChangeAction={(val) => {
-            router.push(`?` + createQueryString({ categoryId: val }));
+        <Label>{t("terms")}</Label>
+        <TermSelector
+          defaultValue={termId}
+          onChange={(val) => {
+            void setSearchParams({ termId: val });
           }}
         />
       </div>
