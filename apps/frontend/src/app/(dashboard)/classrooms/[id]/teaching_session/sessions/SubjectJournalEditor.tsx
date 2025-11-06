@@ -69,12 +69,12 @@ export function SubjectJournalEditor({
   const queryClient = useQueryClient();
 
   const createSubjectJournal = useMutation(
-    trpc.teachingSession.create.mutationOptions({
+    trpc.subjectJournal.create.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.teachingSession.pathFilter());
+        await queryClient.invalidateQueries(trpc.subjectJournal.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         setSelectedFile(null);
         if (fileInputRef.current) {
@@ -151,7 +151,8 @@ export function SubjectJournalEditor({
       status: "PENDING" as const,
       attachment: attachment,
     };
-    createSubjectJournal.mutate(values);
+    console.log(values);
+    //createSubjectJournal.mutate(values);
   };
 
   const { openModal } = useModal();

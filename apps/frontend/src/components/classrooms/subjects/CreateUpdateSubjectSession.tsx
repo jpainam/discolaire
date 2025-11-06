@@ -37,6 +37,7 @@ const formSchema = z.object({
   content: z.string().min(1),
   attachment: z.string().optional(),
   priority: z.enum(["URGENT", "HIGH", "MEDIUM", "LOW"]),
+  sessionCount: z.coerce.number().min(1).default(2),
 });
 export function CreateUpdateSubjectSession({
   subjectId,
@@ -52,6 +53,7 @@ export function CreateUpdateSubjectSession({
       content: "",
       title: "",
       priority: "MEDIUM",
+      sessionCount: 2,
     },
     resolver: zodResolver(formSchema),
   });
@@ -75,6 +77,7 @@ export function CreateUpdateSubjectSession({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -86,6 +89,7 @@ export function CreateUpdateSubjectSession({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -99,6 +103,7 @@ export function CreateUpdateSubjectSession({
       subjectId: subjectId,
       priority: data.priority,
       termId: termId,
+      requiredSessionCount: data.sessionCount,
     };
     if (program) {
       updateProgramMutation.mutate({
@@ -174,10 +179,7 @@ export function CreateUpdateSubjectSession({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Select
-                    defaultValue="MEDIUM"
-                    onValueChange={(val) => field.onChange(val)}
-                  >
+                  <Select onValueChange={(val) => field.onChange(val)}>
                     <SelectTrigger className="w-[100px]">
                       <SelectValue placeholder={t("Priority")} />
                     </SelectTrigger>
@@ -186,6 +188,29 @@ export function CreateUpdateSubjectSession({
                       <SelectItem value="HIGH">{t("HIGH")}</SelectItem>
                       <SelectItem value="MEDIUM">{t("MEDIUM")}</SelectItem>
                       <SelectItem value="LOW">{t("LOW")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="sessionCount"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Select onValueChange={(val) => field.onChange(val)}>
+                    <SelectTrigger className="w-[130px]">
+                      <SelectValue placeholder={t("Session count")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 10 }).map((_, index) => (
+                        <SelectItem key={index} value={index.toString()}>
+                          {index}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
