@@ -1,326 +1,235 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
-import {
-  Bold,
-  FileText,
-  Italic,
-  Link2,
-  List,
-  ListOrdered,
-  Paperclip,
-  Send,
-  Underline,
-  X,
-} from "lucide-react";
+import { useRef, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PaperclipIcon, X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Separator } from "@repo/ui/components/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 
-interface Comment {
-  id: string;
-  text: string;
-  timestamp: Date;
-}
+import { useModal } from "~/hooks/use-modal";
+import { useTRPC } from "~/trpc/react";
 
-interface Attachment {
-  id: string;
-  name: string;
-  type: "document" | "link";
-  url?: string;
-}
-
+const formSchema = z.object({
+  title: z.string().min(1),
+  content: z.string().min(1),
+  attachment: z.string().optional(),
+  priority: z.enum(["URGENT", "HIGH", "MEDIUM", "LOW"]),
+});
 export function CreateUpdateSubjectSession({
   subjectId,
+  termId,
+  program,
 }: {
   subjectId: number;
+  termId: string;
+  program?: RouterOutputs["subjectProgram"]["programs"][number];
 }) {
-  const [content, setContent] = useState("");
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState("");
-  const [attachments, setAttachments] = useState<Attachment[]>([]);
-  const [linkUrl, setLinkUrl] = useState("");
-  const [linkName, setLinkName] = useState("");
-  const [showLinkInput, setShowLinkInput] = useState(false);
+  const form = useForm({
+    defaultValues: {
+      content: "",
+      title: "",
+      priority: "MEDIUM",
+    },
+    resolver: zodResolver(formSchema),
+  });
 
-  const handleAddComment = () => {
-    if (newComment.trim()) {
-      setComments([
-        ...comments,
-        {
-          id: Date.now().toString(),
-          text: newComment,
-          timestamp: new Date(),
-        },
-      ]);
-      setNewComment("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setSelectedFile(files[0] ?? null);
     }
   };
 
-  const handleRemoveComment = (id: string) => {
-    setComments(comments.filter((c) => c.id !== id));
-  };
+  const { closeModal } = useModal();
+  const t = useTranslations();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createProgramMutation = useMutation(
+    trpc.subjectProgram.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const updateProgramMutation = useMutation(
+    trpc.subjectProgram.update.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const newAttachments = Array.from(files).map((file) => ({
-        id: Date.now().toString() + Math.random(),
-        name: file.name,
-        type: "document" as const,
-      }));
-      setAttachments([...attachments, ...newAttachments]);
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const values = {
+      title: data.title,
+      subjectId: subjectId,
+      priority: data.priority,
+      termId: termId,
+    };
+    if (program) {
+      updateProgramMutation.mutate({
+        ...values,
+        id: program.id,
+      });
+    } else {
+      createProgramMutation.mutate({
+        ...values,
+      });
     }
-  };
-
-  const handleAddLink = () => {
-    if (linkUrl.trim() && linkName.trim()) {
-      setAttachments([
-        ...attachments,
-        {
-          id: Date.now().toString(),
-          name: linkName,
-          type: "link",
-          url: linkUrl,
-        },
-      ]);
-      setLinkUrl("");
-      setLinkName("");
-      setShowLinkInput(false);
-    }
-  };
-
-  const handleRemoveAttachment = (id: string) => {
-    setAttachments(attachments.filter((a) => a.id !== id));
   };
 
   return (
-    <ScrollArea className="flex-1 px-6">
-      <div className="space-y-6 pb-6">
-        {/* Rich Text Editor */}
-        <div className="space-y-3">
-          <Label htmlFor="content" className="text-base font-semibold">
-            Content
-          </Label>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("title")}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-          {/* Toolbar */}
-          <div className="bg-muted/30 flex items-center gap-1 rounded-lg border p-2">
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Bold className="h-4 w-4" />
-              <span className="sr-only">Bold</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Italic className="h-4 w-4" />
-              <span className="sr-only">Italic</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Underline className="h-4 w-4" />
-              <span className="sr-only">Underline</span>
-            </Button>
-            <Separator orientation="vertical" className="mx-1 h-6" />
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <List className="h-4 w-4" />
-              <span className="sr-only">Bullet list</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <ListOrdered className="h-4 w-4" />
-              <span className="sr-only">Numbered list</span>
-            </Button>
-            <Separator orientation="vertical" className="mx-1 h-6" />
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <Link2 className="h-4 w-4" />
-              <span className="sr-only">Insert link</span>
-            </Button>
-          </div>
-
-          <Textarea
-            id="content"
-            placeholder="Write your content here... You can use the toolbar above for formatting."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="min-h-[200px] resize-none"
-          />
-        </div>
-
-        {/* Comments Section */}
-        <div className="space-y-3">
-          <Label className="text-base font-semibold">Comments</Label>
-
-          {comments.length > 0 && (
-            <div className="mb-3 space-y-2">
-              {comments.map((comment) => (
-                <div
-                  key={comment.id}
-                  className="bg-muted/50 flex items-start gap-3 rounded-lg border p-3"
-                >
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm">{comment.text}</p>
-                    <p className="text-muted-foreground text-xs">
-                      {comment.timestamp.toLocaleString()}
-                    </p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                    onClick={() => handleRemoveComment(comment.id)}
-                  >
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Remove comment</span>
-                  </Button>
-                </div>
-              ))}
-            </div>
+              <FormMessage />
+            </FormItem>
           )}
+        />
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("content")}</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Saisir le détails du programme..."
+                  className="min-h-[125px] resize-none"
+                  {...field}
+                />
+              </FormControl>
 
-          <div className="flex gap-2">
-            <Textarea
-              placeholder="Add a comment for reviewers..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              className="min-h-[80px] resize-none"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                  handleAddComment();
-                }
-              }}
-            />
-            <Button
-              onClick={handleAddComment}
-              disabled={!newComment.trim()}
-              className="self-end"
-            >
-              <Send className="h-4 w-4" />
-              <span className="sr-only">Add comment</span>
-            </Button>
-          </div>
-          <p className="text-muted-foreground text-xs">
-            Press Cmd/Ctrl + Enter to add comment
-          </p>
-        </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Attachments Section */}
-        <div className="space-y-3">
-          <Label className="text-base font-semibold">Attachments</Label>
-
-          {attachments.length > 0 && (
-            <div className="mb-3 space-y-2">
-              {attachments.map((attachment) => (
-                <div
-                  key={attachment.id}
-                  className="bg-muted/50 flex items-center gap-3 rounded-lg border p-3"
-                >
-                  {attachment.type === "document" ? (
-                    <FileText className="text-muted-foreground h-5 w-5" />
-                  ) : (
-                    <Link2 className="text-muted-foreground h-5 w-5" />
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">
-                      {attachment.name}
-                    </p>
-                    {attachment.url && (
-                      <p className="text-muted-foreground truncate text-xs">
-                        {attachment.url}
-                      </p>
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                    onClick={() => handleRemoveAttachment(attachment.id)}
+        <div className="flex flex-row items-center gap-4">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept="*/*"
+          />
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            type="button"
+            variant="outline"
+            size="icon"
+          >
+            <PaperclipIcon className="h-4 w-4" />
+          </Button>
+          <FormField
+            control={form.control}
+            name="priority"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Select
+                    defaultValue="MEDIUM"
+                    onValueChange={(val) => field.onChange(val)}
                   >
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Remove attachment</span>
-                  </Button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <div className="relative">
-              <Input
-                type="file"
-                multiple
-                onChange={handleFileUpload}
-                className="sr-only"
-                id="file-upload"
-              />
-              <Label htmlFor="file-upload" className="cursor-pointer">
-                <Button variant="outline" asChild>
-                  <span>
-                    <Paperclip className="mr-2 h-4 w-4" />
-                    Attach Files
-                  </span>
-                </Button>
-              </Label>
-            </div>
-
-            <Button
-              variant="outline"
-              onClick={() => setShowLinkInput(!showLinkInput)}
-            >
-              <Link2 className="mr-2 h-4 w-4" />
-              Add Link
-            </Button>
-          </div>
-
-          {showLinkInput && (
-            <div className="bg-muted/30 space-y-2 rounded-lg border p-4">
-              <div className="space-y-2">
-                <Label htmlFor="link-name" className="text-sm">
-                  Link Name
-                </Label>
-                <Input
-                  id="link-name"
-                  placeholder="e.g., Project Documentation"
-                  value={linkName}
-                  onChange={(e) => setLinkName(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="link-url" className="text-sm">
-                  URL
-                </Label>
-                <Input
-                  id="link-url"
-                  type="url"
-                  placeholder="https://example.com"
-                  value={linkUrl}
-                  onChange={(e) => setLinkUrl(e.target.value)}
-                />
-              </div>
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setShowLinkInput(false);
-                    setLinkUrl("");
-                    setLinkName("");
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={handleAddLink}
-                  disabled={!linkUrl.trim() || !linkName.trim()}
-                >
-                  Add Link
-                </Button>
-              </div>
+                    <SelectTrigger className="w-[100px]">
+                      <SelectValue placeholder={t("Priority")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="URGENT">{t("URGENT")}</SelectItem>
+                      <SelectItem value="HIGH">{t("HIGH")}</SelectItem>
+                      <SelectItem value="MEDIUM">{t("MEDIUM")}</SelectItem>
+                      <SelectItem value="LOW">{t("LOW")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {selectedFile && (
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+              <PaperclipIcon className="h-4 w-4" />
+              <span className="max-w-[80%] truncate">{selectedFile.name}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={() => {
+                  setSelectedFile(null);
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
+                }}
+                aria-label="Delete file"
+              >
+                <X className="h-3 w-3" />
+              </Button>
             </div>
           )}
         </div>
-      </div>
-    </ScrollArea>
+        <div className="flex flex-row items-center justify-end gap-4">
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            size={"sm"}
+            variant={"secondary"}
+            type="button"
+          >
+            {t("cancel")}
+          </Button>
+          <Button isLoading={createProgramMutation.isPending} size={"sm"}>
+            {t("submit")}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

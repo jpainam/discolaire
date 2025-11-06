@@ -64,7 +64,7 @@ export const subjectProgramRouter = {
       z.object({
         title: z.string().min(1),
         description: z.string().optional(),
-        priority: z.enum(["MEDIUM", "HIGH", "URGENT"]),
+        priority: z.enum(["MEDIUM", "HIGH", "URGENT", "LOW"]),
         requiredSessionCount: z.number().positive().default(1),
         subjectId: z.coerce.number(),
         termId: z.string(),

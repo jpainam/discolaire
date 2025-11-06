@@ -53,7 +53,7 @@ export default async function Page(props: PageProps) {
           {t("teaching_session")}
         </TabsTrigger>
         <TabsTrigger value="program_coverage">
-          {t("Program coverage")}
+          {t("course_coverage")}
         </TabsTrigger>
         <TabsTrigger value="program">{t("Program")}</TabsTrigger>
       </TabsList>

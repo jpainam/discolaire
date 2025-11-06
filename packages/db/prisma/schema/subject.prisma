@@ -45,6 +45,7 @@ enum PriorityEnum {
     URGENT
     HIGH
     MEDIUM
+    LOW
 }
 
 model SubjectTimetable {

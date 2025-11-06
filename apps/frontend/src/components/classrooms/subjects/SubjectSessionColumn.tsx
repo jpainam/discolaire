@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontal, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -9,6 +10,7 @@ import { Button } from "@repo/ui/components/button";
 import { useModal } from "~/hooks/use-modal";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 import { CreateUpdateSubjectSession } from "./CreateUpdateSubjectSession";
 import {
   BacklogIcon,
@@ -18,19 +20,6 @@ import {
 } from "./statuses";
 import { SubjectSessionCard } from "./SubjectSessionCard";
 
-const getStatusIcon = (term: RouterOutputs["term"]["all"][number]) => {
-  const today = new Date();
-  if (term.startDate < today && term.endDate > today) {
-    return InProgressIcon;
-  }
-  if (term.startDate > today) {
-    return BacklogIcon;
-  }
-  if (term.endDate < today) {
-    return CompletedIcon;
-  }
-  return PausedIcon;
-};
 export function SubjectSessionColumn({
   term,
   subjectId,
@@ -40,16 +29,30 @@ export function SubjectSessionColumn({
   subjectId: number;
   className?: string;
 }) {
-  const StatusIcon = getStatusIcon(term);
+  const getStatusIcon = (term: RouterOutputs["term"]["all"][number]) => {
+    const today = new Date();
+    if (term.startDate < today && term.endDate > today) {
+      return <InProgressIcon />;
+    }
+    if (term.startDate > today) {
+      return <BacklogIcon />;
+    }
+    if (term.endDate < today) {
+      return <CompletedIcon />;
+    }
+    return <PausedIcon />;
+  };
+
   const trpc = useTRPC();
   const programsQuery = useQuery(
     trpc.subjectProgram.programs.queryOptions({ termId: term.id, subjectId }),
   );
+  const subjectQuery = useQuery(trpc.subject.get.queryOptions(subjectId));
   const programs = programsQuery.data;
   const { openModal } = useModal();
-  {
-    /* <div className="flex h-full w-[300px] flex-1 shrink-0 flex-col  lg:w-[360px]"> */
-  }
+  const t = useTranslations();
+  const subject = subjectQuery.data;
+
   return (
     <div className={cn("flex shrink-0 flex-col", className)}>
       <div className="border-border bg-muted/70 dark:bg-muted/50 flex max-h-full flex-col rounded-lg border p-3">
@@ -57,7 +60,7 @@ export function SubjectSessionColumn({
         <div className="mb-2 flex items-center justify-between rounded-lg">
           <div className="flex items-center gap-2">
             <div className="flex size-4 items-center justify-center">
-              <StatusIcon />
+              {getStatusIcon(term)}
             </div>
             <span className="text-sm font-medium">{term.name}</span>
           </div>
@@ -65,9 +68,16 @@ export function SubjectSessionColumn({
             <Button
               onClick={() => {
                 openModal({
-                  className:
-                    "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
-                  view: <CreateUpdateSubjectSession subjectId={subjectId} />,
+                  // className:
+                  //   "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                  title: `Programme ${subject?.course.name}`,
+                  description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
+                  view: (
+                    <CreateUpdateSubjectSession
+                      termId={term.id}
+                      subjectId={subjectId}
+                    />
+                  ),
                 });
               }}
               variant="ghost"
@@ -91,10 +101,23 @@ export function SubjectSessionColumn({
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => {
+              openModal({
+                // className: "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                title: `Programme ${subject?.course.name}`,
+                description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
+                view: (
+                  <CreateUpdateSubjectSession
+                    termId={term.id}
+                    subjectId={subjectId}
+                  />
+                ),
+              });
+            }}
             className="hover:bg-background h-auto gap-2 self-start px-0 py-1 text-xs"
           >
             <Plus className="size-4" />
-            <span>Add task</span>
+            <span>{t("Add program")}</span>
           </Button>
         </div>
       </div>

@@ -30,7 +30,12 @@ export function SubjectSessionBoard({
       ) : (
         <div className={className}>
           {terms.map((t, index) => (
-            <SubjectSessionColumn className={columnClassName} key={index} term={t} subjectId={subjectId} />
+            <SubjectSessionColumn
+              className={columnClassName}
+              key={index}
+              term={t}
+              subjectId={subjectId}
+            />
           ))}
         </div>
       )}
