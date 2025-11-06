@@ -41,6 +41,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { Switch } from "@repo/ui/components/switch";
 import { Textarea } from "@repo/ui/components/textarea";
 
+import { SubjectProgramSelector } from "~/components/shared/selects/SubjectProgramSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -88,6 +89,12 @@ export function SubjectJournalEditor({
     }),
   );
 
+  const [programId, setProgramId] = useQueryState("programId");
+  const [sessionCount, setSessionCount] = useQueryState(
+    "sessionCount",
+    parseAsInteger.withDefault(1),
+  );
+
   const [richText, setRichText] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -118,6 +125,10 @@ export function SubjectJournalEditor({
   const handleSubmit = async (
     data: z.infer<typeof createSubjectJournalSchema>,
   ) => {
+    if (!sessionCount || !programId) {
+      toast.warning("Veuillez choisir le program associé au cahier");
+      return;
+    }
     let attachment = "";
     if (selectedFile) {
       const formData = new FormData();
@@ -150,9 +161,11 @@ export function SubjectJournalEditor({
       subjectId: subjectId,
       status: "PENDING" as const,
       attachment: attachment,
+      programId: programId,
+      sessionCount: sessionCount,
     };
     console.log(values);
-    //createSubjectJournal.mutate(values);
+    createSubjectJournal.mutate(values);
   };
 
   const { openModal } = useModal();
@@ -166,8 +179,8 @@ export function SubjectJournalEditor({
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex w-full flex-1 flex-col gap-2 overflow-y-auto rounded-lg px-4 py-2"
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
+        <div className="flex flex-row items-center gap-8">
+          <div className="flex flex-row items-center gap-1">
             {subjectQuery.isPending ? (
               <Skeleton className="mr-2 h-10 w-10 rounded-full" />
             ) : (
@@ -178,21 +191,42 @@ export function SubjectJournalEditor({
                 {subjectQuery.data?.course.name.substring(0, 2).toUpperCase()}
               </div>
             )}
-            <div className="flex items-center">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input className="w-96" {...field} />
-                    </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input className="w-96" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid flex-1 grid-cols-3 gap-4">
+            <SubjectProgramSelector
+              subjectId={subjectId}
+              onSelectAction={(val) => setProgramId(val)}
+            />
+            <Select
+              onValueChange={(val) =>
+                setSessionCount(val ? parseInt(val) : null)
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={t("Session count")} />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 15 }).map((_, index) => (
+                  <SelectItem key={index} value={index.toString()}>
+                    {index}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex items-center">
             <span className="mr-2 text-sm">{t("Rich text")}</span>

@@ -34,7 +34,7 @@ export const subjectProgramRouter = {
     .input(
       z.object({
         subjectId: z.coerce.number(),
-        termId: z.string(),
+        termId: z.string().optional(),
       }),
     )
     .query(({ ctx, input }) => {
@@ -50,9 +50,14 @@ export const subjectProgramRouter = {
           journals: true,
           createdBy: true,
         },
+        orderBy: {
+          term: {
+            startDate: "asc",
+          },
+        },
         where: {
           subjectId: input.subjectId,
-          termId: input.termId,
+          ...(input.termId ? { termId: input.termId } : {}),
         },
       });
     }),

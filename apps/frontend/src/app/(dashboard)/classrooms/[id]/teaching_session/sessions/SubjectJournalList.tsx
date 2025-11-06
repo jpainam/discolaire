@@ -48,19 +48,19 @@ export function SubjectJournalList({
   const confirm = useConfirm();
 
   const deleteSubjectJournal = useMutation(
-    trpc.teachingSession.delete.mutationOptions({
+    trpc.subjectJournal.delete.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.teachingSession.pathFilter());
+        await queryClient.invalidateQueries(trpc.subjectJournal.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
     }),
   );
 
   const journalsQuery = useQuery(
-    trpc.teachingSession.bySubject.queryOptions({
+    trpc.subjectJournal.bySubject.queryOptions({
       subjectId: subjectId,
       pageIndex,
       pageSize,

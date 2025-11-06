@@ -44,9 +44,9 @@ export function SubjectJournalHeader({
   const queryClient = useQueryClient();
 
   const deleteSubjectJournal = useMutation(
-    trpc.teachingSession.clearAll.mutationOptions({
+    trpc.subjectJournal.clearAll.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.teachingSession.pathFilter());
+        await queryClient.invalidateQueries(trpc.subjectJournal.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
 
