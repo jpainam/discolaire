@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { decode } from "entities";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,15 +22,8 @@ import {
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
-import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
-
-interface Option {
-  label: string;
-  value: string;
-}
 
 interface ClassroomSelectorProps {
   searchPlaceholder?: string;
@@ -41,57 +36,32 @@ interface ClassroomSelectorProps {
 
 export function SubjectSelector({
   searchPlaceholder,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   placeholder,
   className,
   classroomId,
   defaultValue,
   onChange,
 }: ClassroomSelectorProps) {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState(defaultValue);
-  const [items, setItems] = React.useState<Option[]>([]);
-  const { t } = useLocale();
   const trpc = useTRPC();
   const subjectsQuery = useQuery(
     trpc.classroom.subjects.queryOptions(classroomId),
   );
 
-  const subjects = subjectsQuery.data;
-  React.useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(defaultValue);
 
-  React.useEffect(() => {
-    setItems(
-      subjects?.map((it) => ({
-        label: it.course.name,
-        value: it.id.toString(),
-      })) ?? [],
-    );
-  }, [subjects]);
-
-  const handleSearch = (search: string) => {
-    if (!subjects) return;
-    const filteredItems = subjects.filter((it) =>
-      it.course.name.toLowerCase().includes(search.toLowerCase()),
-    );
-    setItems(
-      filteredItems.map((it) => ({
-        label: it.course.name,
-        value: it.id.toString(),
-      })),
-    );
-  };
+  const t = useTranslations();
   if (subjectsQuery.isPending) {
-    return <Skeleton className={cn("h-8 w-full", className)} />;
+    return (
+      <div>
+        <Skeleton className="h-8 w-full" />
+      </div>
+    );
   }
-  if (subjectsQuery.isError) {
-    showErrorToast(subjectsQuery.error);
-    return null;
-  }
-  if (!subjects) return null;
-  const selected = subjects.find((subject) => subject.id.toString() === value);
+
+  const data = subjectsQuery.data ?? [];
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -101,7 +71,9 @@ export function SubjectSelector({
           aria-expanded={open}
           className={cn("w-full justify-between", className)}
         >
-          {selected?.course.name ?? t("Select a subject")}
+          {value
+            ? decode(data.find((d) => d.id === Number(value))?.course.name ?? "")
+            : (placeholder ?? t("Select a subject"))}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -109,19 +81,30 @@ export function SubjectSelector({
         style={{ width: "var(--radix-popover-trigger-width)" }}
         className="w-[300px] p-0"
       >
-        <Command>
+        <Command
+          filter={(value, search) => {
+            const item = value
+              ? data.find((it) => it.id === Number(value))
+              : null;
+            if (
+              item?.course.name.toLowerCase().includes(search.toLowerCase())
+            ) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
           <CommandInput
-            onValueChange={handleSearch}
             placeholder={searchPlaceholder ?? t("search_for_an_option")}
           />
           <CommandList>
             <CommandEmpty>{t("select_an_option")}</CommandEmpty>
             <CommandGroup>
-              {items.map((item) => (
+              {subjectsQuery.data?.map((item) => (
                 <CommandItem
-                  key={item.value}
+                  key={item.id}
                   className="overflow-hidden"
-                  value={item.value}
+                  value={item.id.toString()}
                   onSelect={(currentValue) => {
                     onChange?.(currentValue == value ? null : currentValue);
                     setValue(currentValue === value ? "" : currentValue);
@@ -131,10 +114,10 @@ export function SubjectSelector({
                   <Check
                     className={cn(
                       "h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0",
+                      Number(value) === item.id ? "opacity-100" : "opacity-0",
                     )}
                   />
-                  {item.label}
+                  {decode(item.course.name)}
                 </CommandItem>
               ))}
             </CommandGroup>
