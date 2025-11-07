@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import type { Sidebar } from "@repo/ui/components/sidebar";
 
 import { StudentSidebar } from "~/components/students/StudentSidebar";
-import { MainSidebar } from "~/sidebars/main-sidebar";
+import { MainSidebar } from "~/components/MainSidebar";
 import { AdminSidebar } from "./administration/admin-sidebar";
 //import { TimetableSidebar } from "./timetables/TimetableSidebar";
 import { AiChatSidebar } from "./ai/AiChatSidebar";

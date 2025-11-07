@@ -50,13 +50,12 @@ export function SubjectSessionCard({
   const sum = (a: number[]) => {
     return a.reduce((a, b) => a + b, 0);
   };
-  const StatusIcon = BacklogIcon; //task.status.icon;
   const hasProgress = program.journals.length > 0;
 
-  const sessionDone = sum(program.journals.map((j) => j.sessionCount));
+  const sessionCount = sum(program.journals.map((j) => j.sessionCount));
   const isCompleted =
     program.isCompleted ||
-    (sessionDone == program.requiredSessionCount && hasProgress);
+    (sessionCount >= program.requiredSessionCount && hasProgress);
   const locale = useLocale();
   const t = useTranslations();
   const confirm = useConfirm();
@@ -85,7 +84,11 @@ export function SubjectSessionCard({
         {/* Title with status icon */}
         <div className="mb-2 flex items-center gap-2">
           <div className="bg-muted mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-sm p-1">
-            <StatusIcon />
+            {isCompleted ? (
+              <CheckCircle className="size-4 shrink-0 text-green-500" />
+            ) : (
+              <BacklogIcon />
+            )}
           </div>
           <h3 className="flex-1 text-sm leading-tight font-medium">
             {program.title}
@@ -160,25 +163,15 @@ export function SubjectSessionCard({
           >
             {t(program.priority)}
           </Badge>
+          {isCompleted && (
+            <Badge
+              className="bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400"
+              variant={"secondary"}
+            >
+              {t("completed")}
+            </Badge>
+          )}
         </div>
-
-        {/* Labels */}
-        {/* {task.labels.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {task.labels.map((label) => (
-              <Badge
-                key={label.id}
-                variant="secondary"
-                className={cn(
-                  "px-1.5 py-0.5 text-[10px] font-medium",
-                  label.color,
-                )}
-              >
-                {label.name}
-              </Badge>
-            ))}
-          </div>
-        )} */}
       </div>
 
       {/* Footer with metadata */}
@@ -219,7 +212,9 @@ export function SubjectSessionCard({
                 ) : (
                   <div className="size-3">
                     <CircularProgressbar
-                      value={(sessionDone / program.requiredSessionCount) * 100}
+                      value={
+                        (sessionCount / program.requiredSessionCount) * 100
+                      }
                       strokeWidth={12}
                       styles={buildStyles({
                         pathColor: "#10b981",
@@ -230,7 +225,7 @@ export function SubjectSessionCard({
                   </div>
                 )}
                 <span>
-                  {sessionDone}/{program.requiredSessionCount}
+                  {sessionCount}/{program.requiredSessionCount}
                 </span>
               </div>
             )}

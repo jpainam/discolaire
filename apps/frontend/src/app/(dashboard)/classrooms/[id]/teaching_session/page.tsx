@@ -14,13 +14,13 @@ import {
 
 import { getSession } from "~/auth/server";
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
-import { SubjectSessionBoard } from "~/components/classrooms/subjects/SubjectSessionBoard";
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { SubjectJournalEditor } from "./sessions/SubjectJournalEditor";
 import { SubjectJournalHeader } from "./sessions/SubjectJournalHeader";
 import { SubjectJournalList } from "./sessions/SubjectJournalList";
+import { TeachingSessionCoverage } from "./TeachingSessionCoverage";
 
 const programSchema = {
   subjectId: parseAsInteger,
@@ -107,10 +107,7 @@ export default async function Page(props: PageProps) {
                 </div>
               }
             >
-              <SubjectSessionBoard
-                className="grid grid-cols-3 gap-4 px-4 py-2"
-                subjectId={subjectId}
-              />
+              <TeachingSessionCoverage defaultSubjectId={subjectId} />
             </Suspense>
           </ErrorBoundary>
         )}

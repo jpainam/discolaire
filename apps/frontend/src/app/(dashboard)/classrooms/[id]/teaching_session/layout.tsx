@@ -1,8 +1,14 @@
 import type { SearchParams } from "nuqs/server";
 import type React from "react";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { createLoader, parseAsInteger } from "nuqs/server";
 
+import { Skeleton } from "@repo/ui/components/skeleton";
+
 import { ProgramList } from "~/components/classrooms/programs/ProgramList";
+import { ErrorFallback } from "~/components/error-fallback";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 const programSchema = {
   subjectId: parseAsInteger,
@@ -18,25 +24,28 @@ export default async function Layout(props: PageProps) {
   const params = await props.params;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const searchParams = await programSearchParamsLoader(props.searchParams);
-  //const t = await getTranslations();
-  // if (!searchParams.subjectId) {
-  //   const queryClient = getQueryClient();
-  //   const subjects = await queryClient.fetchQuery(
-  //     trpc.classroom.subjects.queryOptions(params.id),
-  //   );
-  //   const subjectId = subjects[0]?.id;
-  //   if (!subjectId) {
-  //     return <EmptyState title={t("no_data")} />;
-  //   }
-  //   redirect(`/classrooms/${params.id}/programs?subjectId=${subjectId}`);
-  // }
+  batchPrefetch([trpc.classroom.subjects.queryOptions(params.id)]);
 
   const { id } = params;
 
   return (
-    <div className="flex flex-col md:flex-row">
-      <ProgramList classroomId={id} />
-      <div className="flex-1">{props.children}</div>
-    </div>
+    <HydrateClient>
+      <div className="flex flex-col md:flex-row">
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="flex w-[350px] flex-col gap-2 p-2">
+                {Array.from({ length: 16 }).map((_, index) => (
+                  <Skeleton key={index} className="h-8 w-full" />
+                ))}
+              </div>
+            }
+          >
+            <ProgramList classroomId={id} />
+          </Suspense>
+        </ErrorBoundary>
+        <div className="flex-1">{props.children}</div>
+      </div>
+    </HydrateClient>
   );
 }

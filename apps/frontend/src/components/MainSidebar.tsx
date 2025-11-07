@@ -1,23 +1,22 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import type React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  RiAdminLine,
-  RiBrainLine,
-  RiLeafLine,
-  RiScanLine,
-  RiSettings3Line,
-  RiUserFollowLine,
-} from "@remixicon/react";
-import {
+  BrainIcon,
+  BrickWall,
   CalendarDays,
+  CogIcon,
+  ContactIcon,
   FolderOpen,
   HelpCircleIcon,
   HouseIcon,
+  InfoIcon,
   LibraryBigIcon,
   Users,
+  WrenchIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -47,12 +46,14 @@ import { PermissionAction } from "~/permissions";
 export function MainSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const data = [
+  const home = [
     {
       name: "dashboard",
       url: `/`,
-      icon: RiScanLine,
+      icon: BrickWall,
     },
+  ];
+  const data = [
     {
       name: "students",
       url: `/students`,
@@ -65,34 +66,32 @@ export function MainSidebar({
       icon: HouseIcon,
     },
   ];
+  const tools = [
+    {
+      name: "timetables",
+      url: `/timetables`,
+      icon: CalendarDays,
+    },
+  ];
   const { data: session } = authClient.useSession();
   if (session?.user.profile == "staff") {
-    data.push(
-      ...[
-        {
-          name: "staffs",
-          url: `/staffs`,
-          icon: FolderOpen,
-        },
-        {
-          name: "timetables",
-          url: `/timetables`,
-          icon: CalendarDays,
-        },
-      ],
-    );
+    data.push({
+      name: "staffs",
+      url: `/staffs`,
+      icon: FolderOpen,
+    });
   }
   data.push({
     name: "parents",
     url: `/contacts`,
-    icon: RiUserFollowLine,
+    icon: ContactIcon,
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
     PermissionAction.READ,
   );
   if (canReadLibrary) {
-    data.push({
+    tools.push({
       name: "library",
       url: `/library`,
       icon: LibraryBigIcon,
@@ -106,32 +105,32 @@ export function MainSidebar({
     data.push({
       name: "administration",
       url: `/administration`,
-      icon: RiAdminLine,
+      icon: WrenchIcon,
     });
   }
 
-  data.push({
+  tools.push({
     name: "ai",
     url: `/ai`,
-    icon: RiBrainLine,
+    icon: BrainIcon,
   });
 
   const others = [
     {
       name: "settings",
       url: `/users/${session?.user.id}/settings`,
-      icon: RiSettings3Line,
+      icon: CogIcon,
     },
     {
       name: "help_center",
       url: `https://docs.discolaire.com`,
-      icon: RiLeafLine,
+      icon: InfoIcon,
     },
   ];
 
-  //const { t } = useLocale();
+  const menus = { home, data, others, tools };
+
   const t = useTranslations();
-  const pathname = usePathname();
 
   const { openModal } = useModal();
   return (
@@ -140,55 +139,11 @@ export function MainSidebar({
         <SidebarLogo />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarMenu>
-            {data.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton
-                  //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
-                  //className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-                  asChild
-                  tooltip={t(item.name)}
-                  isActive={pathname == item.url}
-                >
-                  <Link href={item.url}>
-                    <item.icon
-                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                    //size={22}
-                    //aria-hidden="true"
-                    />
-                    <span>{t(item.name)}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>{t("others")}</SidebarGroupLabel>
-          {/* <SidebarGroupContent> */}
-          <SidebarMenu>
-            {others.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={t(item.name)}
-                  isActive={pathname === item.url}
-                >
-                  <Link href={item.url}>
-                    <item.icon
-                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                    //size={22}
-                    //aria-hidden="true"
-                    />
-                    <span>{t(item.name)}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-          {/* </SidebarGroupContent> */}
-        </SidebarGroup>
+        <MenuSideGroup items={menus.home} label={t("home")} />
+        <MenuSideGroup items={menus.data} label={t("Data")} />
+        <MenuSideGroup items={menus.tools} label={t("tools")} />
+        <MenuSideGroup items={menus.others} label={t("others")} />
+
         <SidebarGroup className="mt-auto md:hidden">
           <SidebarGroupContent>
             <SidebarMenu>
@@ -221,5 +176,37 @@ export function MainSidebar({
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+function MenuSideGroup({
+  items,
+  label,
+}: {
+  items: { name: string; url: string; icon: LucideIcon }[];
+  label: string;
+}) {
+  const t = useTranslations();
+  const pathname = usePathname();
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>
+      <SidebarMenu>
+        {items.map((item) => (
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton
+              asChild
+              tooltip={t(item.name)}
+              isActive={pathname === item.url}
+            >
+              <Link href={item.url}>
+                <item.icon />
+                <span>{t(item.name)}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
   );
 }

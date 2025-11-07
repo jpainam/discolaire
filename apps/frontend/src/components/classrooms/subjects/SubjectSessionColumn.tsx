@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { MoreHorizontal, Plus } from "lucide-react";
+import { Loader2Icon, MoreHorizontal, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
@@ -94,6 +94,13 @@ export function SubjectSessionColumn({
 
         {/* Tasks list */}
         <div className="flex h-full flex-col gap-3 overflow-y-auto">
+          {programsQuery.isPending && (
+            <div className="flex justify-center">
+              {Array.from({ length: 1 }).map((_, index) => (
+                <Loader2Icon key={index} className="h-5 w-5 animate-spin" />
+              ))}
+            </div>
+          )}
           {programs?.map((program, index) => (
             <SubjectSessionCard key={index} program={program} />
           ))}

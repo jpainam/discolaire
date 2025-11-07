@@ -25,6 +25,7 @@ import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 
 export function SubjectJournalHeader({
   defaultSubjectId,
@@ -69,8 +70,7 @@ export function SubjectJournalHeader({
           className="text-sm leading-none font-medium hover:underline"
           href={`/staffs/${subject?.teacherId}`}
         >
-          {subject?.teacher?.prefix} {subject?.teacher?.lastName}{" "}
-          {subject?.teacher?.firstName}
+          {subject?.teacher?.prefix} {getFullName(subject?.teacher)}
         </Link>
       )}
       {subjectQuery.isPending ? (
