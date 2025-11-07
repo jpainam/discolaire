@@ -2,6 +2,8 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
 
+import { getSubdomainFromHost } from "./lib/tenant";
+
 export const config = {
   //runtime: "nodejs",
   matcher: [
@@ -23,9 +25,17 @@ const unProtectedRoutes = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  const host = request.headers.get("host");
+  const tenant = getSubdomainFromHost(host);
+
+  const requestHeaders = new Headers(request.headers);
+  if (tenant) requestHeaders.set("x-tenant", tenant);
+
   // allow auth routes
   if (pathname.startsWith("/auth")) {
-    return NextResponse.next();
+    return NextResponse.next({
+      request: { headers: requestHeaders },
+    });
   }
 
   const isProtectedRoute = !unProtectedRoutes.some((route) =>
@@ -39,7 +49,11 @@ export async function middleware(request: NextRequest) {
   // });
 
   if (isProtectedRoute && (!schoolYearId || !session)) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+    const res = NextResponse.redirect(new URL("/auth/login", request.url));
+    res.headers.set("x-tenant", tenant);
+    return res;
   }
-  return NextResponse.next();
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 }

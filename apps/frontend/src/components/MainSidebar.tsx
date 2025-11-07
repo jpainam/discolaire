@@ -164,7 +164,7 @@ export function MainSidebar({
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Shortcut />
+                  {/* <Shortcut /> */}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
