@@ -36,7 +36,6 @@ import {
 
 import { authClient } from "~/auth/client";
 import { FeedBackDialog } from "~/components/FeedbackDialog";
-import { Shortcut } from "~/components/shortcuts/Shortcut";
 import { SidebarLogo } from "~/components/sidebar-logo";
 import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";
@@ -139,10 +138,10 @@ export function MainSidebar({
         <SidebarLogo />
       </SidebarHeader>
       <SidebarContent>
-        <MenuSideGroup items={menus.home} label={t("home")} />
-        <MenuSideGroup items={menus.data} label={t("Data")} />
-        <MenuSideGroup items={menus.tools} label={t("tools")} />
-        <MenuSideGroup items={menus.others} label={t("others")} />
+        <MenuSideGroup items={menus.home} label={"home"} />
+        <MenuSideGroup items={menus.data} label={"Data"} />
+        <MenuSideGroup items={menus.tools} label={"tools"} />
+        <MenuSideGroup items={menus.others} label={"others"} />
 
         <SidebarGroup className="mt-auto md:hidden">
           <SidebarGroupContent>

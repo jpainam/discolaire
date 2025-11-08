@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
@@ -31,7 +32,6 @@ import {
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 
-import { DateTimePicker } from "~/components/shared/date-time-picker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
@@ -367,18 +367,7 @@ export default function EventForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Start date</FormLabel>
-              <FormControl>
-                <DateTimePicker
-                  placeholder="Event Start Date"
-                  className="mt-1"
-                  onChange={(date) => {
-                    //setValue("startDate", date);
-                    field.onChange(date);
-                    clearErrors("startDate");
-                  }}
-                  defaultValue={watchedStartDate}
-                />
-              </FormControl>
+              <FormControl></FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -390,18 +379,7 @@ export default function EventForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>End date</FormLabel>
-              <FormControl>
-                <DateTimePicker
-                  placeholder="Event End Date"
-                  className="mt-1"
-                  onChange={(date) => {
-                    field.onChange(date);
-                    //setValue("endDate", date);
-                    clearErrors("endDate");
-                  }}
-                  defaultValue={watchedEndDate}
-                />
-              </FormControl>
+              <FormControl></FormControl>
               <FormMessage />
             </FormItem>
           )}

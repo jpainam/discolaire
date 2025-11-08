@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
-import DateRangePicker from "~/components/date-range-picker";
+import { DateRangePicker } from "~/components/DateRangePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";

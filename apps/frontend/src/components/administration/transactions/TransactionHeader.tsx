@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import DateRangePicker from "~/components/date-range-picker";
+import { DateRangePicker } from "~/components/DateRangePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";

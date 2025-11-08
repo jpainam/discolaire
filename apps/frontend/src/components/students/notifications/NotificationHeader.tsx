@@ -16,7 +16,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 
-import { DateRangePicker } from "~/components/shared/DateRangePicker";
+import { DateRangePicker } from "~/components/DateRangePicker";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
@@ -45,7 +45,7 @@ export function NotificationHeader() {
         className="h-8 w-full md:w-[300px]"
       />
       <DateRangePicker
-        onChange={(dateRange: DateRange | undefined) => {
+        onSelectAction={(dateRange: DateRange | undefined) => {
           const to = dateRange?.to?.toISOString();
           const from = dateRange?.from?.toISOString();
           router.push(

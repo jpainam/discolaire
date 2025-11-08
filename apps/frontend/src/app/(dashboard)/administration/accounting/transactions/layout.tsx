@@ -32,7 +32,11 @@ export default function Layout({ children }: PropsWithChildren) {
           </div>
           {children}
         </div>
-        <TransactionSummaryPerDay />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense>
+            <TransactionSummaryPerDay />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </HydrateClient>
   );

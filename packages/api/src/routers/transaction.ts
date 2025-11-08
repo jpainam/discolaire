@@ -10,7 +10,6 @@ import { classroomService } from "../services/classroom-service";
 import {
   getLastDaysDailySummary,
   getTransactionStats,
-  getTransactionSummary,
   getTransactionTrends,
   transactionService,
 } from "../services/transaction-service";
@@ -412,21 +411,6 @@ export const transactionRouter = {
       });
     }),
 
-  getTransactionSummary: protectedProcedure
-    .input(
-      z.object({
-        from: z.coerce.date().optional().default(subMonths(new Date(), 1)),
-        to: z.coerce.date().optional().default(new Date()),
-      }),
-    )
-    .query(async ({ input, ctx }) => {
-      return getTransactionSummary({
-        from: input.from,
-        to: input.to,
-        schoolYearId: ctx.schoolYearId,
-        schoolId: ctx.schoolId,
-      });
-    }),
   getLastDaysDailySummary: protectedProcedure
     .input(z.object({ number_of_days: z.coerce.number().default(60) }))
     .query(({ ctx, input }) => {

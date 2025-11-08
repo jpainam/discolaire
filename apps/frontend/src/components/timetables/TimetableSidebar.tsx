@@ -4,23 +4,17 @@ import type * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-  SidebarSeparator,
-} from "@repo/ui/components/sidebar";
+
+
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail, SidebarSeparator } from "@repo/ui/components/sidebar";
+
+
 
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 import { Calendars } from "./calendars";
-import { DatePicker } from "./date-picker";
+import { Calendar } from "@repo/ui/components/calendar";
+
 
 // This is sample data.
 const data = {
@@ -67,7 +61,11 @@ export function TimetableSidebar({
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <DatePicker />
+        <SidebarGroup className="pr-0 pl-2">
+          <SidebarGroupContent>
+            <Calendar className="[&_[role=gridcell].bg-accent]:bg-sidebar-primary [&_[role=gridcell].bg-accent]:text-sidebar-primary-foreground [&_[role=gridcell]]:w-[32px]" />
+          </SidebarGroupContent>
+        </SidebarGroup>
         <SidebarSeparator className="mx-0" />
         <Calendars calendars={data.calendars} />
       </SidebarContent>

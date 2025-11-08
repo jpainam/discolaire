@@ -14,11 +14,12 @@ import {
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 
-import { DatePicker } from "~/components/shared/date-picker";
+
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
+import { DatePicker } from "~/components/DatePicker";
 
 export default function SendNotificationDialog() {
   const { closeModal } = useModal();

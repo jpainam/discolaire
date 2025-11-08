@@ -15,12 +15,12 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
+import { DateRangePicker } from "~/components/DateRangePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
-import { DateRangePicker } from "../../shared/DateRangePicker";
 import { AnnouncementSummary } from "./AnnouncementSummary";
 
 interface DateRange {
@@ -64,11 +64,9 @@ export function AnnouncementHeader() {
     <div className="flex items-center gap-2 px-2 py-2">
       <Label>{t("date")}</Label>
       <DateRangePicker
-        onChange={handleDateRangeChange}
-        from={from ? new Date(from) : undefined}
-        to={to ? new Date(to) : undefined}
+        onSelectAction={handleDateRangeChange}
+        //defaultValue={from: from ? new Date(from) : undefined, to: to ? new Date(to) : undefined}
       />
-      
 
       <AnnouncementSummary />
       <div className="ml-auto flex">

@@ -1,11 +1,9 @@
 "use client";
 
-import { subDays } from "date-fns";
-
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
-import { DateRangePicker } from "~/components/shared/DateRangePicker";
+import { DateRangePicker } from "~/components/DateRangePicker";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
@@ -20,7 +18,7 @@ export function SMSHistoryHeader() {
   return (
     <div className="flex flex-row items-center gap-2">
       <Label>{t("date")}</Label>
-      <DateRangePicker from={subDays(d, 20)} to={d} />
+      <DateRangePicker />
       {/* <StatusSelector
         onChange={(val) => {
           setStatus(val);

@@ -25,6 +25,9 @@ export default async function Page(props: PageProps) {
     //   classroomId: searchParams.classroomId ?? undefined,
     //   journalId: searchParams.journalId ?? undefined,
     // }),
+    trpc.transaction.getLastDaysDailySummary.queryOptions({
+      number_of_days: 60,
+    }),
     trpc.transaction.stats.queryOptions({
       from: searchParams.from ? new Date(searchParams.from) : null,
       to: searchParams.to ? new Date(searchParams.to) : null,

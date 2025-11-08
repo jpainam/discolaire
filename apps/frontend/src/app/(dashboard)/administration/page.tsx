@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 //import { ClassroomStatistics } from "~/components/administration/ClassroomStatistics";
 //import { RecentActivities } from "~/components/administration/RecentActivities";
-import { addMonths, subMonths } from "date-fns";
 import { getTranslations } from "next-intl/server";
 
 import {
@@ -32,10 +31,6 @@ export default async function Page() {
   batchPrefetch([
     trpc.gradeSheet.distribution.queryOptions(),
     trpc.attendance.all.queryOptions({}),
-    trpc.transaction.getTransactionSummary.queryOptions({
-      from: subMonths(new Date(), 3),
-      to: addMonths(new Date(), 1),
-    }),
   ]);
   const queryClient = getQueryClient();
   const count = await queryClient.fetchQuery(

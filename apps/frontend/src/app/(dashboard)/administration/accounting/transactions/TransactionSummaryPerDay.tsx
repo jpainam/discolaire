@@ -1,4 +1,7 @@
-import { getLocale, getTranslations } from "next-intl/server";
+"use client";
+
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   Table,
@@ -10,17 +13,17 @@ import {
 } from "@repo/ui/components/table";
 
 import { CURRENCY } from "~/lib/constants";
-import { getQueryClient, trpc } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 
-export async function TransactionSummaryPerDay() {
-  const queryClient = getQueryClient();
-  const summary = await queryClient.fetchQuery(
+export function TransactionSummaryPerDay() {
+  const trpc = useTRPC();
+  const { data: summary } = useSuspenseQuery(
     trpc.transaction.getLastDaysDailySummary.queryOptions({
       number_of_days: 60,
     }),
   );
-  const t = await getTranslations();
-  const locale = await getLocale();
+  const t = useTranslations();
+  const locale = useLocale();
   return (
     <div className="max-h-[calc(100vh-200px)] border-l">
       <div className="bg-background overflow-hidden">

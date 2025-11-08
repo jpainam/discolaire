@@ -23,7 +23,7 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 
 import { DatePicker } from "~/components/DatePicker";
-import { DateRangePicker } from "~/components/shared/DateRangePicker";
+import { DateRangePicker } from "~/components/DateRangePicker";
 import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
@@ -298,7 +298,7 @@ export function CreateEditAssignment({
                 <FormLabel>{t("due_date")}</FormLabel>
                 <FormControl>
                   <DatePicker
-                    onChange={(val) => field.onChange(val)}
+                    //onChange={(val) => field.onChange(val)}
                     defaultValue={field.value}
                   />
                 </FormControl>
@@ -316,9 +316,7 @@ export function CreateEditAssignment({
                 <FormLabel>{t("visble_from_to")}</FormLabel>
                 <DateRangePicker
                   className="w-full"
-                  from={form.getValues("from")}
-                  to={form.getValues("to")}
-                  onChange={(val) => {
+                  onSelectAction={(val) => {
                     if (val) {
                       const dateRange = val as { from: Date; to: Date };
                       form.setValue("from", dateRange.from);
