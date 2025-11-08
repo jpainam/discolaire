@@ -80,7 +80,7 @@ export function ScheduleCard({ className }: { className?: string }) {
         <CardAction>
           <DatePicker
             defaultValue={new Date()}
-            onChange={(e) => {
+            onSelectAction={(e) => {
               console.log(e);
             }}
           />
