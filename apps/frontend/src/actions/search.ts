@@ -7,11 +7,11 @@ export async function searchStudents({
   classroomId,
 }: {
   q?: string;
-  classroomId?: string;
+  classroomId: string | null;
 }) {
   return caller.student.search({
     query: q,
-    classroomId: classroomId,
+    classroomId: classroomId ?? undefined,
     limit: 10,
   });
 }

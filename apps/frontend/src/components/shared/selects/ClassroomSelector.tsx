@@ -24,7 +24,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 interface Props {
-  defaultValue: string;
+  defaultValue?: string;
   className?: string;
   disabled?: boolean;
   onSelect?: (classroomId: string | null) => void;

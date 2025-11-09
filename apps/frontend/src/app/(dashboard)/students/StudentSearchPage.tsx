@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 import { StudentStatus } from "@repo/db/enums";
@@ -22,7 +23,8 @@ import { StudentSearchResultCard } from "./StudentSearchResultCard";
 
 export function StudentSearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedClassroom, setSelectedClassroom] = useState("");
+  const [selectedClassroom, setSelectedClassroom] =
+    useQueryState("classroomId");
 
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [searchResults, setSearchResults] = useState<
@@ -73,9 +75,9 @@ export function StudentSearchPage() {
           <div className="grid max-w-4xl grid-cols-1 gap-4 lg:grid-cols-3">
             <ClassroomSelector
               className="w-full"
-              defaultValue={selectedClassroom}
+              defaultValue={selectedClassroom ?? undefined}
               onSelect={(val) => {
-                setSelectedClassroom(val);
+                void setSelectedClassroom(val);
               }}
             />
 
