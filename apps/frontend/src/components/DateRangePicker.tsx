@@ -73,10 +73,35 @@ export function DateRangePicker({
           //className="rounded-lg border shadow-sm"
           onSelect={(daterange) => {
             setDateRange(daterange);
-            setOpen(false);
-            onSelectAction?.(daterange);
           }}
         />
+        <div className="flex flex-row items-center justify-end px-4 pb-2">
+          {/* <Button size={"sm"} variant={"secondary"}>
+            {dateRange?.from?.toLocaleDateString(locale, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </Button>
+          <Button size={"sm"} variant={"secondary"}>
+            {dateRange?.to?.toLocaleDateString(locale, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </Button> */}
+
+          <Button
+            onClick={() => {
+              setOpen(false);
+              onSelectAction?.(dateRange);
+            }}
+            size={"sm"}
+            variant={"outline"}
+          >
+            OK
+          </Button>
+        </div>
       </PopoverContent>
     </Popover>
   );

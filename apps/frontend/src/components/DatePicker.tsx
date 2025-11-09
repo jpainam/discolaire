@@ -58,6 +58,7 @@ export function DatePicker({
           mode="single"
           //defaultMonth={today.getMonth()}
           selected={date}
+          endMonth={new Date(2050, 0)}
           locale={locale == "fr" ? fr : locale == "en" ? enUS : es}
           captionLayout="dropdown"
           timeZone={timeZone}
