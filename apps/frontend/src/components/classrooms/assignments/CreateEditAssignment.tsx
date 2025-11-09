@@ -54,8 +54,8 @@ const assignmentSchema = z.object({
   notify: z.boolean(),
   subjectId: z.coerce.number(),
   attachments: z.array(z.string()).optional(),
-  from: z.coerce.date(),
-  to: z.coerce.date(),
+  from: z.date(),
+  to: z.date(),
 
   visibles: z.array(z.string()).default([]),
 });
@@ -298,7 +298,7 @@ export function CreateEditAssignment({
                 <FormLabel>{t("due_date")}</FormLabel>
                 <FormControl>
                   <DatePicker
-                    //onChange={(val) => field.onChange(val)}
+                    onSelectAction={field.onChange}
                     defaultValue={field.value}
                   />
                 </FormControl>

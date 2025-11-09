@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useId, useState } from "react";
 import { CalendarIcon } from "lucide-react";
 import { useLocale } from "next-intl";
 import { enUS, es, fr } from "react-day-picker/locale";
 
-import { Button } from "@repo/ui/components//button";
+import { Button } from "@repo/ui/components/button";
 import { Calendar } from "@repo/ui/components/calendar";
 import {
   Popover,
@@ -24,15 +24,16 @@ export function DatePicker({
   defaultValue: Date | undefined;
   onSelectAction?: (val: Date | undefined) => void;
 }) {
-  const [timeZone, setTimeZone] = React.useState<string | undefined>(undefined);
-  const [open, setOpen] = React.useState(false);
+  const [timeZone, setTimeZone] = useState<string | undefined>(undefined);
+  const [open, setOpen] = useState(false);
   //const [today] = React.useState(() => new Date())
   const locale = useLocale();
-  const [date, setDate] = React.useState<Date | undefined>(defaultValue);
-  React.useEffect(() => {
+  const [date, setDate] = useState<Date | undefined>(defaultValue);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
   }, []);
-  const id = React.useId();
+  const id = useId();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
