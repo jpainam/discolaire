@@ -20,7 +20,7 @@ export function AccountingJournalSelector({
   defaultValue,
   className,
 }: {
-  onChange?: (value: string) => void;
+  onChange?: (value: string | null) => void;
   defaultValue?: string;
   className?: string;
 }) {
@@ -28,11 +28,17 @@ export function AccountingJournalSelector({
   const trpc = useTRPC();
   const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
   return (
-    <Select onValueChange={onChange} defaultValue={defaultValue}>
+    <Select
+      onValueChange={(val) => {
+        onChange?.(val == "all" ? null : val);
+      }}
+      defaultValue={defaultValue}
+    >
       <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder={t("Accounting Journals")} />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value="all">{t("all")}</SelectItem>
         {journalQuery.isPending ? (
           <SelectItem value="loading" disabled>
             <Loader2 className="h-4 w-4 animate-spin" />

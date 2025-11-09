@@ -27,7 +27,7 @@ interface Props {
   defaultValue: string;
   className?: string;
   disabled?: boolean;
-  onSelect?: (classroomId: string) => void;
+  onSelect?: (classroomId: string | null) => void;
 }
 
 export function ClassroomSelector({
@@ -96,7 +96,7 @@ export function ClassroomSelector({
                   value={classroom.id}
                   onSelect={() => {
                     setValue(classroom.id === value ? "" : classroom.id);
-                    onSelect?.(classroom.id === value ? "" : classroom.id);
+                    onSelect?.(classroom.id === value ? null : classroom.id);
                     setOpen(false);
                   }}
                 >

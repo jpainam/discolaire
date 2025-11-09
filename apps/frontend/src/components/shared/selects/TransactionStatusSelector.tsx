@@ -1,3 +1,5 @@
+"use client";
+
 import { AlarmClock, AlarmClockCheck, AlarmClockMinus } from "lucide-react";
 
 import {
@@ -16,7 +18,7 @@ export function TransactionStatusSelector({
   className,
   placeholder,
 }: {
-  onChange?: (value?: string) => void;
+  onChange?: (value: string | null) => void;
   className?: string;
   placeholder?: string;
 }) {
@@ -24,7 +26,7 @@ export function TransactionStatusSelector({
   return (
     <Select
       onValueChange={(val) => {
-        onChange?.(val == "all" ? undefined : val);
+        onChange?.(val == "all" ? null : val);
       }}
     >
       <SelectTrigger className={cn("w-[280px]", className)}>
