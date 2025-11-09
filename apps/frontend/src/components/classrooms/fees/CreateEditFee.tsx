@@ -139,7 +139,7 @@ export function CreateEditFee({
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
-                  onChange={(val) => field.onChange(val)}
+                  onSelectAction={(val) => field.onChange(val)}
                 />
               </FormControl>
               <FormMessage />

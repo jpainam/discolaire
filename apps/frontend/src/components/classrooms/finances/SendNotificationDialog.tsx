@@ -14,12 +14,10 @@ import {
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 
-
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
-import { DatePicker } from "~/components/DatePicker";
 
 export default function SendNotificationDialog() {
   const { closeModal } = useModal();
@@ -62,7 +60,7 @@ export default function SendNotificationDialog() {
           <div className="space-y-2">
             <Label htmlFor="custom-date">Date</Label>
 
-            <DatePicker />
+            {/* <DatePicker /> */}
           </div>
         </div>
         <div className="space-y-2">

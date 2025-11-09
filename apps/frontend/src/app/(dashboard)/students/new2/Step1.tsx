@@ -88,7 +88,7 @@ export function Step1() {
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
-                  onChange={field.onChange}
+                  onSelectAction={field.onChange}
                 />
               </FormControl>
               <FormMessage />

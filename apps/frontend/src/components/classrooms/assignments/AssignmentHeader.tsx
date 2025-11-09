@@ -62,8 +62,8 @@ export function AssignmentHeader() {
             <DatePicker
               defaultValue={from ? new Date(from) : undefined}
               className="w-56"
-              onChange={(val) => {
-                void setFrom(val);
+              onSelectAction={(val) => {
+                void setFrom(val ?? null);
               }}
             />
           </div>
@@ -72,8 +72,8 @@ export function AssignmentHeader() {
             <DatePicker
               defaultValue={to ? new Date(to) : undefined}
               className="w-56"
-              onChange={(val) => {
-                void setTo(val);
+              onSelectAction={(val) => {
+                void setTo(val ?? null);
               }}
             />
           </div>

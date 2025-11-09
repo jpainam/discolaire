@@ -56,7 +56,8 @@ export function StockMovementHeader() {
       <div className="flex items-center gap-1">
         <Label>{t("from")}</Label>
         <DatePicker
-          onChange={(val) => {
+          defaultValue={undefined}
+          onSelectAction={(val) => {
             router.push(
               `?${createQueryString({ from: val?.toLocaleDateString() })}`,
             );
@@ -66,7 +67,8 @@ export function StockMovementHeader() {
       <div className="flex items-center gap-1">
         <Label>{t("to")}</Label>
         <DatePicker
-          onChange={(val) => {
+          defaultValue={undefined}
+          onSelectAction={(val) => {
             router.push(
               `?${createQueryString({ to: val?.toLocaleDateString() })}`,
             );

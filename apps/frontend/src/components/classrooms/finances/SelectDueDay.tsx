@@ -28,8 +28,8 @@ export function SelectDueDate({
     <div className="flex flex-col gap-2">
       <DatePicker
         defaultValue={date ?? undefined}
-        onChange={(val) => {
-          setDate(val);
+        onSelectAction={(val) => {
+          setDate(val ?? null);
         }}
       />
       <div className="flex justify-end">

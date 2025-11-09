@@ -187,7 +187,7 @@ export function CreateEditAnnouncement({
                     <DatePicker
                       className="mt-1"
                       defaultValue={field.value}
-                      onChange={(e) => field.onChange(e)}
+                      onSelectAction={(e) => field.onChange(e)}
                     />
                   </FormControl>
                   <FormMessage />
