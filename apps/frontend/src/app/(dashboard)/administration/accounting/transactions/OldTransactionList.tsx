@@ -9,7 +9,7 @@ import {
 
 import { missing_transactions } from "~/actions/miss_transaction";
 
-export default function Page() {
+export function OldTransactionList() {
   const userMappings: Record<string, string> = {
     "162": "TINGO NDOUMBE VALANTINE",
     "77": "KOUNGOU TSOGO Jeanne Marie",

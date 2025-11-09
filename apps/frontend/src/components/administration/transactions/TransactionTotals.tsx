@@ -1,50 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import Link from "next/link";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useQueryStates } from "nuqs";
+import type { RouterOutputs } from "@repo/api";
 
 import ContainersIcon from "~/components/icons/containers";
 import ExpenseIcon from "~/components/icons/expenses";
 import RevenueUpIcon from "~/components/icons/revenue-up";
 import SalesIcon from "~/components/icons/sales";
-import { SkeletonLineGroup } from "~/components/skeletons/data-table";
-import { routes } from "~/configs/routes";
 import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
-import { useTRPC } from "~/trpc/react";
-import { transactionSearchParamsSchema } from "~/utils/search-params";
 
-export function TransactionTotals() {
+export function TransactionTotals({
+  stats,
+}: {
+  stats: RouterOutputs["transaction"]["stats"];
+}) {
   const { t } = useLocale();
 
-  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
-  const trpc = useTRPC();
-  const { data: stats, isPending } = useSuspenseQuery(
-    trpc.transaction.stats.queryOptions({
-      from: searchParams.from,
-      to: searchParams.to,
-      classroomId: searchParams.classroomId,
-      journalId: searchParams.journalId,
-    }),
-  );
-
-  if (isPending) {
-    return (
-      <SkeletonLineGroup
-        skeletonClassName="h-16 rounded-md w-full"
-        columns={4}
-        className="grid grid-cols-4 gap-2 p-2"
-      />
-    );
-  }
-
   const percentage = 4;
-  if (!stats) {
-    return <div></div>;
-  }
+
   return (
     <div className="mt-2 grid w-full grid-cols-1 gap-4 py-1 text-sm md:grid-cols-3 lg:grid-cols-4">
       {/* <TransactionStatCard
@@ -75,15 +49,14 @@ export function TransactionTotals() {
         percentage={percentage}
         subtitle={t("sinceLastMonth")}
       />
-      <Link href={routes.administration.deleteTransactions}>
-        <TransactionStatCard
-          title={t("deleted")}
-          icon={<ContainersIcon className="h-[45px] w-[45px]" />}
-          totalFee={stats.totalDeleted}
-          percentage={percentage}
-          subtitle={t("sinceLastMonth")}
-        />
-      </Link>
+
+      <TransactionStatCard
+        title={t("deleted")}
+        icon={<ContainersIcon className="h-[45px] w-[45px]" />}
+        totalFee={stats.totalDeleted}
+        percentage={percentage}
+        subtitle={t("sinceLastMonth")}
+      />
     </div>
   );
 }

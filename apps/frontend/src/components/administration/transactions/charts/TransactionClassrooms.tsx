@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import _ from "lodash";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
@@ -15,16 +14,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useLocale } from "~/i18n";
-import { useTRPC } from "~/trpc/react";
 
-type TransactionQuotaProcedureOutput = NonNullable<
-  RouterOutputs["transaction"]["quotas"]
->;
-
-export function TransactionClassrooms() {
+export function TransactionClassrooms({
+  quotas,
+}: {
+  quotas: RouterOutputs["transaction"]["quotas"];
+}) {
   const { t } = useLocale();
   const chartConfig = useMemo(() => {
     return {
@@ -43,31 +40,9 @@ export function TransactionClassrooms() {
     } satisfies ChartConfig;
   }, [t]);
 
-  const trpc = useTRPC();
-  const transactionsQuotaQuery = useQuery(
-    trpc.transaction.quotas.queryOptions(),
-  );
-
   const filteredData = useMemo(() => {
-    if (!transactionsQuotaQuery.data) return [];
-    const transactions = transactionsQuotaQuery.data;
-    return _.chunk(transactions, Math.ceil(transactions.length / 4));
-  }, [transactionsQuotaQuery.data]);
-
-  if (transactionsQuotaQuery.isPending) {
-    return (
-      <div className="flex w-full flex-col">
-        <div className="flex w-full flex-row gap-4">
-          <Skeleton className="h-[200px] w-1/3" />
-          <Skeleton className="h-[200px] w-2/3" />
-        </div>
-        <div className="flex w-full flex-row gap-4">
-          <Skeleton className="h-[200px] w-1/3" />
-          <Skeleton className="h-[200px] w-2/3" />
-        </div>
-      </div>
-    );
-  }
+    return _.chunk(quotas, Math.ceil(quotas.length / 4));
+  }, [quotas]);
 
   return (
     <div className="grid items-end gap-8 md:grid-cols-1">

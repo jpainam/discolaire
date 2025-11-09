@@ -1,31 +1,34 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
+import { useQueryStates } from "nuqs";
+
 import { DiscountDataTable } from "~/components/administration/transactions/DiscountDataTable";
 import FlatBadge from "~/components/FlatBadge";
-import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
-import { caller } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
+import { transactionSearchParamsSchema } from "~/utils/search-params";
 
-export default async function Page(props: {
-  searchParams: Promise<{
-    from?: string;
-    to?: string;
-    status?: string;
-    classroom?: string;
-    journalId?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const { t, i18n } = await getServerTranslations();
+export function TransactionDiscount() {
+  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
+  const locale = useLocale();
+  const trpc = useTRPC();
+  const t = useTranslations();
 
-  const transactions = await caller.transaction.all({
-    status: searchParams.status,
-    from: searchParams.from ? new Date(searchParams.from) : undefined,
-    to: searchParams.to ? new Date(searchParams.to) : undefined,
-    classroomId: searchParams.classroom,
-    journalId: searchParams.journalId,
-    transactionType: "DISCOUNT",
-  });
+  const transactionsQuery = useQuery(
+    trpc.transaction.all.queryOptions({
+      status: searchParams.status ?? undefined,
+      from: searchParams.from,
+      to: searchParams.to,
+      classroomId: searchParams.classroomId ?? undefined,
+      journalId: searchParams.journalId ?? undefined,
+      transactionType: "DISCOUNT",
+    }),
+  );
 
-  const moneyFormatter = new Intl.NumberFormat(i18n.language, {
+  const transactions = transactionsQuery.data ?? [];
+  const moneyFormatter = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: CURRENCY,
     maximumFractionDigits: 0,
@@ -47,7 +50,7 @@ export default async function Page(props: {
   );
 
   return (
-    <div className="flex flex-col px-4">
+    <div className="flex flex-col">
       <div className="grid flex-row items-center gap-4 py-2 md:flex">
         <FlatBadge variant={"indigo"}>
           {t("totals")} : {moneyFormatter.format(totals)}

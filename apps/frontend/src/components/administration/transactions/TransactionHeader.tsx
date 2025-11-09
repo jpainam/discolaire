@@ -1,7 +1,6 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
 import { MoreVertical } from "lucide-react";
 import { useQueryStates } from "nuqs";
 
@@ -28,8 +27,6 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { transactionSearchParamsSchema } from "~/utils/search-params";
@@ -41,24 +38,22 @@ export function TransactionHeader() {
     trpc.accountingJournal.all.queryOptions(),
   );
 
-  const router = useRouter();
-  const { createQueryString } = useCreateQueryString();
-  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
-  const from = searchParams.from ?? undefined;
-  const to = searchParams.to ?? undefined;
+  const [searchParams, setSearchParams] = useQueryStates(
+    transactionSearchParamsSchema,
+  );
 
   return (
-    <div className="grid flex-row items-center gap-4 px-4 py-2 md:flex">
+    <div className="grid gap-4 lg:grid-cols-5">
       <div className="flex flex-col gap-1">
         <Label className="hidden md:block">{t("Accounting Journals")}</Label>
         <Select
           onValueChange={(val) => {
-            router.push(
-              `?${createQueryString({ journalId: val === "all" ? null : val })}`,
-            );
+            void setSearchParams({
+              journalId: val,
+            });
           }}
         >
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder={t("all")} />
           </SelectTrigger>
           <SelectContent>
@@ -74,10 +69,12 @@ export function TransactionHeader() {
       <div className="flex flex-col gap-1">
         <Label className="hidden md:block">{t("classroom")}</Label>
         <ClassroomSelector
-          className="w-full md:w-[250px]"
+          className="w-full md:w-full"
           defaultValue={searchParams.classroomId ?? ""}
           onSelect={(val) => {
-            router.push(`?${createQueryString({ classroomId: val })}`);
+            void setSearchParams({
+              classroomId: val,
+            });
           }}
         />
       </div>
@@ -85,16 +82,15 @@ export function TransactionHeader() {
         <Label className="hidden md:block">{t("Date range")}</Label>
         <DateRangePicker
           defaultValue={
-            from && to ? { from: new Date(from), to: new Date(to) } : undefined
+            searchParams.from && searchParams.to
+              ? { from: searchParams.from, to: searchParams.to }
+              : undefined
           }
           onSelectAction={(val) => {
-            if (val?.from && val.to) {
-              router.push(
-                `?${createQueryString({ from: format(val.from, "yyyy-MM-dd"), to: format(val.to, "yyyy-MM-dd") })}`,
-              );
-            } else {
-              router.push(`?${createQueryString({ from: null, to: null })}`);
-            }
+            void setSearchParams({
+              from: val?.from ?? null,
+              to: val?.to ?? null,
+            });
           }}
         />
       </div>
@@ -103,7 +99,9 @@ export function TransactionHeader() {
         <Label className="hidden md:block">{t("status")}</Label>
         <TransactionStatusSelector
           onChange={(val) => {
-            router.push(`?${createQueryString({ status: val })}`);
+            void setSearchParams({
+              status: val,
+            });
           }}
         />
       </div>

@@ -25,7 +25,7 @@ export function TransactionSummaryPerDay() {
   const t = useTranslations();
   const locale = useLocale();
   return (
-    <div className="max-h-[calc(100vh-200px)] border-l">
+    <div className="border-l">
       <div className="bg-background overflow-hidden">
         <Table>
           <TableHeader>

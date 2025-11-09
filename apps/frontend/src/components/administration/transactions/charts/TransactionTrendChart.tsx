@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import * as React from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useQueryStates } from "nuqs";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import type { RouterOutputs } from "@repo/api";
 import type { ChartConfig } from "@repo/ui/components/chart";
 import { Card, CardContent } from "@repo/ui/components/card";
 import {
@@ -15,13 +13,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
-import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useLocale } from "~/i18n";
-import { useTRPC } from "~/trpc/react";
-import { transactionSearchParamsSchema } from "~/utils/search-params";
 
-export function TransactionTrendChart() {
+export function TransactionTrendChart({
+  trends,
+}: {
+  trends: RouterOutputs["transaction"]["trends"];
+}) {
   const { t } = useLocale();
   const chartConfig = React.useMemo(() => {
     return {
@@ -34,17 +33,6 @@ export function TransactionTrendChart() {
       },
     } satisfies ChartConfig;
   }, [t]);
-
-  const [searchParams] = useQueryStates(transactionSearchParamsSchema);
-  const trpc = useTRPC();
-  const transactionsTrendQuery = useSuspenseQuery(
-    trpc.transaction.trends.queryOptions({
-      from: searchParams.from,
-      to: searchParams.to,
-      classroomId: searchParams.classroomId,
-      journalId: searchParams.journalId,
-    }),
-  );
 
   //const [totalAmount, setTotalAmount] = React.useState(0);
 
@@ -70,26 +58,6 @@ export function TransactionTrendChart() {
   //   setTotalAmount(_.sumBy(f, "amount"));
   //   setFilteredData(f);
   // }, [timeRange, transactionsTrendQuery.data]);
-  const data = transactionsTrendQuery.data;
-  if (transactionsTrendQuery.isPending) {
-    return (
-      <div className="flex w-full flex-row gap-4 p-2">
-        <Skeleton className="h-[200px] w-2/3" />
-        <Skeleton className="h-[200px] w-1/3" />
-      </div>
-    );
-  }
-  if (data.length === 0) {
-    return (
-      <Card className="border-none p-0 shadow-none">
-        <CardContent className="p-2">
-          <div className="text-muted-foreground flex h-[250px] w-full items-center justify-center">
-            {t("no_data")}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className="border-none p-0 shadow-none">
@@ -160,7 +128,7 @@ export function TransactionTrendChart() {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={data}>
+          <AreaChart data={trends}>
             <defs>
               <linearGradient id="fillAmount" x1="0" y1="0" x2="0" y2="1">
                 <stop
