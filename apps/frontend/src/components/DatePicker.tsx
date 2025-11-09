@@ -26,6 +26,7 @@ export function DatePicker({
 }) {
   const [timeZone, setTimeZone] = React.useState<string | undefined>(undefined);
   const [open, setOpen] = React.useState(false);
+  //const [today] = React.useState(() => new Date())
   const locale = useLocale();
   const [date, setDate] = React.useState<Date | undefined>(defaultValue);
   React.useEffect(() => {
@@ -54,6 +55,7 @@ export function DatePicker({
       <PopoverContent className="w-auto overflow-hidden p-0" align="start">
         <Calendar
           mode="single"
+          //defaultMonth={today.getMonth()}
           selected={date}
           locale={locale == "fr" ? fr : locale == "en" ? enUS : es}
           captionLayout="dropdown"

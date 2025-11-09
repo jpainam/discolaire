@@ -143,7 +143,7 @@ export function CreateEditLoan({
                 <FormControl>
                   <DatePicker
                     defaultValue={field.value}
-                    onChange={(val) => field.onChange(val)}
+                    onSelectAction={(val) => field.onChange(val)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -159,7 +159,7 @@ export function CreateEditLoan({
                 <FormControl>
                   <DatePicker
                     defaultValue={field.value ?? undefined}
-                    onChange={(val) => field.onChange(val)}
+                    onSelectAction={(val) => field.onChange(val)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -174,7 +174,7 @@ export function CreateEditLoan({
               <FormItem>
                 <FormLabel>{t("returned_date")}</FormLabel>
                 <FormControl>
-                  <DatePicker onChange={(val) => field.onChange(val)} />
+                  <DatePicker defaultValue={field.value ?? undefined} onSelectAction={(val) => field.onChange(val)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

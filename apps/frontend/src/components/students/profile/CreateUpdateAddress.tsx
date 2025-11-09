@@ -120,7 +120,7 @@ export function CreateUpdateAddress() {
                 <FormItem className="flex-1">
                   <FormLabel>{t("dateOfEntry")}</FormLabel>
                   <FormControl>
-                    <DatePicker defaultValue={field.value} {...field} />
+                    <DatePicker defaultValue={field.value}  onSelectAction={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,7 +135,7 @@ export function CreateUpdateAddress() {
                 <FormItem className="flex-1">
                   <FormLabel>{t("dateOfExit")}</FormLabel>
                   <FormControl>
-                    <DatePicker defaultValue={field.value} {...field} />
+                    <DatePicker defaultValue={field.value} onSelectAction={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

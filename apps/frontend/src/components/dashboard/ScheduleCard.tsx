@@ -10,9 +10,9 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 
+import { DatePicker } from "~/components/DatePicker";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
-import { DatePicker } from "../DatePicker";
 
 interface ScheduleItem {
   startTime: string;
@@ -79,7 +79,7 @@ export function ScheduleCard({ className }: { className?: string }) {
         {/* <CardDescription>Card Description</CardDescription> */}
         <CardAction>
           <DatePicker
-            defaultValue={new Date()}
+            defaultValue={undefined}
             onSelectAction={(e) => {
               console.log(e);
             }}

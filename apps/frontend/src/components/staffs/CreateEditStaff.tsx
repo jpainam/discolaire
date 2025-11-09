@@ -49,13 +49,13 @@ const staffCreateEditSchema = z.object({
   address: z.string().optional(),
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
-  dateOfHire: z.coerce.date().optional(),
+  dateOfHire: z.coerce.date<Date>().optional(),
   dateOfRelease: z.coerce.date().optional(),
-  dateOfCriminalRecordCheck: z.coerce.date().optional(),
+  dateOfCriminalRecordCheck: z.date().optional(),
   sendAgendaFrequency: z.string().optional(),
-  dateOfLastAdvancement: z.coerce.date().optional(),
+  dateOfLastAdvancement: z.date().optional(),
   isTeacher: z.string().default("yes"),
-  dateOfBirth: z.coerce.date().optional(),
+  dateOfBirth: z.coerce.date<Date>().optional(),
 });
 interface CreateEditStaffProps {
   staff?: StaffProcedureOutput;
@@ -278,7 +278,10 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               <FormItem>
                 <FormLabel>{t("dateOfBirth")}</FormLabel>
                 <FormControl>
-                  <DatePicker {...field} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onSelectAction={field.onChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -291,7 +294,10 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               <FormItem>
                 <FormLabel>{t("dateOfHire")}</FormLabel>
                 <FormControl>
-                  <DatePicker {...field} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onSelectAction={field.onChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -304,7 +310,10 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               <FormItem>
                 <FormLabel>{t("dateOfLastAdvancement")}</FormLabel>
                 <FormControl>
-                  <DatePicker {...field} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onSelectAction={field.onChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -317,7 +326,10 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
               <FormItem>
                 <FormLabel>{t("lastCriminalRecordCheck")}</FormLabel>
                 <FormControl>
-                  <DatePicker {...field} />
+                  <DatePicker
+                    defaultValue={field.value}
+                    onSelectAction={field.onChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

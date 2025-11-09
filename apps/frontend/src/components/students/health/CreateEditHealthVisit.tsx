@@ -45,7 +45,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFileIcon } from "~/utils/file-icon";
 
 const createEditVisitSchema = z.object({
-  date: z.coerce.date().default(() => new Date()),
+  date: z.date().default(() => new Date()),
   complaint: z.string().min(1),
   signs: z.string().optional(),
   examination: z.string().optional(),
@@ -209,7 +209,7 @@ export function CreateEditHealthVisit({
                     <FormControl>
                       <DatePicker
                         defaultValue={field.value}
-                        onChange={(val) => field.onChange(val)}
+                        onSelectAction={(val) => field.onChange(val)}
                       />
                     </FormControl>
                     <FormMessage />

@@ -4,22 +4,20 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
+
+
 import { Button } from "@repo/ui/components/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { Separator } from "@repo/ui/components/separator";
 
-import { DatePickerField } from "~/components/shared/forms/date-picker-field";
+
+
+import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
+
 
 export function ChurchDetailsForm() {
   const { t } = useLocale();
@@ -30,7 +28,7 @@ export function ChurchDetailsForm() {
     churchAttendanceFrequency: z.string().min(1),
     isChurchMember: z.boolean().optional(),
     isBaptized: z.boolean().optional(),
-    dateOfBaptism: z.coerce.date().optional(),
+    dateOfBaptism: z.date().optional(),
   });
   type FormValues = z.infer<typeof schema>;
   const form = useForm({
@@ -144,11 +142,24 @@ export function ChurchDetailsForm() {
                 </FormItem>
               )}
             />
-            <DatePickerField
-              name={"dateOfBaptism"}
-              className="mt-2 w-1/2"
-              label={t("date_of_baptism")}
+            <FormField
+              control={form.control}
+              name="dateOfBaptism"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("date_of_baptism")}</FormLabel>
+                  <FormControl>
+                    <DatePicker
+                      defaultValue={field.value}
+                      onSelectAction={field.onChange}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
+           
           </div>
         </fieldset>
         <div className="my-4 flex flex-row justify-end gap-4">

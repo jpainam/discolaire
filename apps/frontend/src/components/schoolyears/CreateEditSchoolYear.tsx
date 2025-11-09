@@ -33,8 +33,8 @@ import { useTRPC } from "~/trpc/react";
 
 const schoolYearSchema = z.object({
   name: z.string().min(1),
-  start: z.coerce.date(),
-  end: z.coerce.date(),
+  start: z.date(),
+  end: z.date(),
   isActive: z.boolean().default(true),
   previousSchoolYearId: z.string().optional(),
 });
@@ -136,7 +136,7 @@ export function CreateEditSchoolYear({
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
-                  onChange={(v) => field.onChange(v)}
+                  onSelectAction={(v) => field.onChange(v)}
                 />
               </FormControl>
               <FormMessage />
@@ -152,7 +152,7 @@ export function CreateEditSchoolYear({
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
-                  onChange={(v) => field.onChange(v)}
+                  onSelectAction={(v) => field.onChange(v)}
                 />
               </FormControl>
               <FormMessage />

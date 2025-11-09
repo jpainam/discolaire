@@ -148,12 +148,7 @@
 
 //             <div className="space-y-2">
 //               <Label>Date</Label>
-//               <DatePicker
-//                 defaultValue={date ?? undefined}
-//                 onChange={(val) => {
-//                   void setDate(val);
-//                 }}
-//               />
+
 //             </div>
 
 //             <div className="space-y-2">

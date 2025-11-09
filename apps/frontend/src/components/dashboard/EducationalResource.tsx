@@ -48,8 +48,8 @@ export function EducationalResource({ className }: { className?: string }) {
         </CardDescription>
         <CardAction>
           <DatePicker
-            defaultValue={new Date()}
-            onChange={(e) => {
+            defaultValue={undefined}
+            onSelectAction={(e) => {
               console.log(e);
             }}
           />

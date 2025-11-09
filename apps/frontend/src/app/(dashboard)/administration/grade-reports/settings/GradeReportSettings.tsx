@@ -34,7 +34,7 @@ const formSchema = z.object({
     z.object({
       //active: z.boolean().default(false),
       termId: z.string(),
-      date: z.coerce.date(),
+      date: z.date(),
       observation: z.string().default(""),
     }),
   ),
@@ -116,7 +116,7 @@ export function GradeReportSettings() {
                         <FormControl>
                           <DatePicker
                             defaultValue={field.value}
-                            onChange={(val) => field.onChange(val)}
+                            onSelectAction={(val) => field.onChange(val)}
                           />
                         </FormControl>
                         <FormMessage />
@@ -149,7 +149,7 @@ export function GradeReportSettings() {
             {/* <div className="grid grid-cols-2 gap-2">
               <Label>Date de publication</Label>
               <Textarea placeholder=" Sera publié après le conseil de classe ou le 29/08/2024"></Textarea>
-              <DatePicker />
+ 
             </div> */}
           </CardContent>
         </Card>

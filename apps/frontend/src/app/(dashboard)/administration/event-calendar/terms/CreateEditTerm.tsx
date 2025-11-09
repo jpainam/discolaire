@@ -28,8 +28,8 @@ type Term = RouterOutputs["term"]["all"][number];
 
 const createEditTermSchema = z.object({
   name: z.string().min(1),
-  startDate: z.coerce.date(),
-  endDate: z.coerce.date(),
+  startDate: z.date(),
+  endDate: z.date(),
   isActive: z.boolean(),
 });
 export function CreateEditTerm({ term }: { term?: Term }) {
@@ -110,7 +110,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
-                  onChange={(e) => field.onChange(e)}
+                  onSelectAction={(e) => field.onChange(e)}
                 />
               </FormControl>
               <FormMessage />
@@ -127,7 +127,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
               <FormControl>
                 <DatePicker
                   defaultValue={field.value}
-                  onChange={(e) => field.onChange(e)}
+                  onSelectAction={(e) => field.onChange(e)}
                 />
               </FormControl>
               <FormMessage />

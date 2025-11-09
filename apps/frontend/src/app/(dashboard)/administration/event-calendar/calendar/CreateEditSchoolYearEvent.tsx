@@ -38,7 +38,7 @@ import { useTRPC } from "~/trpc/react";
 const schema = z.object({
   name: z.string().min(1),
   typeId: z.string().min(1),
-  date: z.coerce.date(),
+  date: z.date(),
 });
 export function CreateEditSchoolYearEvent({
   event,
@@ -133,8 +133,8 @@ export function CreateEditSchoolYearEvent({
                 <FormLabel>{t("Event date")}</FormLabel>
                 <FormControl>
                   <DatePicker
-                    //defaultValue={""}
-                    onChange={(v) => field.onChange(v)}
+                    defaultValue={field.value}
+                    onSelectAction={(v) => field.onChange(v)}
                   />
                 </FormControl>
                 <FormMessage />
