@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import {
   BrainIcon,
   BrickWall,
-  CalendarDays,
   CogIcon,
   ContactIcon,
   FolderOpen,
@@ -66,11 +65,11 @@ export function MainSidebar({
     },
   ];
   const tools = [
-    {
-      name: "timetables",
-      url: `/timetables`,
-      icon: CalendarDays,
-    },
+    // {
+    //   name: "timetables",
+    //   url: `/timetables`,
+    //   icon: CalendarDays,
+    // },
   ];
   const { data: session } = authClient.useSession();
   if (session?.user.profile == "staff") {

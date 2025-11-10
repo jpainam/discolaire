@@ -77,7 +77,7 @@ export function WeekView({
     return events
       .filter((event) => {
         // Include explicitly marked all-day events or multi-day events
-        return event.allDay ?? isMultiDayEvent(event);
+        return event.allDay || isMultiDayEvent(event);
       })
       .filter((event) => {
         const eventStart = new Date(event.start);
@@ -160,7 +160,7 @@ export function WeekView({
         let placed = false;
 
         while (!placed) {
-          const col = columns[columnIndex] ?? [];
+          const col = columns[columnIndex] || [];
           if (col.length === 0) {
             columns[columnIndex] = col;
             placed = true;
@@ -183,7 +183,7 @@ export function WeekView({
         }
 
         // Ensure column is initialized before pushing
-        const currentColumn = columns[columnIndex] ?? [];
+        const currentColumn = columns[columnIndex] || [];
         columns[columnIndex] = currentColumn;
         currentColumn.push({ event, end: adjustedEnd });
 
@@ -220,14 +220,14 @@ export function WeekView({
 
   return (
     <div data-slot="week-view" className="flex h-full flex-col">
-      <div className="bg-background/80 border-border/70 sticky top-0 z-30 grid grid-cols-8 border-b backdrop-blur-md">
+      <div className="border-border/70 bg-background/80 sticky top-0 z-30 grid grid-cols-8 border-b backdrop-blur-md">
         <div className="text-muted-foreground/70 py-2 text-center text-sm">
           <span className="max-[479px]:sr-only">{format(new Date(), "O")}</span>
         </div>
         {days.map((day) => (
           <div
             key={day.toString()}
-            className="data-today:text-foreground text-muted-foreground/70 py-2 text-center text-sm data-today:font-medium"
+            className="text-muted-foreground/70 data-today:text-foreground py-2 text-center text-sm data-today:font-medium"
             data-today={isToday(day) || undefined}
           >
             <span className="sm:hidden" aria-hidden="true">
