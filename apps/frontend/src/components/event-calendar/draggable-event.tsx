@@ -78,7 +78,7 @@ export function DraggableEvent({
       <div
         ref={setNodeRef}
         className="opacity-0"
-        style={{ height: height || "auto" }}
+        style={{ height: height ?? "auto" }}
       />
     );
   }
@@ -86,12 +86,12 @@ export function DraggableEvent({
   const style = transform
     ? {
         transform: CSS.Translate.toString(transform),
-        height: height || "auto",
+        height: height ?? "auto",
         width:
           isMultiDayEvent && multiDayWidth ? `${multiDayWidth}%` : undefined,
       }
     : {
-        height: height || "auto",
+        height: height ?? "auto",
         width:
           isMultiDayEvent && multiDayWidth ? `${multiDayWidth}%` : undefined,
       };
@@ -114,6 +114,7 @@ export function DraggableEvent({
     <div
       ref={(node) => {
         setNodeRef(node);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (elementRef) elementRef.current = node;
       }}
       style={style}
