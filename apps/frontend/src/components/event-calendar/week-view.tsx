@@ -77,7 +77,7 @@ export function WeekView({
     return events
       .filter((event) => {
         // Include explicitly marked all-day events or multi-day events
-        return event.allDay || isMultiDayEvent(event);
+        return event.allDay ?? isMultiDayEvent(event);
       })
       .filter((event) => {
         const eventStart = new Date(event.start);
@@ -160,7 +160,7 @@ export function WeekView({
         let placed = false;
 
         while (!placed) {
-          const col = columns[columnIndex] || [];
+          const col = columns[columnIndex] ?? [];
           if (col.length === 0) {
             columns[columnIndex] = col;
             placed = true;
@@ -183,7 +183,7 @@ export function WeekView({
         }
 
         // Ensure column is initialized before pushing
-        const currentColumn = columns[columnIndex] || [];
+        const currentColumn = columns[columnIndex] ?? [];
         columns[columnIndex] = currentColumn;
         currentColumn.push({ event, end: adjustedEnd });
 
