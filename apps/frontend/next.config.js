@@ -10,7 +10,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 /** @type {import("next").NextConfig} */
 const config = {
   output: "standalone",
-  cacheComponents: true,
+  //cacheComponents: true,
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     "@repo/api",
