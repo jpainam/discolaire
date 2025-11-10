@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { format, isSameDay } from "date-fns";
 import { XIcon } from "lucide-react";
 
@@ -24,35 +24,71 @@ export function EventsPopup({
 }: EventsPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
 
-  // Handle click outside to close popup
+  // 1) Keep the adjusted position in state (OK to read in render)
+  const [adjusted, setAdjusted] = useState(position);
+
+  // 2) Recompute after mount/layout when we can read DOM sizes safely
+  const recomputePosition = () => {
+    const node = popupRef.current;
+    if (!node) return;
+
+    const rect = node.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let left = position.left;
+    let top = position.top;
+
+    if (left + rect.width > vw) left = Math.max(0, vw - rect.width);
+    if (top + rect.height > vh) top = Math.max(0, vh - rect.height);
+
+    setAdjusted((prev) =>
+      prev.left === left && prev.top === top ? prev : { left, top },
+    );
+  };
+
+  // Run after layout so measurements are accurate and no flicker
+  useLayoutEffect(() => {
+    setAdjusted(position); // start from requested position
+    // next frame, measure and clamp (ensures node is in the DOM)
+    requestAnimationFrame(recomputePosition);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [position.left, position.top, events.length]); // re-run when content/anchor changes
+
+  // Keep updated on window resize
+  useEffect(() => {
+    const onResize = () => recomputePosition();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Optional: observe size changes of the popup content itself
+  useEffect(() => {
+    if (!popupRef.current || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => recomputePosition());
+    ro.observe(popupRef.current);
+    return () => ro.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        popupRef.current &&
-        !popupRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
+      const node = popupRef.current;
+      if (node && !node.contains(event.target as Node)) onClose();
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  // Handle escape key to close popup
+  // Close on Escape
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
+      if (event.key === "Escape") onClose();
     };
-
     document.addEventListener("keydown", handleEscKey);
-    return () => {
-      document.removeEventListener("keydown", handleEscKey);
-    };
+    return () => document.removeEventListener("keydown", handleEscKey);
   }, [onClose]);
 
   const handleEventClick = (event: CalendarEvent) => {
@@ -60,38 +96,11 @@ export function EventsPopup({
     onClose();
   };
 
-  // Adjust position to ensure popup stays within viewport
-  const adjustedPosition = useMemo(() => {
-    const positionCopy = { ...position };
-
-    // Check if we need to adjust the position to fit in the viewport
-    if (popupRef.current) {
-      const rect = popupRef.current.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-
-      // Adjust horizontally if needed
-      if (positionCopy.left + rect.width > viewportWidth) {
-        positionCopy.left = Math.max(0, viewportWidth - rect.width);
-      }
-
-      // Adjust vertically if needed
-      if (positionCopy.top + rect.height > viewportHeight) {
-        positionCopy.top = Math.max(0, viewportHeight - rect.height);
-      }
-    }
-
-    return positionCopy;
-  }, [position]);
-
   return (
     <div
       ref={popupRef}
       className="bg-background absolute z-50 max-h-96 w-80 overflow-auto rounded-md border shadow-lg"
-      style={{
-        top: `${adjustedPosition.top}px`,
-        left: `${adjustedPosition.left}px`,
-      }}
+      style={{ top: adjusted.top, left: adjusted.left }}
     >
       <div className="bg-background sticky top-0 flex items-center justify-between border-b p-3">
         <h3 className="font-medium">{format(date, "d MMMM yyyy")}</h3>
