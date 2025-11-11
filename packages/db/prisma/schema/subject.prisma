@@ -50,7 +50,7 @@ enum PriorityEnum {
 
 model SubjectTimetable {
     id          Int            @id @default(autoincrement())
-    weekday     Int // 0=Sun, 1=Mon ... 7=Sun
+    weekday     Int // 0=Sun, 1=Mon ... 7=Sa
     start       String
     end         String
     subjectId   Int
@@ -74,6 +74,7 @@ model SubjectProgram {
     isCompleted          Boolean          @default(false)
     priority             PriorityEnum     @default(MEDIUM)
     requiredSessionCount Int              @default(1)
+    startDate            DateTime         @default(now())
     termId               String
     term                 Term             @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     subject              Subject          @relation(fields: [subjectId], references: [id], onDelete: Cascade)

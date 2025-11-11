@@ -89,16 +89,14 @@ export const subjectTimetableRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        from: z.coerce.date().optional(),
-        to: z.coerce.date().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
       const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
         where: { id: ctx.schoolYearId },
       });
-      const start = input.from ?? schoolYear.startDate;
-      const end = input.to ?? schoolYear.endDate;
+      const start = schoolYear.startDate;
+      const end = schoolYear.endDate;
       const lessons = await ctx.db.subjectTimetable.findMany({
         include: {
           subject: {
@@ -124,11 +122,16 @@ export const subjectTimetableRouter = {
   // soft delete one entry
   delete: protectedProcedure
     .input(z.coerce.number())
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.subjectTimetable.update({
-        data: {
-          validTo: new Date(), // stop being active now
-        },
+    .mutation(({ ctx, input }) => {
+      // return ctx.db.subjectTimetable.update({
+      //   data: {
+      //     validTo: new Date(), // stop being active now
+      //   },
+      //   where: {
+      //     id: input,
+      //   },
+      // });
+      return ctx.db.subjectTimetable.delete({
         where: {
           id: input,
         },

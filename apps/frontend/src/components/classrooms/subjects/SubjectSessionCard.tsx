@@ -21,8 +21,15 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 
@@ -73,6 +80,18 @@ export function SubjectSessionCard({
     }),
   );
 
+  const updateSessionPriority = useMutation(
+    trpc.subjectProgram.updatePriority.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    }),
+  );
+
   const { openModal } = useModal();
   const term = program.term;
   const subject = program.subject;
@@ -104,6 +123,40 @@ export function SubjectSessionCard({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>{t("details")}</DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    {t("Priority")}
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuRadioGroup
+                        value={program.priority}
+                        onValueChange={(v) => {
+                          toast.loading(t("Processing"), { id: 0 });
+                          updateSessionPriority.mutate({
+                            id: program.id,
+                            priority: v as "URGENT" | "HIGH" | "MEDIUM" | "LOW",
+                          });
+                        }}
+                      >
+                        <DropdownMenuRadioItem value="URGENT">
+                          {t("URGENT")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="HIGH">
+                          {t("HIGH")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="MEDIUM">
+                          {t("MEDIUM")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="LOW">
+                          {t("LOW")}
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>
               <DropdownMenuItem
                 onSelect={() => {
                   openModal({
@@ -182,7 +235,7 @@ export function SubjectSessionCard({
             <div className="border-border flex items-center gap-1.5 rounded-sm border px-2 py-1">
               <Calendar className="size-3" />
               <span>
-                {program.updatedAt.toLocaleDateString(locale, {
+                {program.startDate.toLocaleDateString(locale, {
                   day: "2-digit",
                   month: "short",
                 })}

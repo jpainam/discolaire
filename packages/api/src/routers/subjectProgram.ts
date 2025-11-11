@@ -24,6 +24,9 @@ export const subjectProgramRouter = {
             ...(input.classroomId ? { classroomId: input.classroomId } : {}),
           },
         },
+        orderBy: {
+          startDate: "asc",
+        },
         include: {
           term: true,
           subject: {
@@ -70,9 +73,7 @@ export const subjectProgramRouter = {
           createdBy: true,
         },
         orderBy: {
-          term: {
-            startDate: "asc",
-          },
+          startDate: "asc",
         },
         where: {
           subjectId: input.subjectId,
@@ -99,6 +100,7 @@ export const subjectProgramRouter = {
         requiredSessionCount: z.number().positive().default(1),
         subjectId: z.coerce.number(),
         termId: z.string(),
+        startDate: z.date().default(new Date()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -111,6 +113,7 @@ export const subjectProgramRouter = {
           subjectId: input.subjectId,
           termId: input.termId,
           createdById: ctx.session.user.id,
+          startDate: input.startDate,
         },
       });
     }),
@@ -123,6 +126,7 @@ export const subjectProgramRouter = {
         requiredSessionCount: z.number().positive().default(1),
         priority: z.enum(["MEDIUM", "HIGH", "URGENT", "LOW"]),
         termId: z.string(),
+        startDate: z.date().default(new Date()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -136,6 +140,7 @@ export const subjectProgramRouter = {
           priority: input.priority,
           requiredSessionCount: input.requiredSessionCount,
           termId: input.termId,
+          startDate: input.startDate,
         },
       });
     }),
@@ -149,12 +154,32 @@ export const subjectProgramRouter = {
     )
     .query(({ ctx, input }) => {
       return ctx.db.subjectProgram.findMany({
+        orderBy: {
+          startDate: "asc",
+        },
         where: {
           subject: {
             ...(input.teacherId ? { teacherId: input.teacherId } : {}),
             classroomId: input.classroomId,
           },
           ...(input.termId ? { termId: input.termId } : {}),
+        },
+      });
+    }),
+  updatePriority: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        priority: z.enum(["URGENT", "HIGH", "MEDIUM", "LOW"]),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.subjectProgram.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          priority: input.priority,
         },
       });
     }),

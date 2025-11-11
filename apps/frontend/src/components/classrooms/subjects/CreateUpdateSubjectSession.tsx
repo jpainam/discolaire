@@ -29,6 +29,7 @@ import {
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 
+import { DatePicker } from "~/components/DatePicker";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -38,6 +39,7 @@ const formSchema = z.object({
   attachment: z.string().optional(),
   priority: z.enum(["URGENT", "HIGH", "MEDIUM", "LOW"]),
   sessionCount: z.coerce.number().min(1).default(2),
+  startDate: z.date().default(new Date()),
 });
 export function CreateUpdateSubjectSession({
   subjectId,
@@ -54,6 +56,7 @@ export function CreateUpdateSubjectSession({
       title: program?.title ?? "",
       priority: program?.priority ?? "MEDIUM",
       sessionCount: program?.requiredSessionCount ?? 2,
+      startDate: program?.startDate ?? new Date(),
     },
     resolver: zodResolver(formSchema),
   });
@@ -105,6 +108,7 @@ export function CreateUpdateSubjectSession({
       priority: data.priority,
       termId: termId,
       requiredSessionCount: data.sessionCount,
+      startDate: data.startDate,
     };
     if (program) {
       updateProgramMutation.mutate({
@@ -222,6 +226,21 @@ export function CreateUpdateSubjectSession({
                       ))}
                     </SelectContent>
                   </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker
+                    defaultValue={program?.startDate}
+                    onSelectAction={(d) => field.onChange(d)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

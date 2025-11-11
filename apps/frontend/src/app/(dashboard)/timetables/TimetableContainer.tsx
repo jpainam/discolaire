@@ -5,6 +5,7 @@ import { addDays, setHours, setMinutes, subDays } from "date-fns";
 
 import type { CalendarEvent } from "~/components/event-calendar";
 import { EventCalendar } from "~/components/event-calendar";
+import { EventCalendarProvider } from "~/components/event-calendar/calendar-context";
 
 // Sample events data with hardcoded times
 const sampleEvents: CalendarEvent[] = [
@@ -150,11 +151,12 @@ export function TimetableContainer() {
   };
 
   return (
-    <EventCalendar
-      events={events}
-      onEventAdd={handleEventAdd}
-      onEventUpdate={handleEventUpdate}
-      onEventDelete={handleEventDelete}
-    />
+    <EventCalendarProvider events={[]}>
+      <EventCalendar
+        onEventAdd={handleEventAdd}
+        onEventUpdate={handleEventUpdate}
+        onEventDelete={handleEventDelete}
+      />
+    </EventCalendarProvider>
   );
 }

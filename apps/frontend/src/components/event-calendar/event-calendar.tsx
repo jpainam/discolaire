@@ -47,9 +47,9 @@ import {
 } from "~/components/event-calendar";
 import { useModal } from "~/hooks/use-modal";
 import { cn } from "~/lib/utils";
+import { useCalendar } from "./calendar-context";
 
 export interface EventCalendarProps {
-  events?: CalendarEvent[];
   onEventAdd?: (event: CalendarEvent) => void;
   onEventUpdate?: (event: CalendarEvent) => void;
   onEventDelete?: (eventId: string) => void;
@@ -58,14 +58,13 @@ export interface EventCalendarProps {
 }
 
 export function EventCalendar({
-  events = [],
   onEventAdd,
   onEventUpdate,
   onEventDelete,
   className,
   initialView = "month",
 }: EventCalendarProps) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const { currentDate, setCurrentDate, events } = useCalendar();
   const [view, setView] = useState<CalendarView>(initialView);
 
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
