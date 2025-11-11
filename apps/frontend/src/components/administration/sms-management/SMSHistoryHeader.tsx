@@ -10,7 +10,6 @@ import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 
 export function SMSHistoryHeader() {
-  const d = new Date();
   //const [status, setStatus] = useState<string | null>(null);
   const { t } = useLocale();
   const router = useRouter();

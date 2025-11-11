@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -68,12 +68,10 @@ export function ClassroomGradeList({
   const params = useParams<{ id: string }>();
   const { openModal } = useModal();
   const [query, setQuery] = useState("");
-  const [filtered, setFiltered] =
-    useState<RouterOutputs["gradeSheet"]["grades"]>(grades);
 
-  useEffect(() => {
+  const filtered = useMemo(() => {
     const lowerQuery = query.toLowerCase();
-    const filteredGrades = grades.filter((g) => {
+    return grades.filter((g) => {
       const student = g.student;
       return (
         student.registrationNumber?.toLowerCase().includes(lowerQuery) ||
@@ -81,7 +79,6 @@ export function ClassroomGradeList({
         student.lastName?.toLowerCase().includes(lowerQuery)
       );
     });
-    setFiltered(filteredGrades);
   }, [grades, query]);
 
   const trpc = useTRPC();

@@ -50,7 +50,6 @@ export default function TopTimetable() {
   const timetablesQuery = useQuery(
     trpc.subjectTimetable.byClassroom.queryOptions({
       classroomId: params.id,
-      from: subDays(today, 7),
     }),
   );
 

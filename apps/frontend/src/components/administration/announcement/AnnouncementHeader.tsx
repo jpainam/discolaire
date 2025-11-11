@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { ChevronDown, Printer } from "lucide-react";
 
 import { Button } from "@repo/ui/components/button";
@@ -35,9 +34,7 @@ function isValidDateRange(range: any): range is DateRange {
 export function AnnouncementHeader() {
   const { t } = useLocale();
   const { createQueryString } = useCreateQueryString();
-  const searchParams = useSearchParams();
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
+
   const router = useRouter();
 
   const handleDateRangeChange = (range: any) => {

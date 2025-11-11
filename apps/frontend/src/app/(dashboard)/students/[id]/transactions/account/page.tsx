@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Fragment } from "react";
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { TbTransactionDollar } from "react-icons/tb";
 
@@ -24,7 +23,9 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await paramsPromise;
-  const { t, i18n } = await getServerTranslations();
+
+  const t = await getTranslations();
+  const locale = await getLocale();
 
   const student = await caller.student.get(id);
   const statements = await caller.studentAccount.getStatements({
@@ -32,30 +33,77 @@ export default async function Page({
   });
 
   const formatAmount = (amount: number) =>
-    amount.toLocaleString(i18n.language, {
+    amount.toLocaleString(locale, {
       maximumFractionDigits: 0,
       minimumFractionDigits: 0,
     });
 
   const formatDate = (date: Date) =>
-    new Intl.DateTimeFormat(i18n.language, {
+    new Intl.DateTimeFormat(locale, {
       month: "short",
       year: "numeric",
       day: "numeric",
     }).format(date);
 
+  // Totals per period (e.g., 2025-0 for Jan 2025)
   const totalPeriodMap: Record<string, number> = {};
   for (const item of statements) {
     const key = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
-    const signedAmount =
-      item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
-    totalPeriodMap[key] = (totalPeriodMap[key] ?? 0) + signedAmount;
+    const signed = item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
+    totalPeriodMap[key] = (totalPeriodMap[key] ?? 0) + signed;
   }
 
-  let currentBalance = 0;
-  let currentPeriodKey: string | null = null;
-  let previousDate: Date | null = null;
+  interface TxRow {
+    kind: "tx";
+    item: (typeof statements)[number];
+    balanceAfter: number;
+  }
+  interface SubtotalRow {
+    kind: "subtotal";
+    periodKey: string;
+    previousDate: Date;
+    total: number;
+  }
+  type Row = TxRow | SubtotalRow;
 
+  // Build immutable rows with a single pass (no mutations in JSX)
+  const { rows } = statements.reduce<{
+    rows: Row[];
+    running: number;
+    currentPeriodKey: string | null;
+    previousDate: Date | null;
+  }>(
+    (acc, item) => {
+      const itemKey = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
+      const signed =
+        item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
+
+      // If we detect a period change, insert a subtotal row BEFORE the new tx
+      const showSubtotal =
+        acc.currentPeriodKey !== null &&
+        acc.currentPeriodKey !== itemKey &&
+        acc.previousDate !== null;
+      if (showSubtotal && acc.currentPeriodKey && acc.previousDate) {
+        acc.rows.push({
+          kind: "subtotal",
+          periodKey: acc.currentPeriodKey,
+          previousDate: acc.previousDate,
+          total: totalPeriodMap[acc.currentPeriodKey] ?? 0,
+        });
+      }
+
+      const newRunning = acc.running + signed;
+      acc.rows.push({ kind: "tx", item, balanceAfter: newRunning });
+
+      acc.running = newRunning;
+      acc.currentPeriodKey = itemKey;
+      acc.previousDate = item.transactionDate;
+      return acc;
+    },
+    { rows: [], running: 0, currentPeriodKey: null, previousDate: null },
+  );
+
+  // Final account total
   const totalBalance = statements.reduce(
     (acc, item) =>
       acc +
@@ -79,74 +127,62 @@ export default async function Page({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {statements.map((item, index) => {
-              const itemKey = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
-              const amount = formatAmount(item.amount);
-              const signedAmount =
-                item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
-              currentBalance += signedAmount;
+            {rows.map((row, idx) => {
+              if (row.kind === "subtotal") {
+                return (
+                  <SubTotal
+                    key={`subtotal-${row.periodKey}-${idx}`}
+                    totalperiod={row.total}
+                    previousDate={row.previousDate}
+                  />
+                );
+              }
 
-              const showSubtotal =
-                currentPeriodKey !== null &&
-                currentPeriodKey !== itemKey &&
-                previousDate !== null;
-
-              const subtotal = showSubtotal ? (
-                <SubTotal
-                  key={`subtotal-${currentPeriodKey}`}
-                  totalperiod={totalPeriodMap[currentPeriodKey ?? ""] ?? 0}
-                  previousDate={previousDate ?? new Date()}
-                />
-              ) : null;
-
-              currentPeriodKey = itemKey;
-              previousDate = item.transactionDate;
+              const { item, balanceAfter } = row;
+              const amountStr = formatAmount(item.amount);
 
               return (
-                <Fragment key={`${item.transactionRef}-${index}`}>
-                  {/* {subtotal} */}
-                  <TableRow>
-                    <TableCell className="text-muted-foreground">
-                      {formatDate(item.transactionDate)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      <Link
-                        href={
-                          item.operation === "fee"
-                            ? routes.classrooms.fees(`${item.id}`)
-                            : routes.students.transactions.details(
-                                id,
-                                Number(item.id),
-                              )
-                        }
-                        className="text-blue-700 hover:underline"
-                      >
-                        {item.transactionRef}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      <div className="flex flex-row items-center gap-2">
-                        {item.operation === "fee" ? (
-                          <LiaFileInvoiceDollarSolid className="h-4 w-4" />
-                        ) : (
-                          <TbTransactionDollar className="h-4 w-4" />
-                        )}
-                        {t(item.reference.toLowerCase())} / {item.classroom}
-                      </div>
-                    </TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {item.type === "DEBIT" ? amount : ""}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {item.type !== "DEBIT" ? amount : ""}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {formatAmount(Math.abs(currentBalance))}
-                      {currentBalance > 0 ? " cr" : ""}
-                    </TableCell>
-                  </TableRow>
-                </Fragment>
+                <TableRow key={`${item.transactionRef}-${idx}`}>
+                  <TableCell className="text-muted-foreground">
+                    {formatDate(item.transactionDate)}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    <Link
+                      href={
+                        item.operation === "fee"
+                          ? routes.classrooms.fees(`${item.id}`)
+                          : routes.students.transactions.details(
+                              id,
+                              Number(item.id),
+                            )
+                      }
+                      className="text-blue-700 hover:underline"
+                    >
+                      {item.transactionRef}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    <div className="flex flex-row items-center gap-2">
+                      {item.operation === "fee" ? (
+                        <LiaFileInvoiceDollarSolid className="h-4 w-4" />
+                      ) : (
+                        <TbTransactionDollar className="h-4 w-4" />
+                      )}
+                      {t(item.reference.toLowerCase())} / {item.classroom}
+                    </div>
+                  </TableCell>
+                  <TableCell>{item.description}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {item.type === "DEBIT" ? amountStr : ""}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {item.type !== "DEBIT" ? amountStr : ""}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {formatAmount(Math.abs(balanceAfter))}
+                    {balanceAfter > 0 ? " cr" : ""}
+                  </TableCell>
+                </TableRow>
               );
             })}
 

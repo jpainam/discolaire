@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   addDays,
   eachDayOfInterval,
@@ -85,15 +85,12 @@ export function MonthView({
     onEventSelect(event);
   };
 
-  const [isMounted, setIsMounted] = useState(false);
   const { contentRef, getVisibleEventCount } = useEventVisibility({
     eventHeight: EventHeight,
     eventGap: EventGap,
   });
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = typeof window !== "undefined";
 
   return (
     <div data-slot="month-view" className="contents">

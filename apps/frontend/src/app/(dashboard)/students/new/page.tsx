@@ -90,7 +90,7 @@ export default function Page() {
   const form = useForm({
     resolver: getCurrentSchema()
       ? // @ts-expect-error TODO Working on it
-        standardSchemaResolver(getCurrentSchema()!)
+        standardSchemaResolver(getCurrentSchema())
       : undefined,
     defaultValues: {
       registrationNumber: "",
