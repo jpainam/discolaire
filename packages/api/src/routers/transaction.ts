@@ -3,7 +3,8 @@ import { TRPCError } from "@trpc/server";
 import { addDays, subDays, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
-import type { TransactionStatus, TransactionType } from "@repo/db/enums";
+import type { TransactionType } from "@repo/db/enums";
+import { TransactionStatus } from "@repo/db/enums";
 
 import { notificationQueue } from "../queue";
 import { classroomService } from "../services/classroom-service";
@@ -257,95 +258,88 @@ export const transactionRouter = {
         },
       });
     }),
-  quotas: protectedProcedure.query(async ({ ctx }) => {
-    const classrooms = await ctx.db.classroom.findMany({
-      where: {
-        schoolYearId: ctx.schoolYearId,
-      },
-      include: {
-        section: true,
-        cycle: true,
-        enrollments: {
-          select: {
-            studentId: true,
-          },
+  quotas: protectedProcedure
+    .input(z.object({ journalId: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const classrooms = await ctx.db.classroom.findMany({
+        where: { schoolYearId: ctx.schoolYearId },
+        include: {
+          section: true,
+          cycle: true,
+          enrollments: { select: { studentId: true } },
         },
-        fees: {
-          select: {
-            amount: true,
-          },
+      });
+      const feeSums = await ctx.db.fee.groupBy({
+        by: ["classroomId"],
+        _sum: { amount: true },
+        where: {
+          classroom: { schoolYearId: ctx.schoolYearId },
+          ...(input?.journalId ? { journalId: input.journalId } : {}),
         },
-      },
-    });
+      });
 
-    const totalFees = await ctx.db.fee.groupBy({
-      by: ["classroomId"],
-      _sum: {
-        amount: true,
-      },
-      where: {
-        classroom: {
-          schoolYearId: ctx.schoolYearId,
-        },
-      },
-    });
-    const totalFeeMap: Record<string, number> = {};
-    totalFees.forEach((item) => {
-      totalFeeMap[item.classroomId] = item._sum.amount ?? 0;
-    });
+      const feeSumByClassroom: Record<string, number> = Object.fromEntries(
+        feeSums.map((f) => [f.classroomId, f._sum.amount ?? 0]),
+      );
+      const allStudentIds = Array.from(
+        new Set(
+          classrooms.flatMap((c) => c.enrollments.map((e) => e.studentId)),
+        ),
+      );
 
-    const enrollmentIds = classrooms.flatMap((classroom) =>
-      classroom.enrollments.map((enrollment) => enrollment.studentId),
-    );
-
-    const transactions = await ctx.db.transaction.findMany({
-      where: {
+      const txnWhereBase = {
         deletedAt: null,
+        status: TransactionStatus.VALIDATED,
         schoolYearId: ctx.schoolYearId,
+        ...(allStudentIds.length ? { studentId: { in: allStudentIds } } : {}),
+        ...(input?.journalId ? { journalId: input.journalId } : {}),
+      } as const;
 
-        studentId: {
-          in: enrollmentIds,
-        },
-      },
-      select: {
-        studentId: true,
-        amount: true,
-      },
-    });
+      const txnByStudentType =
+        allStudentIds.length === 0
+          ? []
+          : await ctx.db.transaction.groupBy({
+              by: ["studentId", "transactionType"],
+              _sum: { amount: true },
+              where: txnWhereBase,
+            });
 
-    const totalTransactionMap: Record<string, number> = {};
-    transactions.forEach((transaction) => {
-      const studentId = transaction.studentId;
-      if (totalTransactionMap[studentId]) {
-        totalTransactionMap[studentId] += transaction.amount;
-      } else {
-        totalTransactionMap[studentId] = transaction.amount;
+      // studentId → signed total (CREDIT/DISCOUNT add, DEBIT subtract)
+      const paidByStudent: Record<string, number> = {};
+      for (const row of txnByStudentType) {
+        const sid = row.studentId;
+        const amt = row._sum.amount ?? 0;
+        const t = row.transactionType;
+
+        // sign: DEBIT = -1, everything else = +1 (covers CREDIT & DISCOUNT)
+        const signed = t === "DEBIT" ? -amt : amt;
+        paidByStudent[sid] = (paidByStudent[sid] ?? 0) + signed;
       }
-    });
+      return classrooms.map((c) => {
+        const studentIds = c.enrollments.map((e) => e.studentId);
+        const headcount = studentIds.length;
 
-    const finalResult = classrooms.map((classroom) => {
-      const totalFee = totalFeeMap[classroom.id] ?? 0;
-      const enrollmentsIds = classroom.enrollments.map(
-        (enrollment) => enrollment.studentId,
-      );
+        const paid = studentIds.reduce(
+          (sum, sid) => sum + (paidByStudent[sid] ?? 0),
+          0,
+        );
 
-      const totalPaid = enrollmentsIds.reduce(
-        (sum, studentId) => sum + (totalTransactionMap[studentId] ?? 0),
-        0,
-      );
+        const perStudentFee = feeSumByClassroom[c.id] ?? 0;
+        const revenue = perStudentFee * headcount;
 
-      return {
-        classroom: classroom.name,
-        reportName: classroom.reportName,
-        paid: totalPaid,
-        revenue: totalFee * enrollmentsIds.length,
-        remaining: Math.abs(totalFee * enrollmentsIds.length - totalPaid),
-        section: classroom.section?.name ?? "",
-        cycle: classroom.cycle?.name ?? "",
-      };
-    });
-    return finalResult;
-  }),
+        return {
+          classroomId: c.id,
+          classroom: c.name,
+          reportName: c.reportName,
+          effectif: headcount,
+          section: c.section?.name ?? "",
+          cycle: c.cycle?.name ?? "",
+          paid,
+          revenue,
+          remaining: Math.abs(revenue - paid),
+        };
+      });
+    }),
   create: protectedProcedure
     .input(createSchema)
     .mutation(async ({ ctx, input }) => {
