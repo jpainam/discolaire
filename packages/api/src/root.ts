@@ -36,14 +36,11 @@ import { logActivityRouter } from "./routers/logActivity";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
-import { permissionRouter } from "./routers/permission";
 import { photoRouter } from "./routers/photo";
-import { policyRouter } from "./routers/policy";
 import { recipientRouter } from "./routers/recipient";
 import { religionRouter } from "./routers/religion";
 import { reportCardRouter } from "./routers/reportCard";
 import { reportingRouter } from "./routers/reporting";
-import { roleRouter } from "./routers/role";
 import { scheduleDivisionRouter } from "./routers/scheduleDivision";
 import { scheduleTaskRouter } from "./routers/scheduleTask";
 import { schoolRouter } from "./routers/school";
@@ -113,11 +110,9 @@ export const appRouter = createTRPCRouter({
   setting: settingRouter,
   grade: gradeRouter,
   religion: religionRouter,
-  permission: permissionRouter,
   feedback: feedbackRouter,
   gradeSheet: gradeSheetRouter,
   health: healthRouter,
-  role: roleRouter,
   shortcut: shortcutRouter,
   enrollment: enrollmentRouter,
   reportCard: reportCardRouter,
@@ -126,7 +121,6 @@ export const appRouter = createTRPCRouter({
   recipient: recipientRouter,
   schoolYear: schoolYearRouter,
   menu: menuRouter,
-  policy: policyRouter,
   attendance: attendanceRouter,
   messaging: messagingRouter,
   fund: fundRouter,

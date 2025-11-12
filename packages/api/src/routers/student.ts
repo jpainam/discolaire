@@ -343,11 +343,7 @@ export const studentRouter = {
       include: {
         contact: {
           include: {
-            user: {
-              include: {
-                roles: true,
-              },
-            },
+            user: true,
           },
         },
         relationship: true,

@@ -14,11 +14,6 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import type { RouterOutputs } from "@repo/api";
 import { PriorityEnum } from "@repo/db/enums";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -88,6 +83,19 @@ export function SubjectSessionCard({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    }),
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const updateSessionComplete = useMutation(
+    trpc.subjectProgram.updateComplete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.subjectProgram.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
       },
     }),
   );
@@ -286,7 +294,7 @@ export function SubjectSessionCard({
 
           {/* Right side - avatars */}
 
-          <div className="flex -space-x-2">
+          {/* <div className="flex -space-x-2">
             <Avatar className="border-background size-5 border-2">
               <AvatarImage
                 src={program.createdBy.avatar ?? undefined}
@@ -299,7 +307,7 @@ export function SubjectSessionCard({
                   .join("")}
               </AvatarFallback>
             </Avatar>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

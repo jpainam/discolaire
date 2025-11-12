@@ -55,11 +55,7 @@ export const staffRouter = {
       include: {
         country: true,
         degree: true,
-        user: {
-          include: {
-            roles: true,
-          },
-        },
+        user: true,
       },
     });
   }),

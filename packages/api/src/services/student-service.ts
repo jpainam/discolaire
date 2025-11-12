@@ -50,11 +50,7 @@ export const studentService = {
             schoolYear: true,
           },
         },
-        user: {
-          include: {
-            roles: true,
-          },
-        },
+        user: true,
       },
     });
 

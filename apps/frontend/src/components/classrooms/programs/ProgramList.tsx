@@ -15,7 +15,7 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
   const [subjectId, setSubjectId] = useQueryState("subjectId", parseAsInteger);
 
   return (
-    <div className="overflow-y-auto border-r text-sm">
+    <div className="h-screen overflow-y-auto border-r text-sm">
       {/* <h2 className="mb-4 text-xl font-bold">{t("courses")}</h2> */}
       <ul>
         {subjects.map((subject, index) => (

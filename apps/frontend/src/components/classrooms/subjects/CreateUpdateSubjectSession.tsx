@@ -23,7 +23,9 @@ import { Input } from "@repo/ui/components/input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
@@ -178,74 +180,85 @@ export function CreateUpdateSubjectSession({
           >
             <PaperclipIcon className="h-4 w-4" />
           </Button>
-          <FormField
-            control={form.control}
-            name="priority"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Select
-                    defaultValue={program?.priority ?? undefined}
-                    onValueChange={(val) => field.onChange(val)}
-                  >
-                    <SelectTrigger className="w-[100px]">
-                      <SelectValue placeholder={t("Priority")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="URGENT">{t("URGENT")}</SelectItem>
-                      <SelectItem value="HIGH">{t("HIGH")}</SelectItem>
-                      <SelectItem value="MEDIUM">{t("MEDIUM")}</SelectItem>
-                      <SelectItem value="LOW">{t("LOW")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="sessionCount"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Select
-                    defaultValue={
-                      program?.requiredSessionCount.toString() ?? undefined
-                    }
-                    onValueChange={(val) => field.onChange(val)}
-                  >
-                    <SelectTrigger className="w-[130px]">
-                      <SelectValue placeholder={t("Session count")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 10 }).map((_, index) => (
-                        <SelectItem key={index} value={index.toString()}>
-                          {index}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="startDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={program?.startDate}
-                    onSelectAction={(d) => field.onChange(d)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid flex-1 grid-cols-3 gap-2">
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Select
+                      defaultValue={program?.priority ?? undefined}
+                      onValueChange={(val) => field.onChange(val)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("Priority")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>{t("Priority")}</SelectLabel>
+                          <SelectItem value="URGENT">{t("URGENT")}</SelectItem>
+                          <SelectItem value="HIGH">{t("HIGH")}</SelectItem>
+                          <SelectItem value="MEDIUM">{t("MEDIUM")}</SelectItem>
+                          <SelectItem value="LOW">{t("LOW")}</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sessionCount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Select
+                      defaultValue={
+                        program?.requiredSessionCount.toString() ?? undefined
+                      }
+                      onValueChange={(val) => field.onChange(val)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("Session count")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>{t("Session count")}</SelectLabel>
+                          {Array.from({ length: 10 }).map((_, index) => (
+                            <SelectItem key={index} value={index.toString()}>
+                              {index}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <DatePicker
+                      className="w-full"
+                      defaultValue={program?.startDate}
+                      onSelectAction={(d) => field.onChange(d)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+        <div>
           {selectedFile && (
             <div className="text-muted-foreground flex items-center gap-2 text-xs">
               <PaperclipIcon className="h-4 w-4" />

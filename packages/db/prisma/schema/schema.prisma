@@ -48,26 +48,6 @@ model Announcement {
     updatedBy   String?
 }
 
-model Policy {
-    id          String       @id @default(cuid())
-    name        String
-    effect      PolicyEffect @default(Deny)
-    actions     String[]
-    resources   String[]
-    description String?
-    category    String       @default("system")
-    isActive    Boolean?     @default(true)
-    createdAt   DateTime     @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime     @updatedAt
-    createdById String?
-    updatedBy   String?
-    condition   Json?
-    roles       RolePolicy[]
-    users       UserPolicy[]
-    school      School       @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    schoolId    String
-}
-
 model Appreciation {
     id         Int                   @id @default(autoincrement())
     content    String
@@ -590,8 +570,6 @@ model School {
     religions             Religion[]
     sports                Sport[]
     clubs                 Club[]
-    permissions           Policy[]
-    roles                 Role[]
     subjectGroup          SubjectGroup[]
     courses               Course[]
     schoolYears           SchoolYear[]
@@ -688,16 +666,6 @@ model ClassroomSection {
     classrooms Classroom[]
     school     School      @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId   String
-}
-
-model UserRole {
-    userId      String
-    roleId      String
-    role        Role    @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    createdById String?
-
-    @@id([userId, roleId])
 }
 
 model Token {

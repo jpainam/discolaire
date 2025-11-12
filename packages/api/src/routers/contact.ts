@@ -63,11 +63,7 @@ export const contactRouter = {
       });
       return ctx.db.contact.findUniqueOrThrow({
         include: {
-          user: {
-            include: {
-              roles: true,
-            },
-          },
+          user: true,
         },
         where: {
           id: input,

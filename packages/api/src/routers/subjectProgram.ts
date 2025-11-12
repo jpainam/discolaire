@@ -183,4 +183,21 @@ export const subjectProgramRouter = {
         },
       });
     }),
+  updateComplete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isComplete: z.boolean(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.subjectProgram.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isCompleted: input.isComplete,
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

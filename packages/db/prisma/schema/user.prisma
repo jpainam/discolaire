@@ -25,12 +25,10 @@ model User {
     staffs                       Staff[]
     students                     Student[]
     tokens                       Token[]
-    roles                        UserRole[]
     assignments                  Assignment[]
     reportCards                  ReportCard[]
     announcements                Announcement[]
     recipients                   Recipient[]
-    policies                     UserPolicy[]
     gradeSheets                  GradeSheet[]
     religion                     Religion[]
     clubs                        Club[]                     @relation("president")
@@ -70,41 +68,6 @@ model User {
 
     @@unique([email])
     @@unique([username])
-}
-
-model Role {
-    id          String       @id @default(cuid())
-    name        String
-    description String?
-    isActive    Boolean?     @default(true)
-    createdAt   DateTime     @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime     @updatedAt
-    createdBy   String?
-    updatedBy   String?
-    policies    RolePolicy[]
-    roles       UserRole[]
-    school      School       @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    schoolId    String
-}
-
-model RolePolicy {
-    roleId      String
-    policyId    String
-    createdById String
-    policy      Policy @relation(fields: [policyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    role        Role   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-    @@id([roleId, policyId])
-}
-
-model UserPolicy {
-    userId      String
-    policyId    String
-    createdById String?
-    policy      Policy  @relation(fields: [policyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-    @@id([userId, policyId])
 }
 
 model NotificationPreference {
