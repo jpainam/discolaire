@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import { CloudRain, Sun } from "lucide-react-native";
-import React from "react";
 import { Appearance, StyleSheet, View } from "react-native";
 import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";

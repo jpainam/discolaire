@@ -2,7 +2,7 @@ import { Colors } from "~/constants/theme";
 
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Clock, User } from "lucide-react-native";
-import React from "react";
+
 import {
   ActivityIndicator,
   Appearance,
@@ -23,7 +23,7 @@ export default function ClassroomSubjects({
   classroomId: string;
 }) {
   const { data: subjects, isPending } = useQuery(
-    trpc.classroom.subjects.queryOptions(classroomId),
+    trpc.classroom.subjects.queryOptions(classroomId)
   );
 
   const renderSubjectItem = ({

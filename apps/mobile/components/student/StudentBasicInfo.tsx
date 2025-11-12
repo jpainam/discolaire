@@ -1,6 +1,5 @@
 import type { RouterOutputs } from "@repo/api";
 import { Calendar, Heart, Chrome as Home, MapPin } from "lucide-react-native";
-import React from "react";
 import { Appearance, StyleSheet, Text, View } from "react-native";
 import { Colors } from "~/constants/Colors";
 import { ThemedText } from "../ThemedText";

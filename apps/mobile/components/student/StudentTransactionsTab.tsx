@@ -8,7 +8,6 @@ import {
   Calendar,
   Search,
 } from "lucide-react-native";
-import React from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -25,7 +24,7 @@ export default function StudentTransactionsTab({
   student: RouterOutputs["student"]["get"];
 }) {
   const { data: transactions, isPending } = useQuery(
-    trpc.student.transactions.queryOptions(student.id),
+    trpc.student.transactions.queryOptions(student.id)
   );
   const getTransactionIcon = (type: TransactionType) => {
     if (type === TransactionType.CREDIT) {

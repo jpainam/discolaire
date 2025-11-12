@@ -1,5 +1,5 @@
 import { TrendingUp } from "lucide-react-native";
-import React from "react";
+
 import { StyleSheet, Text, View } from "react-native";
 
 // Mock progress data - in a real app, this would come from an API

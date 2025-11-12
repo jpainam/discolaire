@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useMemo } from "react";
 import {
   ActivityIndicator,
   Appearance,
@@ -28,29 +28,21 @@ export default function ClassroomFees({
   classroomId: string;
 }) {
   const { data: fees, isPending } = useQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
+    trpc.classroom.fees.queryOptions(classroomId)
   );
 
   const theme = useColorScheme() ?? "light";
 
-  const [totalFees, setTotalFees] = React.useState(0);
-  const [paidFees, setPaidFees] = React.useState(0);
-  const [pendingFees, setPendingFees] = React.useState(0);
-
-  useEffect(() => {
-    if (fees) {
-      const today = new Date();
-      const total = fees.reduce((acc, fee) => acc + fee.amount, 0);
-      const paid = fees
-        .filter((fee) => fee.dueDate < today)
-        .reduce((acc, fee) => acc + fee.amount, 0);
-      const pending = fees
-        .filter((fee) => fee.dueDate >= today)
-        .reduce((acc, fee) => acc + fee.amount, 0);
-      setTotalFees(total);
-      setPaidFees(paid);
-      setPendingFees(pending);
-    }
+  const { totalFees, paidFees, pendingFees } = useMemo(() => {
+    const today = new Date();
+    const totalFees = fees?.reduce((acc, fee) => acc + fee.amount, 0);
+    const paidFees = fees
+      ?.filter((fee) => fee.dueDate < today)
+      .reduce((acc, fee) => acc + fee.amount, 0);
+    const pendingFees = fees
+      ?.filter((fee) => fee.dueDate >= today)
+      .reduce((acc, fee) => acc + fee.amount, 0);
+    return { totalFees, paidFees, pendingFees };
   }, [fees]);
 
   if (isPending) {
@@ -155,7 +147,7 @@ export default function ClassroomFees({
           <Banknote size={20} color={Colors[theme].colors.primary[500]} />
           <Text style={styles.summaryTitle}>Frais</Text>
           <Text style={styles.summaryAmount}>
-            {totalFees.toLocaleString("fr", {
+            {totalFees?.toLocaleString("fr", {
               style: "currency",
               currency: CURRENCY,
               minimumFractionDigits: 0,
@@ -168,7 +160,7 @@ export default function ClassroomFees({
           <CheckCircle size={20} color={Colors[theme].colors.success[500]} />
           <Text style={styles.summaryTitle}>Payé</Text>
           <Text style={styles.summaryAmount}>
-            {paidFees.toLocaleString("fr", {
+            {paidFees?.toLocaleString("fr", {
               style: "currency",
               currency: CURRENCY,
               minimumFractionDigits: 0,
@@ -181,7 +173,7 @@ export default function ClassroomFees({
           <Clock size={20} color={Colors[theme].colors.warning[500]} />
           <Text style={styles.summaryTitle}>Restant</Text>
           <Text style={styles.summaryAmount}>
-            {pendingFees.toLocaleString("fr", {
+            {pendingFees?.toLocaleString("fr", {
               style: "currency",
               currency: CURRENCY,
               minimumFractionDigits: 0,

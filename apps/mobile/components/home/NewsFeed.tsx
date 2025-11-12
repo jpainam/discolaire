@@ -1,5 +1,4 @@
 import { ChevronRight } from "lucide-react-native";
-import React from "react";
 import {
   FlatList,
   Image,

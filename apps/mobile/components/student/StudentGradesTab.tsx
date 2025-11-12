@@ -1,7 +1,7 @@
 import type { RouterOutputs } from "@repo/api";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronUp } from "lucide-react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -18,7 +18,7 @@ export default function StudentGradesTab({
 }) {
   const [expandedTerm, setExpandedTerm] = useState<string | null>("Current");
   const { data: grades } = useQuery(
-    trpc.student.grades.queryOptions({ id: student.id }),
+    trpc.student.grades.queryOptions({ id: student.id })
   );
   const gradesByTerm: {
     name: string;
@@ -34,7 +34,7 @@ export default function StudentGradesTab({
   if (grades) {
     grades.forEach((grade) => {
       const term = gradesByTerm.find(
-        (t) => t.termId === grade.gradeSheet.termId,
+        (t) => t.termId === grade.gradeSheet.termId
       );
       if (term) {
         term.grades.push({

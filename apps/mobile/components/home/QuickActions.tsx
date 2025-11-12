@@ -8,7 +8,6 @@ import {
   BookOpen as Library,
   UserPlus,
 } from "lucide-react-native";
-import React from "react";
 import {
   Appearance,
   StyleSheet,

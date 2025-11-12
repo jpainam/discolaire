@@ -7,7 +7,7 @@ import {
   ChevronUp,
   DollarSign,
 } from "lucide-react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { trpc } from "~/utils/api";
 
@@ -19,7 +19,7 @@ export default function StudentFeesTab({
   const [expandedFee, setExpandedFee] = useState<string | null>(null);
 
   const { data: fees, isPending } = useQuery(
-    trpc.classroom.fees.queryOptions(classroomId),
+    trpc.classroom.fees.queryOptions(classroomId)
   );
 
   const toggleFeeExpansion = (feeId: number) => {
