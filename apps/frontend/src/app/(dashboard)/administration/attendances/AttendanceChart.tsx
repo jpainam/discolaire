@@ -56,7 +56,7 @@ export function AttendanceChart() {
   }, [isMobile]);
 
   const { schoolYear } = useSchool();
-  const filteredData = chartData?.filter((item) => {
+  const filteredData = chartData.filter((item) => {
     const date = new Date(item.date);
     const referenceDate = schoolYear.startDate;
     let daysToSubtract = 90;

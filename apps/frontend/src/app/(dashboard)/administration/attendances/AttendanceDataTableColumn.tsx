@@ -21,8 +21,6 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 
 import { Badge } from "~/components/base-badge";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
-import { useSheet } from "~/hooks/use-sheet";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -212,11 +210,10 @@ export function getColumns(): ColumnDef<ProcedureOutput, unknown>[] {
   ];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ActionCells({ attendance }: { attendance: ProcedureOutput }) {
-  const { openSheet } = useSheet();
   const confirm = useConfirm();
   const { t } = useLocale();
-  const router = useRouter();
 
   const canDeleteClassroom = useCheckPermission(
     "classroom",
@@ -229,6 +226,7 @@ function ActionCells({ attendance }: { attendance: ProcedureOutput }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const deleteClassroomMutation = useMutation(
     trpc.classroom.delete.mutationOptions({
       onSuccess: async () => {
