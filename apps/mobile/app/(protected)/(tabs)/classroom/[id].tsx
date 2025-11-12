@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import {

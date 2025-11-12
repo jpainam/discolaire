@@ -23,10 +23,11 @@ export const AuthContext = createContext<AuthState>({
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [isReady, setIsReady] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { data, isPending } = authClient.useSession();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!data?.session);
+
+  const isReady = !isPending;
 
   const logIn = async (username: string, password: string) => {
     const { data, error } = await authClient.signIn.username({
@@ -48,15 +49,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setIsLoggedIn(false);
     router.replace("/auth/login");
   };
-
-  useEffect(() => {
-    if (!isPending) {
-      if (data?.session) {
-        setIsLoggedIn(true);
-      }
-      setIsReady(true);
-    }
-  }, [data?.session, isPending]);
 
   useEffect(() => {
     if (isReady) {

@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+ 
+ 
+ 
 import type { RouterOutputs } from "@repo/api";
 import { useQuery } from "@tanstack/react-query";
 import { Briefcase, Mail, MapPin, Phone } from "lucide-react-native";
