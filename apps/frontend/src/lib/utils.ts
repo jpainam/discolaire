@@ -1,21 +1,11 @@
-import type { CoreAssistantMessage, CoreToolMessage, UIMessage, UIMessagePart } from "ai";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
-import { formatISO } from "date-fns";
 import i18next from "i18next";
 import { customAlphabet } from "nanoid";
 import { twMerge } from "tailwind-merge";
 
-
-
-import type { AiDocument, AiMessage } from "@repo/db/server";
-
-
-
 import type { ErrorCode } from "./errors";
-import type { ChatMessage, ChatTools, CustomUIDataTypes } from "./types";
 import { ChatSDKError } from "./errors";
-
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -153,59 +143,6 @@ export function generateUUID(): string {
   });
 }
 
-type ResponseMessageWithoutId = CoreToolMessage | CoreAssistantMessage;
-type ResponseMessage = ResponseMessageWithoutId & { id: string };
-
-export function getMostRecentUserMessage(messages: UIMessage[]) {
-  const userMessages = messages.filter((message) => message.role === "user");
-  return userMessages.at(-1);
-}
-
-export function getDocumentTimestampByIndex(
-  documents: AiDocument[],
-  index: number,
-) {
-  //if (!documents) return new Date();
-  if (index > documents.length) return new Date();
-  const document = documents[index];
-  if (!document) return new Date();
-  return document.createdAt;
-}
-
-export function getTrailingMessageId({
-  messages,
-}: {
-  messages: ResponseMessage[];
-}): string | null {
-  const trailingMessage = messages.at(-1);
-
-  if (!trailingMessage) return null;
-
-  return trailingMessage.id;
-}
-
-export function sanitizeText(text: string) {
-  return text.replace("<has_function_call>", "");
-}
-
-export function convertToUIMessages(messages: AiMessage[]): ChatMessage[] {
-  return messages.map((message) => ({
-    id: message.id,
-    role: message.role as "user" | "assistant" | "system",
-    parts: message.parts as UIMessagePart<CustomUIDataTypes, ChatTools>[],
-    metadata: {
-      createdAt: formatISO(message.createdAt),
-    },
-  }));
-}
-
-export function getTextFromMessage(message: ChatMessage): string {
-  return message.parts
-    .filter((part) => part.type === "text")
-    .map((part) => part.text)
-    .join("");
-}
-
 export function generateStringColor(): string {
   const letters = "0123456789ABCDEF";
   let color = "#";
@@ -222,8 +159,6 @@ export function getLatenessValue(value: string) {
   const [hours, minutes] = value.split(":").map(Number);
   return (hours ?? 0) * 60 + (minutes ?? 0);
 }
-
-
 
 export function getWeekdayName(dayNumber: number, locale = "en-US"): string {
   // Create a reference date where Sunday = 0

@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation";
 
 import type { Sidebar } from "@repo/ui/components/sidebar";
 
-import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { MainSidebar } from "~/components/MainSidebar";
+import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { AdminSidebar } from "./administration/admin-sidebar";
 //import { TimetableSidebar } from "./timetables/TimetableSidebar";
-import { AiChatSidebar } from "./ai/AiChatSidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
@@ -42,8 +41,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isStaff =
     pathname.startsWith("/staffs") && pathname.split("/").length > 2;
 
-  const isAi = pathname.startsWith("/ai");
-
   //const isTimetable = pathname.startsWith("/timetables");
 
   React.useEffect(() => {
@@ -59,7 +56,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {isHome && <MainSidebar {...props} />}
       {isStudent && <StudentSidebar {...props} />}
       {isAdmin && <AdminSidebar {...props} />}
-      {isAi && <AiChatSidebar {...props} />}
+
       {isUser && <UserSidebar {...props} />}
       {isContact && <ContactSidebar {...props} />}
       {isStaff && <StaffSidebar {...props} />}

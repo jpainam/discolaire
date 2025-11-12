@@ -109,7 +109,7 @@ export function MainSidebar({
 
   tools.push({
     name: "ai",
-    url: `/ai`,
+    url: `https://chat.discolaire.com`,
     icon: BrainIcon,
   });
 
