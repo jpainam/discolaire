@@ -50,7 +50,7 @@ const ipbwTranslate = {
     "Directeur des Etudes 1er Cycle": "Director of 1st Studies",
     "Groupe 1": "Group 1",
     "Groupe 2": "Group 2",
-    "Groupe 3": "Group 3"
+    "Groupe 3": "Group 3",
   },
   FRA: {},
 };

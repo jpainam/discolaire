@@ -1,6 +1,5 @@
 import { getSession } from "~/auth/server";
 
-
 export async function POST() {
   const session = await getSession();
   if (!session) {

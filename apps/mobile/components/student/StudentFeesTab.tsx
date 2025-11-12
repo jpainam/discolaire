@@ -19,7 +19,7 @@ export default function StudentFeesTab({
   const [expandedFee, setExpandedFee] = useState<string | null>(null);
 
   const { data: fees, isPending } = useQuery(
-    trpc.classroom.fees.queryOptions(classroomId)
+    trpc.classroom.fees.queryOptions(classroomId),
   );
 
   const toggleFeeExpansion = (feeId: number) => {

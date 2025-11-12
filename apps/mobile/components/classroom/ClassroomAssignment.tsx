@@ -25,7 +25,7 @@ export default function ClassroomAssignments({
   classroomId: string;
 }) {
   const { data: assignments, isPending } = useQuery(
-    trpc.classroom.assignments.queryOptions(classroomId)
+    trpc.classroom.assignments.queryOptions(classroomId),
   );
   const [filter, setFilter] = useState<
     "all" | "upcoming" | "completed" | "past-due"

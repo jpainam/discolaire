@@ -15,7 +15,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <HydrateClient>
       <div className="grid lg:grid-cols-[1fr_23rem]">
-        <div className="flex py-2 flex-col gap-2 px-4">
+        <div className="flex flex-col gap-2 px-4 py-2">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-8 w-full" />}>
               <TransactionHeader />

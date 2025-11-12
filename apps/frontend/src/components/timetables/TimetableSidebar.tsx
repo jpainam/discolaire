@@ -4,17 +4,24 @@ import type * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
 
-
-
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail, SidebarSeparator } from "@repo/ui/components/sidebar";
-
-
+import { Calendar } from "@repo/ui/components/calendar";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarSeparator,
+} from "@repo/ui/components/sidebar";
 
 import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 import { Calendars } from "./calendars";
-import { Calendar } from "@repo/ui/components/calendar";
-
 
 // This is sample data.
 const data = {

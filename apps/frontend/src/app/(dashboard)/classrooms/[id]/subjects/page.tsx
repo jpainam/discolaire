@@ -3,11 +3,10 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-
+import { ClassroomSubjectTable } from "~/components/classrooms/subjects/ClassroomSubjectTable";
 import { SubjectHeader } from "~/components/classrooms/subjects/SubjectHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { ClassroomSubjectTable } from "~/components/classrooms/subjects/ClassroomSubjectTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

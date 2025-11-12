@@ -4,16 +4,18 @@ import Link from "next/link";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 
-
-
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-
-
 
 import { useTRPC } from "~/trpc/react";
 import { getNameParts } from "~/utils";
-
 
 export function LatestAttendanceTable({ className }: { className: string }) {
   const t = useTranslations();

@@ -161,7 +161,10 @@ export function Step2() {
             <FormItem className="flex-1">
               <FormLabel>{t("dateOfEntry")}</FormLabel>
               <FormControl>
-                <DatePicker defaultValue={field.value} onSelectAction={field.onChange} />
+                <DatePicker
+                  defaultValue={field.value}
+                  onSelectAction={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

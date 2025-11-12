@@ -4,20 +4,22 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
-
-
 import { Button } from "@repo/ui/components/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/components/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { Separator } from "@repo/ui/components/separator";
-
-
 
 import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
-
 
 export function ChurchDetailsForm() {
   const { t } = useLocale();
@@ -159,7 +161,6 @@ export function ChurchDetailsForm() {
                 </FormItem>
               )}
             />
-           
           </div>
         </fieldset>
         <div className="my-4 flex flex-row justify-end gap-4">

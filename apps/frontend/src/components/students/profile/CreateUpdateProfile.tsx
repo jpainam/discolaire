@@ -68,7 +68,10 @@ export function CreateUpdateProfile() {
                 <FormItem className="flex-1">
                   <FormLabel>{t("dateOfBirth")}</FormLabel>
                   <FormControl>
-                    <DatePicker defaultValue={field.value} onSelectAction={field.onChange}  />
+                    <DatePicker
+                      defaultValue={field.value}
+                      onSelectAction={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

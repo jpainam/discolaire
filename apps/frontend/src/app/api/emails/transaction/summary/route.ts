@@ -1,19 +1,13 @@
-;
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
-
-
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
 import { sendEmail } from "@repo/utils/resend";
-
-
 
 import { getSession } from "~/auth/server";
 import { db } from "~/lib/db";
 import { getFullName } from "~/utils";
-
 
 const schema = z.object({
   userId: z.string(),

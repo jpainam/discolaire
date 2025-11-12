@@ -72,7 +72,9 @@ export function SubjectSelector({
           className={cn("w-full justify-between", className)}
         >
           {value
-            ? decode(data.find((d) => d.id === Number(value))?.course.name ?? "")
+            ? decode(
+                data.find((d) => d.id === Number(value))?.course.name ?? "",
+              )
             : (placeholder ?? t("Select a subject"))}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>

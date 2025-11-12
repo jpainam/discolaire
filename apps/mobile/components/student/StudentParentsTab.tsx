@@ -1,6 +1,3 @@
- 
- 
- 
 import type { RouterOutputs } from "@repo/api";
 import { useQuery } from "@tanstack/react-query";
 import { Briefcase, Mail, MapPin, Phone } from "lucide-react-native";
@@ -25,7 +22,7 @@ export default function StudentParentsTab({
   student: RouterOutputs["student"]["get"];
 }) {
   const { data: studentContacts, isPending } = useQuery(
-    trpc.student.contacts.queryOptions(student.id)
+    trpc.student.contacts.queryOptions(student.id),
   );
   const handlePhoneCall = async (phoneNumber: string) => {
     await Linking.openURL(`tel:${phoneNumber}`);

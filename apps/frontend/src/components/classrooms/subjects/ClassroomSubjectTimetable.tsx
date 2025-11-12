@@ -28,9 +28,9 @@ import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useSheet } from "~/hooks/use-sheet";
+import { getWeekdayName } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { getWeekdayName } from "~/lib/utils";
 
 export function ClassroomSubjectTimetable({
   subjectId,
@@ -233,4 +233,3 @@ export function ClassroomSubjectTimetable({
     </div>
   );
 }
-

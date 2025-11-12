@@ -174,7 +174,10 @@ export function CreateEditLoan({
               <FormItem>
                 <FormLabel>{t("returned_date")}</FormLabel>
                 <FormControl>
-                  <DatePicker defaultValue={field.value ?? undefined} onSelectAction={(val) => field.onChange(val)} />
+                  <DatePicker
+                    defaultValue={field.value ?? undefined}
+                    onSelectAction={(val) => field.onChange(val)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
