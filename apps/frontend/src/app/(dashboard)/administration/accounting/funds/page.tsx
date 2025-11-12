@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { getTranslations } from "next-intl/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
@@ -11,12 +10,7 @@ import {
 } from "@repo/ui/components/tabs";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import {
-  batchPrefetch,
-  getQueryClient,
-  HydrateClient,
-  trpc,
-} from "~/trpc/server";
+import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { FundTable } from "./FundTable";
 
 export default async function Page() {
@@ -55,7 +49,7 @@ export default async function Page() {
             </TabsContent>
           );
         })}
-        
+
         <TabsContent value="school_fees"></TabsContent>
       </Tabs>
     </HydrateClient>
