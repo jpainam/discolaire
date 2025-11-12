@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { MoreVertical, PanelLeftOpen, Search } from "lucide-react";
@@ -37,18 +38,26 @@ import { ClassroomFund } from "./ClassroomFund";
 
 export function FundTable({ journalId }: { journalId: string }) {
   const trpc = useTRPC();
+  const [query, setQuery] = useState("");
   const quotaQuery = useQuery(
     trpc.transaction.quotas.queryOptions({ journalId }),
   );
   const locale = useLocale();
   const t = useTranslations();
-  const quotas = quotaQuery.data ?? [];
+
   const { openSheet } = useSheet();
+  const filtered = useMemo(() => {
+    const quotas = quotaQuery.data ?? [];
+    return quotas.filter((q) => q.classroom.toLowerCase().includes(query));
+  }, [query, quotaQuery.data]);
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
-        <InputGroup>
-          <InputGroupInput placeholder="Search..." />
+      <div className="grid items-center gap-2 lg:flex">
+        <InputGroup className="w-full lg:w-96">
+          <InputGroupInput
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("search")}
+          />
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
@@ -88,7 +97,7 @@ export function FundTable({ journalId }: { journalId: string }) {
           </TableHeader>
           <TableBody>
             {quotaQuery.isPending && <FunTableSkeleton />}
-            {quotas.map((q, index) => {
+            {filtered.map((q, index) => {
               return (
                 <TableRow key={index}>
                   <TableCell>

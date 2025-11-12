@@ -4,9 +4,17 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { decode } from "entities";
+import { PrinterIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { TransactionStatus } from "@repo/db/enums";
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
@@ -18,6 +26,8 @@ import {
 } from "@repo/ui/components/table";
 
 import { Badge } from "~/components/base-badge";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 
@@ -93,7 +103,7 @@ export function ClassroomFund({
     .map((t) => t.amount);
 
   return (
-    <div className="flex flex-col gap-2 overflow-auto">
+    <div className="flex flex-col gap-2 overflow-auto px-2">
       <div className="flex flex-wrap gap-4 px-4">
         <Badge variant={"success"} appearance={"outline"}>
           {t("validated")}:{" "}
@@ -123,43 +133,70 @@ export function ClassroomFund({
           })}
         </Badge>
       </div>
-      <Table className="text-xs">
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("student")}</TableHead>
-            <TableHead className="text-right">{t("amount")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {rows.map((row, index) => {
-            return (
-              <TableRow key={index}>
-                <TableCell>
-                  <Link
-                    className="hover:underline"
-                    href={`/students/${row.studentId}/transactions`}
-                  >
-                    {decode(row.studentName)}
-                  </Link>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Badge
-                    variant={row.amount < totalFees ? "destructive" : "success"}
-                    appearance={"outline"}
-                  >
-                    {row.amount.toLocaleString(locale, {
-                      style: "currency",
-                      maximumFractionDigits: 0,
-                      minimumFractionDigits: 0,
-                      currency: CURRENCY,
-                    })}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+      <div className="h-full overflow-auto border">
+        <Table className="text-xs">
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t("student")}</TableHead>
+              <TableHead className="text-right">{t("amount")}</TableHead>
+              <TableHead className="w-[25px]">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label="More Options"
+                    >
+                      <PrinterIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <PDFIcon />
+                      {t("pdf_export")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <XMLIcon />
+                      {t("xml_export")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row, index) => {
+              return (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Link
+                      className="hover:underline"
+                      href={`/students/${row.studentId}/transactions`}
+                    >
+                      {decode(row.studentName)}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-right" colSpan={2}>
+                    <Badge
+                      variant={
+                        row.amount < totalFees ? "destructive" : "success"
+                      }
+                      appearance={"outline"}
+                    >
+                      {row.amount.toLocaleString(locale, {
+                        style: "currency",
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                        currency: CURRENCY,
+                      })}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
