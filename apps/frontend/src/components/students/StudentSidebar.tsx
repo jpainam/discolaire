@@ -1,5 +1,6 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
@@ -11,6 +12,8 @@ import {
   CalendarDays,
   CaptionsIcon,
   CircleDollarSign,
+  CircleUserIcon,
+  ContactIcon,
   CreditCard,
   FileText,
   KeySquare,
@@ -19,14 +22,14 @@ import {
   NotebookPen,
   NotepadTextDashed,
   PrinterIcon,
-  User,
-  Users,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -43,116 +46,108 @@ export function StudentSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const params = useParams<{ id: string }>();
-  const data = {
-    information: [
-      {
-        name: "profile",
-        icon: User,
-        url: `/students/${params.id}`,
-      },
-      {
-        name: "contacts",
-        icon: Users,
-        url: `/students/${params.id}/contacts`,
-      },
-      {
-        name: "id_card",
-        icon: CreditCard,
-        url: `/students/${params.id}/id-card`,
-      },
-      // {
-      //   name: "photos",
-      //   icon: ImageIcon,
-      //   url: `/students/${params.id}/photos`,
-      // },
-
-      {
-        name: "grades",
-        icon: NotepadTextDashed,
-        url: `/students/${params.id}/grades`,
-      },
-      {
-        name: "transcripts",
-        icon: CaptionsIcon,
-        url: `/students/${params.id}/gradesheets`,
-      },
-      {
-        name: "reportcards",
-        icon: BookText,
-        url: `/students/${params.id}/reportcards`,
-      },
-      {
-        name: "attendances",
-        icon: LineChart,
-        url: `/students/${params.id}/attendances`,
-      },
-
-      {
-        name: "enrollments",
-        icon: ArrowRightLeft,
-        url: `/students/${params.id}/enrollments`,
-      },
-
-      {
-        name: "assignments",
-        icon: NotebookPen,
-        url: `/students/${params.id}/assignments`,
-      },
-      {
-        name: "transactions",
-        icon: CircleDollarSign,
-        url: `/students/${params.id}/transactions`,
-      },
-      {
-        name: "timetables",
-        icon: CalendarDays,
-        url: `/students/${params.id}/timetables`,
-      },
-      {
-        name: "print",
-        icon: PrinterIcon,
-        url: `/students/${params.id}/print`,
-      },
-
-      {
-        name: "login_info",
-        icon: KeySquare,
-        url: `/students/${params.id}/login-info`,
-      },
-
-      {
-        name: "mail",
-        icon: Mail,
-        url: `/students/${params.id}/mail`,
-      },
-      {
-        name: "health",
-        icon: Ambulance,
-        url: `/students/${params.id}/health`,
-      },
-      {
-        name: "notifications",
-        icon: BellRing,
-        url: `/students/${params.id}/notifications`,
-      },
-      {
-        name: "documents",
-        icon: FileText,
-        url: `/students/${params.id}/documents`,
-      },
-    ],
-  };
+  const informations = [
+    {
+      name: "profile",
+      icon: CircleUserIcon,
+      url: `/students/${params.id}`,
+    },
+    {
+      name: "contacts",
+      icon: ContactIcon,
+      url: `/students/${params.id}/contacts`,
+    },
+    {
+      name: "id_card",
+      icon: CreditCard,
+      url: `/students/${params.id}/id-card`,
+    },
+    {
+      name: "login_info",
+      icon: KeySquare,
+      url: `/students/${params.id}/login-info`,
+    },
+  ];
+  const academy = [
+    {
+      name: "enrollments",
+      icon: ArrowRightLeft,
+      url: `/students/${params.id}/enrollments`,
+    },
+    {
+      name: "grades",
+      icon: NotepadTextDashed,
+      url: `/students/${params.id}/grades`,
+    },
+    {
+      name: "transcripts",
+      icon: CaptionsIcon,
+      url: `/students/${params.id}/gradesheets`,
+    },
+    {
+      name: "reportcards",
+      icon: BookText,
+      url: `/students/${params.id}/reportcards`,
+    },
+    {
+      name: "assignments",
+      icon: NotebookPen,
+      url: `/students/${params.id}/assignments`,
+    },
+  ];
   const { t } = useLocale();
-  const pathname = usePathname();
+
   const canReadTransaction = useCheckPermission(
     "transaction",
     PermissionAction.READ,
   );
   if (!canReadTransaction) {
-    data.information = data.information.filter(
-      (item) => item.name !== "transactions",
-    );
+    informations.push({
+      name: "transactions",
+      icon: CircleDollarSign,
+      url: `/students/${params.id}/transactions`,
+    });
   }
+  const school_life = [
+    {
+      name: "attendances",
+      icon: LineChart,
+      url: `/students/${params.id}/attendances`,
+    },
+    {
+      name: "timetables",
+      icon: CalendarDays,
+      url: `/students/${params.id}/timetables`,
+    },
+    {
+      name: "mail",
+      icon: Mail,
+      url: `/students/${params.id}/mail`,
+    },
+    {
+      name: "health",
+      icon: Ambulance,
+      url: `/students/${params.id}/health`,
+    },
+    {
+      name: "notifications",
+      icon: BellRing,
+      url: `/students/${params.id}/notifications`,
+    },
+    {
+      name: "documents",
+      icon: FileText,
+      url: `/students/${params.id}/documents`,
+    },
+  ];
+  const others = [
+    {
+      name: "print",
+      icon: PrinterIcon,
+      url: `/students/${params.id}/print`,
+    },
+  ];
+  const menus = { informations, academy, school_life, others };
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -172,38 +167,44 @@ export function StudentSidebar({
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-
-        <SidebarGroup>
-          {/* <SidebarGroupLabel>{t("information")}</SidebarGroupLabel> */}
-          <SidebarMenu>
-            {data.information.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton
-                  asChild
-                  //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
-                  //disabled={true}
-                  tooltip={t(item.name)}
-                  isActive={pathname === item.url}
-                >
-                  <Link
-                    href={
-                      item.url.includes("undefined") ? "/students" : item.url
-                    }
-                  >
-                    <item.icon
-                    //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                    //size={22}
-                    //aria-hidden="true"
-                    />
-                    <span>{t(item.name)}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+        <MenuSideGroup items={menus.informations} label="information" />
+        <MenuSideGroup label="academy" items={menus.academy} />
+        <MenuSideGroup label="school_life" items={menus.school_life} />
+        <MenuSideGroup label="others" items={menus.others} />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+function MenuSideGroup({
+  items,
+  label,
+}: {
+  items: { name: string; url: string; icon: LucideIcon }[];
+  label: string;
+}) {
+  const t = useTranslations();
+  const pathname = usePathname();
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>
+      <SidebarMenu>
+        {items.map((item) => (
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton
+              asChild
+              tooltip={t(item.name)}
+              isActive={pathname === item.url}
+            >
+              <Link href={item.url}>
+                <item.icon />
+                <span>{t(item.name)}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import i18next from "i18next";
 
 import type { RouterOutputs } from "@repo/api";
@@ -52,15 +53,18 @@ export function GridViewFinanceCard({
         />
 
         <div className="flex w-full flex-col justify-between gap-2 px-2">
-          <div className="flex w-full cursor-pointer flex-col">
+          <div className="flex w-full flex-col">
             <div className="flex w-full flex-row items-center justify-between text-xs">
               {student.registrationNumber}
             </div>
             <div className="flex flex-row items-center justify-between pr-4">
               <SimpleTooltip content={getFullName(student)}>
-                <span className="line-clamp-1 text-xs">
+                <Link
+                  href={`/students/${student.id}/transactions`}
+                  className="line-clamp-1 text-xs hover:underline"
+                >
                   {getFullName(student)}
-                </span>
+                </Link>
               </SimpleTooltip>
             </div>
           </div>

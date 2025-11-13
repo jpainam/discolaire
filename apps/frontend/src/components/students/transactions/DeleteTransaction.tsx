@@ -70,7 +70,7 @@ export function DeleteTransaction({
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                {t("Explain why you are deleting these transactions")}
+                {t("Observation")}
               </FormLabel>
               <FormControl>
                 <Textarea className="resize-none" {...field} />

@@ -1,4 +1,9 @@
-import { Contact, FileStack, NotepadTextDashed, Users } from "lucide-react";
+import {
+  Contact,
+  ContactIcon,
+  FileStack,
+  NotepadTextDashed,
+} from "lucide-react";
 
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
@@ -35,7 +40,7 @@ export default async function Layout({
     {
       name: t("sms_management.to_staffs"),
       href: routes.administration.sms_management.to_staffs,
-      icon: <Users className="h-4 w-4" />,
+      icon: <ContactIcon className="h-4 w-4" />,
     },
   ];
 

@@ -15,6 +15,7 @@ import { useSetAtom } from "jotai";
 import {
   BellRing,
   CheckIcon,
+  ContactIcon,
   ImageMinusIcon,
   ImagePlusIcon,
   KeyRound,
@@ -34,7 +35,6 @@ import {
   Trash2,
   UserIcon,
   UserPlus2,
-  Users,
   XIcon,
 } from "lucide-react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
@@ -304,7 +304,7 @@ export function StudentHeader() {
                 router.push(routes.students.contacts(params.id));
               }}
             >
-              <Users className="h-3 w-3" />
+              <ContactIcon className="h-3 w-3" />
             </Button>
           </SimpleTooltip>
 

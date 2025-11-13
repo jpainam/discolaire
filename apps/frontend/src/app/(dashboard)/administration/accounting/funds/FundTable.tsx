@@ -50,6 +50,7 @@ export function FundTable({ journalId }: { journalId: string }) {
     const quotas = quotaQuery.data ?? [];
     return quotas.filter((q) => q.classroom.toLowerCase().includes(query));
   }, [query, quotaQuery.data]);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="grid items-center gap-2 lg:flex">
