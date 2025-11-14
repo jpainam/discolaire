@@ -2,7 +2,6 @@
 import { Worker } from "bullmq";
 import { fromError } from "zod-validation-error/v4";
 
-
 import { logQueue, logQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 import { logActivitySchema } from "./validation-schema";
@@ -21,7 +20,22 @@ new Worker(
         }
         const { userId, action, entity, schoolId, entityId, metadata } =
           result.data;
-        
+        const response = await fetch(`/api/logs`, {
+          body: JSON.stringify({
+            userId,
+            action,
+            entity,
+            entityId,
+            schoolId,
+            metadata,
+          }),
+        });
+        if (response.ok) {
+          console.log("Log action succeeed");
+        } else {
+          const error = await response.json();
+          console.error(error);
+        }
       } catch (error) {
         console.log("Error processing log job:", error);
         throw error;

@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
-
-import { caller } from "~/trpc/server";
 
 z.config({
   customError: createErrorMap({
@@ -35,14 +34,14 @@ export async function POST(req: NextRequest) {
     const { userId, schoolId, action, entity, entityId, metadata } =
       result.data;
 
-    await caller.logActivity.create({
-      userId,
-      schoolId,
-      action,
-      entity,
-      entityId,
-      metadata,
-    });
+    // await caller.logActivity.create({
+    //   userId,
+    //   schoolId,
+    //   action,
+    //   entity,
+    //   entityId,
+    //   metadata,
+    // });
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {
@@ -50,3 +49,26 @@ export async function POST(req: NextRequest) {
     return Response.json({ error }, { status: 500 });
   }
 }
+
+// create: protectedProcedure
+//   .input(
+//     z.object({
+//       userId: z.string(),
+//       action: z.string(),
+//       entity: z.string(),
+//       entityId: z.string(),
+//       metadata: z.json(),
+//     }),
+//   )
+//   .mutation(({ ctx, input }) => {
+//     return ctx.db.logActivity.create({
+//       data: {
+//         userId: input.userId,
+//         schoolId: ctx.schoolId,
+//         action: input.action,
+//         entity: input.entity,
+//         entityId: input.entityId,
+//         //metadata: input.metadata,
+//       },
+//     });
+//   }),

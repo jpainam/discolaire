@@ -4,7 +4,7 @@ import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
 import { env } from "~/env";
-import { db } from "~/lib/db";
+import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
 import { JobNames, jobQueue, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
@@ -38,22 +38,14 @@ new Worker(
       }
 
       const { cron, schoolId, userId, schoolYearId } = result.data;
+      const user = await caller.user.get(userId);
 
-      const user = await db.user.findUniqueOrThrow({
-        where: {
-          id: userId,
-        },
-      });
       if (!user.email) {
         logger.error(`User ${userId} does not have an email address`);
         return;
       }
+      const school = await caller.school.get(schoolId);
 
-      const school = await db.school.findUniqueOrThrow({
-        where: {
-          id: schoolId,
-        },
-      });
       const interval = parser.parseExpression(cron);
       const startDate = interval.prev().toDate();
       const endDate = new Date();
@@ -101,10 +93,8 @@ function isValidCron(cron: string): boolean {
 }
 
 export async function scheduleTransactionSummaryNofication() {
-  const tasks = await db.scheduleTask.findMany({
-    where: {
-      name: "transaction-summary",
-    },
+  const tasks = await caller.scheduleTask.byName({
+    name: "transaction-summary",
   });
   for (const task of tasks) {
     if (!isValidCron(task.cron)) {
@@ -118,22 +108,16 @@ export async function scheduleTransactionSummaryNofication() {
       logger.error(`No staffId found for task ${task.id} ${task.name}`);
       continue;
     }
-    const staff = await db.staff.findUnique({
-      where: {
-        id: staffId,
-      },
-    });
-    if (!staff?.userId) {
+    const staff = await caller.staff.get(staffId);
+
+    if (!staff.userId) {
       logger.error(
         `No userId found for staff ${staffId} for task ${task.id} ${task.name}`,
       );
       continue;
     }
-    const school = await db.school.findUniqueOrThrow({
-      where: {
-        id: task.schoolId,
-      },
-    });
+    const school = await caller.school.get(task.schoolId);
+
     const values = {
       name: task.name,
       schoolYearId: task.schoolYearId,
