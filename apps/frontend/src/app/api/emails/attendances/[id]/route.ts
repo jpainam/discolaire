@@ -1,7 +1,6 @@
 import type { NextRequest } from "next/server";
 
 import { getSession } from "~/auth/server";
-import { db } from "~/lib/db";
 import { caller } from "~/trpc/server";
 
 export async function POST(
@@ -21,14 +20,14 @@ export async function POST(
     }
     const attendance = await caller.attendance.get(Number(id));
     console.log(attendance);
-    await db.attendance.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        notificationSent: true,
-      },
-    });
+    //const queryClient = getQueryClient();
+    // await queryClient.fetchQuery(trpc.attendance.update.mutationOptions({
+
+    //     id: Number(id),
+
+    //     notificationSent: true,
+
+    // });
     return new Response("OK", { status: 200 });
   } catch (error) {
     console.error(error);

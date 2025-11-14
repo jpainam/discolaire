@@ -1,8 +1,6 @@
 "use server";
 
-import { db } from "~/lib/db";
-import { studentIdMap } from "./student_id_map";
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const exclus: { elevee: number; dateExclusion: string }[] = [
   { elevee: 4475, dateExclusion: "2024-06-03" },
   { elevee: 5504, dateExclusion: "2024-06-03" },
@@ -88,49 +86,49 @@ const exclus: { elevee: number; dateExclusion: string }[] = [
   { elevee: 4701, dateExclusion: "2024-07-15" },
 ];
 
-export async function syncEleveExclus() {
-  const exclusionMap: Record<string, string> = {};
+// export async function syncEleveExclus() {
+//   const exclusionMap: Record<string, string> = {};
 
-  for (const e of exclus) {
-    const uuid = studentIdMap[e.elevee.toString()];
-    if (uuid) {
-      exclusionMap[uuid] = e.dateExclusion;
-    }
-  }
+//   for (const e of exclus) {
+//     const uuid = studentIdMap[e.elevee.toString()];
+//     if (uuid) {
+//       exclusionMap[uuid] = e.dateExclusion;
+//     }
+//   }
 
-  const excludedUuids = Object.keys(exclusionMap);
+//   const excludedUuids = Object.keys(exclusionMap);
 
-  const students = await db.student.findMany({
-    where: {
-      id: { in: excludedUuids },
-    },
-  });
-  console.log(`Found ${students.length} students to update`);
-  for (const student of students) {
-    const d = exclusionMap[student.id];
-    let newDate = new Date().toLocaleDateString("fr", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
-    if (d) {
-      newDate = new Date(d).toLocaleDateString("fr", {
-        year: "numeric",
-        month: "short",
-        day: "2-digit",
-      });
-    }
+//   const students = await db.student.findMany({
+//     where: {
+//       id: { in: excludedUuids },
+//     },
+//   });
+//   console.log(`Found ${students.length} students to update`);
+//   for (const student of students) {
+//     const d = exclusionMap[student.id];
+//     let newDate = new Date().toLocaleDateString("fr", {
+//       year: "numeric",
+//       month: "short",
+//       day: "2-digit",
+//     });
+//     if (d) {
+//       newDate = new Date(d).toLocaleDateString("fr", {
+//         year: "numeric",
+//         month: "short",
+//         day: "2-digit",
+//       });
+//     }
 
-    await db.student.update({
-      where: {
-        id: student.id,
-      },
-      data: {
-        status: "EXPELLED",
-        observation: `Exclu(e) le ${newDate} (saisie automatique)`,
-      },
-    });
-    console.log(`Updated student ${student.id} - ${student.lastName}`);
-  }
-  return students.length;
-}
+//     await db.student.update({
+//       where: {
+//         id: student.id,
+//       },
+//       data: {
+//         status: "EXPELLED",
+//         observation: `Exclu(e) le ${newDate} (saisie automatique)`,
+//       },
+//     });
+//     console.log(`Updated student ${student.id} - ${student.lastName}`);
+//   }
+//   return students.length;
+// }

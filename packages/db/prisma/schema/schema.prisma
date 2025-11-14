@@ -154,18 +154,6 @@ model Enrollment {
     @@unique([schoolYearId, classroomId, studentId])
 }
 
-model Reporting {
-    id        Int      @id @default(autoincrement())
-    url       String
-    title     String
-    type      String   @default("pdf")
-    size      Int      @default(10)
-    createdAt DateTime @default(now()) @db.Timestamp(6)
-    status    String   @default("PENDING")
-    userId    String
-    schoolId  String
-}
-
 model ClassroomLevel {
     id         String      @id @default(cuid())
     name       String

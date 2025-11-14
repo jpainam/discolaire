@@ -1,13 +1,12 @@
 import type { NextRequest } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
+import { getLocale } from "next-intl/server";
 import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
-import { db } from "~/lib/db";
 import { numberToWords } from "~/lib/toword";
 import { getReceipt } from "~/reports/statements/receipt";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const searchSchema = z.object({
   id: z.coerce.number(),
@@ -32,23 +31,30 @@ export async function GET(req: NextRequest) {
       return new Response(error, { status: 400 });
     }
     const { id } = result.data;
+    const queryClient = getQueryClient();
 
-    const transaction = await caller.transaction.get(id);
+    const transaction = await queryClient.fetchQuery(
+      trpc.transaction.get.queryOptions(id),
+    );
 
     if (!transaction.printedAt) {
-      await db.transaction.update({
-        where: { id },
-        data: { printedAt: new Date(), printedById: session.user.id },
+      await caller.transaction.markPrinted({
+        id: id,
+        printedAt: new Date(),
       });
     }
 
-    const school = await caller.school.getSchool();
+    const school = await queryClient.fetchQuery(
+      trpc.school.getSchool.queryOptions(),
+    );
     //const student = await caller.student.get(transaction.account.studentId);
     //const contacts = await caller.student.contacts(transaction.account.studentId);
-    const { i18n } = await getServerTranslations();
-    const amountInWords = numberToWords(transaction.amount, i18n.language);
+    const locale = await getLocale();
+    const amountInWords = numberToWords(transaction.amount, locale);
 
-    const info = await caller.transaction.getReceiptInfo(id);
+    const info = await queryClient.fetchQuery(
+      trpc.transaction.getReceiptInfo.queryOptions(id),
+    );
 
     const stream = await renderToStream(
       getReceipt({

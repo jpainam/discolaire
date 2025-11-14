@@ -413,4 +413,23 @@ export const transactionRouter = {
         days: input.number_of_days,
       });
     }),
+
+  markPrinted: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        printedAt: z.date(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.transaction.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          printedAt: input.printedAt,
+          printedById: ctx.session.user.id,
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

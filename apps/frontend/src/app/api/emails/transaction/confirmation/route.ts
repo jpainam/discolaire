@@ -7,8 +7,7 @@ import { resend } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { getServerTranslations } from "~/i18n/server";
-import { db } from "~/lib/db";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 const schema = z.object({
@@ -33,22 +32,20 @@ export async function POST(req: Request) {
     const { transactionId, studentId, remaining, createdBy, status } =
       result.data;
 
-    const transaction = await caller.transaction.get(transactionId);
+    const queryClient = getQueryClient();
 
-    const student = await caller.student.get(studentId);
+    const transaction = await queryClient.fetchQuery(
+      trpc.transaction.get.queryOptions(transactionId),
+    );
 
-    const contacts = await db.studentContact.findMany({
-      include: {
-        contact: {
-          include: {
-            user: true,
-          },
-        },
-      },
-      where: {
-        studentId: transaction.studentId,
-      },
-    });
+    const student = await queryClient.fetchQuery(
+      trpc.student.get.queryOptions(studentId),
+    );
+
+    const contacts = await queryClient.fetchQuery(
+      trpc.student.contacts.queryOptions(transaction.studentId),
+    );
+
     const destinationEmails = contacts
       .map((c) => {
         if (c.accessBilling || c.paysFee) {

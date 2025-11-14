@@ -145,4 +145,22 @@ export const studentContactRouter = {
         },
       });
     }),
+  fromStudent: protectedProcedure
+    .input(
+      z.object({
+        studentIds: z.string().array(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.studentContact.findMany({
+        where: {
+          studentId: {
+            in: input.studentIds,
+          },
+        },
+        include: {
+          contact: true,
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

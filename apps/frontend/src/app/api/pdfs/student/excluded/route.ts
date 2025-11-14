@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
 import * as XLSX from "@e965/xlsx";
+import { getTranslations } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
-import { db } from "~/lib/db";
 import { getSheetName } from "~/lib/utils";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 
 export async function GET(req: NextRequest) {
@@ -40,18 +39,14 @@ async function toExcel({
 }: {
   students: RouterOutputs["student"]["excluded"];
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const studentIds = students.map((student) => student.id);
-  const contacts = await db.studentContact.findMany({
-    where: {
-      studentId: {
-        in: studentIds,
-      },
-    },
-    include: {
-      contact: true,
-    },
-  });
+  const queryClient = getQueryClient();
+
+  const contacts = await queryClient.fetchQuery(
+    trpc.studentContact.fromStudent.queryOptions({ studentIds }),
+  );
+
   // const dateFormat = Intl.DateTimeFormat(i18n.language, {
   //   year: "numeric",
   //   month: "2-digit",

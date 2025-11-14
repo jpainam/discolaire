@@ -2,9 +2,8 @@ import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
-import { db } from "~/lib/db";
 import { s3client } from "~/lib/s3-client";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 export async function POST(request: Request) {
   const session = await getSession();
@@ -71,7 +70,10 @@ export async function DELETE(request: Request) {
     if (!userId) {
       return Response.json({ error: "No userId provided" }, { status: 400 });
     }
-    const user = await caller.user.get(userId);
+    const queryClient = getQueryClient();
+    const user = await queryClient.fetchQuery(
+      trpc.user.get.queryOptions(userId),
+    );
 
     const avatar = user.avatar;
     if (!avatar) {
@@ -89,14 +91,9 @@ export async function DELETE(request: Request) {
     });
     const response = await s3client.send(command);
     // Update the avatar in the database
-    await db.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        avatar: null,
-      },
-    });
+
+    await caller.user.updateAvatar({ id: userId, avatar: null });
+
     return Response.json({ response });
   } catch (error) {
     return Response.json({ error: (error as Error).message });

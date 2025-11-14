@@ -352,4 +352,21 @@ export const userRouter = {
     });
     console.log("API Key created for student:", apiKey);
   }),
+  updateAvatar: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        avatar: z.string().nullish(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          avatar: input.avatar,
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

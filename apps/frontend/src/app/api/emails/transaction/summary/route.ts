@@ -6,7 +6,7 @@ import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary"
 import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
-import { db } from "~/lib/db";
+import { getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 const schema = z.object({
@@ -27,45 +27,27 @@ export async function POST(req: Request) {
       const error = z.treeifyError(result.error).errors;
       return new Response(JSON.stringify(error), { status: 400 });
     }
-    const { userId, schoolYearId, startDate, endDate } = result.data;
-    const transactions = await db.transaction.findMany({
-      include: {
-        student: true,
-        createdBy: true,
-        updatedBy2: true,
-      },
-      where: {
-        AND: [
-          { schoolYearId: schoolYearId },
-          {
-            createdAt: {
-              gte: startDate,
-              lte: endDate,
-            },
-          },
-        ],
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const { userId, startDate, endDate } = result.data;
+    const queryClient = getQueryClient();
+    const transactions = await queryClient.fetchQuery(
+      trpc.transaction.all.queryOptions({
+        from: startDate,
+        to: endDate,
+      }),
+    );
 
-    const user = await db.user.findUniqueOrThrow({
-      where: {
-        id: userId,
-      },
-    });
+    const user = await queryClient.fetchQuery(
+      trpc.user.get.queryOptions(userId),
+    );
+
     if (!user.email) {
       return new Response("User does not have an email address", {
         status: 400,
       });
     }
-
-    const school = await db.school.findUniqueOrThrow({
-      where: {
-        id: user.schoolId,
-      },
-    });
+    const school = await queryClient.fetchQuery(
+      trpc.school.get.queryOptions(user.schoolId),
+    );
 
     const plainText = await render(
       TransactionsSummary({

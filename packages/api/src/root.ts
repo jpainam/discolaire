@@ -40,7 +40,6 @@ import { photoRouter } from "./routers/photo";
 import { recipientRouter } from "./routers/recipient";
 import { religionRouter } from "./routers/religion";
 import { reportCardRouter } from "./routers/reportCard";
-import { reportingRouter } from "./routers/reporting";
 import { scheduleDivisionRouter } from "./routers/scheduleDivision";
 import { scheduleTaskRouter } from "./routers/scheduleTask";
 import { schoolRouter } from "./routers/school";
@@ -125,7 +124,6 @@ export const appRouter = createTRPCRouter({
   messaging: messagingRouter,
   fund: fundRouter,
   transaction: transactionRouter,
-  reporting: reportingRouter,
   subjectJournal: subjectJournalRouter,
   subjectTimetable: subjectTimetableRouter,
   importStudent: importStudentRouter,

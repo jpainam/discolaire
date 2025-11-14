@@ -8,7 +8,7 @@ import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
 import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
-import { db } from "~/lib/db";
+import { getQueryClient, trpc } from "~/trpc/server";
 
 z.config({
   customError: createErrorMap({
@@ -38,12 +38,10 @@ export async function POST(req: NextRequest) {
       );
     }
     const { url, email, name, userId } = result.data;
-    const user = await db.user.findFirstOrThrow({
-      where: { id: userId },
-      include: {
-        school: true,
-      },
-    });
+    const queryClient = getQueryClient();
+    const user = await queryClient.fetchQuery(
+      trpc.user.get.queryOptions(userId),
+    );
 
     await sendEmail({
       from: `${user.school.name} <hi@discolaire.com>`,
