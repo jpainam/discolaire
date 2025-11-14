@@ -21,6 +21,11 @@ const config = {
   ],
 
   images: {
+    localPatterns: [
+      {
+        pathname: "/api/download/images/**",
+      },
+    ],
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },
       {

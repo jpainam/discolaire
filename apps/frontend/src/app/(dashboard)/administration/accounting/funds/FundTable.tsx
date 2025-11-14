@@ -64,11 +64,29 @@ export function FundTable({ journalId }: { journalId: string }) {
           </InputGroupAddon>
         </InputGroup>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant={"secondary"} size={"sm"}>
+          <Button
+            onClick={() => {
+              window.open(
+                `/api/pdfs/accounting/funds?journalId=${journalId}&format=pdf`,
+                "_blank",
+              );
+            }}
+            variant={"secondary"}
+            size={"sm"}
+          >
             <PDFIcon />
             {t("pdf_export")}
           </Button>
-          <Button size={"sm"} variant={"secondary"}>
+          <Button
+            onClick={() => {
+              window.open(
+                `/api/pdfs/accounting/funds?journalId=${journalId}&format=csv`,
+                "_blank",
+              );
+            }}
+            size={"sm"}
+            variant={"secondary"}
+          >
             <XMLIcon />
             {t("xml_export")}
           </Button>

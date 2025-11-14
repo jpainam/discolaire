@@ -173,11 +173,25 @@ export function ClassroomFund({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        window.open(
+                          `/api/pdfs/accounting/funds?journalId=${journalId}&classroomId=${classroomId}&format=pdf`,
+                          "_blank",
+                        );
+                      }}
+                    >
                       <PDFIcon />
                       {t("pdf_export")}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        window.open(
+                          `/api/pdfs/accounting/funds?journalId=${journalId}&classroomId=${classroomId}&format=csv`,
+                          "_blank",
+                        );
+                      }}
+                    >
                       <XMLIcon />
                       {t("xml_export")}
                     </DropdownMenuItem>

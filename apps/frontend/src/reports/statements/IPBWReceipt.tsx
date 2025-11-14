@@ -10,8 +10,7 @@ import { decode } from "entities";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { CURRENCY } from "~/lib/constants";
-import { getAssetUrl } from "../utils";
+import { formatCurrency, getAssetUrl } from "../utils";
 
 const imageUrl = getAssetUrl("images");
 
@@ -141,14 +140,12 @@ export function IPBWReceipt({
                     <View style={{ flexDirection: "row", gap: 4 }}>
                       <Text style={{ fontWeight: "bold" }}>MONTANT : </Text>
                       <Text>
-                        {transaction.amount} {CURRENCY}({amountInWords})
+                        {formatCurrency(transaction.amount)} ({amountInWords})
                       </Text>
                     </View>
                     <View style={{ flexDirection: "row", gap: 4 }}>
                       <Text style={{ fontWeight: "bold" }}>RESTE : </Text>
-                      <Text>
-                        {remaining} {CURRENCY}
-                      </Text>
+                      <Text>{formatCurrency(remaining)}</Text>
                     </View>
                   </View>
                   <View style={{ flexDirection: "column", gap: 4 }}>
@@ -163,7 +160,9 @@ export function IPBWReceipt({
                         borderRadius: 5,
                       }}
                     >
-                      <Text>MONTANT : # {transaction.amount} #</Text>
+                      <Text>
+                        MONTANT : # {formatCurrency(transaction.amount)} #
+                      </Text>
                     </View>
 
                     <Text>

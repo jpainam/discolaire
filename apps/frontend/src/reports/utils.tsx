@@ -1,4 +1,5 @@
 import { env } from "~/env";
+import { CURRENCY } from "~/lib/constants";
 
 export function getCdnUrl() {
   if (env.NODE_ENV == "production") {
@@ -44,4 +45,28 @@ export function getAssetUrl(asset: string) {
       return `https://${env.S3_AVATAR_BUCKET_NAME}.s3.eu-central-1.amazonaws.com`;
     }
   }
+}
+
+export function formatCurrency(
+  value: number,
+  locale = "fr-FR",
+  currency = CURRENCY,
+) {
+  const parts = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+    currencyDisplay: "symbol",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).formatToParts(value);
+
+  let formatted = "";
+  for (const p of parts) {
+    if (p.type === "group") {
+      formatted += " "; // enforce space separator
+    } else {
+      formatted += p.value;
+    }
+  }
+  return formatted;
 }
