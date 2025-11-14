@@ -2,7 +2,7 @@
 import { Worker } from "bullmq";
 import { fromError } from "zod-validation-error/v4";
 
-import { db } from "~/lib/db";
+
 import { logQueue, logQueueName } from "./queue";
 import { getRedis } from "./redis-client";
 import { logActivitySchema } from "./validation-schema";
@@ -21,9 +21,7 @@ new Worker(
         }
         const { userId, action, entity, schoolId, entityId, metadata } =
           result.data;
-        await db.logActivity.create({
-          data: { userId, schoolId, action, entity, entityId, metadata },
-        });
+        
       } catch (error) {
         console.log("Error processing log job:", error);
         throw error;
