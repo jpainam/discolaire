@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -34,11 +33,6 @@ import {
 import { Label } from "@repo/ui/components/label";
 
 import { sync_attendance } from "~/actions/sync_attendance";
-import { syncEleveExclus } from "~/actions/sync_eleve_exclus";
-import {
-  syncTransactionIds,
-  updateFeesDate,
-} from "~/actions/sync_transaction_ids";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -103,19 +97,6 @@ export function SubscriptionHeader() {
     },
   ];
 
-  const syncTransactions = async () => {
-    const r = await syncTransactionIds();
-    toast.success(`${r} transactions updated`, { id: 0 });
-  };
-  const updateFees = async () => {
-    const r = await updateFeesDate();
-    toast.success(`${r} fees updated`, { id: 0 });
-  };
-
-  const updateStudentStatus = async () => {
-    const r = await syncEleveExclus();
-    toast.success(`${r} students updated`, { id: 0 });
-  };
   const updateAttendance = async () => {
     const r = await sync_attendance();
     toast.success(`${r} attendance updated`, { id: 0 });
