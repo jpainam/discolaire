@@ -1,11 +1,5 @@
-import { createErrorMap } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
-z.config({
-  customError: createErrorMap({
-    includePath: true,
-  }),
-});
 export const logActivitySchema = z.object({
   userId: z.string(),
   action: z.string(),

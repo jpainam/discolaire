@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Worker } from "bullmq";
-import { fromError } from "zod-validation-error/v4";
+import { z } from "zod/v4";
 
 import { logQueue, logQueueName } from "./queue";
 import { getRedis } from "./redis-client";
@@ -15,8 +15,8 @@ new Worker(
       try {
         const result = logActivitySchema.safeParse(job.data);
         if (!result.success) {
-          const validationError = fromError(result.error);
-          throw new Error(`${job.id} ${validationError.message}`);
+          const error = z.treeifyError(result.error);
+          throw new Error(`${job.id} ${JSON.stringify(error)}`);
         }
         const { userId, action, entity, schoolId, entityId, metadata } =
           result.data;

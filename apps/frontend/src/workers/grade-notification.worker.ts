@@ -1,18 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Worker } from "bullmq";
-import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
 import { JobNames, jobQueueName } from "./queue";
 import { getRedis } from "./redis-client";
-
-z.config({
-  customError: createErrorMap({
-    includePath: true,
-  }),
-});
 
 const newGradeSchema = z.object({
   gradeSheetId: z.coerce.number(),
@@ -25,8 +18,8 @@ new Worker(
     if (job.name === JobNames.NEW_GRADE_NOTIFICATION) {
       const result = newGradeSchema.safeParse(job.data);
       if (!result.success) {
-        const validationError = fromError(result.error);
-        throw new Error(`${job.id} ${validationError.message}`);
+        const error = z.treeifyError(result.error);
+        throw new Error(`${job.id} ${JSON.stringify(error)}`);
       }
       const { gradeSheetId } = result.data;
       const gradesheet = await caller.gradeSheet.get(gradeSheetId);

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { createErrorMap, fromError } from "zod-validation-error/v4";
 import { z } from "zod/v4";
 
 import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
@@ -9,12 +8,6 @@ import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { getQueryClient, trpc } from "~/trpc/server";
-
-z.config({
-  customError: createErrorMap({
-    includePath: true,
-  }),
-});
 
 const schema = z.object({
   url: z.string().min(1),
@@ -31,11 +24,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
-      const validationError = fromError(result.error);
-      return NextResponse.json(
-        { error: validationError.message },
-        { status: 400 },
-      );
+      const error = z.treeifyError(result.error);
+      return NextResponse.json(error, { status: 400 });
     }
     const { url, email, name, userId } = result.data;
     const queryClient = getQueryClient();

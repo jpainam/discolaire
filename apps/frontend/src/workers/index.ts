@@ -5,7 +5,6 @@
  */
 import { logger } from "~/utils/logger";
 import { backupQueue } from "./queue";
-import { scheduleTransactionSummaryNofication } from "./transaction-summary.worker";
 
 export const name = "jobs";
 
@@ -25,7 +24,6 @@ async function scheduleBackup() {
 }
 
 export async function initializeJobs() {
-  await scheduleTransactionSummaryNofication();
   await scheduleBackup();
 }
 
@@ -33,4 +31,3 @@ export async function initializeJobs() {
 export * from "./db-backup.worker";
 export * from "./grade-notification.worker";
 export * from "./log.worker";
-export * from "./transaction-summary.worker";
