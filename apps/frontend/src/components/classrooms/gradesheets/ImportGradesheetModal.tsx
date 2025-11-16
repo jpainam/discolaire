@@ -221,7 +221,8 @@ export function ImportGradesheetModal({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Id</TableHead>
+                <TableHead className="w-20"></TableHead>
+                <TableHead>{t("registrationNumber")}</TableHead>
                 <TableHead>{t("fullName")}</TableHead>
                 <TableHead>Note</TableHead>
               </TableRow>
@@ -236,6 +237,7 @@ export function ImportGradesheetModal({
                     )}
                     key={index}
                   >
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{stud.registrationNumber}</TableCell>
                     <TableCell>{getFullName(stud)}</TableCell>
                     <TableCell>

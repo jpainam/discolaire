@@ -3,7 +3,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { EnrollmentDataTable } from "~/components/classrooms/enrollments/EnrollmentDataTable";
+import { ClassroomStudentTable } from "~/components/classrooms/enrollments/ClassroomStudentTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
@@ -35,7 +35,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <EnrollmentHeader />
+          <EnrollmentHeader className="border-b" />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
@@ -48,9 +48,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <div className="px-4 py-2">
-            <EnrollmentDataTable />
-          </div>
+          <ClassroomStudentTable classroomId={params.id} />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

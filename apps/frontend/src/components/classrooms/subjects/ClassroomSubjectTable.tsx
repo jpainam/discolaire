@@ -142,7 +142,7 @@ export function ClassroomSubjectTable() {
                         <Badge
                           onClick={() => {
                             openSheet({
-                              title: `${t("grades")} ${subject.course.name}`,
+                              title: subject.course.name,
                               description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
                               view: (
                                 <ClassroomSubjectGradeSheet
