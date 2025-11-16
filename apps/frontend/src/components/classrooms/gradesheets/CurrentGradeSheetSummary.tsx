@@ -2,9 +2,14 @@
 
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Eye, MoreHorizontal, PencilIcon, Trash } from "lucide-react";
+import {
+  Eye,
+  FileTextIcon,
+  MoreHorizontal,
+  PencilIcon,
+  Trash,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -23,49 +28,68 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@repo/ui/components/empty";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { Badge } from "~/components/base-badge";
-import { EmptyState } from "~/components/EmptyState";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { createGradeSheetSearchSchema } from "./search-params";
-import { UpdateCreatedGradesheet } from "./UpdateCreatedGradesheet";
+import { UpdateCreatedGradesheet } from "../../../app/(dashboard)/classrooms/[id]/gradesheets/create/UpdateCreatedGradesheet";
 
-export function PreviousCreatedGradeSheet() {
-  const [searchParams, _] = useQueryStates(createGradeSheetSearchSchema);
+export function CurrentGradeSheetSummary({
+  termId,
+  subjectId,
+}: {
+  termId: string;
+  subjectId: number;
+}) {
   const trpc = useTRPC();
 
-  const createdGradesheetQuery = useQuery(
+  const previousGradesheetQuery = useQuery(
     trpc.gradeSheet.all.queryOptions({
-      termId: searchParams.termId,
-      subjectId: searchParams.subjectId,
+      termId,
+      subjectId,
     }),
   );
 
-  if (createdGradesheetQuery.isPending) {
+  if (previousGradesheetQuery.isPending) {
     return (
       <div className="pt-2 pr-2">
         <Skeleton className="h-96 w-full" />
       </div>
     );
   }
-  const gradesheets = createdGradesheetQuery.data;
+  const gradesheets = previousGradesheetQuery.data;
   if (!gradesheets || gradesheets.length === 0) {
     return (
-      <div className="flex flex-col gap-4 pt-4 pr-4">
-        <EmptyState title={"Aucune notes précédentes"} />
-      </div>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <FileTextIcon />
+          </EmptyMedia>
+          <EmptyTitle>Aucune notes</EmptyTitle>
+          <EmptyDescription>
+            Vous n'avez aucune notes pour cette période
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent></EmptyContent>
+      </Empty>
     );
   }
 
   return (
     <div className="flex flex-col items-center gap-4 pt-2 pr-2">
-      <div className="font-bold font-medium">Notes Précèdentes</div>
       {gradesheets.map((gs) => {
         const total = gs.grades.length;
         const graded =
@@ -90,6 +114,7 @@ export function PreviousCreatedGradeSheet() {
             minGrade={minGrade}
             avgGrade={avgGrade}
             scale={gs.scale}
+            termName={gs.term.name}
             isClosed={!gs.term.isActive}
             subject={gs.subject.course.name}
             prof={`${gs.subject.teacher?.prefix} ${gs.subject.teacher?.firstName ?? ""} ${
@@ -115,6 +140,8 @@ function CreatedGradesheetCard({
   scale,
   weight,
   isClosed,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  termName,
 }: {
   title: string;
   id: number;
@@ -128,6 +155,7 @@ function CreatedGradesheetCard({
   scale: number;
   weight: number;
   isClosed: boolean;
+  termName: string;
 }) {
   const t = useTranslations();
   const { openModal } = useModal();
@@ -155,7 +183,8 @@ function CreatedGradesheetCard({
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>
-          <div>{subject}</div> <div>{prof}</div>
+          <div>{subject}</div>
+          <div>{prof}</div>
           <div className="font-bold">
             {t("scale")}: {scale} - {t("weight")}: {weight * 100}%
           </div>

@@ -797,7 +797,7 @@
   "official_program": "Programme officiel",
   "old": "ans",
   "oldPassword": "Ancien mot de passe",
-  "oldest": "Min.age",
+  "oldest": "Le plus âgé",
   "school_fees": "Frais scolaires",
   "all_subjects": "Toutes les enseignements",
   "or_continue_with": "Ou continuer avec",
@@ -1351,5 +1351,5 @@
   "youNeedAdditionalPermissionTo": "Vous avez besoin de permissions pour accéder à cette ressource {{resource}}",
   "you_have_reached_the_end_student": "Vous avez atteint le dernier élève",
   "you_have_reached_the_first_student": "Vous avez atteint le premier élève",
-  "youngest": "Max.age"
+  "youngest": "Plus jeune âge"
 }

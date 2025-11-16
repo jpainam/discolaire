@@ -5,7 +5,7 @@ export async function register() {
     const { initializeJobs } = await import("./workers");
     const { runCronJobs } = await import("./workers/cron");
     await initializeJobs();
-    await runCronJobs();
+    runCronJobs();
     initialized = true;
   }
 }

@@ -6,7 +6,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ClassroomSubjectTable } from "~/components/classrooms/subjects/ClassroomSubjectTable";
 import { SubjectHeader } from "~/components/classrooms/subjects/SubjectHeader";
 import { ErrorFallback } from "~/components/error-fallback";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -21,7 +21,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   //   return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   // }
 
-  prefetch(trpc.classroom.subjects.queryOptions(id));
+  batchPrefetch([
+    trpc.classroom.subjects.queryOptions(id),
+    trpc.subject.gradesheetCount.queryOptions({ classroomId: id }),
+  ]);
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>

@@ -14,11 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
 
 import { authClient } from "~/auth/client";
-import FlatBadge from "~/components/FlatBadge";
+import { Badge } from "~/components/base-badge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -26,13 +24,14 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { getAge } from "~/utils";
 import { EnrollStudent } from "./EnrollStudent";
 
-export function EnrollmentHeader() {
+export function EnrollmentHeader({ className }: { className?: string }) {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: students } = useSuspenseQuery(
@@ -52,7 +51,7 @@ export function EnrollmentHeader() {
 
   const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
 
-  const { male, female, total } = useMemo(() => {
+  const { male, female } = useMemo(() => {
     const male = students.filter((student) => student.gender == "male").length;
     const total = students.length || 1e9;
     const female = students.length - male;
@@ -79,155 +78,120 @@ export function EnrollmentHeader() {
   }, [students]);
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="bg-muted text-secondary-foreground grid grid-cols-3 items-center gap-2 border-y px-4 py-1 md:flex md:flex-row">
-        <FlatBadge
-          variant={"yellow"}
-          className="flex flex-row items-center gap-2"
-        >
-          <Label>{t("effective")}: </Label>
-          <span className="text-muted-foreground">{classroom.size}</span>
-        </FlatBadge>
-        {session?.user.profile == "staff" && (
-          <>
-            <Separator orientation="vertical" className="hidden h-5 md:block" />
-            <FlatBadge
-              variant={"green"}
-              className="flex flex-row items-center gap-2"
-            >
-              <Label>{t("male")}: </Label>
-              <span className="text-muted-foreground">
-                {male} - ({((male / total) * 100).toFixed()}%)
-              </span>
-            </FlatBadge>
-            <Separator orientation="vertical" className="hidden h-5 md:block" />
-            <FlatBadge
-              variant={"indigo"}
-              className="flex flex-row items-center gap-2"
-            >
-              <Label>{t("female")}: </Label>
-              <span className="text-muted-foreground">
-                {female} - ({((female / total) * 100).toFixed()}%)
-              </span>
-            </FlatBadge>
-            <Separator orientation="vertical" className="hidden h-5 md:block" />
-            <FlatBadge
-              variant={"purple"}
-              className="flex flex-row items-center gap-2"
-            >
-              <Label>{t("isRepeating")}: </Label>
-              <span className="text-muted-foreground">
-                {repeating} - ({((repeating / total) * 100).toFixed()}%)
-              </span>
-            </FlatBadge>
-            <Separator orientation="vertical" className="hidden h-5 md:block" />
-            <FlatBadge
-              variant={"red"}
-              className="flex flex-row items-center gap-2"
-            >
-              <Label>{t("oldest")}: </Label>
-              <span className="text-muted-foreground">
-                {youngest} {t("old")}
-              </span>
-            </FlatBadge>
-            <Separator orientation="vertical" className="hidden h-5 md:block" />
-            <FlatBadge
-              variant={"blue"}
-              className="flex flex-row items-center gap-2"
-            >
-              <Label>{t("youngest")}: </Label>
-              <span className="text-muted-foreground">
-                {oldest} {t("old")}
-              </span>
-            </FlatBadge>
-          </>
+    <div
+      className={cn(
+        "bg-muted text-secondary-foreground grid grid-cols-2 items-center gap-4 px-4 py-1 md:flex md:flex-row",
+        className,
+      )}
+    >
+      <Badge variant={"warning"} appearance={"outline"}>
+        {t("effective")}:{classroom.size}
+      </Badge>
+      {session?.user.profile == "staff" && (
+        <>
+          <Badge variant={"success"} appearance={"outline"}>
+            {t("male")} : {male}
+          </Badge>
+
+          <Badge variant={"info"} appearance={"outline"}>
+            {t("female")} : {female}
+          </Badge>
+          <Badge variant={"destructive"} appearance={"outline"}>
+            {t("isRepeating")} : {repeating}
+          </Badge>
+
+          <Badge variant={"primary"} appearance={"outline"}>
+            {t("youngest")} : {youngest} {t("old")}
+          </Badge>
+
+          <Badge variant={"warning"} appearance={"outline"}>
+            {t("oldest")} : {oldest} {t("old")}
+          </Badge>
+        </>
+      )}
+
+      <div className="ml-auto flex flex-row items-center gap-2">
+        {canEnroll && (
+          <Button
+            variant="default"
+            size="sm"
+            disabled={!schoolYear.isActive}
+            onClick={() => {
+              if (
+                !school.allowOverEnrollment &&
+                classroom.size >= classroom.maxSize
+              ) {
+                toast.warning(
+                  t(
+                    "Allow enrollments in classrooms that exceed the maximum size",
+                  ),
+                  {
+                    position: "top-center",
+                    duration: 5000,
+                    className: "w-[300px]",
+                    action: canUpdateSchool
+                      ? {
+                          label: t("Authorize"),
+                          onClick: () =>
+                            router.push(
+                              `/administration/my-school/${school.id}`,
+                            ),
+                        }
+                      : undefined,
+                  },
+                );
+                return;
+              }
+              openModal({
+                title: <p className="px-4 pt-4">{t("enroll_new_students")}</p>,
+                className: "p-0",
+                description: (
+                  <span className="px-4">
+                    {t("enroll_new_students_description")}
+                  </span>
+                ),
+                view: <EnrollStudent classroomId={classroom.id} />,
+              });
+            }}
+          >
+            <Plus />
+            {t("enroll")}
+          </Button>
         )}
 
-        <div className="ml-auto flex flex-row items-center gap-2">
-          {canEnroll && (
-            <Button
-              variant="default"
-              size="sm"
-              disabled={!schoolYear.isActive}
-              onClick={() => {
-                if (
-                  !school.allowOverEnrollment &&
-                  classroom.size >= classroom.maxSize
-                ) {
-                  toast.warning(
-                    t(
-                      "Allow enrollments in classrooms that exceed the maximum size",
-                    ),
-                    {
-                      position: "top-center",
-                      duration: 5000,
-                      className: "w-[300px]",
-                      action: canUpdateSchool
-                        ? {
-                            label: t("Authorize"),
-                            onClick: () =>
-                              router.push(
-                                `/administration/my-school/${school.id}`,
-                              ),
-                          }
-                        : undefined,
-                    },
-                  );
-                  return;
-                }
-                openModal({
-                  title: (
-                    <p className="px-4 pt-4">{t("enroll_new_students")}</p>
-                  ),
-                  className: "p-0",
-                  description: (
-                    <span className="px-4">
-                      {t("enroll_new_students_description")}
-                    </span>
-                  ),
-                  view: <EnrollStudent classroomId={classroom.id} />,
-                });
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"} className="size-8" size={"icon"}>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownHelp />
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
+                  "_blank",
+                );
               }}
             >
-              <Plus />
-              {t("enroll")}
-            </Button>
-          )}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} className="size-8" size={"icon"}>
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownHelp />
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={() => {
-                  window.open(
-                    `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=csv`,
-                    "_blank",
-                  );
-                }}
-              >
-                <XMLIcon />
-                {t("xml_export")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  window.open(
-                    `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
-                    "_blank",
-                  );
-                }}
-              >
-                <PDFIcon />
-                {t("pdf_export")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+              <XMLIcon />
+              {t("xml_export")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                window.open(
+                  `/api/pdfs/classroom/students?id=${classroom.id}&preview=true&size=a4&format=pdf`,
+                  "_blank",
+                );
+              }}
+            >
+              <PDFIcon />
+              {t("pdf_export")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

@@ -128,4 +128,24 @@ export const subjectRouter = {
         },
       });
     }),
+  gradesheetCount: protectedProcedure
+    .input(z.object({ classroomId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.db.gradeSheet.findMany({
+        where: {
+          subject: {
+            classroomId: input.classroomId,
+          },
+        },
+      });
+      const countMap = data.reduce((acc, item) => {
+        acc.set(item.subjectId, (acc.get(item.subjectId) ?? 0) + 1);
+        return acc;
+      }, new Map<number, number>());
+
+      return Array.from(countMap, ([subjectId, count]) => ({
+        subjectId,
+        count,
+      }));
+    }),
 } satisfies TRPCRouterRecord;

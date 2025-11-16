@@ -7,8 +7,8 @@ import type { RouterOutputs } from "@repo/api";
 import { CreateGradeSheet } from "~/components/classrooms/gradesheets/grades/CreateGradeSheet";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
+import { CurrentGradeSheetSummary } from "../../../../../../components/classrooms/gradesheets/CurrentGradeSheetSummary";
 import { ClassroomCreateGradeSheetHeader } from "./ClassroomCreateGradeSheetHeader";
-import { PreviousCreatedGradeSheet } from "./PreviousCreatedGradeSheet";
 import { createGradeSheetSearchSchema } from "./search-params";
 
 export function ClassroomCreateGradesheet({
@@ -42,7 +42,13 @@ export function ClassroomCreateGradesheet({
               term={selectedTerm}
               students={students}
             />
-            <PreviousCreatedGradeSheet />
+            <div className="gap2 flex flex-col">
+              <div className="font-bold font-medium">Notes Précèdentes</div>
+              <CurrentGradeSheetSummary
+                subjectId={searchParams.subjectId}
+                termId={searchParams.termId}
+              />
+            </div>
           </div>
         )}
     </div>
