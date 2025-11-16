@@ -5,7 +5,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import i18next from "i18next";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { ExternalLink, Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -81,7 +81,7 @@ export function fetchGradeSheetColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("date")} />
       ),
-      size: 100,
+      size: 60,
       enableSorting: false,
       enableHiding: false,
       cell: ({ row }) => {
@@ -94,35 +94,29 @@ export function fetchGradeSheetColumns({
         );
       },
     },
-    // {
-    //   accessorKey: "name",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("name")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const grade = row.original;
-    //     return (
-    //       <Link
-    //         className="hover:text-blue-600 hover:underline"
-    //         href={routes.classrooms.gradesheets.details(classroomId, grade.id)}
-    //       >
-    //         {grade.name}
-    //       </Link>
-    //     );
-    //   },
-    //   enableSorting: true,
-    // },
+
     {
       accessorKey: "subject.course.reportName",
+      size: 250,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("subject")} />
       ),
       cell: ({ row }) => {
         const subject = row.original.subject;
         return (
-          <span className="text-muted-foreground">
-            {subject.course.reportName}
-          </span>
+          <div className="flex flex-row items-center gap-2">
+            <span className="text-muted-foreground">
+              {subject.course.reportName}
+            </span>
+            <Button variant={"secondary"} size={"sm"}>
+              <Link
+                className="flex flex-row items-center gap-1"
+                href={`/classrooms/${subject.classroomId}/gradesheets/${row.original.id}`}
+              >
+                Details <ExternalLink />
+              </Link>
+            </Button>
+          </div>
         );
       },
     },

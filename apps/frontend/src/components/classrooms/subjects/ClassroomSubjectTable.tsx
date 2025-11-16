@@ -138,69 +138,71 @@ export function ClassroomSubjectTable() {
                         {subject.course.shortName.toUpperCase()} -{" "}
                         {subject.course.name}
                       </Link>
-                      <Badge
-                        onClick={() => {
-                          openSheet({
-                            title: `${t("grades")} ${subject.course.name}`,
-                            description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
-                            view: (
-                              <ClassroomSubjectGradeSheet
-                                subjectId={subject.id}
-                              />
-                            ),
-                          });
-                        }}
-                        className="cursor-pointer"
-                        variant={"warning"}
-                        appearance={"outline"}
-                      >
-                        {gradeCount?.count ?? 0} {t("gradesheets")}{" "}
-                        <ExternalLink />
-                      </Badge>
-
-                      <Badge
-                        className="cursor-pointer"
-                        onClick={() => {
-                          openSheet({
-                            title: `Programme ${subject.course.name} `,
-                            description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
-                            view: (
-                              <div className="h-full w-full overflow-x-auto">
-                                <SubjectSessionBoard
-                                  columnClassName="flex h-full w-[300px] flex-1 shrink-0 flex-col  lg:w-[360px]"
-                                  className="flex h-full min-w-max gap-3 overflow-hidden px-2 pb-2"
+                      <div className="flex flex-row items-center gap-4 px-4">
+                        <Badge
+                          onClick={() => {
+                            openSheet({
+                              title: `${t("grades")} ${subject.course.name}`,
+                              description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
+                              view: (
+                                <ClassroomSubjectGradeSheet
                                   subjectId={subject.id}
                                 />
-                              </div>
-                            ),
-                            className: "min-w-3/4 w-full sm:max-w-5xl w-3/4",
-                          });
-                        }}
-                        appearance={"outline"}
-                        variant={"info"}
-                      >
-                        {subject.programs.length} programmes <ExternalLink />
-                      </Badge>
+                              ),
+                            });
+                          }}
+                          className="cursor-pointer"
+                          variant={"warning"}
+                          appearance={"outline"}
+                        >
+                          {gradeCount?.count ?? 0} {t("gradesheets")}{" "}
+                          <ExternalLink />
+                        </Badge>
 
-                      <Badge
-                        className="cursor-pointer"
-                        onClick={() => {
-                          openSheet({
-                            title: "Emploi du. temps",
-                            description: `${subject.course.name} - ${subject.teacher?.prefix} ${subject.teacher?.lastName}`,
-                            view: (
-                              <ClassroomSubjectTimetable
-                                subjectId={subject.id}
-                              />
-                            ),
-                          });
-                        }}
-                        variant={"success"}
-                        appearance={"outline"}
-                      >
-                        {subject.timetables.length} {t("timetable")}
-                        <ExternalLink />
-                      </Badge>
+                        <Badge
+                          className="cursor-pointer"
+                          onClick={() => {
+                            openSheet({
+                              title: `Programme ${subject.course.name} `,
+                              description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
+                              view: (
+                                <div className="h-full w-full overflow-x-auto">
+                                  <SubjectSessionBoard
+                                    columnClassName="flex h-full w-[300px] flex-1 shrink-0 flex-col  lg:w-[360px]"
+                                    className="flex h-full min-w-max gap-3 overflow-hidden px-2 pb-2"
+                                    subjectId={subject.id}
+                                  />
+                                </div>
+                              ),
+                              className: "min-w-3/4 w-full sm:max-w-5xl w-3/4",
+                            });
+                          }}
+                          appearance={"outline"}
+                          variant={"info"}
+                        >
+                          {subject.programs.length} programmes <ExternalLink />
+                        </Badge>
+
+                        <Badge
+                          className="cursor-pointer"
+                          onClick={() => {
+                            openSheet({
+                              title: "Emploi du. temps",
+                              description: `${subject.course.name} - ${subject.teacher?.prefix} ${subject.teacher?.lastName}`,
+                              view: (
+                                <ClassroomSubjectTimetable
+                                  subjectId={subject.id}
+                                />
+                              ),
+                            });
+                          }}
+                          variant={"success"}
+                          appearance={"outline"}
+                        >
+                          {subject.timetables.length} {t("timetable")}
+                          <ExternalLink />
+                        </Badge>
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
