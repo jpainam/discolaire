@@ -34,9 +34,7 @@ import {
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
-import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function ClassroomSidebar({
@@ -55,13 +53,6 @@ export function ClassroomSidebar({
         url: `/classrooms/${params.id}/fees`,
         icon: Receipt,
       },
-
-      {
-        name: "documents",
-        url: `/classrooms/${params.id}/documents`,
-        icon: FolderOpen,
-      },
-
       {
         name: "financial_situation",
         url: `/classrooms/${params.id}/financial_situation`,
@@ -114,24 +105,26 @@ export function ClassroomSidebar({
         url: `/classrooms/${params.id}/teaching_session`,
         icon: BookText,
       },
-      {
-        name: "print",
-        url: `/classrooms/${params.id}/print`,
-        icon: Printer,
-      },
     ],
   };
-  const canSendCommunication = useCheckPermission(
-    "communication",
-    PermissionAction.CREATE,
-  );
-  if (canSendCommunication) {
-    data.information.push({
+
+  const others = [
+    {
+      name: "documents",
+      url: `/classrooms/${params.id}/documents`,
+      icon: FolderOpen,
+    },
+    {
       name: "communications",
       url: `/classrooms/${params.id}/communications`,
       icon: SendIcon,
-    });
-  }
+    },
+    {
+      name: "print",
+      url: `/classrooms/${params.id}/print`,
+      icon: Printer,
+    },
+  ];
 
   const { t } = useLocale();
 
@@ -156,6 +149,7 @@ export function ClassroomSidebar({
         <MenuSideGroup label="Information" items={data.information} />
         <MenuSideGroup label="academy" items={data.academy} />
         <MenuSideGroup label="school_life" items={data.school_life} />
+        <MenuSideGroup label="others" items={others} />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

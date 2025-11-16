@@ -8,6 +8,7 @@ import {
 import { t } from "i18next";
 import {
   BellIcon as BrandTelegram,
+  CircleEqual,
   ExternalLink,
   Mail,
   MessageCircle,
@@ -36,6 +37,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@repo/ui/components/empty";
 
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -83,6 +92,22 @@ export function CommunicationChannelList() {
 
   const { openModal } = useModal();
   const confirm = useConfirm();
+  if (channels.length == 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <CircleEqual />
+          </EmptyMedia>
+          <EmptyTitle>Aucun</EmptyTitle>
+          <EmptyDescription>
+            Vous n' aucun channal de communication pour cette classe
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent></EmptyContent>
+      </Empty>
+    );
+  }
   return (
     <div className="grid gap-4 px-4 md:grid-cols-2 lg:grid-cols-3">
       {channels.map((channel) => (

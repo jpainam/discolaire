@@ -9,8 +9,6 @@ import {
   ChevronDown,
   Download,
   FileJson,
-  FileSpreadsheet,
-  FileText,
   MoreVertical,
   PlusIcon,
   Upload,
@@ -187,14 +185,14 @@ export function GradeSheetHeader() {
               <FileJson className="size-4" />
               Fiche de saisie
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <FileSpreadsheet className="size-4" />
               Export as CSV
             </DropdownMenuItem>
             <DropdownMenuItem>
               <FileText className="size-4" />
               Export as Markdown
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
 
             <DropdownMenuSeparator />
 
@@ -213,10 +211,10 @@ export function GradeSheetHeader() {
               <FileJson className="size-4" />
               Fiche de saisie
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <FileSpreadsheet className="size-4" />
               Import from CSV
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>
