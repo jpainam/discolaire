@@ -97,17 +97,18 @@ export function StudentSidebar({
   ];
   const { t } = useLocale();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const canReadTransaction = useCheckPermission(
     "transaction",
     PermissionAction.READ,
   );
-  if (!canReadTransaction) {
-    informations.push({
-      name: "transactions",
-      icon: CircleDollarSign,
-      url: `/students/${params.id}/transactions`,
-    });
-  }
+  //if (!canReadTransaction) {
+  informations.push({
+    name: "transactions",
+    icon: CircleDollarSign,
+    url: `/students/${params.id}/transactions`,
+  });
+  //}
   const school_life = [
     {
       name: "attendances",

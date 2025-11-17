@@ -63,7 +63,13 @@ export function DateRangePicker({
           <CalendarIcon />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+      <PopoverContent
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+        className="w-auto overflow-hidden p-0"
+        align="start"
+      >
         <Calendar
           mode="range"
           selected={dateRange}

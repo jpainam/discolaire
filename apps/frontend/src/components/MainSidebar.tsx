@@ -136,6 +136,7 @@ export function MainSidebar({
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
+
       <SidebarContent>
         <MenuSideGroup items={menus.home} label={"home"} />
         <MenuSideGroup items={menus.data} label={"Data"} />

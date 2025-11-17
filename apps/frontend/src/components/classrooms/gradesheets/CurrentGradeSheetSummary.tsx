@@ -9,7 +9,7 @@ import {
   PencilIcon,
   Trash,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -114,6 +114,7 @@ export function CurrentGradeSheetSummary({
             minGrade={minGrade}
             avgGrade={avgGrade}
             scale={gs.scale}
+            date={gs.createdAt}
             termName={gs.term.name}
             isClosed={!gs.term.isActive}
             subject={gs.subject.course.name}
@@ -131,6 +132,7 @@ function CreatedGradesheetCard({
   total,
   title,
   id,
+  date,
   graded,
   subject,
   prof,
@@ -149,6 +151,7 @@ function CreatedGradesheetCard({
   graded: number;
   subject: string;
   prof: string;
+  date: Date;
   maxGrade: number;
   minGrade: number;
   avgGrade: number;
@@ -178,6 +181,7 @@ function CreatedGradesheetCard({
     }),
   );
   const confirm = useConfirm();
+  const locale = useLocale();
   return (
     <Card>
       <CardHeader>
@@ -186,7 +190,12 @@ function CreatedGradesheetCard({
           <div>{subject}</div>
           <div>{prof}</div>
           <div className="font-bold">
-            {t("scale")}: {scale} - {t("weight")}: {weight * 100}%
+            {t("scale")}: {scale} - {t("weight")}: {weight * 100}% -{" "}
+            {date.toLocaleDateString(locale, {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
           </div>
         </CardDescription>
         <CardAction>
