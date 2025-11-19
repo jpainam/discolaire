@@ -29,7 +29,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 
-export function StudentGradesheetTable({className}: {className?:string}) {
+export function StudentGradesheetTable({ className }: { className?: string }) {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: grades } = useSuspenseQuery(

@@ -55,7 +55,13 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { StudentContactDetails } from "./StudentContactDetails";
 
-export function StudentContactTable({ studentId, className }: { studentId: string, className?:string }) {
+export function StudentContactTable({
+  studentId,
+  className,
+}: {
+  studentId: string;
+  className?: string;
+}) {
   const { t } = useLocale();
   const confirm = useConfirm();
   const router = useRouter();
