@@ -366,6 +366,9 @@ export const studentRouter = {
     .input(z.string())
     .query(async ({ ctx, input }) => {
       return ctx.db.student.findMany({
+        include: {
+          user: true,
+        },
         where: {
           siblings: {
             some: {

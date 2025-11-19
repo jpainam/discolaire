@@ -9,7 +9,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { SignUpContact } from "~/components/students/contacts/SignUpContact";
 import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export const metadata: Metadata = {
   title: "Contacts",
@@ -23,7 +23,10 @@ export default async function Layout(props: {
 
   const { children } = props;
   //const studentContacts = await caller.student.contacts(params.id);
-  prefetch(trpc.student.contacts.queryOptions(params.id));
+  batchPrefetch([
+    trpc.student.contacts.queryOptions(params.id),
+    trpc.student.siblings.queryOptions(params.id),
+  ]);
 
   return (
     <HydrateClient>

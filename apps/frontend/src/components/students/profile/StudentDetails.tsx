@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { decode } from "entities";
@@ -12,7 +11,6 @@ import {
   CakeSlice,
   CalendarMinus,
   CalendarPlus,
-  ExternalLink,
   MedalIcon,
   Phone,
   School,
@@ -24,7 +22,6 @@ import { Separator } from "@repo/ui/components/separator";
 import { cn } from "@repo/ui/lib/utils";
 
 import House from "~/components/icons/house";
-import { routes } from "~/configs/routes";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
@@ -32,9 +29,7 @@ export default function StudentDetails({ className }: { className?: string }) {
   const params = useParams<{ id: string }>();
   const { t, i18n } = useLocale();
   const trpc = useTRPC();
-  const { data: siblings } = useSuspenseQuery(
-    trpc.student.siblings.queryOptions(params.id),
-  );
+
   const { data: student } = useSuspenseQuery(
     trpc.student.get.queryOptions(params.id),
   );
@@ -50,72 +45,73 @@ export default function StudentDetails({ className }: { className?: string }) {
     <div className={cn("flex flex-col gap-2 py-2 text-sm", className)}>
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <SquareUserRound className="h-4 w-4 stroke-1" /> {t("lastName")}
+          <SquareUserRound className="h-4 w-4" /> {t("lastName")}
         </span>
         <span>{decode(student.lastName ?? "")}</span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <SquareUserRound className="h-4 w-4 stroke-1" />
+          <SquareUserRound className="h-4 w-4" />
           {t("firstName")}
         </span>
         <span>{decode(student.firstName ?? "")} </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <PiChurchDuotone className="h-4 w-4 stroke-1" />
-          {t("religion")}
-        </span>
-        <span>{student.religion ? student.religion.name : "N/A"}</span>
-        <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <Cake className="h-4 w-4 stroke-1" />
+          <Cake className="h-4 w-4" />
           {t("dateOfBirth")}
         </span>
         <span>
           {student.dateOfBirth && dateFormat.format(student.dateOfBirth)}
         </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <CakeSlice className="h-4 w-4 stroke-1" />
+          <CalendarPlus className="h-4 w-4" />
+          {t("dateOfEntry")}
+        </span>
+        <span>
+          {" "}
+          {student.dateOfEntry && dateFormat.format(student.dateOfEntry)}
+        </span>
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
+          <CakeSlice className="h-4 w-4" />
           {t("placeOfBirth")}
         </span>
-        <span>{student.placeOfBirth ?? "N/A"}</span>
+        <span>{student.placeOfBirth}</span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <BoxesIcon className="h-4 w-4 stroke-1" />
-          {t("clubs")}
+          <House className="h-4 w-4" />
+          {t("residence")}
         </span>
         <span className="line-clamp-1 overflow-ellipsis">
-          {student.clubs.map((club) => club.club.name).join(", ")}
+          {student.residence}
         </span>
       </div>
       <Separator className="my-2 w-full" />
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <House className="h-4 w-4 stroke-1" />
-          {t("residence")}
+          <BoxesIcon className="h-4 w-4" />
+          {t("clubs")}
         </span>
-        <span>{student.residence ?? "N/A"}</span>
+        <span>{student.clubs.map((club) => club.club.name).join(", ")}</span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <CalendarPlus className="h-4 w-4 stroke-1" />
-          {t("dateOfEntry")}
+          <PiChurchDuotone className="h-4 w-4" />
+          {t("religion")}
         </span>
-        <span>
-          {student.dateOfEntry && dateFormat.format(student.dateOfEntry)}
-        </span>
+        <span>{student.religion ? student.religion.name : "N/A"}</span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <CalendarMinus className="h-4 w-4 stroke-1" />
+          <CalendarMinus className="h-4 w-4" />
           {t("dateOfExit")}
         </span>
         <span>
           {student.dateOfExit && dateFormat.format(student.dateOfExit)}
         </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <Phone className="h-4 w-4 stroke-1" />
+          <Phone className="h-4 w-4" />
           {t("phoneNumber")}
         </span>
-        <span>{student.phoneNumber ?? "N/A"}</span>
+        <span>{student.phoneNumber}</span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <AtSign className="h-4 w-4 stroke-1" />
+          <AtSign className="h-4 w-4" />
           {t("email")}
         </span>
         <EmailComponent email={student.user?.email} />
         {/* <span className="flex flex-row items-center gap-1 text-muted-foreground">
-          <CircleUser className="h-4 w-4 stroke-1" />
+          <CircleUser className="h-4 w-4" />
           {t("userId")}
         </span>
         <span>{student.userId ?? "N/A"}</span> */}
@@ -123,78 +119,21 @@ export default function StudentDetails({ className }: { className?: string }) {
       <Separator className="my-2 w-full" />
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <School className="h-4 w-4 stroke-1" />
+          <School className="h-4 w-4" />
           {t("formerSchool")}
         </span>
         <span className="line-clamp-1 overflow-ellipsis">
-          {decode(student.formerSchool?.name ?? "N/A")}
+          {decode(student.formerSchool?.name ?? "")}
         </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <BookHeart className="h-4 w-4 stroke-1" /> {t("hobbies")}
+          <BookHeart className="h-4 w-4" /> {t("hobbies")}
         </span>
         <span>{student.hobbies.join(", ")}</span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <MedalIcon className="h-4 w-4 stroke-1" />
+          <MedalIcon className="h-4 w-4" />
           {t("sports")}
         </span>
         <span>{student.sports.map((sp) => sp.sport.name).join(", ")}</span>
-      </div>
-
-      <Separator className="my-2 w-full" />
-      <div className="grid w-full justify-between px-4 md:flex">
-        {/*<ul className="grid w-[350px] gap-3">
-          <li className="flex items-center justify-between">
-            <span className="flex flex-row items-center gap-1 text-muted-foreground">
-              <ShieldCheck className="h-4 w-4 stroke-1" /> {t("is_active")}?
-            </span>
-            <span>
-              {student.isActive ? (
-                <FlatBadge className="w-[40px] justify-center" variant="green">
-                  {t("yes")}
-                </FlatBadge>
-              ) : (
-                <FlatBadge className="w-[40px] justify-center" variant="red">
-                  {t("no")}
-                </FlatBadge>
-              )}
-            </span>
-          </li>
-          <li className="flex items-center justify-between">
-            <span className="flex flex-row items-center gap-1 text-muted-foreground">
-              <BookHeart className="h-4 w-4 stroke-1" /> {t("parentDivorced")}?
-            </span>
-            <span>
-              {student.parentDivorced ? (
-                <FlatBadge className="w-[40px] justify-center" variant="red">
-                  {t("yes")}
-                </FlatBadge>
-              ) : (
-                "N/A"
-              )}
-            </span>
-          </li>
-        </ul>*/}
-        <ul className="grid w-[350px] gap-3">
-          {siblings.map((sibling, index) => {
-            return (
-              <li
-                key={`${index}`}
-                className="flex items-center justify-between"
-              >
-                <span className="text-muted-foreground">{`${t("sibling")} ${index + 1}`}</span>
-                <Link
-                  className="flex flex-row items-center gap-1 hover:text-blue-500 hover:underline"
-                  href={routes.students.details(sibling.id)}
-                >
-                  <span className="truncate capitalize">
-                    {sibling.lastName?.toLowerCase()}{" "}
-                  </span>
-                  <ExternalLink className="bg-muted h-4 w-4" />
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
       </div>
 
       {student.observation && (

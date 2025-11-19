@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   useMutation,
   useQueryClient,
@@ -68,6 +69,10 @@ export function StudentContactTable({
   const trpc = useTRPC();
   const { data: studentContacts } = useSuspenseQuery(
     trpc.student.contacts.queryOptions(studentId),
+  );
+
+  const { data: siblings } = useSuspenseQuery(
+    trpc.student.siblings.queryOptions(studentId),
   );
 
   const queryClient = useQueryClient();
@@ -310,6 +315,20 @@ export function StudentContactTable({
                       </DropdownMenu>
                     </div>
                   </TableCell>
+                </TableRow>
+              );
+            })}
+            {siblings.map((s, index) => {
+              return (
+                <TableRow key={`${index}-siblings`}>
+                  <TableCell className="flex items-center justify-start gap-1">
+                    <AvatarState
+                      pos={getFullName(s).length}
+                      avatar={s.user?.avatar}
+                    />
+                    <Link href={`/students/${s.id}`}>{getFullName(s)}</Link>
+                  </TableCell>
+                  <TableCell>{t("siblings")}</TableCell>
                 </TableRow>
               );
             })}
