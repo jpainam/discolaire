@@ -116,11 +116,13 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
                     ) : (
                       <ArrowDown className="size-3" />
                     )}
-                    {Math.abs(
-                      ((entry.value - firstPayload.value) /
-                        firstPayload.value) *
-                        100,
-                    ).toFixed(0)}
+                    {firstPayload.value == 0
+                      ? 100
+                      : Math.abs(
+                          ((entry.value - firstPayload.value) /
+                            firstPayload.value) *
+                            100,
+                        ).toFixed(0)}
                     %
                   </Badge>
                 )}
@@ -171,8 +173,8 @@ export function StudentGradesheetChart({
   if (gradeQuery.isPending || gradesheetQuery.isPending) {
     return (
       <div className="grid grid-cols-1 gap-4">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton key={index} className="h-8" />
+        {Array.from({ length: 5 }).map((_, index) => (
+          <Skeleton key={index} className="h-20" />
         ))}
       </div>
     );
