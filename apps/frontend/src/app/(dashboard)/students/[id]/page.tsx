@@ -14,6 +14,7 @@ import {
   HydrateClient,
   trpc,
 } from "~/trpc/server";
+import { StudentGradesheetTable } from "./gradesheets/StudentGradesheetTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -24,6 +25,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.contacts.queryOptions(params.id),
     trpc.student.grades.queryOptions({ id: params.id }),
     trpc.attendance.student.queryOptions({ studentId: params.id }),
+    trpc.student.grades.queryOptions({ id: params.id }),
+    trpc.student.classroom.queryOptions({ studentId: params.id }),
   ]);
   const queryClient = getQueryClient();
   const terms = await queryClient.fetchQuery(trpc.term.all.queryOptions());
@@ -89,6 +92,19 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <div></div>
         </ErrorBoundary>
       </div>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-4 gap-4 px-4">
+              {Array.from({ length: 16 }).map((_, index) => (
+                <Skeleton key={index} className="h-8" />
+              ))}
+            </div>
+          }
+        >
+          <StudentGradesheetTable />
+        </Suspense>
+      </ErrorBoundary>
     </HydrateClient>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { CalendarIcon } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { enUS, es, fr } from "react-day-picker/locale";
 
 import { Button } from "@repo/ui/components/button";
@@ -34,6 +34,7 @@ export function DatePicker({
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
   }, []);
   const id = useId();
+  const t = useTranslations();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -49,7 +50,7 @@ export function DatePicker({
                 day: "2-digit",
                 year: "numeric",
               })
-            : "Select date"}
+            : t("Select date")}
           <CalendarIcon />
         </Button>
       </PopoverTrigger>
