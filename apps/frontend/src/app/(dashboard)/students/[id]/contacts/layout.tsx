@@ -61,6 +61,7 @@ export default async function Layout(props: {
       >
         <StudentContactTable
           //studentContacts={studentContacts}
+          className="px-4"
           studentId={params.id}
         />
       </Suspense>

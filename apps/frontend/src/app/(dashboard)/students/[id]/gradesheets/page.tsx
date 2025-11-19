@@ -29,7 +29,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StudentGradesheetTable />
+          <StudentGradesheetTable className="px-4" />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

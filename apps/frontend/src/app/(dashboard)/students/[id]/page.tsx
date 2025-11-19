@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
+import { Empty, EmptyTitle } from "@repo/ui/components/empty";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { ErrorFallback } from "~/components/error-fallback";
@@ -14,6 +15,7 @@ import {
   HydrateClient,
   trpc,
 } from "~/trpc/server";
+import { StudentGradesheetChart } from "./gradesheets/StudentGradesheetChart";
 import { StudentGradesheetTable } from "./gradesheets/StudentGradesheetTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -30,6 +32,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   ]);
   const queryClient = getQueryClient();
   const terms = await queryClient.fetchQuery(trpc.term.all.queryOptions());
+  const classroom = await queryClient.fetchQuery(
+    trpc.student.classroom.queryOptions({ studentId: params.id }),
+  );
 
   return (
     <HydrateClient>
@@ -75,36 +80,51 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className="grid grid-cols-2 gap-4 py-2">
+      <div className="grid grid-cols-2 gap-4 p-4">
+        <div>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense
+              key={params.id}
+              fallback={
+                <div className="px-4">
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              }
+            >
+              <StudentContactTable studentId={params.id} />
+            </Suspense>
+          </ErrorBoundary>
+
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-4 gap-4 px-4">
+                  {Array.from({ length: 16 }).map((_, index) => (
+                    <Skeleton key={index} className="h-8" />
+                  ))}
+                </div>
+              }
+            >
+              <StudentGradesheetTable />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense
-            key={params.id}
-            fallback={
-              <div className="px-4">
-                <Skeleton className="h-20 w-full" />
-              </div>
-            }
-          >
-            <StudentContactTable studentId={params.id} />
+          <Suspense fallback={<Skeleton className="h-20" />}>
+            {classroom ? (
+              <StudentGradesheetChart
+                defaultTerm={terms[0]?.id ?? ""}
+                classroomId={classroom.id}
+              />
+            ) : (
+              <Empty>
+                <EmptyTitle>Eleve non inscrit</EmptyTitle>
+              </Empty>
+            )}
           </Suspense>
         </ErrorBoundary>
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <div></div>
-        </ErrorBoundary>
       </div>
-      <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-4 gap-4 px-4">
-              {Array.from({ length: 16 }).map((_, index) => (
-                <Skeleton key={index} className="h-8" />
-              ))}
-            </div>
-          }
-        >
-          <StudentGradesheetTable />
-        </Suspense>
-      </ErrorBoundary>
     </HydrateClient>
   );
 }

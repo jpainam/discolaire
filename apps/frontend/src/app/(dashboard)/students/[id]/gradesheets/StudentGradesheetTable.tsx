@@ -29,7 +29,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 
-export function StudentGradesheetTable() {
+export function StudentGradesheetTable({className}: {className?:string}) {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: grades } = useSuspenseQuery(
@@ -54,7 +54,7 @@ export function StudentGradesheetTable() {
 
       vv[subjectId] ??= {
         id: subjectId,
-        subject: grade.gradeSheet.subject.course.name,
+        subject: grade.gradeSheet.subject.course.reportName,
         observation: grade.observation ?? "",
         grades: [],
       };
@@ -91,7 +91,7 @@ export function StudentGradesheetTable() {
   }
 
   return (
-    <div className="px-4 py-2">
+    <div className={cn("py-2", className)}>
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
@@ -103,7 +103,7 @@ export function StudentGradesheetTable() {
               <TableHead>Seq 4</TableHead>
               <TableHead>Seq 5</TableHead>
               <TableHead>Seq 6</TableHead>
-              <TableHead className="text-center">{t("average")}</TableHead>
+              <TableHead className="text-center">{t("avg")}</TableHead>
               <TableHead className="text-center">{t("appreciation")}</TableHead>
               <TableHead className="w-[50px] text-right"></TableHead>
             </TableRow>

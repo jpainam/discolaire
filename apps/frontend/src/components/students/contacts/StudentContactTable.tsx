@@ -55,7 +55,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { StudentContactDetails } from "./StudentContactDetails";
 
-export function StudentContactTable({ studentId }: { studentId: string }) {
+export function StudentContactTable({ studentId, className }: { studentId: string, className?:string }) {
   const { t } = useLocale();
   const confirm = useConfirm();
   const router = useRouter();
@@ -106,7 +106,7 @@ export function StudentContactTable({ studentId }: { studentId: string }) {
   const { openSheet } = useSheet();
 
   return (
-    <div className="px-4">
+    <div className={className}>
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
