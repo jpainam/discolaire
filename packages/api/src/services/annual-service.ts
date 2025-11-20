@@ -1,46 +1,50 @@
-import { db } from "../db";
+import type { PrismaClient } from "@repo/db";
+
 import { getGrades } from "./reportcard-service";
 
-export async function getAnnualReport({
-  classroomId,
-}: {
-  classroomId: string;
-}) {
-  const classroom = await db.classroom.findUniqueOrThrow({
-    where: { id: classroomId },
-  });
-  const terms = await db.term.findMany({
-    orderBy: { order: "asc" },
-    where: { schoolYearId: classroom.schoolYearId },
-  });
-  if (terms.length !== 6) {
-    throw new Error("Sequences non definie ou plus de 6 sequences");
+export class AnnualService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
   }
-  const grade1Id = terms[0]?.id;
-  const grade2Id = terms[1]?.id;
-  const grade3Id = terms[2]?.id;
-  const grade4Id = terms[3]?.id;
-  const grade5Id = terms[4]?.id;
-  const grade6Id = terms[5]?.id;
-  if (
-    !grade1Id ||
-    !grade2Id ||
-    !grade3Id ||
-    !grade4Id ||
-    !grade5Id ||
-    !grade6Id
-  ) {
-    throw new Error("Sequences non definie ou plus de 6 sequences");
+  async getAnnualReport({ classroomId }: { classroomId: string }) {
+    const classroom = await this.db.classroom.findUniqueOrThrow({
+      where: { id: classroomId },
+    });
+    const terms = await this.db.term.findMany({
+      orderBy: { order: "asc" },
+      where: { schoolYearId: classroom.schoolYearId },
+    });
+    if (terms.length !== 6) {
+      throw new Error("Sequences non definie ou plus de 6 sequences");
+    }
+    const grade1Id = terms[0]?.id;
+    const grade2Id = terms[1]?.id;
+    const grade3Id = terms[2]?.id;
+    const grade4Id = terms[3]?.id;
+    const grade5Id = terms[4]?.id;
+    const grade6Id = terms[5]?.id;
+    if (
+      !grade1Id ||
+      !grade2Id ||
+      !grade3Id ||
+      !grade4Id ||
+      !grade5Id ||
+      !grade6Id
+    ) {
+      throw new Error("Sequences non definie ou plus de 6 sequences");
+    }
+    return computeReport(
+      await getGrades(classroomId, grade1Id),
+      await getGrades(classroomId, grade2Id),
+      await getGrades(classroomId, grade3Id),
+      await getGrades(classroomId, grade4Id),
+      await getGrades(classroomId, grade5Id),
+      await getGrades(classroomId, grade6Id),
+    );
   }
-  return computeReport(
-    await getGrades(classroomId, grade1Id),
-    await getGrades(classroomId, grade2Id),
-    await getGrades(classroomId, grade3Id),
-    await getGrades(classroomId, grade4Id),
-    await getGrades(classroomId, grade5Id),
-    await getGrades(classroomId, grade6Id),
-  );
 }
+
 function computeReport(
   grades1: Awaited<ReturnType<typeof getGrades>>,
   grades2: Awaited<ReturnType<typeof getGrades>>,

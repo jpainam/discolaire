@@ -5,7 +5,6 @@ import { z } from "zod/v4";
 import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { checkPermission } from "../permission";
-import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
 import { protectedProcedure } from "../trpc";
 
@@ -36,8 +35,10 @@ export const classroomRouter = {
       return classrooms.filter((cl) => cl.id === classroom?.id);
     }
     if (ctx.session.user.profile === "contact") {
-      const contact = await contactService.getFromUserId(ctx.session.user.id);
-      const classes = await contactService.getClassrooms(
+      const contact = await ctx.services.contact.getFromUserId(
+        ctx.session.user.id,
+      );
+      const classes = await ctx.services.contact.getClassrooms(
         contact.id,
         ctx.schoolYearId,
         ctx.schoolId,
@@ -93,8 +94,10 @@ export const classroomRouter = {
           (student) => student.userId === ctx.session.user.id,
         );
       } else if (ctx.session.user.profile === "contact") {
-        const contact = await contactService.getFromUserId(ctx.session.user.id);
-        const studs = await contactService.getStudents(contact.id);
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studs = await ctx.services.contact.getStudents(contact.id);
         const studentIds = studs.map((s) => s.studentId);
         return students.filter((student) => studentIds.includes(student.id));
       }
@@ -160,8 +163,10 @@ export const classroomRouter = {
           (student) => student.userId === ctx.session.user.id,
         );
       } else if (ctx.session.user.profile === "contact") {
-        const contact = await contactService.getFromUserId(ctx.session.user.id);
-        const studs = await contactService.getStudents(contact.id);
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studs = await ctx.services.contact.getStudents(contact.id);
         const studentIds = studs.map((s) => s.studentId);
         students = students.filter((student) =>
           studentIds.includes(student.id),

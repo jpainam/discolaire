@@ -7,8 +7,6 @@ import { z } from "zod/v4";
 import type { Prisma } from "@repo/db";
 
 import { checkPermission } from "../permission";
-import { getUnpaidFeeDescription } from "../services/accounting-service";
-import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
 import { protectedProcedure } from "../trpc";
 
@@ -82,8 +80,12 @@ export const studentRouter = {
         );
         studentIds.push(student.id);
       } else if (ctx.session.user.profile === "contact") {
-        const contact = await contactService.getFromUserId(ctx.session.user.id);
-        const studentContacts = await contactService.getStudents(contact.id);
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studentContacts = await ctx.services.contact.getStudents(
+          contact.id,
+        );
         studentIds.push(...studentContacts.map((sc) => sc.studentId));
       }
       return ctx.services.enrollment.getEnrollStudents({
@@ -516,7 +518,10 @@ export const studentRouter = {
           message: "Classroom not found",
         });
       }
-      return getUnpaidFeeDescription(input, classroom.id);
+      return ctx.services.accounting.getUnpaidFeeDescription(
+        input,
+        classroom.id,
+      );
     }),
 
   disable: protectedProcedure

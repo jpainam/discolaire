@@ -1,25 +1,29 @@
-import { db } from "../db";
+import type { PrismaClient } from "@repo/db";
 
-export const contactService = {
-  getFromUserId: async (userId: string) => {
-    return db.contact.findFirstOrThrow({
+export class ContactService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+  async getFromUserId(userId: string) {
+    return this.db.contact.findFirstOrThrow({
       where: {
         userId: userId,
       },
     });
-  },
-  getClassrooms: async (
+  }
+  async getClassrooms(
     contactId: string,
     schoolYearId: string,
     schoolId: string,
-  ) => {
-    const students = await db.studentContact.findMany({
+  ) {
+    const students = await this.db.studentContact.findMany({
       where: {
         contactId: contactId,
       },
     });
     const studentIds = students.map((s) => s.studentId);
-    const enrollments = await db.enrollment.findMany({
+    const enrollments = await this.db.enrollment.findMany({
       where: {
         studentId: {
           in: studentIds,
@@ -36,9 +40,9 @@ export const contactService = {
     });
 
     return enrollments.map((e) => e.classroom);
-  },
-  getStudents: async (contactId: string) => {
-    return db.studentContact.findMany({
+  }
+  async getStudents(contactId: string) {
+    return this.db.studentContact.findMany({
       where: {
         contactId: contactId,
       },
@@ -47,5 +51,5 @@ export const contactService = {
         relationship: true,
       },
     });
-  },
-};
+  }
+}

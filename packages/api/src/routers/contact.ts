@@ -2,7 +2,6 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod/v4";
 
-import { contactService } from "../services/contact-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -73,7 +72,7 @@ export const contactRouter = {
   classrooms: protectedProcedure
     .input(z.string().min(1))
     .query(({ ctx, input }) => {
-      return contactService.getClassrooms(
+      return ctx.services.contact.getClassrooms(
         input,
         ctx.schoolYearId,
         ctx.schoolId,
@@ -81,8 +80,8 @@ export const contactRouter = {
     }),
   getFromUserId: protectedProcedure
     .input(z.string().min(1))
-    .query(async ({ input }) => {
-      return contactService.getFromUserId(input);
+    .query(({ input, ctx }) => {
+      return ctx.services.contact.getFromUserId(input);
     }),
   all: protectedProcedure
     .input(
@@ -94,7 +93,9 @@ export const contactRouter = {
     )
     .query(async ({ ctx, input }) => {
       if (ctx.session.user.profile == "contact") {
-        const contact = await contactService.getFromUserId(ctx.session.user.id);
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
         const c = await ctx.db.contact.findUniqueOrThrow({
           include: {
             user: true,
@@ -233,7 +234,9 @@ export const contactRouter = {
     .query(async ({ ctx, input }) => {
       const q = `%${input.query}%`;
       if (ctx.session.user.profile == "contact") {
-        const contact = await contactService.getFromUserId(ctx.session.user.id);
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
         const c = await ctx.db.contact.findUniqueOrThrow({
           include: {
             user: true,

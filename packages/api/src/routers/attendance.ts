@@ -6,7 +6,6 @@ import type { Prisma } from "@repo/db";
 import { AttendanceType } from "@repo/db";
 
 import { attendanceToData } from "../services/attendance-service";
-import { contactService } from "../services/contact-service";
 import { protectedProcedure } from "../trpc";
 
 export const attendanceRouter = {
@@ -28,8 +27,10 @@ export const attendanceRouter = {
         );
         studentIds.push(student.id);
       } else if (ctx.session.user.profile === "contact") {
-        const contact = await contactService.getFromUserId(ctx.session.user.id);
-        const studs = await contactService.getStudents(contact.id);
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studs = await ctx.services.contact.getStudents(contact.id);
         studentIds.push(...studs.map((s) => s.studentId));
       } else {
         if (input.classroomId) {
