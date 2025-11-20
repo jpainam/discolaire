@@ -8,12 +8,6 @@ import { TransactionStatus } from "@repo/db/enums";
 
 import { notificationQueue } from "../queue";
 import { classroomService } from "../services/classroom-service";
-import {
-  getLastDaysDailySummary,
-  getTransactionStats,
-  getTransactionTrends,
-  transactionService,
-} from "../services/transaction-service";
 import { protectedProcedure } from "../trpc";
 
 const createSchema = z.object({
@@ -233,8 +227,8 @@ export const transactionRouter = {
     }),
   getReceiptInfo: protectedProcedure
     .input(z.coerce.number())
-    .query(({ input }) => {
-      return transactionService.getReceiptInfo(input);
+    .query(({ input, ctx }) => {
+      return ctx.services.transaction.getReceiptInfo(input);
     }),
   delete: protectedProcedure
     .input(
@@ -378,7 +372,7 @@ export const transactionRouter = {
       }),
     )
     .query(async ({ ctx, input }) => {
-      return getTransactionTrends({
+      return ctx.services.transaction.getTransactionTrends({
         from: input.from,
         to: input.to,
         classroomId: input.classroomId,
@@ -396,7 +390,7 @@ export const transactionRouter = {
       }),
     )
     .query(async ({ ctx, input }) => {
-      return getTransactionStats({
+      return ctx.services.transaction.getTransactionStats({
         from: input.from,
         to: input.to,
         classroomId: input.classroomId,
@@ -408,7 +402,7 @@ export const transactionRouter = {
   getLastDaysDailySummary: protectedProcedure
     .input(z.object({ number_of_days: z.coerce.number().default(60) }))
     .query(({ ctx, input }) => {
-      return getLastDaysDailySummary({
+      return ctx.services.transaction.getLastDaysDailySummary({
         schoolYearId: ctx.schoolYearId,
         days: input.number_of_days,
       });

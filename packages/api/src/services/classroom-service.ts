@@ -1,7 +1,16 @@
 import _ from "lodash";
 
+import type { PrismaClient } from "@repo/db";
+
 import { db } from "../db";
 
+export class ClassroomService {
+  private db: PrismaClient;
+
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+}
 async function get(classroomId: string, schoolId: string) {
   const classroom = await db.classroom.findUniqueOrThrow({
     where: {

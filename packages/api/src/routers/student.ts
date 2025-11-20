@@ -386,9 +386,15 @@ export const studentRouter = {
     .query(({ ctx, input }) => {
       // return the current classroom
       if (input.schoolYearId) {
-        return ctx.services.student.getClassroom(input.studentId, input.schoolYearId);
+        return ctx.services.student.getClassroom(
+          input.studentId,
+          input.schoolYearId,
+        );
       }
-      return ctx.services.student.getClassroom(input.studentId, ctx.schoolYearId);
+      return ctx.services.student.getClassroom(
+        input.studentId,
+        ctx.schoolYearId,
+      );
     }),
 
   get: protectedProcedure

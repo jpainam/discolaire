@@ -1,11 +1,11 @@
 import type { PrismaClient } from "@repo/db";
 
 import { StudentService } from "./student-service";
+import { TransactionService } from "./transaction-service";
 
 export { messagingService } from "./messaging-service";
 export { staffService } from "./staff-service";
 export { studentService } from "./student-service";
-export { transactionService } from "./transaction-service";
 
 export interface ServiceDeps {
   db: PrismaClient;
@@ -15,6 +15,7 @@ type ServiceCtor<T> = new (deps: ServiceDeps["db"]) => T;
 
 const serviceRegistry = {
   student: StudentService,
+  transaction: TransactionService,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, ServiceCtor<any>>;
 
