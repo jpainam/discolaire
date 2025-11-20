@@ -2,7 +2,6 @@ import type { PrismaClient } from "@repo/db";
 import { TransactionType } from "@repo/db/enums";
 import redisClient from "@repo/kv";
 
-import { db } from "../db";
 import { getFullName } from "../utils";
 import { ClassroomService } from "./classroom-service";
 
@@ -32,10 +31,10 @@ export class StudentService {
     return this.classroom.get(classroom.id, classroom.schoolId);
   }
   async get(studentId: string, schoolYearId: string, schoolId: string) {
-    const currentYear = await db.schoolYear.findUniqueOrThrow({
+    const currentYear = await this.db.schoolYear.findUniqueOrThrow({
       where: { id: schoolYearId },
     });
-    await db.student.update({
+    await this.db.student.update({
       where: {
         id: studentId,
         schoolId: schoolId,
@@ -44,7 +43,7 @@ export class StudentService {
         lastAccessed: new Date(),
       },
     });
-    const student = await db.student.findUniqueOrThrow({
+    const student = await this.db.student.findUniqueOrThrow({
       where: {
         id: studentId,
         schoolId,
@@ -155,10 +154,8 @@ export class StudentService {
     });
     return grades;
   }
-}
-export const studentService = {
-  addClubs: async (studentId: string, clubs: string[]) => {
-    await db.studentClub.deleteMany({
+  async addClubs(studentId: string, clubs: string[]) {
+    await this.db.studentClub.deleteMany({
       where: {
         studentId: studentId,
       },
@@ -169,12 +166,12 @@ export const studentService = {
         studentId: studentId,
       };
     });
-    return db.studentClub.createMany({
+    return this.db.studentClub.createMany({
       data: studentClubs,
     });
-  },
-  addSports: async (studentId: string, sports: string[]) => {
-    await db.studentSport.deleteMany({
+  }
+  async addSports(studentId: string, sports: string[]) {
+    await this.db.studentSport.deleteMany({
       where: {
         studentId: studentId,
       },
@@ -185,14 +182,13 @@ export const studentService = {
         studentId: studentId,
       };
     });
-    return db.studentSport.createMany({
+    return this.db.studentSport.createMany({
       data: studentSports,
       skipDuplicates: true,
     });
-  },
-
-  delete: async (studentIds: string | string[], schoolId: string) => {
-    const students = await db.student.findMany({
+  }
+  async delete(studentIds: string | string[], schoolId: string) {
+    const students = await this.db.student.findMany({
       where: {
         schoolId: schoolId,
         id: {
@@ -202,7 +198,7 @@ export const studentService = {
     });
     const userIds = students.map((c) => c.userId).filter((u) => u != null);
     if (userIds.length > 0) {
-      await db.user.deleteMany({
+      await this.db.user.deleteMany({
         where: {
           id: {
             in: userIds,
@@ -210,7 +206,7 @@ export const studentService = {
         },
       });
     }
-    return db.student.deleteMany({
+    return this.db.student.deleteMany({
       where: {
         schoolId: schoolId,
         id: {
@@ -218,26 +214,26 @@ export const studentService = {
         },
       },
     });
-  },
-  registrationNumberExists: async (
+  }
+  async registrationNumberExists(
     registrationNumber: string,
     studentId?: string,
-  ) => {
-    const student = await db.student.findFirst({
+  ) {
+    const student = await this.db.student.findFirst({
       where: {
         registrationNumber: registrationNumber,
       },
     });
     return student ? !studentId || student.id !== studentId : false;
-  },
-  generateRegistrationNumber: async ({
+  }
+  async generateRegistrationNumber({
     schoolId,
     schoolYearId,
   }: {
     schoolId: string;
     schoolYearId: string;
-  }) => {
-    const schoolYear = await db.schoolYear.findUnique({
+  }) {
+    const schoolYear = await this.db.schoolYear.findUnique({
       where: {
         id: schoolYearId,
       },
@@ -246,7 +242,7 @@ export const studentService = {
       throw new Error("School year not found");
     }
     const startWidth = schoolYear.name.slice(2, 4);
-    const latestStudent = await db.student.findFirst({
+    const latestStudent = await this.db.student.findFirst({
       where: {
         schoolId: schoolId,
         registrationNumber: {
@@ -266,108 +262,106 @@ export const studentService = {
           : Number(latestStudent.registrationNumber.slice(-4))) + 1;
       return `${startWidth}${nextRegistration.toString().padStart(4, "0")}`;
     }
-    const school = await db.school.findUniqueOrThrow({
+    const school = await this.db.school.findUniqueOrThrow({
       where: {
         id: schoolId,
       },
     });
 
     return `${startWidth}${school.registrationPrefix}2001`;
-  },
-};
-
-export async function isRepeating(studentId: string, schoolYearId: string) {
-  const key = `student:${studentId}:schoolYear:${schoolYearId}:isRepeating`;
-  // TODO, when i edit student, i need to delete this key as well
-  const _rep = await redisClient.get(key);
-  // if (rep !== null) {
-  //   return rep === "true";
-  // }
-  const enrollments = await db.enrollment.findMany({
-    where: {
-      studentId: studentId,
-      schoolYearId: {
-        lte: schoolYearId,
-      },
-    },
-    include: {
-      classroom: true,
-      student: true,
-    },
-  });
-  const curEnrollement = enrollments.find(
-    (enr) => enr.classroom.schoolYearId === schoolYearId,
-  );
-  if (enrollments.length <= 1) {
-    const r = curEnrollement?.student.isRepeating;
-    void redisClient.set(key, r ? "true" : "false");
-    return r;
   }
-
-  const prevEnrollments = enrollments.filter(
-    (enr) => enr.classroom.schoolYearId !== schoolYearId,
-  );
-  const isRepeating =
-    prevEnrollments.filter(
-      (prev) => prev.classroom.levelId === curEnrollement?.classroom.levelId,
-    ).length > 0;
-  void redisClient.set(key, isRepeating ? "true" : "false");
-  return isRepeating;
-}
-
-export async function getOverallBalance({ studentId }: { studentId: string }) {
-  const student = await db.student.findUniqueOrThrow({
-    where: {
-      id: studentId,
-    },
-  });
-  const enrollments = await db.enrollment.findMany({
-    where: {
-      studentId: studentId,
-    },
-  });
-  const classroomIds = enrollments.map((enr) => enr.classroomId);
-  const requiredJournals = await db.requiredAccountingJournal.findMany({
-    where: {
-      schoolId: student.schoolId,
-    },
-  });
-  const requiredJournalIds = requiredJournals.map((j) => j.journalId);
-  const fees = await db.fee.findMany({
-    where: {
-      classroomId: {
-        in: classroomIds,
+  async getOverallBalance({ studentId }: { studentId: string }) {
+    const student = await this.db.student.findUniqueOrThrow({
+      where: {
+        id: studentId,
       },
-      journalId: {
-        notIn: requiredJournalIds,
+    });
+    const enrollments = await this.db.enrollment.findMany({
+      where: {
+        studentId: studentId,
       },
-      dueDate: {
-        lte: new Date(),
+    });
+    const classroomIds = enrollments.map((enr) => enr.classroomId);
+    const requiredJournals = await this.db.requiredAccountingJournal.findMany({
+      where: {
+        schoolId: student.schoolId,
       },
-    },
-  });
-  const transactions = await db.transaction.findMany({
-    where: {
-      studentId: studentId,
-      journalId: {
-        notIn: requiredJournalIds,
+    });
+    const requiredJournalIds = requiredJournals.map((j) => j.journalId);
+    const fees = await this.db.fee.findMany({
+      where: {
+        classroomId: {
+          in: classroomIds,
+        },
+        journalId: {
+          notIn: requiredJournalIds,
+        },
+        dueDate: {
+          lte: new Date(),
+        },
       },
-      status: "VALIDATED",
-      deletedAt: null,
-    },
-  });
-  const debit = transactions
-    .filter((t) => t.transactionType === TransactionType.DEBIT)
-    .reduce((acc, t) => acc + t.amount, 0);
-  const credit = transactions
-    .filter((t) => t.transactionType === TransactionType.CREDIT)
-    .reduce((acc, t) => acc + t.amount, 0);
+    });
+    const transactions = await this.db.transaction.findMany({
+      where: {
+        studentId: studentId,
+        journalId: {
+          notIn: requiredJournalIds,
+        },
+        status: "VALIDATED",
+        deletedAt: null,
+      },
+    });
+    const debit = transactions
+      .filter((t) => t.transactionType === TransactionType.DEBIT)
+      .reduce((acc, t) => acc + t.amount, 0);
+    const credit = transactions
+      .filter((t) => t.transactionType === TransactionType.CREDIT)
+      .reduce((acc, t) => acc + t.amount, 0);
 
-  const discount = transactions
-    .filter((t) => t.transactionType === TransactionType.DISCOUNT)
-    .reduce((acc, t) => acc + t.amount, 0);
+    const discount = transactions
+      .filter((t) => t.transactionType === TransactionType.DISCOUNT)
+      .reduce((acc, t) => acc + t.amount, 0);
 
-  const feesTotal = fees.reduce((acc, fee) => acc + fee.amount, 0);
-  const balance = credit + discount - (debit + feesTotal);
-  return { name: getFullName(student), balance: balance };
+    const feesTotal = fees.reduce((acc, fee) => acc + fee.amount, 0);
+    const balance = credit + discount - (debit + feesTotal);
+    return { name: getFullName(student), balance: balance };
+  }
+  async isRepeating(studentId: string, schoolYearId: string) {
+    const key = `student:${studentId}:schoolYear:${schoolYearId}:isRepeating`;
+    // TODO, when i edit student, i need to delete this key as well
+    const _rep = await redisClient.get(key);
+    // if (rep !== null) {
+    //   return rep === "true";
+    // }
+    const enrollments = await this.db.enrollment.findMany({
+      where: {
+        studentId: studentId,
+        schoolYearId: {
+          lte: schoolYearId,
+        },
+      },
+      include: {
+        classroom: true,
+        student: true,
+      },
+    });
+    const curEnrollement = enrollments.find(
+      (enr) => enr.classroom.schoolYearId === schoolYearId,
+    );
+    if (enrollments.length <= 1) {
+      const r = curEnrollement?.student.isRepeating;
+      void redisClient.set(key, r ? "true" : "false");
+      return r;
+    }
+
+    const prevEnrollments = enrollments.filter(
+      (enr) => enr.classroom.schoolYearId !== schoolYearId,
+    );
+    const isRepeating =
+      prevEnrollments.filter(
+        (prev) => prev.classroom.levelId === curEnrollement?.classroom.levelId,
+      ).length > 0;
+    void redisClient.set(key, isRepeating ? "true" : "false");
+    return isRepeating;
+  }
 }

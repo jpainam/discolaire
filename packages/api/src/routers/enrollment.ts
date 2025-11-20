@@ -6,7 +6,6 @@ import {
   enrollmentService,
   getEnrollStudents,
 } from "../services/enrollment-service";
-import { getOverallBalance, isRepeating } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = {
@@ -29,7 +28,7 @@ export const enrollmentRouter = {
       });
       const enrollmentWithRepeating = await Promise.all(
         enrollments.map(async (enrollment) => {
-          const isRep = await isRepeating(
+          const isRep = await ctx.services.student.isRepeating(
             enrollment.student.id,
             ctx.schoolYearId,
           );
@@ -78,7 +77,10 @@ export const enrollmentRouter = {
         data.map(async (student) => {
           return {
             ...student,
-            isRepeating: await isRepeating(student.id, ctx.schoolYearId),
+            isRepeating: await ctx.services.student.isRepeating(
+              student.id,
+              ctx.schoolYearId,
+            ),
             classroom: await ctx.services.student.getClassroom(
               student.id,
               ctx.schoolYearId,
@@ -102,7 +104,9 @@ export const enrollmentRouter = {
         : [input.studentId];
 
       for (const studentId of studentIds) {
-        const { name, balance } = await getOverallBalance({ studentId });
+        const { name, balance } = await ctx.services.student.getOverallBalance({
+          studentId,
+        });
         if (balance < 0) {
           throw new TRPCError({
             code: "BAD_REQUEST",
@@ -255,7 +259,9 @@ export const enrollmentRouter = {
     }),
   canEnroll: protectedProcedure
     .input(z.object({ studentId: z.string() }))
-    .query(async ({ input }) => {
-      return getOverallBalance({ studentId: input.studentId });
+    .query(({ input, ctx }) => {
+      return ctx.services.student.getOverallBalance({
+        studentId: input.studentId,
+      });
     }),
 } satisfies TRPCRouterRecord;

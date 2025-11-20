@@ -11,7 +11,6 @@ import { getUnpaidFeeDescription } from "../services/accounting-service";
 import { contactService } from "../services/contact-service";
 import { getEnrollStudents } from "../services/enrollment-service";
 import { staffService } from "../services/staff-service";
-import { isRepeating, studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
@@ -158,7 +157,10 @@ export const studentRouter = {
         data.map(async (student) => {
           return {
             ...student,
-            isRepeating: await isRepeating(student.id, ctx.schoolYearId),
+            isRepeating: await ctx.services.student.isRepeating(
+              student.id,
+              ctx.schoolYearId,
+            ),
             classroom: await ctx.services.student.getClassroom(
               student.id,
               ctx.schoolYearId,
@@ -174,11 +176,13 @@ export const studentRouter = {
     .mutation(async ({ ctx, input }) => {
       const registrationNumber =
         input.registrationNumber ??
-        (await studentService.generateRegistrationNumber({
+        (await ctx.services.student.generateRegistrationNumber({
           schoolId: ctx.schoolId,
           schoolYearId: ctx.schoolYearId,
         }));
-      if (await studentService.registrationNumberExists(registrationNumber)) {
+      if (
+        await ctx.services.student.registrationNumberExists(registrationNumber)
+      ) {
         console.warn("Registration number already exists", registrationNumber);
         // throw new TRPCError({
         //   code: "BAD_REQUEST",
@@ -229,8 +233,8 @@ export const studentRouter = {
           },
         },
       });
-      void studentService.addClubs(student.id, input.clubs ?? []);
-      void studentService.addSports(student.id, input.sports ?? []);
+      void ctx.services.student.addClubs(student.id, input.clubs ?? []);
+      void ctx.services.student.addSports(student.id, input.sports ?? []);
 
       if (input.classroom) {
         const enr = await ctx.db.enrollment.create({
@@ -256,12 +260,12 @@ export const studentRouter = {
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      void studentService.addClubs(input.id, input.clubs ?? []);
-      void studentService.addSports(input.id, input.sports ?? []);
+      void ctx.services.student.addClubs(input.id, input.clubs ?? []);
+      void ctx.services.student.addSports(input.id, input.sports ?? []);
 
       if (
         input.registrationNumber &&
-        (await studentService.registrationNumberExists(
+        (await ctx.services.student.registrationNumberExists(
           input.registrationNumber,
           input.id,
         ))
@@ -355,7 +359,7 @@ export const studentRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
-      const r = await studentService.delete(input, ctx.schoolId);
+      const r = await ctx.services.student.delete(input, ctx.schoolId);
       await ctx.pubsub.publish("student", {
         type: "delete",
         data: {
