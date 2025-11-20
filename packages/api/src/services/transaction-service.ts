@@ -5,7 +5,23 @@ import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { db } from "../db";
 import { classroomService } from "./classroom-service";
-import { studentService } from "./student-service";
+
+async function getClassroom(studentId: string, schoolYearId: string) {
+  const classroom = await db.classroom.findFirst({
+    where: {
+      enrollments: {
+        some: {
+          studentId: studentId,
+          schoolYearId: schoolYearId,
+        },
+      },
+    },
+  });
+  if (!classroom) {
+    return null;
+  }
+  return classroomService.get(classroom.id, classroom.schoolId);
+}
 
 export const transactionService = {
   getReceiptInfo: async (transactionId: number) => {
@@ -19,7 +35,7 @@ export const transactionService = {
       },
     });
 
-    const classroom = await studentService.getClassroom(
+    const classroom = await getClassroom(
       transaction.studentId,
       transaction.schoolYearId,
     );

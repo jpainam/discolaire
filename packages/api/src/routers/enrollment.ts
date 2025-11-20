@@ -6,11 +6,7 @@ import {
   enrollmentService,
   getEnrollStudents,
 } from "../services/enrollment-service";
-import {
-  getOverallBalance,
-  isRepeating,
-  studentService,
-} from "../services/student-service";
+import { getOverallBalance, isRepeating } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = {
@@ -83,7 +79,7 @@ export const enrollmentRouter = {
           return {
             ...student,
             isRepeating: await isRepeating(student.id, ctx.schoolYearId),
-            classroom: await studentService.getClassroom(
+            classroom: await ctx.services.student.getClassroom(
               student.id,
               ctx.schoolYearId,
             ),

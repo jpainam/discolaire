@@ -13,9 +13,11 @@ import { z, ZodError } from "zod/v4";
 import type { Auth, Session } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
 
+import type { Services } from "./services";
 import { db } from "./db";
 import { PubSubLogger } from "./pubsub-logger";
 import { logQueue } from "./queue";
+import { createServices } from "./services";
 import { getPermissions } from "./services/user-service";
 import { getCookieValue } from "./utils";
 
@@ -39,6 +41,7 @@ export const createTRPCContext = async (opts: {
   authApi: Auth["api"];
   session: Session | null;
   db: PrismaClient;
+  services: Services;
   schoolYearId: string | null;
 }> => {
   const authApi: Auth["api"] = opts.auth.api;
@@ -47,10 +50,12 @@ export const createTRPCContext = async (opts: {
     headers: opts.headers,
   });
   const schoolYearId = getCookieValue(opts.headers, "x-school-year");
+  const services = createServices(db);
   return {
     authApi,
     session,
     db,
+    services,
     schoolYearId: schoolYearId,
   };
 };

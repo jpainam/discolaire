@@ -1,3 +1,4 @@
+import type { PrismaClient } from "@repo/db";
 import { TransactionType } from "@repo/db/enums";
 import redisClient from "@repo/kv";
 
@@ -5,6 +6,30 @@ import { db } from "../db";
 import { getFullName } from "../utils";
 import { classroomService } from "./classroom-service";
 
+export class StudentService {
+  private db: PrismaClient;
+
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+
+  async getClassroom(studentId: string, schoolYearId: string) {
+    const classroom = await this.db.classroom.findFirst({
+      where: {
+        enrollments: {
+          some: {
+            studentId: studentId,
+            schoolYearId: schoolYearId,
+          },
+        },
+      },
+    });
+    if (!classroom) {
+      return null;
+    }
+    return classroomService.get(classroom.id, classroom.schoolId);
+  }
+}
 export const studentService = {
   get: async (studentId: string, schoolYearId: string, schoolId: string) => {
     const currentYear = await db.schoolYear.findUniqueOrThrow({
@@ -90,22 +115,7 @@ export const studentService = {
       },
     });
   },
-  getClassroom: async (studentId: string, schoolYearId: string) => {
-    const classroom = await db.classroom.findFirst({
-      where: {
-        enrollments: {
-          some: {
-            studentId: studentId,
-            schoolYearId: schoolYearId,
-          },
-        },
-      },
-    });
-    if (!classroom) {
-      return null;
-    }
-    return classroomService.get(classroom.id, classroom.schoolId);
-  },
+
   addClubs: async (studentId: string, clubs: string[]) => {
     await db.studentClub.deleteMany({
       where: {

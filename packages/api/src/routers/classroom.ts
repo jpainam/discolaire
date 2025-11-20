@@ -29,7 +29,7 @@ export const classroomRouter = {
     });
     if (ctx.session.user.profile === "student") {
       const student = await studentService.getFromUserId(ctx.session.user.id);
-      const classroom = await studentService.getClassroom(
+      const classroom = await ctx.services.student.getClassroom(
         student.id,
         ctx.schoolYearId,
       );

@@ -157,7 +157,7 @@ export const studentRouter = {
           return {
             ...student,
             isRepeating: await isRepeating(student.id, ctx.schoolYearId),
-            classroom: await studentService.getClassroom(
+            classroom: await ctx.services.student.getClassroom(
               student.id,
               ctx.schoolYearId,
             ),
@@ -386,9 +386,9 @@ export const studentRouter = {
     .query(({ ctx, input }) => {
       // return the current classroom
       if (input.schoolYearId) {
-        return studentService.getClassroom(input.studentId, input.schoolYearId);
+        return ctx.services.student.getClassroom(input.studentId, input.schoolYearId);
       }
-      return studentService.getClassroom(input.studentId, ctx.schoolYearId);
+      return ctx.services.student.getClassroom(input.studentId, ctx.schoolYearId);
     }),
 
   get: protectedProcedure
@@ -497,7 +497,7 @@ export const studentRouter = {
   unpaidRequiredFees: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
-      const classroom = await studentService.getClassroom(
+      const classroom = await ctx.services.student.getClassroom(
         input,
         ctx.schoolYearId,
       );
