@@ -7,7 +7,6 @@ import type { TransactionType } from "@repo/db/enums";
 import { TransactionStatus } from "@repo/db/enums";
 
 import { notificationQueue } from "../queue";
-import { classroomService } from "../services/classroom-service";
 import { protectedProcedure } from "../trpc";
 
 const createSchema = z.object({
@@ -50,7 +49,7 @@ export const transactionRouter = {
         : undefined;
 
       const students = input.classroom
-        ? await classroomService.getStudents(input.classroom)
+        ? await ctx.services.classroom.getStudents(input.classroom)
         : [];
       const studentIds: string[] = students.map((stud) => stud.id);
       return ctx.db.transaction.findMany({

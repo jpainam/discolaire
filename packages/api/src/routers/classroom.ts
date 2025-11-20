@@ -5,7 +5,6 @@ import { z } from "zod/v4";
 import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { checkPermission } from "../permission";
-import { classroomService } from "../services/classroom-service";
 import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
 import { studentService } from "../services/student-service";
@@ -23,7 +22,7 @@ const createUpdateSchema = z.object({
 });
 export const classroomRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
-    const classrooms = await classroomService.getAll({
+    const classrooms = await ctx.services.classroom.getAll({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.session.user.schoolId,
     });
@@ -82,12 +81,12 @@ export const classroomRouter = {
       });
     }),
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    return classroomService.get(input, ctx.schoolId);
+    return ctx.services.classroom.get(input, ctx.schoolId);
   }),
   students: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ input, ctx }) => {
-      const students = await classroomService.getStudents(input);
+      const students = await ctx.services.classroom.getStudents(input);
       if (ctx.session.user.profile === "student") {
         return students.filter(
           (student) => student.userId === ctx.session.user.id,
@@ -130,9 +129,11 @@ export const classroomRouter = {
       return cl;
     }),
 
-  subjects: protectedProcedure.input(z.string().min(1)).query(({ input }) => {
-    return classroomService.getSubjects(input);
-  }),
+  subjects: protectedProcedure
+    .input(z.string().min(1))
+    .query(({ input, ctx }) => {
+      return ctx.services.classroom.getSubjects(input);
+    }),
 
   fees: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     return ctx.db.fee.findMany({
@@ -152,7 +153,7 @@ export const classroomRouter = {
   studentsBalance: protectedProcedure
     .input(z.object({ id: z.string(), journalId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
-      let students = await classroomService.getStudents(input.id);
+      let students = await ctx.services.classroom.getStudents(input.id);
       if (ctx.session.user.profile === "student") {
         students = students.filter(
           (student) => student.userId === ctx.session.user.id,
@@ -262,13 +263,15 @@ export const classroomRouter = {
         },
       });
     }),
-  gradesheets: protectedProcedure.input(z.string()).query(async ({ input }) => {
-    return classroomService.getGradeSheets(input);
-  }),
+  gradesheets: protectedProcedure
+    .input(z.string())
+    .query(async ({ input, ctx }) => {
+      return ctx.services.classroom.getGradeSheets(input);
+    }),
   getMinMaxMoyGrades: protectedProcedure
     .input(z.string())
-    .query(async ({ input }) => {
-      return classroomService.getMinMaxMoyGrades(input);
+    .query(({ input, ctx }) => {
+      return ctx.services.classroom.getMinMaxMoyGrades(input);
     }),
   assignments: protectedProcedure
     .input(z.string())

@@ -1,11 +1,79 @@
 import { TRPCError } from "@trpc/server";
 
-import type { Prisma } from "@repo/db";
+import type { Prisma, PrismaClient } from "@repo/db";
 
 import { db } from "../db";
 import { env } from "../env";
-import { classroomService } from "./classroom-service";
+import { ClassroomService } from "./classroom-service";
 
+export class AttendanceService {
+  private db: PrismaClient;
+  private classroom: ClassroomService;
+  constructor(db: PrismaClient) {
+    this.db = db;
+    this.classroom = new ClassroomService(db);
+  }
+  async getDisciplineForTerms(opts: {
+    classroomId: string;
+    termIds: string[];
+  }) {
+    const students = await this.classroom.getStudents(opts.classroomId);
+    const studentIds = students.map((s: { id: string }) => s.id);
+    //if (studentIds.length === 0) return {};
+
+    const totalsByStudent = new Map<
+      string,
+      {
+        absence: number;
+        justifiedAbsence: number;
+        chatter: number;
+        late: number;
+        justifiedLate: number;
+        consigne: number;
+        exclusion: number;
+      }
+    >();
+    for (const id of studentIds)
+      totalsByStudent.set(id, {
+        absence: 0,
+        justifiedAbsence: 0,
+        chatter: 0,
+        late: 0,
+        justifiedLate: 0,
+        consigne: 0,
+        exclusion: 0,
+      });
+
+    const rows = await this.db.attendance.findMany({
+      where: {
+        studentId: { in: studentIds },
+        termId: { in: opts.termIds },
+      },
+      select: {
+        studentId: true,
+        data: true,
+      },
+    });
+    for (const row of rows) {
+      const parsed = attendanceToData(row.data);
+      const prev = totalsByStudent.get(row.studentId) ?? {
+        absence: 0,
+        justifiedAbsence: 0,
+        chatter: 0,
+        late: 0,
+        justifiedLate: 0,
+        consigne: 0,
+        exclusion: 0,
+      };
+      totalsByStudent.set(row.studentId, addTotals(prev, parsed));
+    }
+    return totalsByStudent;
+    // return Object.fromEntries(totalsByStudent.entries()) as Record<
+    //   string,
+    //   DisciplineTotals
+    // >;
+  }
+}
 export function attendanceToData(data: Prisma.JsonValue) {
   const d = (data ?? {}) as Prisma.JsonObject;
   return {
@@ -47,67 +115,6 @@ function addTotals(
     consigne: a.consigne + b.consigne,
     exclusion: a.exclusion + b.exclusion,
   };
-}
-
-export async function getDisciplineForTerms(opts: {
-  classroomId: string;
-  termIds: string[];
-}) {
-  const students = await classroomService.getStudents(opts.classroomId);
-  const studentIds = students.map((s: { id: string }) => s.id);
-  //if (studentIds.length === 0) return {};
-
-  const totalsByStudent = new Map<
-    string,
-    {
-      absence: number;
-      justifiedAbsence: number;
-      chatter: number;
-      late: number;
-      justifiedLate: number;
-      consigne: number;
-      exclusion: number;
-    }
-  >();
-  for (const id of studentIds)
-    totalsByStudent.set(id, {
-      absence: 0,
-      justifiedAbsence: 0,
-      chatter: 0,
-      late: 0,
-      justifiedLate: 0,
-      consigne: 0,
-      exclusion: 0,
-    });
-
-  const rows = await db.attendance.findMany({
-    where: {
-      studentId: { in: studentIds },
-      termId: { in: opts.termIds },
-    },
-    select: {
-      studentId: true,
-      data: true,
-    },
-  });
-  for (const row of rows) {
-    const parsed = attendanceToData(row.data);
-    const prev = totalsByStudent.get(row.studentId) ?? {
-      absence: 0,
-      justifiedAbsence: 0,
-      chatter: 0,
-      late: 0,
-      justifiedLate: 0,
-      consigne: 0,
-      exclusion: 0,
-    };
-    totalsByStudent.set(row.studentId, addTotals(prev, parsed));
-  }
-  return totalsByStudent;
-  // return Object.fromEntries(totalsByStudent.entries()) as Record<
-  //   string,
-  //   DisciplineTotals
-  // >;
 }
 
 export async function getTrimesterTermIds(

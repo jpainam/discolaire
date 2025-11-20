@@ -7,7 +7,6 @@ import { AttendanceType } from "@repo/db";
 
 import { studentService } from "../services";
 import { attendanceToData } from "../services/attendance-service";
-import { classroomService } from "../services/classroom-service";
 import { contactService } from "../services/contact-service";
 import { protectedProcedure } from "../trpc";
 
@@ -33,7 +32,7 @@ export const attendanceRouter = {
         studentIds.push(...studs.map((s) => s.studentId));
       } else {
         if (input.classroomId) {
-          const students = await classroomService.getStudents(
+          const students = await ctx.services.classroom.getStudents(
             input.classroomId,
           );
           studentIds.push(...students.map((st) => st.id));

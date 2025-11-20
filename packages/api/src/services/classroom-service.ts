@@ -2,337 +2,325 @@ import _ from "lodash";
 
 import type { PrismaClient } from "@repo/db";
 
-import { db } from "../db";
-
 export class ClassroomService {
   private db: PrismaClient;
 
   constructor(db: PrismaClient) {
     this.db = db;
   }
-}
-async function get(classroomId: string, schoolId: string) {
-  const classroom = await db.classroom.findUniqueOrThrow({
-    where: {
-      id: classroomId,
-      schoolId: schoolId,
-    },
-    include: {
-      level: true,
-      cycle: true,
-      schoolYear: true,
-      section: true,
-      classroomLeader: true,
-      headTeacher: true,
-      seniorAdvisor: true,
-    },
-  });
-  const count = await getCount(classroomId);
-  return {
-    ...classroom,
-    femaleCount: count.female,
-    maleCount: count.male,
-    size: count.size,
-  };
-}
-async function getAll({
-  schoolYearId,
-  schoolId,
-}: {
-  schoolYearId: string;
-  schoolId: string;
-}) {
-  const classroomsWithStats = await db.classroom.findMany({
-    orderBy: {
-      levelId: "asc",
-    },
-    where: {
-      schoolYearId: schoolYearId,
-      schoolId: schoolId,
-    },
-    include: {
-      level: true,
-      cycle: true,
-      section: true,
-      classroomLeader: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-        },
+  async get(classroomId: string, schoolId: string) {
+    const classroom = await this.db.classroom.findUniqueOrThrow({
+      where: {
+        id: classroomId,
+        schoolId: schoolId,
       },
-      headTeacher: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-        },
+      include: {
+        level: true,
+        cycle: true,
+        schoolYear: true,
+        section: true,
+        classroomLeader: true,
+        headTeacher: true,
+        seniorAdvisor: true,
       },
-      seniorAdvisor: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-        },
+    });
+    const count = await this.getCount(classroomId);
+    return {
+      ...classroom,
+      femaleCount: count.female,
+      maleCount: count.male,
+      size: count.size,
+    };
+  }
+  async getCount(classroomId: string) {
+    const enrollments = await this.db.enrollment.findMany({
+      where: {
+        classroomId: classroomId,
       },
-      enrollments: {
-        select: {
-          student: {
-            select: {
-              gender: true,
-            },
+      include: {
+        student: true,
+      },
+    });
+
+    const maleCount = enrollments.filter(
+      (enrollment) => enrollment.student.gender === "male",
+    ).length;
+    const femaleCount = enrollments.filter(
+      (enrollment) => enrollment.student.gender === "female",
+    ).length;
+    return {
+      male: maleCount,
+      female: femaleCount,
+      size: enrollments.length,
+    };
+  }
+
+  async getGradeSheets(classroomId: string) {
+    const gradesheets = await this.db.gradeSheet.findMany({
+      include: {
+        term: true,
+        grades: true,
+        subject: {
+          include: {
+            teacher: true,
+            course: true,
           },
         },
       },
-    },
-  });
-
-  const classroomsWithSize = classroomsWithStats.map((c) => {
-    const totalStudents = c.enrollments.length;
-    const femaleCount = c.enrollments.filter(
-      (e) => e.student.gender === "female",
-    ).length;
-    const maleCount = c.enrollments.filter(
-      (e) => e.student.gender === "male",
-    ).length;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { enrollments, ...classroomWithoutEnrollments } = c;
-    return {
-      ...classroomWithoutEnrollments,
-      size: totalStudents,
-      femaleCount,
-      maleCount,
-    };
-  });
-  return classroomsWithSize;
-}
-
-async function getCount(classroomId: string) {
-  const enrollments = await db.enrollment.findMany({
-    where: {
-      classroomId: classroomId,
-    },
-    include: {
-      student: true,
-    },
-  });
-
-  const maleCount = enrollments.filter(
-    (enrollment) => enrollment.student.gender === "male",
-  ).length;
-  const femaleCount = enrollments.filter(
-    (enrollment) => enrollment.student.gender === "female",
-  ).length;
-  return {
-    male: maleCount,
-    female: femaleCount,
-    size: enrollments.length,
-  };
-}
-
-async function getGradeSheets(classroomId: string) {
-  const gradesheets = await db.gradeSheet.findMany({
-    include: {
-      term: true,
-      grades: true,
-      subject: {
-        include: {
-          teacher: true,
-          course: true,
-        },
+      orderBy: {
+        createdAt: "desc",
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    where: {
-      subject: {
-        classroomId: classroomId,
-      },
-    },
-  });
-
-  return gradesheets.map((gradesheet) => {
-    const grades = gradesheet.grades.filter((grade) => !grade.isAbsent);
-    return {
-      ...gradesheet,
-      grades: [], // Omit grades from the response, not needed in the frontend
-      num_grades: grades.length,
-      num_is_absent: gradesheet.grades.filter((grade) => grade.isAbsent).length,
-      max: Math.max(...grades.map((g) => g.grade)),
-      min: Math.min(...grades.map((g) => g.grade)),
-      avg: grades.length
-        ? grades.reduce((acc, g) => acc + g.grade, 0) / grades.length
-        : 0,
-    };
-  });
-}
-async function getMinMaxMoyGrades(classroomId: string) {
-  const gradeAggregation = await db.grade.groupBy({
-    by: ["gradeSheetId"],
-    where: {
-      gradeSheet: {
+      where: {
         subject: {
           classroomId: classroomId,
         },
       },
-    },
-    _min: {
-      grade: true,
-    },
-    _max: {
-      grade: true,
-    },
-    _avg: {
-      grade: true,
-    },
-  });
-  const gradesheets = await db.gradeSheet.findMany({
-    include: {
-      subject: true,
-    },
-    where: {
-      subject: {
-        classroomId: classroomId,
-      },
-    },
-  });
-  const gradesheetMap = _.keyBy(gradesheets, "id");
-  const result = gradeAggregation.map((grade) => {
-    const gr = gradesheetMap[grade.gradeSheetId];
-    return {
-      min: grade._min.grade,
-      max: grade._max.grade,
-      avg: grade._avg.grade,
-      gradeSheetId: grade.gradeSheetId,
-      weight: gr?.weight,
-      subjectId: gr?.subjectId,
-      termId: gr?.termId,
-      name: gr?.name,
-      coefficient: gr?.subject.coefficient,
-    };
-  });
-  return result;
-}
-async function getSubjects(classroomId: string) {
-  return db.subject.findMany({
-    where: {
-      classroomId: classroomId,
-    },
-    orderBy: {
-      order: "asc",
-    },
-    include: {
-      programs: true,
-      timetables: {
-        where: {
-          OR: [
-            { validTo: null },
-            {
-              validTo: {
-                gt: new Date(),
-              },
-            },
-          ],
-        },
-      },
-      course: {
-        select: {
-          id: true,
-          shortName: true,
-          name: true,
-          color: true,
-          reportName: true,
-        },
-      },
-      subjectGroup: true,
-      teacher: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          prefix: true,
-        },
-      },
-    },
-  });
-}
-async function getStudents(classroomId: string) {
-  const classroom = await db.classroom.findUnique({
-    where: {
-      id: classroomId,
-    },
-  });
-  if (!classroom) {
-    throw new Error("Classroom not found");
+    });
+
+    return gradesheets.map((gradesheet) => {
+      const grades = gradesheet.grades.filter((grade) => !grade.isAbsent);
+      return {
+        ...gradesheet,
+        grades: [], // Omit grades from the response, not needed in the frontend
+        num_grades: grades.length,
+        num_is_absent: gradesheet.grades.filter((grade) => grade.isAbsent)
+          .length,
+        max: Math.max(...grades.map((g) => g.grade)),
+        min: Math.min(...grades.map((g) => g.grade)),
+        avg: grades.length
+          ? grades.reduce((acc, g) => acc + g.grade, 0) / grades.length
+          : 0,
+      };
+    });
   }
-  const students = await db.student.findMany({
-    where: {
-      enrollments: {
-        some: {
-          classroomId: classroomId,
-          schoolYearId: {
-            lte: classroom.schoolYearId,
+  async getMinMaxMoyGrades(classroomId: string) {
+    const gradeAggregation = await this.db.grade.groupBy({
+      by: ["gradeSheetId"],
+      where: {
+        gradeSheet: {
+          subject: {
+            classroomId: classroomId,
           },
         },
       },
-    },
-    orderBy: {
-      lastName: "asc",
-    },
-    include: {
-      formerSchool: true,
-      user: true,
-      enrollments: {
-        include: {
-          classroom: true,
-          schoolYear: true,
+      _min: {
+        grade: true,
+      },
+      _max: {
+        grade: true,
+      },
+      _avg: {
+        grade: true,
+      },
+    });
+    const gradesheets = await this.db.gradeSheet.findMany({
+      include: {
+        subject: true,
+      },
+      where: {
+        subject: {
+          classroomId: classroomId,
         },
       },
-      religion: true,
-      studentContacts: {
-        include: {
-          contact: true,
+    });
+    const gradesheetMap = _.keyBy(gradesheets, "id");
+    const result = gradeAggregation.map((grade) => {
+      const gr = gradesheetMap[grade.gradeSheetId];
+      return {
+        min: grade._min.grade,
+        max: grade._max.grade,
+        avg: grade._avg.grade,
+        gradeSheetId: grade.gradeSheetId,
+        weight: gr?.weight,
+        subjectId: gr?.subjectId,
+        termId: gr?.termId,
+        name: gr?.name,
+        coefficient: gr?.subject.coefficient,
+      };
+    });
+    return result;
+  }
+  async getSubjects(classroomId: string) {
+    return this.db.subject.findMany({
+      where: {
+        classroomId: classroomId,
+      },
+      orderBy: {
+        order: "asc",
+      },
+      include: {
+        programs: true,
+        timetables: {
+          where: {
+            OR: [
+              { validTo: null },
+              {
+                validTo: {
+                  gt: new Date(),
+                },
+              },
+            ],
+          },
+        },
+        course: {
+          select: {
+            id: true,
+            shortName: true,
+            name: true,
+            color: true,
+            reportName: true,
+          },
+        },
+        subjectGroup: true,
+        teacher: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            prefix: true,
+          },
         },
       },
-    },
-  });
+    });
+  }
+  async getStudents(classroomId: string) {
+    const classroom = await this.db.classroom.findUnique({
+      where: {
+        id: classroomId,
+      },
+    });
+    if (!classroom) {
+      throw new Error("Classroom not found");
+    }
+    const students = await this.db.student.findMany({
+      where: {
+        enrollments: {
+          some: {
+            classroomId: classroomId,
+            schoolYearId: {
+              lte: classroom.schoolYearId,
+            },
+          },
+        },
+      },
+      orderBy: {
+        lastName: "asc",
+      },
+      include: {
+        formerSchool: true,
+        user: true,
+        enrollments: {
+          include: {
+            classroom: true,
+            schoolYear: true,
+          },
+        },
+        religion: true,
+        studentContacts: {
+          include: {
+            contact: true,
+          },
+        },
+      },
+    });
 
-  // Check for repeating status
-  const withIsRepeating = students.map((st) => {
-    if (st.enrollments.length <= 1) {
+    // Check for repeating status
+    const withIsRepeating = students.map((st) => {
+      if (st.enrollments.length <= 1) {
+        return {
+          ...st,
+          isRepeating: st.isRepeating,
+        };
+      }
+      const currentEnrollement = st.enrollments.find(
+        (enr) => enr.classroomId === classroomId,
+      );
+      const previousEnrollments = st.enrollments.filter(
+        (enr) => enr.classroomId !== classroomId,
+      );
+      const isRepeating =
+        previousEnrollments.filter(
+          (prev) =>
+            prev.classroom.levelId === currentEnrollement?.classroom.levelId,
+        ).length > 0;
+
       return {
         ...st,
-        isRepeating: st.isRepeating,
+        isRepeating: isRepeating,
       };
-    }
-    const currentEnrollement = st.enrollments.find(
-      (enr) => enr.classroomId === classroomId,
-    );
-    const previousEnrollments = st.enrollments.filter(
-      (enr) => enr.classroomId !== classroomId,
-    );
-    const isRepeating =
-      previousEnrollments.filter(
-        (prev) =>
-          prev.classroom.levelId === currentEnrollement?.classroom.levelId,
-      ).length > 0;
+    });
 
-    return {
-      ...st,
-      isRepeating: isRepeating,
-    };
-  });
+    return withIsRepeating;
+  }
+  async getAll({
+    schoolYearId,
+    schoolId,
+  }: {
+    schoolYearId: string;
+    schoolId: string;
+  }) {
+    const classroomsWithStats = await this.db.classroom.findMany({
+      orderBy: {
+        levelId: "asc",
+      },
+      where: {
+        schoolYearId: schoolYearId,
+        schoolId: schoolId,
+      },
+      include: {
+        level: true,
+        cycle: true,
+        section: true,
+        classroomLeader: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        headTeacher: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        seniorAdvisor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        enrollments: {
+          select: {
+            student: {
+              select: {
+                gender: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-  return withIsRepeating;
+    const classroomsWithSize = classroomsWithStats.map((c) => {
+      const totalStudents = c.enrollments.length;
+      const femaleCount = c.enrollments.filter(
+        (e) => e.student.gender === "female",
+      ).length;
+      const maleCount = c.enrollments.filter(
+        (e) => e.student.gender === "male",
+      ).length;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { enrollments, ...classroomWithoutEnrollments } = c;
+      return {
+        ...classroomWithoutEnrollments,
+        size: totalStudents,
+        femaleCount,
+        maleCount,
+      };
+    });
+    return classroomsWithSize;
+  }
 }
-
-export const classroomService = {
-  get,
-  getAll,
-  getCount,
-  getGradeSheets,
-  getMinMaxMoyGrades,
-  getSubjects,
-  getStudents,
-};

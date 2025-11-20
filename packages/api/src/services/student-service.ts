@@ -4,13 +4,15 @@ import redisClient from "@repo/kv";
 
 import { db } from "../db";
 import { getFullName } from "../utils";
-import { classroomService } from "./classroom-service";
+import { ClassroomService } from "./classroom-service";
 
 export class StudentService {
   private db: PrismaClient;
+  classroom: ClassroomService;
 
   constructor(db: PrismaClient) {
     this.db = db;
+    this.classroom = new ClassroomService(db);
   }
 
   async getClassroom(studentId: string, schoolYearId: string) {
@@ -27,7 +29,7 @@ export class StudentService {
     if (!classroom) {
       return null;
     }
-    return classroomService.get(classroom.id, classroom.schoolId);
+    return this.classroom.get(classroom.id, classroom.schoolId);
   }
 }
 export const studentService = {

@@ -3,17 +3,18 @@ import { endOfDay, format, startOfDay, subDays } from "date-fns";
 import type { Prisma, PrismaClient } from "@repo/db";
 import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
-//import { db } from "../db";
-import { classroomService } from "./classroom-service";
+import { ClassroomService } from "./classroom-service";
 import { StudentService } from "./student-service";
 
 export class TransactionService {
   private db: PrismaClient;
   private student: StudentService;
+  private classroom: ClassroomService;
 
   constructor(db: PrismaClient) {
     this.db = db;
     this.student = new StudentService(db);
+    this.classroom = new ClassroomService(db);
   }
   async getReceiptInfo(transactionId: number) {
     const transaction = await this.db.transaction.findUniqueOrThrow({
@@ -132,7 +133,7 @@ export class TransactionService {
     });
     let studentIds: string[] = [];
     if (classroomId) {
-      const students = await classroomService.getStudents(classroomId);
+      const students = await this.classroom.getStudents(classroomId);
       studentIds = students.map((s) => s.id);
     }
     const whereClause: Prisma.TransactionWhereInput = {
@@ -195,7 +196,7 @@ export class TransactionService {
   }) {
     let studentIds: string[] = [];
     if (classroomId) {
-      const students = await classroomService.getStudents(classroomId);
+      const students = await this.classroom.getStudents(classroomId);
       studentIds = students.map((s) => s.id);
     }
     const result = await this.db.transaction.groupBy({

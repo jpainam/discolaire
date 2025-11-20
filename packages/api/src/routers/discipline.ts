@@ -1,10 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import {
-  getDisciplineForTerms,
-  getTrimesterTermIds,
-} from "../services/attendance-service";
+import { getTrimesterTermIds } from "../services/attendance-service";
 import { protectedProcedure } from "../trpc";
 
 export const disciplineRouter = {
@@ -21,7 +18,7 @@ export const disciplineRouter = {
         },
       });
       const termIds = terms.map((t) => t.id);
-      const result = await getDisciplineForTerms({
+      const result = await ctx.services.attendance.getDisciplineForTerms({
         classroomId: input.classroomId,
         termIds: termIds,
       });
@@ -35,8 +32,8 @@ export const disciplineRouter = {
         termId: z.string().min(1),
       }),
     )
-    .query(async ({ input }) => {
-      const result = await getDisciplineForTerms({
+    .query(async ({ input, ctx }) => {
+      const result = await ctx.services.attendance.getDisciplineForTerms({
         classroomId: input.classroomId,
         termIds: [input.termId],
       });
@@ -57,7 +54,7 @@ export const disciplineRouter = {
         ctx.schoolYearId,
       );
 
-      const result = await getDisciplineForTerms({
+      const result = await ctx.services.attendance.getDisciplineForTerms({
         classroomId: input.classroomId,
         termIds: [seq1, seq2],
       });
