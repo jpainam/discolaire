@@ -168,7 +168,7 @@ export default async function Page({
                       ) : (
                         <TbTransactionDollar className="h-4 w-4" />
                       )}
-                      {t(item.reference.toLowerCase())} / {item.classroom}
+                      {item.reference.toLowerCase()} / {item.classroom}
                     </div>
                   </TableCell>
                   <TableCell>{item.description}</TableCell>

@@ -78,94 +78,91 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
 
   return (
     <div className="flex flex-col gap-4 py-2 pr-2">
-      <div className="gap-4">
-        <div>
-          <div className="space-y-2">
-            <TermSelector
-              className="w-full"
-              defaultValue={termId}
-              onChange={(val) => {
-                void setTermId(val);
-              }}
-            />
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                <span className="text-sm">Excellent {">= 18"}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-20 rounded-full bg-gray-200">
-                  <div
-                    className="h-2 rounded-full bg-green-500"
-                    style={{ width: `${(p18 / total) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium">{p18}</span>
-              </div>
+      <div className="space-y-2">
+        <TermSelector
+          className="w-full"
+          defaultValue={termId}
+          onChange={(val) => {
+            void setTermId(val);
+          }}
+        />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="h-3 w-3 rounded-full bg-green-500"></div>
+            <span className="text-sm">Excellent {">= 18"}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-20 rounded-full bg-gray-200">
+              <div
+                className="h-2 rounded-full bg-green-500"
+                style={{ width: `${(p18 / total) * 100}%` }}
+              ></div>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="h-3 w-3 rounded-full bg-blue-500"></div>
-                <span className="text-sm">Bien {">= 14"}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-20 rounded-full bg-gray-200">
-                  <div
-                    className="h-2 rounded-full bg-blue-500"
-                    style={{ width: `${(p14 / total) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium">{p14}</span>
-              </div>
+            <span className="text-sm font-medium">{p18}</span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="h-3 w-3 rounded-full bg-blue-500"></div>
+            <span className="text-sm">Bien {">= 14"}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-20 rounded-full bg-gray-200">
+              <div
+                className="h-2 rounded-full bg-blue-500"
+                style={{ width: `${(p14 / total) * 100}%` }}
+              ></div>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="h-3 w-3 rounded-full bg-orange-500"></div>
-                <span className="text-sm">Assez bien {">= 10"}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-20 rounded-full bg-gray-200">
-                  <div
-                    className="h-2 rounded-full bg-orange-500"
-                    style={{ width: `${(p10 / total) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium">{p10}</span>
-              </div>
+            <span className="text-sm font-medium">{p14}</span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="h-3 w-3 rounded-full bg-orange-500"></div>
+            <span className="text-sm">Assez bien {">= 10"}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-20 rounded-full bg-gray-200">
+              <div
+                className="h-2 rounded-full bg-orange-500"
+                style={{ width: `${(p10 / total) * 100}%` }}
+              ></div>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                <span className="text-sm">Passable {">= 8"}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-20 rounded-full bg-gray-200">
-                  <div
-                    className="h-2 rounded-full bg-yellow-500"
-                    style={{ width: `${(p05 / total) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium">{p05}</span>
-              </div>
+            <span className="text-sm font-medium">{p10}</span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+            <span className="text-sm">Passable {">= 8"}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-20 rounded-full bg-gray-200">
+              <div
+                className="h-2 rounded-full bg-yellow-500"
+                style={{ width: `${(p05 / total) * 100}%` }}
+              ></div>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                <span className="text-sm">Nul {"< 8"}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-20 rounded-full bg-gray-200">
-                  <div
-                    className="h-2 rounded-full bg-red-500"
-                    style={{ width: `${(p00 / total) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium">{p00}</span>
-              </div>
+            <span className="text-sm font-medium">{p05}</span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="h-3 w-3 rounded-full bg-red-500"></div>
+            <span className="text-sm">Nul {"< 8"}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="h-2 w-20 rounded-full bg-gray-200">
+              <div
+                className="h-2 rounded-full bg-red-500"
+                style={{ width: `${(p00 / total) * 100}%` }}
+              ></div>
             </div>
+            <span className="text-sm font-medium">{p00}</span>
           </div>
         </div>
       </div>
+
       <MetricCardGroup className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
         <MetricCard variant={"success"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">

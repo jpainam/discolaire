@@ -61,14 +61,6 @@ export default function StudentDetails({ className }: { className?: string }) {
           {student.dateOfBirth && dateFormat.format(student.dateOfBirth)}
         </span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
-          <CalendarPlus className="h-4 w-4" />
-          {t("dateOfEntry")}
-        </span>
-        <span>
-          {" "}
-          {student.dateOfEntry && dateFormat.format(student.dateOfEntry)}
-        </span>
-        <span className="text-muted-foreground flex flex-row items-center gap-1">
           <CakeSlice className="h-4 w-4" />
           {t("placeOfBirth")}
         </span>
@@ -79,6 +71,13 @@ export default function StudentDetails({ className }: { className?: string }) {
         </span>
         <span className="line-clamp-1 overflow-ellipsis">
           {student.residence}
+        </span>
+        <span className="text-muted-foreground flex flex-row items-center gap-1">
+          <CalendarPlus className="h-4 w-4" />
+          {t("dateOfEntry")}
+        </span>
+        <span className="line-clamp-1 overflow-ellipsis">
+          {student.dateOfEntry && dateFormat.format(student.dateOfEntry)}
         </span>
       </div>
       <Separator className="my-2 w-full" />
@@ -92,7 +91,7 @@ export default function StudentDetails({ className }: { className?: string }) {
           <PiChurchDuotone className="h-4 w-4" />
           {t("religion")}
         </span>
-        <span>{student.religion ? student.religion.name : "N/A"}</span>
+        <span>{student.religion?.name}</span>
         <span className="text-muted-foreground flex flex-row items-center gap-1">
           <CalendarMinus className="h-4 w-4" />
           {t("dateOfExit")}

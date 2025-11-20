@@ -38,7 +38,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <HydrateClient>
-      <div className="grid grid-cols-4 gap-4 divide-x border-b">
+      <div className="grid grid-cols-1 gap-4 divide-x border-b lg:grid-cols-4">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             key={params.id}
@@ -50,7 +50,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
             }
           >
-            <StudentDetails className="col-span-2" />
+            <StudentDetails className="col-span-full lg:col-span-2" />
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
@@ -80,7 +80,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className="grid grid-cols-2 gap-4 p-4">
+      <div className="grid gap-4 p-4 lg:grid-cols-2">
         <div>
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
@@ -109,21 +109,22 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </Suspense>
           </ErrorBoundary>
         </div>
-
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense fallback={<Skeleton className="h-20" />}>
-            {classroom ? (
-              <StudentGradesheetChart
-                defaultTerm={terms[0]?.id ?? ""}
-                classroomId={classroom.id}
-              />
-            ) : (
-              <Empty>
-                <EmptyTitle>Eleve non inscrit</EmptyTitle>
-              </Empty>
-            )}
-          </Suspense>
-        </ErrorBoundary>
+        <div>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<Skeleton className="h-20" />}>
+              {classroom ? (
+                <StudentGradesheetChart
+                  defaultTerm={terms[0]?.id ?? ""}
+                  classroomId={classroom.id}
+                />
+              ) : (
+                <Empty>
+                  <EmptyTitle>Eleve non inscrit</EmptyTitle>
+                </Empty>
+              )}
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </div>
     </HydrateClient>
   );
