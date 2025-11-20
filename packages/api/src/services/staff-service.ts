@@ -1,20 +1,43 @@
-import { db } from "../db";
+import type { PrismaClient } from "@repo/db";
 
-export const staffService = {
-  getFromUserId: async (userId: string) => {
-    return db.staff.findFirstOrThrow({
+export class StaffService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+  getFromUserId(userId: string) {
+    return this.db.staff.findFirstOrThrow({
       where: {
         userId: userId,
       },
     });
-  },
-  getClassrooms: async (staffId: string, schoolYearId: string) => {
-    return _getClassrooms(staffId, schoolYearId);
-  },
-  getStudents: async (staffId: string, schoolYearId: string) => {
-    const classrooms = await _getClassrooms(staffId, schoolYearId);
+  }
+  getClassrooms(staffId: string, schoolYearId: string) {
+    return this.db.classroom.findMany({
+      where: {
+        OR: [
+          {
+            headTeacherId: staffId,
+          },
+          {
+            seniorAdvisorId: staffId,
+          },
+          {
+            subjects: {
+              some: {
+                teacherId: staffId,
+              },
+            },
+          },
+        ],
+        schoolYearId: schoolYearId,
+      },
+    });
+  }
+  async getStudents(staffId: string, schoolYearId: string) {
+    const classrooms = await this.getClassrooms(staffId, schoolYearId);
     const classroomIds = classrooms.map((c) => c.id);
-    return db.student.findMany({
+    return this.db.student.findMany({
       where: {
         enrollments: {
           some: {
@@ -32,28 +55,5 @@ export const staffService = {
         userId: true,
       },
     });
-  },
-};
-
-function _getClassrooms(staffId: string, schoolYearId: string) {
-  return db.classroom.findMany({
-    where: {
-      OR: [
-        {
-          headTeacherId: staffId,
-        },
-        {
-          seniorAdvisorId: staffId,
-        },
-        {
-          subjects: {
-            some: {
-              teacherId: staffId,
-            },
-          },
-        },
-      ],
-      schoolYearId: schoolYearId,
-    },
-  });
+  }
 }

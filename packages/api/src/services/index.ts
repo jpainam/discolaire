@@ -6,11 +6,20 @@ import { AttendanceService } from "./attendance-service";
 import { ClassroomService } from "./classroom-service";
 import { ContactService } from "./contact-service";
 import { EnrollmentService } from "./enrollment-service";
+import { FeeService } from "./fee-service";
+import { GradeSheetService } from "./gradesheet-service";
+import { InventoryService } from "./inventory-service";
+import { ReportCardService } from "./reportcard-service";
+import { SchoolService } from "./school-service";
+import { SchoolYearService } from "./school-year-service";
+import { SequenceService } from "./sequence-service";
+import { StaffService } from "./staff-service";
 import { StudentService } from "./student-service";
 import { TransactionService } from "./transaction-service";
+import { TrimestreService } from "./trimestre-service";
+import { UserService } from "./user-service";
 
 export { messagingService } from "./messaging-service";
-export { staffService } from "./staff-service";
 
 export interface ServiceDeps {
   db: PrismaClient;
@@ -27,6 +36,16 @@ const serviceRegistry = {
   accounting: AccountingService,
   annual: AnnualService,
   contact: ContactService,
+  fee: FeeService,
+  gradesheet: GradeSheetService,
+  inventory: InventoryService,
+  reportcard: ReportCardService,
+  sequence: SequenceService,
+  trimestre: TrimestreService,
+  school: SchoolService,
+  schoolyear: SchoolYearService,
+  staff: StaffService,
+  user: UserService,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, ServiceCtor<any>>;
 

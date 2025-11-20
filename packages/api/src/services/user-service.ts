@@ -2,11 +2,14 @@ import { headers } from "next/headers";
 import { generateRandomString } from "better-auth/crypto";
 
 import type { Auth } from "@repo/auth";
+import type { PrismaClient } from "@repo/db";
 
-import { db } from "../db";
-
-export const userService = {
-  updatePermission: async ({
+export class UserService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+  async updatePermission({
     userId,
     resource,
     action,
@@ -16,8 +19,8 @@ export const userService = {
     resource: string;
     action: "Read" | "Update" | "Create" | "Delete";
     effect: "Allow" | "Deny";
-  }) => {
-    const permissions = await getPermissions(userId);
+  }) {
+    const permissions = await this.getPermissions(userId);
 
     let updatedPermissions = [];
     if (effect === "Allow") {
@@ -31,7 +34,7 @@ export const userService = {
         newPermission.resource == "user" &&
         newPermission.action == "Create"
       ) {
-        await db.user.update({
+        await this.db.user.update({
           where: { id: userId },
           data: {
             role: "admin",
@@ -43,27 +46,25 @@ export const userService = {
         (perm) => !(perm.resource === resource && perm.action === action),
       );
     }
-    return db.user.update({
+    return this.db.user.update({
       where: { id: userId },
       data: {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
         permissions: updatedPermissions as any,
       },
     });
-  },
-
-  deleteUsers: async (userIds: string[]) => {
-    return db.user.deleteMany({
+  }
+  deleteUsers(userIds: string[]) {
+    return this.db.user.deleteMany({
       where: {
         id: {
           in: userIds,
         },
       },
     });
-  },
-
-  validateUsername: async (username: string) => {
-    const registeredUser = await db.user.findFirst({
+  }
+  async validateUsername(username: string) {
+    const registeredUser = await this.db.user.findFirst({
       where: {
         username,
       },
@@ -76,33 +77,65 @@ export const userService = {
     return {
       error: null,
     };
-  },
-};
+  }
+  async getPermissions(userId: string) {
+    const user = await this.db.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
 
-export async function getPermissions(userId: string) {
-  const user = await db.user.findUniqueOrThrow({
-    where: { id: userId },
-  });
+    return (user.permissions ?? []) as {
+      resource: string;
+      action: "Read" | "Update" | "Create" | "Delete";
+      effect: "Allow" | "Deny";
+      condition?: Record<string, unknown> | null;
+    }[];
+  }
+  async attachUser({
+    entityId,
+    entityType,
+    userId,
+  }: {
+    entityId: string;
+    entityType: "staff" | "contact" | "student";
+    userId: string;
+  }) {
+    if (entityType === "staff") {
+      const d = await this.db.staff.update({
+        where: {
+          id: entityId,
+        },
+        data: {
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      });
+      return {
+        name: `${d.lastName} ${d.firstName}`,
+      };
+    }
 
-  return (user.permissions ?? []) as {
-    resource: string;
-    action: "Read" | "Update" | "Create" | "Delete";
-    effect: "Allow" | "Deny";
-    condition?: Record<string, unknown> | null;
-  }[];
-}
+    if (entityType === "contact") {
+      const dd = await this.db.contact.update({
+        where: {
+          id: entityId,
+        },
+        data: {
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      });
+      return {
+        name: `${dd.lastName} ${dd.firstName}`,
+      };
+    }
 
-export async function attachUser({
-  entityId,
-  entityType,
-  userId,
-}: {
-  entityId: string;
-  entityType: "staff" | "contact" | "student";
-  userId: string;
-}) {
-  if (entityType === "staff") {
-    const d = await db.staff.update({
+    const ddd = await this.db.student.update({
       where: {
         id: entityId,
       },
@@ -115,54 +148,52 @@ export async function attachUser({
       },
     });
     return {
-      name: `${d.lastName} ${d.firstName}`,
+      name: `${ddd.lastName} ${ddd.firstName}`,
     };
   }
-
-  if (entityType === "contact") {
-    const dd = await db.contact.update({
-      where: {
-        id: entityId,
-      },
-      data: {
-        user: {
-          connect: {
-            id: userId,
-          },
+  async getByEntity({
+    entityId,
+    entityType,
+  }: {
+    entityId: string;
+    entityType: "staff" | "student" | "contact";
+  }) {
+    if (entityType == "staff") {
+      const dd = await this.db.staff.findUniqueOrThrow({
+        where: {
+          id: entityId,
         },
-      },
-    });
-    return {
-      name: `${dd.lastName} ${dd.firstName}`,
-    };
-  }
-
-  const ddd = await db.student.update({
-    where: {
-      id: entityId,
-    },
-    data: {
-      user: {
-        connect: {
-          id: userId,
+        include: {
+          user: true,
         },
-      },
-    },
-  });
-  return {
-    name: `${ddd.lastName} ${ddd.firstName}`,
-  };
-}
+      });
+      return {
+        name: `${dd.lastName} ${dd.firstName}`,
+        id: dd.id,
+        userId: dd.userId,
+        email: dd.user?.email,
+        entityType: "staff",
+      };
+    }
+    if (entityType == "student") {
+      const dd = await this.db.student.findUniqueOrThrow({
+        where: {
+          id: entityType,
+        },
+        include: {
+          user: true,
+        },
+      });
+      return {
+        name: `${dd.lastName} ${dd.firstName}`,
+        id: dd.id,
+        userId: dd.userId,
+        email: dd.user?.email,
+        entityType: "student",
+      };
+    }
 
-export async function getByEntity({
-  entityId,
-  entityType,
-}: {
-  entityId: string;
-  entityType: "staff" | "student" | "contact";
-}) {
-  if (entityType == "staff") {
-    const dd = await db.staff.findUniqueOrThrow({
+    const dd = await this.db.contact.findFirstOrThrow({
       where: {
         id: entityId,
       },
@@ -174,91 +205,57 @@ export async function getByEntity({
       name: `${dd.lastName} ${dd.firstName}`,
       id: dd.id,
       userId: dd.userId,
+      entityType: "contact",
       email: dd.user?.email,
-      entityType: "staff",
     };
   }
-  if (entityType == "student") {
-    const dd = await db.student.findUniqueOrThrow({
-      where: {
-        id: entityType,
+  async createUser({
+    email,
+    username,
+    authApi,
+    entityId,
+    password,
+    profile,
+    schoolId,
+    name,
+    isActive,
+  }: {
+    email?: string;
+    username: string;
+    entityId: string;
+    name: string;
+    authApi: Auth["api"];
+    password?: string;
+    profile: "student" | "staff" | "contact";
+    schoolId: string;
+    isActive?: boolean;
+  }) {
+    const finalEmail = email?.trim() ? email : `${username}@discolaire.com`;
+    const newUser = await authApi.signUpEmail({
+      body: {
+        email: finalEmail,
+        username: username.toLowerCase(),
+        name: name,
+        profile: profile,
+        schoolId: schoolId,
+        password: password ?? generateRandomString(12),
+        isActive: isActive ?? true,
       },
-      include: {
-        user: true,
-      },
+      headers: await headers(),
     });
-    return {
-      name: `${dd.lastName} ${dd.firstName}`,
-      id: dd.id,
-      userId: dd.userId,
-      email: dd.user?.email,
-      entityType: "student",
-    };
+    await this.attachUser({
+      userId: newUser.user.id,
+      entityId: entityId,
+      entityType: profile,
+    });
+
+    await authApi.forgetPassword({
+      body: {
+        email: newUser.user.email,
+        redirectTo: `/auth/complete-registration/${newUser.user.id}`,
+      },
+      headers: await headers(),
+    });
+    return newUser.user;
   }
-
-  const dd = await db.contact.findFirstOrThrow({
-    where: {
-      id: entityId,
-    },
-    include: {
-      user: true,
-    },
-  });
-  return {
-    name: `${dd.lastName} ${dd.firstName}`,
-    id: dd.id,
-    userId: dd.userId,
-    entityType: "contact",
-    email: dd.user?.email,
-  };
-}
-
-export async function createUser({
-  email,
-  username,
-  authApi,
-  entityId,
-  password,
-  profile,
-  schoolId,
-  name,
-  isActive,
-}: {
-  email?: string;
-  username: string;
-  entityId: string;
-  name: string;
-  authApi: Auth["api"];
-  password?: string;
-  profile: "student" | "staff" | "contact";
-  schoolId: string;
-  isActive?: boolean;
-}) {
-  const finalEmail = email?.trim() ? email : `${username}@discolaire.com`;
-  const newUser = await authApi.signUpEmail({
-    body: {
-      email: finalEmail,
-      username: username.toLowerCase(),
-      name: name,
-      profile: profile,
-      schoolId: schoolId,
-      password: password ?? generateRandomString(12),
-      isActive: isActive ?? true,
-    },
-    headers: await headers(),
-  });
-  await attachUser({
-    userId: newUser.user.id,
-    entityId: entityId,
-    entityType: profile,
-  });
-
-  await authApi.forgetPassword({
-    body: {
-      email: newUser.user.email,
-      redirectTo: `/auth/complete-registration/${newUser.user.id}`,
-    },
-    headers: await headers(),
-  });
-  return newUser.user;
 }

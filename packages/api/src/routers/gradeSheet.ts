@@ -4,11 +4,6 @@ import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
 
-import {
-  gradeReportTracker,
-  gradeSheetService,
-  gradesReportTracker,
-} from "../services/gradesheet-service";
 import { protectedProcedure } from "../trpc";
 
 const createGradeSheetSchema = z.object({
@@ -286,21 +281,23 @@ export const gradeSheetRouter = {
     //   schoolYearId: ctx.schoolYearId,
     //   schoolId: ctx.schoolId,
     // });
-    return gradeSheetService.percentileRawQuery({
+    return ctx.services.gradesheet.percentileRawQuery({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.schoolId,
     });
   }),
   gradesReportTracker: protectedProcedure.query(({ ctx }) => {
-    return gradesReportTracker({
+    return ctx.services.gradesheet.gradesReportTracker({
       schoolYearId: ctx.schoolYearId,
       schoolId: ctx.schoolId,
     });
   }),
   gradeReportTracker: protectedProcedure
     .input(z.object({ subjectId: z.coerce.number() }))
-    .query(({ input }) => {
-      return gradeReportTracker({ subjectId: input.subjectId });
+    .query(({ input, ctx }) => {
+      return ctx.services.gradesheet.gradeReportTracker({
+        subjectId: input.subjectId,
+      });
     }),
   updateCreated: protectedProcedure
     .input(

@@ -3,8 +3,6 @@ import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod/v4";
 
-import { staffService } from "../services";
-import { createUser } from "../services/user-service";
 import { protectedProcedure } from "../trpc";
 import { getFullName } from "../utils";
 
@@ -133,7 +131,7 @@ export const staffRouter = {
         },
       });
       if (email) {
-        await createUser({
+        await ctx.services.user.createUser({
           email,
           entityId: staff.id,
           username: getFullName(staff)
@@ -183,7 +181,7 @@ export const staffRouter = {
             },
           });
         } else {
-          await createUser({
+          await ctx.services.user.createUser({
             email,
             entityId: id,
             username: getFullName(staff)
@@ -292,15 +290,17 @@ export const staffRouter = {
         },
       });
     }),
-  getFromUserId: protectedProcedure.input(z.string()).query(({ input }) => {
-    return staffService.getFromUserId(input);
-  }),
+  getFromUserId: protectedProcedure
+    .input(z.string())
+    .query(({ input, ctx }) => {
+      return ctx.services.staff.getFromUserId(input);
+    }),
   classrooms: protectedProcedure
     .input(
       z.object({ staffId: z.string(), schoolYearId: z.string().optional() }),
     )
     .query(({ ctx, input }) => {
-      return staffService.getClassrooms(
+      return ctx.services.staff.getClassrooms(
         input.staffId,
         input.schoolYearId ?? ctx.schoolYearId,
       );
@@ -308,7 +308,7 @@ export const staffRouter = {
 
   students: protectedProcedure
     .input(z.string().min(1))
-    .query(async ({ ctx, input }) => {
-      return staffService.getStudents(input, ctx.schoolYearId);
+    .query(({ ctx, input }) => {
+      return ctx.services.staff.getStudents(input, ctx.schoolYearId);
     }),
 } satisfies TRPCRouterRecord;

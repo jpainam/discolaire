@@ -1,10 +1,14 @@
 import { format } from "date-fns";
 
-import { db } from "../db";
+import type { PrismaClient } from "@repo/db";
 
-export const feeService = {
-  getMontlyFees: async (schoolYearId: string) => {
-    const fees = await db.fee.findMany({
+export class FeeService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+  async getMontlyFees(schoolYearId: string) {
+    const fees = await this.db.fee.findMany({
       include: {
         journal: true,
       },
@@ -29,9 +33,9 @@ export const feeService = {
         count: result[key],
       };
     });
-  },
-  getAmountTrend: async (schoolYearId: string) => {
-    const fees = await db.fee.findMany({
+  }
+  async getAmountTrend(schoolYearId: string) {
+    const fees = await this.db.fee.findMany({
       include: {
         classroom: true,
         journal: true,
@@ -57,5 +61,6 @@ export const feeService = {
         amount: result[key],
       };
     });
-  },
-};
+  }
+}
+export const feeService = {};

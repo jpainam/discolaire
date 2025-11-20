@@ -1,11 +1,15 @@
-import { db } from "../db";
+import type { PrismaClient } from "@repo/db";
 
-export const schoolService = {
-  get: async (id: string) => {
-    return db.school.findUnique({
+export class SchoolService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+  get(id: string) {
+    return this.db.school.findUnique({
       where: {
         id,
       },
     });
-  },
-};
+  }
+}

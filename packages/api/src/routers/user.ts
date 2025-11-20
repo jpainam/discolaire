@@ -5,12 +5,6 @@ import { hashPassword } from "better-auth/crypto";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod/v4";
 
-import {
-  createUser,
-  getByEntity,
-  getPermissions,
-  userService,
-} from "../services/user-service";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = {
@@ -96,7 +90,7 @@ export const userRouter = {
           id: userIds.join(","),
         },
       });
-      return userService.deleteUsers(userIds);
+      return ctx.services.user.deleteUsers(userIds);
     }),
 
   get: protectedProcedure
@@ -207,8 +201,8 @@ export const userRouter = {
     }),
   getPermissions: protectedProcedure
     .input(z.string().min(1))
-    .query(({ input }) => {
-      return getPermissions(input);
+    .query(({ input, ctx }) => {
+      return ctx.services.user.getPermissions(input);
     }),
 
   updatePermission: protectedProcedure
@@ -231,7 +225,7 @@ export const userRouter = {
           },
         },
       });
-      return userService.updatePermission({
+      return ctx.services.user.updatePermission({
         userId: input.userId,
         resource: input.resource,
         action: input.action,
@@ -268,7 +262,7 @@ export const userRouter = {
           },
         },
       });
-      return createUser({
+      return ctx.services.user.createUser({
         schoolId: ctx.schoolId,
         username: input.username,
         password: input.password,
@@ -288,12 +282,12 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const entity = await getByEntity({
+      const entity = await ctx.services.user.getByEntity({
         entityId: input.entityId,
         entityType: input.entityType,
       });
       if (!entity.userId) {
-        await createUser({
+        await ctx.services.user.createUser({
           schoolId: ctx.schoolId,
           username: entity.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase(),
           profile: input.entityType,
@@ -322,7 +316,7 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const isValid = await userService.validateUsername(input.username);
+      const isValid = await ctx.services.user.validateUsername(input.username);
       if (isValid.error) {
         throw new TRPCError({
           code: "FORBIDDEN",

@@ -1,8 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { getSequenceGrades } from "../services/sequence-service";
-import { getTrimestreGrades } from "../services/trimestre-service";
 import { protectedProcedure } from "../trpc";
 
 export const reportCardRouter = {
@@ -79,8 +77,11 @@ export const reportCardRouter = {
         termId: z.string().min(1),
       }),
     )
-    .query(({ input }) => {
-      return getSequenceGrades(input.classroomId, input.termId);
+    .query(({ input, ctx }) => {
+      return ctx.services.sequence.getSequenceGrades(
+        input.classroomId,
+        input.termId,
+      );
     }),
   getTrimestre: protectedProcedure
     .input(
@@ -90,7 +91,7 @@ export const reportCardRouter = {
       }),
     )
     .query(({ input, ctx }) => {
-      return getTrimestreGrades(
+      return ctx.services.trimestre.getTrimestreGrades(
         input.classroomId,
         input.trimestreId,
         ctx.schoolId,

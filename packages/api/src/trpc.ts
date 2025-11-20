@@ -12,13 +12,13 @@ import { z, ZodError } from "zod/v4";
 
 import type { Auth, Session } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
+import { getDb } from "@repo/db";
 
 import type { Services } from "./services";
-import { db } from "./db";
+import { env } from "./env";
 import { PubSubLogger } from "./pubsub-logger";
 import { logQueue } from "./queue";
 import { createServices } from "./services";
-import { getPermissions } from "./services/user-service";
 import { getCookieValue } from "./utils";
 
 /**
@@ -49,6 +49,7 @@ export const createTRPCContext = async (opts: {
   const session = await authApi.getSession({
     headers: opts.headers,
   });
+  const db = getDb({ connectionString: env.DATABASE_URL });
   const schoolYearId = getCookieValue(opts.headers, "x-school-year");
   const services = createServices(db);
   return {
@@ -153,7 +154,9 @@ export const protectedProcedure = t.procedure
         message: "You must select a school year to access this resource.",
       });
     }
-    const permissions = await getPermissions(ctx.session.user.id);
+    const permissions = await ctx.services.user.getPermissions(
+      ctx.session.user.id,
+    );
 
     return next({
       ctx: {

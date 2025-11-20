@@ -7,7 +7,6 @@ import { z } from "zod/v4";
 import type { Prisma } from "@repo/db";
 
 import { checkPermission } from "../permission";
-import { staffService } from "../services/staff-service";
 import { protectedProcedure } from "../trpc";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
@@ -114,8 +113,10 @@ export const studentRouter = {
       );
       const studentIds: string[] = [];
       if (!canReadStudent) {
-        const staff = await staffService.getFromUserId(ctx.session.user.id);
-        const students = await staffService.getStudents(
+        const staff = await ctx.services.staff.getFromUserId(
+          ctx.session.user.id,
+        );
+        const students = await ctx.services.staff.getStudents(
           staff.id,
           ctx.schoolYearId,
         );

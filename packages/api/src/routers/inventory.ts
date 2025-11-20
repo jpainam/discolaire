@@ -1,17 +1,15 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { db } from "../db";
-import { getAllAssets, getAllConsumables } from "../services/inventory-service";
 import { protectedProcedure } from "../trpc";
 
 export const inventoryRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
-    const assets = await getAllAssets({
+    const assets = await ctx.services.inventory.getAllAssets({
       schoolId: ctx.schoolId,
       schoolYearId: ctx.schoolYearId,
     });
-    const consumables = await getAllConsumables({
+    const consumables = await ctx.services.inventory.getAllConsumables({
       schoolId: ctx.schoolId,
       schoolYearId: ctx.schoolYearId,
     });
@@ -233,7 +231,7 @@ export const inventoryRouter = {
           schoolYearId: ctx.schoolYearId,
         },
       });
-      await syncStockQuantity({
+      await ctx.services.inventory.syncStockQuantity({
         schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
         consumableId: input.consumableId,
@@ -259,7 +257,7 @@ export const inventoryRouter = {
           id: input.id,
         },
       });
-      await syncStockQuantity({
+      await ctx.services.inventory.syncStockQuantity({
         schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
         consumableId: input.consumableId,
@@ -285,7 +283,7 @@ export const inventoryRouter = {
         },
       });
 
-      await syncStockQuantity({
+      await ctx.services.inventory.syncStockQuantity({
         schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
         consumableId: input.consumableId,
@@ -333,46 +331,3 @@ export const inventoryRouter = {
       });
     }),
 } satisfies TRPCRouterRecord;
-
-async function syncStockQuantity({
-  schoolId,
-  schoolYearId,
-  consumableId,
-}: {
-  schoolId: string;
-  schoolYearId: string;
-  consumableId: string;
-}) {
-  const allMovements = await db.inventoryStockMovement.findMany({
-    where: {
-      schoolId: schoolId,
-      schoolYearId: schoolYearId,
-    },
-  });
-  const currentStock = allMovements.reduce((acc, movement) => {
-    if (movement.type === "OUT") {
-      return acc - movement.quantity;
-    } else {
-      return acc + movement.quantity;
-    }
-  }, 0);
-
-  const usages = await db.inventoryConsumableUsage.findMany({
-    where: {
-      consumableId: consumableId,
-      schoolId: schoolId,
-      schoolYearId: schoolYearId,
-    },
-  });
-  const usageStock = usages.reduce((acc, usage) => {
-    return acc + usage.quantity;
-  }, 0);
-  await db.inventoryConsumable.update({
-    where: {
-      id: consumableId,
-    },
-    data: {
-      currentStock: currentStock - usageStock,
-    },
-  });
-}

@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { addYears } from "date-fns";
 
-import { db } from "../db";
+import type { PrismaClient } from "@repo/db";
 
-export const schoolYearService = {
-  create: async ({
+export class SchoolYearService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+
+  async create({
     startDate,
     endDate,
     name,
@@ -20,8 +25,8 @@ export const schoolYearService = {
     isActive?: boolean;
     prevSchoolYearId?: string;
     userId: string;
-  }) => {
-    const newYear = await db.schoolYear.create({
+  }) {
+    const newYear = await this.db.schoolYear.create({
       data: {
         startDate,
         endDate,
@@ -34,7 +39,7 @@ export const schoolYearService = {
       },
     });
     if (!prevSchoolYearId) {
-      await db.schoolYear.update({
+      await this.db.schoolYear.update({
         where: {
           id: prevSchoolYearId,
         },
@@ -50,7 +55,7 @@ export const schoolYearService = {
     //   },
     // });
     // Classroom
-    const classrooms = await db.classroom.findMany({
+    const classrooms = await this.db.classroom.findMany({
       where: {
         schoolYearId: prevSchoolYearId,
         schoolId: schoolId,
@@ -61,7 +66,7 @@ export const schoolYearService = {
       classrooms.map(async (classroom) => {
         const { id, classroomLeaderId, createdAt, updatedAt, ...rest } =
           classroom;
-        const cl = await db.classroom.create({
+        const cl = await this.db.classroom.create({
           data: {
             ...rest,
             createdById: userId,
@@ -70,7 +75,7 @@ export const schoolYearService = {
         });
         console.info(`Classroom ${cl.name} created`);
         // fees
-        const fees = await db.fee.findMany({
+        const fees = await this.db.fee.findMany({
           where: {
             classroomId: classroom.id,
           },
@@ -80,12 +85,12 @@ export const schoolYearService = {
           classroomId: cl.id,
           dueDate: addYears(f.dueDate, 1),
         }));
-        await db.fee.createMany({
+        await this.db.fee.createMany({
           data: allFees,
         });
         console.info(`Fees for classroom ${cl.name} created`);
         // subjects
-        const subjects = await db.subject.findMany({
+        const subjects = await this.db.subject.findMany({
           where: {
             classroomId: classroom.id,
           },
@@ -94,12 +99,12 @@ export const schoolYearService = {
           ...s,
           classroomId: cl.id,
         }));
-        await db.subject.createMany({
+        await this.db.subject.createMany({
           data: allSubjects,
         });
       }),
     );
-    const terms = await db.term.findMany({
+    const terms = await this.db.term.findMany({
       where: {
         schoolYearId: prevSchoolYearId,
         schoolId: schoolId,
@@ -111,19 +116,19 @@ export const schoolYearService = {
       endDate: addYears(t.endDate, 1),
       schoolYearId: newYear.id,
     }));
-    await db.term.createMany({
+    await this.db.term.createMany({
       data: allTerms,
     });
-  },
-  getDefault: async (schoolId: string) => {
-    const schoolyear = await db.schoolYear.findFirst({
+  }
+  async getDefault(schoolId: string) {
+    const schoolyear = await this.db.schoolYear.findFirst({
       where: {
         isDefault: true,
         schoolId: schoolId,
       },
     });
     if (!schoolyear) {
-      return db.schoolYear.findFirst({
+      return this.db.schoolYear.findFirst({
         where: {
           schoolId: schoolId,
         },
@@ -133,5 +138,5 @@ export const schoolYearService = {
       });
     }
     return schoolyear;
-  },
-};
+  }
+}

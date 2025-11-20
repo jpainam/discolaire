@@ -1,7 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { feeService } from "../services/fee-service";
 import { protectedProcedure } from "../trpc";
 
 export const feeRouter = {
@@ -93,10 +92,10 @@ export const feeRouter = {
         },
       });
     }),
-  monthly: protectedProcedure.query(async ({ ctx }) => {
-    return feeService.getMontlyFees(ctx.schoolYearId);
+  monthly: protectedProcedure.query(({ ctx }) => {
+    return ctx.services.fee.getMontlyFees(ctx.schoolYearId);
   }),
-  trend: protectedProcedure.query(async ({ ctx }) => {
-    return feeService.getAmountTrend(ctx.schoolYearId);
+  trend: protectedProcedure.query(({ ctx }) => {
+    return ctx.services.fee.getAmountTrend(ctx.schoolYearId);
   }),
 } satisfies TRPCRouterRecord;

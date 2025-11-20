@@ -2,7 +2,6 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { schoolYearService } from "../services/school-year-service";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const schoolYearRouter = {
@@ -86,7 +85,7 @@ export const schoolYearRouter = {
       }),
     )
     .mutation(({ ctx, input }) => {
-      return schoolYearService.create({
+      return ctx.services.schoolyear.create({
         startDate: input.startDate,
         endDate: input.endDate,
         name: input.name,
@@ -112,7 +111,7 @@ export const schoolYearRouter = {
           id: input.userId,
         },
       });
-      return schoolYearService.getDefault(user.schoolId);
+      return ctx.services.schoolyear.getDefault(user.schoolId);
     }),
   delete: protectedProcedure
     .input(z.string())

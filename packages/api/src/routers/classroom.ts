@@ -5,7 +5,6 @@ import { z } from "zod/v4";
 import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
 import { checkPermission } from "../permission";
-import { staffService } from "../services/staff-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -51,8 +50,8 @@ export const classroomRouter = {
       if (checkPermission("classroom", "Read", {}, ctx.permissions)) {
         return classrooms;
       }
-      const staff = await staffService.getFromUserId(ctx.session.user.id);
-      const classes = await staffService.getClassrooms(
+      const staff = await ctx.services.staff.getFromUserId(ctx.session.user.id);
+      const classes = await ctx.services.staff.getClassrooms(
         staff.id,
         ctx.schoolYearId,
       );
