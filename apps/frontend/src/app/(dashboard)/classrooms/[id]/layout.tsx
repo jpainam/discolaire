@@ -2,14 +2,12 @@ import type React from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { studentService } from "@repo/api/services";
-
 import { getSession } from "~/auth/server";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -17,6 +15,7 @@ export default async function Layout(props: {
 }) {
   const { children } = props;
   const params = await props.params;
+  const queryClient = getQueryClient();
 
   let canReadClassroom = false;
   const session = await getSession();
@@ -28,7 +27,9 @@ export default async function Layout(props: {
   const { user } = session;
 
   if (user.profile === "student") {
-    const student = await studentService.getFromUserId(user.id);
+    const student = await queryClient.fetchQuery(
+      trpc.student.getFromUserId.queryOptions(user.id),
+    );
     const classroom = await caller.student.classroom({
       studentId: student.id,
       schoolYearId,

@@ -3,7 +3,6 @@ import { subMonths } from "date-fns";
 import { z } from "zod/v4";
 
 import { contactService } from "../services/contact-service";
-import { studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -107,7 +106,9 @@ export const contactRouter = {
         return [c];
       }
       if (ctx.session.user.profile == "student") {
-        const student = await studentService.getFromUserId(ctx.session.user.id);
+        const student = await ctx.services.student.getFromUserId(
+          ctx.session.user.id,
+        );
         const studentContacts = await ctx.db.studentContact.findMany({
           where: {
             studentId: student.id,
@@ -244,7 +245,9 @@ export const contactRouter = {
         return [c];
       }
       if (ctx.session.user.profile == "student") {
-        const student = await studentService.getFromUserId(ctx.session.user.id);
+        const student = await ctx.services.student.getFromUserId(
+          ctx.session.user.id,
+        );
         const studentContacts = await ctx.db.studentContact.findMany({
           where: {
             studentId: student.id,

@@ -5,7 +5,6 @@ import { z } from "zod/v4";
 import type { Prisma } from "@repo/db";
 import { AttendanceType } from "@repo/db";
 
-import { studentService } from "../services";
 import { attendanceToData } from "../services/attendance-service";
 import { contactService } from "../services/contact-service";
 import { protectedProcedure } from "../trpc";
@@ -24,7 +23,9 @@ export const attendanceRouter = {
     .query(async ({ ctx, input }) => {
       const studentIds: string[] = [];
       if (ctx.session.user.profile === "student") {
-        const student = await studentService.getFromUserId(ctx.session.user.id);
+        const student = await ctx.services.student.getFromUserId(
+          ctx.session.user.id,
+        );
         studentIds.push(student.id);
       } else if (ctx.session.user.profile === "contact") {
         const contact = await contactService.getFromUserId(ctx.session.user.id);

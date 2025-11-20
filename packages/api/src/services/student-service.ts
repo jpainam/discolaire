@@ -31,9 +31,7 @@ export class StudentService {
     }
     return this.classroom.get(classroom.id, classroom.schoolId);
   }
-}
-export const studentService = {
-  get: async (studentId: string, schoolYearId: string, schoolId: string) => {
+  async get(studentId: string, schoolYearId: string, schoolId: string) {
     const currentYear = await db.schoolYear.findUniqueOrThrow({
       where: { id: schoolYearId },
     });
@@ -109,15 +107,56 @@ export const studentService = {
       )[0]?.schoolYear,
       classroom: currentEnrollment?.classroom,
     };
-  },
-  getFromUserId: async (userId: string) => {
-    return db.student.findFirstOrThrow({
+  }
+  async getFromUserId(userId: string) {
+    return this.db.student.findFirstOrThrow({
       where: {
         userId: userId,
       },
     });
-  },
-
+  }
+  async getGrades({
+    studentId,
+    termId,
+    schoolYearId,
+  }: {
+    studentId: string;
+    termId?: string;
+    schoolYearId: string;
+  }) {
+    const grades = this.db.grade.findMany({
+      where: {
+        studentId: studentId,
+        gradeSheet: {
+          term: {
+            schoolYearId: schoolYearId,
+          },
+        },
+        ...(termId ? { gradeSheet: { termId: termId } } : {}),
+      },
+      orderBy: {
+        gradeSheet: {
+          createdAt: "asc",
+        },
+      },
+      include: {
+        gradeSheet: {
+          include: {
+            term: true,
+            subject: {
+              include: {
+                course: true,
+                teacher: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return grades;
+  }
+}
+export const studentService = {
   addClubs: async (studentId: string, clubs: string[]) => {
     await db.studentClub.deleteMany({
       where: {
@@ -150,46 +189,6 @@ export const studentService = {
       data: studentSports,
       skipDuplicates: true,
     });
-  },
-  getGrades: ({
-    studentId,
-    termId,
-    schoolYearId,
-  }: {
-    studentId: string;
-    termId?: string;
-    schoolYearId: string;
-  }) => {
-    const grades = db.grade.findMany({
-      where: {
-        studentId: studentId,
-        gradeSheet: {
-          term: {
-            schoolYearId: schoolYearId,
-          },
-        },
-        ...(termId ? { gradeSheet: { termId: termId } } : {}),
-      },
-      orderBy: {
-        gradeSheet: {
-          createdAt: "asc",
-        },
-      },
-      include: {
-        gradeSheet: {
-          include: {
-            term: true,
-            subject: {
-              include: {
-                course: true,
-                teacher: true,
-              },
-            },
-          },
-        },
-      },
-    });
-    return grades;
   },
 
   delete: async (studentIds: string | string[], schoolId: string) => {

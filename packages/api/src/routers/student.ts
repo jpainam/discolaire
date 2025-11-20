@@ -79,7 +79,9 @@ export const studentRouter = {
     .query(async ({ ctx, input }) => {
       const studentIds: string[] = [];
       if (ctx.session.user.profile === "student") {
-        const student = await studentService.getFromUserId(ctx.session.user.id);
+        const student = await ctx.services.student.getFromUserId(
+          ctx.session.user.id,
+        );
         studentIds.push(student.id);
       } else if (ctx.session.user.profile === "contact") {
         const contact = await contactService.getFromUserId(ctx.session.user.id);
@@ -397,11 +399,9 @@ export const studentRouter = {
       );
     }),
 
-  get: protectedProcedure
-    .input(z.string().min(1))
-    .query(async ({ ctx, input }) => {
-      return studentService.get(input, ctx.schoolYearId, ctx.schoolId);
-    }),
+  get: protectedProcedure.input(z.string().min(1)).query(({ ctx, input }) => {
+    return ctx.services.student.get(input, ctx.schoolYearId, ctx.schoolId);
+  }),
   selector: protectedProcedure.query(({ ctx }) => {
     return ctx.db.student.findMany({
       where: {
@@ -431,7 +431,7 @@ export const studentRouter = {
   grades: protectedProcedure
     .input(z.object({ id: z.string(), termId: z.string().optional() }))
     .query(({ ctx, input }) => {
-      return studentService.getGrades({
+      return ctx.services.student.getGrades({
         studentId: input.id,
         termId: input.termId,
         schoolYearId: ctx.schoolYearId,

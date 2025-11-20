@@ -7,7 +7,6 @@ import { TransactionStatus, TransactionType } from "@repo/db/enums";
 import { checkPermission } from "../permission";
 import { contactService } from "../services/contact-service";
 import { staffService } from "../services/staff-service";
-import { studentService } from "../services/student-service";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -27,7 +26,9 @@ export const classroomRouter = {
       schoolId: ctx.session.user.schoolId,
     });
     if (ctx.session.user.profile === "student") {
-      const student = await studentService.getFromUserId(ctx.session.user.id);
+      const student = await ctx.services.student.getFromUserId(
+        ctx.session.user.id,
+      );
       const classroom = await ctx.services.student.getClassroom(
         student.id,
         ctx.schoolYearId,
