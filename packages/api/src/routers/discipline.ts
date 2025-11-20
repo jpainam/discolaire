@@ -1,7 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { getTrimesterTermIds } from "../services/attendance-service";
 import { protectedProcedure } from "../trpc";
 
 export const disciplineRouter = {
@@ -49,7 +48,7 @@ export const disciplineRouter = {
       }),
     )
     .query(async ({ input, ctx }) => {
-      const [seq1, seq2] = await getTrimesterTermIds(
+      const [seq1, seq2] = await ctx.services.attendance.getTrimesterTermIds(
         input.trimestreId,
         ctx.schoolYearId,
       );

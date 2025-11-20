@@ -9,7 +9,6 @@ import type { Prisma } from "@repo/db";
 import { checkPermission } from "../permission";
 import { getUnpaidFeeDescription } from "../services/accounting-service";
 import { contactService } from "../services/contact-service";
-import { getEnrollStudents } from "../services/enrollment-service";
 import { staffService } from "../services/staff-service";
 import { protectedProcedure } from "../trpc";
 
@@ -87,7 +86,7 @@ export const studentRouter = {
         const studentContacts = await contactService.getStudents(contact.id);
         studentIds.push(...studentContacts.map((sc) => sc.studentId));
       }
-      return getEnrollStudents({
+      return ctx.services.enrollment.getEnrollStudents({
         schoolYearId: ctx.schoolYearId,
         limit: input?.limit,
         studentIds,

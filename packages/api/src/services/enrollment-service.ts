@@ -1,11 +1,16 @@
-import { db } from "../db";
+import type { PrismaClient } from "@repo/db";
 
-export const enrollmentService = {
-  getCount: async (schoolYearId: string) => {
-    const schoolYear = await db.schoolYear.findUniqueOrThrow({
+export class EnrollmentService {
+  private db: PrismaClient;
+  constructor(db: PrismaClient) {
+    this.db = db;
+  }
+
+  async getCount(schoolYearId: string) {
+    const schoolYear = await this.db.schoolYear.findUniqueOrThrow({
       where: { id: schoolYearId },
     });
-    const students = await db.student.findMany({
+    const students = await this.db.student.findMany({
       include: {
         enrollments: {
           where: {
@@ -44,7 +49,7 @@ export const enrollmentService = {
         active += 1;
       }
     });
-    const contactCount = await db.contact.count({
+    const contactCount = await this.db.contact.count({
       where: {
         studentContacts: {
           some: {
@@ -55,7 +60,7 @@ export const enrollmentService = {
         },
       },
     });
-    const previousYear = await db.schoolYear.findFirst({
+    const previousYear = await this.db.schoolYear.findFirst({
       where: {
         id: {
           not: schoolYearId,
@@ -66,7 +71,7 @@ export const enrollmentService = {
       },
     });
     const totalLastYear = previousYear
-      ? await db.enrollment.count({
+      ? await this.db.enrollment.count({
           where: {
             schoolYearId: previousYear.id,
           },
@@ -84,115 +89,114 @@ export const enrollmentService = {
       active,
       inactive: total - active,
     };
-  },
-};
+  }
+  async getEnrollStudents({
+    schoolYearId,
+    studentIds,
+    limit,
+  }: {
+    schoolYearId: string;
+    limit?: number;
+    studentIds: string[];
+  }) {
+    const targetSchoolYearId = schoolYearId;
 
-export async function getEnrollStudents({
-  schoolYearId,
-  studentIds,
-  limit,
-}: {
-  schoolYearId: string;
-  limit?: number;
-  studentIds: string[];
-}) {
-  const targetSchoolYearId = schoolYearId;
+    // fetch the target year once (safer than comparing names)
+    const currentYear = await this.db.schoolYear.findUniqueOrThrow({
+      where: { id: targetSchoolYearId },
+      select: {
+        id: true,
+        name: true,
+        startDate: true,
+        endDate: true,
+        schoolId: true,
+      },
+    });
 
-  // fetch the target year once (safer than comparing names)
-  const currentYear = await db.schoolYear.findUniqueOrThrow({
-    where: { id: targetSchoolYearId },
-    select: {
-      id: true,
-      name: true,
-      startDate: true,
-      endDate: true,
-      schoolId: true,
-    },
-  });
-
-  // 1) Pull students for the school, with only the enrollment fields we need.
-  //    (Optionally filter to those who have an enrollment in the target year.)
-  const data = await db.student.findMany({
-    take: limit ?? 50,
-    orderBy: { lastName: "desc" },
-    where: {
-      schoolId: currentYear.schoolId,
-      ...(studentIds.length > 0 ? { id: { in: studentIds } } : {}),
-      // If you only want students enrolled in the given year, uncomment:
-      enrollments: { some: { schoolYearId: targetSchoolYearId } },
-    },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      lastAccessed: true,
-      registrationNumber: true,
-      dateOfEntry: true,
-      residence: true,
-      phoneNumber: true,
-      placeOfBirth: true,
-      isRepeating: true,
-      dateOfBirth: true,
-      // keep only what you use; add more fields if you really need them
-      formerSchool: true,
-      gender: true,
-      religion: true,
-      user: true,
-      country: true,
-      enrollments: {
-        select: {
-          id: true,
-          schoolYearId: true,
-          schoolYear: { select: { id: true, name: true, startDate: true } },
-          classroomId: true,
-          classroom: {
-            select: { id: true, name: true, levelId: true, reportName: true },
+    // 1) Pull students for the school, with only the enrollment fields we need.
+    //    (Optionally filter to those who have an enrollment in the target year.)
+    const data = await this.db.student.findMany({
+      take: limit ?? 50,
+      orderBy: { lastName: "desc" },
+      where: {
+        schoolId: currentYear.schoolId,
+        ...(studentIds.length > 0 ? { id: { in: studentIds } } : {}),
+        // If you only want students enrolled in the given year, uncomment:
+        enrollments: { some: { schoolYearId: targetSchoolYearId } },
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        lastAccessed: true,
+        registrationNumber: true,
+        dateOfEntry: true,
+        residence: true,
+        phoneNumber: true,
+        placeOfBirth: true,
+        isRepeating: true,
+        dateOfBirth: true,
+        // keep only what you use; add more fields if you really need them
+        formerSchool: true,
+        gender: true,
+        religion: true,
+        user: true,
+        country: true,
+        enrollments: {
+          select: {
+            id: true,
+            schoolYearId: true,
+            schoolYear: { select: { id: true, name: true, startDate: true } },
+            classroomId: true,
+            classroom: {
+              select: { id: true, name: true, levelId: true, reportName: true },
+            },
           },
         },
       },
-    },
-  });
+    });
 
-  const students = data.map((student) => {
-    // current enrollment = enrollment whose classroom belongs to the target year
-    const currentEnrollment = student.enrollments.find(
-      (e) => e.schoolYearId === targetSchoolYearId,
-    );
-
-    // previous enrollments are those strictly before the current year's start
-    const previousEnrollments = student.enrollments.filter(
-      (e) => e.schoolYear.startDate < currentYear.startDate,
-    );
-
-    const isNew = !!currentEnrollment && student.enrollments.length === 1;
-    const computedRepeating =
-      currentEnrollment &&
-      previousEnrollments.some(
-        (e) =>
-          e.classroom.levelId === currentEnrollment.classroom.levelId &&
-          e.classroomId !== currentEnrollment.classroomId,
+    const students = data.map((student) => {
+      // current enrollment = enrollment whose classroom belongs to the target year
+      const currentEnrollment = student.enrollments.find(
+        (e) => e.schoolYearId === targetSchoolYearId,
       );
 
-    const isRepeating =
-      student.enrollments.length === 1
-        ? !!student.isRepeating
-        : !!computedRepeating;
+      // previous enrollments are those strictly before the current year's start
+      const previousEnrollments = student.enrollments.filter(
+        (e) => e.schoolYear.startDate < currentYear.startDate,
+      );
 
-    // immediate “last” school year (the most recent strictly before the current)
-    const lastSchoolYear = previousEnrollments
-      .slice()
-      .sort(
-        (a, b) =>
-          b.schoolYear.startDate.getTime() - a.schoolYear.startDate.getTime(),
-      )[0]?.schoolYear;
+      const isNew = !!currentEnrollment && student.enrollments.length === 1;
+      const computedRepeating =
+        currentEnrollment &&
+        previousEnrollments.some(
+          (e) =>
+            e.classroom.levelId === currentEnrollment.classroom.levelId &&
+            e.classroomId !== currentEnrollment.classroomId,
+        );
 
-    return {
-      ...student,
-      isNew,
-      isRepeating,
-      lastSchoolYear, // may be undefined if none
-      classroom: currentEnrollment?.classroom ?? null,
-    };
-  });
-  return students;
+      const isRepeating =
+        student.enrollments.length === 1
+          ? !!student.isRepeating
+          : !!computedRepeating;
+
+      // immediate “last” school year (the most recent strictly before the current)
+      const lastSchoolYear = previousEnrollments
+        .slice()
+        .sort(
+          (a, b) =>
+            b.schoolYear.startDate.getTime() - a.schoolYear.startDate.getTime(),
+        )[0]?.schoolYear;
+
+      return {
+        ...student,
+        isNew,
+        isRepeating,
+        lastSchoolYear, // may be undefined if none
+        classroom: currentEnrollment?.classroom ?? null,
+      };
+    });
+    return students;
+  }
 }
