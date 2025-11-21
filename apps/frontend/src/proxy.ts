@@ -22,14 +22,14 @@ const unProtectedRoutes = [
 ];
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const host = request.headers.get("host");
   const tenant = getSubdomainFromHost(host);
 
   const requestHeaders = new Headers(request.headers);
-  if (tenant) requestHeaders.set("x-tenant", tenant);
+  if (tenant) requestHeaders.set("discolaire-tenant", tenant);
 
   // allow auth routes
   if (pathname.startsWith("/auth")) {
@@ -49,8 +49,9 @@ export async function middleware(request: NextRequest) {
   // });
 
   if (isProtectedRoute && (!schoolYearId || !session)) {
-    const res = NextResponse.redirect(new URL("/auth/login", request.url));
-    res.headers.set("x-tenant", tenant);
+    const res = NextResponse.redirect(new URL("/auth/login", request.url), {
+      headers: requestHeaders,
+    });
     return res;
   }
   return NextResponse.next({
