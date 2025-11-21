@@ -11,7 +11,6 @@ import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -32,6 +31,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
+import { Badge } from "~/components/base-badge";
 import { EditGradeStudent } from "~/components/classrooms/gradesheets/grades/EditGradeStudent";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -56,13 +56,6 @@ export function ClassroomGradeList({
   gradesheet: RouterOutputs["gradeSheet"]["get"];
   className?: string;
 }) {
-  const getGradeColor = (grade: number) => {
-    if (grade >= 16) return "text-green-600 bg-green-50";
-    if (grade >= 14) return "text-blue-600 bg-blue-50";
-    if (grade >= 10) return "text-orange-600 bg-orange-50";
-    return "text-red-600 bg-red-50";
-  };
-
   const confirm = useConfirm();
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
@@ -249,8 +242,16 @@ export function ClassroomGradeList({
                     <>-</>
                   ) : (
                     <Badge
-                      variant="outline"
-                      className={`${getGradeColor(g.grade)} border-0`}
+                      variant={
+                        g.grade >= 16
+                          ? "success"
+                          : g.grade >= 14
+                            ? "info"
+                            : g.grade >= 10
+                              ? "warning"
+                              : "destructive"
+                      }
+                      appearance={"outline"}
                     >
                       {g.grade.toFixed(2)}
                     </Badge>
@@ -262,19 +263,7 @@ export function ClassroomGradeList({
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  {!g.isAbsent && (
-                    <Badge
-                      variant={
-                        g.grade < 10
-                          ? "destructive"
-                          : g.grade >= 14
-                            ? "secondary"
-                            : "default"
-                      }
-                    >
-                      {getAppreciations(g.grade, gradesheet.scale)}
-                    </Badge>
-                  )}
+                  {!g.isAbsent && getAppreciations(g.grade, gradesheet.scale)}
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-end">

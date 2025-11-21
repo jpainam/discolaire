@@ -7,12 +7,12 @@ import { Card, CardContent } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
 
 import { getSession } from "~/auth/server";
+import { ClassroomGradeChart } from "~/components/classrooms/gradesheets/ClassroomGradeChart";
+import { ClassroomGradeList } from "~/components/classrooms/gradesheets/ClassroomGradeList";
 import { ErrorFallback } from "~/components/error-fallback";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
-import { ClassroomGradeChart } from "./ClassroomGradeChart";
-import { ClassroomGradeList } from "./ClassroomGradeList";
 
 export default async function Page(props: {
   params: Promise<{ gradesheetId: number }>;

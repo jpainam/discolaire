@@ -25,11 +25,14 @@ import {
 } from "@repo/ui/components/chart";
 
 import { useLocale } from "~/i18n";
+import { cn } from "~/lib/utils";
 
 export function ClassroomGradeChart({
   grades,
+  className,
 }: {
   grades: RouterOutputs["gradeSheet"]["grades"];
+  className?: string;
 }) {
   const { t } = useLocale();
   const p05 = grades.filter((g) => !g.isAbsent && g.grade < 5).length;
@@ -59,7 +62,7 @@ export function ClassroomGradeChart({
   const countp05 = grades.filter((g) => g.grade >= 8 && g.grade < 10).length;
   const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
   return (
-    <div className="flex flex-col gap-2 overflow-hidden">
+    <div className={cn("flex flex-col gap-2 overflow-hidden", className)}>
       <Card className="px-0">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">
