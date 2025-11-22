@@ -25,7 +25,7 @@ import { Separator } from "@repo/ui/components/separator";
 
 import { useSession } from "~/auth/client";
 import { AvatarState } from "~/components/AvatarState";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { routes } from "~/configs/routes";
 import { useTRPC } from "~/trpc/react";
@@ -117,7 +117,7 @@ export function StudentContactDetails({
   }
 
   if (!contact) {
-    return <EmptyState />;
+    return <EmptyComponent />;
   }
   return (
     <Form {...form}>

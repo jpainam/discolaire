@@ -23,7 +23,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
@@ -83,7 +83,7 @@ export function AssignmentTable() {
           {!assignmentsQuery.isPending && assignments.length === 0 && (
             <TableRow>
               <TableCell colSpan={6}>
-                <EmptyState className="py-8" />
+                <EmptyComponent />
               </TableCell>
             </TableRow>
           )}

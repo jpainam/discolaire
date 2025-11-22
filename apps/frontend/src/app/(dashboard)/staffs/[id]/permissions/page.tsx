@@ -1,4 +1,4 @@
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { PermissionTable } from "~/components/users/PermissionTable";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
@@ -8,7 +8,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const staff = await caller.staff.get(params.id);
   const { t } = await getServerTranslations();
   if (!staff.userId) {
-    return <EmptyState className="my-8" title={t("no_user_attached_yet")} />;
+    return (
+      <EmptyComponent title={t("no_user_attached_yet")} />
+    );
   }
 
   return (

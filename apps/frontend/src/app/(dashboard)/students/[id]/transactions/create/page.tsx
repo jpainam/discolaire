@@ -1,7 +1,7 @@
 import type { SearchParams } from "nuqs/server";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { Step1 } from "~/components/students/transactions/create/step1";
 import { Step2 } from "~/components/students/transactions/create/step2";
 import { caller } from "~/trpc/server";
@@ -22,9 +22,7 @@ export default async function Page(props: PageProps) {
   const student = await caller.student.get(params.id);
   const transactions = await caller.student.transactions(params.id);
   if (!classroom) {
-    return (
-      <EmptyState title={t("student_not_registered_yet")} className="my-8" />
-    );
+    return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
   let fees = await caller.classroom.fees(classroom.id);
   const studentContacts = await caller.student.contacts(params.id);

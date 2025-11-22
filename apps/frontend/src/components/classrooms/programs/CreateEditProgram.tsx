@@ -29,7 +29,7 @@ import {
 } from "@repo/ui/components/form";
 import { Label } from "@repo/ui/components/label";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -213,7 +213,7 @@ export function CreateEditProgram({
               }}
             ></div>
             {!subjectQuery.data?.program && (
-              <EmptyState title={t("no_data")} className="my-8" />
+              <EmptyComponent title={t("no_data")} />
             )}
           </>
         )}

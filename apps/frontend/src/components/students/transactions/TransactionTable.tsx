@@ -46,7 +46,7 @@ import {
 } from "@repo/ui/components/table";
 
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { Pill, PillAvatar, PillIcon, PillIndicator } from "~/components/pill";
 import { routes } from "~/configs/routes";
@@ -120,7 +120,7 @@ export function TransactionTable() {
             {transactions.length === 0 && (
               <TableRow>
                 <TableCell colSpan={7} className="text-center">
-                  <EmptyState className="my-8" />
+                  <EmptyComponent />
                 </TableCell>
               </TableRow>
             )}

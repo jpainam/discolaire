@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -77,7 +77,7 @@ export function SportTable() {
             {sports.length === 0 && (
               <TableRow>
                 <TableCell colSpan={2}>
-                  <EmptyState iconClassName="w-[100px] h-auto" />
+                  <EmptyComponent  />
                 </TableCell>
               </TableRow>
             )}

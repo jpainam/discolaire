@@ -11,7 +11,7 @@ import {
 } from "@repo/ui/components/table";
 
 import { getSession } from "~/auth/server";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { env } from "~/env";
 import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
@@ -57,7 +57,7 @@ export default async function Page() {
           {schools.length === 0 && (
             <TableRow>
               <TableCell colSpan={6}>
-                <EmptyState className="my-8" />
+                <EmptyComponent />
               </TableCell>
             </TableRow>
           )}

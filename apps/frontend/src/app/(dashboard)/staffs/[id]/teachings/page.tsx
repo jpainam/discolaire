@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { routes } from "~/configs/routes";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
@@ -19,7 +19,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const teachings = await caller.staff.teachings(params.id);
   const { t } = await getServerTranslations();
   if (teachings.length === 0) {
-    return <EmptyState className="py-8" title={t("no_teachings_found")} />;
+    return <EmptyComponent title={t("no_teachings_found")} />;
   }
 
   return (

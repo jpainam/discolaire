@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { routes } from "~/configs/routes";
 import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
@@ -31,7 +31,7 @@ export async function StudentSiblingTable({
   studentContact: StudentContactGetProcedureOutput;
 }) {
   if (!studentContact) {
-    return <EmptyState description="No student contact found" />;
+    return <EmptyComponent description="No student contact found" />;
   }
   const linkedStudents = await caller.contact.students(
     studentContact.contactId,
@@ -81,8 +81,7 @@ export async function StudentSiblingTable({
           </Table>
         ) : (
           <div className="text-md m-4 flex flex-col items-center justify-center gap-4">
-            <EmptyState
-              iconClassName="w-[100px] h-auto"
+            <EmptyComponent
               description={t("noOtherStudentsLinkedToThisContact")}
             />
           </div>

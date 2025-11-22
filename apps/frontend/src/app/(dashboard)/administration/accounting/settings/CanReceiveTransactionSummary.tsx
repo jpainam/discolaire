@@ -34,7 +34,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -124,7 +124,7 @@ export function CanReceiveTransactionSummary({
               {schedules.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4}>
-                    <EmptyState />
+                    <EmptyComponent />
                   </TableCell>
                 </TableRow>
               )}

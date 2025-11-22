@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
@@ -36,9 +36,7 @@ export default async function Page(props: {
   const { t } = await getServerTranslations();
   const classroom = await caller.student.classroom({ studentId: params.id });
   if (!classroom) {
-    return (
-      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
-    );
+    return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
 
   const { studentsReport, summary, globalRanks } =

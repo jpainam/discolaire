@@ -25,7 +25,7 @@ import {
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -112,7 +112,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
             {data.length === 0 && (
               <TableRow>
                 <TableCell colSpan={10} className="text-center">
-                  <EmptyState title={t("no_data")} className="my-8" />
+                  <EmptyComponent title={t("no_data")} />
                 </TableCell>
               </TableRow>
             )}

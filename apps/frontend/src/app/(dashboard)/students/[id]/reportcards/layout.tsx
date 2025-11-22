@@ -3,7 +3,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReportCardHeader } from "~/components/students/reportcards/ReportCardHeader";
 import { getServerTranslations } from "~/i18n/server";
@@ -22,9 +22,7 @@ export default async function Layout(props: {
   const classroom = await caller.student.classroom({ studentId: id });
   const { t } = await getServerTranslations();
   if (!classroom) {
-    return (
-      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
-    );
+    return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
   prefetch(trpc.term.all.queryOptions());
   return (

@@ -22,7 +22,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { getServerTranslations } from "~/i18n/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
@@ -36,7 +36,7 @@ export default async function Page(props: {
   const { termId } = searchParams;
 
   if (!termId) {
-    return <EmptyState className="my-8" />;
+    return <EmptyComponent  />;
   }
   const {
     studentsReport,

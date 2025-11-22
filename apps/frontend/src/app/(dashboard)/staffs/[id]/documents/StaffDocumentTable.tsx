@@ -28,7 +28,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -88,7 +88,7 @@ export function StaffDocumentTable() {
             {documents.length === 0 && (
               <TableRow>
                 <TableCell colSpan={6}>
-                  <EmptyState title={t("no_data")} className="my-8" />
+                  <EmptyComponent title={t("no_data")} />
                 </TableCell>
               </TableRow>
             )}

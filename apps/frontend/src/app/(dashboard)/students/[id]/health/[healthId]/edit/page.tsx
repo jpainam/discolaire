@@ -1,4 +1,4 @@
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { CreateEditHealthVisit } from "~/components/students/health/CreateEditHealthVisit";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
@@ -11,7 +11,7 @@ export default async function Page(props: {
   const visit = await caller.health.getVisit(params.healthId);
   const student = await caller.student.get(params.id);
   if (!student.userId) {
-    return <EmptyState className="my-8" title="No user id yet" />;
+    return <EmptyComponent title="No user id yet" />;
   }
   return (
     <CreateEditHealthVisit

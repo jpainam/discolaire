@@ -29,7 +29,7 @@ import {
 } from "@repo/ui/components/table";
 
 import { AvatarState } from "~/components/AvatarState";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -68,7 +68,7 @@ export function ContactStudentTable() {
   const router = useRouter();
 
   if (studentContacts.length == 0) {
-    return <EmptyState className="m-8" />;
+    return <EmptyComponent />;
   }
   return (
     <div className="h-fit flex-col gap-2 rounded-lg border">
@@ -87,7 +87,7 @@ export function ContactStudentTable() {
           {studentContacts.length === 0 && (
             <TableRow>
               <TableCell colSpan={6} className="text-center">
-                <EmptyState className="my-8" />
+                <EmptyComponent />
               </TableCell>
             </TableRow>
           )}

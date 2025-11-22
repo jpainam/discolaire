@@ -28,7 +28,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -79,7 +79,7 @@ export function StudentEnrollmentTable({
   );
 
   if (enrollments.length === 0) {
-    return <EmptyState className="my-2" />;
+    return <EmptyComponent />;
   }
 
   const disabled = student.status !== StudentStatus.ACTIVE;

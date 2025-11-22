@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
@@ -54,7 +54,7 @@ export function StudentAssignmentTable({
           {items.length === 0 && (
             <TableRow>
               <TableCell colSpan={7}>
-                <EmptyState className="my-8" />
+                <EmptyComponent />
               </TableCell>
             </TableRow>
           )}

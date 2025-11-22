@@ -1,9 +1,9 @@
 import type { SearchParams } from "nuqs/server";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { CreateTransactionContextProvider } from "~/components/students/transactions/create/CreateTransactionContextProvider";
 import { getServerTranslations } from "~/i18n/server";
-import { caller } from "~/trpc/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { createTransactionSearchParams } from "~/utils/search-params";
 import { CreateStudentTransaction } from "./CreateStudentTransaction";
@@ -21,18 +21,29 @@ export default async function Page(props: PageProps) {
   }
   const studentId = searchParams.studentId;
   const { t } = await getServerTranslations();
+  const queryClient = getQueryClient();
 
-  const classroom = await caller.student.classroom({ studentId });
+  const classroom = await queryClient.fetchQuery(
+    trpc.student.classroom.queryOptions({ studentId }),
+  );
   if (!classroom) {
-    return (
-      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
-    );
+    return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
-  const studentContacts = await caller.student.contacts(studentId);
-  const student = await caller.student.get(studentId);
-  const fees = await caller.classroom.fees(classroom.id);
-  const unpaidRequiredFees = await caller.student.unpaidRequiredFees(studentId);
-  const transactions = await caller.student.transactions(studentId);
+  const studentContacts = await queryClient.fetchQuery(
+    trpc.student.contacts.queryOptions(studentId),
+  );
+  const student = await queryClient.fetchQuery(
+    trpc.student.get.queryOptions(studentId),
+  );
+  const fees = await queryClient.fetchQuery(
+    trpc.classroom.fees.queryOptions(classroom.id),
+  );
+  const unpaidRequiredFees = await queryClient.fetchQuery(
+    trpc.student.unpaidRequiredFees.queryOptions(studentId),
+  );
+  const transactions = await queryClient.fetchQuery(
+    trpc.student.transactions.queryOptions(studentId),
+  );
 
   return (
     <div className="flex flex-col gap-4 py-4">

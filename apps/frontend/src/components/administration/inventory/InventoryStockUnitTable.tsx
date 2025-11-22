@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
@@ -92,7 +92,7 @@ export function InventoryStockUnitTable() {
             {units.length === 0 && (
               <TableRow>
                 <TableCell colSpan={3}>
-                  <EmptyState className="my-8" />
+                  <EmptyComponent  />
                 </TableCell>{" "}
               </TableRow>
             )}

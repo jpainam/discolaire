@@ -3,12 +3,18 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentGrade } from "~/components/students/grades/StudentGrade";
 import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
 import { getServerTranslations } from "~/i18n/server";
-import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  caller,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -20,20 +26,23 @@ export default async function Layout(props: {
   const { id } = params;
 
   const { children } = props;
+  const queryClient = getQueryClient();
 
-  const classroom = await caller.student.classroom({ studentId: id });
-  const student = await caller.student.get(id);
+  const classroom = await queryClient.fetchQuery(
+    trpc.student.classroom.queryOptions({ studentId: id }),
+  );
+  const student = await queryClient.fetchQuery(
+    trpc.student.get.queryOptions(id),
+  );
   const { t } = await getServerTranslations();
   if (!classroom) {
-    return (
-      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
-    );
+    return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
   const grades = await caller.student.grades({
     id: params.id,
   });
   if (grades.length === 0) {
-    return <EmptyState className="my-8" title={t("no_data")} />;
+    return <EmptyComponent title={t("no_data")} />;
   }
   //const searchParams = await props.searchParams;
   //const term = searchParams?.term;

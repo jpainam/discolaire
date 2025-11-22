@@ -22,7 +22,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
-import { EmptyState } from "../EmptyState";
+import { EmptyComponent } from "../EmptyComponent";
 
 export function EducationalResource({ className }: { className?: string }) {
   const { t } = useLocale();
@@ -57,7 +57,7 @@ export function EducationalResource({ className }: { className?: string }) {
       </CardHeader>
       <CardContent className="space-y-2">
         {resources?.length === 0 && (
-          <EmptyState className="my-8" title={t("no_data")} />
+          <EmptyComponent title={t("no_data")} />
         )}
         {resources?.slice(0, 5).map((resource, index) => (
           <div

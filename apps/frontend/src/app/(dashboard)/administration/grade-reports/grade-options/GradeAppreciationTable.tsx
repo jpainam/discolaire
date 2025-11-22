@@ -35,7 +35,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -124,7 +124,7 @@ export function GradeAppreciationTable() {
               gradeAppreciationsQuery.data?.length == 0 && (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center">
-                    <EmptyState title={t("no_data")} className="py-8" />
+                    <EmptyComponent title={t("no_data")}  />
                   </TableCell>
                 </TableRow>
               )}

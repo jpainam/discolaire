@@ -35,7 +35,7 @@ import {
 
 import { authClient } from "~/auth/client";
 import { Badge } from "~/components/base-badge";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -112,7 +112,7 @@ export function ClassroomSubjectTable() {
             {subjects.length == 0 && (
               <TableRow>
                 <TableCell colSpan={6} className="text-center">
-                  <EmptyState />
+                  <EmptyComponent />
                 </TableCell>
               </TableRow>
             )}

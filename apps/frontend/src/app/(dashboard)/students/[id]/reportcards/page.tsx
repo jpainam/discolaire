@@ -17,7 +17,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
@@ -41,14 +41,17 @@ export default async function Page(props: PageProps) {
   const student = await caller.student.get(id);
   if (!student.classroom) {
     return (
-      <EmptyState className="my-8" title={t("student_not_registered_yet")} />
+      <EmptyComponent
+       
+        title={t("student_not_registered_yet")}
+      />
     );
   }
 
   const { termId } = await reportcardSearchParams(props.searchParams);
 
   if (!termId) {
-    return <EmptyState className="my-8" title={t("select_terms")} />;
+    return <EmptyComponent title={t("select_terms")} />;
   }
   const { studentsReport, summary, globalRanks } =
     await caller.reportCard.getSequence({

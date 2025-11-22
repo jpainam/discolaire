@@ -26,7 +26,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
@@ -80,7 +80,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
             {visits.length === 0 && (
               <TableRow>
                 <TableCell colSpan={6} className="text-center">
-                  <EmptyState className="my-8" />
+                  <EmptyComponent />
                 </TableCell>
               </TableRow>
             )}

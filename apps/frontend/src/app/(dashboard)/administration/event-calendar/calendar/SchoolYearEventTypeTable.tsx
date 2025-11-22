@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -74,7 +74,7 @@ export function SchoolYearEventTypeTable() {
             {eventTypes.length === 0 && (
               <TableRow>
                 <TableCell colSpan={3} className="text-center">
-                  <EmptyState className="my-8" title={t("no_data")} />
+                  <EmptyComponent  title={t("no_data")} />
                 </TableCell>
               </TableRow>
             )}

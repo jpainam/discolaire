@@ -16,7 +16,7 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { cn } from "@repo/ui/lib/utils";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -100,7 +100,7 @@ export default function StudentContactList({
       )}
 
       {contactStudentsQuery.data?.length === 0 && (
-        <EmptyState
+        <EmptyComponent
           title={t("no_data")}
           description={`${contactQuery.data?.prefix} ${getFullName(contactQuery.data)}`}
         />

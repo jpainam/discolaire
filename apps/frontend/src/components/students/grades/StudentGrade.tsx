@@ -10,7 +10,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";
@@ -90,7 +90,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
       </div>
 
       {sortedGrades.length === 0 && (
-        <EmptyState title={t("no_data")} className="my-8" />
+        <EmptyComponent title={t("no_data")} />
       )}
       <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-r border-b">
         {view === "by_chronological_order" && (

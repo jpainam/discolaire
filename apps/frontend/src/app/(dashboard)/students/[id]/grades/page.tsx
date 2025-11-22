@@ -1,5 +1,5 @@
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 
 export default function Page() {
-  return <EmptyState />;
+  return <EmptyComponent />;
 }

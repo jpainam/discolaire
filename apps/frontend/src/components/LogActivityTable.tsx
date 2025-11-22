@@ -5,7 +5,7 @@ import type { RouterOutputs } from "@repo/api";
 import { cn } from "@repo/ui/lib/utils";
 
 import { getServerTranslations } from "~/i18n/server";
-import { EmptyState } from "./EmptyState";
+import { EmptyComponent } from "./EmptyComponent";
 
 export async function LogActivityTable({
   logs,
@@ -17,7 +17,7 @@ export async function LogActivityTable({
   return (
     <div className="max-h-[calc(100vh-5rem)] space-y-3 overflow-y-auto">
       {logs.length === 0 && (
-        <EmptyState className="my-8" title={t("no_data")} />
+        <EmptyComponent title={t("no_data")} />
       )}
       {logs.map((log, index) => (
         <div

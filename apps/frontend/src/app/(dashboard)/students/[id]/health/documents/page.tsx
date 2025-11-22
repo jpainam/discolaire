@@ -1,23 +1,28 @@
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { getServerTranslations } from "~/i18n/server";
-import { caller } from "~/trpc/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 import { HealthDocumentTable } from "./DocumentTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const student = await caller.student.get(params.id);
+  const queryClient = getQueryClient();
+  const student = await queryClient.fetchQuery(
+    trpc.student.get.queryOptions(params.id),
+  );
+
   const { t } = await getServerTranslations();
-  // if (!student.userId) {
-  //   return <EmptyState className="py-8" title={t("no_user_attached_yet")} />;
-  // }
-  const documents = await caller.health.documents({
-    userId: student.userId ?? "N/A",
-  });
-  if (!documents.length) {
-    return (
-      <EmptyState className="py-8" title={t("no_health_documents_found")} />
-    );
+  if (!student.userId) {
+    return <EmptyComponent title={t("no_health_documents_found")} />;
   }
+  const documents = await queryClient.fetchQuery(
+    trpc.health.documents.queryOptions({
+      userId: student.userId,
+    }),
+  );
+  if (!documents.length) {
+    return <EmptyComponent title={t("no_health_documents_found")} />;
+  }
+
   return (
     <div>
       <HealthDocumentTable />

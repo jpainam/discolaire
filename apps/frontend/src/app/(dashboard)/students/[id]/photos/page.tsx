@@ -1,5 +1,5 @@
 import { downloadFileFromAws } from "~/actions/upload";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { PhotoHeader } from "~/components/students/photos/PhotoHeader";
 import { StudentPhotoList } from "~/components/students/photos/StudentPhotoList";
 import { getServerTranslations } from "~/i18n/server";
@@ -19,7 +19,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <div className="flex flex-col">
       <PhotoHeader />
       {photos.length === 0 ? (
-        <EmptyState className="my-8" title={t("no_data")} />
+        <EmptyComponent title={t("no_data")} />
       ) : (
         <StudentPhotoList photos={photos} />
       )}

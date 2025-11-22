@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/components/table";
 
 import { auth } from "~/auth/server";
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { caller } from "~/trpc/server";
 import { CreateAuthApiKey } from "./CreateAuthApiKey";
 import { DeleteAuthApiKey } from "./DeleteAuthApiKey";
@@ -45,7 +45,7 @@ export default async function Page() {
             {apikeys.length === 0 && (
               <TableRow>
                 <TableCell colSpan={8} className="text-center">
-                  <EmptyState />
+                  <EmptyComponent />
                 </TableCell>
               </TableRow>
             )}

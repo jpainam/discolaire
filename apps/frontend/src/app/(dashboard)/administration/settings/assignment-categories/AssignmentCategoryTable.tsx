@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -60,7 +60,7 @@ export function AssignmentCategoryTable() {
           {categoriesQuery.data?.length == 0 && (
             <TableRow>
               <TableCell colSpan={2}>
-                <EmptyState className="my-8" />
+                <EmptyComponent />
               </TableCell>
             </TableRow>
           )}

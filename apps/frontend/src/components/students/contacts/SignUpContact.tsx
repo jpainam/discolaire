@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
@@ -34,7 +34,7 @@ export function SignUpContact() {
     return;
   }
   if (studentContactsQuery.data.length === 0) {
-    return <EmptyState className="my-4" />;
+    return <EmptyComponent />;
   }
   const haveNotSignedUp = studentContactsQuery.data.map(
     (std) => !std.contact.userId,

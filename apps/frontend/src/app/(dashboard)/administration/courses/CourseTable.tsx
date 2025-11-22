@@ -22,7 +22,7 @@ import {
 } from "@repo/ui/components/table";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
@@ -79,7 +79,7 @@ export function CourseTable() {
           {coursesQuery.data?.length === 0 && (
             <TableRow>
               <TableCell colSpan={5}>
-                <EmptyState />
+                <EmptyComponent />
               </TableCell>
             </TableRow>
           )}

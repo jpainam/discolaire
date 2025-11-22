@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { EmptyState } from "~/components/EmptyState";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -78,7 +78,7 @@ export function SectionTable() {
           {!sectionsQuery.isPending && data.length === 0 && (
             <TableRow>
               <TableCell colSpan={2} className="text-center">
-                <EmptyState />
+                <EmptyComponent />
               </TableCell>
             </TableRow>
           )}
