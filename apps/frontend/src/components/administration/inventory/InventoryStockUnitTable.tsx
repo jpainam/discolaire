@@ -92,7 +92,7 @@ export function InventoryStockUnitTable() {
             {units.length === 0 && (
               <TableRow>
                 <TableCell colSpan={3}>
-                  <EmptyComponent  />
+                  <EmptyComponent />
                 </TableCell>{" "}
               </TableRow>
             )}

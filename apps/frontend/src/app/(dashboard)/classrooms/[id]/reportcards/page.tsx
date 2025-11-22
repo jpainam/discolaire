@@ -36,7 +36,7 @@ export default async function Page(props: {
   const { termId } = searchParams;
 
   if (!termId) {
-    return <EmptyComponent  />;
+    return <EmptyComponent />;
   }
   const {
     studentsReport,

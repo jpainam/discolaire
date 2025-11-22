@@ -8,9 +8,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const staff = await caller.staff.get(params.id);
   const { t } = await getServerTranslations();
   if (!staff.userId) {
-    return (
-      <EmptyComponent title={t("no_user_attached_yet")} />
-    );
+    return <EmptyComponent title={t("no_user_attached_yet")} />;
   }
 
   return (

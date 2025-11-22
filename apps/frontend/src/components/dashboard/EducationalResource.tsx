@@ -56,9 +56,7 @@ export function EducationalResource({ className }: { className?: string }) {
         </CardAction>
       </CardHeader>
       <CardContent className="space-y-2">
-        {resources?.length === 0 && (
-          <EmptyComponent title={t("no_data")} />
-        )}
+        {resources?.length === 0 && <EmptyComponent title={t("no_data")} />}
         {resources?.slice(0, 5).map((resource, index) => (
           <div
             key={index}

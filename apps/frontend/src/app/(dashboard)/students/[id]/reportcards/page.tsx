@@ -40,12 +40,7 @@ export default async function Page(props: PageProps) {
   const queryClient = getQueryClient();
   const student = await caller.student.get(id);
   if (!student.classroom) {
-    return (
-      <EmptyComponent
-       
-        title={t("student_not_registered_yet")}
-      />
-    );
+    return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
 
   const { termId } = await reportcardSearchParams(props.searchParams);

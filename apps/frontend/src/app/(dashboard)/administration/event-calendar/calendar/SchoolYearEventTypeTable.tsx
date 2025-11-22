@@ -74,7 +74,7 @@ export function SchoolYearEventTypeTable() {
             {eventTypes.length === 0 && (
               <TableRow>
                 <TableCell colSpan={3} className="text-center">
-                  <EmptyComponent  title={t("no_data")} />
+                  <EmptyComponent title={t("no_data")} />
                 </TableCell>
               </TableRow>
             )}

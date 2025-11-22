@@ -77,7 +77,7 @@ export function SportTable() {
             {sports.length === 0 && (
               <TableRow>
                 <TableCell colSpan={2}>
-                  <EmptyComponent  />
+                  <EmptyComponent />
                 </TableCell>
               </TableRow>
             )}

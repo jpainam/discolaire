@@ -8,7 +8,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const activities = await caller.logActivity.user(params.id);
   const { t } = await getServerTranslations();
   if (activities.length === 0) {
-    return <EmptyComponent  title={t("no_data")} />;
+    return <EmptyComponent title={t("no_data")} />;
   }
   return <LogActivityTable logs={activities} />;
 }

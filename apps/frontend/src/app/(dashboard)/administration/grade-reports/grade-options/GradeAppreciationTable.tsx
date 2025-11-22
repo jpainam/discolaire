@@ -124,7 +124,7 @@ export function GradeAppreciationTable() {
               gradeAppreciationsQuery.data?.length == 0 && (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center">
-                    <EmptyComponent title={t("no_data")}  />
+                    <EmptyComponent title={t("no_data")} />
                   </TableCell>
                 </TableRow>
               )}

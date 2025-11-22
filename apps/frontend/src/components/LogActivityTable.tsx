@@ -16,9 +16,7 @@ export async function LogActivityTable({
 
   return (
     <div className="max-h-[calc(100vh-5rem)] space-y-3 overflow-y-auto">
-      {logs.length === 0 && (
-        <EmptyComponent title={t("no_data")} />
-      )}
+      {logs.length === 0 && <EmptyComponent title={t("no_data")} />}
       {logs.map((log, index) => (
         <div
           key={index}

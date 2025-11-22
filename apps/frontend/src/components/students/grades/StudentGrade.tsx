@@ -89,9 +89,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
         </Button>
       </div>
 
-      {sortedGrades.length === 0 && (
-        <EmptyComponent title={t("no_data")} />
-      )}
+      {sortedGrades.length === 0 && <EmptyComponent title={t("no_data")} />}
       <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-r border-b">
         {view === "by_chronological_order" && (
           <ByChronologicalOrder
