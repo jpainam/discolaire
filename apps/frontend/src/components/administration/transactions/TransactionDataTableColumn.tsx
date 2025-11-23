@@ -8,6 +8,7 @@ import {
 } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
+import { decode } from "entities";
 import i18next from "i18next";
 import { BookCopy, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -103,10 +104,14 @@ export const fetchTransactionColumns = ({
         const transaction = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:underline"
             href={`/students/${transaction.studentId}/transactions`}
           >
-            {transaction.student.lastName}
+            {decode(
+              transaction.student.lastName ??
+                transaction.student.firstName ??
+                "",
+            )}
           </Link>
         );
       },
@@ -119,7 +124,7 @@ export const fetchTransactionColumns = ({
         const transaction = row.original;
         return (
           <Link
-            className="hover:text-blue-600 hover:underline"
+            className="hover:underline"
             href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
           >
             {transaction.transactionRef}

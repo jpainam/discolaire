@@ -19,6 +19,7 @@ import {
   UserSquare,
   X,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -26,7 +27,6 @@ import { Label } from "@repo/ui/components/label";
 
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -35,13 +35,9 @@ export function TransactionDetails({
 }: {
   transactionId: number;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
+  const locale = useLocale();
 
-  const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
   const { closeModal } = useModal();
   const trpc = useTRPC();
 
@@ -68,7 +64,7 @@ export function TransactionDetails({
     <div className="grid gap-3 text-sm md:grid-cols-2">
       <Link
         href={`/students/${transaction.studentId}`}
-        className="line-clamp-1 flex flex-row items-center gap-1 underline hover:text-blue-600"
+        className="line-clamp-1 flex flex-row items-center gap-1 hover:underline"
       >
         <UserIcon className="h-4 w-4" />
         {/* <Label>{t("account")}:</Label> */}
@@ -118,7 +114,7 @@ export function TransactionDetails({
       </div>
       <Link
         href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
-        className="flex flex-row items-center gap-1 underline hover:text-blue-600"
+        className="flex flex-row items-center gap-1 hover:underline"
       >
         <FileSliders className="h-4 w-4" />
         {/* <Label>{t("transactionRef")}:</Label> */}
@@ -132,7 +128,11 @@ export function TransactionDetails({
       <div className="flex flex-row items-center gap-1">
         <CalendarDays className="h-4 w-4" />
         {/* <Label>{t("createdAt")}:</Label> */}
-        {fullDateFormatter.format(transaction.createdAt)}
+        {transaction.createdAt.toLocaleDateString(locale, {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
       </div>
       {transaction.deletedAt && (
         <div className="text-destructive flex flex-row items-center gap-1">
@@ -144,7 +144,11 @@ export function TransactionDetails({
         <div className="text-destructive flex flex-row items-center gap-1">
           <Trash2 className="h-4 w-4" />
           {/* <Label>{t("createdAt")}:</Label> */}
-          {fullDateFormatter.format(transaction.deletedAt)}
+          {transaction.deletedAt.toLocaleDateString(locale, {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })}
         </div>
       )}
       <div className="col-span-full flex flex-row items-center gap-1">
