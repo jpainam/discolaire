@@ -30,7 +30,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
+  SidebarSeparator,
 } from "@repo/ui/components/sidebar";
 
 import { authClient } from "~/auth/client";
@@ -40,6 +40,7 @@ import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
+import { Shortcut } from "./shortcuts/Shortcut";
 
 export function MainSidebar({
   ...props
@@ -132,7 +133,7 @@ export function MainSidebar({
 
   const { openModal } = useModal();
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
@@ -140,10 +141,12 @@ export function MainSidebar({
       <SidebarContent>
         <MenuSideGroup items={menus.home} label={"home"} />
         <MenuSideGroup items={menus.data} label={"Data"} />
+        <SidebarSeparator />
         <MenuSideGroup items={menus.tools} label={"tools"} />
+        <SidebarSeparator />
         <MenuSideGroup items={menus.others} label={"others"} />
 
-        <SidebarGroup className="mt-auto md:hidden">
+        <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -163,7 +166,7 @@ export function MainSidebar({
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  {/* <Shortcut /> */}
+                  <Shortcut />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -171,9 +174,9 @@ export function MainSidebar({
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <UserNav className="md:hidden" />
+        <UserNav />
       </SidebarFooter>
-      <SidebarRail />
+      {/* <SidebarRail /> */}
     </Sidebar>
   );
 }
@@ -194,6 +197,7 @@ function MenuSideGroup({
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
+              className="h-7 text-sm"
               asChild
               tooltip={t(item.name)}
               isActive={pathname === item.url}

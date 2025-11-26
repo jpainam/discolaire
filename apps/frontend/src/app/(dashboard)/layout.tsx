@@ -1,30 +1,15 @@
-import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { Separator } from "@repo/ui/components/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@repo/ui/components/sidebar";
-import { Skeleton } from "@repo/ui/components/skeleton";
+import { SidebarInset, SidebarProvider } from "@repo/ui/components/sidebar";
 
 import { getSession } from "~/auth/server";
 import { AppSidebar } from "~/components/app-sidebar";
-import { Breadcrumbs } from "~/components/breadcrumbs";
-import { LanguageSwitcher } from "~/components/LanguageSwitcher";
-import { ModeSwitcher } from "~/components/mode-switcher";
-import NotificationMenu from "~/components/notifications/NotificationMenu";
-import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
-import { Shortcut } from "~/components/shortcuts/Shortcut";
-import { ThemeSelector } from "~/components/ThemeSelector";
-import { TopRightButtons } from "~/components/TopRightButtons";
-import { UserNav } from "~/components/user-nav";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+import { SiteHeader } from "./SideHeader";
 
 export default async function Layout({
   children,
@@ -52,15 +37,10 @@ export default async function Layout({
 
   return (
     <SidebarProvider
-      // style={{
-      //   // @ts-expect-error Ignore
-      //   "--sidebar-width": "14rem",
-      //   "--sidebar-width-mobile": "16rem",
-      // }}
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 64)",
-          "--header-height": "calc(var(--spacing) * 12 + 1px)",
+          //"--sidebar-width": "calc(var(--spacing) * 64)",
+          "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
       defaultOpen={defaultOpen}
@@ -70,48 +50,18 @@ export default async function Layout({
         school={school}
         permissions={permissions}
       >
-        <AppSidebar />
-        <SidebarInset>
-          <header className="bg-background sticky inset-x-0 top-0 isolate z-20 flex shrink-0 items-center gap-2 border-b">
-            <div className="flex w-full items-center gap-2 px-4 py-2">
-              <SidebarTrigger className="-ml-1.5" />
-              <Separator
-                orientation="vertical"
-                className="mr-2 data-[orientation=vertical]:h-4"
-              />
-              {/* <NavHeader /> */}
-              <Breadcrumbs />
-              <div className="ml-auto flex items-center gap-1">
-                <HydrateClient>
-                  <Suspense fallback={<Skeleton className="w-10" />}>
-                    <SchoolYearSwitcher defaultValue={schoolYearId} />
-                  </Suspense>
-                </HydrateClient>
-                <ThemeSelector />
-                <Separator
-                  orientation="vertical"
-                  className="ml-1 hidden w-px data-[orientation=vertical]:h-6 md:block"
-                />
-                <TopRightButtons />
-                <Separator
-                  orientation="vertical"
-                  className="hidden w-px data-[orientation=vertical]:h-6 md:block"
-                />
-                <Shortcut className="hidden md:flex" />
-                <ModeSwitcher />
-                <LanguageSwitcher className="hidden md:flex" />
-                <Separator
-                  orientation="vertical"
-                  className="mr-1 hidden w-px data-[orientation=vertical]:h-6 md:block"
-                />
-                <NotificationMenu userId={session.user.id} />
-                <UserNav className={"hidden md:block"} />
-              </div>
+        <AppSidebar variant="inset" />
+        <SidebarInset className="border">
+          <HydrateClient>
+            <SiteHeader schoolYearId={schoolYearId} />
+          </HydrateClient>
+          <div className="flex flex-1 flex-col">
+            <div className="@container/main flex flex-1 flex-col gap-2">
+              {children}
             </div>
-          </header>
-          {/* <DashaboardLayout /> */}
-          {children}
+          </div>
         </SidebarInset>
+
         <GlobalSheet />
         <GlobalModal />
       </SchoolContextProvider>

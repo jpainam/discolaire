@@ -104,8 +104,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
               <TableHead>Seq 5</TableHead>
               <TableHead>Seq 6</TableHead>
               <TableHead className="text-center">{t("avg")}</TableHead>
-              <TableHead className="text-center">{t("appreciation")}</TableHead>
-              <TableHead className="w-[50px] text-right"></TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -155,10 +154,9 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                   <TableCell className="text-muted-foreground text-center">
                     {avgText}
                   </TableCell>
-                  <TableCell className="text-muted-foreground text-center">
+                  <TableCell className="text-muted-foreground text-center text-right">
                     {getAppreciations(avg)}
                   </TableCell>
-                  <TableCell className="text-right"></TableCell>
                 </TableRow>
               );
             })}

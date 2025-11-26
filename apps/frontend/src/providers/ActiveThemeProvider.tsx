@@ -38,8 +38,8 @@ export function ActiveThemeProvider({
       .forEach((className) => {
         document.body.classList.remove(className);
       });
-    document.body.classList.add(`theme-${activeTheme}`);
-    document.body.classList.add("theme-scaled");
+    //document.body.classList.add(`theme-${activeTheme}`);
+    //document.body.classList.add("theme-scaled");
     // if (activeTheme.endsWith("-scaled")) {
     //   document.body.classList.add("theme-scaled");
     // }

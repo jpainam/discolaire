@@ -5,12 +5,8 @@ import { decode } from "entities";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { getSession } from "~/auth/server";
-import { DashboardClassroomSize } from "~/components/dashboard/DashboardClassroomSize";
-import { EducationalResource } from "~/components/dashboard/EducationalResource";
-import { LatestGradesheet } from "~/components/dashboard/LatestGradesheet";
+import { QuickClassroomList } from "~/components/dashboard/QuickClassroomList";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
-import { ScheduleCard } from "~/components/dashboard/ScheduleCard";
-import { SchoolLife } from "~/components/dashboard/SchoolLife";
 import { Chart01 } from "~/components/dashboard/student/Chart01";
 import { StudentGradeTrend } from "~/components/dashboard/student/StudentGradeTrend";
 import { StudentTransactionStat } from "~/components/dashboard/student/StudentTransactionStats";
@@ -64,60 +60,87 @@ export default async function Page() {
   ]);
 
   return (
-    <div className="@container grid flex-1 gap-2 px-4 py-2 md:grid-cols-2 2xl:grid-cols-2">
-      <Suspense
-        key={"quick-statistics"}
-        fallback={
-          <div className="col-span-full grid grid-cols-1 gap-4 lg:grid-cols-4">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="hidden h-24 w-full lg:flex" />
-            <Skeleton className="hidden h-24 w-full lg:flex" />
-            <Skeleton className="hidden h-24 w-full lg:flex" />
-          </div>
-        }
-      >
-        <QuickStatistics />
-      </Suspense>
-      {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
-      {/* <SchoolFeed /> */}
-
-      <HydrateClient>
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense fallback={<Skeleton className="h-60 w-full" />}>
-            <LatestGradesheet />
-          </Suspense>
-        </ErrorBoundary>
-
-        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
-          <SchoolLife />
+    <HydrateClient>
+      <div className="flex flex-col gap-4 p-4">
+        <Suspense
+          key={"quick-statistics"}
+          fallback={
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="hidden h-24 w-full lg:flex" />
+              <Skeleton className="hidden h-24 w-full lg:flex" />
+              <Skeleton className="hidden h-24 w-full lg:flex" />
+            </div>
+          }
+        >
+          <QuickStatistics />
         </Suspense>
-        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
-          <ScheduleCard />
-        </Suspense>
-        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
-          <EducationalResource />
-        </Suspense>
-        {/* <EffectiveStat className="col-span-full" />
-
-      <ContactCard className="col-span-4" />
-
-      {/* <Suspense>
-        <TransactionStat className="col-span-full" />
-      </Suspense> */}
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense
-            key={"classroom-size"}
-            fallback={
-              <Skeleton className="col-span-full hidden h-60 w-full md:block" />
-            }
-          >
-            <DashboardClassroomSize className="col-span-full hidden md:block" />
-          </Suspense>
-        </ErrorBoundary>
-      </HydrateClient>
-      {/* <UpcomingAssignment /> */}
-      {/* <TransactionStat /> */}
-      {/* <DashboardTransactionTrend className="col-span-full hidden md:block" /> */}
-    </div>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<Skeleton className="h-20" />}>
+              <QuickClassroomList />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+      </div>
+    </HydrateClient>
   );
+
+  // return (
+  //   <div className="@container grid gap-2 px-4 py-2 md:grid-cols-2 2xl:grid-cols-2">
+  //     <Suspense
+  //       key={"quick-statistics"}
+  //       fallback={
+  //         <div className="col-span-full grid grid-cols-1 gap-4 lg:grid-cols-4">
+  //           <Skeleton className="h-24 w-full" />
+  //           <Skeleton className="hidden h-24 w-full lg:flex" />
+  //           <Skeleton className="hidden h-24 w-full lg:flex" />
+  //           <Skeleton className="hidden h-24 w-full lg:flex" />
+  //         </div>
+  //       }
+  //     >
+  //       <QuickStatistics />
+  //     </Suspense>
+  //     {/* <SearchBlock className="col-span-full md:col-span-6" /> */}
+  //     {/* <SchoolFeed /> */}
+
+  //     <HydrateClient>
+  //       <ErrorBoundary errorComponent={ErrorFallback}>
+  //         <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+  //           <LatestGradesheet />
+  //         </Suspense>
+  //       </ErrorBoundary>
+
+  //       <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+  //         <SchoolLife />
+  //       </Suspense>
+  //       <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+  //         <ScheduleCard />
+  //       </Suspense>
+  //       <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+  //         <EducationalResource />
+  //       </Suspense>
+  //       {/* <EffectiveStat className="col-span-full" />
+
+  //     <ContactCard className="col-span-4" />
+
+  //     {/* <Suspense>
+  //       <TransactionStat className="col-span-full" />
+  //     </Suspense> */}
+  //       <ErrorBoundary errorComponent={ErrorFallback}>
+  //         <Suspense
+  //           key={"classroom-size"}
+  //           fallback={
+  //             <Skeleton className="col-span-full hidden h-60 w-full md:block" />
+  //           }
+  //         >
+  //           <DashboardClassroomSize className="col-span-full hidden md:block" />
+  //         </Suspense>
+  //       </ErrorBoundary>
+  //     </HydrateClient>
+  //     {/* <UpcomingAssignment /> */}
+  //     {/* <TransactionStat /> */}
+  //     {/* <DashboardTransactionTrend className="col-span-full hidden md:block" /> */}
+  //   </div>
+  // );
 }

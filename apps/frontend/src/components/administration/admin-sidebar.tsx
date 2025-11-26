@@ -227,7 +227,7 @@ export function AdminSidebar({
   const { t } = useLocale();
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarLogo />
         <SearchForm />

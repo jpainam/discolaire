@@ -31,7 +31,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "@repo/ui/components/sidebar";
 
 import { useLocale } from "~/i18n";
@@ -129,7 +128,7 @@ export function ClassroomSidebar({
   const { t } = useLocale();
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
@@ -151,7 +150,6 @@ export function ClassroomSidebar({
         <MenuSideGroup label="school_life" items={data.school_life} />
         <MenuSideGroup label="others" items={others} />
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   );
 }

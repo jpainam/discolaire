@@ -33,18 +33,17 @@ import {
 } from "@repo/ui/components/popover";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
-import { useSidebar } from "@repo/ui/components/sidebar";
+import { SidebarMenuButton, useSidebar } from "@repo/ui/components/sidebar";
 
 import { env } from "~/env";
 import { useModal } from "~/hooks/use-modal";
 import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
-import { SimpleTooltip } from "../simple-tooltip";
 import { CreateGradesheetShortcut } from "./CreateGradesheetShortcut";
 
 type Shortcut = RouterOutputs["shortcut"]["search"][number];
 
-export function Shortcut({ className }: { className?: string }) {
+export function Shortcut() {
   const [searchQuery, setSearchQuery] = useState("");
   const debounced = useDebouncedCallback((value: string) => {
     void setSearchQuery(value);
@@ -135,7 +134,7 @@ export function Shortcut({ className }: { className?: string }) {
   const shortcuts = shortcutsQuery.data ?? [];
   const { openModal } = useModal();
   return (
-    <div className={className}>
+    <>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         {isMobile ? (
           <PopoverTrigger asChild>
@@ -145,23 +144,21 @@ export function Shortcut({ className }: { className?: string }) {
             </button>
           </PopoverTrigger>
         ) : (
-          <SimpleTooltip content={t("manage_shortcuts")}>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-7">
-                <BookmarkPlus className="h-4 w-4" />
-                <span className="sr-only">{t("shortcuts")}</span>
-              </Button>
-            </PopoverTrigger>
-          </SimpleTooltip>
+          <PopoverTrigger asChild>
+            <SidebarMenuButton>
+              <BookmarkPlus className="h-4 w-4" />
+              <span>{t("shortcuts")}</span>
+            </SidebarMenuButton>
+          </PopoverTrigger>
         )}
-        <PopoverContent className="w-96 p-0" align="end">
+        <PopoverContent className="w-96 p-0" align="start">
           {shortcutsQuery.isPending ? (
             <div className="flex w-32 items-center justify-center">
               <Loader2Icon className="h-8 w-8 animate-spin" />
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between p-4">
+              <div className="flex items-center justify-between px-4 py-1.5">
                 <h3 className="font-medium">{t("shortcuts")}</h3>
                 <Button
                   variant="ghost"
@@ -314,6 +311,6 @@ export function Shortcut({ className }: { className?: string }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

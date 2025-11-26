@@ -34,7 +34,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "@repo/ui/components/sidebar";
 
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -151,7 +150,7 @@ export function StudentSidebar({
   const menus = { informations, academy, school_life, others };
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
@@ -173,7 +172,6 @@ export function StudentSidebar({
         <MenuSideGroup label="school_life" items={menus.school_life} />
         <MenuSideGroup label="others" items={menus.others} />
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   );
 }

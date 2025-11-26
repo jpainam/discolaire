@@ -95,17 +95,6 @@ export async function setSchoolYearCookie(schoolYearId: string) {
   });
 }
 
-export async function setLanguageCookie(language: string) {
-  (await cookies()).set("x-lang", language, {
-    // No expires means the cookie is a session cookie (deleted when browser closes)
-    // For "never expires", set a far future date (e.g., year 9999)
-    expires: new Date("9999-12-31T23:59:59.999Z"),
-    httpOnly: false,
-    secure: false,
-    sameSite: "lax",
-  });
-}
-
 export async function createAuthApiKey() {
   const session = await getSession();
   if (!session) {
