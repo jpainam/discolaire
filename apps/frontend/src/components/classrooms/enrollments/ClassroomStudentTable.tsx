@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import {
   useMutation,
   useQueryClient,
@@ -36,6 +35,7 @@ import {
 
 import { Badge } from "~/components/base-badge";
 import { StudentContactListSheet } from "~/components/students/contacts/StudentContactListSheet";
+import { UserLink } from "~/components/UserLink";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
@@ -179,12 +179,12 @@ export function ClassroomStudentTable({
                   </TableCell>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
-                    <Link
-                      className="hover:underline"
-                      href={`/students/${stud.id}`}
-                    >
-                      {getFullName(stud)}
-                    </Link>
+                    <UserLink
+                      id={stud.id}
+                      name={getFullName(stud)}
+                      avatar={stud.user?.avatar}
+                      profile="student"
+                    />
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {stud.registrationNumber}
