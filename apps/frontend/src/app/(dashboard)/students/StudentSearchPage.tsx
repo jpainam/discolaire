@@ -28,7 +28,7 @@ export function StudentSearchPage() {
 
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [searchResults, setSearchResults] = useState<
-    RouterOutputs["student"]["search"]
+    RouterOutputs["student"]["all"]
   >([]);
   const [isSearching, setIsSearching] = useState(false);
   const { t } = useLocale();

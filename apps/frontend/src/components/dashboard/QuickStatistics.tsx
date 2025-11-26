@@ -1,20 +1,32 @@
+"use client";
+
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   ContactRoundIcon,
   HouseIcon,
   SquareUserIcon,
   UserRound,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-import { getServerTranslations } from "~/i18n/server";
-import { caller } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 
-export async function QuickStatistics() {
-  const enrolled = await caller.enrollment.count({});
-  const classrooms = await caller.classroom.all();
-  const contactCount = await caller.contact.count();
+export function QuickStatistics() {
+  const trpc = useTRPC();
+  const { data: enrolled } = useSuspenseQuery(
+    trpc.enrollment.count.queryOptions({}),
+  );
+  const { data: classrooms } = useSuspenseQuery(
+    trpc.classroom.all.queryOptions(),
+  );
+  const { data: contactCount } = useSuspenseQuery(
+    trpc.contact.count.queryOptions(),
+  );
 
-  const staffCount = await caller.staff.count();
-  const { t } = await getServerTranslations();
+  const { data: staffCount } = useSuspenseQuery(
+    trpc.staff.count.queryOptions(),
+  );
+  const t = useTranslations();
   const stats = [
     {
       title: t("total_students"),

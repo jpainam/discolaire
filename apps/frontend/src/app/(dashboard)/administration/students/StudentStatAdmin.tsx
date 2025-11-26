@@ -17,7 +17,7 @@ function formatNumber(n: number) {
 }
 
 export async function StudentStatAdmin() {
-  const enrolled = await caller.student.all({ limit: 10000 });
+  const enrolled = await caller.enrollment.all({ limit: 10000 });
   const femaleCount = enrolled.filter((std) => std.gender == "female").length;
   const maleCount = enrolled.filter((std) => std.gender == "male").length;
   const previousYear = await caller.schoolYear.getPrevious();

@@ -22,7 +22,7 @@ import { ImportStudentContainer } from "./import/ImportStudentContainer";
 
 export default async function Page() {
   const { t } = await getServerTranslations();
-  const enrolled = await caller.student.all({ limit: 10000 });
+  const enrolled = await caller.enrollment.all({ limit: 10000 });
   const newStudents = enrolled.filter((std) => std.isNew);
   const excluded = await caller.student.excluded();
   return (

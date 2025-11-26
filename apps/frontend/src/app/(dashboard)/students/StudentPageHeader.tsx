@@ -44,7 +44,7 @@ export function StudentPageHeader() {
   const [search, setSearch] = useState("");
   const trpc = useTRPC();
   const students = useQuery(
-    trpc.student.search.queryOptions({
+    trpc.student.all.queryOptions({
       query: search,
     }),
   );

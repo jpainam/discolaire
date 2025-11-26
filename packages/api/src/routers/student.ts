@@ -68,6 +68,8 @@ export const studentRouter = {
       z
         .object({
           limit: z.number().optional().default(10),
+          query: z.string().optional(),
+          classroomId: z.string().optional(),
         })
         .optional(),
     )
@@ -86,45 +88,26 @@ export const studentRouter = {
           contact.id,
         );
         studentIds.push(...studentContacts.map((sc) => sc.studentId));
-      }
-      return ctx.services.enrollment.getEnrollStudents({
-        schoolYearId: ctx.schoolYearId,
-        limit: input?.limit,
-        studentIds,
-      });
-    }),
-  search: protectedProcedure
-    .input(
-      z.object({
-        limit: z.number().optional().default(30),
-        query: z.string().optional().default(""),
-        classroomId: z.string().optional(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      if (ctx.session.user.profile != "staff") {
-        return [];
-      }
-      const canReadStudent = checkPermission(
-        "student",
-        "Read",
-        {},
-        ctx.permissions,
-      );
-      const studentIds: string[] = [];
-      if (!canReadStudent) {
-        const staff = await ctx.services.staff.getFromUserId(
-          ctx.session.user.id,
+      } else {
+        const canReadStudent = checkPermission(
+          "student",
+          "Read",
+          {},
+          ctx.permissions,
         );
-        const students = await ctx.services.staff.getStudents(
-          staff.id,
-          ctx.schoolYearId,
-        );
-        studentIds.push(...students.map((s) => s.id));
+        if (!canReadStudent) {
+          const staff = await ctx.services.staff.getFromUserId(
+            ctx.session.user.id,
+          );
+          const students = await ctx.services.staff.getStudents(
+            staff.id,
+            ctx.schoolYearId,
+          );
+          studentIds.push(...students.map((s) => s.id));
+        }
       }
-
       const data = await ctx.db.student.findMany({
-        take: input.limit,
+        take: input?.limit ?? 100,
         orderBy: {
           lastName: "asc",
         },
@@ -134,12 +117,12 @@ export const studentRouter = {
             some: {
               //schoolYearId: ctx.schoolYearId,
               classroom: {
-                ...(input.classroomId ? { id: input.classroomId } : {}),
+                ...(input?.classroomId ? { id: input.classroomId } : {}),
               },
             },
           },
           ...(studentIds.length > 0 ? { id: { in: studentIds } } : {}),
-          ...whereClause(input.query).where,
+          ...(input?.query ? whereClause(input.query).where : {}),
         },
         include: {
           formerSchool: true,

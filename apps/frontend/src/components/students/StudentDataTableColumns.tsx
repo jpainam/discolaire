@@ -33,7 +33,7 @@ import { getAge, getFullName } from "~/utils";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
 
-type StudentAllProcedureOutput = RouterOutputs["student"]["all"][number];
+type StudentAllProcedureOutput = RouterOutputs["enrollment"]["all"][number];
 
 interface UseStudentColumnsProps {
   t: TFunction<string, unknown>;
@@ -359,7 +359,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.enrollment.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {

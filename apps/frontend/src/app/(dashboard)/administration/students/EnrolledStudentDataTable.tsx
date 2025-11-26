@@ -13,7 +13,7 @@ export function EnrolledStudentDataTable({
   students,
   newStudent,
 }: {
-  students: RouterOutputs["student"]["all"];
+  students: RouterOutputs["enrollment"]["all"];
   newStudent: boolean;
 }) {
   const { t } = useLocale();

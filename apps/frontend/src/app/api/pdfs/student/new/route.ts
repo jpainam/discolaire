@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
       obj[key] = value;
     }
 
-    const enrolled = await caller.student.all({ limit: 10000 });
+    const enrolled = await caller.enrollment.all({ limit: 10000 });
     const newStudents = enrolled.filter((std) => std.isNew);
     const { blob, headers } = await toExcel({ students: newStudents });
     return new Response(blob, { headers });
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 async function toExcel({
   students,
 }: {
-  students: RouterOutputs["student"]["all"];
+  students: RouterOutputs["enrollment"]["all"];
 }) {
   const t = await getTranslations();
   const studentIds = students.map((student) => student.id);

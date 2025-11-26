@@ -9,7 +9,7 @@ export async function searchStudents({
   q?: string;
   classroomId: string | null;
 }) {
-  return caller.student.search({
+  return caller.student.all({
     query: q,
     classroomId: classroomId ?? undefined,
     limit: 10,

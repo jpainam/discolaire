@@ -35,7 +35,7 @@ export function StudentSearchDialog({
   const trpc = useTRPC();
 
   const studentsQuery = useQuery(
-    trpc.student.search.queryOptions({
+    trpc.student.all.queryOptions({
       query: debounceValue,
     }),
   );
@@ -43,7 +43,7 @@ export function StudentSearchDialog({
   const { closeModal } = useModal();
 
   const handleSuggestionClick = (
-    student: RouterOutputs["student"]["search"][number],
+    student: RouterOutputs["student"]["all"][number],
   ) => {
     onSelect({
       id: student.id,

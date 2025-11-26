@@ -43,10 +43,9 @@ export function QuickClassroomList() {
           {t("classrooms")}
         </h2>
 
-        <InputGroup className="h-7 w-[140px] sm:w-[180px] md:w-[235px]">
+        <InputGroup className="w-[140px] sm:w-[180px] md:w-[235px]">
           <InputGroupInput
             onChange={(event) => setQuery(event.target.value)}
-            className="text-muted-foreground text-sm"
             placeholder={t("search")}
           />
           <InputGroupAddon>

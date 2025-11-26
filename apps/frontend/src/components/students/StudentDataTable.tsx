@@ -12,7 +12,9 @@ import { fetchStudentColumns } from "./StudentDataTableColumns";
 
 export function StudentDataTable() {
   const trpc = useTRPC();
-  const { data: students } = useSuspenseQuery(trpc.student.all.queryOptions());
+  const { data: students } = useSuspenseQuery(
+    trpc.enrollment.all.queryOptions(),
+  );
   const { t } = useLocale();
 
   const columns = useMemo(() => {

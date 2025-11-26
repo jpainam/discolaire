@@ -110,7 +110,7 @@ export function StudentHeader() {
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.enrollment.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
         router.push(routes.students.index);
       },
@@ -169,7 +169,7 @@ export function StudentHeader() {
   const [label, setLabel] = useState(getFullName(student));
   const [search, setSearch] = useState("");
   const studentsQuery = useQuery(
-    trpc.student.search.queryOptions({
+    trpc.student.all.queryOptions({
       query: search,
     }),
   );

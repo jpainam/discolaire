@@ -52,7 +52,7 @@ function SearchStudent() {
     isPending,
     isRefetching,
     refetch,
-  } = useQuery(trpc.student.search.queryOptions({ query }));
+  } = useQuery(trpc.student.all.queryOptions({ query }));
 
   const borderColor = useThemeColor({}, "border");
   const theme = useColorScheme() ?? "light";
@@ -106,7 +106,7 @@ function ContactStudent() {
     isPending,
     isRefetching,
     refetch,
-  } = useQuery(trpc.student.all.queryOptions());
+  } = useQuery(trpc.enrollment.all.queryOptions());
   const borderColor = useThemeColor({}, "border");
 
   return (

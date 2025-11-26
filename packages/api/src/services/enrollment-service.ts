@@ -124,33 +124,15 @@ export class EnrollmentService {
         // If you only want students enrolled in the given year, uncomment:
         enrollments: { some: { schoolYearId: targetSchoolYearId } },
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        lastAccessed: true,
-        registrationNumber: true,
-        dateOfEntry: true,
-        residence: true,
-        phoneNumber: true,
-        placeOfBirth: true,
-        isRepeating: true,
-        dateOfBirth: true,
-        // keep only what you use; add more fields if you really need them
+      include: {
         formerSchool: true,
-        gender: true,
         religion: true,
         user: true,
         country: true,
         enrollments: {
-          select: {
-            id: true,
-            schoolYearId: true,
-            schoolYear: { select: { id: true, name: true, startDate: true } },
-            classroomId: true,
-            classroom: {
-              select: { id: true, name: true, levelId: true, reportName: true },
-            },
+          include: {
+            classroom: true,
+            schoolYear: true,
           },
         },
       },

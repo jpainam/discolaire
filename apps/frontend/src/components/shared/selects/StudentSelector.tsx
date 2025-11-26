@@ -44,7 +44,7 @@ export function StudentSelector({
   const { t } = useLocale();
   const [label, setLabel] = React.useState(t("select_an_option"));
   const trpc = useTRPC();
-  const studentsQuery = useQuery(trpc.student.all.queryOptions());
+  const studentsQuery = useQuery(trpc.enrollment.all.queryOptions());
 
   React.useEffect(() => {
     if (studentsQuery.data) {

@@ -5,6 +5,36 @@ import { z } from "zod/v4";
 import { protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = {
+  all: protectedProcedure
+    .input(
+      z
+        .object({
+          limit: z.number().optional().default(10),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      const studentIds: string[] = [];
+      if (ctx.session.user.profile === "student") {
+        const student = await ctx.services.student.getFromUserId(
+          ctx.session.user.id,
+        );
+        studentIds.push(student.id);
+      } else if (ctx.session.user.profile === "contact") {
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studentContacts = await ctx.services.contact.getStudents(
+          contact.id,
+        );
+        studentIds.push(...studentContacts.map((sc) => sc.studentId));
+      }
+      return ctx.services.enrollment.getEnrollStudents({
+        schoolYearId: ctx.schoolYearId,
+        limit: input?.limit,
+        studentIds,
+      });
+    }),
   students: protectedProcedure
     .input(z.object({ classroomId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {

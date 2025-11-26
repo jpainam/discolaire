@@ -9,8 +9,8 @@ export function StudentListItem({
   student,
 }: {
   student:
-    | RouterOutputs["student"]["search"][number]
-    | RouterOutputs["student"]["all"][number];
+    | RouterOutputs["student"]["all"][number]
+    | RouterOutputs["enrollment"]["all"][number];
 }) {
   return (
     <Link href={`/student/${student.id}`} asChild>

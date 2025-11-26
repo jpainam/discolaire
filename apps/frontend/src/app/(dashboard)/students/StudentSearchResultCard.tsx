@@ -32,8 +32,10 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 
 import { AvatarState } from "~/components/AvatarState";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useLocale } from "~/i18n";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -41,7 +43,7 @@ import { getFullName } from "~/utils";
 export function StudentSearchResultCard({
   student,
 }: {
-  student: RouterOutputs["student"]["search"][number];
+  student: RouterOutputs["student"]["all"][number];
 }) {
   const { t } = useLocale();
   const router = useRouter();
@@ -49,6 +51,10 @@ export function StudentSearchResultCard({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const confirm = useConfirm();
+  const canDeleteStudent = useCheckPermission(
+    "student",
+    PermissionAction.DELETE,
+  );
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({
@@ -202,25 +208,29 @@ export function StudentSearchResultCard({
                 <GraduationCap className="h-4 w-4" />
                 {t("View Grades")}
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation", {
-                      name: getFullName(student),
-                    }),
-                  });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteStudentMutation.mutate(student.id);
-                  }
-                }}
-                variant="destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-                {t("delete")}
-              </DropdownMenuItem>
+              {canDeleteStudent && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation", {
+                          name: getFullName(student),
+                        }),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteStudentMutation.mutate(student.id);
+                      }
+                    }}
+                    variant="destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

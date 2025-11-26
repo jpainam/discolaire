@@ -24,7 +24,7 @@ export function CreateStudentTransaction({
   const router = useRouter();
 
   const studentsQuery = useQuery(
-    trpc.student.search.queryOptions({
+    trpc.student.all.queryOptions({
       query: search,
     }),
   );

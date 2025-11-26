@@ -13,7 +13,7 @@ export function EnrolledStudentDataTableAction({
   table,
   newStudent,
 }: {
-  table: Table<NonNullable<RouterOutputs["student"]["all"]>[number]>;
+  table: Table<NonNullable<RouterOutputs["enrollment"]["all"]>[number]>;
   newStudent: boolean;
 }) {
   const { t } = useLocale();

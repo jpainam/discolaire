@@ -7,6 +7,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { getSession } from "~/auth/server";
 import { QuickClassroomList } from "~/components/dashboard/QuickClassroomList";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
+import { QuickStudentList } from "~/components/dashboard/QuickStudentList";
 import { Chart01 } from "~/components/dashboard/student/Chart01";
 import { StudentGradeTrend } from "~/components/dashboard/student/StudentGradeTrend";
 import { StudentTransactionStat } from "~/components/dashboard/student/StudentTransactionStats";
@@ -57,6 +58,9 @@ export default async function Page() {
   batchPrefetch([
     trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 }),
     trpc.classroom.all.queryOptions(),
+    trpc.enrollment.count.queryOptions({}),
+    trpc.contact.count.queryOptions(),
+    trpc.staff.count.queryOptions(),
   ]);
 
   return (
@@ -82,6 +86,18 @@ export default async function Page() {
             </Suspense>
           </ErrorBoundary>
         </div>
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 gap-4 px-4">
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </div>
+            }
+          >
+            <QuickStudentList />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </HydrateClient>
   );

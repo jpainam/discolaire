@@ -16,7 +16,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 type StudentGetAllProcedureOutput = NonNullable<
-  RouterOutputs["student"]["all"]
+  RouterOutputs["enrollment"]["all"]
 >[number];
 
 export function StudentDataTableActions({
@@ -40,7 +40,7 @@ export function StudentDataTableActions({
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.enrollment.pathFilter());
         table.toggleAllRowsSelected(false);
         toast.success(t("deleted_successfully"), { id: 0 });
       },

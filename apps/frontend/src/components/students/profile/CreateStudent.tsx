@@ -107,7 +107,7 @@ export function CreateStudent() {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async (result) => {
-        await queryClient.invalidateQueries(trpc.student.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.enrollment.pathFilter());
         router.push(routes.students.details(result.id));
         toast.success(t("created_successfully"), { id: 0 });
       },
