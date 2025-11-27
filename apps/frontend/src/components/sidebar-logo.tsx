@@ -1,23 +1,51 @@
 import { useCallback } from "react";
-import { ChevronDown, ComputerIcon, MoonIcon, Search, SunIcon, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  ChevronDown,
+  ComputerIcon,
+  MoonIcon,
+  Search,
+  SunIcon,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
-
-
 //import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@repo/ui/components/sidebar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@repo/ui/components/dropdown-menu";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@repo/ui/components/input-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@repo/ui/components/input-group";
 import { Kbd } from "@repo/ui/components/kbd";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@repo/ui/components/sidebar";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@repo/ui/components/sidebar";
 
-
-
-import { changeLocaleAction, changeScaledThemeAction } from "~/actions/change_locale";
+import {
+  changeLocaleAction,
+  changeScaledThemeAction,
+} from "~/actions/change_locale";
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useRouter } from "~/hooks/use-router";
 import { ThemeSelector } from "./ThemeSelector";
-
 
 export function SidebarLogo() {
   const { isMobile } = useSidebar();
