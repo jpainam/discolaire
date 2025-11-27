@@ -1,245 +1,89 @@
 "use client";
 
-import { useState } from "react";
-import { Calendar as CalendarIcon, ChevronDown, Users } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { FileTextIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
+import type { ChartConfig } from "@repo/ui/components/chart";
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@repo/ui/components/chart";
 
-import { Button } from "@repo/ui/components/button";
-import { Calendar } from "@repo/ui/components/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui/components/popover";
+import { useTRPC } from "~/trpc/react";
 
-// Couleurs exactes du design Figma
-const NEW_LEADS_COLOR_LIGHT = "#252C2C";
-const NEW_LEADS_COLOR_DARK = "#E8E9ED"; // Gris clair pour dark mode
-const REPLIED_COLOR = "#888DF9";
+export const description = "A multiple bar chart";
 
-// Couleurs pour les labels selon le thème
-const LABEL_COLOR_LIGHT = "#95979d";
-const LABEL_COLOR_DARK = "#B4B4B4"; // Gris clair pour dark mode
-
-// Couleurs pour la grille selon le thème
-const GRID_COLOR_LIGHT = "#E8E9ED";
-const GRID_COLOR_DARK = "#2A2A2A";
-
-export interface ChartDataPoint {
-  month: string;
-  newLeads: number;
-  replied: number;
-}
-
-export const mockChartData: ChartDataPoint[] = [
-  { month: "Jan", newLeads: 600, replied: 400 },
-  { month: "Feb", newLeads: 800, replied: 600 },
-  { month: "Mar", newLeads: 748, replied: 512 },
-  { month: "Apr", newLeads: 900, replied: 700 },
-  { month: "May", newLeads: 500, replied: 350 },
-  { month: "Jun", newLeads: 750, replied: 550 },
-];
+const chartConfig = {
+  max: {
+    label: "Max",
+    color: "var(--chart-3)",
+  },
+  average: {
+    label: "Moy.",
+    color: "var(--chart-4)",
+  },
+} satisfies ChartConfig;
 
 export function QuickChartCard() {
-  const { resolvedTheme } = useTheme();
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
-
-  // Utiliser resolvedTheme pour gérer le thème système
-  // resolvedTheme sera undefined jusqu'au montage, donc on utilise light par défaut
-  const isDark = resolvedTheme === "dark";
-  const newLeadsColor = isDark ? NEW_LEADS_COLOR_DARK : NEW_LEADS_COLOR_LIGHT;
-  const labelColor = isDark ? LABEL_COLOR_DARK : LABEL_COLOR_LIGHT;
-  const gridColor = isDark ? GRID_COLOR_DARK : GRID_COLOR_LIGHT;
-
-  const formatDateRange = (date: Date | undefined) => {
-    if (!date) return "November";
-    const month = date.toLocaleDateString("en-US", { month: "long" });
-    return month;
-  };
-
+  const trpc = useTRPC();
+  const { data: latestGradesheet } = useSuspenseQuery(
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 7 }),
+  );
+  const t = useTranslations();
+  const grades = useMemo(() => {
+    return latestGradesheet.map((g) => {
+      return {
+        name: g.subject.course.shortName,
+        max: Math.max(...g.grades.map((grade) => grade.grade)),
+        min: Math.min(...g.grades.map((grade) => grade.grade)),
+        average: Number(
+          (
+            g.grades.reduce((acc, grade) => acc + grade.grade, 0) /
+            g.grades.length
+          ).toFixed(2),
+        ),
+      };
+    });
+  }, [latestGradesheet]);
   return (
     <div className="border-border bg-card relative max-h-[400px] overflow-y-auto rounded-xl border p-6">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Users className="text-muted-foreground size-4" />
+          <FileTextIcon className="text-muted-foreground size-4" />
           <h2 className="text-foreground text-[15px] font-normal tracking-[-0.45px]">
-            Leads Over Time
+            {t("Recent Grades")}
           </h2>
         </div>
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-7 gap-2 px-[10px] py-[4px] text-xs"
-            >
-              <CalendarIcon className="size-4" />
-              {formatDateRange(date)}
-              <ChevronDown className="size-3" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
-            <Calendar
-              mode="single"
-              selected={date}
-              captionLayout="dropdown"
-              //   onSelect={(selectedDate) => {
-              //     setDate(selectedDate);
-              //     setOpen(false);
-              //   }}
-            />
-          </PopoverContent>
-        </Popover>
       </div>
-
-      <div className="mb-4 flex items-center justify-center gap-[22px]">
-        <div className="flex items-center gap-1.5">
-          <div
-            className="size-3 rounded-full"
-            style={{ backgroundColor: newLeadsColor }}
-          />
-          <span className="text-muted-foreground text-xs font-medium tracking-[-0.24px]">
-            New Leads
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div
-            className="size-3 rounded-full"
-            style={{ backgroundColor: REPLIED_COLOR }}
-          />
-          <span className="text-muted-foreground text-xs font-medium tracking-[-0.24px]">
-            Replied
-          </span>
-        </div>
-      </div>
-
-      <div>
-        <ResponsiveContainer width="100%" height={237}>
-          <BarChart
-            data={mockChartData}
-            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-            barCategoryGap={4}
-            barGap={5}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke={gridColor}
-              strokeWidth={1}
-            />
+      <div className="">
+        <ChartContainer className="h-75 w-full" config={chartConfig}>
+          <BarChart accessibilityLayer data={grades}>
+            <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
-              tick={{
-                fill: labelColor,
-                fontSize: 12,
-                fontWeight: 400,
-                fontFamily: "inherit",
-              }}
-              axisLine={false}
+              dataKey="name"
               tickLine={false}
-              tickMargin={13}
-              style={{
-                letterSpacing: "-0.24px",
-              }}
-            />
-            <YAxis
-              tick={{
-                fill: labelColor,
-                fontSize: 12,
-                fontWeight: 400,
-                fontFamily: "inherit",
-              }}
+              tickMargin={10}
+              width={4}
               axisLine={false}
-              tickLine={false}
-              domain={[0, 1000]}
-              ticks={[0, 250, 500, 750, 1000]}
-              tickFormatter={(value) => {
-                if (value === 1000) return "1,000";
-                return value.toString();
-              }}
-              style={{
-                letterSpacing: "-0.24px",
-              }}
-              width={40}
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+              tickFormatter={(value) => value.slice(0, 3)}
             />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "transparent",
-                border: "none",
-                boxShadow: "none",
-                padding: 0,
-              }}
-              wrapperStyle={{
-                outline: "none",
-              }}
-              content={({ active, payload, label }) => {
-                if (!active || !payload?.length) return null;
-                const newLeadsEntry = payload.find(
-                  (p) => p.dataKey === "newLeads",
-                );
-                const repliedEntry = payload.find(
-                  (p) => p.dataKey === "replied",
-                );
-                return (
-                  <div className="border-border bg-card rounded-lg border p-2 shadow-lg">
-                    <p className="text-foreground mb-1.5 text-xs font-medium tracking-[-0.24px]">
-                      {label}, 2025
-                    </p>
-                    {newLeadsEntry && (
-                      <div className="mb-1 flex items-center gap-1.5">
-                        <div
-                          className="size-2.5 rounded-full"
-                          style={{ backgroundColor: newLeadsColor }}
-                        />
-                        <span className="text-foreground flex-1 text-xs font-medium tracking-[-0.24px]">
-                          {newLeadsEntry.value}
-                        </span>
-                        <span className="text-muted-foreground text-xs font-medium tracking-[-0.24px]">
-                          +92
-                        </span>
-                      </div>
-                    )}
-                    {repliedEntry && (
-                      <div className="flex items-center gap-1.5">
-                        <div
-                          className="size-2.5 rounded-full"
-                          style={{ backgroundColor: REPLIED_COLOR }}
-                        />
-                        <span className="text-foreground flex-1 text-xs font-medium tracking-[-0.24px]">
-                          {repliedEntry.value}
-                        </span>
-                        <span className="text-xs font-medium tracking-[-0.24px] text-[#888df9]">
-                          +67
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                );
-              }}
+            <YAxis width={25} />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar
-              dataKey="newLeads"
-              fill={newLeadsColor}
-              radius={[4.912, 4.912, 0, 0]}
-              barSize={30}
-            />
-            <Bar
-              dataKey="replied"
-              fill={REPLIED_COLOR}
-              radius={[4.912, 4.912, 0, 0]}
-              barSize={30}
-            />
+            <ChartLegend content={<ChartLegendContent />} />
+            <Bar dataKey="max" fill="var(--color-max)" radius={4} />
+            <Bar dataKey="average" fill="var(--color-average)" radius={4} />
           </BarChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </div>
     </div>
   );

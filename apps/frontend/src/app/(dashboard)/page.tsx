@@ -82,7 +82,15 @@ export default async function Page() {
         </Suspense>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense fallback={<Skeleton className="h-20" />}>
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-1 gap-4">
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                </div>
+              }
+            >
               <QuickChartCard />
             </Suspense>
           </ErrorBoundary>

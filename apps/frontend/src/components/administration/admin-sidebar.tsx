@@ -32,7 +32,6 @@ import {
 } from "@repo/ui/components/sidebar";
 
 import { useLocale } from "~/i18n";
-import { SearchForm } from "../search-form";
 import { SidebarLogo } from "../sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
@@ -230,7 +229,6 @@ export function AdminSidebar({
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarLogo />
-        <SearchForm />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={adminMenu.navMain} />
