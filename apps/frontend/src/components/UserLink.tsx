@@ -8,6 +8,8 @@ import {
   AvatarImage,
 } from "@repo/ui/components/avatar";
 
+import { cn } from "~/lib/utils";
+
 export function UserLink(props: {
   name: string;
   id: string;
@@ -35,7 +37,10 @@ export function UserLink(props: {
         />
         <AvatarFallback></AvatarFallback>
       </Avatar>
-      <Link href={urls[props.profile]} className="hover:underline">
+      <Link
+        href={urls[props.profile]}
+        className={cn("hover:underline", props.className)}
+      >
         {props.name}
       </Link>
     </div>

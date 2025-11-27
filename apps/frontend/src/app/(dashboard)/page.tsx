@@ -5,6 +5,7 @@ import { decode } from "entities";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { getSession } from "~/auth/server";
+import { QuickChartCard } from "~/components/dashboard/QuickChartCard";
 import { QuickClassroomList } from "~/components/dashboard/QuickClassroomList";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { QuickStudentList } from "~/components/dashboard/QuickStudentList";
@@ -80,6 +81,11 @@ export default async function Page() {
           <QuickStatistics />
         </Suspense>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<Skeleton className="h-20" />}>
+              <QuickChartCard />
+            </Suspense>
+          </ErrorBoundary>
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-20" />}>
               <QuickClassroomList />

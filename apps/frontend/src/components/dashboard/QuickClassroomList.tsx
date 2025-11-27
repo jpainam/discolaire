@@ -40,10 +40,10 @@ export function QuickClassroomList() {
     <div className="border-border bg-card relative flex max-h-[400px] flex-col overflow-hidden rounded-xl border">
       <div className="flex flex-wrap items-center justify-between gap-2 px-4 pt-[15px] pb-4">
         <h2 className="text-foreground text-[15px] font-normal tracking-[-0.45px]">
-          {t("classrooms")}
+          {t("Classroom list")}
         </h2>
 
-        <InputGroup className="w-[140px] sm:w-[180px] md:w-[235px]">
+        <InputGroup className="h-7 w-[140px] sm:w-[180px] md:w-[235px]">
           <InputGroupInput
             onChange={(event) => setQuery(event.target.value)}
             placeholder={t("search")}

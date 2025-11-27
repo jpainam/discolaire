@@ -22,9 +22,11 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ActiveThemeProvider({
   children,
   initialTheme,
+  isScaled,
 }: {
   children: ReactNode;
   initialTheme?: string;
+  isScaled?: boolean;
 }) {
   const [activeTheme, setActiveTheme] = useState<string>(
     () => initialTheme ?? DEFAULT_THEME,
@@ -39,11 +41,11 @@ export function ActiveThemeProvider({
         document.body.classList.remove(className);
       });
     //document.body.classList.add(`theme-${activeTheme}`);
-    //document.body.classList.add("theme-scaled");
+    if (isScaled) document.body.classList.add("theme-scaled");
     // if (activeTheme.endsWith("-scaled")) {
     //   document.body.classList.add("theme-scaled");
     // }
-  }, [activeTheme]);
+  }, [activeTheme, isScaled]);
 
   return (
     <ThemeContext.Provider value={{ activeTheme, setActiveTheme }}>

@@ -10,21 +10,21 @@ import { checkPermission } from "../permission";
 import { protectedProcedure } from "../trpc";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
-  const qq = `%${q}%`;
+  const qq = q;
   return {
     where: {
       AND: [
         {
           OR: [
-            { id: { startsWith: qq, mode: "insensitive" } },
-            { firstName: { startsWith: qq, mode: "insensitive" } },
-            { lastName: { startsWith: qq, mode: "insensitive" } },
-            { residence: { startsWith: qq, mode: "insensitive" } },
-            { phoneNumber: { startsWith: qq, mode: "insensitive" } },
+            { id: { contains: qq, mode: "insensitive" } },
+            { firstName: { contains: qq, mode: "insensitive" } },
+            { lastName: { contains: qq, mode: "insensitive" } },
+            { residence: { contains: qq, mode: "insensitive" } },
+            { phoneNumber: { contains: qq, mode: "insensitive" } },
             {
-              user: { email: { startsWith: qq, mode: "insensitive" } },
+              user: { email: { contains: qq, mode: "insensitive" } },
             },
-            { registrationNumber: { startsWith: qq, mode: "insensitive" } },
+            { registrationNumber: { contains: qq, mode: "insensitive" } },
           ],
         },
       ],
@@ -70,6 +70,7 @@ export const studentRouter = {
           limit: z.number().optional().default(10),
           query: z.string().optional(),
           classroomId: z.string().optional(),
+          schoolYearId: z.string().optional(),
         })
         .optional(),
     )
@@ -115,7 +116,9 @@ export const studentRouter = {
           schoolId: ctx.schoolId,
           enrollments: {
             some: {
-              //schoolYearId: ctx.schoolYearId,
+              ...(input?.schoolYearId
+                ? { schoolYearId: input.schoolYearId }
+                : {}),
               classroom: {
                 ...(input?.classroomId ? { id: input.classroomId } : {}),
               },
@@ -436,7 +439,7 @@ export const studentRouter = {
       }),
     )
     .query(async ({ ctx, input }) => {
-      const qq = `%${input.q}%`;
+      const qq = input.q;
       return ctx.db.contact.findMany({
         take: input.limit,
         include: {
@@ -452,11 +455,11 @@ export const studentRouter = {
             },
             {
               OR: [
-                { firstName: { startsWith: qq, mode: "insensitive" } },
-                { lastName: { startsWith: qq, mode: "insensitive" } },
-                { phoneNumber1: { startsWith: qq, mode: "insensitive" } },
-                { phoneNumber2: { startsWith: qq, mode: "insensitive" } },
-                { user: { email: { startsWith: qq, mode: "insensitive" } } },
+                { firstName: { contains: qq, mode: "insensitive" } },
+                { lastName: { contains: qq, mode: "insensitive" } },
+                { phoneNumber1: { contains: qq, mode: "insensitive" } },
+                { phoneNumber2: { contains: qq, mode: "insensitive" } },
+                { user: { email: { contains: qq, mode: "insensitive" } } },
               ],
             },
             {

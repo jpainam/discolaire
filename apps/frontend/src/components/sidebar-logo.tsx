@@ -35,7 +35,10 @@ import {
   useSidebar,
 } from "@repo/ui/components/sidebar";
 
-import { changeLocaleAction } from "~/actions/change_locale";
+import {
+  changeLocaleAction,
+  changeScaledThemeAction,
+} from "~/actions/change_locale";
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useRouter } from "~/hooks/use-router";
 
@@ -103,11 +106,21 @@ export function SidebarLogo() {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Zoom</DropdownMenuLabel>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={async () => {
+                document.body.classList.remove("theme-scaled");
+                await changeScaledThemeAction(false);
+              }}
+            >
               <ZoomIn />
               100%
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={async () => {
+                document.body.classList.add("theme-scaled");
+                await changeScaledThemeAction(true);
+              }}
+            >
               <ZoomOut />
               80%
             </DropdownMenuItem>

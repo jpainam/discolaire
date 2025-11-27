@@ -54,6 +54,7 @@ export const viewport: Viewport = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const activeThemeValue = cookieStore.get("active_theme")?.value ?? "caffeine";
+  const isScaled = cookieStore.get("theme-scaled")?.value == "true";
 
   const locale = await getLocale();
   const lng = await detectLanguage();
@@ -98,7 +99,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
               disableTransitionOnChange
               enableColorScheme
             >
-              <ActiveThemeProvider initialTheme={activeThemeValue}>
+              <ActiveThemeProvider
+                initialTheme={activeThemeValue}
+                isScaled={isScaled}
+              >
                 <NuqsAdapter>
                   <TRPCReactProvider>
                     {/* <AuthProvider userPromise={userPromise}> */}
