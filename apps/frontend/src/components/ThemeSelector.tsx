@@ -1,7 +1,14 @@
 "use client";
 
 import { useCallback } from "react";
-import { Check, ChevronDown, Moon, Shuffle, Sun } from "lucide-react";
+import {
+  BarcodeIcon,
+  Check,
+  ChevronDown,
+  Moon,
+  Shuffle,
+  Sun,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@repo/ui/components/button";
@@ -27,13 +34,12 @@ import {
 
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useLocale } from "~/i18n";
-import { cn } from "~/lib/utils";
 import { useThemeConfig } from "~/providers/ActiveThemeProvider";
 import { defaultThemes } from "~/themes";
 
 type ThemeKey = keyof typeof defaultThemes;
 
-export function ThemeSelector({ className }: { className?: string }) {
+export function ThemeSelector() {
   const { activeTheme, setActiveTheme } = useThemeConfig();
   const { t } = useLocale();
 
@@ -49,24 +55,18 @@ export function ThemeSelector({ className }: { className?: string }) {
       <PopoverTrigger asChild>
         <Button
           id="theme-selector"
+          className="flex w-full justify-between"
           size="sm"
           variant="ghost"
-          className={cn(
-            "h-7 justify-start text-xs *:data-[slot=select-value]:w-12",
-            className,
-          )}
         >
-          <span className="text-muted-foreground hidden sm:block">
-            {t("theme")}:
-          </span>
-          <span className="text-muted-foreground block sm:hidden">
-            {t("theme")}
-          </span>
-          <span>{defaultThemes[themeKey].label}</span>
+          <div className="flex items-center gap-2">
+            <BarcodeIcon className="text-muted-foreground" />
+            <span>{defaultThemes[themeKey].label}</span>
+          </div>
           <ChevronDown className="size-4 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0" align="center">
+      <PopoverContent side="right" className="w-[300px] p-0" align="start">
         <Command className="h-100 w-full rounded-lg border shadow-md">
           <CommandInput placeholder={t("search")} />
           <div className="flex items-center justify-between px-4 py-2">

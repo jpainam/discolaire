@@ -1229,6 +1229,7 @@
     --text-base: 0.85rem;
     --text-sm: 0.8rem;
     --spacing: 0.2rem;
+    --sidebar-width: calc(var(--spacing) * 64);
   }
 }
 

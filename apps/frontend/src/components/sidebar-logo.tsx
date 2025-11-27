@@ -41,6 +41,7 @@ import {
 } from "~/actions/change_locale";
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useRouter } from "~/hooks/use-router";
+import { ThemeSelector } from "./ThemeSelector";
 
 export function SidebarLogo() {
   const { isMobile } = useSidebar();
@@ -92,6 +93,9 @@ export function SidebarLogo() {
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
           >
             <DropdownMenuLabel>{t("Appearance")}</DropdownMenuLabel>
+            <DropdownMenuItem asChild>
+              <ThemeSelector />
+            </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => toggleTheme("dark")}>
               <MoonIcon />
               Dark

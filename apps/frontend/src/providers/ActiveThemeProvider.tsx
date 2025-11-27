@@ -14,6 +14,7 @@ function setThemeCookie(theme: string) {
 
 interface ThemeContextType {
   activeTheme: string;
+  isScaled: boolean;
   setActiveTheme: (theme: string) => void;
 }
 
@@ -40,7 +41,7 @@ export function ActiveThemeProvider({
       .forEach((className) => {
         document.body.classList.remove(className);
       });
-    //document.body.classList.add(`theme-${activeTheme}`);
+    document.body.classList.add(`theme-${activeTheme}`);
     if (isScaled) document.body.classList.add("theme-scaled");
     // if (activeTheme.endsWith("-scaled")) {
     //   document.body.classList.add("theme-scaled");
@@ -48,7 +49,9 @@ export function ActiveThemeProvider({
   }, [activeTheme, isScaled]);
 
   return (
-    <ThemeContext.Provider value={{ activeTheme, setActiveTheme }}>
+    <ThemeContext.Provider
+      value={{ activeTheme, setActiveTheme, isScaled: isScaled ?? false }}
+    >
       {children}
     </ThemeContext.Provider>
   );
