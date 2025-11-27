@@ -25,6 +25,9 @@ const config = {
       {
         pathname: "/api/download/images/**",
       },
+      {
+        pathname: "/avatars/*",
+      },
     ],
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },

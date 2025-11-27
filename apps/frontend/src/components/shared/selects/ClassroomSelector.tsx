@@ -70,7 +70,7 @@ export function ClassroomSelector({
       <PopoverContent
         className="p-0"
         align="start"
-        portal={false}
+        //portal={false}
         style={{ width: "var(--radix-popover-trigger-width)" }}
       >
         <Command

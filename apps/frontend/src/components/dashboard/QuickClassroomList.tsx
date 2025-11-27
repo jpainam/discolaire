@@ -39,7 +39,7 @@ export function QuickClassroomList() {
   return (
     <div className="border-border bg-card relative flex max-h-[400px] flex-col overflow-hidden rounded-xl border">
       <div className="flex flex-wrap items-center justify-between gap-2 px-4 pt-[15px] pb-4">
-        <h2 className="text-foreground text-[15px] font-normal tracking-[-0.45px]">
+        <h2 className="text-foreground text-[15px] font-normal">
           {t("Classroom list")}
         </h2>
 
@@ -78,7 +78,7 @@ export function QuickClassroomList() {
                     </Avatar>
                     <Link
                       href={`/classrooms/${classroom.id}`}
-                      className="text-foreground min-w-0 truncate text-[15px] font-normal tracking-[-0.45px] hover:underline"
+                      className="text-foreground min-w-0 truncate text-xs font-normal hover:underline"
                     >
                       {classroom.name}
                     </Link>
@@ -94,14 +94,14 @@ export function QuickClassroomList() {
                         {classroom.name.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar> */}
-                    <span className="text-foreground min-w-0 truncate text-[15px] font-normal tracking-[-0.45px] whitespace-nowrap">
+                    <span className="text-foreground min-w-0 truncate text-xs font-normal tracking-[-0.45px] whitespace-nowrap">
                       {classroom.cycle?.name}
                     </span>
                   </div>
 
                   <div className="hidden min-w-0 items-center gap-2 overflow-hidden md:flex">
                     <CalendarDays className="text-muted-foreground size-4 shrink-0" />
-                    <span className="text-muted-foreground min-w-0 truncate text-[14px] font-normal tracking-[-0.42px] whitespace-nowrap">
+                    <span className="text-muted-foreground min-w-0 truncate text-xs whitespace-nowrap">
                       {classroom.updatedAt.toLocaleDateString(locale, {
                         month: "short",
                         year: "numeric",
@@ -111,7 +111,7 @@ export function QuickClassroomList() {
                   </div>
 
                   <div className="hidden min-w-0 items-center overflow-hidden lg:flex">
-                    <span className="text-muted-foreground min-w-0 truncate text-[15px] font-normal tracking-[-0.45px] whitespace-nowrap">
+                    <span className="text-muted-foreground min-w-0 truncate text-xs whitespace-nowrap">
                       {classroom.size}
                     </span>
                   </div>

@@ -56,7 +56,7 @@ export function QuickChartCard() {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <FileTextIcon className="text-muted-foreground size-4" />
-          <h2 className="text-foreground text-[15px] font-normal tracking-[-0.45px]">
+          <h2 className="text-foreground text-[15px] font-normal">
             {t("Recent Grades")}
           </h2>
         </div>

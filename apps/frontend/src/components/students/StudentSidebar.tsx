@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
   Ambulance,
-  ArrowLeft,
   ArrowRightLeft,
   BellRing,
   BookText,
@@ -37,7 +36,6 @@ import {
 } from "@repo/ui/components/sidebar";
 
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 
@@ -94,7 +92,6 @@ export function StudentSidebar({
       url: `/students/${params.id}/assignments`,
     },
   ];
-  const { t } = useLocale();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const canReadTransaction = useCheckPermission(
@@ -155,7 +152,7 @@ export function StudentSidebar({
         <SidebarLogo />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={t("back")}>
@@ -166,7 +163,7 @@ export function StudentSidebar({
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-        </SidebarGroup>
+        </SidebarGroup> */}
         <MenuSideGroup items={menus.informations} label="information" />
         <MenuSideGroup label="academy" items={menus.academy} />
         <MenuSideGroup label="school_life" items={menus.school_life} />
@@ -193,6 +190,7 @@ function MenuSideGroup({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
               asChild
+              className="h-7 text-sm"
               tooltip={t(item.name)}
               isActive={pathname === item.url}
             >

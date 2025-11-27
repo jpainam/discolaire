@@ -39,7 +39,7 @@ export default async function Layout({
     <SidebarProvider
       style={
         {
-          //"--sidebar-width": "calc(var(--spacing) * 64)",
+          "--sidebar-width": "calc(var(--spacing) * 58)",
           "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
@@ -50,7 +50,7 @@ export default async function Layout({
         school={school}
         permissions={permissions}
       >
-        <AppSidebar variant="inset" />
+        <AppSidebar className="p-0" variant="inset" />
         <SidebarInset className="border">
           <HydrateClient>
             <SiteHeader schoolYearId={schoolYearId} />

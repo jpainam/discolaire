@@ -30,7 +30,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
 } from "@repo/ui/components/sidebar";
 
 import { authClient } from "~/auth/client";
@@ -141,9 +140,9 @@ export function MainSidebar({
       <SidebarContent>
         <MenuSideGroup items={menus.home} label={"home"} />
         <MenuSideGroup items={menus.data} label={"Data"} />
-        <SidebarSeparator />
+        {/* <SidebarSeparator className="mx-0 px-2" /> */}
         <MenuSideGroup items={menus.tools} label={"tools"} />
-        <SidebarSeparator />
+        {/* <SidebarSeparator className="mx-0 w-[95%]" /> */}
         <MenuSideGroup items={menus.others} label={"others"} />
 
         <SidebarGroup className="mt-auto">

@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import {
   BarcodeIcon,
   Check,
-  ChevronDown,
+  ChevronRight,
   Moon,
   Shuffle,
   Sun,
@@ -47,6 +47,7 @@ export function ThemeSelector() {
   const currentMode = (resolvedTheme ?? "light") as "light" | "dark";
   let themeKey: ThemeKey = activeTheme as ThemeKey;
   if (!Object.keys(defaultThemes).includes(activeTheme)) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     themeKey = "amber_minimal";
   }
 
@@ -61,9 +62,10 @@ export function ThemeSelector() {
         >
           <div className="flex items-center gap-2">
             <BarcodeIcon className="text-muted-foreground" />
-            <span>{defaultThemes[themeKey].label}</span>
+            {/* <span>{defaultThemes[themeKey].label}</span> */}
+            <span>{t("theme")}</span>
           </div>
-          <ChevronDown className="size-4 shrink-0" />
+          <ChevronRight className="size-4 shrink-0" />
         </Button>
       </PopoverTrigger>
       <PopoverContent side="right" className="w-[300px] p-0" align="start">

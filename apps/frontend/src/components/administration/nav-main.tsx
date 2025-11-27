@@ -3,7 +3,7 @@
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, ChevronRightIcon, Home } from "lucide-react";
+import { ChevronRightIcon, Home } from "lucide-react";
 
 import {
   Collapsible,
@@ -40,7 +40,7 @@ export function NavMain({
   const pathname = usePathname();
   return (
     <>
-      <SidebarGroup>
+      {/* <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip={t("back_to_home")}>
@@ -51,7 +51,7 @@ export function NavMain({
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroup>
+      </SidebarGroup> */}
       <SidebarGroup>
         <SidebarMenu>
           <SidebarMenuItem>

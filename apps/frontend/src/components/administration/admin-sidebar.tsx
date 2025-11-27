@@ -28,7 +28,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "@repo/ui/components/sidebar";
 
 import { useLocale } from "~/i18n";
@@ -256,7 +255,6 @@ export function AdminSidebar({
         </SidebarGroup>
         <NavProjects projects={data.projects} />
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   );
 }

@@ -4,7 +4,6 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
-  ArrowLeft,
   BookOpenText,
   BookText,
   CalendarDays,
@@ -33,7 +32,6 @@ import {
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
 
-import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function ClassroomSidebar({
@@ -125,15 +123,13 @@ export function ClassroomSidebar({
     },
   ];
 
-  const { t } = useLocale();
-
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={t("back")}>
@@ -144,7 +140,7 @@ export function ClassroomSidebar({
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-        </SidebarGroup>
+        </SidebarGroup> */}
         <MenuSideGroup label="Information" items={data.information} />
         <MenuSideGroup label="academy" items={data.academy} />
         <MenuSideGroup label="school_life" items={data.school_life} />
@@ -171,6 +167,7 @@ function MenuSideGroup({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
               asChild
+              className="h-7 text-sm"
               tooltip={t(item.name)}
               //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
               isActive={pathname === item.url}

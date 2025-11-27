@@ -1,47 +1,23 @@
 import { useCallback } from "react";
-import {
-  ChevronDown,
-  ComputerIcon,
-  MoonIcon,
-  Search,
-  SunIcon,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
+import { ChevronDown, ComputerIcon, MoonIcon, Search, SunIcon, ZoomIn, ZoomOut } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
-//import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@repo/ui/components/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
-import { Kbd } from "@repo/ui/components/kbd";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@repo/ui/components/sidebar";
 
-import {
-  changeLocaleAction,
-  changeScaledThemeAction,
-} from "~/actions/change_locale";
+
+//import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@repo/ui/components/sidebar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@repo/ui/components/dropdown-menu";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@repo/ui/components/input-group";
+import { Kbd } from "@repo/ui/components/kbd";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@repo/ui/components/sidebar";
+
+
+
+import { changeLocaleAction, changeScaledThemeAction } from "~/actions/change_locale";
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useRouter } from "~/hooks/use-router";
 import { ThemeSelector } from "./ThemeSelector";
+
 
 export function SidebarLogo() {
   const { isMobile } = useSidebar();
@@ -77,7 +53,7 @@ export function SidebarLogo() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex items-center gap-2">
-                <div className="flex size-8 items-center justify-center rounded-sm bg-linear-to-br from-purple-500 to-pink-600 text-xs font-semibold text-white shadow">
+                <div className="flex size-7 items-center justify-center rounded-sm bg-linear-to-br from-purple-500 to-pink-600 text-xs font-semibold text-white shadow">
                   DI
                 </div>
                 <span className="font-semibold">Discolaire</span>
@@ -93,9 +69,7 @@ export function SidebarLogo() {
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
           >
             <DropdownMenuLabel>{t("Appearance")}</DropdownMenuLabel>
-            <DropdownMenuItem asChild>
-              <ThemeSelector />
-            </DropdownMenuItem>
+
             <DropdownMenuItem onSelect={() => toggleTheme("dark")}>
               <MoonIcon />
               Dark
@@ -107,6 +81,10 @@ export function SidebarLogo() {
             <DropdownMenuItem onSelect={() => toggleTheme("system")}>
               <ComputerIcon />
               Sytem
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <ThemeSelector />
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Zoom</DropdownMenuLabel>
@@ -159,23 +137,18 @@ export function SidebarLogo() {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
-
-      <div className="relative mt-4">
-        <Search className="text-muted-foreground absolute top-1/2 left-2.5 z-10 size-4 -translate-y-1/2" />
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="text-muted-foreground placeholder:text-muted-foreground bg-background h-8 pr-8 pl-8 text-sm tracking-[-0.42px]"
-        />
-        <div className="border-border bg-sidebar absolute top-1/2 right-2 flex shrink-0 -translate-y-1/2 items-center gap-0.5 rounded border px-1.5 py-0.5">
-          <span className="text-muted-foreground text-[10px] leading-none font-medium tracking-[-0.1px]">
-            ⌘
-          </span>
-          <Kbd className="h-auto min-w-0 border-0 bg-transparent px-0 py-0 text-[10px] leading-none tracking-[-0.1px]">
-            K
-          </Kbd>
-        </div>
-      </div>
+      <SidebarMenuItem>
+        <InputGroup className="h-7">
+          <InputGroupInput placeholder={t("search")} />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+          <InputGroupAddon align="inline-end">
+            <Kbd>⌘</Kbd>
+            <Kbd>K</Kbd>
+          </InputGroupAddon>
+        </InputGroup>
+      </SidebarMenuItem>
     </SidebarMenu>
   );
 }

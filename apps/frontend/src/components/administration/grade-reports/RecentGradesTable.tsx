@@ -31,7 +31,7 @@ export async function RecentGradesTable() {
     date: Date;
   }[] = [];
   grades.forEach((gradeSheet) => {
-    const subject = gradeSheet.subject.course.name;
+    const subject = gradeSheet.subject.course.shortName;
     const classroom = gradeSheet.subject.classroom.name;
     const minGrade = Math.min(...gradeSheet.grades.map((g) => g.grade));
     const successRate =
