@@ -26,7 +26,7 @@ import {
 
 import "react-image-crop/dist/ReactCrop.css";
 
-import { useLocale } from "~/i18n";
+import { useTranslations } from "next-intl";
 
 type FileWithPreview = FileWithPath & {
   preview: string;
@@ -110,7 +110,7 @@ export function ImageCropper({
     onComplete?.(croppedImageUrl);
   }
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

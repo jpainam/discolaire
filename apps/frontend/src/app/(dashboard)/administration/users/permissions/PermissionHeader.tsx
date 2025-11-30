@@ -1,6 +1,7 @@
 "use client";
 
 import { LockKeyhole, MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -17,10 +18,9 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { UserSelector } from "~/components/shared/selects/UserSelector";
-import { useLocale } from "~/i18n";
 
 export function PermissionHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const [userId, setUserId] = useQueryState("userId");
   return (
     <div className="flex flex-row items-center justify-between gap-2 border-b px-4 py-2">

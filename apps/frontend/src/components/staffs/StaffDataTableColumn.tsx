@@ -1,9 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Pencil, ReceiptText, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
@@ -24,7 +25,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -51,7 +51,7 @@ type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"]>[number];
 export function fetchStaffColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<StaffProcedureOutput, unknown>[] {
   return [
     {
@@ -210,7 +210,7 @@ export function fetchStaffColumns({
 }
 
 function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openSheet } = useSheet();
   const confirm = useConfirm();
   const queryClient = useQueryClient();

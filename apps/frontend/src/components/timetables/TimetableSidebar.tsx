@@ -3,6 +3,7 @@
 import type * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Calendar } from "@repo/ui/components/calendar";
 import {
@@ -19,7 +20,6 @@ import {
   SidebarSeparator,
 } from "@repo/ui/components/sidebar";
 
-import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 import { Calendars } from "./calendars";
 
@@ -49,7 +49,7 @@ const data = {
 export function TimetableSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <Sidebar {...props}>
       <SidebarHeader>

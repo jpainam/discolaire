@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import {
   Select,
@@ -11,7 +12,6 @@ import {
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -29,7 +29,7 @@ export function AppreciationSelector({
   defaultValue,
   showAllOption = true,
 }: AppreciationSelectorProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const termsQuery = useQuery(trpc.term.all.queryOptions());
 

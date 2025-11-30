@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -15,13 +16,13 @@ import {
 import { Textarea } from "@repo/ui/components/textarea";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 
 export default function SendNotificationDialog() {
   const { closeModal } = useModal();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const sendEmailMutation = useMutation(
     trpc.messaging.sendEmail.mutationOptions(),

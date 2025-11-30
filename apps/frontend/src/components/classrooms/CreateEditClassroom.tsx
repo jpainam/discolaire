@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -18,7 +19,6 @@ import {
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
 
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
@@ -33,7 +33,7 @@ export function CreateEditClassroom({
 }: {
   classroom?: ClassroomAllProcedureOutput;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const updateClassroomSchema = z.object({
     name: z.string().trim().min(1),
     maxSize: z.coerce.number().int().positive(),

@@ -37,6 +37,7 @@ import {
   UserPlus2,
   XIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
@@ -63,7 +64,6 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -86,7 +86,8 @@ export function StudentHeader() {
     trpc.student.get.queryOptions(params.id),
   );
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const queryClient = useQueryClient();
 

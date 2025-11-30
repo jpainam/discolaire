@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import {
   Select,
   SelectContent,
@@ -7,7 +9,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export default function PrefixSelector({
@@ -21,7 +22,7 @@ export default function PrefixSelector({
   defaultValue?: string;
   onChange?: (value: string) => void;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const items: { label: string; value: string }[] = [
     { label: t("M"), value: "M" },
     { label: t("Mme"), value: "Mme" },

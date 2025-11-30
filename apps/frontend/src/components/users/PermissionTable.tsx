@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -18,13 +19,12 @@ import {
 
 import { menuPolicies, policies } from "~/configs/policies";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { NoPermission } from "../no-permission";
 
 export function PermissionTable({ userId }: { userId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const canUpdatePermission = useCheckPermission(
     "policy",
     PermissionAction.UPDATE,

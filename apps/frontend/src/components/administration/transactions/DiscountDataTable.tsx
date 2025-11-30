@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { TransactionDataTableAction } from "./TransactionDataTableAction";
 import { fetchTransactionColumns } from "./TransactionDataTableColumn";
@@ -15,7 +15,7 @@ export function DiscountDataTable({
 }: {
   transactions: RouterOutputs["transaction"]["all"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { school } = useSchool();
 
   const columns = useMemo(

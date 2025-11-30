@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
@@ -17,12 +18,12 @@ import {
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function SubjectJournalTemplate() {
   const params = useParams<{ subjectId: string }>();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { closeModal } = useModal();
   const trpc = useTRPC();
   const journalsQuery = useQuery(

@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { CircleDollarSignIcon, MoreVertical, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -19,13 +20,13 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export default function FinanceHeader() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const classroomQuery = useQuery(
     trpc.student.classroom.queryOptions({

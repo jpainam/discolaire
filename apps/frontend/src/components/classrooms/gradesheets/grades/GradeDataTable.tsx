@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { fetchGradeColumns } from "./GradeDataTableColumns";
 
 export function GradeDataTable({
@@ -13,7 +13,7 @@ export function GradeDataTable({
 }: {
   grades: RouterOutputs["gradeSheet"]["grades"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   //const params = useParams<{ id: string }>();
   const columns = useMemo(() => {
     return fetchGradeColumns({ t: t });

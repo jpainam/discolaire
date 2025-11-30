@@ -91,7 +91,7 @@ export function ProfileForm() {
   const { data: session } = authClient.useSession();
   console.log(session);
   //const user = data?.user;
-  //const { t } = useLocale();
+  //
 
   return (
     <Form {...form}>

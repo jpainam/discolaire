@@ -9,6 +9,7 @@ import {
   PlusCircle,
   SquareGanttChartIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -23,7 +24,6 @@ import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { CreateEditSchoolYearEvent } from "./CreateEditSchoolYearEvent";
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 import { SchoolYearEventTypeTable } from "./SchoolYearEventTypeTable";
@@ -41,7 +41,7 @@ export function SchoolYearCalendarHeader() {
     eventTypes,
   } = useSchoolYearCalendarContext();
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const toggleFilter = (type: string) => {
     if (filters.includes(type)) {

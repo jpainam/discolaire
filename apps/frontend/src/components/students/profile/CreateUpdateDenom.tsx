@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import { useTranslations } from "next-intl";
 import { LiaDumbbellSolid } from "react-icons/lia";
 
 import {
@@ -28,10 +29,9 @@ import {
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
 import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
-import { useLocale } from "~/i18n";
 
 export function CreateUpdateDenom() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const form = useFormContext();
 
   return (

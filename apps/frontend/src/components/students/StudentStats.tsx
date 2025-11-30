@@ -1,10 +1,9 @@
 "use client";
 
 import { RiArrowRightUpLine } from "@remixicon/react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@repo/ui/lib/utils";
-
-import { useLocale } from "~/i18n";
 
 interface StatsCardProps {
   title: string;
@@ -19,7 +18,8 @@ interface StatsCardProps {
 export function StatsCard({ title, value, change, icon }: StatsCardProps) {
   const isPositive = change.trend === "up";
   const trendColor = isPositive ? "text-emerald-500" : "text-red-500";
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <div className="group before:from-input/30 before:via-input before:to-input/30 relative p-4 before:absolute before:inset-y-8 before:right-0 before:w-px before:bg-gradient-to-b last:before:hidden lg:p-5">

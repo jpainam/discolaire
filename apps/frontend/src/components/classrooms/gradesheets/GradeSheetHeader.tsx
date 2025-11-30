@@ -13,6 +13,7 @@ import {
   PlusIcon,
   Upload,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
@@ -35,7 +36,6 @@ import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
@@ -54,7 +54,8 @@ export function GradeSheetHeader() {
   const [term, setTerm] = useQueryState("term");
   const { schoolYear } = useSchool();
   const [subject, setSubject] = useQueryState("subject");
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
   const canCreateGradeSheet = useCheckPermission(
     "gradesheet",

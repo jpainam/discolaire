@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { BellIcon, Loader2, TriangleAlert } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -13,7 +14,6 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const initialNotifications = [
@@ -91,7 +91,7 @@ export default function NotificationMenu({ userId }: { userId: string }) {
   const [notifications, setNotifications] = useState(initialNotifications);
   const unreadCount = notifications.filter((n) => n.unread).length;
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const handleMarkAllAsRead = () => {
     setNotifications(

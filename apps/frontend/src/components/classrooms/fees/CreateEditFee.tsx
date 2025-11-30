@@ -2,6 +2,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Save, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -27,7 +28,6 @@ import {
 import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const createEditFeeSchema = z.object({
@@ -45,7 +45,7 @@ export function CreateEditFee({
   fee?: Fee;
   classroomId: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const form = useForm<z.infer<typeof createEditFeeSchema>>({
     resolver: standardSchemaResolver(createEditFeeSchema),
     defaultValues: {

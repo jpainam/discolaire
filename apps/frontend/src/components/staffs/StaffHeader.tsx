@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { Download, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
@@ -17,7 +17,7 @@ import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";
 
 export function StaffHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
 

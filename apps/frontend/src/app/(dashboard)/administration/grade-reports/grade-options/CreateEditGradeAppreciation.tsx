@@ -3,6 +3,7 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SaveIcon, XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -20,7 +21,6 @@ import {
 import { Input } from "@repo/ui/components/input";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const createEditAppreciationSchema = z.object({
@@ -41,7 +41,8 @@ export function CreateEditGradeAppreciation({
       appreciation: gradeAppreciation?.appreciation ?? "",
     },
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { closeModal } = useModal();

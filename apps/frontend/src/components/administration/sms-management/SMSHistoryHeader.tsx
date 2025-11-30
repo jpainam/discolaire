@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
@@ -7,11 +9,11 @@ import { DateRangePicker } from "~/components/DateRangePicker";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 export function SMSHistoryHeader() {
   //const [status, setStatus] = useState<string | null>(null);
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   return (

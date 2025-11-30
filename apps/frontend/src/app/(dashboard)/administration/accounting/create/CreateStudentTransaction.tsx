@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { Label } from "@repo/ui/components/label";
 
 import { SearchCombobox } from "~/components/SearchCombobox";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -18,7 +18,7 @@ export function CreateStudentTransaction({
   studentId: string | null;
   fullName?: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const [search, setSearch] = useState("");
   const router = useRouter();

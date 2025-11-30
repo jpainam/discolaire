@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { Mail, MoreVertical, NotebookPen } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -17,10 +18,9 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 export function StudentAssignmentHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const searchParams = useSearchParams();
   const term = searchParams.get("term");
   const { createQueryString } = useCreateQueryString();

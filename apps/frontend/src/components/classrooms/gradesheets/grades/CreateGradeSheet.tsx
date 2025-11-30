@@ -7,6 +7,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { SaveIcon, TriangleAlert, XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -36,7 +37,6 @@ import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -66,7 +66,7 @@ export function CreateGradeSheet({
   termId: string;
   className?: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);

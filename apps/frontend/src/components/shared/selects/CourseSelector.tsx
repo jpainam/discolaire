@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,7 +21,6 @@ import {
 } from "@repo/ui/components/popover";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -47,7 +47,7 @@ export function CourseSelector({
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(defaultValue);
 
-  const { t } = useLocale();
+  const t = useTranslations();
   if (coursesQuery.isPending) {
     return (
       <div>

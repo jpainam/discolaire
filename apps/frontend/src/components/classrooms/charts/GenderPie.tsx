@@ -4,7 +4,7 @@
 
 // import type { Classroom } from "@repo/db";
 // import type { ChartConfig } from "@repo/ui/components/chart";
-// import { useLocale } from "~/i18n";
+// import { useTranslations } from "next-intl";
 // import { Card, CardContent } from "@repo/ui/components/card";
 // import {
 //   ChartContainer,
@@ -13,7 +13,6 @@
 // } from "@repo/ui/components/chart";
 
 // export function GenderPie({ classroom }: { classroom: Classroom }) {
-//   const { t } = useLocale();
 //   const chartData = [
 //     {
 //       gender: "male",

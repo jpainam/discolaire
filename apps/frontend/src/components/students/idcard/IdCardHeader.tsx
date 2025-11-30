@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -15,11 +16,10 @@ import { Label } from "@repo/ui/components/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { useLocale } from "~/i18n";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function IdCardHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const Icon = sidebarIcons.id_card;
   return (
     <div className="bg-muted text-muted-foreground flex flex-row items-center gap-1 border-b px-4 py-1">

@@ -10,6 +10,7 @@ import {
   SchoolIcon,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { FaLock, FaUnlockAlt, FaUsers } from "react-icons/fa";
 import { toast } from "sonner";
 
@@ -33,7 +34,6 @@ import {
 
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSchoolYear } from "./CreateEditSchoolYear";
@@ -42,7 +42,8 @@ export function SchoolYearTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const schoolYearsQuery = useQuery(trpc.schoolYear.all.queryOptions());
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openModal } = useModal();
 
   const confirm = useConfirm();

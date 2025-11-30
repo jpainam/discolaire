@@ -7,6 +7,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -28,13 +29,13 @@ import {
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function HealthVisitTable({ userId }: { userId: string }) {
-  const { t, i18n } = useLocale();
+  const t = useTranslations();
+  const locale = useLocale();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const params = useParams<{ id: string }>();
@@ -56,7 +57,7 @@ export function HealthVisitTable({ userId }: { userId: string }) {
   const confirm = useConfirm();
   const router = useRouter();
 
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  const dateFormat = Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",

@@ -2,6 +2,7 @@
 
 import { useParams, usePathname } from "next/navigation";
 import { MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -22,13 +23,12 @@ import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { reportcardSearchParamsSchema } from "~/utils/search-params";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function ReportCardHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
 
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);

@@ -3,6 +3,7 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { SettingsIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -26,7 +27,6 @@ import {
 import { Input } from "@repo/ui/components/input";
 
 import { DatePicker } from "~/components/DatePicker";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
@@ -40,7 +40,7 @@ const formSchema = z.object({
   ),
 });
 export function GradeReportSettings() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
   const periodes = terms.map((term) => {

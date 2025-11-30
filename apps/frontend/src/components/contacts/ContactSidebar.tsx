@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { ArrowLeft, BellRing, User, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Sidebar,
@@ -15,7 +16,6 @@ import {
   SidebarRail,
 } from "@repo/ui/components/sidebar";
 
-import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function ContactSidebar({
@@ -42,7 +42,8 @@ export function ContactSidebar({
       },
     ],
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const pathname = usePathname();
   return (
     <Sidebar collapsible="offcanvas" {...props}>

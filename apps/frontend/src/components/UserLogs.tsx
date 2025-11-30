@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown, FileEdit, Filter, Plus, Trash, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -18,8 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-
-import { useLocale } from "~/i18n";
 
 // Sample activity data
 const activityData = [
@@ -147,7 +146,8 @@ export function UserLog() {
     const ActionIcon = actionTypes[action as keyof typeof actionTypes].icon;
     return <ActionIcon className="h-4 w-4" />;
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <div className="flex flex-col space-y-4">

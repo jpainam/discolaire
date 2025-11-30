@@ -15,6 +15,7 @@ import {
   LogOut,
   Settings,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Avatar,
@@ -40,11 +41,11 @@ import {
 import { authClient } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 export function UserNav() {
   const [mounted, setMounted] = React.useState(false);
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const { isMobile } = useSidebar();

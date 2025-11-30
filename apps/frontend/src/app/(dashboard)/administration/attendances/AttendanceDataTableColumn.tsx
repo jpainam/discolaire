@@ -5,6 +5,7 @@ import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -21,7 +22,6 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 
 import { Badge } from "~/components/base-badge";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -213,7 +213,8 @@ export function getColumns(): ColumnDef<ProcedureOutput, unknown>[] {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ActionCells({ attendance }: { attendance: ProcedureOutput }) {
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const canDeleteClassroom = useCheckPermission(
     "classroom",

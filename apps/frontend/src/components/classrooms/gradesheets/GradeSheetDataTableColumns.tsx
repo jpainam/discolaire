@@ -1,6 +1,7 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -16,7 +17,6 @@ import {
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -33,7 +33,8 @@ export function ActionCells({
   gradesheet: ClassroomGradeSheetProcedureOutput;
 }) {
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const router = useRouter();
   const trpc = useTRPC();

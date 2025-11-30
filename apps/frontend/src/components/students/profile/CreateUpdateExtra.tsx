@@ -3,6 +3,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { ActivitySquare } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Card,
@@ -23,11 +24,10 @@ import { Textarea } from "@repo/ui/components/textarea";
 
 import type { Option } from "~/components/multiselect";
 import MultipleSelector from "~/components/multiselect";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function CreateUpdateExtra() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const clubsQuery = useQuery(trpc.setting.clubs.queryOptions());
   const sportsQuery = useQuery(trpc.setting.sports.queryOptions());

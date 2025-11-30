@@ -1,3 +1,22 @@
+import { useId } from "react";
+import { useTranslations } from "next-intl";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
+import type { ChartConfig } from "@repo/ui/components/chart";
+import { Badge } from "@repo/ui/components/badge";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
+import { cn } from "@repo/ui/lib/utils";
+
+import { CustomTooltipContent } from "~/components/charts-extra";
+
 // "use client";
 // import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
@@ -15,7 +34,7 @@
 // } from "@repo/ui/components/chart";
 // import { cn } from "@repo/ui/lib/utils";
 // import { CalendarDays } from "lucide-react";
-// import { useLocale } from "~/i18n";
+// import { useTranslations } from "next-intl";
 // const chartData = [
 //   { month: "Jan", borrowed: 186, returned: 80 },
 //   { month: "Fev", borrowed: 305, returned: 200 },
@@ -26,7 +45,8 @@
 // ];
 
 // export function MonthlyActivities({ className }: { className?: string }) {
-//   const { t } = useLocale();
+//
+const t = useTranslations();
 //   const chartConfig = {
 //     borrowed: {
 //       label: t("borrowed"),
@@ -70,26 +90,7 @@
 //   );
 // }
 
-"use client";
-
-import { useId } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-import type { ChartConfig } from "@repo/ui/components/chart";
-import { Badge } from "@repo/ui/components/badge";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
-import { cn } from "@repo/ui/lib/utils";
-
-import { CustomTooltipContent } from "~/components/charts-extra";
-import { useLocale } from "~/i18n";
+("use client");
 
 const chartData = [
   { month: "Jan 2025", borrowed: 20, returned: 10, overdue: 10 },
@@ -124,7 +125,7 @@ const chartConfig = {
 export function MonthlyActivities({ className }: { className?: string }) {
   const id = useId();
 
-  const { t } = useLocale();
+  const t = useTranslations();
   // Get first and last month with type assertions
   const firstMonth = chartData[0]?.month ?? "Jan 2025";
   const lastMonth = chartData[chartData.length - 1]?.month ?? "Dec 2025";

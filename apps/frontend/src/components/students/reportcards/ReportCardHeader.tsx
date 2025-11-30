@@ -2,6 +2,7 @@
 
 import { useParams, usePathname } from "next/navigation";
 import { BookText, MailIcon, MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -20,12 +21,11 @@ import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { reportcardSearchParamsSchema } from "~/utils/search-params";
 
 export function ReportCardHeader({ classroomId }: { classroomId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   const params = useParams<{ id: string }>();

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -11,11 +12,10 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function FeeBar() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const chartConfig = {
     count: {
       label: t("fees"),

@@ -3,6 +3,7 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -23,7 +24,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { InputField } from "~/components/shared/forms/input-field";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const createEditContactSchema = z.object({
@@ -66,7 +66,8 @@ export default function CreateEditContact({
       observation: contact?.observation ?? "",
     },
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const createStudentContactMutation = useMutation(

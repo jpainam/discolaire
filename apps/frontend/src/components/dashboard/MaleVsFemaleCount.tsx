@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
 import {
@@ -12,7 +13,6 @@ import {
 import { ChartContainer } from "@repo/ui/components/chart";
 import { Separator } from "@repo/ui/components/separator";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function MaleVsFemaleCount({
@@ -28,7 +28,7 @@ export function MaleVsFemaleCount({
   title: string;
   className?: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <Card className={cn("rounded-sm shadow-none", className)}>
       <CardHeader className="p-2">

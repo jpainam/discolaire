@@ -1,14 +1,13 @@
 "use client";
 
 import { Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 
-import { useLocale } from "~/i18n";
-
 export function CopyUserIdButton({ userId }: { userId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <Button
       onClick={async () => {

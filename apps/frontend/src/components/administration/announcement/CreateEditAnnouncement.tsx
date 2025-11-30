@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -24,7 +25,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { DatePicker } from "~/components/DatePicker";
 import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { SelectField } from "../../shared/forms/SelectField";
 
@@ -50,7 +50,7 @@ const noticeBoardSchema = z.object({
 export function CreateEditAnnouncement({
   noticeBoard,
 }: CreateEditNoticeBoardProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   type UpdateNoticeBoardValues = z.infer<typeof noticeBoardSchema>;
 

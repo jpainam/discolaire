@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import {
@@ -12,7 +13,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -26,7 +26,7 @@ export function ReligionSelector({
   onChange,
   defaultValue,
 }: ReligionSelectorProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const religionsQuery = useQuery(trpc.religion.all.queryOptions());
   if (religionsQuery.error) {

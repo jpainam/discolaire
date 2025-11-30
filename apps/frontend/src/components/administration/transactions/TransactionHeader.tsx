@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -20,11 +21,10 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
-import { useLocale } from "~/i18n";
 import { transactionSearchParamsSchema } from "~/utils/search-params";
 
 export function TransactionHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const [searchParams, setSearchParams] = useQueryStates(
     transactionSearchParamsSchema,

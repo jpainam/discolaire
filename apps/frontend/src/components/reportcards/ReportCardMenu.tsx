@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function ReportCardMenu() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const pathname = usePathname();
   const menuItems: { href: string; label: string }[] = [
     { href: routes.reportcards.index, label: t("reportcards") },

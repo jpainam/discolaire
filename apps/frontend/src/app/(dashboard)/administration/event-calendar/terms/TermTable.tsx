@@ -9,6 +9,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -31,7 +32,6 @@ import {
 
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditTerm } from "./CreateEditTerm";
@@ -39,7 +39,8 @@ import { CreateEditTerm } from "./CreateEditTerm";
 export function TermTable() {
   const trpc = useTRPC();
   const termsQuery = useQuery(trpc.term.all.queryOptions());
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const { openModal } = useModal();
   const confirm = useConfirm();

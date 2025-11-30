@@ -1,6 +1,7 @@
 "use client";
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -10,7 +11,6 @@ import { Form } from "@repo/ui/components/form";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import PrintSelector from "./print-selector";
 import PrintTypeRadio from "./print-type-radio";
 
@@ -44,7 +44,8 @@ type PrintFormValues = z.infer<typeof printFormSchema>;
 
 export default function PrintForm() {
   //const schoolYearId = useSchoolYear();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const form = useForm({
     resolver: standardSchemaResolver(printFormSchema),

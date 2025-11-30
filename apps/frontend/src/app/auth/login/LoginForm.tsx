@@ -5,6 +5,7 @@ import { useActionState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 
@@ -15,7 +16,6 @@ import { Label } from "@repo/ui/components/label";
 
 import { signIn } from "~/actions/signin";
 import { ModeSwitcher } from "~/components/mode-switcher";
-import { useLocale } from "~/i18n";
 
 const initialState = { error: undefined, _nonce: undefined };
 
@@ -29,7 +29,8 @@ export function LoginForm() {
   >(signIn, initialState);
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
-  const { t } = useLocale();
+
+  const t = useTranslations();
   useEffect(() => {
     if (state.error) {
       toast.error(t(state.error));
@@ -263,7 +264,8 @@ export function LoginForm() {
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <Button isLoading={pending} className="w-full">
       {t("Continue")}

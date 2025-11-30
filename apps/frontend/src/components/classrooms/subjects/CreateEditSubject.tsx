@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -24,7 +25,6 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { SelectField } from "../../shared/forms/SelectField";
@@ -40,7 +40,7 @@ const createEditSubjectSchema = z.object({
 type Subject = NonNullable<RouterOutputs["classroom"]["subjects"][number]>;
 
 export function CreateEditSubject({ subject }: { subject?: Subject }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { closeSheet } = useSheet();
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();

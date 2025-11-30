@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -11,14 +12,13 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function FeeTrend() {
   const trpc = useTRPC();
   const { data: feesTrend } = useSuspenseQuery(trpc.fee.trend.queryOptions());
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const chartConfig = {
     views: {
       label: t("classroom"),

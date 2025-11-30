@@ -2,16 +2,16 @@
 
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { ClassroomDataTableAction } from "./ClassroomDataTableAction";
 import { getColumns } from "./ClassroomDataTableColumn";
 
 export function ClassroomDataTable() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: classrooms } = useSuspenseQuery(
     trpc.classroom.all.queryOptions(),

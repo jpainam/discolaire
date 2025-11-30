@@ -8,6 +8,7 @@ import {
   PlusIcon,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -27,12 +28,12 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function StudentAttendanceHeader() {
   const params = useParams<{ id: string }>();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openModal } = useModal();
   const [termId, setTermId] = useQueryState("termId");
 

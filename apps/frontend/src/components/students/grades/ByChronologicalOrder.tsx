@@ -2,13 +2,13 @@
 
 import { useParams } from "next/navigation";
 import i18next from "i18next";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface ByChronologicalOrderProps {
@@ -23,7 +23,7 @@ export function ByChronologicalOrder({
   const params = useParams<{ id: string; gradeId: string }>();
   const { createQueryString } = useCreateQueryString();
 
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <div>
       {grades.map((grade) => {

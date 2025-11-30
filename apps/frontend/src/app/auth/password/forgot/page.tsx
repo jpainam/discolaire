@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Loader, Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -29,7 +30,6 @@ import { Input } from "@repo/ui/components/input";
 
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -46,7 +46,8 @@ export default function Page() {
       email: "",
     },
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import {
   Card,
@@ -12,7 +13,6 @@ import {
 import { Progress } from "@repo/ui/components/progress";
 import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function InventoryUserUsage({ className }: { className?: string }) {
@@ -22,7 +22,8 @@ export function InventoryUserUsage({ className }: { className?: string }) {
   );
   // const maxUsage = Math.max(...usages.map((usage) => usage.count), 0);
   // const maxWidth = 100; // Set the maximum width for the progress bar
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <Card className={cn(className)}>
       <CardHeader>

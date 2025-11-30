@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -23,7 +24,6 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { AvatarState } from "~/components/AvatarState";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -53,7 +53,8 @@ const VirtualizedCommand = ({
   const [filteredOptions, setFilteredOptions] =
     React.useState<Option[]>(options);
   const parentRef = React.useRef(null);
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -177,7 +178,8 @@ export function ClassroomStudentSelector({
     value: defaultValue ?? "",
   });
   const [options, setOptions] = React.useState<Option[]>([]);
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   useEffect(() => {
     if (classroomStudentsQuery.data) {

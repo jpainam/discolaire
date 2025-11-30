@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { MoreVertical, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,7 +21,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
@@ -31,7 +31,8 @@ import CreateEditContact from "./CreateEditContact";
 
 export function ContactHeader() {
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const { openSheet } = useSheet();
   const { data: session } = authClient.useSession();

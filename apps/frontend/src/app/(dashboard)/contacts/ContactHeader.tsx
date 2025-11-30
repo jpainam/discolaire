@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreVertical, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -13,11 +14,10 @@ import CreateEditContact from "~/components/contacts/CreateEditContact";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function ContactHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const { openSheet } = useSheet();
 

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
@@ -14,14 +15,12 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
-
 export function TransactionTrendChart({
   trends,
 }: {
   trends: RouterOutputs["transaction"]["trends"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const chartConfig = React.useMemo(() => {
     return {
       transactions: {

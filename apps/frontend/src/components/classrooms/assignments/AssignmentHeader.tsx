@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { MoreVertical, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { parseAsIsoDate, useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -21,13 +22,13 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function AssignmentHeader() {
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   //const searchParams = useSearchParams();
   //const from = searchParams.get("from");

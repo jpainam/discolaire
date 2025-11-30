@@ -12,6 +12,7 @@ import { addDays } from "date-fns/addDays";
 import i18next from "i18next";
 import { groupBy, sumBy } from "lodash";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Badge } from "@repo/ui/components/badge";
@@ -35,7 +36,6 @@ import {
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -48,7 +48,8 @@ export function ClassroomFeeTable() {
   const { data: fees } = useSuspenseQuery(
     trpc.classroom.fees.queryOptions(params.id),
   );
-  const { t, i18n } = useLocale();
+  const locale = useLocale();
+  const t = useTranslations();
   const queryClient = useQueryClient();
 
   const canDeleteClassroomFee = useCheckPermission(
@@ -107,7 +108,7 @@ export function ClassroomFeeTable() {
                   <TableRow key={fee.id}>
                     <TableCell>{fee.description}</TableCell>
                     <TableCell className="text-muted-foreground">
-                      {fee.amount.toLocaleString(i18n.language, {
+                      {fee.amount.toLocaleString(locale, {
                         currency: CURRENCY,
                         maximumFractionDigits: 0,
                         minimumFractionDigits: 0,
@@ -207,7 +208,7 @@ export function ClassroomFeeTable() {
                   </TableCell>
                   <TableCell className="font-bold">
                     {sumBy(journalFees, (f) => f.amount).toLocaleString(
-                      i18n.language,
+                      locale,
                       {
                         currency: CURRENCY,
                         maximumFractionDigits: 0,
@@ -227,7 +228,7 @@ export function ClassroomFeeTable() {
                 {t("total")}
               </TableCell>
               <TableCell className="font-bold">
-                {sumBy(fees, (f) => f.amount).toLocaleString(i18n.language, {
+                {sumBy(fees, (f) => f.amount).toLocaleString(locale, {
                   currency: CURRENCY,
                   maximumFractionDigits: 0,
                   minimumFractionDigits: 0,

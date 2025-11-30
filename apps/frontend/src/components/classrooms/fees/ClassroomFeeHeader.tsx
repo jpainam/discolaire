@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { MoreVertical, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -16,13 +17,12 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditFee } from "./CreateEditFee";
 
 export function ClassroomFeeHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const { openModal } = useModal();
   const canCreateClassroomFee = useCheckPermission(

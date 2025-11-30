@@ -2,6 +2,7 @@
 "use client";
 
 import type { Country } from "react-phone-number-input";
+import { useTranslations } from "next-intl";
 import { PiCalendarDotsDuotone } from "react-icons/pi";
 
 import {
@@ -24,11 +25,10 @@ import { PhoneInput } from "~/components/phone-input";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 
 export function CreateUpdateAddress() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const form = useFormContext();
   const { school } = useSchool();
 

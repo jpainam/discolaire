@@ -1,6 +1,7 @@
 "use client";
 
 import { CalendarDays } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Card,
@@ -11,7 +12,6 @@ import {
 } from "@repo/ui/components/card";
 
 import { DatePicker } from "~/components/DatePicker";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface ScheduleItem {
@@ -67,7 +67,7 @@ const scheduleData: ScheduleItem[] = [
 ];
 
 export function ScheduleCard({ className }: { className?: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   return (
     <Card className={cn(className)}>

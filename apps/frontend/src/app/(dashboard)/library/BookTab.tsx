@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { LibraryBigIcon, MoreVerticalIcon, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,14 +21,13 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { BookDataTable } from "./BookDataTable";
 import { CreateEditBook } from "./CreateEditBook";
 
 export function BookTab() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openSheet } = useSheet();
   const trpc = useTRPC();
   const bookQuery = useQuery(trpc.book.recentlyUsed.queryOptions());

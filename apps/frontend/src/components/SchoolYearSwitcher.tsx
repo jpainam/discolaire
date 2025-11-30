@@ -2,6 +2,7 @@
 
 //import { setSchoolYearSession } from "@repo/auth/session";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 //import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
@@ -16,7 +17,6 @@ import {
 
 import { setSchoolYearCookie } from "~/actions/signin";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 interface SchoolYearSwitcherProps {
@@ -24,7 +24,7 @@ interface SchoolYearSwitcherProps {
   defaultValue: string;
 }
 export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const router = useRouter();
   const trpc = useTRPC();
   const { data: schoolYears } = useSuspenseQuery(

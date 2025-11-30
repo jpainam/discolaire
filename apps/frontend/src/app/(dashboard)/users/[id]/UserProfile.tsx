@@ -7,8 +7,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { t } from "i18next";
 import { ImageMinus, ImageUpIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -43,6 +43,7 @@ const usernameSchema = z.object({
 });
 export function UserProfile() {
   const trpc = useTRPC();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const { data: user } = useSuspenseQuery(
     trpc.user.get.queryOptions(params.id),

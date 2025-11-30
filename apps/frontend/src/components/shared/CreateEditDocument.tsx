@@ -4,6 +4,7 @@ import { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FileIcon, Trash2, UploadIcon, XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -26,7 +27,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { cn } from "@repo/ui/lib/utils";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { formatBytes } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -57,7 +57,8 @@ export function CreateEditDocument({
     onDrop: (acceptedFiles) =>
       setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]),
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
   const trpc = useTRPC();
   const queryClient = useQueryClient();

@@ -9,6 +9,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { LayoutGridIcon, ListIcon, MoreVertical, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
@@ -31,13 +32,12 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function StudentGradeHeader({ classroomId }: { classroomId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const params = useParams<{ gradeId: string; id: string }>();
   const { data: student } = useSuspenseQuery(

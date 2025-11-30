@@ -31,7 +31,7 @@
 // import { DatePicker } from "~/components/DatePicker";
 // import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 // import { useModal } from "~/hooks/use-modal";
-// import { useLocale } from "~/i18n";
+// import { useTranslations } from "next-intl";
 // import { useTRPC } from "~/trpc/react";
 
 // const createEditTimetable = z.object({
@@ -71,7 +71,7 @@
 //   const trpc = useTRPC();
 //   const queryClient = useQueryClient();
 
-//   const { t } = useLocale();
+//
 
 //   const { closeModal } = useModal();
 //   const hours24 = useMemo(() => {

@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
@@ -25,7 +26,6 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
@@ -42,7 +42,8 @@ export function StatisticByCourseDialog({ format }: { format: "pdf" | "csv" }) {
   });
   const trpc = useTRPC();
   const courseQuery = useQuery(trpc.course.used.queryOptions());
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { closeModal } = useModal();
   const handleSubmit = (data: z.infer<typeof schema>) => {
     window.open(

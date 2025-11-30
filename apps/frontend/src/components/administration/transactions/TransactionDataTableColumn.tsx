@@ -1,5 +1,5 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import {
   CheckCircledIcon,
@@ -11,6 +11,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
 import i18next from "i18next";
 import { BookCopy, Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -36,7 +37,6 @@ import { DeleteTransaction } from "~/components/students/transactions/DeleteTran
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
@@ -51,7 +51,7 @@ export const fetchTransactionColumns = ({
   t,
   currency,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
   currency: string;
 }): ColumnDef<TransactionAllProcedureOutput, unknown>[] => {
   return [
@@ -198,7 +198,7 @@ function ActionCell({
 }: {
   transaction: TransactionAllProcedureOutput;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 

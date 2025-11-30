@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { MailIcon, MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,11 +16,10 @@ import { Label } from "@repo/ui/components/label";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { useLocale } from "~/i18n";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function LoginInfoHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const Icon = sidebarIcons.login_info;
   const params = useParams<{ id: string }>();
   return (

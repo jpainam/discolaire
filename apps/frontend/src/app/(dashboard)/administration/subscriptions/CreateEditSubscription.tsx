@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -28,7 +29,6 @@ import {
 
 import { UserSelector } from "~/components/shared/selects/UserSelector";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
@@ -60,7 +60,8 @@ export function CreateEditSubscription({
     },
   });
   const trpc = useTRPC();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { closeSheet } = useSheet();
   const queryClient = useQueryClient();
   const upsertSubscriptionMutation = useMutation(

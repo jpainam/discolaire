@@ -19,6 +19,7 @@ import {
   Settings,
   Users,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Sidebar,
@@ -30,7 +31,6 @@ import {
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
 
-import { useLocale } from "~/i18n";
 import { SidebarLogo } from "../sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
@@ -222,7 +222,8 @@ export function AdminSidebar({
     },
   ];
   const pathname = usePathname();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>

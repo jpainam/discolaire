@@ -12,7 +12,6 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import i18next from "i18next";
 import {
   Banknote,
   BookCopy,
@@ -20,6 +19,7 @@ import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { TransactionType } from "@repo/db/enums";
@@ -52,7 +52,6 @@ import { Pill, PillAvatar, PillIcon, PillIndicator } from "~/components/pill";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
@@ -60,8 +59,9 @@ import { DeleteTransaction } from "./DeleteTransaction";
 
 export function TransactionTable() {
   const params = useParams<{ id: string }>();
-  const { t, i18n } = useLocale();
-  const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
+  const t = useTranslations();
+  const locale = useLocale();
+  const fullDateFormatter = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -174,7 +174,7 @@ export function TransactionTable() {
                     )}
                   </TableCell>
                   <TableCell>
-                    {transaction.amount.toLocaleString(i18n.language, {
+                    {transaction.amount.toLocaleString(locale, {
                       style: "currency",
                       currency: CURRENCY,
                       maximumFractionDigits: 0,
@@ -345,7 +345,7 @@ export function TransactionTable() {
 }
 
 export function TransactionStatus({ status }: { status: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   let variant = "gray";
   if (status === "VALIDATED") {
     variant = "green";

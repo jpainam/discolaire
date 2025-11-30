@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDays } from "date-fns";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -30,7 +31,6 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { FileUploader } from "~/uploads/file-uploader";
 
@@ -97,7 +97,7 @@ export function CreateEditAssignment({
     },
   ];
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -27,7 +28,6 @@ import {
 import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
 
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const updateBookSchema = z.object({
@@ -44,7 +44,7 @@ export function CreateEditBook({
 }: {
   book?: RouterOutputs["book"]["recentlyUsed"][number];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const form = useForm({
     resolver: standardSchemaResolver(updateBookSchema),

@@ -4,6 +4,7 @@ import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Command as CommandPrimitive } from "cmdk";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@repo/ui/components/badge";
 import {
@@ -14,7 +15,6 @@ import {
 } from "@repo/ui/components/command";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -34,7 +34,7 @@ export function RecipientMultiSelector({
   const [selectables, setSelectables] = React.useState<string[]>([]);
   const [inputValue, setInputValue] = React.useState("");
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const handleUnselect = React.useCallback((value: string) => {
     setSelected((prev) => prev.filter((s) => s !== value));
   }, []);

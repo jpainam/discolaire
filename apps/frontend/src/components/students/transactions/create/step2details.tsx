@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { sumBy } from "lodash";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   Card,
@@ -17,7 +18,6 @@ import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 
 import FlatBadge from "~/components/FlatBadge";
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
@@ -49,8 +49,9 @@ export function Step2Details() {
 
   const [transactionDate, _setTransactionDate] = useState<Date>(new Date());
 
-  const { t, i18n } = useLocale();
-  const fullDateTimeFormatter = new Intl.DateTimeFormat(i18n.language, {
+  const locale = useLocale();
+  const t = useTranslations();
+  const fullDateTimeFormatter = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -81,7 +82,7 @@ export function Step2Details() {
           <FlatBadge variant={"green"} className="flex gap-4 font-bold">
             <span>{t("amount")}:</span>
             <span className="font-bold">
-              {amount?.toLocaleString(i18n.language)} {CURRENCY}
+              {amount?.toLocaleString(locale)} {CURRENCY}
             </span>
           </FlatBadge>
         </CardAction>
@@ -108,21 +109,21 @@ export function Step2Details() {
               {t("amountPaidSoFar")}
             </span>
             <span className="text-md flex flex-row font-bold text-green-600">
-              + {paid.toLocaleString(i18n.language)} {CURRENCY}
+              + {paid.toLocaleString(locale)} {CURRENCY}
               <TrendingUpIcon className="ms-1 h-4 w-4" />
             </span>
           </li>
           <li className="flex items-center justify-between">
             <span className="text-muted-foreground">{t("class_fees")}</span>
             <span className="text-md flex flex-row font-bold text-red-600">
-              -{total.toLocaleString(i18n.language)} {CURRENCY}{" "}
+              -{total.toLocaleString(locale)} {CURRENCY}{" "}
               <TrendingDownIcon className="ms-1 h-4 w-4" />
             </span>
           </li>
           <li className="flex items-center justify-between font-semibold">
             <span className="text-muted-foreground">{t("remaining")}</span>
             <span className="flex flex-row items-center gap-2">
-              {(total - paid).toLocaleString(i18n.language)} {CURRENCY}{" "}
+              {(total - paid).toLocaleString(locale)} {CURRENCY}{" "}
               {total - paid == 0 ? <span>🎉</span> : <></>}
             </span>
           </li>

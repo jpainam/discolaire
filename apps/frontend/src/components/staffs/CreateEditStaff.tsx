@@ -4,6 +4,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subMonths } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -24,7 +25,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { CountryPicker } from "../shared/CountryPicker";
@@ -92,7 +92,8 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
         : subMonths(new Date(), 100),
     },
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();

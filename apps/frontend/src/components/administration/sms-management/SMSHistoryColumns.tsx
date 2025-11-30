@@ -1,8 +1,9 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import i18next from "i18next";
 import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -16,12 +17,11 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 
 import type { SMSHistory } from "~/types/sms";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/i18n";
 
 export function fetchSmsHistoryColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }) {
   const dateFormatter = new Intl.DateTimeFormat(i18next.language, {
     day: "numeric",
@@ -111,7 +111,7 @@ export function fetchSmsHistoryColumns({
 }
 
 function ActionsCell({ row }: { row: Row<SMSHistory> }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   console.log(row);
   return (
     <>

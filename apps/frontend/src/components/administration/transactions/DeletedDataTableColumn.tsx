@@ -1,11 +1,12 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
 import i18next from "i18next";
 import { Eye, MoreHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -21,7 +22,6 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 import { Badge } from "~/components/base-badge";
 import { Pill, PillAvatar } from "~/components/pill";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { TransactionDetails } from "./TransactionDetails";
 
 type TransactionAllProcedureOutput = NonNullable<
@@ -34,7 +34,7 @@ export const getDeletedDataTableColumn = ({
   t,
   currency,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
   currency: string;
 }): ColumnDef<TransactionAllProcedureOutput, unknown>[] => {
   return [
@@ -215,7 +215,7 @@ function ActionCell({
 }: {
   transaction: TransactionAllProcedureOutput;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const { openModal } = useModal();
   return (

@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, Plus, Printer, Share2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -26,12 +27,12 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import EventForm from "./EventForm";
 
 export function EventCalendarHeader() {
   const { openModal } = useModal();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();

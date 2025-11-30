@@ -5,13 +5,13 @@ import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import _ from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";
 import { BySubject } from "./BySubject";
@@ -37,7 +37,7 @@ export function StudentGrade({ classroomId }: { classroomId: string }) {
   const [orderBy, setOrderBy] = useState<"subject" | "grade">("grade");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const sortedGrades = useMemo(() => {
     let filteredGrades = grades;

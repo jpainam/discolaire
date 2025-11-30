@@ -1,13 +1,13 @@
 "use client";
 
 import { FileSliders, Printer } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function AnnualHeader({
@@ -18,7 +18,8 @@ export function AnnualHeader({
   classroomId: string;
 }) {
   const { createQueryString } = useCreateQueryString();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const canCreateReportCard = useCheckPermission(
     "reportcard",
     PermissionAction.CREATE,

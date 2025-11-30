@@ -2,6 +2,7 @@ import { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -34,7 +35,6 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -54,7 +54,8 @@ export const StaffLevelSelector = ({
 }: StaffLevelSelectorProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string>(defaultValue ?? "");
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openModal } = useModal();
   const trpc = useTRPC();
 
@@ -151,7 +152,8 @@ function CreateStaffLevel() {
   });
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const createStaffLevelMutation = useMutation(
     trpc.degree.create.mutationOptions({

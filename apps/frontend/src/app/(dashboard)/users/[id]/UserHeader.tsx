@@ -2,15 +2,16 @@
 
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { AvatarState } from "~/components/AvatarState";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function UserHeader() {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { data: user } = useSuspenseQuery(
     trpc.user.get.queryOptions(params.id),
   );

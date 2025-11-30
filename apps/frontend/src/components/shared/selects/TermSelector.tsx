@@ -2,6 +2,7 @@
 
 import { useCallback } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import {
   Select,
@@ -11,7 +12,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -30,7 +30,7 @@ export function TermSelector({
   defaultValue,
   showAllOption = true,
 }: TermSelectorProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
 

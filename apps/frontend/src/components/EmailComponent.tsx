@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { CheckIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
 import { authClient } from "~/auth/client";
-import { useLocale } from "~/i18n";
 
 interface EmailVerificationProps {
   email: string;
@@ -20,7 +20,8 @@ export default function EmailVerification({
   isVerified,
 }: EmailVerificationProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const [verificationSent, setVerificationSent] = useState(false);
 
   const sendVerificationEmail = async () => {

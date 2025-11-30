@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -14,12 +15,11 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function SchoolTableAction({ schoolId }: { schoolId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const router = useRouter();
 
   const confirm = useConfirm();

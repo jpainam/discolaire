@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CirclePlusIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -22,7 +23,6 @@ import {
 } from "@repo/ui/components/table";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditRelationship } from "./CreateEditRelationship";
@@ -33,7 +33,8 @@ export function StudentContactRelationship() {
   const relationshipsQuery = useQuery(
     trpc.studentContact.relationships.queryOptions(),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const deleteRelationship = useMutation(
     trpc.studentContact.deleteRelationship.mutationOptions({

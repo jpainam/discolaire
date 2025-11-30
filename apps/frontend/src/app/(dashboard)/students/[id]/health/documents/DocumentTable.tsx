@@ -1,6 +1,7 @@
 "use client";
 
 import { DownloadCloud, MoreVertical, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -19,10 +20,8 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { useLocale } from "~/i18n";
-
 export function HealthDocumentTable() {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <div className="px-4 py-2">
       <div className="bg-background overflow-hidden rounded-md border">

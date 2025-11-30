@@ -2,15 +2,15 @@
 
 import { useParams } from "next/navigation";
 import { EuroIcon, Printer } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
-import { useLocale } from "~/i18n";
-
 export function TransactionDetailsHeader() {
   const params = useParams<{ transactionId: string }>();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <div className="bg-secondary text-secondary-foreground flex flex-row items-center gap-2 border-b px-4 py-1">

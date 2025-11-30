@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -28,7 +29,6 @@ import { Input } from "@repo/ui/components/input";
 
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
@@ -47,7 +47,8 @@ export function SignUpForm({
   name: string;
 }) {
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
 
   const trpc = useTRPC();

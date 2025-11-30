@@ -1,12 +1,12 @@
 "use client";
 
 import { KeyRound, UserPlus2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 export function AttachUserButton({
   userId,
@@ -21,7 +21,7 @@ export function AttachUserButton({
   email?: string | null;
   type: "staff" | "contact" | "student";
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
   return (
     <Button

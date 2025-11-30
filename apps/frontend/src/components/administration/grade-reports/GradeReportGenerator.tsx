@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -28,7 +29,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { StatisticByCourseDialog } from "./StatisticByCourseDialog";
@@ -49,7 +49,7 @@ export function GradeReportGenerator() {
   } | null>();
   const [formatType, setFormatType] = useState<"pdf" | "csv">("pdf");
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const termQuery = useQuery(trpc.term.all.queryOptions());
   const { school } = useSchool();

@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { useLocale } from "next-intl";
 
 import {
   Avatar,
@@ -10,7 +11,6 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
 import { useMailContext } from "./MailContextProvider";
 
 export function MailList() {
@@ -41,7 +41,7 @@ export function MailList() {
     setComposing(false);
     setAttachedFiles([]);
   };
-  const { i18n } = useLocale();
+  const locale = useLocale();
 
   return (
     <div
@@ -85,7 +85,7 @@ export function MailList() {
                 <div className="flex items-center justify-between">
                   <div className="truncate font-medium">{email.from}</div>
                   <div className="text-muted-foreground ml-2 text-xs whitespace-nowrap">
-                    {email.date.toLocaleDateString(i18n.language, {
+                    {email.date.toLocaleDateString(locale, {
                       month: "2-digit",
                       day: "2-digit",
                       year: "2-digit",

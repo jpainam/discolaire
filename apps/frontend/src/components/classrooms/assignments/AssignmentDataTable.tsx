@@ -2,11 +2,11 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { AssignmentDataTableActions } from "./AssignmentDataTableActions";
 import { fetchAssignmentTableColumns } from "./AssignmentDataTableColumns";
 
@@ -19,7 +19,7 @@ export function AssignmentDataTable({
 }: {
   assignments: ClassroomGetAssignemntProcedureOutput[];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const columns = useMemo<
     ColumnDef<ClassroomGetAssignemntProcedureOutput, unknown>[]
   >(() => fetchAssignmentTableColumns({ t: t }), [t]);

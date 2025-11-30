@@ -2,16 +2,16 @@
 
 import { useParams } from "next/navigation";
 import { CircleGauge, PlusIcon, Recycle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function TransactionTabMenu() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const canCreateTransaction = useCheckPermission(
     "transaction",

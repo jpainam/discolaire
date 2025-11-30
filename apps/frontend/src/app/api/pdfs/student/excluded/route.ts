@@ -47,7 +47,7 @@ async function toExcel({
     trpc.studentContact.fromStudent.queryOptions({ studentIds }),
   );
 
-  // const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  // const dateFormat = Intl.DateTimeFormat(locale, {
   //   year: "numeric",
   //   month: "2-digit",
   //   day: "2-digit",

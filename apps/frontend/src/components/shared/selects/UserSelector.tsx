@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { decode } from "entities";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@repo/ui/lib/utils";
 
 import { SearchCombobox } from "~/components/SearchCombobox";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function UserSelector({
@@ -19,7 +19,7 @@ export function UserSelector({
   defaultValue?: string;
   onChange: (value: string | undefined) => void;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const [value, setValue] = useState<string>(defaultValue ?? "");
   const [label, setLabel] = useState(t("search_a_user"));
   const [search, setSearch] = useState("");

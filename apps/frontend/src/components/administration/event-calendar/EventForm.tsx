@@ -6,6 +6,7 @@
 import type { SubmitHandler } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -36,7 +37,6 @@ import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -108,7 +108,8 @@ export default function EventForm({
   event,
 }: CreateEventProps) {
   const { closeModal } = useModal();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const isUpdateEvent = event !== undefined;
 
   //const parsedCalendarData = parseCalendarEventData(event);

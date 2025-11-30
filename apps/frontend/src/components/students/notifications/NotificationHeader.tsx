@@ -4,6 +4,7 @@ import type { DateRange } from "react-day-picker";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { MailOpen, MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -20,7 +21,6 @@ import { DateRangePicker } from "~/components/DateRangePicker";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function NotificationHeader() {
@@ -30,7 +30,8 @@ export function NotificationHeader() {
   //const debounceValue = useDebounce(value, 500);
 
   const { createQueryString } = useCreateQueryString();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
   console.log(value);
   return (

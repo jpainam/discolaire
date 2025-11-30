@@ -1,6 +1,7 @@
 "use client";
 
 import { HelpCircleIcon, LibraryBig } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   DropdownMenuItem,
@@ -13,10 +14,9 @@ import {
 
 import CalendarIcon from "~/components/icons/calendar";
 import YoutubeIcon from "~/components/icons/youtube";
-import { useLocale } from "~/i18n";
 
 export function DropdownHelp() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const webinarLink = "https://cal.com/jpainam/discolaire-webinar";
   return (
     <DropdownMenuSub>

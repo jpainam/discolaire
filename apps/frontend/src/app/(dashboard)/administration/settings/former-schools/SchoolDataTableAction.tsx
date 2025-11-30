@@ -1,12 +1,12 @@
 import type { Table } from "@tanstack/react-table";
 import { RiDeleteBinLine } from "@remixicon/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -18,7 +18,8 @@ export function SchoolDataTableAction({
   table: Table<FormerSchool>;
 }) {
   const rows = table.getFilteredSelectedRowModel().rows;
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const deleteSchoolsMutation = useMutation(

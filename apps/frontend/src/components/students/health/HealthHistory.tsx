@@ -7,6 +7,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { Ambulance } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -32,7 +33,6 @@ import {
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { Textarea } from "@repo/ui/components/textarea";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const schemaForm = z.object({
@@ -85,7 +85,7 @@ const schemaForm = z.object({
 });
 
 export function HealthHistory({ studentId }: { studentId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   //const params = useParams<{id: string}>();
   const trpc = useTRPC();
   const { data: issue } = useSuspenseQuery(
@@ -259,7 +259,8 @@ function RadioFormItem({
   textarea: string;
 }) {
   const form = useFormContext();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const radioValue = form.watch(name) as boolean;
   return (
     <div className="flex flex-row items-start space-x-2">

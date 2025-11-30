@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { Edit, PlusCircle, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
-
-import { useLocale } from "~/i18n";
 
 // Define the structure of an activity
 interface Activity {
@@ -39,8 +38,9 @@ const getActivityTypeInfo = (type: Activity["type"]) => {
 // ActivityItem component to render individual activity items
 const ActivityItem = ({ activity, onDelete }: ActivityItemProps) => {
   const { icon: Icon, color } = getActivityTypeInfo(activity.type);
-  const { t } = useLocale();
-  // const dateFormat = Intl.DateTimeFormat(i18n.language, {
+
+  const t = useTranslations();
+  // const dateFormat = Intl.DateTimeFormat(locale, {
   //   year: "numeric",
   //   month: "short",
   //   day: "numeric",

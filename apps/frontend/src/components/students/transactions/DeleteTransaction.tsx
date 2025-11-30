@@ -1,5 +1,6 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -16,7 +17,6 @@ import {
 import { Textarea } from "@repo/ui/components/textarea";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const deleteTransactionSchema = z.object({
@@ -33,7 +33,8 @@ export function DeleteTransaction({
       observation: "",
     },
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { closeModal } = useModal();

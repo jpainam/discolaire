@@ -1,6 +1,7 @@
 "use client";
 
 import { BugIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   FloatingPanelBody,
@@ -14,13 +15,13 @@ import {
   FloatingPanelTextarea,
   FloatingPanelTrigger,
 } from "~/components/floating-panel";
-import { useLocale } from "~/i18n";
 
 export function ReportFalseGrade() {
   const handleSubmit = (note: string) => {
     console.log("Submitted note:", note);
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <FloatingPanelRoot>

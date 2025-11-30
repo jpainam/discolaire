@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { useLocale } from "next-intl";
 
-import { useLocale } from "~/i18n";
 // import type { ConfettiRef } from "~/components/magicui/Confetti";
 // import Confetti from "~/components/magicui/Confetti";
 import { cn } from "~/lib/utils";
@@ -14,8 +14,8 @@ export function DateOfBirthWidget({
   date?: Date | null;
   className?: string;
 }) {
-  const { i18n } = useLocale();
-  const dateFormatter = Intl.DateTimeFormat(i18n.language, {
+  const locale = useLocale();
+  const dateFormatter = Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",

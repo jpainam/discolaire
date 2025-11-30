@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+
 import type { RouterOutputs } from "@repo/api";
 
 import ContainersIcon from "~/components/icons/containers";
 import ExpenseIcon from "~/components/icons/expenses";
 import RevenueUpIcon from "~/components/icons/revenue-up";
 import SalesIcon from "~/components/icons/sales";
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 
 export function TransactionTotals({
@@ -15,7 +16,7 @@ export function TransactionTotals({
 }: {
   stats: RouterOutputs["transaction"]["stats"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const percentage = 4;
 
@@ -75,7 +76,7 @@ function TransactionStatCard({
   subtitle,
   title,
 }: TransactionStatCardProps) {
-  const { i18n } = useLocale();
+  const locale = useLocale();
 
   return (
     <div className="bg-muted flex flex-row items-center gap-4 rounded-xl border p-2">
@@ -83,7 +84,7 @@ function TransactionStatCard({
       <div className="flex flex-col">
         <div>{title}</div>
         <p className="font-lexend text-md font-semibold">
-          {totalFee?.toLocaleString(i18n.language, {
+          {totalFee?.toLocaleString(locale, {
             style: "currency",
             currency: CURRENCY,
             maximumFractionDigits: 0,

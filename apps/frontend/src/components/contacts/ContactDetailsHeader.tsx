@@ -20,6 +20,7 @@ import {
   UserIcon,
   UserPlus2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -37,7 +38,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -78,7 +78,8 @@ export function ContactDetailsHeader() {
     "contact",
     PermissionAction.DELETE,
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
 

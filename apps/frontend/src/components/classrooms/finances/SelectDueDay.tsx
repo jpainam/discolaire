@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { addDays } from "date-fns";
 import { PrinterIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 
 import { DatePicker } from "~/components/DatePicker";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 export function SelectDueDate({
   classroomId,
@@ -19,7 +19,7 @@ export function SelectDueDate({
   classroomId: string;
   format: "pdf" | "csv";
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const [date, setDate] = useState<Date | null>(() => addDays(new Date(), 7));
   const { closeModal } = useModal();
   const searchParams = useSearchParams();

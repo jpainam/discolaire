@@ -1,10 +1,11 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDays } from "date-fns";
 import i18next from "i18next";
 import { StampIcon, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -24,7 +25,6 @@ import {
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -33,7 +33,7 @@ type BookProcedureOutput = RouterOutputs["library"]["borrowBooks"][number];
 export function getReservationColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<BookProcedureOutput, unknown>[] {
   return [
     {
@@ -125,7 +125,8 @@ export function getReservationColumns({
 
 function ActionCells({ book }: { book: BookProcedureOutput }) {
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

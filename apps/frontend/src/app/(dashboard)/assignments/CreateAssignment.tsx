@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -9,11 +10,11 @@ import { Label } from "@repo/ui/components/label";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 export function CreateAssignment() {
   const { closeModal } = useModal();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
   const [classroomId, setClassroomId] = useState<string | null>(null);
   return (

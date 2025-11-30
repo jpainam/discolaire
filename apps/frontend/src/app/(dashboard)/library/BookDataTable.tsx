@@ -1,9 +1,9 @@
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { getBookColumns } from "./BookDataTableColumn";
 
 export function BookDataTable({
@@ -11,7 +11,7 @@ export function BookDataTable({
 }: {
   books: RouterOutputs["book"]["recentlyUsed"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const columns = React.useMemo(() => getBookColumns({ t: t }), [t]);
 
   const { table } = useDataTable({

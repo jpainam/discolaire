@@ -6,6 +6,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { PencilIcon, PlusCircle, TrashIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -24,7 +25,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { useLocale } from "../../../i18n/index";
 import { CreateEditStockUnit } from "./CreateEditStockUnit";
 
 export function InventoryStockUnitTable() {
@@ -55,7 +55,8 @@ export function InventoryStockUnitTable() {
     PermissionAction.CREATE,
   );
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openModal } = useModal();
   return (
     <div>

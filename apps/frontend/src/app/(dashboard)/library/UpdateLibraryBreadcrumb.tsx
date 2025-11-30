@@ -2,12 +2,12 @@
 
 import { useEffect } from "react";
 import { useSetAtom } from "jotai";
+import { useTranslations } from "next-intl";
 
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 
 export function UpdateLibraryBreadcrumb() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
   useEffect(() => {
     const breads = [

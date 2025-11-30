@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import i18next from "i18next";
 import { MoreVertical, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -22,14 +23,14 @@ import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 
 export function FeeHeader() {
   const trpc = useTRPC();
   const { data: fees } = useSuspenseQuery(trpc.fee.all.queryOptions());
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
   const { school } = useSchool();
 

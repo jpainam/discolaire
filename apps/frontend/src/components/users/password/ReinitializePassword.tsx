@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -29,7 +30,6 @@ import { Input } from "@repo/ui/components/input";
 import { authClient, useSession } from "~/auth/client";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 const passwordFormSchema = z.object({
   oldPassword: z.string().min(1),
@@ -70,7 +70,8 @@ export function ReinitializePassword() {
       toast.error(t("Not authorized"), { id: 0 });
     }
   }
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <div className="mx-auto max-w-3xl">
       <Card>

@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreVertical, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -14,11 +15,10 @@ import { Label } from "@repo/ui/components/label";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { CreateEditSchool } from "./CreateEditSchool";
 
 export function FormerSchoolHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
   return (
     <div className="flex flex-row items-center justify-center border-b px-4 py-2">

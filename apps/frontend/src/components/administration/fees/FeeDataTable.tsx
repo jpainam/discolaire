@@ -2,11 +2,11 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { FeeDataTableActions } from "./FeeDataTableAction";
 import { fetchFeesColumns } from "./FeeDataTableColumn";
@@ -22,7 +22,7 @@ export function FeeDataTable() {
     return fees;
   }, [classroomId, fees]);
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const columns = useMemo(
     () =>
       fetchFeesColumns({

@@ -1,8 +1,8 @@
 "use client";
 
-import type { RouterOutputs } from "@repo/api";
+import { useTranslations } from "next-intl";
 
-import { useLocale } from "~/i18n";
+import type { RouterOutputs } from "@repo/api";
 
 export function StaffEffectif({
   staffs,
@@ -12,7 +12,8 @@ export function StaffEffectif({
   const females = staffs.filter((staff) => staff.gender == "female").length;
   const total = staffs.length;
   const males = total - females;
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const COLORS = ["#6741D9", "#E0C6FD", "#FFBC75", "#FF7272"];
   return (
     <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm md:flex">

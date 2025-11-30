@@ -3,6 +3,7 @@
 import { isSameDay } from "date-fns";
 import i18next from "i18next";
 import { Eye } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
@@ -20,7 +21,6 @@ import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 type StudentAssignment = RouterOutputs["classroom"]["assignments"][number];
 export function StudentAssignmentTable({
@@ -33,7 +33,7 @@ export function StudentAssignmentTable({
     ? assignments.filter((item) => item.termId === term)
     : assignments;
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const router = useRouter();
   return (

@@ -2,11 +2,11 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { Mail, SendIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { DropdownMenuItem } from "@repo/ui/components/dropdown-menu";
 
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -19,7 +19,7 @@ export function DropdownInvitation({
   entityId: string;
   email?: string | null;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const confirm = useConfirm();
   const trpc = useTRPC();

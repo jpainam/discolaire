@@ -22,8 +22,7 @@
 //     userId: userId,
 //   });
 
-
-//   const format = Intl.DateTimeFormat(i18n.language, {
+//   const format = Intl.DateTimeFormat(locale, {
 //     year: "numeric",
 //     month: "short",
 //     day: "numeric",

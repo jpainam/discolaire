@@ -8,6 +8,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { Mail, MessageSquare, Phone } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -16,7 +17,6 @@ import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 
 import type { NotificationType } from "~/configs/constants";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 interface NotificationEvent {
@@ -154,7 +154,8 @@ export function NotificationPreferences() {
     }));
     upsertMutation.mutate({ userId: params.id, notifications: notifications });
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <div className="container max-w-3xl space-y-8 p-4">

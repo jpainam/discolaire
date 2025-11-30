@@ -87,7 +87,7 @@ export function GradeSheetDataTable() {
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("date")} />
         ),
-        size: 60,
+        size: 80,
         enableSorting: false,
         enableHiding: false,
         cell: ({ row }) => {
@@ -130,8 +130,9 @@ export function GradeSheetDataTable() {
                 }}
                 variant={"secondary"}
                 size={"sm"}
+                className="h-7"
               >
-                Details <ExternalLink />
+                Details <ExternalLink className="h-3 w-3" />
               </Button>
             </div>
           );

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import { useTranslations } from "next-intl";
 import { PiAddressBookTabsDuotone } from "react-icons/pi";
 
 import {
@@ -21,10 +22,9 @@ import {
 import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { SelectField } from "~/components/shared/forms/SelectField";
-import { useLocale } from "~/i18n";
 
 export function CreateUpdateProfile() {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const genders = [
     { label: t("male"), value: "male" },

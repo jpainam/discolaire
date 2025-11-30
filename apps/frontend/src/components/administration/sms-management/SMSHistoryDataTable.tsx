@@ -1,13 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import type { DataTableFilterField } from "@repo/ui/datatable/data-table-toolbar";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
 import type { SMSHistory } from "~/types/sms";
-import { useLocale } from "~/i18n";
 import { SMSHistoryDataTableActions } from "./SMSHistoryActions";
 import { fetchSmsHistoryColumns } from "./SMSHistoryColumns";
 import { SMSHistoryFloatingBar } from "./SMSHistoryFloatingBar";
@@ -19,7 +19,7 @@ export function SMSHistoryDataTable({
   count: number;
   smsHistory: SMSHistory[];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const columns = useMemo(() => {
     const columns = fetchSmsHistoryColumns({

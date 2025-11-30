@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import {
   Select,
   SelectContent,
@@ -18,7 +20,8 @@ export function TrimestreSelector({
   defaultValue?: string;
   className?: string;
 }) {
-  //const { t } = useLocale();
+  //
+  const t = useTranslations();
   return (
     <Select
       onValueChange={(val) => {

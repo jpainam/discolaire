@@ -14,6 +14,7 @@ import {
   UploadIcon,
   XIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -28,7 +29,6 @@ import {
 import { StudentSearchDialog } from "~/components/students/StudentSearchDialog";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -101,7 +101,8 @@ export function ImageGrid({
       startAfter: startAfter,
     }),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
   const pathname = usePathname();
   useEffect(() => {

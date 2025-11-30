@@ -1,10 +1,11 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { FlagOff, Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -24,7 +25,6 @@ import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -39,7 +39,7 @@ type GradeSheetGetGradeProcedureOutput = NonNullable<
 export function fetchGradeColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<GradeSheetGetGradeProcedureOutput, unknown>[] {
   return [
     {
@@ -185,7 +185,8 @@ export function fetchGradeColumns({
 
 function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openModal } = useModal();
   const trpc = useTRPC();
   const queryClient = useQueryClient();

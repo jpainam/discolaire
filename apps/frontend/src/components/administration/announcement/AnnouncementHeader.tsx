@@ -4,6 +4,7 @@
 "use client";
 
 import { ChevronDown, Printer } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -19,7 +20,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { AnnouncementSummary } from "./AnnouncementSummary";
 
 interface DateRange {
@@ -32,7 +32,7 @@ function isValidDateRange(range: any): range is DateRange {
 }
 
 export function AnnouncementHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
 
   const router = useRouter();

@@ -1,6 +1,7 @@
 "use client";
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
@@ -19,10 +20,9 @@ import { Separator } from "@repo/ui/components/separator";
 import { DatePicker } from "~/components/DatePicker";
 import { InputField } from "~/components/shared/forms/input-field";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 export function ChurchDetailsForm() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const schema = z.object({
     churchFamily: z.string().min(1),
     pastorName: z.string().optional(),

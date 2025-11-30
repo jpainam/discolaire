@@ -14,6 +14,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -40,7 +41,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -52,7 +52,8 @@ import { SubjectSessionBoard } from "./SubjectSessionBoard";
 
 export function ClassroomSubjectTable() {
   const params = useParams<{ id: string }>();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const { openSheet } = useSheet();
   const { data: session } = authClient.useSession();

@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
 import i18next from "i18next";
 import { DownloadIcon, FileIcon, RatioIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -19,13 +20,12 @@ import {
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { EmptyComponent } from "../EmptyComponent";
 
 export function EducationalResource({ className }: { className?: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: resources } = useQuery(trpc.document.latest.queryOptions({}));
   // const colors = [

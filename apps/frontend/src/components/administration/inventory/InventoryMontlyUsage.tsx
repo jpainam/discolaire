@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -28,7 +29,6 @@ import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { cn } from "@repo/ui/lib/utils";
 
 import { useIsMobile } from "~/hooks/use-mobile";
-import { useLocale } from "~/i18n";
 
 export const description = "An interactive area chart";
 
@@ -163,7 +163,8 @@ export function InventoryMonthlyUsage({ className }: { className?: string }) {
     startDate.setDate(startDate.getDate() - daysToSubtract);
     return date >= startDate;
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <Card className={cn("@container/card", className)}>
       <CardHeader>

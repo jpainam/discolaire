@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import {
   Table,
@@ -14,7 +15,6 @@ import {
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import FlatBadge from "~/components/FlatBadge";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { ReportCardSummary } from "./ReportCardSummary";
 
@@ -31,7 +31,7 @@ interface ReportCardTableProps {
   }[];
 }
 export function ReportCardTable({ reportCard }: ReportCardTableProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const rowClassName = "border text-center py-0 text-sm";
   console.log(reportCard);
   return (

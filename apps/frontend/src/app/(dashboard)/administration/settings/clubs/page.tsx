@@ -1,7 +1,9 @@
+import { getTranslations } from "next-intl/server";
+
 import { Label } from "@repo/ui/components/label";
 
 import { ClubTable } from "./ClubTable";
-import { getTranslations } from "next-intl/server";
+
 export default async function Page() {
   const t = await getTranslations();
 

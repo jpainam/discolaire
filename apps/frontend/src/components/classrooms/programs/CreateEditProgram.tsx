@@ -7,6 +7,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 //import { html_content } from "./editor-content";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -36,7 +37,6 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
@@ -105,7 +105,7 @@ export function CreateEditProgram({
     });
   };
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   return (
     <Form {...form}>

@@ -1,11 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
@@ -13,7 +13,8 @@ import { useTRPC } from "~/trpc/react";
 export function ContactDetails({ contactId }: { contactId: string }) {
   const trpc = useTRPC();
   const contactQuery = useQuery(trpc.contact.get.queryOptions(contactId));
-  const { t } = useLocale();
+
+  const t = useTranslations();
   if (contactQuery.isPending) {
     return (
       <div className="grid gap-2 md:grid-cols-2">

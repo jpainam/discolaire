@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExternalLink, Trash2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -20,7 +21,6 @@ import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -44,7 +44,9 @@ export default function StudentContactList({
   const contactQuery = useQuery(trpc.contact.get.queryOptions(contactId));
 
   const { openModal } = useModal();
-  const { t, i18n } = useLocale();
+
+  const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const confirm = useConfirm();
 
@@ -61,7 +63,7 @@ export default function StudentContactList({
     }),
   );
 
-  const dateFormatter = Intl.DateTimeFormat(i18n.language, {
+  const dateFormatter = Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",

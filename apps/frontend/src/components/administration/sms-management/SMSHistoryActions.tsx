@@ -3,11 +3,11 @@
 import type { Table } from "@tanstack/react-table";
 import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
 import type { SMSHistory } from "~/types/sms";
-import { useLocale } from "~/i18n";
 import { exportTableToCSV } from "~/lib/export";
 
 interface TasksTableToolbarActionsProps {
@@ -17,7 +17,7 @@ interface TasksTableToolbarActionsProps {
 export function SMSHistoryDataTableActions({
   table,
 }: TasksTableToolbarActionsProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   //const confirm = useConfirm();
   return (
     <div className="flex items-center gap-2">

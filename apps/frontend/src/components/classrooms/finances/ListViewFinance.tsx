@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import i18next from "i18next";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
@@ -18,7 +19,6 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
 
@@ -35,7 +35,8 @@ export function ListViewFinance({
   amountDue: number;
   type: string;
 }) {
-  const { t, i18n } = useLocale();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const total = students.reduce(
     (acc, stud) => acc + (stud.balance - amountDue),
@@ -117,7 +118,7 @@ export function ListViewFinance({
             <TableRow>
               <TableCell colSpan={4}>{t("total")}</TableCell>
               <TableCell className="text-right">
-                {total.toLocaleString(i18n.language, {
+                {total.toLocaleString(locale, {
                   style: "currency",
                   currency: CURRENCY,
                   maximumFractionDigits: 0,

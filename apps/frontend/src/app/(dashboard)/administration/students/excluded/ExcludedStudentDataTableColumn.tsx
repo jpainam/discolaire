@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 
 import type { RouterOutputs } from "@repo/api";
@@ -13,7 +13,7 @@ import { getFullName } from "~/utils";
 export function fetchStudentColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<RouterOutputs["student"]["excluded"][number]>[] {
   return [
     {

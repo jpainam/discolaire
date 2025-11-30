@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRightIcon, Home } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Collapsible,
@@ -20,8 +21,6 @@ import {
   SidebarMenuSubItem,
 } from "@repo/ui/components/sidebar";
 
-import { useLocale } from "~/i18n";
-
 export function NavMain({
   items,
 }: {
@@ -36,7 +35,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const pathname = usePathname();
   return (
     <>

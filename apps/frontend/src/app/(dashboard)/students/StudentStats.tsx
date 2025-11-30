@@ -1,9 +1,9 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { StatsGrid } from "~/components/students/StudentStats";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function StudentStats() {
@@ -13,7 +13,8 @@ export function StudentStats() {
   );
 
   //const repeating = students.filter((student) => student.isRepeating).length;
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <StatsGrid
       className="mx-4 mt-2"

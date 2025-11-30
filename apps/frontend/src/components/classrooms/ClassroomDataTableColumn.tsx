@@ -1,7 +1,7 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
@@ -15,6 +15,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -39,7 +40,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -50,7 +50,7 @@ type ClassroomProcedureOutput = RouterOutputs["classroom"]["all"][number];
 export function getColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<ClassroomProcedureOutput, unknown>[] {
   return [
     {
@@ -290,7 +290,8 @@ export function getColumns({
 function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const router = useRouter();
 
   const canDeleteClassroom = useCheckPermission(

@@ -4,6 +4,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toZonedTime } from "date-fns-tz";
 import { SaveIcon, XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -14,7 +15,6 @@ import { Form } from "@repo/ui/components/form";
 
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { CreateUpdateAddress } from "./CreateUpdateAddress";
 import { CreateUpdateDenom } from "./CreateUpdateDenom";
@@ -67,7 +67,7 @@ const createUpdateStudentSchema = z.object({
 
 type UpdateGetStudent = RouterOutputs["student"]["get"];
 export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const form = useForm({
     resolver: standardSchemaResolver(createUpdateStudentSchema),

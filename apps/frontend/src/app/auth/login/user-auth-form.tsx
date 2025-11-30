@@ -20,7 +20,7 @@
 // import { toast } from "sonner";
 // import { z } from "zod/v4";
 // import { signIn } from "~/actions/signin";
-// import { useLocale } from "~/i18n";
+// import { useTranslations } from "next-intl";
 // import { cn } from "~/lib/utils";
 
 // type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
@@ -39,7 +39,7 @@
 //   });
 //   const searchParams = useSearchParams();
 //   const redirect = searchParams.get("redirect");
-//   const { t } = useLocale();
+//
 //   const [isPending, setIsPending] = React.useState(false);
 //   const handleSubmit = async (values: z.infer<typeof schema>) => {
 //     setIsPending(true);

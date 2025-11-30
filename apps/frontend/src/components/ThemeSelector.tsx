@@ -9,6 +9,7 @@ import {
   Shuffle,
   Sun,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
 import { Button } from "@repo/ui/components/button";
@@ -33,7 +34,6 @@ import {
 } from "@repo/ui/components/tooltip";
 
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
-import { useLocale } from "~/i18n";
 import { useThemeConfig } from "~/providers/ActiveThemeProvider";
 import { defaultThemes } from "~/themes";
 
@@ -41,7 +41,8 @@ type ThemeKey = keyof typeof defaultThemes;
 
 export function ThemeSelector() {
   const { activeTheme, setActiveTheme } = useThemeConfig();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const { resolvedTheme } = useTheme();
   const currentMode = (resolvedTheme ?? "light") as "light" | "dark";

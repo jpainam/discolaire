@@ -1,15 +1,16 @@
 "use client";
 
 import { Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 export function SchoolDetailAction({ schoolId }: { schoolId: string }) {
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <div className="flex flex-row items-center gap-2">
       <Button

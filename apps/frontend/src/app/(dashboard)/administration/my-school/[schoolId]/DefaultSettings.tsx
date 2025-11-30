@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -33,7 +34,6 @@ import { CountryPicker } from "~/components/shared/CountryPicker";
 import { timezones } from "~/data/timezones";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { MultiSelectCombobox } from "./multi-selector";
@@ -53,7 +53,7 @@ export function DefaultSettings({
 }: {
   school: RouterOutputs["school"]["get"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
 

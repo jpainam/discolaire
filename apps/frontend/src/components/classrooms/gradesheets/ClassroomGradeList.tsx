@@ -8,6 +8,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -40,7 +41,6 @@ import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -57,7 +57,8 @@ export function ClassroomGradeList({
   className?: string;
 }) {
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const { openModal } = useModal();
   const [query, setQuery] = useState("");

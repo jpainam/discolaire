@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,12 +16,12 @@ import {
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 export function SubscriptionPlans({ plan }: { plan: string }) {
   const [selectedPlan, setSelectedPlan] = useState(plan);
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const confirm = useConfirm();
   const alertContent = (
     <>{t("contact_your_school_for_paiement_and_subscription")}</>

@@ -18,7 +18,7 @@ import { breadcrumbAtom } from "~/lib/atoms";
 
 export const Breadcrumbs = () => {
   const [breadcrumbs, setBreadcrumbs] = useAtom(breadcrumbAtom);
-  //const { t } = useLocale();
+  //
   const pathname = usePathname();
 
   useEffect(() => {

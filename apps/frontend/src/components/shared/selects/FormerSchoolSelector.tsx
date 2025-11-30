@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { decode } from "entities";
+import { useTranslations } from "next-intl";
 
 import { SearchCombobox } from "~/components/SearchCombobox";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -19,7 +19,7 @@ export function FormerSchoolSelector({
 }: FormerSchoolSelectorProps) {
   const trpc = useTRPC();
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState("");

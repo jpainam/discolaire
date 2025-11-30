@@ -1,11 +1,12 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -22,7 +23,6 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -34,7 +34,7 @@ type ClassroomGetAssignemntProcedureOutput = NonNullable<
 export function fetchAssignmentTableColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<ClassroomGetAssignemntProcedureOutput, unknown>[] {
   const dateFormatter = new Intl.DateTimeFormat(i18next.language, {
     month: "short",
@@ -170,7 +170,8 @@ function ActionsCell({
   assignment: ClassroomGetAssignemntProcedureOutput;
 }) {
   const queryClient = useQueryClient();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const deleteAssignment = useMutation(
     trpc.assignment.delete.mutationOptions({

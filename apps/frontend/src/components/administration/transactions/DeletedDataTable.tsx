@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { getDeletedDataTableColumn } from "./DeletedDataTableColumn";
 
@@ -14,7 +14,7 @@ export function DeletedTransactionDataTable({
 }: {
   transactions: RouterOutputs["transaction"]["getDeleted"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { school } = useSchool();
 
   const columns = useMemo(

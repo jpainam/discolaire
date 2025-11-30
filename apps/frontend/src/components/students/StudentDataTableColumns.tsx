@@ -1,13 +1,14 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import i18next from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -26,7 +27,6 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 import { AvatarState } from "~/components/AvatarState";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getAge, getFullName } from "~/utils";
@@ -36,7 +36,7 @@ import { SimpleTooltip } from "../simple-tooltip";
 type StudentAllProcedureOutput = RouterOutputs["enrollment"]["all"][number];
 
 interface UseStudentColumnsProps {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }
 
 export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
@@ -350,7 +350,7 @@ export function fetchStudentColumns({ t }: UseStudentColumnsProps): {
 }
 
 function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();

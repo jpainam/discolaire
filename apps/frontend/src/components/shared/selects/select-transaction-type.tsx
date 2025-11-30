@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { Label } from "@repo/ui/components/label";
 import {
   Select,
@@ -7,7 +9,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface SelectTransactionTypeProps {
@@ -36,7 +37,7 @@ export function SelectTransactionType({
   onChange,
   placeholder,
 }: SelectTransactionTypeProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   return (
     <div className={cn("flex items-center gap-4", className)}>

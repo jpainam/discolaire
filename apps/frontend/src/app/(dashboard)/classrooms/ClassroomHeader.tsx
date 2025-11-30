@@ -1,17 +1,17 @@
 "use client";
 
 import { Download, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function ClassroomHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const canCreateClassroom = useCheckPermission(
     "classroom",

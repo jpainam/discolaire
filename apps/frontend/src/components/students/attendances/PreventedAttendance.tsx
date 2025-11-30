@@ -1,9 +1,9 @@
 "use client";
 
-import { useLocale } from "~/i18n";
+import { useTranslations } from "next-intl";
 
 export function PreventedAttendance() {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <div className="flex flex-col border-l">
       <div className="flex flex-row items-center justify-between">

@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -18,7 +19,6 @@ import {
 import { InputField } from "~/components/shared/forms/input-field";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const enrollFormSchema = z.object({
@@ -34,7 +34,8 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
     },
     resolver: standardSchemaResolver(enrollFormSchema),
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();

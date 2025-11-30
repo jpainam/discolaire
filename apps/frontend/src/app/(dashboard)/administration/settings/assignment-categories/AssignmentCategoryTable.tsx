@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -22,12 +23,11 @@ import {
 } from "@repo/ui/components/table";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function AssignmentCategoryTable() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

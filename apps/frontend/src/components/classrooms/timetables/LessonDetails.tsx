@@ -8,13 +8,13 @@ import {
   Trash2,
   User2Icon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -23,7 +23,7 @@ export function LessonDetails({
 }: {
   event: RouterOutputs["subjectTimetable"]["byClassroom"][number];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const confirm = useConfirm();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -62,20 +62,20 @@ export function LessonDetails({
         {t("start_time")}
       </div>
       <div>
-        {/* {event.start.toLocaleDateString(i18n.language, {
+        {/* {event.start.toLocaleDateString(locale, {
           timeZone: "UTC",
         })}{" "}
-        - {event.start.toLocaleTimeString(i18n.language)} */}
+        - {event.start.toLocaleTimeString(locale)} */}
       </div>
       <div className="text-muted-foreground flex flex-row items-center">
         <CalendarDays className="mr-2 h-4 w-4" />
         {t("end_time")}
       </div>
       <div>
-        {/* {event.end.toLocaleDateString(i18n.language, {
+        {/* {event.end.toLocaleDateString(locale, {
           timeZone: "UTC",
         })}{" "}
-        - {event.end.toLocaleTimeString(i18n.language)} */}
+        - {event.end.toLocaleTimeString(locale)} */}
       </div>
 
       <Button

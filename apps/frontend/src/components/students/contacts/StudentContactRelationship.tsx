@@ -3,6 +3,7 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Save, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -21,7 +22,6 @@ import { Separator } from "@repo/ui/components/separator";
 
 import { authClient } from "~/auth/client";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({
@@ -49,7 +49,8 @@ export function StudentContactRelationship({
   studentContact: StudentContactGetProcedureOutput;
 }) {
   const { data: session } = authClient.useSession();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
 
   const disabled =
@@ -164,7 +165,7 @@ export function StudentContactRelationship({
               <Separator />
               <div className="mb-2 font-semibold">
                 {t("allowWhichDataToContact", {
-                  name: studentContact.student.lastName,
+                  name: studentContact.student.lastName ?? "",
                 })}
               </div>
               <div className="grid gap-2 md:grid-cols-3">

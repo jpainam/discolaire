@@ -2,6 +2,7 @@
 
 import { useParams, usePathname } from "next/navigation";
 import { MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,10 +16,9 @@ import {
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { useLocale } from "~/i18n";
 
 export function PrintAction() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   return (

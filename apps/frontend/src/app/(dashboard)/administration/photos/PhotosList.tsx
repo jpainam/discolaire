@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useSetAtom } from "jotai";
+import { useTranslations } from "next-intl";
 
 import {
   Card,
@@ -13,11 +14,10 @@ import {
 } from "@repo/ui/components/card";
 
 import FolderIcon from "~/components/icons/folder-solid";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 
 export function PhotosList() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const setBreadcrumbs = useSetAtom(breadcrumbAtom);
   useEffect(() => {
     setBreadcrumbs([
@@ -68,7 +68,7 @@ function PhotoListItem({
   totalFiles: number;
   href: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <Link href={href}>
       <Card className="gap-2 p-2">

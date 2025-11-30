@@ -13,6 +13,7 @@ import {
   PlusIcon,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -38,14 +39,13 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSubscription } from "./CreateEditSubscription";
 
 export function SubscriptionHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openSheet } = useSheet();
   const trpc = useTRPC();
   const queryClient = useQueryClient();

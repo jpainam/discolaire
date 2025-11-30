@@ -2,16 +2,16 @@
 
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { InventoryDataTableAction } from "./InventoryDataTableAction";
 import { getColumns } from "./InventoryDataTableColumn";
 
 export function InventoryDataTable() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: inventory } = useSuspenseQuery(
     trpc.inventory.all.queryOptions(),

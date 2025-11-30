@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -21,7 +22,6 @@ import {
 import { Input } from "@repo/ui/components/input";
 
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { FileUploader } from "~/uploads/file-uploader";
 
@@ -43,7 +43,7 @@ const formSchema = z.object({
 });
 
 export function CreateEditSchool({ school }: { school: School }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const router = useRouter();

@@ -8,6 +8,7 @@ import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   DropdownMenu,
@@ -26,8 +27,6 @@ import {
   useSidebar,
 } from "@repo/ui/components/sidebar";
 
-import { useLocale } from "~/i18n";
-
 export function NavProjects({
   projects,
 }: {
@@ -38,7 +37,8 @@ export function NavProjects({
   }[];
 }) {
   const { isMobile } = useSidebar();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>{t("communications")}</SidebarGroupLabel>

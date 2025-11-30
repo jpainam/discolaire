@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import type { RouterOutputs } from "@repo/api";
 import {
   Table,
@@ -10,14 +12,12 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { useLocale } from "~/i18n";
-
 export function DirectoryTable({
   directories,
 }: {
   directories: RouterOutputs["directory"]["all"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   console.log(directories);
   return (
     <div className="mx-2 rounded-lg border">

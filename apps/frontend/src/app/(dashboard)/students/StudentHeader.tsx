@@ -1,16 +1,16 @@
 "use client";
 
 import { Download, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function StudentHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const router = useRouter();
   const canCreateStudent = useCheckPermission(
     "student",

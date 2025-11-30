@@ -5,7 +5,6 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { t } from "i18next";
 import {
   BellIcon as BrandTelegram,
   CircleEqual,
@@ -18,6 +17,7 @@ import {
   Phone,
   Trash,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -76,6 +76,7 @@ export function CommunicationChannelList() {
     }
   };
   const queryClient = useQueryClient();
+  const t = useTranslations();
   const deleteCommunicationChannel = useMutation(
     trpc.communicationChannel.delete.mutationOptions({
       onSuccess: async () => {

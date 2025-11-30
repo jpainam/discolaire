@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
@@ -18,7 +19,6 @@ import {
 
 import { searchStudents } from "~/actions/search";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { useLocale } from "~/i18n";
 import { StudentSearchResultCard } from "./StudentSearchResultCard";
 
 export function StudentSearchPage() {
@@ -31,7 +31,8 @@ export function StudentSearchPage() {
     RouterOutputs["student"]["all"]
   >([]);
   const [isSearching, setIsSearching] = useState(false);
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const handleSearch = async () => {
     setIsSearching(true);

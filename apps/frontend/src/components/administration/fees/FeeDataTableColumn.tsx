@@ -1,10 +1,11 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -23,7 +24,6 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -33,7 +33,7 @@ type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>[number];
 export function fetchFeesColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<FeeProcedureOutput, unknown>[] {
   const dateFormat = Intl.DateTimeFormat(i18next.language, {
     year: "numeric",
@@ -156,7 +156,7 @@ export function fetchFeesColumns({
 }
 
 function ActionCell({ fee }: { fee: Fee }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
   const confirm = useConfirm();
   const trpc = useTRPC();

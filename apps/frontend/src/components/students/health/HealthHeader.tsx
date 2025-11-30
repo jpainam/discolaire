@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { Separator } from "@repo/ui/components/separator";
 
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function HealthHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const { createQueryString } = useCreateQueryString();

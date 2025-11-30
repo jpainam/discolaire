@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FileIcon, MoreHorizontal, Paperclip, Star, X } from "lucide-react";
+import { useLocale } from "next-intl";
 
 import {
   Avatar,
@@ -10,7 +11,6 @@ import {
 import { Button } from "@repo/ui/components/button";
 import { Textarea } from "@repo/ui/components/textarea";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { useMailContext } from "./MailContextProvider";
 
@@ -41,7 +41,8 @@ export function MailDetail({ emailId }: { emailId: string }) {
     }
   };
   const email = emailQuery.data;
-  const { i18n } = useLocale();
+
+  const locale = useLocale();
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="bg-background sticky top-0 flex items-center justify-between border-b p-4">
@@ -78,7 +79,7 @@ export function MailDetail({ emailId }: { emailId: string }) {
                   </div>
                   <div className="text-muted-foreground text-xs">
                     To: {message.to} •{" "}
-                    {message.date.toLocaleDateString(i18n.language, {
+                    {message.date.toLocaleDateString(locale, {
                       month: "2-digit",
                       day: "2-digit",
                       year: "2-digit",

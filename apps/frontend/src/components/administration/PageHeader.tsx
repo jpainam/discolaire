@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import {
   Breadcrumb,
@@ -12,7 +13,6 @@ import {
 import { Separator } from "@repo/ui/components/separator";
 import { SidebarTrigger } from "@repo/ui/components/sidebar";
 
-import { useLocale } from "~/i18n";
 import { pageHeaderBreadcrumbs } from "./menu";
 
 export function PageHeader() {
@@ -21,7 +21,8 @@ export function PageHeader() {
     title: string;
     url?: string;
   }[] = pageHeaderBreadcrumbs[pathname] ?? [];
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

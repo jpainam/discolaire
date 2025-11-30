@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { School } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -18,7 +18,7 @@ export function ClassroomStatistics({ className }: { className?: string }) {
   const trpc = useTRPC();
   const classroomsQuery = useQuery(trpc.classroom.all.queryOptions());
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   if (classroomsQuery.isPending) {
     return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { Label } from "@repo/ui/components/label";
 
@@ -8,10 +9,9 @@ import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 export function GradesReportsHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();

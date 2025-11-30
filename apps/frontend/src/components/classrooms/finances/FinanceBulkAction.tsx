@@ -1,6 +1,7 @@
 "use client";
 
 import { MailIcon, SendHorizonal, SendIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   DropdownMenuItem,
@@ -12,12 +13,12 @@ import {
 
 import FlatBadge from "~/components/FlatBadge";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import SendNotificationDialog from "./SendNotificationDialog";
 
 export function FinanceBulkAction() {
   const { openModal } = useModal();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>

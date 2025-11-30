@@ -3,6 +3,7 @@
 import type { PropsWithChildren } from "react";
 import type { FileWithPath } from "react-dropzone";
 import React, { useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
@@ -10,7 +11,6 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { ImageCropper } from "~/components/image-cropper";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 export type FileWithPreview = FileWithPath & {
   preview: string;
@@ -53,7 +53,8 @@ export function ChangeAvatarButton(
     onDrop,
     accept,
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const handleUpload = useCallback(
     // eslint-disable-next-line react-hooks/preserve-manual-memoization

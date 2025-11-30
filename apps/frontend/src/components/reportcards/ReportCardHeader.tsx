@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { MailIcon, MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
@@ -17,7 +18,6 @@ import { Label } from "@repo/ui/components/label";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -26,7 +26,7 @@ import { ClassroomStudentSelector } from "../shared/selects/ClassroomStudentSele
 import { TermSelector } from "../shared/selects/TermSelector";
 
 export function ReportCardHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();
   const searchParams = useSearchParams();

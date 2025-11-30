@@ -32,7 +32,7 @@
 // import { EmptyState } from "~/components/EmptyState";
 // import { useCreateQueryString } from "~/hooks/create-query-string";
 // import { useRouter } from "~/hooks/use-router";
-// import { useLocale } from "~/i18n";
+// import { useTranslations } from "next-intl";
 // import { showErrorToast } from "~/lib/handle-error";
 // import { cn } from "~/lib/utils";
 // import { useTRPC } from "~/trpc/react";
@@ -42,7 +42,7 @@
 // }: {
 //   className?: string;
 // }) {
-//   const { t } = useLocale();
+//
 //   const chartConfig = React.useMemo(() => {
 //     return {
 //       transactions: {

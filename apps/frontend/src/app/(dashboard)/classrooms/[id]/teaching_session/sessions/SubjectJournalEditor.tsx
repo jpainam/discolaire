@@ -10,6 +10,7 @@ import {
   PaperclipIcon,
   X,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -44,7 +45,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { SubjectProgramSelector } from "~/components/shared/selects/SubjectProgramSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 
@@ -59,7 +59,9 @@ export function SubjectJournalEditor({
   defaultSubjectId: number;
 }) {
   const trpc = useTRPC();
-  const { t, i18n } = useLocale();
+
+  const t = useTranslations();
+  const locale = useLocale();
   const [subjectId] = useQueryState(
     "subjectId",
     parseAsInteger.withDefault(defaultSubjectId),
@@ -107,7 +109,7 @@ export function SubjectJournalEditor({
     }
   };
 
-  const dateFormat = new Intl.DateTimeFormat(i18n.language, {
+  const dateFormat = new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",

@@ -93,7 +93,8 @@ export function fetchFundColumns(): ColumnDef<FundProcedureOutput, unknown>[] {
 }
 
 // function ActionCell({ fee }: { fee: Fee }) {
-//   const { t } = useLocale();
+//
+
 //   const { openModal } = useModal();
 //   const confirm = useConfirm();
 //   const trpc = useTRPC();

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import { MoreVertical, Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -21,7 +22,6 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 
 export function ProgramHeader({
@@ -29,7 +29,7 @@ export function ProgramHeader({
 }: {
   subject: RouterOutputs["subject"]["get"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string; subjectId: string }>();
 
   const pathname = usePathname();

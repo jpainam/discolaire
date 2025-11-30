@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -18,7 +19,6 @@ import {
 import { Input } from "@repo/ui/components/input";
 
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
@@ -28,7 +28,7 @@ const formSchema = z.object({
 });
 
 export default function Page() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

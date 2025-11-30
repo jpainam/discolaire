@@ -2,6 +2,7 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Rows3Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -17,7 +18,6 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export function LatestGradesheet() {
@@ -39,7 +39,8 @@ export function LatestGradesheet() {
       ),
     };
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const chartConfig = {
     min: {
       label: "Min",

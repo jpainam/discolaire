@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import {
   Select,
@@ -11,7 +12,6 @@ import {
 } from "@repo/ui/components/select";
 import { cn } from "@repo/ui/lib/utils";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 interface SelectorProps {
@@ -25,7 +25,7 @@ export function ConsumableSelector({
   onChange,
   className,
 }: SelectorProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: inventory } = useSuspenseQuery(
     trpc.inventory.consumables.queryOptions(),

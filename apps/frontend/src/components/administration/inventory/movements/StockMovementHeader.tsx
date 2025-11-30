@@ -8,6 +8,7 @@ import {
   FunnelIcon,
   MoreVerticalIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -32,7 +33,6 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStockEntry } from "./CreateEditStockEntry";
 import { CreateEditStockWithdrawal } from "./CreateEditStockWithdrawal";
@@ -40,7 +40,8 @@ import { CreateEditStockWithdrawal } from "./CreateEditStockWithdrawal";
 export function StockMovementHeader() {
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const { openSheet } = useSheet();
 

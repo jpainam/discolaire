@@ -1,16 +1,16 @@
 "use client";
 
 import { FolderOpen, UploadCloudIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 export function StaffDocumentHeader({ userId }: { userId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
 
   return (

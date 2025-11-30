@@ -3,6 +3,7 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -34,7 +35,6 @@ import {
 
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
@@ -54,7 +54,8 @@ export function BookCategory() {
       },
     }),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openModal } = useModal();
   const canUpdateCategory = useCheckPermission(
     "library",
@@ -213,7 +214,8 @@ function CreateEditCategory({
       createCategory.mutate({ name: data.name });
     }
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { closeModal } = useModal();
   return (
     <Form {...form}>

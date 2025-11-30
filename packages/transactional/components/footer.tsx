@@ -3,7 +3,6 @@ import { Container, Link, Text } from "@react-email/components";
 //const publicUrl = getAssetUrl();
 
 export const Footer = () => {
-  //const { t } = geti18n({ locale });
   return (
     <Container className="mx-auto mt-[32px] max-w-[600px] text-center">
       <Text className="m-0 text-[12px] text-[#666666]">

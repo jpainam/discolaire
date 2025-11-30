@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { ArrowRightLeft, ChevronRight, MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { StudentStatus } from "@repo/db/enums";
@@ -16,7 +17,6 @@ import { Label } from "@repo/ui/components/label";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { EnrollStudentModal } from "./EnrollStudentModal";
@@ -26,7 +26,7 @@ export function StudentEnrollmentHeader({
 }: {
   student: RouterOutputs["student"]["get"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const { openModal } = useModal();
   const params = useParams<{ id: string }>();

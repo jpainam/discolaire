@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import _ from "lodash";
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
@@ -15,14 +16,12 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
-
 export function TransactionClassrooms({
   quotas,
 }: {
   quotas: RouterOutputs["transaction"]["quotas"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const chartConfig = useMemo(() => {
     return {
       revenue: {

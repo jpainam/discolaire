@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { KeyRound } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -30,7 +31,6 @@ import { Input } from "@repo/ui/components/input";
 
 import { authClient } from "~/auth/client";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 
 const formSchema = z.object({
   password: z.string().min(1),
@@ -49,7 +49,8 @@ export default function ResetPassword() {
     },
   });
   const router = useRouter();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 

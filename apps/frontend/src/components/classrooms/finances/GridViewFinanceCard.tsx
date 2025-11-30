@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import i18next from "i18next";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
@@ -9,7 +10,6 @@ import { Card, CardContent } from "@repo/ui/components/card";
 
 import { AvatarState } from "~/components/AvatarState";
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { getFullName } from "~/utils";
@@ -30,7 +30,7 @@ export function GridViewFinanceCard({
   const student = studentBalance;
   const balance = studentBalance.balance;
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const remaining = balance - amountDue;
 
   if (type == "credit" && remaining < 0) {

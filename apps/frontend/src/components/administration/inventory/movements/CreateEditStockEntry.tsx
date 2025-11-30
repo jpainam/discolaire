@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -20,7 +21,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 
 import { ConsumableSelector } from "~/components/administration/inventory/ConsumableSelector";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
@@ -49,7 +49,8 @@ export function CreateEditStockEntry({
   });
 
   const trpc = useTRPC();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const queryClient = useQueryClient();
   const createMovementMutation = useMutation(
     trpc.inventory.createStockMovement.mutationOptions({

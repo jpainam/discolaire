@@ -4,18 +4,18 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
+import { useTranslations } from "next-intl";
 
 import { Label } from "@repo/ui/components/label";
 
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 
 export function StaffDetailHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
   const params = useParams<{ id: string }>();

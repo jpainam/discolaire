@@ -3,6 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -10,7 +11,6 @@ import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -21,7 +21,8 @@ export function SubscriptionDataTableAction({
   table: Table<RouterOutputs["subscription"]["all"][number]>;
 }) {
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const canDeleteSubscription = useCheckPermission(
     "subscription",

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Command,
@@ -15,7 +16,6 @@ import {
 } from "@repo/ui/components/command";
 
 import { AvatarState } from "~/components/AvatarState";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface Option {
@@ -63,7 +63,8 @@ const VirtualizedCommand = ({
   });
 
   const virtualOptions = virtualizer.getVirtualItems();
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const handleSearch = (search: string) => {
     setFilteredOptions(

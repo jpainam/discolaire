@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -10,7 +11,6 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export const description = "A bar chart with a label";
@@ -38,7 +38,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GradeDistributionChart() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: chartData } = useSuspenseQuery(
     trpc.gradeSheet.distribution.queryOptions(),

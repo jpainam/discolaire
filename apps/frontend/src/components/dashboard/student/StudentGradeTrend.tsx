@@ -86,7 +86,7 @@ export function StudentGradeTrend({
     startDate.setDate(startDate.getDate() - daysToSubtract);
     return date >= startDate;
   });
-  //const { t } = useLocale();
+  //
 
   return (
     <Card className="@container/card">

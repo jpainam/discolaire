@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { decode } from "entities";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -33,7 +34,6 @@ import { EmptyComponent } from "~/components/EmptyComponent";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -42,7 +42,8 @@ import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 
 export function ContactStudentTable() {
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const canUpdateContact = useCheckPermission(
     "contact",
     PermissionAction.UPDATE,

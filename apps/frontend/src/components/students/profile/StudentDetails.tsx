@@ -16,25 +16,27 @@ import {
   School,
   SquareUserRound,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { PiChurchDuotone } from "react-icons/pi";
 
 import { Separator } from "@repo/ui/components/separator";
 import { cn } from "@repo/ui/lib/utils";
 
 import House from "~/components/icons/house";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 export default function StudentDetails({ className }: { className?: string }) {
   const params = useParams<{ id: string }>();
-  const { t, i18n } = useLocale();
+
+  const t = useTranslations();
+  const locale = useLocale();
   const trpc = useTRPC();
 
   const { data: student } = useSuspenseQuery(
     trpc.student.get.queryOptions(params.id),
   );
 
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  const dateFormat = Intl.DateTimeFormat(locale, {
     timeZone: "UTC",
     year: "numeric",
     month: "long",

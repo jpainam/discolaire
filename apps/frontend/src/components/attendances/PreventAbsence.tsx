@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Paperclip } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
@@ -26,7 +27,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 
 import { useModal } from "~/hooks/use-modal";
 import { useUpload } from "~/hooks/use-upload";
-import { useLocale } from "~/i18n";
 import { FileUploader } from "~/uploads/file-uploader";
 
 const preventSchema = z.object({
@@ -53,7 +53,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
   const [files, setFiles] = React.useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const onSubmit = async (data: z.infer<typeof preventSchema>) => {
     setIsLoading(true);
     const uploadPromises = files.map((file) => {

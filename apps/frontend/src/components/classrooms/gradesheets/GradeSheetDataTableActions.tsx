@@ -4,13 +4,13 @@ import type { Table } from "@tanstack/react-table";
 import React from "react";
 import { RiDeleteBinLine } from "@remixicon/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -26,7 +26,7 @@ interface GradeSheetToolbarActionsProps {
 export function GradeSheetDataTableActions({
   table,
 }: GradeSheetToolbarActionsProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const confirm = useConfirm();
 
   const queryClient = useQueryClient();

@@ -3,19 +3,19 @@
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Label } from "@repo/ui/components/label";
 
 import { useUpload } from "~/hooks/use-upload";
-import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function PhotoHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { school } = useSchool();
   const Icon = sidebarIcons.photos;
   const { onUpload, data: uploadedFiles, isPending } = useUpload();

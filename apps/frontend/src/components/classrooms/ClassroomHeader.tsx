@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -26,7 +27,6 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -42,7 +42,8 @@ export function ClassroomHeader() {
   const { data: classrooms } = useSuspenseQuery(
     trpc.classroom.all.queryOptions(),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
   const queryClient = useQueryClient();
   const params = useParams<{ id: string }>();

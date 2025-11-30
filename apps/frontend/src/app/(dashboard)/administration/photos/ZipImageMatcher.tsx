@@ -10,6 +10,7 @@ import {
   Upload,
   XCircle,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
@@ -35,7 +36,6 @@ import {
 import { Separator } from "@repo/ui/components/separator";
 
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 interface FileMatchResult {
@@ -185,7 +185,8 @@ export function ZipImageMatcher() {
 
   const matchedCount = fileResults.filter((r) => r.matched).length;
   const unmatchedCount = fileResults.filter((r) => !r.matched).length;
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <Card className="w-full">

@@ -1,8 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -18,14 +19,17 @@ import {
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSchool } from "./CreateEditSchool";
 
 type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
 
-export function getSchoolColumns({ t }: { t: TFunction<string, unknown> }) {
+export function getSchoolColumns({
+  t,
+}: {
+  t: Translator<Record<string, never>, never>;
+}) {
   return [
     {
       accessorKey: "selected",
@@ -74,7 +78,7 @@ export function getSchoolColumns({ t }: { t: TFunction<string, unknown> }) {
 }
 
 function ActionCell({ school }: { school: FormerSchool }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const confirm = useConfirm();
 
   const { openModal } = useModal();

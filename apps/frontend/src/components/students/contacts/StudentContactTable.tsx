@@ -15,6 +15,7 @@ import {
   Trash2,
   UserCircle,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Badge } from "@repo/ui/components/badge";
@@ -48,7 +49,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -63,7 +63,7 @@ export function StudentContactTable({
   studentId: string;
   className?: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const confirm = useConfirm();
   const router = useRouter();
   const trpc = useTRPC();

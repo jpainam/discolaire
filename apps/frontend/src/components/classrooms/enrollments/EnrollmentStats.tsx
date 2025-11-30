@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import type { Student } from "@repo/db/client";
 
-import { useLocale } from "~/i18n";
-
 export function EnrollmentStats({ students }: { students: Student[] }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const total = students.length;
   const females = students.filter((s) => s.gender == "female").length;
   const males = total - females;

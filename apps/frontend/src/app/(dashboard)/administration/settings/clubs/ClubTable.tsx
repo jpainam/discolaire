@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CirclePlusIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -23,7 +24,6 @@ import {
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditClub } from "./CreateEditClub";
@@ -32,7 +32,8 @@ export function ClubTable() {
   const trpc = useTRPC();
   const clubsQuery = useQuery(trpc.setting.clubs.queryOptions());
   const clubs = clubsQuery.data ?? [];
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const confirm = useConfirm();
 
   const queryClient = useQueryClient();

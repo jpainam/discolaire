@@ -6,6 +6,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { PencilIcon, PlusIcon, Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -20,13 +21,12 @@ import {
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSchoolYearEventType } from "./CreateEditSchoolYearEventType";
 
 export function SchoolYearEventTypeTable() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const { data: eventTypes } = useSuspenseQuery(
     trpc.schoolYearEvent.eventTypes.queryOptions(),

@@ -12,6 +12,7 @@ import {
   Settings,
   User,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Sidebar,
@@ -26,7 +27,6 @@ import {
 
 import { authClient } from "~/auth/client";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 
@@ -74,7 +74,8 @@ export function UserSidebar({
       },
     ],
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { data: session } = authClient.useSession();
   const canReadPermission = useCheckPermission("policy", PermissionAction.READ);
   if (canReadPermission && session?.user.profile === "staff") {

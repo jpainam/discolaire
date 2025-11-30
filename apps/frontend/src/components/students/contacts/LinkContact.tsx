@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Loader } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -28,7 +29,6 @@ import { randomAvatar } from "~/components/raw-images";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -38,7 +38,7 @@ type Contact = NonNullable<
 >[number];
 
 export function LinkContact({ studentId }: { studentId: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
   const trpc = useTRPC();

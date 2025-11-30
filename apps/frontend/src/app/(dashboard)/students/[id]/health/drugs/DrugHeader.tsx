@@ -2,16 +2,16 @@
 
 import { useParams } from "next/navigation";
 import { PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { CreateEditDrug } from "./CreateEditDrug";
 
 export function DrugHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const { openModal } = useModal();
   return (

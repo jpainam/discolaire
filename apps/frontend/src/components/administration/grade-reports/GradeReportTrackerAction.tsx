@@ -3,6 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { RiFilter3Line } from "@remixicon/react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import {
@@ -14,7 +15,6 @@ import {
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 type ProcedureOutput = NonNullable<
@@ -26,7 +26,7 @@ export function GradeReportTrackerDataTableAction({
 }: {
   table: Table<ProcedureOutput>;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const classroomQuery = useQuery(trpc.classroom.all.queryOptions());
   const termQuery = useQuery(trpc.term.all.queryOptions());

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -21,7 +22,6 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
 import { useIsMobile } from "~/hooks/use-mobile";
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 
@@ -70,7 +70,7 @@ export function AttendanceChart() {
     return date >= startDate;
   });
 
-  const { t } = useLocale();
+  const t = useTranslations();
 
   return (
     <Card className="@container/card">

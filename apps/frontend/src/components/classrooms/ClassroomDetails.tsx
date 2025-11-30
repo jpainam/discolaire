@@ -15,13 +15,14 @@ import {
   SquareUser,
   TableProperties,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
-import { useLocale } from "~/i18n";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 
 export function ClassroomDetails() {
-  const { t, i18n } = useLocale();
+  const locale = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: fees } = useSuspenseQuery(
@@ -68,7 +69,7 @@ export function ClassroomDetails() {
             {t("fees")}
           </div>
           <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {sumBy(fees, "amount").toLocaleString(i18n.language)} {CURRENCY}
+            {sumBy(fees, "amount").toLocaleString(locale)} {CURRENCY}
           </span>
         </li>
       </ul>

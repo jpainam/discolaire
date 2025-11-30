@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLocale } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -13,13 +15,13 @@ import {
   PaginationItem,
 } from "@repo/ui/components/pagination";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 type Student = RouterOutputs["student"]["all"][number];
 
 export function StudentFooter() {
-  const { t, i18n } = useLocale();
+  const locale = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const { data: student } = useSuspenseQuery(
@@ -42,7 +44,7 @@ export function StudentFooter() {
     // }
   }, [student]);
 
-  const dateFormatter = Intl.DateTimeFormat(i18n.language, {
+  const dateFormatter = Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",

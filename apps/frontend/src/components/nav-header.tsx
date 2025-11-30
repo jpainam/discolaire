@@ -9,6 +9,7 @@ import {
   RiUserSettingsLine,
 } from "@remixicon/react";
 import { Home, Users2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   NavigationMenu,
@@ -17,11 +18,10 @@ import {
   NavigationMenuList,
 } from "@repo/ui/components/navigation-menu";
 
-import { useLocale } from "~/i18n";
-
 export function NavHeader() {
   const pathname = usePathname();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <NavigationMenu>
       <NavigationMenuList className="gap-2 *:data-[slot=navigation-menu-item]:h-7 **:data-[slot=navigation-menu-link]:py-1 **:data-[slot=navigation-menu-link]:font-medium">

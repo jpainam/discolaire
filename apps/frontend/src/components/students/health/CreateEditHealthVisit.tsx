@@ -12,6 +12,7 @@ import {
   UploadIcon,
   XIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -40,7 +41,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { DatePicker } from "~/components/DatePicker";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { getFileIcon } from "~/utils/file-icon";
 
@@ -65,7 +65,7 @@ export function CreateEditHealthVisit({
   userId: string;
   name: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const trpc = useTRPC();
   const queryClient = useQueryClient();

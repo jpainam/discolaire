@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 import {
@@ -10,10 +12,8 @@ import {
 } from "@repo/ui/components/tabs";
 import { Textarea } from "@repo/ui/components/textarea";
 
-import { useLocale } from "~/i18n";
-
 const ReportCardSummary = () => {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   return (
     <div className="m-5">

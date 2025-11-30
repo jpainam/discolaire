@@ -1,17 +1,17 @@
 "use client";
 
 import { BlocksIcon, StretchVerticalIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { CreateEditAsset } from "./CreateEditAsset";
 import { CreateEditConsumable } from "./CreateEditConsumable";
 
 export function InventoryHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
   const { openSheet } = useSheet();
   return (

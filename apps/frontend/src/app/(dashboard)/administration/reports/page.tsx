@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Download, Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { Badge } from "@repo/ui/components/badge";
@@ -22,7 +23,6 @@ import {
 } from "@repo/ui/components/tabs";
 
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { useLocale } from "~/i18n";
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -96,7 +96,8 @@ export default function DataExportPage() {
   const [format, setFormat] = useQueryState("format", {
     defaultValue: "csv",
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <div className="container mx-auto px-4 py-3">

@@ -1,14 +1,14 @@
 "use client";
 
 import { CircleGauge, LayoutPanelTop, Recycle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
-import { useLocale } from "~/i18n";
 
 export function ClassroomTabMenu() {
-  const { t } = useLocale();
+  const t = useTranslations();
   //const pathname = usePathname();
 
   const menuTabs: TabMenuOption[] = [

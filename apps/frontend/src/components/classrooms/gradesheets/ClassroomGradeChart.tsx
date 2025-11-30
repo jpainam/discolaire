@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -24,7 +25,6 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function ClassroomGradeChart({
@@ -34,7 +34,7 @@ export function ClassroomGradeChart({
   grades: RouterOutputs["gradeSheet"]["grades"];
   className?: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const p05 = grades.filter((g) => !g.isAbsent && g.grade < 5).length;
   const p09 = grades.filter((g) => g.grade >= 5 && g.grade < 10).length;
   const p13 = grades.filter((g) => g.grade >= 10 && g.grade < 14).length;

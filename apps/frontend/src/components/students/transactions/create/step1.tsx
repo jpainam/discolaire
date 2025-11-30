@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -27,7 +28,6 @@ import {
 
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 
 const makePaymentFormSchema = z.object({
@@ -61,7 +61,8 @@ export function Step1({
     },
     resolver: zodResolver(makePaymentFormSchema),
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const router = useRouter();
   const { createQueryString } = useCreateQueryString();

@@ -3,13 +3,13 @@
 import type { Table } from "@tanstack/react-table";
 import { useMutation } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { getErrorMessage } from "~/lib/handle-error";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -24,7 +24,7 @@ interface ToolbarActionsProps {
 }
 
 export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const confirm = useConfirm();
   const trpc = useTRPC();

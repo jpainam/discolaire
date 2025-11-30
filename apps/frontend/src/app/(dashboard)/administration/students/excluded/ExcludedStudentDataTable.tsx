@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { ExcludedStudentDataTableAction } from "./ExcludedStudentDataTableAction";
 import { fetchStudentColumns } from "./ExcludedStudentDataTableColumn";
 
@@ -14,7 +14,7 @@ export function ExcludedStudentDataTable({
 }: {
   students: RouterOutputs["student"]["excluded"];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
 
   const columns = useMemo(() => {
     return fetchStudentColumns({

@@ -9,7 +9,7 @@ import { useRouter } from "~/hooks/use-router";
 
 export function MakePaymentButton({ studentId }: { studentId: string }) {
   const router = useRouter();
-  //const { t } = useLocale();
+
   return (
     <Button
       onClick={() => {

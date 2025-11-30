@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreVertical, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -13,12 +14,11 @@ import { Label } from "@repo/ui/components/label";
 
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { CreateAssignment } from "./CreateAssignment";
 
 export function AssignmentToolbar() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
   const canCreateAssignment = useCheckPermission(
     "assignment",

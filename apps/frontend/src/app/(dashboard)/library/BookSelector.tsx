@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -19,7 +20,6 @@ import {
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -38,7 +38,8 @@ export const BookSelector = ({
 }: BookSelectorProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<number>(defaultValue ?? -1);
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const booksQuery = useQuery(trpc.book.all.queryOptions());
 

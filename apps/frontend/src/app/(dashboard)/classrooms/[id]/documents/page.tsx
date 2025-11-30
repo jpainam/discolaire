@@ -12,6 +12,7 @@ import {
   Search,
   SlidersHorizontal,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -31,8 +32,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
-
-import { useLocale } from "~/i18n";
 
 // Helper function to get the appropriate icon based on file type
 const getFileIcon = (fileType: string) => {
@@ -135,7 +134,8 @@ export default function Page() {
       doc.category.toLowerCase() === selectedCategory.toLowerCase();
     return matchesSearch && matchesCategory;
   });
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   return (
     <div className="mb-10 flex flex-col">

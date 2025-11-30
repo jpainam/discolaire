@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Warehouse } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -18,12 +19,11 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 export function DashboardClassroomSize({ className }: { className?: string }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   // useEffect(() => {
   //   void captureException(new Error("DashboardClassroomSize").stack ?? "");
   // }, []);

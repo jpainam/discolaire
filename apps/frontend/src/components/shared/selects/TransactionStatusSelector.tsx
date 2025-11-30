@@ -1,6 +1,7 @@
 "use client";
 
 import { AlarmClock, AlarmClockCheck, AlarmClockMinus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Select,
@@ -10,7 +11,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 export function TransactionStatusSelector({
@@ -22,7 +22,7 @@ export function TransactionStatusSelector({
   className?: string;
   placeholder?: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <Select
       onValueChange={(val) => {

@@ -9,6 +9,7 @@ import {
 } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, Loader2, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -25,7 +26,6 @@ import FlatBadge from "~/components/FlatBadge";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
@@ -38,7 +38,7 @@ export function TransactionDataTableAction({
 }: {
   table: Table<TransactionAllProcedureOutput>;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const canDeleteTransaction = useCheckPermission(

@@ -1,6 +1,7 @@
 "use client";
 
 import { ActivityIcon, CircleHelp, Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 
@@ -9,7 +10,6 @@ import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { FeedBackDialog } from "./FeedbackDialog";
 import { UserLog } from "./UserLogs";
 
@@ -19,7 +19,7 @@ export function TopRightButtons() {
   const { openSheet } = useSheet();
   const { data: session } = authClient.useSession();
   const router = useRouter();
-  const { t } = useLocale("description");
+  const t = useTranslations("description");
   return (
     <div className="hidden items-center gap-1 md:flex">
       <SimpleTooltip content="Messages">

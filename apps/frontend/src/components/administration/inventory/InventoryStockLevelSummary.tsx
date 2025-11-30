@@ -4,6 +4,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -23,8 +24,6 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { cn } from "@repo/ui/lib/utils";
-
-import { useLocale } from "~/i18n/index";
 
 export const description = "A stacked bar chart with a legend";
 
@@ -53,7 +52,7 @@ export function InventoryStockLevelSummary({
 }: {
   className?: string;
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <Card className={cn(className)}>
       <CardHeader>

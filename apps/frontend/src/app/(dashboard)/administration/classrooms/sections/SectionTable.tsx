@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -24,7 +25,6 @@ import {
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSection } from "./CreateEditSection";
@@ -33,7 +33,8 @@ export function SectionTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const sectionsQuery = useQuery(trpc.classroomSection.all.queryOptions());
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const data = sectionsQuery.data ?? [];
 
   const deleteSectionMutation = useMutation(

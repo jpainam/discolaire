@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreHorizontal, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,11 +16,10 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { CreateEditCourse } from "./CreateEditCourse";
 
 export function CourseAction() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
   return (
     <div className="flex flex-row items-center gap-2">

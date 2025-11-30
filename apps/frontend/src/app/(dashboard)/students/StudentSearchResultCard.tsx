@@ -16,6 +16,7 @@ import {
   Phone,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -34,7 +35,6 @@ import {
 import { AvatarState } from "~/components/AvatarState";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -45,7 +45,7 @@ export function StudentSearchResultCard({
 }: {
   student: RouterOutputs["student"]["all"][number];
 }) {
-  const { t } = useLocale();
+  const t = useTranslations();
   const router = useRouter();
 
   const trpc = useTRPC();

@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -21,7 +22,6 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
@@ -35,7 +35,8 @@ export function SubjectHeader() {
     trpc.classroom.subjects.queryOptions(params.id),
   );
   const Icon = sidebarIcons.subjects;
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const v = new Set<string>(subjects.map((s) => s.teacherId ?? ""));
   const nbTeacher = v.size;

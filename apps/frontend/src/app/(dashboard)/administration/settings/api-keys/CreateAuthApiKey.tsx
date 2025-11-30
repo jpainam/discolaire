@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AlertTriangle, Check, Copy, Key } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Alert, AlertDescription } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
@@ -15,10 +16,9 @@ import { Label } from "@repo/ui/components/label";
 
 import { createAuthApiKey } from "~/actions/signin";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 
 export function CreateAuthApiKey() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
   const { openModal } = useModal();
   //const router = useRouter();

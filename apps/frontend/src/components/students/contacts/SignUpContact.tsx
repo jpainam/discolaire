@@ -3,20 +3,21 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
-import { useLocale } from "~/i18n";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 import { SignUpContactIcon } from "./SignUpContactIcon";
 
 export function SignUpContact() {
   const params = useParams<{ id: string }>();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const studentContactsQuery = useQuery(
     trpc.student.contacts.queryOptions(params.id),

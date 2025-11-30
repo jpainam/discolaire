@@ -7,6 +7,7 @@ import {
   MoreVertical,
   PlusIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -30,13 +31,12 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { BookSelector } from "../BookSelector";
 import { CreateEditLoan } from "./CreateEditLoan";
 
 export function LoanHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   const { openSheet } = useSheet();

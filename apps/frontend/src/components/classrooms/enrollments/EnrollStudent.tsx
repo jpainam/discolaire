@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import {
@@ -26,7 +27,6 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { randomAvatar } from "~/components/raw-images";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -37,7 +37,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
   const [value, setValue] = useState("");
   const debounceValue = useDebounce(value, 500);
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   //const router = useRouter();

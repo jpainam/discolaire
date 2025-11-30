@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
@@ -12,7 +13,6 @@ import { Form } from "@repo/ui/components/form";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const editGradeStudentSchema = z.object({
@@ -68,7 +68,8 @@ export function EditGradeStudent({
       isAbsent: data.isAbsent,
     });
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { closeModal } = useModal();
 
   return (

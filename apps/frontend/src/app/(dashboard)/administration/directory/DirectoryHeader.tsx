@@ -1,14 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 
 import { Input } from "@repo/ui/components/input";
 
-import { useLocale } from "~/i18n";
-
 export default function DirectoryHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const [_, setSearchText] = useQueryState("q", {
     shallow: false,
   });

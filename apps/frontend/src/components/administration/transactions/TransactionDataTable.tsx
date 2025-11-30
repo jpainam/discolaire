@@ -3,10 +3,10 @@
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDataTableAction } from "./TransactionDataTableAction";
@@ -30,7 +30,8 @@ export function TransactionDataTable() {
       journalId: journalId ?? undefined,
     }),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { school } = useSchool();
 
   const columns = useMemo(

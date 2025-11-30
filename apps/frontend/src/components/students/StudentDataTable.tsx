@@ -2,10 +2,10 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { StudentDataTableActions } from "./StudentDataTableActions";
 import { fetchStudentColumns } from "./StudentDataTableColumns";
@@ -15,7 +15,8 @@ export function StudentDataTable() {
   const { data: students } = useSuspenseQuery(
     trpc.enrollment.all.queryOptions(),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const columns = useMemo(() => {
     const { columns } = fetchStudentColumns({

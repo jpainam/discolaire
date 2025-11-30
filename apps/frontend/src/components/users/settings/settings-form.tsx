@@ -2,6 +2,7 @@
 
 import React from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,8 +17,6 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-
-import { useLocale } from "~/i18n";
 
 //import { toast } from "@repo/ui/components/use-toast";
 
@@ -57,7 +56,8 @@ export function AppearanceForm() {
     //   ),
     // });
   }
-  const { t } = useLocale();
+
+  const t = useTranslations();
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

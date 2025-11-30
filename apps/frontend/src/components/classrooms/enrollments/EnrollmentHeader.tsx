@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -23,7 +24,6 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
@@ -40,7 +40,8 @@ export function EnrollmentHeader({ className }: { className?: string }) {
   const { data: classroom } = useSuspenseQuery(
     trpc.classroom.get.queryOptions(params.id),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const { openModal } = useModal();
   const { schoolYear } = useSchool();
 

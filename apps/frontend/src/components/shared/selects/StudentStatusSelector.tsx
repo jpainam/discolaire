@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { StudentStatus } from "@repo/db/enums";
 import {
   Select,
@@ -9,7 +11,6 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 
 interface StudentStatusSelectorProps {
@@ -23,7 +24,7 @@ export function StudentStatusSelector({
   className,
   defaultValue,
 }: StudentStatusSelectorProps) {
-  const { t } = useLocale();
+  const t = useTranslations();
   return (
     <Select
       defaultValue={defaultValue ?? undefined}

@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import Link from "next/link";
 import i18next from "i18next";
 
@@ -15,7 +15,7 @@ import { getFullName } from "~/utils";
 export function fetchStudentColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<RouterOutputs["enrollment"]["all"][number]>[] {
   const dateFormater = Intl.DateTimeFormat(i18next.language, {
     year: "numeric",

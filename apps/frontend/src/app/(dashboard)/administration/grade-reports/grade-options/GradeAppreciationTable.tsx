@@ -8,6 +8,7 @@ import {
   PlusIcon,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -37,7 +38,6 @@ import {
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditGradeAppreciation } from "./CreateEditGradeAppreciation";
@@ -50,7 +50,7 @@ export function GradeAppreciationTable() {
     trpc.gradeAppreciation.all.queryOptions(),
   );
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const deleteAppreciation = useMutation(
     trpc.gradeAppreciation.delete.mutationOptions({
       onSuccess: async () => {

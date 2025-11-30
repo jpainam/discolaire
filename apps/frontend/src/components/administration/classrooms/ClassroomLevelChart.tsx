@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -25,7 +26,6 @@ import {
 } from "@repo/ui/components/chart";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 const chartConfig = {
@@ -43,7 +43,8 @@ export function ClassroomLevelChart() {
   const classroomLevelCountQuery = useQuery(
     trpc.classroomLevel.count.queryOptions(),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   if (classroomLevelCountQuery.isPending) {
     return <Skeleton className="h-full w-full" />;
   }

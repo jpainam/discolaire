@@ -55,7 +55,7 @@
 // import { useDebouncedCallback } from "use-debounce";
 // import { DatePicker } from "~/components/DatePicker";
 // import FlatBadge from "~/components/FlatBadge";
-// import { useLocale } from "~/i18n";
+// import { useTranslations } from "next-intl";
 // import { useTRPC } from "~/trpc/react";
 
 // export default function Page() {
@@ -113,8 +113,7 @@
 //         return <Badge>{eventType}</Badge>;
 //     }
 //   };
-//   const { t } = useLocale();
-
+//
 //   return (
 //     <div className="">
 //       <Card className="shadow-none rounded-none border-none">

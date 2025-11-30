@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -21,7 +22,6 @@ import { Switch } from "@repo/ui/components/switch";
 
 import { DatePicker } from "~/components/DatePicker";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 
 type Term = RouterOutputs["term"]["all"][number];
@@ -70,7 +70,8 @@ export function CreateEditTerm({ term }: { term?: Term }) {
       },
     }),
   );
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const onSubmit = (data: z.infer<typeof createEditTermSchema>) => {
     if (term) {
       toast.loading(t("updating"), { id: 0 });

@@ -1,18 +1,18 @@
 "use client";
 
 import { PlusIcon, SendIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
 
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { CreateEditCommunicationChannel } from "./CreateEditCommunicationChannel";
 
 export function CommunicationHeader() {
-  const { t } = useLocale();
+  const t = useTranslations();
   const { openModal } = useModal();
   const canSendCommunication = useCheckPermission(
     "communication",

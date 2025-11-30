@@ -3,13 +3,13 @@
 import type { Table } from "@tanstack/react-table";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditAnnouncement } from "./CreateEditAnnouncement";
@@ -27,7 +27,8 @@ export function NoticeboardDataTableActions({
 }: TasksTableToolbarActionsProps) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
+import type { _Translator as Translator } from "next-intl";
 import { decode } from "entities";
 import { CheckIcon } from "lucide-react";
 
@@ -12,7 +12,7 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 export function fetchGradeTrackerColumns({
   t,
 }: {
-  t: TFunction<string, unknown>;
+  t: Translator<Record<string, never>, never>;
 }): ColumnDef<
   RouterOutputs["gradeSheet"]["gradesReportTracker"][number],
   unknown

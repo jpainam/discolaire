@@ -3,6 +3,7 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlusCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -30,7 +31,6 @@ import { Textarea } from "@repo/ui/components/textarea";
 
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStockUnit } from "../../../../components/administration/inventory/CreateEditStockUnit";
 
@@ -98,7 +98,8 @@ export function CreateEditConsumable({
       createConsumableMutation.mutate(values);
     }
   };
-  const { t } = useLocale();
+
+  const t = useTranslations();
 
   const { openModal } = useModal();
   const { closeSheet } = useSheet();

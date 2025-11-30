@@ -58,7 +58,7 @@ export const NoPermission = ({
   isFullPage = false,
   className,
 }: NoPermissionProps) => {
-  //const { t } = useLocale();
+  //
 
   if (isFullPage) {
     return (

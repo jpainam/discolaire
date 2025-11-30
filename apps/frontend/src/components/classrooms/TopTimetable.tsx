@@ -16,6 +16,7 @@ import {
   PlusIcon,
   PrinterIcon,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
@@ -39,7 +40,6 @@ import EyeIcon from "~/components/icons/eye";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
-import { useLocale } from "~/i18n";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -54,10 +54,12 @@ export default function TopTimetable() {
   );
 
   const periods = timetablesQuery.data ?? [];
-  const { t, i18n } = useLocale();
+
+  const locale = useLocale();
+  const t = useTranslations();
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString(i18n.language, {
+    return date.toLocaleDateString(locale, {
       weekday: "long",
       day: "2-digit",
       month: "long",
@@ -222,7 +224,7 @@ function TopTimetableCard({
           </span>
         </div>
         <div className="text-xs font-extralight">
-          {/* {period.start.toLocaleDateString(i18n.language, {
+          {/* {period.start.toLocaleDateString(locale, {
             weekday: "short",
             day: "2-digit",
             month: "short",
@@ -232,14 +234,14 @@ function TopTimetableCard({
       <div className="text-muted-foreground flex justify-between text-sm">
         <FlatBadge variant={"green"}>
           <Clock2Icon className="mr-2 h-4 w-4" />
-          {/* {period.start.toLocaleTimeString(i18n.language, {
+          {/* {period.start.toLocaleTimeString(locale, {
             hour: "2-digit",
             minute: "2-digit",
           })} */}
         </FlatBadge>
         <FlatBadge variant={"pink"}>
           <Clock3Icon className="mr-2 h-4 w-4" />
-          {/* {period.end.toLocaleTimeString(i18n.language, {
+          {/* {period.end.toLocaleTimeString(locale, {
             hour: "2-digit",
             minute: "2-digit",
           })} */}

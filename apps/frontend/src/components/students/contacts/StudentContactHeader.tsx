@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { MoreVertical, PlusIcon, UserPlus, UserSearch } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -21,14 +22,14 @@ import { SimpleTooltip } from "~/components/simple-tooltip";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { useLocale } from "~/i18n";
 import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { LinkContact } from "./LinkContact";
 
 export function StudentContactHeader() {
   const params = useParams<{ id: string }>();
-  const { t } = useLocale();
+
+  const t = useTranslations();
   const canAddContact = useCheckPermission("contact", PermissionAction.CREATE);
 
   const Icon = sidebarIcons.contacts;
