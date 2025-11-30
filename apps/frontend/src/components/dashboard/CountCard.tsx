@@ -1,9 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import { RiArrowRightUpLine } from "@remixicon/react";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { cn } from "@repo/ui/lib/utils";
-
-import { getServerTranslations } from "~/i18n/server";
 
 export async function CountCard({
   icon,
@@ -22,7 +21,9 @@ export async function CountCard({
   percentage: number;
 }) {
   const Icon = icon;
-  const { i18n, t } = await getServerTranslations();
+
+  const t = await getTranslations();
+  const locale = await getLocale();
   const isPositive = trend === "up";
   const trendColor = isPositive ? "text-emerald-500" : "text-red-500";
   return (
@@ -45,7 +46,7 @@ export async function CountCard({
             {title}
           </a>
           <div className="mb-2 text-xl font-semibold">
-            {count.toLocaleString(i18n.language)}
+            {count.toLocaleString(locale)}
           </div>
           <div className="text-muted-foreground/60 text-xs">
             <span className={cn("font-medium", trendColor)}>

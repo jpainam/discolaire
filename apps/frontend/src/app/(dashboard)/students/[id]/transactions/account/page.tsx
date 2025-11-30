@@ -13,7 +13,6 @@ import {
 } from "@repo/ui/components/table";
 
 import { routes } from "~/configs/routes";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -209,14 +208,15 @@ async function SubTotal({
   totalperiod: number;
   previousDate: Date;
 }) {
-  const { t, i18n } = await getServerTranslations();
+  const t = await getTranslations();
+  const locale = await getLocale();
 
-  const dateLabel = new Intl.DateTimeFormat(i18n.language, {
+  const dateLabel = new Intl.DateTimeFormat(locale, {
     month: "numeric",
     year: "numeric",
   }).format(previousDate);
 
-  const formattedAmount = Math.abs(totalperiod).toLocaleString(i18n.language, {
+  const formattedAmount = Math.abs(totalperiod).toLocaleString(locale, {
     maximumFractionDigits: 0,
     minimumFractionDigits: 0,
   });

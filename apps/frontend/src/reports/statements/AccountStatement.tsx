@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { Document, Page, Text, View } from "@react-pdf/renderer";
 import { decode } from "entities";
+import { getLocale } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { getServerTranslations } from "~/i18n/server";
 import { getHeader } from "../headers";
 
 interface Props {
@@ -19,10 +19,10 @@ export async function AcccountStatement({
   school,
   statements,
 }: Props) {
-  const { i18n } = await getServerTranslations();
+  const locale = await getLocale();
 
   const formatAmount = (amount: number) =>
-    amount.toLocaleString(i18n.language, {
+    amount.toLocaleString(locale, {
       maximumFractionDigits: 0,
       minimumFractionDigits: 0,
       style: "currency",
@@ -30,7 +30,7 @@ export async function AcccountStatement({
     });
 
   const formatDate = (date: Date) =>
-    new Intl.DateTimeFormat(i18n.language, {
+    new Intl.DateTimeFormat(locale, {
       month: "short",
       year: "2-digit",
       day: "numeric",
@@ -95,8 +95,7 @@ export async function AcccountStatement({
             <View>
               <Text>Matricule : {student.registrationNumber}</Text>
               <Text>
-                Date génération état :{" "}
-                {new Date().toLocaleDateString(i18n.language)}
+                Date génération état : {new Date().toLocaleDateString(locale)}
               </Text>
               <Text>
                 Période :{" "}
@@ -148,7 +147,7 @@ export async function AcccountStatement({
                   <View style={{ width: "40%" }} />
                   <View style={{ width: "30%" }}>
                     <Text>
-                      {new Intl.DateTimeFormat(i18n.language, {
+                      {new Intl.DateTimeFormat(locale, {
                         month: "numeric",
                         year: "numeric",
                       }).format(previousDate)}{" "}

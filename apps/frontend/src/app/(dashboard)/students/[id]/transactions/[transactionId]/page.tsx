@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Separator } from "@repo/ui/components/separator";
 
 import { routes } from "~/configs/routes";
-import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { numberToWords } from "~/lib/toword";
 import { caller } from "~/trpc/server";
@@ -32,13 +32,14 @@ export default async function Page(props: {
     remaining,
   } = await caller.transaction.getReceiptInfo(params.transactionId);
 
-  const { t, i18n } = await getServerTranslations();
+  const t = await getTranslations();
+  const locale = await getLocale();
 
   if (transaction.studentId !== params.id) {
     redirect(routes.students.transactions.index(params.id));
   }
 
-  const fullDateFormatter = Intl.DateTimeFormat(i18n.language, {
+  const fullDateFormatter = Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -98,18 +99,18 @@ export default async function Page(props: {
                 </p>
                 <p>
                   <span className="font-bold uppercase">{t("amount")}</span> :
-                  {transaction.amount.toLocaleString(i18n.language, {
+                  {transaction.amount.toLocaleString(locale, {
                     style: "currency",
                     currency: CURRENCY,
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
                   })}{" "}
-                  ({numberToWords(transaction.amount, i18n.language)} )
+                  ({numberToWords(transaction.amount, locale)} )
                 </p>
                 <p>
                   <span className="font-bold uppercase">{t("remaining")}</span>{" "}
                   :{" "}
-                  {remaining.toLocaleString(i18n.language, {
+                  {remaining.toLocaleString(locale, {
                     style: "currency",
                     currency: CURRENCY,
                     maximumFractionDigits: 0,

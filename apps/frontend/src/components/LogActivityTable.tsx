@@ -1,10 +1,10 @@
 import { formatDistanceToNow } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
 import { cn } from "@repo/ui/lib/utils";
 
-import { getServerTranslations } from "~/i18n/server";
 import { EmptyComponent } from "./EmptyComponent";
 
 export async function LogActivityTable({
@@ -12,7 +12,8 @@ export async function LogActivityTable({
 }: {
   logs: RouterOutputs["logActivity"]["user"];
 }) {
-  const { t, i18n } = await getServerTranslations();
+  const t = await getTranslations();
+  const locale = await getLocale();
 
   return (
     <div className="max-h-[calc(100vh-5rem)] space-y-3 overflow-y-auto">
@@ -30,8 +31,11 @@ export async function LogActivityTable({
         >
           <div className="font-mono text-neutral-500">
             {formatDistanceToNow(log.createdAt, {
-              locale:
-                i18n.language == "fr" ? fr : i18n.language == "en" ? enUS : es,
+              locale: locale.includes("fr")
+                ? fr
+                : locale.includes("en")
+                  ? enUS
+                  : es,
             })}
           </div>
           <div className="">

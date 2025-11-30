@@ -9,6 +9,7 @@ import {
   Hash,
   Waves,
 } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -18,7 +19,6 @@ import {
 } from "@repo/ui/components/card";
 import { Separator } from "@repo/ui/components/separator";
 
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 interface GradeSheetPageProps {
@@ -40,8 +40,9 @@ interface GradeSheetPageProps {
 export default async function Page(props: GradeSheetPageProps) {
   const searchParams = await props.searchParams;
 
-  const { t, i18n } = await getServerTranslations();
-  const dateFormat = new Intl.DateTimeFormat(i18n.language, {
+  const t = await getTranslations();
+  const locale = await getLocale();
+  const dateFormat = new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",

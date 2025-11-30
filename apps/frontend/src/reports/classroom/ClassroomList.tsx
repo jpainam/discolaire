@@ -16,7 +16,7 @@ export function ClassroomList({
   classrooms: RouterOutputs["classroom"]["all"];
 }) {
   const w = [0.3, 0.3, 0.3, 0.1, 0.1];
-  //const { t, i18n } = await getServerTranslations();
+
   return (
     <Document>
       <Page

@@ -2,12 +2,12 @@
 import type { NextRequest } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
+import { getLocale, getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 import ClassroomStudentList from "~/reports/classroom/ClassroomStudentList";
 import { caller } from "~/trpc/server";
 
@@ -67,8 +67,9 @@ async function toExcel({
   students: RouterOutputs["classroom"]["students"];
   classroom: RouterOutputs["classroom"]["get"];
 }) {
-  const { t, i18n } = await getServerTranslations();
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  const t = await getTranslations();
+  const locale = await getLocale();
+  const dateFormat = Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -123,7 +124,7 @@ async function toCSV({
   students: RouterOutputs["classroom"]["students"];
   preview: boolean;
 }) {
-  const { i18n } = await getServerTranslations();
+  const locale = await getLocale();
   const data = students.map((student) => {
     return {
       "First Name": student.firstName,
@@ -131,7 +132,7 @@ async function toCSV({
       Email: student.user?.email,
       Phone: student.phoneNumber,
       Address: student.residence,
-      "Date of Birth": student.dateOfBirth?.toLocaleDateString(i18n.language, {
+      "Date of Birth": student.dateOfBirth?.toLocaleDateString(locale, {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",

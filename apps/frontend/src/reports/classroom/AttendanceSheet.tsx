@@ -21,7 +21,7 @@ export function AttendanceSheet({
 }) {
   const w = ["3%", "15%", "3%", "2$"];
   const w_cell = "21%";
-  //const { t, i18n } = await getServerTranslations();
+
   return (
     <Document>
       <Page

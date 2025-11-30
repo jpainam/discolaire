@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { Avatar, AvatarImage } from "@repo/ui/components/avatar";
 import { Card } from "@repo/ui/components/card";
@@ -8,7 +9,6 @@ import { Card } from "@repo/ui/components/card";
 import { randomAvatar } from "~/components/raw-images";
 import { IdCardBarCode } from "~/components/students/idcard/id-barcode";
 import { IdCardHeader } from "~/components/students/idcard/IdCardHeader";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -17,7 +17,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const { id } = params;
 
-  const { t, i18n } = await getServerTranslations();
+  const t = await getTranslations();
+  const locale = await getLocale();
   const student = await caller.student.get(id);
   const schoolYear = await caller.schoolYear.getCurrent();
   const school = await caller.school.get(student.schoolId);
@@ -79,7 +80,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   NAISSANCE
                 </p>
                 <p className="text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
-                  {student.dateOfBirth?.toLocaleDateString(i18n.language, {
+                  {student.dateOfBirth?.toLocaleDateString(locale, {
                     timeZone: "UTC",
                     year: "numeric",
                     month: "short",

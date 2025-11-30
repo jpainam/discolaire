@@ -2,12 +2,12 @@
 import type { NextRequest } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
+import { getLocale, getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
 import StudentPage from "~/reports/students/StudentPage";
 import { caller } from "~/trpc/server";
@@ -93,8 +93,9 @@ async function _toExcel({
 }: {
   students: RouterOutputs["student"]["all"];
 }) {
-  const { t, i18n } = await getServerTranslations();
-  const dateFormat = Intl.DateTimeFormat(i18n.language, {
+  const t = await getTranslations();
+  const locale = await getLocale();
+  const dateFormat = Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",

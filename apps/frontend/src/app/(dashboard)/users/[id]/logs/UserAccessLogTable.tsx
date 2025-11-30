@@ -22,7 +22,7 @@
 //     userId: userId,
 //   });
 
-//   const { i18n, t } = await getServerTranslations();
+
 //   const format = Intl.DateTimeFormat(i18n.language, {
 //     year: "numeric",
 //     month: "short",
