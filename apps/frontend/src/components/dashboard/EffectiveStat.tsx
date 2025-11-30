@@ -1,6 +1,6 @@
 import type { IconType } from "react-icons/lib";
+import { getTranslations } from "next-intl/server";
 
-import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { MaleVsFemaleCount } from "./MaleVsFemaleCount";
@@ -19,7 +19,7 @@ export interface StatType {
 }
 
 export async function EffectiveStat({ className }: JobStatsType) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const studentsCount = await caller.student.count();
   const enrollmentsCount = await caller.enrollment.count({});
 

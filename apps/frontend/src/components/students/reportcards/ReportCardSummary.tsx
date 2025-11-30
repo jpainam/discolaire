@@ -1,6 +1,7 @@
+import { getTranslations } from "next-intl/server";
+
 import { Separator } from "@repo/ui/components/separator";
 
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -13,7 +14,7 @@ export async function ReportCardSummary({
   id: string;
   rank: number;
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const cl = await caller.student.classroom({ studentId: id });
   if (!cl) return null;
   const classroom = await caller.classroom.get(cl.id);

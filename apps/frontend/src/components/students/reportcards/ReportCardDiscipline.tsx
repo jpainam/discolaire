@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import {
   Table,
   TableBody,
@@ -7,7 +9,6 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 
 export async function ReportCardDiscipline({
@@ -26,7 +27,7 @@ export async function ReportCardDiscipline({
   consigne: number;
 }) {
   console.log(id);
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const rowClassName = "border-r text-sm";
   return (
     <div className="border">

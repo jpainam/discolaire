@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { CalendarDays } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -8,7 +9,6 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import FlatBadge from "../FlatBadge";
 
@@ -19,7 +19,7 @@ export async function StudentLatestGrade({
   studentId: string;
   name: string;
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const grades = await caller.student.grades({ id: studentId });
 
   return (

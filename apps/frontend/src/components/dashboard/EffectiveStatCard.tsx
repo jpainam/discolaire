@@ -1,6 +1,6 @@
+import { getTranslations } from "next-intl/server";
 import { PiGenderFemale, PiGenderMale } from "react-icons/pi";
 
-import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 import { EffectiveStatCounter } from "./EffectiveStatCounter";
 
@@ -34,7 +34,7 @@ export async function EffectiveStatCard({
     iconFill,
     secondTotal,
   } = props;
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div
       className={cn(

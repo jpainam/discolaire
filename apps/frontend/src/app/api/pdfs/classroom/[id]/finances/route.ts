@@ -3,12 +3,12 @@ import { NextResponse } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
 import { sumBy } from "lodash";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
 import { FinanceList } from "~/reports/classroom/FinanceList";
 import { caller } from "~/trpc/server";
@@ -124,7 +124,7 @@ async function toExcel({
   amountDue: number;
   students: RouterOutputs["classroom"]["studentsBalance"];
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const rows = students.map((stud) => {
     return {
       "Nom et Prénom": getFullName(stud),

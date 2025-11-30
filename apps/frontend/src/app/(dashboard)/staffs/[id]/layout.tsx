@@ -9,6 +9,7 @@ import {
   History,
   KeySquare,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
@@ -19,7 +20,6 @@ import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
 import { routes } from "~/configs/routes";
-import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
@@ -55,7 +55,7 @@ export default async function Layout(props: {
     }
   }
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   prefetch(trpc.staff.all.queryOptions());
 
   const userLinks: UserLink[] = [

@@ -1,8 +1,7 @@
 import { RiArrowRightUpLine } from "@remixicon/react";
+import { getTranslations } from "next-intl/server";
 
 import { cn } from "@repo/ui/lib/utils";
-
-import { getServerTranslations } from "~/i18n/server";
 
 interface StatsCardProps {
   title: string;
@@ -22,7 +21,7 @@ export async function StatsCard({
 }: StatsCardProps) {
   const isPositive = change.trend === "up";
   const trendColor = isPositive ? "text-emerald-500" : "text-red-500";
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
 
   return (
     <div className="group before:from-input/30 before:via-input before:to-input/30 relative p-4 before:absolute before:inset-y-8 before:right-0 before:w-px before:bg-gradient-to-b last:before:hidden lg:p-5">

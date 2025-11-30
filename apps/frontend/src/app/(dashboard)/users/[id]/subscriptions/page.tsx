@@ -5,6 +5,7 @@ import {
   MessageSquare,
   MessageSquareText,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
@@ -16,12 +17,11 @@ import {
 } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
 
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { SubscriptionPlans } from "./SubscriptionPlans";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const params = await props.params;
 
   const subscription = await caller.user.subscription(params.id);

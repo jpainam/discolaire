@@ -14,6 +14,7 @@ import {
   Phone,
   UserIcon,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -29,7 +30,6 @@ import { ErrorFallback } from "~/components/error-fallback";
 import FlatBadge from "~/components/FlatBadge";
 import { NoPermission } from "~/components/no-permission";
 import { env } from "~/env";
-import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
@@ -66,7 +66,7 @@ export default async function Page(props: {
     PermissionAction.UPDATE,
   );
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <HydrateClient>
       <div className="flex flex-col gap-2 text-sm">

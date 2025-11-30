@@ -3,6 +3,7 @@ import { Fragment, Suspense } from "react";
 import Link from "next/link";
 import _, { sum } from "lodash";
 import { CircleAlert } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
@@ -23,7 +24,6 @@ import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCa
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
 import { ReportCardSummary } from "~/components/students/reportcards/ReportCardSummary";
-import { getServerTranslations } from "~/i18n/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 import { reportcardSearchParams } from "~/utils/search-params";
@@ -35,7 +35,7 @@ interface PageProps {
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const { id } = params;
   const queryClient = getQueryClient();
   const student = await caller.student.get(id);

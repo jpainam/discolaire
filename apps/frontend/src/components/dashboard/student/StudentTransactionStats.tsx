@@ -1,6 +1,7 @@
 import Link from "next/link";
 import i18next from "i18next";
 import { CircleArrowRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import {
   PiChartBarHorizontal,
   PiChartLineUp,
@@ -10,7 +11,6 @@ import {
 
 import { Card, CardContent, CardFooter } from "@repo/ui/components/card";
 
-import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
@@ -38,7 +38,7 @@ export async function StudentTransactionStat({
         : 0),
     0,
   );
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className={cn("grid flex-row gap-2 md:flex", className)}>
       <TransactionStatCard
@@ -90,7 +90,7 @@ async function TransactionStatCard({
   className?: string;
   icon?: React.ReactNode;
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <Card className={cn("w-full p-0", className)}>
       {/* <CardHeader>

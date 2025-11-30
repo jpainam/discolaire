@@ -9,6 +9,7 @@ import {
   Info,
   LinkIcon,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -21,7 +22,6 @@ import {
 import { Separator } from "@repo/ui/components/separator";
 
 import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: {
@@ -29,7 +29,7 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   const assignment = await caller.assignment.get(params.assignmentId);
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-start justify-between border-b px-4 py-2 md:flex-row md:items-center">

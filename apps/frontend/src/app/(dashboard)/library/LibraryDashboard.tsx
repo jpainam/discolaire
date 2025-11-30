@@ -1,6 +1,6 @@
 import { BookMarked, BookOpen, Clock, UsersIcon } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { LibraryStatsGrid } from "./LibraryStatsGrid";
 import { MonthlyActivities } from "./MonthlyActivities";
@@ -8,7 +8,7 @@ import { RecentBorrows } from "./RecentBorrows";
 
 export async function LibraryDashboard() {
   const counts = await caller.library.count();
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className="flex-1 px-4">
       <LibraryStatsGrid

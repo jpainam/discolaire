@@ -483,7 +483,7 @@ importers:
     dependencies:
       '@better-auth/expo':
         specifier: 1.3.24
-        version: 1.3.24(3e643060837c75e5308c63ca68b1358c)
+        version: 1.3.24(c4b74d0f97985f099377cd794d662498)
       '@expo/vector-icons':
         specifier: ^14.1.0
         version: 14.1.0(expo-font@13.3.2(expo@53.0.23(@babel/core@7.28.4)(@expo/metro-runtime@5.0.5(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.2.0)(react@19.2.0)))(react-native-webview@13.16.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.2.0)(react@19.2.0))(react@19.2.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.2.0)(react@19.2.0))(react@19.2.0))(react@19.2.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.2.0)(react@19.2.0))(react@19.2.0)
@@ -746,7 +746,7 @@ importers:
     dependencies:
       '@better-auth/expo':
         specifier: 1.3.24
-        version: 1.3.24(3e643060837c75e5308c63ca68b1358c)
+        version: 1.3.24(c4b74d0f97985f099377cd794d662498)
       '@repo/db':
         specifier: workspace:*
         version: link:../db
@@ -13363,7 +13363,7 @@ snapshots:
       better-call: 1.0.19
       zod: 4.1.8
 
-  '@better-auth/expo@1.3.24(3e643060837c75e5308c63ca68b1358c)':
+  '@better-auth/expo@1.3.24(c4b74d0f97985f099377cd794d662498)':
     dependencies:
       '@better-fetch/fetch': 1.1.18
       better-auth: 1.3.24(next@16.0.1(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

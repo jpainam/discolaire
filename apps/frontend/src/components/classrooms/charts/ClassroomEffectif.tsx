@@ -1,5 +1,6 @@
 import { sortBy } from "lodash";
 import { TrendingDown, TrendingUp } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
@@ -19,8 +20,6 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { getServerTranslations } from "~/i18n/server";
-
 type ClassroomAllProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]
 >[number];
@@ -30,7 +29,7 @@ export async function ClassroomEffectif({
 }: {
   stats: ClassroomAllProcedureOutput[];
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const chartConfig = {
     male: {
       label: t("male"),

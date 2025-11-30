@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -13,7 +14,6 @@ import {
 import { getSession } from "~/auth/server";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { env } from "~/env";
-import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
@@ -29,7 +29,7 @@ export default async function Page() {
     redirect(`/administration/my-school/${user.schoolId}`);
   }
   const schools = await caller.school.all();
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const canUpdateSchool = await checkPermission(
     "school",
     PermissionAction.UPDATE,

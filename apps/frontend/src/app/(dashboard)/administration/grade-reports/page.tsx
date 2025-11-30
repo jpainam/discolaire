@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -16,7 +17,6 @@ import { GradeReportGenerator } from "~/components/administration/grade-reports/
 import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
 import { StudentPerformanceChart } from "~/components/administration/grade-reports/StudentPerformanceChart";
 import { ErrorFallback } from "~/components/error-fallback";
-import { getServerTranslations } from "~/i18n/server";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const count = await caller.enrollment.count({});
   batchPrefetch([
     //trpc.gradeSheet.all.queryOptions(),

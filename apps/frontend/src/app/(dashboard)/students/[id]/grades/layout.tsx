@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { getTranslations } from "next-intl/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
@@ -7,7 +8,6 @@ import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentGrade } from "~/components/students/grades/StudentGrade";
 import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
-import { getServerTranslations } from "~/i18n/server";
 import {
   batchPrefetch,
   caller,
@@ -34,7 +34,7 @@ export default async function Layout(props: {
   const student = await queryClient.fetchQuery(
     trpc.student.get.queryOptions(id),
   );
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   if (!classroom) {
     return <EmptyComponent title={t("student_not_registered_yet")} />;
   }

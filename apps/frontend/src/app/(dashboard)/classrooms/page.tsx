@@ -3,17 +3,22 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { ClassroomDataTable } from "~/components/classrooms/ClassroomDataTable";
+import { ClassroomTable } from "~/components/classrooms/ClassroomTable";
 import { ErrorFallback } from "~/components/error-fallback";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { ClassroomHeader } from "./ClassroomHeader";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default function Page() {
-  prefetch(trpc.classroom.all.queryOptions());
+  batchPrefetch([
+    trpc.classroom.all.queryOptions(),
+    trpc.classroom.all.queryOptions(),
+    trpc.classroomCycle.all.queryOptions(),
+    trpc.classroomLevel.all.queryOptions(),
+    trpc.classroomSection.all.queryOptions(),
+  ]);
 
   return (
     <HydrateClient>
-      <ErrorBoundary errorComponent={ErrorFallback}>
+      {/* <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           key={"students"}
           fallback={
@@ -24,8 +29,21 @@ export default function Page() {
         >
           <ClassroomHeader />
         </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundary> */}
       <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-4 gap-4 p-4">
+              {Array.from({ length: 16 }).map((_, i) => (
+                <Skeleton key={i} className="h-8" />
+              ))}
+            </div>
+          }
+        >
+          <ClassroomTable />
+        </Suspense>
+      </ErrorBoundary>
+      {/* <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
             <div className="grid grid-cols-4 gap-4 p-4">
@@ -37,7 +55,7 @@ export default function Page() {
         >
           <ClassroomDataTable />
         </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundary> */}
     </HydrateClient>
   );
 }

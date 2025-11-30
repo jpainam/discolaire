@@ -70,7 +70,7 @@ export function QuickStudentList() {
   const [queryText, setQueryText] = useState<string>("");
   const debounced = useDebouncedCallback((value: string) => {
     void setQueryText(value);
-  }, 1000);
+  }, 300);
 
   const trpc = useTRPC();
   const { data: schoolYears } = useQuery(trpc.schoolYear.all.queryOptions());

@@ -3,6 +3,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import Link from "next/link";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -16,6 +18,11 @@ import {
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
@@ -76,40 +83,37 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         const classroom = row.original;
+        const avatar = createAvatar(initials, {
+          seed: classroom.name,
+        });
         return (
-          <Link
-            className="line-clamp-1 hover:text-blue-600 hover:underline"
-            href={routes.classrooms.details(classroom.id)}
-          >
-            {classroom.name}
-          </Link>
+          <div className="flex flex-row items-center gap-2">
+            <Avatar className="size-[26px] shrink-0">
+              <AvatarImage
+                src={avatar.toDataUri()}
+                alt={classroom.reportName}
+              />
+              <AvatarFallback>
+                {classroom.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <Link
+              className="line-clamp-1 text-xs hover:underline"
+              href={routes.classrooms.details(classroom.id)}
+            >
+              {classroom.name}
+            </Link>
+          </div>
         );
       },
     },
-    // {
-    //   accessorKey: "reportName",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("class_name_report")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const classroom = row.original;
-    //     return (
-    //       <Link
-    //         className="hover:underline hover:text-blue-600"
-    //         href={routes.classrooms.details(classroom.id)}
-    //       >
-    //         {classroom.reportName}
-    //       </Link>
-    //     );
-    //   },
-    // },
-    // {
 
     {
       accessorKey: "maxSize",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("effective")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const maxSize = row.original.maxSize || 0;
         const currentSize = row.original.size || 0;
@@ -133,6 +137,7 @@ export function getColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("boys")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const classroom = row.original;
         const maleCount = classroom.maleCount || 0;
@@ -156,6 +161,7 @@ export function getColumns({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("girls")} />
       ),
+      size: 60,
       cell: ({ row }) => {
         const classroom = row.original;
         const maleCount = classroom.maleCount || 0;
@@ -193,25 +199,7 @@ export function getColumns({
         );
       },
     },
-    // {
-    //   accessorKey: "seniorAdvisorId",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("senior_advisor")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const teacher = row.original.seniorAdvisor;
-    //     return teacher ? (
-    //       <Link
-    //         className="hover:underline hover:text-blue-600"
-    //         href={routes.staffs.details(teacher?.id)}
-    //       >
-    //         {teacher.lastName}
-    //       </Link>
-    //     ) : (
-    //       <></>
-    //     );
-    //   },
-    // },
+
     {
       accessorKey: "levelId",
       header: ({ column }) => (

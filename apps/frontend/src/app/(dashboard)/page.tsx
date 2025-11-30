@@ -15,14 +15,24 @@ import { StudentTransactionStat } from "~/components/dashboard/student/StudentTr
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
 import { ErrorFallback } from "~/components/error-fallback";
-import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
 
 export default async function Page() {
   const session = await getSession();
+  const queryClient = getQueryClient();
 
   if (session?.user.profile === "student") {
-    const student = await caller.student.getFromUserId(session.user.id);
-    const grades = await caller.student.gradeTrends(student.id);
+    const student = await queryClient.fetchQuery(
+      trpc.student.getFromUserId.queryOptions(session.user.id),
+    );
+    const grades = await queryClient.fetchQuery(
+      trpc.student.gradeTrends.queryOptions(student.id),
+    );
     const subjects = grades.map((grade) => ({
       id: grade.subjectId,
       name: grade.name,
@@ -95,7 +105,14 @@ export default async function Page() {
             </Suspense>
           </ErrorBoundary>
           <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense fallback={<Skeleton className="h-20" />}>
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-1 gap-4 px-4">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              }
+            >
               <QuickClassroomList />
             </Suspense>
           </ErrorBoundary>

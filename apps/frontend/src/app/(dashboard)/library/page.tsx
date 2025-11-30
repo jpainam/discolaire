@@ -8,6 +8,7 @@ import {
   SettingsIcon,
   UsersRoundIcon,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
@@ -20,7 +21,6 @@ import {
 } from "@repo/ui/components/tabs";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import { getServerTranslations } from "~/i18n/server";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { BookTab } from "./BookTab";
 import { LibraryDashboard } from "./LibraryDashboard";
@@ -30,7 +30,7 @@ import { LoanHeader } from "./loans/LoanHeader";
 import { ReservationDataTable } from "./reservations/ReservationDataTable";
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const books = await caller.book.all();
 
   prefetch(trpc.library.borrowBooks.queryOptions({ limit: 2000 }));

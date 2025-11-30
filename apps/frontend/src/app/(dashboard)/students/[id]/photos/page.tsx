@@ -1,8 +1,9 @@
+import { getTranslations } from "next-intl/server";
+
 import { downloadFileFromAws } from "~/actions/upload";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { PhotoHeader } from "~/components/students/photos/PhotoHeader";
 import { StudentPhotoList } from "~/components/students/photos/StudentPhotoList";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -14,7 +15,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       return signedUrl;
     }),
   );
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className="flex flex-col">
       <PhotoHeader />

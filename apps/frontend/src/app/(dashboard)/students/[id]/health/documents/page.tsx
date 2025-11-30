@@ -1,5 +1,6 @@
+import { getTranslations } from "next-intl/server";
+
 import { EmptyComponent } from "~/components/EmptyComponent";
-import { getServerTranslations } from "~/i18n/server";
 import { getQueryClient, trpc } from "~/trpc/server";
 import { HealthDocumentTable } from "./DocumentTable";
 
@@ -10,7 +11,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.get.queryOptions(params.id),
   );
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   if (!student.userId) {
     return <EmptyComponent title={t("no_health_documents_found")} />;
   }

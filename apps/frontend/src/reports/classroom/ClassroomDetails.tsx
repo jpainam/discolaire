@@ -13,7 +13,7 @@ export function ClassroomDetails({
   school: RouterOutputs["school"]["getSchool"];
   classroom: RouterOutputs["classroom"]["get"];
 }) {
-  //const { t } = await getServerTranslations();
+  //const t = await getTranslations();
   return (
     <Document>
       <Page

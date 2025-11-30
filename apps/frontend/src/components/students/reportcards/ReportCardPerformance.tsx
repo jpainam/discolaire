@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import {
   Table,
   TableBody,
@@ -7,7 +9,6 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -22,7 +23,7 @@ export async function ReportCardPerformance({
   successRate: number;
   avg: number;
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
 
   const rowClassName = "border-r text-sm";
   return (

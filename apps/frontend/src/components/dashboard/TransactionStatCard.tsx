@@ -5,8 +5,8 @@
  */
 import Link from "next/link";
 import { CircleArrowRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
-import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 
@@ -21,7 +21,7 @@ export async function TransactionStatCard({
   className?: string;
   icon?: React.ReactNode;
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className={cn("relative w-full rounded-lg border p-0", className)}>
       <div className="absolute inset-0 flex items-center justify-end">

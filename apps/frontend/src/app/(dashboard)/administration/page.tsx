@@ -26,7 +26,7 @@ import {
 import { LatestAttendanceTable } from "./attendances/LatestAttendanceTable";
 
 export default async function Page() {
-  //const { t } = await getServerTranslations();
+  //const t = await getTranslations();
   const t = await getTranslations();
   batchPrefetch([
     trpc.gradeSheet.distribution.queryOptions(),

@@ -3,12 +3,12 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
 import { CourseList } from "~/reports/course/CourseList";
 import { caller } from "~/trpc/server";
@@ -78,7 +78,7 @@ async function toExcel({
 }: {
   courses: RouterOutputs["course"]["all"];
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const rows = courses.map((course) => {
     return {
       Code: course.shortName,

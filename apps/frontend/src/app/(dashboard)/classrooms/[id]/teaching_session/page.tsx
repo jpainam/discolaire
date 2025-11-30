@@ -1,6 +1,7 @@
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsInteger } from "nuqs/server";
 
 import { Separator } from "@repo/ui/components/separator";
@@ -15,7 +16,6 @@ import {
 import { getSession } from "~/auth/server";
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
 import { ErrorFallback } from "~/components/error-fallback";
-import { getServerTranslations } from "~/i18n/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { SubjectJournalEditor } from "./sessions/SubjectJournalEditor";
 import { SubjectJournalHeader } from "./sessions/SubjectJournalHeader";
@@ -37,7 +37,7 @@ export default async function Page(props: PageProps) {
   const { id } = params;
   const session = await getSession();
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const queryClient = getQueryClient();
   const subjects = await queryClient.fetchQuery(
     trpc.classroom.subjects.queryOptions(id),

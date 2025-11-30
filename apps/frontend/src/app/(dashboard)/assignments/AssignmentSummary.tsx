@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { CalendarIcon, ListTodo, PieChart, Users } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -8,10 +9,8 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 
-import { getServerTranslations } from "~/i18n/server";
-
 export async function AssignmentSummary() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className="mb-8 grid gap-6 px-2 md:grid-cols-2 xl:grid-cols-4">
       <Card>

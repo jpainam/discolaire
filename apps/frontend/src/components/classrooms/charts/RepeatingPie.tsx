@@ -1,5 +1,6 @@
 "use client";
 
+import { getTranslations } from "next-intl/server";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
 import type { Student } from "@repo/db/client";
@@ -11,10 +12,8 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { getServerTranslations } from "~/i18n/server";
-
 export async function RepeatingPie({ students }: { students: Student[] }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const chartConfig = {
     repeating: {
       label: t("repeating"),

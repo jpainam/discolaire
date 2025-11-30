@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -8,7 +9,6 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
@@ -18,7 +18,7 @@ export async function StudentDashboardContact({
 }: {
   studentId: string;
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const studentContacts = await caller.student.contacts(studentId);
   return (
     <Card>

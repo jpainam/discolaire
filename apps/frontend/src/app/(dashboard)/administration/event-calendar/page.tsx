@@ -7,6 +7,7 @@ import {
   PanelsTopLeftIcon,
   TableRowsSplit,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
@@ -21,7 +22,6 @@ import {
 import { ErrorFallback } from "~/components/error-fallback";
 import { SchoolYearHeader } from "~/components/schoolyears/SchoolYearHeader";
 import { SchoolYearTable } from "~/components/schoolyears/SchoolYearTable";
-import { getServerTranslations } from "~/i18n/server";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 import { SchoolYearCalendar } from "./calendar/SchoolYearCalendar";
 import { SchoolYearCalendarProvider } from "./calendar/SchoolYearCalendarContext";
@@ -30,7 +30,7 @@ import { TermHeader } from "./terms/TermHeader";
 import { TermTable } from "./terms/TermTable";
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const terms = await caller.term.all();
 
   batchPrefetch([

@@ -2,6 +2,7 @@ import type { SearchParams } from "nuqs/server";
 import { Fragment } from "react";
 import Link from "next/link";
 import _ from "lodash";
+import { getTranslations } from "next-intl/server";
 
 import { Separator } from "@repo/ui/components/separator";
 import {
@@ -21,7 +22,6 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { AvatarState } from "~/components/AvatarState";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { trimestreSearchParams } from "~/utils/search-params";
 
@@ -31,7 +31,7 @@ interface PageProps {
 }
 
 export default async function Page(props: PageProps) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const searchParams = await trimestreSearchParams(props.searchParams);
   if (!searchParams.trimestreId) {
     throw new Error("Trimestre ID is required");

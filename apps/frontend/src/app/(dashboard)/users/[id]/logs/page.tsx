@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import i18next from "i18next";
+import { getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -11,11 +12,10 @@ import {
 } from "@repo/ui/components/table";
 
 import { auth } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const { sessions } = await auth.api.listUserSessions({
     body: {
       userId: params.id,

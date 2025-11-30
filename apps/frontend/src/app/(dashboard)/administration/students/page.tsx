@@ -4,6 +4,7 @@ import {
   ImportIcon,
   PanelsTopLeftIcon,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
@@ -14,14 +15,13 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/tabs";
 
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";
 import { ExcludedStudentDataTable } from "./excluded/ExcludedStudentDataTable";
 import { ImportStudentContainer } from "./import/ImportStudentContainer";
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const enrolled = await caller.enrollment.all({ limit: 10000 });
   const newStudents = enrolled.filter((std) => std.isNew);
   const excluded = await caller.student.excluded();

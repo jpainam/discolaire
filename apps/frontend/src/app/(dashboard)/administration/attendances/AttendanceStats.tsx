@@ -1,5 +1,5 @@
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -10,11 +10,10 @@ import {
 } from "@repo/ui/components/card";
 
 import { Badge } from "~/components/base-badge";
-import { getServerTranslations } from "~/i18n/server";
 import { getQueryClient, trpc } from "~/trpc/server";
 
 export async function AttendanceStats() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const queryClient = getQueryClient();
   const count = await queryClient.fetchQuery(
     trpc.attendance.count.queryOptions({}),

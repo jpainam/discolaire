@@ -1,5 +1,5 @@
 export default function Page() {
-  // const { t } = await getServerTranslations();
+  // const t = await getTranslations();
   return (
     <div>
       <ul>

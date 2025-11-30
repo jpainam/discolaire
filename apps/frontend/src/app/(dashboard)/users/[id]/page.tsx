@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { LockKeyhole, Shield, User } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
@@ -14,7 +15,6 @@ import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
 import { PermissionTable } from "~/components/users/PermissionTable";
-import { getServerTranslations } from "~/i18n/server";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
@@ -24,7 +24,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const session = await getSession();
   const { id } = params;
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const canReadPermission = await checkPermission(
     "policy",
     PermissionAction.READ,

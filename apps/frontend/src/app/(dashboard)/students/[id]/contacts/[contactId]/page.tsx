@@ -11,6 +11,7 @@ import {
   Phone,
   PhoneCall,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@repo/ui/components/button";
 import { Label } from "@repo/ui/components/label";
@@ -21,7 +22,6 @@ import { AvatarState } from "~/components/AvatarState";
 import { StudentContactRelationship } from "~/components/students/contacts/StudentContactRelationship";
 import { StudentSiblingTable } from "~/components/students/contacts/StudentSiblingTable";
 import { routes } from "~/configs/routes";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -41,7 +41,7 @@ export default async function Page(props: {
   }
   const contact = await caller.contact.get(contactId);
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className="flex flex-col px-4">
       <div className="mb-2 flex justify-center">

@@ -6,6 +6,7 @@ import {
   LayoutPanelTopIcon,
   PanelsTopLeftIcon,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -22,7 +23,6 @@ import { ClassroomLevelHeader } from "~/components/administration/classrooms/Cla
 import { ClassroomLevelTable } from "~/components/administration/classrooms/ClassroomLevelTable";
 import { ClassroomDataTable } from "~/components/classrooms/ClassroomDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
-import { getServerTranslations } from "~/i18n/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { CycleHeader } from "./cycles/CycleHeader";
 import { CycleTable } from "./cycles/CycleTable";
@@ -30,7 +30,7 @@ import { SectionHeader } from "./sections/SectionHeader";
 import { SectionTable } from "./sections/SectionTable";
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   void prefetch(trpc.classroom.all.queryOptions());
   return (
     <Tabs defaultValue="tab-1" className="pt-2">

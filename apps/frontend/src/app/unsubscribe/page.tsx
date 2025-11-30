@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -11,13 +12,11 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 
-import { getServerTranslations } from "~/i18n/server";
-
 export default async function Page(props: {
   searchParams: Promise<{ email: string }>;
 }) {
   const searchParams = await props.searchParams;
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   if (!searchParams.email) {
     return (
       <div className="bg-muted flex min-h-screen items-center justify-center p-4">

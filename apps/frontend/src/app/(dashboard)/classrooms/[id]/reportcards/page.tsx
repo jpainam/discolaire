@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { CircleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 import { Skeleton } from "@repo/ui/components/skeleton";
 //import { ReportCardTable } from "~/components/classrooms/reportcards/ReportCardTable2";
@@ -23,7 +24,6 @@ import { cn } from "@repo/ui/lib/utils";
 import { AvatarState } from "~/components/AvatarState";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { EmptyComponent } from "~/components/EmptyComponent";
-import { getServerTranslations } from "~/i18n/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: {
@@ -64,7 +64,7 @@ export default async function Page(props: {
   //   classroomId: params.id,
   // });
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
 
   return (
     <div className="mb-10 flex w-full flex-col gap-2 text-sm">

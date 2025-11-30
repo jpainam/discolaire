@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import _, { sum } from "lodash";
+import { getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -17,7 +18,6 @@ import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCa
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
 import { ReportCardSummary } from "~/components/students/reportcards/ReportCardSummary";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 import { AnnualHeader } from "./AnnualHeader";
@@ -33,7 +33,7 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const classroom = await caller.student.classroom({ studentId: params.id });
   if (!classroom) {
     return <EmptyComponent title={t("student_not_registered_yet")} />;

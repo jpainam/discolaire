@@ -1,4 +1,5 @@
 import { CheckIcon } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -9,7 +10,6 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
-import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 
 export async function ReportCardMention({
@@ -20,7 +20,7 @@ export async function ReportCardMention({
   average: number;
 }) {
   console.log(id);
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const rowClassName = "border-r text-sm";
   return (
     <div className="border">

@@ -1,4 +1,5 @@
 import { differenceInCalendarDays, format } from "date-fns";
+import { getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -9,11 +10,10 @@ import {
 } from "@repo/ui/components/card";
 
 import { AvatarState } from "~/components/AvatarState";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export async function RecentBorrows({ className }: { className?: string }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const borrows = await caller.library.borrowBooks({});
   const recents = borrows.slice(0, 5).map((borrow) => {
     return {
@@ -57,7 +57,7 @@ export async function RecentBorrows({ className }: { className?: string }) {
 async function RelativeDayLabel({ date }: { date: Date }) {
   const today = new Date();
   const diff = differenceInCalendarDays(today, date);
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   let label = "";
   switch (diff) {
     case 0:

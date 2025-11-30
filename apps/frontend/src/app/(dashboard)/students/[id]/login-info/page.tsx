@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import {
@@ -9,7 +11,6 @@ import {
 
 import FlatBadge from "~/components/FlatBadge";
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AttachUserButton } from "./AttachUserButton";
@@ -19,7 +20,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const { id } = params;
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const student = await caller.student.get(id);
   const studentcontacts = await caller.student.contacts(id);
 

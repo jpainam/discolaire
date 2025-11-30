@@ -2,10 +2,10 @@
 import type { NextRequest } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 import { RollOfHonor } from "~/reports/gradereports/RollOfHonor";
 import { caller } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
@@ -109,7 +109,7 @@ async function toExcel({
     observation: string;
   }[];
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const rows = reports.map((grade) => {
     return {
       "Registration Number": grade.registrationNumber ?? "",

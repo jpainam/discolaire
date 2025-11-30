@@ -6,6 +6,7 @@ import {
   PanelsTopLeftIcon,
   SettingsIcon,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
@@ -22,7 +23,6 @@ import { InventorySettings } from "~/components/administration/inventory/Invento
 import { ConsumableUsageDataTable } from "~/components/administration/inventory/movements/ConsumableUsageDataTable";
 import { StockMovementHeader } from "~/components/administration/inventory/movements/StockMovementHeader";
 import { ErrorFallback } from "~/components/error-fallback";
-import { getServerTranslations } from "~/i18n/server";
 import {
   batchPrefetch,
   getQueryClient,
@@ -42,7 +42,7 @@ export default async function Page() {
     trpc.inventory.consumableUsages.queryOptions(),
     trpc.inventory.consumables.queryOptions(),
   ]);
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <HydrateClient>
       <Tabs defaultValue="tab-1">

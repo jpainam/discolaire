@@ -1,16 +1,16 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { getTranslations } from "next-intl/server";
 
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { UserDataTable } from "~/components/administration/users/UserDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
-import { getServerTranslations } from "~/i18n/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   prefetch(trpc.user.all.queryOptions({}));
   return (
     <HydrateClient>

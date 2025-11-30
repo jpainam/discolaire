@@ -12,6 +12,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -37,7 +38,6 @@ import { SidebarMenuButton, useSidebar } from "@repo/ui/components/sidebar";
 
 import { env } from "~/env";
 import { useModal } from "~/hooks/use-modal";
-import { useLocale } from "~/i18n";
 import { useTRPC } from "~/trpc/react";
 import { CreateGradesheetShortcut } from "./CreateGradesheetShortcut";
 
@@ -128,7 +128,7 @@ export function Shortcut() {
     setIsEditDialogOpen(false);
   };
 
-  const { t } = useLocale();
+  const t = useTranslations();
   const { isMobile } = useSidebar();
 
   const shortcuts = shortcutsQuery.data ?? [];

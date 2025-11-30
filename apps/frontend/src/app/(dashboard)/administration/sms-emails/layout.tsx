@@ -4,11 +4,11 @@ import {
   FileStack,
   NotepadTextDashed,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import type { TabMenuOption } from "~/components/shared/TabMenu";
 import { TabMenu } from "~/components/shared/TabMenu";
 import { routes } from "~/configs/routes";
-import { getServerTranslations } from "~/i18n/server";
 
 interface UserLink {
   icon: React.ReactNode;
@@ -20,7 +20,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const userLinks: TabMenuOption[] = [
     {
       name: t("sms_management.history"),

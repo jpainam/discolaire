@@ -1,12 +1,13 @@
+import { getTranslations } from "next-intl/server";
+
 import { Label } from "@repo/ui/components/label";
 
-import { getServerTranslations } from "~/i18n/server";
 import { prefetch, trpc } from "~/trpc/server";
 import { CourseAction } from "./CourseAction";
 import { CourseDataTable } from "./CourseDataTable";
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   prefetch(trpc.course.all.queryOptions());
   return (
     <div className="flex flex-col gap-2">

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import type { ChartConfig } from "@repo/ui/components/chart";
@@ -8,15 +9,13 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 
-import { getServerTranslations } from "~/i18n/server";
-
 const chartData = [
   { type: "credit", count: 275, fill: "var(--color-credit)" },
   { type: "debit", count: 200, fill: "var(--color-debit)" },
 ];
 
 export async function CreditDebitPie() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const chartConfig = {
     count: {
       label: t("count"),

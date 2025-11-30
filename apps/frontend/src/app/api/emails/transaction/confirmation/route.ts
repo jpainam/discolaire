@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { nanoid } from "nanoid";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import TransactionConfirmation from "@repo/transactional/emails/TransactionConfirmation";
 import { resend } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       })
       .filter((email) => email != null);
 
-    const { t } = await getServerTranslations();
+    const t = await getTranslations();
     const school = await caller.school.getSchool();
 
     const { error } = await resend.emails.send({

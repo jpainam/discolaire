@@ -2,12 +2,12 @@
 import type { NextRequest } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getSession } from "~/auth/server";
-import { getServerTranslations } from "~/i18n/server";
 import { getSheetName } from "~/lib/utils";
 import { TransactionList } from "~/reports/transactions/TransactionList";
 import { caller } from "~/trpc/server";
@@ -82,7 +82,7 @@ async function toExcel({
 }: {
   transactions: RouterOutputs["transaction"]["all"];
 }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
 
   const rows = transactions.map((tra) => {
     return {

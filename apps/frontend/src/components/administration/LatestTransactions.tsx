@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { TransactionType } from "@repo/db/enums";
 import {
@@ -11,7 +12,6 @@ import {
 } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
 
-import { getServerTranslations } from "~/i18n/server";
 import { CURRENCY } from "~/lib/constants";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
@@ -25,7 +25,7 @@ export async function LatestTransactions({
   const transactions = await caller.transaction.all({
     limit: 10,
   });
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <Card className={cn(className)}>
       <CardHeader>

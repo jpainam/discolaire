@@ -1,6 +1,7 @@
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import i18next from "i18next";
 import { Award, BookOpen, Calendar, TrendingUp, Users } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -10,7 +11,6 @@ import { getSession } from "~/auth/server";
 import { ClassroomGradeChart } from "~/components/classrooms/gradesheets/ClassroomGradeChart";
 import { ClassroomGradeList } from "~/components/classrooms/gradesheets/ClassroomGradeList";
 import { ErrorFallback } from "~/components/error-fallback";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -36,7 +36,7 @@ export default async function Page(props: {
     grades = grades.filter((g) => studentIds.includes(g.studentId));
   }
 
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
   const minGrade = Math.min(
     ...grades.filter((g) => !g.isAbsent).map((grade) => grade.grade),

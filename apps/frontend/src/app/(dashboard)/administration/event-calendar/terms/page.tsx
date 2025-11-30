@@ -1,11 +1,12 @@
+import { getTranslations } from "next-intl/server";
+
 import { Label } from "@repo/ui/components/label";
 
-import { getServerTranslations } from "~/i18n/server";
 import { TermHeader } from "./TermHeader";
 import { TermTable } from "./TermTable";
 
 export default async function Page() {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row items-center justify-center">

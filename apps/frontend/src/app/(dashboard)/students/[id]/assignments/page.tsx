@@ -1,9 +1,10 @@
+import { getTranslations } from "next-intl/server";
+
 import { Separator } from "@repo/ui/components/separator";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { StudentAssignmentTable } from "~/components/students/assignments/StudentAssignementTable";
 import { StudentAssignmentHeader } from "~/components/students/assignments/StudentAssignmentHeader";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -12,7 +13,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const classroom = await caller.student.classroom({ studentId: id });
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   if (!classroom) {
     return <EmptyComponent title={t("student_not_registered_yet")} />;
   }

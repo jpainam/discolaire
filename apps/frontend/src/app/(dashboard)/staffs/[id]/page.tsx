@@ -1,13 +1,14 @@
+import { getTranslations } from "next-intl/server";
+
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { LogActivityTable } from "~/components/LogActivityTable";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { ShortCalendar } from "./ShortCalendar";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const staff = await caller.staff.get(params.id);
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   if (!staff.userId) {
     return <EmptyComponent title={t("no_data")} />;
   }

@@ -1,4 +1,5 @@
 import { MoreVertical, Truck } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -17,12 +18,10 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 
-import { getServerTranslations } from "~/i18n/server";
-
 export default async function Page() {
   // const templates = await getSMSTemplates();
   // const tags = await getSMSTemplateTags();
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <Card className="m-2">
       <CardHeader className="bg-muted/50 flex flex-row items-start border-b py-2">

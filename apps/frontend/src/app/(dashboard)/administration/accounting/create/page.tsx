@@ -1,8 +1,8 @@
 import type { SearchParams } from "nuqs/server";
+import { getTranslations } from "next-intl/server";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { CreateTransactionContextProvider } from "~/components/students/transactions/create/CreateTransactionContextProvider";
-import { getServerTranslations } from "~/i18n/server";
 import { getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { createTransactionSearchParams } from "~/utils/search-params";
@@ -20,7 +20,7 @@ export default async function Page(props: PageProps) {
     return <CreateStudentTransaction studentId={searchParams.studentId} />;
   }
   const studentId = searchParams.studentId;
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   const queryClient = getQueryClient();
 
   const classroom = await queryClient.fetchQuery(

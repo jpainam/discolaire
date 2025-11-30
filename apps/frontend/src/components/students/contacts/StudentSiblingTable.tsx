@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { decode } from "entities";
+import { getTranslations } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
 import {
@@ -19,7 +20,6 @@ import {
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { routes } from "~/configs/routes";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -37,7 +37,7 @@ export async function StudentSiblingTable({
     studentContact.contactId,
   );
   const contact = studentContact.contact;
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <Card className="mb-10 p-0">
       <CardHeader className="bg-muted/50 flex flex-row items-center border-b p-0 px-2 py-1">

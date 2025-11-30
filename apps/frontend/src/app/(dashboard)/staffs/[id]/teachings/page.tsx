@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -11,13 +12,12 @@ import {
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { routes } from "~/configs/routes";
-import { getServerTranslations } from "~/i18n/server";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const teachings = await caller.staff.teachings(params.id);
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   if (teachings.length === 0) {
     return <EmptyComponent title={t("no_teachings_found")} />;
   }

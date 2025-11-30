@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import {
   PiChartBarHorizontal,
   PiChartLineUp,
@@ -5,12 +6,11 @@ import {
   PiMoney,
 } from "react-icons/pi";
 
-import { getServerTranslations } from "~/i18n/server";
 import { cn } from "~/lib/utils";
 import { TransactionStatCard } from "./TransactionStatCard";
 
 export async function TransactionStat({ className }: { className?: string }) {
-  const { t } = await getServerTranslations();
+  const t = await getTranslations();
   return (
     <div className={cn("grid flex-row gap-2 md:flex", className)}>
       <TransactionStatCard
