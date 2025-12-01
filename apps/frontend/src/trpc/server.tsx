@@ -33,6 +33,7 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
 
 export function HydrateClient(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
+  // after https://github.com/t3-oss/create-t3-turbo/issues/1487 is fixed
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       {props.children}

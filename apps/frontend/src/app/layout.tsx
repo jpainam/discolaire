@@ -1,16 +1,8 @@
 import type { Metadata, Viewport } from "next";
 
-import { cn } from "~/lib/utils";
-
 import "./globals.css";
 
 import { Suspense } from "react";
-import { cookies } from "next/headers";
-//import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-//import { auth } from "@repo/auth";
-
-import { getLocale } from "next-intl/server";
 
 import { env } from "~/env";
 import { Providers } from "~/providers/Providers";
@@ -42,14 +34,11 @@ export const viewport: Viewport = {
   themeColor: META_THEME_COLORS.light,
 };
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const cookieStore = await cookies();
-  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "caffeine";
-  const locale = await getLocale();
+export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html
       // https://github.com/facebook/react/issues/11538#issuecomment-350110297
-      lang={locale}
+      lang={"en"}
       className="notranslate"
       translate="no"
       suppressHydrationWarning
@@ -72,13 +61,8 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             async
           ></script> */}
       </head>
-      <body
-        className={cn(
-          "bg-background overscroll-none font-sans antialiased",
-          activeThemeValue ? `theme-${activeThemeValue}` : "",
-        )}
-      >
-        <Suspense>
+      <body className={"bg-background overscroll-none font-sans antialiased"}>
+        <Suspense fallback={null}>
           <Providers>{props.children}</Providers>
         </Suspense>
       </body>

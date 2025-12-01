@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 const COOKIE_NAME = "active_theme";
 const DEFAULT_THEME = "caffeine";
@@ -20,7 +21,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ActiveThemeProvider({
+export function ThemeProvider({
   children,
   initialTheme,
   isScaled,
@@ -49,20 +50,26 @@ export function ActiveThemeProvider({
   }, [activeTheme, isScaled]);
 
   return (
-    <ThemeContext.Provider
-      value={{ activeTheme, setActiveTheme, isScaled: isScaled ?? false }}
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+      enableColorScheme
     >
-      {children}
-    </ThemeContext.Provider>
+      <ThemeContext.Provider
+        value={{ activeTheme, setActiveTheme, isScaled: isScaled ?? false }}
+      >
+        {children}
+      </ThemeContext.Provider>
+    </NextThemesProvider>
   );
 }
 
 export function useThemeConfig() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error(
-      "useThemeConfig must be used within an ActiveThemeProvider",
-    );
+    throw new Error("useThemeConfig must be used within an ThemeProvider");
   }
   return context;
 }

@@ -7,9 +7,9 @@ import { Toaster } from "@repo/ui/components/sonner";
 
 import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
-import { ThemeProvider } from "~/components/theme-provider";
-import { ActiveThemeProvider } from "~/providers/ActiveThemeProvider";
+import { cn } from "~/lib/utils";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
+import { ThemeProvider } from "~/providers/ThemeProvider";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export async function Providers(props: PropsWithChildren) {
@@ -18,33 +18,22 @@ export async function Providers(props: PropsWithChildren) {
   const isScaled = cookieStore.get("theme-scaled")?.value == "true";
 
   return (
-    <NextIntlClientProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-        enableColorScheme
-      >
-        <ActiveThemeProvider
-          initialTheme={activeThemeValue}
-          isScaled={isScaled}
-        >
+    <div className={cn(activeThemeValue ? `theme-${activeThemeValue}` : "")}>
+      <NextIntlClientProvider>
+        <ThemeProvider initialTheme={activeThemeValue} isScaled={isScaled}>
           <NuqsAdapter>
             <TRPCReactProvider>
-              {/* <AuthProvider userPromise={userPromise}> */}
               <ConfirmDialogProvider>
                 <ProgressBarProvider>{props.children}</ProgressBarProvider>
               </ConfirmDialogProvider>
               {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-              {/* </AuthProvider> */}
             </TRPCReactProvider>
             <TailwindIndicator />
             <Toaster richColors />
             {/* <Analytics /> */}
           </NuqsAdapter>
-        </ActiveThemeProvider>
-      </ThemeProvider>
-    </NextIntlClientProvider>
+        </ThemeProvider>
+      </NextIntlClientProvider>
+    </div>
   );
 }

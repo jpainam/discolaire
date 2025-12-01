@@ -34,7 +34,7 @@ import {
 } from "@repo/ui/components/tooltip";
 
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
-import { useThemeConfig } from "~/providers/ActiveThemeProvider";
+import { useThemeConfig } from "~/providers/ThemeProvider";
 import { defaultThemes } from "~/themes";
 
 type ThemeKey = keyof typeof defaultThemes;
