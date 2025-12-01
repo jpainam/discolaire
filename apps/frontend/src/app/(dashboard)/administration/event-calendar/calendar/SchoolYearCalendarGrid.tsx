@@ -1,13 +1,14 @@
 "use client";
 
 import { startOfWeek } from "date-fns";
-import i18next from "i18next";
+import { useLocale } from "next-intl";
 
 import { cn } from "@repo/ui/lib/utils";
 
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 
 export function SchoolYearCalendarGrid() {
+  const locale = useLocale();
   const { filters, events, currentYear } = useSchoolYearCalendarContext();
   const startMonth = 8; // August
   const endMonth = 5; // May
@@ -18,12 +19,9 @@ export function SchoolYearCalendarGrid() {
 
     while (true) {
       const actualYear = currentYear + yearOffset;
-      const monthName = new Date(2000, currentMonth, 1).toLocaleString(
-        i18next.language,
-        {
-          month: "long",
-        },
-      );
+      const monthName = new Date(2000, currentMonth, 1).toLocaleString(locale, {
+        month: "long",
+      });
       const daysInMonth = new Date(actualYear, currentMonth + 1, 0).getDate();
       //const firstDayOfWeek = getDayOfWeek(actualYear, currentMonth, 1);
       const firstDayOfWeek = startOfWeek(

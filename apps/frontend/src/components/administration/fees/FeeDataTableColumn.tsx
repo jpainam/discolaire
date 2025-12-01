@@ -1,11 +1,9 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -30,16 +28,9 @@ import { useTRPC } from "~/trpc/react";
 
 type FeeProcedureOutput = NonNullable<RouterOutputs["fee"]["all"]>[number];
 
-export function fetchFeesColumns({
-  t,
-}: {
-  t: Translator<Record<string, never>, never>;
-}): ColumnDef<FeeProcedureOutput, unknown>[] {
-  const dateFormat = Intl.DateTimeFormat(i18next.language, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+export function useFeesColumns(): ColumnDef<FeeProcedureOutput, unknown>[] {
+  const locale = useLocale();
+  const t = useTranslations();
 
   return [
     {
@@ -99,7 +90,7 @@ export function fetchFeesColumns({
         const fee = row.original;
         return (
           <div>
-            {fee.amount.toLocaleString(i18next.language)} {CURRENCY}
+            {fee.amount.toLocaleString(locale)} {CURRENCY}
           </div>
         );
       },
@@ -130,7 +121,11 @@ export function fetchFeesColumns({
       ),
       cell: ({ row }) => {
         const fee = row.original;
-        const d = dateFormat.format(fee.dueDate);
+        const d = fee.dueDate.toLocaleDateString(locale, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
         return <div>{d}</div>;
       },
     },

@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import i18next from "i18next";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Badge } from "@repo/ui/components/badge";
@@ -29,6 +28,7 @@ export function GridViewFinanceCard({
 }) {
   const student = studentBalance;
   const balance = studentBalance.balance;
+  const locale = useLocale();
 
   const t = useTranslations();
   const remaining = balance - amountDue;
@@ -110,7 +110,7 @@ export function GridViewFinanceCard({
             variant={remaining < 0 ? "outline" : "default"}
             className={remaining < 0 ? "text-destructive" : ""}
           >
-            {remaining.toLocaleString(i18next.language, {
+            {remaining.toLocaleString(locale, {
               currency: CURRENCY,
               maximumFractionDigits: 0,
               minimumFractionDigits: 0,

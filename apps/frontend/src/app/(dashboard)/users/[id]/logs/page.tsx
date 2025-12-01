@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
-import i18next from "i18next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -22,6 +21,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     },
     headers: await headers(),
   });
+  const locale = await getLocale();
   return (
     <div>
       <div className="bg-background overflow-hidden rounded-md border">
@@ -40,14 +40,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               <TableRow key={index}>
                 <TableCell className="py-2 font-medium">{sess.id}</TableCell>
                 <TableCell className="py-2">
-                  {sess.createdAt.toLocaleDateString(i18next.language, {
+                  {sess.createdAt.toLocaleDateString(locale, {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",
                   })}
                 </TableCell>
                 <TableCell className="py-2">
-                  {sess.expiresAt.toLocaleDateString(i18next.language, {
+                  {sess.expiresAt.toLocaleDateString(locale, {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",

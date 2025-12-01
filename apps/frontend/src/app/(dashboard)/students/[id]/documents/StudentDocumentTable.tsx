@@ -7,9 +7,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import i18next from "i18next";
 import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -60,6 +59,7 @@ export function StudentDocumentTable() {
     }
   };
 
+  const locale = useLocale();
   const deleteDocumentMutation = useMutation(
     trpc.document.delete.mutationOptions({
       onSuccess: async () => {
@@ -100,7 +100,7 @@ export function StudentDocumentTable() {
               return (
                 <TableRow key={document.id}>
                   <TableCell className="text-muted-foreground">
-                    {document.createdAt.toLocaleDateString(i18next.language, {
+                    {document.createdAt.toLocaleDateString(locale, {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",

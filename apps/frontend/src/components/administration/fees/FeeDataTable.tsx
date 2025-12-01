@@ -2,14 +2,13 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
 import { useTRPC } from "~/trpc/react";
 import { FeeDataTableActions } from "./FeeDataTableAction";
-import { fetchFeesColumns } from "./FeeDataTableColumn";
+import { useFeesColumns } from "./FeeDataTableColumn";
 
 export function FeeDataTable() {
   const trpc = useTRPC();
@@ -22,14 +21,7 @@ export function FeeDataTable() {
     return fees;
   }, [classroomId, fees]);
 
-  const t = useTranslations();
-  const columns = useMemo(
-    () =>
-      fetchFeesColumns({
-        t: t,
-      }),
-    [t],
-  );
+  const columns = useFeesColumns();
 
   const { table } = useDataTable({
     data: filteredFees,

@@ -1,9 +1,8 @@
 "use client";
 
 import { isSameDay } from "date-fns";
-import i18next from "i18next";
 import { Eye } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
@@ -36,6 +35,7 @@ export function StudentAssignmentTable({
   const t = useTranslations();
 
   const router = useRouter();
+  const locale = useLocale();
   return (
     <div className="rounded-lg border">
       <Table>
@@ -64,7 +64,7 @@ export function StudentAssignmentTable({
             return (
               <TableRow key={item.id}>
                 <TableCell className="py-0">
-                  {item.dueDate.toLocaleDateString(i18next.language, {
+                  {item.dueDate.toLocaleDateString(locale, {
                     month: "short",
                     year: "numeric",
                     day: "2-digit",

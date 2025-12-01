@@ -4,8 +4,6 @@
 // import Link from "next/link";
 import { LoginForm } from "./LoginForm";
 
-// import { getServerTranslations } from "~/i18n/server";
-
 // import { ModeSwitcher } from "~/components/mode-switcher";
 // import { UserAuthForm } from "./user-auth-form";
 

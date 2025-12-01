@@ -1,14 +1,15 @@
 import { Document, Image, Page, Text, View } from "@react-pdf/renderer";
 import { decode } from "entities";
-import i18next from "i18next";
+import { getLocale } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getAssetUrl } from "../utils";
+import { formatAmount } from "./utils/format";
 
 const imageUrl = getAssetUrl("images");
 
-export function CSACongoReceipt({
+export async function CSACongoReceipt({
   amountInWords,
   transaction,
   school,
@@ -30,6 +31,7 @@ export function CSACongoReceipt({
   } = info;
 
   const numberOfReceipts = school.numberOfReceipts ?? 1;
+  const locale = await getLocale();
   return (
     <Document>
       <Page
@@ -115,7 +117,7 @@ export function CSACongoReceipt({
                   <View style={{ flexDirection: "row", gap: 4 }}>
                     <Text style={{ fontWeight: "bold" }}>MONTANT : </Text>
                     <Text>
-                      {transaction.amount.toLocaleString(i18next.language, {
+                      {transaction.amount.toLocaleString(locale, {
                         currency: school.currency,
                         style: "currency",
                         maximumFractionDigits: 0,
@@ -127,11 +129,9 @@ export function CSACongoReceipt({
                   <View style={{ flexDirection: "row", gap: 4 }}>
                     <Text style={{ fontWeight: "bold" }}>RESTE : </Text>
                     <Text>
-                      {remaining.toLocaleString(i18next.language, {
+                      {formatAmount({
+                        amount: remaining,
                         currency: school.currency,
-                        style: "currency",
-                        maximumFractionDigits: 0,
-                        minimumFractionDigits: 0,
                       })}
                     </Text>
                   </View>

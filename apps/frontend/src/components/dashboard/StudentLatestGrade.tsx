@@ -1,6 +1,5 @@
-import i18next from "i18next";
 import { CalendarDays } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import {
   Card,
@@ -21,6 +20,7 @@ export async function StudentLatestGrade({
 }) {
   const t = await getTranslations();
   const grades = await caller.student.grades({ id: studentId });
+  const locale = await getLocale();
 
   return (
     <Card>
@@ -48,14 +48,11 @@ export async function StudentLatestGrade({
                   <CalendarDays className="mr-1.5 h-3.5 w-3.5" />
                   <span>
                     le{" "}
-                    {grade.gradeSheet.createdAt.toLocaleDateString(
-                      i18next.language,
-                      {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      },
-                    )}
+                    {grade.gradeSheet.createdAt.toLocaleDateString(locale, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
                   </span>
                 </div>
               </div>

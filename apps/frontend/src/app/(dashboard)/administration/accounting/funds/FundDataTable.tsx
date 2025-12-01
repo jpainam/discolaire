@@ -1,17 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
 import { useTRPC } from "~/trpc/react";
-import { fetchFundColumns } from "./FundDataTableColumn";
+import { useFundColumns } from "./FundDataTableColumn";
 
 export function FundDataTable() {
   const trpc = useTRPC();
   const fundQuery = useQuery(trpc.fund.all.queryOptions({}));
-  const columns = useMemo(() => fetchFundColumns(), []);
+  const columns = useFundColumns();
   const { table } = useDataTable({
     columns: columns,
     data: fundQuery.data ?? [],

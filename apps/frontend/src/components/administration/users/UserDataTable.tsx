@@ -1,21 +1,18 @@
 "use client";
 
-import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
 import { useTRPC } from "~/trpc/react";
 import { UserDataTableAction } from "./UserDataTableAction";
-import { getUserColumns } from "./UserDataTableColumn";
+import { useUserColumns } from "./UserDataTableColumn";
 
 export function UserDataTable() {
-  const t = useTranslations();
   const trpc = useTRPC();
   const { data: users } = useSuspenseQuery(trpc.user.all.queryOptions({}));
 
-  const columns = useMemo(() => getUserColumns({ t: t }), [t]);
+  const columns = useUserColumns();
 
   const { table } = useDataTable({
     data: users,

@@ -2,8 +2,8 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
 import { addDays } from "date-fns";
-import i18next from "i18next";
 import { sumBy } from "lodash";
+import { getLocale } from "next-intl/server";
 import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
@@ -44,7 +44,7 @@ export async function GET(
     const classroom = await caller.classroom.get(id);
     const school = await caller.school.getSchool();
     const { ids, dueDate, journalId } = parsedQuery.data;
-
+    const locale = await getLocale();
     const fees = (await caller.classroom.fees(id)).filter((fee) => {
       return fee.journalId === journalId;
     });
@@ -65,7 +65,7 @@ export async function GET(
       .map((stud) => {
         return {
           studentName: getFullName(stud),
-          amount: (amountDue - stud.balance).toLocaleString(i18next.language, {
+          amount: (amountDue - stud.balance).toLocaleString(locale, {
             style: "currency",
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,

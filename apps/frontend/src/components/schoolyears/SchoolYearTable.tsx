@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import {
   CalendarClock,
   CalendarDays,
@@ -10,7 +9,7 @@ import {
   SchoolIcon,
   Trash2,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { FaLock, FaUnlockAlt, FaUsers } from "react-icons/fa";
 import { toast } from "sonner";
 
@@ -42,6 +41,7 @@ export function SchoolYearTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const schoolYearsQuery = useQuery(trpc.schoolYear.all.queryOptions());
+  const locale = useLocale();
 
   const t = useTranslations();
   const { openModal } = useModal();
@@ -104,20 +104,17 @@ export function SchoolYearTable() {
                   <TableCell>
                     <div className="flex flex-row items-center gap-2">
                       <CalendarDays className="h-4 w-4" />
-                      {schoolYear.startDate.toLocaleDateString(
-                        i18next.language,
-                        {
-                          month: "short",
-                          year: "numeric",
-                          day: "2-digit",
-                        },
-                      )}
+                      {schoolYear.startDate.toLocaleDateString(locale, {
+                        month: "short",
+                        year: "numeric",
+                        day: "2-digit",
+                      })}
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-row items-center gap-2">
                       <CalendarClock className="h-4 w-4" />
-                      {schoolYear.endDate.toLocaleDateString(i18next.language, {
+                      {schoolYear.endDate.toLocaleDateString(locale, {
                         month: "short",
                         year: "numeric",
                         day: "2-digit",

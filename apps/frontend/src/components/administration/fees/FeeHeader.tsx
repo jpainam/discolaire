@@ -2,9 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import i18next from "i18next";
 import { MoreVertical, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -47,6 +46,7 @@ export function FeeHeader() {
     total: filteredFees.reduce((acc, fee) => acc + fee.amount, 0),
     required: 0,
   };
+  const locale = useLocale();
 
   return (
     <div className="flex flex-row items-center gap-4 border-b px-4 py-1">
@@ -61,7 +61,7 @@ export function FeeHeader() {
       <div className="flex flex-row items-center gap-2">
         <FlatBadge variant={"green"}>
           {t("total_fees")}:{" "}
-          {sums.total.toLocaleString(i18next.language, {
+          {sums.total.toLocaleString(locale, {
             style: "currency",
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,
@@ -70,7 +70,7 @@ export function FeeHeader() {
         </FlatBadge>
         <FlatBadge variant={"pink"}>
           {t("required_fees")}:{" "}
-          {sums.required.toLocaleString(i18next.language, {
+          {sums.required.toLocaleString(locale, {
             style: "currency",
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,

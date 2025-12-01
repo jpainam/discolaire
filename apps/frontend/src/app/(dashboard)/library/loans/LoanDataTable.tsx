@@ -1,13 +1,11 @@
 "use client";
 
-import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
 import { useTRPC } from "~/trpc/react";
-import { getBorrowBooksColumns } from "./LoanDataTableColumn";
+import { useBorrowBooksColumns } from "./LoanDataTableColumn";
 
 export function BorrowBookDataTable() {
   const trpc = useTRPC();
@@ -15,8 +13,7 @@ export function BorrowBookDataTable() {
     trpc.library.borrowBooks.queryOptions({ limit: 2000 }),
   );
 
-  const t = useTranslations();
-  const columns = React.useMemo(() => getBorrowBooksColumns({ t: t }), [t]);
+  const columns = useBorrowBooksColumns();
 
   const { table } = useDataTable({
     data: books,

@@ -6,9 +6,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import i18next from "i18next";
 import { MoreVertical, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -48,7 +47,8 @@ export function StudentEnrollmentTable({
     trpc.student.enrollments.queryOptions(student.id),
   );
   const confirm = useConfirm();
-  const fullDateFormatter = new Intl.DateTimeFormat(i18next.language, {
+  const locale = useLocale();
+  const fullDateFormatter = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",

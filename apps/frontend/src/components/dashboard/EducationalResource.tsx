@@ -4,9 +4,8 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { enUS, es, fr } from "date-fns/locale";
-import i18next from "i18next";
 import { DownloadIcon, FileIcon, RatioIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -27,6 +26,7 @@ import { EmptyComponent } from "../EmptyComponent";
 export function EducationalResource({ className }: { className?: string }) {
   const t = useTranslations();
   const trpc = useTRPC();
+  const locale = useLocale();
   const { data: resources } = useQuery(trpc.document.latest.queryOptions({}));
   // const colors = [
   //   "bg-red-500",
@@ -70,12 +70,11 @@ export function EducationalResource({ className }: { className?: string }) {
                   </Badge>
                   <time className="text-muted-foreground text-sm">
                     {format(resource.createdAt, "d MMMM", {
-                      locale:
-                        i18next.language == "fr"
-                          ? fr
-                          : i18next.language == "es"
-                            ? es
-                            : enUS,
+                      locale: locale.includes("fr")
+                        ? fr
+                        : locale.includes("es")
+                          ? es
+                          : enUS,
                     })}
                   </time>
                 </div>

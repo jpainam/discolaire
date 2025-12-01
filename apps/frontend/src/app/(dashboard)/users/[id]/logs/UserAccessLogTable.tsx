@@ -14,7 +14,7 @@
 //   MonitorSmartphoneIcon,
 // } from "lucide-react";
 // import { EmptyState } from "~/components/EmptyState";
-// import { getServerTranslations } from "~/i18n/server";
+
 // import { caller } from "~/trpc/server";
 
 // export async function UserAccessLogTable({ userId }: { userId: string }) {

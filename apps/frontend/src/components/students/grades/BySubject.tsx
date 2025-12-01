@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import i18next from "i18next";
+import { useLocale } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import {
@@ -107,10 +107,11 @@ function BySubjectItem({
   grade: RouterOutputs["student"]["grades"][number];
   minMaxMoy: RouterOutputs["classroom"]["getMinMaxMoyGrades"][number][];
 }) {
-  const m = grade.gradeSheet.createdAt.toLocaleDateString(i18next.language, {
+  const locale = useLocale();
+  const m = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
     month: "short",
   });
-  const d = grade.gradeSheet.createdAt.toLocaleDateString(i18next.language, {
+  const d = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
     day: "numeric",
   });
   const params = useParams<{ id: string }>();

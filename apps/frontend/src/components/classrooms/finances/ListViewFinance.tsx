@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import i18next from "i18next";
 import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
@@ -42,6 +41,7 @@ export function ListViewFinance({
     (acc, stud) => acc + (stud.balance - amountDue),
     0,
   );
+
   return (
     <div className="px-4 py-2">
       <div className="bg-background overflow-hidden rounded-md border">
@@ -92,7 +92,7 @@ export function ListViewFinance({
                       variant={remaining < 0 ? "outline" : "default"}
                       className={remaining < 0 ? "text-destructive" : ""}
                     >
-                      {remaining.toLocaleString(i18next.language, {
+                      {remaining.toLocaleString(locale, {
                         currency: CURRENCY,
                         maximumFractionDigits: 0,
                         minimumFractionDigits: 0,

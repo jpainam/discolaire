@@ -7,9 +7,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import i18next from "i18next";
 import { DownloadCloud, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -41,6 +40,7 @@ export function StaffDocumentTable() {
   );
 
   const t = useTranslations();
+  const locale = useLocale();
 
   const queryClient = useQueryClient();
   const confirm = useConfirm();
@@ -97,7 +97,7 @@ export function StaffDocumentTable() {
               return (
                 <TableRow key={document.id}>
                   <TableCell>
-                    {document.createdAt.toLocaleDateString(i18next.language, {
+                    {document.createdAt.toLocaleDateString(locale, {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",

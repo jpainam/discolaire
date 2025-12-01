@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
+import { useMemo } from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -36,151 +36,158 @@ type GradeSheetGetGradeProcedureOutput = NonNullable<
   RouterOutputs["gradeSheet"]["grades"]
 >[number];
 
-export function fetchGradeColumns({
-  t,
-}: {
-  t: Translator<Record<string, never>, never>;
-}): ColumnDef<GradeSheetGetGradeProcedureOutput, unknown>[] {
-  return [
-    {
-      id: "select",
-      accessorKey: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      id: "avatar",
-      size: 40,
-      cell: ({ row }) => {
-        const student = row.original.student;
-        return (
-          <AvatarState
-            avatar={student.user?.avatar}
-            pos={student.firstName?.length}
+export function useGradeColumns(): ColumnDef<
+  GradeSheetGetGradeProcedureOutput,
+  unknown
+>[] {
+  const t = useTranslations();
+  return useMemo(
+    () => [
+      {
+        id: "select",
+        accessorKey: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
           />
-        );
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        size: 28,
+        enableSorting: false,
+        enableHiding: false,
       },
-    },
-    {
-      accessorKey: "student.registrationNumber",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={t("registrationNumber")}
-        />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const student = row.original.student;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.students.details(student.id)}
-          >
-            {student.registrationNumber}
-          </Link>
-        );
+      {
+        id: "avatar",
+        size: 40,
+        cell: ({ row }) => {
+          const student = row.original.student;
+          return (
+            <AvatarState
+              avatar={student.user?.avatar}
+              pos={student.firstName?.length}
+            />
+          );
+        },
       },
-      enableSorting: true,
-    },
-    {
-      accessorKey: "student.lastName",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("lastName")} />
-      ),
-      cell: ({ row }) => {
-        const student = row.original.student;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.students.details(student.id)}
-          >
-            {decode(student.lastName ?? "")}
-          </Link>
-        );
+      {
+        accessorKey: "student.registrationNumber",
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            title={t("registrationNumber")}
+          />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const student = row.original.student;
+          return (
+            <Link
+              className="hover:text-blue-600 hover:underline"
+              href={routes.students.details(student.id)}
+            >
+              {student.registrationNumber}
+            </Link>
+          );
+        },
+        enableSorting: true,
       },
-      enableSorting: true,
-    },
-    {
-      accessorKey: "student.firstName",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("firstName")} />
-      ),
-      cell: ({ row }) => {
-        const student = row.original.student;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.students.details(student.id)}
-          >
-            {decode(student.firstName ?? "")}
-          </Link>
-        );
+      {
+        accessorKey: "student.lastName",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("lastName")} />
+        ),
+        cell: ({ row }) => {
+          const student = row.original.student;
+          return (
+            <Link
+              className="hover:text-blue-600 hover:underline"
+              href={routes.students.details(student.id)}
+            >
+              {decode(student.lastName ?? "")}
+            </Link>
+          );
+        },
+        enableSorting: true,
       },
-      enableSorting: true,
-    },
-    {
-      accessorKey: "grade",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("grade")} />
-      ),
-      cell: ({ row }) => {
-        const grade = row.original;
-        return <div>{grade.isAbsent ? "-" : grade.grade}</div>;
+      {
+        accessorKey: "student.firstName",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("firstName")} />
+        ),
+        cell: ({ row }) => {
+          const student = row.original.student;
+          return (
+            <Link
+              className="hover:text-blue-600 hover:underline"
+              href={routes.students.details(student.id)}
+            >
+              {decode(student.firstName ?? "")}
+            </Link>
+          );
+        },
+        enableSorting: true,
       },
-      size: 60,
-    },
-    {
-      accessorKey: "isAbsent",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("absent")} />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const grade = row.original;
-        return (
-          <Badge variant={grade.isAbsent ? "destructive" : "outline"}>
-            {grade.isAbsent ? t("yes") : t("no")}
-          </Badge>
-        );
+      {
+        accessorKey: "grade",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("grade")} />
+        ),
+        cell: ({ row }) => {
+          const grade = row.original;
+          return <div>{grade.isAbsent ? "-" : grade.grade}</div>;
+        },
+        size: 60,
       },
-    },
-    {
-      id: "appreciation",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("appreciation")} />
-      ),
-      cell: ({ row }) => {
-        const grade = row.original;
-        return <div>{grade.isAbsent ? "" : getAppreciations(grade.grade)}</div>;
+      {
+        accessorKey: "isAbsent",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("absent")} />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const grade = row.original;
+          return (
+            <Badge variant={grade.isAbsent ? "destructive" : "outline"}>
+              {grade.isAbsent ? t("yes") : t("no")}
+            </Badge>
+          );
+        },
       },
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => <ActionCells grade={row.original} />,
-      size: 60,
-      enableSorting: false,
-      enableHiding: false,
-    },
-  ];
+      {
+        id: "appreciation",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("appreciation")} />
+        ),
+        cell: ({ row }) => {
+          const grade = row.original;
+          return (
+            <div>{grade.isAbsent ? "" : getAppreciations(grade.grade)}</div>
+          );
+        },
+      },
+      {
+        id: "actions",
+        cell: ({ row }) => <ActionCells grade={row.original} />,
+        size: 60,
+        enableSorting: false,
+        enableHiding: false,
+      },
+    ],
+    [t],
+  );
 }
 
 function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {

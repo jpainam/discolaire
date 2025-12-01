@@ -1,5 +1,4 @@
 import Link from "next/link";
-import i18next from "i18next";
 import {
   BookOpen,
   Calendar,
@@ -9,7 +8,7 @@ import {
   Info,
   LinkIcon,
 } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -30,6 +29,7 @@ export default async function Page(props: {
   const params = await props.params;
   const assignment = await caller.assignment.get(params.assignmentId);
   const t = await getTranslations();
+  const locale = await getLocale();
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-start justify-between border-b px-4 py-2 md:flex-row md:items-center">
@@ -51,7 +51,7 @@ export default async function Page(props: {
         <div className="flex items-center gap-2">
           <Badge variant="secondary" className="text-sm">
             <Calendar className="mr-1 h-3 w-3" />
-            {assignment.dueDate.toLocaleDateString(i18next.language, {
+            {assignment.dueDate.toLocaleDateString(locale, {
               year: "numeric",
               month: "short",
               day: "2-digit",

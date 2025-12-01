@@ -1,8 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import i18next from "i18next";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 
@@ -24,21 +23,16 @@ export function ByChronologicalOrder({
   const { createQueryString } = useCreateQueryString();
 
   const t = useTranslations();
+  const locale = useLocale();
   return (
     <div>
       {grades.map((grade) => {
-        const m = grade.gradeSheet.createdAt.toLocaleDateString(
-          i18next.language,
-          {
-            month: "short",
-          },
-        );
-        const d = grade.gradeSheet.createdAt.toLocaleDateString(
-          i18next.language,
-          {
-            day: "numeric",
-          },
-        );
+        const m = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
+          month: "short",
+        });
+        const d = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
+          day: "numeric",
+        });
         return (
           <div
             onClick={() => {

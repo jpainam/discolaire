@@ -1,6 +1,5 @@
 import Link from "next/link";
-import i18next from "i18next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import {
   Table,
@@ -15,6 +14,7 @@ import { getQueryClient, trpc } from "~/trpc/server";
 
 export async function RecentGradesTable() {
   const t = await getTranslations();
+  const locale = await getLocale();
   const queryClient = getQueryClient();
   const grades = await queryClient.fetchQuery(
     trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 5 }),
@@ -97,7 +97,7 @@ export async function RecentGradesTable() {
                   {(g.successRate * 100).toFixed(1)}%
                 </TableCell>
                 <TableCell className="text-right">
-                  {g.date.toLocaleDateString(i18next.language, {
+                  {g.date.toLocaleDateString(locale, {
                     year: "numeric",
                     month: "short",
                     day: "numeric",

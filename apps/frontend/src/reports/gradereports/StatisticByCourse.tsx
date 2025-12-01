@@ -4,8 +4,6 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
-//import { getServerTranslations } from "~/i18n/server";
-
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";

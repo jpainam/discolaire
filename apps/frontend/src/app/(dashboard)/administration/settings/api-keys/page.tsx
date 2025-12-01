@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import i18next from "i18next";
+import { getLocale } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import {
@@ -21,6 +21,7 @@ export default async function Page() {
   const apikeys = await auth.api.listApiKeys({
     headers: await headers(),
   });
+  const locale = await getLocale();
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -78,7 +79,7 @@ export default async function Page() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{item.prefix}</TableCell>
                   <TableCell>
-                    {item.lastRequest?.toLocaleDateString(i18next.language, {
+                    {item.lastRequest?.toLocaleDateString(locale, {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",

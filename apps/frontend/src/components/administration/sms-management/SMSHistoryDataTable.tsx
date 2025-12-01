@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 
 import type { DataTableFilterField } from "@repo/ui/datatable/data-table-toolbar";
@@ -9,7 +8,7 @@ import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
 import type { SMSHistory } from "~/types/sms";
 import { SMSHistoryDataTableActions } from "./SMSHistoryActions";
-import { fetchSmsHistoryColumns } from "./SMSHistoryColumns";
+import { useSmsHistoryColumns } from "./SMSHistoryColumns";
 import { SMSHistoryFloatingBar } from "./SMSHistoryFloatingBar";
 
 export function SMSHistoryDataTable({
@@ -21,12 +20,7 @@ export function SMSHistoryDataTable({
 }) {
   const t = useTranslations();
 
-  const columns = useMemo(() => {
-    const columns = fetchSmsHistoryColumns({
-      t: t,
-    });
-    return columns;
-  }, [t]);
+  const columns = useSmsHistoryColumns();
   //const pageCount = Math.ceil(count / smsHistory.length);
 
   const filterFields: DataTableFilterField<SMSHistory>[] = [

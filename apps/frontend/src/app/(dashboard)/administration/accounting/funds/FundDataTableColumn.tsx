@@ -1,7 +1,8 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import i18next from "i18next";
+import { useMemo } from "react";
+import { useLocale } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -12,84 +13,88 @@ import { CURRENCY } from "~/lib/constants";
 
 type FundProcedureOutput = NonNullable<RouterOutputs["fund"]["all"]>[number];
 
-export function fetchFundColumns(): ColumnDef<FundProcedureOutput, unknown>[] {
-  return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value);
-          }}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => {
-            row.toggleSelected(!!value);
-          }}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
+export function useFundColumns(): ColumnDef<FundProcedureOutput, unknown>[] {
+  const locale = useLocale();
+  return useMemo(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) => {
+              table.toggleAllPageRowsSelected(!!value);
+            }}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => {
+              row.toggleSelected(!!value);
+            }}
+            aria-label="Select row"
+          />
+        ),
+        size: 28,
+        enableSorting: false,
+        enableHiding: false,
+      },
 
-    {
-      accessorKey: "description",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Description" />
-      ),
-      cell: ({ row }) => {
-        return <div>{row.getValue("description")}</div>;
+      {
+        accessorKey: "description",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Description" />
+        ),
+        cell: ({ row }) => {
+          return <div>{row.getValue("description")}</div>;
+        },
       },
-    },
-    {
-      accessorKey: "amount",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Montant" />
-      ),
-      cell: ({ row }) => {
-        const f = row.original;
-        return (
-          <div>
-            {f.amount.toLocaleString(i18next.language)} {CURRENCY}
-          </div>
-        );
+      {
+        accessorKey: "amount",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Montant" />
+        ),
+        cell: ({ row }) => {
+          const f = row.original;
+          return (
+            <div>
+              {f.amount.toLocaleString(locale)} {CURRENCY}
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "date",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"Date"} />
-      ),
-      cell: ({ row }) => {
-        const f = row.original;
-        const hasPassed = new Date(f.date) < new Date();
+      {
+        accessorKey: "date",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"Date"} />
+        ),
+        cell: ({ row }) => {
+          const f = row.original;
+          const hasPassed = new Date(f.date) < new Date();
 
-        return (
-          <FlatBadge variant={hasPassed ? "green" : "red"}>
-            {hasPassed ? "OUI" : "NON"}
-          </FlatBadge>
-        );
+          return (
+            <FlatBadge variant={hasPassed ? "green" : "red"}>
+              {hasPassed ? "OUI" : "NON"}
+            </FlatBadge>
+          );
+        },
+        filterFn: (row, id, value) => {
+          return value instanceof Array && value.includes(row.getValue(id));
+        },
       },
-      filterFn: (row, id, value) => {
-        return value instanceof Array && value.includes(row.getValue(id));
-      },
-    },
 
-    // {
-    //   id: "actions",
-    //   cell: ({ row }) => <ActionCell fee={row.original} />,
-    //   size: 60,
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
-  ];
+      // {
+      //   id: "actions",
+      //   cell: ({ row }) => <ActionCell fee={row.original} />,
+      //   size: 60,
+      //   enableSorting: false,
+      //   enableHiding: false,
+      // },
+    ],
+    [locale],
+  );
 }
 
 // function ActionCell({ fee }: { fee: Fee }) {

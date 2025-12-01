@@ -1,14 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
 import { useTRPC } from "~/trpc/react";
 import { GradeReportTrackerDataTableAction } from "./GradeReportTrackerAction";
-import { fetchGradeTrackerColumns } from "./GradeReportTrackerColumn";
+import { useGradeTrackerColumns } from "./GradeReportTrackerColumn";
 
 export function GradeReportTrackerDataTable() {
   const trpc = useTRPC();
@@ -16,12 +14,7 @@ export function GradeReportTrackerDataTable() {
     trpc.gradeSheet.gradesReportTracker.queryOptions(),
   );
 
-  const t = useTranslations();
-  const columns = useMemo(() => {
-    return fetchGradeTrackerColumns({
-      t: t,
-    });
-  }, [t]);
+  const columns = useGradeTrackerColumns();
 
   const { table } = useDataTable({
     data: gradeTracker,

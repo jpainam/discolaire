@@ -1,16 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
-import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDataTableAction } from "./TransactionDataTableAction";
-import { fetchTransactionColumns } from "./TransactionDataTableColumn";
+import { useTransactionColumns } from "./TransactionDataTableColumn";
 
 export function TransactionDataTable() {
   const trpc = useTRPC();
@@ -31,17 +28,7 @@ export function TransactionDataTable() {
     }),
   );
 
-  const t = useTranslations();
-  const { school } = useSchool();
-
-  const columns = useMemo(
-    () =>
-      fetchTransactionColumns({
-        t: t,
-        currency: school.currency,
-      }),
-    [t, school.currency],
-  );
+  const columns = useTransactionColumns();
 
   const { table } = useDataTable({
     data: transactions,

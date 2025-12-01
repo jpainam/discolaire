@@ -4,8 +4,6 @@ import type { RouterOutputs } from "@repo/api";
 
 import { getHeader } from "../headers";
 
-//import { getServerTranslations } from "~/i18n/server";
-
 export function ClassroomDetails({
   school,
   classroom,

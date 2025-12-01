@@ -1,6 +1,5 @@
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
-import i18next from "i18next";
 import { customAlphabet } from "nanoid";
 import { twMerge } from "tailwind-merge";
 
@@ -50,18 +49,6 @@ export function generateId({ length = 8, prefix = "" } = {}) {
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
     length,
   )()}`;
-}
-
-export function formatDate(
-  date: Date | string | number,
-  opts: Intl.DateTimeFormatOptions = {},
-) {
-  return new Intl.DateTimeFormat(i18next.language, {
-    month: opts.month ?? "long",
-    day: opts.day ?? "numeric",
-    year: opts.year ?? "numeric",
-    ...opts,
-  }).format(new Date(date));
 }
 
 /**

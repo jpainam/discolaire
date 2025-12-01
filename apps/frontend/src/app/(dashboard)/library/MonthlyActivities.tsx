@@ -46,7 +46,6 @@ import { CustomTooltipContent } from "~/components/charts-extra";
 
 // export function MonthlyActivities({ className }: { className?: string }) {
 //
-const t = useTranslations();
 //   const chartConfig = {
 //     borrowed: {
 //       label: t("borrowed"),
@@ -89,8 +88,6 @@ const t = useTranslations();
 //     </Card>
 //   );
 // }
-
-("use client");
 
 const chartData = [
   { month: "Jan 2025", borrowed: 20, returned: 10, overdue: 10 },

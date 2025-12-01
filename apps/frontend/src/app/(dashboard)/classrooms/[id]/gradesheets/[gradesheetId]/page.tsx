@@ -1,7 +1,6 @@
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import i18next from "i18next";
 import { Award, BookOpen, Calendar, TrendingUp, Users } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -37,6 +36,7 @@ export default async function Page(props: {
   }
 
   const t = await getTranslations();
+  const locale = await getLocale();
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
   const minGrade = Math.min(
     ...grades.filter((g) => !g.isAbsent).map((grade) => grade.grade),
@@ -97,7 +97,7 @@ export default async function Page(props: {
             </div>
             <p className="text-muted-foreground text-sm">
               {t("date")} :{" "}
-              {gradesheet.createdAt.toLocaleDateString(i18next.language, {
+              {gradesheet.createdAt.toLocaleDateString(locale, {
                 year: "numeric",
                 month: "long",
                 weekday: "long",

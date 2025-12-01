@@ -1,6 +1,7 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
+import { useMemo } from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -46,168 +47,173 @@ function getSeverity(total: number) {
   return { label: "Critical", variant: "destructive" as const };
 }
 
-export function getColumns(): ColumnDef<ProcedureOutput, unknown>[] {
-  return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"createdAt"} />
-      ),
-      size: 55,
-      cell: ({ row }) => {
-        const att = row.original;
-        return (
-          <div className="text-muted-foreground">
-            {att.createdAt.toLocaleDateString()}
-          </div>
-        );
+export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
+  return useMemo(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        size: 28,
+        enableSorting: false,
+        enableHiding: false,
       },
-    },
-    {
-      accessorKey: "lastName",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"lastName"} />
-      ),
-      cell: ({ row }) => {
-        const att = row.original;
-        return (
-          <Link
-            className="line-clamp-1 hover:text-blue-600 hover:underline"
-            href={`/students/${att.studentId}/attendances`}
-          >
-            {getFullName(att.student)}
-          </Link>
-        );
+      {
+        accessorKey: "createdAt",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"createdAt"} />
+        ),
+        size: 55,
+        cell: ({ row }) => {
+          const att = row.original;
+          return (
+            <div className="text-muted-foreground">
+              {att.createdAt.toLocaleDateString()}
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "absence",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"absence"} />
-      ),
-      size: 100,
-      cell: ({ row }) => {
-        const att = row.original;
-        return (
-          <div className="text-muted-foreground flex flex-row gap-2">
-            {att.absence}{" "}
-            {att.justifiedAbsence > 0 && (
-              <Badge appearance={"outline"} variant={"warning"}>
-                {att.justifiedAbsence} justifiées
-              </Badge>
-            )}
-          </div>
-        );
+      {
+        accessorKey: "lastName",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"lastName"} />
+        ),
+        cell: ({ row }) => {
+          const att = row.original;
+          return (
+            <Link
+              className="line-clamp-1 hover:text-blue-600 hover:underline"
+              href={`/students/${att.studentId}/attendances`}
+            >
+              {getFullName(att.student)}
+            </Link>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "chatter",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"chatter"} />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const att = row.original;
-        return <div className="text-muted-foreground">{att.chatter}</div>;
+      {
+        accessorKey: "absence",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"absence"} />
+        ),
+        size: 100,
+        cell: ({ row }) => {
+          const att = row.original;
+          return (
+            <div className="text-muted-foreground flex flex-row gap-2">
+              {att.absence}{" "}
+              {att.justifiedAbsence > 0 && (
+                <Badge appearance={"outline"} variant={"warning"}>
+                  {att.justifiedAbsence} justifiées
+                </Badge>
+              )}
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "consigne",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"consigne"} />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const att = row.original;
-        return <div className="text-muted-foreground">{att.consigne}</div>;
+      {
+        accessorKey: "chatter",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"chatter"} />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const att = row.original;
+          return <div className="text-muted-foreground">{att.chatter}</div>;
+        },
       },
-    },
-    {
-      accessorKey: "late",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"late"} />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const att = row.original;
-        return <div className="text-muted-foreground">{att.late}</div>;
+      {
+        accessorKey: "consigne",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"consigne"} />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const att = row.original;
+          return <div className="text-muted-foreground">{att.consigne}</div>;
+        },
       },
-    },
-    {
-      accessorKey: "exclusion",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"exclusion"} />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const att = row.original;
-        return <div className="text-muted-foreground">{att.exclusion}</div>;
+      {
+        accessorKey: "late",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"late"} />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const att = row.original;
+          return <div className="text-muted-foreground">{att.late}</div>;
+        },
       },
-    },
+      {
+        accessorKey: "exclusion",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"exclusion"} />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const att = row.original;
+          return <div className="text-muted-foreground">{att.exclusion}</div>;
+        },
+      },
 
-    {
-      accessorKey: "termId",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"term"} />
-      ),
-      size: 120,
-      cell: ({ row }) => {
-        const att = row.original;
-        return <div className="text-muted-foreground">{att.term.name}</div>;
+      {
+        accessorKey: "termId",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"term"} />
+        ),
+        size: 120,
+        cell: ({ row }) => {
+          const att = row.original;
+          return <div className="text-muted-foreground">{att.term.name}</div>;
+        },
       },
-    },
-    {
-      accessorKey: "student.userId",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={"exclusion"} />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const att = row.original;
-        const total = getTotalIssues(att);
-        const sev = getSeverity(total);
-        return (
-          <Badge variant={sev.variant} appearance="outline">
-            {sev.label}
-          </Badge>
-        );
+      {
+        accessorKey: "student.userId",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={"exclusion"} />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const att = row.original;
+          const total = getTotalIssues(att);
+          const sev = getSeverity(total);
+          return (
+            <Badge variant={sev.variant} appearance="outline">
+              {sev.label}
+            </Badge>
+          );
+        },
       },
-    },
 
-    {
-      id: "actions",
-      header: () => <span className="sr-only">Actions</span>,
-      cell: function Cell({ row }) {
-        return <ActionCells attendance={row.original} />;
+      {
+        id: "actions",
+        header: () => <span className="sr-only">Actions</span>,
+        cell: function Cell({ row }) {
+          return <ActionCells attendance={row.original} />;
+        },
+        size: 60,
+        enableSorting: false,
+        enableHiding: false,
       },
-      size: 60,
-      enableSorting: false,
-      enableHiding: false,
-    },
-  ];
+    ],
+    [],
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

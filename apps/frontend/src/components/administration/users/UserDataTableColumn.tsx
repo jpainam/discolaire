@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
+import { useMemo } from "react";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
@@ -27,127 +27,132 @@ import { useTRPC } from "~/trpc/react";
 
 type User = RouterOutputs["user"]["all"][number];
 
-export function getUserColumns({
-  t,
-}: {
-  t: Translator<Record<string, never>, never>;
-}) {
-  return [
-    {
-      accessorKey: "selected",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value);
-          }}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => {
-            row.toggleSelected(!!value);
-          }}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "avatar",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="" />
-      ),
-      cell: ({ row }) => (
-        <AvatarState
-          pos={row.original.name.length}
-          avatar={row.original.avatar}
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-      size: 32,
-    },
-    {
-      accessorKey: "username",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("user")} />
-      ),
-      cell: ({ row }) => {
-        const user = row.original;
-        return (
-          <Link
-            href={`/users/${user.id}`}
-            className="hover:text-blue-600 hover:underline"
-          >
-            {user.username}
-          </Link>
-        );
-      },
-    },
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("name")} />
-      ),
-      cell: ({ row }) => {
-        const user = row.original;
+export function useUserColumns() {
+  const t = useTranslations();
+  return useMemo(
+    () =>
+      [
+        {
+          accessorKey: "selected",
+          header: ({ table }) => (
+            <Checkbox
+              checked={table.getIsAllPageRowsSelected()}
+              onCheckedChange={(value) => {
+                table.toggleAllPageRowsSelected(!!value);
+              }}
+              aria-label="Select all"
+            />
+          ),
+          cell: ({ row }) => (
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => {
+                row.toggleSelected(!!value);
+              }}
+              aria-label="Select row"
+            />
+          ),
+          size: 28,
+          enableSorting: false,
+          enableHiding: false,
+        },
+        {
+          accessorKey: "avatar",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="" />
+          ),
+          cell: ({ row }) => (
+            <AvatarState
+              pos={row.original.name.length}
+              avatar={row.original.avatar}
+            />
+          ),
+          enableSorting: false,
+          enableHiding: false,
+          size: 32,
+        },
+        {
+          accessorKey: "username",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("user")} />
+          ),
+          cell: ({ row }) => {
+            const user = row.original;
+            return (
+              <Link
+                href={`/users/${user.id}`}
+                className="hover:text-blue-600 hover:underline"
+              >
+                {user.username}
+              </Link>
+            );
+          },
+        },
+        {
+          accessorKey: "name",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("name")} />
+          ),
+          cell: ({ row }) => {
+            const user = row.original;
 
-        return <div className="text-muted-foreground flex">{user.name}</div>;
-      },
-    },
-    {
-      accessorKey: "email",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="E-mail" />
-      ),
-      cell: ({ row }) => (
-        <div className="text-muted-foreground flex">
-          {row.getValue("email")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "profile",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("profile")} />
-      ),
-      cell: ({ row }) => {
-        const user = row.original;
-        return (
-          <div className="text-muted-foreground flex">{t(user.profile)}</div>
-        );
-      },
-    },
-    // {
-    //   accessorKey: "emailVerified",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("is_email_verified")} />
-    //   ),
-    //   cell: () => <Switch checked={false} />,
-    // },
-    // {
-    //   accessorKey: "createdAt",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("createdAt")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const user = row.original;
-    //     return <span>{user.createdAt.toLocaleDateString()} </span>;
-    //   },
-    // },
-    {
-      id: "actions",
-      size: 60,
-      enableSorting: false,
-      enableHiding: false,
-      cell: ({ row }) => <ActionCell user={row.original} />,
-    },
-  ] as ColumnDef<User, unknown>[];
+            return (
+              <div className="text-muted-foreground flex">{user.name}</div>
+            );
+          },
+        },
+        {
+          accessorKey: "email",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="E-mail" />
+          ),
+          cell: ({ row }) => (
+            <div className="text-muted-foreground flex">
+              {row.getValue("email")}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "profile",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("profile")} />
+          ),
+          cell: ({ row }) => {
+            const user = row.original;
+            return (
+              <div className="text-muted-foreground flex">
+                {t(user.profile)}
+              </div>
+            );
+          },
+        },
+        // {
+        //   accessorKey: "emailVerified",
+        //   header: ({ column }) => (
+        //     <DataTableColumnHeader column={column} title={t("is_email_verified")} />
+        //   ),
+        //   cell: () => <Switch checked={false} />,
+        // },
+        // {
+        //   accessorKey: "createdAt",
+        //   header: ({ column }) => (
+        //     <DataTableColumnHeader column={column} title={t("createdAt")} />
+        //   ),
+        //   cell: ({ row }) => {
+        //     const user = row.original;
+        //     return <span>{user.createdAt.toLocaleDateString()} </span>;
+        //   },
+        // },
+        {
+          id: "actions",
+          size: 60,
+          enableSorting: false,
+          enableHiding: false,
+          cell: ({ row }) => <ActionCell user={row.original} />,
+        },
+      ] as ColumnDef<User, unknown>[],
+    [t],
+  );
 }
 
 function ActionCell({ user }: { user: User }) {

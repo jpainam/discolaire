@@ -3,7 +3,7 @@ import type { RouterOutputs } from "@repo/api";
 import CSACongoReceipt from "./CSACongoReceipt";
 import IPBWReceipt from "./IPBWReceipt";
 
-export function getReceipt({
+export async function getReceipt({
   amountInWords,
   transaction,
   school,
@@ -15,7 +15,7 @@ export function getReceipt({
   school: RouterOutputs["school"]["getSchool"];
 }) {
   if (school.code == "csac") {
-    return CSACongoReceipt({
+    return await CSACongoReceipt({
       transaction: transaction,
       amountInWords: amountInWords,
       school: school,

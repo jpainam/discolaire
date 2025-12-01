@@ -2,8 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
-import i18next from "i18next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
@@ -45,6 +44,8 @@ export async function GET(
     const fees = await caller.classroom.fees(id);
     const { format } = parsedQuery.data;
 
+    const locale = await getLocale();
+
     if (format === "csv") {
       const { blob, headers } = await toExcel({ classroom, fees });
       return new Response(blob, { headers });
@@ -54,7 +55,7 @@ export async function GET(
           classroom: classroom,
           fees: fees,
           school: school,
-          lang: i18next.language as "fr" | "en" | "es",
+          lang: locale as "fr" | "en" | "es",
         }),
       );
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import {
   LockIcon,
   LockOpen,
@@ -9,7 +8,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
@@ -41,6 +40,7 @@ export function TermTable() {
   const termsQuery = useQuery(trpc.term.all.queryOptions());
 
   const t = useTranslations();
+  const locale = useLocale();
 
   const { openModal } = useModal();
   const confirm = useConfirm();
@@ -101,14 +101,14 @@ export function TermTable() {
                 <TableRow key={term.id}>
                   <TableCell className="py-0">{term.name}</TableCell>
                   <TableCell className="py-0">
-                    {term.startDate.toLocaleDateString(i18next.language, {
+                    {term.startDate.toLocaleDateString(locale, {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
                     })}
                   </TableCell>
                   <TableCell className="py-0">
-                    {term.endDate.toLocaleDateString(i18next.language, {
+                    {term.endDate.toLocaleDateString(locale, {
                       day: "numeric",
                       month: "short",
                       year: "numeric",

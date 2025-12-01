@@ -1,12 +1,11 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
+import { useMemo } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import { Eye, Pencil, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -31,137 +30,144 @@ type ClassroomGetAssignemntProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["assignments"][number]
 >;
 
-export function fetchAssignmentTableColumns({
-  t,
-}: {
-  t: Translator<Record<string, never>, never>;
-}): ColumnDef<ClassroomGetAssignemntProcedureOutput, unknown>[] {
-  const dateFormatter = new Intl.DateTimeFormat(i18next.language, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  const shortDateFormatter = new Intl.DateTimeFormat(i18next.language, {
-    month: "short",
-    day: "numeric",
-  });
-  return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value);
-          }}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => {
-            row.toggleSelected(!!value);
-          }}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
+export function useAssignmentTableColumns(): ColumnDef<
+  ClassroomGetAssignemntProcedureOutput,
+  unknown
+>[] {
+  const locale = useLocale();
+  const t = useTranslations();
 
-    {
-      accessorKey: "subject",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("subject")} />
-      ),
-      cell: ({ row }) => {
-        const subject = row.original.subject;
-        return (
-          <div className="text-muted-foreground">
-            {subject.course.shortName}
-          </div>
-        );
+  return useMemo(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) => {
+              table.toggleAllPageRowsSelected(!!value);
+            }}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => {
+              row.toggleSelected(!!value);
+            }}
+            aria-label="Select row"
+          />
+        ),
+        size: 28,
+        enableSorting: false,
+        enableHiding: false,
       },
-    },
-    {
-      accessorKey: "title",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("title")} />
-      ),
-      cell: ({ row }) => {
-        return (
-          <Link
-            className="truncate hover:text-blue-600 hover:underline"
-            href={routes.classrooms.assignments.details(
-              row.original.classroomId,
-              row.original.id,
-            )}
-          >
-            {row.original.title}
-          </Link>
-        );
+
+      {
+        accessorKey: "subject",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("subject")} />
+        ),
+        cell: ({ row }) => {
+          const subject = row.original.subject;
+          return (
+            <div className="text-muted-foreground">
+              {subject.course.shortName}
+            </div>
+          );
+        },
       },
-    },
-    // {
-    //   accessorKey: "description",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("description")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const description = row.original.description;
-    //     return <div className="truncate">{description}</div>;
-    //   },
-    // },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("createdAt")} />
-      ),
-      cell: ({ row }) => {
-        const createdAt = row.original.createdAt;
-        return (
-          <div className="text-muted-foreground">
-            {dateFormatter.format(createdAt)}
-          </div>
-        );
+      {
+        accessorKey: "title",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("title")} />
+        ),
+        cell: ({ row }) => {
+          return (
+            <Link
+              className="truncate hover:text-blue-600 hover:underline"
+              href={routes.classrooms.assignments.details(
+                row.original.classroomId,
+                row.original.id,
+              )}
+            >
+              {row.original.title}
+            </Link>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "from",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("visible")} />
-      ),
-      cell: ({ row }) => {
-        const visibleFrom = row.original.from;
-        const visibleTo = row.original.to;
-        return (
-          <div className="text-muted-foreground">
-            {visibleFrom && shortDateFormatter.format(visibleFrom)} -{" "}
-            {visibleTo && shortDateFormatter.format(visibleTo)}
-          </div>
-        );
+      // {
+      //   accessorKey: "description",
+      //   header: ({ column }) => (
+      //     <DataTableColumnHeader column={column} title={t("description")} />
+      //   ),
+      //   cell: ({ row }) => {
+      //     const description = row.original.description;
+      //     return <div className="truncate">{description}</div>;
+      //   },
+      // },
+      {
+        accessorKey: "createdAt",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("createdAt")} />
+        ),
+        cell: ({ row }) => {
+          const createdAt = row.original.createdAt;
+          return (
+            <div className="text-muted-foreground">
+              {createdAt.toLocaleDateString(locale, {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "term.name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("term")} />
-      ),
-      cell: ({ row }) => {
-        const ass = row.original;
-        return <div className="text-muted-foreground">{ass.term.name}</div>;
+      {
+        accessorKey: "from",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("visible")} />
+        ),
+        cell: ({ row }) => {
+          const visibleFrom = row.original.from;
+          const visibleTo = row.original.to;
+          return (
+            <div className="text-muted-foreground">
+              {visibleFrom?.toLocaleDateString(locale, {
+                month: "short",
+                day: "numeric",
+              })}{" "}
+              -{" "}
+              {visibleTo?.toLocaleDateString(locale, {
+                month: "short",
+                day: "numeric",
+              })}
+            </div>
+          );
+        },
       },
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => <ActionsCell assignment={row.original} />,
-      size: 58,
-      enableSorting: false,
-      enableHiding: false,
-    },
-  ];
+      {
+        accessorKey: "term.name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("term")} />
+        ),
+        cell: ({ row }) => {
+          const ass = row.original;
+          return <div className="text-muted-foreground">{ass.term.name}</div>;
+        },
+      },
+      {
+        id: "actions",
+        cell: ({ row }) => <ActionsCell assignment={row.original} />,
+        size: 58,
+        enableSorting: false,
+        enableHiding: false,
+      },
+    ],
+    [locale, t],
+  );
 }
 
 function ActionsCell({

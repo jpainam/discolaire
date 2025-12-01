@@ -1,9 +1,8 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
+import { useMemo } from "react";
 import Link from "next/link";
-import i18next from "i18next";
 import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -18,96 +17,109 @@ import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-head
 import type { SMSHistory } from "~/types/sms";
 import { routes } from "~/configs/routes";
 
-export function fetchSmsHistoryColumns({
-  t,
-}: {
-  t: Translator<Record<string, never>, never>;
-}) {
-  const dateFormatter = new Intl.DateTimeFormat(i18next.language, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-  const columns = [
-    {
-      id: "select",
-      accessorKey: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "message",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("message")} />
-      ),
-      cell: ({ row }) => {
-        const sms = row.original;
-        return (
-          <Link
-            className="hover:text-blue-600 hover:underline"
-            href={routes.administration.sms_management.details(sms.id)}
-          >
-            {sms.message}
-          </Link>
-        );
-      },
-    },
-    {
-      accessorKey: "status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("status")} />
-      ),
-      cell: (info) => info.getValue(),
-    },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("createdAt")} />
-      ),
-      cell: ({ row }) => {
-        const history = row.original;
-        return <div>{dateFormatter.format(history.createdAt)}</div>;
-      },
-    },
-    {
-      accessorKey: "sentAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("sentAt")} />
-      ),
-      cell: ({ row }) => {
-        const history = row.original;
-        return (
-          <div>{history.sentAt && dateFormatter.format(history.sentAt)}</div>
-        );
-      },
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => <ActionsCell row={row} />,
-      size: 60,
-      enableSorting: false,
-      enableHiding: false,
-    },
-  ] as ColumnDef<SMSHistory, unknown>[];
-  return columns;
+export function useSmsHistoryColumns() {
+  const locale = useLocale();
+  const t = useTranslations();
+
+  return useMemo(
+    () =>
+      [
+        {
+          id: "select",
+          accessorKey: "select",
+          header: ({ table }) => (
+            <Checkbox
+              checked={
+                table.getIsAllPageRowsSelected() ||
+                (table.getIsSomePageRowsSelected() && "indeterminate")
+              }
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+              aria-label="Select all"
+            />
+          ),
+          cell: ({ row }) => (
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select row"
+            />
+          ),
+          size: 28,
+          enableSorting: false,
+          enableHiding: false,
+        },
+        {
+          accessorKey: "message",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("message")} />
+          ),
+          cell: ({ row }) => {
+            const sms = row.original;
+            return (
+              <Link
+                className="hover:text-blue-600 hover:underline"
+                href={routes.administration.sms_management.details(sms.id)}
+              >
+                {sms.message}
+              </Link>
+            );
+          },
+        },
+        {
+          accessorKey: "status",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("status")} />
+          ),
+          cell: (info) => info.getValue(),
+        },
+        {
+          accessorKey: "createdAt",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("createdAt")} />
+          ),
+          cell: ({ row }) => {
+            const history = row.original;
+            return (
+              <div>
+                {history.createdAt.toLocaleDateString(locale, {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </div>
+            );
+          },
+        },
+        {
+          accessorKey: "sentAt",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("sentAt")} />
+          ),
+          cell: ({ row }) => {
+            const history = row.original;
+            return (
+              <div>
+                {history.sentAt?.toLocaleDateString(locale, {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </div>
+            );
+          },
+        },
+        {
+          id: "actions",
+          cell: ({ row }) => <ActionsCell row={row} />,
+          size: 60,
+          enableSorting: false,
+          enableHiding: false,
+        },
+      ] as ColumnDef<SMSHistory, unknown>[],
+    [locale, t],
+  );
 }
 
 function ActionsCell({ row }: { row: Row<SMSHistory> }) {

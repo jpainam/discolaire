@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import {
   Calendar,
   CalendarDays,
@@ -16,7 +15,7 @@ import {
   Phone,
   Trash2,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -49,6 +48,7 @@ export function StudentSearchResultCard({
   const router = useRouter();
 
   const trpc = useTRPC();
+  const locale = useLocale();
   const queryClient = useQueryClient();
   const confirm = useConfirm();
   const canDeleteStudent = useCheckPermission(
@@ -115,7 +115,7 @@ export function StudentSearchResultCard({
                 <div className="flex items-center gap-1.5">
                   <CalendarDays className="h-4 w-4" />
                   <span className="text-xs">
-                    {student.dateOfBirth?.toLocaleDateString(i18next.language, {
+                    {student.dateOfBirth?.toLocaleDateString(locale, {
                       year: "numeric",
                       month: "numeric",
                       day: "numeric",
@@ -140,7 +140,7 @@ export function StudentSearchResultCard({
                   <Calendar className="h-4 w-4" />
                   <span>
                     {t("enrolled")}:{" "}
-                    {student.createdAt.toLocaleDateString(i18next.language, {
+                    {student.createdAt.toLocaleDateString(locale, {
                       year: "numeric",
                       month: "short",
                       day: "numeric",

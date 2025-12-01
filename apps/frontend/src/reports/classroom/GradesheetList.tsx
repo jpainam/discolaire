@@ -1,6 +1,4 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
-//import { getServerTranslations } from "~/i18n/server";
-
 import { decode } from "entities";
 
 import type { RouterOutputs } from "@repo/api";

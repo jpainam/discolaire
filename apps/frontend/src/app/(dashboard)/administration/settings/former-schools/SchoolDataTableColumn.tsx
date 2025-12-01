@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
+import { useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
@@ -25,56 +25,57 @@ import { CreateEditSchool } from "./CreateEditSchool";
 
 type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
 
-export function getSchoolColumns({
-  t,
-}: {
-  t: Translator<Record<string, never>, never>;
-}) {
-  return [
-    {
-      accessorKey: "selected",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value);
-          }}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => {
-            row.toggleSelected(!!value);
-          }}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
+export function useSchoolColumns() {
+  const t = useTranslations();
+  return useMemo(
+    () =>
+      [
+        {
+          accessorKey: "selected",
+          header: ({ table }) => (
+            <Checkbox
+              checked={table.getIsAllPageRowsSelected()}
+              onCheckedChange={(value) => {
+                table.toggleAllPageRowsSelected(!!value);
+              }}
+              aria-label="Select all"
+            />
+          ),
+          cell: ({ row }) => (
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => {
+                row.toggleSelected(!!value);
+              }}
+              aria-label="Select row"
+            />
+          ),
+          size: 28,
+          enableSorting: false,
+          enableHiding: false,
+        },
 
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("name")} />
-      ),
-      cell: ({ row }) => (
-        <div className="flex">{decode(row.getValue("name"))}</div>
-      ),
-    },
+        {
+          accessorKey: "name",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("name")} />
+          ),
+          cell: ({ row }) => (
+            <div className="flex">{decode(row.getValue("name"))}</div>
+          ),
+        },
 
-    {
-      id: "actions",
+        {
+          id: "actions",
 
-      cell: ({ row }) => <ActionCell school={row.original} />,
-      size: 60,
-      enableSorting: false,
-      enableHiding: false,
-    },
-  ] as ColumnDef<FormerSchool, unknown>[];
+          cell: ({ row }) => <ActionCell school={row.original} />,
+          size: 60,
+          enableSorting: false,
+          enableHiding: false,
+        },
+      ] as ColumnDef<FormerSchool, unknown>[],
+    [t],
+  );
 }
 
 function ActionCell({ school }: { school: FormerSchool }) {

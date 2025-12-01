@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
     );
 
     const stream = await renderToStream(
-      getReceipt({
+      await getReceipt({
         school,
         amountInWords,
         transaction,

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import i18next from "i18next";
 import {
   AlignStartHorizontal,
   Banknote,
@@ -83,7 +82,7 @@ export function TransactionDetails({
       <div className="flex flex-row items-center gap-1">
         <Banknote className="h-4 w-4" />
         {/* <Label>{t("amount")}:</Label> */}
-        {transactionQuery.data.amount.toLocaleString(i18next.language, {
+        {transactionQuery.data.amount.toLocaleString(locale, {
           maximumFractionDigits: 0,
           minimumFractionDigits: 0,
           currency: "CFA",

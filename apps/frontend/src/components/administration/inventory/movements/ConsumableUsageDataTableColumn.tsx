@@ -1,13 +1,12 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
+import { useMemo } from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import i18next from "i18next";
 import { Pencil, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -31,143 +30,146 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { InventoryUsageDetail } from "../InventoryUsageDetail";
 
-export function getColumns({
-  t,
-}: {
-  t: Translator<Record<string, never>, never>;
-}): ColumnDef<
+export function useColumns(): ColumnDef<
   RouterOutputs["inventory"]["consumableUsages"][number],
   unknown
 >[] {
-  return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("date")} />
-      ),
-      size: 60,
-      cell: ({ row }) => {
-        const usage = row.original;
-        return (
-          <div className="text-muted-foreground">
-            {usage.createdAt.toLocaleDateString(i18next.language, {
-              weekday: "short",
-              month: "short",
-              day: "2-digit",
-            })}
-          </div>
-        );
+  const locale = useLocale();
+  const t = useTranslations();
+  return useMemo(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        size: 28,
+        enableSorting: false,
+        enableHiding: false,
       },
-    },
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("name")} />
-      ),
-      cell: ({ row }) => {
-        const usage = row.original;
-        return <ItemCell item={usage} />;
+      {
+        accessorKey: "createdAt",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("date")} />
+        ),
+        size: 60,
+        cell: ({ row }) => {
+          const usage = row.original;
+          return (
+            <div className="text-muted-foreground">
+              {usage.createdAt.toLocaleDateString(locale, {
+                weekday: "short",
+                month: "short",
+                day: "2-digit",
+              })}
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "quantity",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("quantity")} />
-      ),
-      cell: ({ row }) => {
-        const usage = row.original;
-        return (
-          <div className="text-muted-foreground">
-            {usage.quantity} {usage.consumable?.unit.name}
-          </div>
-        );
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("name")} />
+        ),
+        cell: ({ row }) => {
+          const usage = row.original;
+          return <ItemCell item={usage} />;
+        },
       },
-    },
-    {
-      accessorKey: "quantity",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("type")} />
-      ),
-      cell: () => {
-        return <FlatBadge variant={"pink"}>{t("IN")}</FlatBadge>;
+      {
+        accessorKey: "quantity",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("quantity")} />
+        ),
+        cell: ({ row }) => {
+          const usage = row.original;
+          return (
+            <div className="text-muted-foreground">
+              {usage.quantity} {usage.consumable?.unit.name}
+            </div>
+          );
+        },
       },
-    },
-    // {
-    //   accessorKey: "note",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("description")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const inventory = row.original;
-    //     return <div className="text-muted-foreground">{inventory.note}</div>;
-    //   },
-    // },
-    {
-      accessorKey: "user.name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("to")} />
-      ),
-      cell: ({ row }) => {
-        const usage = row.original;
-        return (
-          <Link
-            href={`/users/${usage.userId}`}
-            className="text-muted-foreground hover:underline"
-          >
-            {usage.user.name}
-          </Link>
-        );
+      {
+        accessorKey: "quantity",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("type")} />
+        ),
+        cell: () => {
+          return <FlatBadge variant={"pink"}>{t("IN")}</FlatBadge>;
+        },
       },
-    },
-    // {
-    //   accessorKey: "createdBy.name",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={t("created_by")} />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const consumable = row.original;
-    //     return (
-    //       <div className="text-muted-foreground">
-    //         {consumable.createdBy.name}
-    //       </div>
-    //     );
-    //   },
-    // },
+      // {
+      //   accessorKey: "note",
+      //   header: ({ column }) => (
+      //     <DataTableColumnHeader column={column} title={t("description")} />
+      //   ),
+      //   cell: ({ row }) => {
+      //     const inventory = row.original;
+      //     return <div className="text-muted-foreground">{inventory.note}</div>;
+      //   },
+      // },
+      {
+        accessorKey: "user.name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("to")} />
+        ),
+        cell: ({ row }) => {
+          const usage = row.original;
+          return (
+            <Link
+              href={`/users/${usage.userId}`}
+              className="text-muted-foreground hover:underline"
+            >
+              {usage.user.name}
+            </Link>
+          );
+        },
+      },
+      // {
+      //   accessorKey: "createdBy.name",
+      //   header: ({ column }) => (
+      //     <DataTableColumnHeader column={column} title={t("created_by")} />
+      //   ),
+      //   cell: ({ row }) => {
+      //     const consumable = row.original;
+      //     return (
+      //       <div className="text-muted-foreground">
+      //         {consumable.createdBy.name}
+      //       </div>
+      //     );
+      //   },
+      // },
 
-    {
-      id: "actions",
-      header: () => <span className="sr-only">Actions</span>,
-      cell: function Cell({ row }) {
-        return <ActionCell inventory={row.original} />;
+      {
+        id: "actions",
+        header: () => <span className="sr-only">Actions</span>,
+        cell: function Cell({ row }) {
+          return <ActionCell inventory={row.original} />;
+        },
+        size: 60,
+        enableSorting: false,
+        enableHiding: false,
       },
-      size: 60,
-      enableSorting: false,
-      enableHiding: false,
-    },
-  ];
+    ],
+    [locale, t],
+  );
 }
 
 function ActionCell({

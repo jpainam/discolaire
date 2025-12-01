@@ -1,7 +1,6 @@
 import Link from "next/link";
-import i18next from "i18next";
 import { CircleArrowRight } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import {
   PiChartBarHorizontal,
   PiChartLineUp,
@@ -39,6 +38,7 @@ export async function StudentTransactionStat({
     0,
   );
   const t = await getTranslations();
+
   return (
     <div className={cn("grid flex-row gap-2 md:flex", className)}>
       <TransactionStatCard
@@ -91,11 +91,12 @@ async function TransactionStatCard({
   icon?: React.ReactNode;
 }) {
   const t = await getTranslations();
+  const locale = await getLocale();
   return (
     <Card className={cn("w-full p-0", className)}>
       {/* <CardHeader>
         <CardTitle>
-          {title.toLocaleString(i18next.language, {
+          {title.toLocaleString(locale, {
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,
             currency: CURRENCY,
@@ -111,7 +112,7 @@ async function TransactionStatCard({
         </div>
         <div className="relative space-y-2">
           <span className="text-lg font-extrabold">
-            {title.toLocaleString(i18next.language, {
+            {title.toLocaleString(locale, {
               maximumFractionDigits: 0,
               minimumFractionDigits: 0,
               currency: CURRENCY,

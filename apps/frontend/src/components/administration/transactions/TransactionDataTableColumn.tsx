@@ -1,5 +1,5 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import type { _Translator as Translator } from "next-intl";
+import { useMemo } from "react";
 import Link from "next/link";
 import {
   CheckCircledIcon,
@@ -9,9 +9,8 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
-import i18next from "i18next";
 import { BookCopy, Eye, MoreHorizontal, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -37,6 +36,7 @@ import { DeleteTransaction } from "~/components/students/transactions/DeleteTran
 import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { CURRENCY } from "~/lib/constants";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
@@ -47,150 +47,158 @@ type TransactionAllProcedureOutput = NonNullable<
 
 const columnHelper = createColumnHelper<TransactionAllProcedureOutput>();
 
-export const fetchTransactionColumns = ({
-  t,
-  currency,
-}: {
-  t: Translator<Record<string, never>, never>;
-  currency: string;
-}): ColumnDef<TransactionAllProcedureOutput, unknown>[] => {
-  return [
-    columnHelper.accessor("id", {
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    }),
-    columnHelper.accessor("createdAt", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("createdAt")} />
-      ),
-      size: 80,
-      cell: ({ row }) => {
-        const transaction = row.original;
+export const useTransactionColumns = (): ColumnDef<
+  TransactionAllProcedureOutput,
+  unknown
+>[] => {
+  const t = useTranslations();
+  const locale = useLocale();
+  return useMemo(
+    () =>
+      [
+        columnHelper.accessor("id", {
+          header: ({ table }) => (
+            <Checkbox
+              checked={
+                table.getIsAllPageRowsSelected() ||
+                (table.getIsSomePageRowsSelected() && "indeterminate")
+              }
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+              aria-label="Select all"
+            />
+          ),
+          cell: ({ row }) => (
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select row"
+            />
+          ),
+          size: 28,
+          enableSorting: false,
+          enableHiding: false,
+        }),
+        columnHelper.accessor("createdAt", {
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("createdAt")} />
+          ),
+          size: 80,
+          cell: ({ row }) => {
+            const transaction = row.original;
 
-        return (
-          <div>
-            {transaction.createdAt.toLocaleDateString(i18next.language, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-          </div>
-        );
-      },
-    }),
-    columnHelper.accessor("student", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("student")} />
-      ),
-      cell: ({ row }) => {
-        const transaction = row.original;
-        return (
-          <Link
-            className="hover:underline"
-            href={`/students/${transaction.studentId}/transactions`}
-          >
-            {decode(
-              transaction.student.lastName ??
-                transaction.student.firstName ??
-                "",
-            )}
-          </Link>
-        );
-      },
-    }),
-    columnHelper.accessor("transactionRef", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("transactionRef")} />
-      ),
-      cell: ({ row }) => {
-        const transaction = row.original;
-        return (
-          <Link
-            className="hover:underline"
-            href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
-          >
-            {transaction.transactionRef}
-          </Link>
-        );
-      },
-    }),
-    columnHelper.accessor("description", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("description")} />
-      ),
-      cell: ({ row }) => {
-        return <div>{row.original.description}</div>;
-      },
-    }),
-    columnHelper.accessor("status", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("status")} />
-      ),
-      size: 120,
-      cell: ({ row }) => {
-        const trans = row.original;
-        const status = row.original.status;
-        const user = trans.updatedBy2;
-        return (
-          <div className="flex flex-row gap-1">
-            <TransactionStatus status={status} />
-            {user && (
-              <Badge className="w-fit" variant={"secondary"}>
-                {user.username}
-              </Badge>
-            )}
-          </div>
-        );
-      },
-    }),
-    columnHelper.accessor("amount", {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("amount")} />
-      ),
-      size: 100,
-      cell: ({ row }) => {
-        const amount = row.original.amount;
-        return (
-          <div>
-            {amount.toLocaleString(i18next.language, {
-              style: "currency",
-              currency: currency,
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            })}
-          </div>
-        );
-      },
-    }),
+            return (
+              <div>
+                {transaction.createdAt.toLocaleDateString(locale, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </div>
+            );
+          },
+        }),
+        columnHelper.accessor("student", {
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("student")} />
+          ),
+          cell: ({ row }) => {
+            const transaction = row.original;
+            return (
+              <Link
+                className="hover:underline"
+                href={`/students/${transaction.studentId}/transactions`}
+              >
+                {decode(
+                  transaction.student.lastName ??
+                    transaction.student.firstName ??
+                    "",
+                )}
+              </Link>
+            );
+          },
+        }),
+        columnHelper.accessor("transactionRef", {
+          header: ({ column }) => (
+            <DataTableColumnHeader
+              column={column}
+              title={t("transactionRef")}
+            />
+          ),
+          cell: ({ row }) => {
+            const transaction = row.original;
+            return (
+              <Link
+                className="hover:underline"
+                href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
+              >
+                {transaction.transactionRef}
+              </Link>
+            );
+          },
+        }),
+        columnHelper.accessor("description", {
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("description")} />
+          ),
+          cell: ({ row }) => {
+            return <div>{row.original.description}</div>;
+          },
+        }),
+        columnHelper.accessor("status", {
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("status")} />
+          ),
+          size: 120,
+          cell: ({ row }) => {
+            const trans = row.original;
+            const status = row.original.status;
+            const user = trans.updatedBy2;
+            return (
+              <div className="flex flex-row gap-1">
+                <TransactionStatus status={status} />
+                {user && (
+                  <Badge className="w-fit" variant={"secondary"}>
+                    {user.username}
+                  </Badge>
+                )}
+              </div>
+            );
+          },
+        }),
+        columnHelper.accessor("amount", {
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("amount")} />
+          ),
+          size: 100,
+          cell: ({ row }) => {
+            const amount = row.original.amount;
+            return (
+              <div>
+                {amount.toLocaleString(locale, {
+                  style: "currency",
+                  currency: CURRENCY,
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}
+              </div>
+            );
+          },
+        }),
 
-    {
-      id: "actions",
-      cell: ({ row }: { row: Row<TransactionAllProcedureOutput> }) => (
-        <ActionCell transaction={row.original} />
-      ),
-      size: 28,
-      enableSorting: false,
-      enableHiding: false,
-    },
-  ] as ColumnDef<TransactionAllProcedureOutput, unknown>[];
+        {
+          id: "actions",
+          cell: ({ row }: { row: Row<TransactionAllProcedureOutput> }) => (
+            <ActionCell transaction={row.original} />
+          ),
+          size: 28,
+          enableSorting: false,
+          enableHiding: false,
+        },
+      ] as ColumnDef<TransactionAllProcedureOutput, unknown>[],
+    [locale, t],
+  );
 };
 
 function ActionCell({

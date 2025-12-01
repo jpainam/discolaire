@@ -1,13 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
-import { useTranslations } from "next-intl";
-
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
 import { EnrolledStudentDataTableAction } from "./EnrolledStudentDataTableAction";
-import { fetchStudentColumns } from "./EnrolledStudentDataTableColumn";
+import { useStudentColumns } from "./EnrolledStudentDataTableColumn";
 
 export function EnrolledStudentDataTable({
   students,
@@ -16,13 +13,7 @@ export function EnrolledStudentDataTable({
   students: RouterOutputs["enrollment"]["all"];
   newStudent: boolean;
 }) {
-  const t = useTranslations();
-
-  const columns = useMemo(() => {
-    return fetchStudentColumns({
-      t: t,
-    });
-  }, [t]);
+  const columns = useStudentColumns();
 
   const { table } = useDataTable({
     data: students,

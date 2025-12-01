@@ -1,14 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 
 import { useTRPC } from "~/trpc/react";
 import { StudentDataTableActions } from "./StudentDataTableActions";
-import { fetchStudentColumns } from "./StudentDataTableColumns";
+import { useStudentColumns } from "./StudentDataTableColumns";
 
 export function StudentDataTable() {
   const trpc = useTRPC();
@@ -16,14 +14,7 @@ export function StudentDataTable() {
     trpc.enrollment.all.queryOptions(),
   );
 
-  const t = useTranslations();
-
-  const columns = useMemo(() => {
-    const { columns } = fetchStudentColumns({
-      t: t,
-    });
-    return columns;
-  }, [t]);
+  const columns = useStudentColumns();
 
   const { table } = useDataTable({
     data: students,

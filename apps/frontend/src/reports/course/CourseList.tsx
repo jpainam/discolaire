@@ -2,8 +2,6 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
-//import { getServerTranslations } from "~/i18n/server";
-
 import { getHeader } from "../headers";
 
 export function CourseList({

@@ -9,7 +9,6 @@ import {
 } from "@tanstack/react-query";
 import { subDays } from "date-fns";
 import { addDays } from "date-fns/addDays";
-import i18next from "i18next";
 import { groupBy, sumBy } from "lodash";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -116,7 +115,7 @@ export function ClassroomFeeTable() {
                       {CURRENCY}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {fee.dueDate.toLocaleDateString(i18next.language, {
+                      {fee.dueDate.toLocaleDateString(locale, {
                         month: "short",
                         year: "numeric",
                         day: "2-digit",
