@@ -33,9 +33,7 @@ export function Step3() {
   }, 300);
 
   const { openModal } = useModal();
-  const parentSearchQuery = useQuery(
-    trpc.contact.search.queryOptions({ query }),
-  );
+  const parentSearchQuery = useQuery(trpc.contact.all.queryOptions({ query }));
   const t = useTranslations();
   const [relationshipId, setRelationshipId] = useState<string | null>(null);
   return (

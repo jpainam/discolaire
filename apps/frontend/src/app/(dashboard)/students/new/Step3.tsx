@@ -44,7 +44,7 @@ export function Step3() {
   }, 300);
   const { openSheet } = useSheet();
   const parentSearchQuery = useQuery(
-    trpc.contact.search.queryOptions({ query }),
+    trpc.contact.all.queryOptions({ query }),
   );
   const t = useTranslations();
   return (

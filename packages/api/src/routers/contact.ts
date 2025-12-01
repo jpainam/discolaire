@@ -83,72 +83,6 @@ export const contactRouter = {
     .query(({ input, ctx }) => {
       return ctx.services.contact.getFromUserId(input);
     }),
-  all: protectedProcedure
-    .input(
-      z
-        .object({
-          limit: z.number().optional().default(50),
-        })
-        .optional(),
-    )
-    .query(async ({ ctx, input }) => {
-      if (ctx.session.user.profile == "contact") {
-        const contact = await ctx.services.contact.getFromUserId(
-          ctx.session.user.id,
-        );
-        const c = await ctx.db.contact.findUniqueOrThrow({
-          include: {
-            user: true,
-          },
-          where: {
-            id: contact.id,
-          },
-        });
-        return [c];
-      }
-      if (ctx.session.user.profile == "student") {
-        const student = await ctx.services.student.getFromUserId(
-          ctx.session.user.id,
-        );
-        const studentContacts = await ctx.db.studentContact.findMany({
-          where: {
-            studentId: student.id,
-          },
-        });
-        const contactIds = studentContacts.map((sc) => sc.contactId);
-        return ctx.db.contact.findMany({
-          include: {
-            user: true,
-          },
-          where: {
-            id: {
-              in: contactIds,
-            },
-          },
-        });
-      }
-
-      // const canReadStaff = checkPermission(
-      //   "staff",
-      //   "Read",
-      //   {},
-      //   ctx.permissions,
-      // );
-
-      return ctx.db.contact.findMany({
-        take: input?.limit ?? 50,
-        include: {
-          user: true,
-        },
-        where: {
-          schoolId: ctx.schoolId,
-        },
-        orderBy: {
-          lastAccessed: "desc",
-          //lastName: "asc",
-        },
-      });
-    }),
   students: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
@@ -224,15 +158,17 @@ export const contactRouter = {
     return { total: result, new: newContacts };
   }),
 
-  search: protectedProcedure
+  all: protectedProcedure
     .input(
-      z.object({
-        limit: z.number().optional().default(30),
-        query: z.string().optional().default(""),
-      }),
+      z
+        .object({
+          limit: z.number().optional().default(100),
+          query: z.string().optional(),
+        })
+        .optional(),
     )
     .query(async ({ ctx, input }) => {
-      const q = `%${input.query}%`;
+      const q = input?.query;
       if (ctx.session.user.profile == "contact") {
         const contact = await ctx.services.contact.getFromUserId(
           ctx.session.user.id,
@@ -240,6 +176,12 @@ export const contactRouter = {
         const c = await ctx.db.contact.findUniqueOrThrow({
           include: {
             user: true,
+            studentContacts: {
+              include: {
+                student: true,
+                relationship: true,
+              },
+            },
           },
           where: {
             id: contact.id,
@@ -260,6 +202,9 @@ export const contactRouter = {
         return ctx.db.contact.findMany({
           include: {
             user: true,
+            studentContacts: {
+              include: { student: true, relationship: true },
+            },
           },
           where: {
             id: {
@@ -269,28 +214,34 @@ export const contactRouter = {
         });
       }
       return ctx.db.contact.findMany({
-        take: input.limit,
+        take: input?.limit ?? 100,
         orderBy: {
-          lastName: "asc",
+          createdAt: "desc",
         },
         include: {
           user: true,
+          studentContacts: {
+            include: {
+              student: true,
+              relationship: true,
+            },
+          },
         },
         where: {
           schoolId: ctx.schoolId,
           OR: [
-            { firstName: { startsWith: q, mode: "insensitive" } },
-            { lastName: { startsWith: q, mode: "insensitive" } },
-            { phoneNumber1: { startsWith: q, mode: "insensitive" } },
-            { phoneNumber2: { startsWith: q, mode: "insensitive" } },
+            { firstName: { contains: q, mode: "insensitive" } },
+            { lastName: { contains: q, mode: "insensitive" } },
+            { phoneNumber1: { contains: q, mode: "insensitive" } },
+            { phoneNumber2: { contains: q, mode: "insensitive" } },
             {
               user: {
-                email: { startsWith: q, mode: "insensitive" },
+                email: { contains: q, mode: "insensitive" },
               },
             },
 
-            { employer: { startsWith: q, mode: "insensitive" } },
-            { occupation: { startsWith: q, mode: "insensitive" } },
+            { employer: { contains: q, mode: "insensitive" } },
+            { occupation: { contains: q, mode: "insensitive" } },
           ],
         },
       });

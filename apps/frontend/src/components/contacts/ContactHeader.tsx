@@ -42,7 +42,7 @@ export function ContactHeader() {
   const trpc = useTRPC();
   const [search, setSearch] = useState("");
   const contacts = useQuery(
-    trpc.contact.search.queryOptions({
+    trpc.contact.all.queryOptions({
       query: search,
     }),
   );
