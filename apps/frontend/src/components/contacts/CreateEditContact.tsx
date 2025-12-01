@@ -38,12 +38,10 @@ const createEditContactSchema = z.object({
   observation: z.string().optional(),
 });
 
-type ContactAllProcedureOutput = NonNullable<
-  RouterOutputs["contact"]["all"]
->[number];
-
 interface CreateEditContactProps {
-  contact?: ContactAllProcedureOutput;
+  contact?:
+    | RouterOutputs["contact"]["all"][number]
+    | RouterOutputs["contact"]["get"];
   studentId?: string;
 }
 

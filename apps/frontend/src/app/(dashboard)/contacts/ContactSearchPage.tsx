@@ -19,7 +19,7 @@ export function ContactSearchPage() {
 
   const t = useTranslations();
   const [searchResults, setSearchResults] = useState<
-    RouterOutputs["contact"]["search"]
+    RouterOutputs["contact"]["all"]
   >([]);
   const handleSearch = async () => {
     setIsSearching(true);

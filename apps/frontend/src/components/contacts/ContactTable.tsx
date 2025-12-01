@@ -14,7 +14,7 @@ import {
   UserCircle,
   Users,
 } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -67,7 +67,6 @@ import StudentContactList from "./StudentContactList";
 
 export function ContactTable() {
   const t = useTranslations();
-  const locale = useLocale();
 
   const [queryText, setQueryText] = useState<string>("");
   const debounced = useDebouncedCallback((value: string) => {
@@ -144,7 +143,7 @@ export function ContactTable() {
             {isPending ? (
               Array.from({ length: 6 }).map((_, index) => (
                 <TableRow key={`row-${index}`}>
-                  {Array.from({ length: 7 }).map((_, ind) => (
+                  {Array.from({ length: 8 }).map((_, ind) => (
                     <TableCell key={`cell-${index}-${ind}`}>
                       <Skeleton className="h-8" />
                     </TableCell>
@@ -303,7 +302,7 @@ export function ContactTable() {
 
             {contacts?.length == 0 && !isPending && (
               <TableRow>
-                <TableCell colSpan={5}>
+                <TableCell colSpan={8}>
                   <EmptyComponent icon={<UserCircle />} />
                 </TableCell>
               </TableRow>
