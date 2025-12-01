@@ -110,7 +110,7 @@ export const studentRouter = {
       const data = await ctx.db.student.findMany({
         take: input?.limit ?? 100,
         orderBy: {
-          lastName: "asc",
+          createdAt: "desc",
         },
         where: {
           schoolId: ctx.schoolId,
