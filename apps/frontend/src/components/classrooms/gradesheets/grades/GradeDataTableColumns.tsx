@@ -30,7 +30,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { getAppreciations } from "~/utils/appreciations";
-import { EditGradeStudent } from "./EditStudentGrade";
+import { EditStudentGrade } from "./EditStudentGrade";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
   RouterOutputs["gradeSheet"]["grades"]
@@ -247,7 +247,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
                   description: getFullName(st),
 
                   view: (
-                    <EditGradeStudent
+                    <EditStudentGrade
                       gradeId={grade.id}
                       grade={grade.grade}
                       studentId={st.id}
