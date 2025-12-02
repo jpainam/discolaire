@@ -20,6 +20,7 @@ import {
   Card,
   CardAction,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
@@ -70,21 +71,23 @@ export default async function Page(props: {
   return (
     <HydrateClient>
       <div className="flex flex-col gap-2 text-sm">
-        <Card className="p-0">
-          <CardHeader className="bg-muted/50 flex flex-row items-center space-x-4 border-b p-2">
-            {school.logo && (
-              <Image
-                src={`/api/download/images/${school.logo}`}
-                alt={school.name}
-                width={80}
-                height={80}
-              />
-            )}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex flex-row items-center gap-6">
+              {school.logo && (
+                <Image
+                  src={`/api/download/images/${school.logo}`}
+                  alt={school.code}
+                  width={80}
+                  height={80}
+                />
+              )}
+              <span className="text-xl">{school.name}</span>
+            </CardTitle>
+            <CardDescription className="text-muted-foreground text-sm">
+              ID: {school.id}
+            </CardDescription>
 
-            <div className="flex-1">
-              <CardTitle className="text-xl">{school.name}</CardTitle>
-              <p className="text-muted-foreground text-sm">ID: {school.id}</p>
-            </div>
             <CardAction className="flex flex-row items-center space-x-2">
               <FlatBadge variant={school.isActive ? "green" : "red"}>
                 {school.isActive ? t("active") : t("inactive")}
@@ -92,7 +95,7 @@ export default async function Page(props: {
               {canUpdateSchool && <SchoolDetailAction schoolId={schoolId} />}
             </CardAction>
           </CardHeader>
-          <CardContent className="p-2">
+          <CardContent>
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
               <InfoItem
                 label={t("authorization")}

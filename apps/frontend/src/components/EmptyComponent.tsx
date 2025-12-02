@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { BirdIcon } from "lucide-react";
+import { FileTextIcon } from "lucide-react";
 
 import {
   Empty,
@@ -24,7 +24,7 @@ export function EmptyComponent({
   return (
     <Empty>
       <EmptyHeader>
-        <EmptyMedia variant="icon">{icon ?? <BirdIcon />}</EmptyMedia>
+        <EmptyMedia variant="icon">{icon ?? <FileTextIcon />}</EmptyMedia>
         <EmptyTitle>{title ?? "No data"}</EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>
       </EmptyHeader>

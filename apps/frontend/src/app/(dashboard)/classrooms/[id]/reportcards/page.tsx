@@ -36,7 +36,12 @@ export default async function Page(props: {
   const { termId } = searchParams;
 
   if (!termId) {
-    return <EmptyComponent />;
+    return (
+      <EmptyComponent
+        title="Veuillez choisir une période"
+        description="Choisissez une période ou un trimestre pour commencer"
+      />
+    );
   }
   const {
     studentsReport,
