@@ -32,7 +32,7 @@ export function StudentGradeHeader() {
   const trpc = useTRPC();
   const params = useParams<{ gradeId: string; id: string }>();
 
-  const [term, setTerm] = useQueryState("term", parseAsString);
+  const [termId, setTermId] = useQueryState("termId", parseAsString);
   const [view, setView] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
@@ -65,9 +65,9 @@ export function StudentGradeHeader() {
         className="w-full md:w-[300px]"
         showAllOption={true}
         onChange={(val) => {
-          void setTerm(val);
+          void setTermId(val);
         }}
-        defaultValue={term}
+        defaultValue={termId}
       />
 
       <div className="ml-auto flex flex-row items-center gap-2">
