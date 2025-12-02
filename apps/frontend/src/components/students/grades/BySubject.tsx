@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 
 import {
   Accordion,
@@ -30,20 +30,27 @@ export function BySubject() {
 
   const [__, setGradeId] = useQueryState("gradeId", parseAsInteger);
   const [_, setGradeSheetId] = useQueryState("gradesheetId", parseAsInteger);
+  const [termId] = useQueryState("termId", parseAsString);
 
   const locale = useLocale();
 
-  const { subjects, subjectSums } = useMemo(() => {
+  const { subjects, subjectSums, filteredGrades } = useMemo(() => {
+    let filteredGrades = grades ?? [];
+    if (termId) {
+      filteredGrades = filteredGrades.filter(
+        (g) => g.gradeSheet.termId === termId,
+      );
+    }
     const subjects = Array.from(
       new Set(
-        grades
-          ?.filter((g) => !g.isAbsent)
+        filteredGrades
+          .filter((g) => !g.isAbsent)
           .map((grade) => grade.gradeSheet.subject),
       ),
     );
 
     const subjectSums: Record<string, number> = {};
-    grades?.forEach((grade) => {
+    filteredGrades.forEach((grade) => {
       const subjectId = grade.gradeSheet.subject.id;
       if (subjectId) {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -51,8 +58,8 @@ export function BySubject() {
         subjectSums[subjectId] += grade.grade * Number(grade.gradeSheet.weight);
       }
     });
-    return { subjectSums, subjects };
-  }, [grades]);
+    return { subjectSums, subjects, filteredGrades };
+  }, [grades, termId]);
 
   const uniqueSubjectTitles: number[] = [];
   if (gradesIsPending) {
@@ -69,10 +76,10 @@ export function BySubject() {
       {subjects.map((subject, index) => {
         if (uniqueSubjectTitles.includes(subject.id)) return null;
         uniqueSubjectTitles.push(subject.id);
-        const filteredGrades =
-          grades?.filter(
-            (grade) => grade.gradeSheet.subject.id === subject.id,
-          ) ?? [];
+        const subGrades = filteredGrades.filter(
+          (grade) => grade.gradeSheet.subject.id === subject.id,
+        );
+
         const subjectAvg =
           (subjectSums[subject.id] ?? 0) / (filteredGrades.length || 1e9);
         return (
@@ -101,7 +108,7 @@ export function BySubject() {
               </FlatBadge>
             </AccordionTrigger>
             <AccordionContent className="px-4">
-              {filteredGrades.map((grade, index) => {
+              {subGrades.map((grade, index) => {
                 const m = grade.gradeSheet.createdAt.toLocaleDateString(
                   locale,
                   {
@@ -142,7 +149,7 @@ export function BySubject() {
                         {grade.grade.toFixed(2)}
                       </div>
                     </div>
-                    {index < filteredGrades.length - 1 && <Separator />}
+                    {index < subGrades.length - 1 && <Separator />}
                   </div>
                 );
               })}
