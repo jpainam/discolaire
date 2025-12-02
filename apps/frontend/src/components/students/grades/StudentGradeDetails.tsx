@@ -1,3 +1,7 @@
+"use client";
+
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   ArrowDownLeft,
   ArrowUpLeft,
@@ -9,7 +13,7 @@ import {
   Hash,
   Waves,
 } from "lucide-react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   Card,
@@ -18,85 +22,111 @@ import {
   CardTitle,
 } from "@repo/ui/components/card";
 import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { caller } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 
-interface GradeSheetPageProps {
-  params: Promise<{ id: string; gradeId: number }>;
-  searchParams: Promise<{
-    color: string;
-    name: string;
-    reportName: string;
-    date: string;
-    grade: string;
-    gradesheetId: string;
-    moy: string;
-    max: string;
-    min: string;
-    coef: string;
-    termName: string;
-  }>;
-}
-export default async function Page(props: GradeSheetPageProps) {
-  const searchParams = await props.searchParams;
-
-  const t = await getTranslations();
-  const locale = await getLocale();
-  const dateFormat = new Intl.DateTimeFormat(locale, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-  const fulldate = dateFormat.format(
-    searchParams.date ? new Date(searchParams.date) : new Date(),
+export function StudentGradeDetails({
+  gradeId,
+  gradesheetId,
+}: {
+  gradeId: number;
+  gradesheetId: number;
+}) {
+  const trpc = useTRPC();
+  const { data: grade, isPending: gradeIsPending } = useQuery(
+    trpc.grade.get.queryOptions(gradeId),
   );
-  const grades = await caller.gradeSheet.grades(
-    Number(searchParams.gradesheetId),
+  const { data: gradeSheet, isPending: gradeSheetIsPending } = useQuery(
+    trpc.gradeSheet.get.queryOptions(gradesheetId),
   );
-  const evaluated = grades.filter((g) => !g.isAbsent);
-  const len = evaluated.length;
-  const maleCount = evaluated.filter((g) => g.student.gender === "male").length;
-  const femaleCount = evaluated.filter(
-    (g) => g.student.gender === "female",
-  ).length;
-  const maleAbove10 = evaluated.filter(
-    (g) => g.grade >= 10 && g.student.gender === "male",
-  ).length;
-  const femaleAbove10 = evaluated.filter(
-    (g) => g.grade >= 10 && g.student.gender === "female",
-  ).length;
-  const above10 = evaluated.filter((g) => g.grade >= 10).length;
+
+  const {
+    maleCount,
+    femaleCount,
+    maleAbove10,
+    femaleAbove10,
+    above10,
+    len,
+    max,
+    min,
+    avg,
+  } = useMemo(() => {
+    const evaluated = gradeSheet?.grades.filter((g) => !g.isAbsent) ?? [];
+    const grades = evaluated.map((g) => g.grade);
+    const maleCount = evaluated.filter(
+      (g) => g.student.gender === "male",
+    ).length;
+    const femaleCount = evaluated.filter(
+      (g) => g.student.gender === "female",
+    ).length;
+    const maleAbove10 = evaluated.filter(
+      (g) => g.grade >= 10 && g.student.gender === "male",
+    ).length;
+    const femaleAbove10 = evaluated.filter(
+      (g) => g.grade >= 10 && g.student.gender === "female",
+    ).length;
+    const above10 = evaluated.filter((g) => g.grade >= 10).length;
+    return {
+      maleCount,
+      femaleCount,
+      maleAbove10,
+      femaleAbove10,
+      above10,
+      len: evaluated.length,
+      max: Math.max(...grades),
+      min: Math.min(...grades),
+      avg:
+        grades.length == 0
+          ? 0
+          : grades.reduce((a, b) => a + b, 0) / grades.length,
+    };
+  }, [gradeSheet]);
+
+  const t = useTranslations();
+  const locale = useLocale();
+  if (gradeIsPending || gradeSheetIsPending) {
+    return (
+      <div className="grid grid-cols-1 gap-4 p-4">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <Skeleton className="h-8" key={index} />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="text-md flex flex-col gap-2"
-      // style={{
-      //   borderTopColor: searchParams.color ?? "lightgray",
-      // }}
-    >
+    <div className="text-md flex flex-col gap-2">
       <div className="bg-muted/50 flex flex-row items-center justify-between gap-4 border-b px-4 py-3">
         {t("subject")}
-        <span className="font-bold"> {searchParams.reportName}</span>
-        {/* <Button variant={"ghost"} className="opacity-0"></Button> */}
+        <span className="font-bold">
+          {grade?.gradeSheet.subject.course.reportName}
+        </span>
       </div>
       <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
           <span className="text-muted-foreground flex flex-row items-center gap-1">
             <Captions className="h-4 w-4 stroke-1" /> {t("subject")}
           </span>
-          <span> {searchParams.reportName}</span>
+          <span> {grade?.gradeSheet.subject.course.reportName}</span>
         </li>
         <li className="flex items-center justify-between">
           <span className="text-muted-foreground flex flex-row items-center gap-1">
             <BookText className="h-4 w-4 stroke-1" /> {t("grade_sheet_name")}
           </span>
-          <span>{searchParams.name}</span>
+          <span>{grade?.gradeSheet.name}</span>
         </li>
         <li className="flex items-center justify-between">
           <span className="text-muted-foreground flex flex-row items-center gap-1">
             <CalendarDays className="h-4 w-4 stroke-1" /> {t("date")}
           </span>
           <span>
-            {t("grade_of")} {fulldate}
+            {t("grade_of")}
+            {gradeSheet?.createdAt.toLocaleDateString(locale, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </span>
         </li>
       </ul>
@@ -107,21 +137,21 @@ export default async function Page(props: GradeSheetPageProps) {
             <Dock className="h-4 w-4 stroke-1" />
             {t("grade_of_the_student")}
           </span>
-          <span>{searchParams.grade || "N/A"}</span>
+          <span>{grade?.grade}</span>
         </li>
         <li className="flex items-center justify-between">
           <span className="text-muted-foreground flex flex-row items-center gap-1">
             <ArrowUpLeft className="h-4 w-4 stroke-1" />{" "}
             {t("highest_classroom_grade")}
           </span>
-          <span>{searchParams.max || "N/A"}</span>
+          <span>{max.toFixed(2)}</span>
         </li>
         <li className="flex items-center justify-between">
           <span className="text-muted-foreground flex flex-row items-center gap-1">
             <ArrowDownLeft className="h-4 w-4 stroke-1" />{" "}
             {t("lowest_classroom_grade")}
           </span>
-          <span>{searchParams.min || "N/A"}</span>
+          <span>{min.toFixed(2)}</span>
         </li>
       </ul>
       <Separator className="my-2" />
@@ -131,19 +161,19 @@ export default async function Page(props: GradeSheetPageProps) {
             <ClipboardList className="h-4 w-4 stroke-1" />
             {t("period_of_evaluation")}
           </span>
-          <span>{searchParams.termName || "N/A"}</span>
+          <span>{gradeSheet?.term.name}</span>
         </li>
         <li className="flex items-center justify-between">
           <span className="text-muted-foreground flex flex-row items-center gap-1">
             <Hash className="h-4 w-4 stroke-1" /> {t("coefficient")}
           </span>
-          <span>{searchParams.coef || "N/A"}</span>
+          <span>{gradeSheet?.subject.coefficient}</span>
         </li>
         <li className="flex items-center justify-between">
           <span className="text-muted-foreground flex flex-row items-center gap-1">
             <Waves className="h-4 w-4 stroke-1" /> {t("average_of_classroom")}
           </span>
-          <span>{searchParams.moy || "N/A"}</span>
+          <span>{avg.toFixed(2)}</span>
         </li>
       </ul>
       <Separator className="my-2" />
@@ -156,7 +186,10 @@ export default async function Page(props: GradeSheetPageProps) {
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-blue-600">
-              {((maleAbove10 * 100) / (maleCount || 1e-9)).toFixed(2)}%
+              {maleCount == 0
+                ? 0
+                : ((maleAbove10 * 100.0) / maleCount).toFixed(2)}
+              %
             </div>
             <p className="text-muted-foreground text-sm">
               {t("out_of_participants", {
@@ -175,7 +208,10 @@ export default async function Page(props: GradeSheetPageProps) {
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-pink-600">
-              {((femaleAbove10 * 100) / (femaleCount || 1e-9)).toFixed(2)}%
+              {femaleCount == 0
+                ? 0
+                : ((femaleAbove10 * 100.0) / femaleCount).toFixed(2)}
+              %
             </div>
             <p className="text-muted-foreground text-sm">
               {t("out_of_participants", {
@@ -192,7 +228,7 @@ export default async function Page(props: GradeSheetPageProps) {
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-green-600">
-              {((above10 * 100) / (len || 1e-9)).toFixed(2)}%
+              {len == 0 ? 0 : ((above10 * 100.0) / len).toFixed(2)}%
             </div>
             <p className="text-muted-foreground text-sm">
               {t("out_of_participants", {

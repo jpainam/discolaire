@@ -16,21 +16,19 @@ export const gradeRouter = {
   get: protectedProcedure
     .input(z.coerce.number())
     .query(async ({ ctx, input }) => {
-      return ctx.db.gradeSheet.findUnique({
+      return ctx.db.grade.findUnique({
         include: {
-          subject: {
+          gradeSheet: {
             include: {
-              course: true,
-              teacher: {
-                select: {
-                  id: true,
-                  lastName: true,
-                  firstName: true,
+              term: true,
+              subject: {
+                include: {
+                  teacher: true,
+                  course: true,
                 },
               },
             },
           },
-          term: true,
         },
         where: {
           id: input,

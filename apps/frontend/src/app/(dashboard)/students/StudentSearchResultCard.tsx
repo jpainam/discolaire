@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Edit,
   Eye,
+  FileTextIcon,
   GraduationCap,
   HeartPlus,
   Mail,
@@ -205,7 +206,7 @@ export function StudentSearchResultCard({
                   router.push(`/students/${student.id}/grades`);
                 }}
               >
-                <GraduationCap className="h-4 w-4" />
+                <FileTextIcon className="h-4 w-4" />
                 {t("View Grades")}
               </DropdownMenuItem>
               {canDeleteStudent && (

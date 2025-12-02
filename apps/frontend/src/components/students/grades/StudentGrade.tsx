@@ -1,106 +1,113 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { useParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import _ from "lodash";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsInteger, parseAsStringLiteral, useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/components/button";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { useTRPC } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";
 import { BySubject } from "./BySubject";
+import { StudentGradeDetails } from "./StudentGradeDetails";
 
-export function StudentGrade({ classroomId }: { classroomId: string }) {
+export function StudentGrade() {
   const params = useParams<{ id: string }>();
-  const trpc = useTRPC();
-  const { data: moyMinMaxGrades } = useSuspenseQuery(
-    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId),
-  );
-  const { data: grades } = useSuspenseQuery(
-    trpc.student.grades.queryOptions({
-      id: params.id,
-    }),
-  );
 
-  const [term] = useQueryState("term", parseAsString);
+  const [gradeId] = useQueryState("gradeId", parseAsInteger);
+  const [gradesheetId] = useQueryState("gradesheetId", parseAsInteger);
+  const trpc = useTRPC();
+  const { data: student, isPending } = useQuery(
+    trpc.student.get.queryOptions(params.id),
+  );
 
   const [view] = useQueryState("view", {
     defaultValue: "by_chronological_order",
   });
 
-  const [orderBy, setOrderBy] = useState<"subject" | "grade">("grade");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [orderBy, setOrderBy] = useQueryState(
+    "orderBy",
+    parseAsStringLiteral(["subject", "grade"]).withDefault("grade"),
+  );
+  const [sortOrder, setSortOrder] = useQueryState(
+    "sortOrder",
+    parseAsStringLiteral(["asc", "desc"]).withDefault("asc"),
+  );
 
   const t = useTranslations();
-
-  const sortedGrades = useMemo(() => {
-    let filteredGrades = grades;
-    if (term) {
-      filteredGrades = grades.filter((g) => g.gradeSheet.termId === term);
-    }
-
-    const sorted =
-      orderBy === "grade"
-        ? _.sortBy(filteredGrades, (grade) => grade.grade)
-        : _.sortBy(
-            filteredGrades,
-            (grade) => grade.gradeSheet.subject.course.name,
-          );
-
-    return sortOrder === "desc" ? sorted.reverse() : sorted;
-  }, [orderBy, sortOrder, grades, term]);
 
   const handleSort = useCallback(
     (field: "subject" | "grade") => {
       if (orderBy === field) {
-        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        void setSortOrder(sortOrder === "asc" ? "desc" : "asc");
       } else {
-        setOrderBy(field);
-        setSortOrder("asc");
+        void setOrderBy(field);
+        void setSortOrder("asc");
       }
     },
     [orderBy, sortOrder, setOrderBy, setSortOrder],
   );
 
-  return (
-    <div className="flex flex-col">
-      <div className="bg-muted/50 flex flex-row justify-between gap-4 border-r border-b px-4 py-1">
-        <Button variant={"ghost"} onClick={() => handleSort("subject")}>
-          {t("subject")}{" "}
-          {orderBy === "subject" && sortOrder === "asc" ? (
-            <ChevronUp className="ml-2 h-4 w-4" />
-          ) : (
-            <ChevronDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-        <Button variant={"ghost"} onClick={() => handleSort("subject")}>
-          {t("grade")}
-          {orderBy === "grade" && sortOrder === "asc" ? (
-            <ChevronUp className="ml-2 h-4 w-4" />
-          ) : (
-            <ChevronDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
+  if (isPending) {
+    return (
+      <div className="grid grid-cols-1 gap-4 px-4">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <Skeleton className="h-8" key={index} />
+        ))}
       </div>
+    );
+  }
 
-      {sortedGrades.length === 0 && <EmptyComponent title={t("no_data")} />}
-      <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-r border-b">
-        {view === "by_chronological_order" && (
-          <ByChronologicalOrder
-            grades={sortedGrades}
-            minMaxMoy={moyMinMaxGrades}
-          />
-        )}
-        {view === "by_subject" && (
-          <BySubject minMaxMoy={moyMinMaxGrades} grades={sortedGrades} />
-        )}
-      </ScrollArea>
+  const classroom = student?.classroom;
+
+  if (!classroom) {
+    return <EmptyComponent title={t("student_not_registered_yet")} />;
+  }
+
+  return (
+    <div className="grid gap-0 p-0 pb-2 text-sm md:grid-cols-2">
+      <div className="flex flex-col">
+        <div className="bg-muted/50 flex flex-row justify-between gap-4 border-r border-b px-4 py-1">
+          <Button variant={"ghost"} onClick={() => handleSort("subject")}>
+            {t("subject")}{" "}
+            {orderBy === "subject" && sortOrder === "asc" ? (
+              <ChevronUp className="ml-2 h-4 w-4" />
+            ) : (
+              <ChevronDown className="ml-2 h-4 w-4" />
+            )}
+          </Button>
+          <Button variant={"ghost"} onClick={() => handleSort("grade")}>
+            {t("grade")}
+            {orderBy === "grade" && sortOrder === "asc" ? (
+              <ChevronUp className="ml-2 h-4 w-4" />
+            ) : (
+              <ChevronDown className="ml-2 h-4 w-4" />
+            )}
+          </Button>
+        </div>
+
+        <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-r border-b">
+          {view === "by_subject" ? (
+            <BySubject />
+          ) : (
+            <ByChronologicalOrder classroomId={classroom.id} />
+          )}
+        </ScrollArea>
+      </div>
+      {gradeId && gradesheetId ? (
+        <StudentGradeDetails gradeId={gradeId} gradesheetId={gradesheetId} />
+      ) : (
+        <EmptyComponent
+          title={"Choisir une note"}
+          description="Veuillez choisir une note pour commencer"
+        />
+      )}
     </div>
   );
 }

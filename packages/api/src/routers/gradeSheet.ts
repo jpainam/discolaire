@@ -132,6 +132,15 @@ export const gradeSheetRouter = {
   get: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
     return ctx.db.gradeSheet.findUniqueOrThrow({
       include: {
+        grades: {
+          include: {
+            student: {
+              select: {
+                gender: true,
+              },
+            },
+          },
+        },
         subject: {
           include: {
             course: true,

@@ -1,5 +1,34 @@
-import { EmptyComponent } from "~/components/EmptyComponent";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-export default function Page() {
-  return <EmptyComponent />;
+import { Skeleton } from "@repo/ui/components/skeleton";
+
+import { ErrorFallback } from "~/components/error-fallback";
+import { StudentGrade } from "~/components/students/grades/StudentGrade";
+import { StudentGradeHeader } from "~/components/students/grades/StudentGradeHeader";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  batchPrefetch([trpc.student.get.queryOptions(params.id)]);
+  return (
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <StudentGradeHeader />
+      </ErrorBoundary>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 gap-4 p-4">
+              {Array.from({ length: 20 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          }
+        >
+          <StudentGrade />
+        </Suspense>
+      </ErrorBoundary>
+    </HydrateClient>
+  );
 }

@@ -1,32 +1,79 @@
 "use client";
 
+import { useMemo } from "react";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
+import {
+  parseAsInteger,
+  parseAsString,
+  parseAsStringLiteral,
+  useQueryState,
+} from "nuqs";
 
-import type { RouterOutputs } from "@repo/api";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { routes } from "~/configs/routes";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
+import { useTRPC } from "~/trpc/react";
 
-interface ByChronologicalOrderProps {
-  grades: RouterOutputs["student"]["grades"][number][];
-  minMaxMoy: RouterOutputs["classroom"]["getMinMaxMoyGrades"][number][];
-}
-export function ByChronologicalOrder({
-  grades,
-  minMaxMoy,
-}: ByChronologicalOrderProps) {
-  const router = useRouter();
-  const params = useParams<{ id: string; gradeId: string }>();
-  const { createQueryString } = useCreateQueryString();
+export function ByChronologicalOrder({ classroomId }: { classroomId: string }) {
+  const params = useParams<{ id: string }>();
+  const trpc = useTRPC();
+  const { data: minMaxMoy, isPending: summaryIsPending } = useQuery(
+    trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId),
+  );
+  const { data: grades, isPending: gradesIsPending } = useQuery(
+    trpc.student.grades.queryOptions({
+      id: params.id,
+    }),
+  );
+
+  const [termId] = useQueryState("termId", parseAsString);
+  const [orderBy] = useQueryState("orderBy", parseAsString);
+  const [sortOrder] = useQueryState(
+    "sortOrder",
+    parseAsStringLiteral(["asc", "desc"]).withDefault("asc"),
+  );
+
+  const sortedGrades = useMemo(() => {
+    let filteredGrades = grades ?? [];
+
+    if (termId) {
+      filteredGrades = filteredGrades.filter(
+        (g) => g.gradeSheet.termId === termId,
+      );
+    }
+
+    const sorted = [...filteredGrades].sort((a, b) => {
+      if (orderBy === "grade") {
+        return a.grade - b.grade;
+      } else {
+        const nameA = a.gradeSheet.subject.course.name.toLowerCase();
+        const nameB = b.gradeSheet.subject.course.name.toLowerCase();
+        return nameA.localeCompare(nameB);
+      }
+    });
+
+    return sortOrder === "desc" ? sorted.reverse() : sorted;
+  }, [orderBy, sortOrder, grades, termId]);
+
+  const [gradeId, setGradeId] = useQueryState("gradeId", parseAsInteger);
+  const [_, setGradeSheetId] = useQueryState("gradesheetId", parseAsInteger);
 
   const t = useTranslations();
   const locale = useLocale();
+  if (gradesIsPending || summaryIsPending) {
+    return (
+      <div className="grid grid-cols-1 gap-4 p-4">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <Skeleton className="h-8" key={index} />
+        ))}
+      </div>
+    );
+  }
   return (
     <div>
-      {grades.map((grade) => {
+      {sortedGrades.map((grade) => {
         const m = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
           month: "short",
         });
@@ -36,33 +83,13 @@ export function ByChronologicalOrder({
         return (
           <div
             onClick={() => {
-              const query = {
-                color: grade.gradeSheet.subject.course.color,
-                name: grade.gradeSheet.name,
-                gradesheetId: grade.gradeSheetId.toString(),
-                reportName: grade.gradeSheet.subject.course.name,
-                date: grade.gradeSheet.createdAt.toISOString(),
-                grade: grade.grade,
-                termName: grade.gradeSheet.term.name,
-                moy: minMaxMoy
-                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
-                  ?.avg?.toFixed(2),
-                max: minMaxMoy
-                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
-                  ?.max?.toFixed(2),
-                min: minMaxMoy
-                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
-                  ?.min?.toFixed(2),
-                coef: grade.gradeSheet.subject.coefficient.toString(),
-              };
-              router.push(
-                `${routes.students.grades(params.id)}/${grade.id}/?${createQueryString({ ...query })}`,
-              );
+              void setGradeId(grade.id);
+              void setGradeSheetId(grade.gradeSheetId);
             }}
             key={grade.id}
             className={cn(
               "border-accent flex cursor-pointer flex-row items-center gap-4 border-b px-4 py-2",
-              grade.id === Number(params.gradeId) ? "bg-accent" : "bg-none",
+              grade.id === gradeId ? "bg-accent" : "bg-none",
             )}
           >
             <div className="flex w-[50px] flex-col justify-center">
@@ -87,7 +114,7 @@ export function ByChronologicalOrder({
               <div className="text-muted-foreground py-0 text-xs">
                 {t("average_of_classroom")}{" "}
                 {minMaxMoy
-                  .find((g) => g.gradeSheetId === grade.gradeSheetId)
+                  ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
                   ?.avg?.toFixed(2)}
               </div>
             </div>
