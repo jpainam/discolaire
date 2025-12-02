@@ -1,9 +1,14 @@
 //import { faker } from "@faker-js/faker";
+import { PrismaPg } from "@prisma/adapter-pg";
+
+import { env } from "./env";
 import { PrismaClient } from "./generated/client/client";
 
 // import appreciations from "./shared/appreciation.ts"; workaround for ts-node issue with import
 
-const client = new PrismaClient();
+const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
+
+const client = new PrismaClient({ adapter });
 
 // // npx prisma db seed --preview-feature
 //

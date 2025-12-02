@@ -35,7 +35,11 @@ export function BySubject() {
 
   const { subjects, subjectSums } = useMemo(() => {
     const subjects = Array.from(
-      new Set(grades?.map((grade) => grade.gradeSheet.subject)),
+      new Set(
+        grades
+          ?.filter((g) => !g.isAbsent)
+          .map((grade) => grade.gradeSheet.subject),
+      ),
     );
 
     const subjectSums: Record<string, number> = {};

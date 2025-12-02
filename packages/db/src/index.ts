@@ -1,3 +1,5 @@
+import { PrismaPg } from "@prisma/adapter-pg";
+
 import { PrismaClient } from "./generated/client/client";
 
 const globalForPrisma = globalThis as unknown as {
@@ -19,11 +21,9 @@ export function getDb({ connectionString }: GetDbParams): PrismaClient {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return cache.get(connectionString)!;
   }
-  //const pool = new PrismaPg({ connectionString: `${connectionString}::csac` });
+  const adapter = new PrismaPg({ connectionString });
 
-  const prisma = new PrismaClient({
-    datasourceUrl: connectionString,
-  });
+  const prisma = new PrismaClient({ adapter });
   cache.set(connectionString, prisma);
   return prisma;
 }

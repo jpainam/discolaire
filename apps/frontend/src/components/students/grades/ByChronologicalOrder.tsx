@@ -73,60 +73,62 @@ export function ByChronologicalOrder({ classroomId }: { classroomId: string }) {
   }
   return (
     <div>
-      {sortedGrades.map((grade) => {
-        const m = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
-          month: "short",
-        });
-        const d = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
-          day: "numeric",
-        });
-        return (
-          <div
-            onClick={() => {
-              void setGradeId(grade.id);
-              void setGradeSheetId(grade.gradeSheetId);
-            }}
-            key={grade.id}
-            className={cn(
-              "border-accent flex cursor-pointer flex-row items-center gap-4 border-b px-4 py-2",
-              grade.id === gradeId ? "bg-accent" : "bg-none",
-            )}
-          >
-            <div className="flex w-[50px] flex-col justify-center">
-              <div className="bg-muted text-muted-foreground mb-1 flex flex-col items-center rounded-md px-1 text-xs">
-                <div>{d}</div>
-                <div>{m}</div>
+      {sortedGrades
+        .filter((g) => !g.isAbsent)
+        .map((grade) => {
+          const m = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
+            month: "short",
+          });
+          const d = grade.gradeSheet.createdAt.toLocaleDateString(locale, {
+            day: "numeric",
+          });
+          return (
+            <div
+              onClick={() => {
+                void setGradeId(grade.id);
+                void setGradeSheetId(grade.gradeSheetId);
+              }}
+              key={grade.id}
+              className={cn(
+                "border-accent flex cursor-pointer flex-row items-center gap-4 border-b px-4 py-2",
+                grade.id === gradeId ? "bg-accent" : "bg-none",
+              )}
+            >
+              <div className="flex w-[50px] flex-col justify-center">
+                <div className="bg-muted text-muted-foreground mb-1 flex flex-col items-center rounded-md px-1 text-xs">
+                  <div>{d}</div>
+                  <div>{m}</div>
+                </div>
+                <div
+                  className="h-1 w-full rounded-sm"
+                  style={{
+                    backgroundColor: grade.gradeSheet.subject.course.color,
+                  }}
+                ></div>
               </div>
-              <div
-                className="h-1 w-full rounded-sm"
-                style={{
-                  backgroundColor: grade.gradeSheet.subject.course.color,
-                }}
-              ></div>
+              <div className="flex flex-col gap-0">
+                <div className="py-0 text-xs font-bold uppercase">
+                  {grade.gradeSheet.subject.course.name}
+                </div>
+                <div className="text-muted-foreground py-0 text-xs">
+                  {grade.gradeSheet.name}
+                </div>
+                <div className="text-muted-foreground py-0 text-xs">
+                  {t("average_of_classroom")}{" "}
+                  {minMaxMoy
+                    ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
+                    ?.avg?.toFixed(2)}
+                </div>
+              </div>
+              <div className="ml-auto flex w-[100px] flex-col text-sm">
+                <span className="font-bold">{grade.grade.toFixed(2)}</span>
+                <span className="text-muted-foreground text-xs">
+                  {grade.gradeSheet.term.name}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col gap-0">
-              <div className="py-0 text-xs font-bold uppercase">
-                {grade.gradeSheet.subject.course.name}
-              </div>
-              <div className="text-muted-foreground py-0 text-xs">
-                {grade.gradeSheet.name}
-              </div>
-              <div className="text-muted-foreground py-0 text-xs">
-                {t("average_of_classroom")}{" "}
-                {minMaxMoy
-                  ?.find((g) => g.gradeSheetId === grade.gradeSheetId)
-                  ?.avg?.toFixed(2)}
-              </div>
-            </div>
-            <div className="ml-auto flex w-[100px] flex-col text-sm">
-              <span className="font-bold">{grade.grade.toFixed(2)}</span>
-              <span className="text-muted-foreground text-xs">
-                {grade.gradeSheet.term.name}
-              </span>
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 }

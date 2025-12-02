@@ -20,8 +20,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <Suspense
           fallback={
             <div className="grid grid-cols-1 gap-4 p-4">
-              {Array.from({ length: 20 }).map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full" />
+              {Array.from({ length: 12 }).map((_, i) => (
+                <Skeleton key={i} className="h-8 w-full" />
               ))}
             </div>
           }
