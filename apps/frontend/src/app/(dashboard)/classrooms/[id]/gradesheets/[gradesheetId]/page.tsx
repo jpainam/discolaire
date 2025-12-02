@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Award, BookOpen, Calendar, TrendingUp, Users } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -5,35 +6,31 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { getSession } from "~/auth/server";
 import { ClassroomGradeChart } from "~/components/classrooms/gradesheets/ClassroomGradeChart";
 import { ClassroomGradeList } from "~/components/classrooms/gradesheets/ClassroomGradeList";
 import { ErrorFallback } from "~/components/error-fallback";
-import { caller } from "~/trpc/server";
+import { batchPrefetch, getQueryClient, trpc } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 
 export default async function Page(props: {
-  params: Promise<{ gradesheetId: number }>;
+  params: Promise<{ gradesheetId: number; id: string }>;
 }) {
   const params = await props.params;
 
   const { gradesheetId } = params;
-  const session = await getSession();
+  const queryClient = getQueryClient();
 
-  const gradesheet = await caller.gradeSheet.get(Number(gradesheetId));
+  batchPrefetch([trpc.classroom.students.queryOptions(params.id)]);
 
-  let grades = await caller.gradeSheet.grades(Number(gradesheetId));
+  const gradesheet = await queryClient.fetchQuery(
+    trpc.gradeSheet.get.queryOptions(Number(gradesheetId)),
+  );
 
-  if (session?.user.profile === "student") {
-    const student = await caller.student.getFromUserId(session.user.id);
-    grades = grades.filter((g) => g.studentId === student.id);
-  } else if (session?.user.profile === "contact") {
-    const contact = await caller.contact.getFromUserId(session.user.id);
-    const students = await caller.contact.students(contact.id);
-    const studentIds = students.map((s) => s.studentId);
-    grades = grades.filter((g) => studentIds.includes(g.studentId));
-  }
+  const grades = await queryClient.fetchQuery(
+    trpc.gradeSheet.grades.queryOptions(Number(gradesheetId)),
+  );
 
   const t = await getTranslations();
   const locale = await getLocale();
@@ -223,11 +220,21 @@ export default async function Page(props: {
       )} */}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <ClassroomGradeList
-            className="col-span-3"
-            gradesheet={gradesheet}
-            grades={grades}
-          />
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 gap-2 p-2">
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton className="h-8" key={index} />
+                ))}
+              </div>
+            }
+          >
+            <ClassroomGradeList
+              className="col-span-3"
+              gradesheet={gradesheet}
+              grades={grades}
+            />
+          </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <ClassroomGradeChart grades={grades} />

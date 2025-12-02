@@ -4,6 +4,8 @@ import type * as RPNInput from "react-phone-number-input";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
 import {
   useMutation,
   useQuery,
@@ -42,6 +44,11 @@ import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db/enums";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/avatar";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -69,7 +76,6 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { AvatarState } from "../AvatarState";
 import { Badge } from "../base-badge";
 import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
@@ -196,13 +202,20 @@ export function StudentHeader() {
     }
   };
 
+  const avatar = createAvatar(initials, {
+    seed: getFullName(student),
+  });
+
   return (
     <div className="bg-muted flex gap-2 border-b px-4 py-1">
-      <AvatarState
-        className="my-0 hidden h-full w-[100px] rounded-md md:flex"
-        pos={getFullName(student).length}
-        avatar={student.user?.avatar}
-      />
+      <Avatar className="hidden h-full w-[100px] rounded-md md:flex">
+        <AvatarImage
+          src={student.user?.avatar ?? avatar.toDataUri()}
+          alt="AV"
+        />
+        <AvatarFallback>AV</AvatarFallback>
+      </Avatar>
+
       <div className="flex w-full flex-col gap-1">
         {session?.user.profile == "student" ? (
           <span className="bg-background h-9 w-full rounded-md px-4 py-2 text-sm font-semibold 2xl:w-[450px]">
@@ -574,7 +587,7 @@ export function StudentHeader() {
                 className="size-1.5 rounded-full bg-amber-500"
                 aria-hidden="true"
               ></span>
-              {t("Not Registered")}
+              {t("student_not_registered_yet")}
             </Badge>
           )}
           {student.classroom && (

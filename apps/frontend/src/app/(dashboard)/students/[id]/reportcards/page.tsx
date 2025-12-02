@@ -46,7 +46,12 @@ export default async function Page(props: PageProps) {
   const { termId } = await reportcardSearchParams(props.searchParams);
 
   if (!termId) {
-    return <EmptyComponent title={t("select_terms")} />;
+    return (
+      <EmptyComponent
+        title="Veuillez choisir une période"
+        description="Choisissez une période ou un trimestre pour commencer"
+      />
+    );
   }
   const { studentsReport, summary, globalRanks } =
     await caller.reportCard.getSequence({

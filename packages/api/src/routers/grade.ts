@@ -35,7 +35,25 @@ export const gradeRouter = {
         },
       });
     }),
-
+  create: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        gradeSheetId: z.coerce.number(),
+        grade: z.coerce.number(),
+        isAbsent: z.boolean().optional().default(false),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.grade.create({
+        data: {
+          gradeSheetId: input.gradeSheetId,
+          grade: input.grade,
+          isAbsent: input.isAbsent,
+          studentId: input.studentId,
+        },
+      });
+    }),
   update: protectedProcedure
     .input(
       z.object({

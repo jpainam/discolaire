@@ -2,13 +2,22 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { decode } from "entities";
-import { FlagOff, MoreVertical, Pencil, Search, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import {
+  FlagOff,
+  MoreVertical,
+  Pencil,
+  PlusIcon,
+  Search,
+  Trash2,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
@@ -31,12 +40,12 @@ import {
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
 
-import { AvatarState } from "~/components/AvatarState";
 import { Badge } from "~/components/base-badge";
-import { EditGradeStudent } from "~/components/classrooms/gradesheets/grades/EditGradeStudent";
+import { EditStudentGrade } from "~/components/classrooms/gradesheets/grades/EditStudentGrade";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { UserLink } from "~/components/UserLink";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -46,6 +55,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { getAppreciations } from "~/utils/appreciations";
+import { CreateStudentGrade } from "./grades/CreateStudentGrade";
 
 export function ClassroomGradeList({
   grades,
@@ -57,25 +67,27 @@ export function ClassroomGradeList({
   className?: string;
 }) {
   const confirm = useConfirm();
+  const trpc = useTRPC();
 
   const t = useTranslations();
   const params = useParams<{ id: string }>();
   const { openModal } = useModal();
   const [query, setQuery] = useState("");
+  const { data: students } = useSuspenseQuery(
+    trpc.classroom.students.queryOptions(params.id),
+  );
 
   const filtered = useMemo(() => {
     const lowerQuery = query.toLowerCase();
-    return grades.filter((g) => {
-      const student = g.student;
+    return students.filter((st) => {
       return (
-        student.registrationNumber?.toLowerCase().includes(lowerQuery) ||
-        student.firstName?.toLowerCase().includes(lowerQuery) ||
-        student.lastName?.toLowerCase().includes(lowerQuery)
+        st.registrationNumber?.toLowerCase().includes(lowerQuery) ||
+        st.firstName?.toLowerCase().includes(lowerQuery) ||
+        st.lastName?.toLowerCase().includes(lowerQuery)
       );
     });
-  }, [grades, query]);
+  }, [students, query]);
 
-  const trpc = useTRPC();
   const queryClient = useQueryClient();
 
   const isClosed = !gradesheet.term.isActive;
@@ -121,6 +133,7 @@ export function ClassroomGradeList({
       },
     }),
   );
+  const locale = useLocale();
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       <div className="flex items-center gap-2">
@@ -199,143 +212,180 @@ export function ClassroomGradeList({
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead className="w-16"></TableHead>
+              <TableHead>{t("fullName")}</TableHead>
+              <TableHead>{t("dateOfBirth")}</TableHead>
               <TableHead>{t("registrationNumber")}</TableHead>
-              <TableHead>{t("lastName")}</TableHead>
-              <TableHead>{t("firstName")}</TableHead>
               <TableHead className="text-center">{t("grade")}</TableHead>
               <TableHead className="text-center">{t("absent")}</TableHead>
-              <TableHead>{t("appreciation")}</TableHead>
+              <TableHead></TableHead>
               <TableHead className="w-12"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((g, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <AvatarState
-                    avatar={g.student.user?.avatar}
-                    pos={g.student.firstName?.length}
-                  />
-                </TableCell>
-                <TableCell className="font-medium">
-                  {g.student.registrationNumber}
-                </TableCell>
+            {filtered.map((st, index) => {
+              const g = grades.find(
+                (g) => g.studentId == st.id && g.gradeSheetId == gradesheet.id,
+              );
 
-                <TableCell className="font-medium">
-                  <Link
-                    className="hover:underline"
-                    href={`/students/${g.student.id}`}
-                  >
-                    {decode(g.student.lastName ?? "")}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Link
-                    className="hover:underline"
-                    href={`/students/${g.student.id}`}
-                  >
-                    {decode(g.student.firstName ?? "")}
-                  </Link>
-                </TableCell>
-                <TableCell className="text-center">
-                  {g.isAbsent ? (
-                    <>-</>
+              return (
+                <TableRow key={index}>
+                  <TableCell>
+                    <UserLink
+                      name={getFullName(st)}
+                      profile="student"
+                      id={st.id}
+                      avatar={st.user?.avatar}
+                    />
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {st.dateOfBirth?.toLocaleDateString(locale, {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {st.registrationNumber}
+                  </TableCell>
+
+                  {g ? (
+                    <TableCell className="text-center">
+                      {g.isAbsent ? (
+                        <>-</>
+                      ) : (
+                        <Badge
+                          variant={
+                            g.grade >= 16
+                              ? "success"
+                              : g.grade >= 14
+                                ? "info"
+                                : g.grade >= 10
+                                  ? "warning"
+                                  : "destructive"
+                          }
+                          appearance={"outline"}
+                        >
+                          {g.grade.toFixed(2)}
+                        </Badge>
+                      )}
+                    </TableCell>
                   ) : (
-                    <Badge
-                      variant={
-                        g.grade >= 16
-                          ? "success"
-                          : g.grade >= 14
-                            ? "info"
-                            : g.grade >= 10
-                              ? "warning"
-                              : "destructive"
-                      }
-                      appearance={"outline"}
-                    >
-                      {g.grade.toFixed(2)}
-                    </Badge>
+                    <TableCell colSpan={3}>
+                      <Badge variant={"destructive"} appearance={"outline"}>
+                        Non marqué
+                      </Badge>
+                    </TableCell>
                   )}
-                </TableCell>
-                <TableCell className="text-center">
-                  <Badge variant={g.isAbsent ? "destructive" : "secondary"}>
-                    {g.isAbsent ? t("yes") : t("no")}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {!g.isAbsent && getAppreciations(g.grade, gradesheet.scale)}
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-end">
-                    {canUpdateGradesheet && (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-label="Open menu"
-                            variant="ghost"
-                            className="data-[state=open]:bg-muted flex size-8 p-0"
-                          >
-                            <DotsHorizontalIcon
-                              className="size-4"
-                              aria-hidden="true"
-                            />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            disabled={isClosed}
-                            onSelect={() => {
-                              const st = g.student;
-                              if (!st.id) {
-                                return;
-                              }
-                              openModal({
-                                title: t("edit"),
-                                description: getFullName(st),
-                                view: (
-                                  <EditGradeStudent
-                                    gradeId={g.id}
-                                    grade={g.grade}
-                                    studentId={st.id}
-                                  />
-                                ),
-                              });
-                            }}
-                          >
-                            <Pencil />
-                            {t("edit")}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
+                  {g && (
+                    <TableCell className="text-center">
+                      <Badge variant={g.isAbsent ? "destructive" : "secondary"}>
+                        {g.isAbsent ? t("yes") : t("no")}
+                      </Badge>
+                    </TableCell>
+                  )}
+                  {g && (
+                    <TableCell>
+                      {!g.isAbsent &&
+                        getAppreciations(g.grade, gradesheet.scale)}
+                    </TableCell>
+                  )}
+                  <TableCell>
+                    <div className="flex justify-end">
+                      {canUpdateGradesheet && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              aria-label="Open menu"
+                              variant="ghost"
+                              className="data-[state=open]:bg-muted flex size-8 p-0"
+                            >
+                              <DotsHorizontalIcon
+                                className="size-4"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {g && (
+                              <DropdownMenuItem
+                                disabled={isClosed}
+                                onSelect={() => {
+                                  const st = g.student;
+                                  if (!st.id) {
+                                    return;
+                                  }
+                                  openModal({
+                                    title: t("edit"),
+                                    description: getFullName(st),
+                                    view: (
+                                      <EditStudentGrade
+                                        gradeId={g.id}
+                                        grade={g.grade}
+                                        studentId={st.id}
+                                      />
+                                    ),
+                                  });
+                                }}
+                              >
+                                <Pencil />
+                                {t("edit")}
+                              </DropdownMenuItem>
+                            )}
+                            {!g && (
+                              <DropdownMenuItem
+                                disabled={isClosed}
+                                onSelect={() => {
+                                  openModal({
+                                    title: "Ajouter une note",
+                                    description: `Veuillez ajouter une note à ${getFullName(st)}`,
+                                    view: (
+                                      <CreateStudentGrade
+                                        studentId={st.id}
+                                        gradeSheetId={gradesheet.id}
+                                      />
+                                    ),
+                                  });
+                                }}
+                              >
+                                <PlusIcon />
+                                {t("add")}
+                              </DropdownMenuItem>
+                            )}
 
-                          <DropdownMenuItem
-                            disabled={isClosed}
-                            variant="destructive"
-                            onSelect={async () => {
-                              const isConfirmed = await confirm({
-                                title: t("delete"),
-                                description: t("delete_confirmation"),
-                              });
-                              if (isConfirmed) {
-                                toast.loading(t("deleting"), { id: 0 });
-                                markGradeAbsent.mutate({
-                                  id: g.id,
-                                  grade: 0,
-                                  isAbsent: true,
-                                });
-                              }
-                            }}
-                          >
-                            <FlagOff className="size-4" />
-                            {t("mark_absent")}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                            {g && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  disabled={isClosed}
+                                  variant="destructive"
+                                  onSelect={async () => {
+                                    const isConfirmed = await confirm({
+                                      title: t("delete"),
+                                      description: t("delete_confirmation"),
+                                    });
+                                    if (isConfirmed) {
+                                      toast.loading(t("deleting"), { id: 0 });
+                                      markGradeAbsent.mutate({
+                                        id: g.id,
+                                        grade: 0,
+                                        isAbsent: true,
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <FlagOff className="size-4" />
+                                  {t("mark_absent")}
+                                </DropdownMenuItem>
+                              </>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>

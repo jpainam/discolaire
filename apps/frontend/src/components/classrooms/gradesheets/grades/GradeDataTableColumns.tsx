@@ -30,7 +30,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { getAppreciations } from "~/utils/appreciations";
-import { EditGradeStudent } from "./EditGradeStudent";
+import { EditGradeStudent } from "./EditStudentGrade";
 
 type GradeSheetGetGradeProcedureOutput = NonNullable<
   RouterOutputs["gradeSheet"]["grades"]

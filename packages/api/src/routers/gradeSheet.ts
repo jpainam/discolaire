@@ -197,9 +197,52 @@ export const gradeSheetRouter = {
         },
       });
     }),
+  summary: protectedProcedure
+    .input(z.coerce.number())
+    .query(async ({ ctx, input }) => {
+      const stats = await ctx.db.grade.aggregate({
+        _min: { grade: true },
+        _max: { grade: true },
+        _avg: { grade: true },
+        where: {
+          gradeSheetId: input,
+        },
+      });
+      return {
+        min: stats._min.grade,
+        max: stats._max.grade,
+        avg: stats._avg.grade,
+      };
+    }),
   grades: protectedProcedure
     .input(z.coerce.number())
     .query(async ({ ctx, input }) => {
+      const gradeSheet = await ctx.db.gradeSheet.findUniqueOrThrow({
+        include: {
+          subject: true,
+        },
+        where: {
+          id: input,
+        },
+      });
+      let students = await ctx.services.classroom.getStudents(
+        gradeSheet.subject.classroomId,
+      );
+      if (ctx.session.user.profile === "student") {
+        students = students.filter(
+          (student) => student.userId === ctx.session.user.id,
+        );
+      } else if (ctx.session.user.profile === "contact") {
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studs = await ctx.services.contact.getStudents(contact.id);
+        const studentIds = studs.map((s) => s.studentId);
+        students = students.filter((student) =>
+          studentIds.includes(student.id),
+        );
+      }
+      const studentIds = students.map((std) => std.id);
       return ctx.db.grade.findMany({
         include: {
           student: {
@@ -219,6 +262,9 @@ export const gradeSheetRouter = {
           },
         },
         where: {
+          studentId: {
+            in: studentIds,
+          },
           gradeSheetId: input,
         },
       });
@@ -252,38 +298,6 @@ export const gradeSheetRouter = {
       name: r.bin.toString(),
       value: Number(r.count),
     }));
-    // const allGrades = await ctx.db.grade.findMany({
-    //   select: {
-    //     studentId: true,
-    //     grade: true,
-    //     gradeSheet: { select: { scale: true } },
-    //   },
-    // });
-
-    // // 2. Build a Set for each bin [0..20] to track unique studentIds.
-    // const studentSets: Record<number, Set<string>> = {};
-    // for (let i = 0; i <= 20; i++) {
-    //   studentSets[i] = new Set();
-    // }
-
-    // // 3. Loop over each grade-record, compute its “scaled bin”, then add studentId to that Set.
-    // for (const { studentId, grade, gradeSheet } of allGrades) {
-    //   const scale = gradeSheet.scale;
-    //   let scaled = (grade / scale) * 20;
-    //   if (scaled < 0) scaled = 0;
-    //   if (scaled > 20) scaled = 20;
-    //   const bin = scaled === 20 ? 20 : Math.floor(scaled);
-
-    //   studentSets[bin].add(studentId);
-    // }
-
-    // // 4. Transform each Set into its size, producing an array of { name, value } sorted by bin.
-    // const chartData = Object.entries(studentSets)
-    //   .map(([key, set]) => ({
-    //     name: key, // “0”, “1”, …, “20”
-    //     value: set.size, // number of distinct students in that bin
-    //   }))
-    //   .sort((a, b) => Number(a.name) - Number(b.name));
   }),
   allPercentile: protectedProcedure.query(({ ctx }) => {
     // return gradeSheetService.allPercentile({

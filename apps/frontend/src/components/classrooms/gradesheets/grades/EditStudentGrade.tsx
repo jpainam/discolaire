@@ -22,7 +22,7 @@ const editGradeStudentSchema = z.object({
   isAbsent: z.coerce.boolean(),
 });
 
-export function EditGradeStudent({
+export function EditStudentGrade({
   studentId,
   grade,
   gradeId,
