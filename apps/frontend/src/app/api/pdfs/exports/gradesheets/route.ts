@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
     ws["!rows"] = [];
     ws["!rows"][0] = { hpt: 28 }; // ~28pt height for row 1
     const workbook = XLSX.utils.book_new();
-    const sheetName = getSheetName("Liste des eleves " + classroom.name);
+    const sheetName = getSheetName(classroom.reportName);
     XLSX.utils.book_append_sheet(workbook, ws, sheetName);
 
     const u8 = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
