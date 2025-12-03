@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -45,7 +46,8 @@ import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { UpdateCreatedGradesheet } from "../../../app/(dashboard)/classrooms/[id]/gradesheets/create/UpdateCreatedGradesheet";
+import { getFullName } from "~/utils";
+import { UpdateCreatedGradesheet } from "./UpdateCreatedGradesheet";
 
 export function CurrentGradeSheetSummary({
   termId,
@@ -91,82 +93,40 @@ export function CurrentGradeSheetSummary({
   return (
     <div className="flex flex-col items-center gap-4 pt-2 pr-2">
       {gradesheets.map((gs) => {
-        const total = gs.grades.length;
-        const graded =
-          gs.grades.length + gs.grades.filter((g) => g.isAbsent).length;
-
-        const maxGrade = Math.min(...gs.grades.map((g) => g.grade));
-        const minGrade = Math.max(...gs.grades.map((g) => g.grade));
-        const avgGrade =
-          gs.grades.length === 0
-            ? 0
-            : gs.grades.reduce((acc, g) => acc + g.grade, 0) / gs.grades.length;
-
-        return (
-          <CreatedGradesheetCard
-            key={gs.id}
-            id={gs.id}
-            total={total}
-            graded={graded}
-            weight={gs.weight}
-            title={gs.name}
-            maxGrade={maxGrade}
-            minGrade={minGrade}
-            avgGrade={avgGrade}
-            scale={gs.scale}
-            date={gs.createdAt}
-            termName={gs.term.name}
-            isClosed={!gs.term.isActive}
-            subject={gs.subject.course.name}
-            prof={`${gs.subject.teacher?.prefix} ${gs.subject.teacher?.firstName ?? ""} ${
-              gs.subject.teacher?.lastName ?? ""
-            }`}
-          />
-        );
+        return <CreatedGradesheetCard gradeSheetId={gs.id} key={gs.id} />;
       })}
     </div>
   );
 }
 
-function CreatedGradesheetCard({
-  total,
-  title,
-  id,
-  date,
-  graded,
-  subject,
-  prof,
-  maxGrade,
-  minGrade,
-  avgGrade,
-  scale,
-  weight,
-  isClosed,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  termName,
-}: {
-  title: string;
-  id: number;
-  total: number;
-  graded: number;
-  subject: string;
-  prof: string;
-  date: Date;
-  maxGrade: number;
-  minGrade: number;
-  avgGrade: number;
-  scale: number;
-  weight: number;
-  isClosed: boolean;
-  termName: string;
-}) {
+function CreatedGradesheetCard({ gradeSheetId }: { gradeSheetId: number }) {
   const t = useTranslations();
   const { openModal } = useModal();
+  const trpc = useTRPC();
+  const gradeSheetQuery = useQuery(
+    trpc.gradeSheet.get.queryOptions(gradeSheetId),
+  );
+
+  const { total, avgGrade, maxGrade, minGrade, graded } = useMemo(() => {
+    const grades = gradeSheetQuery.data?.grades ?? [];
+    const total = grades.length;
+    const graded = grades.filter((g) => g.isAbsent).length;
+
+    const maxGrade = Math.min(...grades.map((g) => g.grade));
+    const minGrade = Math.max(...grades.map((g) => g.grade));
+    const avgGrade =
+      grades.length === 0
+        ? 0
+        : grades.reduce((acc, g) => acc + g.grade, 0) / grades.length;
+
+    return { total, maxGrade, minGrade, avgGrade, graded };
+  }, [gradeSheetQuery.data?.grades]);
+
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
     PermissionAction.DELETE,
   );
-  const trpc = useTRPC();
+
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const deleteGradesheetMutation = useMutation(
@@ -182,16 +142,22 @@ function CreatedGradesheetCard({
   );
   const confirm = useConfirm();
   const locale = useLocale();
+
+  const gs = gradeSheetQuery.data;
+  if (!gs) {
+    return <></>;
+  }
+  const isClosed = !gs.term.isActive;
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>{gs.name}</CardTitle>
         <CardDescription>
-          <div>{subject}</div>
-          <div>{prof}</div>
+          <div>{gs.subject.course.name}</div>
+          <div>{getFullName(gs.subject.teacher)}</div>
           <div className="font-bold">
-            {t("scale")}: {scale} - {t("weight")}: {weight * 100}% -{" "}
-            {date.toLocaleDateString(locale, {
+            {t("scale")}: {gs.scale} - {t("weight")}: {gs.weight * 100}% -{" "}
+            {gs.createdAt.toLocaleDateString(locale, {
               day: "2-digit",
               month: "short",
               year: "numeric",
@@ -208,7 +174,7 @@ function CreatedGradesheetCard({
             <DropdownMenuContent align="end">
               <DropdownMenuItem
                 onSelect={() => {
-                  router.push(`/classrooms/${params.id}/gradesheets/${id}`);
+                  router.push(`/classrooms/${params.id}/gradesheets/${gs.id}`);
                 }}
               >
                 <Eye className="h-4 w-4" />
@@ -221,10 +187,10 @@ function CreatedGradesheetCard({
                     title: "Modifier la fiche de notes",
                     view: (
                       <UpdateCreatedGradesheet
-                        gradeSheetId={id}
-                        title={title}
-                        scale={scale}
-                        weight={weight * 100}
+                        gradeSheetId={gs.id}
+                        title={gs.name}
+                        scale={gs.scale}
+                        weight={gs.weight * 100}
                       />
                     ),
                   });
@@ -245,7 +211,7 @@ function CreatedGradesheetCard({
                   });
                   if (isConfirmed) {
                     toast.loading(t("deleting"), { id: 0 });
-                    deleteGradesheetMutation.mutate(id);
+                    deleteGradesheetMutation.mutate(gs.id);
                   }
                 }}
               >
