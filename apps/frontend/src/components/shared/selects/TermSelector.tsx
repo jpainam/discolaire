@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { LoaderIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -32,7 +33,7 @@ export function TermSelector({
 }: TermSelectorProps) {
   const t = useTranslations();
   const trpc = useTRPC();
-  const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
+  const { data: terms, isPending } = useQuery(trpc.term.all.queryOptions());
 
   const handleChange = useCallback(
     (value: string | null) => {
@@ -57,7 +58,12 @@ export function TermSelector({
             {t("all_terms")}
           </SelectItem>
         )}
-        {terms.map((term) => (
+        {isPending && (
+          <SelectItem value="all">
+            <LoaderIcon className="animate-spn size-4" />
+          </SelectItem>
+        )}
+        {terms?.map((term) => (
           <SelectItem key={term.id} value={term.id.toString()}>
             {term.name}
           </SelectItem>

@@ -1,12 +1,19 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { DollarSign } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
+import { Button } from "@repo/ui/components/button";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   Empty,
   EmptyContent,
@@ -15,6 +22,13 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@repo/ui/components/empty";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/popover";
 import {
   Table,
   TableBody,
@@ -39,13 +53,57 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
   const { data: classroom } = useSuspenseQuery(
     trpc.student.classroom.queryOptions({ studentId: params.id }),
   );
+  const queryClient = useQueryClient();
+  const deleteGradeMutation = useMutation(
+    trpc.grade.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
+        toast.success(t("deleted_successfully", { id: 0 }));
+      },
+    }),
+  );
+
+  const updateGradeMutation = useMutation(
+    trpc.grade.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.student.grades.pathFilter());
+        toast.success(t("updated_successfully", { id: 0 }));
+      },
+    }),
+  );
+
+  const onDeleteGradeAction = (gradeId: number) => {
+    deleteGradeMutation.mutate(gradeId);
+  };
+  const updateGradeAction = (
+    gradeId: number,
+    newGrade: number,
+    isAbsent: boolean,
+  ) => {
+    updateGradeMutation.mutate({
+      id: gradeId,
+      grade: newGrade,
+      isAbsent: isAbsent,
+    });
+  };
 
   const t = useTranslations();
 
   const data = useMemo(() => {
     const vv: Record<
       number,
-      { id: number; subject: string; observation: string; grades: number[] }
+      {
+        id: number;
+        subject: string;
+        observation: string;
+        grades: { grade: number; id: number; isAbsent: boolean }[];
+      }
     > = {};
 
     grades.forEach((grade) => {
@@ -59,7 +117,11 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
         grades: [],
       };
 
-      vv[subjectId].grades.push(grade.grade);
+      vv[subjectId].grades.push({
+        grade: grade.grade,
+        id: grade.id,
+        isAbsent: grade.isAbsent ?? false,
+      });
     });
 
     return Object.values(vv).map((entry) => ({
@@ -117,20 +179,20 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
             )}
             {data.map((row, index) => {
               const totalGrades =
-                (row.grade1 ?? 0) +
-                (row.grade2 ?? 0) +
-                (row.grade3 ?? 0) +
-                (row.grade4 ?? 0) +
-                (row.grade5 ?? 0) +
-                (row.grade6 ?? 0);
+                (row.grade1?.grade ?? 0) +
+                (row.grade2?.grade ?? 0) +
+                (row.grade3?.grade ?? 0) +
+                (row.grade4?.grade ?? 0) +
+                (row.grade5?.grade ?? 0) +
+                (row.grade6?.grade ?? 0);
 
               const gradeCount =
-                (row.grade1 ? 1 : 0) +
-                (row.grade2 ? 1 : 0) +
-                (row.grade3 ? 1 : 0) +
-                (row.grade4 ? 1 : 0) +
-                (row.grade5 ? 1 : 0) +
-                (row.grade6 ? 1 : 0);
+                (row.grade1?.isAbsent ? 0 : 1) +
+                (row.grade2?.isAbsent ? 0 : 1) +
+                (row.grade3?.isAbsent ? 0 : 1) +
+                (row.grade4?.isAbsent ? 0 : 1) +
+                (row.grade5?.isAbsent ? 0 : 1) +
+                (row.grade6?.isAbsent ? 0 : 1);
 
               const avg = gradeCount > 0 ? totalGrades / gradeCount : 0;
               const avgText = avg > 0 ? avg.toFixed(2) : "";
@@ -145,12 +207,47 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                       {row.subject}
                     </Link>
                   </TableCell>
-                  <Cell grade={row.grade1} />
-                  <Cell grade={row.grade2} />
-                  <Cell grade={row.grade3} />
-                  <Cell grade={row.grade4} />
-                  <Cell grade={row.grade5} />
-                  <Cell grade={row.grade6} />
+                  <Cell
+                    gradeId={row.grade1?.id}
+                    isAbsent={row.grade1?.isAbsent}
+                    onDeleteGradeAction={onDeleteGradeAction}
+                    updateGradeAction={updateGradeAction}
+                    grade={row.grade1?.grade}
+                  />
+                  <Cell
+                    gradeId={row.grade2?.id}
+                    isAbsent={row.grade2?.isAbsent}
+                    onDeleteGradeAction={onDeleteGradeAction}
+                    updateGradeAction={updateGradeAction}
+                    grade={row.grade2?.grade}
+                  />
+                  <Cell
+                    gradeId={row.grade3?.id}
+                    isAbsent={row.grade3?.isAbsent}
+                    onDeleteGradeAction={onDeleteGradeAction}
+                    updateGradeAction={updateGradeAction}
+                    grade={row.grade3?.grade}
+                  />
+                  <Cell
+                    gradeId={row.grade4?.id}
+                    isAbsent={row.grade4?.isAbsent}
+                    onDeleteGradeAction={onDeleteGradeAction}
+                    updateGradeAction={updateGradeAction}
+                    grade={row.grade4?.grade}
+                  />
+                  <Cell
+                    gradeId={row.grade5?.id}
+                    isAbsent={row.grade5?.isAbsent}
+                    onDeleteGradeAction={onDeleteGradeAction}
+                    updateGradeAction={updateGradeAction}
+                    grade={row.grade5?.grade}
+                  />
+                  <Cell
+                    gradeId={row.grade6?.id}
+                    onDeleteGradeAction={onDeleteGradeAction}
+                    updateGradeAction={updateGradeAction}
+                    grade={row.grade6?.grade}
+                  />
                   <TableCell className="text-muted-foreground text-center">
                     {avgText}
                   </TableCell>
@@ -167,9 +264,30 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
   );
 }
 
-function Cell({ grade }: { grade?: number }) {
+function Cell({
+  grade,
+  gradeId,
+  isAbsent,
+  updateGradeAction,
+  onDeleteGradeAction,
+}: {
+  grade?: number;
+  gradeId?: number;
+  isAbsent?: boolean;
+  updateGradeAction: (
+    gradeId: number,
+    newGrade: number,
+    isAbsent: boolean,
+  ) => void;
+  onDeleteGradeAction: (gradeId: number) => void;
+}) {
   const g = grade ?? 0;
   const gradeText = g > 0 ? g.toFixed(2) : "";
+  const t = useTranslations();
+  const [newGrade, setNewGrade] = useState<string | null>();
+  const [open, setOpen] = useState<boolean>();
+  const [isNewAbsent, setIsNewAbsent] = useState<boolean>(isAbsent ?? false);
+
   return (
     <TableCell
       className={cn(
@@ -178,7 +296,58 @@ function Cell({ grade }: { grade?: number }) {
         g < 10 ? "text-red-500" : "",
       )}
     >
-      {gradeText}
+      {gradeId && (
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button variant={"link"}>{gradeText}</Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="col-span-full flex flex-col gap-2">
+                <Label>{t("grade")}</Label>
+                <Input
+                  type="number"
+                  defaultValue={gradeText}
+                  onChange={(e) => setNewGrade(e.target.value)}
+                />
+                <div className="flex flex-row items-center justify-end space-x-2">
+                  <Checkbox
+                    id="isAbsence"
+                    checked={isNewAbsent}
+                    onCheckedChange={(checked) => setIsNewAbsent(!!checked)}
+                  />
+                  <Label htmlFor="isAbsence">{t("absent")}</Label>
+                </div>
+              </div>
+              <Button
+                onClick={() => {
+                  if (!newGrade) {
+                    toast.warning("Veuillez saisir une note");
+                    return;
+                  }
+                  updateGradeAction(gradeId, Number(newGrade), isNewAbsent);
+                  setOpen(false);
+                }}
+                size={"sm"}
+                variant={"secondary"}
+              >
+                {t("edit")}
+              </Button>
+
+              <Button
+                onClick={() => {
+                  onDeleteGradeAction(gradeId);
+                  setOpen(false);
+                }}
+                size={"sm"}
+                variant={"destructive"}
+              >
+                {t("delete")}
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
+      )}
     </TableCell>
   );
 }

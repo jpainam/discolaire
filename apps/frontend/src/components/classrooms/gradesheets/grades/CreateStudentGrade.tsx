@@ -99,9 +99,7 @@ export function CreateStudentGrade({
             control={form.control}
             name={"isAbsent"}
             render={({ field }) => (
-              <FormItem
-                className={"flex flex-row items-start space-y-0 space-x-2"}
-              >
+              <FormItem className={"flex flex-row items-start space-y-0"}>
                 <FormControl>
                   <Checkbox
                     checked={!!field.value}

@@ -4,8 +4,7 @@ import { getLocale } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { getAssetUrl } from "../utils";
-import { formatAmount } from "./utils/format";
+import { formatCurrency, getAssetUrl } from "../utils";
 
 const imageUrl = getAssetUrl("images");
 
@@ -128,12 +127,7 @@ export async function CSACongoReceipt({
                   </View>
                   <View style={{ flexDirection: "row", gap: 4 }}>
                     <Text style={{ fontWeight: "bold" }}>RESTE : </Text>
-                    <Text>
-                      {formatAmount({
-                        amount: remaining,
-                        currency: school.currency,
-                      })}
-                    </Text>
+                    <Text>{formatCurrency(remaining)}</Text>
                   </View>
                 </View>
                 <View style={{ flexDirection: "column", gap: 4 }}>

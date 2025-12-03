@@ -1,9 +1,9 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
-import { toZonedTime } from "date-fns-tz";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { getHeader } from "../headers";
+import { formatCurrency } from "../utils";
 
 interface ReminderLetterProps {
   school: RouterOutputs["school"]["getSchool"];
@@ -11,7 +11,7 @@ interface ReminderLetterProps {
   dueDate: Date;
   reminders: {
     studentName: string;
-    amount: string;
+    amount: number;
   }[];
 }
 export function ReminderLetter({
@@ -61,14 +61,14 @@ export function ReminderLetter({
                   , de la classe de{" "}
                   <Text style={{ fontWeight: "bold" }}>{classroom}.</Text>{" "}
                   Bien-vouloir s'acquitter de votre solde de{" "}
-                  <Text style={{ fontWeight: "bold" }}>{reminder.amount}</Text>{" "}
-                  avant le
+                  <Text style={{ fontWeight: "bold" }}>
+                    {formatCurrency(reminder.amount)}
+                  </Text>{" "}
+                  avant le{" "}
                   <Text style={{ fontWeight: "bold", paddingVertical: 2 }}>
-                    {" "}
-                    {}
-                    {toZonedTime(dueDate, "UTC").toLocaleDateString("fr-FR", {
+                    {dueDate.toLocaleDateString("fr-FR", {
                       year: "numeric",
-
+                      timeZone: "UTC",
                       month: "short",
                       day: "numeric",
                     })}

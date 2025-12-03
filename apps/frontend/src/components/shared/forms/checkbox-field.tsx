@@ -46,10 +46,7 @@ export function CheckboxField({
       name={name}
       render={({ field }) => (
         <FormItem
-          className={cn(
-            "flex flex-row items-start space-y-0 space-x-3",
-            className,
-          )}
+          className={cn("flex flex-row items-start space-y-0", className)}
         >
           <FormControl>
             <Checkbox

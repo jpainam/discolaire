@@ -14,11 +14,16 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   batchPrefetch([
     trpc.student.grades.queryOptions({ id: params.id }),
     trpc.student.classroom.queryOptions({ studentId: params.id }),
+    trpc.student.get.queryOptions(params.id),
   ]);
 
   return (
     <HydrateClient>
-      <StudentGradesheetHeader />
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense fallback={<Skeleton className="h-10" />}>
+          <StudentGradesheetHeader />
+        </Suspense>
+      </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={

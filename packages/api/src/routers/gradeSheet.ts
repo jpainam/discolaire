@@ -186,11 +186,16 @@ export const gradeSheetRouter = {
           subject: {
             include: {
               course: true,
-              teacher: true,
+              teacher: {
+                select: {
+                  lastName: true,
+                  firstName: true,
+                },
+              },
             },
           },
           term: true,
-          grades: true,
+          //grades: true,
         },
         orderBy: {
           createdAt: "desc",

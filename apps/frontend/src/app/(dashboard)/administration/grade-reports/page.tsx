@@ -29,7 +29,6 @@ export default async function Page() {
   const t = await getTranslations();
   const count = await caller.enrollment.count({});
   batchPrefetch([
-    //trpc.gradeSheet.all.queryOptions(),
     trpc.term.all.queryOptions(),
     trpc.gradeSheet.distribution.queryOptions(),
     trpc.gradeSheet.allPercentile.queryOptions(),
