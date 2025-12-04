@@ -116,6 +116,10 @@ export function StudentContactTable({
   );
   const { openSheet } = useSheet();
 
+  if (studentContacts.length == 0) {
+    return <></>;
+  }
+
   return (
     <div className={className}>
       <div className="bg-background overflow-hidden rounded-md border">

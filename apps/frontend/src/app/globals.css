@@ -3,9 +3,9 @@
 @import "tw-animate-css";
 @import "@repo/tailwind-config/theme";
 @import "../themes/presets.css";
-@import "../themes/supabase.css";
-@import "../themes/t3chat.css";
-@import "../themes/tangerine.css";
+
+/* always put scaled in last */
+@import "../themes/scaled.css";
 
 @source '../../../../packages/ui/src/**/*.{ts,tsx}';
 

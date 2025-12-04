@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { CheckCircle, TrendingDown, TrendingUp } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
@@ -154,7 +154,7 @@ export function StudentAttendanceCount({
                     {item.label}
                   </div>
 
-                  <span
+                  {/* <span
                     className={cn(
                       "flex items-center gap-0.5 text-xs font-semibold",
                       item.trendDir === "up"
@@ -172,10 +172,8 @@ export function StudentAttendanceCount({
                     ) : (
                       <TrendingDown className="h-3 w-3" />
                     )}
-                    {item.trendPct === null
-                      ? "n/a"
-                      : `${item.trendPct > 0 ? "+" : ""}${item.trendPct}%`}
-                  </span>
+                    {item?.trendPct > 0 ? "+" : ""}${item.trendPct}%`}
+                  </span> */}
                 </div>
               ))}
             </div>

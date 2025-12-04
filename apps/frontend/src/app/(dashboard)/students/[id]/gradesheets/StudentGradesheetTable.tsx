@@ -199,10 +199,10 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
 
               return (
                 <TableRow key={index}>
-                  <TableCell className="font-medium">
+                  <TableCell className="py-0 font-medium">
                     <Link
                       className="hover:underline"
-                      href={`/classrooms/${classroom.id}/${row.subjectId}`}
+                      href={`/classrooms/${classroom.id}/subjects/${row.subjectId}`}
                     >
                       {row.subject}
                     </Link>
@@ -291,7 +291,7 @@ function Cell({
   return (
     <TableCell
       className={cn(
-        "text-muted-foreground",
+        "text-muted-foreground py-0",
         g >= 18 ? "text-green-500" : "",
         g < 10 ? "text-red-500" : "",
       )}
@@ -299,7 +299,9 @@ function Cell({
       {gradeId && (
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button variant={"link"}>{gradeText}</Button>
+            <Button size={"sm"} variant={"link"}>
+              {gradeText}
+            </Button>
           </PopoverTrigger>
           <PopoverContent className="w-80">
             <div className="grid grid-cols-2 gap-6">
@@ -329,7 +331,7 @@ function Cell({
                   setOpen(false);
                 }}
                 size={"sm"}
-                variant={"secondary"}
+                variant={"outline"}
               >
                 {t("edit")}
               </Button>
