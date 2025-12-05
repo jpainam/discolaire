@@ -148,7 +148,7 @@ export function useGradeTrackerColumns(): ColumnDef<
       {
         accessorKey: "classroom",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={t("")} />
+          <DataTableColumnHeader column={column} title={""} />
         ),
         size: 60,
         cell: ({ row }) => {

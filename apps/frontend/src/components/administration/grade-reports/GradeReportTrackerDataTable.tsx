@@ -21,29 +21,22 @@ export function GradeReportTrackerDataTable() {
   const [termId] = useQueryState("termId");
 
   const filtered = useMemo(() => {
-    // if no filters, just return everything
-    const hasFilters = classroomId ?? termId ?? prevCount != null;
-
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const hasFilters = classroomId || termId || prevCount != null;
     if (!hasFilters) return gradeTracker;
 
     return gradeTracker.filter((g) => {
-      // classroom filter
-      if (classroomId && g.classroomId !== classroomId) {
-        return false;
-      }
+      if (classroomId && g.classroomId !== classroomId) return false;
 
-      // term filter
-      if (termId && !g.gradeSheets.some((gs) => gs.termId === termId)) {
-        return false;
-      }
+      // if (termId && !g.gradeSheets.some((gs) => gs.termId === termId)) {
+      //   return false;
+      // }
 
-      // count filter
-      if (
-        prevCount != null &&
-        termId &&
-        g.gradeSheets.map((g) => g.termId === termId).length !== prevCount
-      ) {
-        return false;
+      if (prevCount != null && termId) {
+        const termCount = g.gradeSheets.filter(
+          (gs) => gs.termId === termId,
+        ).length;
+        if (termCount !== prevCount) return false;
       }
 
       return true;

@@ -2,7 +2,7 @@
 
 import type { Table } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { useQueryState } from "nuqs";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 import {
@@ -29,7 +29,7 @@ export function GradeReportTrackerDataTableAction({
   const [classroomId, setClassroomId] = useQueryState("classroomId");
   const [termId, setTermId] = useQueryState("termId");
   const [count, setCount] = useQueryState("count");
-  const [prevCount, setPrevCount] = useQueryState("prevCount");
+  const [prevCount, setPrevCount] = useQueryState("prevCount", parseAsInteger);
   const t = useTranslations();
 
   return (
@@ -49,16 +49,21 @@ export function GradeReportTrackerDataTableAction({
         }}
       />
       <Select
-        defaultValue={prevCount ?? undefined}
+        defaultValue={prevCount?.toString() ?? undefined}
         onValueChange={(val) => {
-          void setPrevCount(val == "all" ? null : val);
+          void setPrevCount(
+            val === "all" ? null : val == "zero" ? 0 : Number(val),
+          );
         }}
       >
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
+
         <SelectContent>
           <SelectItem value="all">{t("all")}</SelectItem>
+          <SelectItem value="zero">Zero</SelectItem>
+
           {Array.from({ length: 10 }).map((_, index) => (
             <SelectItem key={index} value={(index + 1).toString()}>
               {index + 1}
