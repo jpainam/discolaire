@@ -1,92 +1,79 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { CircleGauge, FileIcon, FileTextIcon, Settings } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+
+
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 
-import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
-import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
-import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
-import { StudentPerformanceChart } from "~/components/administration/grade-reports/StudentPerformanceChart";
+
+
+import { GradeReportDashboard } from "~/components/administration/grade-reports/GradeReportDashboard";
+import { GradeReportTrackerDataTable } from "~/components/administration/grade-reports/GradeReportTrackerDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
-import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { GradeReportSettings } from "../../../../components/administration/grade-reports/GradeReportSettings";
 
-export const metadata: Metadata = {
-  title: "Grades Management Dashboard",
-  description:
-    "A comprehensive dashboard for managing and analyzing student grades",
-};
 
 export default async function Page() {
   const t = await getTranslations();
-  const count = await caller.enrollment.count({});
   batchPrefetch([
     trpc.term.all.queryOptions(),
     trpc.gradeSheet.distribution.queryOptions(),
     trpc.gradeSheet.allPercentile.queryOptions(),
+    trpc.gradeSheet.gradesReportTracker.queryOptions(),
   ]);
   return (
     <HydrateClient>
-      <div className="flex flex-col gap-2">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="lg:col-span-4">
-            <CardHeader>
-              <CardTitle>
-                {t("Grade Distribution")} - {count.total} {t("students")}
-              </CardTitle>
-              <CardDescription className="text-xs">
-                {t("Distribution of grades across all students")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <ErrorBoundary errorComponent={ErrorFallback}>
-                <Suspense fallback={<Skeleton className="h-48" />}>
-                  <GradeDistributionChart />
-                </Suspense>
-              </ErrorBoundary>
-            </CardContent>
-          </Card>
-          <Card className="lg:col-span-3">
-            <CardHeader>
-              <CardTitle>{t("Recent Grades")}</CardTitle>
-              <CardDescription className="text-xs">
-                {t("Latest grades entered into the system")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RecentGradesTable />
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="lg:col-span-3">
-            <CardHeader>
-              <CardTitle>{t("Student Performance")}</CardTitle>
-              <CardDescription className="text-xs">
-                {t("Comparison of student performance over time")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pl-0">
-              <ErrorBoundary errorComponent={ErrorFallback}>
-                <Suspense fallback={<Skeleton className="h-48" />}>
-                  <StudentPerformanceChart />
-                </Suspense>
-              </ErrorBoundary>
-            </CardContent>
-          </Card>
-          <GradeReportGenerator />
-        </div>
-
-        <GradeReportGenerator />
-      </div>
+      <Tabs defaultValue="dashboard" className="p-2">
+        <TabsList>
+          <TabsTrigger value="dashboard">
+            <CircleGauge />
+            {t("dashboard")}
+          </TabsTrigger>
+          <TabsTrigger value="grades">
+            <FileTextIcon /> {t("grades")}
+          </TabsTrigger>
+          <TabsTrigger value="reports">
+            <FileIcon /> {t("reports")}
+          </TabsTrigger>
+          <TabsTrigger value="settings">
+            <Settings /> {t("settings")}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="dashboard">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={null}>
+              <GradeReportDashboard />
+            </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
+        <TabsContent value="grades">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-3 gap-4">
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <Skeleton key={index} className="h-48" />
+                  ))}
+                </div>
+              }
+            >
+              <GradeReportTrackerDataTable />
+            </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
+        <TabsContent value="reports">Report</TabsContent>
+        <TabsContent value="settings">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<Skeleton className="h-48" />}>
+              <GradeReportSettings />
+            </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
+      </Tabs>
     </HydrateClient>
   );
 }

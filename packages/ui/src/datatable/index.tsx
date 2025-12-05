@@ -9,8 +9,7 @@ import type {
   VisibilityState,
 } from "@tanstack/react-table";
 import * as React from "react";
-import { useId, useRef, useState } from "react";
-import { RiCloseCircleLine, RiSearch2Line } from "@remixicon/react";
+import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -20,6 +19,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Search } from "lucide-react";
 
 import {
   Table,
@@ -32,7 +32,11 @@ import {
 import { DataTablePagination } from "@repo/ui/datatable/data-table-pagination";
 import { cn } from "@repo/ui/lib/utils";
 
-import { Input } from "../components/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../components/input-group";
 
 interface UseDataTableProps<TData, TValue> {
   data: TData[];
@@ -106,8 +110,6 @@ export function DataTable<TData>({
   className,
   ...props
 }: DataTableProps<TData>) {
-  const id = useId();
-  const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className={cn("space-y-2", className)} {...props}>
       {/* Actions */}
@@ -115,42 +117,15 @@ export function DataTable<TData>({
         {/* Left side */}
         <div className="flex items-center gap-3">
           {/* Filter by name */}
-          <div className="relative">
-            <Input
-              id={`${id}-input`}
-              ref={inputRef}
-              className={cn(
-                //"peer bg-background/10 from-accent/60 to-accent min-w-60 bg-gradient-to-br ps-9",
-                "peer min-w-60 ps-9",
-                Boolean(table.getState().globalFilter) && "pe-9",
-              )}
-              value={(table.getState().globalFilter ?? "") as string}
-              onChange={(e) => {
-                //table.getColumn("name")?.setFilterValue(e.target.value);
-                table.setGlobalFilter(e.target.value);
-              }}
+          <InputGroup className="w-full lg:w-96">
+            <InputGroupInput
+              onChange={(e) => table.setGlobalFilter(e.target.value)}
               placeholder="Search..."
-              type="text"
-              aria-label="Search"
             />
-            <div className="text-muted-foreground/60 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 peer-disabled:opacity-50">
-              <RiSearch2Line size={20} aria-hidden="true" />
-            </div>
-            {Boolean(table.getState().globalFilter) && (
-              <button
-                className="text-muted-foreground/60 hover:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg outline-offset-2 transition-colors focus:z-10 focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                aria-label="Clear filter"
-                onClick={() => {
-                  table.setGlobalFilter("");
-                  if (inputRef.current) {
-                    inputRef.current.focus();
-                  }
-                }}
-              >
-                <RiCloseCircleLine size={16} aria-hidden="true" />
-              </button>
-            )}
-          </div>
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
+          </InputGroup>
         </div>
         <div className="flex flex-row items-center gap-3">{children}</div>
       </div>

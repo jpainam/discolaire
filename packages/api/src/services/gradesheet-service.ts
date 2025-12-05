@@ -160,80 +160,20 @@ export class GradeSheetService {
     schoolYearId: string;
     schoolId: string;
   }) {
-    const gradeSheets = await this.db.gradeSheet.findMany({
+    return this.db.subject.findMany({
       include: {
-        subject: {
-          include: {
-            course: true,
-            teacher: true,
-            classroom: true,
-          },
-        },
-        term: true,
+        classroom: true,
+        course: true,
+        teacher: true,
+        gradeSheets: true,
       },
       where: {
-        term: {
+        classroom: {
           schoolId: schoolId,
           schoolYearId: schoolYearId,
         },
       },
     });
-
-    const results = new Map<
-      number,
-      {
-        id: number;
-        subject: {
-          id: number;
-          course: {
-            name: string;
-          };
-          classroom: {
-            name: string;
-          };
-          coefficient: number;
-          teacher?: {
-            id?: string;
-            firstName?: string | null;
-            lastName?: string | null;
-          };
-        };
-        courseName: string;
-        teacherName: string;
-        terms: string[];
-      }
-    >();
-    gradeSheets.forEach((sheet) => {
-      const key = sheet.subject.id;
-      if (!results.has(key)) {
-        results.set(key, {
-          id: sheet.subject.id,
-          subject: {
-            id: sheet.subject.id,
-            classroom: {
-              name: sheet.subject.classroom.reportName,
-            },
-            coefficient: sheet.subject.coefficient,
-            teacher: {
-              id: sheet.subject.teacher?.id,
-              firstName: sheet.subject.teacher?.firstName,
-              lastName: sheet.subject.teacher?.lastName,
-            },
-            course: {
-              name: sheet.subject.course.name,
-            },
-          },
-          courseName: sheet.subject.course.name,
-          teacherName: `${sheet.subject.teacher?.firstName ?? ""} ${sheet.subject.teacher?.lastName ?? ""}`,
-          terms: [sheet.termId],
-        });
-      } else {
-        const entry = results.get(key);
-        entry?.terms.push(sheet.termId);
-      }
-    });
-    const resultsArray = Array.from(results.values());
-    return resultsArray;
   }
   async gradeReportTracker({ subjectId }: { subjectId: number }) {
     const reports = await this.db.gradeSheet.findMany({

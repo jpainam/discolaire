@@ -173,7 +173,7 @@ export function GradeReportGenerator() {
                     </SelectItem>
                   </>
                 )}
-                <SelectItem value="ann_annual">{t("Annuel")}</SelectItem>
+                <SelectItem value="ann_annual">{t("Annual")}</SelectItem>
               </SelectContent>
             </Select>
           </div>

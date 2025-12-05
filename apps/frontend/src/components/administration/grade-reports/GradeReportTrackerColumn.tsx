@@ -1,20 +1,26 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
+import Link from "next/link";
 import { decode } from "entities";
 import { CheckIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { Badge } from "@repo/ui/components/badge";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Progress } from "@repo/ui/components/progress";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { Badge } from "~/components/base-badge";
+import { cn } from "~/lib/utils";
 
 export function useGradeTrackerColumns(): ColumnDef<
   RouterOutputs["gradeSheet"]["gradesReportTracker"][number],
   unknown
 >[] {
   const t = useTranslations();
+  const [termId] = useQueryState("termId");
+  const [count] = useQueryState("count", parseAsInteger);
   return useMemo(
     () => [
       {
@@ -39,50 +45,99 @@ export function useGradeTrackerColumns(): ColumnDef<
             aria-label="Select row"
           />
         ),
-        size: 28,
+        size: 18,
         enableSorting: false,
         enableHiding: false,
       },
 
       {
-        accessorKey: "subject.course.name",
+        accessorKey: "course.name",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("subject")} />
         ),
         cell: ({ row }) => {
-          const subject = row.original.subject;
+          const subject = row.original;
           return (
-            <span className="text-muted-foreground">{subject.course.name}</span>
-          );
-        },
-      },
-      {
-        accessorKey: "subject.teacher.lastName",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={t("teacher")} />
-        ),
-        cell: ({ row }) => {
-          const subject = row.original.subject;
-          return (
-            <div className="text-muted-foreground flex items-center gap-2">
-              <span>{decode(subject.teacher?.lastName ?? "")}</span>
-              <span className="text-xs">({subject.classroom.name})</span>
+            <div className="flex flex-row items-center gap-1">
+              <div
+                className="h-4 w-4 rounded-full"
+                style={{
+                  backgroundColor: subject.course.color,
+                }}
+              />
+              <Link
+                href={`/classrooms/${subject.classroomId}/subjects/${subject.id}`}
+                className="text-muted-foreground hover:underline"
+              >
+                {subject.course.name}
+              </Link>
             </div>
           );
         },
       },
       {
-        accessorKey: "terms",
+        accessorKey: "teacher.lastName",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("teacher")} />
+        ),
+        cell: ({ row }) => {
+          const subject = row.original;
+          return (
+            <Link
+              href={`/staffs/${subject.teacherId}`}
+              className="text-muted-foreground hover:underline"
+            >
+              {decode(
+                subject.teacher?.lastName ??
+                  subject.teacher?.firstName ??
+                  "N/A",
+              )}
+            </Link>
+          );
+        },
+      },
+      {
+        accessorKey: "classroom.name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("classroom")} />
+        ),
+        cell: ({ row }) => {
+          const subject = row.original;
+
+          return (
+            <Link
+              href={`/classrooms/${subject.classroomId}`}
+              className="text-muted-foreground hover:underline"
+            >
+              ({subject.classroom.name})
+            </Link>
+          );
+        },
+      },
+      {
+        accessorKey: "gradeSheets",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("Progress")} />
         ),
         size: 60,
         cell: ({ row }) => {
-          const report = row.original;
-          const completed = (report.terms.length * 100) / 6;
+          const gradesheets = row.original.gradeSheets;
+          let report = gradesheets.map((g) => g.termId);
+          if (termId) {
+            report = report.filter((r) => r == termId);
+          }
+          const completed = (report.length * 100) / (count ?? 6);
           return (
             <div className="flex items-center gap-2">
-              <Progress value={completed} className="w-20" />
+              <Progress
+                value={completed}
+                className={cn(
+                  "w-20",
+                  completed < 100
+                    ? "[&>div]:bg-red-600"
+                    : "[&>div]:bg-green-600",
+                )}
+              />
               <span className="text-muted-foreground text-xs">
                 {Math.round(completed)}%
               </span>
@@ -91,15 +146,33 @@ export function useGradeTrackerColumns(): ColumnDef<
         },
       },
       {
-        accessorKey: "subject.classroom.name",
+        accessorKey: "classroom",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={t("Completed")} />
+          <DataTableColumnHeader column={column} title={t("")} />
         ),
         size: 60,
         cell: ({ row }) => {
-          const report = row.original;
-          const completed = report.terms.length;
-          return <Badge variant="secondary">{completed}/6</Badge>;
+          const gradesheets = row.original.gradeSheets;
+          let report = gradesheets.map((g) => g.termId);
+          if (termId) {
+            report = report.filter((r) => r == termId);
+          }
+          const len = report.length;
+          return (
+            <Badge
+              variant={
+                len == count
+                  ? "success"
+                  : len > (count ?? len)
+                    ? "destructive"
+                    : "secondary"
+              }
+              appearance={"outline"}
+              className="border-border"
+            >
+              {report.length}/{count ?? 6}
+            </Badge>
+          );
         },
       },
       {
@@ -109,11 +182,18 @@ export function useGradeTrackerColumns(): ColumnDef<
         ),
         size: 60,
         cell: ({ row }) => {
-          const report = row.original;
-          const completed = report.terms.length;
-          const remaining = 6 - completed;
+          const gradesheets = row.original.gradeSheets;
+          let report = gradesheets.map((g) => g.termId);
+          if (termId) {
+            report = report.filter((r) => r == termId);
+          }
+          const completed = report.length;
+          const remaining = (count ?? 6) - completed;
           return (
-            <Badge variant={remaining === 0 ? "default" : "outline"}>
+            <Badge
+              variant={remaining === 0 ? "success" : "destructive"}
+              appearance={"outline"}
+            >
               {remaining}
             </Badge>
           );
@@ -126,13 +206,21 @@ export function useGradeTrackerColumns(): ColumnDef<
         ),
         size: 60,
         cell: ({ row }) => {
-          const report = row.original;
-          const completed = report.terms.length;
-          //const remaining = 6 - completed;
+          const gradesheets = row.original.gradeSheets;
+          let report = gradesheets.map((g) => g.termId);
+          if (termId) {
+            report = report.filter((r) => r == termId);
+          }
+          const completed = report.length;
+          const remaining = (count ?? 6) - completed;
           return (
             <>
-              {completed === 6 ? (
-                <Badge variant="outline" className="gap-1">
+              {remaining == 0 ? (
+                <Badge
+                  variant="success"
+                  appearance={"outline"}
+                  className="gap-1"
+                >
                   <CheckIcon
                     className="text-emerald-500"
                     size={12}
@@ -140,22 +228,24 @@ export function useGradeTrackerColumns(): ColumnDef<
                   />
                   {t("Completed")}
                 </Badge>
-              ) : completed > 0 ? (
-                <Badge variant="outline" className="gap-1.5">
+              ) : (
+                <Badge
+                  variant="warning"
+                  appearance={"outline"}
+                  className="gap-1.5"
+                >
                   <span
                     className="size-1.5 rounded-full bg-red-500"
                     aria-hidden="true"
                   ></span>
                   {t("In Progress")}
                 </Badge>
-              ) : (
-                <Badge variant="outline">Not Started</Badge>
               )}
             </>
           );
         },
       },
     ],
-    [t],
+    [t, termId, count],
   );
 }

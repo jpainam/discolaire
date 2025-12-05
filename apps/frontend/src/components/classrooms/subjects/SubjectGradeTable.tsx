@@ -146,13 +146,14 @@ export function SubjectGradeTable({ subjectId }: { subjectId: number }) {
                     />
                   </TableCell>
                   {terms.map((t, iindex) => {
-                    const g = group.grades.find((gr) => gr.termId == t.id);
+                    const gs = group.grades.filter((gr) => gr.termId == t.id);
+                    const g = gs[0];
                     return (
                       <TableCell
                         className={`py-1 text-center ${getGradeColor(g?.grade)}`}
                         key={`${t.id}-${index}-${iindex}`}
                       >
-                        {g?.grade}
+                        {gs.map((gg) => gg.grade).join(",")}
                       </TableCell>
                     );
                   })}
