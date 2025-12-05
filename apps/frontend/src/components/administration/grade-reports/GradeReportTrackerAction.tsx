@@ -56,7 +56,7 @@ export function GradeReportTrackerDataTableAction({
           );
         }}
       >
-        <SelectTrigger>
+        <SelectTrigger size="sm">
           <SelectValue />
         </SelectTrigger>
 
@@ -78,7 +78,7 @@ export function GradeReportTrackerDataTableAction({
           void setCount(val);
         }}
       >
-        <SelectTrigger>
+        <SelectTrigger size="sm">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

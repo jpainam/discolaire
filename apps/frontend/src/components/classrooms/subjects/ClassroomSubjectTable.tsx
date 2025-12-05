@@ -120,7 +120,7 @@ export function ClassroomSubjectTable() {
 
             {subjects.map((subject, index) => {
               const gradeCount = gradeSheetCount.find(
-                (g) => (g.subjectId = subject.id),
+                (g) => g.subjectId == subject.id,
               );
               return (
                 <TableRow key={`subject-${index}`}>
@@ -144,6 +144,7 @@ export function ClassroomSubjectTable() {
                           onClick={() => {
                             openSheet({
                               title: subject.course.name,
+                              className: "w-full sm:max-w-4xl w-[420px]",
                               description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
                               view: (
                                 <ClassroomSubjectGradeSheet

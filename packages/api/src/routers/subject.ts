@@ -23,6 +23,19 @@ export const subjectRouter = {
       },
     });
   }),
+  gradesheets: protectedProcedure
+    .input(z.coerce.number())
+    .query(({ ctx, input }) => {
+      return ctx.db.gradeSheet.findMany({
+        include: {
+          term: true,
+          subject: true,
+        },
+        where: {
+          subjectId: input,
+        },
+      });
+    }),
   grades: protectedProcedure
     .input(z.coerce.number())
     .query(({ ctx, input }) => {

@@ -46,10 +46,10 @@ export function SubjectGradeDistribution() {
           <TableBody>
             {terms.map((t, index) => {
               const gg = grades
-                .filter((g) => g.gradeSheet.termId == t.id)
+                .filter((g) => !g.isAbsent && g.gradeSheet.termId == t.id)
                 .map((g) => g.grade);
-              const max = Math.max(...gg);
-              const min = Math.min(...gg);
+              const max = gg.length == 0 ? 0 : Math.max(...gg);
+              const min = gg.length == 0 ? 0 : Math.min(...gg);
               const avg = average(gg);
               return (
                 <TableRow key={index}>

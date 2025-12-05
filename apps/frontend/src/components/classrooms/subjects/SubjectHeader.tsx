@@ -31,7 +31,7 @@ export function SubjectHeader() {
         <Label>{t("subject")}</Label>
       </div>
       <div>{subject.course.name}</div>
-      <div>Prof. {getFullName(subject.teacher)}</div>
+      <Label>Prof. {getFullName(subject.teacher)}</Label>
       <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
