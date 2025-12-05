@@ -41,7 +41,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 const createGradeSchema = z.object({
-  weight: z.coerce.number().nonnegative(),
+  //weight: z.coerce.number().nonnegative(),
   name: z.string().min(1),
   scale: z.coerce.number().nonnegative(),
   grades: z.array(
@@ -109,7 +109,7 @@ export function CreateGradeSheet({
   const form = useForm({
     resolver: standardSchemaResolver(createGradeSchema),
     defaultValues: {
-      weight: 100,
+      //weight: 100,
       name: t("harmonized_grade"),
       scale: 20,
       grades: students.map((student) => ({
@@ -141,6 +141,7 @@ export function CreateGradeSheet({
     toast.loading(t("creating"), { id: 0 });
     const values = {
       ...data,
+      weight: 100,
       termId: termId,
       subjectId: subjectId,
       grades: data.grades.map((grade) => ({
@@ -214,7 +215,7 @@ export function CreateGradeSheet({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name={"weight"}
               render={({ field }) => (
@@ -226,7 +227,7 @@ export function CreateGradeSheet({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <div className="mt-4 grid grid-cols-2 items-center gap-2">
               <Button
                 type="button"

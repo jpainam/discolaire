@@ -8,7 +8,6 @@ import { CreateGradeSheet } from "~/components/classrooms/gradesheets/grades/Cre
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { CurrentGradeSheetSummary } from "../../../../../../components/classrooms/gradesheets/CurrentGradeSheetSummary";
-import { ClassroomCreateGradeSheetHeader } from "./ClassroomCreateGradeSheetHeader";
 import { createGradeSheetSearchSchema } from "./search-params";
 
 export function ClassroomCreateGradesheet({
@@ -27,9 +26,7 @@ export function ClassroomCreateGradesheet({
   const selectedTerm = terms.find((t) => t.id == searchParams.termId);
 
   return (
-    <div className="flex flex-col">
-      <ClassroomCreateGradeSheetHeader />
-
+    <>
       {canCreateGradeSheet &&
         selectedTerm &&
         searchParams.termId &&
@@ -51,6 +48,6 @@ export function ClassroomCreateGradesheet({
             </div>
           </div>
         )}
-    </div>
+    </>
   );
 }

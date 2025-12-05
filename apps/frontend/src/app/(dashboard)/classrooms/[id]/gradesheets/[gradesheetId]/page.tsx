@@ -67,8 +67,8 @@ export default async function Page(props: {
 
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
-      <Card className="">
-        <CardContent className="grid grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-4">
+      <Card className="p-2">
+        <CardContent className="grid grid-cols-1 gap-4 px-2 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="mb-2 flex items-center space-x-2">
               <BookOpen className="h-5 w-5 text-blue-600" />

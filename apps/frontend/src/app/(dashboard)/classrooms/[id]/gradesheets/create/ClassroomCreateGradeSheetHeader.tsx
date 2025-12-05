@@ -9,6 +9,8 @@ import { Label } from "@repo/ui/components/label";
 
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useRouter } from "~/hooks/use-router";
 import { createGradeSheetSearchSchema } from "./search-params";
 
 export function ClassroomCreateGradeSheetHeader() {
@@ -18,6 +20,8 @@ export function ClassroomCreateGradeSheetHeader() {
   );
 
   const t = useTranslations();
+  const router = useRouter();
+  const { createQueryString } = useCreateQueryString();
 
   return (
     <div className="bg-muted/50 grid flex-row gap-6 border-b px-4 py-1 text-sm md:flex">
@@ -27,9 +31,10 @@ export function ClassroomCreateGradeSheetHeader() {
           className="w-64"
           defaultValue={searchParams.termId?.toString()}
           onChange={(val) => {
-            void setSearchParams({
-              termId: val,
-            });
+            router.push(
+              `/classrooms/${params.id}/gradesheets/create?` +
+                createQueryString({ termId: val }),
+            );
           }}
         />
       </div>
@@ -39,9 +44,10 @@ export function ClassroomCreateGradeSheetHeader() {
           className="w-96"
           defaultValue={searchParams.subjectId?.toString()}
           onChange={(val) => {
-            void setSearchParams({
-              subjectId: val ? Number(val) : null,
-            });
+            router.push(
+              `/classrooms/${params.id}/gradesheets/create?` +
+                createQueryString({ subjectId: val }),
+            );
           }}
           classroomId={params.id}
         />
