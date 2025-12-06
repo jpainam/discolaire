@@ -233,6 +233,7 @@ export default async function Page(props: {
               className="col-span-3"
               gradesheet={gradesheet}
               grades={grades}
+              classroomId={params.id}
             />
           </Suspense>
         </ErrorBoundary>

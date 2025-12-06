@@ -2,17 +2,21 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Link from "next/link";
 import { decode } from "entities";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
+import { Button } from "@repo/ui/components/button";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Progress } from "@repo/ui/components/progress";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { Badge } from "~/components/base-badge";
+import { useSheet } from "~/hooks/use-sheet";
 import { cn } from "~/lib/utils";
+import { getFullName } from "~/utils";
+import { GradeReportTrackerDetails } from "./GradeReportTrackerDetails";
 
 export function useGradeTrackerColumns(): ColumnDef<
   RouterOutputs["gradeSheet"]["gradesReportTracker"][number],
@@ -21,6 +25,7 @@ export function useGradeTrackerColumns(): ColumnDef<
   const t = useTranslations();
   const [termId] = useQueryState("termId");
   const [count] = useQueryState("count", parseAsInteger);
+  const { openSheet } = useSheet();
   return useMemo(
     () => [
       {
@@ -58,7 +63,7 @@ export function useGradeTrackerColumns(): ColumnDef<
         cell: ({ row }) => {
           const subject = row.original;
           return (
-            <div className="flex flex-row items-center gap-1">
+            <div className="flex flex-1 flex-row items-center gap-1">
               <div
                 className="h-4 w-4 rounded-full"
                 style={{
@@ -71,6 +76,27 @@ export function useGradeTrackerColumns(): ColumnDef<
               >
                 {subject.course.name}
               </Link>
+              <Button
+                onClick={() => {
+                  openSheet({
+                    title: `${subject.course.reportName}`,
+                    description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
+                    className: "min-w-1/2 w-full sm:max-w-5xl w-3/4",
+                    //   className: "min-w-1/2 w-full sm:max-w-5xl w-1/2",
+                    view: (
+                      <GradeReportTrackerDetails
+                        subjectId={subject.id}
+                        classroomId={subject.classroomId}
+                      />
+                    ),
+                  });
+                }}
+                variant={"secondary"}
+                size={"sm"}
+                className="h-7"
+              >
+                {t("details")} <ExternalLink className="h-3 w-3" />
+              </Button>
             </div>
           );
         },
@@ -246,6 +272,6 @@ export function useGradeTrackerColumns(): ColumnDef<
         },
       },
     ],
-    [t, termId, count],
+    [t, termId, count, openSheet],
   );
 }

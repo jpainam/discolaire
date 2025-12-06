@@ -8,6 +8,7 @@ import {
   CalendarDays,
   CircleArrowOutUpRight,
   CircleDollarSign,
+  FileTextIcon,
   Frame,
   ImageUp,
   LayoutListIcon,
@@ -62,10 +63,7 @@ export function AdminSidebar({
             title: "students",
             url: "/administration/students",
           },
-          {
-            title: "grades_and_reports",
-            url: "/administration/grade-reports",
-          },
+
           // {
           //   title: "directory",
           //   url: "/administration/directory",
@@ -179,6 +177,11 @@ export function AdminSidebar({
     ],
   };
   const others = [
+    {
+      name: "grades_and_reports",
+      url: "/administration/grade-reports",
+      icon: FileTextIcon,
+    },
     {
       name: "academy",
       url: "/administration/academy",

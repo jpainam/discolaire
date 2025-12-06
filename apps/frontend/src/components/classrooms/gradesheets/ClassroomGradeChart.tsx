@@ -63,8 +63,8 @@ export function ClassroomGradeChart({
   const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
   return (
     <div className={cn("flex flex-col gap-2 overflow-hidden", className)}>
-      <Card className="px-0">
-        <CardHeader>
+      <Card className="gap-4 px-4 py-2">
+        <CardHeader className="p-0">
           <CardTitle className="text-lg font-semibold">
             Distribution des notes
           </CardTitle>
@@ -77,7 +77,7 @@ export function ClassroomGradeChart({
                 color: "hsl(var(--chart-1))",
               },
             }}
-            className="h-[200px]"
+            className="h-full w-full"
           >
             <BarChart
               data={[
@@ -97,13 +97,13 @@ export function ClassroomGradeChart({
           </ChartContainer>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
+      <Card className="gap-4 p-0">
+        <CardHeader className="px-4 py-2">
           <CardTitle className="text-lg font-semibold">
             {t("Success by gender")}
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="">
           <ChartContainer
             config={{
               males: {
@@ -115,7 +115,7 @@ export function ClassroomGradeChart({
                 color: "#ec4899",
               },
             }}
-            className="h-[200px]"
+            className="h-full w-full"
           >
             <PieChart>
               <Pie

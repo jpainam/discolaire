@@ -2,7 +2,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
   useMutation,
@@ -61,20 +60,22 @@ export function ClassroomGradeList({
   grades,
   gradesheet,
   className,
+  classroomId,
 }: {
   grades: RouterOutputs["gradeSheet"]["grades"];
   gradesheet: RouterOutputs["gradeSheet"]["get"];
+  classroomId: string;
   className?: string;
 }) {
   const confirm = useConfirm();
   const trpc = useTRPC();
 
   const t = useTranslations();
-  const params = useParams<{ id: string }>();
+
   const { openModal } = useModal();
   const [query, setQuery] = useState("");
   const { data: students } = useSuspenseQuery(
-    trpc.classroom.students.queryOptions(params.id),
+    trpc.classroom.students.queryOptions(classroomId),
   );
 
   const filtered = useMemo(() => {
@@ -126,7 +127,7 @@ export function ClassroomGradeList({
       },
       onSuccess: () => {
         toast.success(t("deleted_successfully"), { id: 0 });
-        router.push(routes.classrooms.gradesheets.index(params.id));
+        router.push(routes.classrooms.gradesheets.index(classroomId));
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -152,7 +153,7 @@ export function ClassroomGradeList({
             size={"sm"}
             onClick={() => {
               window.open(
-                `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
+                `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${classroomId}`,
                 "_blank",
               );
             }}
@@ -165,7 +166,7 @@ export function ClassroomGradeList({
             variant={"secondary"}
             onClick={() => {
               window.open(
-                `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${params.id}`,
+                `/api/pdfs/gradesheets/${gradesheet.id}?format=csv&classroomId=${classroomId}`,
                 "_blank",
               );
             }}

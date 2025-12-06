@@ -33,8 +33,8 @@ export function GradeSheetDataTable() {
     trpc.classroom.gradesheets.queryOptions(params.id),
   );
 
-  const [termId] = useQueryState("term");
-  const [subjectId] = useQueryState("subject", parseAsInteger);
+  const [termId] = useQueryState("termId");
+  const [subjectId] = useQueryState("subjectId", parseAsInteger);
 
   const filteredGradesheets = useMemo(() => {
     let result = gradesheets;
@@ -124,15 +124,20 @@ export function GradeSheetDataTable() {
                   openSheet({
                     title: `${subject.course.reportName} - ${row.original.name} - ${row.original.term.name}`,
                     description: `${teacher?.prefix} ${getFullName(teacher)}`,
-                    className: "min-w-1/2 w-full sm:max-w-5xl w-1/2",
-                    view: <GradeSheetSummary gradeSheetId={row.original.id} />,
+                    className: "min-w-1/2 w-full sm:max-w-5xl w-3/4",
+                    view: (
+                      <GradeSheetSummary
+                        classroomId={subject.classroomId}
+                        gradeSheetId={row.original.id}
+                      />
+                    ),
                   });
                 }}
                 variant={"secondary"}
                 size={"sm"}
                 className="h-7"
               >
-                Details <ExternalLink className="h-3 w-3" />
+                {t("details")} <ExternalLink className="h-3 w-3" />
               </Button>
             </div>
           );

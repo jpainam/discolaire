@@ -1,23 +1,27 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
-import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { ClassroomGradeChart } from "./ClassroomGradeChart";
 import { ClassroomGradeList } from "./ClassroomGradeList";
 
-export function GradeSheetSummary({ gradeSheetId }: { gradeSheetId: number }) {
+export function GradeSheetSummary({
+  gradeSheetId,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  classroomId,
+}: {
+  gradeSheetId: number;
+  classroomId: string;
+}) {
   const trpc = useTRPC();
-  const params = useParams<{ id: string }>();
+
   const gradesQuery = useQuery(
     trpc.gradeSheet.grades.queryOptions(gradeSheetId),
   );
-  const router = useRouter();
   const gradeSheetQuery = useQuery(
     trpc.gradeSheet.get.queryOptions(gradeSheetId),
   );
@@ -34,15 +38,6 @@ export function GradeSheetSummary({ gradeSheetId }: { gradeSheetId: number }) {
   const gradeSheet = gradeSheetQuery.data;
   return (
     <div className="h-full flex-1 space-y-2 overflow-auto px-4 pb-4">
-      <Button
-        onClick={() => {
-          router.push(`/classrooms/${params.id}/gradesheets/${gradeSheetId}`);
-        }}
-        className="w-fit"
-        size={"sm"}
-      >
-        Voir plus de details
-      </Button>
       {grades && (
         <ClassroomGradeChart
           className="grid grid-cols-2 gap-2"
@@ -51,7 +46,21 @@ export function GradeSheetSummary({ gradeSheetId }: { gradeSheetId: number }) {
       )}
 
       {gradeSheet && grades && (
-        <ClassroomGradeList gradesheet={gradeSheet} grades={grades} />
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 gap-2 p-2">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <Skeleton className="h-8" key={index} />
+              ))}
+            </div>
+          }
+        >
+          <ClassroomGradeList
+            classroomId={gradeSheet.subject.classroomId}
+            gradesheet={gradeSheet}
+            grades={grades}
+          />
+        </Suspense>
       )}
     </div>
   );

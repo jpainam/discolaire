@@ -51,9 +51,9 @@ export function GradeSheetHeader() {
     trpc.classroom.students.queryOptions(params.id),
   );
 
-  const [term, setTerm] = useQueryState("term");
+  const [term, setTerm] = useQueryState("termId");
   const { schoolYear } = useSchool();
-  const [subject, setSubject] = useQueryState("subject");
+  const [subject, setSubject] = useQueryState("subjectId");
 
   const t = useTranslations();
   const router = useRouter();
