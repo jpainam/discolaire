@@ -88,8 +88,6 @@
     "novel": "^1.0.2",
     "nuqs": "^2.7.0",
     "papaparse": "^5.5.3",
-    "pino": "^9.12.0",
-    "pino-pretty": "^13.1.1",
     "postcss": "^8.5.6",
     "prosemirror-example-setup": "^1.2.3",
     "qrcode": "^1.5.4",

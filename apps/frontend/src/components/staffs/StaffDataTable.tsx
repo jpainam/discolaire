@@ -19,7 +19,7 @@ export function StaffDataTable() {
   });
 
   return (
-    <DataTable table={table}>
+    <DataTable className="px-4 pt-2" table={table}>
       <StaffDataTableActions table={table} />
     </DataTable>
   );

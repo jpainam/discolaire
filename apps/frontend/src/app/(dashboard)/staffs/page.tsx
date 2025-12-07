@@ -27,21 +27,20 @@ export default function Page() {
         </ErrorBoundary>
 
         <Separator />
-        <div className="mt-2 flex-1 px-4">
-          <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense
-              fallback={
-                <div className="grid grid-cols-4 gap-4">
-                  {Array.from({ length: 16 }).map((_, i) => (
-                    <Skeleton key={i} className="h-8" />
-                  ))}
-                </div>
-              }
-            >
-              <StaffDataTable />
-            </Suspense>
-          </ErrorBoundary>
-        </div>
+
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-4 gap-4">
+                {Array.from({ length: 16 }).map((_, i) => (
+                  <Skeleton key={i} className="h-8" />
+                ))}
+              </div>
+            }
+          >
+            <StaffDataTable />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </HydrateClient>
   );

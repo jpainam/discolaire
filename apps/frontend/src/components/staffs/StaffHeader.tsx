@@ -7,6 +7,7 @@ import { Download, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@repo/ui/components/button";
+import { Label } from "@repo/ui/components/label";
 
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
@@ -35,46 +36,39 @@ export function StaffHeader() {
   }, [staffs, setBreadcrumbs, t]);
 
   return (
-    <>
-      <header className="bg-background border-b px-4 py-2">
-        <div className="grid grid-cols-1 items-center justify-between md:flex">
-          <div>
-            <h1 className="text-xl font-bold">{t("Staff Management")}</h1>
-            <p className="text-muted-foreground hidden text-sm md:flex">
-              {t("staff_management_description")}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 items-center gap-3 md:flex">
-            <StaffEffectif staffs={staffs} />
-            {canCreateStaff && (
-              <Button
-                onClick={() => {
-                  window.open(`/api/pdfs/staff?format=csv`, "_blank");
-                }}
-                variant="outline"
-                size="sm"
-              >
-                <Download className="h-4 w-4" />
-                {t("Export")}
-              </Button>
-            )}
-            {canCreateStaff && (
-              <Button
-                onClick={() => {
-                  openSheet({
-                    title: t("create_staff"),
-                    view: <CreateEditStaff />,
-                  });
-                }}
-                size="sm"
-              >
-                <Plus />
-                {t("Add staff")}
-              </Button>
-            )}
-          </div>
+    <div className="flex items-center justify-between p-2 px-4 lg:flex-row">
+      <Label>{t("staffs")}</Label>
+      <div className="grid grid-cols-1 items-center justify-between md:flex">
+        <div className="grid grid-cols-1 items-center gap-3 md:flex">
+          <StaffEffectif staffs={staffs} />
+          {canCreateStaff && (
+            <Button
+              onClick={() => {
+                window.open(`/api/pdfs/staff?format=csv`, "_blank");
+              }}
+              variant="outline"
+              size="sm"
+            >
+              <Download className="h-4 w-4" />
+              {t("Export")}
+            </Button>
+          )}
+          {canCreateStaff && (
+            <Button
+              onClick={() => {
+                openSheet({
+                  title: t("create_staff"),
+                  view: <CreateEditStaff />,
+                });
+              }}
+              size="sm"
+            >
+              <Plus />
+              {t("Add staff")}
+            </Button>
+          )}
         </div>
-      </header>
-    </>
+      </div>
+    </div>
   );
 }

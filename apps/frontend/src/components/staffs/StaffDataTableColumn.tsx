@@ -1,6 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Pencil, ReceiptText, Trash2 } from "lucide-react";
@@ -21,7 +20,6 @@ import {
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import FlatBadge from "~/components/FlatBadge";
-import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
@@ -29,8 +27,8 @@ import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { UserLink } from "../UserLink";
 import { CreateEditStaff } from "./CreateEditStaff";
 
 //  const defaultVisibles = [
@@ -83,62 +81,26 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
           id: "avatar",
           accessorKey: "avatar",
           header: ({ column }) => (
-            <DataTableColumnHeader column={column} title={t("")} />
+            <DataTableColumnHeader column={column} title={""} />
           ),
           cell: ({ row }) => {
             const staff = row.original;
             return (
-              <AvatarState
+              <UserLink
+                id={staff.id}
+                profile="staff"
+                name={getFullName(staff)}
                 avatar={staff.user?.avatar}
-                pos={getFullName(row.original).length}
               />
             );
           },
           enableSorting: false,
           enableHiding: false,
-          size: 32,
-        },
-
-        {
-          id: "lastName",
-          accessorKey: "lastName",
-          header: ({ column }) => (
-            <DataTableColumnHeader column={column} title={t("lastName")} />
-          ),
-          cell: ({ row }) => {
-            const staff = row.original;
-            return (
-              <Link
-                className="line-clamp-1 hover:text-blue-600 hover:underline"
-                href={routes.staffs.details(staff.id)}
-              >
-                {staff.lastName}
-              </Link>
-            );
-          },
-          enableSorting: true,
-        },
-        {
-          id: "firstName",
-          accessorKey: "firstName",
-          header: ({ column }) => (
-            <DataTableColumnHeader column={column} title={t("firstName")} />
-          ),
-          cell: ({ row }) => {
-            const staff = row.original;
-            return (
-              <Link
-                className="text-muted-foreground line-clamp-1 hover:text-blue-600 hover:underline"
-                href={routes.staffs.details(staff.id)}
-              >
-                {staff.firstName}
-              </Link>
-            );
-          },
         },
 
         {
           id: "gender",
+          size: 120,
           accessorKey: "gender",
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={t("gender")} />
@@ -162,12 +124,11 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
             );
           },
           enableSorting: true,
-          filterFn: (row, id, value) => {
-            return value instanceof Array && value.includes(row.getValue(id));
-          },
         },
+
         {
           accessorKey: "jobTitle",
+          size: 80,
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={t("jobTitle")} />
           ),
@@ -182,6 +143,7 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={t("phone")} />
           ),
+          size: 50,
           cell: ({ row }) => {
             const c = row.original;
             return (
