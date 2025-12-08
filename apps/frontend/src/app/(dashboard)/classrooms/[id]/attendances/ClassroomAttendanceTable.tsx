@@ -44,6 +44,7 @@ import {
 
 import { Badge } from "~/components/base-badge";
 import { ClassroomEditAttendance } from "~/components/classrooms/attendances/ClassroomEditAttendance";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
@@ -103,16 +104,6 @@ export function ClassroomAttendanceTable({
   const collator = useCollator(locale);
   const t = useTranslations();
 
-  const dateFmt = useMemo(
-    () =>
-      new Intl.DateTimeFormat(locale, {
-        year: "2-digit",
-        month: "short",
-        day: "numeric",
-      }),
-    [locale],
-  );
-
   const filtered = useMemo(() => {
     const byTerm = termId
       ? attendances.filter((a) => a.termId === termId)
@@ -161,6 +152,15 @@ export function ClassroomAttendanceTable({
     [deleteMutation],
   );
 
+  if (filtered.length === 0) {
+    return (
+      <EmptyComponent
+        title="Aucune présence"
+        description="Veuillez choisir une période et saisir les présences"
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
       <InputGroup className="w-96" aria-label="Search attendance records">
@@ -168,66 +168,56 @@ export function ClassroomAttendanceTable({
           id={inputId}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by name or registration…"
-          aria-label="Search by name or registration"
+          placeholder={t("search")}
         />
         <InputGroupAddon aria-hidden>
           <Search />
         </InputGroupAddon>
       </InputGroup>
 
-      {filtered.length === 0 ? (
-        <div className="text-muted-foreground py-12 text-center">
-          <p className="text-lg">No attendance records found</p>
-          <p className="mt-2 text-sm">Add your first record to get started</p>
-        </div>
-      ) : (
-        <div className="overflow-hidden rounded-lg border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[80px]">Date</TableHead>
-                <TableHead>Nom&Prenom</TableHead>
-                <TableHead>Term</TableHead>
-                <TableHead className="text-center">Absences</TableHead>
-                <TableHead className="text-center">Retards</TableHead>
-                <TableHead className="text-center">Bavardages</TableHead>
-                <TableHead className="text-center">Consignes</TableHead>
-                <TableHead className="text-center">Exclusions</TableHead>
-                <TableHead className="text-center">Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((record) => (
-                <AttendanceRowView
-                  key={record.id}
-                  record={record}
-                  dateFmt={dateFmt}
-                  onDelete={onDelete}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+      <div className="overflow-hidden rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[80px]">Date</TableHead>
+              <TableHead>{t("fullName")}</TableHead>
+              <TableHead>{t("registrationNumber")}</TableHead>
+              <TableHead>Term</TableHead>
+              <TableHead className="text-center">Absences</TableHead>
+              <TableHead className="text-center">Retards</TableHead>
+              <TableHead className="text-center">Bavardages</TableHead>
+              <TableHead className="text-center">Consignes</TableHead>
+              <TableHead className="text-center">Exclusions</TableHead>
+              <TableHead className="text-center">Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered.map((record) => (
+              <AttendanceRowView
+                key={record.id}
+                record={record}
+                onDelete={onDelete}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
 
 const AttendanceRowView = memo(function AttendanceRowView({
   record,
-  dateFmt,
-
   onDelete,
 }: {
   record: AttendanceRow;
-  dateFmt: Intl.DateTimeFormat;
   onDelete: (id: number) => void;
 }) {
   const total = getTotalIssues(record);
   const sev = getSeverity(total);
   const confirm = useConfirm();
+  const locale = useLocale();
   const t = useTranslations();
   const { openModal } = useModal();
   const canDeleteAttendance = useCheckPermission(
@@ -239,17 +229,17 @@ const AttendanceRowView = memo(function AttendanceRowView({
     PermissionAction.UPDATE,
   );
 
-  // pre-format once
-  const created =
-    record.createdAt instanceof Date
-      ? dateFmt.format(record.createdAt)
-      : dateFmt.format(new Date(record.createdAt as unknown as string));
-
   return (
     <TableRow>
-      <TableCell>{created}</TableCell>
-
       <TableCell>
+        {record.createdAt.toLocaleDateString(locale, {
+          year: "2-digit",
+          month: "short",
+          day: "numeric",
+        })}
+      </TableCell>
+
+      <TableCell className="py-0">
         <div>
           <Link
             href={`/students/${record.studentId}/attendances`}
@@ -263,12 +253,15 @@ const AttendanceRowView = memo(function AttendanceRowView({
           </div> */}
         </div>
       </TableCell>
+      <TableCell className="text-muted-foreground py-0">
+        {record.student.registrationNumber}
+      </TableCell>
 
-      <TableCell className="text-muted-foreground">
+      <TableCell className="text-muted-foreground py-0">
         {record.term.name}
       </TableCell>
 
-      <TableCell className="text-center">
+      <TableCell className="py-0 text-center">
         <div className="flex flex-col items-center gap-1">
           <span className="font-semibold">{record.absence}</span>
           {record.justifiedAbsence > 0 && (
@@ -279,7 +272,7 @@ const AttendanceRowView = memo(function AttendanceRowView({
         </div>
       </TableCell>
 
-      <TableCell className="text-center">
+      <TableCell className="py-0 text-center">
         <div className="flex flex-col items-center gap-1">
           <span className="font-semibold">{record.late}</span>
           {record.justifiedLate > 0 && (
@@ -290,28 +283,22 @@ const AttendanceRowView = memo(function AttendanceRowView({
         </div>
       </TableCell>
 
-      <TableCell className="text-center font-semibold">
-        {record.chatter}
-      </TableCell>
-      <TableCell className="text-center font-semibold">
-        {record.consigne}
-      </TableCell>
+      <TableCell className="py-0 text-center">{record.chatter}</TableCell>
+      <TableCell className="py-0 text-center">{record.consigne}</TableCell>
 
-      <TableCell className="text-center font-semibold">
-        {record.exclusion}
-      </TableCell>
+      <TableCell className="py-0 text-center">{record.exclusion}</TableCell>
 
-      <TableCell className="text-center">
+      <TableCell className="py-0 text-center">
         <Badge variant={sev.variant} appearance="outline">
           {sev.label}
         </Badge>
       </TableCell>
 
-      <TableCell className="text-right">
+      <TableCell className="py-0 text-right">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"ghost"} size={"icon-sm"}>
-              <MoreVertical />
+              <MoreVertical className="size-3" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

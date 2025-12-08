@@ -10,7 +10,6 @@ import {
 } from "@react-email/components";
 
 import { Logo } from "../components/logo";
-import { getAssetUrl } from "../utils";
 
 interface School {
   logo?: string | null;
@@ -25,9 +24,9 @@ interface FeedbackEmailProps {
   message?: string;
   school: School;
 }
-const assetUrl = getAssetUrl();
+
 const defaultSchool = {
-  logo: `${assetUrl}/images/logo-round.png`,
+  logo: `logo-round.png`,
   name: "Institut Polyvalent Wague",
   id: "1",
 };
@@ -50,7 +49,7 @@ export const FeedbackEmail = ({
             className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
             style={{ borderStyle: "solid", borderWidth: 1 }}
           >
-            <Logo logoUrl={`${assetUrl}/images/logo-round.png`} />
+            <Logo logoUrl={school.logo} />
             <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
               Email de Feedback de {usernameSender}
             </Heading>

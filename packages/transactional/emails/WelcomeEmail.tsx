@@ -14,18 +14,16 @@ import {
   Text,
 } from "@react-email/components";
 
-import { getAssetUrl } from "../utils";
-
 interface WelcomeEmailProps {
   fullName?: string;
   url?: string;
+  logo: string;
 }
-
-const assetUrl = getAssetUrl();
 
 const WelcomeEmail = ({
   fullName = "Jean-Paul Ainam",
   url = "fr",
+  logo = `logo-round.png`,
 }: WelcomeEmailProps) => {
   const t = (key: string) => {
     const translations: Record<string, string> = {
@@ -63,7 +61,7 @@ const WelcomeEmail = ({
             {/* Logo Section */}
             <Section className="mb-[24px] text-center">
               <Img
-                src={`${assetUrl}/images/logo-round.png`}
+                src={logo}
                 alt="Discolaire Logo"
                 width="80"
                 height="80"
@@ -142,7 +140,7 @@ const WelcomeEmail = ({
                 Jean-Paul Ainam
               </Text>
               <Img
-                src={`${assetUrl}/images/signature.png`}
+                src={`https://discolaire-images-public-uploads-g5v2c4o.s3.eu-central-1.amazonaws.com/signature.png`}
                 alt="Signature"
                 className="h-[24px] w-auto"
               />

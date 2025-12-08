@@ -70,7 +70,10 @@ export default async function Page(props: PageProps) {
                   </div>
                 }
               >
-                <SubjectJournalHeader defaultSubjectId={subjectId} />
+                <SubjectJournalHeader
+                  type="teaching_session"
+                  defaultSubjectId={subjectId}
+                />
                 <SubjectJournalEditor defaultSubjectId={subjectId} />
               </Suspense>
               <Separator />
@@ -107,13 +110,22 @@ export default async function Page(props: PageProps) {
                 </div>
               }
             >
+              <SubjectJournalHeader
+                type="program_coverage"
+                defaultSubjectId={subjectId}
+              />
               <TeachingSessionCoverage defaultSubjectId={subjectId} />
             </Suspense>
           </ErrorBoundary>
         )}
       </TabsContent>
       <TabsContent value="program">
-        {subjectId && <CreateEditProgram defaultSubjectId={subjectId} />}
+        {subjectId && (
+          <>
+            <SubjectJournalHeader type="program" defaultSubjectId={subjectId} />
+            <CreateEditProgram defaultSubjectId={subjectId} />
+          </>
+        )}
       </TabsContent>
     </Tabs>
   );

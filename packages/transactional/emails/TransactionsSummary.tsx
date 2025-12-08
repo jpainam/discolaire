@@ -15,8 +15,9 @@ import { format } from "date-fns";
 import { Footer } from "../components/footer";
 import { Head } from "../components/Head";
 import { Logo } from "../components/logo";
+import { env } from "../env";
 import { geti18n } from "../locales";
-import { cn, getAppUrl, getAssetUrl } from "../utils";
+import { cn } from "../utils";
 
 interface Transaction {
   id: number;
@@ -36,9 +37,8 @@ interface School {
   id: string;
 }
 
-const assetUrl = getAssetUrl();
 const defaultSchool = {
-  logo: `${assetUrl}/images/logo-round.png`,
+  logo: `logo-round.png`,
   name: "Institut Polyvalent Wague",
   id: "1",
 };
@@ -93,8 +93,6 @@ const defaultTransactions = [
     status: "VALIDATED",
   },
 ];
-
-const baseAppUrl = getAppUrl();
 
 export const TransactionsSummary = ({
   fullName = "Jean-Paul Ainam",
@@ -181,7 +179,7 @@ export const TransactionsSummary = ({
                     </td>
                     <td align="left" style={{ width: "50%" }}>
                       <Link
-                        href={`${baseAppUrl}/transactions?id=${transaction.id}`}
+                        href={`${env.NEXT_PUBLIC_BASE_URL}/transactions?id=${transaction.id}`}
                         className={cn(
                           "text-[#121212]",
                           transaction.category === "income" &&
@@ -244,7 +242,7 @@ export const TransactionsSummary = ({
                   paddingTop: 12,
                   paddingBottom: 12,
                 }}
-                href={`${baseAppUrl}/transactions?start=${transactions.at(0)?.date}&end=${transactions[transactions.length - 1]?.date}`}
+                href={`${env.NEXT_PUBLIC_BASE_URL}/transactions?start=${transactions.at(0)?.date}&end=${transactions[transactions.length - 1]?.date}`}
               >
                 {t("transactions.view")}
               </Button>

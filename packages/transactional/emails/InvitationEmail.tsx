@@ -12,10 +12,12 @@ import {
 } from "@react-email/components";
 
 import { Footer } from "../components/footer";
+import { Logo } from "../components/logo";
 
 const InvitationEmail = ({
   inviteeName = "Jamie Smith",
   schoolName = "Design Collective",
+  logo = `logo-round.png`,
   inviteLink = "https://app.example.com/invite/team/abc123",
 }) => {
   return (
@@ -27,6 +29,7 @@ const InvitationEmail = ({
       <Tailwind>
         <Body className="bg-[#f5f5f7] py-[40px] font-sans">
           <Container className="mx-auto max-w-[600px] rounded-[12px] bg-white p-[32px] shadow-sm">
+            <Logo logoUrl={logo} />
             <Heading className="m-0 mb-[24px] text-[18px] font-bold text-black">
               Rejoindre {schoolName}
             </Heading>

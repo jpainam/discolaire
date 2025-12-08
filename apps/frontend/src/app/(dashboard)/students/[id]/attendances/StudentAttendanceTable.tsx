@@ -52,6 +52,7 @@ import {
 
 import { Badge } from "~/components/base-badge";
 import { ClassroomEditAttendance } from "~/components/classrooms/attendances/ClassroomEditAttendance";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
@@ -158,6 +159,15 @@ export function StudentAttendanceTable() {
     [deleteMutation],
   );
 
+  if (filtered.length === 0) {
+    return (
+      <EmptyComponent
+        title="Aucune présence"
+        description="Veuillez choisir une période et saisir une présence"
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
       <InputGroup className="w-96" aria-label="Search attendance records">
@@ -165,49 +175,41 @@ export function StudentAttendanceTable() {
           id={inputId}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by name or registration…"
-          aria-label="Search by name or registration"
+          placeholder={t("search")}
         />
         <InputGroupAddon aria-hidden>
           <Search />
         </InputGroupAddon>
       </InputGroup>
 
-      {filtered.length === 0 ? (
-        <div className="text-muted-foreground py-12 text-center">
-          <p className="text-lg">No attendance records found</p>
-          <p className="mt-2 text-sm">Add your first record to get started</p>
-        </div>
-      ) : (
-        <div className="overflow-hidden rounded-lg border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[80px]">Date</TableHead>
-                <TableHead>Term</TableHead>
-                <TableHead className="text-center">Absences</TableHead>
-                <TableHead className="text-center">Retards</TableHead>
-                <TableHead className="text-center">Bavardages</TableHead>
-                <TableHead className="text-center">Consignes</TableHead>
-                <TableHead className="text-center">Exclusions</TableHead>
-                <TableHead className="text-center">Status</TableHead>
-                <TableHead></TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((record) => (
-                <AttendanceRowView
-                  key={record.id}
-                  record={record}
-                  dateFmt={dateFmt}
-                  onDelete={onDelete}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+      <div className="overflow-hidden rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[80px]">Date</TableHead>
+              <TableHead>Term</TableHead>
+              <TableHead className="text-center">Absences</TableHead>
+              <TableHead className="text-center">Retards</TableHead>
+              <TableHead className="text-center">Bavardages</TableHead>
+              <TableHead className="text-center">Consignes</TableHead>
+              <TableHead className="text-center">Exclusions</TableHead>
+              <TableHead className="text-center">Status</TableHead>
+              <TableHead></TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered.map((record) => (
+              <AttendanceRowView
+                key={record.id}
+                record={record}
+                dateFmt={dateFmt}
+                onDelete={onDelete}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

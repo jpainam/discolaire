@@ -29,8 +29,10 @@ import { getFullName } from "~/utils";
 
 export function SubjectJournalHeader({
   defaultSubjectId,
+  type,
 }: {
   defaultSubjectId: number;
+  type: "program_coverage" | "teaching_session" | "program";
 }) {
   const trpc = useTRPC();
   const [subjectId] = useQueryState(
@@ -62,7 +64,7 @@ export function SubjectJournalHeader({
   );
   const subject = subjectQuery.data;
   return (
-    <div className="bg-muted/50 flex flex-row items-center justify-between border-y px-4 py-2">
+    <div className="bg-muted/50 flex flex-row items-center justify-between border-y px-4 py-1">
       {subjectQuery.isPending ? (
         <Skeleton className="h-8 w-96" />
       ) : (
@@ -99,27 +101,29 @@ export function SubjectJournalHeader({
             {canDeleteSubject && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const isConfirmed = await confirm({
-                      title: t("clear_all"),
-                      description: t("delete_confirmation"),
-                      // icon: <Trash2 className="text-destructive" />,
-                      // alertDialogTitle: {
-                      //   className: "flex items-center gap-2",
-                      // },
-                    });
-                    if (isConfirmed) {
-                      toast.loading(t("deleting"), { id: 0 });
-                      deleteSubjectJournal.mutate({ subjectId: subjectId });
-                    }
-                  }}
-                  variant="destructive"
-                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                >
-                  <Trash2 />
-                  {t("clear_all")}
-                </DropdownMenuItem>
+                {type == "teaching_session" && (
+                  <DropdownMenuItem
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("clear_all"),
+                        description: t("delete_confirmation"),
+                        // icon: <Trash2 className="text-destructive" />,
+                        // alertDialogTitle: {
+                        //   className: "flex items-center gap-2",
+                        // },
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteSubjectJournal.mutate({ subjectId: subjectId });
+                      }
+                    }}
+                    variant="destructive"
+                    className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                  >
+                    <Trash2 />
+                    {t("clear_all")}
+                  </DropdownMenuItem>
+                )}
               </>
             )}
           </DropdownMenuContent>

@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
         inviteeName: name,
         schoolName: user.school.name,
         inviteLink: `${url}&id=${userId}`,
+        logo: user.school.logo ?? "",
       }) as React.ReactElement,
     });
 

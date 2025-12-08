@@ -342,4 +342,23 @@ export const attendanceRouter = {
     }
     return Array.from(grouped, ([date, values]) => ({ date, ...values }));
   }),
+  clearAll: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string(),
+        termId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const students = await ctx.services.classroom.getStudents(
+        input.classroomId,
+      );
+      const studentIds = students.map((s) => s.id);
+      return ctx.db.attendance.deleteMany({
+        where: {
+          studentId: { in: studentIds },
+          ...(input.termId ? { termId: input.termId } : {}),
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;

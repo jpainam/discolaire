@@ -28,10 +28,8 @@ import {
   FormItem,
   FormMessage,
 } from "@repo/ui/components/form";
-import { Label } from "@repo/ui/components/label";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
-import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TiptapEditor } from "~/components/tiptap-editor";
@@ -114,18 +112,6 @@ export function CreateEditProgram({
         onSubmit={form.handleSubmit(submitProgram)}
       >
         <div className="bg-muted/50 flex flex-row justify-end gap-4 border-b px-4 py-1">
-          <div className="flex flex-row items-center gap-2">
-            <Label className="hidden md:block">
-              {subjectQuery.data?.course.name}
-            </Label>
-            <FlatBadge variant={"green"}>
-              {t("coeff")}: {subjectQuery.data?.coefficient}
-            </FlatBadge>
-            <FlatBadge variant={"blue"}>
-              {t("teacher")}: {subjectQuery.data?.teacher?.lastName}
-            </FlatBadge>
-          </div>
-
           <div className="ml-auto flex flex-row items-center gap-2">
             {canUpdateSubject && (
               <>

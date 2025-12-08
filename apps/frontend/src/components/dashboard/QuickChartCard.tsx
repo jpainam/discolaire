@@ -33,11 +33,11 @@ const chartConfig = {
 export function QuickChartCard() {
   const trpc = useTRPC();
   const { data: latestGradesheet } = useSuspenseQuery(
-    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 7 }),
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 20 }),
   );
   const t = useTranslations();
   const grades = useMemo(() => {
-    return latestGradesheet.map((g) => {
+    const gs = latestGradesheet.map((g) => {
       return {
         name: g.subject.course.shortName,
         max: Math.max(...g.grades.map((grade) => grade.grade)),
@@ -50,6 +50,7 @@ export function QuickChartCard() {
         ),
       };
     });
+    return gs.filter((g) => g.max > 0).slice(0, 8);
   }, [latestGradesheet]);
   return (
     <div className="border-border bg-card relative max-h-[400px] overflow-y-auto rounded-xl border p-6">

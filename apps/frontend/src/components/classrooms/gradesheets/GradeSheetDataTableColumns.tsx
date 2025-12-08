@@ -67,8 +67,8 @@ export function ActionCells({
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button aria-label="Open menu" size={"icon"} variant="ghost">
-            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+          <Button size={"icon-sm"} variant="ghost">
+            <DotsHorizontalIcon className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

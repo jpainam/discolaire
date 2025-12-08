@@ -1,9 +1,11 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical, PlusIcon, Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -15,10 +17,13 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Label } from "@repo/ui/components/label";
 
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
+import { useTRPC } from "~/trpc/react";
 
 export function ClassroomAttendanceHeader() {
   const [termId, setTermId] = useQueryState("termId");
@@ -30,6 +35,25 @@ export function ClassroomAttendanceHeader() {
     "attendance",
     PermissionAction.CREATE,
   );
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const clearAllAttendance = useMutation(
+    trpc.attendance.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.attendance.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+      },
+    }),
+  );
+
+  const canDeleteAttendance = useCheckPermission(
+    "attendance",
+    PermissionAction.DELETE,
+  );
+  const confirm = useConfirm();
 
   return (
     <div className="bg-muted grid flex-row items-center gap-4 border-b px-4 py-1 md:flex">
@@ -64,15 +88,33 @@ export function ClassroomAttendanceHeader() {
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Trash />
-              {t("clear_all")}
-            </DropdownMenuItem>
+          <DropdownMenuContent align="end">
+            <DropdownHelp />
+
+            {canDeleteAttendance && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={async () => {
+                    const isConfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                    });
+                    if (isConfirmed) {
+                      toast.loading(t("deleting"), { id: 0 });
+                      clearAllAttendance.mutate({
+                        classroomId: params.id,
+                        termId: termId ?? undefined,
+                      });
+                    }
+                  }}
+                >
+                  <Trash />
+                  {t("clear_all")}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
