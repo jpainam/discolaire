@@ -95,6 +95,8 @@
   "create_classroom_description": "Saisir les informations de la classe, telles que le niveau, l'enseignant principal et la capacité d'accueil.",
   "vs_last_year": "vs l'année dernière",
   "create_permission": "Créer une permission",
+  "Moy Max": "Moy.Max",
+  "Moy Min": "Moy.Min",
   "Classroom Management": "Gestion des classes",
   "Add Classroom": "Ajouter une classe",
   "Grade Report Generator": "Générateur de rapports de notes",

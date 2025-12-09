@@ -38,7 +38,7 @@ export async function ReportCardPerformance({
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell className={cn(rowClassName)}>{t("Moy.Max")}</TableCell>
+            <TableCell className={cn(rowClassName)}>{t("Moy Max")}</TableCell>
             <TableCell className="min-w-[60px]">
               {isFinite(max) ? max.toFixed(2) : "-"}
             </TableCell>

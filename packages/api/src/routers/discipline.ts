@@ -48,7 +48,7 @@ export const disciplineRouter = {
       }),
     )
     .query(async ({ input, ctx }) => {
-      const [seq1, seq2] = await ctx.services.attendance.getTrimesterTermIds(
+      const { seq1, seq2 } = await ctx.services.trimestre.getTermIds(
         input.trimestreId,
         ctx.schoolYearId,
       );

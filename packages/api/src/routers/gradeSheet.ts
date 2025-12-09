@@ -166,7 +166,8 @@ export const gradeSheetRouter = {
       z
         .object({
           termId: z.string().nullable(),
-          subjectId: z.number().nullable(),
+          subjectId: z.number().optional(),
+          classroomId: z.string().optional(),
         })
         .optional(),
     )
@@ -174,6 +175,7 @@ export const gradeSheetRouter = {
       return ctx.db.gradeSheet.findMany({
         where: {
           subject: {
+            ...(input?.classroomId ? { classroomId: input.classroomId } : {}),
             classroom: {
               schoolId: ctx.schoolId,
               schoolYearId: ctx.schoolYearId,

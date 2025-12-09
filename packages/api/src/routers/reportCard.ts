@@ -109,4 +109,9 @@ export const reportCardRouter = {
         classroomId: input.classroomId,
       });
     }),
+  getTermIdsForTrimestre: protectedProcedure
+    .input(z.enum(["trim1", "trim2", "trim3"]))
+    .query(({ ctx, input }) => {
+      return ctx.services.trimestre.getTermIds(input, ctx.schoolYearId);
+    }),
 } satisfies TRPCRouterRecord;

@@ -36,16 +36,16 @@ export function ReportCardActionHeader({
     PermissionAction.CREATE,
   );
   return (
-    <div className="bg-muted/50 grid flex-row items-center gap-4 border-y px-4 py-2 md:flex">
+    <div className="bg-muted/50 grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
       <Label className="font-bold uppercase">{title}</Label>
       <Badge variant={"success"} appearance={"light"}>
-        {t("Moy.Max")} : {isFinite(maxAvg) ? maxAvg.toFixed(2) : "-"}
+        {t("Moy Max")} : {isFinite(maxAvg) ? maxAvg.toFixed(2) : "-"}
       </Badge>
       <Badge variant={"destructive"} appearance={"light"}>
-        {t("Moy.Min")} : {isFinite(minAvg) ? minAvg.toFixed(2) : "-"}
+        {t("Moy Min")} : {isFinite(minAvg) ? minAvg.toFixed(2) : "-"}
       </Badge>
       <Badge variant={"info"} appearance={"light"}>
-        {t("Moy.Class")} : {isFinite(avg) ? avg.toFixed(2) : "-"}
+        {t("Moy Cl")} : {isFinite(avg) ? avg.toFixed(2) : "-"}
       </Badge>
 
       <Badge variant={"warning"} appearance={"light"}>

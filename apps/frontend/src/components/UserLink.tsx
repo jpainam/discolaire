@@ -16,6 +16,7 @@ export function UserLink(props: {
   avatar?: string | null;
   profile: "staff" | "student" | "contact";
   className?: string;
+  href?: string;
 }) {
   const avatar = createAvatar(initials, {
     seed: props.name,
@@ -38,7 +39,7 @@ export function UserLink(props: {
         <AvatarFallback></AvatarFallback>
       </Avatar>
       <Link
-        href={urls[props.profile]}
+        href={props.href ?? urls[props.profile]}
         className={cn("hover:underline", props.className)}
       >
         {props.name}

@@ -1,10 +1,11 @@
 import type { SearchParams } from "nuqs/server";
-import { Fragment } from "react";
-import Link from "next/link";
+import { Fragment, Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import _ from "lodash";
 import { getTranslations } from "next-intl/server";
 
 import { Separator } from "@repo/ui/components/separator";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -20,10 +21,13 @@ import {
 } from "@repo/ui/components/tooltip";
 import { cn } from "@repo/ui/lib/utils";
 
-import { AvatarState } from "~/components/AvatarState";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
+import { ErrorFallback } from "~/components/error-fallback";
+import { UserLink } from "~/components/UserLink";
 import { caller } from "~/trpc/server";
+import { getFullName } from "~/utils";
 import { trimestreSearchParams } from "~/utils/search-params";
+import { TrimestreAlert } from "./TrimestreAlert";
 
 interface PageProps {
   searchParams: Promise<SearchParams>;
@@ -77,12 +81,17 @@ export default async function Page(props: PageProps) {
       />
 
       <Separator />
-      <div className="px-4">
-        <div className="bg-background overflow-hidden rounded-md border">
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense fallback={<Skeleton className="h-10" />}>
+          <TrimestreAlert trimestreId={trimestreId} classroomId={params.id} />
+        </Suspense>
+      </ErrorBoundary>
+      <div className="">
+        <div className="bg-background overflow-hidden">
           <Table className="text-xs">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="text-center" colSpan={3}>
+                <TableHead className="text-center" colSpan={2}>
                   {t("fullName")}
                 </TableHead>
 
@@ -119,21 +128,16 @@ export default async function Page(props: PageProps) {
                 return (
                   <Fragment key={`globalrank-${key}-${index}`}>
                     <TableRow key={`globalrank-${key}-${index}`}>
-                      <TableCell className="w-[10px]" rowSpan={2}>
-                        <AvatarState
-                          className="h-8 w-8"
+                      <TableCell rowSpan={2}>
+                        <UserLink
+                          profile="student"
                           avatar={student.user?.avatar}
-                          pos={student.lastName?.length ?? 0}
+                          name={getFullName(student)}
+                          id={student.id}
+                          href={`/students/${student.id}/reportcards/trimestres?trimestreId=${searchParams.trimestreId}&studentId=${student.id}&classroomId=${params.id}`}
                         />
                       </TableCell>
-                      <TableCell rowSpan={2}>
-                        <Link
-                          className="hover:underline"
-                          href={`/students/${student.id}/reportcards/trimestres?trimestreId=${searchParams.trimestreId}&studentId=${student.id}&classroomId=${params.id}`}
-                        >
-                          {student.lastName}
-                        </Link>
-                      </TableCell>
+
                       <TableCell className="border text-center" rowSpan={2}>
                         {student.gender == "female" ? "F" : "M"}
                       </TableCell>
@@ -191,7 +195,7 @@ export default async function Page(props: PageProps) {
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}`}
                                   >
-                                    {grade?.grade1}
+                                    {grade?.grade1?.toFixed(2)}
                                   </TableCell>
                                 );
                               })}
@@ -201,7 +205,7 @@ export default async function Page(props: PageProps) {
                       )}
                     </TableRow>
                     <TableRow
-                      className="border-b-2 border-b-[#e5e5e5]"
+                      className="border-b border-b-4"
                       key={`globalrank-${key}-${index}-2`}
                     >
                       <TableCell className="border text-center">
@@ -239,7 +243,7 @@ export default async function Page(props: PageProps) {
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}-2`}
                                   >
-                                    {grade?.grade2}
+                                    {grade?.grade2?.toFixed(2)}
                                   </TableCell>
                                 );
                               })}

@@ -10,6 +10,33 @@ export class TrimestreService {
     this.db = db;
     this.reportcard = new ReportCardService(db);
   }
+  async getTermIds(
+    trimestreId: "trim1" | "trim2" | "trim3",
+    schoolYearId: string,
+  ) {
+    let seq1: string | null | undefined = null;
+    let seq2: string | null | undefined = null;
+    const terms = await this.db.term.findMany({
+      where: {
+        schoolYearId: schoolYearId,
+      },
+    });
+    const sortedTerms = terms.sort((a, b) => a.order - b.order);
+    if (trimestreId === "trim1") {
+      seq1 = sortedTerms[0]?.id;
+      seq2 = sortedTerms[1]?.id;
+    } else if (trimestreId === "trim2") {
+      seq1 = sortedTerms[2]?.id;
+      seq2 = sortedTerms[3]?.id;
+    } else {
+      seq1 = sortedTerms[4]?.id;
+      seq2 = sortedTerms[5]?.id;
+    }
+    if (!seq1 || !seq2) {
+      throw new Error(`Invalid trimestreId, ${seq1}, ${seq2}, ${trimestreId}`);
+    }
+    return { seq1, seq2 };
+  }
   async getTrimestreGrades(
     classroomId: string,
     trimestreId: "trim1" | "trim2" | "trim3",
