@@ -24,6 +24,8 @@ import { cn } from "@repo/ui/lib/utils";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { UserLink } from "~/components/UserLink";
+import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { trimestreSearchParams } from "~/utils/search-params";
@@ -67,6 +69,10 @@ export default async function Page(props: PageProps) {
   const { title } = getTitle({ trimestreId });
 
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+  const canCreateGradesheet = await checkPermission(
+    "gradesheet",
+    PermissionAction.CREATE,
+  );
 
   return (
     <div className="mb-10 flex flex-col gap-2">
@@ -81,11 +87,13 @@ export default async function Page(props: PageProps) {
       />
 
       <Separator />
-      <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense fallback={<Skeleton className="h-10" />}>
-          <TrimestreAlert trimestreId={trimestreId} classroomId={params.id} />
-        </Suspense>
-      </ErrorBoundary>
+      {canCreateGradesheet && (
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense fallback={<Skeleton className="h-10" />}>
+            <TrimestreAlert trimestreId={trimestreId} classroomId={params.id} />
+          </Suspense>
+        </ErrorBoundary>
+      )}
       <div className="">
         <div className="bg-background overflow-hidden">
           <Table className="text-xs">

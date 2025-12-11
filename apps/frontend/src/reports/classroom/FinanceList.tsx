@@ -165,7 +165,9 @@ export function FinanceList({
               </View>
             </View>
             {students.map((student, index) => {
-              const remaining = student.balance - amountDue;
+              const remaining =
+                student.journals.find((j) => (j.journalId = journalId))
+                  ?.balance - amountDue;
               if (type == "credit" && remaining < 0) {
                 return null;
               }

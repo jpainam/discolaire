@@ -27,8 +27,10 @@ import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { getWeekdayName } from "~/lib/utils";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -47,6 +49,16 @@ export function ClassroomSubjectTimetable({
 
   const confirm = useConfirm();
   const locale = useLocale();
+
+  const canCreateTimetable = useCheckPermission(
+    "timetable",
+    PermissionAction.CREATE,
+  );
+
+  const canDeleteTimetable = useCheckPermission(
+    "timetable",
+    PermissionAction.DELETE,
+  );
 
   const queryClient = useQueryClient();
   const deleteTimetableSlot = useMutation(
@@ -115,6 +127,7 @@ export function ClassroomSubjectTimetable({
           <Input
             id="start-time"
             type="time"
+            className="h-8"
             value={slotStart}
             onChange={(e) => setSlotStart(e.target.value)}
           />
@@ -123,20 +136,24 @@ export function ClassroomSubjectTimetable({
           <Label htmlFor="end-time">{t("end_time")}</Label>
           <Input
             id="end-time"
+            className="h-8"
             type="time"
             value={slotEnd}
             onChange={(e) => setSlotEnd(e.target.value)}
           />
         </div>
-        <div className="flex items-end">
-          <Button
-            //isLoading={createTimetableSlot.isPending}
-            onClick={handleAddTimeSlot}
-          >
-            {/* <Plus className="h-4 w-4" /> */}
-            {t("add")}
-          </Button>
-        </div>
+        {canCreateTimetable && (
+          <div className="flex items-end">
+            <Button
+              size={"sm"}
+              //isLoading={createTimetableSlot.isPending}
+              onClick={handleAddTimeSlot}
+            >
+              {/* <Plus className="h-4 w-4" /> */}
+              {t("add")}
+            </Button>
+          </div>
+        )}
       </div>
       <FieldGroup>
         <FieldGroup className="flex flex-row flex-wrap gap-2 px-4 [--radius:9999rem]">
@@ -198,23 +215,25 @@ export function ClassroomSubjectTimetable({
               <span className="font-medium">
                 {slot.start} - {slot.end}
               </span>
-              <Button
-                variant="ghost"
-                className="hover:text-destructive"
-                size="icon-sm"
-                onClick={async () => {
-                  const isconfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                  });
-                  if (isconfirmed) {
-                    toast.loading(t("Processing"), { id: 0 });
-                    deleteTimetableSlot.mutate(slot.id);
-                  }
-                }}
-              >
-                <Trash />
-              </Button>
+              {canDeleteTimetable && (
+                <Button
+                  variant="ghost"
+                  className="hover:text-destructive"
+                  size="icon-sm"
+                  onClick={async () => {
+                    const isconfirmed = await confirm({
+                      title: t("delete"),
+                      description: t("delete_confirmation"),
+                    });
+                    if (isconfirmed) {
+                      toast.loading(t("Processing"), { id: 0 });
+                      deleteTimetableSlot.mutate(slot.id);
+                    }
+                  }}
+                >
+                  <Trash />
+                </Button>
+              )}
             </div>
           ))}
         </div>

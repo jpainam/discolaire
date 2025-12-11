@@ -44,6 +44,7 @@ export function CreatedGradesheetCard({
   const t = useTranslations();
   const { openModal } = useModal();
   const trpc = useTRPC();
+
   const gradeSheetQuery = useQuery(
     trpc.gradeSheet.get.queryOptions(gradeSheetId),
   );
@@ -66,6 +67,10 @@ export function CreatedGradesheetCard({
   const canDeleteGradesheet = useCheckPermission(
     "gradesheet",
     PermissionAction.DELETE,
+  );
+  const canUpdateGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.UPDATE,
   );
 
   const params = useParams<{ id: string }>();
@@ -124,44 +129,50 @@ export function CreatedGradesheetCard({
                 <Eye className="h-4 w-4" />
                 {t("details")}
               </DropdownMenuItem>
-              <DropdownMenuItem
-                disabled={isClosed || !canDeleteGradesheet}
-                onSelect={() => {
-                  openModal({
-                    title: "Modifier la fiche de notes",
-                    view: (
-                      <UpdateCreatedGradesheet
-                        gradeSheetId={gs.id}
-                        title={gs.name}
-                        scale={gs.scale}
-                        weight={gs.weight * 100}
-                      />
-                    ),
-                  });
-                }}
-              >
-                <PencilIcon className="h-4 w-4" />
-                {t("edit")}
-              </DropdownMenuItem>
+              {canUpdateGradesheet && (
+                <DropdownMenuItem
+                  disabled={isClosed}
+                  onSelect={() => {
+                    openModal({
+                      title: "Modifier la fiche de notes",
+                      view: (
+                        <UpdateCreatedGradesheet
+                          gradeSheetId={gs.id}
+                          title={gs.name}
+                          scale={gs.scale}
+                          weight={gs.weight * 100}
+                        />
+                      ),
+                    });
+                  }}
+                >
+                  <PencilIcon className="h-4 w-4" />
+                  {t("edit")}
+                </DropdownMenuItem>
+              )}
 
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-destructive"
-                disabled={!canDeleteGradesheet || isClosed}
-                onSelect={async () => {
-                  const isConfirmed = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                  });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteGradesheetMutation.mutate(gs.id);
-                  }
-                }}
-              >
-                <Trash className="text-destructive h-4 w-4" />
-                {t("delete")}
-              </DropdownMenuItem>
+              {canDeleteGradesheet && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    disabled={isClosed}
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteGradesheetMutation.mutate(gs.id);
+                      }
+                    }}
+                  >
+                    <Trash className="text-destructive h-4 w-4" />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </CardAction>

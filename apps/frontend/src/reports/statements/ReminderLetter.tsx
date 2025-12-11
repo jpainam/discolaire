@@ -2,6 +2,7 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getFullName } from "~/utils";
 import { getHeader } from "../headers";
 import { formatCurrency } from "../utils";
 
@@ -9,16 +10,17 @@ interface ReminderLetterProps {
   school: RouterOutputs["school"]["getSchool"];
   classroom: string;
   dueDate: Date;
-  reminders: {
-    studentName: string;
-    amount: number;
-  }[];
+  amountDue: number;
+  journalId: string;
+  students: RouterOutputs["classroom"]["studentsBalance"];
 }
 export function ReminderLetter({
   school,
   classroom,
+  journalId,
+  amountDue,
   dueDate,
-  reminders,
+  students,
 }: ReminderLetterProps) {
   return (
     <Document>
@@ -33,7 +35,17 @@ export function ReminderLetter({
           fontFamily: "Helvetica",
         }}
       >
-        {reminders.map((reminder) => {
+        {students.map((stud) => {
+          const journalBalance = stud.journals.find(
+            (j) => j.journalId === journalId,
+          );
+          if (!journalBalance) {
+            return null;
+          }
+          const solde = journalBalance.balance - amountDue;
+          if (solde >= 0) {
+            return null;
+          }
           return (
             <View style={{ flexDirection: "column", marginBottom: 40 }}>
               {getHeader(school)}
@@ -56,13 +68,13 @@ export function ReminderLetter({
                 <Text>
                   Cher parent de l'élève{" "}
                   <Text style={{ fontWeight: "bold" }}>
-                    {reminder.studentName}
+                    {getFullName(stud)}
                   </Text>
                   , de la classe de{" "}
                   <Text style={{ fontWeight: "bold" }}>{classroom}.</Text>{" "}
                   Bien-vouloir s'acquitter de votre solde de{" "}
                   <Text style={{ fontWeight: "bold" }}>
-                    {formatCurrency(reminder.amount)}
+                    {formatCurrency(solde)}
                   </Text>{" "}
                   avant le{" "}
                   <Text style={{ fontWeight: "bold", paddingVertical: 2 }}>

@@ -111,6 +111,27 @@ export const policies: {
     action: PermissionAction.Update,
   },
   {
+    title: "programs",
+    resource: "program",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "programs",
+    resource: "program",
+    action: PermissionAction.Delete,
+  },
+  {
+    title: "programs",
+    resource: "program",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "programs",
+    resource: "program",
+    action: PermissionAction.Create,
+  },
+
+  {
     title: "enrollments",
     resource: "enrollment",
     action: PermissionAction.Read,

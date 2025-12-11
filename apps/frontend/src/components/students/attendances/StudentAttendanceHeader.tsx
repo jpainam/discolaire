@@ -41,6 +41,10 @@ export function StudentAttendanceHeader() {
     "attendance",
     PermissionAction.CREATE,
   );
+  const canDeleteAttendance = useCheckPermission(
+    "attendance",
+    PermissionAction.DELETE,
+  );
 
   return (
     <div className="bg-muted/50 grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
@@ -109,14 +113,18 @@ export function StudentAttendanceHeader() {
               <XMLIcon />
               {t("xml_export")}
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-            >
-              <Trash2 />
-              {t("clear_all")}
-            </DropdownMenuItem>
+            {canDeleteAttendance && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
+                >
+                  <Trash2 />
+                  {t("clear_all")}
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

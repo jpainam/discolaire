@@ -8,7 +8,9 @@ import type { RouterOutputs } from "@repo/api";
 import { Button } from "@repo/ui/components/button";
 
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { cn } from "~/lib/utils";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateUpdateSubjectSession } from "./CreateUpdateSubjectSession";
@@ -53,6 +55,11 @@ export function SubjectSessionColumn({
   const t = useTranslations();
   const subject = subjectQuery.data;
 
+  const canCreateProgram = useCheckPermission(
+    "program",
+    PermissionAction.CREATE,
+  );
+
   return (
     <div className={cn("flex shrink-0 flex-col", className)}>
       <div className="border-border bg-muted/70 dark:bg-muted/50 flex max-h-full flex-col rounded-lg border p-3">
@@ -65,27 +72,29 @@ export function SubjectSessionColumn({
             <span className="text-sm font-medium">{term.name}</span>
           </div>
           <div className="flex items-center gap-1">
-            <Button
-              onClick={() => {
-                openModal({
-                  // className:
-                  //   "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
-                  title: `Programme ${subject?.course.name}`,
-                  description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
-                  view: (
-                    <CreateUpdateSubjectSession
-                      termId={term.id}
-                      subjectId={subjectId}
-                    />
-                  ),
-                });
-              }}
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-            >
-              <Plus className="size-4" />
-            </Button>
+            {canCreateProgram && (
+              <Button
+                onClick={() => {
+                  openModal({
+                    // className:
+                    //   "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                    title: `Programme ${subject?.course.name}`,
+                    description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
+                    view: (
+                      <CreateUpdateSubjectSession
+                        termId={term.id}
+                        subjectId={subjectId}
+                      />
+                    ),
+                  });
+                }}
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+              >
+                <Plus className="size-4" />
+              </Button>
+            )}
             <Button variant="ghost" size="icon" className="h-6 w-6">
               <MoreHorizontal className="size-4" />
             </Button>
@@ -105,27 +114,29 @@ export function SubjectSessionColumn({
             <SubjectSessionCard key={index} program={program} />
           ))}
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              openModal({
-                // className: "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
-                title: `Programme ${subject?.course.name}`,
-                description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
-                view: (
-                  <CreateUpdateSubjectSession
-                    termId={term.id}
-                    subjectId={subjectId}
-                  />
-                ),
-              });
-            }}
-            className="hover:bg-background h-auto gap-2 self-start px-0 py-1 text-xs"
-          >
-            <Plus className="size-4" />
-            <span>{t("Add program")}</span>
-          </Button>
+          {canCreateProgram && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                openModal({
+                  // className: "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                  title: `Programme ${subject?.course.name}`,
+                  description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
+                  view: (
+                    <CreateUpdateSubjectSession
+                      termId={term.id}
+                      subjectId={subjectId}
+                    />
+                  ),
+                });
+              }}
+              className="hover:bg-background h-auto gap-2 self-start px-0 py-1 text-xs"
+            >
+              <Plus className="size-4" />
+              <span>{t("Add program")}</span>
+            </Button>
+          )}
         </div>
       </div>
     </div>

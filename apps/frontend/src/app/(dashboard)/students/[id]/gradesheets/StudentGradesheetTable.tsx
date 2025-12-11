@@ -40,6 +40,8 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -54,6 +56,10 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
     trpc.student.classroom.queryOptions({ studentId: params.id }),
   );
   const queryClient = useQueryClient();
+  const canUpdateGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.UPDATE,
+  );
   const deleteGradeMutation = useMutation(
     trpc.grade.delete.mutationOptions({
       onError: (error) => {
@@ -213,6 +219,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                     onDeleteGradeAction={onDeleteGradeAction}
                     updateGradeAction={updateGradeAction}
                     grade={row.grade1?.grade}
+                    canUpdateGradesheet={canUpdateGradesheet}
                   />
                   <Cell
                     gradeId={row.grade2?.id}
@@ -220,6 +227,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                     onDeleteGradeAction={onDeleteGradeAction}
                     updateGradeAction={updateGradeAction}
                     grade={row.grade2?.grade}
+                    canUpdateGradesheet={canUpdateGradesheet}
                   />
                   <Cell
                     gradeId={row.grade3?.id}
@@ -227,6 +235,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                     onDeleteGradeAction={onDeleteGradeAction}
                     updateGradeAction={updateGradeAction}
                     grade={row.grade3?.grade}
+                    canUpdateGradesheet={canUpdateGradesheet}
                   />
                   <Cell
                     gradeId={row.grade4?.id}
@@ -234,6 +243,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                     onDeleteGradeAction={onDeleteGradeAction}
                     updateGradeAction={updateGradeAction}
                     grade={row.grade4?.grade}
+                    canUpdateGradesheet={canUpdateGradesheet}
                   />
                   <Cell
                     gradeId={row.grade5?.id}
@@ -241,12 +251,14 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                     onDeleteGradeAction={onDeleteGradeAction}
                     updateGradeAction={updateGradeAction}
                     grade={row.grade5?.grade}
+                    canUpdateGradesheet={canUpdateGradesheet}
                   />
                   <Cell
                     gradeId={row.grade6?.id}
                     onDeleteGradeAction={onDeleteGradeAction}
                     updateGradeAction={updateGradeAction}
                     grade={row.grade6?.grade}
+                    canUpdateGradesheet={canUpdateGradesheet}
                   />
                   <TableCell className="text-muted-foreground text-center">
                     {avgText}
@@ -270,10 +282,12 @@ function Cell({
   isAbsent,
   updateGradeAction,
   onDeleteGradeAction,
+  canUpdateGradesheet,
 }: {
   grade?: number;
   gradeId?: number;
   isAbsent?: boolean;
+  canUpdateGradesheet: boolean;
   updateGradeAction: (
     gradeId: number,
     newGrade: number,
@@ -287,7 +301,19 @@ function Cell({
   const [newGrade, setNewGrade] = useState<string | null>();
   const [open, setOpen] = useState<boolean>();
   const [isNewAbsent, setIsNewAbsent] = useState<boolean>(isAbsent ?? false);
-
+  if (!canUpdateGradesheet) {
+    return (
+      <TableCell
+        className={cn(
+          "text-muted-foreground py-0",
+          g >= 18 ? "text-green-500" : "",
+          g < 10 ? "text-red-500" : "",
+        )}
+      >
+        {isAbsent ? t("absent") : gradeText}
+      </TableCell>
+    );
+  }
   return (
     <TableCell
       className={cn(

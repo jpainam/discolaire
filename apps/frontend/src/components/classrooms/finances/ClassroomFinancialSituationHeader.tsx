@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   CreditCardIcon,
   HandCoins,
@@ -8,6 +8,7 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsString, useQueryState } from "nuqs";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
@@ -26,25 +27,34 @@ import {
 import { Label } from "@repo/ui/components/label";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 
+import { BalanceReminderLetter } from "~/components/classrooms/finances/BalanceReminderLetter";
 import { FinanceBulkAction } from "~/components/classrooms/finances/FinanceBulkAction";
-import { SelectDueDate } from "~/components/classrooms/finances/SelectDueDay";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
-import { useRouter } from "~/hooks/use-router";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { PermissionAction } from "~/permissions";
 
 export function ClassroomFinancialSituationHeader() {
-  const { createQueryString } = useCreateQueryString();
-  const searchParams = useSearchParams();
   const params = useParams<{ id: string }>();
-  const router = useRouter();
   const t = useTranslations();
 
-  const journalId = searchParams.get("journal") ?? "";
+  const [journalId, setJournalId] = useQueryState("journalId");
+  const [view, setView] = useQueryState(
+    "view",
+    parseAsString.withDefault("grid"),
+  );
+  const [situation, setSituation] = useQueryState(
+    "situation",
+    parseAsString.withDefault("all"),
+  );
 
   const { openModal } = useModal();
+  const canCreateTransaction = useCheckPermission(
+    "transaction",
+    PermissionAction.CREATE,
+  );
 
   const options = [
     {
@@ -58,24 +68,29 @@ export function ClassroomFinancialSituationHeader() {
   ];
 
   return (
-    <div className="grid grid-cols-1 flex-row items-center gap-2 border-b px-4 py-1 md:flex">
-      <HandCoins className="h-4 w-4" />
-      <Label>{t("financial_situation")}</Label>
-      <AccountingJournalSelector
-        className="w-64"
-        defaultValue={searchParams.get("journal") ?? ""}
-        onChange={(val) => {
-          router.push("?" + createQueryString({ journal: val }));
-        }}
-      />
+    <div className="grid grid-cols-1 flex-row items-center gap-6 border-b px-4 py-1 md:flex">
+      <div className="flex items-center gap-2">
+        <HandCoins className="h-4 w-4" />
+        <Label>{t("financial_situation")}</Label>
+      </div>
+      <div className="flex items-center gap-2">
+        <Label className="hidden md:block">{t("Accounting Journals")}</Label>
+        <AccountingJournalSelector
+          className="w-64"
+          defaultValue={journalId ?? undefined}
+          onChange={(val) => {
+            void setJournalId(val);
+          }}
+        />
+      </div>
       <ToggleGroup
         type="single"
         size="sm"
         onValueChange={(val) => {
-          router.push("?" + createQueryString({ type: val }));
+          void setSituation(val);
         }}
         variant={"outline"}
-        defaultValue={"all"}
+        defaultValue={situation}
         className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
       >
         <ToggleGroupItem value="all" aria-label="All">
@@ -92,9 +107,9 @@ export function ClassroomFinancialSituationHeader() {
       <div className="ml-auto flex items-center gap-1">
         <ToggleGroup
           size={"sm"}
-          defaultValue={searchParams.get("view") ?? "grid"}
+          defaultValue={view}
           onValueChange={(val) => {
-            router.push("?" + createQueryString({ view: val }));
+            void setView(val);
           }}
           className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
           variant={"outline"}
@@ -151,18 +166,23 @@ export function ClassroomFinancialSituationHeader() {
                   >
                     <span>{t("theCreditorList")} </span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      openModal({
-                        title: t("due_date"),
-                        view: (
-                          <SelectDueDate format="pdf" classroomId={params.id} />
-                        ),
-                      });
-                    }}
-                  >
-                    <span> {t("reminder_letter")} </span>
-                  </DropdownMenuItem>
+                  {canCreateTransaction && (
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        openModal({
+                          title: t("due_date"),
+                          view: (
+                            <BalanceReminderLetter
+                              format="pdf"
+                              classroomId={params.id}
+                            />
+                          ),
+                        });
+                      }}
+                    >
+                      <span> {t("reminder_letter")} </span>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>

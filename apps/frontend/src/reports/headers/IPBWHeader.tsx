@@ -1,11 +1,11 @@
+import fs from "fs";
+import path from "path";
 import type { Style } from "@react-pdf/stylesheet";
 import { Image, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { getAssetUrl } from "../utils";
-
-const imageUrl = getAssetUrl("images");
+//const imageUrl = getAssetUrl("images");
 
 export function IPBWHeader({
   school,
@@ -14,6 +14,9 @@ export function IPBWHeader({
   style?: Style;
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }) {
+  const logo = fs.readFileSync(
+    path.join(process.cwd(), `public/images/${school.logo}`),
+  );
   return (
     <View
       style={{
@@ -93,7 +96,8 @@ export function IPBWHeader({
       >
         {school.logo && (
           <Image
-            src={`${imageUrl}/${school.logo}`}
+            src={logo}
+            //src={`${imageUrl}/${school.logo}`}
             // src={{
             //   uri: "http://localhost:9310/images/cm1hbntgn00001h578bvyjxln.png",
             //   method: "GET",

@@ -24,6 +24,8 @@ import { cn } from "@repo/ui/lib/utils";
 import { AvatarState } from "~/components/AvatarState";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { PermissionAction } from "~/permissions";
+import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: {
@@ -71,6 +73,11 @@ export default async function Page(props: {
 
   const t = await getTranslations();
 
+  const canCreateGradesheet = await checkPermission(
+    "gradesheet",
+    PermissionAction.CREATE,
+  );
+
   return (
     <div className="mb-10 flex w-full flex-col gap-2 text-sm">
       <ReportCardActionHeader
@@ -82,9 +89,11 @@ export default async function Page(props: {
         classroomSize={classroom.size}
         pdfHref={`/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`}
       />
-      <Suspense fallback={<Skeleton className="h-10 w-full" />}>
-        <CheckSubjectScale termId={termId} classroomId={params.id} />
-      </Suspense>
+      {canCreateGradesheet && (
+        <Suspense fallback={<Skeleton className="h-10 w-full" />}>
+          <CheckSubjectScale termId={termId} classroomId={params.id} />
+        </Suspense>
+      )}
 
       <div>
         <div className="bg-background overflow-hidden">

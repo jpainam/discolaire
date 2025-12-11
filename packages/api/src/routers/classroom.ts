@@ -154,9 +154,10 @@ export const classroomRouter = {
   }),
 
   studentsBalance: protectedProcedure
-    .input(z.object({ id: z.string(), journalId: z.string().min(1) }))
+    .input(z.string().min(1)) // classroomId
     .query(async ({ ctx, input }) => {
-      let students = await ctx.services.classroom.getStudents(input.id);
+      let students = await ctx.services.classroom.getStudents(input);
+
       if (ctx.session.user.profile === "student") {
         students = students.filter(
           (student) => student.userId === ctx.session.user.id,
@@ -171,20 +172,20 @@ export const classroomRouter = {
           studentIds.includes(student.id),
         );
       }
+
       const studentIds = students.map((std) => std.id);
-      const _result = await ctx.db.transaction.findMany({
+      const transactions = await ctx.db.transaction.findMany({
         where: {
           schoolYearId: ctx.schoolYearId,
           status: TransactionStatus.VALIDATED,
           deletedAt: null,
-          journalId: input.journalId,
           student: {
             id: {
               in: studentIds,
             },
             enrollments: {
               some: {
-                classroomId: input.id,
+                classroomId: input,
               },
             },
           },
@@ -202,22 +203,53 @@ export const classroomRouter = {
           },
         },
       });
-      const balances: Record<string, number> = {};
-      _result.forEach((transaction) => {
-        const key = transaction.student.id;
-        balances[key] ??= 0;
-        balances[key] +=
-          transaction.transactionType == TransactionType.DEBIT
+
+      // Aggregate per (studentId, journalId)
+      const balances: Record<string, Record<string, number>> = {};
+
+      transactions.forEach((transaction) => {
+        if (!transaction.journalId) return;
+
+        const studentId = transaction.studentId;
+        const journalId = transaction.journalId;
+
+        balances[studentId] ??= {};
+        balances[studentId][journalId] ??= 0;
+        const delta =
+          transaction.transactionType === TransactionType.DEBIT
             ? -transaction.amount
             : transaction.amount;
+
+        balances[studentId][journalId] += delta;
       });
 
+      const journals = await ctx.db.accountingJournal.findMany({
+        where: {
+          schoolYearId: ctx.schoolYearId,
+          schoolId: ctx.session.user.schoolId,
+        },
+      });
       return students.map((student) => {
-        const balance = balances[student.id] ?? 0;
+        const studentBalances = balances[student.id] ?? {};
+
+        // const journalsBalances = Object.entries(studentBalances).map(
+        //   ([journalId, balance]) => ({
+        //     journalId,
+        //     balance,
+        //   }),
+        // );
+
+        // To include journals with zero balance, you could do:
+        const journalsBalances = journals.map((journal) => ({
+          journalId: journal.id,
+          name: journal.name,
+          balance: studentBalances[journal.id] ?? 0,
+        }));
+
         return {
           ...student,
           studentId: student.id,
-          balance: balance,
+          journals: journalsBalances, // [{ journalId, balance }]
         };
       });
     }),

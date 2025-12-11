@@ -37,7 +37,9 @@ import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { cn } from "~/lib/utils";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -73,6 +75,15 @@ export function SubjectSessionCard({
         toast.success(t("deleted_successfully"), { id: 0 });
       },
     }),
+  );
+
+  const canDeleteProgram = useCheckPermission(
+    "program",
+    PermissionAction.DELETE,
+  );
+  const canUpdateProgram = useCheckPermission(
+    "program",
+    PermissionAction.UPDATE,
   );
 
   const updateSessionPriority = useMutation(
@@ -165,40 +176,46 @@ export function SubjectSessionCard({
                   </DropdownMenuPortal>
                 </DropdownMenuSub>
               </DropdownMenuGroup>
-              <DropdownMenuItem
-                onSelect={() => {
-                  openModal({
-                    // className: "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
-                    title: `Programme ${subject.course.name}`,
-                    description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
-                    view: (
-                      <CreateUpdateSubjectSession
-                        termId={term.id}
-                        program={program}
-                        subjectId={program.subjectId}
-                      />
-                    ),
-                  });
-                }}
-              >
-                {t("edit")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onSelect={async () => {
-                  const isConfirm = await confirm({
-                    title: t("delete"),
-                    description: t("delete_confirmation"),
-                  });
-                  if (isConfirm) {
-                    toast.loading(t("Processing"), { id: 0 });
-                    deleteSubjectSessionMutation.mutate(program.id);
-                  }
-                }}
-                variant="destructive"
-              >
-                {t("delete")}
-              </DropdownMenuItem>
+              {canUpdateProgram && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openModal({
+                      // className: "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                      title: `Programme ${subject.course.name}`,
+                      description: `${subject.teacher?.prefix} ${getFullName(subject.teacher)}`,
+                      view: (
+                        <CreateUpdateSubjectSession
+                          termId={term.id}
+                          program={program}
+                          subjectId={program.subjectId}
+                        />
+                      ),
+                    });
+                  }}
+                >
+                  {t("edit")}
+                </DropdownMenuItem>
+              )}
+              {canDeleteProgram && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={async () => {
+                      const isConfirm = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                      });
+                      if (isConfirm) {
+                        toast.loading(t("Processing"), { id: 0 });
+                        deleteSubjectSessionMutation.mutate(program.id);
+                      }
+                    }}
+                    variant="destructive"
+                  >
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

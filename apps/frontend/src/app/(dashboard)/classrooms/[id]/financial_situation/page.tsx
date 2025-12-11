@@ -1,50 +1,42 @@
-import { sumBy } from "lodash";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { getSession } from "~/auth/server";
-import { ClassroomFinancialSituation } from "~/components/classrooms/finances/ClassroomFinancialSituation";
-import { caller } from "~/trpc/server";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
-export default async function Page(props: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ journal: string }>;
-}) {
+import { ErrorFallback } from "~/components/error-fallback";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { ClassroomFinancialSituation } from "../../../../../components/classrooms/finances/ClassroomFinancialSituation";
+import { ClassroomFinancialSituationHeader } from "../../../../../components/classrooms/finances/ClassroomFinancialSituationHeader";
+
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const searchParams = await props.searchParams;
-  if (!searchParams.journal) {
-    return (
-      <div className="my-8 flex items-center justify-center">
-        Veuillez selectionner un journal
-      </div>
-    );
-  }
-  const { id } = params;
 
-  const fees = (await caller.classroom.fees(id)).filter(
-    (fee) => fee.journalId === searchParams.journal,
-  );
-  let balances = await caller.classroom.studentsBalance({
-    id,
-    journalId: searchParams.journal,
-  });
-  const session = await getSession();
-  if (session?.user.profile == "student") {
-    const student = await caller.student.getFromUserId(session.user.id);
-    balances = balances.filter((balance) => balance.studentId === student.id);
-  } else if (session?.user.profile == "contact") {
-    const contact = await caller.contact.getFromUserId(session.user.id);
-    const students = await caller.contact.students(contact.id);
-    const studentIds = students.map((student) => student.studentId);
-    balances = balances.filter((balance) =>
-      studentIds.includes(balance.studentId),
-    );
-  }
-
-  const amountDue = sumBy(
-    fees.filter((fee) => fee.dueDate <= new Date()),
-    "amount",
-  );
+  batchPrefetch([
+    trpc.classroom.fees.queryOptions(params.id),
+    trpc.accountingJournal.all.queryOptions(),
+    trpc.classroom.studentsBalance.queryOptions(params.id),
+  ]);
 
   return (
-    <ClassroomFinancialSituation amountDue={amountDue} balances={balances} />
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense fallback={<Skeleton className="h-10" />}>
+          <ClassroomFinancialSituationHeader />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-2 gap-4 p-4">
+              {Array.from({ length: 6 }).map((_, idx) => (
+                <Skeleton key={idx} className="h-40" />
+              ))}
+            </div>
+          }
+        >
+          <ClassroomFinancialSituation />
+        </Suspense>
+      </ErrorBoundary>
+    </HydrateClient>
   );
 }
