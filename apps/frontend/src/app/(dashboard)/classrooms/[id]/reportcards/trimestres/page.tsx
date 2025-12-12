@@ -89,7 +89,13 @@ export default async function Page(props: PageProps) {
       <Separator />
       {canCreateGradesheet && (
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense fallback={<Skeleton className="h-10" />}>
+          <Suspense
+            fallback={
+              <div className="px-4">
+                <Skeleton className="h-10 w-full" />
+              </div>
+            }
+          >
             <TrimestreAlert trimestreId={trimestreId} classroomId={params.id} />
           </Suspense>
         </ErrorBoundary>
