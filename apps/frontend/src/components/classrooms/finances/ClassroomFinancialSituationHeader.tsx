@@ -139,33 +139,14 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=all`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&classroomId=${params.id}&situation=${situation}`,
                         "_blank",
                       );
                     }}
                   >
                     <span> {t("financial_situation")} </span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=debit`,
-                        "_blank",
-                      );
-                    }}
-                  >
-                    <span>{t("theDebtorList")} </span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=pdf&type=credit`,
-                        "_blank",
-                      );
-                    }}
-                  >
-                    <span>{t("theCreditorList")} </span>
-                  </DropdownMenuItem>
+
                   {canCreateTransaction && (
                     <DropdownMenuItem
                       onSelect={() => {
@@ -197,32 +178,12 @@ export function ClassroomFinancialSituationHeader() {
                   <DropdownMenuItem
                     onSelect={() => {
                       window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=all`,
+                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&situation=${situation}&classroomId=${params.id}`,
                         "_blank",
                       );
                     }}
                   >
                     <span>{t("financial_situation")} </span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=debit`,
-                        "_blank",
-                      );
-                    }}
-                  >
-                    <span>{t("theDebtorList")} </span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      window.open(
-                        `/api/pdfs/classroom/${params.id}/finances?journalId=${journalId}&format=csv&type=credit`,
-                        "_blank",
-                      );
-                    }}
-                  >
-                    <span>{t("theCreditorList")} </span>
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>

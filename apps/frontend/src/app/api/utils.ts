@@ -24,5 +24,6 @@ export function parseSearchParams(req: NextRequest): Record<string, string> {
   for (const [key, value] of requestUrl.searchParams.entries()) {
     obj[key] = value;
   }
+  //Object.fromEntries(req.nextUrl.searchParams);
   return obj;
 }

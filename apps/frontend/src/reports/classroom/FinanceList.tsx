@@ -1,26 +1,23 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
-import { decode } from "entities";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getFullName } from "~/utils";
 import { getHeader } from "../headers";
+import { formatCurrency } from "../utils";
 
 export function FinanceList({
   school,
   students,
-  amountDue,
+  amountDues,
   classroom,
-  lang = "fr",
-  type = "all",
-  total,
+  journals,
 }: {
   school: RouterOutputs["school"]["getSchool"];
   classroom: RouterOutputs["classroom"]["get"];
   students: RouterOutputs["classroom"]["studentsBalance"];
-  amountDue: number;
-  type: "all" | "debit" | "credit" | "selected";
-  total: number;
-  lang?: "fr" | "en" | "es";
+  amountDues: Map<string, number>;
+  journals: RouterOutputs["accountingJournal"]["all"];
 }) {
   return (
     <Document>
@@ -57,13 +54,11 @@ export function FinanceList({
           >
             <Text>SITUATION FINANCIERE</Text>
             <Text>
-              {type == "credit"
-                ? "Liste des créditeurs"
-                : type == "debit"
-                  ? "Liste des débiteurs"
-                  : type == "selected"
-                    ? "Une sélection"
-                    : ""}
+              {new Date().toLocaleDateString("fr-FR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </Text>
           </View>
           <View
@@ -77,32 +72,6 @@ export function FinanceList({
           >
             <Text>Classe: {classroom.name}</Text>
             <Text>Effectif: {classroom.size}</Text>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text>
-                Total des frais à payer:{" "}
-                {amountDue
-                  .toLocaleString(lang, {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                    style: "currency",
-                    currency: school.currency,
-                  })
-                  .replace(/\s/g, " ")}
-              </Text>
-              <Text>
-                Total dûe:{" "}
-                {total
-                  .toLocaleString("fr-FR", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                    style: "currency",
-                    currency: school.currency,
-                  })
-                  .replace(/\s/g, " ")}
-              </Text>
-            </View>
           </View>
           <View
             style={{
@@ -129,7 +98,7 @@ export function FinanceList({
                 <Text>No</Text>
               </View>
               <View
-                style={{ width: "40%", paddingLeft: 5, paddingVertical: 3 }}
+                style={{ width: "25%", paddingLeft: 5, paddingVertical: 3 }}
               >
                 <Text>Nom et Prénom</Text>
               </View>
@@ -144,42 +113,22 @@ export function FinanceList({
               </View>
               <View
                 style={{
-                  width: "15%",
+                  width: "55%",
                   justifyContent: "center",
                   alignItems: "center",
                 }}
               >
                 <Text>Total versé</Text>
               </View>
-              <View
-                style={{
-                  width: "15%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text>Restant</Text>
-              </View>
-              <View style={{ width: "5%" }}>
-                <Text></Text>
-              </View>
             </View>
             {students.map((student, index) => {
-              const remaining =
-                student.journals.find((j) => (j.journalId = journalId))
-                  ?.balance - amountDue;
-              if (type == "credit" && remaining < 0) {
-                return null;
-              }
-              if (type == "debit" && remaining > 0) {
-                return null;
-              }
               return (
                 <View
                   key={index}
                   style={{
                     flexDirection: "row",
                     borderTop: "1px solid black",
+                    fontSize: 8,
                   }}
                 >
                   <View
@@ -193,12 +142,9 @@ export function FinanceList({
                     <Text> {index + 1}</Text>
                   </View>
                   <View
-                    style={{ width: "40%", paddingLeft: 5, paddingVertical: 3 }}
+                    style={{ width: "25%", paddingLeft: 5, paddingVertical: 3 }}
                   >
-                    <Text>
-                      {decode(student.lastName ?? "")}{" "}
-                      {decode(student.firstName ?? "")}
-                    </Text>
+                    <Text>{getFullName(student)}</Text>
                   </View>
                   <View
                     style={{
@@ -211,36 +157,30 @@ export function FinanceList({
                   </View>
                   <View
                     style={{
-                      width: "15%",
+                      width: "55%",
                       justifyContent: "center",
                       alignItems: "center",
+                      //backgroundColor: "red",
                     }}
                   >
-                    <Text>{student.balance}</Text>
-                  </View>
-                  <View
-                    style={{
-                      width: "15%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text>{-1 * remaining}</Text>
-                  </View>
-                  <View
-                    style={{
-                      width: "5%",
-                      backgroundColor:
-                        remaining < 0
-                          ? "red"
-                          : remaining > 0
-                            ? "green"
-                            : "yellow",
-                    }}
-                  >
-                    <Text>
-                      {remaining < 0 ? "#D#" : remaining > 0 ? "#C#" : "#C#"}
-                    </Text>
+                    {journals.map((journal) => {
+                      const amountDue = amountDues.get(journal.id) ?? 0;
+                      const paid =
+                        student.journals.find((j) => j.journalId === journal.id)
+                          ?.balance ?? 0;
+                      const remaining = amountDue - paid;
+                      return (
+                        <Text
+                          style={{
+                            color: remaining > 0 ? "red" : "",
+                          }}
+                          key={journal.id}
+                        >
+                          {journal.name}: {formatCurrency(paid)} (Dû:{" "}
+                          {formatCurrency(remaining)} )
+                        </Text>
+                      );
+                    })}
                   </View>
                 </View>
               );

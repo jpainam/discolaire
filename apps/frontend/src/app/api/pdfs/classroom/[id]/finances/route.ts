@@ -2,89 +2,109 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
-import { sumBy } from "lodash";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
 import { FinanceList } from "~/reports/classroom/FinanceList";
-import { caller } from "~/trpc/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
 
 const querySchema = z.object({
   format: z.enum(["pdf", "csv"]).optional(),
-  type: z.enum(["all", "debit", "credit", "selected"]).default("all"),
-  ids: z.string().optional(),
-  journalId: z.string().min(1),
+  situation: z.enum(["debit", "credit"]).optional(),
+  studentId: z.string().optional(),
+  journalId: z.string().optional(),
+  classroomId: z.string().min(1),
 });
+
+const sum = (a: number[]) => {
+  return a.reduce((acc, val) => acc + val, 0);
+};
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  //{ params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
-  const { id } = await params;
-  if (!id) {
-    return NextResponse.json({ message: "No ID provided", status: 400 });
-  }
-  const searchParams = Object.fromEntries(request.nextUrl.searchParams);
-  const parsedQuery = querySchema.safeParse(searchParams);
-  if (!parsedQuery.success) {
+  const searchParams = parseSearchParams(request);
+  const parsed = querySchema.safeParse(searchParams);
+  if (!parsed.success) {
+    const errors = parsed.error;
     return NextResponse.json(
-      { error: parsedQuery.error.format() },
+      { error: z.treeifyError(errors) },
       { status: 400 },
     );
   }
   try {
-    const classroom = await caller.classroom.get(id);
+    const { format, studentId, classroomId, journalId, situation } =
+      parsed.data;
+    const queryClient = getQueryClient();
 
-    const school = await caller.school.getSchool();
-
-    const { format, ids, journalId } = parsedQuery.data;
-
-    const fees = (await caller.classroom.fees(id)).filter((fee) => {
-      return fee.journalId === journalId;
-    });
-    let balances = await caller.classroom.studentsBalance({ id, journalId });
-
-    if (session.user.profile == "student") {
-      const student = await caller.student.getFromUserId(session.user.id);
-      balances = balances.filter((balance) => balance.studentId === student.id);
-    } else if (session.user.profile == "contact") {
-      const contact = await caller.contact.getFromUserId(session.user.id);
-      const students = await caller.contact.students(contact.id);
-      const studentIds = students.map((student) => student.studentId);
-      balances = balances.filter((balance) =>
-        studentIds.includes(balance.studentId),
-      );
-    }
-    if (ids) {
-      const selectedIds = ids.split(",");
-      balances = balances.filter((stud) =>
-        selectedIds.includes(stud.studentId),
-      );
-    }
-
-    const amountDue = sumBy(
-      fees.filter((fee) => fee.dueDate <= new Date()),
-      "amount",
+    const classroom = await queryClient.fetchQuery(
+      trpc.classroom.get.queryOptions(classroomId),
     );
 
-    const total = balances.reduce(
-      (acc, stud) => acc + (stud.balance - amountDue),
-      0,
+    const school = await queryClient.fetchQuery(
+      trpc.school.getSchool.queryOptions(),
     );
+
+    const fees = await queryClient.fetchQuery(
+      trpc.classroom.fees.queryOptions(classroom.id),
+    );
+    const amountDues = new Map<string, number>();
+    const journals = await queryClient.fetchQuery(
+      trpc.accountingJournal.all.queryOptions(),
+    );
+    if (journalId) {
+      const journal = journals.find((j) => j.id === journalId);
+      if (journal) {
+        journals.splice(0, journals.length, journal);
+      }
+    }
+
+    for (const journal of journals) {
+      const amountDue = sum(
+        fees
+          .filter(
+            (fee) => fee.dueDate <= new Date() && fee.journalId === journal.id,
+          )
+          .map((fee) => fee.amount),
+      );
+      amountDues.set(journal.id, amountDue);
+    }
+    let balances = await queryClient.fetchQuery(
+      trpc.classroom.studentsBalance.queryOptions(classroomId),
+    );
+    if (studentId) {
+      balances = balances.filter((b) => b.id === studentId);
+    }
+    if (situation) {
+      if (situation === "debit") {
+        balances = balances.filter((balance) => {
+          const totalBalance = sum(balance.journals.map((j) => j.balance));
+          return totalBalance < 0;
+        });
+      } else {
+        balances = balances.filter((balance) => {
+          const totalBalance = sum(balance.journals.map((j) => j.balance));
+          return totalBalance > 0;
+        });
+      }
+    }
 
     if (format === "csv") {
       const { blob, headers } = await toExcel({
         classroom,
-        amountDue,
+        amountDues,
+        journals,
         students: balances,
       });
       return new Response(blob, { headers });
@@ -92,10 +112,9 @@ export async function GET(
       const stream = await renderToStream(
         FinanceList({
           classroom: classroom,
+          journals: journals,
           students: balances,
-          total: total,
-          type: parsedQuery.data.type,
-          amountDue: amountDue,
+          amountDues: amountDues,
           school: school,
         }),
       );
@@ -118,20 +137,33 @@ export async function GET(
 async function toExcel({
   classroom,
   students,
-  amountDue,
+  amountDues,
+  journals,
 }: {
   classroom: RouterOutputs["classroom"]["get"];
-  amountDue: number;
+  amountDues: Map<string, number>;
+  journals: RouterOutputs["accountingJournal"]["all"];
   students: RouterOutputs["classroom"]["studentsBalance"];
 }) {
   const t = await getTranslations();
   const rows = students.map((stud) => {
+    const byJournal = Object.fromEntries(
+      journals.flatMap((journal) => {
+        const accountJournal = stud.journals.find(
+          (j) => j.journalId === journal.id,
+        );
+        const amountDue = amountDues.get(journal.id) ?? 0;
+        const paid = accountJournal?.balance ?? 0;
+        //const status = paid - amountDue < 0 ? "Débiteur" : "Créditeur";
+        const remaining = amountDue - paid;
+        return [[`Total due/versé - ${journal.name}`, `${remaining}/${paid}`]];
+      }),
+    );
+
     return {
       "Nom et Prénom": getFullName(stud),
       Redoublant: stud.isRepeating ? "Oui" : "Non",
-      "Total versé": stud.balance,
-      Restant: stud.balance - amountDue,
-      Status: stud.balance - amountDue < 0 ? "Débiteur" : "Créditeur",
+      ...byJournal,
     };
   });
   const worksheet = XLSX.utils.json_to_sheet(rows);
