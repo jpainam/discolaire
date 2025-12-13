@@ -7,9 +7,9 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { AvatarState } from "~/components/AvatarState";
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {

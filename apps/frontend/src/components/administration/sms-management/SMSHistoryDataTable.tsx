@@ -2,11 +2,11 @@
 
 import { useTranslations } from "next-intl";
 
-import type { DataTableFilterField } from "@repo/ui/datatable/data-table-toolbar";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
+import type { DataTableFilterField } from "~/components/datatable/data-table-toolbar";
 import type { SMSHistory } from "~/types/sms";
+import { DataTableToolbar } from "~/components/datatable/data-table-toolbar";
 import { SMSHistoryDataTableActions } from "./SMSHistoryActions";
 import { useSmsHistoryColumns } from "./SMSHistoryColumns";
 import { SMSHistoryFloatingBar } from "./SMSHistoryFloatingBar";

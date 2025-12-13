@@ -21,8 +21,7 @@ import {
 } from "@tanstack/react-table";
 import { Search } from "lucide-react";
 
-import { DataTablePagination } from "@repo/ui/datatable/data-table-pagination";
-
+import { DataTablePagination } from "~/components/datatable/data-table-pagination";
 import {
   Table,
   TableBody,

@@ -5,8 +5,7 @@ import * as React from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useQueryState } from "nuqs";
 
-import { DataTableFacetedFilter } from "@repo/ui/datatable/data-table-faceted-filter";
-
+import { DataTableFacetedFilter } from "~/components/datatable/data-table-faceted-filter";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";

@@ -8,8 +8,8 @@ import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";

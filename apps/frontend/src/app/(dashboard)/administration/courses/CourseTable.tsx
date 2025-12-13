@@ -5,8 +5,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-
+import { DataTableSkeleton } from "~/components/datatable/data-table-skeleton";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";

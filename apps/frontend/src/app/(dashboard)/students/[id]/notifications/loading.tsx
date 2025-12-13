@@ -1,4 +1,4 @@
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+import { DataTableSkeleton } from "~/components/datatable/data-table-skeleton";
 
 export default function Loading() {
   return (

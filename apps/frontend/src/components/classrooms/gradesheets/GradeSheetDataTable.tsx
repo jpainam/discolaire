@@ -12,8 +12,8 @@ import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";

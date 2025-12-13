@@ -4,9 +4,8 @@ import Link from "next/link";
 import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
 import type { SMSHistory } from "~/types/sms";
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {

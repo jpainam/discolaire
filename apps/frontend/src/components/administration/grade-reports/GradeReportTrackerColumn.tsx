@@ -7,9 +7,9 @@ import { useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { Badge } from "~/components/base-badge";
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Progress } from "~/components/ui/progress";

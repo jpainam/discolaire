@@ -5,8 +5,8 @@ import { useMemo } from "react";
 import { useLocale } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
 import { Checkbox } from "~/components/ui/checkbox";
 import { CURRENCY } from "~/lib/constants";

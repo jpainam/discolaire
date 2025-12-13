@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import { DataTable, useDataTable } from "@repo/ui/datatable";
-import { DataTableToolbar } from "@repo/ui/datatable/data-table-toolbar";
 
+import { DataTableToolbar } from "~/components/datatable/data-table-toolbar";
 import { useTRPC } from "~/trpc/react";
 import { NoticeboardDataTableActions } from "./NoticeboardDataTableActions";
 import { getColumns } from "./NoticeboardDataTableColumns";

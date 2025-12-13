@@ -13,9 +13,8 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-
 import { AvatarState } from "~/components/AvatarState";
+import { DataTableSkeleton } from "~/components/datatable/data-table-skeleton";
 import { StudentContactRelationship } from "~/components/students/contacts/StudentContactRelationship";
 import { StudentSiblingTable } from "~/components/students/contacts/StudentSiblingTable";
 import { Button } from "~/components/ui/button";

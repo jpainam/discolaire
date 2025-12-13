@@ -8,9 +8,9 @@ import { Eye, MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { Badge } from "~/components/base-badge";
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Pill, PillAvatar } from "~/components/pill";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";

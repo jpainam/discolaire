@@ -4,8 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LibraryBigIcon, MoreVerticalIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-
+import { DataTableSkeleton } from "~/components/datatable/data-table-skeleton";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";

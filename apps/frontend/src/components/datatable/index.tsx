@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
 import type {
@@ -21,8 +24,12 @@ import {
 } from "@tanstack/react-table";
 import { Search } from "lucide-react";
 
-import { DataTablePagination } from "@repo/ui/datatable/data-table-pagination";
-
+import { DataTablePagination } from "~/components/datatable/data-table-pagination";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import {
   Table,
   TableBody,
@@ -32,11 +39,6 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { cn } from "~/lib/utils";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "../components/input-group";
 
 interface UseDataTableProps<TData, TValue> {
   data: TData[];

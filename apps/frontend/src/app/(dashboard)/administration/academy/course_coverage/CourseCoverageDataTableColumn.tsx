@@ -6,10 +6,10 @@ import { Eye } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { AvatarState } from "~/components/AvatarState";
 import { Badge } from "~/components/base-badge";
+import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
