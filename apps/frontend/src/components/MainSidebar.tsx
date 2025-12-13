@@ -1,22 +1,9 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
 import type React from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  BrainIcon,
-  BrickWall,
-  CogIcon,
-  ContactIcon,
-  FolderOpen,
-  HelpCircleIcon,
-  HouseIcon,
-  InfoIcon,
-  LibraryBigIcon,
-  Users,
-  WrenchIcon,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { authClient } from "~/auth/client";
@@ -37,6 +24,18 @@ import {
 import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import {
+  AdministrationIcon,
+  AiIcon,
+  ContactIcon,
+  DashboardIcon,
+  GroupsIcon,
+  HomeIcon,
+  InformationIcon,
+  LibraryIcon,
+  SettingsIcon,
+  UsersIcon,
+} from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { Shortcut } from "./shortcuts/Shortcut";
 
@@ -47,20 +46,20 @@ export function MainSidebar({
     {
       name: "dashboard",
       url: `/`,
-      icon: BrickWall,
+      icon: <DashboardIcon />,
     },
   ];
   const data = [
     {
       name: "students",
       url: `/students`,
-      icon: Users,
+      icon: <UsersIcon />,
     },
 
     {
       name: "classrooms",
       url: `/classrooms`,
-      icon: HouseIcon,
+      icon: <HomeIcon />,
     },
   ];
   const tools = [
@@ -75,13 +74,13 @@ export function MainSidebar({
     data.push({
       name: "staffs",
       url: `/staffs`,
-      icon: FolderOpen,
+      icon: <GroupsIcon />,
     });
   }
   data.push({
     name: "parents",
     url: `/contacts`,
-    icon: ContactIcon,
+    icon: <ContactIcon />,
   });
   const canReadLibrary = useCheckPermission(
     "menu:library",
@@ -91,7 +90,7 @@ export function MainSidebar({
     tools.push({
       name: "library",
       url: `/library`,
-      icon: LibraryBigIcon,
+      icon: <LibraryIcon />,
     });
   }
   const canReadAdministration = useCheckPermission(
@@ -102,26 +101,26 @@ export function MainSidebar({
     data.push({
       name: "administration",
       url: `/administration`,
-      icon: WrenchIcon,
+      icon: <AdministrationIcon />,
     });
   }
 
   tools.push({
     name: "ai",
     url: `https://chat.discolaire.com`,
-    icon: BrainIcon,
+    icon: <AiIcon />,
   });
 
   const others = [
     {
       name: "settings",
       url: `/users/${session?.user.id}/settings`,
-      icon: CogIcon,
+      icon: <SettingsIcon />,
     },
     {
       name: "help_center",
       url: `https://docs.discolaire.com`,
-      icon: InfoIcon,
+      icon: <InformationIcon />,
     },
   ];
 
@@ -131,7 +130,7 @@ export function MainSidebar({
 
   const { openModal } = useModal();
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar {...props}>
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
@@ -157,7 +156,7 @@ export function MainSidebar({
                       });
                     }}
                   >
-                    <HelpCircleIcon />
+                    <InformationIcon />
                     <span>Feedback</span>
                   </button>
                 </SidebarMenuButton>
@@ -183,7 +182,7 @@ function MenuSideGroup({
   items,
   label,
 }: {
-  items: { name: string; url: string; icon: LucideIcon }[];
+  items: { name: string; url: string; icon: ReactNode }[];
   label: string;
 }) {
   const t = useTranslations();
@@ -195,13 +194,12 @@ function MenuSideGroup({
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
-              className="h-7 text-sm"
               asChild
               tooltip={t(item.name)}
               isActive={pathname === item.url}
             >
               <Link href={item.url}>
-                <item.icon />
+                {item.icon}
                 <span>{t(item.name)}</span>
               </Link>
             </SidebarMenuButton>

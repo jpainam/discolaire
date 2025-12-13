@@ -42,7 +42,6 @@ export function ClassroomFeeHeader() {
                 view: <CreateEditFee classroomId={params.id} />,
               });
             }}
-            size={"sm"}
           >
             <Plus />
             {t("add")}
@@ -50,11 +49,11 @@ export function ClassroomFeeHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-42">
             <DropdownMenuItem
               onSelect={() => {
                 window.open(

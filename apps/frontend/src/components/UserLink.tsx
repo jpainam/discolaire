@@ -26,7 +26,7 @@ export function UserLink(props: {
 
   return (
     <div className="flex items-center gap-2">
-      <Avatar>
+      <Avatar size="sm">
         <AvatarImage
           src={props.avatar ?? avatar.toDataUri()}
           alt={props.name}

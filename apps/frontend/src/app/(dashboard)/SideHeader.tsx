@@ -21,7 +21,7 @@ export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        <Link href={`/`} className="text-base font-medium hover:underline">
+        <Link href={`/`} className="hover:underline">
           {t("home")}
         </Link>
         <div className="ml-auto flex items-center gap-2">

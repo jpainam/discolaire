@@ -146,7 +146,7 @@ export function StudentSidebar({
   const menus = { informations, academy, school_life, others };
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar {...props}>
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
@@ -189,7 +189,6 @@ function MenuSideGroup({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
               asChild
-              className="h-7 text-sm"
               tooltip={t(item.name)}
               isActive={pathname === item.url}
             >

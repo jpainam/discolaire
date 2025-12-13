@@ -59,6 +59,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { Badge as BaseBadge } from "../base-badge";
 import { EmptyComponent } from "../EmptyComponent";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { UserLink } from "../UserLink";
 
 export function QuickStudentList() {
@@ -102,12 +103,11 @@ export function QuickStudentList() {
   const router = useRouter();
 
   return (
-    <div className="border-border bg-card rounded-xl border">
-      <div className="border-border flex flex-col items-stretch gap-3 border-b p-4 sm:flex-row sm:items-center sm:gap-4">
-        <div className="flex flex-1 items-center gap-2 sm:gap-4">
-          <InputGroup className="h-8">
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 sm:gap-4">
+          <InputGroup>
             <InputGroupInput
-              className="w-full pl-8"
               onChange={(e) => debounced(e.target.value)}
               placeholder={t("search")}
             />
@@ -118,10 +118,8 @@ export function QuickStudentList() {
               {students?.length} results
             </InputGroupAddon>
           </InputGroup>
-        </div>
-        <div>
           <Select onValueChange={(val) => setSchoolYear(val)}>
-            <SelectTrigger size="sm" className="w-[180px]">
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={t("schoolYear")} />
             </SelectTrigger>
             <SelectContent>
@@ -135,9 +133,9 @@ export function QuickStudentList() {
               </SelectGroup>
             </SelectContent>
           </Select>
-        </div>
-      </div>
-      <div className="overflow-hidden">
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -262,8 +260,8 @@ export function QuickStudentList() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="size-8">
-                          <MoreHorizontal className="h-4 w-4" />
+                        <Button variant="ghost" size="icon-sm">
+                          <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -351,7 +349,7 @@ export function QuickStudentList() {
             )}
           </TableBody>
         </Table>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

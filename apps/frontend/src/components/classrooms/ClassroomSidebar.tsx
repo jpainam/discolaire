@@ -1,23 +1,16 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
   BookOpenText,
   BookText,
-  CalendarDays,
   Captions,
   Contact,
-  FolderOpen,
   HandCoins,
-  NotebookPen,
-  Printer,
   Proportions,
   Receipt,
-  SendIcon,
-  TableProperties,
-  Users,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -31,6 +24,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import {
+  CalendarDays,
+  ChatIcon,
+  EnrollmentIcon,
+  FileIcon,
+  FilesIcon,
+  FolderIcon,
+  PrinterIcon,
+} from "~/icons";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function ClassroomSidebar({
@@ -42,64 +44,64 @@ export function ClassroomSidebar({
       {
         name: "details",
         url: `/classrooms/${params.id}`,
-        icon: TableProperties,
+        icon: <FilesIcon />,
       },
       {
         name: "School fees",
         url: `/classrooms/${params.id}/fees`,
-        icon: Receipt,
+        icon: <Receipt />,
       },
       {
         name: "financial_situation",
         url: `/classrooms/${params.id}/financial_situation`,
-        icon: HandCoins,
+        icon: <HandCoins />,
       },
     ],
     school_life: [
       {
         name: "attendances",
         url: `/classrooms/${params.id}/attendances`,
-        icon: Contact,
+        icon: <Contact />,
       },
       {
         name: "timetables",
         url: `/classrooms/${params.id}/timetables`,
-        icon: CalendarDays,
+        icon: <CalendarDays />,
       },
     ],
     academy: [
       {
         name: "enrollments",
         url: `/classrooms/${params.id}/enrollments`,
-        icon: Users,
+        icon: <EnrollmentIcon />,
       },
       {
         name: "assignments",
         url: `/classrooms/${params.id}/assignments`,
-        icon: NotebookPen,
+        icon: <FileIcon />,
       },
       {
         name: "gradesheets",
         url: `/classrooms/${params.id}/gradesheets`,
-        icon: BookOpenText,
+        icon: <BookOpenText />,
       },
 
       {
         name: "subjects",
         url: `/classrooms/${params.id}/subjects`,
-        icon: Captions,
+        icon: <Captions />,
       },
 
       {
         name: "reportcards",
         url: `/classrooms/${params.id}/reportcards`,
-        icon: Proportions,
+        icon: <Proportions />,
       },
 
       {
         name: "teaching_session",
         url: `/classrooms/${params.id}/teaching_session`,
-        icon: BookText,
+        icon: <BookText />,
       },
     ],
   };
@@ -108,22 +110,22 @@ export function ClassroomSidebar({
     {
       name: "documents",
       url: `/classrooms/${params.id}/documents`,
-      icon: FolderOpen,
+      icon: <FolderIcon />,
     },
     {
       name: "communications",
       url: `/classrooms/${params.id}/communications`,
-      icon: SendIcon,
+      icon: <ChatIcon />,
     },
     {
       name: "print",
       url: `/classrooms/${params.id}/print`,
-      icon: Printer,
+      icon: <PrinterIcon />,
     },
   ];
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar {...props}>
       <SidebarHeader>
         <SidebarLogo />
       </SidebarHeader>
@@ -153,7 +155,7 @@ function MenuSideGroup({
   items,
   label,
 }: {
-  items: { name: string; url: string; icon: LucideIcon }[];
+  items: { name: string; url: string; icon: ReactNode }[];
   label: string;
 }) {
   const t = useTranslations();
@@ -166,17 +168,11 @@ function MenuSideGroup({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
               asChild
-              className="h-7 text-sm"
               tooltip={t(item.name)}
-              //className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:hover:bg-primary/90 data-[active=true]:hover:text-primary-foreground data-[active=true]:duration-200 data-[active=true]:ease-linear"
               isActive={pathname === item.url}
             >
               <Link href={item.url}>
-                <item.icon
-                //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                //size={22}
-                //aria-hidden="true"
-                />
+                {item.icon}
                 <span>{t(item.name)}</span>
               </Link>
             </SidebarMenuButton>

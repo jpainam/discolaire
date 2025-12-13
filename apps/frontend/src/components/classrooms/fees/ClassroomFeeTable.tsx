@@ -10,7 +10,7 @@ import {
 import { subDays } from "date-fns";
 import { addDays } from "date-fns/addDays";
 import { groupBy, sumBy } from "lodash";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -34,6 +34,7 @@ import {
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon, EditIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -163,7 +164,7 @@ export function ClassroomFeeTable() {
                                     });
                                   }}
                                 >
-                                  <Pencil />
+                                  <EditIcon />
                                   {t("edit")}
                                 </DropdownMenuItem>
                               )}
@@ -184,7 +185,7 @@ export function ClassroomFeeTable() {
                                       }
                                     }}
                                   >
-                                    <Trash2 />
+                                    <DeleteIcon />
                                     {t("delete")}
                                   </DropdownMenuItem>
                                 </>

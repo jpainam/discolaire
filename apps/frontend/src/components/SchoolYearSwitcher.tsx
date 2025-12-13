@@ -40,8 +40,7 @@ export function SchoolYearSwitcher({ defaultValue }: SchoolYearSwitcherProps) {
     >
       <SelectTrigger
         id="year-selector"
-        size="sm"
-        className="h-7 justify-start *:data-[slot=select-value]:w-fit"
+        className="justify-start *:data-[slot=select-value]:w-fit"
       >
         <span className="text-muted-foreground hidden sm:block">Année:</span>
         <span className="text-muted-foreground block sm:hidden">Année</span>
