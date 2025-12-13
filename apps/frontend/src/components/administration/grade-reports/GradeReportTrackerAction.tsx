@@ -5,16 +5,16 @@ import { useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
+
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/select";
 
 type ProcedureOutput = NonNullable<
   RouterOutputs["gradeSheet"]["gradesReportTracker"]

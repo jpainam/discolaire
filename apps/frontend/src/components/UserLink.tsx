@@ -2,12 +2,7 @@ import Link from "next/link";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
 
 export function UserLink(props: {

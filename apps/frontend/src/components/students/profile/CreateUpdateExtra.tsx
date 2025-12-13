@@ -5,12 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ActivitySquare } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import type { Option } from "~/components/multiselect";
+import MultipleSelector from "~/components/multiselect";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   FormControl,
   FormField,
@@ -18,12 +15,9 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/components/form";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import type { Option } from "~/components/multiselect";
-import MultipleSelector from "~/components/multiselect";
+} from "~/components/ui/form";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Textarea } from "~/components/ui/textarea";
 import { useTRPC } from "~/trpc/react";
 
 export function CreateUpdateExtra() {

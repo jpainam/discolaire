@@ -3,9 +3,8 @@
 import { FileSliders, Printer } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

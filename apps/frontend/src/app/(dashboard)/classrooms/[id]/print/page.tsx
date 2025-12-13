@@ -6,27 +6,21 @@ import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Input } from "@repo/ui/components/input";
+import { PrintButtonClassroomStudentList } from "~/components/classrooms/print/PrintButtonClassroomStudentList";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { StudentPrintButton } from "~/components/students/print/StudentPrintButton";
+import { Badge } from "~/components/ui/badge";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
-import { PrintButtonClassroomStudentList } from "~/components/classrooms/print/PrintButtonClassroomStudentList";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { StudentPrintButton } from "~/components/students/print/StudentPrintButton";
+} from "~/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");

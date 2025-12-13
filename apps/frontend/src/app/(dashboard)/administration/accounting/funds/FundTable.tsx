@@ -6,18 +6,22 @@ import { useQuery } from "@tanstack/react-query";
 import { MoreVertical, PanelLeftOpen, Search } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/base-badge";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/input-group";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -25,12 +29,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { Badge } from "~/components/base-badge";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/table";
 import { useSheet } from "~/hooks/use-sheet";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";

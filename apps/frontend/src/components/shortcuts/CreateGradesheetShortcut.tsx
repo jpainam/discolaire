@@ -4,15 +4,14 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
+} from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { ClassroomSelector } from "../shared/selects/ClassroomSelector";

@@ -6,7 +6,8 @@ import { PrinterIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { Button } from "~/components/ui/button";
 
 export function EnrolledStudentDataTableAction({
   table,

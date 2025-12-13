@@ -1,14 +1,13 @@
 import { useTranslations } from "next-intl";
 
-import { Label } from "@repo/ui/components/label";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
+} from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 
 interface SelectTransactionTypeProps {

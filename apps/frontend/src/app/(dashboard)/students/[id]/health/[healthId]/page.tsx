@@ -8,16 +8,16 @@ import {
   Share2,
 } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
+} from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 
 export default function Page() {
   return (

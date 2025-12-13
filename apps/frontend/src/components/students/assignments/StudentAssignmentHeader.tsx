@@ -4,18 +4,17 @@ import { useSearchParams } from "next/navigation";
 import { Mail, MoreVertical, NotebookPen } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 

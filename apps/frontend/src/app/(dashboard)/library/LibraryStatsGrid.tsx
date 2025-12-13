@@ -1,7 +1,7 @@
 import { RiArrowRightUpLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 interface StatsCardProps {
   title: string;

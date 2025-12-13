@@ -7,7 +7,8 @@ import { Eye, MoreHorizontal, PencilIcon, Trash } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/base-badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -15,16 +16,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import { Badge } from "~/components/base-badge";
+} from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";

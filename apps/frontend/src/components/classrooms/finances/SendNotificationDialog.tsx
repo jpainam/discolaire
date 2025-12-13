@@ -2,19 +2,18 @@ import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Textarea } from "@repo/ui/components/textarea";
-
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";

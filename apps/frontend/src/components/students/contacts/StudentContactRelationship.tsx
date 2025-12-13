@@ -9,19 +9,19 @@ import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { authClient } from "~/auth/client";
+import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Form } from "@repo/ui/components/form";
-import { Separator } from "@repo/ui/components/separator";
-
-import { authClient } from "~/auth/client";
-import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+} from "~/components/ui/card";
+import { Form } from "~/components/ui/form";
+import { Separator } from "~/components/ui/separator";
 import { useTRPC } from "~/trpc/react";
 
 const editRelationshipSchema = z.object({

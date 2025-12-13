@@ -6,19 +6,19 @@
 //     Avatar,
 //     AvatarFallback,
 //     AvatarImage,
-// } from "@repo/ui/components/avatar";
+// } from "~/components/ui/avatar";
 // import {
 //     Card,
 //     CardContent,
 //     CardHeader,
 //     CardTitle,
-// } from "@repo/ui/components/card";
+// } from "~/components/ui/card";
 // import {
 //     Tooltip,
 //     TooltipContent,
 //     TooltipProvider,
 //     TooltipTrigger,
-// } from "@repo/ui/components/tooltip";
+// } from "~/components/ui/tooltip";
 
 // import { MultiSelectCombobox } from "./multi-selector";
 

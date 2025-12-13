@@ -5,9 +5,9 @@
 import { useParams } from "next/navigation";
 import { Download } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 
-// import { Button } from "@repo/ui/components/button";
+// import { Button } from "~/components/ui/button";
 // import {
 //   Dialog,
 //   DialogClose,
@@ -17,7 +17,7 @@ import { Button } from "@repo/ui/components/button";
 //   DialogHeader,
 //   DialogTitle,
 //   DialogTrigger,
-// } from "@repo/ui/components/dialog";
+// } from "~/components/ui/dialog";
 
 // export function StudentCertificate({
 //   label,

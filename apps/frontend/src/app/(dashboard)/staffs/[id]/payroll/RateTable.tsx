@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
+} from "~/components/ui/table";
 
 export function RateTable() {
   return (

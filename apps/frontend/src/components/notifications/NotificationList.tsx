@@ -6,22 +6,17 @@
 import { useState } from "react";
 import { Bell, Check, Clock } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Separator } from "@repo/ui/components/separator";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/popover";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { cn } from "~/lib/utils";
 
 // Sample notification data
 const notifications = {

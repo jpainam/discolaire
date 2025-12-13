@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/components/button";
+import { ConsumableSelector } from "~/components/administration/inventory/ConsumableSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,11 +16,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { ConsumableSelector } from "~/components/administration/inventory/ConsumableSelector";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 

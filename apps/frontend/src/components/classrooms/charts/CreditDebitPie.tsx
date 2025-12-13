@@ -1,13 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
-import { Card, CardContent } from "@repo/ui/components/card";
+import type { ChartConfig } from "~/components/ui/chart";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
+} from "~/components/ui/chart";
 
 const chartData = [
   { type: "credit", count: 275, fill: "var(--color-credit)" },

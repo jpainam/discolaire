@@ -2,8 +2,7 @@
 
 import { Plus } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
-
+import { Button } from "~/components/ui/button";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 

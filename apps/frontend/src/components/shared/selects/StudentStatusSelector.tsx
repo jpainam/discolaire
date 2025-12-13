@@ -3,14 +3,14 @@
 import { useTranslations } from "next-intl";
 
 import { StudentStatus } from "@repo/db/enums";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
+} from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 
 interface StudentStatusSelectorProps {

@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { Card, CardContent } from "@repo/ui/components/card";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,8 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { useTRPC } from "~/trpc/react";
 
 export const description = "A multiple bar chart";

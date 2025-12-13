@@ -2,11 +2,10 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { getTranslations } from "next-intl/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReportCardHeader } from "~/components/students/reportcards/ReportCardHeader";
+import { Skeleton } from "~/components/ui/skeleton";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Layout(props: {

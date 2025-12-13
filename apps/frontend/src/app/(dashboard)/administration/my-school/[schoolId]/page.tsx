@@ -16,6 +16,10 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { getSession } from "~/auth/server";
+import { ErrorFallback } from "~/components/error-fallback";
+import FlatBadge from "~/components/FlatBadge";
+import { NoPermission } from "~/components/no-permission";
 import {
   Card,
   CardAction,
@@ -23,13 +27,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import { getSession } from "~/auth/server";
-import { ErrorFallback } from "~/components/error-fallback";
-import FlatBadge from "~/components/FlatBadge";
-import { NoPermission } from "~/components/no-permission";
+} from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 import { env } from "~/env";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";

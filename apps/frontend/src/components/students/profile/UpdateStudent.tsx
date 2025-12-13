@@ -10,9 +10,9 @@ import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Form } from "@repo/ui/components/form";
 
+import { Button } from "~/components/ui/button";
+import { Form } from "~/components/ui/form";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";

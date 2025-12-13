@@ -12,7 +12,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -20,19 +20,18 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { Separator } from "@repo/ui/components/separator";
+} from "~/components/ui/popover";
+import { Separator } from "~/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
-
+} from "~/components/ui/tooltip";
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useThemeConfig } from "~/providers/ThemeProvider";
 import { defaultThemes } from "~/themes";

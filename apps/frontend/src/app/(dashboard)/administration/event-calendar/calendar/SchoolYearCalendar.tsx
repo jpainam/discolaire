@@ -1,8 +1,7 @@
 "use client";
 
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { cn } from "@repo/ui/lib/utils";
-
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { cn } from "~/lib/utils";
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 import { SchoolYearCalendarGrid } from "./SchoolYearCalendarGrid";
 import { SchoolYearCalendarHeader } from "./SchoolYearCalendarHeader";

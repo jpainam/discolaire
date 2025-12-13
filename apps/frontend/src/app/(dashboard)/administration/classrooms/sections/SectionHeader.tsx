@@ -3,9 +3,8 @@
 import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { CreateEditSection } from "./CreateEditSection";
 

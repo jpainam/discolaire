@@ -13,14 +13,14 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
 import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
 
 import { AvatarState } from "~/components/AvatarState";
 import { StudentContactRelationship } from "~/components/students/contacts/StudentContactRelationship";
 import { StudentSiblingTable } from "~/components/students/contacts/StudentSiblingTable";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import { routes } from "~/configs/routes";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";

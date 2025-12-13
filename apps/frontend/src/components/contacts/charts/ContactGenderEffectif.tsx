@@ -4,7 +4,7 @@ import * as React from "react";
 import { TrendingUp } from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardContent,
@@ -12,12 +12,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
+} from "~/components/ui/chart";
 
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },

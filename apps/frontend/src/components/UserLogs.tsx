@@ -4,21 +4,21 @@ import { useState } from "react";
 import { ChevronDown, FileEdit, Filter, Plus, Trash, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
+} from "~/components/ui/select";
 
 // Sample activity data
 const activityData = [

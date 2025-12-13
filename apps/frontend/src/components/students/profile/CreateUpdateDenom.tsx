@@ -4,12 +4,10 @@
 import { useTranslations } from "next-intl";
 import { LiaDumbbellSolid } from "react-icons/lia";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
+import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   FormControl,
   FormField,
@@ -17,18 +15,14 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/components/form";
+} from "~/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
-import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
+} from "~/components/ui/select";
 
 export function CreateUpdateDenom() {
   const t = useTranslations();

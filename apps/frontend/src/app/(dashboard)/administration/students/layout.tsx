@@ -1,8 +1,7 @@
 import type { PropsWithChildren } from "react";
 import { Suspense } from "react";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+import { Skeleton } from "~/components/ui/skeleton";
 import { StudentStatAdmin } from "./StudentStatAdmin";
 
 export default function Layout(props: PropsWithChildren) {

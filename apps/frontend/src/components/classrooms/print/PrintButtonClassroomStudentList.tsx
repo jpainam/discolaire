@@ -1,6 +1,6 @@
 import { Download } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 
 export function PrintButtonClassroomStudentList({
   classroomId,

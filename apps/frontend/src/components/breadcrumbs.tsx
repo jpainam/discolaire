@@ -12,8 +12,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@repo/ui/components/breadcrumb";
-
+} from "~/components/ui/breadcrumb";
 import { breadcrumbAtom } from "~/lib/atoms";
 
 export const Breadcrumbs = () => {

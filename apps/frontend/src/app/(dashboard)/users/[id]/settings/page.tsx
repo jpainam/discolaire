@@ -3,25 +3,24 @@
 import { useEffect, useState } from "react";
 import { Globe, Lock } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Label } from "@repo/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+} from "~/components/ui/card";
+import { Label } from "~/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Switch } from "@repo/ui/components/switch";
-
+} from "~/components/ui/select";
+import { Switch } from "~/components/ui/switch";
 import { UserAppearance } from "./UserAppearance";
 
 export default function Page() {

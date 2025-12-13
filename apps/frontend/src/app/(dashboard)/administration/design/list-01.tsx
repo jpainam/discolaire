@@ -9,7 +9,7 @@ import {
   Wallet,
 } from "lucide-react";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 interface AccountItem {
   id: string;

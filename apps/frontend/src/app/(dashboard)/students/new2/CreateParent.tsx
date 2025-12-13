@@ -9,8 +9,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -18,19 +19,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

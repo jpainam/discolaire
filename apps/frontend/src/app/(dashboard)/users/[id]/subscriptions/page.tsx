@@ -7,16 +7,10 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
-import { Badge } from "@repo/ui/components/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Progress } from "@repo/ui/components/progress";
-
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Badge } from "~/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Progress } from "~/components/ui/progress";
 import { caller } from "~/trpc/server";
 import { SubscriptionPlans } from "./SubscriptionPlans";
 

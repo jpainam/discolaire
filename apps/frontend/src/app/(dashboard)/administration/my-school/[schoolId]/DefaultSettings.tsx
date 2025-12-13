@@ -10,7 +10,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { CountryPicker } from "~/components/shared/CountryPicker";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,19 +20,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Switch } from "@repo/ui/components/switch";
-
-import { CountryPicker } from "~/components/shared/CountryPicker";
+} from "~/components/ui/select";
+import { Switch } from "~/components/ui/switch";
 import { timezones } from "~/data/timezones";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";

@@ -11,9 +11,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/table";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getNameParts } from "~/utils";
 

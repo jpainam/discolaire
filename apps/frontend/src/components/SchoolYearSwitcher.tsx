@@ -4,6 +4,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
+import { setSchoolYearCookie } from "~/actions/signin";
 //import { useConfig } from "@repo/hooks/use-config";
 //import { Style, styles } from "~/registry/styles";
 
@@ -13,9 +14,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { setSchoolYearCookie } from "~/actions/signin";
+} from "~/components/ui/select";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 

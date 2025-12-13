@@ -14,12 +14,11 @@ import {
   X,
 } from "lucide-react";
 
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { cn } from "@repo/ui/lib/utils";
-
 import { CardStats } from "~/components/administration/CardStats";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import { BusinessMetrics } from "./business-metrics";
 import { ManageData } from "./conarapp";
 import List01 from "./list-01";

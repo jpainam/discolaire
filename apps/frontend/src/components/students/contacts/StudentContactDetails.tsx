@@ -19,14 +19,14 @@ import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
-import { Form } from "@repo/ui/components/form";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
 
 import { useSession } from "~/auth/client";
 import { AvatarState } from "~/components/AvatarState";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+import { Form } from "~/components/ui/form";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import { routes } from "~/configs/routes";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

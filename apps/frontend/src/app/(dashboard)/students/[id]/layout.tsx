@@ -5,13 +5,12 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
 import { decode } from "entities";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
+import { Skeleton } from "~/components/ui/skeleton";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";

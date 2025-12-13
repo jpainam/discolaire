@@ -7,10 +7,9 @@ import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
-import { cn } from "@repo/ui/lib/utils";
-
 import { ImageCropper } from "~/components/image-cropper";
 import { useRouter } from "~/hooks/use-router";
+import { cn } from "~/lib/utils";
 
 export type FileWithPreview = FileWithPath & {
   preview: string;

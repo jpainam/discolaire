@@ -5,21 +5,20 @@ import { MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";

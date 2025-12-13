@@ -9,10 +9,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { ChartContainer } from "@repo/ui/components/chart";
-import { Separator } from "@repo/ui/components/separator";
-
+} from "~/components/ui/card";
+import { ChartContainer } from "~/components/ui/chart";
+import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
 
 export function MaleVsFemaleCount({

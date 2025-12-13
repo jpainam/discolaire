@@ -20,7 +20,7 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -29,14 +29,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyContent,
@@ -44,8 +44,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@repo/ui/components/empty";
-
+} from "~/components/ui/empty";
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";

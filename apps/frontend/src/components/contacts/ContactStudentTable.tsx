@@ -12,14 +12,16 @@ import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { AvatarState } from "~/components/AvatarState";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -27,10 +29,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { AvatarState } from "~/components/AvatarState";
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";

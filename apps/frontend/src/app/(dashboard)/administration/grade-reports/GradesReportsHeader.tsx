@@ -3,10 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { Label } from "@repo/ui/components/label";
-
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Label } from "~/components/ui/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 

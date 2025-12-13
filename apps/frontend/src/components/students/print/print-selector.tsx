@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-//import { toast } from "@repo/ui/components/use-toast";
+//import { toast } from "~/components/ui/use-toast";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useFormContext } from "react-hook-form";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -13,21 +13,20 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
+} from "~/components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-
+} from "~/components/ui/popover";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/lib/utils";
 
 interface StudentPrintOption {

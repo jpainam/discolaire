@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ContactDetails } from "~/components/contacts/ContactDetails";
 import { ContactDetailsHeader } from "~/components/contacts/ContactDetailsHeader";
 import { ContactStudentTable } from "~/components/contacts/ContactStudentTable";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

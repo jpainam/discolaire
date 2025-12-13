@@ -10,8 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 

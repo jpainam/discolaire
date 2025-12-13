@@ -1,13 +1,7 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-
 import { Badge } from "~/components/base-badge";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { caller } from "~/trpc/server";
 
 function formatNumber(n: number) {

@@ -1,4 +1,4 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
+} from "~/components/ui/table";
 
 interface DataTableSkeletonProps {
   columnCount: number;

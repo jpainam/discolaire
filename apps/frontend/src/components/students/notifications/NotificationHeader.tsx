@@ -6,18 +6,17 @@ import { useParams } from "next/navigation";
 import { MailOpen, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { DateRangePicker } from "~/components/DateRangePicker";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-
-import { DateRangePicker } from "~/components/DateRangePicker";
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";

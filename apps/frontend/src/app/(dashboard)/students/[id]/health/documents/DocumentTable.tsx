@@ -3,14 +3,14 @@
 import { DownloadCloud, MoreVertical, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -18,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
+} from "~/components/ui/table";
 
 export function HealthDocumentTable() {
   const t = useTranslations();

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -19,9 +19,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-
+} from "~/components/ui/dropdown-menu";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { CreateEditSchoolYearEvent } from "./CreateEditSchoolYearEvent";

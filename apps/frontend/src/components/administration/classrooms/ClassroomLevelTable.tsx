@@ -12,9 +12,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
-
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { selectedClassroomLevelAtom } from "./_atom";

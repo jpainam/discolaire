@@ -4,17 +4,17 @@ import Link from "next/link";
 import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import type { SMSHistory } from "~/types/sms";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
-import type { SMSHistory } from "~/types/sms";
+} from "~/components/ui/dropdown-menu";
 import { routes } from "~/configs/routes";
 
 export function useSmsHistoryColumns() {

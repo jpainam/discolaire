@@ -7,7 +7,8 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { AvatarState } from "~/components/AvatarState";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -15,15 +16,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import { AvatarState } from "~/components/AvatarState";
+} from "~/components/ui/popover";
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

@@ -16,27 +16,26 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { sync_attendance } from "~/actions/sync_attendance";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import { sync_attendance } from "~/actions/sync_attendance";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { PermissionAction } from "~/permissions";

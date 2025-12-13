@@ -8,9 +8,10 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import z from "zod";
 
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
-import { Skeleton } from "@repo/ui/components/skeleton";
+import { Badge } from "~/components/base-badge";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -18,9 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { Badge } from "~/components/base-badge";
+} from "~/components/ui/table";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

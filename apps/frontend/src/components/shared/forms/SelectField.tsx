@@ -9,15 +9,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
+} from "~/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
+} from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 
 interface SelectFieldProps {

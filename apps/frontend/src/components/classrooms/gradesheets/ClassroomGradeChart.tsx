@@ -13,18 +13,13 @@ import {
 } from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-
+} from "~/components/ui/chart";
 import { cn } from "~/lib/utils";
 
 export function ClassroomGradeChart({

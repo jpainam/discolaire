@@ -6,8 +6,8 @@ import { createContext, useContext } from "react";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { XIcon } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
-import { cn } from "@repo/ui/lib/utils";
+import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
 interface BannerContextProps {
   show: boolean;

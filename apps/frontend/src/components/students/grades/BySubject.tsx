@@ -6,16 +6,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 
+import FlatBadge from "~/components/FlatBadge";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@repo/ui/components/accordion";
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/accordion";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 
 export function BySubject() {

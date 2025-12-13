@@ -7,11 +7,10 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";
 import { BySubject } from "./BySubject";

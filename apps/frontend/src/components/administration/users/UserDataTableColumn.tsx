@@ -7,18 +7,18 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { AvatarState } from "~/components/AvatarState";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
-import { AvatarState } from "~/components/AvatarState";
+} from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";

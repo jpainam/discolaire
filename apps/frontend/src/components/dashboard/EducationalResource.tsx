@@ -7,8 +7,8 @@ import { enUS, es, fr } from "date-fns/locale";
 import { DownloadIcon, FileIcon, RatioIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -16,9 +16,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/card";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { EmptyComponent } from "../EmptyComponent";

@@ -7,6 +7,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { Badge } from "~/components/base-badge";
 import {
   Table,
   TableBody,
@@ -14,9 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components//table";
-
-import { Badge } from "~/components/base-badge";
+} from "~/components/ui//table";
 import { UserLink } from "~/components/UserLink";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

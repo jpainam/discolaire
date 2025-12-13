@@ -3,15 +3,14 @@
 import { CalendarDays } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { DatePicker } from "~/components/DatePicker";
 import {
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-
-import { DatePicker } from "~/components/DatePicker";
+} from "~/components/ui/card";
 import { cn } from "~/lib/utils";
 
 interface ScheduleItem {

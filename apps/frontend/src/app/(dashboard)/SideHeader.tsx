@@ -4,13 +4,12 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { Separator } from "@repo/ui/components/separator";
-import { SidebarTrigger } from "@repo/ui/components/sidebar";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { ModeSwitcher } from "~/components/mode-switcher";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
+import { Separator } from "~/components/ui/separator";
+import { SidebarTrigger } from "~/components/ui/sidebar";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
   const t = useTranslations();

@@ -3,12 +3,11 @@ import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { Avatar, AvatarImage } from "@repo/ui/components/avatar";
-import { Card } from "@repo/ui/components/card";
-
 import { randomAvatar } from "~/components/raw-images";
 import { IdCardBarCode } from "~/components/students/idcard/id-barcode";
 import { IdCardHeader } from "~/components/students/idcard/IdCardHeader";
+import { Avatar, AvatarImage } from "~/components/ui/avatar";
+import { Card } from "~/components/ui/card";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 

@@ -2,21 +2,21 @@
 
 import { Cell, Pie, PieChart } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
+} from "~/components/ui/chart";
 
 const statusData = [
   { name: "available", value: 240, fill: "var(--color-available)" },

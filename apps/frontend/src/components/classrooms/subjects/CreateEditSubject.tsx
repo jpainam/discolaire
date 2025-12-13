@@ -9,7 +9,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { CourseSelector } from "~/components/shared/selects/CourseSelector";
+import { StaffSelector } from "~/components/shared/selects/StaffSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,12 +21,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import { CourseSelector } from "~/components/shared/selects/CourseSelector";
-import { StaffSelector } from "~/components/shared/selects/StaffSelector";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useSheet } from "~/hooks/use-sheet";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";

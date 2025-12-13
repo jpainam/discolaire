@@ -1,14 +1,13 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Empty, EmptyTitle } from "@repo/ui/components/empty";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentAttendanceCount } from "~/components/students/attendances/StudentAttendanceCount";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import { StudentGradeCount } from "~/components/students/grades/StudentGradeCount";
 import StudentDetails from "~/components/students/profile/StudentDetails";
+import { Empty, EmptyTitle } from "~/components/ui/empty";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
   getQueryClient,

@@ -5,15 +5,14 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { FileTextIcon, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 

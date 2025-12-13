@@ -13,6 +13,7 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 import type { RouterOutputs } from "@repo/api";
 import { PriorityEnum } from "@repo/db/enums";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,16 +27,15 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 
 import "react-circular-progressbar/dist/styles.css";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { cn } from "~/lib/utils";

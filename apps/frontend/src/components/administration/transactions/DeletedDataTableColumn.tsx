@@ -8,18 +8,18 @@ import { Eye, MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { Badge } from "~/components/base-badge";
+import { Pill, PillAvatar } from "~/components/pill";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
-import { Badge } from "~/components/base-badge";
-import { Pill, PillAvatar } from "~/components/pill";
+} from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { CURRENCY } from "~/lib/constants";
 import { TransactionDetails } from "./TransactionDetails";

@@ -12,14 +12,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
+} from "~/components/ui/popover";
 // Utility imports
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 /**
  * Base interface for option items in the multi-select combobox

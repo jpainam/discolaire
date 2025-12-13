@@ -10,8 +10,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@repo/ui/components/dialog";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/dialog";
+import { cn } from "~/lib/utils";
 
 function Command({
   className,
@@ -167,11 +167,11 @@ function CommandShortcut({
 export {
   Command,
   CommandDialog,
-  CommandInput,
-  CommandList,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
-  CommandShortcut,
+  CommandList,
   CommandSeparator,
+  CommandShortcut,
 };

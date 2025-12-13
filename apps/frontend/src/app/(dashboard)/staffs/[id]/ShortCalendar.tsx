@@ -4,9 +4,9 @@ import * as React from "react";
 import { formatDateRange } from "little-date";
 import { PlusIcon } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
-import { Calendar } from "@repo/ui/components/calendar";
-import { Card, CardContent, CardFooter } from "@repo/ui/components/card";
+import { Button } from "~/components/ui/button";
+import { Calendar } from "~/components/ui/calendar";
+import { Card, CardContent, CardFooter } from "~/components/ui/card";
 
 const events = [
   {

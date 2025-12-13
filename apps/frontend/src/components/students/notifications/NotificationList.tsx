@@ -2,7 +2,7 @@
 
 import { BellIcon, CalendarIcon, InboxIcon, StarIcon } from "lucide-react";
 
-import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 export default function NotificationList() {
   return (

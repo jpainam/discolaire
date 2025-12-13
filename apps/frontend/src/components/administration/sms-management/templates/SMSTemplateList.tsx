@@ -1,6 +1,7 @@
 import { Trash2 } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import type { SMSTemplate } from "~/types/sms";
+import { Button } from "~/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,10 +9,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import type { SMSTemplate } from "~/types/sms";
+} from "~/components/ui/table";
+import { Textarea } from "~/components/ui/textarea";
 
 export function SMSTemplateList({ templates }: { templates: SMSTemplate[] }) {
   return (

@@ -2,8 +2,7 @@
 
 import { useLocale } from "next-intl";
 
-import { Label } from "@repo/ui/components/label";
-
+import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
 
 interface Event {

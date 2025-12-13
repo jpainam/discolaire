@@ -1,15 +1,14 @@
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { Badge } from "~/components/base-badge";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-
-import { Badge } from "~/components/base-badge";
+} from "~/components/ui/card";
 import { getQueryClient, trpc } from "~/trpc/server";
 
 export async function AttendanceStats() {

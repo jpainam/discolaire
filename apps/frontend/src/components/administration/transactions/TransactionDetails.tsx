@@ -21,10 +21,9 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
 import FlatBadge from "~/components/FlatBadge";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

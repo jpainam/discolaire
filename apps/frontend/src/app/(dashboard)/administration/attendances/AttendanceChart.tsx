@@ -5,7 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardAction,
@@ -13,14 +13,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-
+} from "~/components/ui/chart";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";

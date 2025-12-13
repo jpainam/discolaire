@@ -1,4 +1,4 @@
-import { Separator } from "@repo/ui/components/separator";
+import { Separator } from "~/components/ui/separator";
 
 // interface AppreciationProps {
 //   searchParams: {

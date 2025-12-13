@@ -3,17 +3,11 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { CircleGauge, FileIcon, FileTextIcon, Settings } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { GradeReportDashboard } from "~/components/administration/grade-reports/GradeReportDashboard";
 import { GradeReportTrackerDataTable } from "~/components/administration/grade-reports/GradeReportTrackerDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { GradeReportSettings } from "../../../../components/administration/grade-reports/GradeReportSettings";
 

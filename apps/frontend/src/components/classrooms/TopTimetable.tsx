@@ -19,24 +19,19 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+
+import FlatBadge from "~/components/FlatBadge";
+import EyeIcon from "~/components/icons/eye";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@repo/ui/components/carousel";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import FlatBadge from "~/components/FlatBadge";
-import EyeIcon from "~/components/icons/eye";
+} from "~/components/ui/carousel";
+import { Skeleton } from "~/components/ui/skeleton";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";

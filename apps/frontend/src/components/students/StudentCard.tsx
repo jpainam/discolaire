@@ -1,11 +1,11 @@
 import { BellRing, FileIcon, Mail, User } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
+} from "~/components/ui/tooltip";
 
 interface StudentCardProps {
   name?: string | null | undefined;

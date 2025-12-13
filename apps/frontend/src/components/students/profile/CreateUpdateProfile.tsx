@@ -4,12 +4,10 @@
 import { useTranslations } from "next-intl";
 import { PiAddressBookTabsDuotone } from "react-icons/pi";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { DatePicker } from "~/components/DatePicker";
+import { InputField } from "~/components/shared/forms/input-field";
+import { SelectField } from "~/components/shared/forms/SelectField";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   FormControl,
   FormField,
@@ -17,11 +15,7 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/components/form";
-
-import { DatePicker } from "~/components/DatePicker";
-import { InputField } from "~/components/shared/forms/input-field";
-import { SelectField } from "~/components/shared/forms/SelectField";
+} from "~/components/ui/form";
 
 export function CreateUpdateProfile() {
   const t = useTranslations();

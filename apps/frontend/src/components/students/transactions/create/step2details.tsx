@@ -5,6 +5,7 @@ import { sumBy } from "lodash";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
+import FlatBadge from "~/components/FlatBadge";
 import {
   Card,
   CardAction,
@@ -12,12 +13,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
-
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/card";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import { CURRENCY } from "~/lib/constants";
 import { getFullName } from "~/utils";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";

@@ -9,20 +9,20 @@ import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { InputField } from "~/components/shared/forms/input-field";
+import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { SheetClose, SheetFooter } from "@repo/ui/components/sheet";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { InputField } from "~/components/shared/forms/input-field";
-import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { SheetClose, SheetFooter } from "~/components/ui/sheet";
+import { Textarea } from "~/components/ui/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 

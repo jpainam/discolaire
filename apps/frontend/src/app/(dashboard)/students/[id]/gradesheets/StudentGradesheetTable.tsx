@@ -12,8 +12,9 @@ import { DollarSign } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Empty,
   EmptyContent,
@@ -21,14 +22,14 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@repo/ui/components/empty";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/empty";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
+} from "~/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -36,11 +37,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";

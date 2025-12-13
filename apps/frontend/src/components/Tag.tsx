@@ -7,8 +7,8 @@ import type { ComponentProps, MouseEventHandler, ReactNode } from "react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { XIcon } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -16,13 +16,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/popover";
+import { cn } from "~/lib/utils";
 
 interface TagsContextType {
   value?: string;

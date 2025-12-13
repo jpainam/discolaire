@@ -4,15 +4,14 @@ import type * as RPNInput from "react-phone-number-input";
 import { useLocale, useTranslations } from "next-intl";
 import flags from "react-phone-number-input/flags";
 
-import { Button } from "@repo/ui/components/button";
+import { changeLocaleAction } from "~/actions/change_locale";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import { changeLocaleAction } from "~/actions/change_locale";
+} from "~/components/ui/dropdown-menu";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 

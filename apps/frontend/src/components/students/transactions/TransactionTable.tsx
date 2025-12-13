@@ -23,7 +23,12 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { TransactionType } from "@repo/db/enums";
-import { Button } from "@repo/ui/components/button";
+
+import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import FlatBadge from "~/components/FlatBadge";
+import { Pill, PillAvatar, PillIcon, PillIndicator } from "~/components/pill";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +40,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -43,12 +48,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import type { FlatBadgeVariant } from "~/components/FlatBadge";
-import { EmptyComponent } from "~/components/EmptyComponent";
-import FlatBadge from "~/components/FlatBadge";
-import { Pill, PillAvatar, PillIcon, PillIndicator } from "~/components/pill";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";

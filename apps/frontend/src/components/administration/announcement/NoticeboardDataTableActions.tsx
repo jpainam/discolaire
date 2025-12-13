@@ -7,8 +7,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
 
+import { Button } from "~/components/ui/button";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";

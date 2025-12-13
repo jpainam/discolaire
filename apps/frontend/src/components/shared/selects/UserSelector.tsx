@@ -3,9 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { decode } from "entities";
 import { useTranslations } from "next-intl";
 
-import { cn } from "@repo/ui/lib/utils";
-
 import { SearchCombobox } from "~/components/SearchCombobox";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 export function UserSelector({

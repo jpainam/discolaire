@@ -15,12 +15,6 @@ import {
   startOfWeek,
 } from "date-fns";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui/components/popover";
-
 import type { CalendarEvent } from "~/components/event-calendar";
 import {
   DraggableEvent,
@@ -35,6 +29,11 @@ import {
   useEventVisibility,
 } from "~/components/event-calendar";
 import { DefaultStartHour } from "~/components/event-calendar/constants";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 
 interface MonthViewProps {
   currentDate: Date;

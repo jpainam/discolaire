@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import { HydrateClient } from "~/trpc/server";
 
 export default function Page() {

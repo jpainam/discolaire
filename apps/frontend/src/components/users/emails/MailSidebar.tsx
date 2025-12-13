@@ -11,10 +11,9 @@ import {
   Trash,
 } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { useMailContext } from "./MailContextProvider";
 
 export function MailSidebar() {

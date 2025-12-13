@@ -5,10 +5,10 @@ import { useMemo } from "react";
 import { useLocale } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Checkbox } from "@repo/ui/components/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import FlatBadge from "~/components/FlatBadge";
+import { Checkbox } from "~/components/ui/checkbox";
 import { CURRENCY } from "~/lib/constants";
 
 type FundProcedureOutput = NonNullable<RouterOutputs["fund"]["all"]>[number];

@@ -3,8 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, User } from "lucide-react";
 
-import { Progress } from "@repo/ui/components/progress";
-
+import { Progress } from "~/components/ui/progress";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 

@@ -2,7 +2,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
+} from "~/components/ui/tooltip";
 
 export function SimpleTooltip({
   children,

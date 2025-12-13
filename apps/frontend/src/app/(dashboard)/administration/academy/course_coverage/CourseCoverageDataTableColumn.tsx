@@ -6,17 +6,17 @@ import { Eye } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { AvatarState } from "~/components/AvatarState";
+import { Badge } from "~/components/base-badge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
-import { AvatarState } from "~/components/AvatarState";
-import { Badge } from "~/components/base-badge";
+} from "~/components/ui/dropdown-menu";
 import { getFullName } from "~/utils";
 
 type SubjectProcedureOutput = RouterOutputs["subjectProgram"]["all"][number];

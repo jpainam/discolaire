@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
+import { SubmitButton } from "~/components/SubmitButton";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,10 +16,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-
-import { SubmitButton } from "~/components/SubmitButton";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 

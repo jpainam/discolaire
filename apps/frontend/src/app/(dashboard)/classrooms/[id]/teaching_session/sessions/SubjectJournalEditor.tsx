@@ -16,34 +16,33 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/components/button";
-import { Calendar } from "@repo/ui/components/calendar";
+import { SubjectProgramSelector } from "~/components/shared/selects/SubjectProgramSelector";
+import { TiptapEditor } from "~/components/tiptap-editor";
+import { Button } from "~/components/ui/button";
+import { Calendar } from "~/components/ui/calendar";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
+} from "~/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { Switch } from "@repo/ui/components/switch";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { SubjectProgramSelector } from "~/components/shared/selects/SubjectProgramSelector";
-import { TiptapEditor } from "~/components/tiptap-editor";
+} from "~/components/ui/select";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Switch } from "~/components/ui/switch";
+import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { SubjectJournalTemplate } from "./SubjectJournalTemplate";

@@ -17,8 +17,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-
+} from "~/components/ui/card";
 import { InventoryPieChart } from "./InventoryPieChart";
 
 const monthlyUsageData = [

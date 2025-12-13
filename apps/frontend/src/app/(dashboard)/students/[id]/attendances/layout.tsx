@@ -12,8 +12,6 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import type { metricCardVariants } from "~/components/metric-card";
 import { Badge } from "~/components/base-badge";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -25,6 +23,7 @@ import {
   MetricCardValue,
 } from "~/components/metric-card";
 import { StudentAttendanceHeader } from "~/components/students/attendances/StudentAttendanceHeader";
+import { Skeleton } from "~/components/ui/skeleton";
 import { getQueryClient, trpc } from "~/trpc/server";
 
 export default async function Layout(

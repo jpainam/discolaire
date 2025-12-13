@@ -9,19 +9,13 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
-import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { ErrorFallback } from "~/components/error-fallback";
 import { SchoolYearHeader } from "~/components/schoolyears/SchoolYearHeader";
 import { SchoolYearTable } from "~/components/schoolyears/SchoolYearTable";
+import { Badge } from "~/components/ui/badge";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 import { SchoolYearCalendar } from "./calendar/SchoolYearCalendar";
 import { SchoolYearCalendarProvider } from "./calendar/SchoolYearCalendarContext";

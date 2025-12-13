@@ -8,18 +8,18 @@ import { toast } from "sonner";
 import z from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Field,
   FieldContent,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@repo/ui/components/field";
-import { Input } from "@repo/ui/components/input";
-
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/field";
+import { Input } from "~/components/ui/input";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 

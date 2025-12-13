@@ -10,7 +10,9 @@ import { toast } from "sonner";
 import z from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { DatePicker } from "~/components/DatePicker";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,8 +20,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -28,10 +30,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { DatePicker } from "~/components/DatePicker";
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 

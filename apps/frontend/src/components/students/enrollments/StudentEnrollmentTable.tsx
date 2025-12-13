@@ -12,13 +12,16 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import { StudentStatus } from "@repo/db/enums";
-import { Button } from "@repo/ui/components/button";
+
+import { EmptyComponent } from "~/components/EmptyComponent";
+import FlatBadge from "~/components/FlatBadge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -26,10 +29,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

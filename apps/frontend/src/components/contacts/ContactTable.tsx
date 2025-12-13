@@ -18,31 +18,27 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@repo/ui/components/hover-card";
+} from "~/components/ui/hover-card";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/input-group";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -50,8 +46,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";

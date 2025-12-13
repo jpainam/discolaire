@@ -2,11 +2,10 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentDataTable } from "~/components/students/StudentDataTable";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentHeader } from "./StudentHeader";
 import { StudentSearchPage } from "./StudentSearchPage";

@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Checkbox } from "@repo/ui/components/checkbox";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { AvatarState } from "~/components/AvatarState";
 import FlatBadge from "~/components/FlatBadge";
+import { Checkbox } from "~/components/ui/checkbox";
 import { getFullName } from "~/utils";
 
 export function useStudentColumns(): ColumnDef<

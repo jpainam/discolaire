@@ -30,8 +30,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@repo/ui/components/sidebar";
-
+} from "~/components/ui/sidebar";
 import { SidebarLogo } from "../sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";

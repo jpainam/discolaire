@@ -6,19 +6,13 @@ import { Warehouse } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import type { ChartConfig } from "~/components/ui/chart";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-
+} from "~/components/ui/chart";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 

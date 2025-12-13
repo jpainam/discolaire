@@ -9,8 +9,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@repo/ui/components/sheet";
-
+} from "~/components/ui/sheet";
 import { useSheet } from "~/hooks/use-sheet";
 
 export default function GlobalSheet() {

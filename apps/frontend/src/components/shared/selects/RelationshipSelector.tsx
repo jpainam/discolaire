@@ -9,9 +9,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+} from "~/components/ui/select";
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 

@@ -7,7 +7,10 @@ import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { AvatarState } from "~/components/AvatarState";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -15,14 +18,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/dropdown-menu";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -30,12 +33,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
-
-import { AvatarState } from "~/components/AvatarState";
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
+import { cn } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { AddStaffSchedule } from "./CreateTransactionNotificationScheduledTask";

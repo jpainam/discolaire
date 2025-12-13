@@ -13,8 +13,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+
+import { AvatarState } from "~/components/AvatarState";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -22,8 +24,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Table,
   TableBody,
@@ -31,9 +33,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { AvatarState } from "~/components/AvatarState";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";

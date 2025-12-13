@@ -4,7 +4,7 @@ import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -12,14 +12,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/popover";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 

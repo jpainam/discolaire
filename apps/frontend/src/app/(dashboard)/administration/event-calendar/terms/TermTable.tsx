@@ -11,15 +11,16 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import FlatBadge from "~/components/FlatBadge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/dropdown-menu";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -27,9 +28,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";

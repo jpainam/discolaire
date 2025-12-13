@@ -7,7 +7,7 @@ import { TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardContent,
@@ -15,15 +15,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/chart";
+import { cn } from "~/lib/utils";
 
 export const description = "A stacked bar chart with a legend";
 

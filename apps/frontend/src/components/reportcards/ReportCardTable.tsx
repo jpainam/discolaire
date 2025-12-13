@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import FlatBadge from "~/components/FlatBadge";
 import {
   Table,
   TableBody,
@@ -10,10 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import type { FlatBadgeVariant } from "~/components/FlatBadge";
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { cn } from "~/lib/utils";
 import { ReportCardSummary } from "./ReportCardSummary";

@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/components/dialog";
+} from "~/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -21,10 +21,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Textarea } from "@repo/ui/components/textarea";
-
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useUpload } from "~/hooks/use-upload";
 import { FileUploader } from "~/uploads/file-uploader";

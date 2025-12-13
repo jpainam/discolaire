@@ -19,13 +19,9 @@ import {
   YAxis,
 } from "recharts";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -33,13 +29,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-import { Progress } from "@repo/ui/components/progress";
+} from "~/components/ui/chart";
+import { Progress } from "~/components/ui/progress";
 
 export function Dashboard() {
   const attendanceData = [

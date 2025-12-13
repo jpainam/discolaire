@@ -6,8 +6,8 @@ import { Loader2, Search } from "lucide-react";
 import { useDebounce } from "use-debounce";
 
 import type { RouterOutputs } from "@repo/api";
-import { Input } from "@repo/ui/components/input";
 
+import { Input } from "~/components/ui/input";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

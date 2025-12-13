@@ -18,14 +18,16 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
+
+import { DatePicker } from "~/components/DatePicker";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@repo/ui/components/accordion";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+} from "~/components/ui/accordion";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -33,12 +35,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { DatePicker } from "~/components/DatePicker";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";

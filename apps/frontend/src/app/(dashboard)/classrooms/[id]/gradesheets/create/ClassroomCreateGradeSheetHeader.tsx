@@ -4,11 +4,10 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Label } from "@repo/ui/components/label";
-
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Label } from "~/components/ui/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
 import { createGradeSheetSearchSchema } from "./search-params";

@@ -5,9 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { School } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Card, CardContent } from "@repo/ui/components/card";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+import { Card, CardContent } from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 

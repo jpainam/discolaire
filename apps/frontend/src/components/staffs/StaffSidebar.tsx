@@ -22,8 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@repo/ui/components/sidebar";
-
+} from "~/components/ui/sidebar";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function StaffSidebar({

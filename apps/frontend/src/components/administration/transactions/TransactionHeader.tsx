@@ -4,16 +4,6 @@ import { MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
 import { DateRangePicker } from "~/components/DateRangePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -21,6 +11,15 @@ import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TransactionStatusSelector } from "~/components/shared/selects/TransactionStatusSelector";
+import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { transactionSearchParamsSchema } from "~/utils/search-params";
 
 export function TransactionHeader() {

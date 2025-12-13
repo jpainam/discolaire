@@ -10,8 +10,8 @@ import {
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/command";
+import { cn } from "~/lib/utils";
 
 export interface Option {
   value: string;

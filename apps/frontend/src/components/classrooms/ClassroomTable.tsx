@@ -25,25 +25,21 @@ import { parseAsString, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Button } from "@repo/ui/components/button";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/input-group";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -52,8 +48,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/select";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -61,8 +57,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";

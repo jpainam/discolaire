@@ -3,17 +3,11 @@
 import { useId, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
-import { Badge } from "@repo/ui/components/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-
+import type { ChartConfig } from "~/components/ui/chart";
+import { Badge } from "~/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { ChartContainer, ChartTooltip } from "~/components/ui/chart";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { CustomTooltipContent } from "../../charts-extra";
 
 const mrrData = [

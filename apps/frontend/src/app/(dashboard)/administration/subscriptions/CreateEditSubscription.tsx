@@ -8,8 +8,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+
+import { UserSelector } from "~/components/shared/selects/UserSelector";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -17,17 +19,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { UserSelector } from "~/components/shared/selects/UserSelector";
+} from "~/components/ui/select";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 

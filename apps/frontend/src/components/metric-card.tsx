@@ -3,9 +3,9 @@ import type React from "react";
 import { cva } from "class-variance-authority";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { cn } from "@repo/ui/lib/utils";
+import { Badge } from "~/components/ui/badge";
+import { Skeleton } from "~/components/ui/skeleton";
+import { cn } from "~/lib/utils";
 
 export const metricCardVariants = cva(
   "text-card-foreground flex flex-col gap-1 rounded-lg border px-3 py-2",

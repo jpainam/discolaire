@@ -3,6 +3,8 @@
 import { HelpCircleIcon, LibraryBig } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import CalendarIcon from "~/components/icons/calendar";
+import YoutubeIcon from "~/components/icons/youtube";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -10,10 +12,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import CalendarIcon from "~/components/icons/calendar";
-import YoutubeIcon from "~/components/icons/youtube";
+} from "~/components/ui/dropdown-menu";
 
 export function DropdownHelp() {
   const t = useTranslations();

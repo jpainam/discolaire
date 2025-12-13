@@ -7,18 +7,18 @@ import { useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 import { StudentStatus } from "@repo/db/enums";
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
+
+import { searchStudents } from "~/actions/search";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { searchStudents } from "~/actions/search";
-import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+} from "~/components/ui/select";
 import { StudentSearchResultCard } from "./StudentSearchResultCard";
 
 export function StudentSearchPage() {

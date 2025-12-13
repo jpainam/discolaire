@@ -11,8 +11,7 @@ import {
   useQueryState,
 } from "nuqs";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 

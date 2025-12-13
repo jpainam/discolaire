@@ -6,8 +6,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useTranslations } from "next-intl";
 
-import { Label } from "@repo/ui/components/label";
-
+import { Label } from "~/components/ui/label";
 import { useRouter } from "~/hooks/use-router";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useTRPC } from "~/trpc/react";

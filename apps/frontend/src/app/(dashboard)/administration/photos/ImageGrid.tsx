@@ -17,16 +17,15 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { StudentSearchDialog } from "~/components/students/StudentSearchDialog";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import { StudentSearchDialog } from "~/components/students/StudentSearchDialog";
+} from "~/components/ui/dropdown-menu";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useModal } from "~/hooks/use-modal";
 import { breadcrumbAtom } from "~/lib/atoms";

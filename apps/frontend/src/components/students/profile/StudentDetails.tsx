@@ -19,10 +19,9 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { PiChurchDuotone } from "react-icons/pi";
 
-import { Separator } from "@repo/ui/components/separator";
-import { cn } from "@repo/ui/lib/utils";
-
 import House from "~/components/icons/house";
+import { Separator } from "~/components/ui/separator";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 export default function StudentDetails({ className }: { className?: string }) {

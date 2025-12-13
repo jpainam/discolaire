@@ -4,17 +4,16 @@ import { useState } from "react";
 import { AlertTriangle, Check, Copy, Key } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Alert, AlertDescription } from "@repo/ui/components/alert";
-import { Button } from "@repo/ui/components/button";
+import { createAuthApiKey } from "~/actions/signin";
+import { Alert, AlertDescription } from "~/components/ui/alert";
+import { Button } from "~/components/ui/button";
 import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@repo/ui/components/dialog";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-
-import { createAuthApiKey } from "~/actions/signin";
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 
 export function CreateAuthApiKey() {

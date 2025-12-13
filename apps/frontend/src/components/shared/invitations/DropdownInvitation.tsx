@@ -5,8 +5,7 @@ import { Mail, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { DropdownMenuItem } from "@repo/ui/components/dropdown-menu";
-
+import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 

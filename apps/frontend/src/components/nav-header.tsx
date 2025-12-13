@@ -16,7 +16,7 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@repo/ui/components/navigation-menu";
+} from "~/components/ui/navigation-menu";
 
 export function NavHeader() {
   const pathname = usePathname();

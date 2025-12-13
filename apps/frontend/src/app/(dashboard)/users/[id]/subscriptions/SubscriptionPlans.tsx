@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,10 +12,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { cn } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 
 export function SubscriptionPlans({ plan }: { plan: string }) {

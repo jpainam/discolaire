@@ -14,8 +14,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { Badge } from "~/components/base-badge";
+import FlatBadge from "~/components/FlatBadge";
+import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
+import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,13 +33,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
-import { Badge } from "~/components/base-badge";
-import FlatBadge from "~/components/FlatBadge";
-import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
-import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
+} from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";

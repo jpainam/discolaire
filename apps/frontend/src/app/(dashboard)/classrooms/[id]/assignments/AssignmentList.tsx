@@ -13,7 +13,11 @@ import {
 } from "lucide-react";
 import { useQueryState } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/base-badge";
+import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
+import { StaffSelector } from "~/components/shared/selects/StaffSelector";
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -21,13 +25,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Input } from "@repo/ui/components/input";
-
-import { Badge } from "~/components/base-badge";
-import { AssignmentCategorySelector } from "~/components/shared/selects/AssignmentCategorySelector";
-import { StaffSelector } from "~/components/shared/selects/StaffSelector";
-import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+} from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
 
 export interface Exam {
   id: string;

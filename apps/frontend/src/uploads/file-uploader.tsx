@@ -8,13 +8,11 @@ import { Trash2, UploadCloud } from "lucide-react";
 import Dropzone from "react-dropzone";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Progress } from "@repo/ui/components/progress";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { cn } from "@repo/ui/lib/utils";
-
+import { Button } from "~/components/ui/button";
+import { Progress } from "~/components/ui/progress";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { useControllableState } from "~/hooks/use-controllable-state";
-import { formatBytes } from "~/lib/utils";
+import { cn, formatBytes } from "~/lib/utils";
 
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

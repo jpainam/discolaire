@@ -4,18 +4,12 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsInteger } from "nuqs/server";
 
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { getSession } from "~/auth/server";
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { SubjectJournalEditor } from "./sessions/SubjectJournalEditor";
 import { SubjectJournalHeader } from "./sessions/SubjectJournalHeader";

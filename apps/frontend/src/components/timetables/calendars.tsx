@@ -5,7 +5,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@repo/ui/components/collapsible";
+} from "~/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-} from "@repo/ui/components/sidebar";
+} from "~/components/ui/sidebar";
 
 export function Calendars({
   calendars,

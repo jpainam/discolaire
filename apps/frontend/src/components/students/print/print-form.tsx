@@ -5,9 +5,8 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/components/button";
-import { Form } from "@repo/ui/components/form";
-
+import { Button } from "~/components/ui/button";
+import { Form } from "~/components/ui/form";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";

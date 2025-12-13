@@ -9,16 +9,16 @@ import { useLocale, useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
+
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
+} from "~/components/ui/select";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { DayView } from "./day-view";

@@ -2,20 +2,17 @@ import { format } from "date-fns";
 import { Calendar, ClipboardList, Clock, Package, User } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Separator } from "@repo/ui/components/separator";
+
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Separator } from "~/components/ui/separator";
 import {
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@repo/ui/components/sheet";
+} from "~/components/ui/sheet";
 
 export function InventoryUsageDetail({
   item,

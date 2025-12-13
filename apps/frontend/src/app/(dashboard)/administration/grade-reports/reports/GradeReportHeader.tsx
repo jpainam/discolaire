@@ -3,13 +3,12 @@
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 
 export function GradeReportHeader() {
   const t = useTranslations();

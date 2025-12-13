@@ -4,11 +4,10 @@ import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
-
 import { AvatarState } from "~/components/AvatarState";
 import EmailVerification from "~/components/EmailComponent";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { StaffProfileHeader } from "./StaffProfileHeader";

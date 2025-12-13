@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentAttendanceTable } from "./StudentAttendanceTable";
 

@@ -7,8 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-
+} from "~/components/ui/card";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";

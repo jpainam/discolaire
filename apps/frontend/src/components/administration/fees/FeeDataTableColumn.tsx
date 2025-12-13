@@ -8,19 +8,19 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 import type { Fee } from "@repo/db/client";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
+
+import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
+import FlatBadge from "~/components/FlatBadge";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Separator } from "@repo/ui/components/separator";
-import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-
-import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/dropdown-menu";
+import { Separator } from "~/components/ui/separator";
 import { useModal } from "~/hooks/use-modal";
 import { CURRENCY } from "~/lib/constants";
 import { useConfirm } from "~/providers/confirm-dialog";

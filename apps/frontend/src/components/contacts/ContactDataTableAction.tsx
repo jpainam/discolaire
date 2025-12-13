@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
 
+import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";

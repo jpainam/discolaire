@@ -3,15 +3,14 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-
+} from "~/components/ui/chart";
 import { useTRPC } from "~/trpc/react";
 
 export const description = "A line chart with dots";

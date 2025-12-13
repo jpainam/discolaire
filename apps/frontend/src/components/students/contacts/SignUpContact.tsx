@@ -6,10 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
 import { showErrorToast } from "~/lib/handle-error";
 import { useTRPC } from "~/trpc/react";
 import { SignUpContactIcon } from "./SignUpContactIcon";

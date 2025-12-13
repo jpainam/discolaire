@@ -5,19 +5,13 @@ import { Rows3Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import type { ChartConfig } from "~/components/ui/chart";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-
+} from "~/components/ui/chart";
 import { useTRPC } from "~/trpc/react";
 
 export function LatestGradesheet() {

@@ -18,7 +18,7 @@ import {
   ChevronsUpDown,
 } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -26,13 +26,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/popover";
+import { cn } from "~/lib/utils";
 
 export interface CalendarState {
   month: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;

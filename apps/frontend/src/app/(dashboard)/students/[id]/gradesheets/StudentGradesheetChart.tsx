@@ -15,20 +15,19 @@ import {
   YAxis,
 } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
+import { Badge } from "~/components/base-badge";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
 import {
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
-import { Empty, EmptyTitle } from "@repo/ui/components/empty";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import { Badge } from "~/components/base-badge";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/card";
+import { ChartContainer, ChartTooltip } from "~/components/ui/chart";
+import { Empty, EmptyTitle } from "~/components/ui/empty";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 
 const chartConfig = {

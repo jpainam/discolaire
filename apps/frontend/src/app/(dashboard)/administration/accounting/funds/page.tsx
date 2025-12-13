@@ -1,15 +1,9 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { FundTable } from "./FundTable";
 

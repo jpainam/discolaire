@@ -1,10 +1,4 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ImportStudentRegistrationNumber } from "./ImportStudentRegistrationNumber";
 
 export function ImportStudentContainer() {

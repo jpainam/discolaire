@@ -7,12 +7,8 @@ import React from "react";
 import { CropIcon, Trash2Icon } from "lucide-react";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Button } from "@repo/ui/components/button";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -22,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/components/dialog";
+} from "~/components/ui/dialog";
 
 import "react-image-crop/dist/ReactCrop.css";
 

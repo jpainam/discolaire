@@ -6,7 +6,7 @@
 // import * as React from "react";
 
 // import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-// import { Button } from "@repo/ui/components/button";
+// import { Button } from "~/components/ui/button";
 // import {
 //   Form,
 //   FormControl,
@@ -14,8 +14,8 @@
 //   FormItem,
 //   FormLabel,
 //   FormMessage,
-// } from "@repo/ui/components/form";
-// import { Input } from "@repo/ui/components/input";
+// } from "~/components/ui/form";
+// import { Input } from "~/components/ui/input";
 // import { useForm } from "react-hook-form";
 // import { toast } from "sonner";
 // import { z } from "zod/v4";

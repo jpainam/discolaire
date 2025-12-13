@@ -6,15 +6,15 @@ import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 import { StudentStatus } from "@repo/db/enums";
-import { Button } from "@repo/ui/components/button";
+
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

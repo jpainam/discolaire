@@ -44,12 +44,13 @@ import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db/enums";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Button } from "@repo/ui/components/button";
+
+import { authClient } from "~/auth/client";
+import FlatBadge from "~/components/FlatBadge";
+import { StudentSelector } from "~/components/shared/selects/StudentSelector";
+import { SimpleTooltip } from "~/components/simple-tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,12 +61,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import { authClient } from "~/auth/client";
-import FlatBadge from "~/components/FlatBadge";
-import { StudentSelector } from "~/components/shared/selects/StudentSelector";
-import { SimpleTooltip } from "~/components/simple-tooltip";
+} from "~/components/ui/dropdown-menu";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";

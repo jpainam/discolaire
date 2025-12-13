@@ -7,11 +7,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
-import { Form } from "@repo/ui/components/form";
-
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
+import { Button } from "~/components/ui/button";
+import { Form } from "~/components/ui/form";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 

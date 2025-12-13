@@ -10,7 +10,10 @@ import { toast } from "sonner";
 import z from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,9 +21,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Table,
   TableBody,
@@ -28,13 +31,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
-
-import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 

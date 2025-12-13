@@ -10,8 +10,8 @@
 // import { z } from "zod";
 
 // import type { RouterOutputs } from "@repo/api";
-// import { Button } from "@repo/ui/components/button";
-// import { Checkbox } from "@repo/ui/components/checkbox";
+// import { Button } from "~/components/ui/button";
+// import { Checkbox } from "~/components/ui/checkbox";
 // import {
 //   Form,
 //   FormControl,
@@ -19,14 +19,14 @@
 //   FormItem,
 //   FormLabel,
 //   FormMessage,
-// } from "@repo/ui/components/form";
+// } from "~/components/ui/form";
 // import {
 //   Select,
 //   SelectContent,
 //   SelectItem,
 //   SelectTrigger,
 //   SelectValue,
-// } from "@repo/ui/components/select";
+// } from "~/components/ui/select";
 
 // import { DatePicker } from "~/components/DatePicker";
 // import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";

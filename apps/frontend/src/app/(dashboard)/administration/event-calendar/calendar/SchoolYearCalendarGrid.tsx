@@ -3,8 +3,7 @@
 import { startOfWeek } from "date-fns";
 import { useLocale } from "next-intl";
 
-import { cn } from "@repo/ui/lib/utils";
-
+import { cn } from "~/lib/utils";
 import { useSchoolYearCalendarContext } from "./SchoolYearCalendarContext";
 
 export function SchoolYearCalendarGrid() {

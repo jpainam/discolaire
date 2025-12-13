@@ -2,14 +2,14 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
+} from "~/components/ui/chart";
 
 export const description = "A stacked bar chart with a legend";
 

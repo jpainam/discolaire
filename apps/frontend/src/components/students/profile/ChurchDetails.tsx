@@ -2,8 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-
+import { Button } from "~/components/ui/button";
 import { useModal } from "~/hooks/use-modal";
 import { ChurchDetailsForm } from "./ChurchDetailsForm";
 

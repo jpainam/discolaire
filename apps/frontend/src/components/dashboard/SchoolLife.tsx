@@ -20,16 +20,16 @@ import {
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Badge } from "@repo/ui/components/badge";
+import { Badge } from "~/components/ui/badge";
 import {
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Input } from "@repo/ui/components/input";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -37,10 +37,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/table";
 import { useIsMobile } from "~/hooks/use-mobile";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 const groupByWeekday = (items: { date: Date; value: number }[]) => {

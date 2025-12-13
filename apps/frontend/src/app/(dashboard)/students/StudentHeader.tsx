@@ -3,8 +3,7 @@
 import { Download, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-
+import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";

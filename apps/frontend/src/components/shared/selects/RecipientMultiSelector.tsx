@@ -6,15 +6,14 @@ import { Command as CommandPrimitive } from "cmdk";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Badge } from "@repo/ui/components/badge";
+import { Badge } from "~/components/ui/badge";
 import {
   Command,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+} from "~/components/ui/command";
+import { Skeleton } from "~/components/ui/skeleton";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";

@@ -14,8 +14,8 @@ import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -23,18 +23,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Label } from "@repo/ui/components/label";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
+} from "~/components/ui/card";
+import { Label } from "~/components/ui/label";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Separator } from "@repo/ui/components/separator";
-
+} from "~/components/ui/select";
+import { Separator } from "~/components/ui/separator";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 

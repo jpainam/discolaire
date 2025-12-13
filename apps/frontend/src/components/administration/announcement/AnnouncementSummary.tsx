@@ -4,9 +4,8 @@ import { useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { Label } from "@repo/ui/components/label";
-
 import FlatBadge from "~/components/FlatBadge";
+import { Label } from "~/components/ui/label";
 import { useTRPC } from "~/trpc/react";
 
 export function AnnouncementSummary() {

@@ -11,18 +11,18 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { cn } from "~/lib/utils";
 
 export function UserAppearance() {
   const { setTheme, resolvedTheme } = useTheme();

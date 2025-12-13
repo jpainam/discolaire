@@ -1,5 +1,5 @@
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Separator } from "@repo/ui/components/separator";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
 
 export function SMSTemplateTagList({ tags }: { tags: string[] }) {
   return (

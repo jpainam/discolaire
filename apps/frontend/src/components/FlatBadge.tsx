@@ -2,7 +2,7 @@ import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cva } from "class-variance-authority";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 //border border-red-500 bg-red-100 dark:bg-red-900/20 text-red-600 text-xs rounded-full px-2 py-0.5 mt-4
 const flatBadgeVariants = cva(

@@ -1,5 +1,4 @@
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { StudentPhotoCard } from "./StudentPhotoCard";
 
 export function StudentPhotoList({ photos }: { photos: string[] }) {

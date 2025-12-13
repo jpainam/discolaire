@@ -8,9 +8,8 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 
 interface InputFieldProps {

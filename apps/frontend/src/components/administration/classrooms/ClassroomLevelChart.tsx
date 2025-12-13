@@ -11,21 +11,20 @@ import {
   YAxis,
 } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+} from "~/components/ui/chart";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 
 const chartConfig = {

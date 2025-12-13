@@ -13,17 +13,17 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+
+import FlatBadge from "~/components/FlatBadge";
+import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import FlatBadge from "~/components/FlatBadge";
-import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
+} from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

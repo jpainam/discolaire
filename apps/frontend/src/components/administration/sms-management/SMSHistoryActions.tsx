@@ -5,9 +5,8 @@ import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-
 import type { SMSHistory } from "~/types/sms";
+import { Button } from "~/components/ui/button";
 import { exportTableToCSV } from "~/lib/export";
 
 interface TasksTableToolbarActionsProps {

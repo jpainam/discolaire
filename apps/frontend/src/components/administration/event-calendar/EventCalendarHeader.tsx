@@ -4,14 +4,16 @@ import { useSearchParams } from "next/navigation";
 import { ChevronDown, Plus, Printer, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -20,10 +22,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
+} from "~/components/ui/select";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";

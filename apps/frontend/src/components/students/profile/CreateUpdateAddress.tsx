@@ -5,12 +5,12 @@ import type { Country } from "react-phone-number-input";
 import { useTranslations } from "next-intl";
 import { PiCalendarDotsDuotone } from "react-icons/pi";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { DatePicker } from "~/components/DatePicker";
+import { PhoneInput } from "~/components/phone-input";
+import { CountryPicker } from "~/components/shared/CountryPicker";
+import { InputField } from "~/components/shared/forms/input-field";
+import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   FormControl,
   FormField,
@@ -18,13 +18,7 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/components/form";
-
-import { DatePicker } from "~/components/DatePicker";
-import { PhoneInput } from "~/components/phone-input";
-import { CountryPicker } from "~/components/shared/CountryPicker";
-import { InputField } from "~/components/shared/forms/input-field";
-import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
+} from "~/components/ui/form";
 import { useSchool } from "~/providers/SchoolProvider";
 
 export function CreateUpdateAddress() {

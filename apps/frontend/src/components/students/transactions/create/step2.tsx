@@ -17,7 +17,9 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 import type { TransactionType } from "@repo/db/enums";
-import { Button } from "@repo/ui/components/button";
+
+import FlatBadge from "~/components/FlatBadge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -25,8 +27,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Checkbox } from "@repo/ui/components/checkbox";
+} from "~/components/ui/card";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -34,11 +36,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/components/form";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
-
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/form";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { CURRENCY } from "~/lib/constants";

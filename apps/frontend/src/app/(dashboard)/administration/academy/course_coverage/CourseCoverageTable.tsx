@@ -12,16 +12,21 @@ import {
 import { useTranslations } from "next-intl";
 import { parseAsString, useQueryStates } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
+import { AvatarState } from "~/components/AvatarState";
+import { Badge } from "~/components/base-badge";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
-import { Progress } from "@repo/ui/components/progress";
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
+import { Progress } from "~/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -29,13 +34,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { AvatarState } from "~/components/AvatarState";
-import { Badge } from "~/components/base-badge";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/table";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

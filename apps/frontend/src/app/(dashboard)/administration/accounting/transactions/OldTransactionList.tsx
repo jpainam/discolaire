@@ -1,3 +1,4 @@
+import { missing_transactions } from "~/actions/miss_transaction";
 import {
   Table,
   TableBody,
@@ -5,9 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { missing_transactions } from "~/actions/miss_transaction";
+} from "~/components/ui/table";
 
 export function OldTransactionList() {
   const userMappings: Record<string, string> = {

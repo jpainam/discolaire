@@ -17,7 +17,11 @@ import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,13 +29,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";

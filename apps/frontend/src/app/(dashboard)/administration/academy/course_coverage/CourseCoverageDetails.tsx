@@ -8,9 +8,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@repo/ui/components/accordion";
-import { Badge } from "@repo/ui/components/badge";
-
+} from "~/components/ui/accordion";
+import { Badge } from "~/components/ui/badge";
 import { useTRPC } from "~/trpc/react";
 
 const getCoverageBadgeVariant = (coverage: number) => {

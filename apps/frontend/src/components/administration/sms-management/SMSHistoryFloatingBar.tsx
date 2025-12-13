@@ -10,22 +10,21 @@ import {
 } from "@radix-ui/react-icons";
 import { SelectTrigger } from "@radix-ui/react-select";
 
-import { Button } from "@repo/ui/components/button";
+import type { SMSHistory } from "~/types/sms";
+import { Kbd } from "~/components/kbd";
+import { Button } from "~/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-} from "@repo/ui/components/select";
-import { Separator } from "@repo/ui/components/separator";
+} from "~/components/ui/select";
+import { Separator } from "~/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
-
-import type { SMSHistory } from "~/types/sms";
-import { Kbd } from "~/components/kbd";
+} from "~/components/ui/tooltip";
 import { exportTableToCSV } from "~/lib/export";
 
 interface ClassroomTableFloatingBarProps {

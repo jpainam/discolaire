@@ -3,15 +3,14 @@
 import { MailIcon, SendHorizonal, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import FlatBadge from "~/components/FlatBadge";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import SendNotificationDialog from "./SendNotificationDialog";
 

@@ -1,12 +1,11 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { CreatedGradesheetCard } from "~/components/classrooms/gradesheets/CreatedGradesheetCard";
 import { SubjectGradeTable } from "~/components/classrooms/subjects/SubjectGradeTable";
 import { SubjectHeader } from "~/components/classrooms/subjects/SubjectHeader";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
   getQueryClient,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-//import { toast } from "@repo/ui/components/use-toast";
+//import { toast } from "~/components/ui/use-toast";
 import { useFormContext } from "react-hook-form";
 
 import {
@@ -10,8 +10,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+} from "~/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 
 export default function PrintTypeRadio() {
   const form = useFormContext();

@@ -4,11 +4,10 @@ import { useParams } from "next/navigation";
 import { Stethoscope } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-//import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
 import { authClient } from "~/auth/client";
+//import { CreateEditHealthVisit } from "./CreateEditHealthVisit";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 

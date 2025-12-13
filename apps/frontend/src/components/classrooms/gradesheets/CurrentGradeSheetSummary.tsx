@@ -10,9 +10,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@repo/ui/components/empty";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+} from "~/components/ui/empty";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 import { CreatedGradesheetCard } from "./CreatedGradesheetCard";
 

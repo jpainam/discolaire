@@ -8,7 +8,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@repo/ui/components/empty";
+} from "~/components/ui/empty";
 
 export function EmptyComponent({
   title,

@@ -9,10 +9,9 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@repo/ui/components/breadcrumb";
-import { Separator } from "@repo/ui/components/separator";
-import { SidebarTrigger } from "@repo/ui/components/sidebar";
-
+} from "~/components/ui/breadcrumb";
+import { Separator } from "~/components/ui/separator";
+import { SidebarTrigger } from "~/components/ui/sidebar";
 import { pageHeaderBreadcrumbs } from "./menu";
 
 export function PageHeader() {

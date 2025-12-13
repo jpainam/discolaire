@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Edit, PlusCircle, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Button } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 // Define the structure of an activity
 interface Activity {

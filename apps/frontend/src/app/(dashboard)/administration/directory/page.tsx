@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import { Label } from "@repo/ui/components/label";
-
+import { Label } from "~/components/ui/label";
 import { caller } from "~/trpc/server";
 import DirectoryHeader from "./DirectoryHeader";
 import { DirectoryTable } from "./DirectoryTable";

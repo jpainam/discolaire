@@ -1,13 +1,7 @@
 import { CalendarDays } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { caller } from "~/trpc/server";
 import FlatBadge from "../FlatBadge";
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Calendar } from "@repo/ui/components/calendar";
+import { Calendar } from "~/components/ui/calendar";
 import {
   Sidebar,
   SidebarContent,
@@ -18,8 +18,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-} from "@repo/ui/components/sidebar";
-
+} from "~/components/ui/sidebar";
 import { SidebarLogo } from "../sidebar-logo";
 import { Calendars } from "./calendars";
 

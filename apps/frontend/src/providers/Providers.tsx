@@ -3,10 +3,9 @@ import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-import { Toaster } from "@repo/ui/components/sonner";
-
 import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
+import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/lib/utils";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 import { ThemeProvider } from "~/providers/ThemeProvider";

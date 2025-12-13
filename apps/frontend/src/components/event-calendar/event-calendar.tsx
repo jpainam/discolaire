@@ -23,15 +23,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
 import type { CalendarEvent, CalendarView } from "~/components/event-calendar";
 import {
   addHoursToDate,
@@ -45,6 +36,14 @@ import {
   WeekCellsHeight,
   WeekView,
 } from "~/components/event-calendar";
+import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { cn } from "~/lib/utils";
 import { useCalendar } from "./calendar-context";

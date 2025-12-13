@@ -6,7 +6,10 @@ import { FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -14,20 +17,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Label } from "@repo/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+} from "~/components/ui/card";
+import { Label } from "~/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+} from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";

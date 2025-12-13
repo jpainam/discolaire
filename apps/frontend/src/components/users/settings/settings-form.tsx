@@ -15,10 +15,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+} from "~/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 
-//import { toast } from "@repo/ui/components/use-toast";
+//import { toast } from "~/components/ui/use-toast";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {

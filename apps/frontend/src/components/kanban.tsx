@@ -33,7 +33,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { Slot } from "@radix-ui/react-slot";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 interface KanbanContextProps<T> {
   columns: Record<string, T[]>;

@@ -6,8 +6,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-
+} from "~/components/ui/popover";
 import { cn, getWeekdayName } from "~/lib/utils";
 
 interface Event {

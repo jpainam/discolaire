@@ -6,15 +6,16 @@ import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
-import type { ChartConfig } from "@repo/ui/components/chart";
-import { Card, CardContent } from "@repo/ui/components/card";
+
+import type { ChartConfig } from "~/components/ui/chart";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
+} from "~/components/ui/chart";
 
 export function TransactionClassrooms({
   quotas,

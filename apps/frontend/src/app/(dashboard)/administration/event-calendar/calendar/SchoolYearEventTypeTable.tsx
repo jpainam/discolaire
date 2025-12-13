@@ -9,7 +9,8 @@ import { PencilIcon, PlusIcon, Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
 import {
   Table,
   TableBody,
@@ -17,9 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";

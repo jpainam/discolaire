@@ -8,7 +8,7 @@ import {
   Wallet,
 } from "lucide-react";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 interface Transaction {
   id: string;

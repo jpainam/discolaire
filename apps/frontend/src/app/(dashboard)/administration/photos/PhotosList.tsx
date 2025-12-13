@@ -5,15 +5,14 @@ import Link from "next/link";
 import { useSetAtom } from "jotai";
 import { useTranslations } from "next-intl";
 
+import FolderIcon from "~/components/icons/folder-solid";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-
-import FolderIcon from "~/components/icons/folder-solid";
+} from "~/components/ui/card";
 import { breadcrumbAtom } from "~/lib/atoms";
 
 export function PhotosList() {

@@ -2,11 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { CurrentGradeSheetSummary } from "~/components/classrooms/gradesheets/CurrentGradeSheetSummary";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 
 export function ClassroomSubjectGradeSheet({

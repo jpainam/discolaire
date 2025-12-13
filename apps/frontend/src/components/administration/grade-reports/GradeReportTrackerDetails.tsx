@@ -5,11 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { GradeSheetSummary } from "~/components/classrooms/gradesheets/GradeSheetSummary";
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 

@@ -2,11 +2,10 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { getTranslations } from "next-intl/server";
 
-import { Label } from "@repo/ui/components/label";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { UserDataTable } from "~/components/administration/users/UserDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Label } from "~/components/ui/label";
+import { Skeleton } from "~/components/ui/skeleton";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default async function Page() {

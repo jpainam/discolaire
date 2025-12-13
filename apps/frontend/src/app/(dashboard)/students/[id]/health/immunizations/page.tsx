@@ -1,10 +1,14 @@
 import {
+  immunizations,
+  vaccines,
+} from "~/components/students/health/data-immunization";
+import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,12 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import {
-  immunizations,
-  vaccines,
-} from "~/components/students/health/data-immunization";
+} from "~/components/ui/table";
 
 //import { ImmunizationHeader } from "~/components/students/health/ImmunizationHeader";
 export default function Page() {

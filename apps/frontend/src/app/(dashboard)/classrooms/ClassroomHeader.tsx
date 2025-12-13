@@ -3,9 +3,8 @@
 import { Download, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
+import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { PermissionAction } from "~/permissions";

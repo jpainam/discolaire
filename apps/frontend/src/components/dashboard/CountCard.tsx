@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import { RiArrowRightUpLine } from "@remixicon/react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 export async function CountCard({
   icon,

@@ -3,16 +3,10 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { LockKeyhole, Shield, User } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
 import { PermissionTable } from "~/components/users/PermissionTable";
 import { PermissionAction } from "~/permissions";

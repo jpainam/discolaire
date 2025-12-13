@@ -3,17 +3,16 @@ import Link from "next/link";
 import { ArrowUpRightIcon, TriangleAlert } from "lucide-react";
 import { createLoader } from "nuqs/server";
 
-import { Button } from "@repo/ui/components/button";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { NoPermission } from "~/components/no-permission";
+import { Button } from "~/components/ui/button";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@repo/ui/components/empty";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
-import { NoPermission } from "~/components/no-permission";
+} from "~/components/ui/empty";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, trpc } from "~/trpc/server";

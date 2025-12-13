@@ -23,16 +23,15 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { AvatarState } from "~/components/AvatarState";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import { AvatarState } from "~/components/AvatarState";
+} from "~/components/ui/dropdown-menu";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";

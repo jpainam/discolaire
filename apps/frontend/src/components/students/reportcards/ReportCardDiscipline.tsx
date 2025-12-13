@@ -7,8 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { cn } from "~/lib/utils";
 
 export async function ReportCardDiscipline({

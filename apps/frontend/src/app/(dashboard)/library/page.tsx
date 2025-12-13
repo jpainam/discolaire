@@ -10,17 +10,11 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
-import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { ErrorFallback } from "~/components/error-fallback";
+import { Badge } from "~/components/ui/badge";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { BookTab } from "./BookTab";
 import { LibraryDashboard } from "./LibraryDashboard";

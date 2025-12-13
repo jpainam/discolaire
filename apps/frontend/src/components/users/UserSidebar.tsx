@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { authClient } from "~/auth/client";
 import {
   Sidebar,
   SidebarContent,
@@ -23,9 +24,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@repo/ui/components/sidebar";
-
-import { authClient } from "~/auth/client";
+} from "~/components/ui/sidebar";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";

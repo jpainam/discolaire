@@ -1,6 +1,5 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { SkeletonLineGroup } from "~/components/skeletons/data-table";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export default function TimeTableSkeleton() {
   return (

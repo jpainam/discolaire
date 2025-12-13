@@ -15,15 +15,9 @@ import {
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 
 export function StudentGradeDetails({

@@ -3,11 +3,10 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
 import { Badge } from "~/components/base-badge";
 import PDFIcon from "~/components/icons/pdf-solid";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { getAppreciations } from "~/utils/appreciations";

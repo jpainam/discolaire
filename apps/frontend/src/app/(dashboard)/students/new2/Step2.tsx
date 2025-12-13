@@ -6,12 +6,11 @@ import { useParams } from "next/navigation";
 import { Building } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { DatePicker } from "~/components/DatePicker";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
+import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   FormControl,
   FormField,
@@ -19,19 +18,14 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/components/form";
+} from "~/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { DatePicker } from "~/components/DatePicker";
-import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
-import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
+} from "~/components/ui/select";
 
 export function Step2() {
   const params = useParams<{ id: string }>();

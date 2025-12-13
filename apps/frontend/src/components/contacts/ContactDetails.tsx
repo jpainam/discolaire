@@ -3,9 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { showErrorToast } from "~/lib/handle-error";
 import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";

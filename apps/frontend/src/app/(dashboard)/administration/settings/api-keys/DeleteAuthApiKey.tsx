@@ -3,9 +3,8 @@
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-
 import { authClient } from "~/auth/client";
+import { Button } from "~/components/ui/button";
 import { useRouter } from "~/hooks/use-router";
 
 export function DeleteAuthApiKey({ apiKeyId }: { apiKeyId: string }) {

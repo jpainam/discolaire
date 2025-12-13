@@ -2,12 +2,7 @@ import { format } from "date-fns";
 import { CalendarIcon, ListTodo, PieChart, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 export async function AssignmentSummary() {
   const t = await getTranslations();

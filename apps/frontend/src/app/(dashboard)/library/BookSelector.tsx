@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -11,15 +11,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
+} from "~/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+} from "~/components/ui/popover";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 

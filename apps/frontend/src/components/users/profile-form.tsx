@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 //import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/components/button";
+import { authClient } from "~/auth/client";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,18 +16,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { authClient } from "~/auth/client";
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
 
 //import { toast } from "~/registry/new-york/ui/use-toast";
 

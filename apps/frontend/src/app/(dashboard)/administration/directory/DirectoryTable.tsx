@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
+
 import {
   Table,
   TableBody,
@@ -10,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
+} from "~/components/ui/table";
 
 export function DirectoryTable({
   directories,

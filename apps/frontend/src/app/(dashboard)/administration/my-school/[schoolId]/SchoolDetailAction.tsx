@@ -3,8 +3,7 @@
 import { Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-
+import { Button } from "~/components/ui/button";
 import { useRouter } from "~/hooks/use-router";
 
 export function SchoolDetailAction({ schoolId }: { schoolId: string }) {

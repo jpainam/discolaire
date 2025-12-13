@@ -3,8 +3,7 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 
-import type { Sidebar } from "@repo/ui/components/sidebar";
-
+import type { Sidebar } from "~/components/ui/sidebar";
 import { MainSidebar } from "~/components/MainSidebar";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { AdminSidebar } from "./administration/admin-sidebar";

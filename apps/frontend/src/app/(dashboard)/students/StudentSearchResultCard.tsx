@@ -20,9 +20,11 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent } from "@repo/ui/components/card";
+
+import { AvatarState } from "~/components/AvatarState";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,9 +32,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import { AvatarState } from "~/components/AvatarState";
+} from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";

@@ -11,15 +11,15 @@ import { useLocale, useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
 import { DataTable, useDataTable } from "@repo/ui/datatable";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
-import { cn } from "@repo/ui/lib/utils";
 
 import FlatBadge from "~/components/FlatBadge";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import { routes } from "~/configs/routes";
 import { useSheet } from "~/hooks/use-sheet";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { GradeSheetDataTableActions } from "./GradeSheetDataTableActions";

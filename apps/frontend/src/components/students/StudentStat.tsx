@@ -10,9 +10,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Separator } from "@repo/ui/components/separator";
-
+} from "~/components/ui/dropdown-menu";
+import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
 
 export function StudentStat() {

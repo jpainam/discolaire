@@ -1,7 +1,6 @@
-import { Card, CardContent, CardHeader } from "@repo/ui/components/card";
-
 import { SMSHistoryDataTable } from "~/components/administration/sms-management/SMSHistoryDataTable";
 import { SMSHistoryHeader } from "~/components/administration/sms-management/SMSHistoryHeader";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
 // const smsHistorySchema = z.object({
 //   per_page: z.number().optional(),

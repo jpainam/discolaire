@@ -10,20 +10,22 @@ import { Eye, MoreHorizontal, Search, Trash2, Users2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { Badge } from "~/components/base-badge";
+import { StudentContactListSheet } from "~/components/students/contacts/StudentContactListSheet";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
+} from "~/components/ui/input-group";
 import {
   Table,
   TableBody,
@@ -31,10 +33,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { Badge } from "~/components/base-badge";
-import { StudentContactListSheet } from "~/components/students/contacts/StudentContactListSheet";
+} from "~/components/ui/table";
 import { UserLink } from "~/components/UserLink";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";

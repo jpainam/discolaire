@@ -7,8 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
+} from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 
 export default function PrefixSelector({

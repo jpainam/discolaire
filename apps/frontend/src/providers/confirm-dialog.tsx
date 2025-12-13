@@ -11,7 +11,7 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 
-import type { AlertDialogOverlay } from "@repo/ui/components/alert-dialog";
+import type { AlertDialogOverlay } from "~/components/ui/alert-dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,7 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogPortal,
   AlertDialogTitle,
-} from "@repo/ui/components/alert-dialog";
+} from "~/components/ui/alert-dialog";
 
 export interface CustomActionsProps {
   confirm: () => void;

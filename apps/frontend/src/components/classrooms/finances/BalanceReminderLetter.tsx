@@ -5,11 +5,10 @@ import { addDays } from "date-fns";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
 import { DatePicker } from "~/components/DatePicker";
 import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 
 export function BalanceReminderLetter({

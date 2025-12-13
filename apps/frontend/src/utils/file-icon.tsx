@@ -8,7 +8,7 @@ import {
   VideoIcon,
 } from "lucide-react";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 export const getFileIcon = (
   file: {

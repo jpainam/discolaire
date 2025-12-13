@@ -3,14 +3,13 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Award, BookOpen, Calendar, TrendingUp, Users } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Card, CardContent } from "@repo/ui/components/card";
-import { Progress } from "@repo/ui/components/progress";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ClassroomGradeChart } from "~/components/classrooms/gradesheets/ClassroomGradeChart";
 import { ClassroomGradeList } from "~/components/classrooms/gradesheets/ClassroomGradeList";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Badge } from "~/components/ui/badge";
+import { Card, CardContent } from "~/components/ui/card";
+import { Progress } from "~/components/ui/progress";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, getQueryClient, trpc } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 

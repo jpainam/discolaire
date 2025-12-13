@@ -10,7 +10,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@repo/ui/components/collapsible";
+} from "~/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -19,7 +19,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@repo/ui/components/sidebar";
+} from "~/components/ui/sidebar";
 
 export function NavMain({
   items,

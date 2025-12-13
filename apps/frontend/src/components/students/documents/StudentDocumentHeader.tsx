@@ -3,10 +3,9 @@
 import { FolderOpen, UploadCloudIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 
 export function StudentDocumentHeader({ userId }: { userId: string }) {

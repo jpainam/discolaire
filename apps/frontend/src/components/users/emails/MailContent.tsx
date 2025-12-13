@@ -1,7 +1,6 @@
 "use client";
 
-import { cn } from "@repo/ui/lib/utils";
-
+import { cn } from "~/lib/utils";
 import { MailCompose } from "./MailCompose";
 import { useMailContext } from "./MailContextProvider";
 import { MailDetail } from "./MailDetail";

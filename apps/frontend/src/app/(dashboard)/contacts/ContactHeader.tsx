@@ -3,15 +3,14 @@
 import { MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import CreateEditContact from "~/components/contacts/CreateEditContact";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import CreateEditContact from "~/components/contacts/CreateEditContact";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { PermissionAction } from "~/permissions";

@@ -5,8 +5,8 @@ import { Loader2Icon, MoreHorizontal, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
 
+import { Button } from "~/components/ui/button";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { cn } from "~/lib/utils";

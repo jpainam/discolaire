@@ -3,12 +3,9 @@ import { decode } from "entities";
 import { getTranslations } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -16,9 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";

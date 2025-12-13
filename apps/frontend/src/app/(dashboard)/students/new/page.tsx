@@ -15,10 +15,6 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { StudentStatus } from "@repo/db/enums";
-import { Button } from "@repo/ui/components/button";
-import { Form } from "@repo/ui/components/form";
-import { Progress } from "@repo/ui/components/progress";
-import { cn } from "@repo/ui/lib/utils";
 
 import {
   Stepper,
@@ -29,6 +25,10 @@ import {
   StepperTitle,
   StepperTrigger,
 } from "~/components/stepper";
+import { Button } from "~/components/ui/button";
+import { Form } from "~/components/ui/form";
+import { Progress } from "~/components/ui/progress";
+import { cn } from "~/lib/utils";
 import { Step1 } from "./Step1";
 import { Step2 } from "./Step2";
 import { Step3 } from "./Step3";

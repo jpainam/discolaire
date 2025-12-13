@@ -3,8 +3,7 @@
 import { BlocksIcon, StretchVerticalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-
+import { Button } from "~/components/ui/button";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { CreateEditAsset } from "./CreateEditAsset";

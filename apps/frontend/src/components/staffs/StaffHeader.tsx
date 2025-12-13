@@ -6,9 +6,8 @@ import { useSetAtom } from "jotai";
 import { Download, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { breadcrumbAtom } from "~/lib/atoms";

@@ -20,19 +20,23 @@ import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { Badge } from "~/components/base-badge";
+import { ClassroomEditAttendance } from "~/components/classrooms/attendances/ClassroomEditAttendance";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
+} from "~/components/ui/input-group";
 import {
   Table,
   TableBody,
@@ -40,11 +44,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { Badge } from "~/components/base-badge";
-import { ClassroomEditAttendance } from "~/components/classrooms/attendances/ClassroomEditAttendance";
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

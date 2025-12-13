@@ -12,16 +12,15 @@ import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";

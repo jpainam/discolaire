@@ -4,8 +4,10 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import _ from "lodash";
 import { getTranslations } from "next-intl/server";
 
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
+import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
+import { ErrorFallback } from "~/components/error-fallback";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -13,17 +15,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
+} from "~/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
-import { cn } from "@repo/ui/lib/utils";
-
-import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
-import { ErrorFallback } from "~/components/error-fallback";
+} from "~/components/ui/tooltip";
 import { UserLink } from "~/components/UserLink";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";

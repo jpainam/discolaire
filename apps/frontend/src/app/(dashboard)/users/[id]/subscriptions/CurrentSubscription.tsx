@@ -1,13 +1,13 @@
 import { Mail, MessageSquare, Phone } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
+import { Badge } from "~/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 
 export function CurrentSubscription() {
   return (

@@ -5,12 +5,12 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
+} from "~/components/ui/tooltip";
 
 function CopyButton({
   content,

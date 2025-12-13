@@ -10,18 +10,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
 
 import { DatePicker } from "~/components/DatePicker";
 import { DateRangePicker } from "~/components/DateRangePicker";
@@ -29,6 +17,18 @@ import { AssignmentCategorySelector } from "~/components/shared/selects/Assignme
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";

@@ -3,14 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { FileIcon, MoreHorizontal, Paperclip, Star, X } from "lucide-react";
 import { useLocale } from "next-intl";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Button } from "@repo/ui/components/button";
-import { Textarea } from "@repo/ui/components/textarea";
-
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import { Textarea } from "~/components/ui/textarea";
 import { useTRPC } from "~/trpc/react";
 import { useMailContext } from "./MailContextProvider";
 

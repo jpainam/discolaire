@@ -6,14 +6,13 @@ import { formatDistanceToNow } from "date-fns";
 import { BellIcon, Loader2, TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-
+} from "~/components/ui/popover";
 import { useTRPC } from "~/trpc/react";
 
 const initialNotifications = [

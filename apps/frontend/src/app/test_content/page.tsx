@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { BarChart, HelpCircle, Menu, Settings, Users } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { cn } from "@repo/ui/lib/utils";
+import { Button } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { cn } from "~/lib/utils";
 
 export default function Dashboard() {
   const [activeSidePanel, setActiveSidePanel] = useState<string | null>(null);

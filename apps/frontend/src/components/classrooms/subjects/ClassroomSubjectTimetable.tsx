@@ -6,8 +6,8 @@ import { CalendarDays, Trash } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Empty,
   EmptyContent,
@@ -15,18 +15,17 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@repo/ui/components/empty";
+} from "~/components/ui/empty";
 import {
   Field,
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "@repo/ui/components/field";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+} from "~/components/ui/field";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { getWeekdayName } from "~/lib/utils";

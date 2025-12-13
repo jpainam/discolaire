@@ -6,20 +6,20 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { PanelLeftIcon } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
-import { Separator } from "@repo/ui/components/separator";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
+
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Separator } from "~/components/ui/separator";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@repo/ui/components/sheet";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { useIsMobile } from "@repo/ui/hooks/use-mobile";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/sheet";
+import { Skeleton } from "~/components/ui/skeleton";
+import { cn } from "~/lib/utils";
 import {
   Tooltip,
   TooltipContent,

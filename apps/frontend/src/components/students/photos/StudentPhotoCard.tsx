@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   photo: string;

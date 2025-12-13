@@ -10,9 +10,9 @@
 //   AccordionContent,
 //   AccordionItem,
 //   AccordionTrigger,
-// } from "@repo/ui/components/accordion";
-// import { Badge } from "@repo/ui/components/badge";
-// import { Button } from "@repo/ui/components/button";
+// } from "~/components/ui/accordion";
+// import { Badge } from "~/components/ui/badge";
+// import { Button } from "~/components/ui/button";
 // import {
 //   Card,
 //   CardAction,
@@ -20,28 +20,28 @@
 //   CardDescription,
 //   CardHeader,
 //   CardTitle,
-// } from "@repo/ui/components/card";
-// import { Input } from "@repo/ui/components/input";
-// import { Label } from "@repo/ui/components/label";
+// } from "~/components/ui/card";
+// import { Input } from "~/components/ui/input";
+// import { Label } from "~/components/ui/label";
 // import {
 //   Pagination,
 //   PaginationContent,
 //   PaginationItem,
-// } from "@repo/ui/components/pagination";
+// } from "~/components/ui/pagination";
 // import {
 //   Select,
 //   SelectContent,
 //   SelectItem,
 //   SelectTrigger,
 //   SelectValue,
-// } from "@repo/ui/components/select";
+// } from "~/components/ui/select";
 // import {
 //   Sheet,
 //   SheetContent,
 //   SheetDescription,
 //   SheetHeader,
 //   SheetTitle,
-// } from "@repo/ui/components/sheet";
+// } from "~/components/ui/sheet";
 // import {
 //   Table,
 //   TableBody,
@@ -49,7 +49,7 @@
 //   TableHead,
 //   TableHeader,
 //   TableRow,
-// } from "@repo/ui/components/table";
+// } from "~/components/ui/table";
 // import { useQuery } from "@tanstack/react-query";
 // import { parseAsIsoDate, useQueryState } from "nuqs";
 // import { useDebouncedCallback } from "use-debounce";

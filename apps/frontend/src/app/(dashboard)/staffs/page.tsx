@@ -1,12 +1,11 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ErrorFallback } from "~/components/error-fallback";
 import { StaffDataTable } from "~/components/staffs/StaffDataTable";
 import { StaffHeader } from "~/components/staffs/StaffHeader";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
 export default function Page() {

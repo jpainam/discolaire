@@ -9,7 +9,9 @@ import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { StaffSelector } from "~/components/shared/selects/StaffSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,16 +19,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
+} from "~/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { StaffSelector } from "~/components/shared/selects/StaffSelector";
+} from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { cronValues } from "./cron-values";

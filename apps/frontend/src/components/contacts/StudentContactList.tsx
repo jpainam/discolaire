@@ -5,7 +5,8 @@ import { ExternalLink, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -13,14 +14,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { cn } from "@repo/ui/lib/utils";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";

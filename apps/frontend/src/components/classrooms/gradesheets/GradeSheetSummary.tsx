@@ -3,8 +3,7 @@
 import { Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
+import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 import { ClassroomGradeChart } from "./ClassroomGradeChart";
 import { ClassroomGradeList } from "./ClassroomGradeList";

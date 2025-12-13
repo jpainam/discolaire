@@ -1,23 +1,22 @@
 import { MoreHorizontal } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { AvatarState } from "~/components/AvatarState";
+import { Badge } from "~/components/base-badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Progress } from "@repo/ui/components/progress";
-
-import { AvatarState } from "~/components/AvatarState";
-import { Badge } from "~/components/base-badge";
+} from "~/components/ui/dropdown-menu";
+import { Progress } from "~/components/ui/progress";
 
 const courses = [
   {

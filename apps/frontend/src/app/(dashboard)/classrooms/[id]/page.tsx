@@ -1,12 +1,11 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ClassroomDetails } from "~/components/classrooms/ClassroomDetails";
 import { ClassroomStudentTable } from "~/components/classrooms/enrollments/ClassroomStudentTable";
 import { EnrollmentHeader } from "~/components/classrooms/enrollments/EnrollmentHeader";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 //import TopTimetable from "~/components/classrooms/TopTimetable";

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 
 export default async function Page(props: {
   searchParams: Promise<{ email: string }>;

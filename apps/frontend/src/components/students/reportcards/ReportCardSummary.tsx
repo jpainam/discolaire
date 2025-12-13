@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import { Separator } from "@repo/ui/components/separator";
-
+import { Separator } from "~/components/ui/separator";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 

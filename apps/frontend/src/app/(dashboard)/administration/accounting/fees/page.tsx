@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { FeeBar } from "~/components/administration/fees/charts/FeeBar";
 import { FeeTrend } from "~/components/administration/fees/charts/FeeTrend";
 import { FeeDataTable } from "~/components/administration/fees/FeeDataTable";
 import { FeeHeader } from "~/components/administration/fees/FeeHeader";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default function Page() {

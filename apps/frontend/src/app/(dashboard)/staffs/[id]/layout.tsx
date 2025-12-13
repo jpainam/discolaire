@@ -11,14 +11,13 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
 import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
+import { Skeleton } from "~/components/ui/skeleton";
 import { routes } from "~/configs/routes";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";

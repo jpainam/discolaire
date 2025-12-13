@@ -9,17 +9,12 @@ import { CalendarDays, Search } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
-
+} from "~/components/ui/input-group";
 import { useTRPC } from "~/trpc/react";
 
 export function QuickClassroomList() {

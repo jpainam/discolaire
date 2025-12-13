@@ -3,10 +3,9 @@
 import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-
 import { CreateEditClassroom } from "~/components/classrooms/CreateEditClassroom";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useSheet } from "~/hooks/use-sheet";
 
 export function ClassroomHeader() {

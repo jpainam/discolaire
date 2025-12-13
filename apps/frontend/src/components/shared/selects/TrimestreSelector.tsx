@@ -6,8 +6,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/select";
+import { cn } from "~/lib/utils";
 
 export function TrimestreSelector({
   onChange,

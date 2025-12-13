@@ -4,8 +4,10 @@ import { CircleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-//import { ReportCardTable } from "~/components/classrooms/reportcards/ReportCardTable2";
+import { AvatarState } from "~/components/AvatarState";
+import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -13,17 +15,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
+} from "~/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
-import { cn } from "@repo/ui/lib/utils";
-
-import { AvatarState } from "~/components/AvatarState";
-import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/tooltip";
+//import { ReportCardTable } from "~/components/classrooms/reportcards/ReportCardTable2";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";

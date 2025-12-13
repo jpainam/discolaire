@@ -5,7 +5,9 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
+import { DatePicker } from "~/components/DatePicker";
+import { InputField } from "~/components/shared/forms/input-field";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,12 +15,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-import { Separator } from "@repo/ui/components/separator";
-
-import { DatePicker } from "~/components/DatePicker";
-import { InputField } from "~/components/shared/forms/input-field";
+} from "~/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Separator } from "~/components/ui/separator";
 import { useModal } from "~/hooks/use-modal";
 
 export function ChurchDetailsForm() {

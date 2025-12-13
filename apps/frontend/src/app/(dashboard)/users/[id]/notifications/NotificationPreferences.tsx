@@ -11,12 +11,11 @@ import { Mail, MessageSquare, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
-
 import type { NotificationType } from "~/configs/constants";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import { useTRPC } from "~/trpc/react";
 
 interface NotificationEvent {

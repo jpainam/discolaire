@@ -10,8 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";

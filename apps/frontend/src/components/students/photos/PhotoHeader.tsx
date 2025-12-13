@@ -6,8 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Label } from "@repo/ui/components/label";
-
+import { Label } from "~/components/ui/label";
 import { useUpload } from "~/hooks/use-upload";
 import { getErrorMessage } from "~/lib/handle-error";
 import { useSchool } from "~/providers/SchoolProvider";

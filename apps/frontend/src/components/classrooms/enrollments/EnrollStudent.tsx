@@ -7,12 +7,9 @@ import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-import { Button } from "@repo/ui/components/button";
+import { randomAvatar } from "~/components/raw-images";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -20,11 +17,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import { randomAvatar } from "~/components/raw-images";
+} from "~/components/ui/command";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import rangeMap from "~/lib/range-map";

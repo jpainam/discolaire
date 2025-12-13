@@ -8,8 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { getQueryClient, trpc } from "~/trpc/server";
 
 export async function RecentGradesTable() {

@@ -1,23 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { Check, ChevronsUpDown, Loader2, Search } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@repo/ui/components/command";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/command";
+import { Input } from "~/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/popover";
 import { useDebounce } from "~/hooks/use-debounce";
+import { cn } from "~/lib/utils";
 
 export interface Option {
   value: string;

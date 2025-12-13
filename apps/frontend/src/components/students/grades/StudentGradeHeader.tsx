@@ -7,20 +7,19 @@ import { useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";

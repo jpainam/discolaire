@@ -2,15 +2,10 @@
 
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
-import { Label } from "@repo/ui/components/label";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-import { Textarea } from "@repo/ui/components/textarea";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Textarea } from "~/components/ui/textarea";
 
 const ReportCardSummary = () => {
   const t = useTranslations();

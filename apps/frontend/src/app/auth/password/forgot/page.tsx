@@ -8,8 +8,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
-import { Button } from "@repo/ui/components/button";
+import { authClient } from "~/auth/client";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,7 +18,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   Form,
   FormControl,
@@ -25,10 +26,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-
-import { authClient } from "~/auth/client";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { useRouter } from "~/hooks/use-router";
 
 const formSchema = z.object({

@@ -6,15 +6,9 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
-import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
+import { Badge } from "~/components/ui/badge";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { caller } from "~/trpc/server";
 import { EnrolledStudentDataTable } from "./EnrolledStudentDataTable";
 import { ExcludedStudentDataTable } from "./excluded/ExcludedStudentDataTable";

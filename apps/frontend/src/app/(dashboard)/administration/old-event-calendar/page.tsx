@@ -1,6 +1,5 @@
-import { Separator } from "@repo/ui/components/separator";
-
 import { EventCalendarHeader } from "~/components/administration/event-calendar/EventCalendarHeader";
+import { Separator } from "~/components/ui/separator";
 
 export default function Page() {
   return (

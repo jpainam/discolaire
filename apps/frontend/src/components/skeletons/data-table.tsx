@@ -1,7 +1,6 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { cn } from "@repo/ui/lib/utils";
-
+import { Skeleton } from "~/components/ui/skeleton";
 import rangeMap from "~/lib/range-map";
+import { cn } from "~/lib/utils";
 
 interface DatatableSkeletonProps {
   rows: number;

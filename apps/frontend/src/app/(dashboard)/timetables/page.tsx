@@ -1,7 +1,6 @@
 // "use client";
 
-import { SidebarProvider } from "@repo/ui/components/sidebar";
-
+import { SidebarProvider } from "~/components/ui/sidebar";
 import { TimetableContainer } from "./TimetableContainer";
 
 export default function Page() {

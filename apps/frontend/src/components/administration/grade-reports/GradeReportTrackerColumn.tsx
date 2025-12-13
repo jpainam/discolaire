@@ -7,12 +7,12 @@ import { useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { Progress } from "@repo/ui/components/progress";
 import { DataTableColumnHeader } from "@repo/ui/datatable/data-table-column-header";
 
 import { Badge } from "~/components/base-badge";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Progress } from "~/components/ui/progress";
 import { useSheet } from "~/hooks/use-sheet";
 import { cn } from "~/lib/utils";
 import { getFullName } from "~/utils";

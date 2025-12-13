@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { auth } from "~/auth/server";
 import {
   Table,
   TableBody,
@@ -8,9 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { auth } from "~/auth/server";
+} from "~/components/ui/table";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

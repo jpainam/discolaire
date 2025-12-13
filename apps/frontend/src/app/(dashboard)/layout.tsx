@@ -1,10 +1,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { SidebarInset, SidebarProvider } from "@repo/ui/components/sidebar";
-
 import { getSession } from "~/auth/server";
 import { AppSidebar } from "~/components/app-sidebar";
+import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { SchoolContextProvider } from "~/providers/SchoolProvider";

@@ -5,14 +5,13 @@ import { CalendarIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { enUS, es, fr } from "react-day-picker/locale";
 
-import { Button } from "@repo/ui/components/button";
-import { Calendar } from "@repo/ui/components/calendar";
+import { Button } from "~/components/ui/button";
+import { Calendar } from "~/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-
+} from "~/components/ui/popover";
 import { cn } from "~/lib/utils";
 
 export function DatePicker({

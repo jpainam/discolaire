@@ -4,9 +4,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { Label } from "@repo/ui/components/label";
-
 import { SearchCombobox } from "~/components/SearchCombobox";
+import { Label } from "~/components/ui/label";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

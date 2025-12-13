@@ -1,10 +1,9 @@
 import { getTranslations } from "next-intl/server";
 
-import { Separator } from "@repo/ui/components/separator";
-
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { StudentAssignmentTable } from "~/components/students/assignments/StudentAssignementTable";
 import { StudentAssignmentHeader } from "~/components/students/assignments/StudentAssignmentHeader";
+import { Separator } from "~/components/ui/separator";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

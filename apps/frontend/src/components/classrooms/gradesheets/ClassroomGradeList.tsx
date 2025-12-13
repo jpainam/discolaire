@@ -20,15 +20,21 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { Badge } from "~/components/base-badge";
+import { EditStudentGrade } from "~/components/classrooms/gradesheets/grades/EditStudentGrade";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
 import {
   Table,
   TableBody,
@@ -36,19 +42,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
-
-import { Badge } from "~/components/base-badge";
-import { EditStudentGrade } from "~/components/classrooms/gradesheets/grades/EditStudentGrade";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/table";
 import { UserLink } from "~/components/UserLink";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";

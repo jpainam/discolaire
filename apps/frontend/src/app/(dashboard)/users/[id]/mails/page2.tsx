@@ -15,11 +15,11 @@ import {
   Users,
 } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Textarea } from "@repo/ui/components/textarea";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Textarea } from "~/components/ui/textarea";
 
 export default function EmailClient() {
   const [activeFolder, setActiveFolder] = useState("inbox");

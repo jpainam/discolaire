@@ -9,13 +9,12 @@ import { useTranslations } from "next-intl";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent } from "@repo/ui/components/card";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-
 import { signIn } from "~/actions/signin";
 import { ModeSwitcher } from "~/components/mode-switcher";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent } from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 const initialState = { error: undefined, _nonce: undefined };
 

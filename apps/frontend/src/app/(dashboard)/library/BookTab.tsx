@@ -4,21 +4,21 @@ import { useQuery } from "@tanstack/react-query";
 import { LibraryBigIcon, MoreVerticalIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
+
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
-import { DataTableSkeleton } from "@repo/ui/datatable/data-table-skeleton";
-
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { PermissionAction } from "~/permissions";

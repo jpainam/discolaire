@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { GradeSheetDataTable } from "~/components/classrooms/gradesheets/GradeSheetDataTable";
 import { GradeSheetHeader } from "~/components/classrooms/gradesheets/GradeSheetHeader";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: {

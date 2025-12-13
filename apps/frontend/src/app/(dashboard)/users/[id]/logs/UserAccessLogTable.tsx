@@ -5,7 +5,7 @@
 //   TableHead,
 //   TableHeader,
 //   TableRow,
-// } from "@repo/ui/components/table";
+// } from "~/components/ui/table";
 // import {
 //   Clock4,
 //   LogInIcon,

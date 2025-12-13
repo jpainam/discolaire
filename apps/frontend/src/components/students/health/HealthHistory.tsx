@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,7 +20,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   Form,
   FormControl,
@@ -29,10 +29,9 @@ import {
   FormLabel,
   FormMessage,
   useFormContext,
-} from "@repo/ui/components/form";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
-import { Textarea } from "@repo/ui/components/textarea";
-
+} from "~/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Textarea } from "~/components/ui/textarea";
 import { useTRPC } from "~/trpc/react";
 
 const schemaForm = z.object({

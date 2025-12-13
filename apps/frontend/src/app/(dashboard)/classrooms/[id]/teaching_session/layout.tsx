@@ -4,10 +4,9 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { createLoader, parseAsInteger } from "nuqs/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ProgramList } from "~/components/classrooms/programs/ProgramList";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 const programSchema = {

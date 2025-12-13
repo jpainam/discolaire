@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { TransactionType } from "@repo/db/enums";
+
 import {
   Card,
   CardAction,
@@ -9,10 +10,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/card";
 import { CURRENCY } from "~/lib/constants";
+import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";

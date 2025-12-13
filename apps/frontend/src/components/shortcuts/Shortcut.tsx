@@ -17,25 +17,25 @@ import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@repo/ui/components/dialog";
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-import { Separator } from "@repo/ui/components/separator";
-import { SidebarMenuButton, useSidebar } from "@repo/ui/components/sidebar";
-
+} from "~/components/ui/popover";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { SidebarMenuButton, useSidebar } from "~/components/ui/sidebar";
 import { env } from "~/env";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";

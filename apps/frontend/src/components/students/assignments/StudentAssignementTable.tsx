@@ -6,7 +6,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { EmptyComponent } from "~/components/EmptyComponent";
+import FlatBadge from "~/components/FlatBadge";
+import { Button } from "~/components/ui/button";
 import {
   Table,
   TableBody,
@@ -14,10 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
-import FlatBadge from "~/components/FlatBadge";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 

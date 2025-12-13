@@ -8,13 +8,17 @@ import { DollarSign, PrinterIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { TransactionStatus } from "@repo/db/enums";
-import { Button } from "@repo/ui/components/button";
+
+import { Badge } from "~/components/base-badge";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyContent,
@@ -22,8 +26,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@repo/ui/components/empty";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/empty";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -31,11 +35,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { Badge } from "~/components/base-badge";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
+} from "~/components/ui/table";
 import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 

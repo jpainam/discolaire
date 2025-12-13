@@ -15,7 +15,8 @@ import {
 import { useTranslations } from "next-intl";
 import { parseAsString, useQueryStates } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/base-badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -23,19 +24,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Progress } from "@repo/ui/components/progress";
-import { Separator } from "@repo/ui/components/separator";
-import { cn } from "@repo/ui/lib/utils";
-
-import { Badge } from "~/components/base-badge";
+} from "~/components/ui/dropdown-menu";
+import { Progress } from "~/components/ui/progress";
+import { Separator } from "~/components/ui/separator";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 export function CourseCoverageSummary() {

@@ -8,7 +8,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { Fee } from "@repo/db/client";
-import { Button } from "@repo/ui/components/button";
+
+import { DatePicker } from "~/components/DatePicker";
+import { InputField } from "~/components/shared/forms/input-field";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,17 +19,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
+} from "~/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-
-import { DatePicker } from "~/components/DatePicker";
-import { InputField } from "~/components/shared/forms/input-field";
+} from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 

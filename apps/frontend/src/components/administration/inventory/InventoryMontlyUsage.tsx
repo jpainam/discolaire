@@ -4,7 +4,7 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardAction,
@@ -12,23 +12,22 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
+} from "~/components/ui/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useIsMobile } from "~/hooks/use-mobile";
+import { cn } from "~/lib/utils";
 
 export const description = "An interactive area chart";
 

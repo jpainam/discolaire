@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 interface EventProps {
   date: string;

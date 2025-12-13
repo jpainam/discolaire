@@ -5,16 +5,10 @@ import { BoxIcon, PanelsTopLeftIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsString } from "nuqs/server";
 
-import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { ErrorFallback } from "~/components/error-fallback";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { CourseCoverageHeader } from "./course_coverage/CourseCoverageHeader";
 import { CourseCoveragePieChart } from "./course_coverage/CourseCoveragePieChart";

@@ -11,7 +11,11 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
-//import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@repo/ui/components/sidebar";
+import {
+  changeLocaleAction,
+  changeScaledThemeAction,
+} from "~/actions/change_locale";
+//import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "~/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,24 +29,19 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
-import { Kbd } from "@repo/ui/components/kbd";
+} from "~/components/ui/input-group";
+import { Kbd } from "~/components/ui/kbd";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@repo/ui/components/sidebar";
-
-import {
-  changeLocaleAction,
-  changeScaledThemeAction,
-} from "~/actions/change_locale";
+} from "~/components/ui/sidebar";
 import { META_THEME_COLORS, useMetaColor } from "~/hooks/use-meta-color";
 import { useRouter } from "~/hooks/use-router";
 import { ThemeSelector } from "./ThemeSelector";

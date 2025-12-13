@@ -2,8 +2,6 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { decode } from "entities";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { getSession } from "~/auth/server";
 import { QuickChartCard } from "~/components/dashboard/QuickChartCard";
 import { QuickClassroomList } from "~/components/dashboard/QuickClassroomList";
@@ -15,6 +13,7 @@ import { StudentTransactionStat } from "~/components/dashboard/student/StudentTr
 import { StudentDashboardContact } from "~/components/dashboard/StudentDashboardContact";
 import { StudentLatestGrade } from "~/components/dashboard/StudentLatestGrade";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
   getQueryClient,

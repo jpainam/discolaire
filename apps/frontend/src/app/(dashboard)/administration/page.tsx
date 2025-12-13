@@ -4,19 +4,18 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 //import { RecentActivities } from "~/components/administration/RecentActivities";
 import { getTranslations } from "next-intl/server";
 
+import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
+import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
+import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
+import { ErrorFallback } from "~/components/error-fallback";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import { GradeDistributionChart } from "~/components/administration/grade-reports/GradeDistributionChart";
-import { RecentGradesTable } from "~/components/administration/grade-reports/RecentGradesTable";
-import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
-import { ErrorFallback } from "~/components/error-fallback";
+} from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
   getQueryClient,

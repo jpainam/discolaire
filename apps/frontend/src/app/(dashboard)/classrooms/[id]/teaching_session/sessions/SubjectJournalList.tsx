@@ -12,15 +12,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { ScrollArea } from "@repo/ui/components/scroll-area";
-
+} from "~/components/ui/dropdown-menu";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { getFileBasename, isRichText } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";

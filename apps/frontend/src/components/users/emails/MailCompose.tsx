@@ -2,10 +2,9 @@
 
 import { File, Paperclip, X } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
-import { Textarea } from "@repo/ui/components/textarea";
-
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 import { useMailContext } from "./MailContextProvider";
 
 export function MailCompose() {

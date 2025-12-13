@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import { Label } from "@repo/ui/components/label";
-
+import { Label } from "~/components/ui/label";
 import { prefetch, trpc } from "~/trpc/server";
 import { CourseAction } from "./CourseAction";
 import { CourseDataTable } from "./CourseDataTable";

@@ -7,16 +7,15 @@ import { useSetAtom } from "jotai";
 import { MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@repo/ui/components/button";
+import { authClient } from "~/auth/client";
+import { ContactSelector } from "~/components/shared/selects/ContactSelector";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import { authClient } from "~/auth/client";
-import { ContactSelector } from "~/components/shared/selects/ContactSelector";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";

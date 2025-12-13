@@ -4,8 +4,9 @@ import { useId } from "react";
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
-import { Badge } from "@repo/ui/components/badge";
+import type { ChartConfig } from "~/components/ui/chart";
+import { CustomTooltipContent } from "~/components/charts-extra";
+import { Badge } from "~/components/ui/badge";
 import {
   Card,
   CardAction,
@@ -13,11 +14,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { ChartContainer, ChartTooltip } from "@repo/ui/components/chart";
-import { cn } from "@repo/ui/lib/utils";
-
-import { CustomTooltipContent } from "~/components/charts-extra";
+} from "~/components/ui/card";
+import { ChartContainer, ChartTooltip } from "~/components/ui/chart";
+import { cn } from "~/lib/utils";
 
 // "use client";
 // import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
@@ -27,14 +26,14 @@ import { CustomTooltipContent } from "~/components/charts-extra";
 //   CardContent,
 //   CardHeader,
 //   CardTitle,
-// } from "@repo/ui/components/card";
-// import type { ChartConfig } from "@repo/ui/components/chart";
+// } from "~/components/ui/card";
+// import type { ChartConfig } from "~/components/ui/chart";
 // import {
 //   ChartContainer,
 //   ChartTooltip,
 //   ChartTooltipContent,
-// } from "@repo/ui/components/chart";
-// import { cn } from "@repo/ui/lib/utils";
+// } from "~/components/ui/chart";
+// import { cn } from "~/lib/utils";
 // import { CalendarDays } from "lucide-react";
 // import { useTranslations } from "next-intl";
 // const chartData = [

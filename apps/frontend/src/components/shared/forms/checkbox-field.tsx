@@ -2,7 +2,7 @@
 import type React from "react";
 import { useFormContext } from "react-hook-form";
 
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   FormControl,
   FormDescription,
@@ -10,8 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-
+} from "~/components/ui/form";
 import { cn } from "~/lib/utils";
 
 interface InputFieldProps {

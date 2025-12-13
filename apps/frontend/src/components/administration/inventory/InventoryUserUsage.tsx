@@ -9,10 +9,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { Progress } from "@repo/ui/components/progress";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/card";
+import { Progress } from "~/components/ui/progress";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 export function InventoryUserUsage({ className }: { className?: string }) {

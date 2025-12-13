@@ -1,12 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { caller } from "~/trpc/server";
 import { CanReceiveTransactionSummary } from "./CanReceiveTransactionSummary";
 import { AccountingJournal } from "./journal/AccountingJournal";

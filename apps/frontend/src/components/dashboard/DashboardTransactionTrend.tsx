@@ -5,29 +5,29 @@
 // import { useQuery } from "@tanstack/react-query";
 // import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-// import type { ChartConfig } from "@repo/ui/components/chart";
+// import type { ChartConfig } from "~/components/ui/chart";
 // import {
 //   Card,
 //   CardContent,
 //   CardDescription,
 //   CardHeader,
 //   CardTitle,
-// } from "@repo/ui/components/card";
+// } from "~/components/ui/card";
 // import {
 //   ChartContainer,
 //   ChartLegend,
 //   ChartLegendContent,
 //   ChartTooltip,
 //   ChartTooltipContent,
-// } from "@repo/ui/components/chart";
+// } from "~/components/ui/chart";
 // import {
 //   Select,
 //   SelectContent,
 //   SelectItem,
 //   SelectTrigger,
 //   SelectValue,
-// } from "@repo/ui/components/select";
-// import { Skeleton } from "@repo/ui/components/skeleton";
+// } from "~/components/ui/select";
+// import { Skeleton } from "~/components/ui/skeleton";
 
 // import { EmptyState } from "~/components/EmptyState";
 // import { useCreateQueryString } from "~/hooks/create-query-string";

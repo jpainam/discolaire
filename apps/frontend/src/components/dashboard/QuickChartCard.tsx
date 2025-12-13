@@ -6,15 +6,14 @@ import { FileTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-
+} from "~/components/ui/chart";
 import { useTRPC } from "~/trpc/react";
 
 export const description = "A multiple bar chart";

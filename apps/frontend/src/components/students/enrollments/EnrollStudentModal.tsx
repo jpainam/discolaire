@@ -7,17 +7,16 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
+import { InputField } from "~/components/shared/forms/input-field";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@repo/ui/components/form";
-
-import { InputField } from "~/components/shared/forms/input-field";
-import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+} from "~/components/ui/form";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 

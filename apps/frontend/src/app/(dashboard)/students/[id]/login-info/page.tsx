@@ -1,16 +1,10 @@
 import { getTranslations } from "next-intl/server";
 
-import { Label } from "@repo/ui/components/label";
-import { Separator } from "@repo/ui/components/separator";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import FlatBadge from "~/components/FlatBadge";
 import { LoginInfoHeader } from "~/components/students/login-info/LoginInfoHeader";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { caller } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { AttachUserButton } from "./AttachUserButton";

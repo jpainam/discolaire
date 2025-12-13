@@ -19,6 +19,9 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { authClient } from "~/auth/client";
+import { FeedBackDialog } from "~/components/FeedbackDialog";
+import { SidebarLogo } from "~/components/sidebar-logo";
 import {
   Sidebar,
   SidebarContent,
@@ -30,11 +33,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@repo/ui/components/sidebar";
-
-import { authClient } from "~/auth/client";
-import { FeedBackDialog } from "~/components/FeedbackDialog";
-import { SidebarLogo } from "~/components/sidebar-logo";
+} from "~/components/ui/sidebar";
 import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";

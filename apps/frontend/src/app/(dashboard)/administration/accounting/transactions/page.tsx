@@ -3,16 +3,10 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { getTranslations } from "next-intl/server";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { TransactionDataTable } from "~/components/administration/transactions/TransactionDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { transactionSearchParams } from "~/utils/search-params";
 import { DeleteTransactionList } from "./DeleteTransactionList";

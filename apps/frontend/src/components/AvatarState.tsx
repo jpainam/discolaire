@@ -1,11 +1,6 @@
 import Image from "next/image";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
-
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
 import { ImageZoom } from "./ImageZoom";
 import { avatars, randomAvatar } from "./raw-images";

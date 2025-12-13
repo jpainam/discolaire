@@ -5,24 +5,18 @@ import { Download, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");

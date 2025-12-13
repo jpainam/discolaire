@@ -9,8 +9,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@repo/ui/components/dialog";
-
+} from "~/components/ui/dialog";
 import { useModal } from "~/hooks/use-modal";
 
 export default function GlobalModal() {

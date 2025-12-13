@@ -17,11 +17,8 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
+import { authClient } from "~/auth/client";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,15 +27,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@repo/ui/components/sidebar";
-
-import { authClient } from "~/auth/client";
+} from "~/components/ui/sidebar";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 

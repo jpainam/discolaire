@@ -8,21 +8,15 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
-import { ScrollArea, ScrollBar } from "@repo/ui/components/scroll-area";
-import { Separator } from "@repo/ui/components/separator";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
-
 import { InventorySettings } from "~/components/administration/inventory/InventorySettings";
 import { ConsumableUsageDataTable } from "~/components/administration/inventory/movements/ConsumableUsageDataTable";
 import { StockMovementHeader } from "~/components/administration/inventory/movements/StockMovementHeader";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Badge } from "~/components/ui/badge";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   batchPrefetch,
   getQueryClient,

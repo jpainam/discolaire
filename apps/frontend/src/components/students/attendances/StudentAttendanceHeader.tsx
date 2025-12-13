@@ -11,21 +11,20 @@ import {
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-import { Button } from "@repo/ui/components/button";
+import { CreateStudentAttendance } from "~/app/(dashboard)/students/[id]/attendances/CreateStudentAttendance";
+import { PreventAbsence } from "~/components/attendances/PreventAbsence";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-
-import { CreateStudentAttendance } from "~/app/(dashboard)/students/[id]/attendances/CreateStudentAttendance";
-import { PreventAbsence } from "~/components/attendances/PreventAbsence";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

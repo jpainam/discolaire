@@ -33,8 +33,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@repo/ui/components/sidebar";
-
+} from "~/components/ui/sidebar";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";

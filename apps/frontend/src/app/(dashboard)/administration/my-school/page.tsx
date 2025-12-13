@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
+import { getSession } from "~/auth/server";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import {
   Table,
   TableBody,
@@ -9,10 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { getSession } from "~/auth/server";
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { env } from "~/env";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";

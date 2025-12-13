@@ -11,7 +11,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 interface ListItem {
   id: string;

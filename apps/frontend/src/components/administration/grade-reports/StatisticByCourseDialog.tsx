@@ -6,7 +6,8 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -14,17 +15,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
+} from "~/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
-
-import { TermSelector } from "~/components/shared/selects/TermSelector";
+} from "~/components/ui/select";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 

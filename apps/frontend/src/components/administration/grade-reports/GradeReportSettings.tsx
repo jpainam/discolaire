@@ -7,7 +7,8 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/components/button";
+import { DatePicker } from "~/components/DatePicker";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -15,7 +16,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   Form,
   FormControl,
@@ -23,10 +24,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-
-import { DatePicker } from "~/components/DatePicker";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({

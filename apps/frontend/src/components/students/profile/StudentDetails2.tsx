@@ -13,15 +13,9 @@ import {
   User,
 } from "lucide-react";
 
-import { Badge } from "@repo/ui/components/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
-
+import { Badge } from "~/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 import { caller } from "~/trpc/server";
 
 export async function StudentDetails2({ studentId }: { studentId: string }) {

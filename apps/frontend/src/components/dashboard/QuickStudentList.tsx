@@ -18,8 +18,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,12 +27,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/components/input-group";
+} from "~/components/ui/input-group";
 import {
   Select,
   SelectContent,
@@ -41,8 +41,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Skeleton } from "@repo/ui/components/skeleton";
+} from "~/components/ui/select";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -50,8 +50,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";

@@ -8,8 +8,7 @@ import {
   PiMoney,
 } from "react-icons/pi";
 
-import { Card, CardContent, CardFooter } from "@repo/ui/components/card";
-
+import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";

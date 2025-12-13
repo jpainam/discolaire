@@ -10,17 +10,11 @@ import {
 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Separator } from "@repo/ui/components/separator";
-
 import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: {

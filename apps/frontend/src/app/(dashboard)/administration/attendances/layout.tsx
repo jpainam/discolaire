@@ -1,12 +1,7 @@
 import type { PropsWithChildren } from "react";
 import { getTranslations } from "next-intl/server";
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export default async function Layout(props: PropsWithChildren) {
   const t = await getTranslations();

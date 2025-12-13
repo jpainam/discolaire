@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PiStar, PiStarFill } from "react-icons/pi";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 
 export default function Favorite() {
   const [favorite, setFavorite] = useState(false);

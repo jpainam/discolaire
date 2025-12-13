@@ -2,9 +2,8 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Separator } from "@repo/ui/components/separator";
-
+import { Badge } from "~/components/ui/badge";
+import { Separator } from "~/components/ui/separator";
 import { routes } from "~/configs/routes";
 import { CURRENCY } from "~/lib/constants";
 import { numberToWords } from "~/lib/toword";

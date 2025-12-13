@@ -8,14 +8,15 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
-import { Button } from "@repo/ui/components/button";
+import { authClient, useSession } from "~/auth/client";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   Form,
   FormControl,
@@ -24,10 +25,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-
-import { authClient, useSession } from "~/auth/client";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 

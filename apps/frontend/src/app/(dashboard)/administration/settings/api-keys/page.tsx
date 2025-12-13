@@ -1,7 +1,9 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 
-import { Badge } from "@repo/ui/components/badge";
+import { auth } from "~/auth/server";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Badge } from "~/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -9,10 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { auth } from "~/auth/server";
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { caller } from "~/trpc/server";
 import { CreateAuthApiKey } from "./CreateAuthApiKey";
 import { DeleteAuthApiKey } from "./DeleteAuthApiKey";

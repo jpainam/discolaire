@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentEnrollmentHeader } from "~/components/students/enrollments/StudentEnrollmentHeader";
 import { StudentEnrollmentTable } from "~/components/students/enrollments/StudentEnrollmentTable";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
   getQueryClient,

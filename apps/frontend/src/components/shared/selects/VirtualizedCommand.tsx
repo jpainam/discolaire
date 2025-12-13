@@ -5,6 +5,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { AvatarState } from "~/components/AvatarState";
 import {
   Command,
   CommandEmpty,
@@ -13,9 +14,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/components/command";
-
-import { AvatarState } from "~/components/AvatarState";
+} from "~/components/ui/command";
 import { cn } from "~/lib/utils";
 
 interface Option {

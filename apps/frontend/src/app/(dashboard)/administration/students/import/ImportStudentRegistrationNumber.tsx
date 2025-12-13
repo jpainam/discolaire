@@ -9,14 +9,14 @@ import { ArrowLeftRight, CircleAlert, DownloadIcon, Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
+} from "~/components/ui/select";
 import {
   Table,
   TableBody,
@@ -24,10 +24,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-import { cn } from "@repo/ui/lib/utils";
-
+} from "~/components/ui/table";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 interface DataRow {

@@ -6,11 +6,11 @@ import { MailIcon, PhoneIcon, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
 
 import { searchContacts } from "~/actions/search";
 import { AvatarState } from "~/components/AvatarState";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { getFullName } from "~/utils";
 
 export function ContactSearchPage() {

@@ -7,17 +7,11 @@ import { Plus, Search, Users, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Button } from "@repo/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
-import { Input } from "@repo/ui/components/input";
-import { Separator } from "@repo/ui/components/separator";
-
 import CreateEditContact from "~/components/contacts/CreateEditContact";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
+import { Separator } from "~/components/ui/separator";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

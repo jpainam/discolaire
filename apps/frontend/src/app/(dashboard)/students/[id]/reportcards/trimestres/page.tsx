@@ -3,16 +3,6 @@ import Link from "next/link";
 import _, { sum } from "lodash";
 import { getTranslations } from "next-intl/server";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@repo/ui/components/table";
-import { cn } from "@repo/ui/lib/utils";
-
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { EmptyComponent } from "~/components/EmptyComponent";
@@ -21,6 +11,15 @@ import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCa
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
 import { ReportCardSummary } from "~/components/students/reportcards/ReportCardSummary";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
+import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 

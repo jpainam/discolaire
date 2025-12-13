@@ -4,14 +4,13 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import type { ChartConfig } from "@repo/ui/components/chart";
-import { Card, CardContent } from "@repo/ui/components/card";
+import type { ChartConfig } from "~/components/ui/chart";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@repo/ui/components/chart";
-
+} from "~/components/ui/chart";
 import { useTRPC } from "~/trpc/react";
 
 export function FeeTrend() {

@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { InventoryMonthlyUsage } from "~/components/administration/inventory/InventoryMontlyUsage";
 import { InventoryStockLevelSummary } from "~/components/administration/inventory/InventoryStockLevelSummary";
 import { InventorySummary2 } from "~/components/administration/inventory/InventorySummary2";
 import { InventoryUserUsage } from "~/components/administration/inventory/InventoryUserUsage";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export function InventorySummary() {

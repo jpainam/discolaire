@@ -1,15 +1,14 @@
 import { differenceInCalendarDays, format } from "date-fns";
 import { getTranslations } from "next-intl/server";
 
+import { AvatarState } from "~/components/AvatarState";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-
-import { AvatarState } from "~/components/AvatarState";
+} from "~/components/ui/card";
 import { caller } from "~/trpc/server";
 
 export async function RecentBorrows({ className }: { className?: string }) {

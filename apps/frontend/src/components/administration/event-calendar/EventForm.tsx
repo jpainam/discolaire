@@ -12,7 +12,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { InputField } from "~/components/shared/forms/input-field";
+import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,8 +24,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Label } from "@repo/ui/components/label";
+} from "~/components/ui/form";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -30,12 +34,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { InputField } from "~/components/shared/forms/input-field";
-import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
-import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { getErrorMessage } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";

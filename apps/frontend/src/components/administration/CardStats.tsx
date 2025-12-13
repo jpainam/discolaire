@@ -8,8 +8,8 @@ import {
   UserCircle,
 } from "lucide-react";
 
-import { Card, CardContent } from "@repo/ui/components/card";
-import { cn } from "@repo/ui/lib/utils";
+import { Card, CardContent } from "~/components/ui/card";
+import { cn } from "~/lib/utils";
 
 const actions = [
   {

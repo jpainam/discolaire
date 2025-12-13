@@ -4,7 +4,7 @@ import { Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 
 export function CopyUserIdButton({ userId }: { userId: string }) {
   const t = useTranslations();

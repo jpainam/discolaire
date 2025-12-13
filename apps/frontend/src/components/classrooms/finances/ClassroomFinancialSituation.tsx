@@ -7,20 +7,23 @@ import { useLocale, useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { Badge } from "~/components/base-badge";
+import { BalanceReminderLetter } from "~/components/classrooms/finances/BalanceReminderLetter";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
+} from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -28,10 +31,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { Badge } from "~/components/base-badge";
-import { BalanceReminderLetter } from "~/components/classrooms/finances/BalanceReminderLetter";
+} from "~/components/ui/table";
 import { UserLink } from "~/components/UserLink";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";

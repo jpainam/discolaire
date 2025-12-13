@@ -5,35 +5,29 @@ import { User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { DatePicker } from "~/components/DatePicker";
+import { CountryPicker } from "~/components/shared/CountryPicker";
+import { ClubMultiSelector } from "~/components/shared/selects/ClubMultiSelector";
+import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
+import { SportMultiSelector } from "~/components/shared/selects/SportMultiSelector";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
-import { Separator } from "@repo/ui/components/separator";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { DatePicker } from "~/components/DatePicker";
-import { CountryPicker } from "~/components/shared/CountryPicker";
-import { ClubMultiSelector } from "~/components/shared/selects/ClubMultiSelector";
-import { ReligionSelector } from "~/components/shared/selects/ReligionSelector";
-import { SportMultiSelector } from "~/components/shared/selects/SportMultiSelector";
+} from "~/components/ui/select";
+import { Separator } from "~/components/ui/separator";
+import { Textarea } from "~/components/ui/textarea";
 import { useSchool } from "~/providers/SchoolProvider";
 
 export function Step1() {

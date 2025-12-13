@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Input } from "@repo/ui/components/input";
+import { Input } from "~/components/ui/input";
 
 export default function DirectoryHeader() {
   const t = useTranslations();

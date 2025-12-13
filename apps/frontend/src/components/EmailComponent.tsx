@@ -5,10 +5,9 @@ import { CheckIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-
 import { authClient } from "~/auth/client";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 
 interface EmailVerificationProps {
   email: string;

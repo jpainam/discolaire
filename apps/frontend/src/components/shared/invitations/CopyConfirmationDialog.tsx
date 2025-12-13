@@ -1,8 +1,7 @@
 "use client";
 
-import { Input } from "@repo/ui/components/input";
-
 import { CopyButton } from "~/components/copy-button";
+import { Input } from "~/components/ui/input";
 
 export function CopyConfirmationDialog({
   invitationLink,

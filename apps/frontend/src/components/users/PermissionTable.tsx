@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { Switch } from "@repo/ui/components/switch";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Switch } from "~/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -15,8 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
+} from "~/components/ui/table";
 import { menuPolicies, policies } from "~/configs/policies";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

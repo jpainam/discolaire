@@ -2,10 +2,9 @@ import type { PropsWithChildren } from "react";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-import { Skeleton } from "@repo/ui/components/skeleton";
-
 import { TransactionHeader } from "~/components/administration/transactions/TransactionHeader";
 import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { TransactionSummaryPerDay } from "./TransactionSummaryPerDay";
 

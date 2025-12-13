@@ -25,9 +25,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Checkbox } from "@repo/ui/components/checkbox";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -36,8 +36,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
 import {
   Table,
   TableBody,
@@ -45,7 +45,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
+} from "~/components/ui/table";
 
 // Define the data type
 interface Student {

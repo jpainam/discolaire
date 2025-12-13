@@ -2,12 +2,11 @@ import type { PropsWithChildren } from "react";
 import { AlertTriangle, CircleDollarSign } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
-import { Label } from "@repo/ui/components/label";
-import { cn } from "@repo/ui/lib/utils";
-
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Label } from "~/components/ui/label";
 import { CURRENCY } from "~/lib/constants";
+import { cn } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 
 export default async function Layout(

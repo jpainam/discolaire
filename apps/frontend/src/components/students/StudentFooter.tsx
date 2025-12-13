@@ -8,13 +8,13 @@ import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { Button } from "~/components/ui/button";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from "@repo/ui/components/pagination";
-
+} from "~/components/ui/pagination";
 import { useTRPC } from "~/trpc/react";
 
 type Student = RouterOutputs["student"]["all"][number];

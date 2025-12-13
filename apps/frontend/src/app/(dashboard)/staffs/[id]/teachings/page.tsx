@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import { EmptyComponent } from "~/components/EmptyComponent";
 import {
   Table,
   TableBody,
@@ -8,9 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/table";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { caller } from "~/trpc/server";
 

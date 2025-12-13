@@ -9,7 +9,10 @@ import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { DatePicker } from "~/components/DatePicker";
+import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,13 +20,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import { Separator } from "@repo/ui/components/separator";
-import { Textarea } from "@repo/ui/components/textarea";
-
-import { DatePicker } from "~/components/DatePicker";
-import { RecipientMultiSelector } from "~/components/shared/selects/RecipientMultiSelector";
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Separator } from "~/components/ui/separator";
+import { Textarea } from "~/components/ui/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { getErrorMessage } from "~/lib/handle-error";
 import { SelectField } from "../../shared/forms/SelectField";

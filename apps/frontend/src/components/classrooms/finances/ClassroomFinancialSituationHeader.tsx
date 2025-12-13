@@ -12,7 +12,12 @@ import { parseAsString, useQueryState } from "nuqs";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { PiGridFour, PiListBullets } from "react-icons/pi";
 
-import { Button } from "@repo/ui/components/button";
+import { BalanceReminderLetter } from "~/components/classrooms/finances/BalanceReminderLetter";
+import { FinanceBulkAction } from "~/components/classrooms/finances/FinanceBulkAction";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,15 +28,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Label } from "@repo/ui/components/label";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
-
-import { BalanceReminderLetter } from "~/components/classrooms/finances/BalanceReminderLetter";
-import { FinanceBulkAction } from "~/components/classrooms/finances/FinanceBulkAction";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { AccountingJournalSelector } from "~/components/shared/selects/AccountingJournalSelector";
+} from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";

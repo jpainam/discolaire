@@ -2,7 +2,7 @@
 
 import { Mail, ShieldAlert } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,8 +10,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/card";
-import { cn } from "@repo/ui/lib/utils";
+} from "~/components/ui/card";
+import { cn } from "~/lib/utils";
 
 interface NoPermissionProps {
   resourceText?: string;

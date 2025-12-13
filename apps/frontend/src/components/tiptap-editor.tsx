@@ -29,26 +29,26 @@ import {
   Undo,
 } from "lucide-react";
 
-import { Button } from "@repo/ui/components/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/popover";
-import { Separator } from "@repo/ui/components/separator";
-import { Toggle } from "@repo/ui/components/toggle";
+} from "~/components/ui/popover";
+import { Separator } from "~/components/ui/separator";
+import { Toggle } from "~/components/ui/toggle";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@repo/ui/components/tooltip";
+} from "~/components/ui/tooltip";
 
 import "./tiptap.css";
 
@@ -61,8 +61,7 @@ import TextStyle from "@tiptap/extension-text-style";
 // import TableRow from "@tiptap/extension-table-row";
 // import TableCell from "@tiptap/extension-table-cell";
 // import TableHeader from "@tiptap/extension-table-header";
-import { Card, CardContent } from "@repo/ui/components/card";
-
+import { Card, CardContent } from "~/components/ui/card";
 import { cn } from "~/lib/utils";
 
 interface EditorToolbarProps {

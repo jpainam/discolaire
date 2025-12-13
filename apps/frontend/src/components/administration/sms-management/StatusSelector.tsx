@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/select";
+} from "~/components/ui/select";
 
 export function StatusSelector({
   onChange,

@@ -13,26 +13,25 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { Button } from "@repo/ui/components/button";
+import { EmptyComponent } from "~/components/EmptyComponent";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { TiptapEditor } from "~/components/tiptap-editor";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
+} from "~/components/ui/dropdown-menu";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@repo/ui/components/form";
-
-import { EmptyComponent } from "~/components/EmptyComponent";
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { TiptapEditor } from "~/components/tiptap-editor";
+} from "~/components/ui/form";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";

@@ -1,7 +1,6 @@
 import { CircleAlertIcon } from "lucide-react";
 
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
-
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { getQueryClient, trpc } from "~/trpc/server";
 
 export async function TrimestreAlert({

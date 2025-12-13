@@ -4,7 +4,7 @@ import { mergeProps } from "@base-ui-components/react/merge-props";
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva } from "class-variance-authority";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "~/lib/utils";
 
 export interface BadgeProps
   extends useRender.ComponentProps<"span">,

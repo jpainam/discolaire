@@ -17,17 +17,17 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import { Button } from "@repo/ui/components/button";
+
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
-import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
+} from "~/components/ui/dropdown-menu";
 import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useModal } from "~/hooks/use-modal";

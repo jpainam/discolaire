@@ -3,8 +3,8 @@ import { enUS, es, fr } from "date-fns/locale";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import type { RouterOutputs } from "@repo/api";
-import { cn } from "@repo/ui/lib/utils";
 
+import { cn } from "~/lib/utils";
 import { EmptyComponent } from "./EmptyComponent";
 
 export async function LogActivityTable({
