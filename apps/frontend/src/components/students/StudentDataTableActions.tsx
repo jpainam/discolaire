@@ -93,7 +93,7 @@ export function StudentDataTableActions({
       )}
       {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size={"sm"} variant={"outline"}>
+          <Button variant={"outline"}>
             {t("bulk_actions")} <ChevronsUpDown />
           </Button>
         </DropdownMenuTrigger>

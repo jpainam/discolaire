@@ -290,7 +290,6 @@ export function EventCalendar({
             </DropdownMenu>
             <Button
               className="max-[479px]:aspect-square max-[479px]:p-0!"
-              size="sm"
               onClick={() => {
                 setSelectedEvent(null); // Ensure we're creating a new event
               }}

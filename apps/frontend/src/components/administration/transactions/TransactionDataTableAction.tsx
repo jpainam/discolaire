@@ -84,7 +84,7 @@ export function TransactionDataTableAction({
         <div className="flex flex-row items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size={"sm"} variant={"outline"}>
+              <Button variant={"outline"}>
                 {t("Change status")}
                 {updateTransactionMutation.isPending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

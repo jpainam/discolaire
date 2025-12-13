@@ -65,7 +65,7 @@ export default async function Page(props: PageProps) {
             </EmptyDescription>
           </EmptyHeader>
 
-          <Button variant="link" className="text-muted-foreground" size="sm">
+          <Button variant="link" className="text-muted-foreground">
             <Link
               className="flex flex-row items-center gap-1"
               href={`/classrooms/${params.id}/gradesheets?subject=${searchParams.subjectId}`}

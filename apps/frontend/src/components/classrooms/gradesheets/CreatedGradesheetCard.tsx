@@ -115,7 +115,7 @@ export function CreatedGradesheetCard({
         <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"sm"} className="size-7">
+              <Button variant={"outline"} className="size-7">
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

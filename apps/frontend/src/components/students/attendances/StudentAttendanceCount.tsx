@@ -218,7 +218,6 @@ export function StudentAttendanceCount({
                       a.state === "secondary" ? "secondary" : "destructive"
                     }
                     appearance="light"
-                    size="sm"
                   >
                     {a.date}
                   </Badge>

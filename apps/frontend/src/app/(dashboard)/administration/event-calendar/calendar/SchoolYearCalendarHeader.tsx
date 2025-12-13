@@ -57,7 +57,6 @@ export function SchoolYearCalendarHeader() {
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
-          size="sm"
           onClick={() => setCurrentYear(currentYear - 1)}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -65,7 +64,6 @@ export function SchoolYearCalendarHeader() {
         </Button>
         <Button
           variant="outline"
-          size="sm"
           onClick={() => setCurrentYear(currentYear + 1)}
         >
           <span>{t("Next Year")}</span>
@@ -96,7 +94,6 @@ export function SchoolYearCalendarHeader() {
               view: <CreateEditSchoolYearEvent />,
             });
           }}
-          size="sm"
         >
           <PlusCircle className="h-4 w-4" />
           {t("add")}
@@ -116,7 +113,7 @@ export function SchoolYearCalendarHeader() {
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <Button variant="outline">
               <Filter className="h-4 w-4" />
               Filter Events
             </Button>

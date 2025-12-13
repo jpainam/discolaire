@@ -211,14 +211,14 @@ export function ImageGrid({
                 Files ({files.length})
               </h3>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={openFileDialog}>
+                <Button variant="outline" onClick={openFileDialog}>
                   <UploadIcon
                     className="-ms-0.5 size-3.5 opacity-60"
                     aria-hidden="true"
                   />
                   Add files
                 </Button>
-                <Button variant="outline" size="sm" onClick={clearFiles}>
+                <Button variant="outline" onClick={clearFiles}>
                   <Trash2Icon
                     className="-ms-0.5 size-3.5 opacity-60"
                     aria-hidden="true"

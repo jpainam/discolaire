@@ -126,7 +126,7 @@ export function NotificationList({ className }: { className?: string }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="sm" className={cn("relative", className)}>
+        <Button variant="ghost" className={cn("relative", className)}>
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
             <Badge
@@ -204,7 +204,7 @@ export function NotificationList({ className }: { className?: string }) {
 
         <Separator />
         <div className="p-2">
-          <Button variant="ghost" size="sm" className="w-full text-xs">
+          <Button variant="ghost" className="w-full text-xs">
             View all notifications
           </Button>
         </div>

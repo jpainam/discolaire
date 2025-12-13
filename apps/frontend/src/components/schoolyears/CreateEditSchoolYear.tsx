@@ -214,7 +214,6 @@ export function CreateEditSchoolYear({
           <Button
             type="button"
             variant={"outline"}
-            size="sm"
             onClick={() => {
               closeModal();
             }}

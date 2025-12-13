@@ -16,7 +16,6 @@ export function ScheduleDivisionHeader() {
       <Label>{t("Schedule division")}</Label>
       <div className="ml-auto">
         <Button
-          size="sm"
           onClick={() => {
             openModal({
               title: "Ajouter un Créneau",

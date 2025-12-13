@@ -129,7 +129,7 @@ export function CreateEditSchoolYearEventType({
             {t("close")}
           </Button>
           <SubmitButton
-            size="sm"
+           
             isSubmitting={createSchoolYearEventTypeMutation.isPending}
           >
             {t("submit")}

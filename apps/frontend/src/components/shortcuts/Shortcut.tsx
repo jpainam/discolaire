@@ -162,7 +162,6 @@ export function Shortcut() {
                 <h3 className="font-medium">{t("shortcuts")}</h3>
                 <Button
                   variant="ghost"
-                  size="sm"
                   className="h-8 px-2 text-xs"
                   onClick={addCurrentPageToShortcuts}
                 >

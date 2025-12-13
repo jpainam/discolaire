@@ -127,7 +127,6 @@ export function CreateNewStudent() {
               disabled={currentStep === 1}
               variant={"secondary"}
               type="button"
-              size="sm"
             >
               <ArrowLeft />
               {t("previous")}
@@ -137,7 +136,6 @@ export function CreateNewStudent() {
               disabled={currentStep >= steps.length}
               variant={"default"}
               type="button"
-              size="sm"
             >
               {t("next")}
               <ArrowRight />

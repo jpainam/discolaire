@@ -12,7 +12,7 @@ export function SubmitButton({
 }: {
   isSubmitting: boolean;
   disabled?: boolean;
-  size: "default" | "sm" | "lg";
+  size?: "default" | "sm" | "lg";
 } & React.ComponentProps<"button">) {
   return (
     <Button

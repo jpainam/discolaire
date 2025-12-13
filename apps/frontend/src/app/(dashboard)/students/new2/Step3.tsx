@@ -96,7 +96,6 @@ export function Step3() {
                 </div>
                 <Button
                   type="button"
-                  size="sm"
                   variant={"default"}
                   // onClick={() => {
                   //   if (!selectedParents.find((p) => p.id === parent.id)) {
@@ -146,7 +145,6 @@ export function Step3() {
                     type="button"
                     variant="destructive"
                     className="size-7"
-                    size="sm"
                     onClick={() => removeParent(parent.id)}
                   >
                     <X className="h-4 w-4" />

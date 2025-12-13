@@ -99,7 +99,6 @@ export default function EmailVerification({
       {!isVerified && !verificationSent && (
         <Button
           variant="link"
-          size="sm"
           onClick={sendVerificationEmail}
           disabled={isLoading}
           className="h-7 text-xs"
@@ -110,7 +109,6 @@ export default function EmailVerification({
       {!isVerified && verificationSent && (
         <Button
           variant="ghost"
-          size="sm"
           onClick={sendVerificationEmail}
           disabled={isLoading}
           className="h-7 text-xs"

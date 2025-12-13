@@ -97,7 +97,7 @@ export function StockMovementHeader() {
       <div className="ml-auto flex flex-row items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"default"} size={"sm"}>
+            <Button variant={"default"}>
               {t("Stock movement")}
               <ChevronDown className="h-4 w-4" />
             </Button>

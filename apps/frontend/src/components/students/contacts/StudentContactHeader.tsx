@@ -46,7 +46,7 @@ export function StudentContactHeader() {
           <SimpleTooltip content={t("link_contacts")}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size={"sm"} variant={"default"}>
+                <Button variant={"default"}>
                   <PlusIcon />
                   <span>{t("add")}</span>
                 </Button>

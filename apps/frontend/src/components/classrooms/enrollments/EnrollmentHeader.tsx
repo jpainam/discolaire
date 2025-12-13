@@ -114,7 +114,6 @@ export function EnrollmentHeader({ className }: { className?: string }) {
         {canEnroll && (
           <Button
             variant="default"
-            size="sm"
             disabled={!schoolYear.isActive}
             onClick={() => {
               if (

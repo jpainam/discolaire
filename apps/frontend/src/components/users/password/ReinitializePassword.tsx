@@ -137,9 +137,7 @@ export function ReinitializePassword() {
                   </FormItem>
                 )}
               />
-              <Button size={"sm"} type="submit">
-                {t("submit")}
-              </Button>
+              <Button type="submit">{t("submit")}</Button>
             </form>
           </Form>
         </CardContent>

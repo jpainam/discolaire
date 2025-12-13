@@ -329,9 +329,7 @@ function EditorToolbar({ editor }: EditorToolbarProps) {
                     onChange={(e) => setLinkUrl(e.target.value)}
                     className="flex-1"
                   />
-                  <Button size="sm" onClick={setLink}>
-                    Set Link
-                  </Button>
+                  <Button onClick={setLink}>Set Link</Button>
                 </div>
               </PopoverContent>
             </Popover>
@@ -413,9 +411,7 @@ function EditorToolbar({ editor }: EditorToolbarProps) {
                     onChange={(e) => setImageUrl(e.target.value)}
                     className="flex-1"
                   />
-                  <Button size="sm" onClick={addImage}>
-                    Add Image
-                  </Button>
+                  <Button onClick={addImage}>Add Image</Button>
                 </div>
               </PopoverContent>
             </Popover>

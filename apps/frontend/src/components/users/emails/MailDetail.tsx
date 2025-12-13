@@ -170,7 +170,6 @@ export function MailDetail({ emailId }: { emailId: string }) {
                 <Button
                   type="button"
                   variant="outline"
-                  size="sm"
                   className="cursor-pointer"
                 >
                   <span>
@@ -180,9 +179,7 @@ export function MailDetail({ emailId }: { emailId: string }) {
                 </Button>
               </label>
             </div>
-            <Button size="sm" type="submit">
-              Send
-            </Button>
+            <Button type="submit">Send</Button>
           </div>
         </form>
       </div>

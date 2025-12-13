@@ -57,7 +57,6 @@ export function ThemeSelector() {
         <Button
           id="theme-selector"
           className="flex w-full justify-between"
-          size="sm"
           variant="ghost"
         >
           <div className="flex items-center gap-2">
@@ -148,12 +147,7 @@ function ThemeControls() {
     <div className="flex gap-1">
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 w-7 p-0"
-            onClick={toggleTheme}
-          >
+          <Button variant="ghost" className="h-7 w-7 p-0" onClick={toggleTheme}>
             {resolvedTheme === "light" ? (
               <Sun className="h-3.5 w-3.5" />
             ) : (
@@ -168,12 +162,7 @@ function ThemeControls() {
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 w-7 p-0"
-            onClick={randomize}
-          >
+          <Button variant="ghost" className="h-7 w-7 p-0" onClick={randomize}>
             <Shuffle className="h-3.5 w-3.5" />
           </Button>
         </TooltipTrigger>

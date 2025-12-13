@@ -396,7 +396,6 @@ export function CreateEditHealthVisit({
                       <div className="ml-auto flex gap-2">
                         <Button
                           variant="outline"
-                          size="sm"
                           type="button"
                           onClick={openFileDialog}
                         >
@@ -408,7 +407,6 @@ export function CreateEditHealthVisit({
                         </Button>
                         <Button
                           variant="outline"
-                          size="sm"
                           type="button"
                           onClick={clearFiles}
                         >

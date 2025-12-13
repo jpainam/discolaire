@@ -136,7 +136,6 @@ export function ClassroomTimetable() {
               </Button>
               <Button
                 variant={isSameDay(currentDate, today) ? "default" : "ghost"}
-                size="sm"
                 onClick={navigateToday}
               >
                 {t("Today")}
@@ -153,7 +152,6 @@ export function ClassroomTimetable() {
           <div className="bg-muted flex gap-1 rounded-lg p-1">
             <Button
               variant={view === "month" ? "default" : "ghost"}
-              size="sm"
               onClick={() => setView("month")}
               //className={cn(view === "month" && "bg-background shadow-sm")}
             >
@@ -161,7 +159,6 @@ export function ClassroomTimetable() {
             </Button>
             <Button
               variant={view === "week" ? "default" : "ghost"}
-              size="sm"
               onClick={() => setView("week")}
               //className={cn(view === "week" && "bg-background shadow-sm")}
             >
@@ -169,7 +166,6 @@ export function ClassroomTimetable() {
             </Button>
             <Button
               variant={view === "day" ? "default" : "ghost"}
-              size="sm"
               onClick={() => setView("day")}
               //className={cn(view === "day" && "bg-background shadow-sm")}
             >

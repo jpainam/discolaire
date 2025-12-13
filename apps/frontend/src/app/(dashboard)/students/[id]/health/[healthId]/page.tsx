@@ -32,15 +32,15 @@ export default function Page() {
           <h1 className="text-2xl font-bold">Patient Medical Record</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline">
             <Printer className="mr-2 h-4 w-4" />
             Print
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline">
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline">
             <Share2 className="mr-2 h-4 w-4" />
             Share
           </Button>
@@ -409,7 +409,7 @@ export default function Page() {
                   Uploaded on Apr 21, 2025
                 </p>
               </div>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost">
                 <Download className="h-4 w-4" />
               </Button>
             </div>
@@ -421,7 +421,7 @@ export default function Page() {
                   Uploaded on Apr 21, 2025
                 </p>
               </div>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost">
                 <Download className="h-4 w-4" />
               </Button>
             </div>

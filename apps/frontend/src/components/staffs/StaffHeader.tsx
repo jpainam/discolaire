@@ -46,7 +46,6 @@ export function StaffHeader() {
                 window.open(`/api/pdfs/staff?format=csv`, "_blank");
               }}
               variant="outline"
-              size="sm"
             >
               <Download className="h-4 w-4" />
               {t("Export")}
@@ -60,7 +59,6 @@ export function StaffHeader() {
                   view: <CreateEditStaff />,
                 });
               }}
-              size="sm"
             >
               <Plus />
               {t("Add staff")}

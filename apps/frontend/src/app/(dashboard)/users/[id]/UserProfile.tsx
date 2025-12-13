@@ -191,9 +191,7 @@ export function UserProfile() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button size={"sm"} isLoading={updateUser.isPending}>
-                {t("submit")}
-              </Button>
+              <Button isLoading={updateUser.isPending}>{t("submit")}</Button>
             </CardFooter>
           </Card>
         </form>

@@ -173,9 +173,7 @@ export function ChurchDetailsForm() {
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type="submit">
-            {t("submit")}
-          </Button>
+          <Button type="submit">{t("submit")}</Button>
         </div>
       </form>
     </Form>

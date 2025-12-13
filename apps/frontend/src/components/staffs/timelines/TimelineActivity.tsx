@@ -60,7 +60,6 @@ const ActivityItem = ({ activity, onDelete }: ActivityItemProps) => {
       </div>
       <Button
         variant="destructive"
-        size="sm"
         className="h-6 opacity-0 transition-opacity group-hover:opacity-100"
         onClick={() => onDelete(activity.id)}
       >

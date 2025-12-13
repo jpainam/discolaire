@@ -79,7 +79,6 @@ export function AccountingJournalHeader() {
                 view: <CreateUpdateJournal />,
               });
             }}
-            size="sm"
           >
             <PlusIcon />
             {t("add")}
@@ -107,7 +106,6 @@ export function AccountingJournalHeader() {
           Inserer TD
         </Button>
         <Button
-          size="sm"
           onClick={() => {
             toast.loading("Moving transactions", { id: 0 });
             deplacerMutation.mutate();

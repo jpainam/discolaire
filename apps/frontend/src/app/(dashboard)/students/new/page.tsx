@@ -193,7 +193,7 @@ export default function Page() {
                 </Button>
               )}
               {currentStep == STEPS.length && (
-                <Button size={"sm"} type="submit">
+                <Button type="submit">
                   {t("submit")}
                   <SaveIcon />
                 </Button>

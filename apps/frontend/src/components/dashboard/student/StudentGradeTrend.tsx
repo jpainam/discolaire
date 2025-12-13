@@ -105,7 +105,6 @@ export function StudentGradeTrend({
           >
             <SelectTrigger
               className="w-56 "
-              size="sm"
               //aria-label="Select a value"
             >
               <SelectValue placeholder={t("subjects")} />

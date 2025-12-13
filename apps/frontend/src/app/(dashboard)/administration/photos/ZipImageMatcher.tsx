@@ -357,7 +357,7 @@ export function ZipImageMatcher() {
         </div>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button size={"sm"} variant="outline" onClick={resetForm}>
+        <Button variant="outline" onClick={resetForm}>
           {t("Reset")}
         </Button>
         <Button

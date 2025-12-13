@@ -174,7 +174,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} isLoading={isLoading} type="submit">
+          <Button isLoading={isLoading} type="submit">
             {t("submit")}
           </Button>
         </div>

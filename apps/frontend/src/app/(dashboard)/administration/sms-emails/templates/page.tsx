@@ -34,7 +34,7 @@ export default async function Page() {
           </CardDescription>
         </div>
         <div className="ml-auto flex items-center gap-1">
-          <Button size="sm" variant="outline" className="h-8 gap-1">
+          <Button variant="outline" className="h-8 gap-1">
             <Truck className="h-4 w-4" />
             <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
               Track Order

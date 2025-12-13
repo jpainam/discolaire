@@ -109,7 +109,6 @@ export function StudentContactRelationship({
               {form.formState.isDirty && (
                 <Button
                   //disabled={mutation.isPending}
-                  size="sm"
                   onClick={() => {
                     form.reset();
                   }}
@@ -124,12 +123,7 @@ export function StudentContactRelationship({
                 </Button>
               )}
               {form.formState.isDirty && (
-                <Button
-                  type="submit"
-                  size="sm"
-                  variant="default"
-                  className="h-8 gap-1"
-                >
+                <Button type="submit" variant="default">
                   <Save className="h-4 w-4" />
 
                   <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">

@@ -205,9 +205,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
           >
             {t("cancel")}
           </Button>
-          <Button size={"sm"} type="submit">
-            {subject ? t("edit") : t("submit")}
-          </Button>
+          <Button type="submit">{subject ? t("edit") : t("submit")}</Button>
         </div>
       </form>
     </Form>

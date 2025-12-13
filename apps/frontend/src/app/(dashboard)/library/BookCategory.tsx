@@ -228,7 +228,7 @@ function CreateEditCategory({
           )}
         />
         <div className="mt-2 flex flex-row items-center justify-end gap-2">
-          <Button size={"sm"}>{t("submit")}</Button>
+          <Button>{t("submit")}</Button>
           <Button
             type="button"
             onClick={() => {

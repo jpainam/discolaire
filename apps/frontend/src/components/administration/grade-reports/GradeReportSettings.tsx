@@ -89,7 +89,7 @@ export function GradeReportSettings() {
                 >
                   {t("reset")}
                 </Button>
-                <Button size={"sm"}>{t("submit")}</Button>
+                <Button>{t("submit")}</Button>
               </CardAction>
             )}
           </CardHeader>

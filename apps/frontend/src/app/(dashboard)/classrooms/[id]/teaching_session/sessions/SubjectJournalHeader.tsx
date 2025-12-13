@@ -80,11 +80,11 @@ export function SubjectJournalHeader({
         <Label className="font-bold">{subjectQuery.data?.course.name}</Label>
       )}
       <div className="flex flex-row items-center gap-2">
-        <Button size={"sm"} variant={"secondary"}>
+        <Button variant={"secondary"}>
           <PDFIcon />
           {t("pdf_export")}
         </Button>
-        <Button size={"sm"} variant={"secondary"}>
+        <Button variant={"secondary"}>
           <XMLIcon />
           {t("xml_export")}
         </Button>

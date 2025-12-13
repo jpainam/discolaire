@@ -268,7 +268,7 @@ export function ContactDetailsHeader() {
             <>
               {contact.userId ? (
                 <ChangeAvatarButton userId={contact.userId}>
-                  <Button variant={"outline"} size={"sm"}>
+                  <Button variant={"outline"}>
                     <ImageUpIcon />
                     {t("change_avatar")}
                   </Button>

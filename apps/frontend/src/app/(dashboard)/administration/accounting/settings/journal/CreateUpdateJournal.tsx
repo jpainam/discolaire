@@ -150,7 +150,6 @@ export function CreateUpdateJournal({
               createAccountingJournal.isPending ||
               updateAccountingJournal.isPending
             }
-            size="sm"
             type="submit"
           >
             <SaveIcon className="h-3 w-3" />

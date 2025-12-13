@@ -93,9 +93,7 @@ export default function Page() {
                       Last active: Just now
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Current
-                  </Button>
+                  <Button variant="outline">Current</Button>
                 </div>
               </div>
               <div className="rounded-md border p-4">
@@ -106,9 +104,7 @@ export default function Page() {
                       Last active: 2 hours ago
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Revoke
-                  </Button>
+                  <Button variant="outline">Revoke</Button>
                 </div>
               </div>
             </div>

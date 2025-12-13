@@ -66,10 +66,8 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
               }
             }}
             variant="destructive"
-            className="h-8"
-            size="sm"
           >
-            <Trash2 className="mr-2 size-4" aria-hidden="true" />
+            <Trash2 />
             {t("delete")} ({table.getFilteredSelectedRowModel().rows.length})
           </Button>
         )}

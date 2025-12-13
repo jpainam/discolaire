@@ -324,9 +324,7 @@ function Cell({
       {gradeId && (
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button size={"sm"} variant={"link"}>
-              {gradeText}
-            </Button>
+            <Button variant={"link"}>{gradeText}</Button>
           </PopoverTrigger>
           <PopoverContent className="w-80">
             <div className="grid grid-cols-2 gap-6">

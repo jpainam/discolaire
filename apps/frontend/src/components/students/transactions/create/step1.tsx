@@ -213,7 +213,7 @@ export function Step1({
             />
 
             <div className="col-span-full flex justify-end gap-2">
-              <Button size="sm" type="submit">
+              <Button type="submit">
                 {t("next")}
                 <ArrowRight />
               </Button>

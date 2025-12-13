@@ -159,7 +159,6 @@ export function UserLog() {
           <span className="text-xs">{t("filter")}</span>
           <Button
             variant="ghost"
-            size="sm"
             onClick={resetFilters}
             className="ml-auto h-8 px-2 text-xs"
           >

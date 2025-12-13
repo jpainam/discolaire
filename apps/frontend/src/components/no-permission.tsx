@@ -45,7 +45,7 @@ const NoPermissionMessage = ({
       </p>
     </CardContent>
     <CardFooter className="flex justify-center">
-      <Button size={"sm"} className="flex items-center">
+      <Button className="flex items-center">
         <Mail className="h-4 w-4" />
         Contact Administration
       </Button>

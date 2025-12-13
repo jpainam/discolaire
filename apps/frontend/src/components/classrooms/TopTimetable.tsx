@@ -144,15 +144,15 @@ export default function TopTimetable() {
           </div>
         </div> */}
         <div className="m-2 flex gap-2">
-          <Button size={"sm"} variant="outline">
+          <Button variant="outline">
             <PrinterIcon className="mr-2 h-4 w-4" />
             {t("print_timetable")}
           </Button>
-          <Button size={"sm"} variant="outline">
+          <Button variant="outline">
             <DownloadIcon className="mr-2 h-4 w-4" />
             {t("export_timetable")}
           </Button>
-          <Button size={"sm"} variant="outline">
+          <Button variant="outline">
             <EyeIcon className="mr-2 h-4 w-4" />
             {t("view_timetable")}
           </Button>

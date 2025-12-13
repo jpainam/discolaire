@@ -180,10 +180,8 @@ export default function Page() {
               features and security improvements.
             </p>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" className="h-8">
-                Update Now
-              </Button>
-              <Button size="sm" variant="outline" className="h-8">
+              <Button className="h-8">Update Now</Button>
+              <Button variant="outline" className="h-8">
                 Later
               </Button>
             </div>
@@ -199,10 +197,10 @@ export default function Page() {
               it's you or secure your account.
             </p>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" variant="destructive" className="h-8">
+              <Button variant="destructive" className="h-8">
                 Secure Account
               </Button>
-              <Button size="sm" variant="outline" className="h-8">
+              <Button variant="outline" className="h-8">
                 It's Me
               </Button>
             </div>

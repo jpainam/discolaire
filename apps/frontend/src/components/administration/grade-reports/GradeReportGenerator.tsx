@@ -193,7 +193,7 @@ export function GradeReportGenerator() {
         </RadioGroup>
 
         <div className="flex justify-end">
-          <Button size={"sm"} onClick={handleGenerateReport}>
+          <Button onClick={handleGenerateReport}>
             <FileText className="h-4 w-4" />
             {t("Generate Report")}
           </Button>

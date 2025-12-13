@@ -318,7 +318,6 @@ const AttendanceRowView = memo(function AttendanceRowView({
         ) : (
           <Button
             variant="outline"
-            size="sm"
             onClick={() => handleSendNotification(record.id)}
           >
             <Bell className="h-3 w-3" />

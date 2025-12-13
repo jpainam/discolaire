@@ -131,7 +131,7 @@ export function ClassroomDataTableAction({
       )}
       <Popover>
         <PopoverTrigger asChild>
-          <Button size={"sm"} variant="outline">
+          <Button variant="outline">
             <RiFilter3Line
               className="text-muted-foreground/60 -ms-1.5 size-5"
               size={20}

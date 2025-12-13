@@ -121,16 +121,11 @@ export function UpdateCreatedGradesheet({
               closeModal();
             }}
             type="button"
-            size="sm"
             variant={"secondary"}
           >
             {t("cancel")}
           </Button>
-          <Button
-            isLoading={updateCreatedGradesheet.isPending}
-            type="submit"
-            size="sm"
-          >
+          <Button isLoading={updateCreatedGradesheet.isPending} type="submit">
             {t("submit")}
           </Button>
         </div>

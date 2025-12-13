@@ -123,7 +123,7 @@
 //             View all system activity and changes made by users
 //           </CardDescription>
 //           <CardAction>
-//             <Button size={"sm"} variant="outline">
+//             <Button variant="outline">
 //               <Download className="h-4 w-4" />
 //               Export Logs
 //             </Button>

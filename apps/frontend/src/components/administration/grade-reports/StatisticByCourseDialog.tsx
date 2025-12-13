@@ -112,7 +112,7 @@ export function StatisticByCourseDialog({ format }: { format: "pdf" | "csv" }) {
           >
             {t("close")}
           </Button>
-          <Button size={"sm"}>{t("Generate Report")}</Button>
+          <Button>{t("Generate Report")}</Button>
         </div>
       </form>
     </Form>

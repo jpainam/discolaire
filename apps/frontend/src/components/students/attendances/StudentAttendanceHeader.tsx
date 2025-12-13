@@ -63,7 +63,7 @@ export function StudentAttendanceHeader() {
       <div className="ml-auto flex flex-row items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"sm"} variant={"outline"}>
+            <Button variant={"outline"}>
               {t("prevent")}
               <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
             </Button>

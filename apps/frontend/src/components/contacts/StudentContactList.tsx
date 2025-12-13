@@ -130,7 +130,6 @@ export default function StudentContactList({
                 </CardTitle>
                 <CardAction className="flex flex-col gap-2">
                   <Button
-                    size="sm"
                     onClick={() => {
                       router.push(
                         routes.students.details(studentcontact.studentId),

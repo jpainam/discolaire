@@ -98,7 +98,7 @@ export function StaffProfileHeader({
           <>
             {staff.userId ? (
               <ChangeAvatarButton userId={staff.userId}>
-                <Button size={"sm"} variant={"outline"}>
+                <Button variant={"outline"}>
                   <ImagePlusIcon />
                   {t("change_avatar")}
                 </Button>
