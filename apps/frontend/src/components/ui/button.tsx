@@ -1,7 +1,8 @@
 import type { VariantProps } from "class-variance-authority";
-import { Button as ButtonPrimitive } from "@base-ui/react/button";
+import type * as React from "react";
 import { cva } from "class-variance-authority";
 import { LoaderCircleIcon } from "lucide-react";
+import { Slot } from "radix-ui";
 
 import { cn } from "~/lib/utils";
 
@@ -45,13 +46,19 @@ function Button({
   variant = "default",
   size = "default",
   isLoading = false,
+  asChild = false,
   ...props
-}: ButtonPrimitive.Props & { isLoading?: boolean } & VariantProps<
-    typeof buttonVariants
-  >) {
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & { isLoading?: boolean } & {
+    asChild?: boolean;
+  }) {
+  const Comp = asChild ? Slot.Root : "button";
+
   return (
-    <ButtonPrimitive
+    <Comp
       data-slot="button"
+      data-variant={variant}
+      data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -59,7 +66,7 @@ function Button({
     >
       {props.children}
       {isLoading && <LoaderCircleIcon className="animate-spin" />}
-    </ButtonPrimitive>
+    </Comp>
   );
 }
 
