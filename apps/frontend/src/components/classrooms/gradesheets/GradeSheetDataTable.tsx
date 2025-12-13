@@ -11,8 +11,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTable, useDataTable } from "@repo/ui/datatable";
 
+import { DataTable, useDataTable } from "~/components/datatable";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";

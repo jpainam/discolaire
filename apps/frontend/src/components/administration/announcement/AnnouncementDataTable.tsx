@@ -4,8 +4,7 @@ import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-
+import { DataTable, useDataTable } from "~/components/datatable";
 import { DataTableToolbar } from "~/components/datatable/data-table-toolbar";
 import { useTRPC } from "~/trpc/react";
 import { NoticeboardDataTableActions } from "./NoticeboardDataTableActions";

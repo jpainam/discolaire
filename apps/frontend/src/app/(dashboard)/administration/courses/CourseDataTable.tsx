@@ -4,8 +4,7 @@ import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-
+import { DataTable, useDataTable } from "~/components/datatable";
 import { useTRPC } from "~/trpc/react";
 import { CourseDataTableActions } from "./CourseDataTableAction";
 import { getColumns } from "./CourseDataTableColumn";

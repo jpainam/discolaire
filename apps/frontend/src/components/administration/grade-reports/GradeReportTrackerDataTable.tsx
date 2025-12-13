@@ -4,8 +4,7 @@ import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { parseAsInteger, useQueryState } from "nuqs";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-
+import { DataTable, useDataTable } from "~/components/datatable";
 import { useTRPC } from "~/trpc/react";
 import { GradeReportTrackerDataTableAction } from "./GradeReportTrackerAction";
 import { useGradeTrackerColumns } from "./GradeReportTrackerColumn";

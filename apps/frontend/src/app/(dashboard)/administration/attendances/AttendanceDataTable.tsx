@@ -3,8 +3,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-
+import { DataTable, useDataTable } from "~/components/datatable";
 import { useTRPC } from "~/trpc/react";
 import { AttendanceDataTableAction } from "./AttendanceDataTableAction";
 import { useColumns } from "./AttendanceDataTableColumn";

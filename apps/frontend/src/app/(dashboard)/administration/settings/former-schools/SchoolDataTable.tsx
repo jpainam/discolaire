@@ -2,8 +2,7 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-
+import { DataTable, useDataTable } from "~/components/datatable";
 import { useTRPC } from "~/trpc/react";
 import { SchoolDataTableAction } from "./SchoolDataTableAction";
 import { useSchoolColumns } from "./SchoolDataTableColumn";

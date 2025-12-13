@@ -16,8 +16,7 @@ const config = {
     "@repo/api",
     "@repo/auth",
     "@repo/db",
-    "@repo/transactional",
-    "@repo/ui",
+    "@repo/transactional"
   ],
 
   images: {

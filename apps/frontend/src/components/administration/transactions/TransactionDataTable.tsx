@@ -3,8 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { DataTable, useDataTable } from "@repo/ui/datatable";
-
+import { DataTable, useDataTable } from "~/components/datatable";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDataTableAction } from "./TransactionDataTableAction";
 import { useTransactionColumns } from "./TransactionDataTableColumn";

@@ -1,8 +1,8 @@
 "use client";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTable, useDataTable } from "@repo/ui/datatable";
 
+import { DataTable, useDataTable } from "~/components/datatable";
 import { ExcludedStudentDataTableAction } from "./ExcludedStudentDataTableAction";
 import { useStudentColumns } from "./ExcludedStudentDataTableColumn";
 

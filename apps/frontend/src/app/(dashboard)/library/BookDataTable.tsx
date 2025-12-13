@@ -2,8 +2,8 @@ import React from "react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { DataTable, useDataTable } from "@repo/ui/datatable";
 
+import { DataTable, useDataTable } from "~/components/datatable";
 import { getBookColumns } from "./BookDataTableColumn";
 
 export function BookDataTable({
