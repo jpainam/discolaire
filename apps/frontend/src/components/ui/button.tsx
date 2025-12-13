@@ -1,7 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cva } from "class-variance-authority";
-import { LoaderCircleIcon } from "lucide-react";
 import { Slot } from "radix-ui";
 
 import { cn } from "~/lib/utils";
@@ -45,11 +44,13 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isLoading = false,
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & { isLoading?: boolean } & {
+}: React.ComponentProps<"button"> & { isLoading?: boolean } & VariantProps<
+    typeof buttonVariants
+  > & {
     asChild?: boolean;
   }) {
   const Comp = asChild ? Slot.Root : "button";
@@ -61,12 +62,7 @@ function Button({
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      disabled={props.disabled || isLoading}
-    >
-      {props.children}
-      {isLoading && <LoaderCircleIcon className="animate-spin" />}
-    </Comp>
+    />
   );
 }
 

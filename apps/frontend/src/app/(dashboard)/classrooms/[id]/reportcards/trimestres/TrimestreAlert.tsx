@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CircleAlertIcon } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
@@ -105,12 +106,12 @@ export async function TrimestreAlert({
 
                   return (
                     <li key={subject.id}>
-                      <a
+                      <Link
                         className="hover:underline"
                         href={`/classrooms/${classroomId}/subjects/${subject.id}`}
                       >
                         {subject.course.name} ({actual})
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
