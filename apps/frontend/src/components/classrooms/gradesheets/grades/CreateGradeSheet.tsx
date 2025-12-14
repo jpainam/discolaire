@@ -1,11 +1,9 @@
 "use client";
 
 import { useCallback, useRef } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { decode } from "entities";
 import { SaveIcon, TriangleAlert, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -14,7 +12,6 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { AvatarState } from "~/components/AvatarState";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -34,6 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { UserLink } from "~/components/UserLink";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useRouter } from "~/hooks/use-router";
@@ -185,7 +183,7 @@ export function CreateGradeSheet({
             }
           }}
         >
-          <div className="grid grid-cols-2 gap-4 p-1 px-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 p-1 px-4 md:grid-cols-4">
             <FormField
               control={form.control}
               name="name"
@@ -264,9 +262,7 @@ export function CreateGradeSheet({
               <TableHeader>
                 <TableRow className="bg-muted/50">
                   <TableHead className="w-[10px]"></TableHead>
-                  <TableHead className="w-[10px]"></TableHead>
-                  <TableHead>{t("lastName")}</TableHead>
-                  <TableHead>{t("firstName")}</TableHead>
+                  <TableHead>{t("fullName")}</TableHead>
                   <TableHead>{t("grade")}</TableHead>
                   <TableHead>{t("absence")}</TableHead>
                   <TableHead>{t("appreciation")}</TableHead>
@@ -275,34 +271,17 @@ export function CreateGradeSheet({
               <TableBody>
                 {students.map((st, index) => {
                   return (
-                    <TableRow
-                      key={st.id}
-                      className="hover:bg-green-50 hover:text-green-700 hover:ring-green-600/20 dark:hover:bg-green-700/10 dark:hover:text-green-50"
-                    >
+                    <TableRow key={st.id}>
                       <TableCell className="py-0">{index + 1}.</TableCell>
                       <TableCell className="py-0">
-                        <AvatarState
-                          className="h-5 w-5"
+                        <UserLink
+                          profile="student"
+                          id={st.id}
                           avatar={st.user?.avatar}
-                          pos={getFullName(st).length}
+                          name={getFullName(st)}
                         />
                       </TableCell>
-                      <TableCell className="py-0">
-                        <Link
-                          className="hover:text-blue-600 hover:underline"
-                          href={routes.students.details(st.id)}
-                        >
-                          {decode(st.lastName ?? "")}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="py-0">
-                        <Link
-                          className="hover:text-blue-600 hover:underline"
-                          href={routes.students.details(st.id)}
-                        >
-                          {decode(st.firstName ?? "")}
-                        </Link>
-                      </TableCell>
+
                       <TableCell className="py-1">
                         <Input
                           value={st.id}

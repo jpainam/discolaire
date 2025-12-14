@@ -1,27 +1,8 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import {
-  Ambulance,
-  ArrowRightLeft,
-  BellRing,
-  BookText,
-  CalendarDays,
-  CaptionsIcon,
-  CircleDollarSign,
-  CircleUserIcon,
-  ContactIcon,
-  CreditCard,
-  FileText,
-  KeySquare,
-  LineChart,
-  Mail,
-  NotebookPen,
-  NotepadTextDashed,
-  PrinterIcon,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -35,6 +16,25 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { useCheckPermission } from "~/hooks/use-permission";
+import {
+  AttendanceIcon,
+  CalendarDays,
+  ContactIcon,
+  EnrollmentIcon,
+  FilesIcon,
+  FolderIcon,
+  GradeIcon,
+  HealthIcon,
+  IDCardIcon,
+  LibraryIcon,
+  LockIcon,
+  MailIcon,
+  MoneyIcon,
+  NotificationIcon,
+  PrinterIcon,
+  ReportGradeIcon,
+  TextBookIcon,
+} from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 
@@ -45,49 +45,49 @@ export function StudentSidebar({
   const informations = [
     {
       name: "profile",
-      icon: CircleUserIcon,
+      icon: <FilesIcon />,
       url: `/students/${params.id}`,
     },
     {
       name: "contacts",
-      icon: ContactIcon,
+      icon: <ContactIcon />,
       url: `/students/${params.id}/contacts`,
     },
     {
       name: "id_card",
-      icon: CreditCard,
+      icon: <IDCardIcon />,
       url: `/students/${params.id}/id-card`,
     },
     {
       name: "login_info",
-      icon: KeySquare,
+      icon: <LockIcon />,
       url: `/students/${params.id}/login-info`,
     },
   ];
   const academy = [
     {
       name: "enrollments",
-      icon: ArrowRightLeft,
+      icon: <EnrollmentIcon />,
       url: `/students/${params.id}/enrollments`,
     },
     {
       name: "grades",
-      icon: NotepadTextDashed,
+      icon: <GradeIcon />,
       url: `/students/${params.id}/grades`,
     },
     {
       name: "transcripts",
-      icon: CaptionsIcon,
+      icon: <LibraryIcon />,
       url: `/students/${params.id}/gradesheets`,
     },
     {
       name: "reportcards",
-      icon: BookText,
+      icon: <ReportGradeIcon />,
       url: `/students/${params.id}/reportcards`,
     },
     {
       name: "assignments",
-      icon: NotebookPen,
+      icon: <TextBookIcon />,
       url: `/students/${params.id}/assignments`,
     },
   ];
@@ -100,46 +100,46 @@ export function StudentSidebar({
   //if (!canReadTransaction) {
   informations.push({
     name: "transactions",
-    icon: CircleDollarSign,
+    icon: <MoneyIcon />,
     url: `/students/${params.id}/transactions`,
   });
   //}
   const school_life = [
     {
       name: "attendances",
-      icon: LineChart,
+      icon: <AttendanceIcon />,
       url: `/students/${params.id}/attendances`,
     },
     {
       name: "timetables",
-      icon: CalendarDays,
+      icon: <CalendarDays />,
       url: `/students/${params.id}/timetables`,
     },
     {
       name: "mail",
-      icon: Mail,
+      icon: <MailIcon />,
       url: `/students/${params.id}/mail`,
     },
     {
       name: "health",
-      icon: Ambulance,
+      icon: <HealthIcon />,
       url: `/students/${params.id}/health`,
     },
     {
       name: "notifications",
-      icon: BellRing,
+      icon: <NotificationIcon />,
       url: `/students/${params.id}/notifications`,
     },
     {
       name: "documents",
-      icon: FileText,
+      icon: <FolderIcon />,
       url: `/students/${params.id}/documents`,
     },
   ];
   const others = [
     {
       name: "print",
-      icon: PrinterIcon,
+      icon: <PrinterIcon />,
       url: `/students/${params.id}/print`,
     },
   ];
@@ -176,7 +176,7 @@ function MenuSideGroup({
   items,
   label,
 }: {
-  items: { name: string; url: string; icon: LucideIcon }[];
+  items: { name: string; url: string; icon: ReactNode }[];
   label: string;
 }) {
   const t = useTranslations();
@@ -193,7 +193,7 @@ function MenuSideGroup({
               isActive={pathname === item.url}
             >
               <Link href={item.url}>
-                <item.icon />
+                {item.icon}
                 <span>{t(item.name)}</span>
               </Link>
             </SidebarMenuButton>

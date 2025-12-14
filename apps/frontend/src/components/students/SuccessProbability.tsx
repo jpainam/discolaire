@@ -1,7 +1,11 @@
 "use client";
 
-import FlatBadge from "../FlatBadge";
+import { Badge } from "../ui/badge";
 
 export function SuccessProbability() {
-  return <FlatBadge variant={"pink"}>50%</FlatBadge>;
+  return (
+    <Badge variant={"outline"} className="bg-pink-600 dark:bg-pink-800">
+      50%
+    </Badge>
+  );
 }

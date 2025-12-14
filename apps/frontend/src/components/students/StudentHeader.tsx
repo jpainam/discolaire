@@ -24,18 +24,12 @@ import {
   MessageCircleMore,
   MoreVertical,
   NotebookTabs,
-  Pencil,
-  PencilIcon,
   Phone,
-  PlusIcon,
-  Printer,
   Shield,
   ShieldCheck,
   ShieldEllipsis,
   ShieldX,
   SquareEqual,
-  Trash2,
-  UserIcon,
   UserPlus2,
   XIcon,
 } from "lucide-react";
@@ -67,6 +61,13 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import {
+  DeleteIcon,
+  EditIcon,
+  PlusIcon,
+  PrinterIcon,
+  UsersIcon,
+} from "~/icons";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -251,104 +252,83 @@ export function StudentHeader() {
           />
         )}
 
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-1">
           {canEditStudent && (
             <Button
               disabled={!canEditStudent}
-              size={"icon"}
-              className="size-7"
+              size={"icon-sm"}
               onClick={() => {
                 router.push(routes.students.edit(student.id));
               }}
-              aria-label={t("edit")}
               variant="ghost"
             >
-              <Pencil className="h-3 w-3" />
+              <EditIcon />
             </Button>
           )}
-          <SimpleTooltip content="Notification reçus">
-            <Button
-              className="size-7"
-              size={"icon"}
-              aria-label="Notification"
-              variant="ghost"
-            >
-              <BellRing className="h-3 w-3" />
-            </Button>
-          </SimpleTooltip>
-          {student.userId && (
-            <SimpleTooltip content={t("user")}>
-              <Button
-                className="size-7"
-                onClick={() => {
-                  router.push(`/users/${student.userId}`);
-                }}
-                size={"icon"}
-                aria-label="user"
-                variant="ghost"
-              >
-                <UserIcon className="h-3 w-3" />
-              </Button>
-            </SimpleTooltip>
-          )}
-          <SimpleTooltip content="Dialoguer">
-            <Button
-              size={"icon"}
-              className="size-7"
-              aria-label="Notification"
-              variant="ghost"
-              onClick={() => {
-                router.push(`${routes.students.notifications(params.id)}`);
-              }}
-            >
-              <MessageCircleMore className="h-3 w-3" />
-            </Button>
-          </SimpleTooltip>
-          <SimpleTooltip content="Contacts et Responsables">
-            <Button
-              size={"icon"}
-              className="size-7"
-              aria-label="Contacts"
-              variant="ghost"
-              onClick={() => {
-                router.push(routes.students.contacts(params.id));
-              }}
-            >
-              <ContactIcon className="h-3 w-3" />
-            </Button>
-          </SimpleTooltip>
 
-          <SimpleTooltip content="Impressions">
+          <Button size={"icon-sm"} aria-label="Notification" variant="ghost">
+            <BellRing className="h-3 w-3" />
+          </Button>
+
+          {student.userId && (
             <Button
-              size={"icon"}
-              className="size-7"
-              aria-label="print"
-              variant="ghost"
               onClick={() => {
-                window.open(
-                  `/api/pdfs/student/${params.id}?format=pdf`,
-                  "_blank",
-                );
+                router.push(`/users/${student.userId}`);
               }}
+              size={"icon-sm"}
+              variant="ghost"
             >
-              <Printer className="h-3 w-3" />
+              <UsersIcon />
             </Button>
-          </SimpleTooltip>
+          )}
+
+          <Button
+            size={"icon-sm"}
+            aria-label="Notification"
+            variant="ghost"
+            onClick={() => {
+              router.push(`${routes.students.notifications(params.id)}`);
+            }}
+          >
+            <MessageCircleMore />
+          </Button>
+
+          <Button
+            size={"icon-sm"}
+            aria-label="Contacts"
+            variant="ghost"
+            onClick={() => {
+              router.push(routes.students.contacts(params.id));
+            }}
+          >
+            <ContactIcon />
+          </Button>
+
+          <Button
+            size={"icon-sm"}
+            aria-label="print"
+            variant="ghost"
+            onClick={() => {
+              window.open(
+                `/api/pdfs/student/${params.id}?format=pdf`,
+                "_blank",
+              );
+            }}
+          >
+            <PrinterIcon />
+          </Button>
 
           {canCreateStudent && (
-            <SimpleTooltip content={t("add")}>
-              <Button
-                size={"icon"}
-                aria-label="add"
-                className="size-7"
-                variant="ghost"
-                onClick={() => {
-                  router.push(routes.students.create);
-                }}
-              >
-                <PlusIcon className="h-3 w-3" />
-              </Button>
-            </SimpleTooltip>
+            <Button
+              size={"icon-sm"}
+              aria-label="add"
+              variant="ghost"
+              onClick={() => {
+                router.push(routes.students.create);
+              }}
+            >
+              <PlusIcon />
+            </Button>
           )}
           <SimpleTooltip
             content={
@@ -374,23 +354,22 @@ export function StudentHeader() {
               </ChangeAvatarButton>
             ) : null}
           </SimpleTooltip>
-          <SimpleTooltip content={t("Success Probability")}>
-            <SuccessProbability />
-          </SimpleTooltip>
+
+          <SuccessProbability />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                size={"icon"}
+                size={"icon-sm"}
                 variant="ghost"
-                className="size-7"
                 onClick={() => {
                   router.push(routes.students.contacts(params.id));
                 }}
               >
-                <MoreVertical className="h-3 w-3" />
+                <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent className="w-48" align="end">
               <DropdownInvitation
                 entityId={student.id}
                 entityType="student"
@@ -398,7 +377,7 @@ export function StudentHeader() {
               />
               <DropdownMenuSeparator />
               <DropdownHelp />
-              <DropdownMenuSeparator />
+
               {!student.userId && (
                 <DropdownMenuItem
                   onSelect={() => {
@@ -410,7 +389,7 @@ export function StudentHeader() {
                     });
                   }}
                 >
-                  <UserPlus2 className="h-3 w-3" />
+                  <UserPlus2 />
                   {t("create_a_user")}
                 </DropdownMenuItem>
               )}
@@ -438,8 +417,8 @@ export function StudentHeader() {
               )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
-                  <ShieldCheck className="text-muted-foreground mr-2 h-4 w-4" />
-                  <span>{t("status")}</span>
+                  <ShieldCheck />
+                  {t("status")}
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
@@ -523,7 +502,7 @@ export function StudentHeader() {
                     router.push(routes.students.edit(student.id));
                   }}
                 >
-                  <PencilIcon />
+                  <EditIcon />
                   {t("edit")}
                 </DropdownMenuItem>
               )}
@@ -535,7 +514,7 @@ export function StudentHeader() {
                       const isConfirm = await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
-                        icon: <Trash2 className="text-destructive h-4 w-4" />,
+
                         alertDialogTitle: {
                           className: "flex items-center gap-2",
                         },
@@ -547,9 +526,8 @@ export function StudentHeader() {
                     }}
                     disabled={!canDeleteStudent}
                     variant="destructive"
-                    className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                   >
-                    <Trash2 />
+                    <DeleteIcon />
                     {t("delete")}
                   </DropdownMenuItem>
                 </>

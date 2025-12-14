@@ -25,9 +25,9 @@ export function ClassroomCreateGradeSheetHeader() {
   return (
     <div className="bg-muted/50 grid flex-row gap-6 border-b px-4 py-1 text-sm md:flex">
       <div className="flex flex-row items-center gap-2">
-        <Label>{t("term")} </Label>
+        <Label className="hidden md:flex">{t("term")} </Label>
         <TermSelector
-          className="w-64"
+          className="w-full lg:w-64"
           defaultValue={searchParams.termId?.toString()}
           onChange={(val) => {
             router.push(
@@ -38,9 +38,9 @@ export function ClassroomCreateGradeSheetHeader() {
         />
       </div>
       <div className="flex flex-row items-center gap-2">
-        <Label>{t("subject")}</Label>
+        <Label className="hidden md:flex">{t("subject")}</Label>
         <SubjectSelector
-          className="w-96"
+          className="w-full lg:w-96"
           defaultValue={searchParams.subjectId?.toString()}
           onChange={(val) => {
             router.push(
@@ -51,29 +51,30 @@ export function ClassroomCreateGradeSheetHeader() {
           classroomId={params.id}
         />
       </div>
+      <div className="flex items-center gap-4">
+        <div className="flex flex-row items-center gap-2">
+          <Checkbox
+            defaultChecked={searchParams.notifyParents}
+            onCheckedChange={(checked) => {
+              void setSearchParams({
+                notifyParents: checked ? true : false,
+              });
+            }}
+          />
+          <Label>{t("notify_parents")}</Label>
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <Checkbox
+            defaultChecked={searchParams.notifyStudents}
+            onCheckedChange={(checked) => {
+              void setSearchParams({
+                notifyStudents: checked ? true : false,
+              });
+            }}
+          />
 
-      <div className="flex flex-row items-center gap-2">
-        <Checkbox
-          defaultChecked={searchParams.notifyParents}
-          onCheckedChange={(checked) => {
-            void setSearchParams({
-              notifyParents: checked ? true : false,
-            });
-          }}
-        />
-        <Label>{t("notify_parents")}</Label>
-      </div>
-      <div className="flex flex-row items-center gap-2">
-        <Checkbox
-          defaultChecked={searchParams.notifyStudents}
-          onCheckedChange={(checked) => {
-            void setSearchParams({
-              notifyStudents: checked ? true : false,
-            });
-          }}
-        />
-
-        <Label>{t("notify_students")}</Label>
+          <Label>{t("notify_students")}</Label>
+        </div>
       </div>
     </div>
   );

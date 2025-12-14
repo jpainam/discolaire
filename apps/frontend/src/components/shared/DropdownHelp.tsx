@@ -1,6 +1,6 @@
 "use client";
 
-import { HelpCircleIcon, LibraryBig } from "lucide-react";
+import { LibraryBig } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import CalendarIcon from "~/components/icons/calendar";
@@ -13,6 +13,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "~/components/ui/dropdown-menu";
+import { HelpIcon } from "~/icons";
 
 export function DropdownHelp() {
   const t = useTranslations();
@@ -20,8 +21,8 @@ export function DropdownHelp() {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
-        <HelpCircleIcon className="text-muted-foreground mr-2 h-4 w-4" />
-        <span>{t("help")}</span>
+        <HelpIcon />
+        {t("help")}
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
         <DropdownMenuSubContent>

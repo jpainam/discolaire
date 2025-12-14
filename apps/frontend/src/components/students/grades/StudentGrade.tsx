@@ -72,7 +72,7 @@ export function StudentGrade() {
   return (
     <div className="grid gap-0 p-0 pb-2 text-sm md:grid-cols-2">
       <div className="flex flex-col">
-        <div className="bg-muted/50 flex flex-row justify-between gap-4 border-r border-b px-4 py-1">
+        <div className="bg-muted/50 flex flex-row justify-between gap-4 border-r border-b px-4 py-1.5">
           <Button variant={"ghost"} onClick={() => handleSort("subject")}>
             {t("subject")}{" "}
             {orderBy === "subject" && sortOrder === "asc" ? (

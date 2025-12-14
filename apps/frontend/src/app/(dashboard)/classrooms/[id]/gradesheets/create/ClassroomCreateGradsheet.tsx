@@ -31,15 +31,15 @@ export function ClassroomCreateGradesheet({
         selectedTerm &&
         searchParams.termId &&
         searchParams.subjectId && (
-          <div className="grid grid-cols-4 gap-2 divide-x">
+          <div className="grid gap-2 divide-x lg:grid-cols-4">
             <CreateGradeSheet
-              className="col-span-3 py-2"
+              className="py-2 lg:col-span-3"
               subjectId={searchParams.subjectId}
               termId={searchParams.termId}
               term={selectedTerm}
               students={students}
             />
-            <div className="gap2 flex flex-col">
+            <div className="flex hidden flex-col gap-2 lg:flex">
               <div className="font-bold font-medium">Notes Précèdentes</div>
               <CurrentGradeSheetSummary
                 subjectId={searchParams.subjectId}

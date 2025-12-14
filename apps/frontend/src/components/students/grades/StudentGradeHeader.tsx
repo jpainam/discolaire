@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LayoutGridIcon, ListIcon, MoreVertical, Trash2 } from "lucide-react";
+import { LayoutGridIcon, ListIcon, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ import { Label } from "~/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -73,8 +74,6 @@ export function StudentGradeHeader() {
         <ToggleGroup
           defaultValue={view}
           value={view}
-          size={"sm"}
-          className="rounded-sm *:data-[slot=toggle-group-item]:px-3"
           onValueChange={(v) => {
             void setView(v);
           }}
@@ -90,11 +89,11 @@ export function StudentGradeHeader() {
         </ToggleGroup>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" className="size-8" variant="outline">
+            <Button size="icon" variant="outline">
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
@@ -133,7 +132,7 @@ export function StudentGradeHeader() {
                     }
                   }}
                 >
-                  <Trash2 />
+                  <DeleteIcon />
                   {t("delete")}
                 </DropdownMenuItem>
               </>

@@ -8,9 +8,7 @@ import {
   KeyRound,
   Mails,
   MoreHorizontal,
-  Pencil,
   Printer,
-  Trash2,
   UserPlus2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -34,6 +32,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon, EditIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -121,7 +120,7 @@ export function StaffProfileHeader({
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
+            <Button variant={"outline"} size={"icon"}>
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
@@ -137,7 +136,7 @@ export function StaffProfileHeader({
                     });
                   }}
                 >
-                  <Pencil />
+                  <EditIcon />
                   {t("edit")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -204,7 +203,7 @@ export function StaffProfileHeader({
                     }
                   }}
                 >
-                  <Trash2 />
+                  <DeleteIcon />
                   {t("delete")}
                 </DropdownMenuItem>
               </>

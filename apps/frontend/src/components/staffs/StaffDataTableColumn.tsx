@@ -2,7 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Pencil, ReceiptText, Trash2 } from "lucide-react";
+import { ReceiptText } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon, EditIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -202,7 +203,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button aria-label="Open menu" className="size-8" variant={"ghost"}>
+          <Button variant={"ghost"}>
             <DotsHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
@@ -226,7 +227,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
                 });
               }}
             >
-              <Pencil /> {t("edit")}
+              <EditIcon /> {t("edit")}
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
@@ -255,7 +256,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
                   }
                 }}
               >
-                <Trash2 /> {t("delete")}
+                <DeleteIcon /> {t("delete")}
               </DropdownMenuItem>
             </>
           )}

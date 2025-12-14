@@ -4,7 +4,6 @@
 import React from "react";
 import { initials } from "@dicebear/collection";
 //const pathname = usePathname();
-
 import { createAvatar } from "@dicebear/core";
 import {
   BellIcon,
@@ -12,7 +11,6 @@ import {
   ChevronsUpDown,
   CircleUser,
   Computer,
-  LogOut,
   Settings,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -36,6 +34,7 @@ import {
 } from "~/components/ui/sidebar";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { LogoutIcon } from "~/icons";
 
 export function UserNav() {
   const [mounted, setMounted] = React.useState(false);
@@ -173,7 +172,7 @@ export function UserNav() {
                 });
               }}
             >
-              <LogOut />
+              <LogoutIcon />
               <span>{t("logout")}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
