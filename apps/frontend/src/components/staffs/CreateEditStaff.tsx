@@ -31,6 +31,7 @@ import { CountryPicker } from "../shared/CountryPicker";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffLevelSelector } from "../shared/selects/StaffLevelSelector";
+import { Spinner } from "../ui/spinner";
 
 type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"][number]>;
 
@@ -370,12 +371,13 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
 
         <SheetFooter>
           <Button
-            isLoading={
+            disabled={
               updateStaffMutation.isPending || createStaffMutation.isPending
             }
-            size={"sm"}
             type="submit"
           >
+            {(updateStaffMutation.isPending ||
+              createStaffMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
           <SheetClose asChild>

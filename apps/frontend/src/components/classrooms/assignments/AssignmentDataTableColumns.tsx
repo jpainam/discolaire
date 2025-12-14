@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -22,6 +21,7 @@ import {
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -208,12 +208,8 @@ function ActionsCell({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          aria-label="Open menu"
-          variant="ghost"
-          className="data-[state=open]:bg-muted flex size-8 p-0"
-        >
-          <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+        <Button variant="ghost">
+          <DotsHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -224,7 +220,7 @@ function ActionsCell({
             );
           }}
         >
-          <Eye />
+          <ViewIcon />
           {t("details")}
         </DropdownMenuItem>
         {canUpdateAssignment && (
@@ -235,7 +231,7 @@ function ActionsCell({
               );
             }}
           >
-            <Pencil />
+            <EditIcon />
             {t("edit")}
           </DropdownMenuItem>
         )}
@@ -253,7 +249,7 @@ function ActionsCell({
               }
             }}
           >
-            <Trash2 />
+            <DeleteIcon />
             {t("delete")}
           </DropdownMenuItem>
         )}

@@ -9,7 +9,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
-import { BookCopy, Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -36,6 +36,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { ViewIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
@@ -252,7 +253,7 @@ function ActionCell({
               });
             }}
           >
-            <Eye />
+            <ViewIcon />
             {t("details")}
           </DropdownMenuItem>
           {canUpdateTransaction && (

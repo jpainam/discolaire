@@ -1,6 +1,6 @@
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -17,6 +17,7 @@ import {
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -68,7 +69,7 @@ export function ActionCells({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size={"icon-sm"} variant="ghost">
-            <DotsHorizontalIcon className="size-4" />
+            <DotsHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -82,7 +83,7 @@ export function ActionCells({
               );
             }}
           >
-            <Eye />
+            <ViewIcon />
             {t("details")}
           </DropdownMenuItem>
           {canUpdateGradesheet && (
@@ -126,7 +127,7 @@ export function ActionCells({
                   }
                 }}
               >
-                <Trash2 />
+                <DeleteIcon />
                 {t("delete")}
               </DropdownMenuItem>
             </>

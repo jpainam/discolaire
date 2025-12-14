@@ -7,14 +7,7 @@ import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  Eye,
-  MoveRight,
-  Pencil,
-  Trash2,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
+import { MoveRight, TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -36,6 +29,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -331,7 +325,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
               router.push(routes.classrooms.details(classroom.id));
             }}
           >
-            <Eye />
+            <ViewIcon />
             {t("details")}
           </DropdownMenuItem>
           {canUpdateClassroom && (
@@ -344,7 +338,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
                 });
               }}
             >
-              <Pencil />
+              <EditIcon />
               {t("edit")}
             </DropdownMenuItem>
           )}
@@ -366,7 +360,7 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
                   }
                 }}
               >
-                <Trash2 />
+                <DeleteIcon />
                 {t("delete")}
               </DropdownMenuItem>
             </>

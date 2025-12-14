@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { EyeIcon, Loader, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Loader, MoreHorizontal, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -26,6 +26,7 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -95,7 +96,7 @@ export default function ClassroomTable() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant={"ghost"} size={"icon"}>
-                        <MoreHorizontal className="h-4 w-4" />
+                        <MoreHorizontal />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -104,7 +105,7 @@ export default function ClassroomTable() {
                           router.push(`/classrooms/${classroom.id}`);
                         }}
                       >
-                        <EyeIcon className="h-4 w-4" />
+                        <ViewIcon />
                         {t("details")}
                       </DropdownMenuItem>
                       {canEditClassroom && (
@@ -119,7 +120,7 @@ export default function ClassroomTable() {
                             });
                           }}
                         >
-                          <Pencil />
+                          <EditIcon />
                           {t("edit")}
                         </DropdownMenuItem>
                       )}
@@ -143,9 +144,9 @@ export default function ClassroomTable() {
                                 deleteClassroomMutation.mutate(classroom.id);
                               }
                             }}
-                            className="bg-destructive text-destructive-foreground"
+                            variant="destructive"
                           >
-                            <Trash2 />
+                            <DeleteIcon />
                             {t("delete")}
                           </DropdownMenuItem>
                         </>

@@ -2,7 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -21,6 +21,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -180,7 +181,7 @@ function ActionCell({ user }: { user: User }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"ghost"} size={"icon"}>
-            <MoreHorizontal className="h-4 w-4" />
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -189,7 +190,7 @@ function ActionCell({ user }: { user: User }) {
               router.push(`/administration/users/${user.id}`);
             }}
           >
-            <Eye />
+            <ViewIcon />
             {t("details")}
           </DropdownMenuItem>
           {canDeleteUser && (
@@ -213,7 +214,7 @@ function ActionCell({ user }: { user: User }) {
                 }}
                 variant="destructive"
               >
-                <Trash2 />
+                <DeleteIcon />
                 {t("delete")}
               </DropdownMenuItem>
             </>

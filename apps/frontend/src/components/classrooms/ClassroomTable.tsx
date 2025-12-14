@@ -12,9 +12,7 @@ import {
 } from "@tanstack/react-query";
 import {
   Download,
-  Eye,
   MoreHorizontal,
-  Pencil,
   Plus,
   Search,
   UserCircle,
@@ -60,7 +58,7 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { DeleteIcon } from "~/icons";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -359,7 +357,7 @@ export function ClassroomTable() {
                             router.push(`/classrooms/${cl.id}`);
                           }}
                         >
-                          <Eye />
+                          <ViewIcon />
                           {t("details")}
                         </DropdownMenuItem>
                         {canUpdateClassroom && (
@@ -372,7 +370,7 @@ export function ClassroomTable() {
                               });
                             }}
                           >
-                            <Pencil />
+                            <EditIcon />
                             {t("edit")}
                           </DropdownMenuItem>
                         )}

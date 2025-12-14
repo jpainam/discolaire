@@ -2,7 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SaveIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
@@ -146,13 +147,14 @@ export function CreateUpdateJournal({
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               createAccountingJournal.isPending ||
               updateAccountingJournal.isPending
             }
             type="submit"
           >
-            <SaveIcon className="h-3 w-3" />
+            {(createAccountingJournal.isPending ||
+              updateAccountingJournal.isPending) && <Spinner />}
             {t("submit")}
           </Button>
         </div>

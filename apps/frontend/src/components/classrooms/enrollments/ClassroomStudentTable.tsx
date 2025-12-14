@@ -6,7 +6,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Eye, MoreHorizontal, Search, Trash2, Users2 } from "lucide-react";
+import { MoreHorizontal, Search, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -38,6 +38,7 @@ import { UserLink } from "~/components/UserLink";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { ContactIcon, DeleteIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useSchool } from "~/providers/SchoolProvider";
@@ -217,20 +218,18 @@ export function ClassroomStudentTable({
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"} size={"icon-sm"}>
+                        <Button variant={"ghost"}>
                           <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
-                          className="flex items-center gap-2"
                           onSelect={() => {
                             router.push(`/students/${stud.id}`);
                           }}
                         >
-                          <Eye className="h-4 w-4" /> {t("details")}
+                          <ViewIcon /> {t("details")}
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onSelect={() => {
                             openSheet({
@@ -241,7 +240,7 @@ export function ClassroomStudentTable({
                             });
                           }}
                         >
-                          <Users2 />
+                          <ContactIcon />
                           {t("parents")}
                         </DropdownMenuItem>
                         {canDeleteEnrollment && (
@@ -264,7 +263,7 @@ export function ClassroomStudentTable({
                                 }
                               }}
                             >
-                              <Trash2 /> {t("unenroll")}
+                              <DeleteIcon /> {t("unenroll")}
                             </DropdownMenuItem>
                           </>
                         )}

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   Download,
-  Eye,
   FileCode,
   FileSpreadsheet,
   FileText,
@@ -32,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { ViewIcon } from "~/icons";
 
 // Helper function to get the appropriate icon based on file type
 const getFileIcon = (fileType: string) => {
@@ -207,7 +207,7 @@ export default function Page() {
                       {doc.type.toUpperCase()}
                     </Badge>
                     <Button variant="ghost" size="icon">
-                      <Eye className="h-4 w-4" />
+                      <ViewIcon className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon">
                       <Download className="h-4 w-4" />

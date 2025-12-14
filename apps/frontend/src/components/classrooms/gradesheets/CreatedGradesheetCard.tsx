@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Eye, MoreHorizontal, PencilIcon, Trash } from "lucide-react";
+import { MoreHorizontal, Trash } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -27,6 +27,7 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { EditIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -115,8 +116,8 @@ export function CreatedGradesheetCard({
         <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} className="size-7">
-                <MoreHorizontal className="h-4 w-4" />
+              <Button variant={"outline"}>
+                <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -125,7 +126,7 @@ export function CreatedGradesheetCard({
                   router.push(`/classrooms/${params.id}/gradesheets/${gs.id}`);
                 }}
               >
-                <Eye className="h-4 w-4" />
+                <ViewIcon />
                 {t("details")}
               </DropdownMenuItem>
               {canUpdateGradesheet && (
@@ -145,7 +146,7 @@ export function CreatedGradesheetCard({
                     });
                   }}
                 >
-                  <PencilIcon className="h-4 w-4" />
+                  <EditIcon />
                   {t("edit")}
                 </DropdownMenuItem>
               )}

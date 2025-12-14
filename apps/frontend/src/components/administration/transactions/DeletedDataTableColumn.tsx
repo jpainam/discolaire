@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
-import { Eye, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
+import { ViewIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
 import { TransactionDetails } from "./TransactionDetails";
 
@@ -232,8 +233,8 @@ function ActionCell({
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"} size={"icon"} className="size-7">
-            <MoreHorizontal className="h-4 w-4" />
+          <Button variant={"ghost"} size={"icon"}>
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -245,7 +246,7 @@ function ActionCell({
               });
             }}
           >
-            <Eye />
+            <ViewIcon />
             {t("details")}
           </DropdownMenuItem>
         </DropdownMenuContent>

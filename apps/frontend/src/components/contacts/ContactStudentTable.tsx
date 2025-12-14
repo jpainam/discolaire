@@ -8,7 +8,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { decode } from "entities";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -33,6 +33,7 @@ import {
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -130,7 +131,7 @@ export function ContactStudentTable() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button size={"icon"} variant={"ghost"}>
-                        <MoreHorizontal className="h-4 w-4" />
+                        <MoreHorizontal />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -142,7 +143,7 @@ export function ContactStudentTable() {
                           );
                         }}
                       >
-                        <Eye />
+                        <ViewIcon />
                         {t("details")}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -180,7 +181,7 @@ export function ContactStudentTable() {
                               }
                             }}
                           >
-                            <Trash2 />
+                            <DeleteIcon />
                             {t("delete")}
                           </DropdownMenuItem>
                         </>

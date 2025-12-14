@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -103,7 +104,7 @@ export function AssignmentTable() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>
-                      <Eye className="h-4 w-4" />
+                      <ViewIcon />
                       {t("details")}
                     </DropdownMenuItem>
                     <DropdownMenuItem>

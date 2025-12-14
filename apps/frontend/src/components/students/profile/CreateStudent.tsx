@@ -2,7 +2,6 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SaveIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -12,6 +11,7 @@ import { StudentStatus } from "@repo/db/enums";
 
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
+import { Spinner } from "~/components/ui/spinner";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
@@ -129,12 +129,8 @@ export function CreateStudent() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="bg-muted/50 flex flex-row items-center justify-end gap-4 border-b px-4 py-1">
-          <Button
-            isLoading={createStudentMutation.isPending}
-            disabled={!form.formState.isDirty}
-            type="submit"
-          >
-            <SaveIcon />
+          <Button disabled={!form.formState.isDirty} type="submit">
+            {createStudentMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
           <Button
@@ -144,7 +140,6 @@ export function CreateStudent() {
             type="button"
             variant={"outline"}
           >
-            <XIcon />
             {t("cancel")}
           </Button>
         </div>

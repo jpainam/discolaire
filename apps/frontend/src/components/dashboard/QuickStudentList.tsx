@@ -3,17 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Calendar,
-  Edit,
-  Eye,
-  GraduationCap,
-  HeartPlus,
-  MoreHorizontal,
-  Search,
-  Trash2,
-  UserCircle,
-} from "lucide-react";
+import { MoreHorizontal, Search, UserCircle } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
@@ -53,6 +43,14 @@ import {
 } from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import {
+  CalendarDays,
+  DeleteIcon,
+  EditIcon,
+  GradeIcon,
+  HeartIcon,
+  ViewIcon,
+} from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -260,11 +258,11 @@ export function QuickStudentList() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon-sm">
+                        <Button variant="ghost">
                           <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
@@ -275,7 +273,7 @@ export function QuickStudentList() {
                             //router.push(`/students/${student.id}/favorite`);
                           }}
                         >
-                          <HeartPlus className="h-4 w-4" />
+                          <HeartIcon />
                           {t("Favorite")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -283,7 +281,7 @@ export function QuickStudentList() {
                             router.push(`/students/${st.id}`);
                           }}
                         >
-                          <Eye className="h-4 w-4" />
+                          <ViewIcon />
                           {t("View Profile")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -291,7 +289,7 @@ export function QuickStudentList() {
                             router.push(`/students/${st.id}/edit`);
                           }}
                         >
-                          <Edit className="h-4 w-4" />
+                          <EditIcon />
                           {t("edit")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -299,7 +297,7 @@ export function QuickStudentList() {
                             router.push(`/students/${st.id}/attendances`);
                           }}
                         >
-                          <Calendar className="h-4 w-4" />
+                          <CalendarDays className="h-4 w-4" />
                           {t("View Attendance")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -307,7 +305,7 @@ export function QuickStudentList() {
                             router.push(`/students/${st.id}/grades`);
                           }}
                         >
-                          <GraduationCap className="h-4 w-4" />
+                          <GradeIcon />
                           {t("View Grades")}
                         </DropdownMenuItem>
                         {canDeleteStudent && (
@@ -328,7 +326,7 @@ export function QuickStudentList() {
                               }}
                               variant="destructive"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <DeleteIcon />
                               {t("delete")}
                             </DropdownMenuItem>
                           </>

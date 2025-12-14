@@ -3,7 +3,6 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toZonedTime } from "date-fns-tz";
-import { SaveIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -13,6 +12,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
+import { Spinner } from "~/components/ui/spinner";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
@@ -144,24 +144,17 @@ export function UpdateStudent({ student }: { student: UpdateGetStudent }) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="bg-muted/50 flex flex-row items-center justify-end gap-4 border-b px-4 py-1">
-          <Button
-            isLoading={updateStudentMutation.isPending}
-            size={"sm"}
-            disabled={!form.formState.isDirty}
-            type="submit"
-          >
-            <SaveIcon className="h-4 w-4" />
+          <Button disabled={!form.formState.isDirty} type="submit">
+            {updateStudentMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
           <Button
-            size={"sm"}
             onClick={() => {
               router.back();
             }}
             type="button"
             variant={"outline"}
           >
-            <XIcon className="h-4 w-4" />
             {t("cancel")}
           </Button>
         </div>

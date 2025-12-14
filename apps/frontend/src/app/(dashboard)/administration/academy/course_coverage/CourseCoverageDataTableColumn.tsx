@@ -2,7 +2,6 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Eye } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import type { RouterOutputs } from "@repo/api";
@@ -17,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { ViewIcon } from "~/icons";
 import { getFullName } from "~/utils";
 
 type SubjectProcedureOutput = RouterOutputs["subjectProgram"]["all"][number];
@@ -124,7 +124,7 @@ function ActionCell({ program }: { program: SubjectProcedureOutput }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
-            <Eye />
+            <ViewIcon />
             Details
           </DropdownMenuItem>
         </DropdownMenuContent>

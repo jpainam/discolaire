@@ -3,18 +3,12 @@
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  Calendar,
   CalendarDays,
-  Edit,
-  Eye,
-  FileTextIcon,
   GraduationCap,
-  HeartPlus,
   Mail,
   MapPin,
   MoreVertical,
   Phone,
-  Trash2,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -35,6 +29,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon, EditIcon, GradeIcon, HeartIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -161,11 +156,11 @@ export function StudentSearchResultCard({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-8">
-                <MoreVertical className="h-4 w-4" />
+              <Button variant="ghost" size="icon">
+                <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -174,7 +169,7 @@ export function StudentSearchResultCard({
                   //router.push(`/students/${student.id}/favorite`);
                 }}
               >
-                <HeartPlus className="h-4 w-4" />
+                <HeartIcon />
                 {t("Favorite")}
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -182,7 +177,7 @@ export function StudentSearchResultCard({
                   router.push(`/students/${student.id}`);
                 }}
               >
-                <Eye className="h-4 w-4" />
+                <ViewIcon />
                 {t("View Profile")}
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -190,7 +185,7 @@ export function StudentSearchResultCard({
                   router.push(`/students/${student.id}/edit`);
                 }}
               >
-                <Edit className="h-4 w-4" />
+                <EditIcon />
                 {t("edit")}
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -198,7 +193,7 @@ export function StudentSearchResultCard({
                   router.push(`/students/${student.id}/attendances`);
                 }}
               >
-                <Calendar className="h-4 w-4" />
+                <CalendarDays />
                 {t("View Attendance")}
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -206,7 +201,7 @@ export function StudentSearchResultCard({
                   router.push(`/students/${student.id}/grades`);
                 }}
               >
-                <FileTextIcon className="h-4 w-4" />
+                <GradeIcon />
                 {t("View Grades")}
               </DropdownMenuItem>
               {canDeleteStudent && (
@@ -227,7 +222,7 @@ export function StudentSearchResultCard({
                     }}
                     variant="destructive"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <DeleteIcon />
                     {t("delete")}
                   </DropdownMenuItem>
                 </>

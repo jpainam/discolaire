@@ -2,15 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import {
-  Bell,
-  Calendar,
-  Eye,
-  FileText,
-  Pencil,
-  Search,
-  Trash2,
-} from "lucide-react";
+import { Bell, Calendar, FileText, Pencil, Search, Trash2 } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 import { Badge } from "~/components/base-badge";
@@ -27,6 +19,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
+import { ViewIcon } from "~/icons";
 
 export interface Exam {
   id: string;
@@ -257,7 +250,7 @@ export function AssignmentList() {
                   <span>Due: {formatDate(exam.dueDate)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Eye className="text-muted-foreground h-4 w-4" />
+                  <ViewIcon className="text-muted-foreground h-4 w-4" />
                   <span>Visible: {formatDate(exam.visibleDate)}</span>
                 </div>
                 <div className="flex items-center gap-2">

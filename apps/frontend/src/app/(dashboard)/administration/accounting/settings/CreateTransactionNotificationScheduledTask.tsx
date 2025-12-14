@@ -2,7 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SaveIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { cronValues } from "./cron-values";
@@ -161,12 +162,14 @@ export function AddStaffSchedule({
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               createScheduleTask.isPending || updateScheduleTask.isPending
             }
             type="submit"
           >
-            <SaveIcon />
+            {(createScheduleTask.isPending || updateScheduleTask.isPending) && (
+              <Spinner />
+            )}
             {t("submit")}
           </Button>
         </div>

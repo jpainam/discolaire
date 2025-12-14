@@ -6,7 +6,6 @@ import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
-import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -26,6 +25,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getAge, getFullName } from "~/utils";
@@ -365,30 +365,24 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Open menu"
-            variant={"ghost"}
-            className="data-[state=open]:bg-muted flex size-8 p-0"
-          >
-            <DotsHorizontalIcon aria-hidden="true" className="h-4 w-4" />
+          <Button variant={"ghost"}>
+            <DotsHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
-            className="cursor-pointer"
             onSelect={() => {
               router.push(routes.students.details(student.id));
             }}
           >
-            <Eye /> {t("details")}
+            <ViewIcon /> {t("details")}
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="cursor-pointer"
             onSelect={() => {
               router.push(routes.students.edit(student.id));
             }}
           >
-            <Pencil />
+            <EditIcon />
             {t("edit")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -413,7 +407,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
               }
             }}
           >
-            <Trash2 />
+            <DeleteIcon />
             {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
