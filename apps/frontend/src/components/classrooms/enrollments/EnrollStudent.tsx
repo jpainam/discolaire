@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -20,6 +22,8 @@ import {
 } from "~/components/ui/command";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
+import { UserLink } from "~/components/UserLink";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import rangeMap from "~/lib/range-map";
@@ -77,7 +81,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
       <Command
         shouldFilter={false}
         onKeyDown={handleKeyDown}
-        className="h-[250px] rounded-t-none border-t"
+        className="bg-transparent"
       >
         <CommandInput
           onValueChange={(val) => {
@@ -116,31 +120,25 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     );
                   }}
                 >
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage
-                      src={stud.user?.avatar ?? undefined}
-                      alt="Image"
-                    />
-                    <AvatarFallback>
-                      <Image
-                        width={50}
-                        height={50}
-                        src={randomAvatar(getFullName(stud).length)}
-                        alt="AV"
-                      />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="ml-2">
-                    <span className="text-xs leading-none font-medium">
-                      {getFullName(stud)}
-                    </span>
-                    {/* <span className="text-xs text-muted-foreground">
+                  <UserLink
+                    profile="student"
+                    id={stud.id}
+                    rootClassName="flex-1"
+                    className="text-muted-foreground text-xs"
+                    avatar={stud.user?.avatar}
+                    href="#"
+                    name={getFullName(stud)}
+                  />
+
+                  {/* <span className="text-xs text-muted-foreground">
                       {stud.email}
                     </span> */}
+
+                  <div className="flex flex-row justify-end">
+                    {selectedIds.includes(stud.id) ? (
+                      <Check className="text-primary flex h-5 w-5 justify-end" />
+                    ) : null}
                   </div>
-                  {selectedIds.includes(stud.id) ? (
-                    <Check className="text-primary ml-auto flex h-5 w-5" />
-                  ) : null}
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -154,13 +152,16 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
               const stud = unenrollStudentsQuery.data?.find(
                 (u) => u.id === studId,
               );
+              const avatar = createAvatar(initials, {
+                seed: getFullName(stud),
+              });
               return (
                 <Avatar
                   key={`${studId}-selected`}
                   className="border-background inline-block border-2"
                 >
                   <AvatarImage
-                    src={stud?.user?.avatar ?? undefined}
+                    src={stud?.user?.avatar ?? avatar.toDataUri()}
                     alt="Image"
                   />
                   <AvatarFallback>
@@ -183,8 +184,9 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
         <Button
           variant={"default"}
           size={"sm"}
-          isLoading={createEnrollmentMutation.isPending}
-          disabled={selectedIds.length === 0}
+          disabled={
+            selectedIds.length === 0 || createEnrollmentMutation.isPending
+          }
           onClick={() => {
             toast.loading(t("Processing"), { id: 0 });
             createEnrollmentMutation.mutate({
@@ -194,6 +196,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
             });
           }}
         >
+          {createEnrollmentMutation.isPending && <Spinner />}
           {t("enroll")}
         </Button>
       </div>

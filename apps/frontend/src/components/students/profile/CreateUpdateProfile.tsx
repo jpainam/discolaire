@@ -30,9 +30,9 @@ export function CreateUpdateProfile() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">
-          <div className="flex items-center gap-2">
-            <PiAddressBookTabsDuotone className="h-6 w-6" />
+        <CardTitle>
+          <div className="flex items-center gap-1">
+            <PiAddressBookTabsDuotone />
             {t("information")}
           </div>
         </CardTitle>

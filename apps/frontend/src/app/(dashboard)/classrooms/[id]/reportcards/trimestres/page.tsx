@@ -1,6 +1,7 @@
 import type { SearchParams } from "nuqs/server";
 import { Fragment, Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import Link from "next/link";
 import _ from "lodash";
 import { getTranslations } from "next-intl/server";
 
@@ -119,11 +120,16 @@ export default async function Page(props: PageProps) {
                       key={`${index}${subject.id}`}
                     >
                       <Tooltip>
-                        <TooltipTrigger>
-                          {subject.course.reportName.slice(0, 4)}
+                        <TooltipTrigger asChild>
+                          <Link
+                            className="hover:underline"
+                            href={`/classrooms/${subject.classroomId}/subjects/${subject.id}`}
+                          >
+                            {subject.course.reportName.slice(0, 4)}
+                          </Link>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>{subject.course.reportName}</p>
+                          <p>{subject.course.name}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TableHead>

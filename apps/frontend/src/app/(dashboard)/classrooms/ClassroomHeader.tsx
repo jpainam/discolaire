@@ -35,7 +35,7 @@ export function ClassroomHeader() {
               }}
               variant="outline"
             >
-              <Download className="h-4 w-4" />
+              <Download />
               {t("Export")}
             </Button>
           )}
@@ -49,8 +49,8 @@ export function ClassroomHeader() {
                 });
               }}
             >
-              <Plus className="h-4 w-4" />
-              {t("Add Classroom")}
+              <Plus />
+              {t("Add")}
             </Button>
           )}
         </div>

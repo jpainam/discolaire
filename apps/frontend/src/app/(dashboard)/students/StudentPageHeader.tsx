@@ -90,7 +90,7 @@ export function StudentPageHeader() {
       <div className="ml-auto flex flex-row items-center gap-2">
         {canCreateStudent && (
           <Button
-            size={"sm"}
+           
             onClick={() => {
               router.push(routes.students.create);
             }}
@@ -101,7 +101,7 @@ export function StudentPageHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
+            <Button variant={"outline"} size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

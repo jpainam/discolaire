@@ -136,7 +136,7 @@ const ConfirmDialogContent: React.FC<{
             <AlertDialogCancel
               onClick={onCancel}
               {...cancelButton}
-              className="h-8"
+              variant={"secondary"}
             >
               {cancelText && t(cancelText)}
             </AlertDialogCancel>
@@ -144,7 +144,7 @@ const ConfirmDialogContent: React.FC<{
           <AlertDialogAction
             onClick={onConfirm}
             {...confirmButton}
-            className="bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 h-8 text-white shadow-xs"
+            variant={"destructive"}
           >
             {confirmText && t(confirmText)}
           </AlertDialogAction>

@@ -120,7 +120,7 @@ export function CreateNewStudent() {
     <Form {...form}>
       <form className="flex flex-col gap-4">
         <div className="bg-muted flex flex-row items-center gap-2 border-b px-4 py-1">
-          <Label>{t("Add Student")}</Label>
+          <Label>{t("add")}</Label>
           <div className="ml-auto flex flex-row items-center gap-2">
             <Button
               onClick={() => prevStep()}

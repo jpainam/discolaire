@@ -9,6 +9,7 @@ export function UserLink(props: {
   name: string;
   id: string;
   avatar?: string | null;
+  rootClassName?: string;
   profile: "staff" | "student" | "contact";
   className?: string;
   href?: string;
@@ -25,7 +26,7 @@ export function UserLink(props: {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", props.rootClassName)}>
       <Avatar size="sm">
         <AvatarImage
           src={props.avatar ?? avatar.toDataUri()}

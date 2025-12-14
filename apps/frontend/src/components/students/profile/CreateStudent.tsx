@@ -131,22 +131,20 @@ export function CreateStudent() {
         <div className="bg-muted/50 flex flex-row items-center justify-end gap-4 border-b px-4 py-1">
           <Button
             isLoading={createStudentMutation.isPending}
-            size={"sm"}
             disabled={!form.formState.isDirty}
             type="submit"
           >
-            <SaveIcon className="h-4 w-4" />
+            <SaveIcon />
             {t("submit")}
           </Button>
           <Button
-            size={"sm"}
             onClick={() => {
               router.back();
             }}
             type="button"
             variant={"outline"}
           >
-            <XIcon className="h-4 w-4" />
+            <XIcon />
             {t("cancel")}
           </Button>
         </div>

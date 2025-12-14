@@ -4,6 +4,7 @@ import { Download, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
@@ -19,12 +20,8 @@ export function StudentHeader() {
   return (
     <header className="bg-background border-b px-4 py-2">
       <div className="grid grid-cols-1 items-center justify-between gap-2 md:flex">
-        <div>
-          <h1 className="text-xl font-bold">{t("Student Management")}</h1>
-          <p className="text-muted-foreground text-s hidden md:flex">
-            {t("Search and manage student records")}
-          </p>
-        </div>
+        <Label className="text-lg font-bold">{t("students")}</Label>
+
         <div className="grid grid-cols-2 items-center gap-3 md:flex">
           {canReadStudent && (
             <Button
@@ -33,7 +30,7 @@ export function StudentHeader() {
               }}
               variant="outline"
             >
-              <Download className="h-4 w-4" />
+              <Download />
               {t("Export")}
             </Button>
           )}
@@ -43,8 +40,8 @@ export function StudentHeader() {
                 router.push("/students/create");
               }}
             >
-              <Plus className="h-4 w-4" />
-              {t("Add Student")}
+              <Plus />
+              {t("add")}
             </Button>
           )}
         </div>

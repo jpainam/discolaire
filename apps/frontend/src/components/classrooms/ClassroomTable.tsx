@@ -17,7 +17,6 @@ import {
   Pencil,
   Plus,
   Search,
-  Trash2,
   UserCircle,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -61,6 +60,7 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -148,7 +148,7 @@ export function ClassroomTable() {
   return (
     <div className="bg-card">
       <div className="grid grid-cols-1 flex-row justify-between border-b px-4 py-2 lg:flex">
-        <Label className="">{t("Classroom Management")}</Label>
+        <Label className="">{t("classrooms")}</Label>
         <div className="grid grid-cols-2 items-center gap-3 md:flex">
           {canCreateClassroom && (
             <Button
@@ -156,9 +156,8 @@ export function ClassroomTable() {
                 window.open(`/api/pdfs/classroom?format=csv`, "_blank");
               }}
               variant="outline"
-              size="sm"
             >
-              <Download className="h-4 w-4" />
+              <Download />
               {t("Export")}
             </Button>
           )}
@@ -171,19 +170,17 @@ export function ClassroomTable() {
                   view: <CreateEditClassroom />,
                 });
               }}
-              size="sm"
             >
-              <Plus className="h-4 w-4" />
-              {t("Add Classroom")}
+              <Plus />
+              {t("add")}
             </Button>
           )}
         </div>
       </div>
       <div className="border-border flex flex-col items-stretch gap-3 border-b p-4 sm:flex-row sm:items-center sm:gap-4">
         <div className="flex flex-1 items-center gap-2 sm:gap-4">
-          <InputGroup className="h-8">
+          <InputGroup>
             <InputGroupInput
-              className="w-full pl-8"
               onChange={(e) => debounced(e.target.value)}
               placeholder={t("search")}
             />
@@ -200,7 +197,7 @@ export function ClassroomTable() {
             defaultValue={searchParams.levelId ?? undefined}
             onValueChange={(val) => setSearchParams({ levelId: val })}
           >
-            <SelectTrigger size="sm" className="w-[180px]">
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={t("levels")} />
             </SelectTrigger>
             <SelectContent>
@@ -218,7 +215,7 @@ export function ClassroomTable() {
             defaultValue={searchParams.sectionId ?? undefined}
             onValueChange={(val) => setSearchParams({ sectionId: val })}
           >
-            <SelectTrigger size="sm" className="w-[180px]">
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={t("sections")} />
             </SelectTrigger>
             <SelectContent>
@@ -236,7 +233,7 @@ export function ClassroomTable() {
             defaultValue={searchParams.cycleId ?? undefined}
             onValueChange={(val) => setSearchParams({ cycleId: val })}
           >
-            <SelectTrigger size="sm" className="w-[180px]">
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={t("cycles")} />
             </SelectTrigger>
             <SelectContent>
@@ -352,8 +349,8 @@ export function ClassroomTable() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button size={"icon-sm"} variant="ghost">
-                          <MoreHorizontal className="size-4" />
+                        <Button size={"icon"} variant="ghost">
+                          <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -396,7 +393,7 @@ export function ClassroomTable() {
                                 }
                               }}
                             >
-                              <Trash2 />
+                              <DeleteIcon />
                               {t("delete")}
                             </DropdownMenuItem>
                           </>

@@ -498,7 +498,6 @@
   "enroll": "Enroll",
   "enroll_all": "Enroll All",
   "enroll_new_students": "Enroll New Students",
-  "enroll_new_students_description": "Select students to enroll into the current class",
   "enroll_student_description": "The student will be enrolled into the selected class",
   "enrolled": "Enrolled",
   "enrolled_successfuly": "Successfully enrolled ",
@@ -957,7 +956,7 @@
   "studentAccessHistory": "Student",
   "studentContactName": "Contact name",
   "studentGraph": "Student Graph",
-  "studentManagement": "Student Management",
+
   "studentNotifications": "Student Notifications",
   "studentReportCard": "Student Report Card",
   "student_academic_record": "Academic student record",

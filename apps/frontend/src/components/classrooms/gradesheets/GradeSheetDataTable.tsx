@@ -116,9 +116,12 @@ export function GradeSheetDataTable() {
           const teacher = subject.teacher;
           return (
             <div className="flex flex-row items-center gap-2">
-              <span className="text-muted-foreground">
+              <Link
+                href={`/classrooms/${subject.classroomId}/subjects/${subject.id}`}
+                className="text-muted-foreground hover:underline"
+              >
                 {subject.course.reportName}
-              </span>
+              </Link>
               <Button
                 onClick={() => {
                   openSheet({
@@ -134,10 +137,10 @@ export function GradeSheetDataTable() {
                   });
                 }}
                 variant={"secondary"}
-                size={"sm"}
-                className="h-7"
+                size={"xs"}
               >
-                {t("details")} <ExternalLink className="h-3 w-3" />
+                <ExternalLink />
+                {t("details")}
               </Button>
             </div>
           );

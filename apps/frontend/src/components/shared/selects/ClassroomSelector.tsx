@@ -81,11 +81,7 @@ export function ClassroomSelector({
             return 0;
           }}
         >
-          <CommandInput
-            placeholder={t("search")}
-            className="h-9 px-2"
-            autoComplete="off"
-          />
+          <CommandInput placeholder={t("search")} autoComplete="off" />
           <CommandEmpty>{t("no_data")}</CommandEmpty>
           <CommandGroup>
             <CommandList className="max-h-[230px] overflow-y-auto pt-2">
