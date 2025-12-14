@@ -3,15 +3,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import {
-  BookOpenText,
-  BookText,
-  Captions,
-  Contact,
-  HandCoins,
-  Proportions,
-  Receipt,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -25,13 +16,20 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import {
+  AttendanceIcon,
   CalendarDays,
   ChatIcon,
   EnrollmentIcon,
+  FeeIcon,
   FileIcon,
   FilesIcon,
   FolderIcon,
+  GradeIcon,
+  MoneyIcon,
   PrinterIcon,
+  ReportGradeIcon,
+  SubjectIcon,
+  TextBookIcon,
 } from "~/icons";
 import { SidebarLogo } from "../sidebar-logo";
 
@@ -49,19 +47,19 @@ export function ClassroomSidebar({
       {
         name: "School fees",
         url: `/classrooms/${params.id}/fees`,
-        icon: <Receipt />,
+        icon: <FeeIcon />,
       },
       {
         name: "financial_situation",
         url: `/classrooms/${params.id}/financial_situation`,
-        icon: <HandCoins />,
+        icon: <MoneyIcon />,
       },
     ],
     school_life: [
       {
         name: "attendances",
         url: `/classrooms/${params.id}/attendances`,
-        icon: <Contact />,
+        icon: <AttendanceIcon />,
       },
       {
         name: "timetables",
@@ -83,25 +81,25 @@ export function ClassroomSidebar({
       {
         name: "gradesheets",
         url: `/classrooms/${params.id}/gradesheets`,
-        icon: <BookOpenText />,
+        icon: <GradeIcon />,
       },
 
       {
         name: "subjects",
         url: `/classrooms/${params.id}/subjects`,
-        icon: <Captions />,
+        icon: <SubjectIcon />,
       },
 
       {
         name: "reportcards",
         url: `/classrooms/${params.id}/reportcards`,
-        icon: <Proportions />,
+        icon: <ReportGradeIcon />,
       },
 
       {
         name: "teaching_session",
         url: `/classrooms/${params.id}/teaching_session`,
-        icon: <BookText />,
+        icon: <TextBookIcon />,
       },
     ],
   };

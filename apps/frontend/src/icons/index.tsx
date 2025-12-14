@@ -1,28 +1,10 @@
 import type { HugeiconsProps } from "@hugeicons/react";
-import {
-  AddToListIcon,
-  ArtificialIntelligence04Icon,
-  Book04Icon,
-  Calendar03Icon,
-  DashboardSquare01Icon,
-  DashboardSquareSettingIcon,
-  Delete02Icon,
-  File01Icon,
-  Files02Icon,
-  Folder02Icon,
-  Home01Icon,
-  InformationSquareIcon,
-  Message02Icon,
-  PencilEdit02Icon,
-  PrinterIcon as PrinterGlyph,
-  SearchIcon as SearchGlyph,
-  Settings05Icon,
-  UserAccountIcon,
-  UserGroup03Icon,
-  UserMultiple02Icon,
-  YoutubeIcon as YoutubeGlyph,
-} from "@hugeicons/core-free-icons";
+import { AddToListIcon, AppleReminderIcon, Archive02Icon, ArtificialIntelligence04Icon, AssignmentsIcon, Book04Icon, Calendar03Icon, DashboardSquare01Icon, DashboardSquareSettingIcon, Database01Icon, Delete02Icon, DollarSquareIcon, File01Icon, Files02Icon, Folder02Icon, GoogleDocIcon, Home01Icon, InformationSquareIcon, Message02Icon, PencilEdit02Icon, PrinterIcon as PrinterGlyph, SearchIcon as SearchGlyph, Settings05Icon, SortByUp01Icon, UserAccountIcon, UserGroup03Icon, UserMultiple02Icon, YoutubeIcon as YoutubeGlyph } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+
+
+
+
 
 function wrapHugeIcon(icon: NonNullable<HugeiconsProps["icon"]>) {
   return function AppIcon({
@@ -62,3 +44,10 @@ export const PrinterIcon = wrapHugeIcon(PrinterGlyph);
 export const ChatIcon = wrapHugeIcon(Message02Icon);
 export const CalendarDays = wrapHugeIcon(Calendar03Icon);
 export const EnrollmentIcon = wrapHugeIcon(AddToListIcon);
+export const SubjectIcon = wrapHugeIcon(AppleReminderIcon)
+export const ReportGradeIcon = wrapHugeIcon(Archive02Icon);
+export const TextBookIcon = wrapHugeIcon(AssignmentsIcon);
+export const AttendanceIcon = wrapHugeIcon(Database01Icon);
+export const MoneyIcon = wrapHugeIcon(DollarSquareIcon);
+export const FeeIcon = wrapHugeIcon(SortByUp01Icon);
+export const GradeIcon = wrapHugeIcon(GoogleDocIcon);
