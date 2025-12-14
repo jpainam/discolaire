@@ -200,9 +200,11 @@ export function ClassroomStudentTable({
                       year: "numeric",
                     })}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell>
                     {stud.isRepeating ? (
-                      <Badge variant={"destructive"}>{t("yes")}</Badge>
+                      <Badge variant={"outline"} className="text-destructive">
+                        {t("yes")}
+                      </Badge>
                     ) : (
                       <Badge variant={"outline"}>{t("no")}</Badge>
                     )}
