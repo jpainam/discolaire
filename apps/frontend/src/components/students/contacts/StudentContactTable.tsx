@@ -7,13 +7,11 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
-  Eye,
   FileHeart,
   HeartIcon,
   MoreHorizontal,
   Phone,
   Trash2,
-  UserCircle,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -48,6 +46,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { ContactIcon, DeleteIcon, ViewIcon } from "~/icons";
 import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -266,14 +265,14 @@ export function StudentContactTable({
                               );
                             }}
                           >
-                            <Eye /> {t("Open relationship")}
+                            <ViewIcon /> {t("Open relationship")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(`/contacts/${c.contactId}`);
                             }}
                           >
-                            <UserCircle />
+                            <ContactIcon />
                             {t("Open contact")}
                           </DropdownMenuItem>
                           <DropdownInvitation
@@ -286,7 +285,6 @@ export function StudentContactTable({
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 variant="destructive"
-                                className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                                 onSelect={async () => {
                                   const isConfirmed = await confirm({
                                     title: t("delete"),
@@ -309,7 +307,7 @@ export function StudentContactTable({
                                   }
                                 }}
                               >
-                                <Trash2 />
+                                <DeleteIcon />
                                 {t("delete")}
                               </DropdownMenuItem>
                             </>

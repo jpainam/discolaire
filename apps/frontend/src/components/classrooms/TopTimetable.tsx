@@ -21,7 +21,6 @@ import { useLocale, useTranslations } from "next-intl";
 import type { RouterOutputs } from "@repo/api";
 
 import FlatBadge from "~/components/FlatBadge";
-import EyeIcon from "~/components/icons/eye";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
@@ -35,6 +34,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
+import { CalendarDays } from "~/icons";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -153,7 +153,7 @@ export default function TopTimetable() {
             {t("export_timetable")}
           </Button>
           <Button variant="outline">
-            <EyeIcon className="mr-2 h-4 w-4" />
+            <CalendarDays />
             {t("view_timetable")}
           </Button>
           <div className="ml-auto flex gap-2">

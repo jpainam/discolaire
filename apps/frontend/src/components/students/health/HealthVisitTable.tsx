@@ -6,7 +6,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Eye, MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MailIcon, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -28,6 +28,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useRouter } from "~/hooks/use-router";
+import { ViewIcon } from "~/icons";
 import { cn } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -108,11 +109,11 @@ export function HealthVisitTable({ userId }: { userId: string }) {
                               );
                             }}
                           >
-                            <Eye />
+                            <ViewIcon />
                             {t("Details")}
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <MailIcon className="h-4 w-4" />
+                            <MailIcon />
                             {t("notify")}
                           </DropdownMenuItem>
                           <DropdownMenuItem

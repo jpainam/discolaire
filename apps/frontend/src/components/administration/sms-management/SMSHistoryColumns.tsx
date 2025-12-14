@@ -1,7 +1,7 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Link from "next/link";
-import { Eye, MoreVertical, Send, Trash2 } from "lucide-react";
+import { MoreVertical, Send, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import type { SMSHistory } from "~/types/sms";
@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { routes } from "~/configs/routes";
+import { ViewIcon } from "~/icons";
 
 export function useSmsHistoryColumns() {
   const locale = useLocale();
@@ -128,12 +129,8 @@ function ActionsCell({ row }: { row: Row<SMSHistory> }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Open menu"
-            variant={"ghost"}
-            className="data-[state=open]:bg-muted flex size-8 p-0"
-          >
-            <MoreVertical aria-hidden="true" className="h-4 w-4" />
+          <Button aria-label="Open menu" variant={"ghost"}>
+            <MoreVertical />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -142,7 +139,7 @@ function ActionsCell({ row }: { row: Row<SMSHistory> }) {
               // actions.onView && actions.onView(row.original);
             }}
           >
-            <Eye /> {t("details")}
+            <ViewIcon /> {t("details")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {

@@ -1,7 +1,6 @@
 "use client";
 
 import { isSameDay } from "date-fns";
-import { Eye } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 
@@ -20,6 +19,7 @@ import {
 } from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { ViewIcon } from "~/icons";
 
 type StudentAssignment = RouterOutputs["classroom"]["assignments"][number];
 export function StudentAssignmentTable({
@@ -99,7 +99,7 @@ export function StudentAssignmentTable({
                     variant={"ghost"}
                     size={"icon"}
                   >
-                    <Eye className="h-4 w-4" />
+                    <ViewIcon />
                   </Button>
                 </TableCell>
               </TableRow>
