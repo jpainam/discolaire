@@ -63,8 +63,11 @@ export default async function Page(props: {
   const values = Array.from(globalRanks.values());
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
-  const successRate = successCount / averages.length;
-  const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+  const successRate = averages.length == 0 ? 0 : successCount / averages.length;
+  const average =
+    averages.length == 0
+      ? 0
+      : averages.reduce((acc, val) => acc + val, 0) / averages.length;
 
   // const discipline = await caller.discipline.classroom({
   //   classroomId: params.id,

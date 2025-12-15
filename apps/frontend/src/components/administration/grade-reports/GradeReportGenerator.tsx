@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -30,14 +31,8 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
+import { getGeneratorUrl, getReportTypes } from "./report-generator-registry";
 import { StatisticByCourseDialog } from "./StatisticByCourseDialog";
-
-const reportTypes = [
-  { id: "001", label: "Roll of Honor" },
-  { id: "002", label: "Grade report card" },
-  { id: "003", label: "Statistics by course" },
-  { id: "004", label: "Summary of results" },
-];
 
 export function GradeReportGenerator({ limited }: { limited: boolean }) {
   const [classroomId, setClassroomId] = useQueryState("classroomId");
@@ -47,9 +42,12 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
   //   id: string;
   //   type: "trim" | "seq" | "ann";
   // } | null>();
+  const reportTypes = useMemo(() => {
+    return getReportTypes();
+  }, []);
   const [format, setFormat] = useQueryState(
     "format",
-    parseAsStringLiteral(["pdf", "csv"]),
+    parseAsStringLiteral(["pdf", "csv"]).withDefault("pdf"),
   );
 
   const t = useTranslations();
@@ -59,48 +57,32 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
   const { openModal } = useModal();
 
   const handleGenerateReport = () => {
+    if (!reportType) {
+      toast.error("Veuillez choisir un type rapport");
+      return;
+    }
     if (reportType == "003") {
       openModal({
-        view: <StatisticByCourseDialog format={format ?? "pdf"} />,
+        view: <StatisticByCourseDialog format={format} />,
       });
       return;
     }
-    if (!classroomId || !termStr) {
-      toast.error(t("Please select a classroom and term"));
+    const r = getGeneratorUrl({
+      classroomId,
+      termStr,
+      format,
+      reportType,
+    });
+    if (r.error) {
+      toast.error(t(r.error));
       return;
-    }
-    const [termType, termId] = termStr.split("_");
-    if (!termId) {
-      throw new Error("Aucun Ids dans la sequence");
-    }
-    if (reportType == "001") {
-      window.open(
-        `/api/pdfs/gradereports/roll-of-honor?classroomId=${classroomId}&format=${format}&termId=${termId}`,
-        "_blank",
+    } else if (r.url) {
+      window.open(r.url, "__blank");
+    } else {
+      toast.warning(
+        t("This report type is not yet implemented. Please check back later."),
       );
-      return;
     }
-    if (reportType == "002") {
-      let url = `/api/pdfs/reportcards/ipbw?classroomId=${classroomId}&termId=${termId}`;
-      if (termType === "trim") {
-        url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${termId}&classroomId=${classroomId}&format=pdf`;
-      } else if (termType === "ann") {
-        url = `/api/pdfs/reportcards/ipbw/annual?classroomId=${classroomId}&format=pdf`;
-      }
-      window.open(url, "_blank");
-      return;
-    }
-    if (reportType == "004") {
-      window.open(
-        `/api/pdfs/gradereports/summary-of-results?classroomId=${classroomId}&termId=${termId}&format=${format}`,
-        "_blank",
-      );
-      return;
-    }
-
-    toast.warning(
-      t("This report type is not yet implemented. Please check back later."),
-    );
   };
 
   return (

@@ -45,8 +45,11 @@ export async function SummaryOfResult({
 
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
-  const successRate = successCount / averages.length;
-  const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
+  const successRate = averages.length == 0 ? 0 : successCount / averages.length;
+  const average =
+    averages.length == 0
+      ? 0
+      : averages.reduce((acc, val) => acc + val, 0) / averages.length;
 
   let maleCount = 0;
   let maleAbove10 = 0;
@@ -190,7 +193,7 @@ export async function SummaryOfResult({
               evaluated={maleCount}
               gender={"GARCONS"}
               above10={maleAbove10}
-              successRate={maleAbove10 / maleCount}
+              successRate={maleCount == 0 ? 0 : maleAbove10 / maleCount}
             />
             <View style={{ width: "10%" }}></View>
             <EffectifByGender
@@ -198,7 +201,7 @@ export async function SummaryOfResult({
               evaluated={femaleCount}
               gender={"FILLES"}
               above10={femaleAbove10}
-              successRate={femaleAbove10 / femaleCount}
+              successRate={femaleCount == 0 ? 0 : femaleAbove10 / femaleCount}
             />
           </View>
           <View style={{ flexDirection: "row", display: "flex" }}>
@@ -374,8 +377,6 @@ function EffectifByGender({
   successRate: number;
   gender: string;
 }) {
-  //    40
-  //
   return (
     <View
       style={{
