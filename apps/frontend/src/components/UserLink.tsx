@@ -16,6 +16,7 @@ export function UserLink(props: {
 }) {
   const avatar = createAvatar(initials, {
     seed: props.name,
+    fontSize: 35,
   });
 
   //const svg = avatar.toString();

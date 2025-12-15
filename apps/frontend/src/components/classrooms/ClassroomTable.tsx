@@ -279,13 +279,14 @@ export function ClassroomTable() {
             {filtered.map((cl) => {
               const avatar = createAvatar(initials, {
                 seed: cl.name,
+                fontSize: 35,
               });
 
               return (
                 <TableRow key={cl.id}>
                   <TableCell>
                     <div className="flex flex-row items-center gap-2">
-                      <Avatar className="size-[26px] shrink-0">
+                      <Avatar className="size-5 shrink-0">
                         <AvatarImage
                           src={avatar.toDataUri()}
                           alt={cl.reportName}
@@ -347,7 +348,7 @@ export function ClassroomTable() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button size={"icon"} variant="ghost">
+                        <Button size={"icon-sm"} variant="ghost">
                           <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>

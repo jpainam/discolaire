@@ -164,7 +164,7 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
           defaultValue="individual"
           value={reportType}
           onValueChange={setReportType}
-          className={"grid grid-cols-2 gap-2"}
+          className={"grid grid-cols-2 gap-4"}
         >
           {(limited ? reportTypes.slice(0, 4) : reportTypes).map((type) => (
             <div key={type.id} className="flex items-center space-x-2">
