@@ -12,7 +12,6 @@ import { DollarSign } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { EmptyComponent } from "~/components/EmptyComponent";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -54,6 +53,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
   const { data: classroom } = useSuspenseQuery(
     trpc.student.classroom.queryOptions({ studentId: params.id }),
   );
+  const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
   const queryClient = useQueryClient();
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
@@ -101,45 +101,45 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
   const t = useTranslations();
 
   const data = useMemo(() => {
-    const vv: Record<
+    const vv = new Map<
       number,
       {
         id: number;
         subject: string;
         observation: string;
-        grades: { grade: number; id: number; isAbsent: boolean }[];
+        grades: {
+          grade: number;
+          id: number;
+          isAbsent: boolean;
+          termId: string;
+        }[];
       }
-    > = {};
+    >();
 
     grades.forEach((grade) => {
       const subjectId = grade.gradeSheet.subjectId;
       if (!subjectId) return;
 
-      vv[subjectId] ??= {
-        id: subjectId,
-        subject: grade.gradeSheet.subject.course.reportName,
-        observation: grade.observation ?? "",
-        grades: [],
-      };
+      let row = vv.get(subjectId);
+      if (!row) {
+        row = {
+          id: subjectId,
+          subject: grade.gradeSheet.subject.course.reportName,
+          observation: grade.observation ?? "",
+          grades: [],
+        };
+        vv.set(subjectId, row);
+      }
 
-      vv[subjectId].grades.push({
+      row.grades.push({
         grade: grade.grade,
         id: grade.id,
+        termId: grade.gradeSheet.termId,
         isAbsent: grade.isAbsent ?? false,
       });
     });
 
-    return Object.values(vv).map((entry) => ({
-      subjectId: entry.id,
-      subject: entry.subject,
-      grade1: entry.grades[0],
-      grade2: entry.grades[1],
-      grade3: entry.grades[2],
-      grade4: entry.grades[3],
-      grade5: entry.grades[4],
-      grade6: entry.grades[5],
-      observation: entry.observation,
-    }));
+    return vv;
   }, [grades]);
 
   if (!classroom) {
@@ -164,101 +164,49 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("subject")}</TableHead>
-              <TableHead>Seq 1</TableHead>
-              <TableHead>Seq 2</TableHead>
-              <TableHead>Seq 3</TableHead>
-              <TableHead>Seq 4</TableHead>
-              <TableHead>Seq 5</TableHead>
-              <TableHead>Seq 6</TableHead>
+              {terms.map((t) => (
+                <TableHead key={t.id}>{t.name.split(" ")[0]}</TableHead>
+              ))}
+
               <TableHead className="text-center">{t("avg")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.length === 0 && (
+            {/* {Object.values(data).length === 0 && (
               <TableRow>
                 <TableCell colSpan={10} className="text-center">
                   <EmptyComponent title={t("no_data")} />
                 </TableCell>
               </TableRow>
-            )}
-            {data.map((row, index) => {
-              const totalGrades =
-                (row.grade1?.grade ?? 0) +
-                (row.grade2?.grade ?? 0) +
-                (row.grade3?.grade ?? 0) +
-                (row.grade4?.grade ?? 0) +
-                (row.grade5?.grade ?? 0) +
-                (row.grade6?.grade ?? 0);
-
-              const gradeCount =
-                (row.grade1?.isAbsent ? 0 : 1) +
-                (row.grade2?.isAbsent ? 0 : 1) +
-                (row.grade3?.isAbsent ? 0 : 1) +
-                (row.grade4?.isAbsent ? 0 : 1) +
-                (row.grade5?.isAbsent ? 0 : 1) +
-                (row.grade6?.isAbsent ? 0 : 1);
-
-              const avg = gradeCount > 0 ? totalGrades / gradeCount : 0;
-              const avgText = avg > 0 ? avg.toFixed(2) : "";
-
+            )} */}
+            {Array.from(data).map(([key, row], index) => {
+              const avg = 0; //gradeCount > 0 ? totalGrades / gradeCount : 0;
+              const avgText = 0; //avg > 0 ? avg.toFixed(2) : "";
               return (
                 <TableRow key={index}>
                   <TableCell className="py-0 font-medium">
                     <Link
                       className="hover:underline"
-                      href={`/classrooms/${classroom.id}/subjects/${row.subjectId}`}
+                      href={`/classrooms/${classroom.id}/subjects/${key}`}
                     >
                       {row.subject}
                     </Link>
                   </TableCell>
-                  <Cell
-                    gradeId={row.grade1?.id}
-                    isAbsent={row.grade1?.isAbsent}
-                    onDeleteGradeAction={onDeleteGradeAction}
-                    updateGradeAction={updateGradeAction}
-                    grade={row.grade1?.grade}
-                    canUpdateGradesheet={canUpdateGradesheet}
-                  />
-                  <Cell
-                    gradeId={row.grade2?.id}
-                    isAbsent={row.grade2?.isAbsent}
-                    onDeleteGradeAction={onDeleteGradeAction}
-                    updateGradeAction={updateGradeAction}
-                    grade={row.grade2?.grade}
-                    canUpdateGradesheet={canUpdateGradesheet}
-                  />
-                  <Cell
-                    gradeId={row.grade3?.id}
-                    isAbsent={row.grade3?.isAbsent}
-                    onDeleteGradeAction={onDeleteGradeAction}
-                    updateGradeAction={updateGradeAction}
-                    grade={row.grade3?.grade}
-                    canUpdateGradesheet={canUpdateGradesheet}
-                  />
-                  <Cell
-                    gradeId={row.grade4?.id}
-                    isAbsent={row.grade4?.isAbsent}
-                    onDeleteGradeAction={onDeleteGradeAction}
-                    updateGradeAction={updateGradeAction}
-                    grade={row.grade4?.grade}
-                    canUpdateGradesheet={canUpdateGradesheet}
-                  />
-                  <Cell
-                    gradeId={row.grade5?.id}
-                    isAbsent={row.grade5?.isAbsent}
-                    onDeleteGradeAction={onDeleteGradeAction}
-                    updateGradeAction={updateGradeAction}
-                    grade={row.grade5?.grade}
-                    canUpdateGradesheet={canUpdateGradesheet}
-                  />
-                  <Cell
-                    gradeId={row.grade6?.id}
-                    onDeleteGradeAction={onDeleteGradeAction}
-                    updateGradeAction={updateGradeAction}
-                    grade={row.grade6?.grade}
-                    canUpdateGradesheet={canUpdateGradesheet}
-                  />
+                  {terms.map((term) => {
+                    const g = row.grades.find((x) => x.termId === term.id);
+                    return (
+                      <Cell
+                        key={term.id}
+                        gradeId={g?.id}
+                        isAbsent={g?.isAbsent}
+                        onDeleteGradeAction={onDeleteGradeAction}
+                        updateGradeAction={updateGradeAction}
+                        grade={g?.grade}
+                        canUpdateGradesheet={canUpdateGradesheet}
+                      />
+                    );
+                  })}
                   <TableCell className="text-muted-foreground text-center">
                     {avgText}
                   </TableCell>

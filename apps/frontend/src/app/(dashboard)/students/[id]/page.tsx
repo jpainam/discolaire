@@ -28,6 +28,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.attendance.student.queryOptions({ studentId: params.id }),
     trpc.student.grades.queryOptions({ id: params.id }),
     trpc.student.classroom.queryOptions({ studentId: params.id }),
+    trpc.term.all.queryOptions(),
   ]);
   const queryClient = getQueryClient();
   const terms = await queryClient.fetchQuery(trpc.term.all.queryOptions());

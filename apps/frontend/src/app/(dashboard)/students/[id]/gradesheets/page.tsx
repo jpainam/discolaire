@@ -14,6 +14,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.grades.queryOptions({ id: params.id }),
     trpc.student.classroom.queryOptions({ studentId: params.id }),
     trpc.student.get.queryOptions(params.id),
+    trpc.term.all.queryOptions(),
   ]);
 
   return (
