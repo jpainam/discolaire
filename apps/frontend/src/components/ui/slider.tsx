@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Slider as SliderPrimitive } from "radix-ui"
+import * as React from "react";
+import { Slider as SliderPrimitive } from "radix-ui";
 
-import { cn } from "~/lib/utils"
+import { cn } from "~/lib/utils";
 
 function Slider({
   className,
@@ -20,8 +20,8 @@ function Slider({
         : Array.isArray(defaultValue)
           ? defaultValue
           : [min, max],
-    [value, defaultValue, min, max]
-  )
+    [value, defaultValue, min, max],
+  );
 
   return (
     <SliderPrimitive.Root
@@ -31,14 +31,14 @@ function Slider({
       min={min}
       max={max}
       className={cn(
-        "data-vertical:min-h-40 relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:w-auto data-vertical:flex-col",
-        className
+        "relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col",
+        className,
       )}
       {...props}
     >
       <SliderPrimitive.Track
         data-slot="slider-track"
-        className="bg-muted rounded-full data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1 bg-muted relative grow overflow-hidden data-horizontal:w-full data-vertical:h-full"
+        className="bg-muted bg-muted relative grow overflow-hidden rounded-full data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1"
       >
         <SliderPrimitive.Range
           data-slot="slider-range"
@@ -49,11 +49,11 @@ function Slider({
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          className="border-ring ring-ring/50 relative size-3 rounded-full border bg-white transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-[3px] focus-visible:ring-[3px] focus-visible:outline-hidden active:ring-[3px] block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50"
+          className="border-ring ring-ring/50 relative block size-3 shrink-0 rounded-full border bg-white transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-[3px] focus-visible:ring-[3px] focus-visible:outline-hidden active:ring-[3px] disabled:pointer-events-none disabled:opacity-50"
         />
       ))}
     </SliderPrimitive.Root>
-  )
+  );
 }
 
-export { Slider }
+export { Slider };

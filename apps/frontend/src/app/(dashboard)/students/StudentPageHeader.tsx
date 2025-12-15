@@ -90,7 +90,6 @@ export function StudentPageHeader() {
       <div className="ml-auto flex flex-row items-center gap-2">
         {canCreateStudent && (
           <Button
-           
             onClick={() => {
               router.push(routes.students.create);
             }}
