@@ -6,11 +6,12 @@ import { z } from "zod/v4";
 import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import { ClassroomSummaryReport } from "~/reports/gradereports/ClassroomSummaryReport";
+import { ClassroomSummaryReportTrimestre } from "~/reports/gradereports/ClassroomSummaryReportTrimestre";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const searchSchema = z.object({
   termId: z.string().min(1),
-  termType: z.enum(["seq", "term", "ann"]),
+  termType: z.enum(["seq", "trim", "ann"]),
   classroomId: z.string().min(1),
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
@@ -40,10 +41,7 @@ export async function GET(req: NextRequest) {
     const classroom = await queryClient.fetchQuery(
       trpc.classroom.get.queryOptions(classroomId),
     );
-    const report = await caller.reportCard.getSequence({
-      classroomId,
-      termId,
-    });
+
     const school = await queryClient.fetchQuery(
       trpc.school.getSchool.queryOptions(),
     );
@@ -52,16 +50,6 @@ export async function GET(req: NextRequest) {
       classroomId,
       termId,
     });
-    let title = "";
-    if (termType == "seq") {
-      const term = await queryClient.fetchQuery(
-        trpc.term.get.queryOptions(termId),
-      );
-      title = term.name;
-    } else if (termType == "term") {
-      const r = getTitle({ trimestreId: termId });
-      title = r.title;
-    }
 
     if (format === "csv") {
       //const { blob, headers } = toExcel({ stats });
@@ -73,49 +61,59 @@ export async function GET(req: NextRequest) {
         { status: 400 },
       );
     } else {
-      const stream = await renderToStream(
-        ClassroomSummaryReport({
-          classroom,
-          subjects,
-          disciplines,
-          report,
-          students,
-          school,
-          title,
-        }),
-      );
-      //const blob = await new Response(stream).blob();
       const headers: Record<string, string> = {
         "Content-Type": "application/pdf",
         "Cache-Control": "no-store, max-age=0",
       };
-      // @ts-expect-error TODO: fix this
-      return new Response(stream, { headers });
+      if (termType == "seq") {
+        const term = await queryClient.fetchQuery(
+          trpc.term.get.queryOptions(termId),
+        );
+        const report = await caller.reportCard.getSequence({
+          classroomId,
+          termId,
+        });
+        const stream = await renderToStream(
+          ClassroomSummaryReport({
+            classroom,
+            subjects,
+            disciplines,
+            report,
+            students,
+            school,
+            title: term.name,
+          }),
+        );
+        // @ts-expect-error TODO: fix this
+        return new Response(stream, { headers });
+      } else if (termType == "trim") {
+        const report = await queryClient.fetchQuery(
+          trpc.reportCard.getTrimestre.queryOptions({
+            classroomId,
+            trimestreId: termId as "trim1" | "trim2" | "trim3",
+          }),
+        );
+        const stream = await renderToStream(
+          ClassroomSummaryReportTrimestre({
+            classroom,
+            subjects,
+            disciplines,
+            report,
+            students,
+            school,
+            trimestreId: termId,
+          }),
+        );
+        // @ts-expect-error TODO: fix this
+        return new Response(stream, { headers });
+      } else {
+        return NextResponse.json(`Term type ${termType} not supported`, {
+          status: 400,
+        });
+      }
     }
   } catch (error) {
     console.error(error);
     return new Response(String(error), { status: 500 });
   }
-}
-
-function getTitle({ trimestreId }: { trimestreId: string }) {
-  if (trimestreId == "trim1") {
-    return {
-      title: "BULLETIN SCOLAIRE DU PREMIER TRIMESTRE",
-      seq1: "SEQ1",
-      seq2: "SEQ2",
-    };
-  }
-  if (trimestreId == "trim2") {
-    return {
-      title: "BULLETIN SCOLAIRE DU SECOND TRIMESTRE",
-      seq1: "SEQ3",
-      seq2: "SEQ4",
-    };
-  }
-  return {
-    title: "BULLETIN SCOLAIRE DU TROISIEME TRIMESTRE",
-    seq1: "SEQ5",
-    seq2: "SEQ6",
-  };
 }
