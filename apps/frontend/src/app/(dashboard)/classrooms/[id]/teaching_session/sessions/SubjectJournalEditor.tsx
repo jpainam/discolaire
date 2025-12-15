@@ -180,14 +180,14 @@ export function SubjectJournalEditor({
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex w-full flex-1 flex-col gap-2 overflow-y-auto rounded-lg px-4 py-2"
       >
-        <div className="flex flex-row items-center gap-8">
-          <div className="flex flex-row items-center gap-1">
+        <div className="grid flex-row items-center gap-8 lg:flex">
+          <div className="grid flex-row items-center gap-1 lg:flex">
             {subjectQuery.isPending ? (
               <Skeleton className="mr-2 h-10 w-10 rounded-full" />
             ) : (
               <div
                 style={{ backgroundColor: subjectQuery.data?.course.color }}
-                className="mr-2 flex h-10 w-10 items-center justify-center rounded-full font-bold"
+                className="mr-2 flex hidden h-10 w-10 items-center justify-center rounded-full font-bold lg:flex"
               >
                 {subjectQuery.data?.course.name.substring(0, 2).toUpperCase()}
               </div>
@@ -207,7 +207,7 @@ export function SubjectJournalEditor({
               )}
             />
           </div>
-          <div className="grid flex-1 grid-cols-3 gap-4">
+          <div className="grid flex-1 gap-4 lg:grid-cols-3">
             <SubjectProgramSelector
               subjectId={subjectId}
               onSelectAction={(val) => setProgramId(val)}

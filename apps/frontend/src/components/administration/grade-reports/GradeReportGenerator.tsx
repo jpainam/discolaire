@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import PDFIcon from "~/components/icons/pdf-solid";
@@ -39,14 +39,18 @@ const reportTypes = [
   { id: "004", label: "Summary of results" },
 ];
 
-export function GradeReportGenerator() {
-  const [selectedClass, setSelectedClass] = useState<string | null>();
-  const [reportType, setReportType] = useState("individual");
-  const [selectedTerm, setTerm] = useState<{
-    id: string;
-    type: "trim" | "seq" | "ann";
-  } | null>();
-  const [formatType, setFormatType] = useState<"pdf" | "csv">("pdf");
+export function GradeReportGenerator({ limited }: { limited: boolean }) {
+  const [classroomId, setClassroomId] = useQueryState("classroomId");
+  const [reportType, setReportType] = useQueryState("individual");
+  const [termStr, setTermStr] = useQueryState("termStr");
+  // const [termId, setTermId] = useQueryState<{
+  //   id: string;
+  //   type: "trim" | "seq" | "ann";
+  // } | null>();
+  const [format, setFormat] = useQueryState(
+    "format",
+    parseAsStringLiteral(["pdf", "csv"]),
+  );
 
   const t = useTranslations();
   const trpc = useTRPC();
@@ -57,34 +61,38 @@ export function GradeReportGenerator() {
   const handleGenerateReport = () => {
     if (reportType == "003") {
       openModal({
-        view: <StatisticByCourseDialog format={formatType} />,
+        view: <StatisticByCourseDialog format={format ?? "pdf"} />,
       });
       return;
     }
-    if (!selectedClass || !selectedTerm) {
+    if (!classroomId || !termStr) {
       toast.error(t("Please select a classroom and term"));
       return;
     }
+    const [termType, termId] = termStr.split("_");
+    if (!termId) {
+      throw new Error("Aucun Ids dans la sequence");
+    }
     if (reportType == "001") {
       window.open(
-        `/api/pdfs/gradereports/roll-of-honor?classroomId=${selectedClass}&format=${formatType}&termId=${selectedTerm.id}`,
+        `/api/pdfs/gradereports/roll-of-honor?classroomId=${classroomId}&format=${format}&termId=${termId}`,
         "_blank",
       );
       return;
     }
     if (reportType == "002") {
-      let url = `/api/pdfs/reportcards/ipbw?classroomId=${selectedClass}&termId=${selectedTerm.id}`;
-      if (selectedTerm.type === "trim") {
-        url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${selectedTerm.id}&classroomId=${selectedClass}&format=pdf`;
-      } else if (selectedTerm.type === "ann") {
-        url = `/api/pdfs/reportcards/ipbw/annual?classroomId=${selectedClass}&format=pdf`;
+      let url = `/api/pdfs/reportcards/ipbw?classroomId=${classroomId}&termId=${termId}`;
+      if (termType === "trim") {
+        url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${termId}&classroomId=${classroomId}&format=pdf`;
+      } else if (termType === "ann") {
+        url = `/api/pdfs/reportcards/ipbw/annual?classroomId=${classroomId}&format=pdf`;
       }
       window.open(url, "_blank");
       return;
     }
     if (reportType == "004") {
       window.open(
-        `/api/pdfs/gradereports/summary-of-results?classroomId=${selectedClass}&termId=${selectedTerm.id}&format=${formatType}`,
+        `/api/pdfs/gradereports/summary-of-results?classroomId=${classroomId}&termId=${termId}&format=${format}`,
         "_blank",
       );
       return;
@@ -105,7 +113,7 @@ export function GradeReportGenerator() {
         <CardAction>
           <Select
             defaultValue="pdf"
-            onValueChange={(val) => setFormatType(val as "pdf" | "csv")}
+            onValueChange={(val) => setFormat(val as "pdf" | "csv")}
           >
             <SelectTrigger size="sm" className="h-7">
               <SelectValue placeholder="Format" />
@@ -128,26 +136,18 @@ export function GradeReportGenerator() {
           <div className="grid gap-2">
             <Label>{t("classrooms")}</Label>
             <ClassroomSelector
-              defaultValue={selectedClass ?? ""}
+              defaultValue={classroomId ?? undefined}
               onSelect={(val) => {
-                setSelectedClass(val);
+                void setClassroomId(val);
               }}
             />
           </div>
           <div className="grid gap-2">
             <Label>{t("terms")}</Label>
             <Select
+              defaultValue={termStr ?? undefined}
               onValueChange={(value) => {
-                const [type, id] = value.split("_");
-                if (!id) {
-                  setTerm(null);
-                  return;
-                }
-                setTerm({
-                  id,
-                  type:
-                    type === "trim" ? "trim" : type === "seq" ? "seq" : "ann",
-                });
+                void setTermStr(value);
               }}
             >
               <SelectTrigger className="w-full">
@@ -184,7 +184,7 @@ export function GradeReportGenerator() {
           onValueChange={setReportType}
           className={"grid grid-cols-2 gap-2"}
         >
-          {reportTypes.map((type) => (
+          {(limited ? reportTypes.slice(0, 4) : reportTypes).map((type) => (
             <div key={type.id} className="flex items-center space-x-2">
               <RadioGroupItem value={type.id} id={type.id} />
               <Label htmlFor={type.id}>{t(type.label)}</Label>
@@ -193,8 +193,8 @@ export function GradeReportGenerator() {
         </RadioGroup>
 
         <div className="flex justify-end">
-          <Button onClick={handleGenerateReport}>
-            <FileText className="h-4 w-4" />
+          <Button disabled={!reportType} onClick={handleGenerateReport}>
+            <FileText />
             {t("Generate Report")}
           </Button>
         </div>

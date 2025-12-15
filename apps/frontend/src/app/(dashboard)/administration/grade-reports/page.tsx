@@ -9,7 +9,8 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { GradeReportSettings } from "../../../../components/administration/grade-reports/GradeReportSettings";
+import { GradeReportSettings } from "~/components/administration/grade-reports/GradeReportSettings";
+import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
 
 export default async function Page() {
   const t = await getTranslations();
@@ -59,7 +60,9 @@ export default async function Page() {
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
-        <TabsContent value="reports">Report</TabsContent>
+        <TabsContent value="reports">
+          <GradeReportGenerator limited={false} />
+        </TabsContent>
         <TabsContent value="settings">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-48" />}>

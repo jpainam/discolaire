@@ -74,9 +74,8 @@ export async function GradeReportDashboard() {
             </ErrorBoundary>
           </CardContent>
         </Card>
-        <GradeReportGenerator />
+        <GradeReportGenerator limited={true} />
       </div>
-      <GradeReportGenerator />
     </div>
   );
 }

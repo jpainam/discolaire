@@ -63,7 +63,7 @@ export function SubjectJournalHeader({
   );
   const subject = subjectQuery.data;
   return (
-    <div className="bg-muted/50 flex flex-row items-center justify-between border-y px-4 py-1">
+    <div className="bg-muted/50 flex grid grid-cols-1 flex-row items-center justify-between gap-2 border-y px-4 py-1 lg:flex">
       {subjectQuery.isPending ? (
         <Skeleton className="h-8 w-96" />
       ) : (
@@ -91,8 +91,8 @@ export function SubjectJournalHeader({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
