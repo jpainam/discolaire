@@ -55,9 +55,7 @@ export async function ReportCardDiscipline({
             <TableCell className={cn(rowClassName)}>
               {t("non_justified")}
             </TableCell>
-            <TableCell>
-              {absence - justifiedAbsence ? absence - justifiedAbsence : ""}
-            </TableCell>
+            <TableCell>{Math.max(absence - justifiedAbsence, 0)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={cn(rowClassName)}>{t("late")}</TableCell>

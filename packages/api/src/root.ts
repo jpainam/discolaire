@@ -1,5 +1,6 @@
 import { accountingJournal } from "./routers/accountingJournal";
 import { announcementRouter } from "./routers/announcement";
+import { appreciationRouter } from "./routers/appreciation";
 import { assignmentRouter } from "./routers/assignment";
 import { attendanceRouter } from "./routers/attendance";
 import { bibleRouter } from "./routers/bible";
@@ -129,6 +130,7 @@ export const appRouter = createTRPCRouter({
   importStudent: importStudentRouter,
   discipline: disciplineRouter,
   subjectProgram: subjectProgramRouter,
+  appreciation: appreciationRouter,
 });
 
 // export type definition of API

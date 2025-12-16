@@ -181,8 +181,12 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
               </TableRow>
             )} */}
             {Array.from(data).map(([key, row], index) => {
-              const avg = 0; //gradeCount > 0 ? totalGrades / gradeCount : 0;
-              const avgText = 0; //avg > 0 ? avg.toFixed(2) : "";
+              const avg =
+                row.grades.length == 0
+                  ? 0
+                  : row.grades.reduce((a, b) => a + b.grade, 0) /
+                    row.grades.length;
+
               return (
                 <TableRow key={index}>
                   <TableCell className="py-0 font-medium">
@@ -208,7 +212,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                     );
                   })}
                   <TableCell className="text-muted-foreground text-center">
-                    {avgText}
+                    {avg.toFixed(2)}
                   </TableCell>
                   <TableCell className="text-muted-foreground text-center text-right">
                     {getAppreciations(avg)}
@@ -227,6 +231,7 @@ function Cell({
   grade,
   gradeId,
   isAbsent,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateGradeAction,
   onDeleteGradeAction,
   canUpdateGradesheet,
@@ -298,7 +303,8 @@ function Cell({
                     toast.warning("Veuillez saisir une note");
                     return;
                   }
-                  updateGradeAction(gradeId, Number(newGrade), isNewAbsent);
+                  toast.warning("Fonctionnalité non active");
+                  //updateGradeAction(gradeId, Number(newGrade), isNewAbsent);
                   setOpen(false);
                 }}
                 size={"sm"}

@@ -37,7 +37,7 @@ export function UserLink(props: {
       </Avatar>
       <Link
         href={props.href ?? urls[props.profile]}
-        className={cn("hover:underline", props.className)}
+        className={cn("text-sm hover:underline", props.className)}
       >
         {props.name}
       </Link>

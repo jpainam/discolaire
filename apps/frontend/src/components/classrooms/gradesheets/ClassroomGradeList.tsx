@@ -306,7 +306,7 @@ export function ClassroomGradeList({
                               />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="w-38">
                             {g && (
                               <DropdownMenuItem
                                 disabled={isClosed}
@@ -374,7 +374,7 @@ export function ClassroomGradeList({
                                     }
                                   }}
                                 >
-                                  <FlagOff className="size-4" />
+                                  <FlagOff />
                                   {t("mark_absent")}
                                 </DropdownMenuItem>
                               </>

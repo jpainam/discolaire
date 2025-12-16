@@ -43,7 +43,7 @@ export function IPBWDiscipline({
       <SummaryItem name={t("Justifiées")} value={discipline.justifiedAbsence} />
       <SummaryItem
         name={t("Non justifiées")}
-        value={discipline.absence - discipline.justifiedAbsence}
+        value={Math.max(discipline.absence - discipline.justifiedAbsence, 0)}
       />
       <SummaryItem name={t("Retards")} value={discipline.late} />
       <SummaryItem

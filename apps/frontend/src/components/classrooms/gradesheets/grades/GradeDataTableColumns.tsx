@@ -226,16 +226,12 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
       {canUpdateGradesheet && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              aria-label="Open menu"
-              variant="ghost"
-              className="data-[state=open]:bg-muted flex size-8 p-0"
-            >
-              <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+            <Button aria-label="Open menu" variant="ghost">
+              <DotsHorizontalIcon />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
+          <DropdownMenuContent align="end" className="w-38">
+          <DropdownMenuItem
               disabled={isClosed}
               onSelect={() => {
                 const st = grade.student;
