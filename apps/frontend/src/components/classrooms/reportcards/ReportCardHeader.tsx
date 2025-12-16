@@ -1,9 +1,12 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { MoreVertical } from "lucide-react";
+import { MentoringIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChevronDown, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
+import { toast } from "sonner";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -15,6 +18,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
@@ -22,6 +26,13 @@ import { Label } from "~/components/ui/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import {
+  EnrollmentIcon,
+  FileIcon,
+  FilesIcon,
+  UserIcon,
+  UsersIcon,
+} from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { reportcardSearchParamsSchema } from "~/utils/search-params";
 import { sidebarIcons } from "../sidebar-icons";
@@ -30,7 +41,9 @@ export function ReportCardHeader() {
   const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
 
-  const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
+  const [searchParams, setSearchParams] = useQueryStates(
+    reportcardSearchParamsSchema,
+  );
   const { termId, trimestreId } = searchParams;
   const pathname = usePathname();
   const canCreateReportCard = useCheckPermission(
@@ -41,6 +54,7 @@ export function ReportCardHeader() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.reportcards;
+
   return (
     <div className="bg-muted/40 grid flex-row items-center gap-4 border-b px-4 py-1 md:flex">
       {Icon && <Icon className="hidden h-4 w-4 md:block" />}
@@ -49,10 +63,11 @@ export function ReportCardHeader() {
         className="md:w-[350px]"
         defaultValue={termId}
         onChange={(val) => {
-          router.push(
-            `/classrooms/${params.id}/reportcards?` +
-              createQueryString({ termId: val, trimestreId: undefined }),
-          );
+          void setSearchParams({
+            termId: val,
+            trimestreId: null,
+            appreciationType: null,
+          });
         }}
       />
       <Label className="hidden md:block">{t("Trimestre")}</Label>
@@ -75,6 +90,81 @@ export function ReportCardHeader() {
         }}
       />
       <div className="flex flex-row items-center gap-2 md:ml-auto">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              Appréciations
+              <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel className="flex items-center gap-2">
+              <EnrollmentIcon className="size-4" />
+              Appréciation
+            </DropdownMenuLabel>
+            <DropdownMenuItem
+              onSelect={() => {
+                if (!searchParams.termId && !searchParams.trimestreId) {
+                  toast.warning("Veuillez choisir une période");
+                  return;
+                }
+                void setSearchParams({
+                  appreciationType: "subjects",
+                });
+              }}
+            >
+              <UsersIcon />
+              Professeurs / Matières
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                if (!searchParams.termId && !searchParams.trimestreId) {
+                  toast.warning("Veuillez choisir une période");
+                  return;
+                }
+                void setSearchParams({
+                  appreciationType: "prof",
+                });
+              }}
+            >
+              <UserIcon />
+              Prof. Principal
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="flex items-center gap-2">
+              <FileIcon className="size-4" />
+              Observation
+            </DropdownMenuLabel>
+            <DropdownMenuItem
+              onSelect={() => {
+                if (!searchParams.termId && !searchParams.trimestreId) {
+                  toast.warning("Veuillez choisir une période");
+                  return;
+                }
+                void setSearchParams({
+                  appreciationType: "classroom",
+                });
+              }}
+            >
+              <HugeiconsIcon icon={MentoringIcon} strokeWidth={2} />
+              Conseil de classe
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                if (!searchParams.termId && !searchParams.trimestreId) {
+                  toast.warning("Veuillez choisir une période");
+                  return;
+                }
+                void setSearchParams({
+                  appreciationType: "overall",
+                });
+              }}
+            >
+              <FilesIcon />
+              Générales
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} className="size-8" size={"icon"}>

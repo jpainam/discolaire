@@ -361,7 +361,10 @@ export function IPBWTrimestre({
                   alignItems: "center",
                 }}
               >
-                <Text>{studentReport.global.grade1Average.toFixed(2)}</Text>
+                <Text>
+                  {studentReport.global.grade1Average > 0 &&
+                    studentReport.global.grade1Average.toFixed(2)}
+                </Text>
               </View>
               <View
                 style={{
@@ -371,7 +374,10 @@ export function IPBWTrimestre({
                   padding: 2,
                 }}
               >
-                <Text>{studentReport.global.grade2Average.toFixed(2)}</Text>
+                <Text>
+                  {studentReport.global.grade2Average > 0 &&
+                    studentReport.global.grade2Average.toFixed(2)}
+                </Text>
               </View>
               <View
                 style={{

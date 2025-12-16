@@ -206,7 +206,11 @@ export class TrimestreService {
       const coeff2Sum = valid2Totals.reduce((sum, c) => sum + c.coeff, 0);
       const grade2Average = coeff2Sum > 0 ? total2Sum / coeff2Sum : 0;
       const globalAverage =
-        (roundToTwo(grade1Average) + roundToTwo(grade2Average)) / 2;
+        coeff1Sum > 0 && coeff2Sum > 0
+          ? (roundToTwo(grade1Average) + roundToTwo(grade2Average)) / 2
+          : coeff1Sum > 0
+            ? roundToTwo(grade1Average)
+            : roundToTwo(grade2Average);
       studentsReport.set(studentId, {
         studentCourses,
         global: {

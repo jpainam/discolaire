@@ -36,6 +36,7 @@ import {
   SortByUp01Icon,
   UserGroup03Icon,
   UserMultiple02Icon,
+  UserSquareIcon,
   ViewIcon as ViewGlypth,
   YoutubeIcon as YoutubeGlyph,
 } from "@hugeicons/core-free-icons";
@@ -68,6 +69,7 @@ export const FolderIcon = wrapHugeIcon(Folder02Icon);
 export const DashboardIcon = wrapHugeIcon(DashboardSquare01Icon);
 export const HomeIcon = wrapHugeIcon(Home01Icon);
 export const UsersIcon = wrapHugeIcon(UserMultiple02Icon);
+export const UserIcon = wrapHugeIcon(UserSquareIcon);
 export const GroupsIcon = wrapHugeIcon(UserGroup03Icon);
 export const ContactIcon = wrapHugeIcon(Contact01Icon);
 export const SettingsIcon = wrapHugeIcon(Settings05Icon);

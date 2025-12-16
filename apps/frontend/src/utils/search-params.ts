@@ -17,6 +17,7 @@ export const loadSearchParams = createLoader(coordinatesSearchParams);
 export const reportcardSearchParamsSchema = {
   termId: parseAsString,
   trimestreId: parseAsString,
+  appreciationType: parseAsString,
 };
 export const reportcardSearchParams = createLoader(
   reportcardSearchParamsSchema,

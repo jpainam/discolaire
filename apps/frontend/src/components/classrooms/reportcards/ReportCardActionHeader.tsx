@@ -34,7 +34,7 @@ export function ReportCardActionHeader({
     "reportcard",
     PermissionAction.CREATE,
   );
-  //const { openSheet } = useSheet();
+
   return (
     <div className="bg-muted/50 grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
       <Label className="font-bold uppercase">{title}</Label>
@@ -72,36 +72,7 @@ export function ReportCardActionHeader({
             </Button>
           </Link>
         )}
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="hidden gap-2 lg:flex"
-            >
-              Appréciations
-              <ChevronDown className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel className="flex items-center gap-2">
-              <Download />
-              Appréciation
-            </DropdownMenuLabel>
-            <DropdownMenuItem>
-              <FileJson className="size-4" />
-              Des professeurs du bulletin
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <FileJson />
-              Des professeurs par élève
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <FileJson />
-              Générales
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu> */}
+
         {/* <ButtonGroup>
           <Button variant="outline">
             <PrinterIcon />
