@@ -231,7 +231,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-38">
-          <DropdownMenuItem
+            <DropdownMenuItem
               disabled={isClosed}
               onSelect={() => {
                 const st = grade.student;
