@@ -4,8 +4,6 @@ import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 
-
-
 import { ReportCardAppreciation } from "~/components/classrooms/reportcards/ReportCardAppreciation";
 import { ReportCardClassroomCouncil } from "~/components/classrooms/reportcards/ReportCardClassroomCouncil";
 import { ReportCardSkillAcquisition } from "~/components/classrooms/reportcards/ReportCardSkillAcquisition";
@@ -15,7 +13,6 @@ import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { CheckSubjectScale } from "../../../app/(dashboard)/classrooms/[id]/reportcards/CheckSubjectScaleTerm";
 import { ReportCardTerm } from "./ReportCardTerm";
-
 
 export function ReportCardTermContainer() {
   const [termId] = useQueryState("termId");
