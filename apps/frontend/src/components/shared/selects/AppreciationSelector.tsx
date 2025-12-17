@@ -1,70 +1,72 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
+import { Button } from "~/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import { Skeleton } from "~/components/ui/skeleton";
-import { cn } from "~/lib/utils";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "~/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 import { useTRPC } from "~/trpc/react";
 
-interface AppreciationSelectorProps {
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  className?: string;
-  defaultValue?: string | null;
-  showAllOption?: boolean;
-}
-export function AppreciationSelector({
-  onChange,
-  placeholder,
-  className,
-  defaultValue,
-  showAllOption = true,
-}: AppreciationSelectorProps) {
-  const t = useTranslations();
+export function AppreciationSelector() {
+  const [open, setOpen] = useState(false);
   const trpc = useTRPC();
-  const termsQuery = useQuery(trpc.term.all.queryOptions());
+  const appreciationQuery = useQuery(
+    trpc.appreciation.categories.queryOptions(),
+  );
+
+  const categories = appreciationQuery.data;
 
   return (
-    <Select
-      defaultValue={defaultValue ?? undefined}
-      onValueChange={(value) => {
-        onChange?.(value == "all" ? "" : value);
-      }}
-    >
-      {!termsQuery.isPending ? (
-        <SelectTrigger className={cn(className)}>
-          <SelectValue placeholder={placeholder ?? t("select_terms")} />
-        </SelectTrigger>
-      ) : (
-        <Skeleton className={cn("h-8 w-full", className)} />
-      )}
-      <SelectContent>
-        {termsQuery.isPending && (
-          <SelectItem disabled value={"loading"}>
-            <Skeleton className="h-8 w-full" />
-          </SelectItem>
-        )}
-        {showAllOption && (
-          <SelectItem key={"terms-all-key"} value="all">
-            {t("all_terms")}
-          </SelectItem>
-        )}
-        {termsQuery.data?.map((term) => {
-          return (
-            <SelectItem key={term.id} value={term.id.toString()}>
-              {term.name}
-            </SelectItem>
-          );
-        })}
-      </SelectContent>
-    </Select>
+    <div className="flex items-center space-x-4">
+      <p className="text-muted-foreground text-sm">Status</p>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline">Select</Button>
+        </PopoverTrigger>
+        <PopoverContent className="p-0" side="bottom" align="start">
+          <Command>
+            <CommandInput placeholder="Change status..." />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup>
+                {categories?.map((category, index) => {
+                  return (
+                    <CommandGroup heading={category.name}>
+                      {category.appreciations.map((item, idx) => {
+                        return (
+                          <CommandItem
+                            key={`${idx}-${index}`}
+                            value={item.id.toString()}
+                            onSelect={(_value) => {
+                              //onSelectAction?.(cat?.id.toString());
+                              //onSelectContent?.(item.content);
+                              setOpen(false);
+                            }}
+                          >
+                            {item.content}
+                          </CommandItem>
+                        );
+                      })}
+                    </CommandGroup>
+                  );
+                })}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }

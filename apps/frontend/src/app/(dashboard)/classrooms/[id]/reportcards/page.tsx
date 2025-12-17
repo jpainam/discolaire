@@ -4,7 +4,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { ReportCardTermContainer } from "./ReportCardTermContainer";
+import { ReportCardTermContainer } from "../../../../../components/classrooms/reportcards/ReportCardTermContainer";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

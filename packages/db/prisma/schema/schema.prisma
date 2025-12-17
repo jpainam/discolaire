@@ -275,23 +275,24 @@ model Event {
 }
 
 model Term {
-    id           String           @id @default(cuid())
-    name         String
-    schoolYearId String
-    order        Int
-    startDate    DateTime         @default(now()) @db.Timestamp(6)
-    endDate      DateTime         @default(now()) @db.Timestamp(6)
-    isActive     Boolean          @default(true)
-    observation  String?
-    gradeSheets  GradeSheet[]
-    schoolYear   SchoolYear       @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    reportCards  ReportCard[]
-    assignments  Assignment[]
-    School       School           @relation(fields: [schoolId], references: [id])
-    schoolId     String
-    convocations Convocation[]
-    Attendance   Attendance[]
-    programs     SubjectProgram[]
+    id                String             @id @default(cuid())
+    name              String
+    schoolYearId      String
+    order             Int
+    startDate         DateTime           @default(now()) @db.Timestamp(6)
+    endDate           DateTime           @default(now()) @db.Timestamp(6)
+    isActive          Boolean            @default(true)
+    observation       String?
+    gradeSheets       GradeSheet[]
+    schoolYear        SchoolYear         @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    reportCards       ReportCard[]
+    assignments       Assignment[]
+    School            School             @relation(fields: [schoolId], references: [id])
+    schoolId          String
+    convocations      Convocation[]
+    Attendance        Attendance[]
+    programs          SubjectProgram[]
+    skillAcquisitions SkillAcquisition[]
 }
 
 model ContactRelationship {

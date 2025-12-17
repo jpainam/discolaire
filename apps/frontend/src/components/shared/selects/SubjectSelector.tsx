@@ -30,7 +30,7 @@ interface ClassroomSelectorProps {
   classroomId: string;
   className?: string;
   defaultValue?: string;
-  onChange?: (value: string | null | undefined) => void;
+  onChange?: (value: string | null) => void;
 }
 
 export function SubjectSelector({

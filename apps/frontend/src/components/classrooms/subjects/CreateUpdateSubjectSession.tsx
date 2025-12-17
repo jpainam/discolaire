@@ -31,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
@@ -164,7 +165,69 @@ export function CreateUpdateSubjectSession({
         />
 
         {/* Attachments Section */}
-        <div className="flex flex-row items-center gap-4">
+
+        <div className="grid flex-1 grid-cols-2 gap-2">
+          <FormField
+            control={form.control}
+            name="priority"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Select
+                    defaultValue={program?.priority ?? undefined}
+                    onValueChange={(val) => field.onChange(val)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("Priority")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>{t("Priority")}</SelectLabel>
+                        <SelectItem value="URGENT">{t("URGENT")}</SelectItem>
+                        <SelectItem value="HIGH">{t("HIGH")}</SelectItem>
+                        <SelectItem value="MEDIUM">{t("MEDIUM")}</SelectItem>
+                        <SelectItem value="LOW">{t("LOW")}</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="sessionCount"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Select
+                    defaultValue={
+                      program?.requiredSessionCount.toString() ?? undefined
+                    }
+                    onValueChange={(val) => field.onChange(val)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t("Session count")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>{t("Session count")}</SelectLabel>
+                        {Array.from({ length: 10 }).map((_, index) => (
+                          <SelectItem key={index} value={index.toString()}>
+                            {index}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex gap-2">
           <input
             type="file"
             ref={fileInputRef}
@@ -180,123 +243,62 @@ export function CreateUpdateSubjectSession({
           >
             <PaperclipIcon className="h-4 w-4" />
           </Button>
-          <div className="grid flex-1 grid-cols-3 gap-2">
-            <FormField
-              control={form.control}
-              name="priority"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Select
-                      defaultValue={program?.priority ?? undefined}
-                      onValueChange={(val) => field.onChange(val)}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t("Priority")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>{t("Priority")}</SelectLabel>
-                          <SelectItem value="URGENT">{t("URGENT")}</SelectItem>
-                          <SelectItem value="HIGH">{t("HIGH")}</SelectItem>
-                          <SelectItem value="MEDIUM">{t("MEDIUM")}</SelectItem>
-                          <SelectItem value="LOW">{t("LOW")}</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="sessionCount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Select
-                      defaultValue={
-                        program?.requiredSessionCount.toString() ?? undefined
-                      }
-                      onValueChange={(val) => field.onChange(val)}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t("Session count")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>{t("Session count")}</SelectLabel>
-                          {Array.from({ length: 10 }).map((_, index) => (
-                            <SelectItem key={index} value={index.toString()}>
-                              {index}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="startDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <DatePicker
-                      className="w-full"
-                      defaultValue={program?.startDate}
-                      onSelectAction={(d) => field.onChange(d)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <DatePicker
+                    className="w-full"
+                    defaultValue={program?.startDate}
+                    onSelectAction={(d) => field.onChange(d)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {selectedFile && (
+          <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <PaperclipIcon className="h-4 w-4" />
+            <span className="max-w-[80%] truncate">{selectedFile.name}</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6"
+              onClick={() => {
+                setSelectedFile(null);
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = "";
+                }
+              }}
+              aria-label="Delete file"
+            >
+              <X className="h-3 w-3" />
+            </Button>
           </div>
-        </div>
-        <div>
-          {selectedFile && (
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
-              <PaperclipIcon className="h-4 w-4" />
-              <span className="max-w-[80%] truncate">{selectedFile.name}</span>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={() => {
-                  setSelectedFile(null);
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = "";
-                  }
-                }}
-                aria-label="Delete file"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </div>
-          )}
-        </div>
+        )}
+
         <div className="flex flex-row items-center justify-end gap-4">
           <Button
             onClick={() => {
               closeModal();
             }}
-            size={"sm"}
             variant={"secondary"}
             type="button"
           >
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               createProgramMutation.isPending || updateProgramMutation.isPending
             }
-            size={"sm"}
           >
+            {(createProgramMutation.isPending ||
+              updateProgramMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
         </div>

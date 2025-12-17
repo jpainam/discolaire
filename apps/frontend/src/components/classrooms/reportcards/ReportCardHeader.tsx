@@ -30,6 +30,7 @@ import {
   EnrollmentIcon,
   FileIcon,
   FilesIcon,
+  MoreIcon,
   UserIcon,
   UsersIcon,
 } from "~/icons";
@@ -66,7 +67,7 @@ export function ReportCardHeader() {
           void setSearchParams({
             termId: val,
             trimestreId: null,
-            appreciationType: null,
+            action: null,
           });
         }}
       />
@@ -93,14 +94,14 @@ export function ReportCardHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Appréciations
+              Actions
               <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel className="flex items-center gap-2">
-              <EnrollmentIcon className="size-4" />
-              Appréciation
+              <MoreIcon className="size-4" />
+              Appréciations
             </DropdownMenuLabel>
             <DropdownMenuItem
               onSelect={() => {
@@ -109,7 +110,7 @@ export function ReportCardHeader() {
                   return;
                 }
                 void setSearchParams({
-                  appreciationType: "subjects",
+                  action: "subjects",
                 });
               }}
             >
@@ -123,17 +124,31 @@ export function ReportCardHeader() {
                   return;
                 }
                 void setSearchParams({
-                  appreciationType: "prof",
+                  action: "teacher",
                 });
               }}
             >
               <UserIcon />
               Prof. Principal
             </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => {
+                if (!searchParams.termId && !searchParams.trimestreId) {
+                  toast.warning("Veuillez choisir une période");
+                  return;
+                }
+                void setSearchParams({
+                  action: "overall_appreciation",
+                });
+              }}
+            >
+              <FilesIcon />
+              Générales
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="flex items-center gap-2">
               <FileIcon className="size-4" />
-              Observation
+              Conseils / Programmes
             </DropdownMenuLabel>
             <DropdownMenuItem
               onSelect={() => {
@@ -142,7 +157,7 @@ export function ReportCardHeader() {
                   return;
                 }
                 void setSearchParams({
-                  appreciationType: "classroom",
+                  action: "class_council",
                 });
               }}
             >
@@ -156,12 +171,12 @@ export function ReportCardHeader() {
                   return;
                 }
                 void setSearchParams({
-                  appreciationType: "overall",
+                  action: "skills",
                 });
               }}
             >
-              <FilesIcon />
-              Générales
+              <EnrollmentIcon />
+              Compétences évaluées
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

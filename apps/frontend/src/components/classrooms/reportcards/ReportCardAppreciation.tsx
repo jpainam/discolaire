@@ -1,80 +1,41 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
-import { Button } from "~/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "~/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
+import { Label } from "~/components/ui/label";
 import { useTRPC } from "~/trpc/react";
+import { ClassroomStudentSelector } from "./ClassroomStudentSelector";
 
 export function ReportCardAppreciation({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onSelectAction,
-  //onSelectContent,
+  classroomId,
+  termId,
 }: {
-  onSelectAction?: (val: string | null) => void;
-  //onSelectContent?: (val: string) => void;
+  classroomId: string;
+  termId: string;
 }) {
-  const [open, setOpen] = React.useState(false);
-
   const trpc = useTRPC();
   const appreciationQuery = useQuery(
     trpc.appreciation.categories.queryOptions(),
   );
+  const [studentId, setStudentId] = useState<string | null>();
 
   const categories = appreciationQuery.data;
+  const t = useTranslations();
 
   return (
-    <div className="flex items-center space-x-4">
-      <p className="text-muted-foreground text-sm">Status</p>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button variant="outline">Select</Button>
-        </PopoverTrigger>
-        <PopoverContent className="p-0" side="bottom" align="start">
-          <Command>
-            <CommandInput placeholder="Change status..." />
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup>
-                {categories?.map((category, index) => {
-                  return (
-                    <CommandGroup heading={category.name}>
-                      {category.appreciations.map((item, idx) => {
-                        return (
-                          <CommandItem
-                            key={`${idx}-${index}`}
-                            value={item.id.toString()}
-                            onSelect={(_value) => {
-                              //onSelectAction?.(cat?.id.toString());
-                              //onSelectContent?.(item.content);
-                              setOpen(false);
-                            }}
-                          >
-                            {item.content}
-                          </CommandItem>
-                        );
-                      })}
-                    </CommandGroup>
-                  );
-                })}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+    <div className="flex flex-col">
+      <div className="flex items-center gap-6">
+        <div className="flex w-full items-center gap-2">
+          <Label>{t("students")}</Label>
+          <ClassroomStudentSelector
+            className="w-1/3"
+            onSelectAction={(v) => setStudentId(v)}
+            classroomId={classroomId}
+          />
+        </div>
+      </div>
     </div>
   );
 }

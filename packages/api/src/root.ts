@@ -48,6 +48,7 @@ import { schoolYearRouter } from "./routers/schoolYear";
 import { schoolYearEventRouter } from "./routers/schoolYearEvent";
 import { settingRouter } from "./routers/setting";
 import { shortcutRouter } from "./routers/shortcut";
+import { skillAcquisitionRouter } from "./routers/skillAcquisition";
 import { staffRouter } from "./routers/staff";
 import { studentRouter } from "./routers/student";
 import { studentAccountRouter } from "./routers/studentAccount";
@@ -131,6 +132,7 @@ export const appRouter = createTRPCRouter({
   discipline: disciplineRouter,
   subjectProgram: subjectProgramRouter,
   appreciation: appreciationRouter,
+  skillAcquisition: skillAcquisitionRouter,
 });
 
 // export type definition of API

@@ -4,6 +4,7 @@ import {
   AmbulanceIcon,
   AppleReminderIcon,
   Archive02Icon,
+  ArrowDown01Icon,
   ArtificialIntelligence04Icon,
   AssignmentsIcon,
   Book04Icon,
@@ -27,6 +28,7 @@ import {
   Logout01Icon,
   Mail01Icon,
   Message02Icon,
+  MoreIcon as MoreGlyth,
   Notification02Icon,
   PencilEdit02Icon,
   PlusSignSquareIcon,
@@ -98,3 +100,5 @@ export const HealthIcon = wrapHugeIcon(AmbulanceIcon);
 export const MailIcon = wrapHugeIcon(Mail01Icon);
 export const NotificationIcon = wrapHugeIcon(Notification02Icon);
 export const LockIcon = wrapHugeIcon(LockPasswordIcon);
+export const MoreIcon = wrapHugeIcon(MoreGlyth);
+export const ArrowDownIcon = wrapHugeIcon(ArrowDown01Icon);

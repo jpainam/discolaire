@@ -1,20 +1,21 @@
 model Subject {
-    id             Int                @id @default(autoincrement())
-    courseId       String
-    teacherId      String?
-    classroomId    String
-    subjectGroupId Int?
-    program        String?
-    order          Int                @default(1)
-    coefficient    Float              @default(1)
-    gradeSheets    GradeSheet[]
-    programs       SubjectProgram[]
-    classroom      Classroom          @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    course         Course             @relation(fields: [courseId], references: [id])
-    subjectGroup   SubjectGroup?      @relation(fields: [subjectGroupId], references: [id])
-    teacher        Staff?             @relation(fields: [teacherId], references: [id])
-    assignments    Assignment[]
-    timetables     SubjectTimetable[]
+    id                Int                @id @default(autoincrement())
+    courseId          String
+    teacherId         String?
+    classroomId       String
+    subjectGroupId    Int?
+    program           String?
+    order             Int                @default(1)
+    coefficient       Float              @default(1)
+    gradeSheets       GradeSheet[]
+    programs          SubjectProgram[]
+    classroom         Classroom          @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    course            Course             @relation(fields: [courseId], references: [id])
+    subjectGroup      SubjectGroup?      @relation(fields: [subjectGroupId], references: [id])
+    teacher           Staff?             @relation(fields: [teacherId], references: [id])
+    assignments       Assignment[]
+    timetables        SubjectTimetable[]
+    skillAcquisitions SkillAcquisition[]
 
     @@unique([courseId, teacherId, classroomId])
 }
@@ -99,4 +100,19 @@ model SubjectJournal {
     program      SubjectProgram @relation(fields: [programId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     createdAt    DateTime       @default(now())
     updatedAt    DateTime       @updatedAt
+}
+
+model SkillAcquisition {
+    id          Int      @id @default(autoincrement())
+    content     String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    createdById String
+    createdBy   User     @relation("SkillAcquisitionCreatedBy", fields: [createdById], references: [id])
+    subjectId   Int
+    subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    termId      String
+    term        Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+
+    @@unique([termId, subjectId])
 }

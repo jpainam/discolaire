@@ -62,6 +62,7 @@ model User {
     subjectTimetables            SubjectTimetable[]         @relation("SubjectTimetableCreatedBy")
     subjectJournals              SubjectJournal[]           @relation("SubjectJournalCreatedBy")
     subjectPrograms              SubjectProgram[]           @relation("SubjectProgramCreatedBy")
+    skillAcquisitions            SkillAcquisition[]         @relation("SkillAcquisitionCreatedBy")
 
     @@unique([email])
     @@unique([username])
