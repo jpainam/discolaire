@@ -9,6 +9,7 @@ import {
   AssignmentsIcon,
   Book04Icon,
   Calendar03Icon,
+  Calendar04Icon,
   Contact01Icon,
   DashboardSquare01Icon,
   DashboardSquareSettingIcon,
@@ -44,6 +45,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+import { cn } from "~/lib/utils";
+
 function wrapHugeIcon(icon: NonNullable<HugeiconsProps["icon"]>) {
   return function AppIcon({
     strokeWidth = 2,
@@ -54,7 +57,7 @@ function wrapHugeIcon(icon: NonNullable<HugeiconsProps["icon"]>) {
       <HugeiconsIcon
         icon={icon}
         strokeWidth={strokeWidth}
-        className={className}
+        className={cn("size-4", className)}
         {...rest}
       />
     );
@@ -102,3 +105,4 @@ export const NotificationIcon = wrapHugeIcon(Notification02Icon);
 export const LockIcon = wrapHugeIcon(LockPasswordIcon);
 export const MoreIcon = wrapHugeIcon(MoreGlyth);
 export const ArrowDownIcon = wrapHugeIcon(ArrowDown01Icon);
+export const CalendarIcon = wrapHugeIcon(Calendar04Icon);

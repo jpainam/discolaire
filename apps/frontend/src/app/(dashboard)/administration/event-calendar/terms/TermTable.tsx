@@ -1,25 +1,12 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  LockIcon,
-  LockOpen,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { LockIcon, LockOpen } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import FlatBadge from "~/components/FlatBadge";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
@@ -30,9 +17,23 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { CalendarIcon, DeleteIcon, EditIcon } from "~/icons";
+import { cn } from "~/lib/utils";
+import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditTerm } from "./CreateEditTerm";
+
+const periodTypeColors = {
+  MONTHLY:
+    "bg-blue-500/10 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300",
+  QUARTER:
+    "bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300",
+  HALF: "bg-violet-500/10 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300",
+  ANNUAL:
+    "bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300",
+};
 
 export function TermTable() {
   const trpc = useTRPC();
@@ -68,6 +69,8 @@ export function TermTable() {
       },
     }),
   );
+  const terms = termsQuery.data ?? [];
+  const canDeleteTerm = useCheckPermission("term", PermissionAction.DELETE);
   return (
     <div className="">
       <div className="bg-background overflow-hidden rounded-md border">
@@ -75,8 +78,9 @@ export function TermTable() {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("name")}</TableHead>
-              <TableHead>{t("Start date")}</TableHead>
-              <TableHead>{t("End date")}</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead> Date Range</TableHead>
+              <TableHead>Composition</TableHead>
               <TableHead>{t("is_active")}</TableHead>
               <TableHead>{t("school_year")}</TableHead>
               <TableHead>{t("isActive")}</TableHead>
@@ -95,30 +99,78 @@ export function TermTable() {
                 </TableCell>
               </TableRow>
             )}
-            {termsQuery.data?.map((term) => {
+            {terms.map((term) => {
               return (
                 <TableRow key={term.id}>
-                  <TableCell className="py-0">{term.name}</TableCell>
-                  <TableCell className="py-0">
-                    {term.startDate.toLocaleDateString(locale, {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
+                  <TableCell>{term.name}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="secondary"
+                      className={cn("uppercase", periodTypeColors[term.type])}
+                    >
+                      {t(term.type)}
+                    </Badge>
                   </TableCell>
-                  <TableCell className="py-0">
-                    {term.endDate.toLocaleDateString(locale, {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
+                  <TableCell>
+                    <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                      <CalendarIcon />
+                      <span>
+                        {term.startDate.toLocaleDateString(locale, {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}{" "}
+                        -{" "}
+                        {term.endDate.toLocaleDateString(locale, {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
                   </TableCell>
-                  <TableCell className="py-0">
-                    <FlatBadge variant={term.isActive ? "green" : "gray"}>
+                  <TableCell>
+                    {term.parts.length > 0 ? (
+                      <div className="max-w-xs">
+                        <div className="flex flex-wrap gap-1">
+                          {term.parts.slice(0, 3).map((part) => {
+                            const partPeriod = terms.find(
+                              (p) => p.id === part.childId,
+                            );
+                            return partPeriod ? (
+                              <Badge
+                                key={`${part.childId}-${term.id}`}
+                                variant="secondary"
+                                className="text-xs"
+                              >
+                                {partPeriod.name}
+                              </Badge>
+                            ) : null;
+                          })}
+                          {term.parts.length > 3 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{term.parts.length - 3} more
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-muted-foreground text-sm">—</span>
+                    )}
+                  </TableCell>
+
+                  <TableCell>
+                    <Badge
+                      variant={"outline"}
+                      className={cn(
+                        !term.isActive ? "bg-red-500 text-white" : "",
+                      )}
+                    >
                       {term.isActive ? t("yes") : t("no")}
-                    </FlatBadge>
+                    </Badge>
                   </TableCell>
-                  <TableCell className="py-0">{term.schoolYear.name}</TableCell>
+
+                  <TableCell>{term.schoolYear.name}</TableCell>
                   <TableCell>
                     <Button
                       size={"sm"}
@@ -137,39 +189,38 @@ export function TermTable() {
                     </Button>
                   </TableCell>
                   <TableCell className="py-0 text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"} size={"icon"}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            openModal({
-                              title: t("edit"),
-                              view: <CreateEditTerm term={term} />,
-                            });
-                          }}
-                        >
-                          <Pencil />
-                          {t("edit")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            toast.loading(t("Processing"), { id: 0 });
-                            updateTermActiveMutation.mutate({
-                              id: term.id,
-                              isActive: !term.isActive,
-                            });
-                          }}
-                        >
-                          {term.isActive ? <LockIcon /> : <LockOpen />}
-                          {term.isActive ? t("Lock") : t("Unlock")}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onSelect={async () => {
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          openModal({
+                            description: "Update the period details below.",
+                            className: "sm:max-w-xl",
+                            title: "Edit Period",
+                            view: <CreateEditTerm term={term} />,
+                          });
+                        }}
+                      >
+                        <EditIcon />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          toast.loading(t("Processing"), { id: 0 });
+                          updateTermActiveMutation.mutate({
+                            id: term.id,
+                            isActive: !term.isActive,
+                          });
+                        }}
+                      >
+                        {term.isActive ? <LockIcon /> : <LockOpen />}
+                      </Button>
+                      {!canDeleteTerm && (
+                        <Button
+                          size="icon"
+                          onClick={async () => {
                             const isConfirm = await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
@@ -185,11 +236,10 @@ export function TermTable() {
                           }}
                           variant="destructive"
                         >
-                          <Trash2 />
-                          {t("delete")}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                          <DeleteIcon />
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               );

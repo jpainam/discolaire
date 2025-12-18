@@ -274,11 +274,19 @@ model Event {
     location    String?
 }
 
+enum TermType {
+    MONTHLY
+    QUARTER
+    HALF
+    ANNUAL
+}
+
 model Term {
     id                String             @id @default(cuid())
     name              String
     schoolYearId      String
     order             Int
+    type              TermType           @default(MONTHLY)
     startDate         DateTime           @default(now()) @db.Timestamp(6)
     endDate           DateTime           @default(now()) @db.Timestamp(6)
     isActive          Boolean            @default(true)
@@ -289,10 +297,24 @@ model Term {
     assignments       Assignment[]
     School            School             @relation(fields: [schoolId], references: [id])
     schoolId          String
+    parts             TermPart[]         @relation("TermParts_parent")
+    usedIn            TermPart[]         @relation("TermParts_child")
     convocations      Convocation[]
     Attendance        Attendance[]
     programs          SubjectProgram[]
     skillAcquisitions SkillAcquisition[]
+    councils          ClassroomCouncil[]
+}
+
+model TermPart {
+    parentId String
+    childId  String
+    weight   Float?
+    parent   Term   @relation("TermParts_parent", fields: [parentId], references: [id], onDelete: Cascade)
+    child    Term   @relation("TermParts_child", fields: [childId], references: [id], onDelete: Restrict)
+
+    @@id([parentId, childId])
+    @@index([childId])
 }
 
 model ContactRelationship {
@@ -417,6 +439,7 @@ model Student {
     requiredFees         RequiredFeeTransaction[]
     convocations         Convocation[]
     Attendance           Attendance[]
+    councils             ClassroomCouncil[]
 }
 
 model StudentSibling {

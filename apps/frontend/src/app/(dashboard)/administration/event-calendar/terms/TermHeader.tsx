@@ -25,7 +25,9 @@ export function TermHeader() {
       <Button
         onClick={() => {
           openModal({
-            title: t("add"),
+            description: "Fill in the details to create a new period.",
+            className: "sm:max-w-xl",
+            title: "Create New Period",
             view: <CreateEditTerm />,
           });
         }}

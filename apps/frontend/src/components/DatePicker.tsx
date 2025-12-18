@@ -20,7 +20,7 @@ export function DatePicker({
   defaultValue,
 }: {
   className?: string;
-  defaultValue: Date | undefined;
+  defaultValue?: Date;
   onSelectAction?: (val: Date | undefined) => void;
 }) {
   const [timeZone, setTimeZone] = useState<string | undefined>(undefined);
