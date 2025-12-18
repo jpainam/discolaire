@@ -6,27 +6,22 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
+
+
 import type { RouterOutputs } from "@repo/api";
 
+
+
+import { AppreciationSelector } from "~/components/shared/selects/AppreciationSelector";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { UserLink } from "~/components/UserLink";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+
 
 export function ReportCardClassroomCouncil({
   classroomId,
@@ -128,10 +123,11 @@ export function ReportCardClassroomCouncil({
 
                       <Tooltip>
                         <TooltipTrigger>
-                          {" "}
-                          <Button variant={"outline"} size={"icon"}>
-                            <HugeiconsIcon icon={MagicWand01Icon} />
-                          </Button>
+                          <AppreciationSelector>
+                            <Button variant={"outline"} size={"icon"}>
+                              <HugeiconsIcon icon={MagicWand01Icon} />
+                            </Button>
+                          </AppreciationSelector>
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>Générer une observation</p>
