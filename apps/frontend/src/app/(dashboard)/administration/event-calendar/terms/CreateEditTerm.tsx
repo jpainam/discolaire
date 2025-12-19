@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addMonths } from "date-fns";
 import { useTranslations } from "next-intl";
@@ -39,6 +39,7 @@ type Term = RouterOutputs["term"]["all"][number];
 
 const formSchema = z.object({
   name: z.string().min(2),
+  shortName: z.string().min(1),
   type: z.enum([
     TermType.MONTHLY,
     TermType.QUARTER,
@@ -55,6 +56,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
   const form = useForm({
     defaultValues: {
       name: term?.name ?? "",
+      shortName: term?.shortName ?? "",
       type: term?.type ?? TermType.MONTHLY,
       order: term?.order ? String(term.order) : "1",
       startDate: term?.startDate ?? today,
@@ -65,9 +67,9 @@ export function CreateEditTerm({ term }: { term?: Term }) {
       onSubmit: formSchema,
     },
     onSubmit: ({ value }) => {
-      console.log("Inside onSubmit>>>>>");
       const values = {
         name: value.name,
+        shortName: value.shortName,
         startDate: value.startDate,
         endDate: value.endDate,
         order: Number(value.order),
@@ -113,6 +115,8 @@ export function CreateEditTerm({ term }: { term?: Term }) {
     }),
   );
 
+  const periodType = useStore(form.store, (state) => state.values.type);
+
   const t = useTranslations();
   //const onSubmit = (data: z.infer<typeof createEditTermSchema>) => {};
   return (
@@ -125,7 +129,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
           void form.handleSubmit();
         }}
       >
-        <FieldGroup>
+        <FieldGroup className="grid grid-cols-2 gap-4">
           <form.Field
             name="name"
             children={(field) => {
@@ -142,6 +146,29 @@ export function CreateEditTerm({ term }: { term?: Term }) {
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
                     placeholder="ex. Mensuelle 1, Trimestre 1"
+                    autoComplete="off"
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+          <form.Field
+            name="shortName"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>{t("shortName")}</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    placeholder="ex. SEQ1,  TRIM1"
                     autoComplete="off"
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -261,48 +288,52 @@ export function CreateEditTerm({ term }: { term?: Term }) {
             }}
           />
         </FieldGroup>
-        <FieldSeparator />
-        <Label className="col-span-full">Composition</Label>
-        {isPending ? (
-          <Skeleton className="h-12" />
-        ) : (
-          <FieldGroup className="border-border bg-muted/30 grid grid-cols-2 rounded-lg border p-2">
-            {terms?.map((t, index) => {
-              return (
-                <form.Field
-                  key={t.id}
-                  name="parts"
-                  children={(field) => {
-                    const isChecked = field.state.value.includes(t.id);
-                    const handleChange = (checked: boolean) => {
-                      if (checked) {
-                        field.handleChange([...field.state.value, t.id]);
-                      } else {
-                        field.handleChange(
-                          field.state.value.filter((v) => v != t.id),
+        {periodType != TermType.MONTHLY && (
+          <>
+            <FieldSeparator />
+            <Label className="col-span-full">Composition</Label>
+            {isPending ? (
+              <Skeleton className="h-12" />
+            ) : (
+              <FieldGroup className="border-border bg-muted/30 grid grid-cols-2 rounded-lg border p-2">
+                {terms?.map((t, index) => {
+                  return (
+                    <form.Field
+                      key={t.id}
+                      name="parts"
+                      children={(field) => {
+                        const isChecked = field.state.value.includes(t.id);
+                        const handleChange = (checked: boolean) => {
+                          if (checked) {
+                            field.handleChange([...field.state.value, t.id]);
+                          } else {
+                            field.handleChange(
+                              field.state.value.filter((v) => v != t.id),
+                            );
+                          }
+                        };
+                        return (
+                          <Field orientation="horizontal">
+                            <Checkbox
+                              checked={isChecked}
+                              onCheckedChange={(e) => handleChange(!!e)}
+                              id={`${t.id}-${index}`}
+                            />
+                            <FieldLabel
+                              htmlFor={`${t.id}-${index}`}
+                              className="font-normal"
+                            >
+                              {t.name}
+                            </FieldLabel>
+                          </Field>
                         );
-                      }
-                    };
-                    return (
-                      <Field orientation="horizontal">
-                        <Checkbox
-                          checked={isChecked}
-                          onCheckedChange={(e) => handleChange(!!e)}
-                          id={`${t.id}-${index}`}
-                        />
-                        <FieldLabel
-                          htmlFor={`${t.id}-${index}`}
-                          className="font-normal"
-                        >
-                          {t.name}
-                        </FieldLabel>
-                      </Field>
-                    );
-                  }}
-                />
-              );
-            })}
-          </FieldGroup>
+                      }}
+                    />
+                  );
+                })}
+              </FieldGroup>
+            )}
+          </>
         )}
       </form>
       <Field orientation="horizontal" className="justify-end">

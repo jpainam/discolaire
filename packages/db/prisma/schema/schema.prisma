@@ -66,7 +66,7 @@ model ReportCard {
     remarkAt    DateTime  @default(now()) @db.Timestamp(6)
     classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    term        Term      @relation(fields: [termId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
     @@id([studentId, classroomId, termId])
 }
@@ -196,8 +196,8 @@ model GradeSheet {
     termId                String
     grades                Grade[]
     createdBy             User?                @relation(fields: [createdById], references: [id])
-    subject               Subject              @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    term                  Term                 @relation(fields: [termId], references: [id], onDelete: Cascade)
+    subject               Subject              @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+    term                  Term                 @relation(fields: [termId], references: [id], onDelete: Restrict)
     appreciationRuleSetId String?
     appreciationRuleSet   AppreciationRuleSet? @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
@@ -284,6 +284,7 @@ enum TermType {
 model Term {
     id                String             @id @default(cuid())
     name              String
+    shortName         String             @default("")
     schoolYearId      String
     order             Int
     type              TermType           @default(MONTHLY)
@@ -292,7 +293,7 @@ model Term {
     isActive          Boolean            @default(true)
     observation       String?
     gradeSheets       GradeSheet[]
-    schoolYear        SchoolYear         @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolYear        SchoolYear         @relation(fields: [schoolYearId], references: [id], onDelete: Restrict)
     reportCards       ReportCard[]
     assignments       Assignment[]
     School            School             @relation(fields: [schoolId], references: [id])

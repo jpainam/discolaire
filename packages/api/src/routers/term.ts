@@ -7,6 +7,7 @@ import { protectedProcedure } from "../trpc";
 
 const createEditTermSchema = z.object({
   name: z.string().min(1),
+  shortName: z.string().min(1),
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
   type: z.enum([
@@ -26,7 +27,7 @@ export const termRouter = {
         parts: true,
       },
       orderBy: {
-        startDate: "asc",
+        order: "asc",
       },
       where: {
         schoolId: ctx.schoolId,
@@ -55,6 +56,7 @@ export const termRouter = {
             name: input.name,
             startDate: input.startDate,
             endDate: input.endDate,
+            shortName: input.shortName,
             order: input.order,
           },
         });
@@ -89,6 +91,7 @@ export const termRouter = {
             schoolYearId: ctx.schoolYearId,
             schoolId: ctx.schoolId,
             type: input.type,
+            shortName: input.shortName,
             name: input.name,
             startDate: input.startDate,
             endDate: input.endDate,

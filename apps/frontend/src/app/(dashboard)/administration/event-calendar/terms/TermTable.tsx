@@ -102,7 +102,9 @@ export function TermTable() {
             {terms.map((term) => {
               return (
                 <TableRow key={term.id}>
-                  <TableCell>{term.name}</TableCell>
+                  <TableCell>
+                    {term.name} ({term.shortName})
+                  </TableCell>
                   <TableCell>
                     <Badge
                       variant="secondary"

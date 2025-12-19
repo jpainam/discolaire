@@ -42,7 +42,38 @@ export function AppreciationSelector(props: PropsWithChildren) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{props.children}</PopoverTrigger>
-      <PopoverContent className="p-0 md:min-w-2xl" side="bottom" align="end">
+      <PopoverContent
+        // onInteractOutside={(e) => {
+        //   // If the interaction target is inside the popover content, don't dismiss.
+        //   if (
+        //     e.target instanceof Element &&
+        //     e.currentTarget?.contains(e.target)
+        //   ) {
+        //     e.preventDefault();
+        //   }
+        // }}
+        // // Optional: extra safety for pointer down
+        // onPointerDownOutside={(e) => {
+        //   if (
+        //     e.target instanceof Element &&
+        //     e.currentTarget?.contains(e.target)
+        //   ) {
+        //     e.preventDefault();
+        //   }
+        // }}
+        // // Optional: avoid closing on focus changes caused by CommandInput / Checkbox
+        // onFocusOutside={(e) => {
+        //   if (
+        //     e.target instanceof Element &&
+        //     e.currentTarget?.contains(e.target)
+        //   ) {
+        //     e.preventDefault();
+        //   }
+        // }}
+        className="p-0 md:min-w-2xl"
+        side="bottom"
+        align="end"
+      >
         <Command
           filter={(value, search) => {
             const appreciations = categories?.flatMap(
@@ -68,8 +99,8 @@ export function AppreciationSelector(props: PropsWithChildren) {
                   className="gap-1.5 overflow-hidden !px-3 !py-1.5 transition-all duration-100 ease-linear group-has-data-[state=checked]/field-label:!px-2"
                 >
                   <Checkbox
-                    value={cat.id.toString()}
                     id={cat.id.toString()}
+                    checked={filters.includes(cat.id.toString())}
                     onCheckedChange={(checked) => {
                       if (!checked) {
                         setFilters((w) =>
@@ -79,10 +110,9 @@ export function AppreciationSelector(props: PropsWithChildren) {
                         setFilters((w) => [...w, cat.id.toString()]);
                       }
                     }}
-                    defaultChecked={filters.includes(cat.id.toString())}
                     className="-ml-6 -translate-x-1 rounded-full transition-all duration-100 ease-linear data-[state=checked]:ml-0 data-[state=checked]:translate-x-0"
                   />
-                  <FieldTitle>{cat.name}</FieldTitle>
+                  <FieldTitle className="text-xs">{cat.name}</FieldTitle>
                 </Field>
               </FieldLabel>
             ))}
@@ -109,7 +139,7 @@ export function AppreciationSelector(props: PropsWithChildren) {
                             setOpen(false);
                           }}
                         >
-                          {item.content}
+                          <span className="text-xs">{item.content}</span>
                         </CommandItem>
                       );
                     })}
