@@ -24,7 +24,11 @@ export const termRouter = {
     return ctx.db.term.findMany({
       include: {
         schoolYear: true,
-        parts: true,
+        parts: {
+          include: {
+            child: true,
+          },
+        },
       },
       orderBy: {
         order: "asc",
@@ -114,7 +118,11 @@ export const termRouter = {
     return ctx.db.term.findUniqueOrThrow({
       include: {
         schoolYear: true,
-        parts: true,
+        parts: {
+          include: {
+            child: true,
+          },
+        },
       },
       where: {
         id: input,

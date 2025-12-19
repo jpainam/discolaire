@@ -18,12 +18,13 @@ import {
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { CalendarIcon, DeleteIcon, EditIcon } from "~/icons";
+import { CalendarIcon, DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditTerm } from "./CreateEditTerm";
+import { TermDetails } from "./TermDetails";
 
 const periodTypeColors = {
   MONTHLY:
@@ -192,6 +193,19 @@ export function TermTable() {
                   </TableCell>
                   <TableCell className="py-0 text-right">
                     <div className="flex justify-end gap-2">
+                      <Button
+                        onClick={() => {
+                          openModal({
+                            title: term.name,
+                            description: `${term.shortName}-#${term.order}`,
+                            view: <TermDetails term={term} />,
+                          });
+                        }}
+                        variant={"ghost"}
+                        size={"icon"}
+                      >
+                        <ViewIcon />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
