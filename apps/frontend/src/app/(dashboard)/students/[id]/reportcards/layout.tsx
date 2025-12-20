@@ -36,7 +36,7 @@ export default async function Layout(props: {
               </div>
             }
           >
-            <ReportCardHeader classroomId={classroom.id} />
+            <ReportCardHeader />
           </Suspense>
         </ErrorBoundary>
       </HydrateClient>

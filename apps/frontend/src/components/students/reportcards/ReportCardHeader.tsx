@@ -8,7 +8,6 @@ import { useQueryStates } from "nuqs";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -17,15 +16,14 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { reportcardSearchParamsSchema } from "~/utils/search-params";
 
-export function ReportCardHeader({ classroomId }: { classroomId: string }) {
+export function ReportCardHeader() {
   const t = useTranslations();
-  const { createQueryString } = useCreateQueryString();
+
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
@@ -40,35 +38,17 @@ export function ReportCardHeader({ classroomId }: { classroomId: string }) {
   const { termId, trimestreId } = searchParams;
   return (
     <div className="bg-muted text-muted-foreground grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
-      <div className="flex flex-row items-center gap-1">
+      <div className="flex flex-row items-center gap-2">
         <BookText className="h-4 w-4" />
         <Label>{t("reportcards")}</Label>
       </div>
-      <div className="grid grid-cols-2 flex-row items-center gap-2 md:flex">
+      <div className="flex items-center gap-2">
+        <Label>{t("terms")}</Label>
         <TermSelector
           className="md:w-[300px]"
           defaultValue={termId}
           onChange={(val) => {
             router.push(`/students/${params.id}/reportcards?termId=${val}`);
-          }}
-        />
-        <TrimestreSelector
-          className="md:w-[300px]"
-          defaultValue={trimestreId ?? undefined}
-          onChange={(val) => {
-            if (val == "ann") {
-              router.push(`/students/${params.id}/reportcards/annual`);
-            } else {
-              const url =
-                `/students/${params.id}/reportcards/trimestres?` +
-                createQueryString({
-                  trimestreId: val,
-                  classroomId: classroomId,
-                  studentId: params.id,
-                  format: "pdf",
-                });
-              router.push(url);
-            }
           }}
         />
       </div>
