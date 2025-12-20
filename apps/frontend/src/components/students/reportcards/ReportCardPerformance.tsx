@@ -43,11 +43,11 @@ export async function ReportCardPerformance({
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className={cn(rowClassName)}>{t("Moy.Min")}</TableCell>
+            <TableCell className={cn(rowClassName)}>{t("Moy Min")}</TableCell>
             <TableCell>{isFinite(min) ? min.toFixed(2) : "-"}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className={cn(rowClassName)}>{t("Moy.Class")}</TableCell>
+            <TableCell className={cn(rowClassName)}>{t("Moy Cl")}</TableCell>
             <TableCell>{isFinite(avg) ? avg.toFixed(2) : "-"}</TableCell>
           </TableRow>
           <TableRow>

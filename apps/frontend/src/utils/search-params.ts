@@ -35,7 +35,7 @@ export const transactionSearchParams = createLoader(
 );
 
 export const trimestreSearchParamsSchema = {
-  trimestreId: parseAsStringLiteral(["trim1", "trim2", "trim3"]),
+  trimestreId: parseAsString,
   classroomId: parseAsString,
   format: parseAsStringLiteral(["pdf", "csv"]),
 };

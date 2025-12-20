@@ -1,33 +1,39 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { CircleAlertIcon } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { getQueryClient, trpc } from "~/trpc/server";
 
-export async function TrimestreAlert({
+export async function RecpordCardQuarterAlert({
   trimestreId,
   classroomId,
 }: {
-  trimestreId: "trim1" | "trim2" | "trim3";
+  trimestreId: string;
   classroomId: string;
 }) {
   const queryClient = getQueryClient();
-  const { seq1, seq2 } = await queryClient.fetchQuery(
-    trpc.reportCard.getTermIdsForTrimestre.queryOptions(trimestreId),
+  const term = await queryClient.fetchQuery(
+    trpc.term.get.queryOptions(trimestreId),
   );
+  const childTerms = term.parts.map((t) => t.child);
+  const sortedTerms = childTerms.sort((a, b) => a.order - b.order);
+  const term1 = sortedTerms[0];
+  const term2 = sortedTerms[1];
 
-  const term1 = await queryClient.fetchQuery(trpc.term.get.queryOptions(seq1));
-  const term2 = await queryClient.fetchQuery(trpc.term.get.queryOptions(seq2));
+  if (!term1 || !term2) {
+    notFound();
+  }
 
   const subjects = await queryClient.fetchQuery(
     trpc.classroom.subjects.queryOptions(classroomId),
   );
 
   const gradesheetsSeq1 = await queryClient.fetchQuery(
-    trpc.gradeSheet.all.queryOptions({ termId: seq1, classroomId }),
+    trpc.gradeSheet.all.queryOptions({ termId: term1.id, classroomId }),
   );
   const gradesheetsSeq2 = await queryClient.fetchQuery(
-    trpc.gradeSheet.all.queryOptions({ termId: seq2, classroomId }),
+    trpc.gradeSheet.all.queryOptions({ termId: term2.id, classroomId }),
   );
 
   const subjectGradesheetCounts1 = new Map<number, number>();

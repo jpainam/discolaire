@@ -251,3 +251,5 @@ My previous docker https://github.com/jpainam/discolaire/blob/4324613a0d0feec36b
 fix everywhere i use gradeSheet.grades followed by max, min, or avg of grades
 as this will no longer return all grades (e.g. if student is logged)
 or parent.
+
+work on getGeneratorUrl as termType is hardcoded

@@ -55,7 +55,15 @@ export default async function Page(props: {
           </ErrorBoundary>
         </div> */}
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-4 gap-4 p-4">
+                {Array.from({ length: 16 }).map((_, t) => (
+                  <Skeleton className="h-8" key={t} />
+                ))}
+              </div>
+            }
+          >
             <SubjectGradeTable subjectId={params.subjectId} />
           </Suspense>
         </ErrorBoundary>

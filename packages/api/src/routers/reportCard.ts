@@ -86,14 +86,14 @@ export const reportCardRouter = {
   getTrimestre: protectedProcedure
     .input(
       z.object({
-        trimestreId: z.enum(["trim1", "trim2", "trim3"]),
+        termId: z.string().min(1),
         classroomId: z.string().min(1),
       }),
     )
     .query(({ input, ctx }) => {
       return ctx.services.trimestre.getTrimestreGrades(
         input.classroomId,
-        input.trimestreId,
+        input.termId,
         ctx.schoolId,
         ctx.schoolYearId,
       );
@@ -108,10 +108,5 @@ export const reportCardRouter = {
       return ctx.services.annual.getAnnualReport({
         classroomId: input.classroomId,
       });
-    }),
-  getTermIdsForTrimestre: protectedProcedure
-    .input(z.enum(["trim1", "trim2", "trim3"]))
-    .query(({ ctx, input }) => {
-      return ctx.services.trimestre.getTermIds(input, ctx.schoolYearId);
     }),
 } satisfies TRPCRouterRecord;

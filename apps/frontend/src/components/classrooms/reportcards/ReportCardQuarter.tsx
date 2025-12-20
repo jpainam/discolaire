@@ -1,9 +1,10 @@
-import type { SearchParams } from "nuqs/server";
 import { Fragment, Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Link from "next/link";
 import _ from "lodash";
 import { getTranslations } from "next-intl/server";
+
+import type { RouterOutputs } from "@repo/api";
 
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -26,39 +27,40 @@ import { UserLink } from "~/components/UserLink";
 import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
-import { trimestreSearchParams } from "~/utils/search-params";
-import { TrimestreAlert } from "./TrimestreAlert";
+import { RecpordCardQuarterAlert } from "./RecpordCardQuarterAlert";
 
-interface PageProps {
-  searchParams: Promise<SearchParams>;
-  params: Promise<{ id: string }>;
-}
-
-export default async function Page(props: PageProps) {
+export async function ReportCardQuarter({
+  classroomId,
+  term,
+}: {
+  classroomId: string;
+  term: RouterOutputs["term"]["get"];
+}) {
   const t = await getTranslations();
-  const searchParams = await trimestreSearchParams(props.searchParams);
-  if (!searchParams.trimestreId) {
-    throw new Error("Trimestre ID is required");
-  }
-  const params = await props.params;
-  const classroom = await caller.classroom.get(params.id);
+  const queryClient = getQueryClient();
+  const classroom = await queryClient.fetchQuery(
+    trpc.classroom.get.queryOptions(classroomId),
+  );
 
-  const { trimestreId } = searchParams;
-  const { title: _title, seq1, seq2 } = getTitle({ trimestreId });
+  const { title } = getTitle({ trimestreId: term.id });
 
   const {
     studentsReport,
     summary: _summary,
     globalRanks,
   } = await caller.reportCard.getTrimestre({
-    classroomId: params.id,
-    trimestreId: trimestreId,
+    classroomId,
+    termId: term.id,
   });
 
-  const subjects = await caller.classroom.subjects(params.id);
-  const students = await caller.classroom.students(params.id);
+  const subjects = await queryClient.fetchQuery(
+    trpc.classroom.subjects.queryOptions(classroomId),
+  );
+  const students = await queryClient.fetchQuery(
+    trpc.classroom.students.queryOptions(classroomId),
+  );
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   const groups = _.groupBy(subjects, "subjectGroupId");
 
@@ -66,13 +68,15 @@ export default async function Page(props: PageProps) {
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
-  const { title } = getTitle({ trimestreId });
 
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
   const canCreateGradesheet = await checkPermission(
     "gradesheet",
     PermissionAction.CREATE,
   );
+  const trimestreId = term.id;
+  const seq1 = term.parts[0]?.child.shortName;
+  const seq2 = term.parts[1]?.child.shortName;
 
   return (
     <div className="mb-10 flex flex-col gap-2">
@@ -83,7 +87,7 @@ export default async function Page(props: PageProps) {
         avg={average}
         successRate={successRate}
         classroomSize={classroom.size}
-        pdfHref={`/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${trimestreId}&classroomId=${classroom.id}&format=pdf`}
+        pdfHref={`/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${term.id}&classroomId=${classroom.id}&format=pdf`}
       />
 
       <Separator />
@@ -96,7 +100,10 @@ export default async function Page(props: PageProps) {
               </div>
             }
           >
-            <TrimestreAlert trimestreId={trimestreId} classroomId={params.id} />
+            <RecpordCardQuarterAlert
+              trimestreId={trimestreId}
+              classroomId={classroomId}
+            />
           </Suspense>
         </ErrorBoundary>
       )}
@@ -153,7 +160,7 @@ export default async function Page(props: PageProps) {
                           avatar={student.user?.avatar}
                           name={getFullName(student)}
                           id={student.id}
-                          href={`/students/${student.id}/reportcards/trimestres?trimestreId=${searchParams.trimestreId}&studentId=${student.id}&classroomId=${params.id}`}
+                          href={`/students/${student.id}/reportcards/trimestres?trimestreId=${trimestreId}&studentId=${student.id}&classroomId=${classroomId}`}
                         />
                       </TableCell>
 
@@ -306,14 +313,14 @@ export default async function Page(props: PageProps) {
 }
 
 function getTitle({ trimestreId }: { trimestreId: string }) {
-  if (trimestreId == "trim1") {
+  if (trimestreId.includes("1")) {
     return {
       title: "BULLETIN SCOLAIRE DU PREMIER TRIMESTRE",
       seq1: "SEQ1",
       seq2: "SEQ2",
     };
   }
-  if (trimestreId == "trim2") {
+  if (trimestreId.includes("2")) {
     return {
       title: "BULLETIN SCOLAIRE DU SECOND TRIMESTRE",
       seq1: "SEQ3",

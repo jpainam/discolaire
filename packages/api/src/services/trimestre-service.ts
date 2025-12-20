@@ -10,28 +10,26 @@ export class TrimestreService {
     this.db = db;
     this.reportcard = new ReportCardService(db);
   }
-  async getTermIds(
-    trimestreId: "trim1" | "trim2" | "trim3",
-    schoolYearId: string,
-  ) {
+  async getTermIds(trimestreId: string) {
     let seq1: string | null | undefined = null;
     let seq2: string | null | undefined = null;
-    const terms = await this.db.term.findMany({
+    const term = await this.db.term.findUniqueOrThrow({
+      include: {
+        parts: {
+          include: {
+            child: true,
+          },
+        },
+      },
       where: {
-        schoolYearId: schoolYearId,
+        id: trimestreId,
       },
     });
-    const sortedTerms = terms.sort((a, b) => a.order - b.order);
-    if (trimestreId === "trim1") {
-      seq1 = sortedTerms[0]?.id;
-      seq2 = sortedTerms[1]?.id;
-    } else if (trimestreId === "trim2") {
-      seq1 = sortedTerms[2]?.id;
-      seq2 = sortedTerms[3]?.id;
-    } else {
-      seq1 = sortedTerms[4]?.id;
-      seq2 = sortedTerms[5]?.id;
-    }
+    const childs = term.parts.map((t) => t.child);
+    const sortedTerms = childs.sort((a, b) => a.order - b.order);
+    seq1 = sortedTerms[0]?.id;
+    seq2 = sortedTerms[1]?.id;
+
     if (!seq1 || !seq2) {
       throw new Error(`Invalid trimestreId, ${seq1}, ${seq2}, ${trimestreId}`);
     }
@@ -39,7 +37,7 @@ export class TrimestreService {
   }
   async getTrimestreGrades(
     classroomId: string,
-    trimestreId: "trim1" | "trim2" | "trim3",
+    trimestreId: string,
     schoolId: string,
     schoolYearId: string,
   ) {
@@ -56,22 +54,7 @@ export class TrimestreService {
     }
     let grades1: Awaited<ReturnType<typeof this.reportcard.getGrades>> = [];
     let grades2: Awaited<ReturnType<typeof this.reportcard.getGrades>> = [];
-    let seq1: string | null | undefined = null;
-    let seq2: string | null | undefined = null;
-    const sortedTerms = terms.sort((a, b) => a.order - b.order);
-    if (trimestreId === "trim1") {
-      seq1 = sortedTerms[0]?.id;
-      seq2 = sortedTerms[1]?.id;
-    } else if (trimestreId === "trim2") {
-      seq1 = sortedTerms[2]?.id;
-      seq2 = sortedTerms[3]?.id;
-    } else {
-      seq1 = sortedTerms[4]?.id;
-      seq2 = sortedTerms[5]?.id;
-    }
-    if (!seq1 || !seq2) {
-      throw new Error(`Invalid trimestreId, ${seq1}, ${seq2}, ${trimestreId}`);
-    }
+    const { seq1, seq2 } = await this.getTermIds(trimestreId);
     grades1 = await this.reportcard.getGrades(classroomId, seq1);
     grades2 = await this.reportcard.getGrades(classroomId, seq2);
     return this.computeReport(grades1, grades2);

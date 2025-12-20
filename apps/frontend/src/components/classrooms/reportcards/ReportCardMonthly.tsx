@@ -26,25 +26,29 @@ import {
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
-export function ReportCardTerm({
+export function ReportCardMontly({
   termId,
-  classroom,
+  classroomId,
   subjects,
-  students,
 }: {
   termId: string;
-  classroom: RouterOutputs["classroom"]["get"];
+  classroomId: string;
   subjects: RouterOutputs["classroom"]["subjects"];
-  students: RouterOutputs["classroom"]["students"];
 }) {
   const trpc = useTRPC();
   const {
     data: { studentsReport, summary: _summary, globalRanks },
   } = useSuspenseQuery(
     trpc.reportCard.getSequence.queryOptions({
-      classroomId: classroom.id,
+      classroomId: classroomId,
       termId,
     }),
+  );
+  const { data: students } = useSuspenseQuery(
+    trpc.classroom.students.queryOptions(classroomId),
+  );
+  const { data: classroom } = useSuspenseQuery(
+    trpc.classroom.get.queryOptions(classroomId),
   );
   const { data: term } = useSuspenseQuery(trpc.term.get.queryOptions(termId));
 
@@ -107,8 +111,13 @@ export function ReportCardTerm({
                         key={`${index}${subject.id}`}
                       >
                         <Tooltip>
-                          <TooltipTrigger>
-                            {subject.course.reportName.slice(0, 4)}
+                          <TooltipTrigger asChild>
+                            <Link
+                              className="hover:underline"
+                              href={`/classrooms/${subject.classroomId}/subjects/${subject.id}`}
+                            >
+                              {subject.course.reportName.slice(0, 4)}
+                            </Link>
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>{subject.course.reportName}</p>
@@ -164,10 +173,10 @@ export function ReportCardTerm({
                             className={cn(
                               "border-l text-center",
                               (g ?? 0) < 10
-                                ? "!bg-red-50 dark:!bg-red-800"
+                                ? "text-red-500"
                                 : (g ?? 0) < 15
-                                  ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                  : "!bg-green-50 dark:!bg-green-800",
+                                  ? "text-yellow-500"
+                                  : "text-green-500",
                             )}
                           >
                             {g ? g.toFixed(2) : "-"}

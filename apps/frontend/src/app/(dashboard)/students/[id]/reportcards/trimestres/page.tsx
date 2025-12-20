@@ -46,7 +46,7 @@ export default async function Page(props: {
   const { studentsReport, summary, globalRanks } =
     await caller.reportCard.getTrimestre({
       classroomId: classroom.id,
-      trimestreId: trimestreId as "trim1" | "trim2" | "trim3",
+      termId: trimestreId,
     });
 
   const subjects = await caller.classroom.subjects(classroom.id);
@@ -66,7 +66,7 @@ export default async function Page(props: {
 
   const disciplines = await caller.discipline.trimestre({
     classroomId: classroom.id,
-    trimestreId: trimestreId as "trim1" | "trim2" | "trim3",
+    termId: trimestreId,
   });
 
   const disc = disciplines.get(params.id);
@@ -250,14 +250,14 @@ export default async function Page(props: {
 }
 
 function getTitle({ trimestreId }: { trimestreId: string }) {
-  if (trimestreId == "trim1") {
+  if (trimestreId.includes("1")) {
     return {
       title: "BULLETIN SCOLAIRE DU PREMIER TRIMESTRE",
       seq1: "SEQ1",
       seq2: "SEQ2",
     };
   }
-  if (trimestreId == "trim2") {
+  if (trimestreId.includes("2")) {
     return {
       title: "BULLETIN SCOLAIRE DU SECOND TRIMESTRE",
       seq1: "SEQ3",

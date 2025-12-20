@@ -21,12 +21,17 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 const getTrendIcon = (grades: number[]) => {
-  const firstHalf = grades.slice(0, 3).reduce((sum, g) => sum + g, 0) / 3;
-  const secondHalf = grades.slice(3).reduce((sum, g) => sum + g, 0) / 3;
+  const total = grades.length;
+  if (total == 0) {
+    return <Minus className="text-muted-foreground h-4 w-4" />;
+  }
+  const half = total / 2;
+  const firstHalf = grades.slice(0, half).reduce((sum, g) => sum + g, 0) / half;
+  const secondHalf = grades.slice(half).reduce((sum, g) => sum + g, 0) / half;
   const diff = secondHalf - firstHalf;
 
-  if (diff > 2) return <TrendingUp className="h-4 w-4 text-green-600" />;
-  if (diff < -2) return <TrendingDown className="h-4 w-4 text-red-600" />;
+  if (diff > 0) return <TrendingUp className="h-4 w-4 text-green-600" />;
+  if (diff < 0) return <TrendingDown className="h-4 w-4 text-red-600" />;
   return <Minus className="text-muted-foreground h-4 w-4" />;
 };
 const getGradeColor = (grade?: number) => {

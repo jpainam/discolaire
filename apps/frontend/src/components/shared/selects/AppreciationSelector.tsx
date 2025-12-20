@@ -1,7 +1,7 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
@@ -126,7 +126,7 @@ export function AppreciationSelector(props: PropsWithChildren) {
               : categories
             )?.map((category, index) => {
               return (
-                <>
+                <Fragment key={index}>
                   <CommandGroup heading={category.name}>
                     {category.appreciations.map((item, idx) => {
                       return (
@@ -145,7 +145,7 @@ export function AppreciationSelector(props: PropsWithChildren) {
                     })}
                   </CommandGroup>
                   <CommandSeparator />
-                </>
+                </Fragment>
               );
             })}
           </CommandList>

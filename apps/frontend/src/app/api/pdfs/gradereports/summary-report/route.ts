@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
 import { z } from "zod/v4";
 
+import { TermType } from "@repo/db";
+
 import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import { ClassroomSummaryReport } from "~/reports/gradereports/ClassroomSummaryReport";
@@ -11,7 +13,6 @@ import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const searchSchema = z.object({
   termId: z.string().min(1),
-  termType: z.enum(["seq", "trim", "ann"]),
   classroomId: z.string().min(1),
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
@@ -28,9 +29,12 @@ export async function GET(req: NextRequest) {
       const error = z.treeifyError(result.error);
       return NextResponse.json(error, { status: 400 });
     }
-    const { termId, classroomId, format, termType } = result.data;
+    const { termId, classroomId, format } = result.data;
 
     const queryClient = getQueryClient();
+    const term = await queryClient.fetchQuery(
+      trpc.term.get.queryOptions(termId),
+    );
     const subjects = await queryClient.fetchQuery(
       trpc.classroom.subjects.queryOptions(classroomId),
     );
@@ -65,7 +69,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/pdf",
         "Cache-Control": "no-store, max-age=0",
       };
-      if (termType == "seq") {
+      if (term.type == TermType.MONTHLY) {
         const term = await queryClient.fetchQuery(
           trpc.term.get.queryOptions(termId),
         );
@@ -86,11 +90,11 @@ export async function GET(req: NextRequest) {
         );
         // @ts-expect-error TODO: fix this
         return new Response(stream, { headers });
-      } else if (termType == "trim") {
+      } else if (term.type == TermType.QUARTER) {
         const report = await queryClient.fetchQuery(
           trpc.reportCard.getTrimestre.queryOptions({
             classroomId,
-            trimestreId: termId as "trim1" | "trim2" | "trim3",
+            termId,
           }),
         );
         const stream = await renderToStream(
@@ -107,7 +111,7 @@ export async function GET(req: NextRequest) {
         // @ts-expect-error TODO: fix this
         return new Response(stream, { headers });
       } else {
-        return NextResponse.json(`Term type ${termType} not supported`, {
+        return NextResponse.json(`Term type ${term.type} not supported`, {
           status: 400,
         });
       }

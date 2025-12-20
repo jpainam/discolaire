@@ -12,7 +12,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
-import { TrimestreSelector } from "~/components/shared/selects/TrimestreSelector";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -23,9 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
-import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useRouter } from "~/hooks/use-router";
 import {
   EnrollmentIcon,
   FileIcon,
@@ -40,10 +37,12 @@ import { sidebarIcons } from "../sidebar-icons";
 
 export function ReportCardHeader() {
   const t = useTranslations();
-  const { createQueryString } = useCreateQueryString();
 
   const [searchParams, setSearchParams] = useQueryStates(
     reportcardSearchParamsSchema,
+    {
+      shallow: false,
+    },
   );
   const { termId, trimestreId } = searchParams;
   const pathname = usePathname();
@@ -52,7 +51,6 @@ export function ReportCardHeader() {
     PermissionAction.CREATE,
   );
 
-  const router = useRouter();
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.reportcards;
 
@@ -67,29 +65,11 @@ export function ReportCardHeader() {
           void setSearchParams({
             termId: val,
             trimestreId: null,
-            action: null,
+            action: "reportcard",
           });
         }}
       />
-      <Label className="hidden md:block">{t("Trimestre")}</Label>
-      <TrimestreSelector
-        className="w-[300px]"
-        defaultValue={trimestreId ?? undefined}
-        onChange={(val) => {
-          if (val == "ann") {
-            router.push(`/classrooms/${params.id}/reportcards/annual`);
-          } else {
-            const url =
-              `/classrooms/${params.id}/reportcards/trimestres?` +
-              createQueryString({
-                trimestreId: val,
-                classroomId: params.id,
-                format: "pdf",
-              });
-            router.push(url);
-          }
-        }}
-      />
+
       <div className="flex flex-row items-center gap-2 md:ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

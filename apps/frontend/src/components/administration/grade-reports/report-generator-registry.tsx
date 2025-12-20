@@ -1,21 +1,20 @@
 export function getGeneratorUrl({
   reportType,
   classroomId,
-  termStr,
+  termId,
   format,
 }: {
   reportType: string;
   classroomId?: string | null;
-  termStr?: string | null;
+  termId: string | null;
   format: "pdf" | "csv";
 }) {
-  if (!classroomId || !termStr) {
+  // TODO termType
+  const termType = "trim";
+  if (!classroomId || !termId) {
     return { error: "Please select a classroom and term", url: null };
   }
-  const [termType, termId] = termStr.split("_");
-  if (!termId) {
-    throw new Error("Aucun Ids dans la sequence");
-  }
+
   if (reportType == "001") {
     return {
       url: `/api/pdfs/gradereports/roll-of-honor?classroomId=${classroomId}&format=${format}&termId=${termId}`,
@@ -23,6 +22,7 @@ export function getGeneratorUrl({
   }
   if (reportType == "002") {
     let url = `/api/pdfs/reportcards/ipbw?classroomId=${classroomId}&termId=${termId}`;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (termType === "trim") {
       url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${termId}&classroomId=${classroomId}&format=${format}`;
     } else if (termType === "ann") {

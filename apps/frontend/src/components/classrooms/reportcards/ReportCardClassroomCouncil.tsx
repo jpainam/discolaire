@@ -3,10 +3,8 @@
 import { useMemo } from "react";
 import { MagicWand01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-
-import type { RouterOutputs } from "@repo/api";
 
 import { AppreciationSelector } from "~/components/shared/selects/AppreciationSelector";
 import {
@@ -36,11 +34,9 @@ import { getFullName } from "~/utils";
 export function ReportCardClassroomCouncil({
   classroomId,
   termId,
-  students,
 }: {
   classroomId: string;
   termId: string;
-  students: RouterOutputs["classroom"]["students"];
 }) {
   const t = useTranslations();
   const trpc = useTRPC();
@@ -49,6 +45,9 @@ export function ReportCardClassroomCouncil({
       classroomId: classroomId,
       termId,
     }),
+  );
+  const { data: students } = useSuspenseQuery(
+    trpc.classroom.students.queryOptions(classroomId),
   );
 
   const disciplineQuery = useQuery(

@@ -10,7 +10,7 @@ import { caller } from "~/trpc/server";
 const searchSchema = z.object({
   studentId: z.string().nullable(),
   classroomId: z.string().nullable(),
-  trimestreId: z.enum(["trim1", "trim2", "trim3"]),
+  trimestreId: z.string().min(1),
 });
 export async function GET(req: NextRequest) {
   const session = await getSession();
@@ -44,14 +44,14 @@ async function classroomReportCard({
   trimestreId,
 }: {
   classroomId: string;
-  trimestreId: "trim1" | "trim2" | "trim3";
+  trimestreId: string;
 }) {
   const school = await caller.school.getSchool();
   const students = await caller.classroom.students(classroomId);
   const contacts = await caller.student.getPrimaryContacts({ classroomId });
   const report = await caller.reportCard.getTrimestre({
     classroomId: classroomId,
-    trimestreId: trimestreId,
+    termId: trimestreId,
   });
 
   const subjects = await caller.classroom.subjects(classroomId);
@@ -59,7 +59,7 @@ async function classroomReportCard({
 
   const disciplines = await caller.discipline.trimestre({
     classroomId,
-    trimestreId,
+    termId: trimestreId,
   });
   const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
@@ -90,7 +90,7 @@ async function indvidualReportCard({
   trimestreId,
 }: {
   studentId: string;
-  trimestreId: "trim1" | "trim2" | "trim3";
+  trimestreId: string;
 }) {
   const student = await caller.student.get(studentId);
   if (!student.classroom) {
@@ -99,7 +99,7 @@ async function indvidualReportCard({
 
   const report = await caller.reportCard.getTrimestre({
     classroomId: student.classroom.id,
-    trimestreId: trimestreId,
+    termId: trimestreId,
   });
 
   const subjects = await caller.classroom.subjects(student.classroom.id);
@@ -116,7 +116,7 @@ async function indvidualReportCard({
 
   const disciplines = await caller.discipline.trimestre({
     classroomId: classroom.id,
-    trimestreId: trimestreId,
+    termId: trimestreId,
   });
   const lang = classroom.section?.name == "ANG" ? "en" : ("fr" as const);
 

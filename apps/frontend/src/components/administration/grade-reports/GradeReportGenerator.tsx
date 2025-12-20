@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
@@ -10,6 +9,7 @@ import { toast } from "sonner";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
+import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -29,15 +29,13 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
-import { useSchool } from "~/providers/SchoolProvider";
-import { useTRPC } from "~/trpc/react";
 import { getGeneratorUrl, getReportTypes } from "./report-generator-registry";
 import { StatisticByCourseDialog } from "./StatisticByCourseDialog";
 
 export function GradeReportGenerator({ limited }: { limited: boolean }) {
   const [classroomId, setClassroomId] = useQueryState("classroomId");
   const [reportType, setReportType] = useQueryState("individual");
-  const [termStr, setTermStr] = useQueryState("termStr");
+  const [termId, setTermId] = useQueryState("termId");
   // const [termId, setTermId] = useQueryState<{
   //   id: string;
   //   type: "trim" | "seq" | "ann";
@@ -51,9 +49,7 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
   );
 
   const t = useTranslations();
-  const trpc = useTRPC();
-  const termQuery = useQuery(trpc.term.all.queryOptions());
-  const { school } = useSchool();
+
   const { openModal } = useModal();
 
   const handleGenerateReport = () => {
@@ -69,7 +65,7 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
     }
     const r = getGeneratorUrl({
       classroomId,
-      termStr,
+      termId,
       format,
       reportType,
     });
@@ -126,37 +122,12 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
           </div>
           <div className="grid gap-2">
             <Label>{t("terms")}</Label>
-            <Select
-              defaultValue={termStr ?? undefined}
-              onValueChange={(value) => {
-                void setTermStr(value);
+            <TermSelector
+              defaultValue={termId}
+              onChange={(v) => {
+                void setTermId(v);
               }}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder={t("terms")} />
-              </SelectTrigger>
-              <SelectContent>
-                {termQuery.data?.map((term) => (
-                  <SelectItem key={term.id} value={`seq_${term.id}`}>
-                    {term.name}
-                  </SelectItem>
-                ))}
-                {school.hasQuarterlyReports && (
-                  <>
-                    <SelectItem value="trim_trim1">
-                      {t("Trimestre 1")}
-                    </SelectItem>
-                    <SelectItem value="trim_trim2">
-                      {t("Trimestre 2")}
-                    </SelectItem>
-                    <SelectItem value="trim_trim3">
-                      {t("Trimestre 3")}
-                    </SelectItem>
-                  </>
-                )}
-                <SelectItem value="ann_annual">{t("Annual")}</SelectItem>
-              </SelectContent>
-            </Select>
+            />
           </div>
         </div>
 

@@ -431,14 +431,14 @@ function OtherTitle({
 }
 
 function getTitle({ trimestreId }: { trimestreId: string }) {
-  if (trimestreId == "trim1") {
+  if (trimestreId.includes("1")) {
     return {
       title: "PREMIER TRIMESTRE",
       seq1: "SEQ1",
       seq2: "SEQ2",
     };
   }
-  if (trimestreId == "trim2") {
+  if (trimestreId.includes("2")) {
     return {
       title: "SECOND TRIMESTRE",
       seq1: "SEQ3",

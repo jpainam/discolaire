@@ -44,18 +44,21 @@ export const disciplineRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
-        trimestreId: z.enum(["trim1", "trim2", "trim3"]),
+        termId: z.string().min(1),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const { seq1, seq2 } = await ctx.services.trimestre.getTermIds(
-        input.trimestreId,
-        ctx.schoolYearId,
-      );
-
+      const term = await ctx.db.term.findUniqueOrThrow({
+        include: {
+          parts: true,
+        },
+        where: {
+          id: input.termId,
+        },
+      });
       const result = await ctx.services.attendance.getDisciplineForTerms({
         classroomId: input.classroomId,
-        termIds: [seq1, seq2],
+        termIds: term.parts.map((p) => p.childId),
       });
 
       return result;
