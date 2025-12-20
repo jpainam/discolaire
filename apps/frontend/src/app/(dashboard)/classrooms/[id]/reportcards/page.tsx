@@ -38,6 +38,8 @@ export default async function Page(props: PageProps) {
     trpc.classroom.get.queryOptions(params.id),
     trpc.classroom.subjects.queryOptions(params.id),
     trpc.classroom.students.queryOptions(params.id),
+    trpc.classroom.gradesheets.queryOptions(params.id),
+    trpc.appreciation.categories.queryOptions(),
   ]);
 
   if (!searchParams.termId) {
@@ -68,9 +70,10 @@ export default async function Page(props: PageProps) {
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
+          key={`${termId}-${action}`}
           fallback={
             <div className="grid grid-cols-4 gap-4 p-4">
-              {Array.from({ length: 8 }).map((_, t) => (
+              {Array.from({ length: 12 }).map((_, t) => (
                 <Skeleton className="h-20" key={t} />
               ))}
             </div>

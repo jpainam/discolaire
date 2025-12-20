@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import { Label } from "~/components/ui/label";
@@ -17,12 +17,11 @@ export function ReportCardAppreciation({
   termId: string;
 }) {
   const trpc = useTRPC();
-  const appreciationQuery = useQuery(
+  const { data: categories } = useSuspenseQuery(
     trpc.appreciation.categories.queryOptions(),
   );
   const [studentId, setStudentId] = useState<string | null>();
 
-  const categories = appreciationQuery.data;
   const t = useTranslations();
 
   return (

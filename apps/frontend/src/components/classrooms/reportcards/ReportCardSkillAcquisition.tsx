@@ -2,12 +2,12 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
 import { Badge } from "~/components/base-badge";
-import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -28,7 +28,7 @@ export function ReportCardSkillAcquisition({
   classroomId: string;
 }) {
   const trpc = useTRPC();
-  const gradesheetQuery = useQuery(
+  const { data: gradesheets } = useSuspenseQuery(
     trpc.classroom.gradesheets.queryOptions(classroomId),
   );
 
@@ -51,21 +51,14 @@ export function ReportCardSkillAcquisition({
     trpc.skillAcquisition.all.queryOptions({ classroomId, termId }),
   );
 
-  const gradesheets = useMemo(() => {
-    const sheets = gradesheetQuery.data;
-    return sheets?.filter((g) => g.termId == termId);
-  }, [gradesheetQuery.data, termId]);
+  const filtered = useMemo(() => {
+    return gradesheets.filter((g) => g.termId == termId);
+  }, [gradesheets, termId]);
 
-  if (gradesheetQuery.isPending || skillQuery.isPending) {
-    return (
-      <div className="grid gap-4 p-4 lg:grid-cols-4">
-        {Array.from({ length: 8 }).map((_, idx) => (
-          <Skeleton className="h-20" key={idx} />
-        ))}
-      </div>
-    );
-  }
   const skills = skillQuery.data;
+  if (skillQuery.isPending) {
+    return <Spinner className="size-5" />;
+  }
   return (
     <div>
       <div className="bg-background overflow-hidden border-y">
@@ -81,7 +74,7 @@ export function ReportCardSkillAcquisition({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {gradesheets?.map((gs) => {
+            {filtered.map((gs) => {
               const skill = skills?.find(
                 (s) => s.termId == termId && s.subjectId == gs.subjectId,
               );
