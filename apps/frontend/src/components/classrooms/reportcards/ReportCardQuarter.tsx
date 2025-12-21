@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { Badge } from "~/components/base-badge";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
 import {
   Table,
@@ -87,7 +88,7 @@ export function ReportCardQuarter({
       />
 
       <div className="">
-        <div className="bg-background overflow-hidden">
+        <div className="bg-background overflow-hidden border-y">
           <Table className="text-xs">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
@@ -150,17 +151,14 @@ export function ReportCardQuarter({
                         className={cn("border text-center")}
                         rowSpan={2}
                       >
-                        <div
-                          className={cn(
-                            "rounded-2xl",
-                            value.average > 10 &&
-                              "bg-green-600 p-1.5 text-green-100",
-                            value.average < 10 &&
-                              "bg-red-600 p-1.5 text-red-100",
-                          )}
+                        <Badge
+                          variant={
+                            value.average > 10 ? "success" : "destructive"
+                          }
+                          appearance={"outline"}
                         >
                           {value.average.toFixed(2)}
-                        </div>
+                        </Badge>
                       </TableCell>
                       <TableCell className="border text-center" rowSpan={2}>
                         {value.rank}
@@ -193,10 +191,10 @@ export function ReportCardQuarter({
                                     className={cn(
                                       "border-l text-center",
                                       g < 10
-                                        ? "!bg-red-50 dark:!bg-red-800"
+                                        ? "text-red-500"
                                         : g < 15
-                                          ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                          : "!bg-green-50 dark:!bg-green-800",
+                                          ? "text-yellow-500"
+                                          : "text-green-500",
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}`}
                                   >
@@ -241,10 +239,10 @@ export function ReportCardQuarter({
                                     className={cn(
                                       "border-l text-center",
                                       g < 10
-                                        ? "!bg-red-50 dark:!bg-red-800"
+                                        ? "text-red-500"
                                         : g < 15
-                                          ? "!bg-yellow-50 dark:!bg-yellow-800"
-                                          : "!bg-green-50 dark:!bg-green-800",
+                                          ? "text-yellow-500"
+                                          : "!text-green-500",
                                     )}
                                     key={`${subject.id}-${student.id}-${groupId}-${indexs}-2`}
                                   >

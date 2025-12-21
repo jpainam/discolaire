@@ -43,7 +43,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextTopLoader />
+        <NextTopLoader showSpinner={false} />
         <Suspense fallback={null}>
           <Providers>{props.children}</Providers>
         </Suspense>

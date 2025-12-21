@@ -20,6 +20,7 @@ export default async function Page() {
     trpc.gradeSheet.allPercentile.queryOptions(),
     trpc.gradeSheet.gradesReportTracker.queryOptions(),
   ]);
+
   return (
     <HydrateClient>
       <Tabs defaultValue="dashboard" className="p-2">
@@ -61,7 +62,11 @@ export default async function Page() {
           </ErrorBoundary>
         </TabsContent>
         <TabsContent value="reports">
-          <GradeReportGenerator limited={false} />
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+              <GradeReportGenerator limited={false} />
+            </Suspense>
+          </ErrorBoundary>
         </TabsContent>
         <TabsContent value="settings">
           <ErrorBoundary errorComponent={ErrorFallback}>

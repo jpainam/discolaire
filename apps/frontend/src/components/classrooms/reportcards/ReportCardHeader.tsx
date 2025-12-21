@@ -1,16 +1,13 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { MentoringIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ChevronDown, MoreVertical } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useQueryStates } from "nuqs";
+import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
-import PDFIcon from "~/components/icons/pdf-solid";
-import XMLIcon from "~/components/icons/xml-solid";
-import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { Button } from "~/components/ui/button";
 import {
@@ -22,7 +19,8 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
-import { useCheckPermission } from "~/hooks/use-permission";
+import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useRouter } from "~/hooks/use-router";
 import {
   EnrollmentIcon,
   FileIcon,
@@ -31,28 +29,17 @@ import {
   UserIcon,
   UsersIcon,
 } from "~/icons";
-import { PermissionAction } from "~/permissions";
-import { reportcardSearchParamsSchema } from "~/utils/search-params";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function ReportCardHeader() {
   const t = useTranslations();
+  const { createQueryString } = useCreateQueryString();
 
-  const [searchParams, setSearchParams] = useQueryStates(
-    reportcardSearchParamsSchema,
-    {
-      shallow: false,
-    },
-  );
-  const { termId, trimestreId } = searchParams;
-  const pathname = usePathname();
-  const canCreateReportCard = useCheckPermission(
-    "repordcard",
-    PermissionAction.CREATE,
-  );
+  const [termId] = useQueryState("termId");
 
   const params = useParams<{ id: string }>();
   const Icon = sidebarIcons.reportcards;
+  const router = useRouter();
 
   return (
     <div className="bg-muted/40 grid flex-row items-center gap-4 border-b px-4 py-1 md:flex">
@@ -62,11 +49,10 @@ export function ReportCardHeader() {
         className="md:w-[350px]"
         defaultValue={termId}
         onChange={(val) => {
-          void setSearchParams({
-            termId: val,
-            trimestreId: null,
-            action: "reportcard",
-          });
+          router.push(
+            `/classrooms/${params.id}/reportcards?` +
+              createQueryString({ action: "reportcard", termId: val }),
+          );
         }}
       />
 
@@ -85,13 +71,17 @@ export function ReportCardHeader() {
             </DropdownMenuLabel>
             <DropdownMenuItem
               onSelect={() => {
-                if (!searchParams.termId && !searchParams.trimestreId) {
+                if (!termId) {
                   toast.warning("Veuillez choisir une période");
                   return;
                 }
-                void setSearchParams({
-                  action: "subjects",
-                });
+                router.push(
+                  `/classrooms/${params.id}/reportcards?` +
+                    createQueryString({
+                      action: "subjects",
+                      termId: termId,
+                    }),
+                );
               }}
             >
               <UsersIcon />
@@ -99,13 +89,17 @@ export function ReportCardHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                if (!searchParams.termId && !searchParams.trimestreId) {
+                if (!termId) {
                   toast.warning("Veuillez choisir une période");
                   return;
                 }
-                void setSearchParams({
-                  action: "teacher",
-                });
+                router.push(
+                  `/classrooms/${params.id}/reportcards?` +
+                    createQueryString({
+                      action: "teacher",
+                      termId: termId,
+                    }),
+                );
               }}
             >
               <UserIcon />
@@ -113,13 +107,17 @@ export function ReportCardHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                if (!searchParams.termId && !searchParams.trimestreId) {
+                if (!termId) {
                   toast.warning("Veuillez choisir une période");
                   return;
                 }
-                void setSearchParams({
-                  action: "overall_appreciation",
-                });
+                router.push(
+                  `/classrooms/${params.id}/reportcards?` +
+                    createQueryString({
+                      action: "overall_appreciation",
+                      termId: termId,
+                    }),
+                );
               }}
             >
               <FilesIcon />
@@ -132,13 +130,17 @@ export function ReportCardHeader() {
             </DropdownMenuLabel>
             <DropdownMenuItem
               onSelect={() => {
-                if (!searchParams.termId && !searchParams.trimestreId) {
+                if (!termId) {
                   toast.warning("Veuillez choisir une période");
                   return;
                 }
-                void setSearchParams({
-                  action: "class_council",
-                });
+                router.push(
+                  `/classrooms/${params.id}/reportcards?` +
+                    createQueryString({
+                      action: "class_council",
+                      termId: termId,
+                    }),
+                );
               }}
             >
               <HugeiconsIcon icon={MentoringIcon} strokeWidth={2} />
@@ -146,47 +148,21 @@ export function ReportCardHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                if (!searchParams.termId && !searchParams.trimestreId) {
+                if (!termId) {
                   toast.warning("Veuillez choisir une période");
                   return;
                 }
-                void setSearchParams({
-                  action: "skills",
-                });
+                router.push(
+                  `/classrooms/${params.id}/reportcards?` +
+                    createQueryString({
+                      action: "skills",
+                      termId: termId,
+                    }),
+                );
               }}
             >
               <EnrollmentIcon />
               Compétences évaluées
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownHelp />
-            <DropdownMenuSeparator />
-            {canCreateReportCard && (
-              <DropdownMenuItem
-                disabled={!termId && !trimestreId}
-                onSelect={() => {
-                  let url = `/api/pdfs/reportcards/ipbw?classroomId=${params.id}&termId=${termId}`;
-                  if (pathname.includes("/trimestres")) {
-                    url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${trimestreId}&classroomId=${params.id}&format=pdf`;
-                  }
-                  window.open(url, "_blank");
-                }}
-              >
-                <PDFIcon />
-                {t("pdf_export")}
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuItem>
-              <XMLIcon />
-              {t("xml_export")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

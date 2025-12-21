@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
@@ -29,6 +30,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
+import { useTRPC } from "~/trpc/react";
 import { getGeneratorUrl, getReportTypes } from "./report-generator-registry";
 import { StatisticByCourseDialog } from "./StatisticByCourseDialog";
 
@@ -36,10 +38,8 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
   const [classroomId, setClassroomId] = useQueryState("classroomId");
   const [reportType, setReportType] = useQueryState("individual");
   const [termId, setTermId] = useQueryState("termId");
-  // const [termId, setTermId] = useQueryState<{
-  //   id: string;
-  //   type: "trim" | "seq" | "ann";
-  // } | null>();
+  const trpc = useTRPC();
+  const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
   const reportTypes = useMemo(() => {
     return getReportTypes();
   }, []);
@@ -66,6 +66,7 @@ export function GradeReportGenerator({ limited }: { limited: boolean }) {
     const r = getGeneratorUrl({
       classroomId,
       termId,
+      termType: terms.find((t) => t.id == termId)?.type,
       format,
       reportType,
     });

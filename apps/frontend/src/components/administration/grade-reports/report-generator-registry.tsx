@@ -1,16 +1,18 @@
+import { TermType } from "@repo/db/enums";
+
 export function getGeneratorUrl({
   reportType,
   classroomId,
   termId,
+  termType,
   format,
 }: {
   reportType: string;
   classroomId?: string | null;
   termId: string | null;
+  termType?: TermType;
   format: "pdf" | "csv";
 }) {
-  // TODO termType
-  const termType = "trim";
   if (!classroomId || !termId) {
     return { error: "Please select a classroom and term", url: null };
   }
@@ -22,10 +24,10 @@ export function getGeneratorUrl({
   }
   if (reportType == "002") {
     let url = `/api/pdfs/reportcards/ipbw?classroomId=${classroomId}&termId=${termId}`;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (termType === "trim") {
+
+    if (termType == TermType.QUARTER) {
       url = `/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${termId}&classroomId=${classroomId}&format=${format}`;
-    } else if (termType === "ann") {
+    } else if (termType == TermType.ANNUAL) {
       url = `/api/pdfs/reportcards/ipbw/annual?classroomId=${classroomId}&format=${format}`;
     }
     return { url, error: null };
