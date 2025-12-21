@@ -44,7 +44,6 @@ const ipbwTranslate = {
     Blâme: "Censure",
     "Moy Max": "Max.Avg",
     "Moy Min": "Min.Avg",
-    "Moy C": "C Avg",
     "Taux de reussite": "Success rate",
     "Directeur des Etudes": "Director of Studies",
     "Directeur des Etudes 1er Cycle": "Director of 1st Studies",

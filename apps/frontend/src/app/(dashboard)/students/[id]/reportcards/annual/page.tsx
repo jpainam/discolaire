@@ -245,6 +245,7 @@ export default async function Page(props: {
           />
           <ReportCardSummary
             id={params.id}
+            classroom={classroom}
             rank={globalRank.rank}
             average={globalRank.average}
           />
