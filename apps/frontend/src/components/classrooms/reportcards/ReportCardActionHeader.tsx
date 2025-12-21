@@ -45,7 +45,7 @@ export function ReportCardActionHeader({
         {t("Moy Min")} : {isFinite(minAvg) ? minAvg.toFixed(2) : "-"}
       </Badge>
       <Badge variant={"info"} appearance={"light"}>
-        {t("Moy Cl")} : {isFinite(avg) ? avg.toFixed(2) : "-"}
+        {t("Moy C")} : {isFinite(avg) ? avg.toFixed(2) : "-"}
       </Badge>
 
       <Badge variant={"warning"} appearance={"light"}>

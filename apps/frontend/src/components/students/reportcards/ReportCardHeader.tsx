@@ -56,11 +56,11 @@ export function ReportCardHeader() {
       <div className="ml-auto flex flex-row items-center gap-0">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} className="size-8" variant={"outline"}>
-              <MoreVertical className="h-4 w-4" />
+            <Button size={"icon-sm"} variant={"outline"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem disabled={!termId && !trimestreId}>
               <MailIcon />
               {t("notify_parents")}

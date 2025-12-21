@@ -1,5 +1,4 @@
 {
-  "AvgC": "Moy.C",
   "CANCELED": "Annulée",
   "COMPLETED": "Terminée",
   "Canceled": "Annulée",
@@ -614,7 +613,7 @@
   "formerSchool": "Ancienne école",
   "former_schools": "Anciennes écoles",
   "francophone": "Francophone",
-  "Moy Cl": "Moy Cl",
+  "Moy C": "Moy C",
   "french": "Français",
   "from": "De",
   "fullName": "Nom et Prénom",
@@ -757,7 +756,7 @@
   "messaging_description": "Messages aux élèves, contacts et personnels",
   "min": "Min",
   "min_grade": "Note min",
-  "min_max": "Min/Max",
+  "Min/Max": "Min/Max",
   "ministry": "Ministère",
   "month": "Mois",
   "monthly": "Mensuel",

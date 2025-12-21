@@ -1,22 +1,22 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
+
+import type { RouterOutputs } from "@repo/api";
 
 import { Separator } from "~/components/ui/separator";
-import { caller } from "~/trpc/server";
 import { getAppreciations } from "~/utils/appreciations";
 
-export async function ReportCardSummary({
+export function ReportCardSummary({
   average,
   rank,
-  id,
+  classroom,
 }: {
   average: number;
   id: string;
   rank: number;
+  classroom: RouterOutputs["classroom"]["get"];
 }) {
-  const t = await getTranslations();
-  const cl = await caller.student.classroom({ studentId: id });
-  if (!cl) return null;
-  const classroom = await caller.classroom.get(cl.id);
+  const t = useTranslations();
+
   return (
     <div className="flex-1 border text-sm">
       <div className="bg-muted/50 py-2 text-center font-bold">

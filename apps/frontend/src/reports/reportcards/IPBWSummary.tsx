@@ -61,7 +61,7 @@ export function IPBWSummary({
         </View>
         <SummaryItem name={t("Moy Max")} value={summary.max.toFixed(2)} />
         <SummaryItem name={t("Moy Min")} value={summary.min.toFixed(2)} />
-        <SummaryItem name={t("Moy Cl")} value={summary.average.toFixed(2)} />
+        <SummaryItem name={t("Moy C")} value={summary.average.toFixed(2)} />
         <SummaryItem
           name={t("Taux de reussite")}
           value={(successRate * 100).toFixed(2) + "%"}

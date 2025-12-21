@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
 import {
   Table,
@@ -11,7 +11,7 @@ import {
 import { cn } from "~/lib/utils";
 import { getAppreciations } from "~/utils/appreciations";
 
-export async function ReportCardPerformance({
+export function ReportCardPerformance({
   max,
   min,
   avg,
@@ -22,7 +22,7 @@ export async function ReportCardPerformance({
   successRate: number;
   avg: number;
 }) {
-  const t = await getTranslations();
+  const t = useTranslations();
 
   const rowClassName = "border-r text-sm";
   return (
@@ -47,7 +47,7 @@ export async function ReportCardPerformance({
             <TableCell>{isFinite(min) ? min.toFixed(2) : "-"}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className={cn(rowClassName)}>{t("Moy Cl")}</TableCell>
+            <TableCell className={cn(rowClassName)}>{t("Moy C")}</TableCell>
             <TableCell>{isFinite(avg) ? avg.toFixed(2) : "-"}</TableCell>
           </TableRow>
           <TableRow>

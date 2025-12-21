@@ -170,7 +170,7 @@ export function IPBWTrimestre({
                             justifyContent: "center",
                           }}
                         >
-                          <Text> {grade ? grade.grade1 : ""}</Text>
+                          <Text> {grade ? grade.grade1?.toFixed(2) : ""}</Text>
                         </View>
                         <View
                           style={{
@@ -180,7 +180,7 @@ export function IPBWTrimestre({
                             justifyContent: "center",
                           }}
                         >
-                          <Text> {grade ? grade.grade2 : ""}</Text>
+                          <Text> {grade ? grade.grade2?.toFixed(2) : ""}</Text>
                         </View>
                         <View
                           style={{
@@ -569,7 +569,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> Moy.C</Text>
+        <Text>Moy C</Text>
       </View>
       <View
         style={{

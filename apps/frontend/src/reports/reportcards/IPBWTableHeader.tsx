@@ -81,7 +81,7 @@ export function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> {t("Moy.C")}</Text>
+        <Text> {t("Moy C")}</Text>
       </View>
       <View
         style={{

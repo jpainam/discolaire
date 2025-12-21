@@ -1,5 +1,4 @@
 {
-  "AvgC": "Avg.C",
   "CANCELED": "Canceled",
   "COMPLETED": "Completed",
   "Completed": "Completed",
@@ -231,7 +230,6 @@
   "average_of_classroom": "Average classroom grade",
   "averages": "Averages",
   "avg": "Avg",
-  "avgC": "Avg.C",
   "avg_grade": "Avg Grade",
   "number": "Number",
   "reason": "Reason",
@@ -664,7 +662,7 @@
   "messaging_description": "Communication with students, parents, and staffs",
   "min": "Min",
   "min_grade": "Min Grade",
-  "min_max": "Min/Max",
+  "Min/Max": "Min/Max",
   "ministry": "Ministry",
   "month": "Month",
   "monthly": "Monthly",
@@ -957,7 +955,6 @@
   "studentAccessHistory": "Student",
   "studentContactName": "Contact name",
   "studentGraph": "Student Graph",
-
   "studentNotifications": "Student Notifications",
   "studentReportCard": "Student Report Card",
   "student_academic_record": "Academic student record",

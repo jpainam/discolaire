@@ -558,7 +558,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
           paddingHorizontal: 2,
         }}
       >
-        <Text> Moy.C</Text>
+        <Text> Moy C</Text>
       </View> */}
       {/* <View
         style={{

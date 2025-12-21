@@ -1,5 +1,5 @@
 import { CheckIcon } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
 import {
   Table,
@@ -11,15 +11,15 @@ import {
 } from "~/components/ui/table";
 import { cn } from "~/lib/utils";
 
-export async function ReportCardMention({
+export function ReportCardMention({
   average,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   id,
 }: {
   id: string;
   average: number;
 }) {
-  console.log(id);
-  const t = await getTranslations();
+  const t = useTranslations();
   const rowClassName = "border-r text-sm";
   return (
     <div className="border">

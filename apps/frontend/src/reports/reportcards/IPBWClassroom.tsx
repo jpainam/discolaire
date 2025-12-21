@@ -183,7 +183,10 @@ export function IPBWClassroom({
                                 justifyContent: "center",
                               }}
                             >
-                              <Text> {grade ? grade.average : ""}</Text>
+                              <Text>
+                                {" "}
+                                {grade ? grade.average?.toFixed(2) : ""}
+                              </Text>
                             </View>
                             <View
                               style={{

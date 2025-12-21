@@ -70,7 +70,7 @@ export default async function Page(props: PageProps) {
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense>
+        <Suspense fallback={<Skeleton className="h-20 w-full" />}>
           <CheckReportCard
             term={term}
             classroomId={params.id}

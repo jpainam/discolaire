@@ -1,11 +1,15 @@
+"use client";
+
 import { Fragment } from "react";
 import Link from "next/link";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import _, { sum } from "lodash";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
+
+import type { RouterOutputs } from "@repo/api";
 
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
-import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
@@ -20,39 +24,47 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { cn } from "~/lib/utils";
-import { caller } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 
-export default async function Page(props: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{
-    trimestreId: string;
-    classroomId: string;
-    studentId: string;
-    format: string;
-  }>;
+export function StudentReportCardQuarter({
+  student,
+  classroom,
+  subjects,
+  term,
+}: {
+  student: RouterOutputs["student"]["get"];
+  classroom: RouterOutputs["classroom"]["get"];
+  subjects: RouterOutputs["classroom"]["subjects"];
+  term: RouterOutputs["term"]["get"];
 }) {
-  const params = await props.params;
+  const t = useTranslations();
+  const termId = term.id;
+  const classroomId = classroom.id;
+  const studentId = student.id;
 
-  const t = await getTranslations();
-  const classroom = await caller.student.classroom({ studentId: params.id });
-  if (!classroom) {
-    return <EmptyComponent title={t("student_not_registered_yet")} />;
-  }
-  const searchParams = await props.searchParams;
-  const { trimestreId } = searchParams;
-  const { title, seq1, seq2 } = getTitle({ trimestreId });
+  const trpc = useTRPC();
+  const { title, seq1, seq2 } = getTitle({ trimestreId: term.id });
 
-  const { studentsReport, summary, globalRanks } =
-    await caller.reportCard.getTrimestre({
-      classroomId: classroom.id,
-      termId: trimestreId,
-    });
+  const {
+    data: { studentsReport, summary, globalRanks },
+  } = useSuspenseQuery(
+    trpc.reportCard.getTrimestre.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
 
-  const subjects = await caller.classroom.subjects(classroom.id);
+  const { data: disciplines } = useSuspenseQuery(
+    trpc.discipline.trimestre.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
+
   const groups = _.groupBy(subjects, "subjectGroupId");
-  const studentReport = studentsReport.get(params.id);
-  const globalRank = globalRanks.get(params.id);
+  const studentReport = studentsReport.get(studentId);
+  const globalRank = globalRanks.get(studentId);
   if (!studentReport || !globalRank) {
     return null;
   }
@@ -64,12 +76,7 @@ export default async function Page(props: {
   const rowClassName = "border text-center py-0";
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
 
-  const disciplines = await caller.discipline.trimestre({
-    classroomId: classroom.id,
-    termId: trimestreId,
-  });
-
-  const disc = disciplines.get(params.id);
+  const disc = disciplines.get(studentId);
 
   return (
     <div className="flex flex-col gap-2">
@@ -80,7 +87,7 @@ export default async function Page(props: {
         avg={average}
         successRate={successRate}
         classroomSize={classroom.size}
-        pdfHref={`/api/pdfs/reportcards/ipbw/trimestres/?studentId=${params.id}&trimestreId=${trimestreId}`}
+        pdfHref={`/api/pdfs/reportcards/ipbw/trimestres/?studentId=${studentId}&trimestreId=${termId}`}
       />
       <div>
         <div className="bg-background overflow-hidden rounded-md">
@@ -96,7 +103,9 @@ export default async function Page(props: {
                 <TableHead className={cn(rowClassName)}>{t("coeff")}</TableHead>
                 <TableHead className={cn(rowClassName)}>{t("total")}</TableHead>
                 <TableHead className={cn(rowClassName)}>{t("rank")}</TableHead>
-                <TableHead className={cn(rowClassName)}>{t("Moy.C")}</TableHead>
+                <TableHead className={cn(rowClassName)}>
+                  {t("Moy C")}
+                </TableHead>
                 <TableHead className={cn(rowClassName)}>
                   {t("Min/Max")}
                 </TableHead>
@@ -126,12 +135,15 @@ export default async function Page(props: {
                         <TableRow key={`${subject.id}-${groupId}-${index}`}>
                           <TableCell className={cn(rowClassName, "text-left")}>
                             <div className="flex flex-col">
-                              <span className="font-semibold">
+                              <Link
+                                href={`/classrooms/${subject.id}/subjects/${subject.id}`}
+                                className="font-semibold hover:underline"
+                              >
                                 {subject.course.reportName}
-                              </span>
+                              </Link>
                               <Link
                                 href={`/staffs/${subject.teacher?.id}`}
-                                className="ml-4 hover:text-blue-500 hover:underline"
+                                className="ml-4 hover:underline"
                               >
                                 {subject.teacher?.prefix}{" "}
                                 {subject.teacher?.lastName}
@@ -223,14 +235,14 @@ export default async function Page(props: {
           </Table>
         </div>
         <div className="flex flex-row items-start gap-2 py-2">
-          <ReportCardMention average={globalRank.average} id={params.id} />
+          <ReportCardMention average={globalRank.average} id={studentId} />
           <ReportCardDiscipline
             absence={disc?.absence ?? 0}
             lateness={disc?.late ?? 0}
             justifiedLateness={disc?.justifiedLate ?? 0}
             consigne={disc?.consigne ?? 0}
             justifiedAbsence={disc?.justifiedAbsence ?? 0}
-            id={params.id}
+            id={studentId}
           />
           <ReportCardPerformance
             successRate={successRate}
@@ -239,7 +251,8 @@ export default async function Page(props: {
             avg={average}
           />
           <ReportCardSummary
-            id={params.id}
+            id={studentId}
+            classroom={classroom}
             rank={globalRank.rank}
             average={globalRank.average}
           />

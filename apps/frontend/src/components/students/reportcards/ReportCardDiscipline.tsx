@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
 import {
   Table,
@@ -10,12 +10,13 @@ import {
 } from "~/components/ui/table";
 import { cn } from "~/lib/utils";
 
-export async function ReportCardDiscipline({
+export function ReportCardDiscipline({
   absence,
   lateness,
   justifiedAbsence,
   consigne,
   //justifiedLateness,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   id,
 }: {
   id: string;
@@ -25,8 +26,7 @@ export async function ReportCardDiscipline({
   justifiedLateness: number;
   consigne: number;
 }) {
-  console.log(id);
-  const t = await getTranslations();
+  const t = useTranslations();
   const rowClassName = "border-r text-sm";
   return (
     <div className="border">
