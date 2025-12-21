@@ -34,15 +34,6 @@ export class StudentService {
     const currentYear = await this.db.schoolYear.findUniqueOrThrow({
       where: { id: schoolYearId },
     });
-    await this.db.student.update({
-      where: {
-        id: studentId,
-        schoolId: schoolId,
-      },
-      data: {
-        lastAccessed: new Date(),
-      },
-    });
     const student = await this.db.student.findUniqueOrThrow({
       where: {
         id: studentId,

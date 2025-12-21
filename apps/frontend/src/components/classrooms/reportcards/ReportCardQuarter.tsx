@@ -1,15 +1,14 @@
-import { Fragment, Suspense } from "react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+"use client";
+
+import { Fragment, useMemo } from "react";
 import Link from "next/link";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import _ from "lodash";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
-import { ErrorFallback } from "~/components/error-fallback";
-import { Separator } from "~/components/ui/separator";
-import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -25,55 +24,52 @@ import {
 } from "~/components/ui/tooltip";
 import { UserLink } from "~/components/UserLink";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
-import { checkPermission } from "~/permissions/server";
-import { caller, getQueryClient, trpc } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { RecpordCardQuarterAlert } from "./RecpordCardQuarterAlert";
 
-export async function ReportCardQuarter({
+export function ReportCardQuarter({
   classroomId,
   term,
 }: {
   classroomId: string;
   term: RouterOutputs["term"]["get"];
 }) {
-  const t = await getTranslations();
-  const queryClient = getQueryClient();
-  const classroom = await queryClient.fetchQuery(
+  const t = useTranslations();
+  const trpc = useTRPC();
+  const { data: classroom } = useSuspenseQuery(
     trpc.classroom.get.queryOptions(classroomId),
   );
 
   const { title } = getTitle({ trimestreId: term.id });
 
   const {
-    studentsReport,
-    summary: _summary,
-    globalRanks,
-  } = await caller.reportCard.getTrimestre({
-    classroomId,
-    termId: term.id,
-  });
+    data: { studentsReport, summary: _summary, globalRanks },
+  } = useSuspenseQuery(
+    trpc.reportCard.getTrimestre.queryOptions({
+      classroomId,
+      termId: term.id,
+    }),
+  );
 
-  const subjects = await queryClient.fetchQuery(
+  const { data: subjects } = useSuspenseQuery(
     trpc.classroom.subjects.queryOptions(classroomId),
   );
-  const students = await queryClient.fetchQuery(
+  const { data: students } = useSuspenseQuery(
     trpc.classroom.students.queryOptions(classroomId),
   );
+  const { averages, average, successRate, groups } = useMemo(() => {
+    const values = Array.from(globalRanks.values());
+    const averages = values.map((g) => g.average);
+    const successCount = averages.filter((val) => val >= 10).length;
+    const successRate = successCount / averages.length;
+    const groups = _.groupBy(subjects, "subjectGroupId");
+    const average =
+      averages.reduce((acc, val) => acc + val, 0) / averages.length;
+    return { averages, successRate, average, groups };
+  }, [globalRanks, subjects]);
+
   const studentsMap = new Map(students.map((s) => [s.id, s]));
-  const groups = _.groupBy(subjects, "subjectGroupId");
 
-  const values = Array.from(globalRanks.values());
-  const averages = values.map((g) => g.average);
-  const successCount = averages.filter((val) => val >= 10).length;
-  const successRate = successCount / averages.length;
-
-  const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
-  const canCreateGradesheet = await checkPermission(
-    "gradesheet",
-    PermissionAction.CREATE,
-  );
   const trimestreId = term.id;
   const seq1 = term.parts[0]?.child.shortName;
   const seq2 = term.parts[1]?.child.shortName;
@@ -90,23 +86,6 @@ export async function ReportCardQuarter({
         pdfHref={`/api/pdfs/reportcards/ipbw/trimestres?trimestreId=${term.id}&classroomId=${classroom.id}&format=pdf`}
       />
 
-      <Separator />
-      {canCreateGradesheet && (
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense
-            fallback={
-              <div className="px-4">
-                <Skeleton className="h-10 w-full" />
-              </div>
-            }
-          >
-            <RecpordCardQuarterAlert
-              trimestreId={trimestreId}
-              classroomId={classroomId}
-            />
-          </Suspense>
-        </ErrorBoundary>
-      )}
       <div className="">
         <div className="bg-background overflow-hidden">
           <Table className="text-xs">

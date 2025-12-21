@@ -1,12 +1,40 @@
 import { CircleAlert } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
+import { TermType } from "@repo/db";
 
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, trpc } from "~/trpc/server";
+import { RecpordCardQuarterAlert } from "./RecpordCardQuarterAlert";
 
-export async function CheckSubjectScale({
+export function CheckReportCard({
+  term,
+  classroomId,
+  subjects,
+}: {
+  term: RouterOutputs["term"]["get"];
+  classroomId: string;
+  subjects: RouterOutputs["classroom"]["subjects"];
+}) {
+  if (term.type == TermType.MONTHLY) {
+    return (
+      <CheckSubjectScale
+        term={term}
+        classroomId={classroomId}
+        subjects={subjects}
+      />
+    );
+  } else if (term.type == TermType.QUARTER) {
+    return (
+      <RecpordCardQuarterAlert
+        trimestreId={term.id}
+        classroomId={classroomId}
+      />
+    );
+  }
+}
+async function CheckSubjectScale({
   term,
   classroomId,
   subjects,

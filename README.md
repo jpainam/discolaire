@@ -253,3 +253,30 @@ as this will no longer return all grades (e.g. if student is logged)
 or parent.
 
 work on getGeneratorUrl as termType is hardcoded
+
+
+[TRPC] reportCard.getSequence took 42.04408300000068ms to execute
+[TRPC] student.get took 21.668584000006376ms to execute
+[TRPC] student.get took 16.468333999997412ms to execute
+[TRPC] classroom.subjects took 6.2300410000025295ms to execute
+[TRPC] student.get took 17.489000000001397ms to execute
+[TRPC] term.get took 8.02166600000055ms to execute
+[TRPC] student.get took 14.347332999997889ms to execute
+[TRPC] student.get took 19.167083000000275ms to execute
+[TRPC] classroom.get took 14.542583000002196ms to execute
+[TRPC] student.get took 16.464292000004207ms to execute
+[TRPC] discipline.sequence took 18.297082999997656ms to execute
+
+[TRPC] student.get took 2245.4543330000015ms to execute
+
+[TRPC] appreciation.categories took 11.326374999996915ms to execute
+[TRPC] classroom.subjects took 13.03679099999863ms to execute
+[TRPC] term.get took 15.845792000000074ms to execute
+[TRPC] classroom.get took 33.182708000000275ms to execute
+[TRPC] classroom.students took 36.39900000000489ms to execute
+[TRPC] gradeSheet.subjectWeight took 17.079625000005763ms to execute
+[TRPC] user.getPermissions took 2.796249999999418ms to execute
+
+[TRPC] classroom.gradesheets took 79.33291599999939ms to execute
+
+[TRPC] skillAcquisition.all took 4.938207999999577ms to execute

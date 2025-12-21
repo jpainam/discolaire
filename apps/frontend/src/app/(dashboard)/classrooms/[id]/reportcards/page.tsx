@@ -5,7 +5,7 @@ import { createLoader, parseAsString } from "nuqs/server";
 
 import { TermType } from "@repo/db/enums";
 
-import { CheckSubjectScale } from "~/components/classrooms/reportcards/CheckSubjectScaleTerm";
+import { CheckReportCard } from "~/components/classrooms/reportcards/CheckSubjectScaleTerm";
 import { ReportCardAppreciation } from "~/components/classrooms/reportcards/ReportCardAppreciation";
 import { ReportCardClassroomCouncil } from "~/components/classrooms/reportcards/ReportCardClassroomCouncil";
 import { ReportCardMontly } from "~/components/classrooms/reportcards/ReportCardMonthly";
@@ -34,14 +34,6 @@ export default async function Page(props: PageProps) {
   const params = await props.params;
   const searchParams = await reportCardSearchParams(props.searchParams);
 
-  batchPrefetch([
-    trpc.classroom.get.queryOptions(params.id),
-    trpc.classroom.subjects.queryOptions(params.id),
-    trpc.classroom.students.queryOptions(params.id),
-    trpc.classroom.gradesheets.queryOptions(params.id),
-    trpc.appreciation.categories.queryOptions(),
-  ]);
-
   if (!searchParams.termId) {
     return (
       <EmptyComponent
@@ -51,17 +43,35 @@ export default async function Page(props: PageProps) {
     );
   }
   const queryClient = getQueryClient();
-  const subjects = await queryClient.fetchQuery(
-    trpc.classroom.subjects.queryOptions(params.id),
-  );
   const { termId, action } = searchParams;
+  const classroomId = params.id;
   const term = await queryClient.fetchQuery(trpc.term.get.queryOptions(termId));
+  batchPrefetch([
+    trpc.classroom.get.queryOptions(classroomId),
+    trpc.classroom.subjects.queryOptions(classroomId),
+    trpc.classroom.students.queryOptions(classroomId),
+    trpc.classroom.gradesheets.queryOptions(classroomId),
+    trpc.appreciation.categories.queryOptions(),
+    term.type == TermType.MONTHLY
+      ? trpc.reportCard.getSequence.queryOptions({
+          classroomId,
+          termId,
+        })
+      : trpc.reportCard.getTrimestre.queryOptions({
+          classroomId,
+          termId,
+        }),
+  ]);
+
+  const subjects = await queryClient.fetchQuery(
+    trpc.classroom.subjects.queryOptions(classroomId),
+  );
 
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense>
-          <CheckSubjectScale
+          <CheckReportCard
             term={term}
             classroomId={params.id}
             subjects={subjects}
@@ -86,7 +96,7 @@ export default async function Page(props: PageProps) {
             />
           )}
           {action == "subjects" && (
-            <ReportCardAppreciation classroomId={params.id} termId={termId} />
+            <ReportCardAppreciation classroomId={classroomId} termId={termId} />
           )}
           {action == "class_council" && (
             <ReportCardClassroomCouncil
@@ -98,11 +108,11 @@ export default async function Page(props: PageProps) {
             <ReportCardMontly
               termId={termId}
               subjects={subjects}
-              classroomId={params.id}
+              classroomId={classroomId}
             />
           )}
           {action == "reportcard" && term.type == TermType.QUARTER && (
-            <ReportCardQuarter classroomId={params.id} term={term} />
+            <ReportCardQuarter classroomId={classroomId} term={term} />
           )}
         </Suspense>
       </ErrorBoundary>

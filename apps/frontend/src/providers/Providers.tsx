@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-import ProgressBarProvider from "~/components/next-progress";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/lib/utils";
@@ -22,9 +21,7 @@ export async function Providers(props: PropsWithChildren) {
         <ThemeProvider initialTheme={activeThemeValue} isScaled={isScaled}>
           <NuqsAdapter>
             <TRPCReactProvider>
-              <ConfirmDialogProvider>
-                <ProgressBarProvider>{props.children}</ProgressBarProvider>
-              </ConfirmDialogProvider>
+              <ConfirmDialogProvider>{props.children}</ConfirmDialogProvider>
               {/* <ReactQueryDevtools initialIsOpen={false} /> */}
             </TRPCReactProvider>
             <TailwindIndicator />
