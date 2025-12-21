@@ -6,9 +6,6 @@ settings:
 
 catalogs:
   default:
-    '@eslint/js':
-      specifier: ^9.37.0
-      version: 9.37.0
     '@tailwindcss/postcss':
       specifier: ^4.1.14
       version: 4.1.14
@@ -27,21 +24,9 @@ catalogs:
     '@trpc/tanstack-react-query':
       specifier: ^11.6.0
       version: 11.6.0
-    eslint:
-      specifier: ^9.36.0
-      version: 9.36.0
     prettier:
       specifier: ^3.6.2
       version: 3.6.2
-    react:
-      specifier: 19.2.1
-      version: 19.2.1
-    react-dom:
-      specifier: 19.2.1
-      version: 19.2.1
-    tailwindcss:
-      specifier: ^3.4.18
-      version: 3.4.18
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
@@ -96,6 +81,9 @@ importers:
       '@base-ui-components/react':
         specifier: 1.0.0-beta.4
         version: 1.0.0-beta.4(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@bprogress/next':
+        specifier: ^3.2.12
+        version: 3.2.12(next@16.0.10(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@codemirror/lang-python':
         specifier: ^6.2.1
         version: 6.2.1
@@ -294,15 +282,9 @@ importers:
       next-intl:
         specifier: ^4.5.0
         version: 4.5.0(@swc/helpers@0.5.17)(next@16.0.10(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
-      next-nprogress-bar:
-        specifier: ^2.4.7
-        version: 2.4.7
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      nextjs-toploader:
-        specifier: ^3.9.17
-        version: 3.9.17(next@16.0.10(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       node-cron:
         specifier: ^4.2.1
         version: 4.2.1
@@ -1889,6 +1871,22 @@ packages:
 
   '@better-fetch/fetch@1.1.18':
     resolution: {integrity: sha512-rEFOE1MYIsBmoMJtQbl32PGHHXuG2hDxvEd7rUHE0vCBoFQVSDqaVs9hkZEtHCxRoY+CljXKFCOuJ8uxqw1LcA==}
+
+  '@bprogress/core@1.3.4':
+    resolution: {integrity: sha512-q/AqpurI/1uJzOrQROuZWixn/+ARekh+uvJGwLCP6HQ/EqAX4SkvNf618tSBxL4NysC0MwqAppb/mRw6Tzi61w==}
+
+  '@bprogress/next@3.2.12':
+    resolution: {integrity: sha512-/ZvNwbAd0ty9QiQwCfT2AfwWVdAaEyCPx5RUz3CfiiJS/OLBohhDz/IC/srhwK9GnXeXavvtiUrpKzN5GJDwlw==}
+    peerDependencies:
+      next: '>=13.0.0'
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+
+  '@bprogress/react@1.2.7':
+    resolution: {integrity: sha512-MqJfHW+R5CQeWqyqrLxUjdBRHk24Xl63OkBLo5DMWqUqocUikRTfCIc/jtQQbPk7BRfdr5OP3Lx7YlfQ9QOZMQ==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
 
   '@callstack/react-theme-provider@3.0.9':
     resolution: {integrity: sha512-tTQ0uDSCL0ypeMa8T/E9wAZRGKWj8kXP7+6RYgPTfOPs9N07C9xM8P02GJ3feETap4Ux5S69D9nteq9mEj86NA==}
@@ -9408,9 +9406,6 @@ packages:
       typescript:
         optional: true
 
-  next-nprogress-bar@2.4.7:
-    resolution: {integrity: sha512-OeveNQYFBhQhZ+RgrDnvHNUEQfHCmipymmD4AfAVE9pFV4jeWi7/nNK5f0lIk7ODRrtjyyr/n2YpkRbs5kUoMg==}
-
   next-themes@0.4.6:
     resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
     peerDependencies:
@@ -9459,13 +9454,6 @@ packages:
         optional: true
       sass:
         optional: true
-
-  nextjs-toploader@3.9.17:
-    resolution: {integrity: sha512-9OF0KSSLtoSAuNg2LZ3aTl4hR9mBDj5L9s9DZiFCbMlXehyICGjkIz5dVGzuATU2bheJZoBdFgq9w07AKSuQQw==}
-    peerDependencies:
-      next: '>= 6.0.0'
-      react: '>= 16.0.0'
-      react-dom: '>= 16.0.0'
 
   node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
@@ -9542,12 +9530,6 @@ packages:
   npm-run-path@6.0.0:
     resolution: {integrity: sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==}
     engines: {node: '>=18'}
-
-  nprogress-v2@1.1.10:
-    resolution: {integrity: sha512-MypWLNIPIM07SS0bAc/oac0vhVFz9vAHm7d1sj//Pnf3J03LQ3CuWrlDteIu6exq0fIvkDJ6tUDRWLaifsIt5w==}
-
-  nprogress@0.2.0:
-    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
@@ -13312,6 +13294,22 @@ snapshots:
   '@better-auth/utils@0.3.0': {}
 
   '@better-fetch/fetch@1.1.18': {}
+
+  '@bprogress/core@1.3.4': {}
+
+  '@bprogress/next@3.2.12(next@16.0.10(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      '@bprogress/core': 1.3.4
+      '@bprogress/react': 1.2.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      next: 16.0.10(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
+
+  '@bprogress/react@1.2.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      '@bprogress/core': 1.3.4
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
 
   '@callstack/react-theme-provider@3.0.9(react@19.2.0)':
     dependencies:
@@ -22066,10 +22064,6 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  next-nprogress-bar@2.4.7:
-    dependencies:
-      nprogress-v2: 1.1.10
-
   next-themes@0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       react: 19.2.0
@@ -22146,14 +22140,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
-
-  nextjs-toploader@3.9.17(next@16.0.10(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-    dependencies:
-      next: 16.0.10(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      nprogress: 0.2.0
-      prop-types: 15.8.1
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
 
   node-abort-controller@3.1.1: {}
 
@@ -22258,10 +22244,6 @@ snapshots:
     dependencies:
       path-key: 4.0.0
       unicorn-magic: 0.3.0
-
-  nprogress-v2@1.1.10: {}
-
-  nprogress@0.2.0: {}
 
   nth-check@2.1.1:
     dependencies:

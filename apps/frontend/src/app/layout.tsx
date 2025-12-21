@@ -4,7 +4,6 @@ import "./globals.css";
 
 import { Suspense } from "react";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
-import NextTopLoader from "nextjs-toploader";
 
 import { env } from "~/env";
 import { cn } from "~/lib/utils";
@@ -43,7 +42,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextTopLoader showSpinner={false} />
+        {/* <NextTopLoader showSpinner={false} /> */}
         <Suspense fallback={null}>
           <Providers>{props.children}</Providers>
         </Suspense>

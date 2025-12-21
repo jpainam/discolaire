@@ -9,6 +9,7 @@ import { cn } from "~/lib/utils";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 import { ThemeProvider } from "~/providers/ThemeProvider";
 import { TRPCReactProvider } from "~/trpc/react";
+import { ProgressBarProvider } from "./progress-bar-provider";
 
 export async function Providers(props: PropsWithChildren) {
   const cookieStore = await cookies();
@@ -21,7 +22,9 @@ export async function Providers(props: PropsWithChildren) {
         <ThemeProvider initialTheme={activeThemeValue} isScaled={isScaled}>
           <NuqsAdapter>
             <TRPCReactProvider>
-              <ConfirmDialogProvider>{props.children}</ConfirmDialogProvider>
+              <ConfirmDialogProvider>
+                <ProgressBarProvider>{props.children}</ProgressBarProvider>
+              </ConfirmDialogProvider>
               {/* <ReactQueryDevtools initialIsOpen={false} /> */}
             </TRPCReactProvider>
             <TailwindIndicator />

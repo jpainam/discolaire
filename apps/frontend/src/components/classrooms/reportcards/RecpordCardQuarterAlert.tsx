@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CircleAlertIcon } from "lucide-react";
+import { CircleAlertIcon, TriangleAlert } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { getQueryClient, trpc } from "~/trpc/server";
@@ -79,64 +79,78 @@ export async function RecpordCardQuarterAlert({
   //const missingCount = (actual: number) => Math.abs(expected - actual);
 
   return (
-    <div className="flex flex-row items-start gap-4 px-4">
-      {entries.map(([seqName, list]) => {
-        const counts =
-          seqName === seqLabel1
-            ? subjectGradesheetCounts1
-            : subjectGradesheetCounts2;
+    <div className="flex flex-col gap-2 px-4">
+      <div className="flex flex-row items-start gap-4">
+        {entries.map(([seqName, list]) => {
+          const counts =
+            seqName === seqLabel1
+              ? subjectGradesheetCounts1
+              : subjectGradesheetCounts2;
 
-        return (
-          <Alert
-            key={seqName}
-            className="border-destructive/32 bg-destructive/4 [&>svg]:text-destructive"
-          >
-            <CircleAlertIcon />
-            <AlertTitle>Saisie manquante - {seqName}</AlertTitle>
-            <AlertDescription>
-              {list.length}{" "}
-              {list.length > 1
-                ? "matières n'ont pas le nombre de note requis"
-                : "matière n'a pas le nombre de note requis"}
-              :
-              <ul className="mt-2 list-disc pl-5">
-                {list.map((subject) => {
-                  const actual = counts.get(subject.id) ?? 0;
-                  // const diff = actual - 1; // expected = 1
-                  // const label =
-                  //   diff < 0
-                  //     ? `${Math.abs(diff)} manquant${Math.abs(diff) > 1 ? "s" : ""}`
-                  //     : diff > 0
-                  //       ? `${diff} en trop`
-                  //       : "OK";
-
-                  return (
-                    <li key={subject.id}>
-                      <Link
-                        className="hover:underline"
-                        href={`/classrooms/${classroomId}/subjects/${subject.id}`}
-                      >
-                        {subject.course.name} ({actual})
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </AlertDescription>
-          </Alert>
-        );
-      })}
-
-      {[...gradesheetsSeq1, ...gradesheetsSeq2]
-        .filter((gs) => gs.weight !== 1)
-        .map((gs, index) => {
           return (
-            <div key={index}>
-              {gs.subject.course.reportName} - {gs.weight * 100}% pour la
-              séquence
-            </div>
+            <Alert
+              key={seqName}
+              className="border-destructive/32 bg-destructive/4 [&>svg]:text-destructive"
+            >
+              <CircleAlertIcon />
+              <AlertTitle>Saisie manquante - {seqName}</AlertTitle>
+              <AlertDescription>
+                {list.length}{" "}
+                {list.length > 1
+                  ? "matières n'ont pas le nombre de note requis"
+                  : "matière n'a pas le nombre de note requis"}
+                :
+                <ul className="mt-2 list-disc pl-5">
+                  {list.map((subject) => {
+                    const actual = counts.get(subject.id) ?? 0;
+                    // const diff = actual - 1; // expected = 1
+                    // const label =
+                    //   diff < 0
+                    //     ? `${Math.abs(diff)} manquant${Math.abs(diff) > 1 ? "s" : ""}`
+                    //     : diff > 0
+                    //       ? `${diff} en trop`
+                    //       : "OK";
+
+                    return (
+                      <li key={subject.id}>
+                        <Link
+                          className="hover:underline"
+                          href={`/classrooms/${classroomId}/subjects/${subject.id}`}
+                        >
+                          {subject.course.name} ({actual})
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </AlertDescription>
+            </Alert>
           );
         })}
+      </div>
+      <div className="rounded-md border border-amber-500/50 px-4 py-3 text-amber-600">
+        <p className="text-sm">
+          <TriangleAlert
+            aria-hidden="true"
+            className="me-3 -mt-0.5 inline-flex opacity-60"
+            size={16}
+          />
+          Les matières suivantes n'ont pas un poids de 100%{"  "}
+          {[...gradesheetsSeq1, ...gradesheetsSeq2]
+            .filter((gs) => gs.weight !== 1)
+            .map((gs, index) => {
+              return (
+                <Link
+                  className="hover:underline"
+                  href={`/classrooms/${gs.subject.classroomId}/subjects/${gs.subjectId}`}
+                  key={index}
+                >
+                  {gs.subject.course.reportName} ({gs.weight * 100}%){" "}
+                </Link>
+              );
+            })}
+        </p>
+      </div>
     </div>
   );
 }
