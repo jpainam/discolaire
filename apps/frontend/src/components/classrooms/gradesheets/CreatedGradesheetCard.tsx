@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -27,7 +27,7 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { EditIcon, ViewIcon } from "~/icons";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -104,7 +104,7 @@ export function CreatedGradesheetCard({
         <CardDescription>
           <div>{gs.subject.course.name}</div>
           <div>{getFullName(gs.subject.teacher)}</div>
-          <div className="font-bold">
+          <div className="text-xs italic">
             {t("scale")}: {gs.scale} - {t("weight")}: {gs.weight * 100}% -{" "}
             {gs.createdAt.toLocaleDateString(locale, {
               day: "2-digit",
@@ -116,7 +116,7 @@ export function CreatedGradesheetCard({
         <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"}>
+              <Button size={"icon-sm"} variant={"outline"}>
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -155,7 +155,7 @@ export function CreatedGradesheetCard({
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    className="text-destructive"
+                    variant="destructive"
                     disabled={isClosed}
                     onSelect={async () => {
                       const isConfirmed = await confirm({
@@ -168,7 +168,7 @@ export function CreatedGradesheetCard({
                       }
                     }}
                   >
-                    <Trash className="text-destructive h-4 w-4" />
+                    <DeleteIcon />
                     {t("delete")}
                   </DropdownMenuItem>
                 </>

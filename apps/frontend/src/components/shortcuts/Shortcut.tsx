@@ -3,15 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  BookmarkPlus,
-  Edit2,
-  Loader2Icon,
-  NotebookPen,
-  Search,
-  Trash2,
-  X,
-} from "lucide-react";
+import { Loader2Icon, NotebookPen, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
@@ -20,25 +12,22 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { Separator } from "~/components/ui/separator";
 import { SidebarMenuButton, useSidebar } from "~/components/ui/sidebar";
 import { env } from "~/env";
 import { useModal } from "~/hooks/use-modal";
+import { BookmarkIcon, DeleteIcon, EditIcon, PlusIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../ui/input-group";
+import { CreateEditShortcut } from "./CreateEditShortcut";
 import { CreateGradesheetShortcut } from "./CreateGradesheetShortcut";
 
 type Shortcut = RouterOutputs["shortcut"]["search"][number];
@@ -47,7 +36,7 @@ export function Shortcut() {
   const [searchQuery, setSearchQuery] = useState("");
   const debounced = useDebouncedCallback((value: string) => {
     void setSearchQuery(value);
-  }, 1000);
+  }, 500);
   const pathname = usePathname();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -59,10 +48,6 @@ export function Shortcut() {
   );
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [currentShortcut, setCurrentShortcut] = useState<Shortcut | null>(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [editUrl, setEditUrl] = useState("");
 
   const addShortcut = useMutation(
     trpc.shortcut.create.mutationOptions({
@@ -86,17 +71,6 @@ export function Shortcut() {
       },
     }),
   );
-  const updateShortcut = useMutation(
-    trpc.shortcut.update.mutationOptions({
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.shortcut.pathFilter());
-        toast.success(t("updated_successfully"), { id: 0 });
-      },
-    }),
-  );
 
   const addCurrentPageToShortcuts = () => {
     const newShortcut = {
@@ -109,25 +83,6 @@ export function Shortcut() {
     addShortcut.mutate(newShortcut);
   };
 
-  const openEditDialog = (shortcut: Shortcut) => {
-    setCurrentShortcut(shortcut);
-    setEditTitle(shortcut.title);
-    setEditUrl(shortcut.url);
-    setIsEditDialogOpen(true);
-  };
-
-  const saveEdit = () => {
-    if (!currentShortcut) return;
-    toast.loading(t("updating"), { id: 0 });
-    updateShortcut.mutate({
-      id: currentShortcut.id,
-      title: editTitle,
-      url: editUrl,
-    });
-
-    setIsEditDialogOpen(false);
-  };
-
   const t = useTranslations();
   const { isMobile } = useSidebar();
 
@@ -138,15 +93,15 @@ export function Shortcut() {
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         {isMobile ? (
           <PopoverTrigger asChild>
-            <button className="flex flex-row items-center gap-2">
-              <BookmarkPlus className="h-4 w-4" />
+            <Button variant={"ghost"} size={"sm"}>
+              <BookmarkIcon />
               <span>{t("shortcuts")}</span>
-            </button>
+            </Button>
           </PopoverTrigger>
         ) : (
           <PopoverTrigger asChild>
             <SidebarMenuButton>
-              <BookmarkPlus className="h-4 w-4" />
+              <BookmarkIcon />
               <span>{t("shortcuts")}</span>
             </SidebarMenuButton>
           </PopoverTrigger>
@@ -158,45 +113,36 @@ export function Shortcut() {
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between px-4 py-1.5">
-                <h3 className="font-medium">{t("shortcuts")}</h3>
+              <div className="flex items-center justify-between border-b p-1.5">
+                <div className="flex items-center gap-2 text-xs">
+                  <BookmarkIcon className="size-3" />
+                  {t("shortcuts")}
+                </div>
                 <Button
+                  size={"xs"}
                   variant="ghost"
-                  className="h-8 px-2 text-xs"
                   onClick={addCurrentPageToShortcuts}
                 >
-                  <BookmarkPlus className="mr-1 h-3.5 w-3.5" />
+                  <PlusIcon />
                   {t("add_current_page")}
                 </Button>
               </div>
-              <Separator />
-              <div className="p-4">
-                <div className="relative">
-                  <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-                  <Input
-                    type="search"
-                    placeholder={t("search") + "..."}
-                    className="pl-8"
-                    value={searchQuery}
+              <div className="px-2">
+                <InputGroup>
+                  <InputGroupInput
                     onChange={(e) => debounced(e.target.value)}
+                    placeholder={t("search")}
                   />
-                  {searchQuery && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute top-1 right-1 h-7 w-7"
-                      onClick={() => debounced("")}
-                    >
-                      <X className="h-4 w-4" />
-                      <span className="sr-only">Clear search</span>
-                    </Button>
-                  )}
-                </div>
+                  <InputGroupAddon>
+                    <Search />
+                  </InputGroupAddon>
+                </InputGroup>
               </div>
-              <ScrollArea className="h-[300px] px-4">
-                <div className="flex flex-col gap-2">
+              <ScrollArea className="h-[300px] px-2">
+                <div className="flex flex-col items-start gap-2">
                   <Button
                     size={"sm"}
+                    variant={"link"}
                     onClick={() => {
                       openModal({
                         title: "Saisie de note - raccourcis",
@@ -210,11 +156,11 @@ export function Shortcut() {
                   </Button>
                 </div>
                 {shortcuts.length > 0 ? (
-                  <ul className="space-y-2 pb-4">
+                  <ul className="">
                     {shortcuts.map((shortcut) => (
                       <li
                         key={shortcut.id}
-                        className="group hover:bg-muted flex items-center justify-between rounded-md py-2"
+                        className="group hover:bg-muted flex items-center justify-between rounded-md p-2"
                       >
                         <a
                           rel="noopener noreferrer"
@@ -231,23 +177,28 @@ export function Shortcut() {
                         <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                           <Button
                             variant="ghost"
-                            size="icon"
-                            className="h-4 w-4"
-                            onClick={() => openEditDialog(shortcut)}
+                            size="icon-sm"
+                            onClick={() => {
+                              openModal({
+                                title: t("edit_shortcut"),
+                                view: (
+                                  <CreateEditShortcut shortcut={shortcut} />
+                                ),
+                              });
+                            }}
                           >
-                            <Edit2 className="h-3 w-3" />
+                            <EditIcon />
                             <span className="sr-only">{t("edit")}</span>
                           </Button>
                           <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-destructive hover:text-destructive/90 h-4 w-4"
+                            variant="destructive"
+                            size="icon-sm"
                             onClick={() => {
                               toast.loading(t("deleting"), { id: 0 });
                               deleteShortcut.mutate(shortcut.id);
                             }}
                           >
-                            <Trash2 className="h-3 w-3" />
+                            <DeleteIcon />
                             <span className="sr-only">{t("delete")}</span>
                           </Button>
                         </div>
@@ -268,48 +219,6 @@ export function Shortcut() {
           )}
         </PopoverContent>
       </Popover>
-
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{t("edit_shortcut")}</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="title" className="text-sm font-medium">
-                {t("title")}
-              </Label>
-              <Input
-                id="title"
-                value={editTitle}
-                required={true}
-                onChange={(e) => setEditTitle(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="url" className="text-sm font-medium">
-                URL
-              </Label>
-              <Input
-                id="url"
-                required={true}
-                value={editUrl}
-                onChange={(e) => setEditUrl(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsEditDialogOpen(false)}
-            >
-              {t("cancel")}
-            </Button>
-            <Button onClick={saveEdit}>{t("submit")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

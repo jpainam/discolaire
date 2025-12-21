@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  MailIcon,
-  MoreHorizontal,
-  MoreVertical,
-  Search,
-  Trash2,
-} from "lucide-react";
+import { MailIcon, MoreHorizontal, MoreVertical, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsString, useQueryStates } from "nuqs";
 
@@ -36,6 +30,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CourseCoverageDetails } from "./CourseCoverageDetails";
@@ -109,7 +104,7 @@ export function CourseCoverageTable() {
 
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive">
-                <Trash2 />
+                <DeleteIcon />
                 {t("delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>

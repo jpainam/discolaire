@@ -2,7 +2,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
   useMutation,
   useQueryClient,
@@ -10,11 +9,10 @@ import {
 } from "@tanstack/react-query";
 import {
   FlagOff,
+  MoreHorizontal,
   MoreVertical,
-  Pencil,
   PlusIcon,
   Search,
-  Trash2,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -34,7 +32,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import {
   Table,
   TableBody,
@@ -48,6 +50,7 @@ import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon, EditIcon } from "~/icons";
 import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -138,15 +141,16 @@ export function ClassroomGradeList({
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       <div className="flex items-center gap-2">
-        <div className="relative w-full md:w-64">
-          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-          <Input
-            placeholder={t("search") + "..."}
-            className="pl-8"
-            //value={query}
+        <InputGroup className="w-1/2">
+          <InputGroupInput
             onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("search")}
           />
-        </div>
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
+
         <div className="ml-auto flex items-center gap-2">
           <Button
             variant={"secondary"}
@@ -176,8 +180,8 @@ export function ClassroomGradeList({
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"icon"} className="size-8">
-                <MoreVertical className="size-4" />
+              <Button variant={"outline"} size={"icon-sm"}>
+                <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -200,7 +204,7 @@ export function ClassroomGradeList({
                     }}
                     variant="destructive"
                   >
-                    <Trash2 />
+                    <DeleteIcon />
                     {t("delete")}
                   </DropdownMenuItem>
                 </>
@@ -295,15 +299,8 @@ export function ClassroomGradeList({
                       {canUpdateGradesheet && (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              aria-label="Open menu"
-                              variant="ghost"
-                              className="data-[state=open]:bg-muted flex size-8 p-0"
-                            >
-                              <DotsHorizontalIcon
-                                className="size-4"
-                                aria-hidden="true"
-                              />
+                            <Button variant={"ghost"} size={"icon-sm"}>
+                              <MoreHorizontal />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-38">
@@ -328,7 +325,7 @@ export function ClassroomGradeList({
                                   });
                                 }}
                               >
-                                <Pencil />
+                                <EditIcon />
                                 {t("edit")}
                               </DropdownMenuItem>
                             )}

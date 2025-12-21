@@ -11,7 +11,6 @@ import {
   ExternalLink,
   FileTextIcon,
   MoreHorizontal,
-  Pencil,
   Trash2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -40,6 +39,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon, EditIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -234,11 +234,11 @@ export function ClassroomSubjectTable() {
                     {(canEditClassroomSubject || canDeleteClassroomSubject) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant={"ghost"} size={"icon"}>
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button variant={"ghost"} size={"icon-sm"}>
+                            <MoreHorizontal />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="w-38">
                           {canEditClassroomSubject && (
                             <DropdownMenuItem
                               onSelect={() => {
@@ -252,7 +252,7 @@ export function ClassroomSubjectTable() {
                                 });
                               }}
                             >
-                              <Pencil />
+                              <EditIcon />
                               {t("edit")}
                             </DropdownMenuItem>
                           )}
@@ -291,7 +291,7 @@ export function ClassroomSubjectTable() {
                                 variant="destructive"
                                 className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                               >
-                                <Trash2 />
+                                <DeleteIcon />
                                 {t("delete")}
                               </DropdownMenuItem>
                             </>

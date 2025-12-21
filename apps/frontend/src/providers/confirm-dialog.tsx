@@ -190,7 +190,7 @@ const ConfirmDialogContent: React.FC<{
           )}
           {contentSlot}
         </AlertDialogHeader>
-        <AlertDialogFooter {...alertDialogFooter}>
+        <AlertDialogFooter {...alertDialogFooter} className="p-2">
           {renderActions()}
         </AlertDialogFooter>
       </AlertDialogContent>

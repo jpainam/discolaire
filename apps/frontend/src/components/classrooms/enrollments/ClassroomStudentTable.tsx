@@ -220,7 +220,7 @@ export function ClassroomStudentTable({
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"}>
+                        <Button size={"icon-sm"} variant={"ghost"}>
                           <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>

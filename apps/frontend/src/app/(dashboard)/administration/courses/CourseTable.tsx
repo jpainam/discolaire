@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
+import { DeleteIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditCourse } from "./CreateEditCourse";
@@ -132,7 +133,7 @@ export function CourseTable() {
                           }
                         }}
                       >
-                        <Trash2 />
+                        <DeleteIcon />
                         {t("delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
