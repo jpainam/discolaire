@@ -1,11 +1,52 @@
 import type { HugeiconsProps } from "@hugeicons/react";
-import { AddToListIcon, AmbulanceIcon, AppleReminderIcon, Archive02Icon, ArrowDown01Icon, ArtificialIntelligence04Icon, AssignmentsIcon, Book04Icon, Bookmark01Icon, Calendar03Icon, Calendar04Icon, Contact01Icon, DashboardSquare01Icon, DashboardSquareSettingIcon, Database01Icon, Delete02Icon, DollarSquareIcon, FavouriteSquareIcon, File01Icon, Files02Icon, Folder02Icon, GoogleDocIcon, HelpSquareIcon, Home01Icon, IdentityCardIcon, InformationSquareIcon, LockPasswordIcon, Logout01Icon, Mail01Icon, Message02Icon, MoreIcon as MoreGlyth, Notification02Icon, PencilEdit02Icon, PlusSignSquareIcon, PrinterIcon as PrinterGlyph, SearchIcon as SearchGlyph, Settings05Icon, SortByUp01Icon, UserGroup03Icon, UserMultiple02Icon, UserSquareIcon, ViewIcon as ViewGlypth, YoutubeIcon as YoutubeGlyph } from "@hugeicons/core-free-icons";
+import {
+  AddToListIcon,
+  AmbulanceIcon,
+  AppleReminderIcon,
+  Archive02Icon,
+  ArrowDown01Icon,
+  ArtificialIntelligence04Icon,
+  AssignmentsIcon,
+  Book04Icon,
+  Bookmark01Icon,
+  Calendar03Icon,
+  Calendar04Icon,
+  Contact01Icon,
+  DashboardSquare01Icon,
+  DashboardSquareSettingIcon,
+  Database01Icon,
+  Delete02Icon,
+  DollarSquareIcon,
+  FavouriteSquareIcon,
+  File01Icon,
+  Files02Icon,
+  Folder02Icon,
+  GoogleDocIcon,
+  HelpSquareIcon,
+  Home01Icon,
+  IdentityCardIcon,
+  InformationSquareIcon,
+  LockPasswordIcon,
+  Logout01Icon,
+  Mail01Icon,
+  Message02Icon,
+  MoreIcon as MoreGlyth,
+  Notification02Icon,
+  PencilEdit02Icon,
+  PlusSignSquareIcon,
+  PrinterIcon as PrinterGlyph,
+  SearchIcon as SearchGlyph,
+  Settings05Icon,
+  SortByUp01Icon,
+  UserGroup03Icon,
+  UserMultiple02Icon,
+  UserSquareIcon,
+  ViewIcon as ViewGlypth,
+  YoutubeIcon as YoutubeGlyph,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-
-
 import { cn } from "~/lib/utils";
-
 
 function wrapHugeIcon(icon: NonNullable<HugeiconsProps["icon"]>) {
   return function AppIcon({
