@@ -77,6 +77,9 @@ export async function RecpordCardQuarterAlert({
   // Helper to compute "missing" count vs expected=1
   //const expected = 1;
   //const missingCount = (actual: number) => Math.abs(expected - actual);
+  const not100Weights = [...gradesheetsSeq1, ...gradesheetsSeq2].filter(
+    (gs) => gs.weight !== 1,
+  );
 
   return (
     <div className="flex flex-col gap-2 px-4">
@@ -128,17 +131,16 @@ export async function RecpordCardQuarterAlert({
           );
         })}
       </div>
-      <div className="rounded-md border border-amber-500/50 px-4 py-3 text-amber-600">
-        <p className="text-sm">
-          <TriangleAlert
-            aria-hidden="true"
-            className="me-3 -mt-0.5 inline-flex opacity-60"
-            size={16}
-          />
-          Les matières suivantes n'ont pas un poids de 100%{"  "}
-          {[...gradesheetsSeq1, ...gradesheetsSeq2]
-            .filter((gs) => gs.weight !== 1)
-            .map((gs, index) => {
+      {not100Weights.length > 0 && (
+        <div className="rounded-md border border-amber-500/50 px-4 py-3 text-amber-600">
+          <p className="text-sm">
+            <TriangleAlert
+              aria-hidden="true"
+              className="me-3 -mt-0.5 inline-flex opacity-60"
+              size={16}
+            />
+            Les matières suivantes n'ont pas un poids de 100%{"  "}
+            {not100Weights.map((gs, index) => {
               return (
                 <Link
                   className="hover:underline"
@@ -149,8 +151,9 @@ export async function RecpordCardQuarterAlert({
                 </Link>
               );
             })}
-        </p>
-      </div>
+          </p>
+        </div>
+      )}
     </div>
   );
 }
