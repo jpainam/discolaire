@@ -1,9 +1,5 @@
 import { TermType } from "@repo/db/enums";
 
-
-
-
-
 export function getGeneratorUrl({
   reportType,
   classroomId,
