@@ -7,7 +7,7 @@ import type { RouterOutputs } from "@repo/api";
 import { caller } from "~/trpc/server";
 import { getHeader } from "../headers";
 
-export async function SummaryOfResult({
+export async function SummaryOfResult10({
   globalRanks,
   term,
   students,
@@ -21,13 +21,25 @@ export async function SummaryOfResult({
 }) {
   const school = await caller.school.getSchool();
   const studentsMap = new Map(students.map((s) => [s.id, s]));
-  const allstudents = Array.from(globalRanks).map(([key, value]) => {
-    const student = studentsMap.get(key);
-    return {
-      studentName: `${student?.firstName} ${student?.lastName}`,
-      average: value.average,
-    };
-  });
+  const first10Students = Array.from(globalRanks)
+    .slice(0, 10)
+    .map(([key, value]) => {
+      const student = studentsMap.get(key);
+      return {
+        studentName: `${student?.firstName} ${student?.lastName}`,
+        average: value.average,
+      };
+    });
+
+  const last10Students = Array.from(globalRanks)
+    .slice(-10)
+    .map(([key, value]) => {
+      const student = studentsMap.get(key);
+      return {
+        studentName: `${student?.firstName} ${student?.lastName}`,
+        average: value.average,
+      };
+    });
 
   const values = Array.from(globalRanks.values());
 
@@ -193,7 +205,9 @@ export async function SummaryOfResult({
             />
           </View>
           <View style={{ flexDirection: "row", display: "flex" }}>
-            <TenStudent data={allstudents} last={false} />
+            <TenStudent data={first10Students} last={false} />
+            <View style={{ width: "10%" }}></View>
+            <TenStudent data={last10Students} last={true} />
           </View>
         </View>
       </Page>
@@ -203,7 +217,6 @@ export async function SummaryOfResult({
 
 function TenStudent({
   data,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   last,
 }: {
   data: { studentName: string; average: number }[];
@@ -234,7 +247,7 @@ function TenStudent({
             borderRight: "1px solid black",
           }}
         >
-          <Text>Rang</Text>
+          <Text>No</Text>
         </View>
         <View
           style={{
@@ -244,7 +257,7 @@ function TenStudent({
             borderRight: "1px solid black",
           }}
         >
-          <Text>{"ELEVES"}</Text>
+          <Text>{last ? "DIX DERNIERS" : "DIX PREMIER"}</Text>
         </View>
         <View
           style={{

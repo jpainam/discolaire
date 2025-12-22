@@ -3,7 +3,7 @@ import { renderToStream } from "@react-pdf/renderer";
 import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
-import { SummaryOfResult10 } from "~/reports/gradereports/SummaryOfResult10";
+import { SummaryOfResult } from "~/reports/gradereports/SummaryOfResult";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
       );
     } else {
       const stream = await renderToStream(
-        await SummaryOfResult10({
+        await SummaryOfResult({
           globalRanks: globalRanks,
           students: students,
           classroom: classroom,

@@ -1,5 +1,9 @@
 import { TermType } from "@repo/db/enums";
 
+
+
+
+
 export function getGeneratorUrl({
   reportType,
   classroomId,
@@ -43,6 +47,11 @@ export function getGeneratorUrl({
       url: `/api/pdfs/gradereports/summary-report?classroomId=${classroomId}&format=${format}&termId=${termId}&termType=${termType}`,
     };
   }
+  if (reportType == "006") {
+    return {
+      url: `/api/pdfs/gradereports/summary?classroomId=${classroomId}&format=${format}&termId=${termId}&termType=${termType}`,
+    };
+  }
   return { url: null, error: null };
 }
 export function getReportTypes() {
@@ -50,7 +59,8 @@ export function getReportTypes() {
     { id: "001", label: "Roll of Honor" },
     { id: "002", label: "Grade report card" },
     { id: "003", label: "Statistics by course" },
-    { id: "004", label: "Summary of results" },
+    { id: "004", label: "Summary of results (10 first/10 last)" },
     { id: "005", label: "Summary Report" },
+    { id: "006", label: "Synthèse des résultats de la classe" },
   ];
 }
