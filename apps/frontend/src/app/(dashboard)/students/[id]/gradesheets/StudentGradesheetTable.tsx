@@ -12,6 +12,8 @@ import { DollarSign } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { TermType } from "@repo/db/enums";
+
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -164,9 +166,11 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("subject")}</TableHead>
-              {terms.map((t) => (
-                <TableHead key={t.id}>{t.name.split(" ")[0]}</TableHead>
-              ))}
+              {terms
+                .filter((t) => t.type == TermType.MONTHLY)
+                .map((t) => (
+                  <TableHead key={t.id}>{t.name.split(" ")[0]}</TableHead>
+                ))}
 
               <TableHead className="text-center">{t("avg")}</TableHead>
               <TableHead className="text-right"></TableHead>
@@ -197,20 +201,22 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                       {row.subject}
                     </Link>
                   </TableCell>
-                  {terms.map((term) => {
-                    const g = row.grades.find((x) => x.termId === term.id);
-                    return (
-                      <Cell
-                        key={term.id}
-                        gradeId={g?.id}
-                        isAbsent={g?.isAbsent}
-                        onDeleteGradeAction={onDeleteGradeAction}
-                        updateGradeAction={updateGradeAction}
-                        grade={g?.grade}
-                        canUpdateGradesheet={canUpdateGradesheet}
-                      />
-                    );
-                  })}
+                  {terms
+                    .filter((t) => t.type == TermType.MONTHLY)
+                    .map((term) => {
+                      const g = row.grades.find((x) => x.termId === term.id);
+                      return (
+                        <Cell
+                          key={term.id}
+                          gradeId={g?.id}
+                          isAbsent={g?.isAbsent}
+                          onDeleteGradeAction={onDeleteGradeAction}
+                          updateGradeAction={updateGradeAction}
+                          grade={g?.grade}
+                          canUpdateGradesheet={canUpdateGradesheet}
+                        />
+                      );
+                    })}
                   <TableCell className="text-muted-foreground text-center">
                     {avg.toFixed(2)}
                   </TableCell>

@@ -57,7 +57,7 @@ export function CurrentGradeSheetSummary({
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 pt-2 pr-2">
+    <div className="flex flex-col items-center gap-2 p-2">
       {gradesheets.map((gs) => {
         return <CreatedGradesheetCard gradeSheetId={gs.id} key={gs.id} />;
       })}

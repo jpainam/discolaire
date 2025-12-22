@@ -54,8 +54,8 @@ export function CreatedGradesheetCard({
       gradeSheetQuery.data?.grades.filter((g) => !g.isAbsent) ?? [];
     const total = grades.length;
 
-    const maxGrade = Math.min(...grades.map((g) => g.grade));
-    const minGrade = Math.max(...grades.map((g) => g.grade));
+    const minGrade = Math.min(...grades.map((g) => g.grade));
+    const maxGrade = Math.max(...grades.map((g) => g.grade));
     const avgGrade =
       grades.length === 0
         ? 0
@@ -95,7 +95,7 @@ export function CreatedGradesheetCard({
   }
   const isClosed = !gs.term.isActive;
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>
           {gs.name}
@@ -179,7 +179,7 @@ export function CreatedGradesheetCard({
       </CardHeader>
       <CardContent className="flex flex-wrap items-center gap-2">
         <Badge variant={"success"} appearance={"outline"}>
-          {t("effectif")} : {total} / {gs.grades.length}
+          {total} / {gs.grades.length}
         </Badge>
         <Badge variant={"info"} appearance={"outline"}>
           {t("max")}: {maxGrade}
