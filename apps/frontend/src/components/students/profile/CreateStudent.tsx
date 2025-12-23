@@ -1,5 +1,6 @@
 "use client";
 
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -9,6 +10,7 @@ import { z } from "zod/v4";
 
 import { StudentStatus } from "@repo/db/enums";
 
+import { ErrorFallback } from "~/components/error-fallback";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
 import { Spinner } from "~/components/ui/spinner";
@@ -145,9 +147,15 @@ export function CreateStudent() {
         </div>
         <div className="grid grid-cols-1 gap-4 p-2 xl:grid-cols-2">
           <CreateUpdateProfile />
-          <CreateUpdateAddress />
-          <CreateUpdateDenom />
-          <CreateUpdateExtra />
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <CreateUpdateAddress />
+          </ErrorBoundary>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <CreateUpdateDenom />
+          </ErrorBoundary>
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <CreateUpdateExtra />
+          </ErrorBoundary>
         </div>
       </form>
     </Form>

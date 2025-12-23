@@ -1,7 +1,9 @@
 import type { SearchParams } from "nuqs/server";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { getTranslations } from "next-intl/server";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { ErrorFallback } from "~/components/error-fallback";
 import { Step1 } from "~/components/students/transactions/create/step1";
 import { Step2 } from "~/components/students/transactions/create/step2";
 import { caller } from "~/trpc/server";
@@ -48,12 +50,14 @@ export default async function Page(props: PageProps) {
     );
   } else {
     return (
-      <Step1
-        defaultJournalId={defaultJournalId ?? ""}
-        journals={journals.filter((j) => journalIdsFromFees.includes(j.id))}
-        unpaidRequiredFees={unpaidRequiredFees}
-        studentId={params.id}
-      />
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Step1
+          defaultJournalId={defaultJournalId ?? ""}
+          journals={journals.filter((j) => journalIdsFromFees.includes(j.id))}
+          unpaidRequiredFees={unpaidRequiredFees}
+          studentId={params.id}
+        />
+      </ErrorBoundary>
     );
   }
 }

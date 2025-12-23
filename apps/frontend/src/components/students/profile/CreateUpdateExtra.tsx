@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { ActivitySquare } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import type { Option } from "~/components/multiselect";
-import MultipleSelector from "~/components/multiselect";
+import { ClubMultiSelector } from "~/components/shared/selects/ClubMultiSelector";
+import { SportMultiSelector } from "~/components/shared/selects/SportMultiSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   FormControl,
@@ -16,28 +14,10 @@ import {
   FormMessage,
   useFormContext,
 } from "~/components/ui/form";
-import { Skeleton } from "~/components/ui/skeleton";
 import { Textarea } from "~/components/ui/textarea";
-import { useTRPC } from "~/trpc/react";
 
 export function CreateUpdateExtra() {
   const t = useTranslations();
-  const trpc = useTRPC();
-  const clubsQuery = useQuery(trpc.setting.clubs.queryOptions());
-  const sportsQuery = useQuery(trpc.setting.sports.queryOptions());
-  const sportOptions: Option[] = sportsQuery.data
-    ? sportsQuery.data.map((sport) => ({
-        label: sport.name,
-        value: sport.id,
-      }))
-    : [];
-
-  const clubOptions: Option[] = clubsQuery.data
-    ? clubsQuery.data.map((club) => ({
-        label: club.name,
-        value: club.id,
-      }))
-    : [];
 
   const form = useFormContext();
 
@@ -52,14 +32,7 @@ export function CreateUpdateExtra() {
         </CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
-      {sportsQuery.isPending ||
-        (clubsQuery.isPending && (
-          <div className="py">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="h-8" />
-            ))}
-          </div>
-        ))}
+
       <CardContent>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3 md:flex-row">
@@ -70,27 +43,9 @@ export function CreateUpdateExtra() {
                 <FormItem className="flex-1">
                   <FormLabel>{t("sports")}</FormLabel>
                   <FormControl>
-                    {sportsQuery.isPending ? (
-                      <Skeleton className="h-8 w-full" />
-                    ) : (
-                      <MultipleSelector
-                        commandProps={{
-                          label: t("select_options"),
-                        }}
-                        value={field.value}
-                        defaultOptions={sportOptions}
-                        //options={sportOptions}
-                        onChange={(values) => {
-                          field.onChange(values);
-                        }}
-                        hidePlaceholderWhenSelected
-                        emptyIndicator={
-                          <p className="text-center text-sm">
-                            {t("no_results")}
-                          </p>
-                        }
-                      />
-                    )}
+                    <SportMultiSelector
+                      onChangeAction={(values) => field.onChange(values)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,27 +58,9 @@ export function CreateUpdateExtra() {
                 <FormItem className="flex-1">
                   <FormLabel>{t("clubs")}</FormLabel>
                   <FormControl>
-                    {clubsQuery.isPending ? (
-                      <Skeleton className="h-8 w-full" />
-                    ) : (
-                      <MultipleSelector
-                        commandProps={{
-                          label: t("select_options"),
-                        }}
-                        value={field.value}
-                        defaultOptions={clubOptions}
-                        //options={clubOptions}
-                        onChange={(values) => {
-                          field.onChange(values);
-                        }}
-                        hidePlaceholderWhenSelected
-                        emptyIndicator={
-                          <p className="text-center text-sm">
-                            {t("no_results")}
-                          </p>
-                        }
-                      />
-                    )}
+                    <ClubMultiSelector
+                      onChangeAction={(values) => field.onChange(values)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

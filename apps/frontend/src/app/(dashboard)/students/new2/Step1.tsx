@@ -285,7 +285,7 @@ export function Step1() {
                 <FormLabel>{t("clubs")}</FormLabel>
                 <FormControl>
                   <ClubMultiSelector
-                    onSelect={(values) => field.onChange(values)}
+                    onChangeAction={(values) => field.onChange(values)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -302,8 +302,7 @@ export function Step1() {
                 <FormLabel>{t("sports")}</FormLabel>
                 <FormControl>
                   <SportMultiSelector
-                    defaultValues={[]}
-                    onSelect={(values) => field.onChange(values)}
+                    onChangeAction={(values) => field.onChange(values)}
                   />
                 </FormControl>
                 <FormMessage />
