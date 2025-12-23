@@ -84,7 +84,7 @@ export function RollOfHonor({
               <Item label="Observation" width="15%" last />
             </View>
 
-            {reports.map((grade, index) => {
+            {reports.map((report, index) => {
               return (
                 <View
                   key={index}
@@ -113,7 +113,7 @@ export function RollOfHonor({
                       borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{grade.registrationNumber}</Text>
+                    <Text>{report.registrationNumber}</Text>
                   </View>
                   <View
                     style={{
@@ -123,7 +123,7 @@ export function RollOfHonor({
                       borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{grade.studentName}</Text>
+                    <Text>{report.studentName}</Text>
                   </View>
                   <View
                     style={{
@@ -133,7 +133,7 @@ export function RollOfHonor({
                       borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{grade.dateOfBirth?.toLocaleDateString()}</Text>
+                    <Text>{report.dateOfBirth?.toLocaleDateString()}</Text>
                   </View>
                   <View
                     style={{
@@ -143,7 +143,7 @@ export function RollOfHonor({
                       borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{grade.isRepeating ? "OUI" : "NON"}</Text>
+                    <Text>{report.isRepeating ? "OUI" : "NON"}</Text>
                   </View>
                   <View
                     style={{
@@ -153,7 +153,7 @@ export function RollOfHonor({
                       borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{grade.grade.toFixed(2)}</Text>
+                    <Text>{report.grade.toFixed(2)}</Text>
                   </View>
                   <View
                     style={{
@@ -162,7 +162,7 @@ export function RollOfHonor({
                       //borderRight: "1px solid black",
                     }}
                   >
-                    <Text>{getAppreciations(grade.grade)}</Text>
+                    <Text>{getAppreciations(report.grade)}</Text>
                   </View>
                 </View>
               );

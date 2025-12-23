@@ -1,13 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
+import { TermType } from "@repo/db";
+
+import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import { RollOfHonor } from "~/reports/gradereports/RollOfHonor";
-import { caller } from "~/trpc/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 import { getFullName, xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -22,53 +26,33 @@ export async function GET(req: NextRequest) {
     return new Response("Unauthorized", { status: 401 });
   }
   try {
-    const requestUrl = new URL(req.url);
-    const obj: Record<string, string> = {};
-    for (const [key, value] of requestUrl.searchParams.entries()) {
-      obj[key] = value;
-    }
+    const searchParams = parseSearchParams(req);
 
-    const result = searchSchema.safeParse(obj);
+    const result = searchSchema.safeParse(searchParams);
     if (!result.success) {
-      const error = result.error.issues.map((e) => e.message).join(", ");
-      return new Response(error, { status: 400 });
+      const error = z.treeifyError(result.error);
+      return NextResponse.json(error, { status: 400 });
     }
     const { termId, classroomId, format } = result.data;
+    const queryClient = getQueryClient();
+    const school = await queryClient.fetchQuery(
+      trpc.school.getSchool.queryOptions(),
+    );
 
-    const report = await caller.reportCard.getSequence({
-      classroomId,
-      termId,
-    });
-    const { globalRanks } = report;
-    const students = await caller.classroom.students(classroomId);
-    const studentsMap = new Map(students.map((s) => [s.id, s]));
-    const reports: {
-      registrationNumber: string | null;
-      studentName: string;
-      dateOfBirth: Date | null;
-      isRepeating: boolean;
-      grade: number;
-      observation: string;
-    }[] = [];
-    /// GEt the list of report with global average >= 12
-    Array.from(globalRanks).map(([key, value], _index) => {
-      const student = studentsMap.get(key);
-      if (!student) return;
-      if (value.average >= 12) {
-        reports.push({
-          registrationNumber: student.registrationNumber,
-          studentName: getFullName(student),
-          dateOfBirth: student.dateOfBirth,
-          isRepeating: student.isRepeating,
-          grade: value.average,
-          observation: getAppreciations(value.average),
-        });
-      }
-    });
-
-    const school = await caller.school.getSchool();
-    const term = await caller.term.get(termId);
-    const classroom = await caller.classroom.get(classroomId);
+    const classroom = await queryClient.fetchQuery(
+      trpc.classroom.get.queryOptions(classroomId),
+    );
+    const term = await queryClient.fetchQuery(
+      trpc.term.get.queryOptions(termId),
+    );
+    let reports;
+    if (term.type == TermType.MONTHLY) {
+      reports = await getMonthlyReport(classroomId, termId);
+    } else if (term.type == TermType.QUARTER) {
+      reports = await getQuarterReport(classroomId, termId);
+    } else {
+      return NextResponse.json("Pas de rapport", { status: 500 });
+    }
 
     if (format === "csv") {
       const { blob, headers } = await toExcel({ reports });
@@ -95,6 +79,84 @@ export async function GET(req: NextRequest) {
     console.error(error);
     return new Response(String(error), { status: 500 });
   }
+}
+
+async function getMonthlyReport(classroomId: string, termId: string) {
+  const queryClient = getQueryClient();
+  const report = await queryClient.fetchQuery(
+    trpc.reportCard.getSequence.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
+  const { globalRanks } = report;
+  const students = await queryClient.fetchQuery(
+    trpc.classroom.students.queryOptions(classroomId),
+  );
+  const studentsMap = new Map(students.map((s) => [s.id, s]));
+  const reports: {
+    registrationNumber: string;
+    studentName: string;
+    dateOfBirth: Date | null;
+    isRepeating: boolean;
+    grade: number;
+    observation: string;
+  }[] = [];
+  /// GEt the list of report with global average >= 12
+  Array.from(globalRanks).map(([key, value], _index) => {
+    const student = studentsMap.get(key);
+    if (!student) return;
+    if (value.average >= 12) {
+      reports.push({
+        registrationNumber: student.registrationNumber ?? "",
+        studentName: getFullName(student),
+        dateOfBirth: student.dateOfBirth,
+        isRepeating: student.isRepeating,
+        grade: value.average,
+        observation: getAppreciations(value.average),
+      });
+    }
+  });
+  return reports;
+}
+
+async function getQuarterReport(classroomId: string, termId: string) {
+  const queryClient = getQueryClient();
+  const report = await queryClient.fetchQuery(
+    trpc.reportCard.getTrimestre.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
+  const { globalRanks } = report;
+  const students = await queryClient.fetchQuery(
+    trpc.classroom.students.queryOptions(classroomId),
+  );
+  const studentsMap = new Map(students.map((s) => [s.id, s]));
+  const reports: {
+    registrationNumber: string;
+    studentName: string;
+    dateOfBirth: Date | null;
+    isRepeating: boolean;
+    grade: number;
+    observation: string;
+  }[] = [];
+  /// GEt the list of report with global average >= 12
+  Array.from(globalRanks).map(([key, value], _index) => {
+    const student = studentsMap.get(key);
+    if (!student) return;
+    if (value.average >= 12) {
+      reports.push({
+        registrationNumber: student.registrationNumber ?? "",
+        studentName: getFullName(student),
+        dateOfBirth: student.dateOfBirth,
+        isRepeating: student.isRepeating,
+        grade: value.average,
+        observation: getAppreciations(value.average),
+      });
+    }
+  });
+  return reports;
 }
 
 async function toExcel({
