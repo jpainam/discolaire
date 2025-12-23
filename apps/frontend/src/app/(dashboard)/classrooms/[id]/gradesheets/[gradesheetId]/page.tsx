@@ -221,9 +221,9 @@ export default async function Page(props: {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="grid grid-cols-1 gap-2 p-2">
+              <div className="col-span-3 grid grid-cols-1 gap-2 p-2">
                 {Array.from({ length: 10 }).map((_, index) => (
-                  <Skeleton className="h-8" key={index} />
+                  <Skeleton className="h-20" key={index} />
                 ))}
               </div>
             }

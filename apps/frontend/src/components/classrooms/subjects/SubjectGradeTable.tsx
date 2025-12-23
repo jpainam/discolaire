@@ -7,6 +7,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { TermType } from "@repo/db/enums";
+
 import { Badge } from "~/components/base-badge";
 import {
   Table,
@@ -117,14 +119,16 @@ export function SubjectGradeTable({ subjectId }: { subjectId: number }) {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("fullName")}</TableHead>
-              {terms.map((t, index) => (
-                <TableHead
-                  key={`${t.id}-${index}-head`}
-                  className="text-center"
-                >
-                  {t.name.slice(0, 6)}
-                </TableHead>
-              ))}
+              {terms
+                .filter((t) => t.type == TermType.MONTHLY)
+                .map((t, index) => (
+                  <TableHead
+                    key={`${t.id}-${index}-head`}
+                    className="text-center"
+                  >
+                    {t.name.slice(0, 6)}
+                  </TableHead>
+                ))}
 
               <TableHead className="text-center">{t("average")}</TableHead>
               <TableHead className="text-center">Trend</TableHead>
@@ -149,24 +153,26 @@ export function SubjectGradeTable({ subjectId }: { subjectId: number }) {
                       avatar={avatar.toDataUri()}
                     />
                   </TableCell>
-                  {terms.map((t, iindex) => {
-                    const gs = group.grades.filter((gr) => gr.termId == t.id);
-                    const g = gs[0];
-                    return (
-                      <TableCell
-                        className={`py-1 text-center ${getGradeColor(g?.grade)}`}
-                        key={`${t.id}-${index}-${iindex}`}
-                      >
-                        {gs.map((gg) => gg.grade).join(",")}
-                      </TableCell>
-                    );
-                  })}
+                  {terms
+                    .filter((t) => t.type == TermType.MONTHLY)
+                    .map((t, iindex) => {
+                      const gs = group.grades.filter((gr) => gr.termId == t.id);
+                      const g = gs[0];
+                      return (
+                        <TableCell
+                          className={`py-1 text-center ${getGradeColor(g?.grade)}`}
+                          key={`${t.id}-${index}-${iindex}`}
+                        >
+                          {gs.map((gg) => gg.grade).join(",")}
+                        </TableCell>
+                      );
+                    })}
                   <TableCell className="text-center">
                     <Badge
                       variant={average > 10 ? "info" : "warning"}
                       appearance={"outline"}
                     >
-                      {average}
+                      {average.toFixed(2)}
                     </Badge>
                   </TableCell>
 

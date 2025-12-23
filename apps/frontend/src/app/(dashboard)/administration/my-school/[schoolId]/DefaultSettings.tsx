@@ -2,8 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -12,6 +11,7 @@ import { z } from "zod";
 import type { RouterOutputs } from "@repo/api";
 
 import { CountryPicker } from "~/components/shared/CountryPicker";
+import { JournalMultiSelector } from "~/components/shared/selects/JournalMultiSelector";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -36,7 +36,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
-import { MultiSelectCombobox } from "./multi-selector";
 
 const defaultSettingsSchema = z.object({
   defaultCountryId: z.string().min(1),
@@ -57,9 +56,8 @@ export function DefaultSettings({
   const trpc = useTRPC();
   const params = useParams<{ schoolId: string }>();
 
-  const journalQuery = useQuery(trpc.accountingJournal.all.queryOptions());
-
   const queryClient = useQueryClient();
+  const requiredJournals = school.requiredJournals.map((req) => req.journalId);
 
   const form = useForm({
     resolver: standardSchemaResolver(defaultSettingsSchema),
@@ -71,9 +69,10 @@ export function DefaultSettings({
       allowOverEnrollment: school.allowOverEnrollment ?? true,
       currency: school.currency,
       timezone: school.timezone,
-      requiredJournals: school.requiredJournals.map((req) => req.journalId),
+      requiredJournals: requiredJournals,
     },
   });
+
   const router = useRouter();
   const canUpdateSchool = useCheckPermission("school", PermissionAction.UPDATE);
   const updateDefaultSettings = useMutation(
@@ -234,29 +233,10 @@ export function DefaultSettings({
                 <FormItem>
                   <FormLabel>{t("required_fees")}</FormLabel>
                   <FormControl>
-                    {journalQuery.isPending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <MultiSelectCombobox
-                        label={t("required_fees")}
-                        options={(journalQuery.data ?? []).map((journal) => ({
-                          label: journal.name,
-                          value: journal.id,
-                        }))}
-                        value={field.value ?? [""]}
-                        onChange={(val) => field.onChange(val)}
-                        renderItem={(option) => option.label}
-                        renderSelectedItem={(value: string[]) => {
-                          if (value.length === 0) return "";
-                          if (value.length === 1) {
-                            return journalQuery.data?.find(
-                              (p) => p.id === value[0],
-                            )?.name;
-                          }
-                          return `${value.length} journals selected`;
-                        }}
-                      />
-                    )}
+                    <JournalMultiSelector
+                      defaultValue={requiredJournals}
+                      onChangeAction={(values) => field.onChange(values)}
+                    />
                   </FormControl>
 
                   <FormMessage />
