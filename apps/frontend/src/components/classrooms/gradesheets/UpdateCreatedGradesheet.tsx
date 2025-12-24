@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -125,7 +126,8 @@ export function UpdateCreatedGradesheet({
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={updateCreatedGradesheet.isPending} type="submit">
+          <Button disabled={updateCreatedGradesheet.isPending} type="submit">
+            {updateCreatedGradesheet.isPending && <Spinner />}
             {t("submit")}
           </Button>
         </div>

@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
@@ -79,7 +80,6 @@ export function DeleteTransaction({
         />
         <div className="flex flex-row items-end justify-end gap-4">
           <Button
-            size={"sm"}
             onClick={() => {
               closeModal();
             }}
@@ -88,11 +88,11 @@ export function DeleteTransaction({
             {t("cancel")}
           </Button>
           <Button
-            isLoading={deleteTransactionMutation.isPending}
+            disabled={deleteTransactionMutation.isPending}
             variant={"destructive"}
-            size={"sm"}
             type="submit"
           >
+            {deleteTransactionMutation.isPending && <Spinner />}
             {t("continue")}
           </Button>
         </div>

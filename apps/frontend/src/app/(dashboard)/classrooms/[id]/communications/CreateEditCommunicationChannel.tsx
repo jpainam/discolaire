@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
@@ -175,7 +176,6 @@ export function CreateEditCommunicationChannel({
 
           <div className="flex justify-end gap-2">
             <Button
-              size={"sm"}
               type="button"
               variant="outline"
               onClick={() => closeModal()}
@@ -183,13 +183,14 @@ export function CreateEditCommunicationChannel({
               {t("cancel")}
             </Button>
             <Button
-              isLoading={
+              disabled={
                 updateCommunicationChannel.isPending ||
                 createCommunicationChannel.isPending
               }
               type="submit"
-              size={"sm"}
             >
+              {(updateCommunicationChannel.isPending ||
+                createCommunicationChannel.isPending) && <Spinner />}
               {t("submit")}
             </Button>
           </div>

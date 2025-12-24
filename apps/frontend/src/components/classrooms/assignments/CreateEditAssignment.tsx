@@ -29,6 +29,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Spinner } from "~/components/ui/spinner";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
@@ -192,15 +193,11 @@ export function CreateEditAssignment({
               }}
               variant={"outline"}
               type="button"
-              size={"sm"}
             >
               {t("cancel")}
             </Button>
-            <Button
-              isLoading={createAssignmentMutation.isPending}
-              type="submit"
-              size={"sm"}
-            >
+            <Button disabled={createAssignmentMutation.isPending} type="submit">
+              {createAssignmentMutation.isPending && <Spinner />}
               {t("submit")}
             </Button>
           </div>

@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  ArrowLeft,
-  Save,
-  TrendingDownIcon,
-  TrendingUpIcon,
-} from "lucide-react";
+import { ArrowLeft, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
@@ -39,6 +34,7 @@ import {
 } from "~/components/ui/form";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
+import { Spinner } from "~/components/ui/spinner";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { CURRENCY } from "~/lib/constants";
@@ -315,20 +311,14 @@ export function Step2({
             onClick={() => {
               router.push("./create");
             }}
-            size="sm"
             type="button"
             variant="outline"
           >
             <ArrowLeft />
             {t("prev")}
           </Button>
-          <Button
-            isLoading={createTransactionMutation.isPending}
-            disabled={createTransactionMutation.isPending}
-            type="submit"
-            size="sm"
-          >
-            <Save /> {t("submit")}
+          <Button disabled={createTransactionMutation.isPending} type="submit">
+            {createTransactionMutation.isPending && <Spinner />} {t("submit")}
           </Button>
         </div>
       </form>

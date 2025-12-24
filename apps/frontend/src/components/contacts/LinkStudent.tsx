@@ -28,6 +28,7 @@ import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { randomAvatar } from "../raw-images";
+import { Spinner } from "../ui/spinner";
 
 export function LinkStudent({ contactId }: { contactId: string }) {
   const t = useTranslations();
@@ -175,9 +176,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
           </span>
         )}
         <Button
-          size={"sm"}
           variant={"default"}
-          isLoading={createStudentContactMutation.isPending}
           disabled={selectedStudents.length === 0}
           onClick={() => {
             if (!relationship) {
@@ -196,6 +195,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
             });
           }}
         >
+          {createStudentContactMutation.isPending && <Spinner />}
           {t("link")}
         </Button>
       </div>

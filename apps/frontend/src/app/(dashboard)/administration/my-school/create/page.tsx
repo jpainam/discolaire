@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 
@@ -117,7 +118,8 @@ export default function Page() {
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={createSchoolMutation.isPending} type="submit">
+          <Button disabled={createSchoolMutation.isPending} type="submit">
+            {createSchoolMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
         </div>

@@ -17,6 +17,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
+import { Spinner } from "../ui/spinner";
 
 const createEditUserSchema = z.object({
   username: z.string().min(1),
@@ -166,7 +167,6 @@ export function CreateEditUser({
         <div className="mt-4 flex flex-row items-center justify-end gap-2">
           <Button
             type="button"
-            size={"sm"}
             variant="secondary"
             onClick={() => {
               closeModal();
@@ -175,12 +175,14 @@ export function CreateEditUser({
             {t("cancel")}
           </Button>
           <Button
-            size={"sm"}
-            isLoading={
+            disabled={
               createUserMutation.isPending || updateUserMutation.isPending
             }
             type="submit"
           >
+            {(createUserMutation.isPending || updateUserMutation.isPending) && (
+              <Spinner />
+            )}
             {t("submit")}
           </Button>
         </div>

@@ -33,6 +33,7 @@ import {
 } from "~/components/ui/popover";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { showErrorToast } from "~/lib/handle-error";
 import { cn } from "~/lib/utils";
@@ -199,15 +200,11 @@ function CreateStaffLevel() {
             }}
             type="button"
             variant={"outline"}
-            size={"sm"}
           >
             {t("cancel")}
           </Button>
-          <Button
-            isLoading={createStaffLevelMutation.isPending}
-            type="submit"
-            size={"sm"}
-          >
+          <Button disabled={createStaffLevelMutation.isPending} type="submit">
+            {createStaffLevelMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
         </div>

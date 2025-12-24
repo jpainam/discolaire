@@ -144,7 +144,7 @@ export function ClassroomTable() {
   );
 
   return (
-    <div className="bg-card">
+    <div className="">
       <div className="grid grid-cols-1 flex-row justify-between border-b px-4 py-2 lg:flex">
         <Label className="">{t("classrooms")}</Label>
         <div className="grid grid-cols-2 items-center gap-3 md:flex">

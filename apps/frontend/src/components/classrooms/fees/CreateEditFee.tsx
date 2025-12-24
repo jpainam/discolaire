@@ -1,7 +1,7 @@
 import type { SubmitHandler } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Save, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -203,22 +204,21 @@ export function CreateEditFee({
             onClick={() => {
               closeModal();
             }}
-            size={"sm"}
             variant="outline"
             type="button"
           >
-            <X className="h-4 w-4" />
             {t("cancel")}
           </Button>
 
           <Button
-            isLoading={
+            disabled={
               updateFeeMutation.isPending || createFeeMutation.isPending
             }
-            size={"sm"}
             type="submit"
           >
-            <Save className="h-4 w-4" />
+            {(updateFeeMutation.isPending || createFeeMutation.isPending) && (
+              <Spinner />
+            )}
             {fee ? t("edit") : t("submit")}
           </Button>
         </div>

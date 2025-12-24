@@ -20,6 +20,7 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -366,12 +367,14 @@ export function CreateStudentAttendance({
           {t("cancel")}
         </Button>
         <Button
-          isLoading={
+          disabled={
             createAttendanceMutation.isPending ||
             updateAttendanceMutation.isPending
           }
           type="submit"
         >
+          {(createAttendanceMutation.isPending ||
+            updateAttendanceMutation.isPending) && <Spinner />}
           {attendance ? t("update") : t("submit")}
         </Button>
       </div>

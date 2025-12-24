@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SaveIcon, TriangleAlert, XIcon } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -229,7 +230,6 @@ export function CreateGradeSheet({
             <div className="mt-4 grid grid-cols-2 items-center gap-2">
               <Button
                 type="button"
-                size={"sm"}
                 className="w-fit"
                 variant={"outline"}
                 onClick={() => {
@@ -240,17 +240,14 @@ export function CreateGradeSheet({
                   );
                 }}
               >
-                <XIcon />
                 {t("cancel")}
               </Button>
               <Button
-                size={"sm"}
-                disabled={!term.isActive}
+                disabled={!term.isActive || createGradesheetMutation.isPending}
                 className="w-fit"
-                isLoading={createGradesheetMutation.isPending}
                 type="submit"
               >
-                <SaveIcon />
+                {createGradesheetMutation.isPending && <Spinner />}
 
                 {t("submit")}
               </Button>

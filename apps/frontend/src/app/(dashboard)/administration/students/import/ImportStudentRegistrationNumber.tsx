@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -220,7 +221,6 @@ export function ImportStudentRegistrationNumber() {
           onClick={handleMatch}
           disabled={rows.length == 0}
           variant={"secondary"}
-          size={"sm"}
         >
           <ArrowLeftRight />
           Matcher
@@ -246,12 +246,11 @@ export function ImportStudentRegistrationNumber() {
           <ToggleGroupItem value="unmatched">Unmatched</ToggleGroupItem>
         </ToggleGroup>
         <Button
-          isLoading={updateRegistration.isPending}
           onClick={handleSubmit}
           disabled={rows.length == 0 || !filename || !isMatched}
           variant={"default"}
-          size={"sm"}
         >
+          {updateRegistration.isPending && <Spinner />}
           Valider
         </Button>
       </div>

@@ -16,6 +16,7 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -120,7 +121,6 @@ export function CreateEditLevel({
         <div className="ml-auto flex gap-4">
           <Button
             type="button"
-            size={"sm"}
             variant={"outline"}
             onClick={() => {
               closeModal();
@@ -129,12 +129,13 @@ export function CreateEditLevel({
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               updateClassroomLevel.isPending || createClassroomLevel.isPending
             }
-            size={"sm"}
             type="submit"
           >
+            {(updateClassroomLevel.isPending ||
+              createClassroomLevel.isPending) && <Spinner />}
             {id ? t("edit") : t("submit")}
           </Button>
         </div>

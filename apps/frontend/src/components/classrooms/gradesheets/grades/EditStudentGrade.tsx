@@ -11,6 +11,7 @@ import { CheckboxField } from "~/components/shared/forms/checkbox-field";
 import { InputField } from "~/components/shared/forms/input-field";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -86,16 +87,12 @@ export function EditStudentGrade({
               closeModal();
             }}
             type="button"
-            size={"sm"}
             variant={"outline"}
           >
             {t("cancel")}
           </Button>
-          <Button
-            isLoading={updateGradeMutation.isPending}
-            size={"sm"}
-            type="submit"
-          >
+          <Button disabled={updateGradeMutation.isPending} type="submit">
+            {updateGradeMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
         </div>

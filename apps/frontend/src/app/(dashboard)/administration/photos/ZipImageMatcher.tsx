@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
+import { Spinner } from "~/components/ui/spinner";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 
@@ -361,8 +362,6 @@ export function ZipImageMatcher() {
           {t("Reset")}
         </Button>
         <Button
-          size={"sm"}
-          isLoading={matchIdsMutation.isPending}
           onClick={handleSubmit}
           disabled={
             fileResults.length === 0 ||
@@ -370,6 +369,7 @@ export function ZipImageMatcher() {
             matchedCount === 0
           }
         >
+          {matchIdsMutation.isPending && <Spinner />}
           {t("Submit Matched Files")}
         </Button>
       </CardFooter>

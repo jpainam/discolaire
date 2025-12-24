@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FileIcon, Trash2, UploadIcon, XIcon } from "lucide-react";
+import { FileIcon, Trash2, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
@@ -27,6 +27,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { cn, formatBytes } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+import { Spinner } from "../ui/spinner";
 
 const createEditDocumentSchema = z.object({
   title: z.string().min(1),
@@ -256,24 +257,23 @@ export function CreateEditDocument({
             onClick={() => {
               closeModal();
             }}
-            size={"sm"}
             type="button"
             variant={"outline"}
           >
-            <XIcon className="h-4 w-4" />
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               isLoading ||
               createDocumentMutation.isPending ||
               updateDocumentMutation.isPending
             }
             variant={"default"}
-            size={"sm"}
             type="submit"
           >
-            <UploadIcon /> {t("submit")}
+            {(createDocumentMutation.isPending ||
+              updateDocumentMutation.isPending) && <Spinner />}
+            {t("submit")}
           </Button>
         </div>
       </form>

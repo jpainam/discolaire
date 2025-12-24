@@ -2,7 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SaveIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -147,22 +148,23 @@ export function CreateEditGradeAppreciation({
           <Button
             type="button"
             variant={"outline"}
-            size={"sm"}
             onClick={() => {
               closeModal();
             }}
           >
-            <XIcon className="mr-2 size-4" />
+            <XIcon />
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               createAppreciation.isPending || updateAppreciation.isPending
             }
             type="submit"
-            size={"sm"}
           >
-            <SaveIcon className="mr-2 size-4" />
+            {(createAppreciation.isPending || updateAppreciation.isPending) && (
+              <Spinner />
+            )}
+
             {t("submit")}
           </Button>
         </div>

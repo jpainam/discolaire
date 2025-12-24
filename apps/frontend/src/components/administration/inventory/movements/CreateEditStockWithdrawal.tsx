@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
@@ -159,7 +160,8 @@ export function CreateEditStockWithdrawal({
             )}
           />
           <div className="grid grid-cols-1 gap-2">
-            <Button isLoading={createConsumableMutation.isPending} size={"sm"}>
+            <Button disabled={createConsumableMutation.isPending}>
+              {createConsumableMutation.isPending && <Spinner />}
               {t("submit")}
             </Button>
             <Button
@@ -167,7 +169,6 @@ export function CreateEditStockWithdrawal({
                 closeSheet();
               }}
               type="button"
-              size={"sm"}
               variant={"outline"}
             >
               {t("close")}

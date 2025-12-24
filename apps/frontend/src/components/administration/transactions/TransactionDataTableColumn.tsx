@@ -249,6 +249,7 @@ function ActionCell({
             onSelect={() => {
               openModal({
                 title: t("details"),
+                className: "sm:max-w-lg",
                 view: <TransactionDetails transactionId={transaction.id} />,
               });
             }}

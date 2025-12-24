@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -176,8 +177,7 @@ export function TermTable() {
                   <TableCell>{term.schoolYear.name}</TableCell>
                   <TableCell>
                     <Button
-                      size={"sm"}
-                      //isLoading={updateTermActiveMutation.isPending}
+                      disabled={updateTermActiveMutation.isPending}
                       onClick={() => {
                         toast.loading(t("Processing"), { id: 0 });
                         updateTermActiveMutation.mutate({
@@ -187,6 +187,7 @@ export function TermTable() {
                       }}
                       variant={term.isActive ? "secondary" : "destructive"}
                     >
+                      {updateTermActiveMutation.isPending && <Spinner />}
                       {term.isActive ? <LockIcon /> : <LockOpen />}
                       {term.isActive ? t("Lock") : t("Unlock")}
                     </Button>

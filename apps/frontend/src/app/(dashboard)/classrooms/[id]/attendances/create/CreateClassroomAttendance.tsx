@@ -12,6 +12,7 @@ import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -334,7 +335,8 @@ export function CreateClassroomAttendance({
         <Button type="reset" variant={"secondary"}>
           {t("cancel")}
         </Button>
-        <Button isLoading={createPeriodic.isPending} type="submit">
+        <Button disabled={createPeriodic.isPending} type="submit">
+          {createPeriodic.isPending && <Spinner />}
           {t("submit")}
         </Button>
       </div>

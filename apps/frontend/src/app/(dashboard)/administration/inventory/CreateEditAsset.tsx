@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
@@ -157,19 +158,19 @@ export function CreateEditAsset({
             onClick={() => {
               closeModal();
             }}
-            size={"sm"}
             variant={"outline"}
             type="button"
           >
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               createAssetMutation.isPending || updateAssetMutation.isPending
             }
-            size={"sm"}
             type="submit"
           >
+            {(createAssetMutation.isPending ||
+              updateAssetMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
         </div>

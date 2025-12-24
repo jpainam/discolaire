@@ -15,6 +15,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "~/components/ui/input-group";
+import { Spinner } from "~/components/ui/spinner";
 import { getFullName } from "~/utils";
 
 export function ContactSearchPage() {
@@ -48,12 +49,8 @@ export function ContactSearchPage() {
           <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
         </InputGroup>
 
-        <Button
-          disabled={isSearching}
-          isLoading={isSearching}
-          onClick={handleSearch}
-          size={"sm"}
-        >
+        <Button disabled={isSearching} onClick={handleSearch}>
+          {isSearching && <Spinner />}
           {t("search")}
         </Button>
       </div>

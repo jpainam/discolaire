@@ -27,6 +27,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 
@@ -149,8 +150,9 @@ export function SignUpForm({
               <Button
                 type="submit"
                 className="w-full"
-                isLoading={signUpMutation.isPending || isLoading}
+                disabled={signUpMutation.isPending || isLoading}
               >
+                {(signUpMutation.isPending || isLoading) && <Spinner />}
                 {t("Register")}
               </Button>
             </form>

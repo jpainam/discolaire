@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/form";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
+import { Spinner } from "./ui/spinner";
 
 const feedbackSchema = z.object({
   content: z.string().min(5),
@@ -84,7 +85,6 @@ export function FeedBackDialog() {
 
         <div className="flex flex-row justify-end gap-4">
           <Button
-            size={"sm"}
             onClick={() => {
               closeModal();
             }}
@@ -93,7 +93,8 @@ export function FeedBackDialog() {
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={isLoading} size={"sm"} type="submit">
+          <Button disabled={isLoading} type="submit">
+            {isLoading && <Spinner />}
             {t("send_feedback")}
           </Button>
         </div>

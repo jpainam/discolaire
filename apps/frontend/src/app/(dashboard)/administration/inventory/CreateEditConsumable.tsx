@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
@@ -213,12 +214,14 @@ export function CreateEditConsumable({
               {t("cancel")}
             </Button>
             <Button
-              isLoading={
+              disabled={
                 createConsumableMutation.isPending ||
                 updateConsumableMutation.isPending
               }
               type="submit"
             >
+              {(createConsumableMutation.isPending ||
+                updateConsumableMutation.isPending) && <Spinner />}
               {t("submit")}
             </Button>
           </div>

@@ -291,7 +291,7 @@
 //           </Button>
 //           <Button
 //             type="submit"
-//             isLoading={createLessonMutation.isPending}
+//             disabled={createLessonMutation.isPending}
 //             size={"sm"}
 //           >
 //             {t("submit")}

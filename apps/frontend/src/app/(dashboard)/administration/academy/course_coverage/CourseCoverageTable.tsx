@@ -69,7 +69,6 @@ export function CourseCoverageTable() {
         <div className="ml-auto flex items-center gap-2">
           <Button
             variant={"secondary"}
-            size={"sm"}
             // onClick={() => {
             //   window.open(
             //     `/api/pdfs/gradesheets/${gradesheet.id}?format=pdf&classroomId=${params.id}`,
@@ -81,7 +80,6 @@ export function CourseCoverageTable() {
             {t("pdf_export")}
           </Button>
           <Button
-            size={"sm"}
             variant={"secondary"}
             // onClick={() => {
             //   window.open(

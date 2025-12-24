@@ -29,6 +29,7 @@ import {
 } from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
+import { Spinner } from "../ui/spinner";
 
 const schoolYearSchema = z.object({
   name: z.string().min(1),
@@ -221,14 +222,15 @@ export function CreateEditSchoolYear({
             {t("cancel")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               createSchoolYearMutation.isPending ||
               updateSchoolYearMutation.isPending
             }
             variant={"default"}
-            size={"sm"}
             type="submit"
           >
+            {(createSchoolYearMutation.isPending ||
+              updateSchoolYearMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
         </div>

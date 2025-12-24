@@ -126,7 +126,6 @@ export function ClassroomSubjectTimetable({
           <Input
             id="start-time"
             type="time"
-            className="h-8"
             value={slotStart}
             onChange={(e) => setSlotStart(e.target.value)}
           />
@@ -135,7 +134,6 @@ export function ClassroomSubjectTimetable({
           <Label htmlFor="end-time">{t("end_time")}</Label>
           <Input
             id="end-time"
-            className="h-8"
             type="time"
             value={slotEnd}
             onChange={(e) => setSlotEnd(e.target.value)}
@@ -143,11 +141,7 @@ export function ClassroomSubjectTimetable({
         </div>
         {canCreateTimetable && (
           <div className="flex items-end">
-            <Button
-              size={"sm"}
-              //isLoading={createTimetableSlot.isPending}
-              onClick={handleAddTimeSlot}
-            >
+            <Button onClick={handleAddTimeSlot}>
               {/* <Plus className="h-4 w-4" /> */}
               {t("add")}
             </Button>

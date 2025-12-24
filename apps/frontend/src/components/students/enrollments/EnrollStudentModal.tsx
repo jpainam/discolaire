@@ -17,6 +17,7 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -93,7 +94,6 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
 
         <div className="ml-auto flex flex-row gap-4">
           <Button
-            size={"sm"}
             type="button"
             onClick={() => {
               closeModal();
@@ -102,11 +102,8 @@ export function EnrollStudentModal({ studentId }: { studentId: string }) {
           >
             {t("cancel")}
           </Button>
-          <Button
-            size={"sm"}
-            isLoading={createEnrollmentMutation.isPending}
-            type="submit"
-          >
+          <Button disabled={createEnrollmentMutation.isPending} type="submit">
+            {createEnrollmentMutation.isPending && <Spinner />}
             {t("enroll")}
           </Button>
         </div>

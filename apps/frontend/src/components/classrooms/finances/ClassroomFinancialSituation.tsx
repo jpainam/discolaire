@@ -193,10 +193,10 @@ function ListViewFinance({
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant={"ghost"} size={"icon-sm"}>
-                          <MoreVertical className="size-4" />
+                          <MoreVertical  />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="w-38">
                         {canCreateTransaction && (
                           <DropdownMenuItem
                             onSelect={() => {
@@ -295,7 +295,7 @@ function GridViewFinanceCard({
                 <MoreVertical className="size-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-38">
               {canCreateTransaction && (
                 <DropdownMenuItem
                   onSelect={() => {

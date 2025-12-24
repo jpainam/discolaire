@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 
 export function CreateAuthApiKey() {
@@ -34,12 +35,12 @@ export function CreateAuthApiKey() {
   };
   return (
     <Button
-      isLoading={isLoading}
+      disabled={isLoading}
       onClick={async () => {
         await createApiKey();
       }}
-      size={"sm"}
     >
+      {isLoading && <Spinner />}
       {t("Create api key")}
     </Button>
   );

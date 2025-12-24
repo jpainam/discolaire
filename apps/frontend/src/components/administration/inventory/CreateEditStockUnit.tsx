@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -105,18 +106,18 @@ export function CreateEditStockUnit({
               closeModal();
             }}
             variant={"outline"}
-            size={"sm"}
           >
             {t("close")}
           </Button>
           <Button
-            isLoading={
+            disabled={
               createStockUnitMutation.isPending ||
               updateStockUnitMutation.isPending
             }
-            size={"sm"}
             type="submit"
           >
+            {(createStockUnitMutation.isPending ||
+              updateStockUnitMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
         </div>

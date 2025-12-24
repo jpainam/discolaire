@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -181,17 +182,17 @@ export function CreateEditCourse({
               closeModal();
             }}
             type="button"
-            size={"sm"}
           >
             {t("cancel")}
           </Button>
           <Button
-            size={"sm"}
-            isLoading={
+            disabled={
               createCourseMutation.isPending || updateCourseMutation.isPending
             }
             variant={"default"}
           >
+            {(createCourseMutation.isPending ||
+              updateCourseMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
         </div>

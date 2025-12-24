@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { SheetFooter } from "~/components/ui/sheet";
+import { Spinner } from "~/components/ui/spinner";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
@@ -187,15 +188,16 @@ export function CreateEditLoan({
         </div>
         <SheetFooter>
           <Button
-            isLoading={createMutation.isPending || updateMutation.isPending}
-            size={"sm"}
+            disabled={createMutation.isPending || updateMutation.isPending}
             type="submit"
           >
+            {(createMutation.isPending || updateMutation.isPending) && (
+              <Spinner />
+            )}
             {t("submit")}
           </Button>
           <Button
             variant={"outline"}
-            size={"sm"}
             type="button"
             onClick={() => {
               closeSheet();

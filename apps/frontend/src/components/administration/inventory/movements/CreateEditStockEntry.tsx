@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
@@ -146,12 +147,13 @@ export function CreateEditStockEntry({
           />
           <div className="grid grid-cols-1 gap-2">
             <Button
-              isLoading={
+              disabled={
                 createMovementMutation.isPending ||
                 updateMovementMutation.isPending
               }
-              size={"sm"}
             >
+              {(createMovementMutation.isPending ||
+                updateMovementMutation.isPending) && <Spinner />}
               {t("submit")}
             </Button>
             <Button
@@ -159,7 +161,6 @@ export function CreateEditStockEntry({
                 closeSheet();
               }}
               type="button"
-              size={"sm"}
               variant={"outline"}
             >
               {t("close")}

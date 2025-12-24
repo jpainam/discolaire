@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -119,16 +120,12 @@ export function CreateStudentGrade({
               closeModal();
             }}
             type="button"
-            size={"sm"}
             variant={"outline"}
           >
             {t("cancel")}
           </Button>
-          <Button
-            isLoading={createGradeMutation.isPending}
-            size={"sm"}
-            type="submit"
-          >
+          <Button disabled={createGradeMutation.isPending} type="submit">
+            {createGradeMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
         </div>

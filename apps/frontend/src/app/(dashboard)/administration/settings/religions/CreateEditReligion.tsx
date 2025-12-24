@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -106,18 +107,18 @@ export function CreateEditReligion({
               closeModal();
             }}
             type="button"
-            size={"sm"}
           >
             {t("cancel")}
           </Button>
           <Button
-            size={"sm"}
-            isLoading={
+            disabled={
               createReligionMutation.isPending ||
               updateReligionMutation.isPending
             }
             variant={"default"}
           >
+            {(createReligionMutation.isPending ||
+              updateReligionMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
         </div>

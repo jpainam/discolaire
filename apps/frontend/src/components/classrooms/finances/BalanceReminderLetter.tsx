@@ -27,7 +27,7 @@ export function BalanceReminderLetter({
   const [journalId, setJournalId] = useState<string | null>();
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-6">
       <div className="flex flex-col gap-2">
         <Label>{t("Accounting journals")}</Label>
         <AccountingJournalSelector onChange={(val) => setJournalId(val)} />
@@ -42,7 +42,7 @@ export function BalanceReminderLetter({
         />
       </div>
       <div className="col-span-full flex items-center justify-end gap-2">
-        <Button variant="secondary" onClick={() => closeModal()} size={"sm"}>
+        <Button variant="secondary" onClick={() => closeModal()}>
           {t("cancel")}
         </Button>
         <Button
@@ -59,7 +59,6 @@ export function BalanceReminderLetter({
             );
             closeModal();
           }}
-          size={"sm"}
         >
           {t("print")}
         </Button>

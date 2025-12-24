@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { FileUploader } from "~/uploads/file-uploader";
@@ -313,9 +314,10 @@ export function CreateEditSchool({ school }: { school: School }) {
           )}
         />
         <Button
-          isLoading={updateSchoolMutation.isPending || isLoading}
+          disabled={updateSchoolMutation.isPending || isLoading}
           type="submit"
         >
+          {(updateSchoolMutation.isPending || isLoading) && <Spinner />}
           {t("submit")}
         </Button>
       </form>

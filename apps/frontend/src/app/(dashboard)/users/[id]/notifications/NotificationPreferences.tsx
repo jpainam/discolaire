@@ -16,6 +16,7 @@ import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
+import { Spinner } from "~/components/ui/spinner";
 import { useTRPC } from "~/trpc/react";
 
 interface NotificationEvent {
@@ -216,7 +217,7 @@ export function NotificationPreferences() {
                   handleChannelChange(event.id, "whatsapp", checked === true)
                 }
               />
-              <MessageSquare className="text-muted-foreground mr-1 h-4 w-4" />
+              <MessageSquare className="text-muted-foreground h-4 w-4" />
               <Label htmlFor={`${event.id}-whatsapp`}>WhatsApp</Label>
             </div>
           </div>
@@ -227,10 +228,10 @@ export function NotificationPreferences() {
 
       <div className="flex">
         <Button
-          isLoading={upsertMutation.isPending}
-          size={"sm"}
+          disabled={upsertMutation.isPending}
           onClick={handleSavePreferences}
         >
+          {upsertMutation.isPending && <Spinner />}
           {t("submit")}
         </Button>
       </div>

@@ -41,6 +41,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
@@ -388,15 +389,15 @@ export function SubjectJournalEditor({
               disabled={!form.formState.isDirty}
               type="button"
               variant="outline"
-              size={"sm"}
             >
               {t("cancel")}
             </Button>
             <Button
-              disabled={!form.formState.isDirty}
-              isLoading={createSubjectJournal.isPending}
-              size={"sm"}
+              disabled={
+                !form.formState.isDirty || createSubjectJournal.isPending
+              }
             >
+              {createSubjectJournal.isPending && <Spinner />}
               {t("submit")}
             </Button>
           </div>

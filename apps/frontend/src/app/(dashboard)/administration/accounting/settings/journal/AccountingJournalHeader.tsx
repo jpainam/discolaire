@@ -86,7 +86,7 @@ export function AccountingJournalHeader() {
         )}
         {/* {canCreateFees && (
           <Button
-            isLoading={updateOldFees.isPending}
+            disabled={updateOldFees.isPending}
             onClick={() => {
               handleSync();
             }}

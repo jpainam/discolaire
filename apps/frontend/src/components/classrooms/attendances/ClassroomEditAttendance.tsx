@@ -17,6 +17,7 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -293,7 +294,8 @@ export function ClassroomEditAttendance({
         >
           {t("cancel")}
         </Button>
-        <Button isLoading={updateAttendanceMutation.isPending} type="submit">
+        <Button disabled={updateAttendanceMutation.isPending} type="submit">
+          {updateAttendanceMutation.isPending && <Spinner />}
           {t("update")}
         </Button>
       </div>

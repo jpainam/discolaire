@@ -32,6 +32,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { ChangeAvatarButton } from "~/components/users/ChangeAvatarButton";
 import { useTRPC } from "~/trpc/react";
 
@@ -191,7 +192,10 @@ export function UserProfile() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button isLoading={updateUser.isPending}>{t("submit")}</Button>
+              <Button disabled={updateUser.isPending}>
+                {updateUser.isPending && <Spinner />}
+                {t("submit")}
+              </Button>
             </CardFooter>
           </Card>
         </form>

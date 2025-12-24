@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 
@@ -242,16 +243,12 @@ export function CreateEditSubscription({
             onClick={() => {
               closeSheet();
             }}
-            size={"sm"}
             variant={"outline"}
           >
             {t("cancel")}
           </Button>
-          <Button
-            isLoading={upsertSubscriptionMutation.isPending}
-            type="submit"
-            size={"sm"}
-          >
+          <Button disabled={upsertSubscriptionMutation.isPending} type="submit">
+            {upsertSubscriptionMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
         </div>

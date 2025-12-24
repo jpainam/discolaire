@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
@@ -149,7 +150,8 @@ export function CreateEditAssetUsage({
           )}
         />
         <div className="grid grid-cols-1 gap-2">
-          <Button isLoading={createAssetUsageMutation.isPending} size={"sm"}>
+          <Button disabled={createAssetUsageMutation.isPending}>
+            {createAssetUsageMutation.isPending && <Spinner />}
             {t("submit")}
           </Button>
           <Button
@@ -158,7 +160,6 @@ export function CreateEditAssetUsage({
               closeSheet();
             }}
             type="button"
-            size={"sm"}
           >
             {t("close")}
           </Button>

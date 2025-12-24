@@ -27,6 +27,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useUpload } from "~/hooks/use-upload";
 import { FileUploader } from "~/uploads/file-uploader";
+import { Spinner } from "../ui/spinner";
 
 const preventSchema = z.object({
   from: z.string().datetime(),
@@ -165,7 +166,7 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
 
         <div className="flex flex-row items-center justify-end gap-2">
           <Button
-            size={"sm"}
+          
             onClick={() => {
               closeModal();
             }}
@@ -174,7 +175,8 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
           >
             {t("cancel")}
           </Button>
-          <Button isLoading={isLoading} type="submit">
+          <Button disabled={isLoading} type="submit">
+            {isLoading && <Spinner />}
             {t("submit")}
           </Button>
         </div>

@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { SheetClose, SheetFooter } from "~/components/ui/sheet";
+import { Spinner } from "~/components/ui/spinner";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 
@@ -207,16 +208,15 @@ export function CreateEditBook({
         <SheetFooter>
           <div className="flex flex-row justify-end gap-2">
             <Button
-              size={"sm"}
               variant={"default"}
-              isLoading={form.formState.isSubmitting}
               disabled={form.formState.isSubmitting}
               type="submit"
             >
+              {form.formState.isSubmitting && <Spinner />}
               {book ? t("edit") : t("submit")}
             </Button>
             <SheetClose asChild>
-              <Button type="button" variant="outline" size={"sm"}>
+              <Button type="button" variant="outline">
                 {t("cancel")}
               </Button>
             </SheetClose>

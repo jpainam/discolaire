@@ -31,6 +31,7 @@ import {
   useFormContext,
 } from "~/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useTRPC } from "~/trpc/react";
 
@@ -166,10 +167,11 @@ export function HealthHistory({ studentId }: { studentId: string }) {
               <Ambulance />
               {t("past_and_present_health_problems")}
               <div className="ml-auto flex flex-row items-center gap-2">
-                <Button isLoading={updateIssueMutation.isPending} size={"sm"}>
+                <Button disabled={updateIssueMutation.isPending}>
+                  {updateIssueMutation.isPending && <Spinner />}
                   {t("submit")}
                 </Button>
-                <Button variant={"outline"} type="reset" size={"sm"}>
+                <Button variant={"outline"} type="reset">
                   {t("reset")}
                 </Button>
               </div>

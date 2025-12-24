@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { Switch } from "~/components/ui/switch";
 import { timezones } from "~/data/timezones";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -324,12 +325,8 @@ export function DefaultSettings({
           >
             {t("reset")}
           </Button>
-          <Button
-            type="submit"
-            disabled={!form.formState.isDirty || disabled}
-            isLoading={updateDefaultSettings.isPending}
-            size={"sm"}
-          >
+          <Button type="submit" disabled={!form.formState.isDirty || disabled}>
+            {updateDefaultSettings.isPending && <Spinner />}
             {t("submit")}
           </Button>
         </div>

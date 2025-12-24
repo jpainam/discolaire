@@ -38,6 +38,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useRouter } from "~/hooks/use-router";
@@ -173,18 +174,14 @@ export function CreateEditHealthVisit({
             <Button
               variant={"outline"}
               type="button"
-              size={"sm"}
               onClick={() => {
                 router.push(`/students/${params.id}/health`);
               }}
             >
               {t("cancel")}
             </Button>
-            <Button
-              size={"sm"}
-              isLoading={createVisitMutation.isPending}
-              type="submit"
-            >
+            <Button disabled={createVisitMutation.isPending} type="submit">
+              {createVisitMutation.isPending && <Spinner />}
               {t("submit")}
             </Button>
           </div>

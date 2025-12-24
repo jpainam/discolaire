@@ -23,6 +23,7 @@ import { useTRPC } from "~/trpc/react";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffSelector } from "../shared/selects/StaffSelector";
+import { Spinner } from "../ui/spinner";
 
 type ClassroomAllProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]
@@ -184,16 +185,15 @@ export function CreateEditClassroom({
 
         <SheetFooter>
           <Button
-            size={"sm"}
             variant={"default"}
-            isLoading={form.formState.isSubmitting}
             disabled={form.formState.isSubmitting}
             type="submit"
           >
+            {form.formState.isSubmitting && <Spinner />}
             {classroom ? t("edit") : t("submit")}
           </Button>
           <SheetClose asChild>
-            <Button type="button" variant="outline" size={"sm"}>
+            <Button type="button" variant="outline">
               {t("cancel")}
             </Button>
           </SheetClose>

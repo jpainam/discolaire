@@ -32,6 +32,7 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
+import { Spinner } from "~/components/ui/spinner";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
@@ -114,11 +115,8 @@ export function CreateEditProgram({
           <div className="ml-auto flex flex-row items-center gap-2">
             {canUpdateSubject && (
               <>
-                <Button
-                  size={"sm"}
-                  isLoading={updateSubjectProgram.isPending}
-                  type="submit"
-                >
+                <Button disabled={updateSubjectProgram.isPending} type="submit">
+                  {updateSubjectProgram.isPending && <Spinner />}
                   {t("submit")}
                 </Button>
                 <Button
@@ -127,7 +125,6 @@ export function CreateEditProgram({
                     router.push(pathname.split("/").slice(0, -1).join("/"));
                   }}
                   variant={"outline"}
-                  size={"sm"}
                 >
                   {t("cancel")}
                 </Button>

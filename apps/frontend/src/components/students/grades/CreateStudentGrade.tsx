@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
@@ -88,13 +89,12 @@ export function CreateStudentGrade({
           onClick={() => {
             closeModal();
           }}
-          size={"sm"}
           variant={"secondary"}
         >
           {t("cancel")}
         </Button>
         <Button
-          isLoading={createStudentGradeMutation.isPending}
+          disabled={createStudentGradeMutation.isPending}
           onClick={() => {
             if (!grade || !gradeSheetId) {
               toast.warning("Choisir une fiche existente et saisir la note");
@@ -106,8 +106,8 @@ export function CreateStudentGrade({
               gradeSheetId: gradeSheetId,
             });
           }}
-          size={"sm"}
         >
+          {createStudentGradeMutation.isPending && <Spinner />}
           {t("submit")}
         </Button>
       </div>

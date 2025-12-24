@@ -100,7 +100,7 @@ export function StudentPageHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} size={"icon-sm"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
