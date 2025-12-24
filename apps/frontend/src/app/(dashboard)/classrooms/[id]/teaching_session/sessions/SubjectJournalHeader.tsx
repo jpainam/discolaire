@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { MoreVertical, Trash2 } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -117,9 +118,8 @@ export function SubjectJournalHeader({
                       }
                     }}
                     variant="destructive"
-                    className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                   >
-                    <Trash2 />
+                    <DeleteIcon />
                     {t("clear_all")}
                   </DropdownMenuItem>
                 )}

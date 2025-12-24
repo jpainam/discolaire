@@ -130,7 +130,7 @@ export function TransactionTable() {
             {transactions.map((transaction) => {
               const createdBy = transaction.createdBy;
               const name = createdBy?.name ?? createdBy?.username;
-              const avatar = createdBy?.avatar;
+              //const avatar = createdBy?.avatar;
               return (
                 <TableRow key={transaction.id}>
                   <TableCell>

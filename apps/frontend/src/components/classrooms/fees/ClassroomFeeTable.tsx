@@ -203,7 +203,7 @@ export function ClassroomFeeTable() {
                 {/* Journal Subtotal */}
                 <TableRow>
                   <TableCell className="pl-8 font-bold uppercase">
-                    {t("subtotal")}
+                    subtotal
                   </TableCell>
                   <TableCell className="font-bold">
                     {sumBy(journalFees, (f) => f.amount).toLocaleString(

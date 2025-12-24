@@ -11,7 +11,6 @@ import {
   MessageSquare,
   MoreVertical,
   PlusIcon,
-  Trash2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -38,6 +37,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -164,8 +164,8 @@ export function SubscriptionHeader() {
           </Button> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size={"icon"} variant={"outline"} className="size-8">
-                <MoreVertical className="h-4 w-4" />
+              <Button size={"icon"} variant={"outline"}>
+                <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -196,7 +196,7 @@ export function SubscriptionHeader() {
                     }}
                     variant="destructive"
                   >
-                    <Trash2 />
+                    <DeleteIcon />
                     {t("clear_all")}
                   </DropdownMenuItem>
                 </>

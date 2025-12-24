@@ -2,7 +2,7 @@
 
 import { useParams, usePathname } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { MoreVertical, PlusIcon, Trash } from "lucide-react";
+import { MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -75,7 +76,6 @@ export function ClassroomAttendanceHeader() {
                 `/classrooms/${params.id}/attendances/create?termId=${termId}`,
               );
             }}
-            size={"sm"}
           >
             <PlusIcon />
             {t("add")}
@@ -83,7 +83,7 @@ export function ClassroomAttendanceHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon-sm"}>
+            <Button size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
@@ -109,7 +109,7 @@ export function ClassroomAttendanceHeader() {
                     }
                   }}
                 >
-                  <Trash />
+                  <DeleteIcon />
                   {t("clear_all")}
                 </DropdownMenuItem>
               </>

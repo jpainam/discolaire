@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, MoreVerticalIcon, PlusIcon, Trash2 } from "lucide-react";
+import { CalendarDays, MoreVerticalIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -20,6 +20,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -73,8 +74,8 @@ export function ClassroomTimeTableHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVerticalIcon className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVerticalIcon />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -109,9 +110,8 @@ export function ClassroomTimeTableHeader() {
                     }
                   }}
                   variant="destructive"
-                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                 >
-                  <Trash2 />
+                  <DeleteIcon />
                   {t("clear_all")}
                 </DropdownMenuItem>
               </>

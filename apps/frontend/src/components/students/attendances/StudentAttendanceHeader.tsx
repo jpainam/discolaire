@@ -1,13 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import {
-  ChevronDown,
-  LineChart,
-  MoreVertical,
-  PlusIcon,
-  Trash2,
-} from "lucide-react";
+import { ChevronDown, LineChart, MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
@@ -27,6 +21,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 
 export function StudentAttendanceHeader() {
@@ -99,8 +94,8 @@ export function StudentAttendanceHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -115,11 +110,8 @@ export function StudentAttendanceHeader() {
             {canDeleteAttendance && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  variant="destructive"
-                  className="dark:data-[variant=destructive]:focus:bg-destructive/10"
-                >
-                  <Trash2 />
+                <DropdownMenuItem variant="destructive">
+                  <DeleteIcon />
                   {t("clear_all")}
                 </DropdownMenuItem>
               </>
