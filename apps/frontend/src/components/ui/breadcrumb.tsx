@@ -1,12 +1,9 @@
-import type * as React from "react";
-import {
-  ArrowRight01Icon,
-  MoreHorizontalCircle01Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Slot } from "radix-ui";
+import * as React from "react"
+import { Slot } from "radix-ui"
 
-import { cn } from "~/lib/utils";
+import { cn } from "~/lib/utils"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowRight01Icon, MoreHorizontalCircle01Icon } from "@hugeicons/core-free-icons"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -16,7 +13,7 @@ function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
       className={cn(className)}
       {...props}
     />
-  );
+  )
 }
 
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
@@ -24,22 +21,22 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words",
-        className,
+        "text-muted-foreground gap-1.5 text-xs/relaxed flex flex-wrap items-center break-words",
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
   return (
     <li
       data-slot="breadcrumb-item"
-      className={cn("inline-flex items-center gap-1", className)}
+      className={cn("gap-1 inline-flex items-center", className)}
       {...props}
     />
-  );
+  )
 }
 
 function BreadcrumbLink({
@@ -47,9 +44,9 @@ function BreadcrumbLink({
   className,
   ...props
 }: React.ComponentProps<"a"> & {
-  asChild?: boolean;
+  asChild?: boolean
 }) {
-  const Comp = asChild ? Slot.Root : "a";
+  const Comp = asChild ? Slot.Root : "a"
 
   return (
     <Comp
@@ -57,7 +54,7 @@ function BreadcrumbLink({
       className={cn("hover:text-foreground transition-colors", className)}
       {...props}
     />
-  );
+  )
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
@@ -70,7 +67,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       className={cn("text-foreground font-normal", className)}
       {...props}
     />
-  );
+  )
 }
 
 function BreadcrumbSeparator({
@@ -86,9 +83,11 @@ function BreadcrumbSeparator({
       className={cn("[&>svg]:size-3.5", className)}
       {...props}
     >
-      {children ?? <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />}
+      {children ?? (
+        <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+      )}
     </li>
-  );
+  )
 }
 
 function BreadcrumbEllipsis({
@@ -101,23 +100,23 @@ function BreadcrumbEllipsis({
       role="presentation"
       aria-hidden="true"
       className={cn(
-        "flex size-5 items-center justify-center [&>svg]:size-4",
-        className,
+        "size-4 [&>svg]:size-3.5 flex items-center justify-center",
+        className
       )}
       {...props}
     >
       <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
       <span className="sr-only">More</span>
     </span>
-  );
+  )
 }
 
 export {
   Breadcrumb,
-  BreadcrumbEllipsis,
+  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-};
+  BreadcrumbEllipsis,
+}

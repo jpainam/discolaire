@@ -9,7 +9,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
-import { BookCopy, MoreHorizontal, Trash2 } from "lucide-react";
+import { BookCopy, MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -36,7 +36,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { ViewIcon } from "~/icons";
+import { DeleteIcon, ViewIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
@@ -240,8 +240,8 @@ function ActionCell({
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"} size={"icon"} className="size-7">
-            <MoreHorizontal className="h-4 w-4" />
+          <Button variant={"ghost"} size={"icon-sm"}>
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -259,7 +259,7 @@ function ActionCell({
           {canUpdateTransaction && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
-                <BookCopy className="text-muted-foreground mr-2 h-4 w-4" />
+                <BookCopy className="text-muted-foreground h-4 w-4" />
                 {t("status")}
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
@@ -284,7 +284,7 @@ function ActionCell({
                   >
                     <FlatBadge variant={"green"}>
                       <CheckCircledIcon
-                        className="text-muted-foreground mr-2 size-4"
+                        className="text-muted-foreground size-4"
                         aria-hidden="true"
                       />
                       {t("validate")}
@@ -296,7 +296,7 @@ function ActionCell({
                   >
                     <FlatBadge variant={"red"}>
                       <CrossCircledIcon
-                        className="text-muted-foreground mr-2 size-4"
+                        className="text-muted-foreground size-4"
                         aria-hidden="true"
                       />
                       {t("cancel")}
@@ -308,7 +308,7 @@ function ActionCell({
                   >
                     <FlatBadge variant={"yellow"}>
                       <StopwatchIcon
-                        className="text-muted-foreground mr-2 size-4"
+                        className="text-muted-foreground size-4"
                         aria-hidden="true"
                       />
                       {t("pending")}
@@ -334,7 +334,7 @@ function ActionCell({
                 variant="destructive"
                 className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               >
-                <Trash2 />
+                <DeleteIcon />
                 {t("delete")}
               </DropdownMenuItem>
             </>

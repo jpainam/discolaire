@@ -13,11 +13,11 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
+  BadgeCheckIcon,
   Banknote,
   BookCopy,
   CheckCircle,
   MoreHorizontal,
-  Trash2,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -27,7 +27,7 @@ import { TransactionType } from "@repo/db/enums";
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
-import { Pill, PillAvatar, PillIcon, PillIndicator } from "~/components/pill";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -52,7 +52,9 @@ import {
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { DeleteTransaction } from "./DeleteTransaction";
@@ -111,7 +113,7 @@ export function TransactionTable() {
               <TableHead>{t("createdAt")}</TableHead>
               <TableHead>{t("description")}</TableHead>
               <TableHead>{t("amount")}</TableHead>
-              {/* <TableHead>{t("status")}</TableHead> */}
+
               <TableHead></TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -186,59 +188,39 @@ export function TransactionTable() {
                   </TableCell> */}
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      {/* <Badge variant="secondary">
-                      {transaction.journal?.name}
-                    </Badge> */}
-                      <Pill>
-                        <PillIcon icon={Banknote} />
+                      <Badge variant="secondary">
+                        <Banknote />
                         {transaction.journal?.name}
-                      </Pill>
-                      <Pill>
-                        <PillIndicator
-                          pulse
-                          variant={
-                            transaction.status == "VALIDATED"
-                              ? "success"
-                              : "error"
-                          }
-                        />
+                      </Badge>
+
+                      <Badge
+                        variant="secondary"
+                        className={cn(
+                          transaction.status == "VALIDATED"
+                            ? "bg-blue-500 text-white dark:bg-blue-600"
+                            : "bg-red-500 text-white dark:bg-red-600",
+                        )}
+                      >
+                        <BadgeCheckIcon />
                         {t(transaction.status)}
-                      </Pill>
-                      <Pill>
-                        <PillAvatar
-                          fallback={
-                            name ? name.slice(0, 2).toUpperCase() : "N/A"
-                          }
-                          src={
-                            avatar
-                              ? `/api/download/avatars/${avatar}`
-                              : undefined
-                          }
-                        />
-                        <span className="capitalize">{name}</span>
-                      </Pill>
+                      </Badge>
+
+                      <Badge variant={"secondary"}>{name}</Badge>
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
                     {(canUpdateTransaction || canDeleteTransaction) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-label="Open menu"
-                            variant="ghost"
-                            size={"sm"}
-                          >
-                            <MoreHorizontal
-                              className="size-4"
-                              aria-hidden="true"
-                            />
+                          <Button variant="ghost" size={"icon"}>
+                            <MoreHorizontal aria-hidden="true" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           {canUpdateTransaction && (
                             <DropdownMenuSub>
                               <DropdownMenuSubTrigger>
-                                <BookCopy className="text-muted-foreground mr-2 h-4 w-4" />
+                                <BookCopy className="text-muted-foreground h-4 w-4" />
                                 {t("status")}
                               </DropdownMenuSubTrigger>
                               <DropdownMenuSubContent>
@@ -274,7 +256,7 @@ export function TransactionTable() {
                                   >
                                     <FlatBadge variant={"green"}>
                                       <CheckCircledIcon
-                                        className="text-muted-foreground mr-2 size-4"
+                                        className="text-muted-foreground size-4"
                                         aria-hidden="true"
                                       />
                                       {t("validate")}
@@ -286,7 +268,7 @@ export function TransactionTable() {
                                   >
                                     <FlatBadge variant={"red"}>
                                       <CrossCircledIcon
-                                        className="text-muted-foreground mr-2 size-4"
+                                        className="text-muted-foreground size-4"
                                         aria-hidden="true"
                                       />
                                       {t("cancel")}
@@ -298,7 +280,7 @@ export function TransactionTable() {
                                   >
                                     <FlatBadge variant={"yellow"}>
                                       <StopwatchIcon
-                                        className="text-muted-foreground mr-2 size-4"
+                                        className="text-muted-foreground size-4"
                                         aria-hidden="true"
                                       />
                                       {t("pending")}
@@ -325,7 +307,7 @@ export function TransactionTable() {
                                   });
                                 }}
                               >
-                                <Trash2 className="size-4" aria-hidden="true" />
+                                <DeleteIcon />
                                 {t("delete")}
                               </DropdownMenuItem>
                             </>

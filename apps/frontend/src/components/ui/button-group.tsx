@@ -1,26 +1,25 @@
-import type { VariantProps } from "class-variance-authority";
-import { cva } from "class-variance-authority";
-import { Slot } from "radix-ui";
+import { cva, type VariantProps } from "class-variance-authority"
+import { Slot } from "radix-ui"
 
-import { Separator } from "~/components/ui/separator";
-import { cn } from "~/lib/utils";
+import { cn } from "~/lib/utils"
+import { Separator } from "~/components/ui/separator"
 
 const buttonGroupVariants = cva(
-  "flex w-fit items-stretch has-[>[data-slot=button-group]]:gap-2 [&>*]:focus-visible:relative [&>*]:focus-visible:z-10 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
+  "has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
   {
     variants: {
       orientation: {
         horizontal:
-          "[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg!",
+          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-md! [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none",
         vertical:
-          "flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!",
+          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-md! flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none",
       },
     },
     defaultVariants: {
       orientation: "horizontal",
     },
-  },
-);
+  }
+)
 
 function ButtonGroup({
   className,
@@ -35,7 +34,7 @@ function ButtonGroup({
       className={cn(buttonGroupVariants({ orientation }), className)}
       {...props}
     />
-  );
+  )
 }
 
 function ButtonGroupText({
@@ -43,19 +42,19 @@ function ButtonGroupText({
   asChild = false,
   ...props
 }: React.ComponentProps<"div"> & {
-  asChild?: boolean;
+  asChild?: boolean
 }) {
-  const Comp = asChild ? Slot.Root : "div";
+  const Comp = asChild ? Slot.Root : "div"
 
   return (
     <Comp
       className={cn(
-        "bg-muted flex items-center gap-2 rounded-lg border px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
-        className,
+        "bg-muted gap-2 rounded-md border px-2.5 text-xs/relaxed font-medium [&_svg:not([class*='size-'])]:size-4 flex items-center [&_svg]:pointer-events-none",
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function ButtonGroupSeparator({
@@ -69,11 +68,11 @@ function ButtonGroupSeparator({
       orientation={orientation}
       className={cn(
         "bg-input relative self-stretch data-[orientation=horizontal]:mx-px data-[orientation=horizontal]:w-auto data-[orientation=vertical]:my-px data-[orientation=vertical]:h-auto",
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 export {
@@ -81,4 +80,4 @@ export {
   ButtonGroupSeparator,
   ButtonGroupText,
   buttonGroupVariants,
-};
+}
