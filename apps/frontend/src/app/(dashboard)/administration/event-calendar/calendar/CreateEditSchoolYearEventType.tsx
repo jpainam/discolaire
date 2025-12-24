@@ -122,7 +122,6 @@ export function CreateEditSchoolYearEventType({
             onClick={() => {
               closeModal();
             }}
-            size={"sm"}
             type="button"
             variant={"secondary"}
           >

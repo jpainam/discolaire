@@ -30,15 +30,14 @@ export function CourseAction() {
           });
         }}
         variant={"default"}
-        size={"sm"}
       >
         <PlusIcon />
         {t("add")}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"outline"} className="size-8" size={"icon"}>
-            <MoreHorizontal className="h-4 w-4" />
+          <Button variant={"outline"} size={"icon"}>
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

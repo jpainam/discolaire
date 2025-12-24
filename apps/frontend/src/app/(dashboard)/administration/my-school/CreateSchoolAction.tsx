@@ -15,9 +15,8 @@ export function CreateSchoolAction() {
         router.push("/administration/my-school/create");
       }}
       variant={"default"}
-      size={"sm"}
     >
-      <PlusIcon className={"h-4 w-4"} />
+      <PlusIcon />
       {t("add")}
     </Button>
   );

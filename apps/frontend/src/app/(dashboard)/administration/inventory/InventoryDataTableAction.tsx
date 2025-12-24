@@ -59,7 +59,6 @@ export function InventoryDataTableAction({
     <>
       {table.getSelectedRowModel().rows.length > 0 && canDeleteInventory && (
         <Button
-          size={"sm"}
           onClick={async () => {
             const isConfirmed = await confirm({
               title: t("delete"),

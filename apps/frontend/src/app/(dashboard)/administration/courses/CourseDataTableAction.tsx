@@ -66,7 +66,6 @@ export function CourseDataTableActions({
     <>
       {table.getSelectedRowModel().rows.length > 0 && canDeleteCourse && (
         <Button
-          size={"sm"}
           onClick={async () => {
             const isConfirmed = await confirm({
               title: t("delete"),

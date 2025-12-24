@@ -17,7 +17,6 @@ export function SchoolDetailAction({ schoolId }: { schoolId: string }) {
           router.push(`/administration/my-school/${schoolId}/edit`);
         }}
         variant={"outline"}
-        size={"sm"}
       >
         <Pencil />
         {t("edit")}

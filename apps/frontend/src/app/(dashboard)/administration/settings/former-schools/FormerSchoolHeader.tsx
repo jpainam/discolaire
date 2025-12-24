@@ -31,14 +31,13 @@ export function FormerSchoolHeader() {
             });
           }}
           variant={"default"}
-          size={"sm"}
         >
           <PlusIcon />
           {t("add")}
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="size-8" variant={"outline"} size={"icon"}>
+            <Button variant={"outline"} size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

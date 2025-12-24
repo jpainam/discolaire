@@ -173,7 +173,6 @@ export function CreateEditSchoolYearEvent({
         </div>
         <div className="flex flex-row items-center justify-end gap-2">
           <Button
-            size={"sm"}
             variant={"secondary"}
             onClick={() => {
               closeModal();
@@ -185,7 +184,6 @@ export function CreateEditSchoolYearEvent({
             isSubmitting={
               createEventMutation.isPending || updateEventMutation.isPending
             }
-            size={"sm"}
           >
             {t("submit")}
           </SubmitButton>

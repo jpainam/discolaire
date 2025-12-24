@@ -347,7 +347,6 @@ export function ImageGrid({
 
       {files.length >= 0 && (
         <Button
-          size={"sm"}
           className="w-fit self-center"
           onClick={() => {
             const lastImage = images[images.length - 1];

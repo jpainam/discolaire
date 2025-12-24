@@ -2,7 +2,6 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -139,11 +138,9 @@ export function CreateUpdateJournal({
             onClick={() => {
               closeModal();
             }}
-            size={"sm"}
             variant={"secondary"}
             type="button"
           >
-            <XIcon className="h-3 w-3" />
             {t("cancel")}
           </Button>
           <Button

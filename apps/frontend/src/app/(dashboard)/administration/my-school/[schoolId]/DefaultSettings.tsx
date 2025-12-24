@@ -321,7 +321,6 @@ export function DefaultSettings({
             onClick={() => {
               form.reset();
             }}
-            size={"sm"}
           >
             {t("reset")}
           </Button>

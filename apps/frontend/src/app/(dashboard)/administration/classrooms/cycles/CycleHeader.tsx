@@ -24,7 +24,6 @@ export function CycleHeader() {
             });
           }}
           variant={"default"}
-          size={"sm"}
         >
           <PlusIcon />
           {t("add")}

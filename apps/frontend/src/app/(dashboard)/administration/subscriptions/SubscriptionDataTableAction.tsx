@@ -2,7 +2,6 @@
 
 import type { Table } from "@tanstack/react-table";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -11,6 +10,7 @@ import type { RouterOutputs } from "@repo/api";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -52,7 +52,6 @@ export function SubscriptionDataTableAction({
     <>
       {table.getSelectedRowModel().rows.length > 0 && canDeleteSubscription && (
         <Button
-          size={"sm"}
           onClick={async () => {
             const isConfirmed = await confirm({
               title: t("delete"),
@@ -67,9 +66,9 @@ export function SubscriptionDataTableAction({
           }}
           variant={"destructive"}
         >
-          <Trash2 />
+          <DeleteIcon />
           {t("delete")}
-          <Badge className="size-4">
+          <Badge className="size-4 rounded-full">
             {table.getSelectedRowModel().rows.length}
           </Badge>
         </Button>

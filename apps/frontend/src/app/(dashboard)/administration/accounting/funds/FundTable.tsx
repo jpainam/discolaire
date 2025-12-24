@@ -71,7 +71,6 @@ export function FundTable({ journalId }: { journalId: string }) {
               );
             }}
             variant={"secondary"}
-            size={"sm"}
           >
             <PDFIcon />
             {t("pdf_export")}
@@ -83,7 +82,6 @@ export function FundTable({ journalId }: { journalId: string }) {
                 "_blank",
               );
             }}
-            size={"sm"}
             variant={"secondary"}
           >
             <XMLIcon />
@@ -200,7 +198,6 @@ export function FundTable({ journalId }: { journalId: string }) {
                         });
                       }}
                       variant={"secondary"}
-                      size={"sm"}
                     >
                       {t("details")}
                       <PanelLeftOpen />

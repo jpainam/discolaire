@@ -152,14 +152,13 @@ export function SubjectJournalList({
         ))}
         <div className="flex items-center justify-between pb-4">
           <Button
-            size={"sm"}
             onClick={() => {
               void setPageIndex(() => pageIndex - 1);
             }}
             disabled={pageIndex === 1}
             variant="outline"
           >
-            <ChevronLeftIcon className="h-4 w-4" />
+            <ChevronLeftIcon />
             {t("previous")}
           </Button>
           <span className="text-xs">
@@ -167,7 +166,6 @@ export function SubjectJournalList({
             {Math.ceil((journalsQuery.data?.length ?? 0) / pageSize)}
           </span>
           <Button
-            size={"sm"}
             onClick={() => {
               void setPageIndex(() => pageIndex + 1);
             }}

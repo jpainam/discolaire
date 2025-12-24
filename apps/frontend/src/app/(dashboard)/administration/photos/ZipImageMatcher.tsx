@@ -262,7 +262,6 @@ export function ZipImageMatcher() {
             </div>
 
             <Button
-              size={"sm"}
               onClick={processZipFile}
               disabled={!zipFile || matchIdsMutation.isPending}
               className="w-full"
@@ -270,9 +269,7 @@ export function ZipImageMatcher() {
               {matchIdsMutation.isPending
                 ? "Processing"
                 : "Match Files with IDs"}
-              {!matchIdsMutation.isPending && (
-                <Upload className="ml-2 h-4 w-4" />
-              )}
+              {!matchIdsMutation.isPending && <Upload className="h-4 w-4" />}
             </Button>
           </div>
 

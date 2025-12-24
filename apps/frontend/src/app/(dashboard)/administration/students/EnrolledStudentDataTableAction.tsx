@@ -20,7 +20,6 @@ export function EnrolledStudentDataTableAction({
 
   return (
     <Button
-      size={"sm"}
       onClick={() => {
         if (newStudent) {
           window.open(`/api/pdfs/student/new`, "_blank");

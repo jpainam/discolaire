@@ -205,7 +205,6 @@ export function ImportStudentRegistrationNumber() {
             }
           }}
           variant={"secondary"}
-          size={"sm"}
         >
           <DownloadIcon />
           Importer

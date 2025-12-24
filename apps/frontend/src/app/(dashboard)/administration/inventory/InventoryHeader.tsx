@@ -24,9 +24,8 @@ export function InventoryHeader() {
             });
           }}
           variant={"default"}
-          size={"sm"}
         >
-          <BlocksIcon className="h-4 w-4" />
+          <BlocksIcon />
           {t("Create a consumable")}
         </Button>
         <Button
@@ -37,9 +36,8 @@ export function InventoryHeader() {
             });
           }}
           variant={"outline"}
-          size={"sm"}
         >
-          <StretchVerticalIcon className="h-4 w-4" />
+          <StretchVerticalIcon />
           {t("Create an asset")}
         </Button>
       </div>

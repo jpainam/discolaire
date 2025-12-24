@@ -32,14 +32,13 @@ export function TermHeader() {
           });
         }}
         variant={"default"}
-        size={"sm"}
       >
         <PlusIcon />
         {t("add")}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"outline"} className="size-8" size={"icon"}>
+          <Button variant={"outline"} size={"icon"}>
             <MoreVertical />
           </Button>
         </DropdownMenuTrigger>

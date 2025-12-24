@@ -18,7 +18,6 @@ export function ExcludedStudentDataTableAction({
 
   return (
     <Button
-      size={"sm"}
       onClick={() => {
         window.open(`/api/pdfs/student/excluded`, "_blank");
       }}

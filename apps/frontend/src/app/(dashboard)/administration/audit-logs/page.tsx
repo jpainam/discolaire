@@ -254,7 +254,7 @@
 //             <PaginationItem>
 //               <Button
 //                 variant="outline"
-//                 size={"sm"}
+//
 //                 aria-label="Go to previous page"
 //               >
 //                 {t("previous")}
@@ -263,7 +263,7 @@
 //             <PaginationItem>
 //               <Button
 //                 variant="outline"
-//                 size={"sm"}
+//
 //                 aria-label="Go to next page"
 //               >
 //                 {t("next")}

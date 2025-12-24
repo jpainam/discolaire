@@ -54,9 +54,8 @@ export function SchoolYearEventTypeTable() {
               view: <CreateEditSchoolYearEventType />,
             });
           }}
-          size={"sm"}
         >
-          <PlusIcon className="h-4 w-4" />
+          <PlusIcon />
           {t("add")}
         </Button>
       </div>

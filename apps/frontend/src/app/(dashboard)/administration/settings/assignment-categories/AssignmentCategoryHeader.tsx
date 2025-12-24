@@ -22,7 +22,6 @@ export function AssignmentCategoryHeader() {
               view: <CreateEditAssignmentCategory />,
             });
           }}
-          size={"sm"}
           variant={"default"}
         >
           <PlusIcon />

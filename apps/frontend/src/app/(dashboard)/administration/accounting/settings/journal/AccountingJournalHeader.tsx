@@ -90,14 +90,14 @@ export function AccountingJournalHeader() {
             onClick={() => {
               handleSync();
             }}
-            size={"sm"}
+          
             variant={"destructive"}
           >
             Synchroniser
           </Button>
         )}
         <Button
-          size={"sm"}
+          
           onClick={() => {
             toast.loading("Inserting TD transactions", { id: 0 });
             insertTDMutation.mutate();

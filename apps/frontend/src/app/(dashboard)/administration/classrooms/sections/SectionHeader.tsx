@@ -23,7 +23,6 @@ export function SectionHeader() {
             });
           }}
           variant={"default"}
-          size={"sm"}
         >
           <PlusIcon />
           {t("add")}

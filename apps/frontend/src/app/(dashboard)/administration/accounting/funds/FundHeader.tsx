@@ -33,11 +33,11 @@ export function FundHeader() {
         }}
       />
       <div className="ml-auto flex flex-row items-center gap-4">
-        <Button variant={"secondary"} size={"sm"}>
+        <Button variant={"secondary"}>
           <PDFIcon />
           {t("pdf_export")}
         </Button>
-        <Button variant={"secondary"} size={"sm"}>
+        <Button variant={"secondary"}>
           <XMLIcon />
           {t("xml_export")}
         </Button>

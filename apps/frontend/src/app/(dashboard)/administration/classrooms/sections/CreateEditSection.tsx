@@ -108,7 +108,6 @@ export function CreateEditSection({
               closeModal();
             }}
             type="button"
-            size={"sm"}
             variant={"outline"}
           >
             {t("cancel")}
