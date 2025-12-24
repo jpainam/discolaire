@@ -68,7 +68,6 @@ export function CreateGradesheetShortcut() {
             closeModal();
           }}
           variant={"secondary"}
-          size={"sm"}
         >
           {t("cancel")}
         </Button>
@@ -83,7 +82,6 @@ export function CreateGradesheetShortcut() {
               `/classrooms/${classroomId}/gradesheets/create?termId=${termId}&subjectId=${subjectId}`,
             );
           }}
-          size={"sm"}
         >
           {t("submit")}
         </Button>
