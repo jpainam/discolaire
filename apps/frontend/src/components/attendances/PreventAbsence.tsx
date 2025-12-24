@@ -166,7 +166,6 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
 
         <div className="flex flex-row items-center justify-end gap-2">
           <Button
-          
             onClick={() => {
               closeModal();
             }}

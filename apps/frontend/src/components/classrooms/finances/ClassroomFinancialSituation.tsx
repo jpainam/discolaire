@@ -193,7 +193,7 @@ function ListViewFinance({
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant={"ghost"} size={"icon-sm"}>
-                          <MoreVertical  />
+                          <MoreVertical />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-38">
