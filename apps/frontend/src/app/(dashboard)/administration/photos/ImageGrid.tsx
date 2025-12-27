@@ -168,11 +168,8 @@ export function ImageGrid({
 
   const handleDeleteAvatar = async (userId: string) => {
     toast.loading(t("deleting"), { id: 0 });
-    const response = await fetch("/api/upload/avatars", {
+    const response = await fetch(`/api/upload/avatars?userId=${userId}`, {
       method: "DELETE",
-      body: JSON.stringify({
-        userId: userId,
-      }),
     });
     if (response.ok) {
       toast.success(t("deleted_successfully"), {

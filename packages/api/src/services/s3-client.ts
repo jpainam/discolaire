@@ -1,4 +1,8 @@
-import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
+import {
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { lookup } from "mime-types";
 import * as Minio from "minio";
 
@@ -131,4 +135,40 @@ export async function listS3Objects({
     }
     return files;
   }
+}
+
+export async function getObjectStat({
+  bucket,
+  key,
+}: {
+  bucket: string;
+  key: string;
+}) {
+  if (isLocal) {
+    const stat = await minioClient.statObject(bucket, key);
+
+    return {
+      exists: true,
+      size: stat.size,
+      etag: stat.etag,
+      lastModified: stat.lastModified,
+      contentType: stat.metaData["content-type"] as string | undefined,
+      metadata: stat.metaData,
+    };
+  }
+  const result = await s3client.send(
+    new HeadObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    }),
+  );
+
+  return {
+    exists: true,
+    size: result.ContentLength,
+    contentType: result.ContentType,
+    lastModified: result.LastModified,
+    etag: result.ETag,
+    metadata: result.Metadata,
+  };
 }

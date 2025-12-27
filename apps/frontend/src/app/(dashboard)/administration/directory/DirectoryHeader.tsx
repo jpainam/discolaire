@@ -13,7 +13,7 @@ export default function DirectoryHeader() {
   });
   const debounced = useDebouncedCallback((value: string) => {
     void setSearchText(value);
-  }, 1000);
+  }, 500);
 
   return (
     <div>

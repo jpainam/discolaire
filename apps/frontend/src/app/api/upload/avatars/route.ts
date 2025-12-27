@@ -1,7 +1,13 @@
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import z from "zod/v4";
+
+import { uploadFile } from "~/actions/upload";
+import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
-import { deleteFile, uploadFile } from "~/lib/s3-client";
-import { caller } from "~/trpc/server";
+import { deleteFile } from "~/lib/s3-client";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 export async function POST(request: Request) {
   const session = await getSession();
@@ -41,29 +47,53 @@ export async function POST(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+const searchSchema = z.object({
+  userId: z.string().optional(),
+  key: z.string().optional(),
+});
+export async function DELETE(request: NextRequest) {
   const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
   try {
-    const { userId } = (await request.json()) as { userId: string };
-    if (!userId) {
-      return Response.json({ error: "No userId provided" }, { status: 400 });
-    }
-    const user = await caller.user.get(userId);
+    const searchParams = parseSearchParams(request);
+    const parsed = searchSchema.safeParse(searchParams);
 
-    const avatar = user.avatar;
-    if (!avatar) {
+    if (!parsed.success) {
+      const error = z.treeifyError(parsed.error);
+      return NextResponse.json(error, { status: 400 });
+    }
+    const { userId, key } = parsed.data;
+    const queryClient = getQueryClient();
+    let keyFile = key;
+    if (userId) {
+      const user = await queryClient.fetchQuery(
+        trpc.user.get.queryOptions(userId),
+      );
+      keyFile = user.avatar ?? undefined;
+    }
+
+    if (!keyFile) {
       return Response.json({ error: "No avatar to delete" }, { status: 400 });
     }
 
     await deleteFile({
       bucket: env.S3_AVATAR_BUCKET_NAME,
-      key: avatar,
+      key: keyFile,
     });
 
-    await caller.user.updateAvatar({ id: userId, avatar: null });
+    if (userId) {
+      await caller.user.updateAvatar({ id: userId, avatar: null });
+    } else if (key) {
+      // Get user by avatar key
+      const secondUser = await queryClient.fetchQuery(
+        trpc.photo.getUserByKey.queryOptions({ key }),
+      );
+      if (secondUser) {
+        await caller.user.updateAvatar({ id: secondUser.id, avatar: null });
+      }
+    }
 
     return Response.json({ message: "Avatar deleted successfully" });
   } catch (error) {

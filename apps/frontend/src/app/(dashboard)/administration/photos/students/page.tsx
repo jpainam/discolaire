@@ -5,7 +5,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { env } from "~/env";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { ImageGrid } from "../ImageGrid";
+import { PhotoStudentList } from "../../../../../components/administration/photos/PhotoStudentList";
 
 export default function Page() {
   prefetch(
@@ -18,6 +18,11 @@ export default function Page() {
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense fallback={<Skeleton className="h-20 w-full" />}>
+          <PhotoStudentList />
+        </Suspense>
+      </ErrorBoundary>
+      {/* <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={
             <div className="grid grid-cols-4 gap-4 p-4">
@@ -28,7 +33,7 @@ export default function Page() {
           }
         ></Suspense>
         <ImageGrid bucket={env.S3_AVATAR_BUCKET_NAME} prefix="student/" />
-      </ErrorBoundary>
+      </ErrorBoundary> */}
     </HydrateClient>
   );
 }

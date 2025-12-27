@@ -186,7 +186,7 @@ export default function PageNotFound() {
         <br />
         <Link href={"/"}>
           <Button>
-            <PiArrowLeftBold className="mr-1.5 text-lg" />
+            <PiArrowLeftBold />
             Retour à l'accueil
           </Button>
         </Link>

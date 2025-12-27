@@ -181,6 +181,7 @@ function MenuSideGroup({
 }) {
   const t = useTranslations();
   const pathname = usePathname();
+  const params = useParams<{ id?: string }>();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>
@@ -192,7 +193,7 @@ function MenuSideGroup({
               tooltip={t(item.name)}
               isActive={pathname === item.url}
             >
-              <Link href={item.url}>
+              <Link href={params.id == undefined ? "/students" : item.url}>
                 {item.icon}
                 <span>{t(item.name)}</span>
               </Link>
