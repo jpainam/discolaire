@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { ImageCropper } from "~/components/image-cropper";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
+import { getBucket, uploadFile } from "~/actions/upload";
 
 export type FileWithPreview = FileWithPath & {
   preview: string;
@@ -59,16 +60,27 @@ export function ChangeAvatarButton(
     // eslint-disable-next-line react-hooks/preserve-manual-memoization
     async (croppedImageUrl: string) => {
       toast.loading(t("Processing"), { id: 0 });
+
       try {
+        if (!selectedFile) {
+          return;
+        }
         const croppedBlob = await (await fetch(croppedImageUrl)).blob();
         const formData = new FormData();
-        formData.append(
-          "file",
-          croppedBlob,
-          selectedFile?.name ?? "avatar.png",
-        );
+        formData.append("file", croppedBlob, selectedFile.name);
 
         formData.append("userId", props.userId);
+
+        const file = new File([croppedBlob], selectedFile.name, {
+          type: croppedBlob.type || "application/octet-stream",
+          lastModified: Date.now(),
+        });
+        const bucket = await getBucket("avatar");
+        const result = await uploadFile({
+           file,
+          destination,
+          bucket
+        })
         const response = await fetch("/api/upload/avatars", {
           method: "POST",
           body: formData,

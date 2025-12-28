@@ -3,6 +3,8 @@
 import * as React from "react";
 import { formatDateRange } from "little-date";
 import { PlusIcon } from "lucide-react";
+import { useLocale } from "next-intl";
+import { enUS, es, fr } from "react-day-picker/locale";
 
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
@@ -31,32 +33,33 @@ export function ShortCalendar() {
     new Date(2025, 5, 12),
   );
 
+  const locale = useLocale();
+
   return (
-    <Card className="w-fit py-4">
-      <CardContent className="px-4">
+    <Card>
+      <CardContent className="">
         <Calendar
           mode="single"
+          locale={
+            locale.includes("fr") ? fr : locale.includes("es") ? es : enUS
+          }
           selected={date}
           onSelect={setDate}
-          className="bg-transparent p-0"
+          className="w-full p-0"
           required
         />
       </CardContent>
-      <CardFooter className="flex flex-col items-start gap-3 border-t px-4 !pt-4">
+
+      <CardFooter className="flex flex-col items-start gap-3 border-t">
         <div className="flex w-full items-center justify-between px-1">
           <div className="text-sm font-medium">
-            {date?.toLocaleDateString("en-US", {
+            {date?.toLocaleDateString(locale, {
               day: "numeric",
-              month: "long",
+              month: "short",
               year: "numeric",
             })}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-6"
-            title="Add Event"
-          >
+          <Button variant="ghost" size="icon">
             <PlusIcon />
             <span className="sr-only">Add Event</span>
           </Button>

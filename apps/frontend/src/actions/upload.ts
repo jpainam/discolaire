@@ -87,8 +87,6 @@ export async function uploadFile({
       "Content-Type": file.type,
     };
 
-    // Upload the file with fPutObject If an object with the same name exists,  it is updated with new data
-
     await minioClient.putObject(
       bucket,
       destination,

@@ -32,6 +32,7 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
+import { Label } from "~/components/ui/label";
 import { Spinner } from "~/components/ui/spinner";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -112,6 +113,7 @@ export function CreateEditProgram({
         onSubmit={form.handleSubmit(submitProgram)}
       >
         <div className="bg-muted/50 flex flex-row justify-end gap-4 border-b px-4 py-1">
+          <Label>Programme {subjectQuery.data?.course.name}</Label>
           <div className="ml-auto flex flex-row items-center gap-2">
             {canUpdateSubject && (
               <>
@@ -132,11 +134,11 @@ export function CreateEditProgram({
             )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size="icon" className="size-8" variant="outline">
+                <Button size="icon" variant="outline">
                   <MoreVertical />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem
                   onSelect={() => {
                     window.open(
@@ -207,7 +209,7 @@ export function CreateEditProgram({
               <FormItem className="">
                 <FormControl>
                   <TiptapEditor
-                    defaultContent={field.value}
+                    defaultContent={subjectQuery.data?.program ?? ""}
                     className="rounded-none shadow-none"
                     onChange={field.onChange}
                   />

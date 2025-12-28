@@ -1,136 +1,123 @@
-import type React from "react";
-import { Suspense } from "react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import type { PropsWithChildren, ReactNode } from "react";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
+import { MoreVertical } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
+
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import { Card, CardAction, CardHeader, CardTitle } from "~/components/ui/card";
 import {
-  BookOpenCheck,
-  CalendarDays,
-  CircleDollarSign,
-  Folders,
-  History,
-  KeySquare,
-} from "lucide-react";
-import { getTranslations } from "next-intl/server";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "~/components/ui/item";
+import { EditIcon } from "~/icons";
+import { getQueryClient, trpc } from "~/trpc/server";
+import { getFullName } from "~/utils";
+import { ShortCalendar } from "./ShortCalendar";
 
-import { getSession } from "~/auth/server";
-import { ErrorFallback } from "~/components/error-fallback";
-import { NoPermission } from "~/components/no-permission";
-import { StaffProfile } from "~/components/staffs/profile/StaffProfile";
-import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
-import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
-import { Skeleton } from "~/components/ui/skeleton";
-import { routes } from "~/configs/routes";
-import { PermissionAction } from "~/permissions";
-import { checkPermission } from "~/permissions/server";
-import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
-
-interface UserLink {
-  icon: React.ReactNode;
-  name: string;
-  href: string;
+export default async function Layout(
+  props: PropsWithChildren<{ params: Promise<{ id: string }> }>,
+) {
+  const queryClient = getQueryClient();
+  const params = await props.params;
+  const staff = await queryClient.fetchQuery(
+    trpc.staff.get.queryOptions(params.id),
+  );
+  const avatar = createAvatar(initials, {
+    seed: getFullName(staff),
+  });
+  const t = await getTranslations();
+  const locale = await getLocale();
+  return (
+    <div className="flex flex-col gap-4 px-4 py-2">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-4">
+            <Avatar className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]">
+              <AvatarImage src={staff.user?.avatar ?? avatar.toDataUri()} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="grid gap-4 md:grid-cols-4 lg:grid-cols-6">
+              <ItemLabel label={t("lastName")} value={staff.lastName} />
+              <ItemLabel label={t("firstName")} value={staff.lastName} />
+              <ItemLabel label={t("email")} value={staff.user?.email} />
+              <ItemLabel label={t("phoneNumber")} value={staff.phoneNumber1} />
+              <ItemLabel label={t("phoneNumber")} value={staff.phoneNumber2} />
+              <ItemLabel label={t("jobTitle")} value={staff.jobTitle} />
+              <ItemLabel
+                label={t("employmentType")}
+                value={staff.employmentType}
+              />
+              <ItemLabel label={t("degree")} value={staff.degree?.name} />
+              <ItemLabel
+                label={t("dateOfHire")}
+                value={staff.dateOfHire?.toLocaleDateString(locale, {
+                  month: "short",
+                  year: "numeric",
+                  day: "numeric",
+                })}
+              />
+            </div>
+          </CardTitle>
+          <CardAction className="flex items-center gap-2">
+            <Button variant={"outline"}>
+              <EditIcon />
+              {t("edit")}
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"outline"}>
+                  <MoreVertical />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Billing</DropdownMenuItem>
+                <DropdownMenuItem>Team</DropdownMenuItem>
+                <DropdownMenuItem>Subscription</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardAction>
+        </CardHeader>
+      </Card>
+      <div className="flex flex-col items-start gap-6 md:flex-row">
+        <div className="flex-1">{props.children}</div>
+        <ShortCalendar />
+      </div>
+    </div>
+  );
 }
 
-export default async function Layout(props: {
-  params: Promise<{ id: string }>;
-  children: React.ReactNode;
+function ItemLabel({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value?: string | null;
+  icon?: ReactNode;
 }) {
-  const params = await props.params;
-
-  const { id } = params;
-  const queryClient = getQueryClient();
-
-  const { children } = props;
-  const session = await getSession();
-  const staff = await queryClient.fetchQuery(trpc.staff.get.queryOptions(id));
-
-  if (staff.userId !== session?.user.id) {
-    const canReadStaff = await checkPermission("staff", PermissionAction.READ);
-    if (!canReadStaff) {
-      return (
-        <div>
-          {staff.userId} {session?.user.id}
-          <NoPermission className="my-8" isFullPage resourceText="" />
-        </div>
-      );
-    }
-  }
-
-  const t = await getTranslations();
-  prefetch(trpc.staff.all.queryOptions());
-
-  const userLinks: UserLink[] = [
-    {
-      name: t("timeline"),
-      href: routes.staffs.details(id),
-      icon: <History className="h-4 w-4" />,
-    },
-    {
-      name: t("permissions"),
-      href: `/staffs/${id}/permissions`,
-      icon: <KeySquare className="h-4 w-4" />,
-    },
-    {
-      name: t("teachings"),
-      href: routes.staffs.teachings(id),
-      icon: <BookOpenCheck className="h-4 w-4" />,
-    },
-    {
-      name: t("timetables"),
-      href: routes.staffs.timetables(id),
-      icon: <CalendarDays className="h-4 w-4" />,
-    },
-
-    {
-      name: t("payroll"),
-      href: `/staffs/${id}/payroll`,
-      icon: <CircleDollarSign className="h-4 w-4" />,
-    },
-    {
-      name: t("documents"),
-      href: routes.staffs.documents(id),
-      icon: <Folders className="h-4 w-4" />,
-    },
-  ];
   return (
-    <HydrateClient>
-      <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense
-          key={params.id}
-          fallback={
-            <div className="px-4 py-2">
-              <Skeleton className="h-8" />
-            </div>
-          }
-        >
-          <StaffDetailHeader />
-        </Suspense>
-      </ErrorBoundary>
-      <div className="grid gap-2 px-4 2xl:grid-cols-[30%_70%]">
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense
-            key={params.id}
-            fallback={<Skeleton className="h-20 w-full" />}
-          >
-            <StaffProfile />
-          </Suspense>
-        </ErrorBoundary>
-
-        <div className="w-full md:grid-cols-2 xl:grid-cols-3">
-          <div className="bg-muted text-muted-foreground flex max-w-fit items-center rounded-full">
-            {userLinks.map((link: UserLink, _index) => {
-              return (
-                <StaffTabMenu
-                  key={link.href}
-                  href={link.href}
-                  icon={link.icon}
-                  title={link.name}
-                />
-              );
-            })}
-          </div>
-
-          {children}
-        </div>
-      </div>
-    </HydrateClient>
+    <Item className="p-0">
+      <ItemMedia variant="icon">{icon}</ItemMedia>
+      <ItemContent>
+        <ItemTitle> {label}</ItemTitle>
+        <ItemDescription> {value ?? "#"}</ItemDescription>
+      </ItemContent>
+    </Item>
   );
 }

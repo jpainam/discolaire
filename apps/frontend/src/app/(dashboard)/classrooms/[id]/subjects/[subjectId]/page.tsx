@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { CreatedGradesheetCard } from "~/components/classrooms/gradesheets/CreatedGradesheetCard";
+import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
 import { SubjectGradeTable } from "~/components/classrooms/subjects/SubjectGradeTable";
 import { SubjectHeader } from "~/components/classrooms/subjects/SubjectHeader";
 import { ErrorFallback } from "~/components/error-fallback";
@@ -14,7 +15,7 @@ import {
 } from "~/trpc/server";
 
 export default async function Page(props: {
-  params: Promise<{ subjectId: number }>;
+  params: Promise<{ subjectId: string }>;
 }) {
   const params = await props.params;
   const queryClient = getQueryClient();
@@ -47,13 +48,18 @@ export default async function Page(props: {
             </div>
           </Suspense>
         </ErrorBoundary>
-        {/* <div className="grid grid-cols-2 gap-4 px-4">
-          <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense>
-              <SubjectGradeDistribution />
-            </Suspense>
-          </ErrorBoundary>
-        </div> */}
+        <div className="grid grid-cols-1 gap-4 px-4">
+          <div className="border">
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense>
+                {/* <SubjectGradeDistribution /> */}
+                <CreateEditProgram
+                  defaultSubjectId={Number(params.subjectId)}
+                />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+        </div>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
@@ -64,7 +70,7 @@ export default async function Page(props: {
               </div>
             }
           >
-            <SubjectGradeTable subjectId={params.subjectId} />
+            <SubjectGradeTable subjectId={Number(params.subjectId)} />
           </Suspense>
         </ErrorBoundary>
       </div>

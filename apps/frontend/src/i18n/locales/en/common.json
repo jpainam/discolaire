@@ -122,7 +122,7 @@
   "registrationPrefix": "Registration prefix",
   "no_user_attached_yet": "No user attached yet",
   "no_health_documents_found": "No health documents found",
-  "no_teachings_found": "No teachings found",
+
   "teachings": "Teachings",
   "create_policy": "Create Policy",
   "send_transaction_summary_every": "Send transaction summary every",

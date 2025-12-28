@@ -100,7 +100,7 @@ export function PhotoListUploader({ initialFiles }: { initialFiles: File[] }) {
     const k = fileKey(f);
     setStatus((prev) => ({ ...prev, [k]: "uploading" }));
     try {
-      const destination = `${school.code}/student/${f.name}`;
+      const destination = `${school.code}/student/${f.name.split("/").pop()}`;
       await uploadFile({
         file: f,
         destination: destination,
@@ -136,102 +136,104 @@ export function PhotoListUploader({ initialFiles }: { initialFiles: File[] }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <Table>
-        <TableCaption>
-          {uploadedCount}/{files.length} uploaded
-        </TableCaption>
+      <div className="no-scrollbar max-h-[70vh] overflow-y-auto">
+        <Table>
+          <TableCaption>
+            {uploadedCount}/{files.length} uploaded
+          </TableCaption>
 
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("name")}</TableHead>
-            <TableHead>Size</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right" />
-          </TableRow>
-        </TableHeader>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t("name")}</TableHead>
+              <TableHead>Size</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right" />
+            </TableRow>
+          </TableHeader>
 
-        <TableBody>
-          {files.map((f) => {
-            const k = fileKey(f);
-            const s = status[k] ?? "queued";
+          <TableBody>
+            {files.map((f) => {
+              const k = fileKey(f);
+              const s = status[k] ?? "queued";
 
-            return (
-              <TableRow key={k}>
-                <TableCell className="max-w-[420px] truncate" title={f.name}>
-                  {f.name}
-                </TableCell>
+              return (
+                <TableRow key={k}>
+                  <TableCell className="max-w-[420px] truncate" title={f.name}>
+                    {f.name}
+                  </TableCell>
 
-                <TableCell>{formatBytes(f.size)}</TableCell>
+                  <TableCell>{formatBytes(f.size)}</TableCell>
 
-                <TableCell>
-                  <Badge
-                    variant={"secondary"}
-                    className={cn(
-                      s === "uploaded" && "bg-green-500 text-white",
-                    )}
-                  >
-                    {s === "uploaded" && (
+                  <TableCell>
+                    <Badge
+                      variant={"secondary"}
+                      className={cn(
+                        s === "uploaded" && "bg-green-500 text-white",
+                      )}
+                    >
+                      {s === "uploaded" && (
+                        <>
+                          <BadgeCheckIcon />
+                          Uploaded
+                        </>
+                      )}
+                      {s === "uploading" && (
+                        <>
+                          <Spinner />
+                          Uploading…
+                        </>
+                      )}
+                      {s === "queued" && <>Queued</>}
+                    </Badge>
+
+                    {s === "error" && (
                       <>
-                        <BadgeCheckIcon />
-                        Uploaded
+                        Failed
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          disabled={isUploading}
+                          onClick={async () => {
+                            const bucket = await getBucket("avatar");
+                            void uploadOne(f, bucket);
+                          }}
+                        >
+                          Retry
+                        </Button>
                       </>
                     )}
-                    {s === "uploading" && (
-                      <>
-                        <Spinner />
-                        Uploading…
-                      </>
-                    )}
-                    {s === "queued" && <>Queued</>}
-                  </Badge>
+                  </TableCell>
 
-                  {s === "error" && (
-                    <>
-                      Failed
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        disabled={isUploading}
-                        onClick={async () => {
-                          const bucket = await getBucket("avatar");
-                          void uploadOne(f, bucket);
-                        }}
-                      >
-                        Retry
-                      </Button>
-                    </>
-                  )}
-                </TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      size="icon-sm"
+                      variant="destructive"
+                      disabled={isUploading || s === "uploading"}
+                      onClick={() => removeFile(k)}
+                      aria-label="Remove file"
+                    >
+                      <DeleteIcon className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
 
-                <TableCell className="text-right">
-                  <Button
-                    size="icon-sm"
-                    variant="destructive"
-                    disabled={isUploading || s === "uploading"}
-                    onClick={() => removeFile(k)}
-                    aria-label="Remove file"
-                  >
-                    <DeleteIcon className="h-4 w-4" />
-                  </Button>
+            {files.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="text-muted-foreground py-8 text-center"
+                >
+                  No files selected
                 </TableCell>
               </TableRow>
-            );
-          })}
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
-          {files.length === 0 && (
-            <TableRow>
-              <TableCell
-                colSpan={4}
-                className="text-muted-foreground py-8 text-center"
-              >
-                No files selected
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
-      <div className="flex items-center justify-end gap-2">
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button variant="secondary" disabled={isUploading} onClick={closeModal}>
           {t("close")}
         </Button>

@@ -26,7 +26,7 @@ export function SubjectJournalTemplate() {
   const { closeModal } = useModal();
   const trpc = useTRPC();
   const journalsQuery = useQuery(
-    trpc.subjectJournal.bySubject.queryOptions({
+    trpc.subjectJournal.subject.queryOptions({
       subjectId: Number(params.subjectId),
     }),
   );

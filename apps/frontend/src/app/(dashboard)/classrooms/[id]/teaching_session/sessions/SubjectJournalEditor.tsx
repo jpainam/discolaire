@@ -166,7 +166,6 @@ export function SubjectJournalEditor({
       programId: programId,
       sessionCount: sessionCount,
     };
-    console.log(values);
     createSubjectJournal.mutate(values);
   };
 

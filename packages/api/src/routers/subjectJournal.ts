@@ -49,10 +49,11 @@ export const subjectJournalRouter = {
         },
       });
     }),
-  bySubject: protectedProcedure
+  subject: protectedProcedure
     .input(
       z.object({
         subjectId: z.coerce.number(),
+        termId: z.string().optional(),
         pageIndex: z.coerce.number().default(0),
         pageSize: z.coerce.number().default(10),
       }),
@@ -70,6 +71,9 @@ export const subjectJournalRouter = {
         },
         where: {
           subjectId: input.subjectId,
+          program: {
+            ...(input.termId ? { termId: input.termId } : {}),
+          },
         },
       });
     }),

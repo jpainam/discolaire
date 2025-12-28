@@ -92,7 +92,7 @@ export default async function Page(props: PageProps) {
           {action == "skills" && (
             <ReportCardSkillAcquisition
               classroomId={params.id}
-              termId={termId}
+              term={term}
             />
           )}
           {action == "subjects" && (

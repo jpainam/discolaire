@@ -1,8 +1,10 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { decode } from "entities";
 import { parseAsInteger, useQueryState } from "nuqs";
 
+import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -15,8 +17,7 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
   const [subjectId, setSubjectId] = useQueryState("subjectId", parseAsInteger);
 
   return (
-    <div className="h-screen overflow-y-auto border-r text-sm">
-      {/* <h2 className="mb-4 text-xl font-bold">{t("courses")}</h2> */}
+    <div className="h-screen overflow-y-auto border-r">
       <ul>
         {subjects.map((subject, index) => (
           <li
@@ -25,7 +26,7 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
               void setSubjectId(subject.id);
             }}
             className={cn(
-              `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-2`,
+              `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-1`,
               subject.id === subjectId
                 ? "bg-secondary text-secondary-foreground"
                 : "",
@@ -37,7 +38,7 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
                 backgroundColor: subject.course.color,
               }}
             ></div>
-            <span>{subject.course.name}</span>
+            <Label>{decode(subject.course.name)}</Label>
           </li>
         ))}
       </ul>

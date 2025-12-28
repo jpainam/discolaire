@@ -264,9 +264,14 @@ export const staffRouter = {
           },
         },
         include: {
+          teacher: true,
           subjectGroup: true,
           course: true,
-          classroom: true,
+          classroom: {
+            include: {
+              headTeacher: true,
+            },
+          },
         },
       });
     }),

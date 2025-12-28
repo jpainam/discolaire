@@ -59,7 +59,7 @@ export function SubjectJournalList({
   );
 
   const journalsQuery = useQuery(
-    trpc.subjectJournal.bySubject.queryOptions({
+    trpc.subjectJournal.subject.queryOptions({
       subjectId: subjectId,
       pageIndex,
       pageSize,
