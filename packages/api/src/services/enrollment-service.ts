@@ -6,6 +6,27 @@ export class EnrollmentService {
     this.db = db;
   }
 
+  // async getRepeaters(props: { classroomId?: string; schoolYearId: string }) {
+  //   const { classroomId, schoolYearId } = props;
+  //   const repeaters = await this.db.$queryRaw<{ studentId: string }[]>`
+  //     SELECT DISTINCT e."studentId" as "studentId"
+  //     FROM "Enrollment" e
+  //     JOIN "Classroom" c ON c.id = e."classroomId"
+  //     WHERE e."schoolYearId" = ${schoolYearId}
+  //        ${classroomId ? `AND e."classroomId" = ${classroomId}` : ""}
+  //       AND EXISTS (
+  //         SELECT 1 FROM "Enrollment" e2
+  //         JOIN "Classroom" c2 ON c2.id = e2."classroomId"
+  //         WHERE e2."studentId" = e."studentId"
+  //            ${classroomId ? `AND e2."classroomId" = ${classroomId}` : ""}
+  //           AND c2."levelId" = c."levelId"
+  //           AND e2."schoolYearId" < e."schoolYearId"
+  //       )
+  //   `;
+  //   const repeaterSet = new Set(repeaters.map((r) => r.studentId));
+  //   return repeaterSet;
+  // }
+
   async getCount(schoolYearId: string) {
     const schoolYear = await this.db.schoolYear.findUniqueOrThrow({
       where: { id: schoolYearId },

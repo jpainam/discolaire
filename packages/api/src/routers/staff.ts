@@ -249,6 +249,56 @@ export const staffRouter = {
       })),
     ];
   }),
+  gradesheets: protectedProcedure
+    .input(z.string().min(2))
+    .query(({ ctx, input }) => {
+      return ctx.db.gradeSheet.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        select: {
+          id: true,
+          name: true,
+          termId: true,
+          term: {
+            select: {
+              name: true,
+            },
+          },
+          createdAt: true,
+          grades: {
+            select: {
+              grade: true,
+              isAbsent: true,
+            },
+          },
+          subject: {
+            include: {
+              course: true,
+              classroom: {
+                select: {
+                  reportName: true,
+                },
+              },
+            },
+          },
+          createdBy: {
+            select: {
+              name: true,
+              username: true,
+            },
+          },
+        },
+        where: {
+          subject: {
+            teacherId: input,
+            classroom: {
+              schoolYearId: ctx.schoolYearId,
+            },
+          },
+        },
+      });
+    }),
   teachings: protectedProcedure
     .input(z.string().min(1))
     .query(({ ctx, input }) => {

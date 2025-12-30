@@ -38,7 +38,7 @@ export function ClassroomDetails() {
     trpc.classroom.get.queryOptions(params.id),
   );
   return (
-    <div className="grid grid-cols-1 gap-4 divide-x md:grid-cols-4 lg:grid-cols-5">
+    <div className="grid grid-cols-1 gap-4 divide-x p-2 md:grid-cols-4 lg:grid-cols-5">
       <ItemLabel
         label={"name"}
         value={classroom.name}
@@ -104,7 +104,7 @@ function ItemLabel({
 }) {
   const t = useTranslations();
   return (
-    <Item>
+    <Item className="p-0">
       <ItemMedia variant="icon">{icon}</ItemMedia>
       <ItemContent>
         <ItemTitle> {t(label)}</ItemTitle>

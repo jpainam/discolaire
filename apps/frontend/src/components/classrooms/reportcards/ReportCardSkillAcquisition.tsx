@@ -95,7 +95,19 @@ export function ReportCardSkillAcquisition({
   return (
     <div className="flex flex-col gap-2">
       <div className="border-y px-4 py-1">
-        <div className="flex items-center justify-end gap-2">
+        <div className="grid items-center justify-end gap-2 md:flex">
+          <Button
+            onClick={() => {
+              window.open(
+                `/api/pdfs/reportcards/ipbw/scoring?classroomId=${classroomId}&termId=${termId}`,
+                "__blank",
+              );
+            }}
+            variant={"secondary"}
+          >
+            <PDFIcon />
+            Grille de notation
+          </Button>
           <Button variant={"secondary"}>
             <PDFIcon />
             {t("pdf_export")}

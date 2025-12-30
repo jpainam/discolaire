@@ -8,6 +8,7 @@ export class ClassroomService {
   constructor(db: PrismaClient) {
     this.db = db;
   }
+
   async get(classroomId: string, schoolId: string) {
     const classroom = await this.db.classroom.findUniqueOrThrow({
       where: {

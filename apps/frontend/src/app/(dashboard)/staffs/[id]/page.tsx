@@ -12,6 +12,7 @@ import { getTranslations } from "next-intl/server";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { TableSkeleton } from "~/components/skeletons/table-skeleton";
+import { StaffGradesheetTable } from "~/components/staffs/profile/StaffGradesheetTable";
 import { StaffTeachingTable } from "~/components/staffs/StaffTeachingTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { GradeIcon } from "~/icons";
@@ -20,7 +21,10 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const t = await getTranslations();
-  batchPrefetch([trpc.staff.teachings.queryOptions(params.id)]);
+  batchPrefetch([
+    trpc.staff.teachings.queryOptions(params.id),
+    trpc.staff.gradesheets.queryOptions(params.id),
+  ]);
   return (
     <HydrateClient>
       <Tabs defaultValue="timeline" className="w-full">
@@ -61,7 +65,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </ErrorBoundary>
         </TabsContent>
         <TabsContent value="timetables">timetables</TabsContent>
-        <TabsContent value="grades">grades</TabsContent>
+        <TabsContent value="grades">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<TableSkeleton rows={8} cols={4} />}>
+              <StaffGradesheetTable staffId={params.id} />
+            </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
         <TabsContent value="payroll">payroll</TabsContent>
         <TabsContent value="documents">documents</TabsContent>
       </Tabs>

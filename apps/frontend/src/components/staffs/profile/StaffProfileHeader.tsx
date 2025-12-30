@@ -128,8 +128,8 @@ export function StaffProfileHeader({
                   onSelect={() => {
                     openSheet({
                       view: <CreateEditStaff staff={staff} />,
-                      title: t("edit_staff"),
-                      description: `${getFullName(staff)}`,
+                      title: t("edit"),
+                      description: `${t("staff")} - ${getFullName(staff)}`,
                     });
                   }}
                 >

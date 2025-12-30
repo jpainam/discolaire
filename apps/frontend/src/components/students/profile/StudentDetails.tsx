@@ -43,7 +43,7 @@ export default function StudentDetails({ className }: { className?: string }) {
   });
 
   return (
-    <div className={cn("flex flex-col gap-2 py-2 text-sm", className)}>
+    <div className={cn("flex flex-col gap-2 py-2 text-xs", className)}>
       <div className="grid grid-cols-2 gap-y-3 px-4 xl:grid-cols-4">
         <span className="text-muted-foreground flex flex-row items-center gap-1">
           <SquareUserRound className="h-4 w-4" /> {t("lastName")}

@@ -177,10 +177,10 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     { label: t("contract"), value: "contract" },
   ];
   const prefixes = [
-    { label: t("Mr"), value: "mr" },
-    { label: t("Mrs"), value: "mrs" },
-    { label: t("Miss"), value: "miss" },
-    { label: t("Dr"), value: "dr" },
+    { label: "Mr", value: "Mr" },
+    { label: "Mrs", value: "Mrs" },
+    { label: "Miss", value: "Miss" },
+    { label: "Dr", value: "Dr" },
   ];
 
   const genders = [

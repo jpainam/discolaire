@@ -32,7 +32,7 @@ import { useTRPC } from "~/trpc/react";
 
 const chartConfig = {
   classroomAvg: {
-    label: "MoyCl",
+    label: "Moy C",
     color: "var(--color-pink-500)",
   },
   grade: {
@@ -95,7 +95,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
                 <span className="text-popover-foreground font-semibold">
                   {entry.value.toFixed(1)}
                 </span>
-                {config.label == "MoyCl" && (
+                {config.label == "Moy C" && (
                   <Badge
                     variant={
                       ((entry.value - firstPayload.value) /
@@ -194,7 +194,7 @@ export function StudentGradesheetChart({
         <CardAction>
           <div className="flex items-center gap-4 text-sm">
             <ChartLabel label={t("grade")} color={chartConfig.grade.color} />
-            <ChartLabel label="MoyCl" color={chartConfig.classroomAvg.color} />
+            <ChartLabel label="Moy C" color={chartConfig.classroomAvg.color} />
           </div>
         </CardAction>
       </CardHeader>

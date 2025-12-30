@@ -7,6 +7,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import { decode } from "entities";
 import {
   ExternalLink,
   FileTextIcon,
@@ -136,7 +137,7 @@ export function ClassroomSubjectTable() {
                         className="hover:underline"
                       >
                         {subject.course.shortName.toUpperCase()} -{" "}
-                        {subject.course.name}
+                        {decode(subject.course.name)}
                       </Link>
                       <div className="flex flex-row items-center gap-4 px-4">
                         <Badge

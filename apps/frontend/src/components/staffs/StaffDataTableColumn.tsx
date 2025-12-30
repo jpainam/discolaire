@@ -222,8 +222,8 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
               onClick={() => {
                 openSheet({
                   view: <CreateEditStaff staff={staff} />,
-                  title: t("edit_staff"),
-                  description: `${getFullName(staff)}`,
+                  title: t("edit"),
+                  description: `${t("staff")} - ${getFullName(staff)}`,
                 });
               }}
             >

@@ -7,6 +7,7 @@ import {
   createTRPCClient,
   httpBatchStreamLink,
   loggerLink,
+  retryLink,
 } from "@trpc/client";
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 import SuperJSON from "superjson";
@@ -34,6 +35,19 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const [trpcClient] = useState(() =>
     createTRPCClient<AppRouter>({
       links: [
+        retryLink({
+          retry: (opts) => {
+            const code = opts.error.data?.code;
+            if (
+              code === "UNAUTHORIZED" &&
+              typeof window !== "undefined" &&
+              !window.location.pathname.includes("/login")
+            ) {
+              window.location.href = `${env.NEXT_PUBLIC_BASE_URL}/auth/login`;
+            }
+            return false;
+          },
+        }),
         loggerLink({
           enabled: (op) =>
             env.NODE_ENV === "development" ||

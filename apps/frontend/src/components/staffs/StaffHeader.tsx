@@ -55,13 +55,14 @@ export function StaffHeader() {
             <Button
               onClick={() => {
                 openSheet({
-                  title: t("create_staff"),
+                  title: t("add"),
+                  description: t("staff"),
                   view: <CreateEditStaff />,
                 });
               }}
             >
               <Plus />
-              {t("Add staff")}
+              {t("add")}
             </Button>
           )}
         </div>

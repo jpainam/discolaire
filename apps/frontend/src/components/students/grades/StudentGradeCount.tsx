@@ -2,23 +2,15 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  Notebook,
-  NotepadText,
-  ProportionsIcon,
-  Rows3Icon,
-} from "lucide-react";
+import { Notebook, NotepadText, ProportionsIcon, Rows3Icon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
-import {
-  MetricCard,
-  MetricCardGroup,
-  MetricCardHeader,
-  MetricCardTitle,
-  MetricCardValue,
-} from "~/components/metric-card";
+
+
+import { MetricCard, MetricCardGroup, MetricCardHeader, MetricCardTitle, MetricCardValue } from "~/components/metric-card";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { useTRPC } from "~/trpc/react";
+
 
 export function StudentGradeCount({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
@@ -166,39 +158,47 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
       <MetricCardGroup className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
         <MetricCard variant={"success"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">Note maximum</MetricCardTitle>
+            <MetricCardTitle className="truncate text-xs">
+              Note maximum
+            </MetricCardTitle>
             <NotepadText className="size-4" />
           </MetricCardHeader>
-          <MetricCardValue>
+          <MetricCardValue className="text-xs">
             {isFinite(maxGrade) ? maxGrade.toFixed(2) : "N/A"}
           </MetricCardValue>
         </MetricCard>
         <MetricCard variant={"destructive"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">Note mininum</MetricCardTitle>
+            <MetricCardTitle className="truncate text-xs">
+              Note mininum
+            </MetricCardTitle>
             <Notebook className="size-4" />
           </MetricCardHeader>
-          <MetricCardValue>
+          <MetricCardValue className="text-xs">
             {isFinite(minGrade) ? minGrade.toFixed(2) : "N/A"}
           </MetricCardValue>
         </MetricCard>
         <MetricCard variant={"warning"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">Note moyenne</MetricCardTitle>
+            <MetricCardTitle className="truncate text-xs">
+              Note moyenne
+            </MetricCardTitle>
             <Rows3Icon className="size-4" />
           </MetricCardHeader>
-          <MetricCardValue>
+          <MetricCardValue className="text-xs">
             {isFinite(averageGrade) ? averageGrade.toFixed(2) : "N/A"}
           </MetricCardValue>
         </MetricCard>
         <MetricCard variant={"default"}>
           <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate">
+            <MetricCardTitle className="truncate text-xs">
               Taux de réussite
             </MetricCardTitle>
             <ProportionsIcon className="size-4" />
           </MetricCardHeader>
-          <MetricCardValue>{successRate.toFixed(2)}%</MetricCardValue>
+          <MetricCardValue className="text-xs">
+            {successRate.toFixed(2)}%
+          </MetricCardValue>
         </MetricCard>
       </MetricCardGroup>
     </div>
