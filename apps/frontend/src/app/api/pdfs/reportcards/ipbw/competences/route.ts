@@ -3,10 +3,12 @@ import { NextResponse } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
 import { z } from "zod/v4";
 
+import type { RouterOutputs } from "@repo/api";
+
 import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import { IPBWCompetence } from "~/reports/reportcards/IPBWCompetence";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().optional(),
@@ -27,36 +29,62 @@ export async function GET(req: NextRequest) {
   }
 
   const { studentId, termId, classroomId } = result.data;
+  const queryClient = getQueryClient();
+  const school = await queryClient.fetchQuery(
+    trpc.school.getSchool.queryOptions(),
+  );
+  const term = await queryClient.fetchQuery(trpc.term.get.queryOptions(termId));
   if (studentId) {
-    return indvidualReportCard({ studentId, termId });
+    return indvidualReportCard({ studentId, termId, school, term });
   } else if (classroomId) {
-    return classroomReportCard({ classroomId, termId });
+    return classroomReportCard({ classroomId, termId, school, term });
   }
 }
 
 async function classroomReportCard({
   classroomId,
   termId,
+  school,
+  term,
 }: {
   classroomId: string;
   termId: string;
+  school: RouterOutputs["school"]["getSchool"];
+  term: RouterOutputs["term"]["get"];
 }) {
-  const school = await caller.school.getSchool();
-  const students = await caller.classroom.students(classroomId);
-  const contacts = await caller.student.getPrimaryContacts({ classroomId });
-  const report = await caller.reportCard.getSequence({
-    classroomId,
-    termId,
-  });
+  const queryClient = getQueryClient();
+  const skills = await queryClient.fetchQuery(
+    trpc.skillAcquisition.all.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
 
-  const subjects = await caller.classroom.subjects(classroomId);
-  const term = await caller.term.get(termId);
-  const classroom = await caller.classroom.get(classroomId);
+  const students = await queryClient.fetchQuery(
+    trpc.classroom.students.queryOptions(classroomId),
+  );
+  const contacts = await queryClient.fetchQuery(
+    trpc.student.getPrimaryContacts.queryOptions({ classroomId }),
+  );
+  const report = await queryClient.fetchQuery(
+    trpc.reportCard.getSequence.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
 
-  const disciplines = await caller.discipline.sequence({
-    classroomId,
-    termId,
-  });
+  const subjects = await queryClient.fetchQuery(
+    trpc.classroom.subjects.queryOptions(classroomId),
+  );
+  const classroom = await queryClient.fetchQuery(
+    trpc.classroom.get.queryOptions(classroomId),
+  );
+  const disciplines = await queryClient.fetchQuery(
+    trpc.discipline.sequence.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
   const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
   const stream = await renderToStream(
@@ -65,6 +93,7 @@ async function classroomReportCard({
       students,
       disciplines,
       classroom,
+      skills,
       title:
         classroom.section?.name == "FRA"
           ? `BULLETIN SCOLAIRE : ${term.name}`
@@ -87,14 +116,28 @@ async function classroomReportCard({
 async function indvidualReportCard({
   studentId,
   termId,
+  school,
+  term,
 }: {
   studentId: string;
   termId: string;
+  school: RouterOutputs["school"]["getSchool"];
+  term: RouterOutputs["term"]["get"];
 }) {
-  const student = await caller.student.get(studentId);
+  const queryClient = getQueryClient();
+  const student = await queryClient.fetchQuery(
+    trpc.student.get.queryOptions(studentId),
+  );
   if (!student.classroom) {
-    return NextResponse.json("Student not registered", { status: 400 });
+    return NextResponse.json("Eleve non inscrit", { status: 401 });
   }
+  const classroomId = student.classroom.id;
+  const skills = await queryClient.fetchQuery(
+    trpc.skillAcquisition.all.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
 
   const report = await caller.reportCard.getSequence({
     classroomId: student.classroom.id,
@@ -111,8 +154,6 @@ async function indvidualReportCard({
   }
 
   const contact = await caller.student.getPrimaryContact(student.id);
-  const school = await caller.school.getSchool();
-  const term = await caller.term.get(termId);
 
   const disciplines = await caller.discipline.sequence({
     classroomId: classroom.id,
@@ -126,6 +167,7 @@ async function indvidualReportCard({
       disciplines: disciplines,
       students: [student],
       lang: lang,
+      skills,
       classroom,
       title:
         lang == "fr"

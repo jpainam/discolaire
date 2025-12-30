@@ -34,7 +34,10 @@ export function IPBWSummary({
 }) {
   const t = getTranslation(lang);
   return (
-    <View style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}>
+    <View
+      wrap={false}
+      style={{ flexDirection: "row", marginTop: "4px", gap: 2 }}
+    >
       <IPBWTravail lang={lang} grade={average} style={{ width: "20%" }} />
       <IPBWDiscipline
         lang={lang}

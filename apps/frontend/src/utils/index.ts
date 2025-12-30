@@ -35,8 +35,9 @@ export function addSpacesToCamelCase(str: string) {
  * @param part  > 0 1..n (n = length of name parts)
  * @returns
  */
-export function getNameParts(person: Person, part: number) {
+export function getNameParts(person?: any, ppart?: number) {
   const v = getFullName(person);
+  const part = ppart ?? 0;
   const tabs = v.split(" ").filter((s) => s.length > 0);
   if (tabs.length > part) {
     return tabs[part - 1] ?? "";
