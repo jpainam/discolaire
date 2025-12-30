@@ -5,8 +5,7 @@ import { z } from "zod/v4";
 
 import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
-import IPBW from "~/reports/reportcards/IPBW";
-import IPBWClassroom from "~/reports/reportcards/IPBWClassroom";
+import { IPBWCompetence } from "~/reports/reportcards/IPBWCompetence";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -19,8 +18,8 @@ export async function GET(req: NextRequest) {
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
-  const searchParams = parseSearchParams(req);
 
+  const searchParams = parseSearchParams(req);
   const result = searchSchema.safeParse(searchParams);
   if (!result.success) {
     const error = z.treeifyError(result.error);
@@ -33,9 +32,6 @@ export async function GET(req: NextRequest) {
   } else if (classroomId) {
     return classroomReportCard({ classroomId, termId });
   }
-
-  //const schoolYear = await caller.schoolYear.get(classroom.schoolYearId);
-  //const totalPoints = sum(reportCard.map((c) => 20 * c.coefficient));
 }
 
 async function classroomReportCard({
@@ -64,7 +60,7 @@ async function classroomReportCard({
   const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
   const stream = await renderToStream(
-    IPBWClassroom({
+    IPBWCompetence({
       school,
       students,
       disciplines,
@@ -97,7 +93,7 @@ async function indvidualReportCard({
 }) {
   const student = await caller.student.get(studentId);
   if (!student.classroom) {
-    return new Response("Student not registered", { status: 400 });
+    return NextResponse.json("Student not registered", { status: 400 });
   }
 
   const report = await caller.reportCard.getSequence({
@@ -125,10 +121,10 @@ async function indvidualReportCard({
   const lang = classroom.section?.name == "ANG" ? "en" : ("fr" as const);
 
   const stream = await renderToStream(
-    IPBW({
+    IPBWCompetence({
       school,
       disciplines: disciplines,
-      student,
+      students: [student],
       lang: lang,
       classroom,
       title:
@@ -137,7 +133,7 @@ async function indvidualReportCard({
           : `MONTHLY PROGRESS REPORT CARD N° ${term.order + 1}`,
       subjects,
       report,
-      contact,
+      contacts: contact ? [contact] : [],
       schoolYear: classroom.schoolYear,
     }),
   );

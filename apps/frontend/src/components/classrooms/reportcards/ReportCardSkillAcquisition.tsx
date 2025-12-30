@@ -120,7 +120,15 @@ export function ReportCardSkillAcquisition({
             <PDFIcon />
             Commentaires
           </Button>
-          <Button variant={"secondary"}>
+          <Button
+            onClick={() => {
+              window.open(
+                `/api/pdfs/reportcards/ipbw/competences?classroomId=${classroomId}&termId=${termId}`,
+                "__blank",
+              );
+            }}
+            variant={"secondary"}
+          >
             <PDFIcon />
             {t("pdf_export")}
           </Button>
