@@ -26,6 +26,7 @@ import {
   FileIcon,
   FilesIcon,
   MoreIcon,
+  ReportGradeIcon,
   UserIcon,
   UsersIcon,
 } from "~/icons";
@@ -65,6 +66,24 @@ export function ReportCardHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuItem
+              onSelect={() => {
+                if (!termId) {
+                  toast.warning("Veuillez choisir une période");
+                  return;
+                }
+                router.push(
+                  `/classrooms/${params.id}/reportcards?` +
+                    createQueryString({
+                      action: "reportcard",
+                      termId: termId,
+                    }),
+                );
+              }}
+            >
+              <ReportGradeIcon />
+              {t("reportcards")}
+            </DropdownMenuItem>
             <DropdownMenuLabel className="flex items-center gap-2">
               <MoreIcon className="size-4" />
               Appréciations

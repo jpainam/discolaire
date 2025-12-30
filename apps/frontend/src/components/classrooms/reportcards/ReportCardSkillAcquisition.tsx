@@ -108,6 +108,18 @@ export function ReportCardSkillAcquisition({
             <PDFIcon />
             Grille de notation
           </Button>
+          <Button
+            onClick={() => {
+              window.open(
+                `/api/pdfs/reportcards/ipbw/teachers_comments?classroomId=${classroomId}&termId=${termId}`,
+                "__blank",
+              );
+            }}
+            variant={"secondary"}
+          >
+            <PDFIcon />
+            Commentaires
+          </Button>
           <Button variant={"secondary"}>
             <PDFIcon />
             {t("pdf_export")}
