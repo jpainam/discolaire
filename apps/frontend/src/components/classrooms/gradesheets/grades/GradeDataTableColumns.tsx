@@ -76,7 +76,7 @@ export function useGradeColumns(): ColumnDef<
           const student = row.original.student;
           return (
             <AvatarState
-              avatar={student.user?.avatar}
+              avatar={student.avatar}
               pos={student.firstName?.length}
             />
           );

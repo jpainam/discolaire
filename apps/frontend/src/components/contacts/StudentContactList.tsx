@@ -123,7 +123,7 @@ export default function StudentContactList({
               <CardHeader className="bg-muted/50 gap-0 border-b p-2">
                 <CardTitle>
                   <AvatarState
-                    avatar={student.user?.avatar}
+                    avatar={student.avatar}
                     className="h-[60px] w-[60px]"
                     pos={getFullName(student).length}
                   />

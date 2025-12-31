@@ -97,7 +97,7 @@ export function ContactStudentTable() {
             return (
               <TableRow key={`${stc.contactId}-${index}`}>
                 <TableCell className="w-[50px]">
-                  <AvatarState pos={index} avatar={student.user?.avatar} />
+                  <AvatarState pos={index} avatar={student.avatar} />
                 </TableCell>
                 <TableCell>
                   <Link

@@ -140,7 +140,7 @@ export function ReportCardMontly({
                     <TableCell className="w-[10px]">
                       <AvatarState
                         className="h-8 w-8"
-                        avatar={student.user?.avatar}
+                        avatar={student.avatar}
                         pos={index}
                       />
                     </TableCell>

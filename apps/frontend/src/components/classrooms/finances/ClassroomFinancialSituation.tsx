@@ -146,7 +146,7 @@ function ListViewFinance({
                       id={stud.studentId}
                       name={getFullName(stud)}
                       profile="student"
-                      avatar={stud.user?.avatar}
+                      avatar={stud.avatar}
                     />
                   </TableCell>
                   <TableCell className="text-muted-foreground">
@@ -255,7 +255,7 @@ function GridViewFinanceCard({
             profile="student"
             id={student.studentId}
             name={getFullName(student)}
-            avatar={student.user?.avatar}
+            avatar={student.avatar}
           />
         </CardTitle>
         <CardDescription>

@@ -175,7 +175,7 @@ export function QuickStudentList() {
                     <UserLink
                       name={getFullName(st)}
                       id={st.id}
-                      avatar={st.user?.avatar}
+                      avatar={st.avatar}
                       profile="student"
                     />
                   </TableCell>

@@ -107,7 +107,7 @@ export function ReportCardClassroomCouncil({
                     <UserLink
                       profile="student"
                       id={student.id}
-                      avatar={student.user?.avatar}
+                      avatar={student.avatar}
                       name={getFullName(student)}
                     />
                   </TableCell>

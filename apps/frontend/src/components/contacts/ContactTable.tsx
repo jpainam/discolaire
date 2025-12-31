@@ -155,7 +155,7 @@ export function ContactTable() {
                     <UserLink
                       name={getFullName(c)}
                       id={c.id}
-                      avatar={c.user?.avatar}
+                      avatar={c.avatar}
                       profile="contact"
                     />
                   </TableCell>

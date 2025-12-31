@@ -123,10 +123,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
                   }}
                 >
                   <Avatar className="h-6 w-6">
-                    <AvatarImage
-                      src={stud.user?.avatar ?? undefined}
-                      alt="Image"
-                    />
+                    <AvatarImage src={stud.avatar ?? undefined} alt="Image" />
                     <AvatarFallback>
                       <Image
                         height={50}

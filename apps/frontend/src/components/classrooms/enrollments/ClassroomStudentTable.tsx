@@ -182,7 +182,7 @@ export function ClassroomStudentTable({
                     <UserLink
                       id={stud.id}
                       name={getFullName(stud)}
-                      avatar={stud.user?.avatar}
+                      avatar={stud.avatar}
                       profile="student"
                     />
                   </TableCell>

@@ -16,6 +16,7 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { handleDeleteAvatar } from "~/actions/upload";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { Button } from "~/components/ui/button";
@@ -69,43 +70,27 @@ export function StaffProfileHeader({
 
   const { openModal } = useModal();
   const { openSheet } = useSheet();
-  const handleDeleteAvatar = async (userId: string) => {
-    toast.loading(t("deleting"), { id: 0 });
-    const response = await fetch(`/api/upload/avatars?userId=${userId}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      toast.success(t("deleted_successfully"), {
-        id: 0,
-      });
-      await queryClient.invalidateQueries(trpc.user.get.pathFilter());
-      await queryClient.invalidateQueries(trpc.staff.get.pathFilter());
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { error } = await response.json();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      toast.error(error ?? response.statusText, { id: 0 });
-    }
-  };
+
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-row items-center gap-2">
-        {!staff.user?.avatar ? (
-          <>
-            {staff.userId ? (
-              <ChangeAvatarButton userId={staff.userId}>
-                <Button variant={"outline"}>
-                  <ImagePlusIcon />
-                  {t("change_avatar")}
-                </Button>
-              </ChangeAvatarButton>
-            ) : null}
-          </>
+        {!staff.avatar ? (
+          <ChangeAvatarButton id={staff.id} profile="staff">
+            <Button variant={"outline"}>
+              <ImagePlusIcon />
+              {t("change_avatar")}
+            </Button>
+          </ChangeAvatarButton>
         ) : (
           <Button
-            onClick={() => {
-              if (!staff.user) return;
-              void handleDeleteAvatar(staff.user.id);
+            onClick={async () => {
+              if (!staff.avatar) return;
+              await handleDeleteAvatar(staff.avatar);
+              toast.success(t("deleted_successfully"), {
+                id: 0,
+              });
+              await queryClient.invalidateQueries(trpc.user.get.pathFilter());
+              await queryClient.invalidateQueries(trpc.staff.get.pathFilter());
             }}
             variant={"outline"}
             size={"sm"}

@@ -73,7 +73,7 @@ export function StudentSearchResultCard({
           <div className="flex items-start gap-4">
             <AvatarState
               pos={getFullName(student).length}
-              avatar={student.user?.avatar}
+              avatar={student.avatar}
               className="h-12 w-12"
             />
 

@@ -53,7 +53,7 @@ export async function LatestTransactions({
             <AvatarState
               className="h-8 w-8 rounded-full"
               pos={transaction.student.lastName?.length ?? 0}
-              avatar={transaction.student.user?.avatar}
+              avatar={transaction.student.avatar}
             />
 
             <div className="flex min-w-0 flex-1 items-center justify-between">

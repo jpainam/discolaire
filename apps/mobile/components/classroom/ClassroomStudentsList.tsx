@@ -24,7 +24,7 @@ export default function ClassroomStudentsList({
   classroomId: string;
 }) {
   const { data: students, isPending } = useQuery(
-    trpc.classroom.students.queryOptions(classroomId),
+    trpc.classroom.students.queryOptions(classroomId)
   );
 
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function ClassroomStudentsList({
       style={styles.studentCard}
     >
       <View style={styles.studentInfo}>
-        <Avatar imageUrl={item.user?.avatar} style={styles.avatar} />
+        <Avatar imageUrl={item.avatar} style={styles.avatar} />
         <View style={styles.studentDetails}>
           <Text style={styles.studentName}>{getFullName(item)}</Text>
           <Text style={styles.studentId}>ID: {item.registrationNumber}</Text>

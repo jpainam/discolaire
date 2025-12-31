@@ -194,7 +194,7 @@ export function ClassroomStudentSelector({
         classroomStudentsQuery.data.map((student) => ({
           label: getFullName(student),
           value: student.id,
-          avatar: student.user?.avatar ?? undefined,
+          avatar: student.avatar ?? undefined,
         })),
       );
     }

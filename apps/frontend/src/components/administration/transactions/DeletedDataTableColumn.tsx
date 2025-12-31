@@ -11,7 +11,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Badge } from "~/components/base-badge";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
-import { Pill, PillAvatar } from "~/components/pill";
+import { Pill } from "~/components/pill";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -159,18 +159,9 @@ export const useDeletedDataTableColumn = (): ColumnDef<
           cell: ({ row }) => {
             const transaction = row.original;
             const user = transaction.deletedBy;
-            const name = user?.name ?? user?.username ?? "N/A";
+            //const name = user?.name ?? user?.username ?? "N/A";
 
-            return (
-              <Pill>
-                <PillAvatar
-                  fallback={name.slice(0, 2).toUpperCase()}
-                  src={user?.avatar ?? undefined}
-                />
-
-                {decode(user?.name ?? user?.username ?? "")}
-              </Pill>
-            );
+            return <Pill>{decode(user?.name ?? user?.username ?? "")}</Pill>;
           },
         }),
 

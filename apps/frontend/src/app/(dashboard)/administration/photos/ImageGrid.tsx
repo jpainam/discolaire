@@ -17,6 +17,7 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { handleDeleteAvatar } from "~/actions/upload";
 import { StudentSearchDialog } from "~/components/students/StudentSearchDialog";
 import { Button } from "~/components/ui/button";
 import {
@@ -28,6 +29,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useModal } from "~/hooks/use-modal";
+import { DeleteIcon } from "~/icons";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -166,24 +168,6 @@ export function ImageGrid({
   const queryClient = useQueryClient();
   const { openModal } = useModal();
 
-  const handleDeleteAvatar = async (userId: string) => {
-    toast.loading(t("deleting"), { id: 0 });
-    const response = await fetch(`/api/upload/avatars?userId=${userId}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      toast.success(t("deleted_successfully"), {
-        id: 0,
-      });
-      await queryClient.invalidateQueries(trpc.user.get.pathFilter());
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { error } = await response.json();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      toast.error(error ?? response.statusText, { id: 0 });
-    }
-  };
-
   return (
     <div className="flex flex-col gap-4 p-4">
       {/* Drop area */}
@@ -294,15 +278,19 @@ export function ImageGrid({
                               description: t("This action cannot be undone."),
                             });
                             if (isConfirmed) {
-                              const userId = extractId(image.key);
-                              if (!userId) return;
-                              alert(userId);
-                              void handleDeleteAvatar(userId);
+                              if (!image.key) return;
+                              await handleDeleteAvatar(image.key);
+                              toast.success(t("deleted_successfully"), {
+                                id: 0,
+                              });
+                              await queryClient.invalidateQueries(
+                                trpc.user.get.pathFilter(),
+                              );
                             }
                           }}
                           variant="destructive"
                         >
-                          <Trash2Icon />
+                          <DeleteIcon />
                           {t("delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -356,10 +344,4 @@ export function ImageGrid({
       )}
     </div>
   );
-}
-
-function extractId(path: string): string | null {
-  const filename = path.split("/").pop();
-  if (!filename) return null;
-  return filename.split(".").slice(0, -1).join(".") || null;
 }

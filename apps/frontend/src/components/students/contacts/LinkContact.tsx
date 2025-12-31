@@ -126,7 +126,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
                 >
                   <Avatar className="h-6 w-6">
                     <AvatarImage
-                      src={contact.user?.avatar ?? undefined}
+                      src={contact.avatar ?? undefined}
                       alt="Image"
                     />
                     <AvatarFallback>
@@ -158,10 +158,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
                 key={`${contact.id}-selected`}
                 className="border-background inline-block border-2"
               >
-                <AvatarImage
-                  src={contact.user?.avatar ?? undefined}
-                  alt="Image"
-                />
+                <AvatarImage src={contact.avatar ?? undefined} alt="Image" />
                 <AvatarFallback>
                   <Image
                     width={50}

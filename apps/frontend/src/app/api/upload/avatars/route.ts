@@ -1,3 +1,4 @@
+import path from "path";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import z from "zod/v4";
@@ -9,36 +10,54 @@ import { env } from "~/env";
 import { deleteFile } from "~/lib/s3-client";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
-export async function POST(request: Request) {
+const postSchema = z.object({
+  id: z.string(),
+  profile: z.enum(["student", "contact", "student"]),
+});
+export async function POST(request: NextRequest) {
   const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
+  const postParams = parseSearchParams(request);
+  const parsed = postSchema.safeParse(postParams);
+  if (!parsed.success) {
+    const error = z.treeifyError(parsed.error);
+    return NextResponse.json(error, { status: 400 });
+  }
   try {
+    const { id: ownerId, profile } = parsed.data;
     const formData = await request.formData();
-    const file = formData.get("file");
-    const userId = formData.get("userId") as string | null;
-    if (!userId) {
-      return Response.json({ error: "User Id missing" }, { status: 400 });
-    }
+    const file = formData.get("file") as File | null;
 
     if (!file) {
-      return Response.json({ error: "Data missing" }, { status: 400 });
+      return NextResponse.json({ error: "No file uploaded." }, { status: 400 });
     }
-    if (!(file instanceof File)) {
-      return Response.json({ error: "Invalid file type" }, { status: 400 });
+    const originalFilename = file.name;
+    const fileExtension = path.extname(originalFilename);
+    if (!fileExtension) {
+      return NextResponse.json(
+        { error: "File has no extension." },
+        { status: 400 },
+      );
     }
+    const uniqueFilename = `${ownerId}${fileExtension}`;
+    const queryClient = getQueryClient();
+    const school = await queryClient.fetchQuery(
+      trpc.school.getSchool.queryOptions(),
+    );
 
-    const ext = file.name.split(".").pop();
-    const user = await caller.user.get(userId);
-
-    const key = `${user.school.code}/${user.profile}/${userId}.${ext}`;
+    const key = `${school.code}/${profile}/${uniqueFilename}`;
     const result = await uploadFile({
       file: file,
       bucket: env.S3_AVATAR_BUCKET_NAME,
       destination: key,
     });
-    await caller.user.updateAvatar({ id: userId, avatar: result.key });
+    await caller.user.updateAvatar({
+      id: ownerId,
+      avatar: result.key,
+      profile: profile,
+    });
 
     // TODO Send an email to the user to confirm the change
     return Response.json(result);
@@ -48,10 +67,9 @@ export async function POST(request: Request) {
 }
 
 const searchSchema = z.object({
-  userId: z.string().optional(),
-  studentId: z.string().optional(),
-  contactId: z.string().optional(),
-  staffId: z.string().optional(),
+  ownerId: z.string().optional(),
+  filename: z.string().optional(),
+  profile: z.enum(["student", "contact", "staff"]),
 });
 export async function DELETE(request: NextRequest) {
   const session = await getSession();
@@ -66,46 +84,45 @@ export async function DELETE(request: NextRequest) {
       const error = z.treeifyError(parsed.error);
       return NextResponse.json(error, { status: 400 });
     }
-    const { userId, studentId, contactId, staffId } = parsed.data;
+    const { ownerId, filename, profile } = parsed.data;
+    const ids = [ownerId, filename].filter(Boolean);
+    if (ids.length !== 1) {
+      return NextResponse.json(
+        {
+          error: "Provide exactly one of key or id",
+        },
+        { status: 400 },
+      );
+    }
     const queryClient = getQueryClient();
+    let avatar: string | null = null;
+    let avatarOwnerId = ownerId;
 
-    if (userId) {
-      const user = await queryClient.fetchQuery(
-        trpc.user.get.queryOptions(userId),
-      );
-      if (user.profile == "student") {
+    if (ownerId) {
+      if (profile == "student") {
         const student = await queryClient.fetchQuery(
-          trpc.student.getFromUserId.queryOptions(user.id),
+          trpc.student.get.queryOptions(ownerId),
         );
-        await deleteFromProfile(student.avatar, student.id, "student");
-      } else if (user.profile == "staff") {
+        avatar = student.avatar;
+      } else if (profile == "staff") {
         const staff = await queryClient.fetchQuery(
-          trpc.staff.getFromUserId.queryOptions(user.id),
+          trpc.staff.get.queryOptions(ownerId),
         );
-        await deleteFromProfile(staff.avatar, staff.id, "staff");
-      } else if (user.profile == "contact") {
+        avatar = staff.avatar;
+      } else {
         const contact = await queryClient.fetchQuery(
-          trpc.contact.getFromUserId.queryOptions(user.id),
+          trpc.contact.get.queryOptions(ownerId),
         );
-        await deleteFromProfile(contact.avatar, contact.id, "contact");
+        avatar = contact.avatar;
       }
+    } else if (filename) {
+      const { id: fromKeyOwner } = await queryClient.fetchQuery(
+        trpc.photo.getFromKey.queryOptions({ key: filename, profile }),
+      );
+      avatarOwnerId = fromKeyOwner;
+      avatar = filename;
     }
-    if (studentId) {
-      const student = await queryClient.fetchQuery(
-        trpc.student.get.queryOptions(studentId),
-      );
-      await deleteFromProfile(student.avatar, student.id, "student");
-    } else if (contactId) {
-      const contact = await queryClient.fetchQuery(
-        trpc.contact.get.queryOptions(contactId),
-      );
-      await deleteFromProfile(contact.avatar, contact.id, "contact");
-    } else if (staffId) {
-      const staff = await queryClient.fetchQuery(
-        trpc.staff.getFromUserId.queryOptions(staffId),
-      );
-      await deleteFromProfile(staff.avatar, staff.id, "staff");
-    }
+    if (avatarOwnerId) await deleteFromProfile(avatar, avatarOwnerId, profile);
 
     return Response.json({ message: "Avatar deleted successfully" });
   } catch (error) {

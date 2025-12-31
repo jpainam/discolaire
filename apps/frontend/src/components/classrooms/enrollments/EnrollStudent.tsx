@@ -125,7 +125,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                     id={stud.id}
                     rootClassName="flex-1"
                     className="text-muted-foreground text-xs"
-                    avatar={stud.user?.avatar}
+                    avatar={stud.avatar}
                     href="#"
                     name={getFullName(stud)}
                   />
@@ -161,7 +161,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
                   className="border-background inline-block border-2"
                 >
                   <AvatarImage
-                    src={stud?.user?.avatar ?? avatar.toDataUri()}
+                    src={stud?.avatar ?? avatar.toDataUri()}
                     alt="Image"
                   />
                   <AvatarFallback>

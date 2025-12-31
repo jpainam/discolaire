@@ -66,10 +66,7 @@ export function ContactSearchPage() {
           {searchResults.map((contact) => (
             <div key={contact.id} className="p-0">
               <div className="flex flex-row items-center justify-between rounded-xl border px-4 py-2 shadow-sm">
-                <AvatarState
-                  className="h-10 w-10"
-                  avatar={contact.user?.avatar}
-                />
+                <AvatarState className="h-10 w-10" avatar={contact.avatar} />
                 <div className="ml-4 flex flex-1 flex-col gap-2">
                   <Link
                     className="hover:underline"

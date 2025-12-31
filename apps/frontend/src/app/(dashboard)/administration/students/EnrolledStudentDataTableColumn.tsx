@@ -57,7 +57,7 @@ export function useStudentColumns(): ColumnDef<
               <AvatarState
                 pos={getFullName(student).length}
                 className="h-6 w-6"
-                avatar={student.user?.avatar}
+                avatar={student.avatar}
               />
               <Link
                 href={`/students/${student.id}`}

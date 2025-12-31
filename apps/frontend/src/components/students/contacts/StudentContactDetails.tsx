@@ -128,7 +128,7 @@ export function StudentContactDetails({
               <AvatarState
                 pos={0}
                 className="h-16 w-16"
-                avatar={contact.user?.avatar}
+                avatar={contact.avatar}
               />
               <div className="flex flex-col gap-2">
                 <Link

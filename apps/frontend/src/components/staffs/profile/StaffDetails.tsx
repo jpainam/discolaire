@@ -56,7 +56,7 @@ export function StaffDetails({ staffId }: { staffId: string }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-4">
           <Avatar className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]">
-            <AvatarImage src={staff.user?.avatar ?? avatar.toDataUri()} />
+            <AvatarImage src={staff.avatar ?? avatar.toDataUri()} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="grid flex-1 gap-4 md:grid-cols-4 lg:grid-cols-6">

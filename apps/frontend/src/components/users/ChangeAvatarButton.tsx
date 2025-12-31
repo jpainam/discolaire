@@ -7,10 +7,10 @@ import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
+import { handleUploadAvatar } from "~/actions/upload";
 import { ImageCropper } from "~/components/image-cropper";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
-import { getBucket, uploadFile } from "~/actions/upload";
 
 export type FileWithPreview = FileWithPath & {
   preview: string;
@@ -23,7 +23,8 @@ const accept = {
 export function ChangeAvatarButton(
   props: PropsWithChildren<{
     className?: string;
-    userId: string;
+    id: string;
+    profile: string;
   }>,
 ) {
   const [selectedFile, setSelectedFile] =
@@ -57,7 +58,6 @@ export function ChangeAvatarButton(
   const t = useTranslations();
 
   const handleUpload = useCallback(
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     async (croppedImageUrl: string) => {
       toast.loading(t("Processing"), { id: 0 });
 
@@ -66,40 +66,25 @@ export function ChangeAvatarButton(
           return;
         }
         const croppedBlob = await (await fetch(croppedImageUrl)).blob();
-        const formData = new FormData();
-        formData.append("file", croppedBlob, selectedFile.name);
-
-        formData.append("userId", props.userId);
 
         const file = new File([croppedBlob], selectedFile.name, {
           type: croppedBlob.type || "application/octet-stream",
           lastModified: Date.now(),
         });
-        const bucket = await getBucket("avatar");
-        const result = await uploadFile({
-           file,
-          destination,
-          bucket
-        })
-        const response = await fetch("/api/upload/avatars", {
-          method: "POST",
-          body: formData,
-        });
-        if (response.ok) {
+        const result = await handleUploadAvatar(file, props.id, props.profile);
+
+        if (result.success) {
           toast.success(t("success"), { id: 0 });
           router.refresh();
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          const { error } = await response.json();
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          toast.error(error ?? response.statusText, { id: 0 });
+          toast.error("Une erreur s'est produite");
         }
       } catch (error) {
         toast.error("Something went wrong while uploading", { id: 0 });
         console.error(error);
       }
     },
-    [props.userId, router, selectedFile?.name, t],
+    [props.id, props.profile, router, selectedFile, t],
   );
 
   return (

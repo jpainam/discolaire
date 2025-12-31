@@ -12,7 +12,8 @@ import { PermissionTable } from "~/components/users/PermissionTable";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-import { UserProfile } from "./UserProfile";
+
+// import { UserProfile } from "./UserProfile";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -66,7 +67,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 </div>
               }
             >
-              <UserProfile />
+              {/* <UserProfile /> */}
             </Suspense>
           </TabsContent>
           <TabsContent className="px-4" value="tab-2">

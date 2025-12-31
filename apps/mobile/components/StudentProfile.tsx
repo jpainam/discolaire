@@ -42,7 +42,7 @@ export function StudentProfile({
             {student.isRepeating ? "Redoublant" : "New Student"}
           </ThemedText>
         </ThemedView>
-        <Avatar imageUrl={student.user?.avatar} />
+        <Avatar imageUrl={student.avatar} />
       </ThemedView>
     </ThemedView>
   );

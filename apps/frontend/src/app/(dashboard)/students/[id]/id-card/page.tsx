@@ -50,12 +50,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             {/* Left column with photo and name */}
             <div className="flex w-2/5 flex-col">
               <div className="mb-4 overflow-hidden rounded-md p-2">
-                {student.user?.avatar && (
+                {student.avatar && (
                   <Avatar className="h-[150px] w-[150px] rounded-lg shadow-lg">
-                    <AvatarImage src={student.user.avatar} alt="Avatar" />
+                    <AvatarImage src={student.avatar} alt="Avatar" />
                   </Avatar>
                 )}
-                {!student.user?.avatar && (
+                {!student.avatar && (
                   <Image
                     src={randomAvatar()}
                     className="rounded-lg shadow-lg"

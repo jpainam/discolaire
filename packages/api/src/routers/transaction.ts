@@ -114,11 +114,7 @@ export const transactionRouter = {
           updatedBy2: true,
           receivedBy: true,
           deletedBy: true,
-          student: {
-            include: {
-              user: true,
-            },
-          },
+          student: true,
         },
         where: {
           schoolYearId: ctx.schoolYearId,

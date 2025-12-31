@@ -161,7 +161,7 @@ export function StudentContactTable({
                     <AvatarState
                       className="h-7 w-7"
                       pos={index}
-                      avatar={contact.user?.avatar}
+                      avatar={contact.avatar}
                     />
                     {/* <Link
                       href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
@@ -325,7 +325,7 @@ export function StudentContactTable({
                   <TableCell className="flex items-center justify-start gap-1">
                     <AvatarState
                       pos={getFullName(s).length}
-                      avatar={s.user?.avatar}
+                      avatar={s.avatar}
                     />
                     <Link href={`/students/${s.id}`}>{getFullName(s)}</Link>
                   </TableCell>

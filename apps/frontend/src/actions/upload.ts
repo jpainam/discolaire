@@ -33,9 +33,40 @@ export async function handleDeleteAvatar(key: string) {
     throw new Error("Unauthorized");
   }
   try {
-    const response = await fetch(`/api/upload/avatars?key=${key}`, {
+    const response = await fetch(`/api/upload/avatars?filename=${key}`, {
       method: "DELETE",
     });
+    if (!response.ok) {
+      throw new Error("An error occured");
+    }
+    return {
+      success: true,
+    };
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function handleUploadAvatar(
+  file: File,
+  id: string,
+  profile: string,
+) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+  try {
+    const formData = new FormData();
+    formData.append("file", file, file.name);
+    const response = await fetch(
+      `/api/upload/avatars?id=${id}&profile=${profile}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
     if (!response.ok) {
       throw new Error("An error occured");
     }

@@ -91,7 +91,7 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
                 id={staff.id}
                 profile="staff"
                 name={getFullName(staff)}
-                avatar={staff.user?.avatar}
+                avatar={staff.avatar}
               />
             );
           },

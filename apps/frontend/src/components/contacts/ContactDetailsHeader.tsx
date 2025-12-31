@@ -23,6 +23,7 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { handleDeleteAvatar } from "~/actions/upload";
 import { AvatarState } from "~/components/AvatarState";
 import { Button } from "~/components/ui/button";
 import {
@@ -101,29 +102,11 @@ export function ContactDetailsHeader() {
     PermissionAction.CREATE,
   );
 
-  const handleDeleteAvatar = async (userId: string) => {
-    toast.loading(t("deleting"), { id: 0 });
-    const response = await fetch(`/api/upload/avatars?userId=${userId}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      toast.success(t("deleted_successfully"), {
-        id: 0,
-      });
-      await queryClient.invalidateQueries(trpc.contact.get.pathFilter());
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { error } = await response.json();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      toast.error(error ?? response.statusText, { id: 0 });
-    }
-  };
-
   return (
     <div className="flex flex-row items-start gap-2">
       <AvatarState
         pos={contact.lastName?.length}
-        avatar={contact.user?.avatar}
+        avatar={contact.avatar}
         className="h-auto w-[100px]"
       />
 
@@ -249,11 +232,17 @@ export function ContactDetailsHeader() {
           </DropdownMenu>
         </div>
         <div className="grid flex-row gap-2 md:flex">
-          {contact.user?.avatar ? (
+          {contact.avatar ? (
             <Button
-              onClick={() => {
-                if (!contact.userId) return;
-                void handleDeleteAvatar(contact.userId);
+              onClick={async () => {
+                if (!contact.avatar) return;
+                await handleDeleteAvatar(contact.avatar);
+                toast.success(t("deleted_successfully"), {
+                  id: 0,
+                });
+                await queryClient.invalidateQueries(
+                  trpc.contact.get.pathFilter(),
+                );
               }}
               variant={"outline"}
               size={"sm"}
@@ -262,16 +251,12 @@ export function ContactDetailsHeader() {
               {t("Remove avatar")}
             </Button>
           ) : (
-            <>
-              {contact.userId ? (
-                <ChangeAvatarButton userId={contact.userId}>
-                  <Button variant={"outline"}>
-                    <ImageUpIcon />
-                    {t("change_avatar")}
-                  </Button>
-                </ChangeAvatarButton>
-              ) : null}
-            </>
+            <ChangeAvatarButton id={contact.id} profile="contact">
+              <Button variant={"outline"}>
+                <ImageUpIcon />
+                {t("change_avatar")}
+              </Button>
+            </ChangeAvatarButton>
           )}
 
           {canCreateContact && (

@@ -137,7 +137,7 @@ export function ReportCardQuarter({
                       <TableCell rowSpan={2}>
                         <UserLink
                           profile="student"
-                          avatar={student.user?.avatar}
+                          avatar={student.avatar}
                           name={getFullName(student)}
                           id={student.id}
                           href={`/students/${student.id}/reportcards/trimestres?trimestreId=${trimestreId}&studentId=${student.id}&classroomId=${classroomId}`}

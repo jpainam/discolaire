@@ -79,7 +79,7 @@ export function useStudentColumns(): ColumnDef<
             const student = row.original;
             return (
               <AvatarState
-                avatar={student.user?.avatar}
+                avatar={student.avatar}
                 pos={getFullName(row.original).length}
               />
             );

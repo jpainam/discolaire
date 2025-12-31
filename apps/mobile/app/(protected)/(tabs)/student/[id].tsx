@@ -38,7 +38,7 @@ export default function StudentProfileScreen() {
   const [activeTab, setActiveTab] = useState<TabType>("info");
 
   const { data: student, isPending } = useQuery(
-    trpc.student.get.queryOptions(id),
+    trpc.student.get.queryOptions(id)
   );
 
   if (!student) {
@@ -92,7 +92,7 @@ export default function StudentProfileScreen() {
       <View style={styles.profileHeader}>
         <View style={styles.profileImageContainer}>
           <Image
-            source={{ uri: student.user?.avatar ?? "" }}
+            source={{ uri: student.avatar ?? "" }}
             style={styles.profileImage}
           />
           {student.isNew && (

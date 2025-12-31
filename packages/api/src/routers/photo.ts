@@ -97,6 +97,37 @@ export const photoRouter = {
         };
       });
     }),
+  getFromKey: protectedProcedure
+    .input(
+      z.object({
+        key: z.string(),
+        profile: z.enum(["student", "contact", "staff"]),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (input.profile == "staff") {
+        const staff = await ctx.db.staff.findFirst({
+          where: {
+            avatar: input.key,
+          },
+        });
+        return { id: staff?.id };
+      } else if (input.profile == "contact") {
+        const contact = await ctx.db.contact.findFirst({
+          where: {
+            avatar: input.key,
+          },
+        });
+        return { id: contact?.id };
+      } else {
+        const student = await ctx.db.student.findFirst({
+          where: {
+            avatar: input.key,
+          },
+        });
+        return { id: student?.id };
+      }
+    }),
   get: protectedProcedure
     .input(
       z.object({

@@ -22,7 +22,7 @@ export default function StudentParentsTab({
   student: RouterOutputs["student"]["get"];
 }) {
   const { data: studentContacts, isPending } = useQuery(
-    trpc.student.contacts.queryOptions(student.id),
+    trpc.student.contacts.queryOptions(student.id)
   );
   const handlePhoneCall = async (phoneNumber: string) => {
     await Linking.openURL(`tel:${phoneNumber}`);
@@ -48,7 +48,7 @@ export default function StudentParentsTab({
         <View key={index} style={styles.parentCard}>
           <View style={styles.parentHeader}>
             <Image
-              source={{ uri: std.contact.user?.avatar ?? "" }}
+              source={{ uri: std.contact.avatar ?? "" }}
               style={styles.parentImage}
             />
             <View style={styles.parentInfo}>

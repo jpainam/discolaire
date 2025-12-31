@@ -39,6 +39,7 @@ import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db/enums";
 
+import { handleDeleteAvatar } from "~/actions/upload";
 import { authClient } from "~/auth/client";
 import FlatBadge from "~/components/FlatBadge";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
@@ -178,24 +179,6 @@ export function StudentHeader() {
     }),
   );
 
-  const handleDeleteAvatar = async (userId: string) => {
-    toast.loading(t("deleting"), { id: 0 });
-    const response = await fetch(`/api/upload/avatars?userId=${userId}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      toast.success(t("deleted_successfully"), {
-        id: 0,
-      });
-      await queryClient.invalidateQueries(trpc.student.get.pathFilter());
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { error } = await response.json();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      toast.error(error ?? response.statusText, { id: 0 });
-    }
-  };
-
   const avatar = createAvatar(initials, {
     seed: getFullName(student),
   });
@@ -203,10 +186,7 @@ export function StudentHeader() {
   return (
     <div className="bg-muted flex gap-2 border-b px-4 py-1">
       <Avatar className="hidden h-full w-[100px] rounded-md md:flex">
-        <AvatarImage
-          src={student.user?.avatar ?? avatar.toDataUri()}
-          alt="AV"
-        />
+        <AvatarImage src={student.avatar ?? avatar.toDataUri()} alt="AV" />
         <AvatarFallback>AV</AvatarFallback>
       </Avatar>
 
@@ -328,28 +308,32 @@ export function StudentHeader() {
             </Button>
           )}
           <SimpleTooltip
-            content={
-              student.user?.avatar ? t("Remove avatar") : t("change_avatar")
-            }
+            content={student.avatar ? t("Remove avatar") : t("change_avatar")}
           >
-            {student.user?.avatar ? (
+            {student.avatar ? (
               <Button
-                onClick={() => {
-                  if (student.userId) void handleDeleteAvatar(student.userId);
+                onClick={async () => {
+                  if (!student.avatar) return;
+                  await handleDeleteAvatar(student.avatar);
+                  toast.success(t("deleted_successfully"), {
+                    id: 0,
+                  });
+                  await queryClient.invalidateQueries(
+                    trpc.student.get.pathFilter(),
+                  );
                 }}
                 variant={"ghost"}
-                className="size-7"
-                size={"icon"}
+                size={"icon-xs"}
               >
                 <ImageMinusIcon />
               </Button>
-            ) : student.userId ? (
-              <ChangeAvatarButton userId={student.userId}>
-                <Button size={"icon"} className="size-7" variant={"ghost"}>
+            ) : (
+              <ChangeAvatarButton id={student.id} profile="student">
+                <Button size={"icon-xs"} variant={"ghost"}>
                   <ImagePlusIcon />
                 </Button>
               </ChangeAvatarButton>
-            ) : null}
+            )}
           </SimpleTooltip>
 
           <SuccessProbability />

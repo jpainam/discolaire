@@ -80,7 +80,7 @@ export function getColumns({
         return (
           <AvatarState
             pos={getFullName(contact).length}
-            avatar={contact.user?.avatar}
+            avatar={contact.avatar}
           />
         );
       },

@@ -239,7 +239,7 @@ export function ClassroomGradeList({
                       name={getFullName(st)}
                       profile="student"
                       id={st.id}
-                      avatar={st.user?.avatar}
+                      avatar={st.avatar}
                     />
                   </TableCell>
                   <TableCell className="text-muted-foreground">

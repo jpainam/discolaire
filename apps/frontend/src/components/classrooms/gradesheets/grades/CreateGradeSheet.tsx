@@ -274,7 +274,7 @@ export function CreateGradeSheet({
                         <UserLink
                           profile="student"
                           id={st.id}
-                          avatar={st.user?.avatar}
+                          avatar={st.avatar}
                           name={getFullName(st)}
                         />
                       </TableCell>

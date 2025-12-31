@@ -30,7 +30,7 @@ export function StaffProfile() {
     <Card className="p-0">
       <CardHeader className="bg-muted/50 flex flex-row items-start gap-4 border-b py-4">
         <AvatarState
-          avatar={staff.user?.avatar}
+          avatar={staff.avatar}
           className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]"
           pos={getFullName(staff).length}
         />
