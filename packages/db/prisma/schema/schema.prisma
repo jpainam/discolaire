@@ -339,6 +339,7 @@ model Staff {
     prefix                    String?
     firstName                 String?
     lastName                  String?
+    avatar                    String?
     isActive                  Boolean      @default(true)
     jobTitle                  String?
     employmentType            String?
@@ -352,6 +353,7 @@ model Staff {
     gender                    Gender       @default(male)
     phoneNumber1              String?
     phoneNumber2              String?
+    email                     String?
     address                   String?
     observation               String?
     dateOfCriminalRecordCheck DateTime?    @db.Date
@@ -391,6 +393,7 @@ model Student {
     isActive             Boolean                  @default(true)
     firstName            String?
     lastName             String?
+    avatar               String?
     dateOfBirth          DateTime?                @db.Date
     bloodType            String?
     placeOfBirth         String?
@@ -513,10 +516,12 @@ model Contact {
     prefix          String?
     firstName       String?
     lastName        String?
+    avatar          String?
     occupation      String?
     employer        String?
     phoneNumber1    String?
     phoneNumber2    String?
+    email           String?
     isActive        Boolean          @default(true)
     address         String?
     gender          String?          @default("male")

@@ -350,17 +350,33 @@ export const userRouter = {
     .input(
       z.object({
         id: z.string(),
-        avatar: z.string().nullish(),
+        profile: z.enum(["student", "contact", "staff"]),
+        avatar: z.string().nullable(),
       }),
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.user.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          avatar: input.avatar,
-        },
-      });
+    .mutation(async ({ ctx, input }) => {
+      if (input.profile == "student") {
+        await ctx.db.student.update({
+          data: {
+            avatar: input.avatar,
+          },
+          where: { id: input.id },
+        });
+      } else if (input.profile == "contact") {
+        await ctx.db.contact.update({
+          data: {
+            avatar: input.avatar,
+          },
+          where: { id: input.id },
+        });
+      } else {
+        await ctx.db.staff.update({
+          data: {
+            avatar: input.avatar,
+          },
+          where: { id: input.id },
+        });
+      }
+      return true;
     }),
 } satisfies TRPCRouterRecord;

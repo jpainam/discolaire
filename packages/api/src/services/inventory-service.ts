@@ -49,7 +49,7 @@ export class InventoryService {
         name: asset.name,
         users: asset.usages.map((u) => {
           return {
-            image: u.user.avatar ?? "",
+            image: "",
             name: u.user.name,
           };
         }),
@@ -107,7 +107,7 @@ export class InventoryService {
         users: consumable.usages.map((u) => {
           return {
             name: u.user.name,
-            image: u.user.avatar ?? "",
+            image: "",
           };
         }),
         other: {

@@ -49,7 +49,9 @@ export async function POST(request: Request) {
 
 const searchSchema = z.object({
   userId: z.string().optional(),
-  key: z.string().optional(),
+  studentId: z.string().optional(),
+  contactId: z.string().optional(),
+  staffId: z.string().optional(),
 });
 export async function DELETE(request: NextRequest) {
   const session = await getSession();
@@ -64,35 +66,45 @@ export async function DELETE(request: NextRequest) {
       const error = z.treeifyError(parsed.error);
       return NextResponse.json(error, { status: 400 });
     }
-    const { userId, key } = parsed.data;
+    const { userId, studentId, contactId, staffId } = parsed.data;
     const queryClient = getQueryClient();
-    let keyFile = key;
+
     if (userId) {
       const user = await queryClient.fetchQuery(
         trpc.user.get.queryOptions(userId),
       );
-      keyFile = user.avatar ?? undefined;
-    }
-
-    if (!keyFile) {
-      return Response.json({ error: "No avatar to delete" }, { status: 400 });
-    }
-
-    await deleteFile({
-      bucket: env.S3_AVATAR_BUCKET_NAME,
-      key: keyFile,
-    });
-
-    if (userId) {
-      await caller.user.updateAvatar({ id: userId, avatar: null });
-    } else if (key) {
-      // Get user by avatar key
-      const secondUser = await queryClient.fetchQuery(
-        trpc.photo.getUserByKey.queryOptions({ key }),
-      );
-      if (secondUser) {
-        await caller.user.updateAvatar({ id: secondUser.id, avatar: null });
+      if (user.profile == "student") {
+        const student = await queryClient.fetchQuery(
+          trpc.student.getFromUserId.queryOptions(user.id),
+        );
+        await deleteFromProfile(student.avatar, student.id, "student");
+      } else if (user.profile == "staff") {
+        const staff = await queryClient.fetchQuery(
+          trpc.staff.getFromUserId.queryOptions(user.id),
+        );
+        await deleteFromProfile(staff.avatar, staff.id, "staff");
+      } else if (user.profile == "contact") {
+        const contact = await queryClient.fetchQuery(
+          trpc.contact.getFromUserId.queryOptions(user.id),
+        );
+        await deleteFromProfile(contact.avatar, contact.id, "contact");
       }
+    }
+    if (studentId) {
+      const student = await queryClient.fetchQuery(
+        trpc.student.get.queryOptions(studentId),
+      );
+      await deleteFromProfile(student.avatar, student.id, "student");
+    } else if (contactId) {
+      const contact = await queryClient.fetchQuery(
+        trpc.contact.get.queryOptions(contactId),
+      );
+      await deleteFromProfile(contact.avatar, contact.id, "contact");
+    } else if (staffId) {
+      const staff = await queryClient.fetchQuery(
+        trpc.staff.getFromUserId.queryOptions(staffId),
+      );
+      await deleteFromProfile(staff.avatar, staff.id, "staff");
     }
 
     return Response.json({ message: "Avatar deleted successfully" });
@@ -100,4 +112,21 @@ export async function DELETE(request: NextRequest) {
     console.error(error);
     return Response.json({ error: (error as Error).message }, { status: 500 });
   }
+}
+
+async function deleteFromProfile(
+  key: string | null,
+  id: string,
+  profile: "student" | "contact" | "staff",
+) {
+  if (!key) return;
+  await deleteFile({
+    bucket: env.S3_AVATAR_BUCKET_NAME,
+    key,
+  });
+  return caller.user.updateAvatar({
+    id: id,
+    profile: profile,
+    avatar: null,
+  });
 }

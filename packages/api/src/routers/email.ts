@@ -138,7 +138,7 @@ export const emailRouter = {
             read: !!r.readAt,
             folder: "inbox",
             group: "work", // you can derive this from tags later
-            avatar: e.sender.avatar,
+            avatar: "",
           };
         },
         //formatEmail(r.email, "inbox", !!r.readAt),
@@ -155,7 +155,7 @@ export const emailRouter = {
           read: true,
           folder: "sent",
           group: "work", // you can derive this from tags later
-          avatar: e.sender.avatar,
+          avatar: "",
         };
       });
 

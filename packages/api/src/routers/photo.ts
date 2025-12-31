@@ -1,5 +1,4 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { TRPCError } from "@trpc/server";
 import { z } from "zod/v4";
 
 import { env } from "../env";
@@ -105,32 +104,18 @@ export const photoRouter = {
         type: z.enum(["avatar", "image"]),
       }),
     )
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       const bucket = input.type == "avatar" ? env.S3_AVATAR_BUCKET_NAME : "";
       const obj = await getObjectStat({ key: input.key, bucket });
-      const user = await ctx.db.user.findFirst({
-        where: {
-          avatar: input.key,
-        },
-      });
-      if (!obj.exists || !user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "obj or user not found",
-        });
-      }
-      return {
-        obj,
-        user,
-      };
+      return obj;
     }),
-  getUserByKey: protectedProcedure
-    .input(z.object({ key: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.user.findFirst({
-        where: {
-          avatar: input.key,
-        },
-      });
-    }),
+  // getUserByKey: protectedProcedure
+  //   .input(z.object({ key: z.string() }))
+  //   .query(({ ctx, input }) => {
+  //     return ctx.db.user.findFirst({
+  //       where: {
+  //         avatar: input.key,
+  //       },
+  //     });
+  //   }),
 } satisfies TRPCRouterRecord;
