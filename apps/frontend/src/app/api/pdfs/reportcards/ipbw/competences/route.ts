@@ -92,6 +92,7 @@ async function classroomReportCard({
       school,
       students,
       disciplines,
+      term,
       classroom,
       skills,
       title:
@@ -167,6 +168,7 @@ async function indvidualReportCard({
       disciplines: disciplines,
       students: [student],
       lang: lang,
+      term,
       skills,
       classroom,
       title:

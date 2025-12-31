@@ -80,6 +80,8 @@ export class TrimestreService {
           average: number;
           rank: number;
           grade1Average: number;
+          totalCoeff1: number;
+          totalCoeff2: number;
           grade2Average: number;
         };
       }
@@ -106,6 +108,8 @@ export class TrimestreService {
         global: {
           average: number;
           rank: number;
+          totalCoeff1: number;
+          totalCoeff2: number;
           grade1Average: number;
           grade2Average: number;
         };
@@ -200,6 +204,8 @@ export class TrimestreService {
           average: globalAverage,
           rank: 0,
           grade1Average: grade1Average,
+          totalCoeff1: coeff1Sum,
+          totalCoeff2: coeff2Sum,
           grade2Average: grade2Average,
         },
       });

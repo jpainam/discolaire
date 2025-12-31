@@ -28,13 +28,14 @@ export class SequenceService {
         global: {
           average: number;
           rank: number;
+          totalCoeff: number;
         };
       }
     >;
     summary: Map<number, { average: number; min: number; max: number }>;
     globalRanks: Map<
       string,
-      { average: number; rank: number; aequoRank: string }
+      { average: number; rank: number; aequoRank: string; total: number }
     >;
   }> {
     const grades = await this.reportcard.getGrades(classroomId, sequenceId);
@@ -54,6 +55,7 @@ export class SequenceService {
         global: {
           average: number;
           rank: number;
+          totalCoeff: number;
           aequoRank: string;
         };
       }
@@ -108,6 +110,7 @@ export class SequenceService {
         global: {
           average: roundToTwo(globalAverage),
           rank: 0,
+          totalCoeff: coeffSum,
           aequoRank: "",
         },
       });
@@ -146,7 +149,7 @@ export class SequenceService {
     );
     const globalRanks = new Map<
       string,
-      { average: number; rank: number; aequoRank: string }
+      { average: number; rank: number; aequoRank: string; total: number }
     >();
     let rank = 1;
     let lastScore: number | null = null;
@@ -164,6 +167,7 @@ export class SequenceService {
         average: s.globalAverage,
         rank: idx + 1,
         aequoRank,
+        total: s.total,
       });
       const report = studentsReport.get(s.studentId);
       if (report) {
