@@ -26,7 +26,7 @@ import { ConsumableSelector } from "../ConsumableSelector";
 
 const schema = z.object({
   userId: z.string().min(1),
-  quantity: z.coerce.number().min(1).max(1000),
+  quantity: z.number().min(1).max(1000),
   note: z.string().optional(),
   consumableId: z.string().min(1),
 });

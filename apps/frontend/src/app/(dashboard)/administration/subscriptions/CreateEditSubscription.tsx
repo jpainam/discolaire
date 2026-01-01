@@ -34,11 +34,11 @@ import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
   userId: z.string().min(1),
-  emails: z.coerce.number().default(0),
+  emails: z.number().default(0),
   unlimitedEmails: z.boolean().default(false),
-  sms: z.coerce.number().default(0),
+  sms: z.number().default(0),
   unlimitedSms: z.boolean().default(false),
-  whatsapp: z.coerce.number().default(0),
+  whatsapp: z.number().default(0),
   unlimitedWhatsapp: z.boolean().default(false),
   plan: z.string().default("hobby"),
 });

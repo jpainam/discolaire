@@ -25,7 +25,7 @@ import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   consumableId: z.string().min(1),
-  quantity: z.coerce.number().min(1).max(1000),
+  quantity: z.number().min(1).max(1000),
   note: z.string().optional(),
 });
 export function CreateEditStockEntry({

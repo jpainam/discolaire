@@ -23,8 +23,8 @@ import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   title: z.string().min(1),
-  scale: z.coerce.number().min(1),
-  weight: z.coerce.number().min(0).max(100),
+  scale: z.number().min(1),
+  weight: z.number().min(0).max(100),
 });
 export function UpdateCreatedGradesheet({
   title,

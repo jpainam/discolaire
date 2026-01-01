@@ -25,8 +25,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
 const createEditAppreciationSchema = z.object({
-  min: z.coerce.number().min(0),
-  max: z.coerce.number().min(0),
+  min: z.number().min(0),
+  max: z.number().min(0),
   appreciation: z.string().min(1),
 });
 export function CreateEditGradeAppreciation({

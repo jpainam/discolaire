@@ -42,7 +42,7 @@ const defaultSettingsSchema = z.object({
   defaultCountryId: z.string().min(1),
   applyRequiredFee: z.enum(["YES", "PASSIVE", "NO"]),
   includeRequiredFee: z.boolean(),
-  numberOfReceipts: z.coerce.number().min(1),
+  numberOfReceipts: z.number().min(1),
   currency: z.string().min(1).default("CFA"),
   timezone: z.string().min(1).default("UTC"),
   allowOverEnrollment: z.boolean().default(true),

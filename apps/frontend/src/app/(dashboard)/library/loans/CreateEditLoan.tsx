@@ -28,7 +28,7 @@ import { useTRPC } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
 
 const formSchema = z.object({
-  bookId: z.coerce.number().positive(),
+  bookId: z.number().positive(),
   userId: z.string().min(1),
   borrowed: z.date().default(() => new Date()),
   returned: z.date().nullable(),

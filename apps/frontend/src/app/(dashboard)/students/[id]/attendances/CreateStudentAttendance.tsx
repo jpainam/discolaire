@@ -26,7 +26,7 @@ import { useTRPC } from "~/trpc/react";
 
 const toNonNegInt = z.preprocess(
   (v) => (v === "" || v == null ? 0 : v),
-  z.coerce.number().int().nonnegative(),
+  z.number().int().nonnegative(),
 );
 const formSchema = z.object({
   absence: toNonNegInt,

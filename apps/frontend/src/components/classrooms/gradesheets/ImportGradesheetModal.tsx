@@ -41,7 +41,7 @@ import { getFullName } from "~/utils";
 const createGradeSchema = z.object({
   //weight: z.coerce.number().nonnegative(),
   name: z.string().min(1),
-  scale: z.coerce.number().nonnegative(),
+  scale: z.number().nonnegative(),
   grades: z.array(
     z.object({
       studentId: z.string(),

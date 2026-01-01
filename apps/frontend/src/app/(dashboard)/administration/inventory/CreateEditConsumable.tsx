@@ -10,6 +10,7 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { CreateEditStockUnit } from "~/components/administration/inventory/CreateEditStockUnit";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -33,12 +34,10 @@ import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditStockUnit } from "../../../../components/administration/inventory/CreateEditStockUnit";
 
 const schema = z.object({
   name: z.string().min(5),
-  //currentStock: z.coerce.number().default(0),
-  minStockLevel: z.coerce.number().default(0),
+  minStockLevel: z.number().default(0),
   unitId: z.string().min(1),
   note: z.string().optional(),
 });

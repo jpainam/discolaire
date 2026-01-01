@@ -11,9 +11,9 @@ import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 const schema = z.object({
-  transactionId: z.coerce.number(),
+  transactionId: z.number(),
   studentId: z.string().min(1),
-  remaining: z.coerce.number(),
+  remaining: z.number(),
   createdBy: z.string().min(1),
   status: z.string().min(1).default("success"),
 });

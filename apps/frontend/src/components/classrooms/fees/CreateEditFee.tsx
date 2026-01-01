@@ -32,7 +32,7 @@ import { useTRPC } from "~/trpc/react";
 const createEditFeeSchema = z.object({
   code: z.string().min(1),
   description: z.string().min(1),
-  amount: z.coerce.number().min(1),
+  amount: z.number().min(1),
   dueDate: z.date(),
   journalId: z.string().min(1),
 });

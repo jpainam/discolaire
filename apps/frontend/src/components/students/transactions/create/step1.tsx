@@ -30,7 +30,7 @@ import { useSchool } from "~/providers/SchoolProvider";
 import { useCreateTransaction } from "./CreateTransactionContextProvider";
 
 const makePaymentFormSchema = z.object({
-  amount: z.coerce.number().min(1),
+  amount: z.number().min(1),
   description: z.string().min(1),
   transactionType: z.string().min(1),
   paymentMethod: z.string().min(1),

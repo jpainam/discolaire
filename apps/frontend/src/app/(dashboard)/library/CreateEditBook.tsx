@@ -34,7 +34,7 @@ import { useTRPC } from "~/trpc/react";
 const updateBookSchema = z.object({
   title: z.string().trim().min(1),
   author: z.string().min(1),
-  available: z.coerce.number().min(0),
+  available: z.number().min(0),
   description: z.string().optional(),
   isbn: z.string().optional(),
   categoryId: z.string().min(1),

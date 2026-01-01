@@ -35,7 +35,7 @@ const createEditSubjectSchema = z.object({
   teacherId: z.string().min(1),
   subjectGroupId: z.string().min(1),
   coefficient: z.string().min(1),
-  order: z.coerce.number().min(1),
+  order: z.number().min(1),
 });
 
 type Subject = NonNullable<RouterOutputs["classroom"]["subjects"][number]>;
