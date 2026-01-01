@@ -79,7 +79,6 @@ export async function DELETE(request: NextRequest) {
   try {
     const searchParams = parseSearchParams(request);
     const parsed = searchSchema.safeParse(searchParams);
-
     if (!parsed.success) {
       const error = z.treeifyError(parsed.error);
       return NextResponse.json(error, { status: 400 });

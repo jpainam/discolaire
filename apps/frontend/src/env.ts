@@ -38,9 +38,9 @@ export const env = createEnv({
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_BASE_URL: z.string().url(),
-    NEXT_PUBLIC_DEPLOYMENT_ENV: z.string().default("local"),
-    NEXT_PUBLIC_MINIO_URL: z.string().url(),
+    NEXT_PUBLIC_BASE_URL: z.url(),
+    NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]).default("local"),
+    NEXT_PUBLIC_MINIO_URL: z.url(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.

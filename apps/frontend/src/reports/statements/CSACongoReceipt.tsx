@@ -6,7 +6,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import { formatCurrency, getAssetUrl } from "../utils";
 
-const imageUrl = getAssetUrl("images");
+const imageUrl = getAssetUrl("image");
 
 export async function CSACongoReceipt({
   amountInWords,

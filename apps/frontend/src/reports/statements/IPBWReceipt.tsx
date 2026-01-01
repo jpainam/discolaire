@@ -12,7 +12,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import { formatCurrency, getAssetUrl } from "../utils";
 
-const imageUrl = getAssetUrl("images");
+const imageUrl = getAssetUrl("image");
 
 const styles = StyleSheet.create({
   page: {

@@ -279,7 +279,7 @@ export function ImageGrid({
                             });
                             if (isConfirmed) {
                               if (!image.key) return;
-                              await handleDeleteAvatar(image.key);
+                              await handleDeleteAvatar(image.key, "student");
                               toast.success(t("deleted_successfully"), {
                                 id: 0,
                               });

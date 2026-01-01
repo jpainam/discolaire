@@ -236,7 +236,7 @@ export function ContactDetailsHeader() {
             <Button
               onClick={async () => {
                 if (!contact.avatar) return;
-                await handleDeleteAvatar(contact.avatar);
+                await handleDeleteAvatar(contact.avatar, "contact");
                 toast.success(t("deleted_successfully"), {
                   id: 0,
                 });

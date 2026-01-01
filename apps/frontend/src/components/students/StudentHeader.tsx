@@ -4,8 +4,6 @@ import type * as RPNInput from "react-phone-number-input";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { initials } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
 import {
   useMutation,
   useQuery,
@@ -44,7 +42,6 @@ import { authClient } from "~/auth/client";
 import FlatBadge from "~/components/FlatBadge";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { SimpleTooltip } from "~/components/simple-tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -79,6 +76,7 @@ import { SearchCombobox } from "../SearchCombobox";
 import { CountryComponent } from "../shared/CountryPicker";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { UserAvatar } from "../UserAvatar";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
 import { SuccessProbability } from "./SuccessProbability";
@@ -179,16 +177,13 @@ export function StudentHeader() {
     }),
   );
 
-  const avatar = createAvatar(initials, {
-    seed: getFullName(student),
-  });
-
   return (
     <div className="bg-muted flex gap-2 border-b px-4 py-1">
-      <Avatar className="hidden h-full w-[100px] rounded-md md:flex">
-        <AvatarImage src={student.avatar ?? avatar.toDataUri()} alt="AV" />
-        <AvatarFallback>AV</AvatarFallback>
-      </Avatar>
+      <UserAvatar
+        name={getFullName(student)}
+        photoKey={student.avatar}
+        className="hidden size-[100px] rounded-full md:flex"
+      />
 
       <div className="flex w-full flex-col gap-1">
         {session?.user.profile == "student" ? (
@@ -229,7 +224,35 @@ export function StudentHeader() {
           />
         )}
 
-        <div className="flex flex-row items-center gap-1">
+        <div className="flex items-center gap-1.5">
+          <SimpleTooltip
+            content={student.avatar ? t("Remove avatar") : t("change_avatar")}
+          >
+            {student.avatar ? (
+              <Button
+                onClick={async () => {
+                  if (!student.avatar) return;
+                  await handleDeleteAvatar(student.avatar, "student");
+                  toast.success(t("deleted_successfully"), {
+                    id: 0,
+                  });
+                  await queryClient.invalidateQueries(
+                    trpc.student.get.pathFilter(),
+                  );
+                }}
+                variant={"ghost"}
+                size={"icon"}
+              >
+                <ImageMinusIcon />
+              </Button>
+            ) : (
+              <ChangeAvatarButton id={student.id} profile="student">
+                <Button size={"icon"} variant={"ghost"}>
+                  <ImagePlusIcon />
+                </Button>
+              </ChangeAvatarButton>
+            )}
+          </SimpleTooltip>
           {canEditStudent && (
             <Button
               disabled={!canEditStudent}
@@ -307,34 +330,6 @@ export function StudentHeader() {
               <PlusIcon />
             </Button>
           )}
-          <SimpleTooltip
-            content={student.avatar ? t("Remove avatar") : t("change_avatar")}
-          >
-            {student.avatar ? (
-              <Button
-                onClick={async () => {
-                  if (!student.avatar) return;
-                  await handleDeleteAvatar(student.avatar);
-                  toast.success(t("deleted_successfully"), {
-                    id: 0,
-                  });
-                  await queryClient.invalidateQueries(
-                    trpc.student.get.pathFilter(),
-                  );
-                }}
-                variant={"ghost"}
-                size={"icon-xs"}
-              >
-                <ImageMinusIcon />
-              </Button>
-            ) : (
-              <ChangeAvatarButton id={student.id} profile="student">
-                <Button size={"icon-xs"} variant={"ghost"}>
-                  <ImagePlusIcon />
-                </Button>
-              </ChangeAvatarButton>
-            )}
-          </SimpleTooltip>
 
           <SuccessProbability />
 

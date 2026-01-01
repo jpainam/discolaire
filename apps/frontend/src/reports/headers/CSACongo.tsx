@@ -5,7 +5,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import { getAssetUrl } from "../utils";
 
-const imageUrl = getAssetUrl("images");
+const imageUrl = getAssetUrl("image");
 
 export function CSACongoHeader({
   school,

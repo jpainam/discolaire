@@ -85,7 +85,7 @@ export function StaffProfileHeader({
           <Button
             onClick={async () => {
               if (!staff.avatar) return;
-              await handleDeleteAvatar(staff.avatar);
+              await handleDeleteAvatar(staff.avatar, "staff");
               toast.success(t("deleted_successfully"), {
                 id: 0,
               });

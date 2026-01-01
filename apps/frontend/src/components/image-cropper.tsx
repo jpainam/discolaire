@@ -4,7 +4,7 @@ import type { SyntheticEvent } from "react";
 import type { FileWithPath } from "react-dropzone";
 import type { Crop, PixelCrop } from "react-image-crop";
 import React from "react";
-import { CropIcon, Trash2Icon } from "lucide-react";
+import { CropIcon } from "lucide-react";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -23,6 +23,8 @@ import {
 import "react-image-crop/dist/ReactCrop.css";
 
 import { useTranslations } from "next-intl";
+
+import { DeleteIcon } from "~/icons";
 
 type FileWithPreview = FileWithPath & {
   preview: string;
@@ -150,12 +152,12 @@ export function ImageCropper({
                 setSelectedFile?.(null);
               }}
             >
-              <Trash2Icon className="size-4" />
+              <DeleteIcon />
               {t("cancel")}
             </Button>
           </DialogClose>
           <Button type="submit" size={"sm"} className="w-fit" onClick={onCrop}>
-            <CropIcon className="size-4" />
+            <CropIcon />
             {t("crop")}
           </Button>
         </DialogFooter>

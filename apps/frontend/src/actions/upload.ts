@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import { getSession } from "~/auth/server";
@@ -27,56 +28,57 @@ export async function downloadFileFromAws(key: string): Promise<string> {
   }
 }
 
-export async function handleDeleteAvatar(key: string) {
+export async function handleDeleteAvatar(
+  key: string,
+  profile: "student" | "staff" | "contact",
+) {
   const session = await getSession();
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
-  try {
-    const response = await fetch(`/api/upload/avatars?filename=${key}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) {
-      throw new Error("An error occured");
-    }
-    return {
-      success: true,
-    };
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-}
+  if (!session) throw new Error("Unauthorized");
 
+  const url = new URL("/api/upload/avatars", env.NEXT_PUBLIC_BASE_URL);
+  url.searchParams.set("filename", key);
+  url.searchParams.set("profile", profile);
+
+  const response = await fetch(url.toString(), {
+    method: "DELETE",
+    headers: {
+      cookie: (await cookies()).toString(),
+    },
+  });
+
+  if (!response.ok) throw new Error(await response.text());
+  return { success: true };
+}
 export async function handleUploadAvatar(
   file: File,
   id: string,
-  profile: string,
+  profile: "student" | "staff" | "contact",
 ) {
   const session = await getSession();
   if (!session) {
     throw new Error("Unauthorized");
   }
-  try {
-    const formData = new FormData();
-    formData.append("file", file, file.name);
-    const response = await fetch(
-      `/api/upload/avatars?id=${id}&profile=${profile}`,
-      {
-        method: "POST",
-        body: formData,
-      },
-    );
-    if (!response.ok) {
-      throw new Error("An error occured");
-    }
-    return {
-      success: true,
-    };
-  } catch (err) {
-    console.error(err);
-    throw err;
+
+  const formData = new FormData();
+  formData.append("file", file, file.name);
+  const url = new URL("/api/upload/avatars", env.NEXT_PUBLIC_BASE_URL);
+  url.searchParams.set("id", id);
+  url.searchParams.set("profile", profile);
+
+  const response = await fetch(url.toString(), {
+    method: "POST",
+    body: formData,
+    headers: {
+      cookie: (await cookies()).toString(),
+    },
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err || "Upload failed");
   }
+
+  return { success: true };
 }
 
 export async function getBucket(type: "avatar" | "image" | "document") {

@@ -98,7 +98,7 @@ export function PhotoStudentList() {
   const confirm = useConfirm();
   const deletePhoto = async (key: string) => {
     toast.loading(t("deleting"), { id: 0 });
-    const result = await handleDeleteAvatar(key);
+    const result = await handleDeleteAvatar(key, "student");
     if (result.success) {
       await queryClient.invalidateQueries(trpc.photo.pathFilter());
       toast.success(t("deleted_successfully"), { id: 0 });

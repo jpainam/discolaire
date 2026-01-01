@@ -3,6 +3,7 @@ import { Image, Text, View } from "@react-pdf/renderer";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { getAssetUrl } from "../utils";
 import { getTranslation } from "./translation";
 
 export function IPBWStudentInfo({
@@ -26,6 +27,9 @@ export function IPBWStudentInfo({
   contact: RouterOutputs["student"]["getPrimaryContact"];
 }) {
   const t = getTranslation(lang);
+  const avatarDataUri = student.avatar
+    ? `${getAssetUrl("avatar")}/${student.avatar}`
+    : null;
   let naiss =
     student.dateOfBirth &&
     Intl.DateTimeFormat(classroom.section?.name == "ANG" ? "en" : "fr", {
@@ -43,25 +47,20 @@ export function IPBWStudentInfo({
         paddingVertical: "4px",
       }}
     >
-      {student.avatar ? (
+      {avatarDataUri ? (
         <Image
           style={{
-            width: 60,
-            height: 50,
+            width: 100,
+            height: 72,
           }}
-          src={{
-            uri: student.avatar,
-            method: "GET",
-            headers: { "Cache-Control": "no-cache" },
-            body: "",
-          }}
+          src={avatarDataUri}
         />
       ) : (
         <View
           style={{
             width: 70,
             fontWeight: "bold",
-            height: 70,
+            height: 65,
             border: "1px solid gray",
             justifyContent: "center",
             textAlign: "center",

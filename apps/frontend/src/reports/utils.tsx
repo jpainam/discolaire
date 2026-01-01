@@ -30,21 +30,26 @@ export function getTitle({ trimestreId }: { trimestreId: string }) {
   };
 }
 
-export function getAssetUrl(asset: string) {
+export function getAssetUrl(asset: "image" | "avatar") {
   const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV === "local";
+  let assetUrl = "";
   if (isLocal) {
-    if (asset === "images") {
-      return `${env.NEXT_PUBLIC_MINIO_URL}/${env.S3_IMAGE_BUCKET_NAME}`;
-    } else if (asset == "avatars") {
-      return `${env.NEXT_PUBLIC_MINIO_URL}/${env.S3_AVATAR_BUCKET_NAME}`;
+    if (asset === "image") {
+      assetUrl = `${env.NEXT_PUBLIC_MINIO_URL}/${env.S3_IMAGE_BUCKET_NAME}`;
+    } else {
+      assetUrl = `${env.NEXT_PUBLIC_MINIO_URL}/${env.S3_AVATAR_BUCKET_NAME}`;
     }
   } else {
-    if (asset === "images") {
-      return `https://${env.S3_IMAGE_BUCKET_NAME}.s3.eu-central-1.amazonaws.com`;
+    if (asset === "image") {
+      assetUrl = `https://${env.S3_IMAGE_BUCKET_NAME}.s3.eu-central-1.amazonaws.com`;
     } else {
-      return `https://${env.S3_AVATAR_BUCKET_NAME}.s3.eu-central-1.amazonaws.com`;
+      assetUrl = `https://${env.S3_AVATAR_BUCKET_NAME}.s3.eu-central-1.amazonaws.com`;
     }
   }
+  if (assetUrl.includes("localhost")) {
+    assetUrl = assetUrl.replace("localhost", "127.0.0.1");
+  }
+  return assetUrl;
 }
 
 export function formatCurrency(
