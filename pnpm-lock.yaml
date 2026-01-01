@@ -895,8 +895,8 @@ importers:
   packages/notification:
     dependencies:
       '@novu/api':
-        specifier: ^1.8.0
-        version: 1.8.0
+        specifier: ^3.11.2
+        version: 3.11.2
       '@repo/db':
         specifier: workspace:*
         version: link:../db
@@ -3435,14 +3435,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@novu/api@1.8.0':
-    resolution: {integrity: sha512-ba/+fogM+a380AfJ2SSGBQSnHJe0H2Io2NWOf7LeJwFhWIjiYlNAZ1N5DaFv+jNRkaKh33jXDoWWkqqgQUu5lw==}
-    hasBin: true
-    peerDependencies:
-      '@modelcontextprotocol/sdk': '>=1.5.0 <1.10.0'
-    peerDependenciesMeta:
-      '@modelcontextprotocol/sdk':
-        optional: true
+  '@novu/api@3.11.2':
+    resolution: {integrity: sha512-NGp5TogFJwzUuH9ujCMCASwQWo8RHukD7TDAr4xb98+sTl/PC22TR1bk3C+1RBPNN+/KK9pNenheQ6qAyXXeTQ==}
 
   '@open-draft/deferred-promise@2.2.0':
     resolution: {integrity: sha512-CecwLWx3rhxVQF6V4bAgPS5t+So2sTbPgAzafKkVizyi7tlwpcFpdFqq+wqF2OwNBmqFuu6tOyouTuxgpMfzmA==}
@@ -14601,7 +14595,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@novu/api@1.8.0':
+  '@novu/api@3.11.2':
     dependencies:
       zod: 4.3.4
 
