@@ -185,8 +185,7 @@ export function CalendarDndProvider({
 
         // Only update if time has changed
         if (
-          !currentTime ||
-          newTime.getHours() !== currentTime.getHours() ||
+          newTime.getHours() !== currentTime?.getHours() ||
           newTime.getMinutes() !== currentTime.getMinutes() ||
           newTime.getDate() !== currentTime.getDate() ||
           newTime.getMonth() !== currentTime.getMonth() ||
@@ -208,8 +207,7 @@ export function CalendarDndProvider({
 
         // Only update if date has changed
         if (
-          !currentTime ||
-          newTime.getDate() !== currentTime.getDate() ||
+          newTime.getDate() !== currentTime?.getDate() ||
           newTime.getMonth() !== currentTime.getMonth() ||
           newTime.getFullYear() !== currentTime.getFullYear()
         ) {

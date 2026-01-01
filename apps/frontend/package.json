@@ -128,7 +128,6 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:^",
     "@repo/prettier-config": "workspace:*",
-    "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "catalog:",
     "@types/json-logic-js": "^2.0.8",

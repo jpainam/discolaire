@@ -147,7 +147,7 @@ export const userRouter = {
             },
           });
           if (input.email)
-            await ctx.authApi.forgetPassword({
+            await ctx.authApi.requestPasswordReset({
               body: {
                 email: input.email,
                 redirectTo: `/auth/complete-registration/${input.id}`,
@@ -297,7 +297,7 @@ export const userRouter = {
           authApi: ctx.authApi,
         });
       } else {
-        await ctx.authApi.forgetPassword({
+        await ctx.authApi.requestPasswordReset({
           body: {
             email: input.email,
             redirectTo: `/auth/complete-registration/${entity.userId}`,

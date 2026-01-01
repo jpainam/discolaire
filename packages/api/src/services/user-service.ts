@@ -249,7 +249,7 @@ export class UserService {
       entityType: profile,
     });
 
-    await authApi.forgetPassword({
+    await authApi.requestPasswordReset({
       body: {
         email: newUser.user.email,
         redirectTo: `/auth/complete-registration/${newUser.user.id}`,

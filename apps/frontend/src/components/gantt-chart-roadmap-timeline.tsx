@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Download, Share2, ZoomIn, ZoomOut } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -450,8 +450,7 @@ export default function GanttChartRoadmap() {
                         }
 
                         const isDragging =
-                          draggedEvent &&
-                          draggedEvent.catIndex === catIndex &&
+                          draggedEvent?.catIndex === catIndex &&
                           draggedEvent.evtIndex === evtIndex;
                         const showLabel = width > 50;
 
