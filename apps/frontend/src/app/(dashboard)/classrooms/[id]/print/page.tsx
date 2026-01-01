@@ -12,7 +12,11 @@ import XMLIcon from "~/components/icons/xml-solid";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { StudentPrintButton } from "~/components/students/print/StudentPrintButton";
 import { Badge } from "~/components/ui/badge";
-import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import {
   Select,
   SelectContent,
@@ -88,15 +92,16 @@ export default function DataExportPage() {
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
       <div className="flex flex-col gap-4 md:flex-row">
-        <div className="relative flex-1">
-          <Search className="text-muted-foreground absolute top-3 left-3 h-4 w-4" />
-          <Input
-            placeholder={t("search") + "..."}
-            className="pl-10"
-            value={searchQuery}
+        <InputGroup>
+          <InputGroupInput
             onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t("search")}
           />
-        </div>
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
+
         <TermSelector
           defaultValue={termId}
           onChange={setTermId}

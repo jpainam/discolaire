@@ -30,9 +30,9 @@ export function CommunicationHeader() {
                 view: <CreateEditCommunicationChannel />,
               });
             }}
-            size={"sm"}
+          
           >
-            <PlusIcon className="h-4 w-4" />
+            <PlusIcon  />
             {t("add")}
           </Button>
         )}

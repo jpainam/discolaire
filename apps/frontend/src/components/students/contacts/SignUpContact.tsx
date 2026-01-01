@@ -98,7 +98,7 @@ export function SignUpContact() {
                 }}
                 variant={"default"}
                 className="w-fit"
-                size={"sm"}
+               
               >
                 {t("send_invite")}
               </Button>

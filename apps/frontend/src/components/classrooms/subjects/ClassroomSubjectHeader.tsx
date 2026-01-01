@@ -5,8 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import type { FlatBadgeVariant } from "~/components/FlatBadge";
-import FlatBadge from "~/components/FlatBadge";
+import { Badge } from "~/components/base-badge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -21,9 +20,9 @@ import {
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
+import { SubjectIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
-import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditSubject } from "./CreateEditSubject";
 
 export function ClassroomSubjectHeader() {
@@ -33,7 +32,6 @@ export function ClassroomSubjectHeader() {
   const { data: subjects } = useSuspenseQuery(
     trpc.classroom.subjects.queryOptions(params.id),
   );
-  const Icon = sidebarIcons.subjects;
 
   const t = useTranslations();
 
@@ -58,44 +56,38 @@ export function ClassroomSubjectHeader() {
     PermissionAction.CREATE,
   );
 
-  const badgeVariants = [
-    "blue",
-    "red",
-    "yellow",
-    "gray",
-    "purple",
-  ] as FlatBadgeVariant[];
-
   return (
-    <div className="bg-muted text-muted-foreground grid w-full grid-cols-1 flex-row items-center gap-2 border-b px-4 py-1 md:flex">
-      {Icon && <Icon className="hidden h-4 w-4 md:block" />}
-      <Label className="hidden md:block">{t("subjects")}</Label>
+    <div className="bg-muted text-muted-foreground grid w-full grid-cols-1 flex-row items-center gap-4 border-b px-4 py-1 md:flex">
+      <div className="flex items-center gap-2">
+        <SubjectIcon />
+        <Label className="hidden md:block">{t("subjects")}</Label>
+      </div>
       <div className="grid grid-cols-3 flex-row items-center gap-2 md:flex">
-        <FlatBadge variant={"indigo"}>
+        <Badge variant={"info"} appearance={"outline"}>
           {subjects.length} {t("subjects")}
-        </FlatBadge>
-        <FlatBadge variant={"green"}>
+        </Badge>
+        <Badge variant={"success"} appearance={"outline"}>
           {nbTeacher} {t("teachers")}
-        </FlatBadge>
-        {Object.keys(groups).map((key, index) => {
+        </Badge>
+        {/* {Object.keys(groups).map((key, index) => {
           return (
-            <FlatBadge
+            <Badge
               key={key}
-              variant={badgeVariants[index % badgeVariants.length]}
+              variant={otherBadgeVariants[index % otherBadgeVariants.length]}
+              appearance={"outline"}
             >
-              {groups[key]} {key}
-            </FlatBadge>
+              {key}
+            </Badge>
           );
-        })}
+        })} */}
 
-        <FlatBadge variant={"pink"}>
+        <Badge variant={"warning"} appearance={"outline"}>
           {coeff} {t("coefficient")}
-        </FlatBadge>
+        </Badge>
       </div>
       <div className="ml-auto flex flex-row items-center gap-2">
         {canAddClassroomSubject && (
           <Button
-            size={"sm"}
             onClick={() => {
               openSheet({
                 title: (
@@ -114,7 +106,7 @@ export function ClassroomSubjectHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon-sm"}>
+            <Button variant={"outline"} size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

@@ -25,7 +25,6 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
-import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -98,7 +97,7 @@ export function LinkContact({ studentId }: { studentId: string }) {
             <CommandGroup className="p-2">
               {studentUnLinkedContact.isPending && (
                 <CommandItem className="flex flex-col items-center justify-center gap-2">
-                  {rangeMap(10, (index) => (
+                  {Array.from({ length: 10 }).map((_, index) => (
                     <Skeleton className="h-8 w-full" key={index} />
                   ))}
                 </CommandItem>

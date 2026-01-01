@@ -26,7 +26,6 @@ import { Spinner } from "~/components/ui/spinner";
 import { UserLink } from "~/components/UserLink";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
-import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -95,8 +94,8 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
             <CommandGroup className="p-2">
               {unenrollStudentsQuery.isPending && (
                 <CommandItem className="flex flex-col items-center justify-center gap-2">
-                  {rangeMap(10, (index) => (
-                    <Skeleton className="h-8 w-full" key={index} />
+                  {Array.from({ length: 10 }).map((_, t) => (
+                    <Skeleton className="h-8 w-full" key={t} />
                   ))}
                 </CommandItem>
               )}

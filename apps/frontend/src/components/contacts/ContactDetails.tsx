@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { showErrorToast } from "~/lib/handle-error";
-import rangeMap from "~/lib/range-map";
 import { useTRPC } from "~/trpc/react";
 
 export function ContactDetails({ contactId }: { contactId: string }) {
@@ -17,7 +16,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
   if (contactQuery.isPending) {
     return (
       <div className="grid gap-2 md:grid-cols-2">
-        {rangeMap(6, (i) => (
+        {Array.from({ length: 6 }).map((_, i) => (
           <Skeleton key={i} className="h-8" />
         ))}
       </div>

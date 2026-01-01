@@ -103,7 +103,7 @@ export function TransactionTable() {
   );
   const { openModal } = useModal();
   return (
-    <div className="px-4">
+    <div>
       <div className="bg-background overflow-hidden rounded-md border">
         <Table>
           <TableHeader>

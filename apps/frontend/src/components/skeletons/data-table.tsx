@@ -1,5 +1,4 @@
 import { Skeleton } from "~/components/ui/skeleton";
-import rangeMap from "~/lib/range-map";
 import { cn } from "~/lib/utils";
 
 interface DatatableSkeletonProps {
@@ -13,7 +12,7 @@ export default function DatatableSkeleton({ rows }: DatatableSkeletonProps) {
         <Skeleton className="h-8 w-[45%] rounded" />
         <Skeleton className="ml-auto h-8 w-16 rounded" />
       </div>
-      {rangeMap(rows, (i) => (
+      {Array.from({ length: rows }).map((_, i) => (
         <div key={i}>
           <SkeletonLineGroup
             columns={6}
@@ -42,7 +41,7 @@ export function SkeletonLineGroup({
   return (
     <>
       <div className={cn("grid", className)}>
-        {rangeMap(columns, (i) => (
+        {Array.from({ length: columns }).map((_, i) => (
           <Skeleton key={i} className={cn("h-2 rounded", skeletonClassName)} />
         ))}
       </div>

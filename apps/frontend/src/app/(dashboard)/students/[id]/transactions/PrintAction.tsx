@@ -23,11 +23,11 @@ export function PrintAction() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={"icon"} className="size-8" variant={"outline"}>
-          <MoreVertical className="h-4 w-4" />
+        <Button size={"icon"} variant={"outline"}>
+          <MoreVertical />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-42">
         <DropdownHelp />
         <DropdownMenuSeparator />
         <DropdownMenuItem

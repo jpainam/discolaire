@@ -37,7 +37,7 @@ export function StudentContactHeader() {
   const { openSheet } = useSheet();
 
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 px-4 py-1">
+    <div className="bg-muted flex flex-row items-center gap-2 px-4 py-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("contacts")}</Label>
 
@@ -45,8 +45,8 @@ export function StudentContactHeader() {
         {canAddContact && (
           <SimpleTooltip content={t("link_contacts")}>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant={"default"}>
+              <DropdownMenuTrigger  asChild>
+                <Button >
                   <PlusIcon />
                   <span>{t("add")}</span>
                 </Button>
@@ -87,11 +87,11 @@ export function StudentContactHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} className="size-8" variant={"outline"}>
+            <Button size={"icon"} variant={"outline"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-42">
             <DropdownHelp />
             <DropdownMenuSeparator />
             <DropdownMenuItem

@@ -1,5 +1,10 @@
+"use client";
+
+import { useMemo } from "react";
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { TbTransactionDollar } from "react-icons/tb";
 
@@ -12,23 +17,24 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { routes } from "~/configs/routes";
-import { caller } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
-export default async function Page({
-  params: paramsPromise,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await paramsPromise;
+export function StudentTransactionAccountTable() {
+  const params = useParams<{ id: string }>();
 
-  const t = await getTranslations();
-  const locale = await getLocale();
+  const t = useTranslations();
+  const locale = useLocale();
+  const trpc = useTRPC();
 
-  const student = await caller.student.get(id);
-  const statements = await caller.studentAccount.getStatements({
-    studentId: id,
-  });
+  const { data: student } = useSuspenseQuery(
+    trpc.student.get.queryOptions(params.id),
+  );
+  const { data: statements } = useSuspenseQuery(
+    trpc.studentAccount.getStatements.queryOptions({
+      studentId: params.id,
+    }),
+  );
 
   const formatAmount = (amount: number) =>
     amount.toLocaleString(locale, {
@@ -44,12 +50,6 @@ export default async function Page({
     }).format(date);
 
   // Totals per period (e.g., 2025-0 for Jan 2025)
-  const totalPeriodMap: Record<string, number> = {};
-  for (const item of statements) {
-    const key = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
-    const signed = item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
-    totalPeriodMap[key] = (totalPeriodMap[key] ?? 0) + signed;
-  }
 
   interface TxRow {
     kind: "tx";
@@ -63,43 +63,51 @@ export default async function Page({
     total: number;
   }
   type Row = TxRow | SubtotalRow;
-
-  // Build immutable rows with a single pass (no mutations in JSX)
-  const { rows } = statements.reduce<{
-    rows: Row[];
-    running: number;
-    currentPeriodKey: string | null;
-    previousDate: Date | null;
-  }>(
-    (acc, item) => {
-      const itemKey = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
+  const { rows } = useMemo(() => {
+    const totalPeriodMap: Record<string, number> = {};
+    for (const item of statements) {
+      const key = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
       const signed =
         item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
+      totalPeriodMap[key] = (totalPeriodMap[key] ?? 0) + signed;
+    }
+    return statements.reduce<{
+      rows: Row[];
+      running: number;
+      currentPeriodKey: string | null;
+      previousDate: Date | null;
+    }>(
+      (acc, item) => {
+        const itemKey = `${item.transactionDate.getFullYear()}-${item.transactionDate.getMonth()}`;
+        const signed =
+          item.type === "DEBIT" ? -Math.abs(item.amount) : item.amount;
 
-      // If we detect a period change, insert a subtotal row BEFORE the new tx
-      const showSubtotal =
-        acc.currentPeriodKey !== null &&
-        acc.currentPeriodKey !== itemKey &&
-        acc.previousDate !== null;
-      if (showSubtotal && acc.currentPeriodKey && acc.previousDate) {
-        acc.rows.push({
-          kind: "subtotal",
-          periodKey: acc.currentPeriodKey,
-          previousDate: acc.previousDate,
-          total: totalPeriodMap[acc.currentPeriodKey] ?? 0,
-        });
-      }
+        // If we detect a period change, insert a subtotal row BEFORE the new tx
+        const showSubtotal =
+          acc.currentPeriodKey !== null &&
+          acc.currentPeriodKey !== itemKey &&
+          acc.previousDate !== null;
+        if (showSubtotal && acc.currentPeriodKey && acc.previousDate) {
+          acc.rows.push({
+            kind: "subtotal",
+            periodKey: acc.currentPeriodKey,
+            previousDate: acc.previousDate,
+            total: totalPeriodMap[acc.currentPeriodKey] ?? 0,
+          });
+        }
 
-      const newRunning = acc.running + signed;
-      acc.rows.push({ kind: "tx", item, balanceAfter: newRunning });
+        const newRunning = acc.running + signed;
+        acc.rows.push({ kind: "tx", item, balanceAfter: newRunning });
 
-      acc.running = newRunning;
-      acc.currentPeriodKey = itemKey;
-      acc.previousDate = item.transactionDate;
-      return acc;
-    },
-    { rows: [], running: 0, currentPeriodKey: null, previousDate: null },
-  );
+        acc.running = newRunning;
+        acc.currentPeriodKey = itemKey;
+        acc.previousDate = item.transactionDate;
+        return acc;
+      },
+      { rows: [], running: 0, currentPeriodKey: null, previousDate: null },
+    );
+  }, [statements]);
+  // Build immutable rows with a single pass (no mutations in JSX)
 
   // Final account total
   const totalBalance = statements.reduce(
@@ -110,7 +118,7 @@ export default async function Page({
   );
 
   return (
-    <div className="mt-2 px-4">
+    <div className="">
       <div className="bg-background overflow-hidden rounded-md border">
         <Table className="font-mono text-xs">
           <TableHeader>
@@ -150,7 +158,7 @@ export default async function Page({
                         item.operation === "fee"
                           ? routes.classrooms.fees(`${item.id}`)
                           : routes.students.transactions.details(
-                              id,
+                              params.id,
                               Number(item.id),
                             )
                       }
@@ -200,15 +208,15 @@ export default async function Page({
   );
 }
 
-async function SubTotal({
+function SubTotal({
   totalperiod,
   previousDate,
 }: {
   totalperiod: number;
   previousDate: Date;
 }) {
-  const t = await getTranslations();
-  const locale = await getLocale();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const dateLabel = new Intl.DateTimeFormat(locale, {
     month: "numeric",

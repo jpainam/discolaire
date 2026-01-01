@@ -22,17 +22,17 @@ export function LoginInfoHeader() {
   const Icon = sidebarIcons.login_info;
   const params = useParams<{ id: string }>();
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 px-4 py-1">
+    <div className="bg-muted flex flex-row items-center gap-2 px-4 py-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("login_info")}</Label>
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
+            <Button variant={"outline"}  size={"icon"}>
+              <MoreVertical  />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-42">
             <DropdownHelp />
             <DropdownMenuSeparator />
             <DropdownMenuItem

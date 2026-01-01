@@ -39,12 +39,12 @@ export function AttachUserButton({
         });
       }}
       variant={"default"}
-      size={"sm"}
+      
     >
       {userId ? (
-        <KeyRound className="h-4 w-4" />
+        <KeyRound />
       ) : (
-        <UserPlus2 className="h-4 w-4" />
+        <UserPlus2 />
       )}
       {!userId ? t("create_a_user") : t("change_password")}
     </Button>

@@ -6,8 +6,6 @@ import { NoPermission } from "~/components/no-permission";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
-import { PrintAction } from "./PrintAction";
-import { TransactionTabMenu } from "./TransactionTabMenu";
 
 export default async function Layout(
   props: PropsWithChildren<{ params: Promise<{ id: string }> }>,
@@ -39,13 +37,5 @@ export default async function Layout(
     return <NoPermission className="my-8" />;
   }
 
-  return (
-    <div className="flex flex-col">
-      <div className="flex flex-row items-center justify-between border-b px-4 py-1">
-        <TransactionTabMenu />
-        <PrintAction />
-      </div>
-      {props.children}
-    </div>
-  );
+  return <>{props.children}</>;
 }

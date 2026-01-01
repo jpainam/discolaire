@@ -95,16 +95,16 @@ export function ClassroomSubjectTable() {
   const router = useRouter();
 
   return (
-    <div className="px-4 py-2">
-      <div className="bg-background overflow-hidden rounded-md border">
+    <div className="py-2">
+      <div className="bg-background overflow-hidden border-y">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>{t("course")}</TableHead>
               <TableHead>{t("teacher")}</TableHead>
-              <TableHead>{t("coeff")}</TableHead>
-              <TableHead>{t("group")}</TableHead>
-              <TableHead>{t("order")}</TableHead>
+              <TableHead className="text-center">{t("coeff")}</TableHead>
+              <TableHead className="text-center">{t("group")}</TableHead>
+              <TableHead className="text-center">{t("order")}</TableHead>
 
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -221,13 +221,13 @@ export function ClassroomSubjectTable() {
                       </span>
                     )}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell className="text-muted-foreground text-center">
                     {subject.coefficient}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell className="text-muted-foreground text-center">
                     {subject.subjectGroup?.name}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell className="text-muted-foreground text-center">
                     {subject.order}
                   </TableCell>
 

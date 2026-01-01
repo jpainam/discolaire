@@ -22,7 +22,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import { Label } from "~/components/ui/label";
 import {
   Select,
@@ -142,15 +146,15 @@ export default function Page() {
       <div className="flex flex-col items-start gap-2 border-b px-4 py-2 md:flex-row md:items-center">
         <FolderOpen className="hidden h-4 w-4 md:block" />
         <Label className="hidden md:block">{t("documents")}</Label>
-        <div className="relative w-full md:ml-4 md:w-64">
-          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-          <Input
-            placeholder={t("search") + "..."}
-            className="pl-8"
-            value={searchTerm}
+        <InputGroup>
+          <InputGroupInput
             onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={t("search")}
           />
-        </div>
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
 
         <div className="ml-auto flex w-full items-center gap-2 md:w-auto">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>

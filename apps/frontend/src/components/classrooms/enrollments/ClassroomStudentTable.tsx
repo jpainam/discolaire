@@ -6,7 +6,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { MoreHorizontal, Search, Trash2 } from "lucide-react";
+import { MoreHorizontal, Search } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -104,10 +104,8 @@ export function ClassroomStudentTable({
         <div className="ml-auto">
           {selectedIds.length > 0 && canDeleteEnrollment && (
             <Button
-              variant="outline"
+              variant="destructive"
               disabled={!schoolYear.isActive}
-              size={"sm"}
-              className="text-destructive"
               onClick={async () => {
                 const isConfirmed = await confirm({
                   title: t("unenroll"),
@@ -125,7 +123,7 @@ export function ClassroomStudentTable({
                 }
               }}
             >
-              <Trash2 className="text-destructive" />
+              <DeleteIcon />
               {t("unenroll")}
               <span>({selectedIds.length})</span>
             </Button>

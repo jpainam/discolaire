@@ -151,8 +151,8 @@ export function GradeSheetHeader() {
             onClick={() => {
               router.push(routes.classrooms.gradesheets.create(params.id));
             }}
-            variant={"default"}
-            size={"sm"}
+           
+           
           >
             <PlusIcon />
             {t("new")}
@@ -162,14 +162,14 @@ export function GradeSheetHeader() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              size="sm"
-              className="hidden gap-2 lg:flex"
+            
+             
             >
               Import / Export
-              <ChevronDown className="size-4" />
+              <ChevronDown  />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="end" className="w-42">
             <DropdownMenuLabel className="flex items-center gap-2">
               <Download className="size-4" />
               Export
@@ -219,11 +219,11 @@ export function GradeSheetHeader() {
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
+            <Button variant={"outline"}  size={"icon"}>
+              <MoreVertical  />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-42">
             <DropdownMenuItem
               onSelect={() => {
                 window.open(

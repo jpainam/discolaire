@@ -74,120 +74,118 @@ export async function StudentTransactionSummary({
   const t = await getTranslations();
 
   return (
-    <div className="mt-2 px-4">
-      <MetricCardGroup className="gap-2 md:grid-cols-3 lg:grid-cols-6">
-        {Object.entries(feesByJournal).map(([journalId, feeAmount], index) => {
-          const title =
-            journals.find((j) => j.id === journalId)?.name ?? "Autres";
-          const {
-            credit = 0,
-            debit = 0,
-            discount = 0,
-          } = txByJournal[journalId] ?? {};
+    <MetricCardGroup className="gap-2 md:grid-cols-3 lg:grid-cols-6">
+      {Object.entries(feesByJournal).map(([journalId, feeAmount], index) => {
+        const title =
+          journals.find((j) => j.id === journalId)?.name ?? "Autres";
+        const {
+          credit = 0,
+          debit = 0,
+          discount = 0,
+        } = txByJournal[journalId] ?? {};
 
-          const due = credit + discount - debit - feeAmount;
+        const due = credit + discount - debit - feeAmount;
 
-          return (
-            <MetricCard key={index} variant={"default"}>
-              <MetricCardHeader className="flex items-center justify-between gap-2">
-                <MetricCardTitle className="truncate uppercase">
-                  {title}
-                </MetricCardTitle>
-                <Banknote className="size-4" />
-              </MetricCardHeader>
-              <div className="flex flex-row flex-wrap items-center gap-1">
-                <MetricCardValue>
-                  {feeAmount.toLocaleString(locale, {
-                    style: "currency",
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                    currency: CURRENCY,
-                  })}
-                </MetricCardValue>
-                <Badge
-                  //className="text-[8px]"
-                  appearance={"outline"}
-                  variant={due < 0 ? "destructive" : "success"}
-                >
-                  {due.toLocaleString(locale, {
-                    style: "currency",
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                    currency: CURRENCY,
-                  })}
-                </Badge>
-              </div>
-            </MetricCard>
-          );
-        })}
-        <MetricCard variant={"success"}>
-          <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate uppercase">
-              {t("amountPaid")}
-            </MetricCardTitle>
-            <BanknoteArrowDown className="size-4" />
-          </MetricCardHeader>
-          <MetricCardValue>
-            {totalPaid.toLocaleString(locale, {
-              style: "currency",
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-              currency: CURRENCY,
-            })}
-          </MetricCardValue>
-        </MetricCard>
-        <MetricCard variant={"warning"}>
-          <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate uppercase">
-              {t("discount")}
-            </MetricCardTitle>
-            <BanknoteX className="size-4" />
-          </MetricCardHeader>
-          <MetricCardValue>
-            {totalDiscount.toLocaleString(locale, {
-              style: "currency",
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-              currency: CURRENCY,
-            })}
-          </MetricCardValue>
-        </MetricCard>
-        <MetricCard variant={"destructive"}>
-          <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate uppercase">
-              {t("amountDue")}
-            </MetricCardTitle>
-            <BanknoteArrowUp className="size-4" />
-          </MetricCardHeader>
-          <MetricCardValue>
-            {totalDue.toLocaleString(locale, {
-              style: "currency",
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-              currency: CURRENCY,
-            })}
-          </MetricCardValue>
-        </MetricCard>
-        <MetricCard variant={"success"}>
-          <MetricCardHeader className="flex items-center justify-between gap-2">
-            <MetricCardTitle className="truncate uppercase">
-              {t("transactionsCompleted")}
-            </MetricCardTitle>
-            <HandCoins className="size-4" />
-          </MetricCardHeader>
-          <MetricCardValue>
-            {sumBy(
-              transactions.filter((t) => t.status == "VALIDATED"),
-              "amount",
-            ).toLocaleString(locale, {
-              style: "currency",
-              maximumFractionDigits: 0,
-              minimumFractionDigits: 0,
-              currency: CURRENCY,
-            })}
-          </MetricCardValue>
-        </MetricCard>
-      </MetricCardGroup>
-    </div>
+        return (
+          <MetricCard key={index} variant={"default"}>
+            <MetricCardHeader className="flex items-center justify-between gap-2">
+              <MetricCardTitle className="truncate uppercase">
+                {title}
+              </MetricCardTitle>
+              <Banknote className="size-4" />
+            </MetricCardHeader>
+            <div className="flex flex-row flex-wrap items-center gap-1">
+              <MetricCardValue>
+                {feeAmount.toLocaleString(locale, {
+                  style: "currency",
+                  maximumFractionDigits: 0,
+                  minimumFractionDigits: 0,
+                  currency: CURRENCY,
+                })}
+              </MetricCardValue>
+              <Badge
+                //className="text-[8px]"
+                appearance={"outline"}
+                variant={due < 0 ? "destructive" : "success"}
+              >
+                {due.toLocaleString(locale, {
+                  style: "currency",
+                  maximumFractionDigits: 0,
+                  minimumFractionDigits: 0,
+                  currency: CURRENCY,
+                })}
+              </Badge>
+            </div>
+          </MetricCard>
+        );
+      })}
+      <MetricCard variant={"success"}>
+        <MetricCardHeader className="flex items-center justify-between gap-2">
+          <MetricCardTitle className="truncate uppercase">
+            {t("amountPaid")}
+          </MetricCardTitle>
+          <BanknoteArrowDown className="size-4" />
+        </MetricCardHeader>
+        <MetricCardValue>
+          {totalPaid.toLocaleString(locale, {
+            style: "currency",
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+            currency: CURRENCY,
+          })}
+        </MetricCardValue>
+      </MetricCard>
+      <MetricCard variant={"warning"}>
+        <MetricCardHeader className="flex items-center justify-between gap-2">
+          <MetricCardTitle className="truncate uppercase">
+            {t("discount")}
+          </MetricCardTitle>
+          <BanknoteX className="size-4" />
+        </MetricCardHeader>
+        <MetricCardValue>
+          {totalDiscount.toLocaleString(locale, {
+            style: "currency",
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+            currency: CURRENCY,
+          })}
+        </MetricCardValue>
+      </MetricCard>
+      <MetricCard variant={"destructive"}>
+        <MetricCardHeader className="flex items-center justify-between gap-2">
+          <MetricCardTitle className="truncate uppercase">
+            {t("amountDue")}
+          </MetricCardTitle>
+          <BanknoteArrowUp className="size-4" />
+        </MetricCardHeader>
+        <MetricCardValue>
+          {totalDue.toLocaleString(locale, {
+            style: "currency",
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+            currency: CURRENCY,
+          })}
+        </MetricCardValue>
+      </MetricCard>
+      <MetricCard variant={"success"}>
+        <MetricCardHeader className="flex items-center justify-between gap-2">
+          <MetricCardTitle className="truncate uppercase">
+            {t("transactionsCompleted")}
+          </MetricCardTitle>
+          <HandCoins className="size-4" />
+        </MetricCardHeader>
+        <MetricCardValue>
+          {sumBy(
+            transactions.filter((t) => t.status == "VALIDATED"),
+            "amount",
+          ).toLocaleString(locale, {
+            style: "currency",
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+            currency: CURRENCY,
+          })}
+        </MetricCardValue>
+      </MetricCard>
+    </MetricCardGroup>
   );
 }

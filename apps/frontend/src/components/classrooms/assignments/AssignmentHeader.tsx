@@ -5,7 +5,7 @@ import { MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsIsoDate, useQueryState } from "nuqs";
 
-import { DatePicker } from "~/components/DatePicker";
+import { DateRangePicker } from "~/components/DateRangePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -44,7 +44,7 @@ export function AssignmentHeader() {
   );
   return (
     <div className="flex w-full flex-col">
-      <div className="bg-muted text-muted-foreground grid flex-row items-center gap-2 border-b px-4 py-1 md:flex md:gap-6">
+      <div className="bg-muted grid items-center gap-4 px-4 py-1 lg:flex">
         <div className="flex flex-row items-center gap-2">
           {Icon && <Icon className="hidden h-4 w-4 md:block" />}
           <Label className="hidden md:block">{t("assignments")}</Label>
@@ -56,27 +56,20 @@ export function AssignmentHeader() {
           }}
           className="w-64"
         />
-        <div className="grid grid-cols-2 gap-2">
-          <div className="flex flex-row items-center gap-2">
-            <Label className="hidden md:block">{t("from")}</Label>
-            <DatePicker
-              defaultValue={from ? new Date(from) : undefined}
-              className="w-56"
-              onSelectAction={(val) => {
-                void setFrom(val ?? null);
-              }}
-            />
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <Label className="hidden md:block">{t("to")}</Label>
-            <DatePicker
-              defaultValue={to ? new Date(to) : undefined}
-              className="w-56"
-              onSelectAction={(val) => {
-                void setTo(val ?? null);
-              }}
-            />
-          </div>
+        <div className="flex items-center gap-2">
+          <Label className="w-[100px]">{t("Date range")}</Label>
+          <DateRangePicker
+            className="w-96"
+            defaultValue={from && to ? { from: from, to: to } : undefined}
+            onSelectAction={(range) => {
+              if (range?.from) {
+                void setFrom(range.from);
+              }
+              if (range?.to) {
+                void setTo(range.to);
+              }
+            }}
+          />
         </div>
 
         <div className="ml-auto flex flex-row items-center gap-2">
@@ -85,8 +78,6 @@ export function AssignmentHeader() {
               onClick={() => {
                 router.push(`/classrooms/${params.id}/assignments/create`);
               }}
-              variant={"default"}
-              size={"sm"}
             >
               <PlusIcon />
               {t("add")}
@@ -94,11 +85,11 @@ export function AssignmentHeader() {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} className="size-8" size={"icon"}>
-                <MoreVertical className="h-4 w-4" />
+              <Button variant={"outline"} size={"icon"}>
+                <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-42">
               <DropdownHelp />
               <DropdownMenuSeparator />
               <DropdownMenuItem>
