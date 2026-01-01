@@ -76,7 +76,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   DATE DE
                 </p>
                 <p className="text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
-                  NAISSANCE
+                  NAISSANCE " "
                 </p>
                 <p className="text-sm font-bold text-[#0a2d5e] dark:text-[#c7d9f2]">
                   {student.dateOfBirth?.toLocaleDateString(locale, {
