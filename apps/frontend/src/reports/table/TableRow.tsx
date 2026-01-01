@@ -3,8 +3,10 @@ import { View } from "@react-pdf/renderer";
 
 import { tableContext } from "./Table";
 
-export interface TableRowProps
-  extends Omit<React.ComponentProps<typeof View>, "children"> {
+export interface TableRowProps extends Omit<
+  React.ComponentProps<typeof View>,
+  "children"
+> {
   _firstRow?: boolean;
   _lastRow?: boolean;
 

@@ -23,8 +23,9 @@ export interface DataTableFilterField<TData> {
   options?: Option[];
 }
 
-interface DataTableToolbarProps<TData>
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface DataTableToolbarProps<
+  TData,
+> extends React.HTMLAttributes<HTMLDivElement> {
   table: Table<TData>;
   searchPlaceholder?: string;
   filterFields?: DataTableFilterField<TData>[];

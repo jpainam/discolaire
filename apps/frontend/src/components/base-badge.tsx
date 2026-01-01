@@ -7,15 +7,15 @@ import { cva } from "class-variance-authority";
 import { cn } from "~/lib/utils";
 
 export interface BadgeProps
-  extends useRender.ComponentProps<"span">,
-    VariantProps<typeof badgeVariants> {
+  extends useRender.ComponentProps<"span">, VariantProps<typeof badgeVariants> {
   asChild?: boolean;
   dotClassName?: string;
   disabled?: boolean;
 }
 
 export interface BadgeButtonProps
-  extends useRender.ComponentProps<"button">,
+  extends
+    useRender.ComponentProps<"button">,
     VariantProps<typeof badgeButtonVariants> {
   asChild?: boolean;
 }

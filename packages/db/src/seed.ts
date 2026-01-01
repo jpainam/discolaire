@@ -27,7 +27,7 @@ main()
     console.error(e);
     throw e;
   })
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
   .finally(async () => {
     await client.$disconnect();
   });

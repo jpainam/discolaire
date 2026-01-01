@@ -20,7 +20,8 @@ const kbdVariants = cva(
 );
 
 export interface KbdProps
-  extends React.ComponentPropsWithoutRef<"kbd">,
+  extends
+    React.ComponentPropsWithoutRef<"kbd">,
     VariantProps<typeof kbdVariants> {
   /**
    * The title of the `abbr` element inside the `kbd` element.

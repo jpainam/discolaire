@@ -5,8 +5,10 @@ import React, { useMemo } from "react";
 import { View } from "@react-pdf/renderer";
 import { flatten } from "@react-pdf/stylesheet";
 
-export interface TableProps
-  extends Omit<React.ComponentProps<typeof View>, "children"> {
+export interface TableProps extends Omit<
+  React.ComponentProps<typeof View>,
+  "children"
+> {
   weightings?: number[];
   tdStyle?: Style | Style[];
   trStyle?: Style | Style[];

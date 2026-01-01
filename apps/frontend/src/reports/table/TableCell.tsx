@@ -4,8 +4,10 @@ import { Text, View } from "@react-pdf/renderer";
 
 import { tableContext } from "./Table";
 
-export interface TableCellProps
-  extends Omit<React.ComponentProps<typeof View>, "children"> {
+export interface TableCellProps extends Omit<
+  React.ComponentProps<typeof View>,
+  "children"
+> {
   /**
    * The weighting of a cell based on the flex layout style.
    * This value is between 0..1, if not specified 1 is assumed, this will take up the remaining available space.

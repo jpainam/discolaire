@@ -35,7 +35,8 @@ const flatBadgeVariants = cva(
 );
 
 export interface FlatBadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof flatBadgeVariants> {}
 
 export default function FlatBadge({
