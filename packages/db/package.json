@@ -18,7 +18,7 @@
     "lint": "eslint --flag unstable_native_nodejs_ts_config",
     "push": "pnpm with-env prisma db push --schema=prisma/schema",
     "studio": "pnpm with-env prisma studio --schema=prisma/schema",
-    "generate": "node -e \"process.exit(process.env.CI ? 0 : 1)\" || pnpm with-env prisma generate",
+    "generate": "pnpm with-env prisma generate",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --"
   },
