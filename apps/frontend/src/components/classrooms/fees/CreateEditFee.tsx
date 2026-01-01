@@ -1,25 +1,23 @@
-import type { SubmitHandler } from "react-hook-form";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+"use client";
+
+import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { Fee } from "@repo/db/client";
 
 import { DatePicker } from "~/components/DatePicker";
-import { InputField } from "~/components/shared/forms/input-field";
 import { Button } from "~/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -35,7 +33,7 @@ const createEditFeeSchema = z.object({
   code: z.string().min(1),
   description: z.string().min(1),
   amount: z.coerce.number().min(1),
-  dueDate: z.coerce.date(),
+  dueDate: z.date(),
   journalId: z.string().min(1),
 });
 
@@ -47,14 +45,34 @@ export function CreateEditFee({
   classroomId: string;
 }) {
   const t = useTranslations();
-  const form = useForm<z.infer<typeof createEditFeeSchema>>({
-    resolver: standardSchemaResolver(createEditFeeSchema),
+  const form = useForm({
     defaultValues: {
       code: fee?.code ?? "",
       description: fee?.description ?? "",
       amount: fee?.amount ?? 0,
       dueDate: fee?.dueDate ?? new Date(),
       journalId: fee?.journalId ?? "",
+    },
+    validators: {
+      onSubmit: createEditFeeSchema,
+    },
+    onSubmit: ({ value }) => {
+      const values = {
+        code: value.code,
+        description: value.description,
+        amount: value.amount,
+        dueDate: value.dueDate,
+        isActive: true,
+        classroomId: classroomId,
+        journalId: value.journalId,
+      };
+      if (fee) {
+        toast.loading(t("updating"), { id: 0 });
+        updateFeeMutation.mutate({ id: fee.id, ...values });
+      } else {
+        toast.loading(t("creating"), { id: 0 });
+        createFeeMutation.mutate(values);
+      }
     },
   });
 
@@ -90,76 +108,136 @@ export function CreateEditFee({
     }),
   );
 
-  const onSubmit: SubmitHandler<z.infer<typeof createEditFeeSchema>> = (
-    data: z.infer<typeof createEditFeeSchema>,
-  ) => {
-    const values = {
-      code: data.code,
-      description: data.description,
-      amount: data.amount,
-      dueDate: data.dueDate,
-      isActive: true,
-      classroomId: classroomId,
-      journalId: data.journalId,
-    };
-    if (fee) {
-      toast.loading(t("updating"), { id: 0 });
-      updateFeeMutation.mutate({ id: fee.id, ...values });
-    } else {
-      toast.loading(t("creating"), { id: 0 });
-      createFeeMutation.mutate(values);
-    }
-  };
-
   if (!classroomId) {
     throw new Error("Classroom id is required");
   }
 
   return (
-    <Form {...form}>
+    <div className="flex flex-col gap-4">
       <form
+        id="create-fee-form"
         className="grid grid-cols-2 gap-x-2 gap-y-6"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
       >
-        <div className="col-span-full flex flex-row gap-2">
-          <InputField className="w-[75px]" label="Code" name="code" />
-          <InputField
-            className="flex-1"
-            label="Description"
-            name="description"
+        <FieldGroup className="col-span-full grid grid-cols-[75px_1fr] gap-2">
+          <form.Field
+            name="code"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Code</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={isInvalid}
+                    className="w-[75px]"
+                    autoComplete="off"
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
           />
-        </div>
+          <form.Field
+            name="description"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Description</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={isInvalid}
+                    autoComplete="off"
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+        </FieldGroup>
 
-        <InputField label="Amount" name="amount" />
-        <FormField
-          control={form.control}
-          name="dueDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("due_date")}</FormLabel>
-              <FormControl>
-                <DatePicker
-                  defaultValue={field.value}
-                  onSelectAction={(val) => field.onChange(val)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="col-span-full grid grid-cols-2 gap-2">
-          <FormField
-            control={form.control}
+        <FieldGroup className="col-span-full grid grid-cols-2 gap-2">
+          <form.Field
+            name="amount"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>{t("amount")}</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    type="number"
+                    min="1"
+                    step="1"
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      const nextValue = event.target.valueAsNumber;
+                      field.handleChange(
+                        Number.isNaN(nextValue) ? 0 : nextValue,
+                      );
+                    }}
+                    aria-invalid={isInvalid}
+                    autoComplete="off"
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+          <form.Field
+            name="dueDate"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>{t("due_date")}</FieldLabel>
+                  <DatePicker
+                    defaultValue={field.state.value}
+                    onSelectAction={(val) => val && field.handleChange(val)}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+        </FieldGroup>
+
+        <FieldGroup className="col-span-full grid grid-cols-2 gap-2">
+          <form.Field
             name="journalId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel></FormLabel>
-                <FormControl>
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="col-span-full">
+                  <FieldLabel htmlFor={field.name} className="sr-only">
+                    {t("Accounting Journals")}
+                  </FieldLabel>
                   <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    name={field.name}
+                    value={field.state.value}
+                    onValueChange={field.handleChange}
+                    aria-invalid={isInvalid}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full" id={field.name}>
                       <SelectValue placeholder={t("Accounting Journals")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -176,13 +254,12 @@ export function CreateEditFee({
                       )}
                     </SelectContent>
                   </Select>
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
           />
-        </div>
+        </FieldGroup>
         {/* <FormField
           control={form.control}
           name="isActive"
@@ -198,31 +275,29 @@ export function CreateEditFee({
             </FormItem>
           )}
         /> */}
-
-        <div className="col-span-full ml-auto flex flex-row items-center gap-2">
-          <Button
-            onClick={() => {
-              closeModal();
-            }}
-            variant="outline"
-            type="button"
-          >
-            {t("cancel")}
-          </Button>
-
-          <Button
-            disabled={
-              updateFeeMutation.isPending || createFeeMutation.isPending
-            }
-            type="submit"
-          >
-            {(updateFeeMutation.isPending || createFeeMutation.isPending) && (
-              <Spinner />
-            )}
-            {fee ? t("edit") : t("submit")}
-          </Button>
-        </div>
       </form>
-    </Form>
+      <Field orientation="horizontal" className="justify-end">
+        <Button
+          onClick={() => {
+            closeModal();
+          }}
+          variant="outline"
+          type="button"
+        >
+          {t("cancel")}
+        </Button>
+
+        <Button
+          disabled={updateFeeMutation.isPending || createFeeMutation.isPending}
+          type="submit"
+          form="create-fee-form"
+        >
+          {(updateFeeMutation.isPending || createFeeMutation.isPending) && (
+            <Spinner />
+          )}
+          {fee ? t("edit") : t("submit")}
+        </Button>
+      </Field>
+    </div>
   );
 }

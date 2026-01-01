@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -17,12 +18,18 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PermissionAction } from "~/permissions";
+import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditFee } from "./CreateEditFee";
 
 export function ClassroomFeeHeader() {
   const t = useTranslations();
   const params = useParams<{ id: string }>();
+
+  const trpc = useTRPC();
+  const { data: classroom } = useSuspenseQuery(
+    trpc.classroom.get.queryOptions(params.id),
+  );
   const { openModal } = useModal();
   const canCreateClassroomFee = useCheckPermission(
     "fee",
@@ -39,6 +46,7 @@ export function ClassroomFeeHeader() {
             onClick={() => {
               openModal({
                 title: t("add"),
+                description: `${t("fees")} - ${classroom.name}`,
                 view: <CreateEditFee classroomId={params.id} />,
               });
             }}

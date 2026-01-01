@@ -155,6 +155,7 @@ export function ClassroomFeeTable() {
                                   onSelect={() => {
                                     openModal({
                                       title: t("edit"),
+                                      description: `${t("fees")} - ${fee.classroom.name}`,
                                       view: (
                                         <CreateEditFee
                                           classroomId={params.id}

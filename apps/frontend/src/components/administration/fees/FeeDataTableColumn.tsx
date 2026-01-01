@@ -7,7 +7,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
-import type { Fee } from "@repo/db/client";
 
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
@@ -150,7 +149,11 @@ export function useFeesColumns(): ColumnDef<FeeProcedureOutput, unknown>[] {
   ];
 }
 
-function ActionCell({ fee }: { fee: Fee }) {
+function ActionCell({
+  fee,
+}: {
+  fee: RouterOutputs["classroom"]["fees"][number];
+}) {
   const t = useTranslations();
   const { openModal } = useModal();
   const confirm = useConfirm();
@@ -181,6 +184,7 @@ function ActionCell({ fee }: { fee: Fee }) {
             onSelect={() => {
               openModal({
                 title: t("edit"),
+                description: `${t("fees")} - ${fee.classroom.name}`,
                 view: <CreateEditFee classroomId={fee.classroomId} fee={fee} />,
               });
             }}

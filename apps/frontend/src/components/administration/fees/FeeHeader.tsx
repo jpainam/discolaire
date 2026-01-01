@@ -86,6 +86,7 @@ export function FeeHeader() {
               if (!classroomId) return;
               openModal({
                 title: t("add"),
+                description: `${t("fees")}`,
                 view: <CreateEditFee classroomId={classroomId} />,
               });
             }}

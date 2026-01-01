@@ -5,7 +5,7 @@ import { ClassroomFeeHeader } from "~/components/classrooms/fees/ClassroomFeeHea
 import { ClassroomFeeTable } from "~/components/classrooms/fees/ClassroomFeeTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
-import { HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -19,21 +19,26 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   // if (!canReadClassroomFee) {
   //   return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
   // }
-  void prefetch(trpc.classroom.fees.queryOptions(id));
+  void batchPrefetch([
+    trpc.classroom.fees.queryOptions(id),
+    trpc.classroom.get.queryOptions(params.id),
+  ]);
   return (
-    <div className="flex flex-col gap-2">
-      <Suspense
-        key={params.id}
-        fallback={
-          <div className="px-4 py-2">
-            <Skeleton className="h-8 w-full" />
-          </div>
-        }
-      >
-        <ClassroomFeeHeader />
-      </Suspense>
+    <HydrateClient>
+      <div className="flex flex-col gap-2">
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            key={params.id}
+            fallback={
+              <div className="px-4 py-2">
+                <Skeleton className="h-8 w-full" />
+              </div>
+            }
+          >
+            <ClassroomFeeHeader />
+          </Suspense>
+        </ErrorBoundary>
 
-      <HydrateClient>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
@@ -47,7 +52,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <ClassroomFeeTable />
           </Suspense>
         </ErrorBoundary>
-      </HydrateClient>
-    </div>
+      </div>
+    </HydrateClient>
   );
 }
