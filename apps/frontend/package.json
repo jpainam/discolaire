@@ -59,7 +59,7 @@
     "@upstash/ratelimit": "^2.0.7",
     "@upstash/redis": "^1.36.0",
     "@vercel/blob": "^2.0.0",
-    "@vercel/functions": "^2.2.13",
+    "@vercel/functions": "^3.3.4",
     "accept-language": "^3.0.20",
     "bullmq": "^5.66.4",
     "class-variance-authority": "^0.7.1",
