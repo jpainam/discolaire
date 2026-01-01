@@ -51,7 +51,7 @@ import { SubjectJournalTemplate } from "./SubjectJournalTemplate";
 const createSubjectJournalSchema = z.object({
   title: z.string().min(1),
   content: z.string().min(1),
-  publishDate: z.coerce.date().default(() => new Date()),
+  publishDate: z.date().default(() => new Date()),
 });
 export function SubjectJournalEditor({
   defaultSubjectId,

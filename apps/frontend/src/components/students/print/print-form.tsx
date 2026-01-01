@@ -20,14 +20,10 @@ import PrintTypeRadio from "./print-type-radio";
 //   | "En fin de semaine"
 //   | "Personnalisé";
 const printFormSchema = z.object({
-  type: z.enum(["pdf", "excel"], {
-    required_error: "Veuillez choisir un type d'impression",
-  }),
+  type: z.enum(["pdf", "excel"]),
   date: z.date().optional(),
-  print: z.string({ required_error: "Veuillez choisir un rapport" }),
-  school_year: z.string({
-    required_error: "Veuillez choisir une année scolaire",
-  }),
+  print: z.string(),
+  school_year: z.string(),
   start: z.enum([
     "Maintenant",
     "En soirée",

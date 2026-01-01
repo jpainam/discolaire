@@ -62,12 +62,8 @@ const eventFormSchema = z
       .enum(["None", "15min", "30min", "1hour"])
       .optional()
       .default("None"),
-    startDate: z.date({
-      required_error: "Start Date is required",
-    }),
-    endDate: z.date({
-      required_error: "End Date is required",
-    }),
+    startDate: z.date(),
+    endDate: z.date(),
   })
   .superRefine((data, ctx) => {
     // Conditional validation for Teaching Calendar
