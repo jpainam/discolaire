@@ -425,8 +425,7 @@ export default function GanttChartRoadmap() {
                         }
 
                         const isDragging =
-                          draggedEvent &&
-                          draggedEvent.catIndex === catIndex &&
+                          draggedEvent?.catIndex === catIndex &&
                           draggedEvent.evtIndex === evtIndex;
                         const showLabel = width > 50;
 

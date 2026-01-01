@@ -30,8 +30,10 @@ catalogs:
 linkWorkspacePackages: true
 
 onlyBuiltDependencies:
+  - '@parcel/watcher'
   - '@prisma/client'
   - '@prisma/engines'
+  - '@swc/core'
   - '@tailwindcss/oxide'
   - core-js-pure
   - esbuild

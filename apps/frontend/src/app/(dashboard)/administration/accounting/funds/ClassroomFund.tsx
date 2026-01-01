@@ -107,7 +107,7 @@ export function ClassroomFund({
     .filter((t) => t.status == TransactionStatus.PENDING)
     .map((t) => t.amount);
 
-  if (transactionQuery.data && transactionQuery.data.length == 0) {
+  if (transactionQuery.data?.length == 0) {
     return (
       <Empty>
         <EmptyHeader>
