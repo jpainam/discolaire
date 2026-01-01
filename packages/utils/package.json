@@ -15,9 +15,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "^0.13.8",
-    "ioredis": "^5.8.0",
-    "minimatch": "^10.0.3",
+    "@t3-oss/env-nextjs": "^0.13.10",
+    "ioredis": "^5.8.2",
+    "minimatch": "^10.1.1",
     "nanoid": "^5.1.6",
     "resend": "^4.8.0",
     "server-only": "^0.0.1"
