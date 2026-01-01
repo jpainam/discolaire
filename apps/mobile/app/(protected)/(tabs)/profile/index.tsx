@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useState } from "react";
 import {
-  Appearance,
   ScrollView,
   StyleSheet,
   Switch,
@@ -25,7 +24,7 @@ export default function Screen() {
   const { data: session } = authClient.useSession();
   const authContext = useContext(AuthContext);
 
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
 
   return (
     <ScrollView
@@ -154,7 +153,7 @@ export default function Screen() {
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   /** Header */
 

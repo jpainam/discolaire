@@ -1,12 +1,6 @@
 import { useRouter } from "expo-router";
 
-import {
-  Appearance,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Colors } from "~/constants/theme";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -21,7 +15,7 @@ export default function ClassroomCard({
   classroom: RouterOutputs["classroom"]["all"][number];
 }) {
   const router = useRouter();
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
 
   const handlePress = () => {
     router.push(`/classroom/${classroom.id}`);
@@ -80,7 +74,7 @@ export default function ClassroomCard({
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors2[theme].cardBackground,

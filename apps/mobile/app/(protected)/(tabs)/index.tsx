@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Appearance,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import AcademicProgress from "~/components/home/AcademicProgress";
@@ -63,7 +57,7 @@ export default function HomePage() {
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

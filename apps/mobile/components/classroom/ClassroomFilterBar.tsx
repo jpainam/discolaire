@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  Appearance,
   ScrollView,
   StyleSheet,
   Text,
@@ -91,7 +90,7 @@ export default function ClassroomFilterBar() {
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,

@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  Appearance,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -141,7 +140,7 @@ export default function ClassroomStudentsList({
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

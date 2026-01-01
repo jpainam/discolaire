@@ -12,12 +12,10 @@ import type { JSX } from "react";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Appearance,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -29,6 +27,7 @@ import { ThemedView } from "~/components/ThemedView";
 
 import { Colors as Colors2 } from "~/constants/Colors";
 import { Colors } from "~/constants/theme";
+import { useColorScheme } from "~/hooks/useColorScheme";
 import { trpc } from "~/utils/api";
 
 type TabName = "students" | "attendance" | "fees" | "subjects" | "assignments";
@@ -41,7 +40,7 @@ export default function ClassroomDetailsScreen() {
   const { data: classroom, isPending } = useQuery(
     trpc.classroom.get.queryOptions(id),
   );
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   //const { top } = useSafeAreaInsets();
 
   if (isPending) {
@@ -222,7 +221,7 @@ export default function ClassroomDetailsScreen() {
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

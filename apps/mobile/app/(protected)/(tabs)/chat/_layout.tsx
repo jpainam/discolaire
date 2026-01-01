@@ -3,7 +3,7 @@ import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 
 export default function Layout() {
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   return (
     <Stack>
       <Stack.Screen

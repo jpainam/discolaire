@@ -8,13 +8,7 @@ import {
   BookOpen as Library,
   UserPlus,
 } from "lucide-react-native";
-import {
-  Appearance,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Colors } from "~/constants/Colors";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
@@ -60,7 +54,7 @@ export default function QuickActions() {
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors[theme].cardBackground,

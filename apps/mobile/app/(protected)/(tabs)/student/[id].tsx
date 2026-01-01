@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Appearance,
   Image,
   ScrollView,
   StyleSheet,
@@ -240,7 +239,7 @@ export default function StudentProfileScreen() {
     </View>
   );
 }
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -5,14 +5,13 @@ import { BookOpen, Clock, User } from "lucide-react-native";
 
 import {
   ActivityIndicator,
-  Appearance,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from "react-native";
+import { useColorScheme } from "~/hooks/useColorScheme";
 import type { RouterOutputs } from "~/utils/api";
 import { trpc } from "~/utils/api";
 import { ThemedView } from "../ThemedView";
@@ -59,7 +58,7 @@ export default function ClassroomSubjects({
     </TouchableOpacity>
   );
 
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   const colors = Colors[theme].colors;
 
   if (isPending) {
@@ -103,7 +102,7 @@ export default function ClassroomSubjects({
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

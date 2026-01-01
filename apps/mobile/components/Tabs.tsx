@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Appearance,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -65,7 +64,7 @@ const Tabs = ({ onTabChange, tabs, initialTab = tabs[0] }: TabsProps) => {
   );
 };
 
-const theme = Appearance.getColorScheme();
+const theme = "light";
 const styles = StyleSheet.create({
   scrollContainer: {
     paddingHorizontal: 8,
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     //marginHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: Colors[theme ?? "light"].border,
+    borderBottomColor: Colors[theme].border,
   },
   tabText: {
     fontSize: 14,

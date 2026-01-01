@@ -1,11 +1,9 @@
 import { useMemo } from "react";
 import {
   ActivityIndicator,
-  Appearance,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from "react-native";
 import { Colors } from "~/constants/theme";
@@ -17,6 +15,7 @@ import {
   CircleCheck as CheckCircle,
   Clock,
 } from "lucide-react-native";
+import { useColorScheme } from "~/hooks/useColorScheme";
 import { CURRENCY } from "~/utils";
 import type { RouterOutputs } from "~/utils/api";
 import { trpc } from "~/utils/api";
@@ -31,7 +30,7 @@ export default function ClassroomFees({
     trpc.classroom.fees.queryOptions(classroomId),
   );
 
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
 
   const { totalFees, paidFees, pendingFees } = useMemo(() => {
     const today = new Date();
@@ -210,7 +209,7 @@ export default function ClassroomFees({
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

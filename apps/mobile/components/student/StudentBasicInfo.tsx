@@ -1,6 +1,6 @@
 import type { RouterOutputs } from "@repo/api";
 import { Calendar, Heart, Chrome as Home, MapPin } from "lucide-react-native";
-import { Appearance, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "~/constants/Colors";
 import { ThemedText } from "../ThemedText";
 
@@ -156,7 +156,7 @@ export default function StudentBasicInfo({
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

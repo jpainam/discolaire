@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { CloudRain, Sun } from "lucide-react-native";
-import { Appearance, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { ThemedText } from "../ThemedText";
@@ -16,7 +16,7 @@ const weatherData = {
 
 export default function WeatherInfo() {
   // Function to get the appropriate weather icon based on condition
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   const getWeatherIcon = () => {
     const condition = weatherData.condition.toLowerCase();
     if (condition.includes("cloud"))
@@ -58,7 +58,7 @@ export default function WeatherInfo() {
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors[theme].cardBackground,
@@ -97,11 +97,11 @@ const styles = StyleSheet.create({
   },
   location: {
     fontSize: 12,
-    color: theme == "light" ? "#64748b" : Colors.dark.textSecondary,
+    color: Colors.dark.textSecondary,
     marginBottom: 2,
   },
   highLow: {
     fontSize: 12,
-    color: theme == "light" ? "#94a3b8" : Colors.dark.textTertiary,
+    color: Colors.dark.textTertiary,
   },
 });

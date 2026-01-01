@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Briefcase, Mail, MapPin, Phone } from "lucide-react-native";
 import {
   ActivityIndicator,
-  Appearance,
   Image,
   Linking,
   StyleSheet,
@@ -129,7 +128,7 @@ export default function StudentParentsTab({
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { Ionicons } from "@expo/vector-icons";
-import { Appearance, Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "~/constants/Colors";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
@@ -59,7 +60,7 @@ export default function WelcomeHeader() {
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,

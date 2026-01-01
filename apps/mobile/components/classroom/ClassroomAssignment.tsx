@@ -7,14 +7,13 @@ import { Calendar, Check, ClipboardList, Clock, X } from "lucide-react-native";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Appearance,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
 } from "react-native";
+import { useColorScheme } from "~/hooks/useColorScheme";
 import type { RouterOutputs } from "~/utils/api";
 import { trpc } from "~/utils/api";
 import { ThemedView } from "../ThemedView";
@@ -31,7 +30,7 @@ export default function ClassroomAssignments({
     "all" | "upcoming" | "completed" | "past-due"
   >("all");
 
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   if (isPending) {
     return (
       <ThemedView
@@ -242,7 +241,7 @@ export default function ClassroomAssignments({
   );
 }
 
-const theme = Appearance.getColorScheme() ?? "light";
+const theme = "light";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
