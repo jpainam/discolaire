@@ -25,11 +25,11 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
-    "@prisma/adapter-pg": "^7.0.1",
-    "@prisma/client": "^7.0.1",
-    "@t3-oss/env-nextjs": "^0.13.8",
-    "minimatch": "^10.0.3",
-    "mysql2": "^3.15.1",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "@t3-oss/env-nextjs": "^0.13.10",
+    "minimatch": "^10.1.1",
+    "mysql2": "^3.16.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "dotenv-cli": "^11.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prisma": "^7.0.1",
+    "prisma": "^7.2.0",
     "typescript": "catalog:"
   }
 }

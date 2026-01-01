@@ -4,28 +4,28 @@ packages:
   - tooling/*
 
 catalog:
-  '@eslint/js': ^9.37.0
-  '@tailwindcss/postcss': ^4.1.14
-  '@tanstack/react-form': ^1.23.7
-  '@tanstack/react-query': ^5.90.2
-  '@trpc/client': ^11.6.0
-  '@trpc/server': ^11.6.0
-  '@trpc/tanstack-react-query': ^11.6.0
-  '@types/react-dom': ^19.2.1
-  eslint: ^9.36.0
-  prettier: ^3.6.2
-  react: 19.2.1
-  react-dom: 19.2.1
+  '@eslint/js': ^9.39.2
+  '@tailwindcss/postcss': ^4.1.18
+  '@tanstack/react-form': ^1.27.7
+  '@tanstack/react-query': ^5.90.16
+  '@trpc/client': ^11.8.1
+  '@trpc/server': ^11.8.1
+  '@trpc/tanstack-react-query': ^11.8.1
+  '@types/react-dom': ^19.2.3
+  eslint: ^9.39.2
+  prettier: ^3.7.4
+  react: 19.2.3
+  react-dom: 19.2.3
   tailwindcss: ^4.1.18
   typescript: ^5.9.3
   zod: ^3.25.76
 
 catalogs:
   react19:
-    '@types/react': ^19.2.1
-    '@types/react-dom': ^19.2.1
-    react: 19.2.0
-    react-dom: 19.2.0
+    '@types/react': ^19.2.7
+    '@types/react-dom': ^19.2.3
+    react: 19.2.3
+    react-dom: 19.2.3
 
 linkWorkspacePackages: true
 
