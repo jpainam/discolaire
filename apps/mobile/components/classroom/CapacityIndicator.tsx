@@ -12,7 +12,6 @@ export default function CapacityIndicator({
 }: CapacityIndicatorProps) {
   const ratio = current / max;
   let color = "#34C759";
-  //const theme = useColorScheme() ?? "light";
 
   if (ratio >= 0.9) {
     color = "#FF3B30";

@@ -11,7 +11,6 @@ import { useClassroomFilterStore } from "~/stores/classroom";
 import { trpc } from "~/utils/api";
 
 export default function ClassroomFilterBar() {
-  //const theme = useColorScheme() ?? "light";
   const cyclesQuery = useQuery(trpc.classroomCycle.all.queryOptions());
   const sectionsQuery = useQuery(trpc.classroomSection.all.queryOptions());
   const { setSection, section, cycle, setCycle } = useClassroomFilterStore();

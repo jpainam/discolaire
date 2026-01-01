@@ -12,7 +12,7 @@ export function StudentProfile({
 }: {
   student: RouterOutputs["student"]["get"];
 }) {
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   return (
     <ThemedView style={{ flex: 1, flexDirection: "column" }}>
       <ThemedView

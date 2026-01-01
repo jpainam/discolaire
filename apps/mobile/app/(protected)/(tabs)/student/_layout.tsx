@@ -4,7 +4,7 @@ import { useColorScheme } from "~/hooks/useColorScheme";
 import { useStudentFilterStore } from "~/stores/student";
 
 export default function Layout() {
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   const setQuery = useStudentFilterStore((s) => s.setQuery);
   return (
     <Stack>

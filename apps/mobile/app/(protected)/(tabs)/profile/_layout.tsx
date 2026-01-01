@@ -5,7 +5,7 @@ import { Colors } from "~/constants/Colors";
 import { useColorScheme } from "~/hooks/useColorScheme";
 
 const Layout = () => {
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   return (
     <Stack
       screenOptions={{

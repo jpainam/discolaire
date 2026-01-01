@@ -5,7 +5,7 @@ import { useColorScheme } from "~/hooks/useColorScheme";
 
 export default function Screen() {
   //const headerHeight = useHeaderHeight();
-  const theme = useColorScheme() ?? "light";
+  const theme = useColorScheme();
   return (
     <View>
       <ScrollView
