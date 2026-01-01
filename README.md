@@ -153,9 +153,13 @@ Remove `"dev": "email dev -p 3001",` from transactional
 ## nvm
 
 ```bash
+nvm list
+nvm ls-remote
 nvm install 8.10.0
 nvm use 8.10.0
 nvm alias default 8.10.0
+nvm uninstall <old_version>
+pnpm i -g pnpm
 ```
 
 ```
