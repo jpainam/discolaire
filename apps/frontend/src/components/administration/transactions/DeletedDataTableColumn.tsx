@@ -1,29 +1,26 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Link from "next/link";
-import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
 import { MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
+
+
 import type { RouterOutputs } from "@repo/api";
 
-import { Badge } from "~/components/base-badge";
+
+
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
-import { Pill } from "~/components/pill";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { ViewIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
 import { TransactionDetails } from "./TransactionDetails";
+
 
 type TransactionAllProcedureOutput = NonNullable<
   RouterOutputs["transaction"]["getDeleted"]
@@ -133,35 +130,22 @@ export const useDeletedDataTableColumn = (): ColumnDef<
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={t("deletedAt")} />
           ),
-          size: 80,
-          cell: ({ row }) => {
-            const transaction = row.original;
-            return (
-              <Badge appearance={"outline"} variant={"destructive"}>
-                <CrossCircledIcon
-                  className="size-4 text-red-500"
-                  aria-hidden="true"
-                />
-                {transaction.deletedAt?.toLocaleDateString(locale, {
-                  year: "2-digit",
-                  month: "short",
-                  day: "2-digit",
-                })}
-              </Badge>
-            );
-          },
-        }),
-        columnHelper.accessor("deletedById", {
-          header: ({ column }) => (
-            <DataTableColumnHeader column={column} title={""} />
-          ),
-          size: 80,
           cell: ({ row }) => {
             const transaction = row.original;
             const user = transaction.deletedBy;
-            //const name = user?.name ?? user?.username ?? "N/A";
+            return (
+              <div className="flex items-center gap-1">
+                <span>
+                  {transaction.deletedAt?.toLocaleDateString(locale, {
+                    year: "2-digit",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                </span>
 
-            return <Pill>{decode(user?.name ?? user?.username ?? "")}</Pill>;
+                <span>- {decode(user?.name ?? user?.username ?? "")}</span>
+              </div>
+            );
           },
         }),
 
@@ -169,7 +153,6 @@ export const useDeletedDataTableColumn = (): ColumnDef<
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={t("amount")} />
           ),
-          size: 60,
           cell: ({ row }) => {
             const amount = row.original.amount;
             return (
@@ -191,9 +174,9 @@ export const useDeletedDataTableColumn = (): ColumnDef<
           cell: ({ row }) => {
             const transaction = row.original;
             return (
-              <Badge variant={"secondary"} className="line-clamp-1 truncate">
+              <div className="text-muted-foreground line-clamp-1 truncate text-xs">
                 {transaction.observation}
-              </Badge>
+              </div>
             );
           },
         }),
@@ -233,6 +216,7 @@ function ActionCell({
             onSelect={() => {
               openModal({
                 title: t("details"),
+                className: "sm:max-w-lg",
                 view: <TransactionDetails transactionId={transaction.id} />,
               });
             }}

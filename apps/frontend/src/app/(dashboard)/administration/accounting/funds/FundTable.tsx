@@ -89,11 +89,11 @@ export function FundTable({ journalId }: { journalId: string }) {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"icon"} className="size-8">
-                <MoreVertical className="size-4" />
+              <Button variant={"outline"} size={"icon"} >
+                <MoreVertical/>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-42">
               <DropdownHelp />
             </DropdownMenuContent>
           </DropdownMenu>
