@@ -36,6 +36,7 @@ onlyBuiltDependencies:
   - core-js-pure
   - esbuild
   - msgpackr-extract
+  - msw
   - prisma
   - sharp
   - unrs-resolver
