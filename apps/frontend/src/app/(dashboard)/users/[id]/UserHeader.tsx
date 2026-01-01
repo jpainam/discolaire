@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { AvatarState } from "~/components/AvatarState";
 import { useTRPC } from "~/trpc/react";
 
 export function UserHeader() {
@@ -17,11 +16,11 @@ export function UserHeader() {
   );
   return (
     <div className="flex flex-row items-center gap-2 px-4 py-2">
-      <AvatarState
+      {/* <AvatarState
         pos={1}
         avatar={user.avatar}
         className="h-[100px] w-[100px]"
-      />
+      /> */}
 
       <div className="space-y-0.5">
         <div className="flex flex-row gap-16">

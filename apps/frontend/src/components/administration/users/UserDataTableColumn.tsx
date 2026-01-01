@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { AvatarState } from "~/components/AvatarState";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -57,21 +56,18 @@ export function useUserColumns() {
           enableSorting: false,
           enableHiding: false,
         },
-        {
-          accessorKey: "avatar",
-          header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="" />
-          ),
-          cell: ({ row }) => (
-            <AvatarState
-              pos={row.original.name.length}
-              avatar={row.original.avatar}
-            />
-          ),
-          enableSorting: false,
-          enableHiding: false,
-          size: 32,
-        },
+        // {
+        //   accessorKey: "avatar",
+        //   header: ({ column }) => (
+        //     <DataTableColumnHeader column={column} title="" />
+        //   ),
+        //   cell: ({ row }) => (
+        //     <AvatarState pos={row.original.name.length} avatar={row.avatar} />
+        //   ),
+        //   enableSorting: false,
+        //   enableHiding: false,
+        //   size: 32,
+        // },
         {
           accessorKey: "username",
           header: ({ column }) => (

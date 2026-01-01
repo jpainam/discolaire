@@ -1,8 +1,9 @@
 import { randomUUID } from "crypto";
 
+import { uploadFiles } from "~/actions/upload";
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
-import { deleteFile, uploadFiles } from "~/lib/s3-client";
+import { deleteFile } from "~/lib/s3-client";
 import { caller } from "~/trpc/server";
 
 export async function POST(request: Request) {

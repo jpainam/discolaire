@@ -18,7 +18,7 @@ export async function RecentBorrows({ className }: { className?: string }) {
     return {
       name: borrow.user.name,
       book: borrow.book.title,
-      avatar: borrow.user.avatar,
+      avatar: "",
       date: borrow.borrowed,
     };
   });

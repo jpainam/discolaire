@@ -3,7 +3,6 @@ import { Calendar, ClipboardList, Clock, Package, User } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
@@ -47,13 +46,13 @@ export function InventoryUsageDetail({
             <div>
               <h4 className="font-medium">Assigned To</h4>
               <div className="mt-1 flex items-center gap-2">
-                <Avatar>
+                {/* <Avatar>
                   <AvatarImage
                     src={item.user.avatar ?? "/placeholder.svg"}
                     alt={item.user.name}
                   />
                   <AvatarFallback>{item.user.name.charAt(0)}</AvatarFallback>
-                </Avatar>
+                </Avatar> */}
                 <div>
                   <p>{item.user.name}</p>
                   <p className="text-muted-foreground text-sm">
@@ -96,7 +95,7 @@ export function InventoryUsageDetail({
             <div>
               <h4 className="font-medium">Recorded By</h4>
               <div className="mt-1 flex items-center gap-2">
-                <Avatar>
+                {/* <Avatar>
                   <AvatarImage
                     src={item.createdBy.avatar ?? "/placeholder.svg"}
                     alt={item.createdBy.name}
@@ -104,7 +103,7 @@ export function InventoryUsageDetail({
                   <AvatarFallback>
                     {item.createdBy.name.charAt(0)}
                   </AvatarFallback>
-                </Avatar>
+                </Avatar> */}
                 <div>
                   <p>{item.createdBy.name}</p>
                   <p className="text-muted-foreground text-sm">

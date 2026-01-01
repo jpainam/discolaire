@@ -38,7 +38,7 @@ export default function StudentProfileScreen() {
   const [activeTab, setActiveTab] = useState<TabType>("info");
 
   const { data: student, isPending } = useQuery(
-    trpc.student.get.queryOptions(id)
+    trpc.student.get.queryOptions(id),
   );
 
   if (!student) {
