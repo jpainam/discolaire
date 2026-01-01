@@ -45,8 +45,8 @@ export function StudentContactHeader() {
         {canAddContact && (
           <SimpleTooltip content={t("link_contacts")}>
             <DropdownMenu>
-              <DropdownMenuTrigger  asChild>
-                <Button >
+              <DropdownMenuTrigger asChild>
+                <Button>
                   <PlusIcon />
                   <span>{t("add")}</span>
                 </Button>

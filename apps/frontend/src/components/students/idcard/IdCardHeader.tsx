@@ -27,8 +27,8 @@ export function IdCardHeader() {
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"}  size={"icon"}>
-              <MoreVertical  />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-42">

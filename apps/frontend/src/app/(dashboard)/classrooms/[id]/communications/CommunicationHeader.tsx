@@ -30,9 +30,8 @@ export function CommunicationHeader() {
                 view: <CreateEditCommunicationChannel />,
               });
             }}
-          
           >
-            <PlusIcon  />
+            <PlusIcon />
             {t("add")}
           </Button>
         )}

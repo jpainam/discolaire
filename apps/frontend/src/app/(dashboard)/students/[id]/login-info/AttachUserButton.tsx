@@ -39,13 +39,8 @@ export function AttachUserButton({
         });
       }}
       variant={"default"}
-      
     >
-      {userId ? (
-        <KeyRound />
-      ) : (
-        <UserPlus2 />
-      )}
+      {userId ? <KeyRound /> : <UserPlus2 />}
       {!userId ? t("create_a_user") : t("change_password")}
     </Button>
   );

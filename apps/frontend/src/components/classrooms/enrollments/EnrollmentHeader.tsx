@@ -113,7 +113,6 @@ export function EnrollmentHeader({ className }: { className?: string }) {
       <div className="ml-auto flex flex-row items-center gap-2">
         {canEnroll && (
           <Button
-           
             disabled={!schoolYear.isActive}
             onClick={() => {
               if (
