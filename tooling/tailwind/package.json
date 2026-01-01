@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./theme": "./theme.css",
     "./postcss-config": "./postcss-config.js"
   },
   "license": "MIT",
