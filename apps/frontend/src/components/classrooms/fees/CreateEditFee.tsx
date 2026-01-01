@@ -108,12 +108,8 @@ export function CreateEditFee({
     }),
   );
 
-  if (!classroomId) {
-    throw new Error("Classroom id is required");
-  }
-
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <form
         id="create-fee-form"
         className="grid grid-cols-2 gap-x-2 gap-y-6"
