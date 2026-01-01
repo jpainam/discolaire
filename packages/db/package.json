@@ -38,7 +38,7 @@
     "@repo/tsconfig": "workspace:*",
     "@types/minimatch": "^6.0.0",
     "dotenv": "^17.2.3",
-    "dotenv-cli": "^10.0.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "prisma": "^7.0.1",
