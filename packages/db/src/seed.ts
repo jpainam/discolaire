@@ -1,12 +1,14 @@
 //import { faker } from "@faker-js/faker";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-import { env } from "./env";
 import { PrismaClient } from "./generated/client/client";
 
 // import appreciations from "./shared/appreciation.ts"; workaround for ts-node issue with import
-
-const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
+const databaseUrl = process.env.DATABASE_URL;
+if (!process.env.DATABASE_URL) {
+  throw new Error("Missing POSTGRES_URL");
+}
+const adapter = new PrismaPg({ connectionString: databaseUrl });
 
 const client = new PrismaClient({ adapter });
 
