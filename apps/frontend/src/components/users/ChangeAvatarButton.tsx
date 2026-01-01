@@ -24,7 +24,7 @@ export function ChangeAvatarButton(
   props: PropsWithChildren<{
     className?: string;
     id: string;
-    profile: string;
+    profile: "student" | "contact" | "staff";
   }>,
 ) {
   const [selectedFile, setSelectedFile] =

@@ -48,13 +48,21 @@ export function IPBWStudentInfo({
       }}
     >
       {avatarDataUri ? (
-        <Image
+        <View
           style={{
             width: 100,
             height: 72,
+            border: "1px solid black",
           }}
-          src={avatarDataUri}
-        />
+        >
+          <Image
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+            src={avatarDataUri}
+          />
+        </View>
       ) : (
         <View
           style={{

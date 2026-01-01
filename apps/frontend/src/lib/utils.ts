@@ -156,9 +156,8 @@ export function getWeekdayName(dayNumber: number, locale = "en-US"): string {
   );
 }
 
-
-export function avatarUrl(filename?: string){
-  if(filename){
-    return `/api/avatars/${filename}`
+export function avatarUrl(filename?: string) {
+  if (filename) {
+    return `/api/avatars/${filename}`;
   }
 }
