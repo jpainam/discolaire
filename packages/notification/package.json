@@ -14,7 +14,7 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
-    "@novu/api": "^1.8.0",
+    "@novu/api": "^3.11.2",
     "@repo/db": "workspace:*",
     "@repo/kv": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.10",
