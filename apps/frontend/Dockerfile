@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:23.11.1-alpine AS base
+FROM node:24.12.0-alpine AS base
 
 #ENV NODE_OPTIONS="--max-old-space-size=6144"
 ENV NODE_OPTIONS="--max-old-space-size=8192"
