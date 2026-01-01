@@ -26,9 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
 import { useSchool } from "~/providers/SchoolProvider";
+import { useCreateTransaction } from "./CreateTransactionContextProvider";
 
 const makePaymentFormSchema = z.object({
   amount: z.coerce.number().min(1),
@@ -40,32 +39,41 @@ const makePaymentFormSchema = z.object({
 
 export function Step1({
   unpaidRequiredFees,
-  studentId,
   defaultJournalId,
   journals,
+  onNextAction,
 }: {
   unpaidRequiredFees: RouterOutputs["student"]["unpaidRequiredFees"];
-  studentId: string;
   defaultJournalId: string;
   journals: RouterOutputs["accountingJournal"]["all"];
+  onNextAction: () => void;
 }) {
   const { school } = useSchool();
+  const {
+    amount,
+    description,
+    transactionType,
+    paymentMethod,
+    journalId,
+    setAmount,
+    setDescription,
+    setTransactionType,
+    setPaymentMethod,
+    setJournalId,
+  } = useCreateTransaction();
 
   const form = useForm({
     defaultValues: {
-      amount: 0,
-      journalId: defaultJournalId,
-      description: "",
-      transactionType: "CREDIT",
-      paymentMethod: "",
+      amount: amount ?? 0,
+      journalId: journalId ?? defaultJournalId,
+      description: description ?? "",
+      transactionType: transactionType ?? "CREDIT",
+      paymentMethod: paymentMethod ?? "",
     },
     resolver: zodResolver(makePaymentFormSchema),
   });
 
   const t = useTranslations();
-
-  const router = useRouter();
-  const { createQueryString } = useCreateQueryString();
 
   function onSubmit(data: z.infer<typeof makePaymentFormSchema>) {
     if (school.applyRequiredFee === "YES") {
@@ -77,18 +85,12 @@ export function Step1({
         return;
       }
     }
-    router.push(
-      "?" +
-        createQueryString({
-          amount: data.amount,
-          description: data.description,
-          transactionType: data.transactionType,
-          paymentMethod: data.paymentMethod,
-          journalId: data.journalId,
-          studentId: studentId,
-          step: "step2",
-        }),
-    );
+    setAmount(data.amount);
+    setDescription(data.description);
+    setTransactionType(data.transactionType);
+    setPaymentMethod(data.paymentMethod);
+    setJournalId(data.journalId);
+    onNextAction();
   }
   const items: { label: string; value: string }[] = [
     { label: "credit", value: "CREDIT" },

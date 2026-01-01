@@ -67,7 +67,10 @@ export const CreateTransactionContextProvider = ({
   const [transactionType, setTransactionType] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [requiredFeeIds, setRequiredFeeIds] = useState<number[]>([]);
-  const [notifications, setNotifications] = useState<string[]>([]);
+  const [notifications, setNotifications] = useState<string[]>(() => [
+    student.id,
+    ...studentContacts.map((contact) => contact.contactId),
+  ]);
   const [journalId, setJournalId] = useState<string | null>(null);
   const [journal, setJournal] = useState<
     RouterOutputs["accountingJournal"]["get"] | null

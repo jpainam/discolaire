@@ -121,7 +121,7 @@ export default async function Page(props: {
                 <p className="text-lg font-bold">
                   {t("classroom")} : {classroom.name}
                 </p>
-                <Badge variant={"default"} className="px-2 text-lg font-bold">
+                <Badge variant={"default"} className="text-lg font-bold">
                   {t("amount")} : #{transaction.amount}#
                 </Badge>
               </div>

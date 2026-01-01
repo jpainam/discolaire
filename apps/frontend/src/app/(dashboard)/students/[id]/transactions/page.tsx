@@ -12,19 +12,36 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { PlusIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
-import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
 import { PrintAction } from "./PrintAction";
 import { StudentTransactionAccountTable } from "./StudentTransactionAccountTable";
+import { StudentTransactionCreate } from "./StudentTransactionCreate";
+import { StudentTransactionCreateAlert } from "./StudentTransactionCreateAlert";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   batchPrefetch([
     trpc.student.transactions.queryOptions(params.id),
     trpc.student.get.queryOptions(params.id),
+    trpc.student.unpaidRequiredFees.queryOptions(params.id),
+    trpc.student.contacts.queryOptions(params.id),
+    trpc.accountingJournal.all.queryOptions(),
     trpc.studentAccount.getStatements.queryOptions({
       studentId: params.id,
     }),
   ]);
+  const queryClient = getQueryClient();
+  const classroom = await queryClient.fetchQuery(
+    trpc.student.classroom.queryOptions({ studentId: params.id }),
+  );
+  if (classroom) {
+    batchPrefetch([trpc.classroom.fees.queryOptions(classroom.id)]);
+  }
   const t = await getTranslations();
   const canCreateTransaction = await checkPermission(
     "transaction",
@@ -48,7 +65,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           {canCreateTransaction && (
             <TabsTrigger value="create">
               <PlusIcon />
-              {t("create")}
+              {t("make_payment")}
             </TabsTrigger>
           )}
         </TabsList>
@@ -98,7 +115,26 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </ErrorBoundary>
         </TabsContent>
         {canCreateTransaction && (
-          <TabsContent value="create">Change your password here.</TabsContent>
+          <TabsContent value="create">
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense fallback={<Skeleton className="h-8 w-full" />}>
+                <StudentTransactionCreateAlert />
+              </Suspense>
+            </ErrorBoundary>
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense
+                fallback={
+                  <div className="mx-auto grid w-full max-w-3xl grid-cols-2 gap-4 py-4">
+                    {Array.from({ length: 8 }).map((_, index) => (
+                      <Skeleton key={index} className="h-8 w-full" />
+                    ))}
+                  </div>
+                }
+              >
+                <StudentTransactionCreate />
+              </Suspense>
+            </ErrorBoundary>
+          </TabsContent>
         )}
       </Tabs>
     </HydrateClient>
