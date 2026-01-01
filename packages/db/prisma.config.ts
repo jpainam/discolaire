@@ -1,15 +1,10 @@
 import "dotenv/config";
 
-import fs from "fs";
 import path from "node:path";
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import { defineConfig, env } from "prisma/config";
 
-if (fs.existsSync(".env")) {
-  dotenv.config({ path: ".env" });
-} else {
-  dotenv.config({ path: ".env.example" });
-}
+config();
 
 export default defineConfig({
   schema: path.join("prisma", "schema"),
