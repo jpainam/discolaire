@@ -20,6 +20,7 @@ import {
   CommandItem,
   CommandList,
 } from "~/components/ui/command";
+import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Spinner } from "~/components/ui/spinner";
@@ -28,7 +29,6 @@ import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { Label } from "~/components/ui/label";
 
 export function EnrollStudent({ classroomId }: { classroomId: string }) {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
@@ -177,13 +177,10 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
             })}
           </div>
         ) : (
-          <Label>
-            {t("select_students_to_enroll")}
-          </Label>
+          <Label>{t("select_students_to_enroll")}</Label>
         )}
         <Button
           variant={"default"}
-         
           disabled={
             selectedIds.length === 0 || createEnrollmentMutation.isPending
           }

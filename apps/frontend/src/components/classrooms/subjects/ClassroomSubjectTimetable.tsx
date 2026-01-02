@@ -27,7 +27,6 @@ import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useSheet } from "~/hooks/use-sheet";
 import { getWeekdayName } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -44,7 +43,7 @@ export function ClassroomSubjectTimetable({
   const [slotEnd, setSlotEnd] = useState("");
   const [weekdays, setWeekdays] = useState<number[]>([1]);
   const t = useTranslations();
-  const { closeSheet } = useSheet();
+  //const { closeSheet } = useSheet();
 
   const confirm = useConfirm();
   const locale = useLocale();
@@ -105,7 +104,7 @@ export function ClassroomSubjectTimetable({
 
   if (subjectQuery.isPending) {
     return (
-      <div className="grid grid-cols-1 gap-4 p-4">
+      <div className="grid grid-cols-1 gap-4">
         {Array.from({ length: 8 }).map((_, index) => (
           <Skeleton key={index} className="h-8 w-full" />
         ))}
@@ -119,7 +118,7 @@ export function ClassroomSubjectTimetable({
   //   );
   // }
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-hidden">
+    <div className="flex flex-col gap-2">
       <div className="flex gap-2">
         <div className="flex flex-1 flex-col gap-2">
           <Label htmlFor="start-time">{t("start_time")}</Label>
@@ -149,7 +148,7 @@ export function ClassroomSubjectTimetable({
         )}
       </div>
       <FieldGroup>
-        <FieldGroup className="flex flex-row flex-wrap gap-2 px-4 [--radius:9999rem]">
+        <FieldGroup className="flex flex-row flex-wrap gap-1 [--radius:9999rem]">
           {[0, 1, 2, 3, 4, 5, 6].map((option) => (
             <FieldLabel
               htmlFor={option.toString()}
@@ -180,7 +179,7 @@ export function ClassroomSubjectTimetable({
         </FieldGroup>
       </FieldGroup>
       <Separator />
-      <div className="grid flex-1 auto-rows-min gap-2 overflow-y-auto px-4">
+      <div className="grid flex-1 auto-rows-min gap-2 overflow-y-auto">
         {!timetables ||
           (timetables.length == 0 && (
             <Empty>
@@ -231,7 +230,7 @@ export function ClassroomSubjectTimetable({
           ))}
         </div>
       </div>
-      <div className={"mt-auto flex flex-col gap-2 p-4"}>
+      {/* <div className={"mt-auto flex flex-col gap-2"}>
         <Button
           onClick={() => {
             closeSheet();
@@ -241,7 +240,7 @@ export function ClassroomSubjectTimetable({
         >
           {t("close")}
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
