@@ -24,8 +24,8 @@ export function DrugHeader() {
               view: <CreateEditDrug studentId={params.id} />,
             });
           }}
-          variant={"default"}
-          size={"sm"}
+         
+         
         >
           <PlusIcon />
           {t("add")}

@@ -29,7 +29,7 @@ export function HealthVisitHeader() {
               );
             }}
             variant={"default"}
-            size={"sm"}
+           
           >
             <Stethoscope />
             {t("new_visit")}

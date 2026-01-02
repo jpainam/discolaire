@@ -12,7 +12,12 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { StudentCertificate } from "~/components/students/print/StudentCertificate";
 import { StudentPrintButton } from "~/components/students/print/StudentPrintButton";
 import { Badge } from "~/components/ui/badge";
-import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
+import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -21,6 +26,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { PrinterIcon } from "~/icons";
 
 export default function DataExportPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,17 +91,22 @@ export default function DataExportPage() {
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col gap-2 px-4 py-2">
-      <div className="flex flex-col gap-4 md:flex-row">
-        <div className="relative flex-1">
-          <Search className="text-muted-foreground absolute top-3 left-3 h-4 w-4" />
-          <Input
-            placeholder={t("search") + "..."}
-            className="pl-10"
-            value={searchQuery}
+    <div className="flex flex-col gap-2">
+      <div className="bg-muted/50 flex flex-col gap-6 border-b px-4 py-1 md:flex-row">
+        <div className="flex items-center gap-1">
+          <PrinterIcon />
+          <Label>Impression</Label>
+        </div>
+        <InputGroup>
+          <InputGroupInput
+            placeholder={t("search")}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </div>
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
+
         <TermSelector
           defaultValue={termId}
           onChange={setTermId}
@@ -124,7 +135,7 @@ export default function DataExportPage() {
         </Button> */}
       </div>
 
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs defaultValue="all" className="w-full px-4">
         <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger value="all">
             {t("all")}

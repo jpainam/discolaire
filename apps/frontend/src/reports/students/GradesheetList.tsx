@@ -1,4 +1,5 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
+import { decode } from "entities";
 
 import type { RouterOutputs } from "@repo/api";
 
@@ -8,8 +9,10 @@ export function GradesheetList({
   student,
   grades,
   school,
+  schoolYear,
 }: {
   student: RouterOutputs["student"]["get"];
+  schoolYear: RouterOutputs["schoolYear"]["getCurrent"];
   grades: {
     subject: string;
     grade1: number | null;
@@ -52,6 +55,15 @@ export function GradesheetList({
             <Text>
               {student.lastName} {student.firstName}
             </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 6,
+              }}
+            >
+              <Text>{student.classroom?.name}</Text>
+              <Text>{schoolYear.name}</Text>
+            </View>
           </View>
           <View
             style={{
@@ -67,18 +79,23 @@ export function GradesheetList({
                 display: "flex",
                 fontWeight: "bold",
                 borderBottom: "1px solid black",
-                paddingVertical: 6,
               }}
             >
-              <Text style={{ width: "40%", paddingHorizontal: 2 }}>
+              <Text
+                style={{
+                  width: "40%",
+                  borderRight: "1px solid black",
+                  paddingHorizontal: 2,
+                }}
+              >
                 Matière
               </Text>
-              <Text style={{ width: "10%" }}>Note 1</Text>
-              <Text style={{ width: "10%" }}>Note 2</Text>
-              <Text style={{ width: "10%" }}>Note 3</Text>
-              <Text style={{ width: "10%" }}>Note 4</Text>
-              <Text style={{ width: "10%" }}>Note 5</Text>
-              <Text style={{ width: "10%" }}>Note 6</Text>
+              <HeadItem label="Note 1" />
+              <HeadItem label="Note 2" />
+              <HeadItem label="Note 3" />
+              <HeadItem label="Note 4" />
+              <HeadItem label="Note 5" />
+              <HeadItem last={true} label="Note 6" />
             </View>
             {grades.map((grade, index) => {
               return (
@@ -86,20 +103,26 @@ export function GradesheetList({
                   style={{
                     flexDirection: "row",
                     display: "flex",
-                    borderBottom: "1px solid black",
-                    paddingVertical: 6,
+                    borderBottom:
+                      index == grades.length - 1 ? "" : "1px solid black",
                   }}
                   key={index}
                 >
-                  <Text style={{ width: "40%", paddingHorizontal: 2 }}>
-                    {grade.subject}
-                  </Text>
-                  <Text style={{ width: "10%" }}>{grade.grade1}</Text>
-                  <Text style={{ width: "10%" }}>{grade.grade2}</Text>
-                  <Text style={{ width: "10%" }}>{grade.grade3}</Text>
-                  <Text style={{ width: "10%" }}>{grade.grade4}</Text>
-                  <Text style={{ width: "10%" }}>{grade.grade5}</Text>
-                  <Text style={{ width: "10%" }}>{grade.grade6}</Text>
+                  <View
+                    style={{
+                      width: "40%",
+                      borderRight: "1px solid black",
+                      paddingHorizontal: 2,
+                    }}
+                  >
+                    <Text>{decode(grade.subject)}</Text>
+                  </View>
+                  <GradeItemCell grade={grade.grade1} />
+                  <GradeItemCell grade={grade.grade2} />
+                  <GradeItemCell grade={grade.grade3} />
+                  <GradeItemCell grade={grade.grade4} />
+                  <GradeItemCell grade={grade.grade5} />
+                  <GradeItemCell last={true} grade={grade.grade6} />
                 </View>
               );
             })}
@@ -107,5 +130,40 @@ export function GradesheetList({
         </View>
       </Page>
     </Document>
+  );
+}
+function GradeItemCell({
+  last = false,
+  grade,
+}: {
+  grade: number | null;
+  last?: boolean;
+}) {
+  return (
+    <View
+      style={{
+        width: "10%",
+        paddingVertical: 6,
+        borderRight: last ? "" : "1px solid black",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text>{grade}</Text>
+    </View>
+  );
+}
+function HeadItem({ last = false, label }: { label: string; last?: boolean }) {
+  return (
+    <Text
+      style={{
+        width: "10%",
+        textAlign: "center",
+        paddingVertical: 6,
+        borderRight: last ? "" : "1px solid black",
+      }}
+    >
+      {label}
+    </Text>
   );
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import * as XLSX from "@e965/xlsx";
 import { renderToStream } from "@react-pdf/renderer";
 import { getTranslations } from "next-intl/server";
@@ -10,12 +11,13 @@ import type { RouterOutputs } from "@repo/api";
 import { getSession } from "~/auth/server";
 import { getSheetName } from "~/lib/utils";
 import GradeList from "~/reports/students/GradeList";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { xlsxType } from "~/utils";
 import { getAppreciations } from "~/utils/appreciations";
 
 const searchSchema = z.object({
   id: z.string().min(1),
+  termId: z.string().optional(),
   format: z.union([z.literal("pdf"), z.literal("csv")]).default("pdf"),
 });
 export async function GET(req: NextRequest) {
@@ -32,15 +34,26 @@ export async function GET(req: NextRequest) {
 
     const result = searchSchema.safeParse(obj);
     if (!result.success) {
-      const error = result.error.issues.map((e) => e.message).join(", ");
-      return new Response(error, { status: 400 });
+      const error = z.treeifyError(result.error);
+      return NextResponse.json(error, { status: 400 });
     }
-    const { id, format } = result.data;
-    const school = await caller.school.getSchool();
+    const { id, format, termId } = result.data;
+    const queryClient = getQueryClient();
+    const school = await queryClient.fetchQuery(
+      trpc.school.getSchool.queryOptions(),
+    );
 
-    const student = await caller.student.get(id);
+    const student = await queryClient.fetchQuery(
+      trpc.student.get.queryOptions(id),
+    );
 
-    const grades = await caller.student.grades({ id });
+    let grades = await caller.student.grades({ id });
+    const schoolYear = await queryClient.fetchQuery(
+      trpc.schoolYear.getCurrent.queryOptions(),
+    );
+    if (termId) {
+      grades = grades.filter((g) => g.gradeSheet.termId == termId);
+    }
 
     if (format === "csv") {
       const { blob, headers } = await toExcel({ grades, student });
@@ -48,9 +61,10 @@ export async function GET(req: NextRequest) {
     } else {
       const stream = await renderToStream(
         GradeList({
-          student: student,
-          grades: grades,
-          school: school,
+          student,
+          schoolYear,
+          grades,
+          school,
         }),
       );
 

@@ -25,7 +25,7 @@ export function StudentAssignmentHeader() {
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 px-2 py-1">
+    <div className="bg-muted/50 flex flex-row items-center gap-2 px-2 py-1">
       <NotebookPen className="h-4 w-4" />
       <Label>{t("assignments")}</Label>
       <TermSelector
@@ -42,13 +42,13 @@ export function StudentAssignmentHeader() {
       <div className="ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
-              <MoreVertical className="h-4 w-4" />
+            <Button variant={"outline"} size={"icon"}>
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <Mail className="mr-2 h-4 w-4" />
+              <Mail />
               {t("notify")}
             </DropdownMenuItem>
             <DropdownMenuItem>

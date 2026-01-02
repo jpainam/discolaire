@@ -58,9 +58,11 @@ export function StudentGradeHeader() {
   );
 
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-4 py-1">
-      <ListIcon className="h-4 w-4" />
-      <Label>{t("grades")}</Label>
+    <div className="bg-muted/50 flex flex-row items-center gap-6 border-b px-4 py-1">
+      <div className="flex items-center gap-1">
+        <ListIcon className="h-4 w-4" />
+        <Label>{t("grades")}</Label>
+      </div>
       <TermSelector
         className="w-full md:w-[300px]"
         showAllOption={true}
@@ -93,11 +95,11 @@ export function StudentGradeHeader() {
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuContent align="end">
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
-                  `/api/pdfs/student/grades/?id=${params.id}&format=pdf`,
+                  `/api/pdfs/student/grades/?id=${params.id}&termId=${termId}&format=pdf`,
                   "_blank",
                 );
               }}
@@ -107,7 +109,7 @@ export function StudentGradeHeader() {
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
-                  `/api/pdfs/student/grades/?id=${params.id}&format=csv`,
+                  `/api/pdfs/student/grades/?id=${params.id}&termId=${termId}&format=csv`,
                   "_blank",
                 );
               }}

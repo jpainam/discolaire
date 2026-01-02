@@ -34,17 +34,18 @@ export function NotificationHeader() {
   const router = useRouter();
   console.log(value);
   return (
-    <div className="bg-muted text-muted-foreground grid items-center gap-2 border-b px-2 py-1 md:flex md:flex-row">
-      {Icon && <Icon className="hidden h-4 w-4 md:block" />}
+    <div className="bg-muted/50  grid items-center gap-2 border-b px-2 py-1 md:flex md:flex-row">
+      {Icon && <Icon className="hidden md:block" />}
       <Label className="hidden md:block">{t("notifications")}</Label>
 
       <Input
         onChange={(event) => {
           setValue(event.target.value);
         }}
-        className="h-8 w-full md:w-[300px]"
+       
       />
       <DateRangePicker
+      className="w-1/4"
         onSelectAction={(dateRange: DateRange | undefined) => {
           const to = dateRange?.to?.toISOString();
           const from = dateRange?.from?.toISOString();

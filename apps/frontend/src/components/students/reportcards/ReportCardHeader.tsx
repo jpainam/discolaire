@@ -37,7 +37,7 @@ export function ReportCardHeader() {
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
   const { termId, trimestreId } = searchParams;
   return (
-    <div className="bg-muted text-muted-foreground grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
+    <div className="bg-muted/50 grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       <div className="flex flex-row items-center gap-2">
         <BookText className="h-4 w-4" />
         <Label>{t("reportcards")}</Label>
@@ -56,11 +56,11 @@ export function ReportCardHeader() {
       <div className="ml-auto flex flex-row items-center gap-0">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon-sm"} variant={"outline"}>
+            <Button size={"icon"} variant={"outline"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuContent align="end">
             <DropdownMenuItem disabled={!termId && !trimestreId}>
               <MailIcon />
               {t("notify_parents")}

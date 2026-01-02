@@ -9,10 +9,12 @@ export function GradeList({
   student,
   grades,
   school,
+  schoolYear,
 }: {
   student: RouterOutputs["student"]["get"];
   grades: RouterOutputs["student"]["grades"];
   school: RouterOutputs["school"]["getSchool"];
+  schoolYear: RouterOutputs["schoolYear"]["getCurrent"];
 }) {
   return (
     <Document>
@@ -45,6 +47,15 @@ export function GradeList({
             <Text>
               {student.lastName} {student.firstName}
             </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 6,
+              }}
+            >
+              <Text>{student.classroom?.name}</Text>
+              <Text>{schoolYear.name}</Text>
+            </View>
           </View>
           <View
             style={{
@@ -63,12 +74,12 @@ export function GradeList({
                 paddingVertical: 6,
               }}
             >
-              <Text style={{ width: "20%" }}>Séquence</Text>
-              <Text style={{ width: "20%" }}>Matière</Text>
+              <Text style={{ width: "10%" }}></Text>
+              <Text style={{ width: "40%" }}>Matière</Text>
               <Text style={{ width: "20%" }}>Description</Text>
               <Text style={{ width: "10%" }}>Note</Text>
               <Text style={{ width: "15%" }}>Date</Text>
-              <Text style={{ width: "20%" }}>Appréciation</Text>
+              <Text style={{ width: "10%" }}></Text>
             </View>
             {grades.map((grade, index) => {
               return (
@@ -76,15 +87,17 @@ export function GradeList({
                   style={{
                     flexDirection: "row",
                     display: "flex",
-                    borderBottom: "1px solid black",
+                    borderBottom:
+                      index == grades.length - 1 ? "" : "1px solid black",
                     paddingVertical: 6,
                   }}
                   key={index}
                 >
-                  <Text style={{ width: "20%" }}>
-                    {grade.gradeSheet.term.name}
+                  <Text style={{ width: "10%" }}>
+                    {" "}
+                    {grade.gradeSheet.term.shortName}
                   </Text>
-                  <Text style={{ width: "20%" }}>
+                  <Text style={{ width: "40%" }}>
                     {grade.gradeSheet.subject.course.reportName}
                   </Text>
                   <Text style={{ width: "20%" }}>{grade.gradeSheet.name}</Text>
@@ -92,7 +105,7 @@ export function GradeList({
                   <Text style={{ width: "15%" }}>
                     {grade.gradeSheet.createdAt.toLocaleDateString()}
                   </Text>
-                  <Text style={{ width: "20%" }}>
+                  <Text style={{ width: "10%" }}>
                     {getAppreciations(grade.grade)}
                   </Text>
                 </View>

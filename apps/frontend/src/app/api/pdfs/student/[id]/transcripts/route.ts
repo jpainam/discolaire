@@ -78,6 +78,7 @@ export async function GET(
   }));
 
   const school = await caller.school.getSchool();
+  const schoolYear = await caller.schoolYear.getCurrent();
   if (format === "csv") {
     const { blob, headers } = await toExcel({ data });
     return new Response(blob, { headers });
@@ -85,6 +86,7 @@ export async function GET(
     const stream = await renderToStream(
       GradesheetList({
         student: student,
+        schoolYear,
         grades: data,
         school: school,
       }),

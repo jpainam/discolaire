@@ -20,6 +20,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { PlusIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -39,7 +40,7 @@ export function StudentGradesheetHeader() {
   );
 
   return (
-    <div className="text-muted-foreground bg-muted flex flex-row items-center gap-1 border-b px-4 py-1">
+    <div className="bg-muted flex flex-row items-center gap-1 border-b px-4 py-1">
       <Captions className="h-4 w-4" />
       <Label>{t("transcripts")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
@@ -60,14 +61,14 @@ export function StudentGradesheetHeader() {
                 ),
               });
             }}
-            size={"sm"}
           >
-            Ajouter une note
+            <PlusIcon />
+            {t("add")}
           </Button>
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} size={"icon"} className="size-8">
+            <Button variant={"outline"} size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

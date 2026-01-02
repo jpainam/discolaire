@@ -38,14 +38,14 @@ export function HealthHeader() {
   ];
   return (
     <div className="mb-2 flex flex-col">
-      <ul className="flex flex-row items-center justify-start gap-4 px-2">
+      <ul className="flex flex-row items-center justify-start gap-4 px-4">
         {healthLinks.map((menu, index) => {
           const isActive = pathname === menu.href;
           return (
             <li key={index} className="py-2">
               <Link
                 className={cn(
-                  "flex items-center py-2 text-sm",
+                  "flex items-center py-2 text-xs",
                   isActive
                     ? "border-b-primary border-b"
                     : "text-muted-foreground",

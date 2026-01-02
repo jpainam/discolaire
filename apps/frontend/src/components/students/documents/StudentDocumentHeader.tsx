@@ -12,7 +12,7 @@ export function StudentDocumentHeader({ userId }: { userId: string }) {
   const t = useTranslations();
   const { openModal } = useModal();
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-4 py-1">
+    <div className="bg-muted/50  flex flex-row items-center gap-2 border-b px-4 py-1">
       <FolderOpen className="hidden h-4 w-4 md:block" />
       <Label className="hidden md:block">{t("documents")}</Label>
       <div className="ml-auto flex items-center gap-2">
@@ -23,8 +23,8 @@ export function StudentDocumentHeader({ userId }: { userId: string }) {
               view: <CreateEditDocument userId={userId} />,
             });
           }}
-          variant={"default"}
-          size={"sm"}
+         
+       
         >
           <UploadCloudIcon />
           {t("upload")}
