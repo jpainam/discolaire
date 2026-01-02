@@ -22,7 +22,13 @@ export default async function Page(props: {
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense fallback={<div className="px-4"><Skeleton className="h-8 w-full" /></div>}>
+        <Suspense
+          fallback={
+            <div className="px-4">
+              <Skeleton className="h-8 w-full" />
+            </div>
+          }
+        >
           <GradeSheetHeader />
         </Suspense>
       </ErrorBoundary>

@@ -120,7 +120,7 @@ export function ClassroomSubjectTimetable({
   // }
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-hidden">
-      <div className="flex gap-2 px-4">
+      <div className="flex gap-2">
         <div className="flex flex-1 flex-col gap-2">
           <Label htmlFor="start-time">{t("start_time")}</Label>
           <Input

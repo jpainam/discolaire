@@ -8,7 +8,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
-import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
+import { MoreVertical, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -26,6 +26,7 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { EditIcon } from "~/icons";
 import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -137,7 +138,6 @@ export function ClassroomHeader() {
           canUpdateClassroom &&
           pathname == `/classrooms/${params.id}` && (
             <Button
-              className="size-8"
               variant="outline"
               onClick={() => {
                 const classroom = classrooms.find((c) => c.id === params.id);
@@ -150,14 +150,13 @@ export function ClassroomHeader() {
               }}
               size="icon"
             >
-              <Pencil />
-              <span className="sr-only">{t("edit")}</span>
+              <EditIcon />
             </Button>
           )}
         {pathname == `/classrooms` && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} className="size-8" size={"icon"}>
+              <Button variant={"outline"} size={"icon"}>
                 <MoreVertical />
               </Button>
             </DropdownMenuTrigger>

@@ -29,7 +29,7 @@ export function ClassroomSubjectGradeSheet({
       {terms?.map((t, index) => {
         return (
           <div key={index} className="flex flex-col">
-            <Label className="text-muted-foreground px-4">{t.name}</Label>
+            <Label className="text-muted-foreground">{t.name}</Label>
             <CurrentGradeSheetSummary subjectId={subjectId} termId={t.id} />
             <Separator className="my-2" />
           </div>

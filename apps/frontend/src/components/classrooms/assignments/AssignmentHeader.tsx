@@ -44,7 +44,7 @@ export function AssignmentHeader() {
   );
   return (
     <div className="flex w-full flex-col">
-      <div className="bg-muted grid border-y items-center gap-4 px-4 py-1 lg:flex">
+      <div className="bg-muted grid items-center gap-4 border-y px-4 py-1 lg:flex">
         <div className="flex flex-row items-center gap-2">
           {Icon && <Icon className="hidden h-4 w-4 md:block" />}
           <Label className="hidden md:block">{t("assignments")}</Label>

@@ -36,7 +36,7 @@ export function GradeSheetSummary({
   const grades = gradesQuery.data;
   const gradeSheet = gradeSheetQuery.data;
   return (
-    <div className="h-full flex-1 space-y-2 overflow-auto px-4 pb-4">
+    <div className="h-full flex-1 space-y-2 overflow-auto pb-4">
       {grades && (
         <ClassroomGradeChart
           className="grid grid-cols-2 gap-2"
