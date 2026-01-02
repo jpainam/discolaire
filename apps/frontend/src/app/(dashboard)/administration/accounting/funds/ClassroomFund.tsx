@@ -126,7 +126,7 @@ export function ClassroomFund({
 
   return (
     <div className="flex flex-col gap-2 overflow-auto px-2">
-      <div className="flex flex-wrap gap-4 ">
+      <div className="flex flex-wrap gap-4">
         <Badge variant={"success"} appearance={"outline"}>
           {t("validated")}:{" "}
           {sum(validatedTransactions).toLocaleString(locale, {
