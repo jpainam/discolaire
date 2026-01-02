@@ -11,7 +11,6 @@ import type { RouterOutputs } from "@repo/api";
 
 import { CourseSelector } from "~/components/shared/selects/CourseSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
-import { Button } from "~/components/ui/button";
 import {
   Field,
   FieldDescription,
@@ -40,7 +39,13 @@ const createEditSubjectSchema = z.object({
 
 type Subject = NonNullable<RouterOutputs["classroom"]["subjects"][number]>;
 
-export function CreateEditSubject({ subject }: { subject?: Subject }) {
+export function CreateEditSubject({
+  subject,
+  formId = "create-subject-form",
+}: {
+  subject?: Subject;
+  formId?: string;
+}) {
   const t = useTranslations();
   const { closeSheet } = useSheet();
   const params = useParams<{ id: string }>();
@@ -115,7 +120,7 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
   return (
     <div className="flex flex-col gap-4">
       <form
-        id="create-subject-form"
+        id={formId}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit();
@@ -265,21 +270,6 @@ export function CreateEditSubject({ subject }: { subject?: Subject }) {
           />
         </div>
       </form>
-      <div className="flex flex-row items-end justify-end gap-2 px-2 py-4">
-        <Button
-          type="button"
-          variant={"outline"}
-          size={"sm"}
-          onClick={() => {
-            closeSheet();
-          }}
-        >
-          {t("cancel")}
-        </Button>
-        <Button type="submit" form="create-subject-form">
-          {subject ? t("edit") : t("submit")}
-        </Button>
-      </div>
     </div>
   );
 }

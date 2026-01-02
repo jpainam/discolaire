@@ -6,6 +6,7 @@ import { AppSidebar } from "~/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
+import { SheetProvider } from "~/hooks/use-sheet";
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
 import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 import { SiteHeader } from "./SideHeader";
@@ -49,20 +50,22 @@ export default async function Layout({
         school={school}
         permissions={permissions}
       >
-        <AppSidebar className="p-0" variant="inset" />
-        <SidebarInset className="border">
-          <HydrateClient>
-            <SiteHeader schoolYearId={schoolYearId} />
-          </HydrateClient>
-          <div className="flex flex-1 flex-col">
-            <div className="@container/main flex flex-1 flex-col gap-2">
-              {children}
+        <SheetProvider>
+          <AppSidebar className="p-0" variant="inset" />
+          <SidebarInset className="border">
+            <HydrateClient>
+              <SiteHeader schoolYearId={schoolYearId} />
+            </HydrateClient>
+            <div className="flex flex-1 flex-col">
+              <div className="@container/main flex flex-1 flex-col gap-2">
+                {children}
+              </div>
             </div>
-          </div>
-        </SidebarInset>
+          </SidebarInset>
 
-        <GlobalSheet />
-        <GlobalModal />
+          <GlobalSheet />
+          <GlobalModal />
+        </SheetProvider>
       </SchoolContextProvider>
     </SidebarProvider>
   );

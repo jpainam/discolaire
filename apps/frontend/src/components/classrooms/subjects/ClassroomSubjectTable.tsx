@@ -243,13 +243,16 @@ export function ClassroomSubjectTable() {
                           {canEditClassroomSubject && (
                             <DropdownMenuItem
                               onSelect={() => {
+                                const formId = `edit-subject-form-${subject.id}`;
                                 openSheet({
-                                  title: (
-                                    <>
-                                      {t("edit")}-{t("subject")}
-                                    </>
+                                  title: `${t("edit")}-${t("subject")}`,
+                                  view: (
+                                    <CreateEditSubject
+                                      subject={subject}
+                                      formId={formId}
+                                    />
                                   ),
-                                  view: <CreateEditSubject subject={subject} />,
+                                  formId,
                                 });
                               }}
                             >

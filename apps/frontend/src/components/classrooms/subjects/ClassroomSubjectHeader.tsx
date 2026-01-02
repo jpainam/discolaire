@@ -89,13 +89,11 @@ export function ClassroomSubjectHeader() {
         {canAddClassroomSubject && (
           <Button
             onClick={() => {
+              const formId = "create-subject-form";
               openSheet({
-                title: (
-                  <>
-                    {t("create")}-{t("subject")}
-                  </>
-                ),
-                view: <CreateEditSubject />,
+                title: `${t("create")}-${t("subject")}`,
+                view: <CreateEditSubject formId={formId} />,
+                formId,
               });
             }}
             variant={"default"}
