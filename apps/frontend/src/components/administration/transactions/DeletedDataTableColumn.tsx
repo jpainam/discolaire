@@ -6,21 +6,21 @@ import { decode } from "entities";
 import { MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-
-
 import type { RouterOutputs } from "@repo/api";
-
-
 
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { ViewIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
 import { TransactionDetails } from "./TransactionDetails";
-
 
 type TransactionAllProcedureOutput = NonNullable<
   RouterOutputs["transaction"]["getDeleted"]
