@@ -57,7 +57,7 @@ export function ClassroomSubjectHeader() {
   );
 
   return (
-    <div className="bg-muted text-muted-foreground grid w-full grid-cols-1 flex-row items-center gap-4 border-b px-4 py-1 md:flex">
+    <div className="bg-muted text-muted-foreground grid w-full grid-cols-1 flex-row items-center gap-4 border-y px-4 py-1 md:flex">
       <div className="flex items-center gap-2">
         <SubjectIcon />
         <Label className="hidden md:block">{t("subjects")}</Label>

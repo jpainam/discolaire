@@ -34,7 +34,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <EnrollmentHeader className="border-b" />
+          <EnrollmentHeader className="border-y" />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>

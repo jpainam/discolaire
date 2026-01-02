@@ -287,7 +287,7 @@ export function GradeSheetDataTable() {
     data: filteredGradesheets,
   });
   return (
-    <div className="w-full p-4">
+    <div className="w-full px-4 py-2">
       <DataTable table={table}>
         <GradeSheetDataTableActions table={table} />
       </DataTable>

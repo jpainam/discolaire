@@ -43,7 +43,7 @@ export function ReportCardHeader() {
   const router = useRouter();
 
   return (
-    <div className="bg-muted/40 grid flex-row items-center gap-4 border-b px-4 py-1 md:flex">
+    <div className="bg-muted/40 grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
       {Icon && <Icon className="hidden h-4 w-4 md:block" />}
       <Label className="hidden md:block">{t("term")}</Label>
       <TermSelector

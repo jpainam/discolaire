@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export default function DataExportPage() {
@@ -90,8 +91,9 @@ export default function DataExportPage() {
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col gap-2 px-4 py-2">
-      <div className="flex flex-col gap-4 md:flex-row">
+    <div className="flex flex-col gap-2">
+      <Separator />
+      <div className="flex flex-col gap-4 px-4 md:flex-row">
         <InputGroup>
           <InputGroupInput
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -130,7 +132,7 @@ export default function DataExportPage() {
         </Button> */}
       </div>
 
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs defaultValue="all" className="w-full px-4">
         <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger value="all">
             {t("all")}

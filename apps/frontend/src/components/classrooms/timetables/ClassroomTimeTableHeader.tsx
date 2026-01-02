@@ -53,7 +53,7 @@ export function ClassroomTimeTableHeader() {
     }),
   );
   return (
-    <div className="bg-secondary flex flex-row items-center gap-2 border-b px-4 py-1">
+    <div className="bg-secondary flex flex-row items-center gap-2 border-y px-4 py-1">
       <CalendarDays className="h-4 w-4" />
       <Label>{t("classroom_timetables")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">

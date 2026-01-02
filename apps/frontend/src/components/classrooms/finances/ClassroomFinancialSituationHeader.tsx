@@ -67,7 +67,7 @@ export function ClassroomFinancialSituationHeader() {
   ];
 
   return (
-    <div className="grid grid-cols-1 flex-row items-center gap-6 border-b px-4 py-1 md:flex">
+    <div className="bg-muted/50 grid grid-cols-1 flex-row items-center gap-6 border-y px-4 py-1 md:flex">
       <div className="flex items-center gap-2">
         <HandCoins className="h-4 w-4" />
         <Label>{t("financial_situation")}</Label>
@@ -84,7 +84,6 @@ export function ClassroomFinancialSituationHeader() {
       </div>
       <ToggleGroup
         type="single"
-        size="sm"
         onValueChange={(val) => {
           void setSituation(val);
         }}
@@ -105,7 +104,6 @@ export function ClassroomFinancialSituationHeader() {
 
       <div className="ml-auto flex items-center gap-1">
         <ToggleGroup
-          size={"sm"}
           defaultValue={view}
           onValueChange={(val) => {
             void setView(val);
@@ -122,7 +120,7 @@ export function ClassroomFinancialSituationHeader() {
         </ToggleGroup>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline" className="size-8">
+            <Button size="icon" variant="outline">
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

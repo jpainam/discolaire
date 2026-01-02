@@ -24,7 +24,7 @@ export function SubjectHeader() {
     trpc.subject.get.queryOptions(Number(params.subjectId)),
   );
   return (
-    <div className="bg-muted/50 flex flex-row items-center justify-between gap-6 border-b px-4 py-1">
+    <div className="bg-muted/50 flex flex-row items-center justify-between gap-6 border-y px-4 py-1">
       <div className="flex flex-row items-center gap-2">
         <FileTextIcon className="size-4" />
         <Label>{t("subject")}</Label>

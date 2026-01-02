@@ -59,7 +59,7 @@ export function ProgramHeader({
   const router = useRouter();
 
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-2 py-1">
+    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-y px-2 py-1">
       <div className="flex flex-row items-center gap-2">
         <Label>{subject.course.name}</Label>
         <FlatBadge variant={"green"}>

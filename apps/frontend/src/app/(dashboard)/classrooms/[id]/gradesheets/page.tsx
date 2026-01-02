@@ -22,7 +22,7 @@ export default async function Page(props: {
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense fallback={<Skeleton className="h-8 w-full" />}>
+        <Suspense fallback={<div className="px-4"><Skeleton className="h-8 w-full" /></div>}>
           <GradeSheetHeader />
         </Suspense>
       </ErrorBoundary>
@@ -31,7 +31,7 @@ export default async function Page(props: {
         <Suspense
           key={params.id}
           fallback={
-            <div className="grid grid-cols-4 gap-4 p-4">
+            <div className="grid grid-cols-4 gap-4 px-4 py-2">
               {Array.from({ length: 16 }).map((_, i) => (
                 <Skeleton key={i} className="h-8" />
               ))}

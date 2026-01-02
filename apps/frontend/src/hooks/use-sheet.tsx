@@ -55,7 +55,7 @@ const defaultState: SheetTypes = {
   cancelText: undefined,
   submitText: undefined,
   placement: "right",
-  className: "w-[700px]",
+  className: "",
 };
 
 const SheetContext = createContext<SheetContextValue | null>(null);

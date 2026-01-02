@@ -117,7 +117,7 @@ export function GradeSheetHeader() {
   const inputRef = useRef(null);
 
   return (
-    <div className="bg-muted/40 grid flex-row items-center gap-4 px-4 py-1 md:flex md:border-b">
+    <div className="bg-muted/50 grid flex-row items-center gap-4 px-4 py-1 md:flex md:border-y">
       <Label className="hidden md:flex">{t("term")}</Label>
       <TermSelector
         showAllOption={true}

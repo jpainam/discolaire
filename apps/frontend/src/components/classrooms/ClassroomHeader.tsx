@@ -107,7 +107,7 @@ export function ClassroomHeader() {
   }, [classrooms, params.id, setBreadcrumbs, t]);
 
   return (
-    <div className="grid w-full flex-row items-center gap-2 border-b px-4 py-1 md:flex">
+    <div className="grid w-full flex-row items-center gap-2 px-4 py-1 md:flex">
       <Label className="hidden md:block">{t("classrooms")}</Label>
       <ClassroomSelector
         className="w-full md:w-[400px]"

@@ -143,7 +143,7 @@ export default function Page() {
 
   return (
     <div className="mb-10 flex flex-col">
-      <div className="flex flex-col items-start gap-2 border-b px-4 py-2 md:flex-row md:items-center">
+      <div className="bg-muted/50 flex flex-col items-start gap-2 border-y px-4 py-1 md:flex-row md:items-center">
         <FolderOpen className="hidden h-4 w-4 md:block" />
         <Label className="hidden md:block">{t("documents")}</Label>
         <InputGroup>

@@ -18,7 +18,7 @@ export function CommunicationHeader() {
     PermissionAction.CREATE,
   );
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-1 border-b px-4 py-1">
+    <div className="bg-muted flex flex-row items-center gap-1 border-y px-4 py-1">
       <SendIcon className="hidden h-4 w-4 md:block" />
       <Label>{t("communications")}</Label>
       <div className="ml-auto">

@@ -26,7 +26,7 @@ export function ProgramList({ classroomId }: { classroomId: string }) {
               void setSubjectId(subject.id);
             }}
             className={cn(
-              `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-b p-1`,
+              `hover:bg-secondary hover:text-secondary-foreground flex cursor-pointer flex-row items-center gap-2 border-t p-1`,
               subject.id === subjectId
                 ? "bg-secondary text-secondary-foreground"
                 : "",
