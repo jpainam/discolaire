@@ -272,8 +272,8 @@ function ActionCells({ attendance }: { attendance: ProcedureOutput }) {
             <DropdownMenuItem
               onSelect={() => {
                 // openSheet({
-                //   description: t("edit_classroom_description"),
-                //   title: t("edit_a_classroom"),
+                //   description: t("edit"),
+                //   title: t("classroom"),
                 //   view: <CreateEditClassroom classroom={classroom} />,
                 // });
               }}

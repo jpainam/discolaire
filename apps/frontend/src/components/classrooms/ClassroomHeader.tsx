@@ -120,13 +120,14 @@ export function ClassroomHeader() {
       <div className="flex items-center gap-2 md:ml-auto">
         {canCreateClassroom && pathname == "/classrooms" && (
           <Button
-            size={"sm"}
             disabled={!canCreateClassroom}
             onClick={() => {
+              const formId = "create-classroom-form";
               openSheet({
-                title: t("create_a_classroom"),
-                description: t("create_classroom_description"),
-                view: <CreateEditClassroom />,
+                formId,
+                title: t("create"),
+                description: t("classroom"),
+                view: <CreateEditClassroom formId={formId} />,
               });
             }}
           >
@@ -142,10 +143,17 @@ export function ClassroomHeader() {
               onClick={() => {
                 const classroom = classrooms.find((c) => c.id === params.id);
                 if (!classroom) return;
+                const formId = `edit-classroom-${classroom.id}`;
                 openSheet({
-                  title: t("edit_a_classroom"),
-                  description: t("edit_classroom_description"),
-                  view: <CreateEditClassroom classroom={classroom} />,
+                  formId,
+                  title: t("edit"),
+                  description: classroom.name,
+                  view: (
+                    <CreateEditClassroom
+                      classroom={classroom}
+                      formId={formId}
+                    />
+                  ),
                 });
               }}
               size="icon"

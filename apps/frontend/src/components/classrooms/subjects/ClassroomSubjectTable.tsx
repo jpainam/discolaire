@@ -246,6 +246,7 @@ export function ClassroomSubjectTable() {
                                 const formId = `edit-subject-form-${subject.id}`;
                                 openSheet({
                                   title: `${t("edit")}-${t("subject")}`,
+                                  description: subject.course.name,
                                   view: (
                                     <CreateEditSubject
                                       subject={subject}

@@ -111,11 +111,16 @@ export default function ClassroomTable() {
                       {canEditClassroom && (
                         <DropdownMenuItem
                           onSelect={() => {
+                            const formId = `edit-classroom-form-${classroom.id}`;
                             openSheet({
-                              title: t("edit_a_classroom"),
-                              description: t("edit_classroom_description"),
+                              formId,
+                              title: t("edit"),
+                              description: classroom.name,
                               view: (
-                                <CreateEditClassroom classroom={classroom} />
+                                <CreateEditClassroom
+                                  classroom={classroom}
+                                  formId={formId}
+                                />
                               ),
                             });
                           }}

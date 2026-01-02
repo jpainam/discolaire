@@ -162,10 +162,12 @@ export function ClassroomTable() {
           {canCreateClassroom && (
             <Button
               onClick={() => {
+                const formId = `create-classroom-form`;
                 openSheet({
-                  title: t("create_a_classroom"),
-                  description: t("create_classroom_description"),
-                  view: <CreateEditClassroom />,
+                  formId,
+                  title: t("create"),
+                  description: t("classroom"),
+                  view: <CreateEditClassroom formId={formId} />,
                 });
               }}
             >
@@ -364,10 +366,17 @@ export function ClassroomTable() {
                         {canUpdateClassroom && (
                           <DropdownMenuItem
                             onSelect={() => {
+                              const formId = `edit-classroom-form-${cl.id}`;
                               openSheet({
-                                description: t("edit_classroom_description"),
-                                title: t("edit_a_classroom"),
-                                view: <CreateEditClassroom classroom={cl} />,
+                                formId,
+                                description: cl.name,
+                                title: t("edit"),
+                                view: (
+                                  <CreateEditClassroom
+                                    formId={formId}
+                                    classroom={cl}
+                                  />
+                                ),
                               });
                             }}
                           >

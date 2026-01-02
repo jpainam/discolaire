@@ -331,10 +331,17 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
           {canUpdateClassroom && (
             <DropdownMenuItem
               onSelect={() => {
+                const formId = `edit-classroom-form-${classroom.id}`;
                 openSheet({
-                  description: t("edit_classroom_description"),
-                  title: t("edit_a_classroom"),
-                  view: <CreateEditClassroom classroom={classroom} />,
+                  formId,
+                  description: classroom.name,
+                  title: t("edit"),
+                  view: (
+                    <CreateEditClassroom
+                      formId={formId}
+                      classroom={classroom}
+                    />
+                  ),
                 });
               }}
             >

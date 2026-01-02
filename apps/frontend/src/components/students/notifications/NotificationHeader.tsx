@@ -34,7 +34,7 @@ export function NotificationHeader() {
   const router = useRouter();
   console.log(value);
   return (
-    <div className="bg-muted/50  grid items-center gap-2 border-b px-2 py-1 md:flex md:flex-row">
+    <div className="bg-muted/50 grid items-center gap-2 border-b px-2 py-1 md:flex md:flex-row">
       {Icon && <Icon className="hidden md:block" />}
       <Label className="hidden md:block">{t("notifications")}</Label>
 
@@ -42,10 +42,9 @@ export function NotificationHeader() {
         onChange={(event) => {
           setValue(event.target.value);
         }}
-       
       />
       <DateRangePicker
-      className="w-1/4"
+        className="w-1/4"
         onSelectAction={(dateRange: DateRange | undefined) => {
           const to = dateRange?.to?.toISOString();
           const from = dateRange?.from?.toISOString();

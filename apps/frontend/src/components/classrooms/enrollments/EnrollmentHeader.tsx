@@ -142,7 +142,7 @@ export function EnrollmentHeader({ className }: { className?: string }) {
               }
               openModal({
                 title: <p className="px-4 pt-4">{t("enroll_new_students")}</p>,
-                className: "p-0",
+                className: "p-0 sm:max-w-lg",
                 description: <span className="px-4">{classroom.name}</span>,
                 view: <EnrollStudent classroomId={classroom.id} />,
               });

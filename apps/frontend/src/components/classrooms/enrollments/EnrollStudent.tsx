@@ -28,6 +28,7 @@ import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+import { Label } from "~/components/ui/label";
 
 export function EnrollStudent({ classroomId }: { classroomId: string }) {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
@@ -91,7 +92,7 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
         <CommandList>
           <CommandEmpty>{t("no_data")}</CommandEmpty>
           <ScrollArea className="h-[200px] w-full">
-            <CommandGroup className="p-2">
+            <CommandGroup>
               {unenrollStudentsQuery.isPending && (
                 <CommandItem className="flex flex-col items-center justify-center gap-2">
                   {Array.from({ length: 10 }).map((_, t) => (
@@ -176,13 +177,13 @@ export function EnrollStudent({ classroomId }: { classroomId: string }) {
             })}
           </div>
         ) : (
-          <span className="text-muted-foreground text-sm">
+          <Label>
             {t("select_students_to_enroll")}
-          </span>
+          </Label>
         )}
         <Button
           variant={"default"}
-          size={"sm"}
+         
           disabled={
             selectedIds.length === 0 || createEnrollmentMutation.isPending
           }

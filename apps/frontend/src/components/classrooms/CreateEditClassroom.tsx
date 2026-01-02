@@ -9,7 +9,6 @@ import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { Button } from "~/components/ui/button";
 import {
   Form,
   FormField,
@@ -17,13 +16,11 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { SheetClose, SheetFooter } from "~/components/ui/sheet";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { InputField } from "../shared/forms/input-field";
 import { SelectField } from "../shared/forms/SelectField";
 import { StaffSelector } from "../shared/selects/StaffSelector";
-import { Spinner } from "../ui/spinner";
 
 type ClassroomAllProcedureOutput = NonNullable<
   RouterOutputs["classroom"]["all"]
@@ -31,8 +28,10 @@ type ClassroomAllProcedureOutput = NonNullable<
 
 export function CreateEditClassroom({
   classroom,
+  formId,
 }: {
   classroom?: ClassroomAllProcedureOutput;
+  formId: string;
 }) {
   const t = useTranslations();
   const updateClassroomSchema = z.object({
@@ -114,90 +113,73 @@ export function CreateEditClassroom({
   return (
     <Form {...form}>
       <form
+        id={formId}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-1 flex-col overflow-hidden"
+        className="grid grid-cols-1 gap-6"
       >
-        <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto">
-          <InputField label={t("class_name_report")} name="reportName" />
-          <InputField label={t("class_name")} name="name" />
-          <InputField type="number" label={t("max_size")} name="maxSize" />
+        <InputField label={t("class_name_report")} name="reportName" />
+        <InputField label={t("class_name")} name="name" />
+        <InputField type="number" label={t("max_size")} name="maxSize" />
 
-          <SelectField
-            label={t("level")}
-            placeholder={t("choose_class_level")}
-            name="levelId"
-            items={levels?.map((l) => ({
-              label: l.name,
-              value: l.id.toString(),
-            }))}
-          />
-          <SelectField
-            label={t("cycle")}
-            placeholder={t("choose_class_cycle")}
-            name="cycleId"
-            inputClassName="w-full"
-            items={cycles?.map((l) => ({
-              label: l.name,
-              value: l.id.toString(),
-            }))}
-          />
-          <SelectField
-            label={t("section")}
-            inputClassName="w-full"
-            placeholder={t("choose_class_section")}
-            name="sectionId"
-            items={sections?.map((l) => ({
-              label: l.name,
-              value: l.id.toString(),
-            }))}
-          />
+        <SelectField
+          label={t("level")}
+          placeholder={t("choose_class_level")}
+          name="levelId"
+          items={levels?.map((l) => ({
+            label: l.name,
+            value: l.id.toString(),
+          }))}
+        />
+        <SelectField
+          label={t("cycle")}
+          placeholder={t("choose_class_cycle")}
+          name="cycleId"
+          inputClassName="w-full"
+          items={cycles?.map((l) => ({
+            label: l.name,
+            value: l.id.toString(),
+          }))}
+        />
+        <SelectField
+          label={t("section")}
+          inputClassName="w-full"
+          placeholder={t("choose_class_section")}
+          name="sectionId"
+          items={sections?.map((l) => ({
+            label: l.name,
+            value: l.id.toString(),
+          }))}
+        />
 
-          <FormField
-            control={form.control}
-            name={"seniorAdvisorId"}
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("senior_advisor")}</FormLabel>
-                <StaffSelector
-                  onSelect={field.onChange}
-                  defaultValue={field.value || ""}
-                />
+        <FormField
+          control={form.control}
+          name={"seniorAdvisorId"}
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("senior_advisor")}</FormLabel>
+              <StaffSelector
+                onSelect={field.onChange}
+                defaultValue={field.value || ""}
+              />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name={"headTeacherId"}
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>{t("head_teacher")}</FormLabel>
-                <StaffSelector
-                  onSelect={field.onChange}
-                  defaultValue={field.value || ""}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <SheetFooter>
-          <Button
-            variant={"default"}
-            disabled={form.formState.isSubmitting}
-            type="submit"
-          >
-            {form.formState.isSubmitting && <Spinner />}
-            {classroom ? t("edit") : t("submit")}
-          </Button>
-          <SheetClose asChild>
-            <Button type="button" variant="outline">
-              {t("cancel")}
-            </Button>
-          </SheetClose>
-        </SheetFooter>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"headTeacherId"}
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <FormLabel>{t("head_teacher")}</FormLabel>
+              <StaffSelector
+                onSelect={field.onChange}
+                defaultValue={field.value || ""}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </form>
     </Form>
   );

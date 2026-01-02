@@ -48,7 +48,7 @@ export function StudentEnrollmentHeader({
             onClick={() => {
               openModal({
                 title: t("enrollment"),
-
+                className: "sm:max-w-lg",
                 description: t("enroll_student_description"),
                 view: <EnrollStudentModal studentId={params.id} />,
               });

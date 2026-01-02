@@ -24,8 +24,6 @@ export function DrugHeader() {
               view: <CreateEditDrug studentId={params.id} />,
             });
           }}
-         
-         
         >
           <PlusIcon />
           {t("add")}

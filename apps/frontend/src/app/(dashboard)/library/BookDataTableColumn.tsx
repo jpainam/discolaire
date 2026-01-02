@@ -193,8 +193,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                 <DropdownMenuItem
                   onSelect={() => {
                     openSheet({
-                      description: t("edit_classroom_description"),
-                      title: t("edit_a_classroom"),
+                      description: t("book"),
+                      title: t("edit"),
                       view: <CreateEditBook book={book} />,
                     });
                   }}

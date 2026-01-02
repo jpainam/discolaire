@@ -29,7 +29,6 @@ export function HealthVisitHeader() {
               );
             }}
             variant={"default"}
-           
           >
             <Stethoscope />
             {t("new_visit")}

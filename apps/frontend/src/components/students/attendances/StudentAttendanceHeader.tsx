@@ -78,7 +78,6 @@ export function StudentAttendanceHeader() {
         </DropdownMenu>
         {canCreateAttendance && (
           <Button
-          
             onClick={() => {
               openModal({
                 title: "Saisie d'une présence",

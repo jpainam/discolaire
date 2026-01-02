@@ -15,13 +15,13 @@ export function ClassroomHeader() {
     <div className="bg-muted/50 flex flex-row items-center justify-between gap-2 border-y px-4 py-1">
       <Label>{t("classrooms")}</Label>
       <Button
-        variant={"default"}
-        size={"sm"}
         onClick={() => {
+          const formId = "create-classroom-form";
           openSheet({
-            title: t("create_a_classroom"),
-            description: t("create_classroom_description"),
-            view: <CreateEditClassroom />,
+            formId,
+            title: t("create"),
+            description: t("classroom"),
+            view: <CreateEditClassroom formId={formId} />,
           });
         }}
       >
