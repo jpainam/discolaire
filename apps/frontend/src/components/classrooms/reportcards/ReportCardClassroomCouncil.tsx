@@ -1,18 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { MagicWand01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import { AppreciationSelector } from "~/components/shared/selects/AppreciationSelector";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "~/components/ui/input-group";
+import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
@@ -22,11 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
 import { UserLink } from "~/components/UserLink";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -40,6 +28,7 @@ export function ReportCardClassroomCouncil({
 }) {
   const t = useTranslations();
   const trpc = useTRPC();
+
   const reportQuery = useQuery(
     trpc.reportCard.getSequence.queryOptions({
       classroomId: classroomId,
@@ -100,7 +89,7 @@ export function ReportCardClassroomCouncil({
               const disc = disciplines?.get(student.id);
               return (
                 <TableRow
-                  className="bg-transparent"
+                  className="group/row-council bg-transparent"
                   key={`${student.id}-${index}`}
                 >
                   <TableCell>
@@ -127,28 +116,14 @@ export function ReportCardClassroomCouncil({
                   </TableCell>
                   <TableCell className="text-center">{value.rank}</TableCell>
                   <TableCell className="w-full">
-                    <InputGroup>
-                      <InputGroupInput placeholder="Saisir votre observation..." />
-                      <InputGroupAddon align="inline-end">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <AppreciationSelector>
-                              <InputGroupButton
-                                variant="ghost"
-                                aria-label="Info"
-                                size="icon-xs"
-                                onMouseDown={(e) => e.preventDefault()} // key line
-                              >
-                                <HugeiconsIcon icon={MagicWand01Icon} />
-                              </InputGroupButton>
-                            </AppreciationSelector>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Générer une observation</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </InputGroupAddon>
-                    </InputGroup>
+                    <div className="flex items-center gap-1">
+                      <Input placeholder="Saisir votre observation..." />
+                      <AppreciationSelector
+                        onSelectAction={(e) => {
+                          console.log(e.id, e.content);
+                        }}
+                      />
+                    </div>
                   </TableCell>
                 </TableRow>
               );

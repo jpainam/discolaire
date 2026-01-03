@@ -1,10 +1,13 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
 import { Fragment, useState } from "react";
+import { MagicWand01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
+import { EmptyComponent } from "~/components/EmptyComponent";
+import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   Command,
@@ -28,7 +31,11 @@ import {
 } from "~/components/ui/popover";
 import { useTRPC } from "~/trpc/react";
 
-export function AppreciationSelector(props: PropsWithChildren) {
+export function AppreciationSelector({
+  onSelectAction,
+}: {
+  onSelectAction: ({ id, content }: { id: number; content: string }) => void;
+}) {
   const [open, setOpen] = useState(false);
   const trpc = useTRPC();
   const appreciationQuery = useQuery(
@@ -41,39 +48,16 @@ export function AppreciationSelector(props: PropsWithChildren) {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>{props.children}</PopoverTrigger>
-      <PopoverContent
-        // onInteractOutside={(e) => {
-        //   // If the interaction target is inside the popover content, don't dismiss.
-        //   if (
-        //     e.target instanceof Element &&
-        //     e.currentTarget?.contains(e.target)
-        //   ) {
-        //     e.preventDefault();
-        //   }
-        // }}
-        // // Optional: extra safety for pointer down
-        // onPointerDownOutside={(e) => {
-        //   if (
-        //     e.target instanceof Element &&
-        //     e.currentTarget?.contains(e.target)
-        //   ) {
-        //     e.preventDefault();
-        //   }
-        // }}
-        // // Optional: avoid closing on focus changes caused by CommandInput / Checkbox
-        // onFocusOutside={(e) => {
-        //   if (
-        //     e.target instanceof Element &&
-        //     e.currentTarget?.contains(e.target)
-        //   ) {
-        //     e.preventDefault();
-        //   }
-        // }}
-        className="p-0 md:min-w-2xl"
-        side="bottom"
-        align="end"
-      >
+      <PopoverTrigger asChild>
+        <Button
+          className="opacity-0 transition-opacity group-hover/row-council:opacity-100"
+          size={"icon"}
+          variant={"secondary"}
+        >
+          <HugeiconsIcon icon={MagicWand01Icon} />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0 md:min-w-2xl" side="bottom" align="end">
         <Command
           filter={(value, search) => {
             const appreciations = categories?.flatMap(
@@ -118,8 +102,10 @@ export function AppreciationSelector(props: PropsWithChildren) {
             ))}
           </FieldGroup>
           <CommandSeparator />
-          <CommandList>
-            <CommandEmpty>{t("no_data")}</CommandEmpty>
+          <CommandList className="min-h-72">
+            <CommandEmpty>
+              <EmptyComponent />
+            </CommandEmpty>
 
             {(filters.length > 0
               ? categories?.filter((c) => filters.includes(String(c.id)))
@@ -134,8 +120,11 @@ export function AppreciationSelector(props: PropsWithChildren) {
                           key={`${idx}-${index}`}
                           value={item.id.toString()}
                           onSelect={(_value) => {
-                            //onSelectAction?.(cat?.id.toString());
-                            //onSelectContent?.(item.content);
+                            onSelectAction({
+                              id: item.id,
+                              content: item.content,
+                            });
+
                             setOpen(false);
                           }}
                         >
