@@ -106,7 +106,6 @@
     "react-image-crop": "^11.0.10",
     "react-medium-image-zoom": "^5.4.0",
     "react-phone-number-input": "^3.4.14",
-    "react-resizable-panels": "^3.0.6",
     "recharts": "^2.15.4",
     "redis": "^5.10.0",
     "remark-gfm": "^4.0.1",
