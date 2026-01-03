@@ -28,7 +28,7 @@
         "next": "16.1.1",
         "react": "catalog:",
         "react-dom": "catalog:",
-        "resend": "^4.8.0",
+        "resend": "^6.6.0",
         "zod": "catalog:"
     },
     "devDependencies": {
