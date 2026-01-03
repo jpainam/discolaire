@@ -1,11 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { AppreciationSelector } from "~/components/shared/selects/AppreciationSelector";
-import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
@@ -42,6 +48,7 @@ export function ReportCardClassroomCouncil({
   const disciplineQuery = useQuery(
     trpc.discipline.sequence.queryOptions({ termId, classroomId }),
   );
+  const [councilNotes, setCouncilNotes] = useState<Record<string, string>>({});
   const { studentsMap } = useMemo(() => {
     const studentsMap = new Map(students.map((s) => [s.id, s]));
     return { studentsMap };
@@ -117,10 +124,43 @@ export function ReportCardClassroomCouncil({
                   <TableCell className="text-center">{value.rank}</TableCell>
                   <TableCell className="w-full">
                     <div className="flex items-center gap-1">
-                      <Input placeholder="Saisir votre observation..." />
+                      <InputGroup>
+                        <InputGroupInput
+                          placeholder="Saisir conseil..."
+                          value={councilNotes[student.id] ?? ""}
+                          onChange={(event) => {
+                            const nextValue = event.target.value;
+                            setCouncilNotes((prev) => ({
+                              ...prev,
+                              [student.id]: nextValue,
+                            }));
+                          }}
+                        />
+                        <InputGroupAddon align="inline-end">
+                          <InputGroupButton
+                            aria-label="clear"
+                            title="Clear"
+                            type="button"
+                            size="icon-xs"
+                            disabled={!councilNotes[student.id]}
+                            onClick={() => {
+                              setCouncilNotes((prev) => ({
+                                ...prev,
+                                [student.id]: "",
+                              }));
+                            }}
+                          >
+                            {councilNotes[student.id] && <XIcon />}
+                          </InputGroupButton>
+                        </InputGroupAddon>
+                      </InputGroup>
+
                       <AppreciationSelector
                         onSelectAction={(e) => {
-                          console.log(e.id, e.content);
+                          setCouncilNotes((prev) => ({
+                            ...prev,
+                            [student.id]: e.content,
+                          }));
                         }}
                       />
                     </div>
