@@ -1,37 +1,34 @@
 "use client";
 
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useForm } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { subMonths } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { Button } from "~/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { SheetClose, SheetFooter } from "~/components/ui/sheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { DatePicker } from "../DatePicker";
 import { CountryPicker } from "../shared/CountryPicker";
-import { InputField } from "../shared/forms/input-field";
-import { SelectField } from "../shared/forms/SelectField";
 import { StaffLevelSelector } from "../shared/selects/StaffLevelSelector";
-import { Spinner } from "../ui/spinner";
 
 type StaffProcedureOutput = NonNullable<RouterOutputs["staff"]["all"][number]>;
 
@@ -39,66 +36,101 @@ const staffCreateEditSchema = z.object({
   prefix: z.string().min(1),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  gender: z.enum(["female", "male"]).default("male"),
+  gender: z.enum(["male", "female"]).default("male"),
   isActive: z.coerce.boolean().default(true),
   jobTitle: z.string().optional(),
   countryId: z.string().optional(),
   observation: z.string().optional(),
-  email: z.string().email().optional().or(z.literal("")),
+  email: z.email().optional().or(z.literal("")),
   degreeId: z.string().optional(),
   employmentType: z.string().optional(),
   address: z.string().optional(),
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
-  dateOfHire: z.coerce.date<Date>().optional(),
-  dateOfRelease: z.coerce.date().optional(),
+  dateOfHire: z.date().optional(),
+  dateOfRelease: z.date().optional(),
   dateOfCriminalRecordCheck: z.date().optional(),
   sendAgendaFrequency: z.string().optional(),
   dateOfLastAdvancement: z.date().optional(),
   isTeacher: z.string().default("yes"),
-  dateOfBirth: z.coerce.date<Date>().optional(),
+  dateOfBirth: z.date().optional(),
 });
+type StaffFormInput = z.input<typeof staffCreateEditSchema>;
 interface CreateEditStaffProps {
   staff?: StaffProcedureOutput;
+  formId: string;
 }
 
-export function CreateEditStaff({ staff }: CreateEditStaffProps) {
+export function CreateEditStaff({ staff, formId }: CreateEditStaffProps) {
   const { closeSheet } = useSheet();
-
-  const form = useForm({
-    resolver: standardSchemaResolver(staffCreateEditSchema),
-    defaultValues: {
-      prefix: staff?.prefix ?? "",
-      firstName: staff?.firstName ?? "",
-      lastName: staff?.lastName ?? "",
-      gender: staff?.gender ?? "male",
-      isActive: staff?.isActive ?? true,
-      jobTitle: staff?.jobTitle ?? "",
-      email: staff?.user?.email ?? "",
-      countryId: staff?.countryId ?? "",
-      observation: staff?.observation ?? "",
-      degreeId: staff?.degreeId ?? "",
-      employmentType: staff?.employmentType ?? "",
-      address: staff?.address ?? "",
-      phoneNumber1: staff?.phoneNumber1 ?? "",
-      phoneNumber2: staff?.phoneNumber2 ?? "",
-      dateOfHire: staff?.dateOfHire ?? new Date(),
-      dateOfRelease: staff?.dateOfRelease ?? new Date(),
-      dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck ?? new Date(),
-      sendAgendaFrequency: staff?.sendAgendaFrequency ?? "",
-      dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? new Date(),
-      isTeacher: staff?.isTeacher ? "yes" : "no",
-      dateOfBirth: staff?.dateOfBirth
-        ? toZonedTime(staff.dateOfBirth, "UTC")
-        : subMonths(new Date(), 100),
-    },
-  });
-
   const t = useTranslations();
-
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const defaultValues: StaffFormInput = {
+    prefix: staff?.prefix ?? "",
+    firstName: staff?.firstName ?? "",
+    lastName: staff?.lastName ?? "",
+    gender: staff?.gender ?? "male",
+    isActive: staff?.isActive ?? true,
+    jobTitle: staff?.jobTitle ?? "",
+    email: staff?.user?.email ?? "",
+    countryId: staff?.countryId ?? "",
+    observation: staff?.observation ?? "",
+    degreeId: staff?.degreeId ?? "",
+    employmentType: staff?.employmentType ?? "",
+    address: staff?.address ?? "",
+    phoneNumber1: staff?.phoneNumber1 ?? "",
+    phoneNumber2: staff?.phoneNumber2 ?? "",
+    dateOfHire: staff?.dateOfHire ?? undefined,
+    dateOfRelease: staff?.dateOfRelease ?? undefined,
+    dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck ?? undefined,
+    sendAgendaFrequency: staff?.sendAgendaFrequency ?? "",
+    dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? undefined,
+    isTeacher: staff?.isTeacher ? "yes" : "no",
+    dateOfBirth: staff?.dateOfBirth ?? undefined,
+  };
+
+  const form = useForm({
+    defaultValues,
+    validators: {
+      onSubmit: staffCreateEditSchema,
+    },
+    onSubmit: ({ value }) => {
+      const parsed = staffCreateEditSchema.parse(value);
+      const values = {
+        prefix: parsed.prefix,
+        firstName: parsed.firstName,
+        lastName: parsed.lastName,
+        gender: parsed.gender,
+        isActive: parsed.isActive,
+        jobTitle: parsed.jobTitle,
+        countryId: parsed.countryId,
+        observation: parsed.observation,
+        degreeId: parsed.degreeId?.trim() ? parsed.degreeId : undefined,
+        employmentType: parsed.employmentType,
+        address: parsed.address,
+        phoneNumber1: parsed.phoneNumber1,
+        phoneNumber2: parsed.phoneNumber2,
+        email: parsed.email,
+        dateOfHire: parsed.dateOfHire,
+        dateOfRelease: parsed.dateOfRelease,
+        dateOfCriminalRecordCheck: parsed.dateOfCriminalRecordCheck,
+        sendAgendaFrequency: parsed.sendAgendaFrequency,
+        dateOfLastAdvancement: parsed.dateOfLastAdvancement,
+        isTeacher: parsed.isTeacher === "yes",
+        dateOfBirth: parsed.dateOfBirth,
+      };
+      if (staff) {
+        toast.loading(t("updating"), { id: 0 });
+        updateStaffMutation.mutate({ ...values, id: staff.id });
+      } else {
+        toast.loading(t("creating"), { id: 0 });
+        createStaffMutation.mutate(values);
+      }
+    },
+  });
 
   const createStaffMutation = useMutation(
     trpc.staff.create.mutationOptions({
@@ -126,39 +158,6 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     }),
   );
 
-  const onSubmit = (data: z.infer<typeof staffCreateEditSchema>) => {
-    const values = {
-      prefix: data.prefix,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      gender: data.gender,
-      isActive: data.isActive,
-      jobTitle: data.jobTitle,
-      countryId: data.countryId,
-      observation: data.observation,
-      degreeId: data.degreeId?.trim() ? data.degreeId : undefined,
-      employmentType: data.employmentType,
-      address: data.address,
-      phoneNumber1: data.phoneNumber1,
-      phoneNumber2: data.phoneNumber2,
-      email: data.email,
-      dateOfHire: data.dateOfHire,
-      dateOfRelease: data.dateOfRelease,
-      dateOfCriminalRecordCheck: data.dateOfCriminalRecordCheck,
-      sendAgendaFrequency: data.sendAgendaFrequency,
-      dateOfLastAdvancement: data.dateOfLastAdvancement,
-      isTeacher: data.isTeacher === "yes",
-      dateOfBirth: data.dateOfBirth,
-    };
-    if (staff) {
-      toast.loading(t("updating"), { id: 0 });
-      updateStaffMutation.mutate({ ...values, id: staff.id });
-    } else {
-      toast.loading(t("creating"), { id: 0 });
-      createStaffMutation.mutate(values);
-    }
-  };
-
   const isTeacherItems = [
     { label: t("yes"), value: "yes" },
     { label: t("no"), value: "no" },
@@ -183,210 +182,464 @@ export function CreateEditStaff({ staff }: CreateEditStaffProps) {
     { label: "Dr", value: "Dr" },
   ];
 
-  const genders = [
-    { label: t("male"), value: "male" },
-    { label: t("female"), value: "female" },
-  ];
-
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-1 flex-col overflow-hidden"
-      >
-        <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto px-4">
-          <div className="grid grid-cols-[20%_80%] gap-2">
-            <SelectField label={t("civility")} name="prefix" items={prefixes} />
-            <InputField name="lastName" label={t("lastName")} />
-          </div>
+    <form
+      id={formId}
+      className="gap-4 flex flex-col"
+      onSubmit={(event) => {
+        event.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <div className="flex items-center gap-2">
+        <form.Field
+          name="prefix"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid} className="w-[100px]">
+                <FieldLabel htmlFor={field.name}>{t("civility")}</FieldLabel>
+                <Select
+                  value={field.state.value}
+                  onValueChange={field.handleChange}
+                >
+                  <SelectTrigger id={field.name} aria-invalid={isInvalid}>
+                    <SelectValue placeholder={t("civility")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {prefixes.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+        <form.Field
+          name="lastName"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid} className="w-full">
+                <FieldLabel htmlFor={field.name}>{t("lastName")}</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={isInvalid}
+                  autoComplete="off"
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+      </div>
 
-          <InputField name="firstName" label={t("firstName")} />
-          <div className="grid grid-cols-2 gap-2">
-            <InputField name="phoneNumber1" label={`${t("phone")} 1`} />
-            <InputField name="phoneNumber2" label={`${t("phone")} 2`} />
-          </div>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("email")}</FormLabel>
-                <FormControl>
-                  <Input placeholder="email" type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form.Field
+        name="firstName"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("firstName")}</FieldLabel>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                aria-invalid={isInvalid}
+                autoComplete="off"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
 
-          <InputField name="jobTitle" label={t("jobTitle")} />
-          <FormField
-            control={form.control}
-            name="countryId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="countryId">{t("citizenship")}</FormLabel>
-                <FormControl>
-                  <CountryPicker
-                    placeholder={t("citizenship")}
-                    onChange={field.onChange}
-                    defaultValue={field.value}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="grid grid-cols-2 gap-2">
-            <SelectField
-              name="gender"
-              label={t("gender")}
-              placeholder={t("gender")}
-              items={genders}
-            />
-            <SelectField
-              label={t("employmentType")}
-              items={employmentTypeItems}
-              name="employmentType"
-            />
-          </div>
+      <FieldGroup className="grid grid-cols-2 gap-2">
+        <form.Field
+          name="phoneNumber1"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel
+                  htmlFor={field.name}
+                >{`${t("phone")} 1`}</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={isInvalid}
+                  autoComplete="off"
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+        <form.Field
+          name="phoneNumber2"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel
+                  htmlFor={field.name}
+                >{`${t("phone")} 2`}</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={isInvalid}
+                  autoComplete="off"
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+      </FieldGroup>
 
-          <InputField name="address" label={t("address")} />
+      <form.Field
+        name="email"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("email")}</FieldLabel>
+              <Input
+                id={field.name}
+                name={field.name}
+                type="email"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                aria-invalid={isInvalid}
+                autoComplete="off"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
 
-          <FormField
-            control={form.control}
-            name={"degreeId"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("degree")}</FormLabel>
-                <FormControl>
-                  <StaffLevelSelector
-                    className="w-full"
-                    onChange={(val) => {
-                      field.onChange(val);
-                    }}
-                    defaultValue={field.value}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form.Field
+        name="jobTitle"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("jobTitle")}</FieldLabel>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                aria-invalid={isInvalid}
+                autoComplete="off"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
 
-          <FormField
-            control={form.control}
-            name="dateOfBirth"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("dateOfBirth")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={field.value}
-                    onSelectAction={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="dateOfHire"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("dateOfHire")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={field.value}
-                    onSelectAction={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="dateOfLastAdvancement"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("dateOfLastAdvancement")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={field.value}
-                    onSelectAction={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="dateOfCriminalRecordCheck"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("lastCriminalRecordCheck")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={field.value}
-                    onSelectAction={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <SelectField
-            label={t("sendAgenda")}
-            items={sendAgendaFrequency}
-            name="sendAgendaFrequency"
-          />
-          <SelectField
-            label={t("isTeacher")}
-            items={isTeacherItems}
-            name="isTeacher"
-          />
+      <form.Field
+        name="countryId"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("citizenship")}</FieldLabel>
+              <CountryPicker
+                placeholder={t("citizenship")}
+                onChange={(value) => field.handleChange(value)}
+                defaultValue={field.state.value ?? undefined}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
 
-          <FormField
-            control={form.control}
-            name={"observation"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("observations")}</FormLabel>
-                <FormControl>
-                  <Textarea
-                    onChange={(event) => {
-                      field.onChange(event.target.value);
-                    }}
-                    className="resize-none"
-                  />
-                </FormControl>
+      <FieldGroup className="grid grid-cols-2 gap-2">
+        <form.Field
+          name="gender"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{t("gender")}</FieldLabel>
+                <Select
+                  value={field.state.value}
+                  onValueChange={(value) =>
+                    field.handleChange(value as "male" | "female")
+                  }
+                >
+                  <SelectTrigger id={field.name} aria-invalid={isInvalid}>
+                    <SelectValue placeholder={t("gender")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"male"}>{t("male")}</SelectItem>
+                    <SelectItem value={"female"}>{t("female")}</SelectItem>
+                  </SelectContent>
+                </Select>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+        <form.Field
+          name="employmentType"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>
+                  {t("employmentType")}
+                </FieldLabel>
+                <Select
+                  value={field.state.value}
+                  onValueChange={field.handleChange}
+                >
+                  <SelectTrigger id={field.name} aria-invalid={isInvalid}>
+                    <SelectValue placeholder={t("select_an_option")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {employmentTypeItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+      </FieldGroup>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+      <form.Field
+        name="address"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("address")}</FieldLabel>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                aria-invalid={isInvalid}
+                autoComplete="off"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
 
-        <SheetFooter>
-          <Button
-            disabled={
-              updateStaffMutation.isPending || createStaffMutation.isPending
-            }
-            type="submit"
-          >
-            {(updateStaffMutation.isPending ||
-              createStaffMutation.isPending) && <Spinner />}
-            {t("submit")}
-          </Button>
-          <SheetClose asChild>
-            <Button type="button" variant="outline" size={"sm"}>
-              {t("cancel")}
-            </Button>
-          </SheetClose>
-        </SheetFooter>
-      </form>
-    </Form>
+      <form.Field
+        name="degreeId"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("degree")}</FieldLabel>
+              <StaffLevelSelector
+                className="w-full"
+                onChange={(val) => {
+                  field.handleChange(val ?? "");
+                }}
+                defaultValue={field.state.value}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="dateOfBirth"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("dateOfBirth")}</FieldLabel>
+              <DatePicker
+                defaultValue={field.state.value ?? undefined}
+                onSelectAction={(date) => field.handleChange(date)}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="dateOfHire"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("dateOfHire")}</FieldLabel>
+              <DatePicker
+                defaultValue={field.state.value ?? undefined}
+                onSelectAction={(date) => field.handleChange(date)}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="dateOfLastAdvancement"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>
+                {t("dateOfLastAdvancement")}
+              </FieldLabel>
+              <DatePicker
+                defaultValue={field.state.value ?? undefined}
+                onSelectAction={(date) => field.handleChange(date)}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="dateOfCriminalRecordCheck"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>
+                {t("lastCriminalRecordCheck")}
+              </FieldLabel>
+              <DatePicker
+                defaultValue={field.state.value ?? undefined}
+                onSelectAction={field.handleChange}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="sendAgendaFrequency"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("sendAgenda")}</FieldLabel>
+              <Select
+                value={field.state.value}
+                onValueChange={field.handleChange}
+              >
+                <SelectTrigger id={field.name} aria-invalid={isInvalid}>
+                  <SelectValue placeholder={t("select_an_option")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {sendAgendaFrequency.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="isTeacher"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("isTeacher")}</FieldLabel>
+              <Select
+                value={field.state.value}
+                onValueChange={field.handleChange}
+              >
+                <SelectTrigger id={field.name} aria-invalid={isInvalid}>
+                  <SelectValue placeholder={t("select_an_option")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {isTeacherItems.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="observation"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldLabel htmlFor={field.name}>{t("observations")}</FieldLabel>
+              <Textarea
+                value={field.state.value ?? ""}
+                onChange={(event) => field.handleChange(event.target.value)}
+                className="resize-none"
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+    </form>
   );
 }

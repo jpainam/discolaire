@@ -16,6 +16,7 @@ const createUpdateSchema = z.object({
   phoneNumber1: z.string().min(1),
   address: z.string().optional(),
   phoneNumber2: z.string().optional(),
+  email: z.string().optional(),
 });
 export const contactRouter = {
   delete: protectedProcedure
@@ -262,6 +263,7 @@ export const contactRouter = {
           address: input.address,
           phoneNumber1: input.phoneNumber1,
           phoneNumber2: input.phoneNumber2,
+          email: input.email,
           schoolId: ctx.schoolId,
         },
       });
@@ -283,6 +285,7 @@ export const contactRouter = {
           observation: input.observation,
           prefix: input.prefix,
           address: input.address,
+          email: input.email,
           phoneNumber1: input.phoneNumber1,
           phoneNumber2: input.phoneNumber2,
         },

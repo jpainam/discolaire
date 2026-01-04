@@ -20,7 +20,7 @@ const createUpdateSchema = z.object({
   gender: z.enum(["female", "male"]).default("male"),
   phoneNumber1: z.string().optional(),
   phoneNumber2: z.string().optional(),
-  email: z.string().email().optional().or(z.literal("")),
+  email: z.email().optional().or(z.literal("")),
   observation: z.string().optional(),
   dateOfLastAdvancement: z.coerce.date().optional(),
   dateOfCriminalRecordCheck: z.coerce.date().optional(),
@@ -124,6 +124,7 @@ export const staffRouter = {
       const staff = await ctx.db.staff.create({
         data: {
           ...data,
+          email: input.email,
           dateOfBirth: input.dateOfBirth
             ? fromZonedTime(input.dateOfBirth, "UTC")
             : undefined,
@@ -210,6 +211,7 @@ export const staffRouter = {
         },
         data: {
           ...data,
+          email: input.email,
           dateOfBirth: data.dateOfBirth
             ? fromZonedTime(data.dateOfBirth, "UTC")
             : undefined,

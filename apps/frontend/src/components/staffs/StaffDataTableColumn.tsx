@@ -221,9 +221,15 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
               className=""
               onClick={() => {
                 openSheet({
-                  view: <CreateEditStaff staff={staff} />,
+                  view: (
+                    <CreateEditStaff
+                      staff={staff}
+                      formId="create-edit-staff-form"
+                    />
+                  ),
                   title: t("edit"),
                   description: `${t("staff")} - ${getFullName(staff)}`,
+                  formId: "create-edit-staff-form",
                 });
               }}
             >

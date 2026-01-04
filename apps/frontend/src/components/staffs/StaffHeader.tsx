@@ -57,7 +57,8 @@ export function StaffHeader() {
                 openSheet({
                   title: t("add"),
                   description: t("staff"),
-                  view: <CreateEditStaff />,
+                  view: <CreateEditStaff formId="create-edit-staff-form" />,
+                  formId: "create-edit-staff-form",
                 });
               }}
             >

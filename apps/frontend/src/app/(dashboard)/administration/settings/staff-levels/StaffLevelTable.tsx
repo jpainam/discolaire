@@ -61,6 +61,7 @@ export function StaffLevelTable() {
                   onClick={() => {
                     openModal({
                       title: t("create"),
+                      
                       view: <CreateEditStaffLevel />,
                     });
                   }}
