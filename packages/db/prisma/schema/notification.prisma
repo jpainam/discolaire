@@ -1,0 +1,157 @@
+enum NotificationSourceType {
+    ATTENDANCE
+    GRADE_PUBLISHED
+}
+
+enum NotificationStatus {
+    PENDING
+    SENT
+    FAILED
+    CANCELED
+    SKIPPED
+}
+
+model NotificationDelivery {
+    id             String              @id @default(cuid())
+    notificationId String
+    channel        NotificationChannel
+    status         NotificationStatus  @default(PENDING)
+    provider       String? // "twilio", "ses", "whatsapp"
+    providerMsgId  String? // message id from provider
+    error          String?
+    attemptCount   Int                 @default(0)
+    // if skipped due to subscription/credit rules
+    skipReason     String?
+    sentAt         DateTime?
+    createdAt      DateTime            @default(now())
+    updateAt       DateTime            @updatedAt
+    notification   Notification        @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+    events         NotificationEvent[]
+
+    @@unique([notificationId, channel])
+    @@index([notificationId, channel])
+    @@index([status, channel])
+}
+
+model Notification {
+    id          String                 @id @default(cuid())
+    schoolId    String
+    recipientId String
+    sourceType  NotificationSourceType
+    sourceId    String
+    templateId  String?
+    template    NotificationTemplate?  @relation(fields: [templateId], references: [id])
+    payload     Json
+    createdAt   DateTime               @default(now())
+    deliveries  NotificationDelivery[]
+
+    @@unique([schoolId, recipientId, sourceType, sourceId])
+    @@index([schoolId, recipientId, createdAt])
+    @@index([schoolId, sourceType, sourceId])
+}
+
+model NotificationPreference {
+    id         String                 @id @default(cuid())
+    entityId   String
+    profile    EntityProfile
+    sourceType NotificationSourceType
+    channel    NotificationChannel
+    enabled    Boolean                @default(true)
+    createdAt  DateTime               @default(now())
+    updatedAt  DateTime               @updatedAt
+
+    @@unique([entityId, sourceType, channel])
+}
+
+enum NotificationChannel {
+    EMAIL
+    SMS
+    WHATSAPP
+    IN_APP
+}
+
+model NotificationEvent {
+    id         String   @id @default(cuid())
+    deliveryId String
+    type       String // "REQUESTED" | "PROVIDER_ACCEPTED" | "DELIVERED" | ...
+    data       Json?
+    createdAt  DateTime @default(now())
+
+    delivery NotificationDelivery @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+
+    @@index([deliveryId, createdAt])
+}
+
+enum NotificationTemplateStatus {
+    DRAFT
+    ACTIVE
+    ARCHIVED
+}
+
+enum NotificationTemplateVarType {
+    STRING
+    NUMBER
+    BOOLEAN
+    DATE
+    DATETIME
+}
+
+model NotificationTemplate {
+    id              String                     @id @default(cuid())
+    schoolId        String
+    sourceType      NotificationSourceType
+    channel         NotificationChannel
+    locale          String? // fr, en, es
+    name            String
+    status          NotificationTemplateStatus @default(DRAFT)
+    version         Int                        @default(1)
+    subjectTemplate String?
+    bodyTemplate    String
+    createdAt       DateTime                   @default(now())
+    updatedAt       DateTime                   @updatedAt
+    notifications   Notification[]
+
+    @@index([schoolId, sourceType, channel, locale])
+}
+
+model NotificationTemplateVariable {
+    id          String                      @id @default(cuid())
+    schoolId    String
+    sourceType  NotificationSourceType
+    key         String
+    label       String
+    description String?
+    example     String?
+    type        NotificationTemplateVarType
+    // e.g., date: dd/MM/yyyy
+    formatHint  String?
+    createdAt   DateTime                    @default(now())
+    updatedAt   DateTime                    @updatedAt
+
+    @@unique([schoolId, sourceType, key])
+    @@index([schoolId, sourceType])
+}
+
+enum SubscriptionStatus {
+    ACTIVE
+    PAUSED
+    CANCELED
+}
+
+model NotificationSubscription {
+    id          String              @id @default(cuid())
+    entityId    String
+    profile     EntityProfile
+    channel     NotificationChannel
+    status      SubscriptionStatus  @default(ACTIVE)
+    // Credits in "messages". Email will be free/unlimited  and large number of unlimited credit
+    balance     Int
+    plan        String
+    createdAt   DateTime            @default(now())
+    createdById String
+    createdBy   User                @relation("CreatedSubscriptions", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    updatedAt   DateTime            @updatedAt
+    comment     String?
+
+    @@index([entityId, channel, status])
+}

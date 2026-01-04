@@ -39,11 +39,9 @@ model User {
     borrowedBooks                BorrowedBook[]
     healthVisits                 HealthVisit[]
     logActivities                LogActivity[]
-    notificationPreferences      NotificationPreference[]
     sentEmails                   Email[]                    @relation("Sender")
     receivedEmails               EmailRecipient[]
-    subscriptions                Subscription[]             @relation("UserSubscriptions")
-    createdSubscriptions         Subscription[]             @relation("CreatedSubscriptions")
+    createdSubscriptions         NotificationSubscription[] @relation("CreatedSubscriptions")
     accessedCommunicationChannel CommunicationChannel[]
     assetAssignmentUsages        InventoryAssetUsage[]
     stockMovements               InventoryStockMovement[]
@@ -67,43 +65,10 @@ model User {
     @@unique([username])
 }
 
-// enum UserProfile {
-//     STUDENT
-//     CONTACT
-//     STAFF
-// }
-
-model NotificationPreference {
-    id       String                @id @default(cuid())
-    user     User                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    userId   String
-    event    String
-    channels NotificationChannel[]
-
-    @@unique([userId, event])
-}
-
-enum NotificationChannel {
-    EMAIL
-    SMS
-    WHATSAPP
-}
-
-model Subscription {
-    id          String   @id @default(cuid())
-    userId      String
-    user        User     @relation("UserSubscriptions", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    sms         Int      @default(0)
-    whatsapp    Int      @default(0)
-    email       Int      @default(0)
-    plan        String
-    createdAt   DateTime @default(now())
-    createdById String
-    createdBy   User     @relation("CreatedSubscriptions", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    updatedAt   DateTime @updatedAt
-    comment     String?
-
-    @@unique([userId])
+enum EntityProfile {
+    STUDENT
+    CONTACT
+    STAFF
 }
 
 model LogActivity {

@@ -9,6 +9,7 @@ import { EnrollmentService } from "./enrollment-service";
 import { FeeService } from "./fee-service";
 import { GradeSheetService } from "./gradesheet-service";
 import { InventoryService } from "./inventory-service";
+import { NotificationService } from "./notification-service";
 import { ReportCardService } from "./reportcard-service";
 import { SchoolService } from "./school-service";
 import { SchoolYearService } from "./school-year-service";
@@ -46,6 +47,7 @@ const serviceRegistry = {
   schoolyear: SchoolYearService,
   staff: StaffService,
   user: UserService,
+  notification: NotificationService,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, ServiceCtor<any>>;
 

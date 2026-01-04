@@ -361,4 +361,24 @@ export const attendanceRouter = {
         },
       });
     }),
+  notify: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const attendance = await ctx.db.attendance.findUniqueOrThrow({
+        where: {
+          id: input.id,
+        },
+        include: {
+          student: {
+            include: {
+              studentContacts: true,
+            },
+          },
+        },
+      });
+    }),
 } satisfies TRPCRouterRecord;
