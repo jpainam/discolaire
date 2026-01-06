@@ -43,19 +43,19 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const totalUsed = [
     {
       title: "Email",
-      total: subscription?.email ?? 0,
+      total: 0, //subscription?.email ?? 0,
       limit: plan?.email ?? 0,
       icon: <Mail className="h-5 w-5 text-blue-500" />,
     },
     {
       title: "Whatsapp",
-      total: subscription?.whatsapp ?? 0,
+      total: 0, //subscription?.whatsapp ?? 0,
       limit: plan?.whatsapp ?? 0,
       icon: <MessageSquare className="h-5 w-5 text-green-500" />,
     },
     {
       title: "SMS",
-      total: subscription?.sms ?? 0,
+      total: 0, //subscription?.sms ?? 0,
       limit: plan?.sms ?? 0,
       icon: <MessageSquareText className="h-5 w-5 text-purple-500" />,
     },

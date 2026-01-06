@@ -185,7 +185,7 @@ export function CreateEditStaff({ staff, formId }: CreateEditStaffProps) {
   return (
     <form
       id={formId}
-      className="gap-4 flex flex-col"
+      className="flex flex-col gap-4"
       onSubmit={(event) => {
         event.preventDefault();
         void form.handleSubmit();

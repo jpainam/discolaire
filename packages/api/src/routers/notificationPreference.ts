@@ -1,83 +1,69 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import type { $Enums } from "@repo/db/client";
+import {
+  EntityProfile,
+  NotificationChannel,
+  NotificationSourceType,
+} from "@repo/db/enums";
 
 import { protectedProcedure } from "../trpc";
 
-const upsertSchema = z.object({
-  userId: z.string(),
-  notifications: z.array(
-    z.object({
-      event: z.enum([
-        "grades_updates",
-        "absence_alerts",
-        "payment_reminders",
-        "event_notifications",
-        "weekly_summaries",
-      ]),
-      channels: z.object({
-        EMAIL: z.boolean(),
-        SMS: z.boolean(),
-        WHATSAPP: z.boolean(),
-      }),
-    }),
-  ),
-});
 export const notificationPreferenceRouter = {
   user: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
+        entityId: z.string(),
+        profile: z.enum(EntityProfile),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const notifications = await ctx.db.notificationPreference.findMany({
+      const prefs = await ctx.db.notificationPreference.findMany({
         where: {
-          userId: input.userId,
+          entityId: input.entityId,
+          profile: input.profile,
         },
       });
       // return as {event: string, channels: {email: boolean, sms: boolean, whatsapp: boolean}}
-      const notificationPreferences = notifications.map((notification) => {
+      const notificationPreferences = prefs.map((pref) => {
         return {
-          userId: notification.userId,
-          id: notification.id,
-          event: notification.event,
-          channels: notification.channels.reduce(
-            (acc, channel) => {
-              acc[channel] = true;
-              return acc;
-            },
-            {} as Record<$Enums.NotificationChannel, boolean>,
-          ),
+          entityId: pref.entityId,
+          id: pref.id,
+          channel: pref.channel,
+          sourceType: pref.sourceType,
         };
       });
       return notificationPreferences;
     }),
   upsert: protectedProcedure
-    .input(upsertSchema)
+    .input(
+      z.object({
+        entityId: z.string(),
+        profile: z.enum(EntityProfile),
+        sourceType: z.enum(NotificationSourceType),
+        channel: z.enum(NotificationChannel),
+        enabled: z.boolean(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      for (const notification of input.notifications) {
-        const channels = Object.entries(notification.channels)
-          .filter(([_, value]) => value)
-          .map(([key]) => key) as $Enums.NotificationChannel[];
-        await ctx.db.notificationPreference.upsert({
-          where: {
-            userId_event: {
-              userId: input.userId,
-              event: notification.event,
-            },
+      return ctx.db.notificationPreference.upsert({
+        create: {
+          entityId: input.entityId,
+          sourceType: input.sourceType,
+          channel: input.channel,
+          profile: input.profile,
+          enabled: input.enabled,
+        },
+        update: {
+          enabled: input.enabled,
+        },
+        where: {
+          entityId_sourceType_channel: {
+            entityId: input.entityId,
+            sourceType: input.sourceType,
+            channel: input.channel,
           },
-          create: {
-            userId: input.userId,
-            event: notification.event,
-            channels: channels,
-          },
-          update: {
-            channels: channels,
-          },
-        });
-      }
-      return true;
+        },
+      });
     }),
 } satisfies TRPCRouterRecord;

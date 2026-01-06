@@ -548,65 +548,66 @@ model Country {
 }
 
 model School {
-    id                    String                      @id @default(cuid())
-    code                  String                      @unique
-    name                  String
-    authorization         String?
-    ministry              String?
-    department            String?
-    region                String?
-    defaultLocale         String                      @default("fr")
-    city                  String?
-    headmaster            String?
-    phoneNumber1          String?
-    phoneNumber2          String?
-    email                 String?
-    website               String?
-    numberOfReceipts      Int?                        @default(1)
-    logo                  String?
-    createdAt             DateTime                    @default(now()) @db.Timestamp(6)
-    updatedAt             DateTime                    @updatedAt
-    isActive              Boolean                     @default(true)
-    address               String?
-    timezone              String                      @default("Africa/Brazzaville")
-    defaultCountryId      String?
-    registrationPrefix    String                      @default("1")
-    requestSunPlusNo      Boolean?                    @default(true)
-    allowOverEnrollment   Boolean?                    @default(true)
-    applyRequiredFee      ApplyRequiredFee            @default(NO)
-    includeRequiredFee    Boolean?                    @default(false)
-    hasQuarterlyReports   Boolean                     @default(true)
-    contacts              Contact[]
-    users                 User[]
-    students              Student[]
-    currency              String
-    classrooms            Classroom[]
-    staffs                Staff[]
-    formerSchools         FormerSchool[]
-    religions             Religion[]
-    sports                Sport[]
-    clubs                 Club[]
-    subjectGroup          SubjectGroup[]
-    courses               Course[]
-    schoolYears           SchoolYear[]
-    cycles                ClassroomCycle[]
-    sections              ClassroomSection[]
-    levels                ClassroomLevel[]
-    terms                 Term[]
-    documents             Document[]
-    degrees               StaffDegree[]
-    relationships         ContactRelationship[]
-    inventoryAssets       InventoryAsset[]
-    inventoryConsumables  InventoryConsumable[]
-    stockMovements        InventoryStockMovement[]
-    consumableUsages      InventoryConsumableUsage[]
-    schoolYearEvents      SchoolYearEvent[]
-    schoolYearEventTypes  SchoolYearEventType[]
-    logActivities         LogActivity[]
-    AppreciationRuleSet   AppreciationRuleSet?        @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    appreciationRuleSetId String?
-    accountingJournals    AccountingJournal[]
-    requiredJournals      RequiredAccountingJournal[]
+    id                        String                      @id @default(cuid())
+    code                      String                      @unique
+    name                      String
+    authorization             String?
+    ministry                  String?
+    department                String?
+    region                    String?
+    defaultLocale             String                      @default("fr")
+    city                      String?
+    headmaster                String?
+    phoneNumber1              String?
+    phoneNumber2              String?
+    email                     String?
+    website                   String?
+    numberOfReceipts          Int?                        @default(1)
+    logo                      String?
+    createdAt                 DateTime                    @default(now()) @db.Timestamp(6)
+    updatedAt                 DateTime                    @updatedAt
+    isActive                  Boolean                     @default(true)
+    address                   String?
+    timezone                  String                      @default("Africa/Brazzaville")
+    defaultCountryId          String?
+    registrationPrefix        String                      @default("1")
+    requestSunPlusNo          Boolean?                    @default(true)
+    allowOverEnrollment       Boolean?                    @default(true)
+    applyRequiredFee          ApplyRequiredFee            @default(NO)
+    includeRequiredFee        Boolean?                    @default(false)
+    hasQuarterlyReports       Boolean                     @default(true)
+    contacts                  Contact[]
+    users                     User[]
+    students                  Student[]
+    currency                  String
+    classrooms                Classroom[]
+    staffs                    Staff[]
+    formerSchools             FormerSchool[]
+    religions                 Religion[]
+    sports                    Sport[]
+    clubs                     Club[]
+    subjectGroup              SubjectGroup[]
+    courses                   Course[]
+    schoolYears               SchoolYear[]
+    cycles                    ClassroomCycle[]
+    sections                  ClassroomSection[]
+    levels                    ClassroomLevel[]
+    terms                     Term[]
+    documents                 Document[]
+    degrees                   StaffDegree[]
+    relationships             ContactRelationship[]
+    inventoryAssets           InventoryAsset[]
+    inventoryConsumables      InventoryConsumable[]
+    stockMovements            InventoryStockMovement[]
+    consumableUsages          InventoryConsumableUsage[]
+    schoolYearEvents          SchoolYearEvent[]
+    schoolYearEventTypes      SchoolYearEventType[]
+    logActivities             LogActivity[]
+    AppreciationRuleSet       AppreciationRuleSet?        @relation(fields: [appreciationRuleSetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    appreciationRuleSetId     String?
+    accountingJournals        AccountingJournal[]
+    requiredJournals          RequiredAccountingJournal[]
+    notificationSubscriptions NotificationSubscription[]
 }
 
 model RequiredAccountingJournal {

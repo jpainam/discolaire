@@ -54,6 +54,45 @@ export class UserService {
       },
     });
   }
+  async getEntity(userId: string, profile: "student" | "staff" | "contact") {
+    if (profile == "staff") {
+      const s = await this.db.staff.findFirst({
+        where: {
+          userId: userId,
+        },
+      });
+      return {
+        entityId: s?.id,
+        entityType: "staff",
+        lastName: s?.lastName,
+        firstName: s?.firstName,
+      };
+    } else if (profile == "contact") {
+      const c = await this.db.contact.findFirst({
+        where: {
+          userId: userId,
+        },
+      });
+      return {
+        entityId: c?.id,
+        entityType: "contact",
+        lastName: c?.lastName,
+        firstName: c?.firstName,
+      };
+    } else {
+      const s = await this.db.student.findFirst({
+        where: {
+          userId: userId,
+        },
+      });
+      return {
+        entityId: s?.id,
+        entityType: "student",
+        lastName: s?.lastName,
+        firstName: s?.firstName,
+      };
+    }
+  }
   deleteUsers(userIds: string[]) {
     return this.db.user.deleteMany({
       where: {

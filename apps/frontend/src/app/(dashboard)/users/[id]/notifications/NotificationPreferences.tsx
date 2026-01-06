@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -49,16 +50,19 @@ export function NotificationPreferences() {
     }),
   );
   const { data: preferences } = useSuspenseQuery(
-    trpc.notificationPreference.user.queryOptions({ userId: params.id }),
+    trpc.notificationPreference.user.queryOptions({
+      entityId: params.id,
+      profile: "STUDENT",
+    }),
   );
   const findPreferences = (
     event: string,
   ): { sms: boolean; email: boolean; whatsapp: boolean } => {
-    const pref = preferences.find((pref) => pref.event === event);
+    //const pref = preferences.find((pref) => pref.channel === event);
     return {
-      sms: pref?.channels.SMS ?? false,
-      email: pref?.channels.EMAIL ?? false,
-      whatsapp: pref?.channels.WHATSAPP ?? false,
+      sms: false, //pref?.channels.SMS ?? false,
+      email: false, //pref?.channels.EMAIL ?? false,
+      whatsapp: false, //pref?.channels.WHATSAPP ?? false,
     };
   };
 
@@ -152,7 +156,7 @@ export function NotificationPreferences() {
         WHATSAPP: event.channels.whatsapp,
       },
     }));
-    upsertMutation.mutate({ userId: params.id, notifications: notifications });
+    //upsertMutation.mutate({ userId: params.id, notifications: notifications });
   };
 
   const t = useTranslations();

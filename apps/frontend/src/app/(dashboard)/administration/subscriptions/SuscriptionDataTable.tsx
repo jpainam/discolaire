@@ -13,7 +13,7 @@ export function SubscriptionDataTable() {
   const t = useTranslations();
   const trpc = useTRPC();
   const { data: subscriptions } = useSuspenseQuery(
-    trpc.subscription.all.queryOptions({ limit: 1000 }),
+    trpc.notificationSubscription.all.queryOptions({ limit: 1000 }),
   );
 
   const columns = React.useMemo(() => getColumns({ t: t }), [t]);

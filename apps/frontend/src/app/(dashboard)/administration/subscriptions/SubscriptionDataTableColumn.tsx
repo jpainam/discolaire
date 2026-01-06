@@ -33,7 +33,10 @@ export function getColumns({
   t,
 }: {
   t: Translator<Record<string, never>, never>;
-}): ColumnDef<RouterOutputs["subscription"]["all"][number], unknown>[] {
+}): ColumnDef<
+  RouterOutputs["notificationSubscription"]["all"][number],
+  unknown
+>[] {
   return [
     {
       id: "select",
@@ -68,9 +71,9 @@ export function getColumns({
         return (
           <Link
             className="line-clamp-1 hover:text-blue-600 hover:underline"
-            href={`/users/${subscription.user.id}/subscriptions`}
+            href={`/users/${subscription.entityId}/subscriptions`}
           >
-            {subscription.user.name}
+            {subscription.comment}
           </Link>
         );
       },
@@ -85,7 +88,9 @@ export function getColumns({
         const subscription = row.original;
         return (
           <div className="text-muted-foreground">
-            {subscription.sms == -1 ? t("unlimited_sms") : subscription.sms}
+            {subscription.balance == -1
+              ? t("unlimited_sms")
+              : subscription.balance}
           </div>
         );
       },
@@ -99,9 +104,9 @@ export function getColumns({
         const subscription = row.original;
         return (
           <div className="text-muted-foreground">
-            {subscription.whatsapp == -1
+            {subscription.balance == -1
               ? t("unlimited_whatsapp_messages")
-              : subscription.whatsapp}
+              : subscription.balance}
           </div>
         );
       },
@@ -115,8 +120,8 @@ export function getColumns({
         const subscription = row.original;
         return (
           <div className="text-muted-foreground">
-            {subscription.email != -1
-              ? subscription.email
+            {subscription.balance != -1
+              ? subscription.balance
               : t("unlimited_emails")}
           </div>
         );
@@ -139,7 +144,7 @@ export function getColumns({
 function ActionCells({
   subscription,
 }: {
-  subscription: RouterOutputs["subscription"]["all"][number];
+  subscription: RouterOutputs["notificationSubscription"]["all"][number];
 }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
@@ -158,11 +163,13 @@ function ActionCells({
   const queryClient = useQueryClient();
 
   const deleteSubscriptionMutation = useMutation(
-    trpc.subscription.delete.mutationOptions({
+    trpc.notificationSubscription.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter(),
+          trpc.notificationSubscription.all.pathFilter(),
+        );
+        await queryClient.invalidateQueries(
+          trpc.notificationSubscription.count.pathFilter(),
         );
         toast.success(t("success"), { id: 0 });
       },
@@ -188,7 +195,7 @@ function ActionCells({
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             onSelect={() => {
-              router.push(`/users/${subscription.user.id}/subscriptions`);
+              router.push(`/users/${subscription.entityId}/subscriptions`);
             }}
           >
             <Receipt />

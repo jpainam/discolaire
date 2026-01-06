@@ -49,15 +49,17 @@ export function SubscriptionHeader() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data: totals } = useSuspenseQuery(
-    trpc.subscription.count.queryOptions(),
+    trpc.notificationSubscription.count.queryOptions(),
   );
 
   const deleteSubscriptionMutation = useMutation(
-    trpc.subscription.clearAll.mutationOptions({
+    trpc.notificationSubscription.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter(),
+          trpc.notificationSubscription.all.pathFilter(),
+        );
+        await queryClient.invalidateQueries(
+          trpc.notificationSubscription.count.pathFilter(),
         );
         toast.success(t("success"), { id: 0 });
       },
@@ -191,7 +193,7 @@ export function SubscriptionHeader() {
                       });
                       if (isConfirmed) {
                         toast.loading(t("Processing"), { id: 0 });
-                        deleteSubscriptionMutation.mutate();
+                        deleteSubscriptionMutation.mutate([]);
                       }
                     }}
                     variant="destructive"

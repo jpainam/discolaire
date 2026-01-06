@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
@@ -45,19 +46,19 @@ const formSchema = z.object({
 export function CreateEditSubscription({
   subscription,
 }: {
-  subscription?: RouterOutputs["subscription"]["all"][number];
+  subscription?: RouterOutputs["notificationSubscription"]["all"][number];
 }) {
   const form = useForm({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
-      userId: subscription?.userId ?? "",
-      emails: subscription?.email ?? 0,
-      plan: subscription?.plan ?? "hobby",
-      unlimitedEmails: subscription?.email === -1,
-      sms: subscription?.sms ?? 0,
-      unlimitedSms: subscription?.sms === -1,
-      whatsapp: subscription?.whatsapp ?? 0,
-      unlimitedWhatsapp: subscription?.whatsapp === -1,
+      userId: "",
+      emails: 0,
+      plan: "hobby",
+      unlimitedEmails: false,
+      sms: 0,
+      unlimitedSms: false,
+      whatsapp: 0,
+      unlimitedWhatsapp: false,
     },
   });
   const trpc = useTRPC();
@@ -66,11 +67,13 @@ export function CreateEditSubscription({
   const { closeSheet } = useSheet();
   const queryClient = useQueryClient();
   const upsertSubscriptionMutation = useMutation(
-    trpc.subscription.upsert.mutationOptions({
+    trpc.notificationSubscription.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter(),
+          trpc.notificationSubscription.all.pathFilter(),
+        );
+        await queryClient.invalidateQueries(
+          trpc.notificationSubscription.count.pathFilter(),
         );
         toast.success(t("success"), { id: 0 });
         closeSheet();
@@ -83,11 +86,13 @@ export function CreateEditSubscription({
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     toast.loading(t("Processing"), { id: 0 });
     upsertSubscriptionMutation.mutate({
-      userId: data.userId,
+      entityId: data.userId,
       plan: data.plan,
-      sms: data.unlimitedSms ? -1 : data.sms,
-      email: data.unlimitedEmails ? -1 : data.emails,
-      whatsapp: data.unlimitedWhatsapp ? -1 : data.whatsapp,
+      channel: "EMAIL",
+      profile: "STUDENT",
+      balance: data.unlimitedSms ? -1 : data.sms,
+      //email: data.unlimitedEmails ? -1 : data.emails,
+      //whatsapp: data.unlimitedWhatsapp ? -1 : data.whatsapp,
     });
   };
 

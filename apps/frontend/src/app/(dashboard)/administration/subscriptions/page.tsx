@@ -9,10 +9,10 @@ import { SubscriptionDataTable } from "./SuscriptionDataTable";
 
 export default function Page() {
   batchPrefetch([
-    trpc.subscription.all.queryOptions({
+    trpc.notificationSubscription.all.queryOptions({
       limit: 1000,
     }),
-    trpc.subscription.count.queryOptions(),
+    trpc.notificationSubscription.count.queryOptions(),
   ]);
   return (
     <HydrateClient>

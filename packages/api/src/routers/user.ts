@@ -235,9 +235,21 @@ export const userRouter = {
   subscription: protectedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
-      return ctx.db.subscription.findFirst({
+      const user = await ctx.db.user.findUniqueOrThrow({
         where: {
-          userId: input,
+          id: input,
+        },
+      });
+      const entity = await ctx.services.user.getEntity(
+        user.id,
+        user.profile as "student" | "contact" | "staff",
+      );
+      if (!entity.entityId) {
+        return null;
+      }
+      return ctx.db.notificationSubscription.findFirst({
+        where: {
+          entityId: entity.entityId,
         },
       });
     }),

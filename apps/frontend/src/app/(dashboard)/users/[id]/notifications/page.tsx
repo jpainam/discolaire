@@ -9,7 +9,10 @@ import { NotificationPreferences } from "./NotificationPreferences";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   prefetch(
-    trpc.notificationPreference.user.queryOptions({ userId: params.id }),
+    trpc.notificationPreference.user.queryOptions({
+      entityId: params.id,
+      profile: "STUDENT",
+    }),
   );
   return (
     <HydrateClient>

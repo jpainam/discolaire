@@ -38,6 +38,7 @@ import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
 import { notificationRouter } from "./routers/notification";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
+import { notificationSubscriptionRouter } from "./routers/notificationSubscription";
 import { notificationTemplateRouter } from "./routers/notificationTemplate";
 import { photoRouter } from "./routers/photo";
 import { recipientRouter } from "./routers/recipient";
@@ -60,7 +61,6 @@ import { subjectGroupRouter } from "./routers/subjectGroup";
 import { subjectJournalRouter } from "./routers/subjectJournal";
 import { subjectProgramRouter } from "./routers/subjectProgram";
 import { subjectTimetableRouter } from "./routers/subjectTimetable";
-import { subscriptionRouter } from "./routers/subscription";
 import { termRouter } from "./routers/term";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
@@ -90,7 +90,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   bible: bibleRouter,
   accountingJournal: accountingJournal,
-  subscription: subscriptionRouter,
+  notificationSubscription: notificationSubscriptionRouter,
   convocation: convocationRouter,
   student: studentRouter,
   scheduleTask: scheduleTaskRouter,

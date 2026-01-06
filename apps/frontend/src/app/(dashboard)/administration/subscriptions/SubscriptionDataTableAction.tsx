@@ -18,7 +18,7 @@ import { useTRPC } from "~/trpc/react";
 export function SubscriptionDataTableAction({
   table,
 }: {
-  table: Table<RouterOutputs["subscription"]["all"][number]>;
+  table: Table<RouterOutputs["notificationSubscription"]["all"][number]>;
 }) {
   const confirm = useConfirm();
 
@@ -32,14 +32,16 @@ export function SubscriptionDataTableAction({
   const trpc = useTRPC();
 
   const deleteSubscriptionMutation = useMutation(
-    trpc.subscription.delete.mutationOptions({
+    trpc.notificationSubscription.delete.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.subscription.all.pathFilter());
         await queryClient.invalidateQueries(
-          trpc.subscription.count.pathFilter(),
+          trpc.notificationSubscription.all.pathFilter(),
+        );
+        await queryClient.invalidateQueries(
+          trpc.notificationSubscription.count.pathFilter(),
         );
         table.toggleAllRowsSelected(false);
         toast.success(t("deleted_successfully"), { id: 0 });
