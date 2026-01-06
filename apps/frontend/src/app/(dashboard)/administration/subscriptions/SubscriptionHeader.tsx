@@ -6,7 +6,6 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
-  Mail,
   MessageCircle,
   MessageSquare,
   MoreVertical,
@@ -15,7 +14,6 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { sync_attendance } from "~/actions/sync_attendance";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -24,6 +22,7 @@ import {
   Card,
   CardAction,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -37,7 +36,8 @@ import {
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { DeleteIcon } from "~/icons";
+import { ContactIcon, DeleteIcon, MailIcon, UsersIcon } from "~/icons";
+import { cn } from "~/lib/utils";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -79,29 +79,46 @@ export function SubscriptionHeader() {
   );
   const totalData = [
     {
+      title: "Staff",
+      value: totals.sms,
+      icon: <UsersIcon />,
+      unlimited: totals.unlimitedSms,
+      textColor: "text-violet-600",
+    },
+    {
+      title: "Contact",
+      value: totals.sms,
+      icon: <ContactIcon />,
+      unlimited: totals.unlimitedSms,
+      textColor: "text-green-600",
+    },
+    {
       title: "SMS",
       value: totals.sms,
       icon: <MessageSquare className="text-muted-foreground h-4 w-4" />,
       unlimited: totals.unlimitedSms,
+      textColor: "text-red-600",
     },
     {
       title: "WhatsApp",
       value: totals.whatsapp,
       icon: <MessageCircle className="text-muted-foreground h-4 w-4" />,
       unlimited: totals.unlimitedWhatsapp,
+      textColor: "text-yellow-600",
     },
     {
       title: "Email",
       value: totals.email,
-      icon: <Mail className="text-muted-foreground h-4 w-4" />,
+      icon: <MailIcon />,
       unlimited: totals.unlimitedEmail,
+      textColor: "text-cyan-600",
     },
   ];
 
-  const updateAttendance = async () => {
-    const r = await sync_attendance();
-    toast.success(`${r} attendance updated`, { id: 0 });
-  };
+  // const updateAttendance = async () => {
+  //   const r = await sync_attendance();
+  //   toast.success(`${r} attendance updated`, { id: 0 });
+  // };
   return (
     <div className="px-4 py-2">
       <div className="flex items-center justify-between">
@@ -115,7 +132,6 @@ export function SubscriptionHeader() {
                   view: <CreateEditSubscription />,
                 });
               }}
-              size={"sm"}
             >
               <PlusIcon />
               {t("create")}
@@ -130,14 +146,14 @@ export function SubscriptionHeader() {
           >
             Sync transactions
           </Button> */}
-          <Button
+          {/* <Button
             onClick={async () => {
               toast.loading(t("Processing"), { id: 0 });
               await updateAttendance();
             }}
           >
             Sync attendance
-          </Button>
+          </Button> */}
           {/* <Button
             onClick={async () => {
               const r = await find_missing_transaction2();
@@ -207,22 +223,18 @@ export function SubscriptionHeader() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="grid gap-4 pt-2 md:grid-cols-3">
+      <div className="grid gap-4 pt-2 md:grid-cols-5">
         {totalData.map((item) => (
-          <Card key={item.title} className="gap-2">
+          <Card key={item.title}>
             <CardHeader>
               <CardTitle>Total {item.title}</CardTitle>
+              <CardDescription>{item.unlimited} illimité</CardDescription>
               <CardAction>{item.icon}</CardAction>
             </CardHeader>
             <CardContent>
-              <div className="text-lg font-bold">{item.value}</div>
-              <p className="text-muted-foreground text-xs">
-                {t("users_with_unlimited", {
-                  unlimited: item.unlimited,
-                  title: item.title,
-                })}
-                {/* {item.unlimited} users with unlimited {item.title} */}
-              </p>
+              <span className={cn("text-3xl", item.textColor)}>
+                {item.value}
+              </span>
             </CardContent>
           </Card>
         ))}

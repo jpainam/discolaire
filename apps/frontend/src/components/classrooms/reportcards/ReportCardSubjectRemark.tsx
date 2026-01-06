@@ -5,7 +5,9 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { Badge } from "~/components/base-badge";
 import { AppreciationSelector } from "~/components/shared/selects/AppreciationSelector";
+import { Button } from "~/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
@@ -25,15 +27,21 @@ import { UserLink } from "~/components/UserLink";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
-export function ReportCardClassroomCouncil({
+export function ReportCardSubjectRemark({
   classroomId,
   termId,
+  subjectId,
 }: {
   classroomId: string;
   termId: string;
+  subjectId: string;
 }) {
   const t = useTranslations();
   const trpc = useTRPC();
+
+  const { data: subject } = useSuspenseQuery(
+    trpc.subject.get.queryOptions(subjectId),
+  );
 
   const reportQuery = useQuery(
     trpc.reportCard.getSequence.queryOptions({
@@ -77,13 +85,16 @@ export function ReportCardClassroomCouncil({
           <TableHeader>
             <TableRow>
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead className="text-center">Abs. Just/NonJ</TableHead>
-              <TableHead className="text-center">Consigne</TableHead>
-              <TableHead className="text-center">Bavardage</TableHead>
-              <TableHead className="text-center">Exclusion</TableHead>
+              <TableHead className="text-center">Abs/Just</TableHead>
+              <TableHead>{subject.course.reportName}</TableHead>
               <TableHead className="text-center">Moy.</TableHead>
               <TableHead className="text-center">Rang</TableHead>
-              <TableHead className="text-center">Conseil de classe</TableHead>
+              <TableHead className="text-center">
+                <div className="flex items-center justify-between pr-4">
+                  <span>Appréciation matière</span>
+                  <Button>{t("submit")}</Button>
+                </div>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -93,6 +104,9 @@ export function ReportCardClassroomCouncil({
               if (!studentReport || !student) {
                 return null;
               }
+              const s = studentReport.studentCourses.find(
+                (subj) => subj.subjectId == Number(subjectId),
+              );
               const disc = disciplines?.get(student.id);
               return (
                 <TableRow
@@ -108,16 +122,30 @@ export function ReportCardClassroomCouncil({
                     />
                   </TableCell>
                   <TableCell>
-                    {disc?.justifiedAbsence} /{" "}
-                    {(disc?.absence ?? 0) - (disc?.justifiedAbsence ?? 0)}
+                    <Badge
+                      appearance={"light"}
+                      variant={
+                        disc?.absence != 0
+                          ? "destructive"
+                          : disc.justifiedAbsence != 0
+                            ? "warning"
+                            : "secondary"
+                      }
+                    >
+                      {disc?.absence} / {disc?.justifiedAbsence ?? 0}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-center">
-                    {disc?.consigne}
+                    <Badge
+                      appearance={"light"}
+                      variant={
+                        (s?.average ?? 0) < 10 ? "destructive" : "success"
+                      }
+                    >
+                      {s?.average?.toFixed(2)}
+                    </Badge>
                   </TableCell>
-                  <TableCell className="text-center">{disc?.chatter}</TableCell>
-                  <TableCell className="text-center">
-                    {disc?.exclusion}
-                  </TableCell>
+
                   <TableCell className="text-center">
                     {value.average.toFixed(2)}
                   </TableCell>
@@ -126,7 +154,7 @@ export function ReportCardClassroomCouncil({
                     <div className="flex items-center gap-1">
                       <InputGroup>
                         <InputGroupInput
-                          placeholder="Saisir conseil..."
+                          placeholder="Saisir appréciation..."
                           value={councilNotes[student.id] ?? ""}
                           onChange={(event) => {
                             const nextValue = event.target.value;

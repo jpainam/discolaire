@@ -2,16 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { Badge } from "~/components/base-badge";
 import { AppreciationSelector } from "~/components/shared/selects/AppreciationSelector";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "~/components/ui/input-group";
+import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
@@ -21,11 +16,12 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { Textarea } from "~/components/ui/textarea";
 import { UserLink } from "~/components/UserLink";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
-export function ReportCardClassroomCouncil({
+export function ReportCardOverallAppreciation({
   classroomId,
   termId,
 }: {
@@ -41,6 +37,7 @@ export function ReportCardClassroomCouncil({
       termId,
     }),
   );
+
   const { data: students } = useSuspenseQuery(
     trpc.classroom.students.queryOptions(classroomId),
   );
@@ -48,7 +45,10 @@ export function ReportCardClassroomCouncil({
   const disciplineQuery = useQuery(
     trpc.discipline.sequence.queryOptions({ termId, classroomId }),
   );
-  const [councilNotes, setCouncilNotes] = useState<Record<string, string>>({});
+  const [appreciations, setAppreciations] = useState<Record<string, string>>(
+    {},
+  );
+  const [avis, setAvis] = useState<Record<string, string>>({});
   const { studentsMap } = useMemo(() => {
     const studentsMap = new Map(students.map((s) => [s.id, s]));
     return { studentsMap };
@@ -75,15 +75,19 @@ export function ReportCardClassroomCouncil({
       <div className="bg-background overflow-hidden border-y">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-muted/50">
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead className="text-center">Abs. Just/NonJ</TableHead>
-              <TableHead className="text-center">Consigne</TableHead>
-              <TableHead className="text-center">Bavardage</TableHead>
-              <TableHead className="text-center">Exclusion</TableHead>
+              <TableHead className="text-center">Abs/Just.</TableHead>
+              <TableHead className="text-center">{t("courses")}</TableHead>
               <TableHead className="text-center">Moy.</TableHead>
               <TableHead className="text-center">Rang</TableHead>
-              <TableHead className="text-center">Conseil de classe</TableHead>
+              <TableHead className="text-center">App. A: Travail</TableHead>
+              <TableHead>
+                <div className="flex flex-row items-center justify-between px-2">
+                  <span>App. B: Avis Global</span>
+                  <Button>Valider</Button>
+                </div>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -108,57 +112,72 @@ export function ReportCardClassroomCouncil({
                     />
                   </TableCell>
                   <TableCell>
-                    {disc?.justifiedAbsence} /{" "}
-                    {(disc?.absence ?? 0) - (disc?.justifiedAbsence ?? 0)}
+                    <Badge
+                      appearance={"light"}
+                      variant={
+                        disc?.absence != 0
+                          ? "destructive"
+                          : disc.justifiedAbsence != 0
+                            ? "warning"
+                            : "secondary"
+                      }
+                    >
+                      {disc?.absence} / {disc?.justifiedAbsence ?? 0}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-center">
-                    {disc?.consigne}
-                  </TableCell>
-                  <TableCell className="text-center">{disc?.chatter}</TableCell>
-                  <TableCell className="text-center">
-                    {disc?.exclusion}
+                    {studentReport.studentCourses.length}
                   </TableCell>
                   <TableCell className="text-center">
-                    {value.average.toFixed(2)}
+                    <Badge
+                      variant={value.average < 10 ? "destructive" : "success"}
+                      appearance={"light"}
+                    >
+                      {value.average.toFixed(2)}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-center">{value.rank}</TableCell>
-                  <TableCell className="w-full">
-                    <div className="flex items-center gap-1">
-                      <InputGroup>
-                        <InputGroupInput
-                          placeholder="Saisir conseil..."
-                          value={councilNotes[student.id] ?? ""}
-                          onChange={(event) => {
-                            const nextValue = event.target.value;
-                            setCouncilNotes((prev) => ({
-                              ...prev,
-                              [student.id]: nextValue,
-                            }));
-                          }}
-                        />
-                        <InputGroupAddon align="inline-end">
-                          <InputGroupButton
-                            aria-label="clear"
-                            title="Clear"
-                            type="button"
-                            size="icon-xs"
-                            disabled={!councilNotes[student.id]}
-                            onClick={() => {
-                              setCouncilNotes((prev) => ({
-                                ...prev,
-                                [student.id]: "",
-                              }));
-                            }}
-                          >
-                            {councilNotes[student.id] && <XIcon />}
-                          </InputGroupButton>
-                        </InputGroupAddon>
-                      </InputGroup>
-
+                  <TableCell className="w-1/2">
+                    <div className="flex gap-1">
+                      <Textarea
+                        placeholder="Saisir une appréciation"
+                        defaultValue={appreciations[student.id]}
+                        onChange={(event) => {
+                          const nextValue = event.target.value;
+                          setAppreciations((prev) => ({
+                            ...prev,
+                            [student.id]: nextValue,
+                          }));
+                        }}
+                      />
                       <AppreciationSelector
                         className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
                         onSelectAction={(e) => {
-                          setCouncilNotes((prev) => ({
+                          setAppreciations((prev) => ({
+                            ...prev,
+                            [student.id]: e.content,
+                          }));
+                        }}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="w-1/2">
+                    <div className="flex gap-1">
+                      <Textarea
+                        placeholder="Saisir votre avis"
+                        defaultValue={avis[student.id]}
+                        onChange={(event) => {
+                          const nextValue = event.target.value;
+                          setAvis((prev) => ({
+                            ...prev,
+                            [student.id]: nextValue,
+                          }));
+                        }}
+                      />
+                      <AppreciationSelector
+                        className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
+                        onSelectAction={(e) => {
+                          setAvis((prev) => ({
                             ...prev,
                             [student.id]: e.content,
                           }));

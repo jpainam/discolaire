@@ -2,7 +2,8 @@ import { Twilio } from "twilio";
 
 import { env } from "../env";
 
-const client = new Twilio(env.TWILIO_ACCOUNT_SID, env.TWILIO_AUTH_TOKEN);
+const accountSid = env.TWILIO_ACCOUNT_SID;
+const client = new Twilio(accountSid, env.TWILIO_AUTH_TOKEN);
 const twilioFrom = env.TWILIO_SMS_FROM;
 export async function sendSmsTwilio(opts: {
   toPhone: string;

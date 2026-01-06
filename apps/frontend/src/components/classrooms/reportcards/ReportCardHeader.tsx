@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
+import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { Button } from "~/components/ui/button";
 import {
@@ -20,6 +21,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
 import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import {
   EnrollmentIcon,
@@ -27,15 +29,17 @@ import {
   FilesIcon,
   MoreIcon,
   ReportGradeIcon,
-  UserIcon,
   UsersIcon,
 } from "~/icons";
 import { sidebarIcons } from "../sidebar-icons";
+import { ClassroomSubjectModal } from "./ClassroomSubjectModal";
 
 export function ReportCardHeader() {
   const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
-
+  const [action] = useQueryState("action");
+  const [subjectId] = useQueryState("subjectId");
+  const { openModal } = useModal();
   const [termId] = useQueryState("termId");
 
   const params = useParams<{ id: string }>();
@@ -43,9 +47,11 @@ export function ReportCardHeader() {
   const router = useRouter();
 
   return (
-    <div className="bg-muted/40 grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
-      {Icon && <Icon className="hidden h-4 w-4 md:block" />}
-      <Label className="hidden md:block">{t("term")}</Label>
+    <div className="bg-muted/40 grid flex-row items-center gap-6 border-y px-4 py-1 md:flex">
+      <div className="hidden items-center gap-2 md:flex">
+        {Icon && <Icon className="hidden h-4 w-4 md:block" />}
+        <Label className="hidden md:block">{t("term")}</Label>
+      </div>
       <TermSelector
         className="md:w-[350px]"
         defaultValue={termId}
@@ -56,6 +62,24 @@ export function ReportCardHeader() {
           );
         }}
       />
+      {action == "subjects" && (
+        <div className="flex items-center gap-2">
+          <Label>{t("subjects")}</Label>
+          <SubjectSelector
+            className="md:w-[350px]"
+            classroomId={params.id}
+            defaultValue={subjectId ?? undefined}
+            onChange={(value) => {
+              router.push(
+                `/classrooms/${params.id}/reportcards?` +
+                  createQueryString({
+                    subjectId: value,
+                  }),
+              );
+            }}
+          />
+        </div>
+      )}
 
       <div className="flex flex-row items-center gap-2 md:ml-auto">
         <DropdownMenu>
@@ -94,19 +118,31 @@ export function ReportCardHeader() {
                   toast.warning("Veuillez choisir une période");
                   return;
                 }
-                router.push(
-                  `/classrooms/${params.id}/reportcards?` +
-                    createQueryString({
-                      action: "subjects",
-                      termId: termId,
-                    }),
-                );
+                openModal({
+                  title: t("subjects"),
+                  description: "Veuillez choisir la matière",
+                  view: (
+                    <ClassroomSubjectModal
+                      onSelectAction={(value) => {
+                        router.push(
+                          `/classrooms/${params.id}/reportcards?` +
+                            createQueryString({
+                              action: "subjects",
+                              termId: termId,
+                              subjectId: value,
+                            }),
+                        );
+                      }}
+                      classroomId={params.id}
+                    />
+                  ),
+                });
               }}
             >
               <UsersIcon />
               Professeurs / Matières
             </DropdownMenuItem>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               onSelect={() => {
                 if (!termId) {
                   toast.warning("Veuillez choisir une période");
@@ -123,7 +159,7 @@ export function ReportCardHeader() {
             >
               <UserIcon />
               Prof. Principal
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem
               onSelect={() => {
                 if (!termId) {

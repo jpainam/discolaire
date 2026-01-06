@@ -29,12 +29,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
 export function AppreciationSelector({
   onSelectAction,
+  className,
 }: {
   onSelectAction: ({ id, content }: { id: number; content: string }) => void;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const trpc = useTRPC();
@@ -49,11 +52,7 @@ export function AppreciationSelector({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          className="opacity-0 transition-opacity group-hover/row-council:opacity-100"
-          size={"icon"}
-          variant={"secondary"}
-        >
+        <Button className={cn(className)} size={"icon"} variant={"secondary"}>
           <HugeiconsIcon icon={MagicWand01Icon} />
         </Button>
       </PopoverTrigger>

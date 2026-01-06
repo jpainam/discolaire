@@ -30,7 +30,6 @@ import {
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Skeleton } from "~/components/ui/skeleton";
-import { Spinner } from "~/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -80,7 +79,7 @@ export function ReportCardSkillAcquisition({
   }, 500);
   const t = useTranslations();
 
-  const skillQuery = useQuery(
+  const { data: skills } = useSuspenseQuery(
     trpc.skillAcquisition.all.queryOptions({ classroomId, termId }),
   );
 
@@ -88,10 +87,6 @@ export function ReportCardSkillAcquisition({
     return gradesheets.filter((g) => g.termId == termId);
   }, [gradesheets, termId]);
 
-  const skills = skillQuery.data;
-  if (skillQuery.isPending) {
-    return <Spinner className="size-5" />;
-  }
   return (
     <div className="flex flex-col gap-2">
       <div className="border-y px-4 py-1">
@@ -168,7 +163,7 @@ export function ReportCardSkillAcquisition({
                 </TableHeader>
                 <TableBody>
                   {filtered.map((gs) => {
-                    const skill = skills?.find(
+                    const skill = skills.find(
                       (s) => s.termId == termId && s.subjectId == gs.subjectId,
                     );
                     return (
