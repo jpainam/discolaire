@@ -3,7 +3,11 @@ import { addDays, format, subDays } from "date-fns";
 import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
-import { AttendanceType } from "@repo/db";
+import {
+  AttendanceType,
+  EntityProfile,
+  NotificationSourceType,
+} from "@repo/db";
 
 import { attendanceToData } from "../services/attendance-service";
 import { protectedProcedure } from "../trpc";
@@ -365,6 +369,7 @@ export const attendanceRouter = {
     .input(
       z.object({
         id: z.number(),
+        templateId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -375,10 +380,70 @@ export const attendanceRouter = {
         include: {
           student: {
             include: {
-              studentContacts: true,
+              studentContacts: {
+                include: {
+                  contact: true,
+                },
+              },
             },
           },
         },
+      });
+      const templateId =
+        input.templateId ??
+        (
+          await ctx.db.notificationTemplate.findFirst({
+            where: {
+              schoolId: ctx.schoolId,
+              sourceType: NotificationSourceType.ATTENDANCE,
+              status: "ACTIVE",
+              channel: "EMAIL",
+            },
+            select: { id: true },
+          })
+        )?.id;
+
+      if (!templateId) {
+        throw new Error("No active attendance notification template found.");
+      }
+
+      const attendanceData = attendanceToData(attendance.data);
+      const studentName = `${attendance.student.firstName ?? ""} ${
+        attendance.student.lastName ?? ""
+      }`.trim();
+
+      const payload = {
+        attendanceId: attendance.id,
+        studentName,
+        studentId: attendance.studentId,
+        date: format(attendance.createdAt, "yyyy-MM-dd"),
+        ...attendanceData,
+      };
+
+      const recipients = attendance.student.studentContacts
+        .filter(
+          (item) =>
+            item.accessAttendance !== false && item.canAccessData !== false,
+        )
+        .map((item) => item.contact)
+        .filter(Boolean);
+
+      if (recipients.length === 0) return [];
+
+      return ctx.services.notification.notifyMany({
+        schoolId: ctx.schoolId,
+        sourceType: NotificationSourceType.ATTENDANCE,
+        items: recipients.map((contact) => ({
+          recipient: {
+            id: contact.id,
+            profile: EntityProfile.CONTACT,
+            email: contact.email,
+            phone: contact.phoneNumber1 ?? contact.phoneNumber2,
+          },
+          sourceId: String(attendance.id),
+          templateId,
+          payload,
+        })),
       });
     }),
 } satisfies TRPCRouterRecord;

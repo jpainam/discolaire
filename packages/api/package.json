@@ -22,7 +22,9 @@
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
+    "@aws-sdk/client-pinpoint-sms-voice-v2": "^3.962.0",
     "@aws-sdk/client-s3": "^3.962.0",
+    "@aws-sdk/client-sns": "^3.962.0",
     "@aws-sdk/s3-presigned-post": "^3.962.0",
     "@aws-sdk/s3-request-presigner": "^3.962.0",
     "@repo/auth": "workspace:*",
@@ -32,6 +34,9 @@
     "@t3-oss/env-nextjs": "^0.13.10",
     "@trpc/server": "catalog:",
     "@unkey/ratelimit": "^2.1.4",
+    "@vonage/auth": "^1.13.1",
+    "@vonage/server-client": "^1.18.1",
+    "@vonage/sms": "^1.19.1",
     "bullmq": "^5.66.4",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
@@ -44,6 +49,7 @@
     "nanoid": "^5.1.6",
     "next": "16.1.1",
     "superjson": "2.2.6",
+    "twilio": "^5.11.1",
     "uuid": "^13.0.0",
     "zod": "catalog:"
   },
