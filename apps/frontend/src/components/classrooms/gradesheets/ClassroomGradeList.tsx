@@ -301,7 +301,7 @@ export function ClassroomGradeList({
                               <MoreHorizontal />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-38">
+                          <DropdownMenuContent align="end">
                             {g && (
                               <DropdownMenuItem
                                 disabled={isClosed}

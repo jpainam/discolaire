@@ -35,6 +35,7 @@ import {
 import { UserLink } from "~/components/UserLink";
 import { routes } from "~/configs/routes";
 import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useIsMobile } from "~/hooks/use-mobile";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -55,18 +56,17 @@ const createGradeSchema = z.object({
 export function CreateGradeSheet({
   students,
   subjectId,
-  termId,
   className,
   term,
 }: {
   students: RouterOutputs["classroom"]["students"];
-  term: RouterOutputs["term"]["all"][number];
+  term: RouterOutputs["term"]["get"] | RouterOutputs["term"]["all"][number];
   subjectId: number;
-  termId: string;
   className?: string;
 }) {
   const t = useTranslations();
   const trpc = useTRPC();
+  const termId = term.id;
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const setInputRef = useCallback((el: HTMLInputElement | null, i: number) => {
@@ -153,6 +153,7 @@ export function CreateGradeSheet({
   const params = useParams<{ id: string }>();
 
   const { createQueryString } = useCreateQueryString();
+  const isMobile = useIsMobile();
 
   return (
     <div className={className}>
@@ -170,7 +171,7 @@ export function CreateGradeSheet({
       )}
       <Form {...form}>
         <form
-          className="flex w-full flex-col"
+          className="flex flex-col"
           onSubmit={form.handleSubmit(onSubmit)}
           onKeyDown={(e) => {
             if (
@@ -189,7 +190,7 @@ export function CreateGradeSheet({
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="gap-1">
+                <FormItem>
                   <FormLabel>{t("Label")}</FormLabel>
                   <FormControl>
                     <Input placeholder={t("Label")} {...field} />
@@ -203,7 +204,7 @@ export function CreateGradeSheet({
               control={form.control}
               name="scale"
               render={({ field }) => (
-                <FormItem className="gap-1">
+                <FormItem>
                   <FormLabel>{t("scale")}</FormLabel>
                   <FormControl>
                     <Input placeholder={t("scale")} type="number" {...field} />
@@ -261,8 +262,8 @@ export function CreateGradeSheet({
                   <TableHead className="w-[10px]"></TableHead>
                   <TableHead>{t("fullName")}</TableHead>
                   <TableHead>{t("grade")}</TableHead>
-                  <TableHead>{t("absence")}</TableHead>
-                  <TableHead>{t("appreciation")}</TableHead>
+                  <TableHead>{isMobile ? "abs" : t("absence")}</TableHead>
+                  <TableHead>{isMobile ? "" : t("appreciation")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -272,6 +273,7 @@ export function CreateGradeSheet({
                       <TableCell className="py-0">{index + 1}.</TableCell>
                       <TableCell className="py-0">
                         <UserLink
+                          className="w-[100px] overflow-hidden md:w-full"
                           profile="student"
                           id={st.id}
                           avatar={st.avatar}
@@ -294,13 +296,13 @@ export function CreateGradeSheet({
                               <FormControl>
                                 <Input
                                   {...field}
-                                  maxLength={6}
+                                  maxLength={4}
                                   autoComplete="off"
                                   inputMode="numeric"
-                                  size={6}
+                                  size={4}
                                   // step=".01"
                                   type="number"
-                                  className="h-8 w-[150px] text-sm"
+                                  className="h-8 w-[100px] text-sm"
                                   ref={(el) => setInputRef(el, index)}
                                   onKeyDown={(e) => handleKeyDown(e, index)}
                                   onWheel={handleWheel}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { ArrowRightLeft, ChevronRight, MoreVertical } from "lucide-react";
+import { ChevronRight, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
@@ -17,6 +17,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { EnrollmentIcon } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { EnrollStudentModal } from "./EnrollStudentModal";
@@ -37,13 +38,14 @@ export function StudentEnrollmentHeader({
   const disabled = student.status !== StudentStatus.ACTIVE;
 
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-b px-4 py-1">
-      <ArrowRightLeft className="h-4 w-4" />
-      <Label>{t("enrollments")}</Label>
+    <div className="bg-muted/50 flex flex-row items-center gap-6 border-b px-4 py-1">
+      <div className="flex items-center gap-2">
+        <EnrollmentIcon className="hidden md:flex" />
+        <Label>{t("enrollments")}</Label>
+      </div>
       <div className="ml-auto flex flex-row items-center gap-2">
         {!isEnrolled && canEnroll && (
           <Button
-            size={"sm"}
             disabled={!schoolYear.isActive || disabled}
             onClick={() => {
               openModal({
@@ -61,7 +63,7 @@ export function StudentEnrollmentHeader({
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} className="size-8" variant={"outline"}>
+            <Button size={"icon"} variant={"outline"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

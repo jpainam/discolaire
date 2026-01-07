@@ -80,7 +80,7 @@ export function EnrollmentHeader({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "bg-muted text-secondary-foreground grid grid-cols-2 items-center gap-4 px-4 py-1 md:flex md:flex-row",
+        "bg-muted/50 grid grid-cols-2 items-center gap-4 px-4 py-1 lg:flex ",
         className,
       )}
     >

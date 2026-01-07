@@ -31,13 +31,13 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
-import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
+import { CreateClassroomGradeSheetModal } from "./CreateClassroomGradesheetModal";
 import { ImportGradesheetModal } from "./ImportGradesheetModal";
 
 export function GradeSheetHeader() {
@@ -50,12 +50,13 @@ export function GradeSheetHeader() {
     trpc.classroom.students.queryOptions(params.id),
   );
 
-  const [term, setTerm] = useQueryState("termId");
+  const [termId, setTermId] = useQueryState("termId");
   const { schoolYear } = useSchool();
-  const [subject, setSubject] = useQueryState("subjectId");
+  const [subjectId, setSubjectId] = useQueryState("subjectId");
 
   const t = useTranslations();
   const router = useRouter();
+
   const canCreateGradeSheet = useCheckPermission(
     "gradesheet",
     PermissionAction.CREATE,
@@ -121,18 +122,18 @@ export function GradeSheetHeader() {
       <Label className="hidden md:flex">{t("term")}</Label>
       <TermSelector
         showAllOption={true}
-        defaultValue={term}
+        defaultValue={termId}
         onChange={(val) => {
-          void setTerm(val ?? null);
+          void setTermId(val ?? null);
         }}
         className="w-[300px]"
       />
       <Label className="hidden md:flex">{t("subject")}</Label>
       <SubjectSelector
         className="md:w-[300px]"
-        defaultValue={subject ?? undefined}
+        defaultValue={subjectId ?? undefined}
         onChange={(val) => {
-          void setSubject(val ?? null);
+          void setSubjectId(val ?? null);
         }}
         classroomId={params.id}
       />
@@ -149,7 +150,22 @@ export function GradeSheetHeader() {
           <Button
             disabled={!schoolYear.isActive}
             onClick={() => {
-              router.push(routes.classrooms.gradesheets.create(params.id));
+              openModal({
+                title: "Créer une fiche de saisie",
+                description: `Classe ${classroom.name}`,
+                view: (
+                  <CreateClassroomGradeSheetModal
+                    onSelectAction={(t: string, s: string) => {
+                      router.push(
+                        `/classrooms/${params.id}/gradesheets/create?termId=${t}&subjectId=${s}`,
+                      );
+                    }}
+                    termId={termId}
+                    subjectId={subjectId}
+                    classroomId={params.id}
+                  />
+                ),
+              });
             }}
           >
             <PlusIcon />
@@ -220,8 +236,14 @@ export function GradeSheetHeader() {
           <DropdownMenuContent align="end" className="w-42">
             <DropdownMenuItem
               onSelect={() => {
+                if (!termId || !subjectId) {
+                  toast.warning(
+                    "Veuillez sélectionner un terme et une matière",
+                  );
+                  return;
+                }
                 window.open(
-                  `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=pdf`,
+                  `/api/pdfs/classroom/${params.id}/gradesheets?termId=${termId}&subjectId=${subjectId}&format=pdf`,
                   "_blank",
                 );
               }}
@@ -232,7 +254,7 @@ export function GradeSheetHeader() {
             <DropdownMenuItem
               onSelect={() => {
                 window.open(
-                  `/api/pdfs/classroom/${params.id}/gradesheets?termId=${term ?? 0}&subjectId=${subject ?? 0}&format=csv`,
+                  `/api/pdfs/classroom/${params.id}/gradesheets?termId=${termId}&subjectId=${subjectId}&format=csv`,
                   "_blank",
                 );
               }}

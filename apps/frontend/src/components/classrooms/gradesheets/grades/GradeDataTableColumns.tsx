@@ -230,7 +230,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
               <DotsHorizontalIcon />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-38">
+          <DropdownMenuContent align="end">
             <DropdownMenuItem
               disabled={isClosed}
               onSelect={() => {
@@ -275,7 +275,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
                 }
               }}
             >
-              <FlagOff className="size-4" />
+              <FlagOff  />
               {t("mark_absent")}
             </DropdownMenuItem>
           </DropdownMenuContent>

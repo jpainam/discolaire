@@ -38,7 +38,7 @@ export function ClassroomDetails() {
     trpc.classroom.get.queryOptions(params.id),
   );
   return (
-    <div className="grid grid-cols-1 gap-4 divide-x border-t p-2 md:grid-cols-4 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-4 divide-x border-t p-2 md:grid-cols-3 lg:grid-cols-5">
       <ItemLabel
         label={"name"}
         value={classroom.name}
