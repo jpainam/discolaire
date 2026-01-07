@@ -275,7 +275,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
                 }
               }}
             >
-              <FlagOff  />
+              <FlagOff />
               {t("mark_absent")}
             </DropdownMenuItem>
           </DropdownMenuContent>
