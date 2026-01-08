@@ -10,6 +10,7 @@ import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { Skeleton } from "~/components/ui/skeleton";
+import { ModalProvider } from "~/hooks/use-modal";
 import { SheetProvider } from "~/hooks/use-sheet";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
@@ -66,25 +67,27 @@ export default async function Layout({
         permissions={permissions}
       >
         <SheetProvider>
-          <AppSidebar className="p-0" variant="inset" />
-          <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
-          <SidebarInset className="border">
-            <HydrateClient>
-              <ErrorBoundary errorComponent={ErrorFallback}>
-                <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-                  <SiteHeader schoolYearId={schoolYearId} />
-                </Suspense>
-              </ErrorBoundary>
-            </HydrateClient>
-            <div className="flex flex-1 flex-col">
-              <div className="@container/main flex flex-1 flex-col gap-2">
-                {children}
+          <ModalProvider>
+            <AppSidebar className="p-0" variant="inset" />
+            <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
+            <SidebarInset className="border">
+              <HydrateClient>
+                <ErrorBoundary errorComponent={ErrorFallback}>
+                  <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+                    <SiteHeader schoolYearId={schoolYearId} />
+                  </Suspense>
+                </ErrorBoundary>
+              </HydrateClient>
+              <div className="flex flex-1 flex-col">
+                <div className="@container/main flex flex-1 flex-col gap-2">
+                  {children}
+                </div>
               </div>
-            </div>
-          </SidebarInset>
+            </SidebarInset>
 
-          <GlobalSheet />
-          <GlobalModal />
+            <GlobalSheet />
+            <GlobalModal />
+          </ModalProvider>
         </SheetProvider>
       </SchoolContextProvider>
     </SidebarProvider>
