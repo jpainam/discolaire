@@ -5,15 +5,16 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { FileTextIcon, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-
-
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { Button } from "~/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-
 
 export function SubjectHeader() {
   const trpc = useTRPC();
@@ -34,7 +35,7 @@ export function SubjectHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"} size={"icon"}>
-              <MoreVertical  />
+              <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

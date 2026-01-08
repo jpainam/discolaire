@@ -6,11 +6,7 @@ import { CheckCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
-
-
 import type { RouterOutputs } from "@repo/api";
-
-
 
 import { Badge } from "~/components/base-badge";
 import { Label } from "~/components/ui/label";
@@ -18,7 +14,6 @@ import { Progress } from "~/components/ui/progress";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
-
 
 interface PerfItem {
   label: string;

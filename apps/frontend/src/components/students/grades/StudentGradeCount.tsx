@@ -2,16 +2,24 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Notebook, NotepadText, ProportionsIcon, Rows3Icon } from "lucide-react";
+import {
+  Notebook,
+  NotepadText,
+  ProportionsIcon,
+  Rows3Icon,
+} from "lucide-react";
 import { useQueryState } from "nuqs";
 
-
-
-import { MetricCard, MetricCardGroup, MetricCardHeader, MetricCardTitle, MetricCardValue } from "~/components/metric-card";
+import {
+  MetricCard,
+  MetricCardGroup,
+  MetricCardHeader,
+  MetricCardTitle,
+  MetricCardValue,
+} from "~/components/metric-card";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { Label } from "~/components/ui/label";
 import { useTRPC } from "~/trpc/react";
-
 
 export function StudentGradeCount({ studentId }: { studentId: string }) {
   const trpc = useTRPC();

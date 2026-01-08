@@ -104,7 +104,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 </div>
               }
             >
-              <StudentGradesheetTable className="py-0" tableClassName="border-t" />
+              <StudentGradesheetTable
+                className="py-0"
+                tableClassName="border-t"
+              />
             </Suspense>
           </ErrorBoundary>
         </div>
