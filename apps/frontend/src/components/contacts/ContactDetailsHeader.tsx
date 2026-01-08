@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import {
   ImageMinus,
   ImageUpIcon,
@@ -38,11 +36,9 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { getFullName } from "~/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
@@ -82,16 +78,6 @@ export function ContactDetailsHeader() {
   const t = useTranslations();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
-
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-  useEffect(() => {
-    const breads = [
-      { name: t("home"), url: "/" },
-      { name: t("contacts"), url: "/contacts" },
-      { name: getFullName(contact), url: `/contacts/${contact.id}` },
-    ];
-    setBreadcrumbs(breads);
-  }, [contact, setBreadcrumbs, t]);
 
   const canUpdateContact = useCheckPermission(
     "contact",

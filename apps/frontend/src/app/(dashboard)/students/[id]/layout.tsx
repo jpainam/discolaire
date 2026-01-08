@@ -4,8 +4,10 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
 import { decode } from "entities";
+import { getTranslations } from "next-intl/server";
 
 import { getSession } from "~/auth/server";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { StudentFooter } from "~/components/students/StudentFooter";
@@ -14,6 +16,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
+import { getFullName } from "~/utils";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -79,9 +82,17 @@ export default async function Layout(props: {
   if (!canReadStudent) {
     return <NoPermission className="my-8" />;
   }
+  const t = await getTranslations();
 
   return (
     <HydrateClient>
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/" },
+          { label: t("students"), href: "/students", icon: "students" },
+          { label: getFullName(student) },
+        ]}
+      />
       <div className="flex flex-1 flex-col">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense

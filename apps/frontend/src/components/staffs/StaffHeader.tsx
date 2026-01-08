@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import { Download, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -10,7 +8,6 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStaff } from "./CreateEditStaff";
@@ -24,15 +21,6 @@ export function StaffHeader() {
   const canCreateStaff = useCheckPermission("staff", PermissionAction.CREATE);
 
   const { openSheet } = useSheet();
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-  useEffect(() => {
-    const breads = [
-      { name: t("home"), url: "/" },
-      { name: t("staffs"), url: "/staffs" },
-    ];
-
-    setBreadcrumbs(breads);
-  }, [staffs, setBreadcrumbs, t]);
 
   return (
     <div className="flex items-center justify-between p-2 px-4 lg:flex-row">

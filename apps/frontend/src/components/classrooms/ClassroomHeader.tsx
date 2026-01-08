@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import { MoreVertical, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -27,10 +25,10 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { EditIcon } from "~/icons";
-import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { BreadcrumbsSetter } from "../BreadcrumbsSetter";
 import PDFIcon from "../icons/pdf-solid";
 import XMLIcon from "../icons/xml-solid";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -93,22 +91,14 @@ export function ClassroomHeader() {
   );
   const { openSheet } = useSheet();
 
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-
-  useEffect(() => {
-    const classroom = classrooms.find((c) => c.id === params.id);
-    const breads = [
-      { name: t("home"), url: "/" },
-      { name: t("classrooms"), url: "/classrooms" },
-    ];
-    if (classroom) {
-      breads.push({ name: classroom.name, url: `/classrooms/${classroom.id}` });
-    }
-    setBreadcrumbs(breads);
-  }, [classrooms, params.id, setBreadcrumbs, t]);
-
   return (
     <div className="grid w-full flex-row items-center gap-2 px-4 py-1 md:flex">
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/", icon: "home" },
+          { label: t("classrooms"), href: "/classrooms" },
+        ]}
+      />
       <Label className="hidden md:block">{t("classrooms")}</Label>
       <ClassroomSelector
         className="w-full md:w-[400px]"

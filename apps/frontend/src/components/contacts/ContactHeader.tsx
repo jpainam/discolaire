@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import { MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -20,10 +18,10 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+import { BreadcrumbsSetter } from "../BreadcrumbsSetter";
 import { SearchCombobox } from "../SearchCombobox";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import CreateEditContact from "./CreateEditContact";
@@ -32,7 +30,7 @@ export function ContactHeader() {
   const router = useRouter();
 
   const t = useTranslations();
-  const params = useParams<{ id: string }>();
+
   const { openSheet } = useSheet();
   const { data: session } = authClient.useSession();
 
@@ -46,17 +44,6 @@ export function ContactHeader() {
     }),
   );
 
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-  useEffect(() => {
-    if (!params.id) {
-      const breads = [
-        { name: t("home"), url: "/" },
-        { name: t("contacts"), url: "/contacts" },
-      ];
-      setBreadcrumbs(breads);
-    }
-  }, [setBreadcrumbs, t, params.id]);
-
   const canCreateContact = useCheckPermission(
     "contact",
     PermissionAction.CREATE,
@@ -64,6 +51,12 @@ export function ContactHeader() {
 
   return (
     <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/", icon: "home" },
+          { label: t("contacts"), href: "/contacts", icon: "contact" },
+        ]}
+      />
       <Label className="hidden md:block">{t("contacts")}</Label>
       {/* <Button
         onClick={async () => {

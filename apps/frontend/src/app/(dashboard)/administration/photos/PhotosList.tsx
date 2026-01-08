@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
-import { useSetAtom } from "jotai";
 import { useTranslations } from "next-intl";
 
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import FolderIcon from "~/components/icons/folder-solid";
 import {
   Card,
@@ -13,25 +12,24 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { breadcrumbAtom } from "~/lib/atoms";
 
 export function PhotosList() {
   const t = useTranslations();
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-  useEffect(() => {
-    setBreadcrumbs([
-      {
-        name: t("Administration"),
-        url: "/administration",
-      },
-      {
-        name: t("Photos"),
-        url: "/administration/photos",
-      },
-    ]);
-  }, [setBreadcrumbs, t]);
+
   return (
     <div className="grid gap-4 lg:grid-cols-3">
+      <BreadcrumbsSetter
+        items={[
+          {
+            label: t("Administration"),
+            href: "/administration",
+          },
+          {
+            label: t("Photos"),
+            href: "/administration/photos",
+          },
+        ]}
+      />
       <PhotoListItem
         href={`/administration/photos/students`}
         title={t("Student photos")}

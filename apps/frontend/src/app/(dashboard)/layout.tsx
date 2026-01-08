@@ -2,9 +2,11 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { getSession } from "~/auth/server";
 import { AppSidebar } from "~/components/app-sidebar";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -46,6 +48,7 @@ export default async function Layout({
     ),
   ]);
   batchPrefetch([trpc.schoolYear.all.queryOptions()]);
+  const t = await getTranslations();
 
   return (
     <SidebarProvider
@@ -64,6 +67,7 @@ export default async function Layout({
       >
         <SheetProvider>
           <AppSidebar className="p-0" variant="inset" />
+          <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
           <SidebarInset className="border">
             <HydrateClient>
               <ErrorBoundary errorComponent={ErrorFallback}>

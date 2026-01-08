@@ -1,37 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
 import { useParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import { useTranslations } from "next-intl";
 
 import { Label } from "~/components/ui/label";
 import { useRouter } from "~/hooks/use-router";
-import { breadcrumbAtom } from "~/lib/atoms";
-import { useTRPC } from "~/trpc/react";
-import { getFullName } from "~/utils";
 import { StaffSelector } from "../shared/selects/StaffSelector";
 
 export function StaffDetailHeader() {
   const t = useTranslations();
-  const trpc = useTRPC();
-  const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
+
   const params = useParams<{ id: string }>();
 
   const router = useRouter();
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-  useEffect(() => {
-    const staff = staffs.find((c) => c.id === params.id);
-    const breads = [
-      { name: t("home"), url: "/" },
-      { name: t("staffs"), url: "/staffs" },
-    ];
-    if (staff) {
-      breads.push({ name: getFullName(staff), url: `/staffs/${staff.id}` });
-    }
-    setBreadcrumbs(breads);
-  }, [staffs, params.id, setBreadcrumbs, t]);
 
   return (
     <div className="grid flex-row items-center justify-between gap-4 px-4 py-1 lg:flex">

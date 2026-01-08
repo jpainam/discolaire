@@ -1,7 +1,7 @@
 "use client";
 
 import type * as RPNInput from "react-phone-number-input";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
@@ -10,8 +10,6 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { decode } from "entities";
-import { useSetAtom } from "jotai";
 import {
   BellRing,
   CheckIcon,
@@ -66,7 +64,6 @@ import {
   PrinterIcon,
   UsersIcon,
 } from "~/icons";
-import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -97,18 +94,6 @@ export function StudentHeader() {
     "student",
     PermissionAction.CREATE,
   );
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-
-  useEffect(() => {
-    setBreadcrumbs([
-      { name: t("home"), url: "/" },
-      { name: t("students"), url: "/students" },
-      {
-        name: decode(student.lastName ?? student.firstName ?? ""),
-        url: `/students/${student.id}`,
-      },
-    ]);
-  }, [student, setBreadcrumbs, t]);
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({

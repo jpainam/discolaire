@@ -6,7 +6,6 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, Reorder } from "framer-motion";
-import { useAtom } from "jotai";
 import { Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -16,16 +15,13 @@ import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
-import { selectedClassroomLevelAtom } from "./_atom";
 import { CreateEditLevel } from "./CreateEditLevel";
 
 export function ClassroomLevelTable() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const classroomLevelsQuery = useQuery(trpc.classroomLevel.all.queryOptions());
-  const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
-  );
+  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
 
   const t = useTranslations();
   const updateLevelOrder = useMutation(

@@ -1,7 +1,7 @@
 "use client";
 
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAtom } from "jotai";
 import { MoreVertical, PlusIcon, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -21,7 +21,6 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { selectedClassroomLevelAtom } from "./_atom";
 import { CreateEditLevel } from "./CreateEditLevel";
 
 export function ClassroomLevelHeader() {
@@ -29,9 +28,7 @@ export function ClassroomLevelHeader() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { openModal } = useModal();
-  const [selectedLevels, setSelectedLevels] = useAtom(
-    selectedClassroomLevelAtom,
-  );
+  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
 
   const deleteClassroomLevelMutation = useMutation(
     trpc.classroomLevel.delete.mutationOptions({

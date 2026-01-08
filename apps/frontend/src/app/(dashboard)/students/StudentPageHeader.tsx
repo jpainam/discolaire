@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import { MoreVertical, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { authClient } from "~/auth/client";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { SearchCombobox } from "~/components/SearchCombobox";
@@ -23,7 +23,6 @@ import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { breadcrumbAtom } from "~/lib/atoms";
 import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -48,20 +47,17 @@ export function StudentPageHeader() {
     }),
   );
 
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-  useEffect(() => {
-    const breads = [
-      { name: t("home"), url: "/" },
-      { name: t("students"), url: "/students" },
-    ];
-    setBreadcrumbs(breads);
-  }, [setBreadcrumbs, t]);
-
   if (session?.user.profile !== "staff") {
     return null;
   }
   return (
     <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/" },
+          { label: t("students"), href: "/students" },
+        ]}
+      />
       <Label className="hidden md:block">{t("students")}</Label>
 
       <SearchCombobox

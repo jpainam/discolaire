@@ -1,4 +1,3 @@
-import type { HugeiconsProps } from "@hugeicons/react";
 import {
   AddToListIcon,
   AmbulanceIcon,
@@ -39,11 +38,14 @@ import {
   Settings05Icon,
   SortByUp01Icon,
   UserGroup03Icon,
+  UserGroupIcon,
+  UserIcon as UserIconGlypth,
   UserMultiple02Icon,
   UserSquareIcon,
   ViewIcon as ViewGlypth,
   YoutubeIcon as YoutubeGlyph,
 } from "@hugeicons/core-free-icons";
+import type { HugeiconsProps } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "~/lib/utils";
@@ -108,3 +110,21 @@ export const MoreIcon = wrapHugeIcon(MoreGlyth);
 export const ArrowDownIcon = wrapHugeIcon(ArrowDown01Icon);
 export const CalendarIcon = wrapHugeIcon(Calendar04Icon);
 export const BookmarkIcon = wrapHugeIcon(Bookmark01Icon);
+
+export type BreadcrumbIconKey =
+  | "home"
+  | "students"
+  | "student"
+  | "staff"
+  | "contact";
+
+export const breadcrumbIcons: Record<
+  BreadcrumbIconKey,
+  HugeiconsProps["icon"]
+> = {
+  home: Home01Icon,
+  students: UserGroupIcon,
+  student: UserIconGlypth,
+  staff: UserIconGlypth,
+  contact: Contact01Icon,
+};

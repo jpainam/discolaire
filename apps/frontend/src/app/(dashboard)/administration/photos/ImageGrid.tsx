@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
 import {
   AlertCircleIcon,
   ArrowRightLeft,
@@ -30,7 +28,6 @@ import {
 import { formatBytes, useFileUpload } from "~/hooks/use-file-upload";
 import { useModal } from "~/hooks/use-modal";
 import { DeleteIcon } from "~/icons";
-import { breadcrumbAtom } from "~/lib/atoms";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFileIcon } from "./photo-utils";
@@ -104,37 +101,6 @@ export function ImageGrid({
   );
 
   const t = useTranslations();
-  const setBreadcrumbs = useSetAtom(breadcrumbAtom);
-  const pathname = usePathname();
-  useEffect(() => {
-    const d = [
-      {
-        name: t("Administration"),
-        url: "/administration",
-      },
-      {
-        name: t("Photos"),
-        url: "/administration/photos",
-      },
-    ];
-    if (pathname.includes("students")) {
-      d.push({
-        name: t("Student photos"),
-        url: "/administration/photos/students",
-      });
-    } else if (pathname.includes("staff")) {
-      d.push({
-        name: t("Staff photos"),
-        url: "/administration/photos/staffs",
-      });
-    } else {
-      d.push({
-        name: t("Contact photos"),
-        url: "/administration/photos/contacts",
-      });
-    }
-    setBreadcrumbs(d);
-  }, [pathname, setBreadcrumbs, t]);
 
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
