@@ -57,9 +57,11 @@ import { StudentContactDetails } from "./StudentContactDetails";
 export function StudentContactTable({
   studentId,
   className,
+  tableClassName,
 }: {
   studentId: string;
   className?: string;
+  tableClassName?: string;
 }) {
   const t = useTranslations();
   const confirm = useConfirm();
@@ -120,7 +122,7 @@ export function StudentContactTable({
 
   return (
     <div className={className}>
-      <div className="bg-background overflow-hidden rounded-md border">
+      <div className={cn("bg-background overflow-hidden", tableClassName)}>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">

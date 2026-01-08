@@ -239,7 +239,7 @@ export function ClassroomSubjectTable() {
                             <MoreHorizontal />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-38">
+                        <DropdownMenuContent align="end" >
                           {canEditClassroomSubject && (
                             <DropdownMenuItem
                               onSelect={() => {

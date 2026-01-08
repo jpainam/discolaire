@@ -93,7 +93,7 @@ export function FundTable({ journalId }: { journalId: string }) {
                 <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-42">
+            <DropdownMenuContent align="end">
               <DropdownHelp />
             </DropdownMenuContent>
           </DropdownMenu>

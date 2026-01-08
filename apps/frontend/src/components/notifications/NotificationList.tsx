@@ -4,18 +4,28 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, Check, Clock } from "lucide-react";
+import Link from "next/link";
+import { Check, Clock, XIcon } from "lucide-react";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { NotificationIcon } from "~/icons";
 import { cn } from "~/lib/utils";
 
 // Sample notification data
@@ -94,19 +104,20 @@ function NotificationItem({
 }) {
   return (
     <div
-      className={`hover:bg-muted/50 flex items-start gap-3 rounded-lg p-3 transition-colors ${!isRead ? "bg-blue-50/50" : ""}`}
+      className={`bg-muted/50 hover:bg-muted flex items-start gap-3 rounded-lg p-3 transition-colors ${!isRead ? "bg-blue-50/50" : ""}`}
     >
       <div
         className={`mt-1 h-2 w-2 flex-shrink-0 rounded-full ${!isRead ? "bg-blue-500" : "bg-transparent"}`}
       />
       <div className="flex-1 space-y-1">
         <div className="flex items-center justify-between">
-          <p
-            className={`text-sm font-medium ${!isRead ? "text-foreground" : "text-muted-foreground"}`}
+          <Link
+            href=""
+            className={`line-clamp-1 overflow-hidden text-sm font-medium hover:underline ${!isRead ? "text-foreground" : "text-muted-foreground"}`}
           >
             {notification.title}
-          </p>
-          <span className="text-muted-foreground flex items-center gap-1 text-xs">
+          </Link>
+          <span className="text-muted-foreground flex w-[80px] items-center justify-end gap-1 text-xs">
             <Clock className="h-3 w-3" />
             {formatDate(notification.date)}
           </span>
@@ -126,88 +137,113 @@ export function NotificationList({ className }: { className?: string }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className={cn("relative", className)}>
-          <Bell className="h-5 w-5" />
+        <Button
+          variant="ghost"
+          size={"icon-xs"}
+          className={cn("relative", className)}
+        >
+          <NotificationIcon />
           {unreadCount > 0 && (
             <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center p-0 text-xs"
-            >
-              {unreadCount}
-            </Badge>
+              variant="ghost"
+              className="absolute -top-0.5 -right-0.5 flex size-2 items-center justify-center bg-red-600 p-0 text-[7px]"
+            ></Badge>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="end">
-        <div className="border-b p-4">
-          <h3 className="font-semibold">Notifications</h3>
-          <p className="text-muted-foreground text-sm">
-            {unreadCount > 0
-              ? `You have ${unreadCount} unread notifications`
-              : "All caught up!"}
-          </p>
-        </div>
+      <PopoverContent
+        className="mr-3 h-[calc(100vh-5rem)] w-80 p-0"
+        align="start"
+        sideOffset={10}
+      >
+        <Card className="flex h-full flex-col">
+          <CardHeader>
+            <CardTitle>Notification</CardTitle>
+            <CardDescription>
+              {unreadCount > 0
+                ? `You have ${unreadCount} unread notifications`
+                : "All caught up!"}
+            </CardDescription>
+            <CardAction>
+              <Button
+                onClick={() => {
+                  setOpen(false);
+                }}
+                variant={"secondary"}
+                size={"icon"}
+              >
+                <XIcon />
+              </Button>
+            </CardAction>
+          </CardHeader>
 
-        <Tabs defaultValue="unread" className="w-full">
-          <TabsList className="m-2 grid w-full grid-cols-2">
-            <TabsTrigger value="unread" className="relative">
-              Unread
-              {unreadCount > 0 && (
-                <Badge
-                  variant="secondary"
-                  className="ml-2 flex h-5 w-5 items-center justify-center p-0 text-xs"
-                >
-                  {unreadCount}
-                </Badge>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="read">Read</TabsTrigger>
-          </TabsList>
+          <CardContent className="min-h-0 flex-1 p-2">
+            <Tabs defaultValue="unread">
+              <TabsList className="w-full">
+                <TabsTrigger value="unread" className="relative">
+                  Unread
+                  {unreadCount > 0 && (
+                    <Badge
+                      variant="secondary"
+                      className="ml-2 flex h-5 w-5 items-center justify-center p-0 text-xs"
+                    >
+                      {unreadCount}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="read">Read</TabsTrigger>
+              </TabsList>
 
-          <TabsContent value="unread" className="m-0">
-            <ScrollArea className="h-80">
-              {notifications.unread.length > 0 ? (
-                <div className="space-y-1 p-2">
-                  {notifications.unread.map((notification) => (
-                    <NotificationItem
-                      key={notification.id}
-                      notification={notification}
-                      isRead={false}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="flex h-32 flex-col items-center justify-center p-4 text-center">
-                  <Check className="mb-2 h-8 w-8 text-green-500" />
-                  <p className="text-muted-foreground text-sm">
-                    No unread notifications
-                  </p>
-                </div>
-              )}
-            </ScrollArea>
-          </TabsContent>
+              <TabsContent value="unread" className="m-0 min-h-0 flex-1">
+                <ScrollArea className="h-[calc(100vh-16rem)]">
+                  {notifications.unread.length > 0 ? (
+                    <div className="space-y-2">
+                      {[
+                        ...notifications.unread,
+                        ...notifications.unread,
+                        ...notifications.unread,
+                        ...notifications.unread,
+                      ].map((notification, index) => (
+                        <NotificationItem
+                          key={index}
+                          notification={notification}
+                          isRead={false}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex h-32 flex-col items-center justify-center p-4 text-center">
+                      <Check className="mb-2 h-8 w-8 text-green-500" />
+                      <p className="text-muted-foreground text-sm">
+                        No unread notifications
+                      </p>
+                    </div>
+                  )}
+                </ScrollArea>
+              </TabsContent>
 
-          <TabsContent value="read" className="m-0">
-            <ScrollArea className="h-80">
-              <div className="space-y-1 p-2">
-                {notifications.read.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    notification={notification}
-                    isRead={true}
-                  />
-                ))}
-              </div>
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+              <TabsContent value="read" className="m-0 min-h-0 flex-1">
+                <ScrollArea className="h-[calc(100vh-16rem)]">
+                  <div className="space-y-2">
+                    {notifications.read.map((notification, index) => (
+                      <NotificationItem
+                        key={index}
+                        notification={notification}
+                        isRead={true}
+                      />
+                    ))}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
 
-        <Separator />
-        <div className="p-2">
-          <Button variant="ghost" className="w-full text-xs">
-            View all notifications
-          </Button>
-        </div>
+          <CardFooter className="mt-auto">
+            <Button variant="link" className="w-full text-xs">
+              View all notifications
+            </Button>
+          </CardFooter>
+        </Card>
       </PopoverContent>
     </Popover>
   );

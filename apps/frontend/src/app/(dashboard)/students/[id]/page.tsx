@@ -6,7 +6,6 @@ import { StudentAttendanceCount } from "~/components/students/attendances/Studen
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import { StudentGradeCount } from "~/components/students/grades/StudentGradeCount";
 import StudentDetails from "~/components/students/profile/StudentDetails";
-import { Empty, EmptyTitle } from "~/components/ui/empty";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
@@ -80,8 +79,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className="grid gap-4 p-4 lg:grid-cols-2">
-        <div>
+      <div className="divide-border grid gap-4 divide-y lg:grid-cols-2 lg:divide-x lg:divide-y-0">
+        <div className="flex flex-col gap-2">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
               key={params.id}
@@ -98,29 +97,25 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
               fallback={
-                <div className="grid grid-cols-4 gap-4 px-4">
+                <div className="grid grid-cols-4 gap-4">
                   {Array.from({ length: 16 }).map((_, index) => (
                     <Skeleton key={index} className="h-8" />
                   ))}
                 </div>
               }
             >
-              <StudentGradesheetTable />
+              <StudentGradesheetTable className="py-0" tableClassName="border-t" />
             </Suspense>
           </ErrorBoundary>
         </div>
         <div>
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-20" />}>
-              {classroom ? (
+              {classroom && (
                 <StudentGradesheetChart
                   defaultTerm={terms[0]?.id ?? ""}
                   classroomId={classroom.id}
                 />
-              ) : (
-                <Empty>
-                  <EmptyTitle>Eleve non inscrit</EmptyTitle>
-                </Empty>
               )}
             </Suspense>
           </ErrorBoundary>

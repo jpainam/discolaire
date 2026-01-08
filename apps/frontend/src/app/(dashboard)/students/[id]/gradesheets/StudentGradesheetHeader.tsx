@@ -40,7 +40,7 @@ export function StudentGradesheetHeader() {
   );
 
   return (
-    <div className="bg-muted flex flex-row items-center gap-1 border-b px-4 py-1">
+    <div className="bg-muted/50 flex flex-row items-center gap-1 border-b px-4 py-1">
       <Captions className="h-4 w-4" />
       <Label>{t("transcripts")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">
@@ -52,7 +52,8 @@ export function StudentGradesheetHeader() {
               }
               openModal({
                 title: "Ajouter une note",
-                description: `Note à une saisie existente ${getFullName(student)}`,
+                className: "sm:max-w-xl",
+                description: getFullName(student),
                 view: (
                   <CreateStudentGrade
                     classroomId={student.classroom.id}

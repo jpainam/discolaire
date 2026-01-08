@@ -38,7 +38,7 @@ export default function StudentDetails({ className }: { className?: string }) {
   const dateFormat = Intl.DateTimeFormat(locale, {
     timeZone: "UTC",
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   });
 

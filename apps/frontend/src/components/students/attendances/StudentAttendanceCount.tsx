@@ -6,13 +6,19 @@ import { CheckCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
+
+
 import type { RouterOutputs } from "@repo/api";
 
+
+
 import { Badge } from "~/components/base-badge";
+import { Label } from "~/components/ui/label";
 import { Progress } from "~/components/ui/progress";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+
 
 interface PerfItem {
   label: string;
@@ -138,9 +144,9 @@ export function StudentAttendanceCount({
         <div className="space-y-5">
           {/* Attendance Overview */}
           <div>
-            <div className="mb-2.5 text-sm font-medium">
+            <Label className="mb-2.5 font-medium">
               {t("attendance")} {terms.find((t) => t.id == termId)?.name}
-            </div>
+            </Label>
             <div className="grid grid-cols-4 gap-1">
               {performance.map((item) => (
                 <div
@@ -184,9 +190,9 @@ export function StudentAttendanceCount({
           {/* Attendance Rate */}
           <div>
             <div className="mb-2.5 flex items-center justify-between">
-              <span className="text-foreground text-sm font-medium">
+              <Label className="text-foreground font-medium">
                 {t("Attendance rate")}
-              </span>
+              </Label>
               <span className="text-foreground text-xs font-semibold">
                 {attendanceRate}%
               </span>
@@ -198,9 +204,9 @@ export function StudentAttendanceCount({
 
           {/* Recent Activity (replace with your domain data or remove) */}
           <div>
-            <div className="text-foreground mb-2.5 text-sm font-medium">
+            <Label className="text-foreground mb-2.5 font-medium">
               {t("Recent Activities")}
-            </div>
+            </Label>
             <ul className="space-y-2">
               {activity.map((a, i) => (
                 <li

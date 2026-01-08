@@ -27,6 +27,7 @@ import {
 } from "~/components/ui/card";
 import { ChartContainer, ChartTooltip } from "~/components/ui/chart";
 import { Empty, EmptyTitle } from "~/components/ui/empty";
+import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 
@@ -65,7 +66,7 @@ const ChartLabel = ({
         className="bg-background size-3.5 rounded-full border-4"
         style={{ borderColor: color }}
       ></div>
-      <span className="text-muted-foreground">{label}</span>
+      <Label className="text-muted-foreground">{label}</Label>
     </div>
   );
 };
@@ -172,8 +173,8 @@ export function StudentGradesheetChart({
   if (gradeQuery.isPending || gradesheetQuery.isPending) {
     return (
       <div className="grid grid-cols-1 gap-4">
-        {Array.from({ length: 5 }).map((_, index) => (
-          <Skeleton key={index} className="h-20" />
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Skeleton key={index} className="h-12" />
         ))}
       </div>
     );
@@ -183,7 +184,7 @@ export function StudentGradesheetChart({
       ? chartData.reduce((max, item) => (item.grade > max.grade ? item : max))
       : undefined;
   return (
-    <Card className="bg-transparent">
+    <Card className="rounded-none bg-transparent px-0 py-2 shadow-none ring-0">
       <CardHeader className="">
         <CardTitle>
           <TermSelector
@@ -199,7 +200,7 @@ export function StudentGradesheetChart({
         </CardAction>
       </CardHeader>
 
-      <CardContent className="flex flex-col items-end px-2">
+      <CardContent className="flex flex-col items-end p-0">
         {chartData?.length === 0 && (
           <Empty>
             <EmptyTitle>Aucune notes</EmptyTitle>
@@ -253,6 +254,7 @@ export function StudentGradesheetChart({
             <YAxis
               axisLine={false}
               tickLine={false}
+              width={30}
               tick={{ fontSize: 11, className: "text-muted-foreground" }}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
               tickFormatter={(value) => `${value.toFixed(1)}`}

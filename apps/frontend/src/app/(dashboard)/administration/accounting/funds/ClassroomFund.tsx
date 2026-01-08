@@ -172,7 +172,7 @@ export function ClassroomFund({
                       <PrinterIcon />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-42">
+                  <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onSelect={() => {
                         window.open(

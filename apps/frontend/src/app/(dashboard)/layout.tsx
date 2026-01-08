@@ -1,14 +1,23 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { getSession } from "~/auth/server";
 import { AppSidebar } from "~/components/app-sidebar";
+import { ErrorFallback } from "~/components/error-fallback";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
+import { Skeleton } from "~/components/ui/skeleton";
 import { SheetProvider } from "~/hooks/use-sheet";
 import GlobalModal from "~/layouts/GlobalModal";
 import GlobalSheet from "~/layouts/GlobalSheet";
 import { SchoolContextProvider } from "~/providers/SchoolProvider";
-import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
 import { SiteHeader } from "./SideHeader";
 
 export default async function Layout({
@@ -27,11 +36,14 @@ export default async function Layout({
     console.error("No school year selected");
     redirect("/auth/login");
   }
+  const queryClient = getQueryClient();
 
   const [school, schoolYear, permissions] = await Promise.all([
-    caller.school.get(session.user.schoolId),
-    caller.schoolYear.get(schoolYearId),
-    caller.user.getPermissions(session.user.id),
+    queryClient.fetchQuery(trpc.school.get.queryOptions(session.user.schoolId)),
+    queryClient.fetchQuery(trpc.schoolYear.get.queryOptions(schoolYearId)),
+    queryClient.fetchQuery(
+      trpc.user.getPermissions.queryOptions(session.user.id),
+    ),
   ]);
   batchPrefetch([trpc.schoolYear.all.queryOptions()]);
 
@@ -54,7 +66,11 @@ export default async function Layout({
           <AppSidebar className="p-0" variant="inset" />
           <SidebarInset className="border">
             <HydrateClient>
-              <SiteHeader schoolYearId={schoolYearId} />
+              <ErrorBoundary errorComponent={ErrorFallback}>
+                <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+                  <SiteHeader schoolYearId={schoolYearId} />
+                </Suspense>
+              </ErrorBoundary>
             </HydrateClient>
             <div className="flex flex-1 flex-col">
               <div className="@container/main flex flex-1 flex-col gap-2">

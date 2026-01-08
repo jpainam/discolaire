@@ -27,7 +27,7 @@ export function PrintAction() {
           <MoreVertical />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-42">
+      <DropdownMenuContent align="end">
         <DropdownHelp />
         <DropdownMenuSeparator />
         <DropdownMenuItem

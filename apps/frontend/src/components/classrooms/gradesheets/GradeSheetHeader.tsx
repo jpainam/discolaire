@@ -179,7 +179,7 @@ export function GradeSheetHeader() {
               <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-42">
+          <DropdownMenuContent align="end">
             <DropdownMenuLabel className="flex items-center gap-2">
               <Download className="size-4" />
               Export
@@ -233,7 +233,7 @@ export function GradeSheetHeader() {
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-42">
+          <DropdownMenuContent align="end">
             <DropdownMenuItem
               onSelect={() => {
                 if (!termId || !subjectId) {

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
+
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { SignUpContact } from "~/components/students/contacts/SignUpContact";
 import { StudentContactHeader } from "~/components/students/contacts/StudentContactHeader";
@@ -9,6 +11,7 @@ import { StudentContactTable } from "~/components/students/contacts/StudentConta
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+
 
 export const metadata: Metadata = {
   title: "Contacts",
@@ -63,6 +66,7 @@ export default async function Layout(props: {
       >
         <StudentContactTable
           //studentContacts={studentContacts}
+          tableClassName="rounded-md border"
           className="px-4"
           studentId={params.id}
         />

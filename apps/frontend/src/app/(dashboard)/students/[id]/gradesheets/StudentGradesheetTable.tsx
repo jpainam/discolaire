@@ -45,7 +45,13 @@ import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 
-export function StudentGradesheetTable({ className }: { className?: string }) {
+export function StudentGradesheetTable({
+  className,
+  tableClassName,
+}: {
+  className?: string;
+  tableClassName?: string;
+}) {
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: grades } = useSuspenseQuery(
@@ -60,6 +66,10 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
   const canUpdateGradesheet = useCheckPermission(
     "gradesheet",
     PermissionAction.UPDATE,
+  );
+  const canDeleteGradesheet = useCheckPermission(
+    "gradesheet",
+    PermissionAction.DELETE,
   );
   const deleteGradeMutation = useMutation(
     trpc.grade.delete.mutationOptions({
@@ -108,6 +118,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
       {
         id: number;
         subject: string;
+        color: string;
         observation: string;
         grades: {
           grade: number;
@@ -126,6 +137,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
       if (!row) {
         row = {
           id: subjectId,
+          color: grade.gradeSheet.subject.course.color,
           subject: grade.gradeSheet.subject.course.reportName,
           observation: grade.observation ?? "",
           grades: [],
@@ -161,7 +173,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
 
   return (
     <div className={cn("py-2", className)}>
-      <div className="bg-background overflow-hidden rounded-md border">
+      <div className={cn("bg-background overflow-hidden", tableClassName)}>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
@@ -194,12 +206,20 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
               return (
                 <TableRow key={index}>
                   <TableCell className="py-0 font-medium">
-                    <Link
-                      className="hover:underline"
-                      href={`/classrooms/${classroom.id}/subjects/${key}`}
-                    >
-                      {row.subject}
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="size-4 rounded-full"
+                        style={{
+                          backgroundColor: row.color,
+                        }}
+                      ></div>
+                      <Link
+                        className="hover:underline"
+                        href={`/classrooms/${classroom.id}/subjects/${key}`}
+                      >
+                        {row.subject}
+                      </Link>
+                    </div>
                   </TableCell>
                   {terms
                     .filter((t) => t.type == TermType.MONTHLY)
@@ -214,6 +234,7 @@ export function StudentGradesheetTable({ className }: { className?: string }) {
                           updateGradeAction={updateGradeAction}
                           grade={g?.grade}
                           canUpdateGradesheet={canUpdateGradesheet}
+                          canDeleteGradesheet={canDeleteGradesheet}
                         />
                       );
                     })}
@@ -239,6 +260,7 @@ function Cell({
   isAbsent,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateGradeAction,
+  canDeleteGradesheet,
   onDeleteGradeAction,
   canUpdateGradesheet,
 }: {
@@ -246,6 +268,7 @@ function Cell({
   gradeId?: number;
   isAbsent?: boolean;
   canUpdateGradesheet: boolean;
+  canDeleteGradesheet: boolean;
   updateGradeAction: (
     gradeId: number,
     newGrade: number,
@@ -280,14 +303,14 @@ function Cell({
         g < 10 ? "text-red-500" : "",
       )}
     >
-      {gradeId && (
+      {gradeId && gradeText != "" && (
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button variant={"link"}>{gradeText}</Button>
           </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="col-span-full flex flex-col gap-2">
+          <PopoverContent className="w-40">
+            <div className="grid gap-4">
+              <div className="flex flex-col gap-2">
                 <Label>{t("grade")}</Label>
                 <Input
                   type="number"
@@ -303,32 +326,35 @@ function Cell({
                   <Label htmlFor="isAbsence">{t("absent")}</Label>
                 </div>
               </div>
-              <Button
-                onClick={() => {
-                  if (!newGrade) {
-                    toast.warning("Veuillez saisir une note");
-                    return;
-                  }
-                  toast.warning("Fonctionnalité non active");
-                  //updateGradeAction(gradeId, Number(newGrade), isNewAbsent);
-                  setOpen(false);
-                }}
-                size={"sm"}
-                variant={"outline"}
-              >
-                {t("edit")}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={() => {
+                    if (!newGrade) {
+                      toast.warning("Veuillez saisir une note");
+                      return;
+                    }
+                    toast.warning("Fonctionnalité non active");
+                    //updateGradeAction(gradeId, Number(newGrade), isNewAbsent);
+                    setOpen(false);
+                  }}
+                  size={"xs"}
+                  variant={"outline"}
+                >
+                  {t("edit")}
+                </Button>
 
-              <Button
-                onClick={() => {
-                  onDeleteGradeAction(gradeId);
-                  setOpen(false);
-                }}
-                size={"sm"}
-                variant={"destructive"}
-              >
-                {t("delete")}
-              </Button>
+                <Button
+                  disabled={!canDeleteGradesheet}
+                  onClick={() => {
+                    onDeleteGradeAction(gradeId);
+                    setOpen(false);
+                  }}
+                  size={"xs"}
+                  variant={"destructive"}
+                >
+                  {t("delete")}
+                </Button>
+              </div>
             </div>
           </PopoverContent>
         </Popover>

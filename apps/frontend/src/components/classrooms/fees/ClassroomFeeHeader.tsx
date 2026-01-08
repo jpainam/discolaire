@@ -61,7 +61,7 @@ export function ClassroomFeeHeader() {
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-42">
+          <DropdownMenuContent align="end">
             <DropdownMenuItem
               onSelect={() => {
                 window.open(

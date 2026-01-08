@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { ModeSwitcher } from "~/components/mode-switcher";
+import { NotificationList } from "~/components/notifications/NotificationList";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
 import {
   Breadcrumb,
@@ -45,8 +46,8 @@ export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
           <Suspense fallback={<Skeleton className="w-10" />}>
             <SchoolYearSwitcher defaultValue={schoolYearId} />
           </Suspense>
-
           <LanguageSwitcher className="hidden md:flex" />
+          <NotificationList />
           <ModeSwitcher />
         </div>
       </div>

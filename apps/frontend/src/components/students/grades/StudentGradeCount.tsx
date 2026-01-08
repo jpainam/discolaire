@@ -2,23 +2,16 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  Notebook,
-  NotepadText,
-  ProportionsIcon,
-  Rows3Icon,
-} from "lucide-react";
+import { Notebook, NotepadText, ProportionsIcon, Rows3Icon } from "lucide-react";
 import { useQueryState } from "nuqs";
 
-import {
-  MetricCard,
-  MetricCardGroup,
-  MetricCardHeader,
-  MetricCardTitle,
-  MetricCardValue,
-} from "~/components/metric-card";
+
+
+import { MetricCard, MetricCardGroup, MetricCardHeader, MetricCardTitle, MetricCardValue } from "~/components/metric-card";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
+import { Label } from "~/components/ui/label";
 import { useTRPC } from "~/trpc/react";
+
 
 export function StudentGradeCount({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
@@ -78,7 +71,7 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
 
   return (
     <div className="flex flex-col gap-4 py-2 pr-2">
-      <div className="space-y-2">
+      <div className="space-y-4">
         <TermSelector
           className="w-full"
           defaultValue={termId}
@@ -89,7 +82,7 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="h-3 w-3 rounded-full bg-green-500"></div>
-            <span className="text-sm">Excellent {">= 18"}</span>
+            <Label>Excellent {">= 18"}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -98,13 +91,13 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
                 style={{ width: `${(p18 / total) * 100}%` }}
               ></div>
             </div>
-            <span className="text-sm font-medium">{p18}</span>
+            <Label className="font-medium">{p18}</Label>
           </div>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="h-3 w-3 rounded-full bg-blue-500"></div>
-            <span className="text-sm">Bien {">= 14"}</span>
+            <Label>Bien {">= 14"}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -113,13 +106,13 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
                 style={{ width: `${(p14 / total) * 100}%` }}
               ></div>
             </div>
-            <span className="text-sm font-medium">{p14}</span>
+            <Label className="font-medium">{p14}</Label>
           </div>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="h-3 w-3 rounded-full bg-orange-500"></div>
-            <span className="text-sm">Assez bien {">= 10"}</span>
+            <Label>Assez bien {">= 10"}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -128,13 +121,13 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
                 style={{ width: `${(p10 / total) * 100}%` }}
               ></div>
             </div>
-            <span className="text-sm font-medium">{p10}</span>
+            <Label className="font-medium">{p10}</Label>
           </div>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-            <span className="text-sm">Passable {">= 8"}</span>
+            <Label>Passable {">= 8"}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -143,13 +136,13 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
                 style={{ width: `${(p05 / total) * 100}%` }}
               ></div>
             </div>
-            <span className="text-sm font-medium">{p05}</span>
+            <Label className="font-medium">{p05}</Label>
           </div>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="h-3 w-3 rounded-full bg-red-500"></div>
-            <span className="text-sm">Nul {"< 8"}</span>
+            <Label>Nul {"< 8"}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -158,7 +151,7 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
                 style={{ width: `${(p00 / total) * 100}%` }}
               ></div>
             </div>
-            <span className="text-sm font-medium">{p00}</span>
+            <Label className="font-medium">{p00}</Label>
           </div>
         </div>
       </div>
