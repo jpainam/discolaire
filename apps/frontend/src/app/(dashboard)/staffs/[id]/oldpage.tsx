@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { LogActivityTable } from "~/components/LogActivityTable";
 import { caller } from "~/trpc/server";
-import { ShortCalendar } from "../../../../components/staffs/profile/ShortCalendar";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -17,7 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   return (
     <div className="flex flex-col p-2">
       <LogActivityTable logs={logs} />
-      <ShortCalendar />
+      {/* <ShortCalendar /> */}
     </div>
   );
 }

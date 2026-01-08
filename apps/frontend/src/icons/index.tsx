@@ -1,3 +1,4 @@
+import type { HugeiconsProps } from "@hugeicons/react";
 import {
   AddToListIcon,
   AmbulanceIcon,
@@ -45,7 +46,6 @@ import {
   ViewIcon as ViewGlypth,
   YoutubeIcon as YoutubeGlyph,
 } from "@hugeicons/core-free-icons";
-import type { HugeiconsProps } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "~/lib/utils";

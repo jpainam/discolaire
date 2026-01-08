@@ -5,7 +5,6 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { ShortCalendar } from "../../../../components/staffs/profile/ShortCalendar";
 import { StaffDetails } from "../../../../components/staffs/profile/StaffDetails";
 
 export default async function Layout(
@@ -34,7 +33,7 @@ export default async function Layout(
           <div className="flex-1">{props.children}</div>
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-20 w-[200px]" />}>
-              <ShortCalendar />
+              {/* <ShortCalendar /> */}
             </Suspense>
           </ErrorBoundary>
         </div>
