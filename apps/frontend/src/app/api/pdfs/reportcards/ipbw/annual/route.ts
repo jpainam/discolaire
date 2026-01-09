@@ -1,119 +1,85 @@
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
 import { z } from "zod/v4";
 
+import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import { IPBWAnnual } from "~/reports/reportcards/IPBWAnnual";
-import { caller } from "~/trpc/server";
+import { getQueryClient, trpc } from "~/trpc/server";
 
 const searchSchema = z.object({
-  studentId: z.string().nullable(),
-  classroomId: z.string().nullable(),
+  studentId: z.string().optional(),
+  classroomId: z.string().min(1),
+  termId: z.string().min(1),
 });
 export async function GET(req: NextRequest) {
-  const session = await getSession();
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
+  try {
+    const session = await getSession();
+    if (!session) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const searchParams = parseSearchParams(req);
+
+    const result = searchSchema.safeParse(searchParams);
+    if (!result.success) {
+      const error = z.treeifyError(result.error);
+      return NextResponse.json(error, { status: 400 });
+    }
+
+    const { studentId, classroomId, termId } = result.data;
+    const queryClient = getQueryClient();
+    const school = await queryClient.fetchQuery(
+      trpc.school.getSchool.queryOptions(),
+    );
+    let students = await queryClient.fetchQuery(
+      trpc.classroom.students.queryOptions(classroomId),
+    );
+    if (studentId) {
+      students = students.filter((s) => s.id === studentId);
+    }
+    const contacts = await queryClient.fetchQuery(
+      trpc.student.getPrimaryContacts.queryOptions({ classroomId }),
+    );
+    const report = await queryClient.fetchQuery(
+      trpc.reportCard.getAnnualReport.queryOptions({
+        classroomId,
+        termId,
+      }),
+    );
+
+    const subjects = await queryClient.fetchQuery(
+      trpc.classroom.subjects.queryOptions(classroomId),
+    );
+    const classroom = await queryClient.fetchQuery(
+      trpc.classroom.get.queryOptions(classroomId),
+    );
+    const disciplines = await queryClient.fetchQuery(
+      trpc.discipline.annual.queryOptions({ classroomId }),
+    );
+    const lang = classroom.section?.name == "ANG" ? "en" : ("fr" as const);
+    const stream = await renderToStream(
+      IPBWAnnual({
+        school,
+        students,
+        disciplines,
+        classroom,
+        subjects,
+        report,
+        contacts,
+        lang,
+        schoolYear: classroom.schoolYear,
+      }),
+    );
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/pdf",
+      "Cache-Control": "no-store, max-age=0",
+    };
+    // @ts-expect-error TODO: fix this
+    return new Response(stream, { headers });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(err, { status: 500 });
   }
-  const studId = req.nextUrl.searchParams.get("studentId");
-  const classId = req.nextUrl.searchParams.get("classroomId");
-
-  const result = searchSchema.safeParse({
-    studentId: studId,
-    classroomId: classId,
-  });
-  if (!result.success) {
-    const error = z.treeifyError(result.error).errors;
-    return new Response(JSON.stringify(error), { status: 400 });
-  }
-
-  const { studentId, classroomId } = result.data;
-  if (studentId) {
-    return indvidualReportCard({ studentId });
-  } else if (classroomId) {
-    return classroomReportCard({ classroomId });
-  }
-}
-
-async function classroomReportCard({ classroomId }: { classroomId: string }) {
-  const school = await caller.school.getSchool();
-  const students = await caller.classroom.students(classroomId);
-  const contacts = await caller.student.getPrimaryContacts({ classroomId });
-  const report = await caller.reportCard.getAnnualReport({
-    classroomId,
-  });
-
-  const subjects = await caller.classroom.subjects(classroomId);
-  const classroom = await caller.classroom.get(classroomId);
-  const disciplines = await caller.discipline.annual({ classroomId });
-  const lang = classroom.section?.name == "ANG" ? "en" : ("fr" as const);
-  const stream = await renderToStream(
-    IPBWAnnual({
-      school,
-      students,
-      disciplines,
-      classroom,
-      subjects,
-      report,
-      contacts,
-      lang,
-      schoolYear: classroom.schoolYear,
-    }),
-  );
-
-  const headers: Record<string, string> = {
-    "Content-Type": "application/pdf",
-    "Cache-Control": "no-store, max-age=0",
-  };
-  // @ts-expect-error TODO: fix this
-  return new Response(stream, { headers });
-}
-async function indvidualReportCard({ studentId }: { studentId: string }) {
-  const student = await caller.student.get(studentId);
-  if (!student.classroom) {
-    return new Response("Student not registered", { status: 400 });
-  }
-
-  const report = await caller.reportCard.getAnnualReport({
-    classroomId: student.classroom.id,
-  });
-
-  const subjects = await caller.classroom.subjects(student.classroom.id);
-  const classroom = await caller.classroom.get(student.classroom.id);
-
-  const studentReport = report.studentsReport.get(studentId);
-  const globalRank = report.globalRanks.get(studentId);
-  if (!studentReport || !globalRank) {
-    return new Response("Student has no grades", { status: 400 });
-  }
-
-  const contact = await caller.student.getPrimaryContact(student.id);
-  const school = await caller.school.getSchool();
-
-  const disciplines = await caller.discipline.annual({
-    classroomId: student.classroom.id,
-  });
-  const lang = classroom.section?.name == "ANG" ? "en" : "fr";
-
-  const stream = await renderToStream(
-    IPBWAnnual({
-      school,
-      students: [student],
-      classroom,
-      disciplines,
-      subjects,
-      report,
-      lang,
-      contacts: [contact],
-      schoolYear: classroom.schoolYear,
-    }),
-  );
-
-  const headers: Record<string, string> = {
-    "Content-Type": "application/pdf",
-    "Cache-Control": "no-store, max-age=0",
-  };
-
-  // @ts-expect-error TODO: fix this
-  return new Response(stream, { headers });
 }

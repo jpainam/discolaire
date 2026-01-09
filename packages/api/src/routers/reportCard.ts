@@ -1,7 +1,10 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
+
+
 import { protectedProcedure } from "../trpc";
+
 
 export const reportCardRouter = {
   getRemarks: protectedProcedure
@@ -102,11 +105,13 @@ export const reportCardRouter = {
     .input(
       z.object({
         classroomId: z.string().min(1),
+        termId: z.string().min(1),
       }),
     )
     .query(({ input, ctx }) => {
       return ctx.services.annual.getAnnualReport({
         classroomId: input.classroomId,
+        termId: input.termId,
       });
     }),
 } satisfies TRPCRouterRecord;

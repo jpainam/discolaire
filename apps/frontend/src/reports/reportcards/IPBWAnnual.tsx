@@ -5,11 +5,20 @@ import type { RouterOutputs } from "@repo/api";
 
 import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
+import { IPBWNotationSystem } from "./IPBWNotationSystem";
 import { IPBWSignatureAnnual } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 
-const W = ["30%", "6%", "6%", "6%", "6%", "6%", "10%", "12%"];
+const W = {
+  subject: 28,
+  seq: 6,
+  moy: 6,
+  coeff: 6,
+  total: 6,
+  rang: 6,
+  appreciation: 12,
+};
 
 export function IPBWAnnual({
   school,
@@ -23,16 +32,12 @@ export function IPBWAnnual({
   lang,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
-  studentId?: string;
-  students:
-    | RouterOutputs["classroom"]["students"]
-    | RouterOutputs["student"]["get"][];
+  students: RouterOutputs["classroom"]["students"];
+
   classroom: RouterOutputs["classroom"]["get"];
   report: RouterOutputs["reportCard"]["getAnnualReport"];
   schoolYear: RouterOutputs["schoolYear"]["get"];
-  contacts:
-    | RouterOutputs["student"]["getPrimaryContacts"]
-    | RouterOutputs["student"]["getPrimaryContact"][];
+  contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["annual"];
   lang: "fr" | "en";
@@ -40,12 +45,7 @@ export function IPBWAnnual({
   const { studentsReport, summary: _summary, globalRanks } = report;
   const values = Array.from(globalRanks.values());
   const studentsMap = new Map(students.map((s) => [s.id, s]));
-  const primaryContactsMap = new Map(
-    contacts
-      .filter((c) => c?.studentId != null)
-      .filter((c) => c != null)
-      .map((c) => [c.studentId, c]),
-  );
+  const primaryContactsMap = new Map(contacts.map((c) => [c.studentId, c]));
   const groups = _.groupBy(subjects, "subjectGroupId");
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
@@ -125,7 +125,7 @@ export function IPBWAnnual({
                   flexDirection: "column",
                 }}
               >
-                <IPBWTableHeader W={W} />
+                <IPBWTableHeader />
                 {Object.keys(groups).map((groupId: string) => {
                   const items = groups[Number(groupId)]?.sort(
                     (a, b) => a.order - b.order,
@@ -155,7 +155,7 @@ export function IPBWAnnual({
                           >
                             <View
                               style={{
-                                width: W[0],
+                                width: `${W.subject}%`,
                                 flexDirection: "column",
                                 display: "flex",
                                 borderRight: "1px solid black",
@@ -182,7 +182,7 @@ export function IPBWAnnual({
                                 <View
                                   key={`g-${subject.id}-${student.id}-${i}`}
                                   style={{
-                                    width: W[1],
+                                    width: `${W.seq}%`,
                                     borderRight: "1px solid black",
                                     alignItems: "center",
                                     justifyContent: "center",
@@ -195,20 +195,19 @@ export function IPBWAnnual({
 
                             <View
                               style={{
-                                width: W[1],
+                                width: `${W.moy}%`,
                                 borderRight: "1px solid black",
                                 alignItems: "center",
                                 justifyContent: "center",
                               }}
                             >
                               <Text>
-                                {" "}
                                 {grade ? grade.average?.toFixed(2) : ""}
                               </Text>
                             </View>
                             <View
                               style={{
-                                width: W[2],
+                                width: `${W.coeff}%`,
                                 borderRight: "1px solid black",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -222,7 +221,7 @@ export function IPBWAnnual({
                             </View>
                             <View
                               style={{
-                                width: W[3],
+                                width: `${W.total}%`,
                                 borderRight: "1px solid black",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -236,7 +235,7 @@ export function IPBWAnnual({
                             </View>
                             <View
                               style={{
-                                width: W[4],
+                                width: `${W.rang}%`,
                                 borderRight: "1px solid black",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -246,32 +245,10 @@ export function IPBWAnnual({
                                 {grade?.average != null ? grade.rank : ""}
                               </Text>
                             </View>
-                            {/* <View
-                              style={{
-                                width: W[5],
-                                alignItems: "center",
-                                justifyContent: "center",
-                                borderRight: "1px solid black",
-                              }}
-                            >
-                              <Text>{subjectSummary?.average.toFixed(2)}</Text>
-                            </View> */}
-                            {/* <View
-                              style={{
-                                width: W[6],
-                                alignItems: "center",
-                                justifyContent: "center",
-                                borderRight: "1px solid black",
-                              }}
-                            >
-                              <Text>
-                                {subjectSummary?.min.toFixed(2)}/
-                                {subjectSummary?.max.toFixed(2)}
-                              </Text>
-                            </View> */}
+
                             <View
                               style={{
-                                width: W[7],
+                                width: `${W.appreciation}%`,
                                 textTransform: "uppercase",
                                 paddingLeft: 4,
                                 justifyContent: "center",
@@ -286,20 +263,17 @@ export function IPBWAnnual({
                       <View
                         style={{
                           backgroundColor: "#D7D7D7",
-                          fontSize: 8,
                           flexDirection: "row",
                           display: "flex",
                           fontWeight: "bold",
-                          width: "100%",
                           borderBottom: "1px solid black",
                         }}
                       >
                         <View
                           style={{
-                            width: "48%",
-                            paddingVertical: 2,
+                            width: `${W.subject + W.seq * 6 + W.moy}%`,
+                            padding: 2,
                             borderRight: "1px solid black",
-
                             justifyContent: "center",
                           }}
                         >
@@ -307,7 +281,7 @@ export function IPBWAnnual({
                         </View>
                         <View
                           style={{
-                            width: "6%",
+                            width: `${W.coeff}%`,
                             alignItems: "center",
                             justifyContent: "center",
                             borderRight: "1px solid black",
@@ -319,7 +293,7 @@ export function IPBWAnnual({
                         <View
                           style={{
                             justifyContent: "center",
-                            width: "6%",
+                            width: `${W.total}%`,
                             alignItems: "center",
                             borderRight: "1px solid black",
                           }}
@@ -338,9 +312,9 @@ export function IPBWAnnual({
                         <View
                           style={{
                             justifyContent: "center",
-                            width: "22%",
+                            width: `${W.rang + W.appreciation}%`,
                             alignItems: "center",
-                            borderRight: "1px solid black",
+                            //borderRight: "1px solid black",
                           }}
                         >
                           <Text>
@@ -370,7 +344,7 @@ export function IPBWAnnual({
                 >
                   <View
                     style={{
-                      width: W[0],
+                      width: `${W.subject}%`,
                       borderRight: "1px solid black",
                       padding: 2,
                     }}
@@ -382,7 +356,7 @@ export function IPBWAnnual({
                       <View
                         key={`${student.id}-${ii}`}
                         style={{
-                          width: W[1],
+                          width: `${W.seq}%`,
                           padding: 2,
                           borderRight: "1px solid black",
                           alignItems: "center",
@@ -395,7 +369,7 @@ export function IPBWAnnual({
 
                   <View
                     style={{
-                      width: W[1],
+                      width: `${W.moy}%`,
                       borderRight: "1px solid black",
                       padding: 2,
                       alignItems: "center",
@@ -405,7 +379,7 @@ export function IPBWAnnual({
                   </View>
                   <View
                     style={{
-                      width: W[2],
+                      width: `${W.coeff}%`,
                       borderRight: "1px solid black",
                       padding: 2,
                       alignItems: "center",
@@ -421,7 +395,7 @@ export function IPBWAnnual({
                   </View>
                   <View
                     style={{
-                      width: W[2],
+                      width: `${W.total}%`,
                       borderRight: "1px solid black",
                       padding: 2,
                       alignItems: "center",
@@ -456,7 +430,18 @@ export function IPBWAnnual({
                 lang={lang}
                 rank={`${value.rank}`}
               />
-              <IPBWSignatureAnnual />
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 2,
+                  width: "100%",
+                  display: "flex",
+                  paddingTop: 4,
+                }}
+              >
+                <IPBWNotationSystem lang={lang} />
+                <IPBWSignatureAnnual lang={lang} />
+              </View>
             </View>
           </Page>
         );
@@ -465,7 +450,7 @@ export function IPBWAnnual({
   );
 }
 
-function IPBWTableHeader({ W }: { W: number[] | string[] }) {
+function IPBWTableHeader() {
   return (
     <View
       style={{
@@ -482,7 +467,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
       <View
         style={{
           padding: 2,
-          width: W[0],
+          width: `${W.subject}%`,
           alignItems: "center",
           borderRight: "1px solid black",
           paddingHorizontal: 2,
@@ -494,7 +479,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
         <View
           style={{
             justifyContent: "center",
-            width: W[1],
+            width: `${W.seq}%`,
             alignItems: "center",
             borderRight: "1px solid black",
             paddingHorizontal: 2,
@@ -509,7 +494,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
         style={{
           justifyContent: "center",
           alignItems: "center",
-          width: W[1],
+          width: `${W.moy}%`,
           borderRight: "1px solid black",
           paddingHorizontal: 2,
         }}
@@ -518,7 +503,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
       </View>
       <View
         style={{
-          width: W[2],
+          width: `${W.coeff}%`,
           alignItems: "center",
           justifyContent: "center",
           borderRight: "1px solid black",
@@ -529,7 +514,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
       </View>
       <View
         style={{
-          width: W[3],
+          width: `${W.total}%`,
           justifyContent: "center",
           alignItems: "center",
           borderRight: "1px solid black",
@@ -540,7 +525,7 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
       </View>
       <View
         style={{
-          width: W[4],
+          width: `${W.rang}%`,
           justifyContent: "center",
           alignItems: "center",
           borderRight: "1px solid black",
@@ -549,31 +534,10 @@ function IPBWTableHeader({ W }: { W: number[] | string[] }) {
       >
         <Text> Rang</Text>
       </View>
-      {/* <View
-        style={{
-          width: W[5],
-          justifyContent: "center",
-          alignItems: "center",
-          borderRight: "1px solid black",
-          paddingHorizontal: 2,
-        }}
-      >
-        <Text> Moy C</Text>
-      </View> */}
-      {/* <View
-        style={{
-          width: W[6],
-          justifyContent: "center",
-          alignItems: "center",
-          borderRight: "1px solid black",
-          paddingHorizontal: 2,
-        }}
-      >
-        <Text> Min/Max</Text>
-      </View> */}
+
       <View
         style={{
-          width: W[7],
+          width: `${W.appreciation}%`,
           justifyContent: "center",
           alignItems: "center",
           paddingHorizontal: 2,

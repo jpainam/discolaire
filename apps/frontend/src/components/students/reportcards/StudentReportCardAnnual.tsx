@@ -1,9 +1,15 @@
-import { Fragment } from "react";
-import Link from "next/link";
-import _, { sum } from "lodash";
-import { getTranslations } from "next-intl/server";
+"use client";
 
-import { EmptyComponent } from "~/components/EmptyComponent";
+import { Fragment, useMemo } from "react";
+import Link from "next/link";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import _, { sum } from "lodash";
+import { useTranslations } from "next-intl";
+
+import type { RouterOutputs } from "@repo/api";
+
+import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
+import { TableSkeleton } from "~/components/skeletons/table-skeleton";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
 import { ReportCardPerformance } from "~/components/students/reportcards/ReportCardPerformance";
@@ -17,54 +23,78 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { cn } from "~/lib/utils";
-import { caller } from "~/trpc/server";
+import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
-import { AnnualHeader } from "./AnnualHeader";
 
-export default async function Page(props: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{
-    trimestreId: string;
-    classroomId: string;
-    studentId: string;
-    format: string;
-  }>;
+export function StudentReportCardAnnual({
+  classroom,
+  term,
+  student,
+  subjects,
+}: {
+  classroom: RouterOutputs["classroom"]["get"];
+  subjects: RouterOutputs["classroom"]["subjects"];
+  term: RouterOutputs["term"]["get"];
+  student: RouterOutputs["student"]["get"];
 }) {
-  const params = await props.params;
+  const studentId = student.id;
+  const classroomId = classroom.id;
+  const termId = term.id;
 
-  const t = await getTranslations();
-  const classroom = await caller.student.classroom({ studentId: params.id });
-  if (!classroom) {
-    return <EmptyComponent title={t("student_not_registered_yet")} />;
-  }
+  const t = useTranslations();
+  const trpc = useTRPC();
 
-  const { studentsReport, summary, globalRanks } =
-    await caller.reportCard.getAnnualReport({
-      classroomId: classroom.id,
-    });
+  const {
+    data: { studentsReport, summary, globalRanks },
+  } = useSuspenseQuery(
+    trpc.reportCard.getAnnualReport.queryOptions({
+      classroomId,
+      termId,
+    }),
+  );
 
-  const subjects = await caller.classroom.subjects(classroom.id);
-  const groups = _.groupBy(subjects, "subjectGroupId");
-  const studentReport = studentsReport.get(params.id);
-  const globalRank = globalRanks.get(params.id);
-  if (!studentReport || !globalRank) {
-    return null;
-  }
+  const { successRate, average, averages } = useMemo(() => {
+    const values = Array.from(globalRanks.values());
+    const averages = values.map((g) => g.average);
+    const successCount = averages.filter((val) => val >= 10).length;
+    const successRate = successCount / averages.length;
 
-  const values = Array.from(globalRanks.values());
-  const averages = values.map((g) => g.average);
-  const successCount = averages.filter((val) => val >= 10).length;
-  const successRate = successCount / averages.length;
+    const average =
+      averages.reduce((acc, val) => acc + val, 0) / averages.length;
+    return { successRate, average, averages };
+  }, [globalRanks]);
+
   const rowClassName = "border text-center py-0";
-  const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
-  const disciplines = await caller.discipline.annual({
-    classroomId: classroom.id,
-  });
-  const disc = disciplines.get(params.id);
+  const { data: disciplines, isPending: isPendingDiscipline } = useQuery(
+    trpc.discipline.annual.queryOptions({
+      classroomId,
+    }),
+  );
+
+  const groups = _.groupBy(subjects, "subjectGroupId");
+  const studentReport = studentsReport.get(studentId);
+  const globalRank = globalRanks.get(studentId);
+
+  if (isPendingDiscipline) {
+    return <TableSkeleton rows={4} />;
+  }
+
+  if (!studentReport || !globalRank) {
+    return <></>;
+  }
+  const disc = disciplines?.get(studentId);
 
   return (
     <div className="flex flex-col gap-2">
-      <AnnualHeader studentId={params.id} classroomId={classroom.id} />
+      <ReportCardActionHeader
+        title={"BULLETIN ANNUEL"}
+        maxAvg={Math.max(...averages)}
+        minAvg={Math.min(...averages)}
+        avg={average}
+        successRate={successRate}
+        classroomSize={classroom.size}
+        pdfHref={`/api/pdfs/reportcards/ipbw/annual?studentId=${studentId}&classroomId=${classroomId}&termId=${termId}`}
+      />
       <div className="px-4">
         <div className="bg-background overflow-hidden rounded-md">
           <Table>
@@ -228,14 +258,14 @@ export default async function Page(props: {
           </Table>
         </div>
         <div className="flex flex-row items-start gap-2 py-2">
-          <ReportCardMention average={globalRank.average} id={params.id} />
+          <ReportCardMention average={globalRank.average} id={studentId} />
           <ReportCardDiscipline
             absence={disc?.absence ?? 0}
             lateness={disc?.late ?? 0}
             justifiedLateness={disc?.justifiedLate ?? 0}
             consigne={disc?.consigne ?? 0}
             justifiedAbsence={disc?.justifiedAbsence ?? 0}
-            id={params.id}
+            id={studentId}
           />
           <ReportCardPerformance
             successRate={successRate}
@@ -244,7 +274,7 @@ export default async function Page(props: {
             avg={average}
           />
           <ReportCardSummary
-            id={params.id}
+            id={studentId}
             classroom={classroom}
             rank={globalRank.rank}
             average={globalRank.average}

@@ -6,6 +6,7 @@ import { createLoader, parseAsString } from "nuqs/server";
 import { TermType } from "@repo/db/enums";
 
 import { CheckReportCard } from "~/components/classrooms/reportcards/CheckSubjectScaleTerm";
+import { ReportCardAnnual } from "~/components/classrooms/reportcards/ReportCardAnnual";
 import { ReportCardClassroomCouncil } from "~/components/classrooms/reportcards/ReportCardClassroomCouncil";
 import { ReportCardMontly } from "~/components/classrooms/reportcards/ReportCardMonthly";
 import { ReportCardOverallAppreciation } from "~/components/classrooms/reportcards/ReportCardOverallAppreciation";
@@ -63,10 +64,15 @@ export default async function Page(props: PageProps) {
           classroomId,
           termId,
         })
-      : trpc.reportCard.getTrimestre.queryOptions({
-          classroomId,
-          termId,
-        }),
+      : term.type == TermType.ANNUAL
+        ? trpc.reportCard.getAnnualReport.queryOptions({
+            classroomId,
+            termId,
+          })
+        : trpc.reportCard.getTrimestre.queryOptions({
+            classroomId,
+            termId,
+          }),
   ]);
 
   const subjects = await queryClient.fetchQuery(
@@ -136,6 +142,13 @@ export default async function Page(props: PageProps) {
           )}
           {action == "reportcard" && term.type == TermType.QUARTER && (
             <ReportCardQuarter classroomId={classroomId} term={term} />
+          )}
+          {action == "reportcard" && term.type == TermType.ANNUAL && (
+            <ReportCardAnnual
+              subjects={subjects}
+              classroomId={classroomId}
+              term={term}
+            />
           )}
         </Suspense>
       </ErrorBoundary>

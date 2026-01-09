@@ -6,7 +6,7 @@ import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
 import { ReportCardHeader } from "~/components/students/reportcards/ReportCardHeader";
 import { Skeleton } from "~/components/ui/skeleton";
-import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import { caller, HydrateClient } from "~/trpc/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ export default async function Layout(props: {
   if (!classroom) {
     return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
-  prefetch(trpc.term.all.queryOptions());
+
   return (
     <div className="flex w-full flex-col gap-2">
       <HydrateClient>

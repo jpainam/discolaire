@@ -2,12 +2,14 @@ import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { getTranslations } from "next-intl/server";
+import { createLoader, parseAsString } from "nuqs/server";
 
 import { TermType } from "@repo/db/enums";
 
 import { CheckReportCard } from "~/components/classrooms/reportcards/CheckSubjectScaleTerm";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
+import { StudentReportCardAnnual } from "~/components/students/reportcards/StudentReportCardAnnual";
 import { StudentReportCardMontly } from "~/components/students/reportcards/StudentReportCardMonthly";
 import { StudentReportCardQuarter } from "~/components/students/reportcards/StudentReportCardQuarter";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -17,12 +19,17 @@ import {
   HydrateClient,
   trpc,
 } from "~/trpc/server";
-import { reportcardSearchParams } from "~/utils/search-params";
 
 interface PageProps {
-  searchParams: Promise<SearchParams>;
   params: Promise<{ id: string }>;
+  searchParams: Promise<SearchParams>;
 }
+const searchSchema = {
+  termId: parseAsString,
+  subjectId: parseAsString,
+  action: parseAsString,
+};
+const reportCardSearchParams = createLoader(searchSchema);
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
@@ -37,7 +44,7 @@ export default async function Page(props: PageProps) {
     return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
 
-  const { termId } = await reportcardSearchParams(props.searchParams);
+  const { termId } = await reportCardSearchParams(props.searchParams);
 
   if (!termId) {
     return (
@@ -58,10 +65,15 @@ export default async function Page(props: PageProps) {
           classroomId,
           termId,
         })
-      : trpc.reportCard.getTrimestre.queryOptions({
-          classroomId,
-          termId,
-        }),
+      : term.type == TermType.ANNUAL
+        ? trpc.reportCard.getAnnualReport.queryOptions({
+            classroomId,
+            termId,
+          })
+        : trpc.reportCard.getTrimestre.queryOptions({
+            classroomId,
+            termId,
+          }),
   ]);
 
   const classroom = await queryClient.fetchQuery(
@@ -108,6 +120,14 @@ export default async function Page(props: PageProps) {
               subjects={subjects}
               student={student}
               classroom={classroom}
+            />
+          )}
+          {term.type == TermType.ANNUAL && (
+            <StudentReportCardAnnual
+              term={term}
+              subjects={subjects}
+              classroom={classroom}
+              student={student}
             />
           )}
         </Suspense>

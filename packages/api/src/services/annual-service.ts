@@ -9,40 +9,47 @@ export class AnnualService {
     this.db = db;
     this.reportcard = new ReportCardService(db);
   }
-  async getAnnualReport({ classroomId }: { classroomId: string }) {
+  async getAnnualReport({
+    classroomId,
+    termId,
+  }: {
+    classroomId: string;
+    termId: string;
+  }) {
     const classroom = await this.db.classroom.findUniqueOrThrow({
       where: { id: classroomId },
     });
-    const terms = await this.db.term.findMany({
-      orderBy: { order: "asc" },
-      where: { schoolYearId: classroom.schoolYearId },
+    const term = await this.db.term.findUniqueOrThrow({
+      include: {
+        parts: {
+          include: { child: true },
+        },
+      },
+      where: { id: termId },
     });
-    if (terms.length !== 6) {
-      throw new Error("Sequences non definie ou plus de 6 sequences");
+    if (term.parts.length !== 6) {
+      throw new Error(`Expected 6 sequences, found ${term.parts.length}`);
     }
-    const grade1Id = terms[0]?.id;
-    const grade2Id = terms[1]?.id;
-    const grade3Id = terms[2]?.id;
-    const grade4Id = terms[3]?.id;
-    const grade5Id = terms[4]?.id;
-    const grade6Id = terms[5]?.id;
-    if (
-      !grade1Id ||
-      !grade2Id ||
-      !grade3Id ||
-      !grade4Id ||
-      !grade5Id ||
-      !grade6Id
-    ) {
-      throw new Error("Sequences non definie ou plus de 6 sequences");
+    const childTerms = term.parts.map((t) => t.child);
+    const sortedTerms = childTerms.sort((a, b) => a.order - b.order);
+    const term1 = sortedTerms[0];
+    const term2 = sortedTerms[1];
+    const term3 = sortedTerms[2];
+    const term4 = sortedTerms[3];
+    const term5 = sortedTerms[4];
+    const term6 = sortedTerms[5];
+
+    if (!term1 || !term2 || !term3 || !term4 || !term5 || !term6) {
+      throw new Error("All 6 terms must be defined");
     }
+
     return this.computeReport(
-      await this.reportcard.getGrades(classroomId, grade1Id),
-      await this.reportcard.getGrades(classroomId, grade2Id),
-      await this.reportcard.getGrades(classroomId, grade3Id),
-      await this.reportcard.getGrades(classroomId, grade4Id),
-      await this.reportcard.getGrades(classroomId, grade5Id),
-      await this.reportcard.getGrades(classroomId, grade6Id),
+      await this.reportcard.getGrades(classroomId, term1.id),
+      await this.reportcard.getGrades(classroomId, term2.id),
+      await this.reportcard.getGrades(classroomId, term3.id),
+      await this.reportcard.getGrades(classroomId, term4.id),
+      await this.reportcard.getGrades(classroomId, term5.id),
+      await this.reportcard.getGrades(classroomId, term6.id),
     );
   }
   computeReport(

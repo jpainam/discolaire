@@ -1,6 +1,9 @@
 import { Text, View } from "@react-pdf/renderer";
 
+
+
 import { getTranslation } from "./translation";
+
 
 export function IPBWSignature({
   cycle,
@@ -109,17 +112,17 @@ export function IPBWSignatureTrimestre({ lang }: { lang: "fr" | "en" }) {
   );
 }
 
-export function IPBWSignatureAnnual() {
+export function IPBWSignatureAnnual({lang}: { lang: "fr" | "en" }) {
+  const t = getTranslation(lang);
   return (
     <View
       style={{
         flexDirection: "row",
         gap: 2,
         display: "flex",
-        paddingTop: 4,
         fontWeight: "bold",
-        fontSize: 9,
-        width: "100%",
+        fontSize: 8,
+        width: "80%",
       }}
     >
       <View
@@ -127,20 +130,20 @@ export function IPBWSignatureAnnual() {
           width: "30%",
           border: "1px solid black",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}> Parents</Text>
+        <Text style={{ paddingVertical: 2 }}> {t("Parents")}</Text>
       </View>
       <View
         style={{
           width: "30%",
           border: "1px solid black",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}>Prof. Principal</Text>
+        <Text style={{ paddingVertical: 2 }}>{t("Prof. Principal")}</Text>
       </View>
 
       <View
@@ -148,10 +151,12 @@ export function IPBWSignatureAnnual() {
           width: "40%",
           border: "1px solid black",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
-        <Text style={{ paddingVertical: 2 }}>Le Chef d'établissement</Text>
+        <Text style={{ paddingVertical: 2 }}>
+          {t("Le Chef d'établissement")}
+        </Text>
       </View>
     </View>
   );
