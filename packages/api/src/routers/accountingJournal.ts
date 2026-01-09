@@ -13,6 +13,81 @@ export const accountingJournal = {
       },
     });
   }),
+  studentsBalances: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().min(1),
+        journalId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      let students = await ctx.services.classroom.getStudents(
+        input.classroomId,
+      );
+
+      if (ctx.session.user.profile === "student") {
+        students = students.filter(
+          (student) => student.userId === ctx.session.user.id,
+        );
+      } else if (ctx.session.user.profile === "contact") {
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studs = await ctx.services.contact.getStudents(contact.id);
+        const studentIds = studs.map((s) => s.studentId);
+        students = students.filter((student) =>
+          studentIds.includes(student.id),
+        );
+      }
+
+      const studentIds = students.map((std) => std.id);
+      const transactions = await ctx.db.transaction.findMany({
+        where: {
+          journalId: input.journalId,
+          schoolYearId: ctx.schoolYearId,
+          status: TransactionStatus.VALIDATED,
+          deletedAt: null,
+          student: {
+            id: {
+              in: studentIds,
+            },
+            enrollments: {
+              some: {
+                classroomId: input.classroomId,
+              },
+            },
+          },
+        },
+        orderBy: {
+          student: {
+            lastName: "asc",
+          },
+        },
+        include: {
+          student: true,
+        },
+      });
+
+      // Aggregate per (studentId)
+      const balances = new Map<string, number>();
+
+      transactions.forEach((transaction) => {
+        if (!transaction.journalId) return;
+
+        const studentId = transaction.studentId;
+        const b = balances.get(studentId);
+        const delta =
+          transaction.transactionType === TransactionType.DEBIT
+            ? -transaction.amount
+            : transaction.amount;
+        if (!b) {
+          balances.set(studentId, delta);
+        } else {
+          balances.set(studentId, b + delta);
+        }
+      });
+      return balances;
+    }),
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.accountingJournal.findMany({
       where: {
