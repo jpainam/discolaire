@@ -16,9 +16,6 @@ export class AnnualService {
     classroomId: string;
     termId: string;
   }) {
-    const classroom = await this.db.classroom.findUniqueOrThrow({
-      where: { id: classroomId },
-    });
     const term = await this.db.term.findUniqueOrThrow({
       include: {
         parts: {

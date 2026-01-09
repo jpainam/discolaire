@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
+import { ClassroomFinancialSituation } from "~/components/classrooms/finances/ClassroomFinancialSituation";
+import { ClassroomFinancialSituationHeader } from "~/components/classrooms/finances/ClassroomFinancialSituationHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { ClassroomFinancialSituation } from "~/components/classrooms/finances/ClassroomFinancialSituation";
-import { ClassroomFinancialSituationHeader } from "~/components/classrooms/finances/ClassroomFinancialSituationHeader";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

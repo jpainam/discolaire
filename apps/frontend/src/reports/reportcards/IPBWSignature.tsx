@@ -1,9 +1,6 @@
 import { Text, View } from "@react-pdf/renderer";
 
-
-
 import { getTranslation } from "./translation";
-
 
 export function IPBWSignature({
   cycle,
@@ -112,7 +109,7 @@ export function IPBWSignatureTrimestre({ lang }: { lang: "fr" | "en" }) {
   );
 }
 
-export function IPBWSignatureAnnual({lang}: { lang: "fr" | "en" }) {
+export function IPBWSignatureAnnual({ lang }: { lang: "fr" | "en" }) {
   const t = getTranslation(lang);
   return (
     <View

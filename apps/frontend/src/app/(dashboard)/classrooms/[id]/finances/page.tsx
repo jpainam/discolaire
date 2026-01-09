@@ -1,13 +1,10 @@
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
-
-
 import { ErrorFallback } from "~/components/error-fallback";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { ClassroomFinanceHeader } from "./ClassroomFinanceHeader";
 import { ClassroomFinanceTable } from "./ClassroomFinanceTable";
-
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const queryClient = getQueryClient();
@@ -18,7 +15,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const fees = await queryClient.fetchQuery(
     trpc.classroom.fees.queryOptions(params.id),
   );
-
 
   const journalIds = fees.map((fee) => fee.journalId);
   const currentJournals = journals.filter((journal) =>
