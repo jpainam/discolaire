@@ -99,7 +99,7 @@ export default async function Page() {
         <Card className="lg:col-span-4">
           <CardHeader>
             <CardTitle>
-              {t("Grade Distribution")} - {count.total} {t("students")}
+              {t("Grade distribution")} - {count.total} {t("students")}
             </CardTitle>
             <CardDescription className="text-xs">
               {t("Distribution of grades across all students")}

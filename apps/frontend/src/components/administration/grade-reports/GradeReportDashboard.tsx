@@ -44,7 +44,7 @@ export async function GradeReportDashboard() {
         </Card>
         <Card className="lg:col-span-4">
           <CardHeader>
-            <CardTitle>{t("Grade Distribution")}</CardTitle>
+            <CardTitle>{t("Grade distribution")}</CardTitle>
             <CardDescription className="text-xs">
               {t("Distribution of grades across all students")}
             </CardDescription>

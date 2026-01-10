@@ -1,7 +1,11 @@
+import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { CircleGauge, FileIcon, FileTextIcon, Settings } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { createLoader, parseAsString } from "nuqs/server";
+
+
 
 import { GradeReportDashboard } from "~/components/administration/grade-reports/GradeReportDashboard";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
@@ -11,9 +15,20 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AnalysisTextLinkIcon } from "@hugeicons/core-free-icons";
 
-export default async function Page() {
+
+const gradeReportSearchSchema = {
+  tabId: parseAsString,
+};
+interface PageProps {
+  searchParams: Promise<SearchParams>;
+}
+const gradeReportSchema = createLoader(gradeReportSearchSchema);
+export default async function Page(props: PageProps) {
   const t = await getTranslations();
+  const searchParams = await gradeReportSchema(props.searchParams);
   batchPrefetch([
     trpc.term.all.queryOptions(),
     trpc.gradeSheet.distribution.queryOptions(),
@@ -23,7 +38,7 @@ export default async function Page() {
 
   return (
     <HydrateClient>
-      <Tabs defaultValue="dashboard" className="p-2">
+      <Tabs defaultValue={searchParams.tabId ?? "dashboard"} className="p-2">
         <TabsList>
           <TabsTrigger value="dashboard">
             <CircleGauge />
@@ -34,6 +49,9 @@ export default async function Page() {
           </TabsTrigger>
           <TabsTrigger value="reports">
             <FileIcon /> {t("reports")}
+          </TabsTrigger>
+          <TabsTrigger value="distributions">
+            <HugeiconsIcon icon={AnalysisTextLinkIcon} /> {t("Distributions")}
           </TabsTrigger>
           <TabsTrigger value="settings">
             <Settings /> {t("settings")}
@@ -68,6 +86,7 @@ export default async function Page() {
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
+        <TabsContent value="distributions">Distributions</TabsContent>
         <TabsContent value="settings">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-48" />}>

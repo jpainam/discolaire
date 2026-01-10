@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useTranslations } from "next-intl";
 import {
   Bar,
@@ -14,7 +17,13 @@ import {
 
 import type { RouterOutputs } from "@repo/api";
 
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -36,6 +45,7 @@ export function ClassroomGradeChart({
   const p17 = grades.filter((g) => g.grade >= 14 && g.grade < 18).length;
   const p20 = grades.filter((g) => g.grade >= 18).length;
   const total = grades.filter((g) => !g.isAbsent).length;
+
   //const totalFailed = grades.filter((g) => g.grade < 10).length;
 
   const malePassedCount = grades.filter(
@@ -58,11 +68,17 @@ export function ClassroomGradeChart({
   const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
   return (
     <div className={cn("flex flex-col gap-2 overflow-hidden", className)}>
-      <Card className="gap-4 px-4 py-2">
-        <CardHeader className="p-0">
-          <CardTitle className="text-lg font-semibold">
-            Distribution des notes
-          </CardTitle>
+      <Card className="group/dist">
+        <CardHeader>
+          <CardTitle>{t("Grade distribution")}</CardTitle>
+          <CardAction className="opacity-0 transition-opacity group-hover/dist:opacity-100">
+            <Link
+              target="_blank"
+              href={`/administration/grade-reports?tabId=distributions`}
+            >
+              <HugeiconsIcon className="size-4" icon={LinkSquare02Icon} />
+            </Link>
+          </CardAction>
         </CardHeader>
         <CardContent className="p-0">
           <ChartContainer
@@ -92,9 +108,9 @@ export function ClassroomGradeChart({
           </ChartContainer>
         </CardContent>
       </Card>
-      <Card className="gap-4 p-0">
-        <CardHeader className="px-4 py-2">
-          <CardTitle className="text-lg font-semibold">
+      <Card>
+        <CardHeader>
+          <CardTitle>
             {t("Success by gender")}
           </CardTitle>
         </CardHeader>
@@ -151,7 +167,7 @@ export function ClassroomGradeChart({
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">
+          <CardTitle>
             {t("Grade distribution")}
           </CardTitle>
         </CardHeader>
