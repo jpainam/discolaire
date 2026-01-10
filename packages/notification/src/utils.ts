@@ -6,7 +6,7 @@ import redisClient from "@repo/kv";
 import { env } from "./env";
 
 export function getNotificationDb(tenant?: string | null) {
-  return getDb({ connectionString: env.DATABASE_URL, tenant });
+  return getDb({ connectionString: env.DATABASE_URL, tenant: tenant ?? "public" });
 }
 
 export const db = getNotificationDb();

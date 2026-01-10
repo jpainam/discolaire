@@ -6,14 +6,14 @@ import {
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
-import type { auth } from "./server";
+import type { getAuth } from "./server";
 
 export const authClient = createAuthClient({
   plugins: [
     apiKeyClient(),
     adminClient(),
     usernameClient(),
-    inferAdditionalFields<typeof auth>(),
+    inferAdditionalFields<Awaited<ReturnType<typeof getAuth>>>(),
   ],
 });
 

@@ -113,100 +113,102 @@ export function FundTable({ journalId }: { journalId: string }) {
           </TableHeader>
           <TableBody>
             {quotaQuery.isPending && <FunTableSkeleton />}
-            {filtered.map((q, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Link
-                      href={`/classrooms/${q.classroomId}`}
-                      className="hover:underline"
-                    >
-                      {q.classroom}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{q.effectif}</TableCell>
-                  <TableCell>
-                    {q.revenue.toLocaleString(locale, {
-                      style: "currency",
-                      maximumFractionDigits: 0,
-                      minimumFractionDigits: 0,
-                      currency: CURRENCY,
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-row items-center gap-2">
-                      {q.paid.toLocaleString(locale, {
+            {filtered
+              .filter((f) => f.paid != 0 || f.revenue != 0)
+              .map((q, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Link
+                        href={`/classrooms/${q.classroomId}`}
+                        className="hover:underline"
+                      >
+                        {q.classroom}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{q.effectif}</TableCell>
+                    <TableCell>
+                      {q.revenue.toLocaleString(locale, {
                         style: "currency",
                         maximumFractionDigits: 0,
                         minimumFractionDigits: 0,
                         currency: CURRENCY,
                       })}
-                      <Badge
-                        variant={
-                          q.remaining == 0
-                            ? "success"
-                            : q.paid < q.remaining
-                              ? "destructive"
-                              : "warning"
-                        }
-                        appearance={"light"}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-row items-center gap-2">
+                        {q.paid.toLocaleString(locale, {
+                          style: "currency",
+                          maximumFractionDigits: 0,
+                          minimumFractionDigits: 0,
+                          currency: CURRENCY,
+                        })}
+                        <Badge
+                          variant={
+                            q.remaining == 0
+                              ? "success"
+                              : q.paid < q.remaining
+                                ? "destructive"
+                                : "warning"
+                          }
+                          appearance={"light"}
+                        >
+                          {q.revenue == 0
+                            ? 0
+                            : ((100 * q.paid) / q.revenue).toFixed(2)}
+                          %
+                        </Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-row items-center gap-2">
+                        {q.remaining.toLocaleString(locale, {
+                          style: "currency",
+                          maximumFractionDigits: 0,
+                          minimumFractionDigits: 0,
+                          currency: CURRENCY,
+                        })}
+                        <Badge
+                          variant={
+                            q.remaining == 0
+                              ? "success"
+                              : q.paid < q.remaining
+                                ? "destructive"
+                                : "warning"
+                          }
+                          appearance={"light"}
+                        >
+                          {q.revenue == 0
+                            ? 0
+                            : ((100 * q.remaining) / q.revenue).toFixed(2)}
+                          %
+                        </Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => {
+                          openSheet({
+                            title: `Compte Caisse - ${new Date().toLocaleDateString(locale, { month: "short", day: "2-digit", year: "numeric" })}`,
+                            description: q.classroom,
+                            view: (
+                              <ClassroomFund
+                                classroomId={q.classroomId}
+                                journalId={journalId}
+                              />
+                            ),
+                          });
+                        }}
+                        variant={"secondary"}
+                        size={"sm"}
                       >
-                        {q.revenue == 0
-                          ? 0
-                          : ((100 * q.paid) / q.revenue).toFixed(2)}
-                        %
-                      </Badge>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-row items-center gap-2">
-                      {q.remaining.toLocaleString(locale, {
-                        style: "currency",
-                        maximumFractionDigits: 0,
-                        minimumFractionDigits: 0,
-                        currency: CURRENCY,
-                      })}
-                      <Badge
-                        variant={
-                          q.remaining == 0
-                            ? "success"
-                            : q.paid < q.remaining
-                              ? "destructive"
-                              : "warning"
-                        }
-                        appearance={"light"}
-                      >
-                        {q.revenue == 0
-                          ? 0
-                          : ((100 * q.remaining) / q.revenue).toFixed(2)}
-                        %
-                      </Badge>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      onClick={() => {
-                        openSheet({
-                          title: `Compte Caisse - ${new Date().toLocaleDateString(locale, { month: "short", day: "2-digit", year: "numeric" })}`,
-                          description: q.classroom,
-                          view: (
-                            <ClassroomFund
-                              classroomId={q.classroomId}
-                              journalId={journalId}
-                            />
-                          ),
-                        });
-                      }}
-                      variant={"secondary"}
-                      size={"sm"}
-                    >
-                      {t("details")}
-                      <PanelLeftOpen />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        {t("details")}
+                        <PanelLeftOpen />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </div>

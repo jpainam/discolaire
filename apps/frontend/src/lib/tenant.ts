@@ -1,8 +1,10 @@
-export function getSubdomainFromHost(host: string | null): string {
-  if (!host) return "public";
+import { env } from "~/env";
 
-  const h = host.split(":")[0]; // strip port
-  if (!h || h === "localhost") return "public";
+export function getSubdomainFromHost(host: string | null): string {
+  const h = host?.split(":")[0]; // strip port
+  if (!h || h === "localhost") {
+    return env.DEFAULT_TENANT ?? "public";
+  }
 
   const parts = h.split(".");
   if (parts.length <= 2) return "public";
@@ -10,5 +12,5 @@ export function getSubdomainFromHost(host: string | null): string {
   if (parts[0]) {
     return parts[0].toLowerCase();
   }
-  return "public";
+  return env.DEFAULT_TENANT ?? "public";
 }

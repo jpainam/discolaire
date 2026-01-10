@@ -10,14 +10,11 @@ globalForPrisma.prismaTenants ??= new Map();
 
 export interface GetDbParams {
   connectionString: string;
-  tenant?: string | null;
+  tenant: string;
 }
 
-function withTenantSchema(
-  connectionString: string,
-  tenant?: string | null,
-): string {
-  const schema = tenant?.trim() ? tenant.trim().toLowerCase() : "public";
+function withTenantSchema(connectionString: string, tenant: string): string {
+  const schema = tenant.trim().toLowerCase();
   try {
     const url = new URL(connectionString);
     url.searchParams.set("schema", schema);
@@ -27,8 +24,13 @@ function withTenantSchema(
     return `${connectionString}${separator}schema=${schema}`;
   }
 }
-
+const tenants = ["public", "csac", "demo", "ipbw"];
 export function getDb({ connectionString, tenant }: GetDbParams): PrismaClient {
+  if (!tenants.includes(tenant)) {
+    throw new Error(
+      `Expecting tenant in ${tenants.toString()} found ${tenant}`,
+    );
+  }
   const cache = globalForPrisma.prismaTenants;
   if (!cache) {
     throw new Error(">>>>> Unable to create globalForPrisma");
@@ -38,7 +40,10 @@ export function getDb({ connectionString, tenant }: GetDbParams): PrismaClient {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return cache.get(tenantConnectionString)!;
   }
-  const adapter = new PrismaPg({ connectionString: tenantConnectionString });
+  const adapter = new PrismaPg(
+    { connectionString: connectionString },
+    { schema: tenant },
+  );
 
   const prisma = new PrismaClient({ adapter });
   cache.set(tenantConnectionString, prisma);
