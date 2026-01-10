@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Download, Share2, ZoomIn, ZoomOut } from "lucide-react";
 import {
   Area,

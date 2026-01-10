@@ -16,6 +16,7 @@ import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
+import { StudentRightPanelMeta } from "./StudentRightPanelMeta";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -92,6 +93,7 @@ export default async function Layout(props: {
           { label: getFullName(student) },
         ]}
       />
+      <StudentRightPanelMeta studentName={getFullName(student)} />
       <div className="flex flex-1 flex-col">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense

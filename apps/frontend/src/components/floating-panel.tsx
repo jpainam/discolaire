@@ -1,6 +1,6 @@
 "use client";
 
-import type { Variants } from "framer-motion";
+import type { Variants } from "motion/react";
 import type React from "react";
 import {
   createContext,
@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { ArrowLeftIcon } from "lucide-react";
 
 import { cn } from "../lib/utils";

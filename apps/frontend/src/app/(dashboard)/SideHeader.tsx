@@ -2,7 +2,7 @@
 
 import { Fragment, Suspense } from "react";
 import Link from "next/link";
-import { PanelRightCloseIcon, PanelRightOpenIcon } from "@hugeicons/core-free-icons";
+import { PanelRightCloseIcon, PanelRightOpenIcon, SidebarRightIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 
@@ -18,15 +18,12 @@ import { SidebarTrigger } from "~/components/ui/sidebar";
 import { Skeleton } from "~/components/ui/skeleton";
 import { breadcrumbIcons } from "~/icons";
 import { useBreadcrumbsStore } from "~/stores/breadcrumbs";
-import { useRightPanelStore } from "~/stores/right-panel";
+import { useRightPanel } from "./RightPanelProvider";
 
 
 export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
   const breadcrumbs = useBreadcrumbsStore((s) => s.items);
-  const { showMeta, toggleMeta } = useRightPanelStore((s) => ({
-    showMeta: s.showMeta,
-    toggleMeta: s.toggleMeta,
-  }));
+  const { isOpen, toggle } = useRightPanel();
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -88,19 +85,19 @@ export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
             variant="ghost"
             size={"icon-xs"}
             onClick={() => {
-              toggleMeta();
+              toggle();
             }}
           >
-            {showMeta ? (
+            {isOpen ? (
               <HugeiconsIcon
                 icon={PanelRightOpenIcon}
                 className="size-4"
-                strokeWidth={2}
+                //strokeWidth={2}
               />
             ) : (
               <HugeiconsIcon
-                icon={PanelRightCloseIcon}
                 className="size-4"
+                icon={SidebarRightIcon}
                 strokeWidth={2}
               />
             )}

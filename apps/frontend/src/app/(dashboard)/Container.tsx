@@ -1,19 +1,19 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 
-import { useRightPanelStore } from "~/stores/right-panel";
+import { useRightPanel } from "./RightPanelProvider";
 
 export function Container(props: PropsWithChildren) {
-  const showMeta = useRightPanelStore((s) => s.showMeta);
+  const { isOpen, content } = useRightPanel();
   return (
     <div className="flex flex-1 flex-col">
       <div
         className={
           "grid flex-1 grid-cols-1 " +
-          (showMeta
-            ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,200px)]"
+          (isOpen
+            ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,16rem)]"
             : "lg:grid-cols-[minmax(0,1fr)_minmax(0,0px)]")
         }
       >
@@ -21,7 +21,7 @@ export function Container(props: PropsWithChildren) {
           {props.children}
         </div>
         <AnimatePresence initial={false}>
-          {showMeta && (
+          {isOpen && (
             <motion.div
               key="meta-panel"
               initial={{ x: 80, opacity: 0 }}
@@ -30,7 +30,7 @@ export function Container(props: PropsWithChildren) {
               transition={{ type: "spring", stiffness: 260, damping: 26 }}
               className="lg:border-border h-full lg:border-l lg:pl-6"
             >
-              Right pannel
+              {content ?? "Right pannel"}
             </motion.div>
           )}
         </AnimatePresence>

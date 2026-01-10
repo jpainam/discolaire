@@ -23,6 +23,7 @@ import {
 } from "~/trpc/server";
 import { SiteHeader } from "./SideHeader";
 import { Container } from "./Container";
+import { RightPanelProvider } from "./RightPanelProvider";
 
 export default async function Layout({
   children,
@@ -72,16 +73,18 @@ export default async function Layout({
             <AppSidebar className="p-0" variant="inset" />
             <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
             <SidebarInset className="border">
-              <HydrateClient>
-                <ErrorBoundary errorComponent={ErrorFallback}>
-                  <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-                    <SiteHeader schoolYearId={schoolYearId} />
-                  </Suspense>
-                </ErrorBoundary>
-              </HydrateClient>
-              <Container>
-                {children}
-              </Container>
+              <RightPanelProvider>
+                <HydrateClient>
+                  <ErrorBoundary errorComponent={ErrorFallback}>
+                    <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+                      <SiteHeader schoolYearId={schoolYearId} />
+                    </Suspense>
+                  </ErrorBoundary>
+                </HydrateClient>
+                <Container>
+                  {children}
+                </Container>
+              </RightPanelProvider>
             </SidebarInset>
 
             <GlobalSheet />

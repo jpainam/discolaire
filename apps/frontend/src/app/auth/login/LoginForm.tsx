@@ -4,7 +4,7 @@
 import { useActionState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
