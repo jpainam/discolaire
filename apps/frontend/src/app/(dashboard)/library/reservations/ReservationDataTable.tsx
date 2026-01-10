@@ -19,5 +19,5 @@ export function ReservationDataTable() {
     data: books.filter((book) => book.borrowed > today),
     columns: columns,
   });
-  return <DataTable className="px-4" table={table}></DataTable>;
+  return <DataTable className="" table={table}></DataTable>;
 }

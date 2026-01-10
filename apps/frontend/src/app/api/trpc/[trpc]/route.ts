@@ -3,7 +3,7 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
 import { appRouter, createTRPCContext } from "@repo/api";
 
-import { auth } from "~/auth/server";
+import { getAuth } from "~/auth/server";
 
 /**
  * Configure basic CORS headers
@@ -25,6 +25,7 @@ export const OPTIONS = () => {
 };
 
 const handler = async (req: NextRequest) => {
+  const auth = await getAuth(req.headers);
   const response = await fetchRequestHandler({
     endpoint: "/api/trpc",
     router: appRouter,

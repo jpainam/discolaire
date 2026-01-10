@@ -7,21 +7,26 @@ import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
 
+import { getDb } from "@repo/db";
 import { sendEmail } from "@repo/utils/resend";
 
 import { authEnv } from "../env";
-import { completeRegistration, db, sendResetPassword } from "./utils";
+import { completeRegistration, sendResetPassword } from "./utils";
 
 const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */
 export function initAuth(options: {
   secret: string | undefined;
   baseUrl: string;
+  tenant: string;
 }) {
   const config = {
-    database: prismaAdapter(db, {
-      provider: "postgresql",
-    }),
+    database: prismaAdapter(
+      getDb({ connectionString: env.DATABASE_URL, tenant: options.tenant }),
+      {
+        provider: "postgresql",
+      },
+    ),
     baseURL: options.baseUrl,
     user: {
       // Prisma automically camelCases model names, so we use camelCase here

@@ -18,5 +18,5 @@ export function BorrowBookDataTable() {
     data: books,
     columns: columns,
   });
-  return <DataTable className="px-4" table={table}></DataTable>;
+  return <DataTable className="" table={table}></DataTable>;
 }

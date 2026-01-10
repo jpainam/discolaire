@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 
-import { auth } from "~/auth/server";
+import { getAuth } from "~/auth/server";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -17,8 +17,10 @@ import { CreateAuthApiKey } from "./CreateAuthApiKey";
 import { DeleteAuthApiKey } from "./DeleteAuthApiKey";
 
 export default async function Page() {
+  const requestHeaders = await headers();
+  const auth = await getAuth(requestHeaders);
   const apikeys = await auth.api.listApiKeys({
-    headers: await headers(),
+    headers: requestHeaders,
   });
   const locale = await getLocale();
 

@@ -10,21 +10,38 @@ globalForPrisma.prismaTenants ??= new Map();
 
 export interface GetDbParams {
   connectionString: string;
+  tenant?: string | null;
 }
 
-export function getDb({ connectionString }: GetDbParams): PrismaClient {
+function withTenantSchema(
+  connectionString: string,
+  tenant?: string | null,
+): string {
+  const schema = tenant?.trim() ? tenant.trim().toLowerCase() : "public";
+  try {
+    const url = new URL(connectionString);
+    url.searchParams.set("schema", schema);
+    return url.toString();
+  } catch {
+    const separator = connectionString.includes("?") ? "&" : "?";
+    return `${connectionString}${separator}schema=${schema}`;
+  }
+}
+
+export function getDb({ connectionString, tenant }: GetDbParams): PrismaClient {
   const cache = globalForPrisma.prismaTenants;
   if (!cache) {
     throw new Error(">>>>> Unable to create globalForPrisma");
   }
-  if (cache.has(connectionString)) {
+  const tenantConnectionString = withTenantSchema(connectionString, tenant);
+  if (cache.has(tenantConnectionString)) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return cache.get(connectionString)!;
+    return cache.get(tenantConnectionString)!;
   }
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = new PrismaPg({ connectionString: tenantConnectionString });
 
   const prisma = new PrismaClient({ adapter });
-  cache.set(connectionString, prisma);
+  cache.set(tenantConnectionString, prisma);
   return prisma;
 }
 

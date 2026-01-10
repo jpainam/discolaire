@@ -10,7 +10,7 @@ export async function LibraryDashboard() {
   const counts = await caller.library.count();
   const t = await getTranslations();
   return (
-    <div className="flex-1 px-4">
+    <div className="flex-1">
       <LibraryStatsGrid
         stats={[
           {

@@ -1,5 +1,3 @@
-import { getDb } from "@repo/db";
-
 import { authEnv } from "../env";
 
 const env = authEnv();
@@ -73,5 +71,3 @@ export async function sendResetPassword({
     throw new Error(`Failed to send invitation email: ${error.message}`);
   }
 }
-
-export const db = getDb({ connectionString: env.DATABASE_URL });

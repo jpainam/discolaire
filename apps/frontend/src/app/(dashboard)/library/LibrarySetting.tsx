@@ -4,7 +4,7 @@ import { BookCategory } from "./BookCategory";
 
 export function LibrarySetting() {
   return (
-    <div className="grid gap-4 px-4 md:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-3">
       <BookCategory />
     </div>
   );

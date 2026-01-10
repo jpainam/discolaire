@@ -7,7 +7,7 @@ import { getSubdomainFromHost } from "./lib/tenant";
 export const config = {
   //runtime: "nodejs",
   matcher: [
-    "/((?!api|_next/static|_next/image|images|avatars|fonts|favicon.ico|manifest.webmanifest|robots.txt).*)",
+    "/((?!_next/static|_next/image|images|avatars|fonts|favicon.ico|manifest.webmanifest|robots.txt).*)",
   ],
 };
 
@@ -25,11 +25,20 @@ const unProtectedRoutes = [
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const host = request.headers.get("host");
-  const tenant = getSubdomainFromHost(host);
-
   const requestHeaders = new Headers(request.headers);
-  if (tenant) requestHeaders.set("discolaire-tenant", tenant);
+  const existingTenant = requestHeaders.get("discolaire-tenant");
+
+  if (!existingTenant) {
+    const host = request.headers.get("host");
+    const tenant = getSubdomainFromHost(host);
+    if (tenant) requestHeaders.set("discolaire-tenant", tenant);
+  }
+
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next({
+      request: { headers: requestHeaders },
+    });
+  }
 
   // allow auth routes
   if (pathname.startsWith("/auth")) {

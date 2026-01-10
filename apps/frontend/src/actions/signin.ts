@@ -4,7 +4,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import z from "zod";
 
-import { auth, getSession } from "~/auth/server";
+import { getAuth, getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
 
@@ -32,13 +32,15 @@ export async function signIn(
   await Promise.resolve();
 
   try {
+    const requestHeaders = await headers();
+    const auth = await getAuth(requestHeaders);
     const result = await auth.api.signInUsername({
       body: {
         username: username.toLowerCase(),
         password,
         rememberMe: true,
       },
-      headers: await headers(),
+      headers: requestHeaders,
     });
 
     if (!result) {
@@ -100,6 +102,7 @@ export async function createAuthApiKey() {
   if (!session) {
     throw new Error("Not authenticated");
   }
+  const auth = await getAuth();
   const userId = session.user.id;
   const result = await auth.api.createApiKey({
     body: {

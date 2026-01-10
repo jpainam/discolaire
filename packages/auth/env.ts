@@ -12,6 +12,7 @@ export function authEnv() {
       DISCOLAIRE_API_KEY: z.string().min(1),
       RESEND_API_KEY: z.string().min(1),
       DATABASE_URL: z.string().min(1),
+      DEFAULT_TENANT: z.string().min(1).optional(),
     },
     client: {
       NEXT_PUBLIC_BASE_URL: z.url(),
@@ -23,6 +24,7 @@ export function authEnv() {
       RESEND_API_KEY: process.env.RESEND_API_KEY,
       DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
       NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+      DEFAULT_TENANT: process.env.DEFAULT_TENANT,
     },
 
     skipValidation:

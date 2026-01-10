@@ -5,7 +5,11 @@ import redisClient from "@repo/kv";
 
 import { env } from "./env";
 
-export const db = getDb({ connectionString: env.DATABASE_URL });
+export function getNotificationDb(tenant?: string | null) {
+  return getDb({ connectionString: env.DATABASE_URL, tenant });
+}
+
+export const db = getNotificationDb();
 
 // Define queues
 export const notificationQueue = new Queue("notification", {

@@ -30,29 +30,15 @@ export default async function Page() {
   prefetch(trpc.library.borrowBooks.queryOptions({ limit: 2000 }));
   return (
     <HydrateClient>
-      <Tabs defaultValue="tab-1">
+      <Tabs defaultValue="tab-1" className="px-4">
         <ScrollArea>
-          <TabsList className="text-foreground mb-2 h-auto w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1">
-            <TabsTrigger
-              value="tab-1"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <HouseIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+          <TabsList>
+            <TabsTrigger value="tab-1">
+              <HouseIcon size={16} aria-hidden="true" />
               {t("dashboard")}
             </TabsTrigger>
-            <TabsTrigger
-              value="tab-2"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <PanelsTopLeftIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+            <TabsTrigger value="tab-2">
+              <PanelsTopLeftIcon size={16} aria-hidden="true" />
               {t("materials")}
               <Badge
                 className="bg-primary/15 ms-1.5 min-w-5 px-1"
@@ -61,49 +47,21 @@ export default async function Page() {
                 {books.length}
               </Badge>
             </TabsTrigger>
-            <TabsTrigger
-              value="tab-3"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <BoxIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+            <TabsTrigger value="tab-3">
+              <BoxIcon size={16} aria-hidden="true" />
               {t("loans")}
               <Badge className="ms-1.5">New</Badge>
             </TabsTrigger>
-            <TabsTrigger
-              value="tab-4"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <UsersRoundIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+            <TabsTrigger value="tab-4">
+              <UsersRoundIcon size={16} aria-hidden="true" />
               {t("reservations")}
             </TabsTrigger>
-            <TabsTrigger
-              value="tab-5"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <ChartLine
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+            <TabsTrigger value="tab-5">
+              <ChartLine size={16} aria-hidden="true" />
               {t("insights")}
             </TabsTrigger>
-            <TabsTrigger
-              value="tab-6"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <SettingsIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
+            <TabsTrigger value="tab-6">
+              <SettingsIcon size={16} aria-hidden="true" />
               {t("settings")}
             </TabsTrigger>
           </TabsList>

@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { auth } from "~/auth/server";
+import { getAuth } from "~/auth/server";
 import {
   Table,
   TableBody,
@@ -14,11 +14,13 @@ import {
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const t = await getTranslations();
+  const requestHeaders = await headers();
+  const auth = await getAuth(requestHeaders);
   const { sessions } = await auth.api.listUserSessions({
     body: {
       userId: params.id,
     },
-    headers: await headers(),
+    headers: requestHeaders,
   });
   const locale = await getLocale();
   return (

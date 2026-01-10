@@ -34,6 +34,8 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
         headers() {
           const headers = new Map<string, string>();
           headers.set("x-trpc-source", "expo-react");
+          // I'll extract the tenant from the logged user info later.
+          headers.set("discolaire-tenant", "public");
           // TODO Temporary setting up a default school year
           setSchoolYear("cmcw47cfx0001rz9rbf924zvb");
           const schoolYear = getSchoolYear();

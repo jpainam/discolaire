@@ -25,7 +25,7 @@ export class AnnualService {
       where: { id: termId },
     });
     if (term.parts.length !== 6) {
-      throw new Error(`Expected 6 sequences, found ${term.parts.length}`);
+      throw new Error(`Expected 6 sequences, but found ${term.parts.length}`);
     }
     const childTerms = term.parts.map((t) => t.child);
     const sortedTerms = childTerms.sort((a, b) => a.order - b.order);
@@ -35,9 +35,13 @@ export class AnnualService {
     const term4 = sortedTerms[3];
     const term5 = sortedTerms[4];
     const term6 = sortedTerms[5];
-
+    const definedTerms = [term1, term2, term3, term4, term5, term6].filter(
+      (t) => t !== undefined,
+    );
     if (!term1 || !term2 || !term3 || !term4 || !term5 || !term6) {
-      throw new Error("All 6 terms must be defined");
+      throw new Error(
+        `All 6 terms must be defined, but found ${definedTerms.length}`,
+      );
     }
 
     return this.computeReport(
