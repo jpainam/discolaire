@@ -53,7 +53,7 @@ export function StudentFooter() {
   return (
     <>
       <div className="text-muted-foreground text-xs">
-        {t("lastUpdatedAt")}{" "}
+        Derniere mise a jour{" "}
         {
           <time dateTime={new Date(student.updatedAt).toISOString()}>
             {dateFormatter.format(new Date(student.updatedAt))}

@@ -2,28 +2,31 @@
 
 import { Fragment, Suspense } from "react";
 import Link from "next/link";
+import { PanelRightCloseIcon, PanelRightOpenIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+
+
 
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { ModeSwitcher } from "~/components/mode-switcher";
 import { NotificationList } from "~/components/notifications/NotificationList";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "~/components/ui/breadcrumb";
+import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { SidebarTrigger } from "~/components/ui/sidebar";
 import { Skeleton } from "~/components/ui/skeleton";
 import { breadcrumbIcons } from "~/icons";
 import { useBreadcrumbsStore } from "~/stores/breadcrumbs";
+import { useRightPanelStore } from "~/stores/right-panel";
+
 
 export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
   const breadcrumbs = useBreadcrumbsStore((s) => s.items);
+  const { showMeta, toggleMeta } = useRightPanelStore((s) => ({
+    showMeta: s.showMeta,
+    toggleMeta: s.toggleMeta,
+  }));
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -81,6 +84,27 @@ export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
           <LanguageSwitcher className="hidden md:flex" />
           <NotificationList />
           <ModeSwitcher />
+          <Button
+            variant="ghost"
+            size={"icon-xs"}
+            onClick={() => {
+              toggleMeta();
+            }}
+          >
+            {showMeta ? (
+              <HugeiconsIcon
+                icon={PanelRightOpenIcon}
+                className="size-4"
+                strokeWidth={2}
+              />
+            ) : (
+              <HugeiconsIcon
+                icon={PanelRightCloseIcon}
+                className="size-4"
+                strokeWidth={2}
+              />
+            )}
+          </Button>
         </div>
       </div>
     </header>

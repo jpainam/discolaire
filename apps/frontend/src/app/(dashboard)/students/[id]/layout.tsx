@@ -10,7 +10,6 @@ import { getSession } from "~/auth/server";
 import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
-import { StudentFooter } from "~/components/students/StudentFooter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { Skeleton } from "~/components/ui/skeleton";
 import { PermissionAction } from "~/permissions";
@@ -109,11 +108,11 @@ export default async function Layout(props: {
         {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
 
         <main className="flex-1">{props.children}</main>
-        <div className="bg-muted/50 flex flex-row items-center border-y px-6 py-1">
+        {/* <div className="bg-muted/50 flex flex-row items-center border-y px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />
           </Suspense>
-        </div>
+        </div> */}
       </div>
     </HydrateClient>
   );

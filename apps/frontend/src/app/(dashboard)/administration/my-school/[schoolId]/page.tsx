@@ -157,7 +157,7 @@ export default async function Page(props: {
               {t("created_at")}: {school.createdAt.toLocaleString()}
             </p>
             <p>
-              {t("last_updated")}: {school.updatedAt.toLocaleString()}
+            
             </p>
           </div> */}
           </CardContent>

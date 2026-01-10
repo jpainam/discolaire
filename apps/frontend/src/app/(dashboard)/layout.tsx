@@ -22,6 +22,7 @@ import {
   trpc,
 } from "~/trpc/server";
 import { SiteHeader } from "./SideHeader";
+import { Container } from "./Container";
 
 export default async function Layout({
   children,
@@ -78,11 +79,9 @@ export default async function Layout({
                   </Suspense>
                 </ErrorBoundary>
               </HydrateClient>
-              <div className="flex flex-1 flex-col">
-                <div className="@container/main flex flex-1 flex-col gap-2">
-                  {children}
-                </div>
-              </div>
+              <Container>
+                {children}
+              </Container>
             </SidebarInset>
 
             <GlobalSheet />

@@ -596,12 +596,12 @@
   "language": "Language",
   "lastCriminalRecordCheck": "Criminal record check",
   "lastName": "Last Name",
-  "lastUpdatedAt": "Last Updated At",
+  
   "Last 30 days": "Last 30 days",
   "Last 3 months": "Last 3 months",
   "Last 7 days": "Last 7 days",
   "last_login": "Last Login",
-  "last_updated": "Last Updated",
+ 
   "lateness": "Lateness",
   "level": "Level",
   "library": "Library",
