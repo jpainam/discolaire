@@ -15,7 +15,7 @@ interface RightPanelContextValue {
 const RightPanelContext = createContext<RightPanelContextValue | null>(null);
 
 export function RightPanelProvider({ children }: PropsWithChildren) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [content, setContent] = useState<ReactNode | null>(null);
 
   const value = useMemo(

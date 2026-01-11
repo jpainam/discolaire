@@ -16,7 +16,7 @@ const config = {
     "@repo/api",
     "@repo/auth",
     "@repo/db",
-    "@repo/transactional"
+    "@repo/transactional",
   ],
 
   images: {
@@ -29,6 +29,10 @@ const config = {
       },
     ],
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "assets.stickpng.com",
+      },
       { protocol: "https", hostname: "github.com" },
       {
         protocol: "https",

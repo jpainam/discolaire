@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import { StudentAttendanceCount } from "~/components/students/attendances/StudentAttendanceCount";
+import { StudentAttendanceSummary } from "~/components/students/attendances/StudentAttendanceSummary";
 import { StudentContactTable } from "~/components/students/contacts/StudentContactTable";
 import { StudentGradeCount } from "~/components/students/grades/StudentGradeCount";
 import StudentDetails from "~/components/students/profile/StudentDetails";
@@ -37,19 +37,32 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <HydrateClient>
-      <div className="grid grid-cols-1 gap-4 divide-x border-b lg:grid-cols-4">
+      <div className="grid grid-cols-1 divide-x border-b lg:grid-cols-6">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             key={params.id}
             fallback={
-              <div className="grid grid-cols-3 gap-4 px-4">
+              <div className="grid gap-4 px-4 lg:grid-cols-3">
                 {Array.from({ length: 9 }).map((_, i) => (
                   <Skeleton key={i} className="h-8" />
                 ))}
               </div>
             }
           >
-            <StudentDetails className="col-span-full lg:col-span-2" />
+            <StudentDetails className="col-span-full lg:col-span-3" />
+          </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="flex flex-col gap-4 pt-2 lg:col-span-2">
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </div>
+            }
+          >
+            <StudentGradeCount className={"col-span-2 px-2"} studentId={params.id} />
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
@@ -62,24 +75,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
             }
           >
-            <StudentGradeCount studentId={params.id} />
-          </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense
-            fallback={
-              <div className="flex flex-col gap-4 pt-2 pr-2">
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-              </div>
-            }
-          >
-            <StudentAttendanceCount terms={terms} studentId={params.id} />
+            <StudentAttendanceSummary studentId={params.id} />
+            {/* <StudentAttendanceCount terms={terms} studentId={params.id} /> */}
           </Suspense>
         </ErrorBoundary>
       </div>
-      <div className="divide-border grid gap-4 divide-y lg:grid-cols-2 lg:divide-x lg:divide-y-0">
+      <div className="divide-border grid divide-y lg:grid-cols-2 lg:divide-x lg:divide-y-0">
         <div className="flex flex-col gap-2">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense

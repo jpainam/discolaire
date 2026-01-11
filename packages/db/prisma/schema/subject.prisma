@@ -129,3 +129,29 @@ model ClassroomCouncil {
 
     @@unique([studentId, termId])
 }
+
+model StudentAcademicSnapshot {
+    studentId   String
+    student     Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    classroomId String
+    classroom   Classroom              @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    termId      String
+    term        Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
+    average     Decimal
+    rank        Int
+    data        Json
+    status      AcademicSnapshotStatus
+    version     String
+    createdAt   DateTime               @default(now())
+    updatedAt   DateTime               @updatedAt
+
+    @@id([studentId, classroomId, termId])
+    @@index([classroomId, termId, rank])
+}
+
+enum AcademicSnapshotStatus {
+    DIRTY
+    COMPUTING
+    READY
+    ERROR
+}

@@ -3,11 +3,14 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { getSession } from "~/auth/server";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";
+import { RightPanelSetter } from "~/components/RightPanelSetter";
 import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
+import { ClassroomRightPanelMeta } from "./ClassroomRightPanelMeta";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -20,6 +23,7 @@ export default async function Layout(props: {
   let canReadClassroom = false;
   const session = await getSession();
   const classroom = await caller.classroom.get(params.id);
+
   const schoolYearId = (await cookies()).get("x-school-year")?.value;
   if (!session || !schoolYearId || schoolYearId !== classroom.schoolYearId) {
     redirect("/");
@@ -65,7 +69,18 @@ export default async function Layout(props: {
   }
   return (
     <div className="grid grid-cols-1">
+      <BreadcrumbsSetter
+        items={[
+          { label: "home", href: "/", icon: "home" },
+          { label: "classrooms", href: "/classrooms", icon: "home" },
+          { label: classroom.name },
+        ]}
+      />
+      <RightPanelSetter
+        content={<ClassroomRightPanelMeta classroomId={classroom.id} />}
+      />
       <ClassroomHeader />
+
       {children}
     </div>
   );

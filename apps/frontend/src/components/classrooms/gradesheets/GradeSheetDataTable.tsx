@@ -12,9 +12,9 @@ import { parseAsInteger, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { Badge } from "~/components/base-badge";
 import { DataTable, useDataTable } from "~/components/datatable";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
-import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { routes } from "~/configs/routes";
@@ -211,9 +211,12 @@ export function GradeSheetDataTable() {
         cell: ({ row }) => {
           const avg = row.original.avg || 0;
           return (
-            <FlatBadge variant={avg < 10 ? "red" : "green"}>
+            <Badge
+              appearance={"light"}
+              variant={avg < 10 ? "destructive" : "success"}
+            >
               {avg.toFixed(2)}
-            </FlatBadge>
+            </Badge>
           );
         },
       },
@@ -226,9 +229,12 @@ export function GradeSheetDataTable() {
         cell: ({ row }) => {
           const min = isFinite(row.original.min) ? row.original.min : 0;
           return (
-            <FlatBadge variant={min < 10 ? "purple" : "yellow"}>
+            <Badge
+              appearance={"light"}
+              variant={min < 10 ? "secondary" : "warning"}
+            >
               {min.toFixed(2)}
-            </FlatBadge>
+            </Badge>
           );
         },
       },
@@ -241,9 +247,12 @@ export function GradeSheetDataTable() {
         cell: ({ row }) => {
           const max = isFinite(row.original.max) ? row.original.max : 0;
           return (
-            <FlatBadge variant={max < 10 ? "pink" : "blue"}>
+            <Badge
+              appearance={"light"}
+              variant={max < 10 ? "info" : "secondary"}
+            >
               {max.toFixed(2)}
-            </FlatBadge>
+            </Badge>
           );
         },
       },
@@ -260,12 +269,13 @@ export function GradeSheetDataTable() {
       },
       {
         accessorKey: "term",
+        size: 50,
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("term")} />
         ),
         cell: ({ row }) => {
           const term = row.original.term;
-          return <div>{term.name}</div>;
+          return <div>{term.shortName}</div>;
         },
       },
       {

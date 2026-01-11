@@ -1,35 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTranslations } from "next-intl";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Pie,
-  PieChart,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, Pie, PieChart, XAxis, YAxis } from "recharts";
+
+
 
 import type { RouterOutputs } from "@repo/api";
 
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "~/components/ui/chart";
+
+
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "~/components/ui/chart";
+import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
+
 
 export function ClassroomGradeChart({
   grades,
@@ -39,6 +27,7 @@ export function ClassroomGradeChart({
   className?: string;
 }) {
   const t = useTranslations();
+  const pathname = usePathname();
   const p05 = grades.filter((g) => !g.isAbsent && g.grade < 5).length;
   const p09 = grades.filter((g) => g.grade >= 5 && g.grade < 10).length;
   const p13 = grades.filter((g) => g.grade >= 10 && g.grade < 14).length;
@@ -71,11 +60,8 @@ export function ClassroomGradeChart({
       <Card className="group/dist">
         <CardHeader>
           <CardTitle>{t("Grade distribution")}</CardTitle>
-          <CardAction className="opacity-0 transition-opacity group-hover/dist:opacity-100">
-            <Link
-              target="_blank"
-              href={`/administration/grade-reports?tabId=distributions`}
-            >
+          <CardAction className="pointer-events-none opacity-0 transition-opacity group-focus-within/dist:pointer-events-auto group-focus-within/dist:opacity-100 group-hover/dist:pointer-events-auto group-hover/dist:opacity-100">
+            <Link target="_blank" href={pathname} aria-label={t("details")}>
               <HugeiconsIcon className="size-4" icon={LinkSquare02Icon} />
             </Link>
           </CardAction>
@@ -108,11 +94,14 @@ export function ClassroomGradeChart({
           </ChartContainer>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="group/dist">
         <CardHeader>
-          <CardTitle>
-            {t("Success by gender")}
-          </CardTitle>
+          <CardTitle>{t("Success by gender")}</CardTitle>
+          <CardAction className="pointer-events-none opacity-0 transition-opacity group-focus-within/dist:pointer-events-auto group-focus-within/dist:opacity-100 group-hover/dist:pointer-events-auto group-hover/dist:opacity-100">
+            <Link target="_blank" href={pathname} aria-label={t("details")}>
+              <HugeiconsIcon className="size-4" icon={LinkSquare02Icon} />
+            </Link>
+          </CardAction>
         </CardHeader>
         <CardContent className="">
           <ChartContainer
@@ -165,18 +154,21 @@ export function ClassroomGradeChart({
           </ChartContainer>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="group/dist">
         <CardHeader>
-          <CardTitle>
-            {t("Grade distribution")}
-          </CardTitle>
+          <CardTitle>{t("Grade distribution")}</CardTitle>
+          <CardAction className="pointer-events-none opacity-0 transition-opacity group-focus-within/dist:pointer-events-auto group-focus-within/dist:opacity-100 group-hover/dist:pointer-events-auto group-hover/dist:opacity-100">
+            <Link target="_blank" href={pathname} aria-label={t("details")}>
+              <HugeiconsIcon className="size-4" icon={LinkSquare02Icon} />
+            </Link>
+          </CardAction>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                <span className="text-sm">Excellent {">= 18"}</span>
+                <Label>Excellent {">= 18"}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -191,7 +183,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-blue-500"></div>
-                <span className="text-sm">Bien {">= 14"}</span>
+                <Label>Bien {">= 14"}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -206,7 +198,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-orange-500"></div>
-                <span className="text-sm">Assez bien {">= 10"}</span>
+                <Label>Assez bien {">= 10"}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -221,7 +213,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                <span className="text-sm">Passable {">= 8"}</span>
+                <Label>Passable {">= 8"}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -236,7 +228,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                <span className="text-sm">Nul {"< 8"}</span>
+                <Label>Nul {"< 8"}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">

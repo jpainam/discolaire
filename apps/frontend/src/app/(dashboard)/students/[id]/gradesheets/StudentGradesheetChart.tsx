@@ -200,7 +200,7 @@ export function StudentGradesheetChart({
         </CardAction>
       </CardHeader>
 
-      <CardContent className="flex flex-col items-end p-0">
+      <CardContent className="flex flex-col items-end">
         {chartData?.length === 0 && (
           <Empty>
             <EmptyTitle>Aucune notes</EmptyTitle>

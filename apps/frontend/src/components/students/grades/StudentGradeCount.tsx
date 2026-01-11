@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   Notebook,
@@ -9,6 +8,7 @@ import {
   Rows3Icon,
 } from "lucide-react";
 import { useQueryState } from "nuqs";
+import { useMemo } from "react";
 
 import {
   MetricCard,
@@ -19,9 +19,16 @@ import {
 } from "~/components/metric-card";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { Label } from "~/components/ui/label";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
-export function StudentGradeCount({ studentId }: { studentId: string }) {
+export function StudentGradeCount({
+  studentId,
+  className,
+}: {
+  studentId: string;
+  className?: string;
+}) {
   const trpc = useTRPC();
   const { data: allgrades } = useSuspenseQuery(
     trpc.student.grades.queryOptions({ id: studentId }),
@@ -78,7 +85,7 @@ export function StudentGradeCount({ studentId }: { studentId: string }) {
   }, [allgrades, termId]);
 
   return (
-    <div className="flex flex-col gap-4 py-2 pr-2">
+    <div className={cn("flex flex-col gap-4 py-2 pr-2", className)}>
       <div className="space-y-4">
         <TermSelector
           className="w-full"

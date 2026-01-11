@@ -10,6 +10,7 @@ import { getSession } from "~/auth/server";
 import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
+import { RightPanelSetter } from "~/components/RightPanelSetter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { Skeleton } from "~/components/ui/skeleton";
 import { PermissionAction } from "~/permissions";
@@ -93,7 +94,9 @@ export default async function Layout(props: {
           { label: getFullName(student) },
         ]}
       />
-      <StudentRightPanelMeta studentName={getFullName(student)} />
+      <RightPanelSetter
+        content={<StudentRightPanelMeta studentId={params.id} />}
+      />
       <div className="flex flex-1 flex-col">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
