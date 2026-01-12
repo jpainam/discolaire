@@ -1,11 +1,11 @@
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { AnalysisTextLinkIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { CircleGauge, FileIcon, FileTextIcon, Settings } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsString } from "nuqs/server";
-
-
 
 import { GradeReportDashboard } from "~/components/administration/grade-reports/GradeReportDashboard";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
@@ -15,9 +15,6 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { AnalysisTextLinkIcon } from "@hugeicons/core-free-icons";
-
 
 const gradeReportSearchSchema = {
   tabId: parseAsString,

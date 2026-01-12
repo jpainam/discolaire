@@ -43,6 +43,7 @@ export const accountingJournal = {
 } satisfies TRPCRouterRecord;
 
 export function snapshotsToData(data: Prisma.JsonValue) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const d = (data ?? {}) as Prisma.JsonObject;
   return {};
 }

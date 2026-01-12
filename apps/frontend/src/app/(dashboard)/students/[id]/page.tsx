@@ -62,7 +62,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
             }
           >
-            <StudentGradeCount className={"col-span-2 px-2"} studentId={params.id} />
+            <StudentGradeCount
+              className={"col-span-2 px-2"}
+              studentId={params.id}
+            />
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>

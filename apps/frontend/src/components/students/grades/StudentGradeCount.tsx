@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   Notebook,
@@ -8,7 +9,6 @@ import {
   Rows3Icon,
 } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { useMemo } from "react";
 
 import {
   MetricCard,

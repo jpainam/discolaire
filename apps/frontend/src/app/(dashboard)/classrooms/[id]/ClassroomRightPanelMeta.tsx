@@ -33,7 +33,7 @@ export function ClassroomRightPanelMeta({
       </div>
     );
   }
- 
+
   const cl = {
     name: "Grade 10-A",
     code: "CLS-2024-10A",

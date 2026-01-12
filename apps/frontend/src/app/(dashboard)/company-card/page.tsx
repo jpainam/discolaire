@@ -3,7 +3,6 @@
 import { useState, ViewTransition } from "react";
 import { DM_Sans } from "next/font/google";
 import Image from "next/image";
-
 import {
   BarChart3,
   ChevronDown,
@@ -350,8 +349,6 @@ function InfoRowDark({
 export default function CompanyCardPage() {
   return (
     <div className={`min-h-screen ${dmSans.className}`}>
-      
-
       {/* Split layout */}
       <div className="flex min-h-screen flex-col pt-[57px] md:flex-row">
         {/* Light mode side */}

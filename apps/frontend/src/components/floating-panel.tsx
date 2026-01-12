@@ -10,8 +10,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { ArrowLeftIcon } from "lucide-react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 
 import { cn } from "../lib/utils";
 

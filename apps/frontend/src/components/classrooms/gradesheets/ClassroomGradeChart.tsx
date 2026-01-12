@@ -5,19 +5,33 @@ import { usePathname } from "next/navigation";
 import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTranslations } from "next-intl";
-import { Bar, BarChart, CartesianGrid, Legend, Pie, PieChart, XAxis, YAxis } from "recharts";
-
-
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Pie,
+  PieChart,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import type { RouterOutputs } from "@repo/api";
 
-
-
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "~/components/ui/chart";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "~/components/ui/chart";
 import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
-
 
 export function ClassroomGradeChart({
   grades,

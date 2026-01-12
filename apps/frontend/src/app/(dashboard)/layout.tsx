@@ -21,9 +21,9 @@ import {
   HydrateClient,
   trpc,
 } from "~/trpc/server";
-import { SiteHeader } from "./SideHeader";
 import { Container } from "./Container";
 import { RightPanelProvider } from "./RightPanelProvider";
+import { SiteHeader } from "./SideHeader";
 
 export default async function Layout({
   children,
@@ -81,9 +81,7 @@ export default async function Layout({
                     </Suspense>
                   </ErrorBoundary>
                 </HydrateClient>
-                <Container>
-                  {children}
-                </Container>
+                <Container>{children}</Container>
               </RightPanelProvider>
             </SidebarInset>
 

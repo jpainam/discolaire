@@ -2,16 +2,24 @@
 
 import { Fragment, Suspense } from "react";
 import Link from "next/link";
-import { PanelRightCloseIcon, PanelRightOpenIcon, SidebarRightIcon } from "@hugeicons/core-free-icons";
+import {
+  PanelRightOpenIcon,
+  SidebarRightIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-
-
 
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { ModeSwitcher } from "~/components/mode-switcher";
 import { NotificationList } from "~/components/notifications/NotificationList";
 import { SchoolYearSwitcher } from "~/components/SchoolYearSwitcher";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "~/components/ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "~/components/ui/breadcrumb";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { SidebarTrigger } from "~/components/ui/sidebar";
@@ -19,7 +27,6 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { breadcrumbIcons } from "~/icons";
 import { useBreadcrumbsStore } from "~/stores/breadcrumbs";
 import { useRightPanel } from "./RightPanelProvider";
-
 
 export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
   const breadcrumbs = useBreadcrumbsStore((s) => s.items);

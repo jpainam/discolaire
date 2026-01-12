@@ -28,7 +28,7 @@ export function Container(props: PropsWithChildren) {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 80, opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 26 }}
-              className="lg:border-border h-full lg:border-l "
+              className="lg:border-border h-full lg:border-l"
             >
               {content ?? "Right pannel"}
             </motion.div>
