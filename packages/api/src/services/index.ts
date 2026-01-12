@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@repo/db";
 
+import { AcademicSnapshotService } from "./academic-snapshot-service";
 import { AccountingService } from "./accounting-service";
 import { AnnualService } from "./annual-service";
 import { AttendanceService } from "./attendance-service";
@@ -48,6 +49,7 @@ const serviceRegistry = {
   staff: StaffService,
   user: UserService,
   notification: NotificationService,
+  academicSnapshot: AcademicSnapshotService,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, ServiceCtor<any>>;
 

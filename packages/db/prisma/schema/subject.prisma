@@ -137,11 +137,11 @@ model StudentAcademicSnapshot {
     classroom   Classroom              @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     termId      String
     term        Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
-    average     Decimal
+    average     Float
     rank        Int
     data        Json
     status      AcademicSnapshotStatus
-    version     String
+    version     Int
     createdAt   DateTime               @default(now())
     updatedAt   DateTime               @updatedAt
 

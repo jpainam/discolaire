@@ -77,11 +77,25 @@ export const reportCardRouter = {
         termId: z.string().min(1),
       }),
     )
-    .query(({ input, ctx }) => {
-      return ctx.services.sequence.getSequenceGrades(
+    .query(async ({ input, ctx }) => {
+      const results = await ctx.services.sequence.getSequenceGrades(
         input.classroomId,
         input.termId,
       );
+      const { globalRanks } = results;
+      const d = Array.from(globalRanks).map(([key, value]) => {
+        return {
+          studentId: key,
+          average: Number(value.average.toFixed(2)),
+          rank: value.rank,
+        };
+      });
+      await ctx.services.academicSnapshot.create({
+        classroomId: input.classroomId,
+        termId: input.termId,
+        reportcards: d,
+      });
+      return results;
     }),
   getTrimestre: protectedProcedure
     .input(
@@ -90,13 +104,27 @@ export const reportCardRouter = {
         classroomId: z.string().min(1),
       }),
     )
-    .query(({ input, ctx }) => {
-      return ctx.services.trimestre.getTrimestreGrades(
+    .query(async ({ input, ctx }) => {
+      const results = await ctx.services.trimestre.getTrimestreGrades(
         input.classroomId,
         input.termId,
         ctx.schoolId,
         ctx.schoolYearId,
       );
+      const { globalRanks } = results;
+      const d = Array.from(globalRanks).map(([key, value]) => {
+        return {
+          studentId: key,
+          average: Number(value.average.toFixed(2)),
+          rank: value.rank,
+        };
+      });
+      await ctx.services.academicSnapshot.create({
+        classroomId: input.classroomId,
+        termId: input.termId,
+        reportcards: d,
+      });
+      return results;
     }),
   getAnnualReport: protectedProcedure
     .input(
