@@ -50,7 +50,7 @@ export const createTRPCContext = async (opts: {
     headers: opts.headers,
   });
 
-  const tenant = opts.headers.get("discolaire-tenant") ?? "public";
+  const tenant = "public"; //opts.headers.get("discolaire-tenant") ?? "public";
   const db = getDb({ connectionString: env.DATABASE_URL, tenant });
   const schoolYearId = getCookieValue(opts.headers, "x-school-year");
   const services = createServices(db);
