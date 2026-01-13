@@ -42,6 +42,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { UserLink } from "~/components/UserLink";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -160,35 +161,12 @@ export function StudentContactTable({
               return (
                 <TableRow key={`${contact.id}-${index}`}>
                   <TableCell className="flex items-center justify-start gap-1">
-                    <AvatarState
-                      className="h-7 w-7"
-                      pos={index}
+                    <UserLink
+                      id={contact.id}
+                      profile="contact"
                       avatar={contact.avatar}
+                      name={getFullName(contact)}
                     />
-                    {/* <Link
-                      href={`${routes.students.contacts(c.studentId)}/${contact.id}`}
-                      className={cn(
-                        "ml-4 justify-center space-y-1 hover:text-blue-600 hover:underline",
-                      )}
-                    >
-                      {getFullName(contact)}
-                    </Link> */}
-                    <div
-                      className="cursor-pointer text-xs hover:underline"
-                      onClick={() => {
-                        openSheet({
-                          view: (
-                            <StudentContactDetails
-                              studentId={c.studentId}
-                              contactId={c.contactId}
-                              studentContact={c}
-                            />
-                          ),
-                        });
-                      }}
-                    >
-                      {getFullName(contact)}
-                    </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -251,15 +229,27 @@ export function StudentContactTable({
                       )}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            className="size-7"
-                            variant={"ghost"}
-                            size={"icon"}
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button variant={"ghost"} size={"icon"}>
+                            <MoreHorizontal />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              openSheet({
+                                view: (
+                                  <StudentContactDetails
+                                    studentId={c.studentId}
+                                    contactId={c.contactId}
+                                    studentContact={c}
+                                  />
+                                ),
+                              });
+                            }}
+                          >
+                            <ViewIcon />
+                            {t("details")}
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
                               router.push(
@@ -267,7 +257,8 @@ export function StudentContactTable({
                               );
                             }}
                           >
-                            <ViewIcon /> {t("Open relationship")}
+                            <FileHeart className="h-4 w-4" />
+                            {t("Open relationship")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {

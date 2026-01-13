@@ -2,23 +2,17 @@
 
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  ArrowDownLeft,
-  ArrowUpLeft,
-  BookText,
-  CalendarDays,
-  Captions,
-  ClipboardList,
-  Dock,
-  Hash,
-  Waves,
-} from "lucide-react";
+import { ArrowDownLeft, ArrowUpLeft, BookText, CalendarDays, Captions, ClipboardList, Dock, Hash, Waves } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+
+
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
+import { StudentGradePercentiles } from "./StudentGradePercentiles";
+
 
 export function StudentGradeDetails({
   gradeId,
@@ -45,6 +39,7 @@ export function StudentGradeDetails({
     max,
     min,
     avg,
+    evaluated,
   } = useMemo(() => {
     const evaluated = gradeSheet?.grades.filter((g) => !g.isAbsent) ?? [];
     const grades = evaluated.map((g) => g.grade);
@@ -67,6 +62,7 @@ export function StudentGradeDetails({
       maleAbove10,
       femaleAbove10,
       above10,
+      evaluated,
       len: evaluated.length,
       max: Math.max(...grades),
       min: Math.min(...grades),
@@ -233,8 +229,19 @@ export function StudentGradeDetails({
           </CardContent>
         </Card>
       </div>
+      <div className="px-4">
+      <StudentGradePercentiles
+        grades={evaluated.map((g) => g.grade)}
+        females={evaluated
+          .filter((g) => g.student.gender == "female")
+          .map((g) => g.grade)}
+        males={evaluated
+          .filter((g) => g.student.gender == "male")
+          .map((g) => g.grade)}
+      />
 
       {/* <StudentGradeChart grades={[]} /> */}
+    </div>
     </div>
   );
 }

@@ -161,3 +161,21 @@ export function avatarUrl(filename?: string) {
     return `/api/avatars/${filename}`;
   }
 }
+
+export function percentile(sorted: number[], p: number): number {
+  if (sorted.length === 0) {
+    throw new Error("Empty dataset");
+  }
+
+  if (p <= 0) return sorted[0] ?? 0;
+  if (p >= 100) return sorted[sorted.length - 1] ?? 0;
+
+  const rank = (p / 100) * (sorted.length - 1);
+  const low = Math.floor(rank);
+  const high = Math.ceil(rank);
+
+  const weight = rank - low;
+  return (
+    (sorted[low] ?? 0) + weight * ((sorted[high] ?? 0) - (sorted[low] ?? 0))
+  );
+}

@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Loader } from "lucide-react";
+import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { randomAvatar } from "~/components/raw-images";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   Command,
@@ -23,6 +23,8 @@ import {
 } from "~/components/ui/command";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
+import { UserLink } from "~/components/UserLink";
 import { useDebounce } from "~/hooks/use-debounce";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
@@ -123,23 +125,13 @@ export function LinkContact({ studentId }: { studentId: string }) {
                     );
                   }}
                 >
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage
-                      src={contact.avatar ?? undefined}
-                      alt="Image"
-                    />
-                    <AvatarFallback>
-                      <Image
-                        height={50}
-                        width={50}
-                        src={randomAvatar(getFullName(contact).length)}
-                        alt="AV"
-                      />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="ml-2 text-xs leading-none font-medium">
-                    {getFullName(contact)}
-                  </div>
+                  <UserLink
+                    avatar={contact.avatar}
+                    name={getFullName(contact)}
+                    id={contact.id}
+                    profile="contact"
+                  />
+
                   {selectedContacts.includes(contact) ? (
                     <Check className="text-primary ml-auto flex h-5 w-5" />
                   ) : null}
@@ -152,30 +144,29 @@ export function LinkContact({ studentId }: { studentId: string }) {
       <div className="flex items-center border-t p-4 sm:justify-between">
         {selectedContacts.length > 0 ? (
           <div className="flex -space-x-2">
-            {selectedContacts.map((contact) => (
-              <Avatar
-                key={`${contact.id}-selected`}
-                className="border-background inline-block border-2"
-              >
-                <AvatarImage src={contact.avatar ?? undefined} alt="Image" />
-                <AvatarFallback>
-                  <Image
-                    width={50}
-                    height={50}
-                    src={randomAvatar(getFullName(contact).length)}
-                    alt="AV"
+            {selectedContacts.map((contact) => {
+              const avatar = createAvatar(initials, {
+                seed: getFullName(contact),
+              });
+              return (
+                <Avatar
+                  key={`${contact.id}-selected`}
+                  className="border-background inline-block size-8 border-2"
+                >
+                  <AvatarImage
+                    src={contact.avatar ?? avatar.toDataUri()}
+                    alt="Image"
                   />
-                </AvatarFallback>
-              </Avatar>
-            ))}
+                </Avatar>
+              );
+            })}
           </div>
         ) : (
-          <span className="text-muted-foreground text-sm">
+          <span className="text-muted-foreground text-xs">
             {t("select_students_to_add")}
           </span>
         )}
         <Button
-          size={"sm"}
           variant={"default"}
           disabled={
             selectedContacts.length === 0 ||
@@ -196,10 +187,8 @@ export function LinkContact({ studentId }: { studentId: string }) {
             });
           }}
         >
-          {createStudentContactMutation.isPending && (
-            <Loader className="h-4 w-4 animate-spin" />
-          )}
-          {t("link")}
+          {createStudentContactMutation.isPending && <Spinner />}
+          {t("add")}
         </Button>
       </div>
     </div>

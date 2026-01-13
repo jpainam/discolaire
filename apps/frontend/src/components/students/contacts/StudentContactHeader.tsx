@@ -37,7 +37,7 @@ export function StudentContactHeader() {
   const { openSheet } = useSheet();
 
   return (
-    <div className="bg-muted flex flex-row items-center gap-2 px-4 py-1">
+    <div className="bg-muted/50 flex flex-row items-center gap-2 px-4 py-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("contacts")}</Label>
 
@@ -55,9 +55,9 @@ export function StudentContactHeader() {
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
-                      className: "p-0",
+                      className: "sm:max-w-lg p-0",
                       title: (
-                        <p className="px-2 pt-4">{t("add_from_existing")}</p>
+                        <p className="px-4 pt-4">{t("add_from_existing")}</p>
                       ),
                       // description: (
                       //   <div className="px-2">{t("add_from_existing")}</div>
