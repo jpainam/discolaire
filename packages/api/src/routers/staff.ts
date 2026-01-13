@@ -1,6 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
-import { fromZonedTime } from "date-fns-tz";
 import { z } from "zod/v4";
 
 import { protectedProcedure } from "../trpc";
@@ -125,9 +124,7 @@ export const staffRouter = {
         data: {
           ...data,
           email: input.email,
-          dateOfBirth: input.dateOfBirth
-            ? fromZonedTime(input.dateOfBirth, "UTC")
-            : undefined,
+          dateOfBirth: input.dateOfBirth,
           schoolId: ctx.schoolId,
         },
       });
@@ -212,9 +209,7 @@ export const staffRouter = {
         data: {
           ...data,
           email: input.email,
-          dateOfBirth: data.dateOfBirth
-            ? fromZonedTime(data.dateOfBirth, "UTC")
-            : undefined,
+          dateOfBirth: data.dateOfBirth,
         },
       });
     }),

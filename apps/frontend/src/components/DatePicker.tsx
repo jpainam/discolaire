@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { CalendarIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { enUS, es, fr } from "react-day-picker/locale";
@@ -18,18 +18,40 @@ export function DatePicker({
   className,
   onSelectAction,
   defaultValue,
+  dateOnly = true,
 }: {
   className?: string;
   defaultValue?: Date;
   onSelectAction?: (val: Date | undefined) => void;
+  dateOnly?: boolean;
 }) {
   const [timeZone, setTimeZone] = useState<string | undefined>(undefined);
   const [open, setOpen] = useState(false);
   //const [today] = React.useState(() => new Date())
   const locale = useLocale();
-  const [date, setDate] = useState<Date | undefined>(defaultValue);
+  const normalizedDefaultValue = useMemo(() => {
+    if (!defaultValue) {
+      return undefined;
+    }
+    if (!dateOnly) {
+      return defaultValue;
+    }
+    return new Date(
+      Date.UTC(
+        defaultValue.getUTCFullYear(),
+        defaultValue.getUTCMonth(),
+        defaultValue.getUTCDate(),
+        12,
+      ),
+    );
+  }, [dateOnly, defaultValue]);
+
+  const [date, setDate] = useState<Date | undefined>(normalizedDefaultValue);
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDate(normalizedDefaultValue);
+  }, [normalizedDefaultValue]);
+  useEffect(() => {
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
   }, []);
   const id = useId();
@@ -58,14 +80,24 @@ export function DatePicker({
           mode="single"
           //defaultMonth={today.getMonth()}
           selected={date}
+          defaultMonth={date ?? normalizedDefaultValue ?? new Date()}
           endMonth={new Date(2050, 0)}
           locale={locale == "fr" ? fr : locale == "en" ? enUS : es}
           captionLayout="dropdown"
           timeZone={timeZone}
           onSelect={(date) => {
-            setDate(date);
+            if (!date || !dateOnly) {
+              setDate(date);
+              onSelectAction?.(date);
+              setOpen(false);
+              return;
+            }
+            const normalized = new Date(
+              Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 12),
+            );
+            setDate(normalized);
             setOpen(false);
-            onSelectAction?.(date);
+            onSelectAction?.(normalized);
           }}
         />
       </PopoverContent>
