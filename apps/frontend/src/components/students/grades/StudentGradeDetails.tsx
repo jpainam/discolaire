@@ -2,17 +2,28 @@
 
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowDownLeft, ArrowUpLeft, BookText, CalendarDays, Captions, ClipboardList, Dock, Hash, Waves } from "lucide-react";
+import {
+  ArrowDownLeft,
+  ArrowUpLeft,
+  ClipboardList,
+  Dock,
+  Hash,
+  Waves,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-
-
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 import { StudentGradePercentiles } from "./StudentGradePercentiles";
-
 
 export function StudentGradeDetails({
   gradeId,
@@ -88,81 +99,59 @@ export function StudentGradeDetails({
   return (
     <div className="text-md flex flex-col gap-2">
       <div className="bg-muted/50 flex flex-row items-center justify-between gap-4 border-b px-4 py-3">
-        {t("subject")}
-        <span className="font-bold">
+        <Label className="font-bold">
           {grade?.gradeSheet.subject.course.reportName}
+        </Label>
+        <Label>{grade?.gradeSheet.name}</Label>
+        <span className="text-muted-foreground text-xs">
+          {gradeSheet?.createdAt.toLocaleDateString(locale, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
         </span>
       </div>
+
       <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <Captions className="h-4 w-4 stroke-1" /> {t("subject")}
-          </span>
-          <span> {grade?.gradeSheet.subject.course.reportName}</span>
-        </li>
-        <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <BookText className="h-4 w-4 stroke-1" /> {t("grade_sheet_name")}
-          </span>
-          <span>{grade?.gradeSheet.name}</span>
-        </li>
-        <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <CalendarDays className="h-4 w-4 stroke-1" /> {t("date")}
-          </span>
-          <span>
-            {t("grade_of")}
-            {gradeSheet?.createdAt.toLocaleDateString(locale, {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </span>
-        </li>
-      </ul>
-      <Separator className="my-2" />
-      <ul className="grid gap-3 px-4">
-        <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <Dock className="h-4 w-4 stroke-1" />
+          <Label className="text-muted-foreground flex flex-row items-center gap-1">
+            <Dock className="size-4" />
             {t("grade_of_the_student")}
-          </span>
+          </Label>
           <span>{grade?.grade}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <ArrowUpLeft className="h-4 w-4 stroke-1" />{" "}
-            {t("highest_classroom_grade")}
-          </span>
+          <Label className="text-muted-foreground flex flex-row items-center gap-1">
+            <ArrowUpLeft className="h-4 w-4" /> {t("highest_classroom_grade")}
+          </Label>
           <span>{max.toFixed(2)}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <ArrowDownLeft className="h-4 w-4 stroke-1" />{" "}
-            {t("lowest_classroom_grade")}
-          </span>
+          <Label className="text-muted-foreground flex flex-row items-center gap-1">
+            <ArrowDownLeft className="h-4 w-4" /> {t("lowest_classroom_grade")}
+          </Label>
           <span>{min.toFixed(2)}</span>
         </li>
       </ul>
       <Separator className="my-2" />
       <ul className="grid gap-3 px-4">
         <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <ClipboardList className="h-4 w-4 stroke-1" />
+          <Label className="text-muted-foreground flex flex-row items-center gap-1">
+            <ClipboardList className="h-4 w-4" />
             {t("period_of_evaluation")}
-          </span>
+          </Label>
           <span>{gradeSheet?.term.name}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <Hash className="h-4 w-4 stroke-1" /> {t("coefficient")}
-          </span>
+          <Label className="text-muted-foreground flex flex-row items-center gap-1">
+            <Hash className="h-4 w-4" /> {t("coefficient")}
+          </Label>
           <span>{gradeSheet?.subject.coefficient}</span>
         </li>
         <li className="flex items-center justify-between">
-          <span className="text-muted-foreground flex flex-row items-center gap-1">
-            <Waves className="h-4 w-4 stroke-1" /> {t("average_of_classroom")}
-          </span>
+          <Label className="text-muted-foreground flex flex-row items-center gap-1">
+            <Waves className="h-4 w-4" /> {t("average_of_classroom")}
+          </Label>
           <span>{avg.toFixed(2)}</span>
         </li>
       </ul>
@@ -173,6 +162,12 @@ export function StudentGradeDetails({
             <CardTitle>
               {t("males")} {">=10"}
             </CardTitle>
+            <CardDescription>
+              {t("out_of_participants", {
+                n1: maleAbove10,
+                n2: maleCount,
+              })}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-blue-600">
@@ -181,12 +176,6 @@ export function StudentGradeDetails({
                 : ((maleAbove10 * 100.0) / maleCount).toFixed(2)}
               %
             </div>
-            <p className="text-muted-foreground text-sm">
-              {t("out_of_participants", {
-                n1: maleAbove10,
-                n2: maleCount,
-              })}
-            </p>
           </CardContent>
         </Card>
 
@@ -195,6 +184,12 @@ export function StudentGradeDetails({
             <CardTitle>
               {t("females")} {">=10"}
             </CardTitle>
+            <CardDescription>
+              {t("out_of_participants", {
+                n1: femaleAbove10,
+                n2: femaleCount,
+              })}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-pink-600">
@@ -203,45 +198,40 @@ export function StudentGradeDetails({
                 : ((femaleAbove10 * 100.0) / femaleCount).toFixed(2)}
               %
             </div>
-            <p className="text-muted-foreground text-sm">
-              {t("out_of_participants", {
-                n1: femaleAbove10,
-                n2: femaleCount,
-              })}
-            </p>
           </CardContent>
         </Card>
 
         <Card className="gap-2">
           <CardHeader>
             <CardTitle>{t("success_rate")}</CardTitle>
+            <CardDescription>
+              {" "}
+              {t("out_of_participants", {
+                n1: above10,
+                n2: len,
+              })}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-green-600">
               {len == 0 ? 0 : ((above10 * 100.0) / len).toFixed(2)}%
             </div>
-            <p className="text-muted-foreground text-sm">
-              {t("out_of_participants", {
-                n1: above10,
-                n2: len,
-              })}
-            </p>
           </CardContent>
         </Card>
       </div>
       <div className="px-4">
-      <StudentGradePercentiles
-        grades={evaluated.map((g) => g.grade)}
-        females={evaluated
-          .filter((g) => g.student.gender == "female")
-          .map((g) => g.grade)}
-        males={evaluated
-          .filter((g) => g.student.gender == "male")
-          .map((g) => g.grade)}
-      />
+        <StudentGradePercentiles
+          grades={evaluated.map((g) => g.grade)}
+          females={evaluated
+            .filter((g) => g.student.gender == "female")
+            .map((g) => g.grade)}
+          males={evaluated
+            .filter((g) => g.student.gender == "male")
+            .map((g) => g.grade)}
+        />
 
-      {/* <StudentGradeChart grades={[]} /> */}
-    </div>
+        {/* <StudentGradeChart grades={[]} /> */}
+      </div>
     </div>
   );
 }

@@ -21,17 +21,35 @@ const createUpdateSchema = z.object({
   visibles: z.array(z.string()).optional(),
 });
 export const assignmentRouter = {
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.assignment.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        category: true,
-        classroom: true,
-      },
-    });
-  }),
+  all: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string().optional(),
+        termId: z.string().optional(),
+      }),
+    )
+    .query(({ input, ctx }) => {
+      return ctx.db.assignment.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          ...(input.classroomId ? { classroomId: input.classroomId } : {}),
+          ...(input.termId ? { termId: input.termId } : {}),
+        },
+        include: {
+          category: true,
+          classroom: true,
+          term:  true,
+          subject: {
+            include: {
+              teacher: true,
+              course: true,
+            },
+          },
+        },
+      });
+    }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.assignment.findUniqueOrThrow({
       include: {

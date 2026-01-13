@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import type { ChartConfig } from "~/components/ui/chart";
 import {
@@ -78,7 +78,7 @@ export function StudentGradePercentiles({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart - Interactive</CardTitle>
+        <CardTitle>Percentiles - Notes</CardTitle>
         <CardDescription>
           Showing total visitors for the last 3 months
         </CardDescription>
@@ -88,7 +88,10 @@ export function StudentGradePercentiles({
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart
+            data={filteredData}
+            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+          >
             <defs>
               <linearGradient id="fillGrade" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -135,15 +138,20 @@ export function StudentGradePercentiles({
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                return value;
+                return String(value);
               }}
+            />
+            <YAxis
+              hide
+              domain={[0, "dataMax"]}
+              padding={{ top: 0, bottom: 0 }}
             />
             <ChartTooltip
               cursor={false}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return value;
+                    return String(value);
                   }}
                   indicator="dot"
                 />

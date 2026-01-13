@@ -23,7 +23,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
 interface Props {
-  defaultValue: string;
+  defaultValue?: string;
   className?: string;
   disabled?: boolean;
   onSelect?: (staffId: string) => void;

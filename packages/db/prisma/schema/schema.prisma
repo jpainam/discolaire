@@ -238,31 +238,30 @@ model AppreciationCategory {
 }
 
 model Assignment {
-    id          String    @id @default(uuid())
+    id          String             @id @default(uuid())
     title       String
     description String?
-    isActive    Boolean?  @default(true)
+    isActive    Boolean?           @default(true)
     categoryId  String
     subjectId   Int
     termId      String
-    term        Term      @relation(fields: [termId], references: [id], onDelete: Cascade)
-    post        Boolean?  @default(false)
-    dueDate     DateTime  @default(now()) @db.Timestamp(6)
-    createdAt   DateTime  @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime  @updatedAt
+    term        Term               @relation(fields: [termId], references: [id], onDelete: Cascade)
+    post        Boolean?           @default(false)
+    dueDate     DateTime           @default(now()) @db.Timestamp(6)
+    createdAt   DateTime           @default(now()) @db.Timestamp(6)
+    updatedAt   DateTime           @updatedAt
     createdById String?
-    createdBy   User?     @relation(fields: [createdById], references: [id])
+    createdBy   User?              @relation(fields: [createdById], references: [id])
     classroomId String
-    from        DateTime? @default(now()) @db.Timestamp(6)
-    to          DateTime? @default(now()) @db.Timestamp(6)
+    from        DateTime?          @default(now()) @db.Timestamp(6)
+    to          DateTime?          @default(now()) @db.Timestamp(6)
     visibles    String[]
     attachments String[]
     sections    String[]
-    subject     Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-    notify      Boolean?  @default(true)
-
-    classroom Classroom          @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-    category  AssignmentCategory @relation(fields: [categoryId], references: [id])
+    subject     Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    notify      Boolean?           @default(true)
+    classroom   Classroom          @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    category    AssignmentCategory @relation(fields: [categoryId], references: [id])
 }
 
 model Event {
