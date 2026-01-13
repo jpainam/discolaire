@@ -56,6 +56,7 @@ export function useDataTable<TData, TValue>({
   );
 
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
@@ -74,6 +75,7 @@ export function useDataTable<TData, TValue>({
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     state: {
@@ -81,6 +83,7 @@ export function useDataTable<TData, TValue>({
       pagination,
       columnFilters,
       columnVisibility,
+      globalFilter,
     },
   });
   return { table };

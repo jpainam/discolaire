@@ -111,7 +111,7 @@ export const userRouter = {
         id: z.string().min(1),
         username: z.string().min(1),
         password: z.string().optional(),
-        email: z.string().email().optional().or(z.literal("")),
+        email: z.email().optional().or(z.literal("")),
         name: z.string().optional(),
       }),
     )

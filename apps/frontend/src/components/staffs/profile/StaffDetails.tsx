@@ -11,11 +11,17 @@ import {
   UserIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { MoreVertical } from "lucide-react";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { KeyRound, MoreVertical, UserPlus2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { toast } from "sonner";
 
-import { CreateEditStaff } from "~/components/staffs/CreateEditStaff";
+import { DropdownHelp } from "~/components/shared/DropdownHelp";
+import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Card, CardAction, CardHeader, CardTitle } from "~/components/ui/card";
@@ -23,7 +29,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
@@ -34,10 +39,17 @@ import {
   ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
+import { CreateEditUser } from "~/components/users/CreateEditUser";
+import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { CalendarDays, EditIcon, MailIcon } from "~/icons";
+import { CalendarDays, DeleteIcon, EditIcon, MailIcon } from "~/icons";
+import { PermissionAction } from "~/permissions";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+import { CreateEditStaff } from "../CreateEditStaff";
 
 export function StaffDetails({ staffId }: { staffId: string }) {
   const trpc = useTRPC();
@@ -50,6 +62,29 @@ export function StaffDetails({ staffId }: { staffId: string }) {
   const t = useTranslations();
   const locale = useLocale();
   const { openSheet } = useSheet();
+
+  const confirm = useConfirm();
+
+  const queryClient = useQueryClient();
+
+  const router = useRouter();
+
+  const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
+  const canEditStaff = useCheckPermission("staff", PermissionAction.UPDATE);
+  const deleteStaffMutation = useMutation(
+    trpc.staff.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.all.pathFilter());
+        toast.success(t("deleted_successfully"), { id: 0 });
+        router.push("/staffs");
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+
+  const { openModal } = useModal();
 
   return (
     <Card>
@@ -112,38 +147,101 @@ export function StaffDetails({ staffId }: { staffId: string }) {
           </div>
         </CardTitle>
         <CardAction className="flex items-center gap-2">
-          <Button
-            onClick={() => {
-              openSheet({
-                view: (
-                  <CreateEditStaff
-                    staff={staff}
-                    formId="create-edit-staff-form"
-                  />
-                ),
-                title: t("edit"),
-                description: `${t("staff")} - ${getFullName(staff)}`,
-                formId: "create-edit-staff-form",
-              });
-            }}
-            variant={"outline"}
-          >
-            <EditIcon />
-            {t("edit")}
-          </Button>
+          {canEditStaff && (
+            <Button
+              onClick={() => {
+                openSheet({
+                  view: (
+                    <CreateEditStaff
+                      staff={staff}
+                      formId="create-edit-staff-form"
+                    />
+                  ),
+                  title: t("edit"),
+                  description: `${t("staff")} - ${getFullName(staff)}`,
+                  formId: "create-edit-staff-form",
+                });
+              }}
+              variant={"outline"}
+            >
+              <EditIcon />
+              {t("edit")}
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"}>
+              <Button size={"icon"} variant={"outline"}>
                 <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuContent align="end">
+              {!staff.userId && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openModal({
+                      title: t("create_a_user"),
+                      className: "sm:max-w-xl",
+                      view: <CreateEditUser entityId={staffId} type="staff" />,
+                    });
+                  }}
+                >
+                  <UserPlus2 />
+                  {t("create_a_user")}
+                </DropdownMenuItem>
+              )}
+              {staff.userId && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    if (!staff.userId) return;
+                    openModal({
+                      title: t("change_password"),
+                      view: (
+                        <CreateEditUser
+                          userId={staff.userId}
+                          type="staff"
+                          email={staff.user?.email}
+                          entityId={staffId}
+                          username={staff.user?.username}
+                        />
+                      ),
+                    });
+                  }}
+                >
+                  <KeyRound />
+                  {t("change_password")}
+                </DropdownMenuItem>
+              )}
+              <DropdownInvitation
+                entityId={staff.id}
+                entityType="staff"
+                email={staff.user?.email}
+              />
+              <DropdownHelp />
+              {canDeleteStaff && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={async () => {
+                      const isConfirmed = await confirm({
+                        title: t("delete"),
+                        description: t("delete_confirmation"),
+                        // icon: <Trash2 className="text-destructive" />,
+                        // alertDialogTitle: {
+                        //   className: "flex items-center gap-1",
+                        // },
+                      });
+                      if (isConfirmed) {
+                        toast.loading(t("deleting"), { id: 0 });
+                        deleteStaffMutation.mutate(staffId);
+                      }
+                    }}
+                  >
+                    <DeleteIcon />
+                    {t("delete")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </CardAction>

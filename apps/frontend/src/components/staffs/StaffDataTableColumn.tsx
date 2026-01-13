@@ -80,7 +80,7 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
         },
         {
           id: "avatar",
-          accessorKey: "avatar",
+          accessorFn: (staff) => getFullName(staff),
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={""} />
           ),

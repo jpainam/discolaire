@@ -107,7 +107,7 @@ export function CreateEditUser({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <div className="grid grid-cols-2 gap-x-4">
