@@ -40,7 +40,7 @@ export const assignmentRouter = {
         include: {
           category: true,
           classroom: true,
-          term:  true,
+          term: true,
           subject: {
             include: {
               teacher: true,
