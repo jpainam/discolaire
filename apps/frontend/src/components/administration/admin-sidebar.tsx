@@ -89,6 +89,10 @@ export function AdminSidebar({
             url: "/administration/accounting/funds",
           },
           {
+            title: "Salaire & Paie",
+            url: "/administration/accounting/salary",
+          },
+          {
             title: "settings",
             url: "/administration/accounting/settings",
           },

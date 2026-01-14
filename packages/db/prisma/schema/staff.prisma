@@ -1,0 +1,44 @@
+model Staff {
+    id                        String       @id @default(uuid())
+    prefix                    String?
+    firstName                 String?
+    lastName                  String?
+    avatar                    String?
+    isActive                  Boolean      @default(true)
+    jobTitle                  String?
+    employmentType            String?
+    degreeId                  String?
+    dateOfHire                DateTime?    @db.Date
+    bloodType                 String?
+    dateOfBirth               DateTime?    @db.Date
+    sendAgendaFrequency       String?
+    dateOfRelease             DateTime?    @db.Date
+    isTeacher                 Boolean?     @default(true)
+    gender                    Gender       @default(male)
+    phoneNumber1              String?
+    phoneNumber2              String?
+    email                     String?
+    address                   String?
+    observation               String?
+    dateOfCriminalRecordCheck DateTime?    @db.Date
+    createdAt                 DateTime?    @default(now()) @db.Timestamp(6)
+    updatedAt                 DateTime     @updatedAt
+    userId                    String?
+    countryId                 String?
+    dateOfLastAdvancement     DateTime?    @db.Date
+    country                   Country?     @relation(fields: [countryId], references: [id])
+    user                      User?        @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    subjects                  Subject[]
+    degree                    StaffDegree? @relation(fields: [degreeId], references: [id])
+    classrooms                Classroom[]  @relation("seniorAdvisor")
+    classrooms2               Classroom[]  @relation("headTeacher")
+    school                    School       @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    schoolId                  String
+}
+
+model EmploymentType {
+    id       String @id @default(cuid())
+    name     String
+    schoolId String
+    school   School @relation(fields: [schoolId], references: [id])
+}
