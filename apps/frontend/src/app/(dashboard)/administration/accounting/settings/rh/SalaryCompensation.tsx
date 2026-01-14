@@ -94,7 +94,9 @@ export function SalaryCompensation() {
                     >
                       Allocation de logement par défaut
                     </FieldLabel>
-                    <FieldDescription>Montant attribué par défaut.</FieldDescription>
+                    <FieldDescription>
+                      Montant attribué par défaut.
+                    </FieldDescription>
                     <Input
                       id={field.name}
                       name={field.name}
@@ -109,7 +111,9 @@ export function SalaryCompensation() {
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -127,7 +131,9 @@ export function SalaryCompensation() {
                     >
                       Allocation de transport par défaut
                     </FieldLabel>
-                    <FieldDescription>Montant attribué par défaut.</FieldDescription>
+                    <FieldDescription>
+                      Montant attribué par défaut.
+                    </FieldDescription>
                     <Input
                       id={field.name}
                       name={field.name}
@@ -142,7 +148,9 @@ export function SalaryCompensation() {
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -160,7 +168,9 @@ export function SalaryCompensation() {
                     >
                       Prime de performance par défaut
                     </FieldLabel>
-                    <FieldDescription>Montant attribué par défaut.</FieldDescription>
+                    <FieldDescription>
+                      Montant attribué par défaut.
+                    </FieldDescription>
                     <Input
                       id={field.name}
                       name={field.name}
@@ -175,7 +185,9 @@ export function SalaryCompensation() {
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -209,7 +221,9 @@ export function SalaryCompensation() {
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -241,10 +255,14 @@ export function SalaryCompensation() {
                         <SelectItem value="virement">Virement</SelectItem>
                         <SelectItem value="cheque">Chèque</SelectItem>
                         <SelectItem value="espece">Espèce</SelectItem>
-                        <SelectItem value="mobile_money">Mobile money</SelectItem>
+                        <SelectItem value="mobile_money">
+                          Mobile money
+                        </SelectItem>
                       </SelectContent>
                     </Select>
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -275,14 +293,16 @@ export function SalaryCompensation() {
                       checked={Boolean(field.state.value)}
                       onCheckedChange={(checked) => field.handleChange(checked)}
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
             />
           </FieldGroup>
         </CardContent>
-        <CardFooter className="border-t bg-muted/50 px-4 py-3">
+        <CardFooter className="bg-muted/50 border-t px-4 py-3">
           <div className="ml-auto flex items-center">
             <Button type="submit">Enregistrer</Button>
           </div>

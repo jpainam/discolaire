@@ -6,6 +6,14 @@ import z from "zod";
 import { EmploymentTypeSelector } from "~/components/shared/selects/EmploymentTypeSelector";
 import { Button } from "~/components/ui/button";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import {
   Combobox,
   ComboboxChip,
   ComboboxChips,
@@ -17,14 +25,6 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "~/components/ui/combobox";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
 import {
   Field,
   FieldDescription,
@@ -118,9 +118,13 @@ export function ContractHiring() {
                       Choisissez le type appliqué par défaut.
                     </FieldDescription>
                     <EmploymentTypeSelector
-                      onSelectAction={(value) => field.handleChange(value ?? "")}
+                      onSelectAction={(value) =>
+                        field.handleChange(value ?? "")
+                      }
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -155,7 +159,9 @@ export function ContractHiring() {
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -190,7 +196,9 @@ export function ContractHiring() {
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -225,7 +233,9 @@ export function ContractHiring() {
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -243,7 +253,9 @@ export function ContractHiring() {
                     >
                       Statut par défaut du personnel
                     </FieldLabel>
-                    <FieldDescription>Statut attribué à l'embauche.</FieldDescription>
+                    <FieldDescription>
+                      Statut attribué à l'embauche.
+                    </FieldDescription>
                     <Select
                       value={field.state.value}
                       onValueChange={field.handleChange}
@@ -255,7 +267,9 @@ export function ContractHiring() {
                         <SelectItem value="active">Actif</SelectItem>
                       </SelectContent>
                     </Select>
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -308,14 +322,16 @@ export function ContractHiring() {
                         </ComboboxList>
                       </ComboboxContent>
                     </Combobox>
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
             />
           </FieldGroup>
         </CardContent>
-        <CardFooter className="border-t bg-muted/50 px-4 py-3">
+        <CardFooter className="bg-muted/50 border-t px-4 py-3">
           <div className="ml-auto flex items-center">
             <Button type="submit">Enregistrer</Button>
           </div>
