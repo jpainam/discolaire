@@ -50,7 +50,13 @@ export const createTRPCContext = async (opts: {
     headers: opts.headers,
   });
 
-  const tenant = "public"; //opts.headers.get("discolaire-tenant") ?? "public";
+  const tenant = opts.headers.get("discolaire-tenant");
+  if (!tenant) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "We are missing the tenant",
+    });
+  }
   const db = getDb({ connectionString: env.DATABASE_URL, tenant });
   const schoolYearId = getCookieValue(opts.headers, "x-school-year");
   const services = createServices(db);
