@@ -1,30 +1,21 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  Clock,
-  Clock2Icon,
-  Clock3Icon,
-  Edit,
-  FileText,
-  MessageSquare,
-  PlusCircle,
-} from "lucide-react";
+import { Clock, Clock2Icon, Clock3Icon, Edit, FileText, MessageSquare, PlusCircle } from "lucide-react";
+
+
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+import { StudentPerformanceTrend } from "./StudentPerformanceTrend";
+
 
 export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
@@ -85,6 +76,7 @@ export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
           "documents",
           "timeline",
           "actions",
+          "trend"
         ]}
         className="w-full rounded-none border-none"
       >
@@ -123,6 +115,14 @@ export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
                 badge={{ variant: "success", text: "Active" }}
               />
             </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="trend">
+          <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+            Academic Summary
+          </AccordionTrigger>
+          <AccordionContent>
+            <StudentPerformanceTrend />
           </AccordionContent>
         </AccordionItem>
 

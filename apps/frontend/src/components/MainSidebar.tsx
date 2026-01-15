@@ -4,6 +4,7 @@ import type React from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ChevronRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { authClient } from "~/auth/client";
@@ -20,6 +21,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "~/components/ui/sidebar";
 import { UserNav } from "~/components/user-nav";
 import { useModal } from "~/hooks/use-modal";
@@ -38,18 +42,30 @@ import {
 } from "~/icons";
 import { PermissionAction } from "~/permissions";
 import { Shortcut } from "./shortcuts/Shortcut";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
 
+interface MenuItem {
+  name: string;
+  url: string;
+  icon: ReactNode;
+  items?: { name: string; url: string }[];
+}
 export function MainSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const home = [
+  const home: MenuItem[] = [
     {
       name: "dashboard",
       url: `/`,
       icon: <DashboardIcon />,
+      items: [],
     },
   ];
-  const data = [
+  const data: MenuItem[] = [
     {
       name: "students",
       url: `/students`,
@@ -62,7 +78,7 @@ export function MainSidebar({
       icon: <HomeIcon />,
     },
   ];
-  const tools = [
+  const tools: MenuItem[] = [
     // {
     //   name: "timetables",
     //   url: `/timetables`,
@@ -75,6 +91,11 @@ export function MainSidebar({
       name: "staffs",
       url: `/staffs`,
       icon: <GroupsIcon />,
+      items: [
+        { name: "Liste du personnel", url: "/staffs" },
+        { name: "Presence", url: "/staffs/attendances" },
+        { name: "Ajouter", url: "/staffs/create" },
+      ],
     });
   }
   data.push({
@@ -111,7 +132,7 @@ export function MainSidebar({
     icon: <AiIcon />,
   });
 
-  const others = [
+  const others: MenuItem[] = [
     {
       name: "settings",
       url: `/users/${session?.user.id}/settings`,
@@ -178,33 +199,62 @@ export function MainSidebar({
   );
 }
 
-function MenuSideGroup({
-  items,
-  label,
-}: {
-  items: { name: string; url: string; icon: ReactNode }[];
-  label: string;
-}) {
+function MenuSideGroup({ items, label }: { items: MenuItem[]; label: string }) {
   const t = useTranslations();
   const pathname = usePathname();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton
-              asChild
-              tooltip={t(item.name)}
-              isActive={pathname === item.url}
-            >
-              <Link href={item.url}>
-                {item.icon}
-                <span>{t(item.name)}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+        {items.map((menu) => {
+          if (menu.items?.length) {
+            return (
+              <Collapsible
+                key={menu.name}
+                asChild
+                defaultOpen={pathname === menu.url}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip={t(menu.name)}>
+                      {menu.icon}
+                      <span>{t(menu.name)}</span>
+                      <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {menu.items.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.name}>
+                          <SidebarMenuSubButton asChild>
+                            <Link href={subItem.url}>
+                              <span>{t(subItem.name)}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+            );
+          }
+          return (
+            <SidebarMenuItem key={menu.name}>
+              <SidebarMenuButton
+                asChild
+                tooltip={t(menu.name)}
+                isActive={pathname === menu.url}
+              >
+                <Link href={menu.url}>
+                  {menu.icon}
+                  <span>{t(menu.name)}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          );
+        })}
       </SidebarMenu>
     </SidebarGroup>
   );

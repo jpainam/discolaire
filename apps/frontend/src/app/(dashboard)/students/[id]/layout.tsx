@@ -17,7 +17,7 @@ import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
-import { StudentRightPanelMeta } from "./StudentRightPanelMeta";
+import { StudentRightPanelMeta } from "../../../../components/students/right-panel/StudentRightPanelMeta";
 
 interface Props {
   params: Promise<{ id: string }>;
