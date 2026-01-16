@@ -1,11 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 
+import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import { Label } from "~/components/ui/label";
 import {
   Select,
@@ -14,328 +33,305 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { Textarea } from "~/components/ui/textarea";
+import { Separator } from "~/components/ui/separator";
 
 export default function PersonnelCreatePage() {
-  const [expandedSections, setExpandedSections] = useState({
-    personal: true,
-    professional: true,
-    contractual: true,
-  });
-
   const [autoGenerateEmail, setAutoGenerateEmail] = useState(false);
-
-  const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
-  };
+  const t = useTranslations();
 
   return (
-    
-      <div className="px-4 py-2">
-        <div className="mb-8">
-          <h1 className="text-foreground mb-2 text-3xl font-bold">
-            Créer un Personnel
-          </h1>
-          <p className="text-muted-foreground">
-            Remplissez les informations du nouveau membre du personnel
-          </p>
-        </div>
+    <div className="flex flex-col gap-4 p-4">
+      <Card className="bg-accent text-accent-foreground">
+        <CardHeader>
+          <CardTitle>Créer un personnel</CardTitle>
+          <CardDescription>
+            Veuillez vérifier si le personnel n'existe pas déjà
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-4">
+            <InputGroup>
+              <InputGroupInput placeholder={t("search")} />
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+            </InputGroup>
+            <Button>{t("search")}</Button>
+          </div>
+        </CardContent>
+      </Card>
 
-        <form className="space-y-6">
+      <form className="space-y-2">
+        <Accordion
+          type="multiple"
+          defaultValue={["personal", "professional", "contractual"]}
+          className="w-full space-y-4 border-0"
+        >
           {/* Personal Information Section */}
-          <div className="bg-card border-border overflow-hidden rounded-lg border">
-            <button
-              type="button"
-              onClick={() => toggleSection("personal")}
-              className="hover:bg-accent/50 flex w-full items-center gap-3 p-4 text-left transition-colors"
-            >
-              <div className="flex h-5 w-5 items-center justify-center">
-                <div className="border-primary bg-primary/10 h-4 w-4 rounded border-2" />
-              </div>
-              <span className="text-primary flex-1 text-lg font-semibold">
-                Informations Personnelles
-              </span>
-              {expandedSections.personal ? (
-                <ChevronUp className="text-muted-foreground h-5 w-5" />
-              ) : (
-                <ChevronDown className="text-muted-foreground h-5 w-5" />
-              )}
-            </button>
-
-            {expandedSections.personal && (
-              <div className="border-border space-y-6 border-t p-6">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="nom">
-                      Nom <span className="text-destructive">*</span>
-                    </Label>
-                    <Input id="nom" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="prenom">Prénom</Label>
-                    <Input id="prenom" />
-                  </div>
+          <AccordionItem
+            value="personal"
+            className="bg-card border-border overflow-hidden rounded-lg border"
+          >
+            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+              Informations Personnelles
+            </AccordionTrigger>
+            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="flex items-start gap-2">
+                <div className="w-[75px] space-y-2">
+                  <Label>Prefix</Label>
+                  <PrefixSelector className="w-[75px]" />
                 </div>
-
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="dateNaissance">
-                      Date de naissance{" "}
-                      <span className="text-destructive">*</span>
-                    </Label>
-                    <Input id="dateNaissance" type="date" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="lieuNaissance">
-                      Lieu de naissance{" "}
-                      <span className="text-destructive">*</span>
-                    </Label>
-                    <Input id="lieuNaissance" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="sexe">
-                      Sexe <span className="text-destructive">*</span>
-                    </Label>
-                    <Select required>
-                      <SelectTrigger id="sexe">
-                        <SelectValue placeholder="Sélectionner" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="masculin">Masculin</SelectItem>
-                        <SelectItem value="feminin">Féminin</SelectItem>
-                        <SelectItem value="autre">Autre</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="telephone">
-                      Téléphone <span className="text-destructive">*</span>
-                    </Label>
-                    <Input id="telephone" type="tel" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="nationalite">Nationalité</Label>
-                    <Input id="nationalite" defaultValue="Congolaise" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">
-                      Email{" "}
-                      <span className="text-muted-foreground text-sm">
-                        (Optionnel - Pour le compte utilisateur)
-                      </span>
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="example@kelasi.com"
-                      disabled={autoGenerateEmail}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="autoEmail"
-                    checked={autoGenerateEmail}
-                    onCheckedChange={(checked) =>
-                      setAutoGenerateEmail(checked === true)
-                    }
-                  />
-                  <label
-                    htmlFor="autoEmail"
-                    className="text-muted-foreground cursor-pointer text-sm"
-                  >
-                    Si vide, email auto-généré : matricule@kelasi.local
-                  </label>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="adresse">Adresse</Label>
-                  <Textarea id="adresse" rows={4} className="resize-none" />
+                <div className="w-full space-y-2">
+                  <Label htmlFor="nom">
+                    Nom <span className="text-destructive">*</span>
+                  </Label>
+                  <Input id="nom" required />
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Professional Information Section */}
-          <div className="bg-card border-border overflow-hidden rounded-lg border">
-            <button
-              type="button"
-              onClick={() => toggleSection("professional")}
-              className="hover:bg-accent/50 flex w-full items-center gap-3 p-4 text-left transition-colors"
-            >
-              <div className="flex h-5 w-5 items-center justify-center">
-                <div className="border-primary bg-primary/10 h-4 w-4 rounded border-2" />
+              <div className="space-y-2">
+                <Label htmlFor="prenom">Prénom</Label>
+                <Input id="prenom" />
               </div>
-              <span className="text-primary flex-1 text-lg font-semibold">
-                Informations Professionnelles
-              </span>
-              {expandedSections.professional ? (
-                <ChevronUp className="text-muted-foreground h-5 w-5" />
-              ) : (
-                <ChevronDown className="text-muted-foreground h-5 w-5" />
-              )}
-            </button>
 
-            {expandedSections.professional && (
-              <div className="border-border space-y-6 border-t p-6">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="typePersonnel">
-                      Type de Personnel{" "}
-                      <span className="text-destructive">*</span>
-                    </Label>
-                    <Select required>
-                      <SelectTrigger id="typePersonnel">
-                        <SelectValue placeholder="Sélectionner un type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="enseignant">Enseignant</SelectItem>
-                        <SelectItem value="administratif">
-                          Administratif
-                        </SelectItem>
-                        <SelectItem value="technique">Technique</SelectItem>
-                        <SelectItem value="direction">Direction</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="poste">Poste</Label>
-                    <Input
-                      id="poste"
-                      placeholder="Ex: Principal, Directrice des Études, Comptable..."
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="specialite">Spécialité</Label>
-                    <Input id="specialite" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="statut">
-                      Statut <span className="text-destructive">*</span>
-                    </Label>
-                    <Select required>
-                      <SelectTrigger id="statut">
-                        <SelectValue placeholder="Sélectionner un statut" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="permanent">Permanent</SelectItem>
-                        <SelectItem value="temporaire">Temporaire</SelectItem>
-                        <SelectItem value="contractuel">Contractuel</SelectItem>
-                        <SelectItem value="stagiaire">Stagiaire</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="dateNaissance">
+                  Date de naissance <span className="text-destructive">*</span>
+                </Label>
+                <Input id="dateNaissance" type="date" required />
               </div>
-            )}
-          </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="lieuNaissance">
+                  Lieu de naissance <span className="text-destructive">*</span>
+                </Label>
+                <Input id="lieuNaissance" required />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="sexe">
+                  Sexe <span className="text-destructive">*</span>
+                </Label>
+                <Select required>
+                  <SelectTrigger id="sexe" className="w-full">
+                    <SelectValue placeholder="Sélectionner" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="masculin">Masculin</SelectItem>
+                    <SelectItem value="feminin">Féminin</SelectItem>
+                    <SelectItem value="autre">Autre</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="telephone">
+                  Téléphone <span className="text-destructive">*</span>
+                </Label>
+                <Input id="telephone" type="tel" required />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="nationalite">Nationalité</Label>
+                <Input id="nationalite" defaultValue="Congolaise" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="example@kelasi.com"
+                  disabled={autoGenerateEmail}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="adresse">Adresse</Label>
+                <Input id="adresse" />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
 
           {/* Contract Information Section */}
-          <div className="bg-card border-border overflow-hidden rounded-lg border">
-            <button
-              type="button"
-              onClick={() => toggleSection("contractual")}
-              className="hover:bg-accent/50 flex w-full items-center gap-3 p-4 text-left transition-colors"
-            >
-              <div className="flex h-5 w-5 items-center justify-center">
-                <div className="border-primary bg-primary/10 h-4 w-4 rounded border-2" />
+          <AccordionItem
+            value="contractual"
+            className="bg-card border-border overflow-hidden rounded-lg border"
+          >
+            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+              Informations Contractuelles
+            </AccordionTrigger>
+
+            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="dateEmbauche">
+                  Date d&apos;embauche{" "}
+                  <span className="text-destructive">*</span>
+                </Label>
+                <Input id="dateEmbauche" type="date" required />
               </div>
-              <span className="text-primary flex-1 text-lg font-semibold">
-                Informations Contractuelles
-              </span>
-              {expandedSections.contractual ? (
-                <ChevronUp className="text-muted-foreground h-5 w-5" />
-              ) : (
-                <ChevronDown className="text-muted-foreground h-5 w-5" />
-              )}
-            </button>
 
-            {expandedSections.contractual && (
-              <div className="border-border space-y-6 border-t p-6">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="dateEmbauche">
-                      Date d&apos;embauche{" "}
-                      <span className="text-destructive">*</span>
-                    </Label>
-                    <Input id="dateEmbauche" type="date" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="dateFinContrat">
-                      Date de fin de contrat
-                    </Label>
-                    <Input id="dateFinContrat" type="date" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="typeContrat">
-                      Type de contrat{" "}
-                      <span className="text-destructive">*</span>
-                    </Label>
-                    <Select required>
-                      <SelectTrigger id="typeContrat">
-                        <SelectValue placeholder="Sélectionner un type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="cdi">
-                          CDI (Contrat à Durée Indéterminée)
-                        </SelectItem>
-                        <SelectItem value="cdd">
-                          CDD (Contrat à Durée Déterminée)
-                        </SelectItem>
-                        <SelectItem value="stage">Stage</SelectItem>
-                        <SelectItem value="freelance">Freelance</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="heuresTravail">
-                    Heures de travail/semaine
-                  </Label>
-                  <Input
-                    id="heuresTravail"
-                    type="number"
-                    defaultValue="40"
-                    min="1"
-                    max="168"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="dateFinContrat">Date de fin de contrat</Label>
+                <Input id="dateFinContrat" type="date" />
               </div>
-            )}
-          </div>
+              <div className="space-y-2">
+                <Label htmlFor="typePersonnel">
+                  Type de Personnel <span className="text-destructive">*</span>
+                </Label>
+                <Select required>
+                  <SelectTrigger id="typePersonnel" className="w-full">
+                    <SelectValue placeholder="Sélectionner un type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="enseignant">Enseignant</SelectItem>
+                    <SelectItem value="administratif">Administratif</SelectItem>
+                    <SelectItem value="technique">Technique</SelectItem>
+                    <SelectItem value="direction">Direction</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-          {/* Form Actions */}
-          <div className="flex justify-end gap-4 pt-4">
-            <Button type="button" variant="outline" size="lg">
-              Annuler
-            </Button>
-            <Button
-              type="submit"
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Créer le Personnel
-            </Button>
-          </div>
-        </form>
-      </div>
-   
+              <div className="space-y-2">
+                <Label htmlFor="typeContrat">
+                  Type de contrat <span className="text-destructive">*</span>
+                </Label>
+                <Select required>
+                  <SelectTrigger id="typeContrat" className="w-full">
+                    <SelectValue placeholder="Sélectionner un type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cdi">
+                      CDI (Contrat à Durée Indéterminée)
+                    </SelectItem>
+                    <SelectItem value="cdd">
+                      CDD (Contrat à Durée Déterminée)
+                    </SelectItem>
+                    <SelectItem value="stage">Stage</SelectItem>
+                    <SelectItem value="freelance">Freelance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="poste">Poste</Label>
+                <Input
+                  id="poste"
+                  placeholder="Ex: Principal, Directrice des Études, Comptable..."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="specialite">Spécialité</Label>
+                <Input
+                  id="specialite"
+                  placeholder="Ex: Maths/Phys, Francais/Philo ..."
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="heuresTravail">Heures de travail/semaine</Label>
+                <Input
+                  id="heuresTravail"
+                  type="number"
+                  defaultValue="40"
+                  min="1"
+                  max="168"
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          {/** Gestion des Salaires et Allocations */}
+          <AccordionItem
+            value="allocations"
+            className="bg-card border-border overflow-hidden rounded-lg border"
+          >
+            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+              Gestion des Salaires et Allocations
+            </AccordionTrigger>
+            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="salaireDeBase">Salaire de Base</Label>
+                <Input id="salaireDeBase" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="allocationDeplacement">
+                  Allocation Deplacement
+                </Label>
+                <Input id="allocationDeplacement" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="allocationTelephone">
+                  Allocation Telephone
+                </Label>
+                <Input id="allocationTelephone" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="alocationLogement">Allocation Logement</Label>
+                <Input id="alocationLogement" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="allocationTransport">
+                  Allocation Transport
+                </Label>
+                <Input id="allocationTransport" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="primePerformamce">Prime de performance</Label>
+                <Input id="primePerformamce" />
+              </div>
+              <div className="bg-primary text-primary-foreground col-span-full grid grid-cols-3 rounded-lg p-2">
+                <div>Salaire total calculé : </div>
+                <div>Mensuel : 0 FCFA </div>
+                <div>Annuel : 0 FCFA</div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          {/* * Informations Bancaires */}
+          <AccordionItem
+            value="banquesInformation"
+            className="bg-card border-border overflow-hidden rounded-lg border"
+          >
+            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+              Informations Bancaires
+            </AccordionTrigger>
+            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="banque">Banque</Label>
+                <Input id="banque" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="Numerocompte">Numéro de compte</Label>
+                <Input id="Numerocompte" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="codebanque">Code banque</Label>
+                <Input id="codebanque" />
+              </div>
+              <Separator className="col-span-full" />
+              <div className="space-y-2">
+                <Label htmlFor="cnps">Numéro CNPS</Label>
+                <Input id="cnps" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="cnss">Numéro CNSS</Label>
+                <Input id="cnss" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="impot"> Numéro d'impôt</Label>
+                <Input id="impot" />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        {/* Form Actions */}
+        <div className="flex justify-end gap-4">
+          <Button type="button" variant="outline">
+            Annuler
+          </Button>
+          <Button type="submit">{t("add")}</Button>
+        </div>
+      </form>
+    </div>
   );
 }
