@@ -1,337 +1,905 @@
-"use client";
+// "use client";
 
-import { useState } from "react";
-import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+// import { useState } from "react";
+// import { useForm } from "@tanstack/react-form";
+// import { Search } from "lucide-react";
+// import { useTranslations } from "next-intl";
+// import { z } from "zod";
 
-import PrefixSelector from "~/components/shared/forms/PrefixSelector";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
-import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "~/components/ui/input-group";
-import { Label } from "~/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import { Separator } from "~/components/ui/separator";
+// import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "~/components/ui/accordion";
+// import { Button } from "~/components/ui/button";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "~/components/ui/card";
+// import { Input } from "~/components/ui/input";
+// import {
+//   InputGroup,
+//   InputGroupAddon,
+//   InputGroupInput,
+// } from "~/components/ui/input-group";
+// import {
+//   Field,
+//   FieldError,
+//   FieldGroup,
+//   FieldLabel,
+// } from "~/components/ui/field";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "~/components/ui/select";
+// import { Separator } from "~/components/ui/separator";
 
-export default function PersonnelCreatePage() {
-  const [autoGenerateEmail, setAutoGenerateEmail] = useState(false);
-  const t = useTranslations();
+// const staffCreateSchema = z.object({
+//   prefix: z.string().min(1),
+//   lastName: z.string().min(1),
+//   firstName: z.string().optional().default(""),
+//   dateOfBirth: z.string().min(1),
+//   birthPlace: z.string().min(1),
+//   gender: z.enum(["male", "female", "other"]),
+//   phoneNumber: z.string().min(1),
+//   nationality: z.string().optional(),
+//   email: z.email().optional().or(z.literal("")),
+//   address: z.string().optional(),
+//   dateOfHire: z.string().min(1),
+//   contractEndDate: z.string().optional(),
+//   staffType: z.enum(["teacher", "administrative", "technical", "management"]),
+//   contractType: z.enum(["cdi", "cdd", "internship", "freelance"]),
+//   jobTitle: z.string().optional(),
+//   specialty: z.string().optional(),
+//   weeklyWorkingHours: z.coerce.number().min(1).max(168),
+//   baseSalary: z.string().optional(),
+//   travelAllowance: z.string().optional(),
+//   phoneAllowance: z.string().optional(),
+//   housingAllowance: z.string().optional(),
+//   transportAllowance: z.string().optional(),
+//   performanceBonus: z.string().optional(),
+//   bankName: z.string().optional(),
+//   accountNumber: z.string().optional(),
+//   bankCode: z.string().optional(),
+//   cnpsNumber: z.string().optional(),
+//   cnssNumber: z.string().optional(),
+//   taxNumber: z.string().optional(),
+// });
 
-  return (
-    <div className="flex flex-col gap-4 p-4">
-      <Card className="bg-accent text-accent-foreground">
-        <CardHeader>
-          <CardTitle>Créer un personnel</CardTitle>
-          <CardDescription>
-            Veuillez vérifier si le personnel n'existe pas déjà
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-4">
-            <InputGroup>
-              <InputGroupInput placeholder={t("search")} />
-              <InputGroupAddon>
-                <Search />
-              </InputGroupAddon>
-            </InputGroup>
-            <Button>{t("search")}</Button>
-          </div>
-        </CardContent>
-      </Card>
+// export default function PersonnelCreatePage() {
+//   const [autoGenerateEmail] = useState(false);
+//   const t = useTranslations();
+//   const form = useForm({
+//     defaultValues: {
+//       prefix: "M",
+//       lastName: "",
+//       //firstName: "",
+//       dateOfBirth: "",
+//       birthPlace: "",
+//       gender: "male",
+//       phoneNumber: "",
+//       nationality: "Congolaise",
+//       email: "",
+//       address: "",
+//       dateOfHire: "",
+//       contractEndDate: "",
+//       staffType: "teacher",
+//       contractType: "cdi",
+//       jobTitle: "",
+//       specialty: "",
+//       weeklyWorkingHours: 40,
+//       baseSalary: "",
+//       travelAllowance: "",
+//       phoneAllowance: "",
+//       housingAllowance: "",
+//       transportAllowance: "",
+//       performanceBonus: "",
+//       bankName: "",
+//       accountNumber: "",
+//       bankCode: "",
+//       cnpsNumber: "",
+//       cnssNumber: "",
+//       taxNumber: "",
+//     },
+//     validators: {
+//       onSubmit: staffCreateSchema,
+//     },
+//     onSubmit: () => {},
+//   });
 
-      <form className="space-y-2">
-        <Accordion
-          type="multiple"
-          defaultValue={["personal", "professional", "contractual"]}
-          className="w-full space-y-4 border-0"
-        >
-          {/* Personal Information Section */}
-          <AccordionItem
-            value="personal"
-            className="bg-card border-border overflow-hidden rounded-lg border"
-          >
-            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
-              Informations Personnelles
-            </AccordionTrigger>
-            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="flex items-start gap-2">
-                <div className="w-[75px] space-y-2">
-                  <Label>Prefix</Label>
-                  <PrefixSelector className="w-[75px]" />
-                </div>
-                <div className="w-full space-y-2">
-                  <Label htmlFor="nom">
-                    Nom <span className="text-destructive">*</span>
-                  </Label>
-                  <Input id="nom" required />
-                </div>
-              </div>
+//   return (
+//     <div className="flex flex-col gap-4 p-4">
+//       <Card className="bg-accent text-accent-foreground">
+//         <CardHeader>
+//           <CardTitle>Créer un personnel</CardTitle>
+//           <CardDescription>
+//             Veuillez vérifier si le personnel n'existe pas déjà
+//           </CardDescription>
+//         </CardHeader>
+//         <CardContent>
+//           <div className="flex items-center gap-4">
+//             <InputGroup>
+//               <InputGroupInput placeholder={t("search")} />
+//               <InputGroupAddon>
+//                 <Search />
+//               </InputGroupAddon>
+//             </InputGroup>
+//             <Button>{t("search")}</Button>
+//           </div>
+//         </CardContent>
+//       </Card>
 
-              <div className="space-y-2">
-                <Label htmlFor="prenom">Prénom</Label>
-                <Input id="prenom" />
-              </div>
+//       <form
+//         className="space-y-2"
+//         onSubmit={(event) => {
+//           event.preventDefault();
+//           void form.handleSubmit();
+//         }}
+//       >
+//         <Accordion
+//           type="multiple"
+//           defaultValue={["personal", "professional", "contractual"]}
+//           className="w-full space-y-4 border-0"
+//         >
+//           {/* Personal Information Section */}
+//           <AccordionItem
+//             value="personal"
+//             className="bg-card border-border overflow-hidden rounded-lg border"
+//           >
+//             <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+//               Informations Personnelles
+//             </AccordionTrigger>
+//             <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+//               <FieldGroup className="col-span-full grid grid-cols-[100px_1fr] items-start gap-2">
+//                 <form.Field
+//                   name="prefix"
+//                   children={(field) => {
+//                     const isInvalid =
+//                       field.state.meta.isTouched && !field.state.meta.isValid;
+//                     return (
+//                       <Field data-invalid={isInvalid} className="w-[100px]">
+//                         <FieldLabel>Prefix</FieldLabel>
+//                         <PrefixSelector
+//                           className="w-[100px]"
+//                           onChange={field.handleChange}
+//                           defaultValue={field.state.value}
+//                         />
+//                         {isInvalid && (
+//                           <FieldError errors={field.state.meta.errors} />
+//                         )}
+//                       </Field>
+//                     );
+//                   }}
+//                 />
+//                 <form.Field
+//                   name="lastName"
+//                   children={(field) => {
+//                     const isInvalid =
+//                       field.state.meta.isTouched && !field.state.meta.isValid;
+//                     return (
+//                       <Field data-invalid={isInvalid}>
+//                         <FieldLabel htmlFor={field.name}>
+//                           Nom <span className="text-destructive">*</span>
+//                         </FieldLabel>
+//                         <Input
+//                           id={field.name}
+//                           name={field.name}
+//                           value={field.state.value}
+//                           onBlur={field.handleBlur}
+//                           onChange={(event) =>
+//                             field.handleChange(event.target.value)
+//                           }
+//                           aria-invalid={isInvalid}
+//                           autoComplete="off"
+//                         />
+//                         {isInvalid && (
+//                           <FieldError errors={field.state.meta.errors} />
+//                         )}
+//                       </Field>
+//                     );
+//                   }}
+//                 />
+//               </FieldGroup>
 
-              <div className="space-y-2">
-                <Label htmlFor="dateNaissance">
-                  Date de naissance <span className="text-destructive">*</span>
-                </Label>
-                <Input id="dateNaissance" type="date" required />
-              </div>
+//               <form.Field
+//                 name="firstName"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Prénom</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
 
-              <div className="space-y-2">
-                <Label htmlFor="lieuNaissance">
-                  Lieu de naissance <span className="text-destructive">*</span>
-                </Label>
-                <Input id="lieuNaissance" required />
-              </div>
+//               <form.Field
+//                 name="dateOfBirth"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>
+//                         Date de naissance{" "}
+//                         <span className="text-destructive">*</span>
+//                       </FieldLabel>
+//                       <Input
+//                         id={field.name}
+//                         name={field.name}
+//                         type="date"
+//                         value={field.state.value}
+//                         onBlur={field.handleBlur}
+//                         onChange={(event) =>
+//                           field.handleChange(event.target.value)
+//                         }
+//                         aria-invalid={isInvalid}
+//                       />
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
 
-              <div className="space-y-2">
-                <Label htmlFor="sexe">
-                  Sexe <span className="text-destructive">*</span>
-                </Label>
-                <Select required>
-                  <SelectTrigger id="sexe" className="w-full">
-                    <SelectValue placeholder="Sélectionner" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="masculin">Masculin</SelectItem>
-                    <SelectItem value="feminin">Féminin</SelectItem>
-                    <SelectItem value="autre">Autre</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+//               <form.Field
+//                 name="birthPlace"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>
+//                         Lieu de naissance{" "}
+//                         <span className="text-destructive">*</span>
+//                       </FieldLabel>
+//                       <Input
+//                         id={field.name}
+//                         name={field.name}
+//                         value={field.state.value}
+//                         onBlur={field.handleBlur}
+//                         onChange={(event) =>
+//                           field.handleChange(event.target.value)
+//                         }
+//                         aria-invalid={isInvalid}
+//                         autoComplete="off"
+//                       />
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
 
-              <div className="space-y-2">
-                <Label htmlFor="telephone">
-                  Téléphone <span className="text-destructive">*</span>
-                </Label>
-                <Input id="telephone" type="tel" required />
-              </div>
+//               <form.Field
+//                 name="gender"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>
+//                         Sexe <span className="text-destructive">*</span>
+//                       </FieldLabel>
+//                       <Select
+//                         value={field.state.value}
+//                         onValueChange={(value) =>
+//                           field.handleChange(value as "male" | "female")
+//                         }
+//                       >
+//                         <SelectTrigger id={field.name} className="w-full">
+//                           <SelectValue placeholder="Sélectionner" />
+//                         </SelectTrigger>
+//                         <SelectContent>
+//                           <SelectItem value="male">Masculin</SelectItem>
+//                           <SelectItem value="female">Féminin</SelectItem>
 
-              <div className="space-y-2">
-                <Label htmlFor="nationalite">Nationalité</Label>
-                <Input id="nationalite" defaultValue="Congolaise" />
-              </div>
+//                         </SelectContent>
+//                       </Select>
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="example@kelasi.com"
-                  disabled={autoGenerateEmail}
-                />
-              </div>
+//               <form.Field
+//                 name="phoneNumber"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>
+//                         Téléphone <span className="text-destructive">*</span>
+//                       </FieldLabel>
+//                       <Input
+//                         id={field.name}
+//                         name={field.name}
+//                         type="tel"
+//                         value={field.state.value}
+//                         onBlur={field.handleBlur}
+//                         onChange={(event) =>
+//                           field.handleChange(event.target.value)
+//                         }
+//                         aria-invalid={isInvalid}
+//                         autoComplete="off"
+//                       />
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
 
-              <div className="space-y-2">
-                <Label htmlFor="adresse">Adresse</Label>
-                <Input id="adresse" />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+//               <form.Field
+//                 name="nationality"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Nationalité</FieldLabel>
 
-          {/* Contract Information Section */}
-          <AccordionItem
-            value="contractual"
-            className="bg-card border-border overflow-hidden rounded-lg border"
-          >
-            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
-              Informations Contractuelles
-            </AccordionTrigger>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
 
-            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="space-y-2">
-                <Label htmlFor="dateEmbauche">
-                  Date d&apos;embauche{" "}
-                  <span className="text-destructive">*</span>
-                </Label>
-                <Input id="dateEmbauche" type="date" required />
-              </div>
+//               <form.Field
+//                 name="email"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+//                       <Input
+//                         id={field.name}
+//                         name={field.name}
+//                         type="email"
+//                         placeholder="example@kelasi.com"
+//                         disabled={autoGenerateEmail}
+//                         value={field.state.value}
+//                         onBlur={field.handleBlur}
+//                         onChange={(event) =>
+//                           field.handleChange(event.target.value)
+//                         }
+//                         aria-invalid={isInvalid}
+//                         autoComplete="off"
+//                       />
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
 
-              <div className="space-y-2">
-                <Label htmlFor="dateFinContrat">Date de fin de contrat</Label>
-                <Input id="dateFinContrat" type="date" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="typePersonnel">
-                  Type de Personnel <span className="text-destructive">*</span>
-                </Label>
-                <Select required>
-                  <SelectTrigger id="typePersonnel" className="w-full">
-                    <SelectValue placeholder="Sélectionner un type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="enseignant">Enseignant</SelectItem>
-                    <SelectItem value="administratif">Administratif</SelectItem>
-                    <SelectItem value="technique">Technique</SelectItem>
-                    <SelectItem value="direction">Direction</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+//               <form.Field
+//                 name="address"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Adresse</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//             </AccordionContent>
+//           </AccordionItem>
 
-              <div className="space-y-2">
-                <Label htmlFor="typeContrat">
-                  Type de contrat <span className="text-destructive">*</span>
-                </Label>
-                <Select required>
-                  <SelectTrigger id="typeContrat" className="w-full">
-                    <SelectValue placeholder="Sélectionner un type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="cdi">
-                      CDI (Contrat à Durée Indéterminée)
-                    </SelectItem>
-                    <SelectItem value="cdd">
-                      CDD (Contrat à Durée Déterminée)
-                    </SelectItem>
-                    <SelectItem value="stage">Stage</SelectItem>
-                    <SelectItem value="freelance">Freelance</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="poste">Poste</Label>
-                <Input
-                  id="poste"
-                  placeholder="Ex: Principal, Directrice des Études, Comptable..."
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="specialite">Spécialité</Label>
-                <Input
-                  id="specialite"
-                  placeholder="Ex: Maths/Phys, Francais/Philo ..."
-                />
-              </div>
+//           {/* Contract Information Section */}
+//           <AccordionItem
+//             value="contractual"
+//             className="bg-card border-border overflow-hidden rounded-lg border"
+//           >
+//             <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+//               Informations Contractuelles
+//             </AccordionTrigger>
 
-              <div className="space-y-2">
-                <Label htmlFor="heuresTravail">Heures de travail/semaine</Label>
-                <Input
-                  id="heuresTravail"
-                  type="number"
-                  defaultValue="40"
-                  min="1"
-                  max="168"
-                />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          {/** Gestion des Salaires et Allocations */}
-          <AccordionItem
-            value="allocations"
-            className="bg-card border-border overflow-hidden rounded-lg border"
-          >
-            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
-              Gestion des Salaires et Allocations
-            </AccordionTrigger>
-            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="space-y-2">
-                <Label htmlFor="salaireDeBase">Salaire de Base</Label>
-                <Input id="salaireDeBase" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="allocationDeplacement">
-                  Allocation Deplacement
-                </Label>
-                <Input id="allocationDeplacement" />
-              </div>
+//             <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+//               <form.Field
+//                 name="dateOfHire"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>
+//                         Date d&apos;embauche{" "}
+//                         <span className="text-destructive">*</span>
+//                       </FieldLabel>
+//                       <Input
+//                         id={field.name}
+//                         name={field.name}
+//                         type="date"
+//                         value={field.state.value}
+//                         onBlur={field.handleBlur}
+//                         onChange={(event) =>
+//                           field.handleChange(event.target.value)
+//                         }
+//                         aria-invalid={isInvalid}
+//                       />
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
 
-              <div className="space-y-2">
-                <Label htmlFor="allocationTelephone">
-                  Allocation Telephone
-                </Label>
-                <Input id="allocationTelephone" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="alocationLogement">Allocation Logement</Label>
-                <Input id="alocationLogement" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="allocationTransport">
-                  Allocation Transport
-                </Label>
-                <Input id="allocationTransport" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="primePerformamce">Prime de performance</Label>
-                <Input id="primePerformamce" />
-              </div>
-              <div className="bg-primary text-primary-foreground col-span-full grid grid-cols-3 rounded-lg p-2">
-                <div>Salaire total calculé : </div>
-                <div>Mensuel : 0 FCFA </div>
-                <div>Annuel : 0 FCFA</div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          {/* * Informations Bancaires */}
-          <AccordionItem
-            value="banquesInformation"
-            className="bg-card border-border overflow-hidden rounded-lg border"
-          >
-            <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
-              Informations Bancaires
-            </AccordionTrigger>
-            <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="space-y-2">
-                <Label htmlFor="banque">Banque</Label>
-                <Input id="banque" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="Numerocompte">Numéro de compte</Label>
-                <Input id="Numerocompte" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="codebanque">Code banque</Label>
-                <Input id="codebanque" />
-              </div>
-              <Separator className="col-span-full" />
-              <div className="space-y-2">
-                <Label htmlFor="cnps">Numéro CNPS</Label>
-                <Input id="cnps" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="cnss">Numéro CNSS</Label>
-                <Input id="cnss" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="impot"> Numéro d'impôt</Label>
-                <Input id="impot" />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+//               <form.Field
+//                 name="contractEndDate"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Date de fin de contrat
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       type="date"
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="staffType"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>
+//                         Type de Personnel{" "}
+//                         <span className="text-destructive">*</span>
+//                       </FieldLabel>
+//                       <Select
+//                         value={field.state.value}
+//                         onValueChange={(value) =>
+//                           field.handleChange(
+//                             value as
+//                               | "teacher"
+//                               | "administrative"
+//                               | "technical"
+//                               | "management",
+//                           )
+//                         }
+//                       >
+//                         <SelectTrigger id={field.name} className="w-full">
+//                           <SelectValue placeholder="Sélectionner un type" />
+//                         </SelectTrigger>
+//                         <SelectContent>
+//                           <SelectItem value="teacher">Enseignant</SelectItem>
+//                           <SelectItem value="administrative">
+//                             Administratif
+//                           </SelectItem>
+//                           <SelectItem value="technical">Technique</SelectItem>
+//                           <SelectItem value="management">Direction</SelectItem>
+//                         </SelectContent>
+//                       </Select>
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
 
-        {/* Form Actions */}
-        <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline">
-            Annuler
-          </Button>
-          <Button type="submit">{t("add")}</Button>
-        </div>
-      </form>
-    </div>
-  );
-}
+//               <form.Field
+//                 name="contractType"
+//                 children={(field) => {
+//                   const isInvalid =
+//                     field.state.meta.isTouched && !field.state.meta.isValid;
+//                   return (
+//                     <Field data-invalid={isInvalid}>
+//                       <FieldLabel htmlFor={field.name}>
+//                         Type de contrat{" "}
+//                         <span className="text-destructive">*</span>
+//                       </FieldLabel>
+//                       <Select
+//                         value={field.state.value}
+//                         onValueChange={(value) =>
+//                           field.handleChange(
+//                             value as "cdi" | "cdd" | "internship" | "freelance",
+//                           )
+//                         }
+//                       >
+//                         <SelectTrigger id={field.name} className="w-full">
+//                           <SelectValue placeholder="Sélectionner un type" />
+//                         </SelectTrigger>
+//                         <SelectContent>
+//                           <SelectItem value="cdi">
+//                             CDI (Contrat à Durée Indéterminée)
+//                           </SelectItem>
+//                           <SelectItem value="cdd">
+//                             CDD (Contrat à Durée Déterminée)
+//                           </SelectItem>
+//                           <SelectItem value="internship">Stage</SelectItem>
+//                           <SelectItem value="freelance">Freelance</SelectItem>
+//                         </SelectContent>
+//                       </Select>
+//                       {isInvalid && (
+//                         <FieldError errors={field.state.meta.errors} />
+//                       )}
+//                     </Field>
+//                   );
+//                 }}
+//               />
+//               <form.Field
+//                 name="jobTitle"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Poste</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       placeholder="Ex: Principal, Directrice des Études, Comptable..."
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="specialty"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Spécialité</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       placeholder="Ex: Maths/Phys, Francais/Philo ..."
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+
+//               <form.Field
+//                 name="weeklyWorkingHours"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Heures de travail/semaine
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       type="number"
+//                       value={field.state.value}
+//                       min="1"
+//                       max="168"
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) => {
+//                         const nextValue = event.target.valueAsNumber;
+//                         field.handleChange(
+//                           Number.isNaN(nextValue) ? 0 : nextValue,
+//                         );
+//                       }}
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//             </AccordionContent>
+//           </AccordionItem>
+//           {/** Gestion des Salaires et Allocations */}
+//           <AccordionItem
+//             value="allocations"
+//             className="bg-card border-border overflow-hidden rounded-lg border"
+//           >
+//             <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+//               Gestion des Salaires et Allocations
+//             </AccordionTrigger>
+//             <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+//               <form.Field
+//                 name="baseSalary"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Salaire de Base</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="travelAllowance"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Allocation Deplacement
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+
+//               <form.Field
+//                 name="phoneAllowance"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Allocation Telephone
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="housingAllowance"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Allocation Logement
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="transportAllowance"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Allocation Transport
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="performanceBonus"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Prime de performance
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <div className="bg-primary text-primary-foreground col-span-full grid grid-cols-3 rounded-lg p-2">
+//                 <div>Salaire total calculé : </div>
+//                 <div>Mensuel : 0 FCFA </div>
+//                 <div>Annuel : 0 FCFA</div>
+//               </div>
+//             </AccordionContent>
+//           </AccordionItem>
+//           {/* * Informations Bancaires */}
+//           <AccordionItem
+//             value="banquesInformation"
+//             className="bg-card border-border overflow-hidden rounded-lg border"
+//           >
+//             <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
+//               Informations Bancaires
+//             </AccordionTrigger>
+//             <AccordionContent className="border-border grid gap-4 border-t p-4 md:grid-cols-2 lg:grid-cols-3">
+//               <form.Field
+//                 name="bankName"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Banque</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="accountNumber"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Numéro de compte
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="bankCode"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Code banque</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <Separator className="col-span-full" />
+//               <form.Field
+//                 name="cnpsNumber"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Numéro CNPS</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="cnssNumber"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>Numéro CNSS</FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//               <form.Field
+//                 name="taxNumber"
+//                 children={(field) => (
+//                   <Field>
+//                     <FieldLabel htmlFor={field.name}>
+//                       Numéro d&apos;impôt
+//                     </FieldLabel>
+//                     <Input
+//                       id={field.name}
+//                       name={field.name}
+//                       value={field.state.value ?? ""}
+//                       onBlur={field.handleBlur}
+//                       onChange={(event) =>
+//                         field.handleChange(event.target.value)
+//                       }
+//                       autoComplete="off"
+//                     />
+//                   </Field>
+//                 )}
+//               />
+//             </AccordionContent>
+//           </AccordionItem>
+//         </Accordion>
+
+//         {/* Form Actions */}
+//         <div className="flex justify-end gap-4">
+//           <Button type="button" variant="outline">
+//             Annuler
+//           </Button>
+//           <Button type="submit">{t("add")}</Button>
+//         </div>
+//       </form>
+//     </div>
+//   );
+// }

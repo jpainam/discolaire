@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
 
@@ -28,6 +27,7 @@ import {
 } from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
 import { Textarea } from "~/components/ui/textarea";
+import { UserIcon } from "~/icons";
 import { useSchool } from "~/providers/SchoolProvider";
 
 export function Step1() {
@@ -36,10 +36,10 @@ export function Step1() {
   const { school } = useSchool();
 
   return (
-    <Card className="gap-2">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-md flex items-center gap-2">
-          <User className="h-4 w-4" />
+        <CardTitle className="flex items-center gap-2">
+          <UserIcon />
           {t("Basic Information")}
         </CardTitle>
       </CardHeader>
@@ -156,6 +156,7 @@ export function Step1() {
             </FormItem>
           )}
         />
+        <Separator className="col-span-full" />
         <FormField
           control={form.control}
           name="countryId"
