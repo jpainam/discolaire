@@ -25,7 +25,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { EditIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { BreadcrumbsSetter } from "../BreadcrumbsSetter";
@@ -47,14 +46,8 @@ export function ClassroomHeader() {
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const router = useRouter();
-  const canDeleteClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
-  const canUpdateClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteClassroom = useCheckPermission("classroom", "delete");
+  const canUpdateClassroom = useCheckPermission("classroom", "update");
   const deleteClassroomMutation = useMutation(
     trpc.classroom.delete.mutationOptions({
       onSuccess: async () => {
@@ -85,10 +78,7 @@ export function ClassroomHeader() {
       router.push(routes.classrooms.details(value));
     }
   };
-  const canCreateClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.CREATE,
-  );
+  const canCreateClassroom = useCheckPermission("classroom", "create");
   const { openSheet } = useSheet();
 
   return (

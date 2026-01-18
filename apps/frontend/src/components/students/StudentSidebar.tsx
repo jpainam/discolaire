@@ -35,7 +35,6 @@ import {
   ReportGradeIcon,
   TextBookIcon,
 } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function StudentSidebar({
@@ -93,10 +92,7 @@ export function StudentSidebar({
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const canReadTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.READ,
-  );
+  const canReadTransaction = useCheckPermission("transaction", "read");
   //if (!canReadTransaction) {
   informations.push({
     name: "transactions",

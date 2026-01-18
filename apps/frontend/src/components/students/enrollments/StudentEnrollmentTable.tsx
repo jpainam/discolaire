@@ -32,7 +32,6 @@ import {
 } from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -54,10 +53,7 @@ export function StudentEnrollmentTable({
     year: "numeric",
   });
 
-  const canDeleteEnrollment = useCheckPermission(
-    "enrollment",
-    PermissionAction.DELETE,
-  );
+  const canDeleteEnrollment = useCheckPermission("enrollment", "delete");
 
   const queryClient = useQueryClient();
   const deleteEnrollmentMutation = useMutation(

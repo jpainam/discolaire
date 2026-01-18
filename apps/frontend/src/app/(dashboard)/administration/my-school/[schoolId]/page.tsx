@@ -30,7 +30,6 @@ import {
 } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { env } from "~/env";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { DefaultSettings } from "./DefaultSettings";
@@ -58,13 +57,10 @@ export default async function Page(props: {
   ) {
     return <NoPermission />;
   }
-  const canReadSchool = await checkPermission("school", PermissionAction.READ);
+  const canReadSchool = await checkPermission("school", "read");
   if (!canReadSchool) return <NoPermission />;
 
-  const canUpdateSchool = await checkPermission(
-    "school",
-    PermissionAction.UPDATE,
-  );
+  const canUpdateSchool = await checkPermission("school", "update");
 
   const t = await getTranslations();
   return (

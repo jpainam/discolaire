@@ -93,7 +93,7 @@ export const studentRouter = {
       } else {
         const canReadStudent = checkPermission(
           "student",
-          "Read",
+          "read",
           {},
           ctx.permissions,
         );

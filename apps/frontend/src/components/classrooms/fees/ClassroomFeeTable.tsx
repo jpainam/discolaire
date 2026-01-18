@@ -36,7 +36,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon, EditIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditFee } from "./CreateEditFee";
@@ -51,14 +50,8 @@ export function ClassroomFeeTable() {
   const t = useTranslations();
   const queryClient = useQueryClient();
 
-  const canDeleteClassroomFee = useCheckPermission(
-    "fee",
-    PermissionAction.DELETE,
-  );
-  const canUpdateClassroomFee = useCheckPermission(
-    "fee",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteClassroomFee = useCheckPermission("fee", "delete");
+  const canUpdateClassroomFee = useCheckPermission("fee", "update");
 
   const deleteFeeMutation = useMutation(
     trpc.fee.delete.mutationOptions({

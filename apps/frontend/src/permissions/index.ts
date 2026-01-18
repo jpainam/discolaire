@@ -15,7 +15,7 @@ export const permissionSchema = z.object({
   actions: z.array(z.string()),
   resources: z.array(z.string()),
   schoolId: z.string(),
-  effect: z.enum(["Allow", "Deny"]),
+  effect: z.enum(["allow", "deny"]),
   condition: z.any(),
 });
 
@@ -27,7 +27,7 @@ export interface Permission {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   condition?: any;
   schoolId: string;
-  effect: "Allow" | "Deny";
+  effect: "allow" | "deny";
   resources: string[];
 }
 
@@ -55,7 +55,7 @@ export function doPermissionsCheck(
   );
   // If there is at least one deny permission, return false
   const hasDenyPermission = allPermissions.some(
-    (permission) => permission.effect === "Deny",
+    (permission) => permission.effect === "deny",
   );
   if (hasDenyPermission) {
     return false;

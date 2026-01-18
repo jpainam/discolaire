@@ -41,7 +41,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -65,19 +64,10 @@ export function ClassroomSubjectTable() {
     trpc.subject.gradesheetCount.queryOptions({ classroomId: params.id }),
   );
   const confirm = useConfirm();
-  const canDeleteClassroomSubject = useCheckPermission(
-    "subject",
-    PermissionAction.DELETE,
-  );
-  const canEditClassroomSubject = useCheckPermission(
-    "subject",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteClassroomSubject = useCheckPermission("subject", "delete");
+  const canEditClassroomSubject = useCheckPermission("subject", "update");
   const queryClient = useQueryClient();
-  const canCreateGradeSheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.CREATE,
-  );
+  const canCreateGradeSheet = useCheckPermission("gradesheet", "create");
 
   const deleteSubjectMutation = useMutation(
     trpc.subject.delete.mutationOptions({

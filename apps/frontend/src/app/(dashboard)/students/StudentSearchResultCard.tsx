@@ -30,7 +30,6 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, EditIcon, GradeIcon, HeartIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -47,10 +46,7 @@ export function StudentSearchResultCard({
   const locale = useLocale();
   const queryClient = useQueryClient();
   const confirm = useConfirm();
-  const canDeleteStudent = useCheckPermission(
-    "student",
-    PermissionAction.DELETE,
-  );
+  const canDeleteStudent = useCheckPermission("student", "delete");
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({

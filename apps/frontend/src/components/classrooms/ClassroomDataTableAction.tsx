@@ -22,7 +22,6 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -38,10 +37,7 @@ export function ClassroomDataTableAction({
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const t = useTranslations();
-  const canDeleteClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
+  const canDeleteClassroom = useCheckPermission("classroom", "delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const classroomDeleteMutation = useMutation(

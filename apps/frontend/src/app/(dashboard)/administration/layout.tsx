@@ -3,15 +3,11 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 
 export default async function Layout({ children }: PropsWithChildren) {
   //const session = await getSession();
-  const canSeeAdminMenu = await checkPermission(
-    "menu:administration",
-    PermissionAction.READ,
-  );
+  const canSeeAdminMenu = await checkPermission("menu:administration", "read");
   if (!canSeeAdminMenu) {
     redirect("/");
   }

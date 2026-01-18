@@ -7,16 +7,12 @@ import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 
 export function TransactionDetailsHeader() {
   const params = useParams<{ transactionId: string }>();
 
   const t = useTranslations();
-  const canCreateTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.CREATE,
-  );
+  const canCreateTransaction = useCheckPermission("transaction", "create");
 
   return (
     <div className="bg-secondary text-secondary-foreground flex flex-row items-center gap-2 border-b px-4 py-1">

@@ -36,7 +36,6 @@ import { UserLink } from "~/components/UserLink";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CURRENCY } from "~/lib/constants";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -73,10 +72,7 @@ export function ClassroomFinancialSituation() {
     "situation",
     parseAsString.withDefault("all"),
   );
-  const canCreateTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.CREATE,
-  );
+  const canCreateTransaction = useCheckPermission("transaction", "create");
 
   return (
     <div>

@@ -55,7 +55,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { DeleteTransaction } from "./DeleteTransaction";
 
@@ -74,18 +73,9 @@ export function TransactionTable() {
   );
   const queryClient = useQueryClient();
 
-  const canDeleteTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.DELETE,
-  );
-  const canUpdateTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.UPDATE,
-  );
-  const canReadTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.READ,
-  );
+  const canDeleteTransaction = useCheckPermission("transaction", "delete");
+  const canUpdateTransaction = useCheckPermission("transaction", "update");
+  const canReadTransaction = useCheckPermission("transaction", "read");
 
   const updateTransactionMutation = useMutation(
     trpc.transaction.updateStatus.mutationOptions({

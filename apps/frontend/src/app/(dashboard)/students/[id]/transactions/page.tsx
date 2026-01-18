@@ -10,7 +10,6 @@ import { TransactionTable } from "~/components/students/transactions/Transaction
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { PlusIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import {
   batchPrefetch,
@@ -43,10 +42,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     batchPrefetch([trpc.classroom.fees.queryOptions(classroom.id)]);
   }
   const t = await getTranslations();
-  const canCreateTransaction = await checkPermission(
-    "transaction",
-    PermissionAction.CREATE,
-  );
+  const canCreateTransaction = await checkPermission("transaction", "create");
   return (
     <HydrateClient>
       <div className="bg-muted/50 flex justify-end border-b px-4 py-1">

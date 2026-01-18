@@ -28,7 +28,6 @@ import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { getWeekdayName } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -48,15 +47,9 @@ export function ClassroomSubjectTimetable({
   const confirm = useConfirm();
   const locale = useLocale();
 
-  const canCreateTimetable = useCheckPermission(
-    "timetable",
-    PermissionAction.CREATE,
-  );
+  const canCreateTimetable = useCheckPermission("timetable", "create");
 
-  const canDeleteTimetable = useCheckPermission(
-    "timetable",
-    PermissionAction.DELETE,
-  );
+  const canDeleteTimetable = useCheckPermission("timetable", "delete");
 
   const queryClient = useQueryClient();
   const deleteTimetableSlot = useMutation(

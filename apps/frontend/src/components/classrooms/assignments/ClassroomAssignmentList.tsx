@@ -32,7 +32,6 @@ import {
 } from "~/components/ui/input-group";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -76,10 +75,7 @@ export function ClassroomAssignmentList({
     return ass;
   }, [assignments, termId, subjectId, staffId]);
   const queryClient = useQueryClient();
-  const canDeleteAssignment = useCheckPermission(
-    "assignment",
-    PermissionAction.DELETE,
-  );
+  const canDeleteAssignment = useCheckPermission("assignment", "delete");
   const deleteMutation = useMutation(
     trpc.assignment.delete.mutationOptions({
       onSuccess: async () => {

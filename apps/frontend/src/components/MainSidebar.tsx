@@ -40,7 +40,6 @@ import {
   SettingsIcon,
   UsersIcon,
 } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { Shortcut } from "./shortcuts/Shortcut";
 import {
   Collapsible,
@@ -103,10 +102,7 @@ export function MainSidebar({
     url: `/contacts`,
     icon: <ContactIcon />,
   });
-  const canReadLibrary = useCheckPermission(
-    "menu:library",
-    PermissionAction.READ,
-  );
+  const canReadLibrary = useCheckPermission("menu:library", "read");
   if (canReadLibrary) {
     tools.push({
       name: "library",
@@ -116,7 +112,7 @@ export function MainSidebar({
   }
   const canReadAdministration = useCheckPermission(
     "menu:administration",
-    PermissionAction.READ,
+    "read",
   );
   if (canReadAdministration) {
     data.push({

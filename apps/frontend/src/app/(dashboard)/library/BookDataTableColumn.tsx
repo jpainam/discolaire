@@ -21,7 +21,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditBook } from "./CreateEditBook";
@@ -175,8 +174,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
       },
     }),
   );
-  const canUpdateBook = useCheckPermission("library", PermissionAction.UPDATE);
-  const canDeleteBook = useCheckPermission("library", PermissionAction.DELETE);
+  const canUpdateBook = useCheckPermission("library", "update");
+  const canDeleteBook = useCheckPermission("library", "delete");
 
   return (
     <div className="flex justify-end">

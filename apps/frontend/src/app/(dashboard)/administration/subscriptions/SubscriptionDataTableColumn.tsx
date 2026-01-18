@@ -24,7 +24,6 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSubscription } from "./CreateEditSubscription";
@@ -151,14 +150,8 @@ function ActionCells({
 
   const t = useTranslations();
 
-  const canDeleteSubscription = useCheckPermission(
-    "subscription",
-    PermissionAction.DELETE,
-  );
-  const canUpdateSubscription = useCheckPermission(
-    "subscription",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteSubscription = useCheckPermission("subscription", "delete");
+  const canUpdateSubscription = useCheckPermission("subscription", "update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

@@ -11,7 +11,6 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -28,10 +27,7 @@ export function CourseDataTableActions({
 
   const t = useTranslations();
 
-  const canDeleteCourse = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
+  const canDeleteCourse = useCheckPermission("classroom", "delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

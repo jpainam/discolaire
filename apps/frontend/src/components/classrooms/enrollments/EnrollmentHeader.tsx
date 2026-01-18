@@ -24,7 +24,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { getAge } from "~/utils";
@@ -47,9 +46,9 @@ export function EnrollmentHeader({ className }: { className?: string }) {
   const { data: session } = authClient.useSession();
   const { school } = useSchool();
   const router = useRouter();
-  const canUpdateSchool = useCheckPermission("school", PermissionAction.UPDATE);
+  const canUpdateSchool = useCheckPermission("school", "update");
 
-  const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
+  const canEnroll = useCheckPermission("enrollment", "create");
 
   const { male, female } = useMemo(() => {
     const male = students.filter((student) => student.gender == "male").length;

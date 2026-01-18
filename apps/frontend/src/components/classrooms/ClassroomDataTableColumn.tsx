@@ -30,7 +30,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditClassroom } from "./CreateEditClassroom";
@@ -284,14 +283,8 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const t = useTranslations();
   const router = useRouter();
 
-  const canDeleteClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
-  const canUpdateClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteClassroom = useCheckPermission("classroom", "delete");
+  const canUpdateClassroom = useCheckPermission("classroom", "update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

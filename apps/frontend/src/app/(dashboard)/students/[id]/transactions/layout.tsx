@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 
 import { getSession } from "~/auth/server";
 import { NoPermission } from "~/components/no-permission";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 
@@ -27,10 +26,7 @@ export default async function Layout(
     const studentIds = students.map((s) => s.studentId);
     canReadTransaction = studentIds.includes(params.id);
   } else {
-    canReadTransaction = await checkPermission(
-      "transaction",
-      PermissionAction.READ,
-    );
+    canReadTransaction = await checkPermission("transaction", "read");
   }
 
   if (!canReadTransaction) {

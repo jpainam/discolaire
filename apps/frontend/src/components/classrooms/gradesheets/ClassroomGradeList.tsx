@@ -52,7 +52,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, EditIcon } from "~/icons";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -112,15 +111,9 @@ export function ClassroomGradeList({
       },
     }),
   );
-  const canUpdateGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.UPDATE,
-  );
+  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
 
-  const canDeleteGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.DELETE,
-  );
+  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
   const router = useRouter();
   const deleteGradeSheetMutation = useMutation(
     trpc.gradeSheet.delete.mutationOptions({

@@ -36,7 +36,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -70,23 +69,14 @@ export function ContactDetailsHeader() {
       },
     }),
   );
-  const canDeleteContact = useCheckPermission(
-    "contact",
-    PermissionAction.DELETE,
-  );
+  const canDeleteContact = useCheckPermission("contact", "delete");
 
   const t = useTranslations();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
 
-  const canUpdateContact = useCheckPermission(
-    "contact",
-    PermissionAction.UPDATE,
-  );
-  const canCreateContact = useCheckPermission(
-    "contact",
-    PermissionAction.CREATE,
-  );
+  const canUpdateContact = useCheckPermission("contact", "update");
+  const canCreateContact = useCheckPermission("contact", "create");
 
   return (
     <div className="flex flex-row items-start gap-2">

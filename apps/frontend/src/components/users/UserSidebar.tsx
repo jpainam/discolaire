@@ -26,7 +26,6 @@ import {
   SidebarRail,
 } from "~/components/ui/sidebar";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function UserSidebar({
@@ -76,7 +75,7 @@ export function UserSidebar({
 
   const t = useTranslations();
   const { data: session } = authClient.useSession();
-  const canReadPermission = useCheckPermission("policy", PermissionAction.READ);
+  const canReadPermission = useCheckPermission("policy", "read");
   if (canReadPermission && session?.user.profile === "staff") {
     data.information.push({
       name: "permissions",

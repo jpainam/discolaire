@@ -21,7 +21,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   // const canReadEnrollment = await checkPermission(
   //   "enrollment",
-  //   PermissionAction.READ,
+  //   "read",
   // );
 
   void batchPrefetch([

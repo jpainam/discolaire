@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 
 import { getSession } from "~/auth/server";
 import { NoPermission } from "~/components/no-permission";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
@@ -17,7 +16,7 @@ export default async function Layout(props: {
   }
   if (session.user.id !== params.id) {
     if (session.user.profile == "staff") {
-      const canReadUser = await checkPermission("user", PermissionAction.READ);
+      const canReadUser = await checkPermission("user", "read");
       if (!canReadUser) {
         return (
           <NoPermission className="my-8" isFullPage={true} resourceText="" />

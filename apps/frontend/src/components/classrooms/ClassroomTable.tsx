@@ -59,7 +59,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { Badge } from "../base-badge";
@@ -99,14 +98,8 @@ export function ClassroomTable() {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
 
-  const canDeleteClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
-  const canUpdateClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteClassroom = useCheckPermission("classroom", "delete");
+  const canUpdateClassroom = useCheckPermission("classroom", "update");
 
   const queryClient = useQueryClient();
 
@@ -138,10 +131,7 @@ export function ClassroomTable() {
     });
   }, [classrooms, queryText, searchParams]);
 
-  const canCreateClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.CREATE,
-  );
+  const canCreateClassroom = useCheckPermission("classroom", "create");
 
   return (
     <div className="">

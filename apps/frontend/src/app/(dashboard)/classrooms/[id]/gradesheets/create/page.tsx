@@ -15,7 +15,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "~/components/ui/empty";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, trpc } from "~/trpc/server";
 import { createGradeSheetSearchSchema } from "./search-params";
@@ -29,10 +28,7 @@ const searchParamsLoader = createLoader(createGradeSheetSearchSchema);
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const canCreateGradeSheet = await checkPermission(
-    "gradesheet",
-    PermissionAction.CREATE,
-  );
+  const canCreateGradeSheet = await checkPermission("gradesheet", "create");
 
   const searchParams = await searchParamsLoader(props.searchParams);
 

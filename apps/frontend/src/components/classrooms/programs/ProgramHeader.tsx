@@ -22,7 +22,6 @@ import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 
 export function ProgramHeader({
   subject,
@@ -33,10 +32,7 @@ export function ProgramHeader({
   const params = useParams<{ id: string; subjectId: string }>();
 
   const pathname = usePathname();
-  const canEditSubjectProgram = useCheckPermission(
-    "program",
-    PermissionAction.UPDATE,
-  );
+  const canEditSubjectProgram = useCheckPermission("program", "update");
   useEffect(() => {
     const breads = [
       { label: t("programs"), href: routes.classrooms.programs(params.id) },

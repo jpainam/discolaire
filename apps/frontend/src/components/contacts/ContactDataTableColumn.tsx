@@ -28,7 +28,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -197,14 +196,8 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 
-  const canDeleteContact = useCheckPermission(
-    "contact",
-    PermissionAction.DELETE,
-  );
-  const canUpdateContact = useCheckPermission(
-    "contact",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteContact = useCheckPermission("contact", "delete");
+  const canUpdateContact = useCheckPermission("contact", "update");
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
       onError: (error) => {

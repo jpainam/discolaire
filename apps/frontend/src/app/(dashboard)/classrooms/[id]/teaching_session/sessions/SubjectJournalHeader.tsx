@@ -22,7 +22,6 @@ import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -58,10 +57,7 @@ export function SubjectJournalHeader({
       },
     }),
   );
-  const canDeleteSubject = useCheckPermission(
-    "subject",
-    PermissionAction.DELETE,
-  );
+  const canDeleteSubject = useCheckPermission("subject", "delete");
   const subject = subjectQuery.data;
   return (
     <div className="bg-muted/50 flex grid grid-cols-1 flex-row items-center justify-between gap-2 border-y px-4 py-1 lg:flex">

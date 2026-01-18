@@ -18,7 +18,7 @@ export default async function Page() {
 
   // const canReadContact = await checkPermission(
   //   "contact",
-  //   PermissionAction.READ
+  //   "read"
   // );
 
   return (

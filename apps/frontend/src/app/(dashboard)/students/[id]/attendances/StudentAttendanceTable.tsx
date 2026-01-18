@@ -55,7 +55,6 @@ import {
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -229,14 +228,8 @@ const AttendanceRowView = memo(function AttendanceRowView({
   const confirm = useConfirm();
   const t = useTranslations();
   const { openModal } = useModal();
-  const canDeleteAttendance = useCheckPermission(
-    "attendance",
-    PermissionAction.DELETE,
-  );
-  const canUpdateAttendance = useCheckPermission(
-    "attendance",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteAttendance = useCheckPermission("attendance", "delete");
+  const canUpdateAttendance = useCheckPermission("attendance", "update");
 
   const handleSendNotification = async (id: number) => {
     try {

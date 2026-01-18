@@ -23,7 +23,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditCourse } from "./CreateEditCourse";
@@ -160,14 +159,8 @@ function ActionCells({ course }: { course: CourseProcedureOutput }) {
     }),
   );
 
-  const canDeleteCourse = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
-  const canUpdateCourse = useCheckPermission(
-    "classroom",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteCourse = useCheckPermission("classroom", "delete");
+  const canUpdateCourse = useCheckPermission("classroom", "update");
 
   return (
     <div className="flex justify-end">

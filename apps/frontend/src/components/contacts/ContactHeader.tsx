@@ -18,7 +18,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { BreadcrumbsSetter } from "../BreadcrumbsSetter";
@@ -44,10 +43,7 @@ export function ContactHeader() {
     }),
   );
 
-  const canCreateContact = useCheckPermission(
-    "contact",
-    PermissionAction.CREATE,
-  );
+  const canCreateContact = useCheckPermission("contact", "create");
 
   return (
     <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">

@@ -29,7 +29,6 @@ import {
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
 export function BookCategory() {
@@ -51,18 +50,9 @@ export function BookCategory() {
 
   const t = useTranslations();
   const { openModal } = useModal();
-  const canUpdateCategory = useCheckPermission(
-    "library",
-    PermissionAction.UPDATE,
-  );
-  const canCreateCategory = useCheckPermission(
-    "library",
-    PermissionAction.CREATE,
-  );
-  const canDeleteCategory = useCheckPermission(
-    "library",
-    PermissionAction.DELETE,
-  );
+  const canUpdateCategory = useCheckPermission("library", "update");
+  const canCreateCategory = useCheckPermission("library", "create");
+  const canDeleteCategory = useCheckPermission("library", "delete");
 
   return (
     <Card className="gap-0 p-0">

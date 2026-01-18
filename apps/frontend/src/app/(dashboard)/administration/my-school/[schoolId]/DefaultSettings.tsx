@@ -35,7 +35,6 @@ import { Switch } from "~/components/ui/switch";
 import { timezones } from "~/data/timezones";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
 const defaultSettingsSchema = z.object({
@@ -75,7 +74,7 @@ export function DefaultSettings({
   });
 
   const router = useRouter();
-  const canUpdateSchool = useCheckPermission("school", PermissionAction.UPDATE);
+  const canUpdateSchool = useCheckPermission("school", "update");
   const updateDefaultSettings = useMutation(
     trpc.school.updateDefaultSettings.mutationOptions({
       onSuccess: async () => {

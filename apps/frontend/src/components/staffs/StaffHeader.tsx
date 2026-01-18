@@ -8,7 +8,6 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStaff } from "./CreateEditStaff";
 import { StaffEffectif } from "./StaffEffectif";
@@ -18,7 +17,7 @@ export function StaffHeader() {
   const trpc = useTRPC();
   const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
 
-  const canCreateStaff = useCheckPermission("staff", PermissionAction.CREATE);
+  const canCreateStaff = useCheckPermission("staff", "create");
 
   const { openSheet } = useSheet();
 

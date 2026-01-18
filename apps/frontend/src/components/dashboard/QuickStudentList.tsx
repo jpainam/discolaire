@@ -51,7 +51,6 @@ import {
   HeartIcon,
   ViewIcon,
 } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -82,10 +81,7 @@ export function QuickStudentList() {
 
   const queryClient = useQueryClient();
   const confirm = useConfirm();
-  const canDeleteStudent = useCheckPermission(
-    "student",
-    PermissionAction.DELETE,
-  );
+  const canDeleteStudent = useCheckPermission("student", "delete");
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({

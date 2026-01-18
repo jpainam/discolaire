@@ -21,7 +21,6 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 import { LinkContact } from "./LinkContact";
 
@@ -29,7 +28,7 @@ export function StudentContactHeader() {
   const params = useParams<{ id: string }>();
 
   const t = useTranslations();
-  const canAddContact = useCheckPermission("contact", PermissionAction.CREATE);
+  const canAddContact = useCheckPermission("contact", "create");
 
   const Icon = sidebarIcons.contacts;
 

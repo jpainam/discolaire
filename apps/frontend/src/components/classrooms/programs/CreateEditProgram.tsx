@@ -36,7 +36,6 @@ import { Label } from "~/components/ui/label";
 import { Spinner } from "~/components/ui/spinner";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
 // const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
@@ -79,10 +78,7 @@ export function CreateEditProgram({
 
   const queryClient = useQueryClient();
 
-  const canUpdateSubject = useCheckPermission(
-    "subject",
-    PermissionAction.UPDATE,
-  );
+  const canUpdateSubject = useCheckPermission("subject", "update");
   const updateSubjectProgram = useMutation(
     trpc.subject.updateProgram.mutationOptions({
       onSuccess: async () => {

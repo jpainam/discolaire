@@ -21,7 +21,6 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -157,7 +156,7 @@ function ActionCell({ user }: { user: User }) {
   const confirm = useConfirm();
   const router = useRouter();
 
-  const canDeleteUser = useCheckPermission("user", PermissionAction.DELETE);
+  const canDeleteUser = useCheckPermission("user", "delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

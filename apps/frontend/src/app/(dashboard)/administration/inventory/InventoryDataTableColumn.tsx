@@ -32,7 +32,6 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditAsset } from "./CreateEditAsset";
@@ -172,14 +171,8 @@ function ActionCell({
 
   const t = useTranslations();
 
-  const canDeleteInventory = useCheckPermission(
-    "inventory",
-    PermissionAction.DELETE,
-  );
-  const canUpdateInventory = useCheckPermission(
-    "inventory",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteInventory = useCheckPermission("inventory", "delete");
+  const canUpdateInventory = useCheckPermission("inventory", "update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const deleteConsumableMutation = useMutation(

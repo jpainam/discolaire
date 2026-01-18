@@ -3,7 +3,6 @@ import { CircleAlert } from "lucide-react";
 import type { RouterOutputs } from "@repo/api";
 import { TermType } from "@repo/db";
 
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, trpc } from "~/trpc/server";
 import { RecpordCardQuarterAlert } from "./RecpordCardQuarterAlert";
@@ -52,10 +51,7 @@ async function CheckSubjectScale({
   );
 
   const areNot100percent = allweights.filter((s) => !s.weight || s.weight < 1);
-  const canCreateGradesheet = await checkPermission(
-    "gradesheet",
-    PermissionAction.CREATE,
-  );
+  const canCreateGradesheet = await checkPermission("gradesheet", "create");
   if (canCreateGradesheet && areNot100percent.length != 0) {
     return (
       <div className="px-4">

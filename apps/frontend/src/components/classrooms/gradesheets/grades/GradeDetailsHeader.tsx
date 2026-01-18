@@ -23,7 +23,6 @@ import {
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { ReportFalseGrade } from "./ReportFalseGrade";
@@ -70,10 +69,7 @@ export function GradeDetailsHeader({
     }),
   );
 
-  const canDeleteGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.DELETE,
-  );
+  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
 
   return (
     <div className="flex flex-col gap-2 border-b">

@@ -21,7 +21,6 @@ import {
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStockUnit } from "./CreateEditStockUnit";
@@ -41,18 +40,9 @@ export function InventoryStockUnitTable() {
       },
     }),
   );
-  const canDeleteStockUnit = useCheckPermission(
-    "inventory",
-    PermissionAction.DELETE,
-  );
-  const canUpdateStockUnit = useCheckPermission(
-    "inventory",
-    PermissionAction.UPDATE,
-  );
-  const canCreateStockUnit = useCheckPermission(
-    "inventory",
-    PermissionAction.CREATE,
-  );
+  const canDeleteStockUnit = useCheckPermission("inventory", "delete");
+  const canUpdateStockUnit = useCheckPermission("inventory", "update");
+  const canCreateStockUnit = useCheckPermission("inventory", "create");
   const confirm = useConfirm();
 
   const t = useTranslations();

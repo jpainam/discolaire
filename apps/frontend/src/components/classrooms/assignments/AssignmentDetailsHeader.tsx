@@ -16,7 +16,6 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -45,7 +44,7 @@ export function AssignmentDetailsHeader({
   );
   const confirm = useConfirm();
 
-  const canDelete = useCheckPermission("assignment", PermissionAction.DELETE);
+  const canDelete = useCheckPermission("assignment", "delete");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -49,7 +49,6 @@ import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { ContactIcon, DeleteIcon, ViewIcon } from "~/icons";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -107,14 +106,8 @@ export function StudentContactTable({
     }),
   );
 
-  const canUpdateStudentContact = useCheckPermission(
-    "contact",
-    PermissionAction.UPDATE,
-  );
-  const canDeleteStudentContact = useCheckPermission(
-    "contact",
-    PermissionAction.DELETE,
-  );
+  const canUpdateStudentContact = useCheckPermission("contact", "update");
+  const canDeleteStudentContact = useCheckPermission("contact", "delete");
   const { openSheet } = useSheet();
 
   if (studentContacts.length == 0) {

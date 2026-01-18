@@ -21,7 +21,6 @@ import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { SubjectIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSubject } from "./CreateEditSubject";
 
@@ -51,10 +50,7 @@ export function ClassroomSubjectHeader() {
   });
 
   const { openSheet } = useSheet();
-  const canAddClassroomSubject = useCheckPermission(
-    "subject",
-    PermissionAction.CREATE,
-  );
+  const canAddClassroomSubject = useCheckPermission("subject", "create");
 
   return (
     <div className="bg-muted text-muted-foreground grid w-full grid-cols-1 flex-row items-center gap-4 border-y px-4 py-1 md:flex">

@@ -29,7 +29,7 @@ export default async function Layout({
   } else {
     // const canReadContact = await checkPermission(
     //   "contact",
-    //   PermissionAction.READ,
+    //   "read",
     // );
     // if (!canReadContact) {
     //   return <NoPermission className="my-8" />;

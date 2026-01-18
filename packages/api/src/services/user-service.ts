@@ -17,13 +17,13 @@ export class UserService {
   }: {
     userId: string;
     resource: string;
-    action: "Read" | "Update" | "Create" | "Delete";
-    effect: "Allow" | "Deny";
+    action: "read" | "update" | "create" | "delete";
+    effect: "allow" | "deny";
   }) {
     const permissions = await this.getPermissions(userId);
 
     let updatedPermissions = [];
-    if (effect === "Allow") {
+    if (effect === "allow") {
       const newPermission = {
         resource,
         action,
@@ -32,7 +32,7 @@ export class UserService {
       updatedPermissions = [...permissions, newPermission];
       if (
         newPermission.resource == "user" &&
-        newPermission.action == "Create"
+        newPermission.action == "create"
       ) {
         await this.db.user.update({
           where: { id: userId },
@@ -121,13 +121,24 @@ export class UserService {
     const user = await this.db.user.findUniqueOrThrow({
       where: { id: userId },
     });
-
-    return (user.permissions ?? []) as {
+    const perms = user.permissions as {
       resource: string;
-      action: "Read" | "Update" | "Create" | "Delete";
-      effect: "Allow" | "Deny";
+      action: string;
+      effect: string;
       condition?: Record<string, unknown> | null;
     }[];
+    return perms.map((p) => {
+      return {
+        resource: p.resource.toLowerCase(),
+        action: p.action.toLowerCase() as
+          | "read"
+          | "update"
+          | "create"
+          | "delete",
+        effect: p.effect.toLowerCase() as "allow" | "deny",
+        condition: p.condition,
+      };
+    });
   }
   async attachUser({
     entityId,

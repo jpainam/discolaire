@@ -27,7 +27,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -50,14 +49,8 @@ export default function ClassroomTable() {
       },
     }),
   );
-  const canDeleteClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
-  const canEditClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteClassroom = useCheckPermission("classroom", "delete");
+  const canEditClassroom = useCheckPermission("classroom", "update");
   const confirm = useConfirm();
   return (
     <div className="rounded-lg border">

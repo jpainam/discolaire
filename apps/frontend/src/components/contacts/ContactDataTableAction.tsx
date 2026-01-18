@@ -9,7 +9,6 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -19,10 +18,7 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const t = useTranslations();
-  const canDeleteContact = useCheckPermission(
-    "contact",
-    PermissionAction.DELETE,
-  );
+  const canDeleteContact = useCheckPermission("contact", "delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const deleteContactMutation = useMutation(

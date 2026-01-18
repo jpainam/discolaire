@@ -25,7 +25,6 @@ import {
 import { routes } from "~/configs/routes";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -216,10 +215,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
       },
     }),
   );
-  const canUpdateGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.UPDATE,
-  );
+  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
 
   return (
     <div className="flex justify-end">

@@ -10,7 +10,6 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -22,10 +21,7 @@ export function ConsumableUsageDataTableAction({
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const t = useTranslations();
-  const canDeleteInventory = useCheckPermission(
-    "inventory",
-    PermissionAction.DELETE,
-  );
+  const canDeleteInventory = useCheckPermission("inventory", "delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

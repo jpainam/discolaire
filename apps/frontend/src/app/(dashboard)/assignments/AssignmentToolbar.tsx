@@ -13,16 +13,12 @@ import {
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { CreateAssignment } from "./CreateAssignment";
 
 export function AssignmentToolbar() {
   const t = useTranslations();
   const { openModal } = useModal();
-  const canCreateAssignment = useCheckPermission(
-    "assignment",
-    PermissionAction.CREATE,
-  );
+  const canCreateAssignment = useCheckPermission("assignment", "create");
   return (
     <header className="bg-muted/50 flex items-center justify-between border-b px-4 py-1">
       <Label>{t("assignments")}</Label>

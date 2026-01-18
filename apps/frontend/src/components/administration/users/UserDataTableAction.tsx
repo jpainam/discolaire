@@ -10,7 +10,6 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -48,7 +47,7 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
   }, [table]);
 
   const confirm = useConfirm();
-  const canDeleteUser = useCheckPermission("user", PermissionAction.DELETE);
+  const canDeleteUser = useCheckPermission("user", "delete");
   return (
     <>
       {canDeleteUser && table.getSelectedRowModel().rows.length > 0 && (

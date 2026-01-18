@@ -21,7 +21,6 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { PlusIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -34,10 +33,7 @@ export function StudentGradesheetHeader() {
     trpc.student.get.queryOptions(params.id),
   );
 
-  const canUpdateGrade = useCheckPermission(
-    "gradesheet",
-    PermissionAction.UPDATE,
-  );
+  const canUpdateGrade = useCheckPermission("gradesheet", "update");
 
   return (
     <div className="bg-muted/50 flex flex-row items-center gap-1 border-b px-4 py-1">

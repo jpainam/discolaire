@@ -22,7 +22,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -194,14 +193,8 @@ function ActionsCell({
     }),
   );
   const router = useRouter();
-  const canDeleteAssignment = useCheckPermission(
-    "assignment",
-    PermissionAction.DELETE,
-  );
-  const canUpdateAssignment = useCheckPermission(
-    "assignment",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteAssignment = useCheckPermission("assignment", "delete");
+  const canUpdateAssignment = useCheckPermission("assignment", "update");
   const confirm = useConfirm();
   const params = useParams<{ id: string }>();
 

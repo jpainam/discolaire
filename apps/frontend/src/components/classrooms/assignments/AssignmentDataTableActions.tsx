@@ -11,7 +11,6 @@ import type { RouterOutputs } from "@repo/api";
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { getErrorMessage } from "~/lib/handle-error";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -32,10 +31,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
     trpc.assignment.delete.mutationOptions(),
   );
 
-  const canDeleteAssignment = useCheckPermission(
-    "assignment",
-    PermissionAction.DELETE,
-  );
+  const canDeleteAssignment = useCheckPermission("assignment", "delete");
   return (
     <>
       {canDeleteAssignment &&

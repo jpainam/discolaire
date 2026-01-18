@@ -209,9 +209,9 @@ export const userRouter = {
     .input(
       z.object({
         userId: z.string().min(1),
-        action: z.enum(["Read", "Update", "Create", "Delete"]),
+        action: z.enum(["read", "update", "create", "delete"]),
         resource: z.string().min(1),
-        effect: z.enum(["Allow", "Deny"]),
+        effect: z.enum(["allow", "deny"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {

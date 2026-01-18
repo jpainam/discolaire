@@ -21,7 +21,6 @@ import {
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateUpdateJournal } from "./CreateUpdateJournal";
@@ -53,8 +52,8 @@ export function AccountingJournalTable() {
   );
 
   const confirm = useConfirm();
-  const canUpdateFees = useCheckPermission("fee", PermissionAction.UPDATE);
-  const canDeleteFees = useCheckPermission("fee", PermissionAction.DELETE);
+  const canUpdateFees = useCheckPermission("fee", "update");
+  const canDeleteFees = useCheckPermission("fee", "delete");
   return (
     <div>
       <div className="bg-background overflow-hidden rounded-md border">

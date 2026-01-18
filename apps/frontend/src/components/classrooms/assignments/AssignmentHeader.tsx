@@ -21,7 +21,6 @@ import {
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 import { sidebarIcons } from "../sidebar-icons";
 
 export function AssignmentHeader() {
@@ -38,10 +37,7 @@ export function AssignmentHeader() {
   const [termId, setTermId] = useQueryState("termId");
 
   const Icon = sidebarIcons.assignments;
-  const canCreateAssignment = useCheckPermission(
-    "assignment",
-    PermissionAction.CREATE,
-  );
+  const canCreateAssignment = useCheckPermission("assignment", "create");
   return (
     <div className="flex w-full flex-col">
       <div className="bg-muted/50 grid items-center gap-4 border-y px-4 py-1 lg:flex">

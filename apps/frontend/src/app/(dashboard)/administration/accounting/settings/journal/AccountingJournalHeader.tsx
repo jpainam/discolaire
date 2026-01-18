@@ -10,12 +10,11 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { CreateUpdateJournal } from "./CreateUpdateJournal";
 
 export function AccountingJournalHeader() {
-  const canCreateFees = useCheckPermission("fee", PermissionAction.CREATE);
+  const canCreateFees = useCheckPermission("fee", "create");
   const { openModal } = useModal();
   const t = useTranslations();
   const trpc = useTRPC();

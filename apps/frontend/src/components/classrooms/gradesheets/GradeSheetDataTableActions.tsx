@@ -11,7 +11,6 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -59,10 +58,7 @@ export function GradeSheetDataTableActions({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [table]);
 
-  const canDeleteGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.DELETE,
-  );
+  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
 
   return (
     <>

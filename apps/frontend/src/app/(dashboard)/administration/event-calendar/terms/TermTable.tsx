@@ -21,7 +21,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { CalendarIcon, DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditTerm } from "./CreateEditTerm";
@@ -72,7 +71,7 @@ export function TermTable() {
     }),
   );
   const terms = termsQuery.data ?? [];
-  const canDeleteTerm = useCheckPermission("term", PermissionAction.DELETE);
+  const canDeleteTerm = useCheckPermission("term", "delete");
   return (
     <div className="">
       <div className="bg-background overflow-hidden rounded-md border">

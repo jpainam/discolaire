@@ -14,7 +14,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   // const canReadClassroomFee = await checkPermission(
   //   "fee",
-  //   PermissionAction.READ,
+  //   "read",
   // );
   // if (!canReadClassroomFee) {
   //   return <NoPermission className="my-8" isFullPage={true} resourceText="" />;

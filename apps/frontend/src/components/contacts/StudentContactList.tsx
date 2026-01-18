@@ -20,7 +20,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -68,14 +67,8 @@ export default function StudentContactList({
     day: "numeric",
     timeZone: "UTC",
   });
-  const canDeleteContact = useCheckPermission(
-    "contact",
-    PermissionAction.DELETE,
-  );
-  const canCreateContact = useCheckPermission(
-    "contact",
-    PermissionAction.CREATE,
-  );
+  const canDeleteContact = useCheckPermission("contact", "delete");
+  const canCreateContact = useCheckPermission("contact", "create");
 
   return (
     <div

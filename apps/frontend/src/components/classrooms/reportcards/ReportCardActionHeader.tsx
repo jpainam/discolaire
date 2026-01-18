@@ -8,7 +8,6 @@ import PDFIcon from "~/components/icons/pdf-solid";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { getAppreciations } from "~/utils/appreciations";
 
 export function ReportCardActionHeader({
@@ -30,10 +29,7 @@ export function ReportCardActionHeader({
 }) {
   const t = useTranslations();
 
-  const canCreateReportCard = useCheckPermission(
-    "reportcard",
-    PermissionAction.CREATE,
-  );
+  const canCreateReportCard = useCheckPermission("reportcard", "create");
 
   return (
     <div className="bg-muted/50 grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">

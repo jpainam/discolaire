@@ -19,7 +19,6 @@ import { StaffTabMenu } from "~/components/staffs/profile/StaffTabMenu";
 import { StaffDetailHeader } from "~/components/staffs/StaffDetailHeader";
 import { Skeleton } from "~/components/ui/skeleton";
 import { routes } from "~/configs/routes";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, prefetch, trpc } from "~/trpc/server";
 
@@ -43,7 +42,7 @@ export default async function Layout(props: {
   const staff = await queryClient.fetchQuery(trpc.staff.get.queryOptions(id));
 
   if (staff.userId !== session?.user.id) {
-    const canReadStaff = await checkPermission("staff", PermissionAction.READ);
+    const canReadStaff = await checkPermission("staff", "read");
     if (!canReadStaff) {
       return (
         <div>

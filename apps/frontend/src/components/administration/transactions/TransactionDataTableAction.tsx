@@ -26,7 +26,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 
 type TransactionAllProcedureOutput = NonNullable<
@@ -41,10 +40,7 @@ export function TransactionDataTableAction({
   const t = useTranslations();
   const rows = table.getFilteredSelectedRowModel().rows;
 
-  const canDeleteTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.DELETE,
-  );
+  const canDeleteTransaction = useCheckPermission("transaction", "delete");
   const { openModal } = useModal();
 
   const trpc = useTRPC();

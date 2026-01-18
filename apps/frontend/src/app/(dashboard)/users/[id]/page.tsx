@@ -9,7 +9,6 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
 import { PermissionTable } from "~/components/users/PermissionTable";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
@@ -20,10 +19,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const session = await getSession();
   const { id } = params;
   const t = await getTranslations();
-  const canReadPermission = await checkPermission(
-    "policy",
-    PermissionAction.READ,
-  );
+  const canReadPermission = await checkPermission("policy", "read");
 
   prefetch(trpc.user.get.queryOptions(id));
 

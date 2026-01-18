@@ -24,7 +24,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -196,8 +195,8 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
     }),
   );
   const router = useRouter();
-  const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
-  const canUpdateStaff = useCheckPermission("staff", PermissionAction.UPDATE);
+  const canDeleteStaff = useCheckPermission("staff", "delete");
+  const canUpdateStaff = useCheckPermission("staff", "update");
 
   return (
     <div className="flex justify-end">

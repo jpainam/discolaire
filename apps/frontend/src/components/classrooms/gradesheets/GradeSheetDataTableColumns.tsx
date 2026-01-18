@@ -18,7 +18,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -55,14 +54,8 @@ export function ActionCells({
     }),
   );
 
-  const canDeleteGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.DELETE,
-  );
-  const canUpdateGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
+  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
 
   return (
     <div className="flex justify-end">

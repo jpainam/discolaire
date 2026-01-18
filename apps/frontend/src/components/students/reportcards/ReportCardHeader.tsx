@@ -18,7 +18,6 @@ import {
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 import { reportcardSearchParamsSchema } from "~/utils/search-params";
 
 export function ReportCardHeader() {
@@ -29,10 +28,7 @@ export function ReportCardHeader() {
 
   const pathname = usePathname();
 
-  const canPrintReportCard = useCheckPermission(
-    "reportcard",
-    PermissionAction.CREATE,
-  );
+  const canPrintReportCard = useCheckPermission("reportcard", "create");
 
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
   const { termId, trimestreId } = searchParams;

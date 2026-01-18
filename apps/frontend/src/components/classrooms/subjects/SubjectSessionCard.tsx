@@ -39,7 +39,6 @@ import { Button } from "~/components/ui/button";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -77,14 +76,8 @@ export function SubjectSessionCard({
     }),
   );
 
-  const canDeleteProgram = useCheckPermission(
-    "program",
-    PermissionAction.DELETE,
-  );
-  const canUpdateProgram = useCheckPermission(
-    "program",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteProgram = useCheckPermission("program", "delete");
+  const canUpdateProgram = useCheckPermission("program", "update");
 
   const updateSessionPriority = useMutation(
     trpc.subjectProgram.updatePriority.mutationOptions({

@@ -18,7 +18,6 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { EnrollmentIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { EnrollStudentModal } from "./EnrollStudentModal";
 
@@ -33,7 +32,7 @@ export function StudentEnrollmentHeader({
   const params = useParams<{ id: string }>();
   const { schoolYear } = useSchool();
 
-  const canEnroll = useCheckPermission("enrollment", PermissionAction.CREATE);
+  const canEnroll = useCheckPermission("enrollment", "create");
   const isEnrolled = !!student.classroom;
   const disabled = student.status !== StudentStatus.ACTIVE;
 

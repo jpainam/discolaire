@@ -26,7 +26,6 @@ import {
 } from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -39,7 +38,7 @@ export function AssignmentTable() {
   const confirm = useConfirm();
 
   const t = useTranslations();
-  const canDelete = useCheckPermission("assignment", PermissionAction.DELETE);
+  const canDelete = useCheckPermission("assignment", "delete");
 
   const deleteAssignmentMutation = useMutation(
     trpc.assignment.delete.mutationOptions({

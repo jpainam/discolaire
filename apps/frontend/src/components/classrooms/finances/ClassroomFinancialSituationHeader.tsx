@@ -33,7 +33,6 @@ import { Label } from "~/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 
 export function ClassroomFinancialSituationHeader() {
   const params = useParams<{ id: string }>();
@@ -50,10 +49,7 @@ export function ClassroomFinancialSituationHeader() {
   );
 
   const { openModal } = useModal();
-  const canCreateTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.CREATE,
-  );
+  const canCreateTransaction = useCheckPermission("transaction", "create");
 
   const options = [
     {

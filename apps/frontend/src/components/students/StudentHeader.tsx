@@ -64,7 +64,6 @@ import {
   PrinterIcon,
   UsersIcon,
 } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -90,10 +89,7 @@ export function StudentHeader() {
 
   const queryClient = useQueryClient();
 
-  const canCreateStudent = useCheckPermission(
-    "student",
-    PermissionAction.CREATE,
-  );
+  const canCreateStudent = useCheckPermission("student", "create");
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({
@@ -146,11 +142,8 @@ export function StudentHeader() {
   };
   const confirm = useConfirm();
 
-  const canDeleteStudent = useCheckPermission(
-    "student",
-    PermissionAction.DELETE,
-  );
-  const canEditStudent = useCheckPermission("student", PermissionAction.UPDATE);
+  const canDeleteStudent = useCheckPermission("student", "delete");
+  const canEditStudent = useCheckPermission("student", "update");
   const { data: session } = authClient.useSession();
 
   const [value, setValue] = useState("");

@@ -24,7 +24,6 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -168,8 +167,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
     }),
   );
 
-  const canUpdateLoan = useCheckPermission("library", PermissionAction.UPDATE);
-  const canDeleteLoan = useCheckPermission("library", PermissionAction.DELETE);
+  const canUpdateLoan = useCheckPermission("library", "update");
+  const canDeleteLoan = useCheckPermission("library", "delete");
 
   return (
     <div className="flex justify-end">

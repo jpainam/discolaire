@@ -38,7 +38,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { ContactIcon, DeleteIcon, MailIcon, UsersIcon } from "~/icons";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSubscription } from "./CreateEditSubscription";
@@ -69,14 +68,8 @@ export function SubscriptionHeader() {
     }),
   );
   const confirm = useConfirm();
-  const canCreateSubscription = useCheckPermission(
-    "subscription",
-    PermissionAction.CREATE,
-  );
-  const canDeleteSubscription = useCheckPermission(
-    "subscription",
-    PermissionAction.DELETE,
-  );
+  const canCreateSubscription = useCheckPermission("subscription", "create");
+  const canDeleteSubscription = useCheckPermission("subscription", "delete");
   const totalData = [
     {
       title: "Staff",

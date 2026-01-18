@@ -22,7 +22,6 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 
 export function StudentAttendanceHeader() {
   const params = useParams<{ id: string }>();
@@ -31,14 +30,8 @@ export function StudentAttendanceHeader() {
   const { openModal } = useModal();
   const [termId, setTermId] = useQueryState("termId");
 
-  const canCreateAttendance = useCheckPermission(
-    "attendance",
-    PermissionAction.CREATE,
-  );
-  const canDeleteAttendance = useCheckPermission(
-    "attendance",
-    PermissionAction.DELETE,
-  );
+  const canCreateAttendance = useCheckPermission("attendance", "create");
+  const canDeleteAttendance = useCheckPermission("attendance", "delete");
 
   return (
     <div className="bg-muted/50 grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">

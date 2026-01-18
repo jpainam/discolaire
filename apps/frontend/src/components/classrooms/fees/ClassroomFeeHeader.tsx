@@ -17,7 +17,6 @@ import {
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { sidebarIcons } from "../sidebar-icons";
 import { CreateEditFee } from "./CreateEditFee";
@@ -31,10 +30,7 @@ export function ClassroomFeeHeader() {
     trpc.classroom.get.queryOptions(params.id),
   );
   const { openModal } = useModal();
-  const canCreateClassroomFee = useCheckPermission(
-    "fee",
-    PermissionAction.CREATE,
-  );
+  const canCreateClassroomFee = useCheckPermission("fee", "create");
   const Icon = sidebarIcons.fees;
   return (
     <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-y px-4 py-1">

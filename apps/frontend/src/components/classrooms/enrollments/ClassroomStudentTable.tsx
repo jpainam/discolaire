@@ -39,7 +39,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { ContactIcon, DeleteIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
@@ -60,10 +59,7 @@ export function ClassroomStudentTable({
   const [query, setQuery] = useState("");
 
   const router = useRouter();
-  const canDeleteEnrollment = useCheckPermission(
-    "enrollment",
-    PermissionAction.DELETE,
-  );
+  const canDeleteEnrollment = useCheckPermission("enrollment", "delete");
   const queryClient = useQueryClient();
 
   const unenrollStudentsMutation = useMutation(

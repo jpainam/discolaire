@@ -7,7 +7,6 @@ import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ClassroomHeader } from "~/components/classrooms/ClassroomHeader";
 import { NoPermission } from "~/components/no-permission";
 import { RightPanelSetter } from "~/components/RightPanelSetter";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { ClassroomRightPanelMeta } from "./ClassroomRightPanelMeta";
@@ -48,10 +47,7 @@ export default async function Layout(props: {
     const classroomIds = classrooms.map((c) => c.id);
     canReadClassroom = classroomIds.includes(params.id);
   } else {
-    canReadClassroom = await checkPermission(
-      "classroom",
-      PermissionAction.READ,
-    );
+    canReadClassroom = await checkPermission("classroom", "read");
 
     if (!canReadClassroom) {
       const staff = await caller.staff.getFromUserId(user.id);

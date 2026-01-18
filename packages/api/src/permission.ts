@@ -2,12 +2,12 @@
 
 export function checkPermission(
   resource: string,
-  action: "Read" | "Update" | "Delete" | "Create",
+  action: "read" | "update" | "delete" | "create",
   condition: Record<string, any> = {},
   permissions: {
     resource: string;
-    action: "Read" | "Update" | "Create" | "Delete";
-    effect: "Allow" | "Deny";
+    action: "read" | "update" | "create" | "delete";
+    effect: "allow" | "deny";
     condition?: Record<string, unknown> | null;
   }[],
 ) {
@@ -15,7 +15,7 @@ export function checkPermission(
 
   for (const perm of permissions) {
     if (perm.resource === resource && perm.action === action) {
-      if (perm.effect === "Deny") {
+      if (perm.effect === "deny") {
         if (perm.condition) {
           // If deny condition matches, return false
           const conditionMatches = Object.entries(perm.condition).every(
@@ -29,7 +29,7 @@ export function checkPermission(
         }
       }
 
-      if (perm.effect === "Allow") {
+      if (perm.effect === "allow") {
         if (perm.condition) {
           const conditionMatches = Object.entries(perm.condition).every(
             ([key, value]) => condition[key] === value,

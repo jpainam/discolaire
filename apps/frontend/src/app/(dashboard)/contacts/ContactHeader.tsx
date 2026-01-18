@@ -13,18 +13,14 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 
 export function ContactHeader() {
   const t = useTranslations();
 
   const { openSheet } = useSheet();
 
-  const canCreateContact = useCheckPermission(
-    "contact",
-    PermissionAction.CREATE,
-  );
-  //const canReadStudent = useCheckPermission("student", PermissionAction.READ);
+  const canCreateContact = useCheckPermission("contact", "create");
+  //const canReadStudent = useCheckPermission("student", "read");
   return (
     <header className="bg-background border-b px-4 py-2">
       <div className="grid grid-cols-1 items-center justify-between gap-2 md:flex">

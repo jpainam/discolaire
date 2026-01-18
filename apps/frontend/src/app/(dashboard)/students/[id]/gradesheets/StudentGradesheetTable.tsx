@@ -41,7 +41,6 @@ import {
 } from "~/components/ui/table";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getAppreciations } from "~/utils/appreciations";
 
@@ -63,14 +62,8 @@ export function StudentGradesheetTable({
   );
   const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
   const queryClient = useQueryClient();
-  const canUpdateGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.UPDATE,
-  );
-  const canDeleteGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.DELETE,
-  );
+  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
+  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
   const deleteGradeMutation = useMutation(
     trpc.grade.delete.mutationOptions({
       onError: (error) => {

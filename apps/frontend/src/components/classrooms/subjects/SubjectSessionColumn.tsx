@@ -10,7 +10,6 @@ import { Button } from "~/components/ui/button";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { cn } from "~/lib/utils";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateUpdateSubjectSession } from "./CreateUpdateSubjectSession";
@@ -55,10 +54,7 @@ export function SubjectSessionColumn({
   const t = useTranslations();
   const subject = subjectQuery.data;
 
-  const canCreateProgram = useCheckPermission(
-    "program",
-    PermissionAction.CREATE,
-  );
+  const canCreateProgram = useCheckPermission("program", "create");
 
   return (
     <div className={cn("flex shrink-0 flex-col", className)}>

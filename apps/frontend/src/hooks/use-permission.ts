@@ -6,7 +6,7 @@ const cache = new Map<string, boolean>();
 
 export const useCheckPermission = (
   resource: string,
-  action: "Read" | "Update" | "Delete" | "Create",
+  action: "read" | "update" | "delete" | "create",
   condition: Record<string, any> = {},
 ): boolean => {
   const { permissions } = useSchool();
@@ -20,7 +20,7 @@ export const useCheckPermission = (
 
   for (const perm of permissions) {
     if (perm.resource === resource && perm.action === action) {
-      if (perm.effect === "Deny") {
+      if (perm.effect === "deny") {
         if (perm.condition) {
           // If deny condition matches, return false
 
@@ -37,7 +37,7 @@ export const useCheckPermission = (
         }
       }
 
-      if (perm.effect === "Allow") {
+      if (perm.effect === "allow") {
         if (perm.condition) {
           const conditionMatches = Object.entries(perm.condition).every(
             ([key, value]) => condition[key] === value,

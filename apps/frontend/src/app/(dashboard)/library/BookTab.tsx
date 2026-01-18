@@ -20,7 +20,6 @@ import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { BookDataTable } from "./BookDataTable";
 import { CreateEditBook } from "./CreateEditBook";
@@ -30,7 +29,7 @@ export function BookTab() {
   const { openSheet } = useSheet();
   const trpc = useTRPC();
   const bookQuery = useQuery(trpc.book.recentlyUsed.queryOptions());
-  const canCreateBook = useCheckPermission("library", PermissionAction.CREATE);
+  const canCreateBook = useCheckPermission("library", "create");
 
   return (
     <div className="flex flex-col gap-2">

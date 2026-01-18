@@ -34,7 +34,6 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 import { CreateClassroomGradeSheetModal } from "./CreateClassroomGradesheetModal";
@@ -57,10 +56,7 @@ export function GradeSheetHeader() {
   const t = useTranslations();
   const router = useRouter();
 
-  const canCreateGradeSheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.CREATE,
-  );
+  const canCreateGradeSheet = useCheckPermission("gradesheet", "create");
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) {

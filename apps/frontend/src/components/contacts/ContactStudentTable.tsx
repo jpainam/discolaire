@@ -34,7 +34,6 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { DropdownHelp } from "../shared/DropdownHelp";
@@ -44,10 +43,7 @@ export function ContactStudentTable() {
   const confirm = useConfirm();
 
   const t = useTranslations();
-  const canUpdateContact = useCheckPermission(
-    "contact",
-    PermissionAction.UPDATE,
-  );
+  const canUpdateContact = useCheckPermission("contact", "update");
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: studentContacts } = useSuspenseQuery(

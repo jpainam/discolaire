@@ -23,7 +23,6 @@ import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -32,10 +31,7 @@ export function StudentPageHeader() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
 
-  const canCreateStudent = useCheckPermission(
-    "student",
-    PermissionAction.CREATE,
-  );
+  const canCreateStudent = useCheckPermission("student", "create");
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(t("search"));

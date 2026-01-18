@@ -11,7 +11,6 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -24,10 +23,7 @@ export function SubscriptionDataTableAction({
 
   const t = useTranslations();
 
-  const canDeleteSubscription = useCheckPermission(
-    "subscription",
-    PermissionAction.DELETE,
-  );
+  const canDeleteSubscription = useCheckPermission("subscription", "delete");
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 

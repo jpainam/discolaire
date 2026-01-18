@@ -24,7 +24,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { ViewIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -223,14 +222,8 @@ function ActionCells({ attendance }: { attendance: ProcedureOutput }) {
 
   const t = useTranslations();
 
-  const canDeleteClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.DELETE,
-  );
-  const canUpdateClassroom = useCheckPermission(
-    "classroom",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteClassroom = useCheckPermission("classroom", "delete");
+  const canUpdateClassroom = useCheckPermission("classroom", "update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

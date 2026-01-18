@@ -45,7 +45,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { CalendarDays, DeleteIcon, EditIcon, MailIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -69,8 +68,8 @@ export function StaffDetails({ staffId }: { staffId: string }) {
 
   const router = useRouter();
 
-  const canDeleteStaff = useCheckPermission("staff", PermissionAction.DELETE);
-  const canEditStaff = useCheckPermission("staff", PermissionAction.UPDATE);
+  const canDeleteStaff = useCheckPermission("staff", "delete");
+  const canEditStaff = useCheckPermission("staff", "update");
   const deleteStaffMutation = useMutation(
     trpc.staff.delete.mutationOptions({
       onSuccess: async () => {

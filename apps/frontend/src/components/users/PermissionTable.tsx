@@ -18,18 +18,14 @@ import {
 } from "~/components/ui/table";
 import { menuPolicies, policies } from "~/configs/policies";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { NoPermission } from "../no-permission";
 
 export function PermissionTable({ userId }: { userId: string }) {
   const t = useTranslations();
-  const canUpdatePermission = useCheckPermission(
-    "policy",
-    PermissionAction.UPDATE,
-  );
+  const canUpdatePermission = useCheckPermission("policy", "update");
   const trpc = useTRPC();
-  const canReadPermission = useCheckPermission("policy", PermissionAction.READ);
+  const canReadPermission = useCheckPermission("policy", "read");
   const permissionsQuery = useQuery(
     trpc.user.getPermissions.queryOptions(userId),
   );
@@ -54,14 +50,14 @@ export function PermissionTable({ userId }: { userId: string }) {
   const debounced = useDebouncedCallback(
     (
       resource: string,
-      action: "Read" | "Update" | "Create" | "Delete",
+      action: "read" | "update" | "create" | "delete",
       checked: boolean,
     ) => {
       permissionMutation.mutate({
         userId: userId,
         resource: resource,
         action: action,
-        effect: checked ? "Allow" : "Deny",
+        effect: checked ? "allow" : "deny",
       });
     },
     500,
@@ -104,26 +100,26 @@ export function PermissionTable({ userId }: { userId: string }) {
               const canRead = !!permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
-                  p.action === "Read" &&
-                  p.effect === "Allow",
+                  p.action === "read" &&
+                  p.effect === "allow",
               );
               const canUpdate = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
-                  p.action === "Update" &&
-                  p.effect === "Allow",
+                  p.action === "update" &&
+                  p.effect === "allow",
               );
               const canCreate = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
-                  p.action === "Create" &&
-                  p.effect === "Allow",
+                  p.action === "create" &&
+                  p.effect === "allow",
               );
               const canDelete = permissions.find(
                 (p) =>
                   p.resource === perm.resource &&
-                  p.action === "Delete" &&
-                  p.effect === "Allow",
+                  p.action === "delete" &&
+                  p.effect === "allow",
               );
               return (
                 <TableRow key={index}>
@@ -133,7 +129,7 @@ export function PermissionTable({ userId }: { userId: string }) {
                       defaultChecked={canRead ? true : false}
                       disabled={!canUpdatePermission}
                       onCheckedChange={(checked) => {
-                        debounced(perm.resource, "Read", checked);
+                        debounced(perm.resource, "read", checked);
                       }}
                     />
                   </TableCell>
@@ -142,7 +138,7 @@ export function PermissionTable({ userId }: { userId: string }) {
                       defaultChecked={canUpdate ? true : false}
                       //disabled={!canUpdatePermission}
                       onCheckedChange={(checked) => {
-                        debounced(perm.resource, "Update", checked);
+                        debounced(perm.resource, "update", checked);
                       }}
                     />
                   </TableCell>
@@ -151,7 +147,7 @@ export function PermissionTable({ userId }: { userId: string }) {
                       defaultChecked={canCreate ? true : false}
                       //disabled={!canUpdatePermission}
                       onCheckedChange={(checked) => {
-                        debounced(perm.resource, "Create", checked);
+                        debounced(perm.resource, "create", checked);
                       }}
                     />
                   </TableCell>
@@ -160,7 +156,7 @@ export function PermissionTable({ userId }: { userId: string }) {
                       defaultChecked={canDelete ? true : false}
                       //disabled={!canUpdatePermission}
                       onCheckedChange={(checked) => {
-                        debounced(perm.resource, "Delete", checked);
+                        debounced(perm.resource, "delete", checked);
                       }}
                     />
                   </TableCell>
@@ -183,8 +179,8 @@ export function PermissionTable({ userId }: { userId: string }) {
               const canAccess = !!permissions.find(
                 (p) =>
                   p.resource === menu.resource &&
-                  p.action === "Read" &&
-                  p.effect === "Allow",
+                  p.action === "read" &&
+                  p.effect === "allow",
               );
               return (
                 <TableRow key={`menu-policy-${index}`}>
@@ -194,7 +190,7 @@ export function PermissionTable({ userId }: { userId: string }) {
                       defaultChecked={canAccess ? true : false}
                       disabled={!canUpdatePermission}
                       onCheckedChange={(checked) => {
-                        debounced(menu.resource, "Read", checked);
+                        debounced(menu.resource, "read", checked);
                       }}
                     />
                   </TableCell>

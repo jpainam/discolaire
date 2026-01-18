@@ -21,7 +21,6 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -33,14 +32,8 @@ export function ClassroomTimeTableHeader() {
   const queryClient = useQueryClient();
 
   const { openModal } = useModal();
-  const canDeleteTimetable = useCheckPermission(
-    "timetable",
-    PermissionAction.DELETE,
-  );
-  const canCreateTimetable = useCheckPermission(
-    "timetable",
-    PermissionAction.CREATE,
-  );
+  const canDeleteTimetable = useCheckPermission("timetable", "delete");
+  const canCreateTimetable = useCheckPermission("timetable", "create");
   const clearClassroomLessonMutation = useMutation(
     trpc.subjectTimetable.clearByClassroom.mutationOptions({
       onSuccess: async () => {

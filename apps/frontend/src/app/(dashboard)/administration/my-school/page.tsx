@@ -13,7 +13,6 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { env } from "~/env";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 import { SchoolTableAction } from "./SchoolTableAction";
@@ -29,15 +28,9 @@ export default async function Page() {
   }
   const schools = await caller.school.all();
   const t = await getTranslations();
-  const canUpdateSchool = await checkPermission(
-    "school",
-    PermissionAction.UPDATE,
-  );
-  const canDeleteSchool = await checkPermission(
-    "school",
-    PermissionAction.DELETE,
-  );
-  const canReadSchool = await checkPermission("school", PermissionAction.READ);
+  const canUpdateSchool = await checkPermission("school", "update");
+  const canDeleteSchool = await checkPermission("school", "delete");
+  const canReadSchool = await checkPermission("school", "read");
 
   return (
     <div className="rounded-lg border">

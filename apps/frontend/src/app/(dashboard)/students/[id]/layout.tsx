@@ -13,7 +13,6 @@ import { NoPermission } from "~/components/no-permission";
 import { RightPanelSetter } from "~/components/RightPanelSetter";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { Skeleton } from "~/components/ui/skeleton";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
@@ -64,7 +63,7 @@ export default async function Layout(props: {
 
   let canReadStudent =
     (user.profile === "student" && user.id === student.userId) ||
-    (await checkPermission("student", PermissionAction.READ));
+    (await checkPermission("student", "read"));
 
   if (!canReadStudent) {
     if (user.profile === "contact") {

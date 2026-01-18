@@ -1,6 +1,5 @@
 import { NoPermission } from "~/components/no-permission";
 import { UpdateStudent } from "~/components/students/profile/UpdateStudent";
-import { PermissionAction } from "~/permissions";
 import { checkPermission } from "~/permissions/server";
 import { caller } from "~/trpc/server";
 
@@ -10,10 +9,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const student = await caller.student.get(id);
-  const canEditStudent = await checkPermission(
-    "student",
-    PermissionAction.UPDATE,
-  );
+  const canEditStudent = await checkPermission("student", "update");
   if (!canEditStudent) {
     return <NoPermission className="my-8" />;
   }

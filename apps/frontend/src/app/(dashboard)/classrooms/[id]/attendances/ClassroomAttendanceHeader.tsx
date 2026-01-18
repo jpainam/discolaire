@@ -21,7 +21,6 @@ import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -31,10 +30,7 @@ export function ClassroomAttendanceHeader() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
-  const canCreateAttendance = useCheckPermission(
-    "attendance",
-    PermissionAction.CREATE,
-  );
+  const canCreateAttendance = useCheckPermission("attendance", "create");
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   const clearAllAttendance = useMutation(
@@ -49,10 +45,7 @@ export function ClassroomAttendanceHeader() {
     }),
   );
 
-  const canDeleteAttendance = useCheckPermission(
-    "attendance",
-    PermissionAction.DELETE,
-  );
+  const canDeleteAttendance = useCheckPermission("attendance", "delete");
   const confirm = useConfirm();
 
   return (

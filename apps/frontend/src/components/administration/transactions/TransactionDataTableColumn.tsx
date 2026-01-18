@@ -38,7 +38,6 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon, ViewIcon } from "~/icons";
 import { CURRENCY } from "~/lib/constants";
-import { PermissionAction } from "~/permissions";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
 
@@ -226,14 +225,8 @@ function ActionCell({
     }),
   );
 
-  const canDeleteTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.DELETE,
-  );
-  const canUpdateTransaction = useCheckPermission(
-    "transaction",
-    PermissionAction.UPDATE,
-  );
+  const canDeleteTransaction = useCheckPermission("transaction", "delete");
+  const canUpdateTransaction = useCheckPermission("transaction", "update");
 
   const { openModal } = useModal();
   return (

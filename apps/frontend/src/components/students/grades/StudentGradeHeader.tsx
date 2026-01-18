@@ -23,7 +23,6 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon } from "~/icons";
-import { PermissionAction } from "~/permissions";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -39,10 +38,7 @@ export function StudentGradeHeader() {
   const router = useRouter();
 
   const queryClient = useQueryClient();
-  const canDeleteGradesheet = useCheckPermission(
-    "gradesheet",
-    PermissionAction.DELETE,
-  );
+  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
   const confirm = useConfirm();
   const deleteGradeMutation = useMutation(
     trpc.grade.delete.mutationOptions({
