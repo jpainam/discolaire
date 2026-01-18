@@ -41,6 +41,7 @@ import { notificationRouter } from "./routers/notification";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { notificationSubscriptionRouter } from "./routers/notificationSubscription";
 import { notificationTemplateRouter } from "./routers/notificationTemplate";
+import { permissionRouter } from "./routers/permission";
 import { photoRouter } from "./routers/photo";
 import { recipientRouter } from "./routers/recipient";
 import { religionRouter } from "./routers/religion";
@@ -94,6 +95,7 @@ export const appRouter = createTRPCRouter({
   notificationSubscription: notificationSubscriptionRouter,
   convocation: convocationRouter,
   student: studentRouter,
+  permission: permissionRouter,
   employmentType: employmentTypeRouter,
   scheduleTask: scheduleTaskRouter,
   assignment: assignmentRouter,
