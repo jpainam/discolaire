@@ -37,6 +37,7 @@ import { libraryRouter } from "./routers/library";
 import { logActivityRouter } from "./routers/logActivity";
 import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
+import { moduleRouter } from "./routers/module";
 import { notificationRouter } from "./routers/notification";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { notificationSubscriptionRouter } from "./routers/notificationSubscription";
@@ -68,6 +69,7 @@ import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
 import { userRouter } from "./routers/user";
 import { userNotificationRouter } from "./routers/userNotification";
+import { userRoleRouter } from "./routers/userRole";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
@@ -100,10 +102,12 @@ export const appRouter = createTRPCRouter({
   scheduleTask: scheduleTaskRouter,
   assignment: assignmentRouter,
   term: termRouter,
+  module: moduleRouter,
   document: documentRouter,
   schoolYearEvent: schoolYearEventRouter,
   school: schoolRouter,
   email: emailRouter,
+  userRole: userRoleRouter,
   inventoryUsage: inventoryUsageRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,

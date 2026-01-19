@@ -271,6 +271,7 @@ model PermissionRole {
     roleId       String
     role         UserRole   @relation(fields: [roleId], references: [id], onDelete: Cascade)
     createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
     effect       String     @default("allow") // allow or deny
 
     @@id([permissionId, roleId])
@@ -292,4 +293,6 @@ model UserRole {
     isActive        Boolean          @default(true)
     permissionRoles PermissionRole[]
     users           User[]
+    schoolId        String
+    school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }

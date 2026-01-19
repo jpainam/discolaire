@@ -16,6 +16,26 @@ export const policies: {
     action: PermissionAction.Read,
   },
   {
+    title: "modules",
+    resource: "module",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "modules",
+    resource: "module",
+    action: PermissionAction.Delete,
+  },
+  {
+    title: "modules",
+    resource: "module",
+    action: PermissionAction.Create,
+  },
+  {
+    title: "modules",
+    resource: "module",
+    action: PermissionAction.Update,
+  },
+  {
     title: "classrooms",
     resource: "classroom",
     action: PermissionAction.Create,

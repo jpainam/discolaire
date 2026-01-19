@@ -3,20 +3,20 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient } from "~/trpc/server";
-import { PermissionDataTableV2 } from "./PermissionDataTableV2";
-import { PermissionHeader } from "./PermissionHeader";
+import { ModuleDataTableV2 } from "./ModuleDataTableV2";
+import { ModuleHeader } from "./ModuleHeader";
 
 export default function Page() {
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <PermissionHeader />
-      </ErrorBoundary>
-      <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense>
-          <PermissionDataTableV2 />
+          <ModuleHeader />
         </Suspense>
       </ErrorBoundary>
+      <Suspense>
+        <ModuleDataTableV2 />
+      </Suspense>
     </HydrateClient>
   );
 }

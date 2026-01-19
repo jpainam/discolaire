@@ -18,6 +18,9 @@
   "Lock": "Lock",
   "Month": "Month",
   "Modified": "Modified",
+  "List": "List",
+  "Modules": "Modules",
+  "Roles": "Roles",
   "Week": "Week",
   "Day": "Day",
   "No previous term to compare": "No previous term to compare",
@@ -595,12 +598,10 @@
   "language": "Language",
   "lastCriminalRecordCheck": "Criminal record check",
   "lastName": "Last Name",
-  
   "Last 30 days": "Last 30 days",
   "Last 3 months": "Last 3 months",
   "Last 7 days": "Last 7 days",
   "last_login": "Last Login",
- 
   "lateness": "Lateness",
   "level": "Level",
   "library": "Library",

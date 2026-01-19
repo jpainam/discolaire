@@ -2,19 +2,21 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import { HydrateClient } from "~/trpc/server";
-import { PermissionDataTableV2 } from "./PermissionDataTableV2";
-import { PermissionHeader } from "./PermissionHeader";
+import { TableSkeleton } from "~/components/skeletons/table-skeleton";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { UserRoleHeader } from "./UserRoleHeader";
+import { UserRoleTable } from "./UserRoleTable";
 
 export default function Page() {
+  batchPrefetch([trpc.userRole.all.queryOptions()]);
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <PermissionHeader />
+        <UserRoleHeader />
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense>
-          <PermissionDataTableV2 />
+        <Suspense fallback={<TableSkeleton rows={10} cols={5} />}>
+          <UserRoleTable />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
