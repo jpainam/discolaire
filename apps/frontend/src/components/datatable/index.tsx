@@ -35,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 
 interface UseDataTableProps<TData, TValue> {
@@ -104,14 +105,45 @@ interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
    */
   floatingBar?: React.ReactNode | null;
   isLoading?: boolean;
+  loadingComponent?: React.ReactNode;
+  loadingRows?: number;
 }
 export function DataTable<TData>({
   table,
   isLoading = false,
+  loadingComponent,
+  loadingRows,
   children,
   className,
   ...props
 }: DataTableProps<TData>) {
+  const resolvedLoadingRows =
+    loadingRows ?? table.getState().pagination.pageSize;
+  const visibleColumnCount = Math.max(
+    1,
+    table.getVisibleLeafColumns().length,
+  );
+
+  const loadingContent = loadingComponent ?? (
+    <>
+      {Array.from({ length: resolvedLoadingRows }).map((_, rowIndex) => (
+        <TableRow
+          key={`loading-row-${rowIndex}`}
+          className="hover:bg-transparent h-px border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+        >
+          {Array.from({ length: visibleColumnCount }).map((_, cellIndex) => (
+            <TableCell
+              key={`loading-cell-${rowIndex}-${cellIndex}`}
+              className="h-[inherit] last:py-0"
+            >
+              <Skeleton className="h-4 w-full" />
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </>
+  );
+
   return (
     <div className={cn("space-y-2", className)} {...props}>
       {/* Actions */}
@@ -159,14 +191,18 @@ export function DataTable<TData>({
         <tbody aria-hidden="true" className="table-row h-1"></tbody>
         <TableBody>
           {isLoading ? (
-            <TableRow className="hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
-              <TableCell
-                colSpan={table.getAllColumns().length}
-                className="h-24 text-center"
-              >
-                Loading...
-              </TableCell>
-            </TableRow>
+            loadingComponent ? (
+              <TableRow className="hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+                <TableCell
+                  colSpan={visibleColumnCount}
+                  className="h-24 text-center"
+                >
+                  {loadingComponent}
+                </TableCell>
+              </TableRow>
+            ) : (
+              loadingContent
+            )
           ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
@@ -187,7 +223,7 @@ export function DataTable<TData>({
           ) : (
             <TableRow className="hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
               <TableCell
-                colSpan={table.getAllColumns().length}
+                colSpan={visibleColumnCount}
                 className="h-24 text-center"
               >
                 No results.
