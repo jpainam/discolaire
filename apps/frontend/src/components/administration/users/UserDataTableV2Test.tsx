@@ -26,7 +26,7 @@ export function UserDataTableV2Test() {
   const { table, state } = useDataTableV2({
     data: tableData,
     columns,
-    pageSize: 10,
+    pageSize: 30,
     rowCount,
     manualPagination: true,
     manualSorting: true,
@@ -108,10 +108,10 @@ export function UserDataTableV2Test() {
 
   return (
     <>
-      <div className="text-muted-foreground bg-muted/40 rounded-md border p-2 text-xs">
+      {/* <div className="text-muted-foreground bg-muted/40 rounded-md border p-2 text-xs">
         pages: {data?.pages.length ?? 0} | rowCount: {rowCount} | tableData:{" "}
         {tableData.length} | pageIndex: {state.pagination.pageIndex}
-      </div>
+      </div> */}
       <DataTableV2
         table={table}
         isLoading={isFetching || isFetchingNextPage}

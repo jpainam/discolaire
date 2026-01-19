@@ -35,7 +35,10 @@ import { useDataTableSettings } from "~/stores/data-table";
 export { DataTablePaginationV2 } from "~/components/datatable_v2/data-table-pagination";
 export { DataTableToolbarV2 } from "~/components/datatable_v2/data-table-toolbar";
 export { DataTableViewOptionsV2 } from "~/components/datatable_v2/data-table-view-options";
-export type { DataTableFilterField, Option } from "~/components/datatable_v2/types";
+export type {
+  DataTableFilterField,
+  Option,
+} from "~/components/datatable_v2/types";
 
 export interface DataTableState {
   sorting: SortingState;
@@ -133,14 +136,18 @@ export function useDataTableV2<TData, TValue>({
     getSortedRowModel: manualSorting ? undefined : getSortedRowModel(),
     onSortingChange: setSorting,
     enableSortingRemoval: false,
-    getPaginationRowModel: manualPagination ? undefined : getPaginationRowModel(),
+    getPaginationRowModel: manualPagination
+      ? undefined
+      : getPaginationRowModel(),
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     getFilteredRowModel: manualFiltering ? undefined : getFilteredRowModel(),
-    getFacetedUniqueValues: manualFiltering ? undefined : getFacetedUniqueValues(),
+    getFacetedUniqueValues: manualFiltering
+      ? undefined
+      : getFacetedUniqueValues(),
     state: tableState,
     manualPagination,
     manualSorting,
@@ -156,11 +163,7 @@ export function useDataTableV2<TData, TValue>({
   React.useEffect(() => {
     if (!columnVisibilityKey) return;
     setColumnVisibilitySetting(columnVisibilityKey, columnVisibility);
-  }, [
-    columnVisibility,
-    columnVisibilityKey,
-    setColumnVisibilitySetting,
-  ]);
+  }, [columnVisibility, columnVisibilityKey, setColumnVisibilitySetting]);
 
   return { table, state: tableState };
 }
