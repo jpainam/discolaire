@@ -9,7 +9,10 @@ import { useUserColumns } from "./UserDataTableColumn";
 
 export function UserDataTable() {
   const trpc = useTRPC();
-  const { data: users } = useSuspenseQuery(trpc.user.all.queryOptions({}));
+  const { data: usersResponse } = useSuspenseQuery(
+    trpc.user.all.queryOptions({}),
+  );
+  const users = usersResponse?.data ?? [];
 
   const columns = useUserColumns();
 

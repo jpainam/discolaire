@@ -5,6 +5,8 @@ import { hashPassword } from "better-auth/crypto";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod/v4";
 
+import type { Prisma } from "@repo/db";
+
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = {
@@ -50,20 +52,129 @@ export const userRouter = {
   all: protectedProcedure
     .input(
       z.object({
-        limit: z.number().optional().default(30),
+        pageSize: z.number().int().min(1).max(200).optional().default(30),
+        cursor: z.string().nullish(),
+        search: z.string().optional().default(""),
+        filters: z
+          .array(
+            z.object({
+              id: z.string().min(1),
+              value: z.union([z.string(), z.array(z.string())]).optional(),
+            }),
+          )
+          .optional()
+          .default([]),
+        sorting: z
+          .array(
+            z.object({
+              id: z.string().min(1),
+              desc: z.boolean().optional().default(false),
+            }),
+          )
+          .optional()
+          .default([]),
       }),
     )
-    .query(({ ctx, input }) => {
-      return ctx.db.user.findMany({
-        take: input.limit,
-        where: {
-          schoolId: ctx.schoolId,
-          isActive: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+    .query(async ({ ctx, input }) => {
+      const search = input.search.trim();
+
+      const profileFilter = input.filters.find(
+        (filter) => filter.id === "profile",
+      );
+      const profileValues = Array.isArray(profileFilter?.value)
+        ? profileFilter.value
+        : profileFilter?.value
+          ? [profileFilter.value]
+          : [];
+
+      const where: Prisma.UserWhereInput = {
+        schoolId: ctx.schoolId,
+        isActive: true,
+        ...(search
+          ? {
+              OR: [
+                {
+                  username: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  name: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  email: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  profile: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            }
+          : {}),
+        ...(profileValues.length
+          ? {
+              profile: {
+                in: profileValues,
+              },
+            }
+          : {}),
+      };
+
+      const sortableFields = new Set([
+        "username",
+        "name",
+        "email",
+        "profile",
+        "createdAt",
+      ]);
+
+      const orderBy = input.sorting
+        .filter((sort) => sortableFields.has(sort.id))
+        .map((sort) => ({
+          [sort.id]: sort.desc ? "desc" : "asc",
+        }));
+
+      const resolvedOrderBy =
+        orderBy.length > 0 ? orderBy : [{ createdAt: "desc" }, { id: "desc" }];
+
+      if (!resolvedOrderBy.some((order) => "id" in order)) {
+        resolvedOrderBy.push({ id: "desc" });
+      }
+
+      const take = input.pageSize + 1;
+
+      const [rowCount, data] = await ctx.db.$transaction([
+        ctx.db.user.count({ where }),
+        ctx.db.user.findMany({
+          where,
+          orderBy: resolvedOrderBy,
+          take,
+          ...(input.cursor
+            ? {
+                cursor: { id: input.cursor },
+                skip: 1,
+              }
+            : {}),
+        }),
+      ]);
+      console.log(">>>>>>>>>>>>>>>>>>>");
+      console.log(rowCount, data.length);
+
+      const hasNextPage = data.length > input.pageSize;
+      const items = hasNextPage ? data.slice(0, -1) : data;
+      const nextCursor = hasNextPage ? items[items.length - 1]?.id : undefined;
+      console.log(">>>>>>>>>>>>.2");
+      console.log(">>>>>", items.length, rowCount, nextCursor);
+      return { data: items, rowCount, nextCursor };
     }),
   count: protectedProcedure
     .input(

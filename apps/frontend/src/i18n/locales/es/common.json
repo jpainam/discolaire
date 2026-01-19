@@ -9,6 +9,7 @@
   "in_progress": "En progreso",
   "not_started": "No iniciado",
   "Select date": "Select date",
+  "Salary & Payroll": "Salary & Payroll",
   "overall_progress": "Progreso general",
   "Recent Activities": "Actividades recientes",
   "Roll of Honor": "Cuadro de Honor",
@@ -693,13 +694,11 @@
   "Count": "Contar",
   "Current stock level": "Nivel de stock actual",
   "Current stock level compared to minimum level": "Nivel de stock actual comparado con el nivel mínimo",
- 
   "Last 30 days": "Últimos 30 días",
   "Last 3 months": "Últimos 3 meses",
   "Last 7 days": "Últimos 7 días",
   "last_login": "Último inicio de sesión",
   "Update a stock unit": "Actualizar una unidad de stock",
- 
   "lateness": "Tardanza",
   "level": "Nivel",
   "library": "Biblioteca",

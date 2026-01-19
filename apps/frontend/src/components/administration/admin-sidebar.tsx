@@ -2,38 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  BlindsIcon,
-  BrickWall,
-  CalendarDays,
-  CircleArrowOutUpRight,
-  CircleDollarSign,
-  FileTextIcon,
-  Frame,
-  ImageUp,
-  LayoutListIcon,
-  LifeBuoy,
-  PrinterIcon,
-  SchoolIcon,
-  ScrollTextIcon,
-  Send,
-  Settings,
-  Users,
-} from "lucide-react";
+import { BlindsIcon, BrickWall, CalendarDays, CircleArrowOutUpRight, CircleDollarSign, FileTextIcon, Frame, ImageUp, LayoutListIcon, LifeBuoy, PrinterIcon, SchoolIcon, ScrollTextIcon, Send, Settings, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "~/components/ui/sidebar";
+
+
+import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "~/components/ui/sidebar";
 import { SidebarLogo } from "../sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
+
 
 export function AdminSidebar({
   ...props
@@ -89,7 +67,7 @@ export function AdminSidebar({
             url: "/administration/accounting/funds",
           },
           {
-            title: "Salaire & Paie",
+            title: "Salary & Payroll",
             url: "/administration/accounting/salary",
           },
           {

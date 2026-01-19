@@ -13,7 +13,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-type User = RouterOutputs["user"]["all"][number];
+type User = RouterOutputs["user"]["all"]["data"][number];
 
 export function UserDataTableAction({ table }: { table: Table<User> }) {
   const rows = table.getFilteredSelectedRowModel().rows;

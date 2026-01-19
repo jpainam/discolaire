@@ -6,7 +6,7 @@ export type Classroom =
 
 export type User =
   | RouterOutputs["user"]["get"]
-  | RouterOutputs["user"]["all"][number];
+  | RouterOutputs["user"]["all"]["data"][number];
 
 export type Subject =
   | RouterOutputs["subject"]["get"]
