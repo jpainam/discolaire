@@ -63,7 +63,7 @@ export default async function Layout(props: {
 
   let canReadStudent =
     (user.profile === "student" && user.id === student.userId) ||
-    (await checkPermission("student", "read"));
+    (await checkPermission("student.read"));
 
   if (!canReadStudent) {
     if (user.profile === "contact") {

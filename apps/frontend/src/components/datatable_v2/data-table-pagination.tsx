@@ -46,32 +46,32 @@ export function DataTablePaginationV2<TData>({
       </div>
       <div className="flex items-center space-x-2">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Page {table.getState().pagination.pageIndex + 1} of {" "}
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
-            size={'icon'}
+            size={"icon"}
             className="hidden lg:flex"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to first page</span>
-            <DoubleArrowLeftIcon  />
+            <DoubleArrowLeftIcon />
           </Button>
           <Button
             variant="outline"
-            size={'icon'}
+            size={"icon"}
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to previous page</span>
-            <ChevronLeftIcon  />
+            <ChevronLeftIcon />
           </Button>
           <Button
             variant="outline"
-            size={'icon'}
+            size={"icon"}
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
@@ -80,13 +80,13 @@ export function DataTablePaginationV2<TData>({
           </Button>
           <Button
             variant="outline"
-            size={'icon'}
+            size={"icon"}
             className="hidden lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to last page</span>
-            <DoubleArrowRightIcon  />
+            <DoubleArrowRightIcon />
           </Button>
         </div>
       </div>

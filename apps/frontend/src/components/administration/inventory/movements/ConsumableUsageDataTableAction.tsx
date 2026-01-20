@@ -21,7 +21,7 @@ export function ConsumableUsageDataTableAction({
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const t = useTranslations();
-  const canDeleteInventory = useCheckPermission("inventory", "delete");
+  const canDeleteInventory = useCheckPermission("inventory.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

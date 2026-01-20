@@ -28,9 +28,9 @@ export default async function Page() {
   }
   const schools = await caller.school.all();
   const t = await getTranslations();
-  const canUpdateSchool = await checkPermission("school", "update");
-  const canDeleteSchool = await checkPermission("school", "delete");
-  const canReadSchool = await checkPermission("school", "read");
+  const canUpdateSchool = await checkPermission("school.update");
+  const canDeleteSchool = await checkPermission("school.delete");
+  const canReadSchool = await checkPermission("school.read");
 
   return (
     <div className="rounded-lg border">

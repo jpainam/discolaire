@@ -54,8 +54,8 @@ export function ActionCells({
     }),
   );
 
-  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
-  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
+  const canDeleteGradesheet = useCheckPermission("gradesheet.delete");
+  const canUpdateGradesheet = useCheckPermission("gradesheet.update");
 
   return (
     <div className="flex justify-end">

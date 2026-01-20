@@ -106,8 +106,8 @@ export function StudentContactTable({
     }),
   );
 
-  const canUpdateStudentContact = useCheckPermission("contact", "update");
-  const canDeleteStudentContact = useCheckPermission("contact", "delete");
+  const canUpdateStudentContact = useCheckPermission("contact.update");
+  const canDeleteStudentContact = useCheckPermission("contact.delete");
   const { openSheet } = useSheet();
 
   if (studentContacts.length == 0) {

@@ -37,7 +37,7 @@ export function AssignmentHeader() {
   const [termId, setTermId] = useQueryState("termId");
 
   const Icon = sidebarIcons.assignments;
-  const canCreateAssignment = useCheckPermission("assignment", "create");
+  const canCreateAssignment = useCheckPermission("assignment.create");
   return (
     <div className="flex w-full flex-col">
       <div className="bg-muted/50 grid items-center gap-4 border-y px-4 py-1 lg:flex">

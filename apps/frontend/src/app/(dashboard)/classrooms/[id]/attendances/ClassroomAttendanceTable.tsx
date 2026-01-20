@@ -219,8 +219,8 @@ const AttendanceRowView = memo(function AttendanceRowView({
   const locale = useLocale();
   const t = useTranslations();
   const { openModal } = useModal();
-  const canDeleteAttendance = useCheckPermission("attendance", "delete");
-  const canUpdateAttendance = useCheckPermission("attendance", "update");
+  const canDeleteAttendance = useCheckPermission("attendance.delete");
+  const canUpdateAttendance = useCheckPermission("attendance.update");
 
   return (
     <TableRow>

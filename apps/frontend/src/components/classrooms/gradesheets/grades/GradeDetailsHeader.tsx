@@ -69,7 +69,7 @@ export function GradeDetailsHeader({
     }),
   );
 
-  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
+  const canDeleteGradesheet = useCheckPermission("gradesheet.delete");
 
   return (
     <div className="flex flex-col gap-2 border-b">

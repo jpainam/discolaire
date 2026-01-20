@@ -50,9 +50,9 @@ export function BookCategory() {
 
   const t = useTranslations();
   const { openModal } = useModal();
-  const canUpdateCategory = useCheckPermission("library", "update");
-  const canCreateCategory = useCheckPermission("library", "create");
-  const canDeleteCategory = useCheckPermission("library", "delete");
+  const canUpdateCategory = useCheckPermission("library.update");
+  const canCreateCategory = useCheckPermission("library.create");
+  const canDeleteCategory = useCheckPermission("library.delete");
 
   return (
     <Card className="gap-0 p-0">

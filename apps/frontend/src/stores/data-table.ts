@@ -1,8 +1,8 @@
 "use client";
 
+import type { VisibilityState } from "@tanstack/react-table";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { VisibilityState } from "@tanstack/react-table";
 
 interface DataTableSettingsState {
   columnVisibilityByKey: Record<string, VisibilityState>;

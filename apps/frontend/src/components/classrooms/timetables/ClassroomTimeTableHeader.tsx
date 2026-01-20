@@ -32,8 +32,8 @@ export function ClassroomTimeTableHeader() {
   const queryClient = useQueryClient();
 
   const { openModal } = useModal();
-  const canDeleteTimetable = useCheckPermission("timetable", "delete");
-  const canCreateTimetable = useCheckPermission("timetable", "create");
+  const canDeleteTimetable = useCheckPermission("timetable.delete");
+  const canCreateTimetable = useCheckPermission("timetable.create");
   const clearClassroomLessonMutation = useMutation(
     trpc.subjectTimetable.clearByClassroom.mutationOptions({
       onSuccess: async () => {

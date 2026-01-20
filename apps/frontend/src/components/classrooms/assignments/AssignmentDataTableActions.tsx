@@ -31,7 +31,7 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
     trpc.assignment.delete.mutationOptions(),
   );
 
-  const canDeleteAssignment = useCheckPermission("assignment", "delete");
+  const canDeleteAssignment = useCheckPermission("assignment.delete");
   return (
     <>
       {canDeleteAssignment &&

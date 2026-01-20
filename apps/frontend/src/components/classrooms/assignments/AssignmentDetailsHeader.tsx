@@ -44,7 +44,7 @@ export function AssignmentDetailsHeader({
   );
   const confirm = useConfirm();
 
-  const canDelete = useCheckPermission("assignment", "delete");
+  const canDelete = useCheckPermission("assignment.delete");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

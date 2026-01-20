@@ -51,7 +51,7 @@ async function CheckSubjectScale({
   );
 
   const areNot100percent = allweights.filter((s) => !s.weight || s.weight < 1);
-  const canCreateGradesheet = await checkPermission("gradesheet", "create");
+  const canCreateGradesheet = await checkPermission("gradesheet.create");
   if (canCreateGradesheet && areNot100percent.length != 0) {
     return (
       <div className="px-4">

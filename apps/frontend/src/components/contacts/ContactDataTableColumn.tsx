@@ -196,8 +196,8 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 
-  const canDeleteContact = useCheckPermission("contact", "delete");
-  const canUpdateContact = useCheckPermission("contact", "update");
+  const canDeleteContact = useCheckPermission("contact.delete");
+  const canUpdateContact = useCheckPermission("contact.update");
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
       onError: (error) => {

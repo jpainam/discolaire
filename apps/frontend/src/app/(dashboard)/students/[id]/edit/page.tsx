@@ -9,7 +9,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const { id } = params;
 
   const student = await caller.student.get(id);
-  const canEditStudent = await checkPermission("student", "update");
+  const canEditStudent = await checkPermission("student.update");
   if (!canEditStudent) {
     return <NoPermission className="my-8" />;
   }

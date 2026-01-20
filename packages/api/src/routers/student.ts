@@ -92,8 +92,7 @@ export const studentRouter = {
         studentIds.push(...studentContacts.map((sc) => sc.studentId));
       } else {
         const canReadStudent = checkPermission(
-          "student",
-          "read",
+          "student.read",
           {},
           ctx.permissions,
         );

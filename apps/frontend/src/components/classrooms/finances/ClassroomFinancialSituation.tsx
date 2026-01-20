@@ -72,7 +72,7 @@ export function ClassroomFinancialSituation() {
     "situation",
     parseAsString.withDefault("all"),
   );
-  const canCreateTransaction = useCheckPermission("transaction", "create");
+  const canCreateTransaction = useCheckPermission("transaction.create");
 
   return (
     <div>

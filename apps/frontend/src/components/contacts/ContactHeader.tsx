@@ -43,7 +43,7 @@ export function ContactHeader() {
     }),
   );
 
-  const canCreateContact = useCheckPermission("contact", "create");
+  const canCreateContact = useCheckPermission("contact.create");
 
   return (
     <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">

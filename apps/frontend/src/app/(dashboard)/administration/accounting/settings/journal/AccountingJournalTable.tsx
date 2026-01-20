@@ -52,8 +52,8 @@ export function AccountingJournalTable() {
   );
 
   const confirm = useConfirm();
-  const canUpdateFees = useCheckPermission("fee", "update");
-  const canDeleteFees = useCheckPermission("fee", "delete");
+  const canUpdateFees = useCheckPermission("fee.update");
+  const canDeleteFees = useCheckPermission("fee.delete");
   return (
     <div>
       <div className="bg-background overflow-hidden rounded-md border">

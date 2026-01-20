@@ -38,7 +38,7 @@ export function AssignmentTable() {
   const confirm = useConfirm();
 
   const t = useTranslations();
-  const canDelete = useCheckPermission("assignment", "delete");
+  const canDelete = useCheckPermission("assignment.delete");
 
   const deleteAssignmentMutation = useMutation(
     trpc.assignment.delete.mutationOptions({

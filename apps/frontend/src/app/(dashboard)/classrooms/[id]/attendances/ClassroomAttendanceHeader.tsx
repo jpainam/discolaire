@@ -30,7 +30,7 @@ export function ClassroomAttendanceHeader() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
-  const canCreateAttendance = useCheckPermission("attendance", "create");
+  const canCreateAttendance = useCheckPermission("attendance.create");
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   const clearAllAttendance = useMutation(
@@ -45,7 +45,7 @@ export function ClassroomAttendanceHeader() {
     }),
   );
 
-  const canDeleteAttendance = useCheckPermission("attendance", "delete");
+  const canDeleteAttendance = useCheckPermission("attendance.delete");
   const confirm = useConfirm();
 
   return (

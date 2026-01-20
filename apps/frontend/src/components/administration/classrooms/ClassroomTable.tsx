@@ -49,8 +49,8 @@ export default function ClassroomTable() {
       },
     }),
   );
-  const canDeleteClassroom = useCheckPermission("classroom", "delete");
-  const canEditClassroom = useCheckPermission("classroom", "update");
+  const canDeleteClassroom = useCheckPermission("classroom.delete");
+  const canEditClassroom = useCheckPermission("classroom.update");
   const confirm = useConfirm();
   return (
     <div className="rounded-lg border">

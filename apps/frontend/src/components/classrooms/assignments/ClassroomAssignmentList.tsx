@@ -75,7 +75,7 @@ export function ClassroomAssignmentList({
     return ass;
   }, [assignments, termId, subjectId, staffId]);
   const queryClient = useQueryClient();
-  const canDeleteAssignment = useCheckPermission("assignment", "delete");
+  const canDeleteAssignment = useCheckPermission("assignment.delete");
   const deleteMutation = useMutation(
     trpc.assignment.delete.mutationOptions({
       onSuccess: async () => {

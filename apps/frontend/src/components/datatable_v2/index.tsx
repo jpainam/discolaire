@@ -21,6 +21,7 @@ import {
 } from "@tanstack/react-table";
 
 import { DataTablePaginationV2 } from "~/components/datatable_v2/data-table-pagination";
+import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -29,7 +30,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useDataTableSettings } from "~/stores/data-table";
 
@@ -193,17 +193,14 @@ export function DataTableV2<TData>({
 }: DataTableV2Props<TData>) {
   const resolvedLoadingRows =
     loadingRows ?? table.getState().pagination.pageSize;
-  const visibleColumnCount = Math.max(
-    1,
-    table.getVisibleLeafColumns().length,
-  );
+  const visibleColumnCount = Math.max(1, table.getVisibleLeafColumns().length);
 
   const loadingContent = loadingComponent ?? (
     <>
       {Array.from({ length: resolvedLoadingRows }).map((_, rowIndex) => (
         <TableRow
           key={`loading-row-${rowIndex}`}
-          className="hover:bg-transparent h-px border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+          className="h-px border-0 hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
         >
           {Array.from({ length: visibleColumnCount }).map((_, cellIndex) => (
             <TableCell

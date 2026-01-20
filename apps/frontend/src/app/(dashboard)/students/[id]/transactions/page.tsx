@@ -42,7 +42,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     batchPrefetch([trpc.classroom.fees.queryOptions(classroom.id)]);
   }
   const t = await getTranslations();
-  const canCreateTransaction = await checkPermission("transaction", "create");
+  const canCreateTransaction = await checkPermission("transaction.create");
   return (
     <HydrateClient>
       <div className="bg-muted/50 flex justify-end border-b px-4 py-1">

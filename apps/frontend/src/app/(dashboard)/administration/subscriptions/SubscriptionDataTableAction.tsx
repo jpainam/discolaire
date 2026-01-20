@@ -23,7 +23,7 @@ export function SubscriptionDataTableAction({
 
   const t = useTranslations();
 
-  const canDeleteSubscription = useCheckPermission("subscription", "delete");
+  const canDeleteSubscription = useCheckPermission("subscription.delete");
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 

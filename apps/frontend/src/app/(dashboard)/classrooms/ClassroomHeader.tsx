@@ -11,9 +11,9 @@ import { useSheet } from "~/hooks/use-sheet";
 export function ClassroomHeader() {
   const t = useTranslations();
 
-  const canCreateClassroom = useCheckPermission("classroom", "create");
+  const canCreateClassroom = useCheckPermission("classroom.create");
   const { openSheet } = useSheet();
-  //const canReadStudent = useCheckPermission("student", "read");
+  //const canReadStudent = useCheckPermission("student.read");
   return (
     <header className="bg-background border-b px-4 py-2">
       <div className="grid grid-cols-1 items-center justify-between gap-2 md:flex">

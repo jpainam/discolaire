@@ -195,8 +195,8 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
     }),
   );
   const router = useRouter();
-  const canDeleteStaff = useCheckPermission("staff", "delete");
-  const canUpdateStaff = useCheckPermission("staff", "update");
+  const canDeleteStaff = useCheckPermission("staff.delete");
+  const canUpdateStaff = useCheckPermission("staff.update");
 
   return (
     <div className="flex justify-end">

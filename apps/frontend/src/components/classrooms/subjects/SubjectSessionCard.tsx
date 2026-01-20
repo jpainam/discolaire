@@ -76,8 +76,8 @@ export function SubjectSessionCard({
     }),
   );
 
-  const canDeleteProgram = useCheckPermission("program", "delete");
-  const canUpdateProgram = useCheckPermission("program", "update");
+  const canDeleteProgram = useCheckPermission("program.delete");
+  const canUpdateProgram = useCheckPermission("program.update");
 
   const updateSessionPriority = useMutation(
     trpc.subjectProgram.updatePriority.mutationOptions({

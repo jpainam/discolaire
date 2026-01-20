@@ -32,7 +32,7 @@ export function ProgramHeader({
   const params = useParams<{ id: string; subjectId: string }>();
 
   const pathname = usePathname();
-  const canEditSubjectProgram = useCheckPermission("program", "update");
+  const canEditSubjectProgram = useCheckPermission("program.update");
   useEffect(() => {
     const breads = [
       { label: t("programs"), href: routes.classrooms.programs(params.id) },

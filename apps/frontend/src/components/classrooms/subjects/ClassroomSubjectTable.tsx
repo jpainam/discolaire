@@ -64,10 +64,10 @@ export function ClassroomSubjectTable() {
     trpc.subject.gradesheetCount.queryOptions({ classroomId: params.id }),
   );
   const confirm = useConfirm();
-  const canDeleteClassroomSubject = useCheckPermission("subject", "delete");
-  const canEditClassroomSubject = useCheckPermission("subject", "update");
+  const canDeleteClassroomSubject = useCheckPermission("subject.delete");
+  const canEditClassroomSubject = useCheckPermission("subject.update");
   const queryClient = useQueryClient();
-  const canCreateGradeSheet = useCheckPermission("gradesheet", "create");
+  const canCreateGradeSheet = useCheckPermission("gradesheet.create");
 
   const deleteSubjectMutation = useMutation(
     trpc.subject.delete.mutationOptions({

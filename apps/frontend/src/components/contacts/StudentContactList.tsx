@@ -67,8 +67,8 @@ export default function StudentContactList({
     day: "numeric",
     timeZone: "UTC",
   });
-  const canDeleteContact = useCheckPermission("contact", "delete");
-  const canCreateContact = useCheckPermission("contact", "create");
+  const canDeleteContact = useCheckPermission("contact.delete");
+  const canCreateContact = useCheckPermission("contact.create");
 
   return (
     <div

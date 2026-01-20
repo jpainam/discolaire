@@ -225,8 +225,8 @@ function ActionCell({
     }),
   );
 
-  const canDeleteTransaction = useCheckPermission("transaction", "delete");
-  const canUpdateTransaction = useCheckPermission("transaction", "update");
+  const canDeleteTransaction = useCheckPermission("transaction.delete");
+  const canUpdateTransaction = useCheckPermission("transaction.update");
 
   const { openModal } = useModal();
   return (

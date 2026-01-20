@@ -54,7 +54,7 @@ export function SubjectSessionColumn({
   const t = useTranslations();
   const subject = subjectQuery.data;
 
-  const canCreateProgram = useCheckPermission("program", "create");
+  const canCreateProgram = useCheckPermission("program.create");
 
   return (
     <div className={cn("flex shrink-0 flex-col", className)}>

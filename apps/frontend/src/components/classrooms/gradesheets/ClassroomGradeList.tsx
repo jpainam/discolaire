@@ -111,9 +111,9 @@ export function ClassroomGradeList({
       },
     }),
   );
-  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
+  const canUpdateGradesheet = useCheckPermission("gradesheet.update");
 
-  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
+  const canDeleteGradesheet = useCheckPermission("gradesheet.delete");
   const router = useRouter();
   const deleteGradeSheetMutation = useMutation(
     trpc.gradeSheet.delete.mutationOptions({

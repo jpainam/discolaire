@@ -16,7 +16,7 @@ export default async function Layout(props: {
   }
   if (session.user.id !== params.id) {
     if (session.user.profile == "staff") {
-      const canReadUser = await checkPermission("user", "read");
+      const canReadUser = await checkPermission("user.read");
       if (!canReadUser) {
         return (
           <NoPermission className="my-8" isFullPage={true} resourceText="" />

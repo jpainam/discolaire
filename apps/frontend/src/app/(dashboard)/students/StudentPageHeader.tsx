@@ -31,7 +31,7 @@ export function StudentPageHeader() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
 
-  const canCreateStudent = useCheckPermission("student", "create");
+  const canCreateStudent = useCheckPermission("student.create");
 
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(t("search"));

@@ -30,7 +30,7 @@ export function ClassroomFeeHeader() {
     trpc.classroom.get.queryOptions(params.id),
   );
   const { openModal } = useModal();
-  const canCreateClassroomFee = useCheckPermission("fee", "create");
+  const canCreateClassroomFee = useCheckPermission("fee.create");
   const Icon = sidebarIcons.fees;
   return (
     <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-y px-4 py-1">

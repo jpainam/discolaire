@@ -58,7 +58,7 @@ export function GradeSheetDataTableActions({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [table]);
 
-  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
+  const canDeleteGradesheet = useCheckPermission("gradesheet.delete");
 
   return (
     <>

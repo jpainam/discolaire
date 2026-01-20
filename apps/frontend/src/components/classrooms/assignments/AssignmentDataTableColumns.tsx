@@ -193,8 +193,8 @@ function ActionsCell({
     }),
   );
   const router = useRouter();
-  const canDeleteAssignment = useCheckPermission("assignment", "delete");
-  const canUpdateAssignment = useCheckPermission("assignment", "update");
+  const canDeleteAssignment = useCheckPermission("assignment.delete");
+  const canUpdateAssignment = useCheckPermission("assignment.update");
   const confirm = useConfirm();
   const params = useParams<{ id: string }>();
 

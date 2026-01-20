@@ -37,7 +37,7 @@ export function ClassroomDataTableAction({
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const t = useTranslations();
-  const canDeleteClassroom = useCheckPermission("classroom", "delete");
+  const canDeleteClassroom = useCheckPermission("classroom.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const classroomDeleteMutation = useMutation(

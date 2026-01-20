@@ -8,7 +8,6 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
-import { PermissionTable } from "~/components/users/PermissionTable";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
@@ -19,7 +18,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const session = await getSession();
   const { id } = params;
   const t = await getTranslations();
-  const canReadPermission = await checkPermission("policy", "read");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const canReadPermission = await checkPermission("policy.read");
 
   prefetch(trpc.user.get.queryOptions(id));
 
@@ -78,7 +78,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </TabsContent>
           {session?.user.profile == "staff" && (
             <TabsContent value="tab-3">
-              {canReadPermission && <PermissionTable userId={params.id} />}
+              {/* {canReadPermission && <PermissionTable userId={params.id} />} */}
             </TabsContent>
           )}
         </Tabs>

@@ -63,8 +63,8 @@ export function CreatedGradesheetCard({
     return { total, maxGrade, minGrade, avgGrade };
   }, [gradeSheetQuery.data?.grades]);
 
-  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
-  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
+  const canDeleteGradesheet = useCheckPermission("gradesheet.delete");
+  const canUpdateGradesheet = useCheckPermission("gradesheet.update");
 
   const params = useParams<{ id: string }>();
   const router = useRouter();

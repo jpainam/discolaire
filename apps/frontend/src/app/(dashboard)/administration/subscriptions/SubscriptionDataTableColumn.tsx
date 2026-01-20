@@ -150,8 +150,8 @@ function ActionCells({
 
   const t = useTranslations();
 
-  const canDeleteSubscription = useCheckPermission("subscription", "delete");
-  const canUpdateSubscription = useCheckPermission("subscription", "update");
+  const canDeleteSubscription = useCheckPermission("subscription.delete");
+  const canUpdateSubscription = useCheckPermission("subscription.update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

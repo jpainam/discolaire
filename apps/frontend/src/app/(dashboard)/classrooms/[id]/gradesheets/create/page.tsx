@@ -28,7 +28,7 @@ const searchParamsLoader = createLoader(createGradeSheetSearchSchema);
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const canCreateGradeSheet = await checkPermission("gradesheet", "create");
+  const canCreateGradeSheet = await checkPermission("gradesheet.create");
 
   const searchParams = await searchParamsLoader(props.searchParams);
 

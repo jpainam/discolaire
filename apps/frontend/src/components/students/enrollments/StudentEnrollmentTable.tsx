@@ -53,7 +53,7 @@ export function StudentEnrollmentTable({
     year: "numeric",
   });
 
-  const canDeleteEnrollment = useCheckPermission("enrollment", "delete");
+  const canDeleteEnrollment = useCheckPermission("enrollment.delete");
 
   const queryClient = useQueryClient();
   const deleteEnrollmentMutation = useMutation(

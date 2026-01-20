@@ -38,7 +38,7 @@ export function StudentGradeHeader() {
   const router = useRouter();
 
   const queryClient = useQueryClient();
-  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
+  const canDeleteGradesheet = useCheckPermission("gradesheet.delete");
   const confirm = useConfirm();
   const deleteGradeMutation = useMutation(
     trpc.grade.delete.mutationOptions({

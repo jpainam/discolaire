@@ -26,7 +26,7 @@ export default async function Layout(
     const studentIds = students.map((s) => s.studentId);
     canReadTransaction = studentIds.includes(params.id);
   } else {
-    canReadTransaction = await checkPermission("transaction", "read");
+    canReadTransaction = await checkPermission("transaction.read");
   }
 
   if (!canReadTransaction) {

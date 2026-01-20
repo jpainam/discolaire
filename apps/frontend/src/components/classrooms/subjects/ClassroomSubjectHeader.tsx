@@ -50,7 +50,7 @@ export function ClassroomSubjectHeader() {
   });
 
   const { openSheet } = useSheet();
-  const canAddClassroomSubject = useCheckPermission("subject", "create");
+  const canAddClassroomSubject = useCheckPermission("subject.create");
 
   return (
     <div className="bg-muted text-muted-foreground grid w-full grid-cols-1 flex-row items-center gap-4 border-y px-4 py-1 md:flex">

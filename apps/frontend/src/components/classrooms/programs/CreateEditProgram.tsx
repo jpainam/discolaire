@@ -78,7 +78,7 @@ export function CreateEditProgram({
 
   const queryClient = useQueryClient();
 
-  const canUpdateSubject = useCheckPermission("subject", "update");
+  const canUpdateSubject = useCheckPermission("subject.update");
   const updateSubjectProgram = useMutation(
     trpc.subject.updateProgram.mutationOptions({
       onSuccess: async () => {

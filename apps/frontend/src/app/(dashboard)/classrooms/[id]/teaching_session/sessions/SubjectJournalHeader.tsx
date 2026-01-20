@@ -57,7 +57,7 @@ export function SubjectJournalHeader({
       },
     }),
   );
-  const canDeleteSubject = useCheckPermission("subject", "delete");
+  const canDeleteSubject = useCheckPermission("subject.delete");
   const subject = subjectQuery.data;
   return (
     <div className="bg-muted/50 flex grid grid-cols-1 flex-row items-center justify-between gap-2 border-y px-4 py-1 lg:flex">

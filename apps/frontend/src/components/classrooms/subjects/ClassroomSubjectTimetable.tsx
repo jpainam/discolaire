@@ -47,9 +47,9 @@ export function ClassroomSubjectTimetable({
   const confirm = useConfirm();
   const locale = useLocale();
 
-  const canCreateTimetable = useCheckPermission("timetable", "create");
+  const canCreateTimetable = useCheckPermission("timetable.create");
 
-  const canDeleteTimetable = useCheckPermission("timetable", "delete");
+  const canDeleteTimetable = useCheckPermission("timetable.delete");
 
   const queryClient = useQueryClient();
   const deleteTimetableSlot = useMutation(

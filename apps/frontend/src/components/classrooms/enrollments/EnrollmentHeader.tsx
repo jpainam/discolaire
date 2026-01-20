@@ -46,9 +46,9 @@ export function EnrollmentHeader({ className }: { className?: string }) {
   const { data: session } = authClient.useSession();
   const { school } = useSchool();
   const router = useRouter();
-  const canUpdateSchool = useCheckPermission("school", "update");
+  const canUpdateSchool = useCheckPermission("school.update");
 
-  const canEnroll = useCheckPermission("enrollment", "create");
+  const canEnroll = useCheckPermission("enrollment.create");
 
   const { male, female } = useMemo(() => {
     const male = students.filter((student) => student.gender == "male").length;

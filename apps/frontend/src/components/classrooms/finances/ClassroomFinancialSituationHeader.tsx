@@ -49,7 +49,7 @@ export function ClassroomFinancialSituationHeader() {
   );
 
   const { openModal } = useModal();
-  const canCreateTransaction = useCheckPermission("transaction", "create");
+  const canCreateTransaction = useCheckPermission("transaction.create");
 
   const options = [
     {

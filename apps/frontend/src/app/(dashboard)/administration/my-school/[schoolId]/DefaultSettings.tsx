@@ -74,7 +74,7 @@ export function DefaultSettings({
   });
 
   const router = useRouter();
-  const canUpdateSchool = useCheckPermission("school", "update");
+  const canUpdateSchool = useCheckPermission("school.update");
   const updateDefaultSettings = useMutation(
     trpc.school.updateDefaultSettings.mutationOptions({
       onSuccess: async () => {

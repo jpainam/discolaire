@@ -159,8 +159,8 @@ function ActionCells({ course }: { course: CourseProcedureOutput }) {
     }),
   );
 
-  const canDeleteCourse = useCheckPermission("classroom", "delete");
-  const canUpdateCourse = useCheckPermission("classroom", "update");
+  const canDeleteCourse = useCheckPermission("classroom.delete");
+  const canUpdateCourse = useCheckPermission("classroom.update");
 
   return (
     <div className="flex justify-end">

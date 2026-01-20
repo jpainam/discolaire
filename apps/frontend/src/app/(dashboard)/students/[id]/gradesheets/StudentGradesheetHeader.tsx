@@ -33,7 +33,7 @@ export function StudentGradesheetHeader() {
     trpc.student.get.queryOptions(params.id),
   );
 
-  const canUpdateGrade = useCheckPermission("gradesheet", "update");
+  const canUpdateGrade = useCheckPermission("gradesheet.update");
 
   return (
     <div className="bg-muted/50 flex flex-row items-center gap-1 border-b px-4 py-1">

@@ -62,8 +62,8 @@ export function StudentGradesheetTable({
   );
   const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
   const queryClient = useQueryClient();
-  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
-  const canDeleteGradesheet = useCheckPermission("gradesheet", "delete");
+  const canUpdateGradesheet = useCheckPermission("gradesheet.update");
+  const canDeleteGradesheet = useCheckPermission("gradesheet.delete");
   const deleteGradeMutation = useMutation(
     trpc.grade.delete.mutationOptions({
       onError: (error) => {

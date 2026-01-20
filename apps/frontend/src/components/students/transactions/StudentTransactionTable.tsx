@@ -73,9 +73,9 @@ export function StudentTransactionTable() {
   );
   const queryClient = useQueryClient();
 
-  const canDeleteTransaction = useCheckPermission("transaction", "delete");
-  const canUpdateTransaction = useCheckPermission("transaction", "update");
-  const canReadTransaction = useCheckPermission("transaction", "read");
+  const canDeleteTransaction = useCheckPermission("transaction.delete");
+  const canUpdateTransaction = useCheckPermission("transaction.update");
+  const canReadTransaction = useCheckPermission("transaction.read");
 
   const updateTransactionMutation = useMutation(
     trpc.transaction.updateStatus.mutationOptions({

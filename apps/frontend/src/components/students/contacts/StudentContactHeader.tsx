@@ -28,7 +28,7 @@ export function StudentContactHeader() {
   const params = useParams<{ id: string }>();
 
   const t = useTranslations();
-  const canAddContact = useCheckPermission("contact", "create");
+  const canAddContact = useCheckPermission("contact.create");
 
   const Icon = sidebarIcons.contacts;
 

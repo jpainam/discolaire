@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -110,7 +111,7 @@ export function CreateEditPermission({
         moduleId: value.moduleId,
         resource: value.resource,
         type: value.type,
-        isActive: value.isActive ?? true,
+        isActive: value.isActive,
       };
 
       if (permission) {
@@ -267,7 +268,7 @@ export function CreateEditPermission({
           children={(field) => (
             <Field orientation="horizontal">
               <Checkbox
-                checked={field.state.value ?? false}
+                checked={field.state.value}
                 onCheckedChange={(value) => field.handleChange(Boolean(value))}
                 id={`${field.name}-toggle`}
               />

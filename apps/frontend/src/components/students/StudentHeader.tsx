@@ -89,7 +89,7 @@ export function StudentHeader() {
 
   const queryClient = useQueryClient();
 
-  const canCreateStudent = useCheckPermission("student", "create");
+  const canCreateStudent = useCheckPermission("student.create");
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({
@@ -142,8 +142,8 @@ export function StudentHeader() {
   };
   const confirm = useConfirm();
 
-  const canDeleteStudent = useCheckPermission("student", "delete");
-  const canEditStudent = useCheckPermission("student", "update");
+  const canDeleteStudent = useCheckPermission("student.delete");
+  const canEditStudent = useCheckPermission("student.update");
   const { data: session } = authClient.useSession();
 
   const [value, setValue] = useState("");

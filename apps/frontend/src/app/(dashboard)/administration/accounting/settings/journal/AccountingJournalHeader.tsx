@@ -14,7 +14,7 @@ import { useTRPC } from "~/trpc/react";
 import { CreateUpdateJournal } from "./CreateUpdateJournal";
 
 export function AccountingJournalHeader() {
-  const canCreateFees = useCheckPermission("fee", "create");
+  const canCreateFees = useCheckPermission("fee.create");
   const { openModal } = useModal();
   const t = useTranslations();
   const trpc = useTRPC();

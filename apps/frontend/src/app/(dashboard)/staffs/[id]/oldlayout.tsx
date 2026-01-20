@@ -42,7 +42,7 @@ export default async function Layout(props: {
   const staff = await queryClient.fetchQuery(trpc.staff.get.queryOptions(id));
 
   if (staff.userId !== session?.user.id) {
-    const canReadStaff = await checkPermission("staff", "read");
+    const canReadStaff = await checkPermission("staff.read");
     if (!canReadStaff) {
       return (
         <div>

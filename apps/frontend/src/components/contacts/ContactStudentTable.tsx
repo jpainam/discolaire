@@ -43,7 +43,7 @@ export function ContactStudentTable() {
   const confirm = useConfirm();
 
   const t = useTranslations();
-  const canUpdateContact = useCheckPermission("contact", "update");
+  const canUpdateContact = useCheckPermission("contact.update");
   const trpc = useTRPC();
   const params = useParams<{ id: string }>();
   const { data: studentContacts } = useSuspenseQuery(

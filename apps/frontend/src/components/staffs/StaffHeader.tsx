@@ -17,7 +17,7 @@ export function StaffHeader() {
   const trpc = useTRPC();
   const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
 
-  const canCreateStaff = useCheckPermission("staff", "create");
+  const canCreateStaff = useCheckPermission("staff.create");
 
   const { openSheet } = useSheet();
 

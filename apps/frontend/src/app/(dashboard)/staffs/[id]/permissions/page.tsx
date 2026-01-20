@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
-import { PermissionTable } from "~/components/users/PermissionTable";
 import { caller } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -14,7 +13,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="p-2 2xl:p-4">
-      <PermissionTable userId={staff.userId} />
+      {/* <PermissionTable userId={staff.userId} /> */}
     </div>
   );
 }

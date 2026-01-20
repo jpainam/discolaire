@@ -98,8 +98,8 @@ export function ClassroomTable() {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
 
-  const canDeleteClassroom = useCheckPermission("classroom", "delete");
-  const canUpdateClassroom = useCheckPermission("classroom", "update");
+  const canDeleteClassroom = useCheckPermission("classroom.delete");
+  const canUpdateClassroom = useCheckPermission("classroom.update");
 
   const queryClient = useQueryClient();
 
@@ -131,7 +131,7 @@ export function ClassroomTable() {
     });
   }, [classrooms, queryText, searchParams]);
 
-  const canCreateClassroom = useCheckPermission("classroom", "create");
+  const canCreateClassroom = useCheckPermission("classroom.create");
 
   return (
     <div className="">

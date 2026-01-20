@@ -68,8 +68,8 @@ export function SubscriptionHeader() {
     }),
   );
   const confirm = useConfirm();
-  const canCreateSubscription = useCheckPermission("subscription", "create");
-  const canDeleteSubscription = useCheckPermission("subscription", "delete");
+  const canCreateSubscription = useCheckPermission("subscription.create");
+  const canDeleteSubscription = useCheckPermission("subscription.delete");
   const totalData = [
     {
       title: "Staff",

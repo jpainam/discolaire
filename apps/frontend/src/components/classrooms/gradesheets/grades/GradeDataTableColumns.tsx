@@ -215,7 +215,7 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
       },
     }),
   );
-  const canUpdateGradesheet = useCheckPermission("gradesheet", "update");
+  const canUpdateGradesheet = useCheckPermission("gradesheet.update");
 
   return (
     <div className="flex justify-end">

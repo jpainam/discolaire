@@ -40,9 +40,9 @@ export function InventoryStockUnitTable() {
       },
     }),
   );
-  const canDeleteStockUnit = useCheckPermission("inventory", "delete");
-  const canUpdateStockUnit = useCheckPermission("inventory", "update");
-  const canCreateStockUnit = useCheckPermission("inventory", "create");
+  const canDeleteStockUnit = useCheckPermission("inventory.delete");
+  const canUpdateStockUnit = useCheckPermission("inventory.update");
+  const canCreateStockUnit = useCheckPermission("inventory.create");
   const confirm = useConfirm();
 
   const t = useTranslations();

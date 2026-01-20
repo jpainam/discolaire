@@ -29,7 +29,7 @@ export function ReportCardActionHeader({
 }) {
   const t = useTranslations();
 
-  const canCreateReportCard = useCheckPermission("reportcard", "create");
+  const canCreateReportCard = useCheckPermission("reportcard.create");
 
   return (
     <div className="bg-muted/50 grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">

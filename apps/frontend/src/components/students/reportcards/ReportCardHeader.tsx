@@ -28,7 +28,7 @@ export function ReportCardHeader() {
 
   const pathname = usePathname();
 
-  const canPrintReportCard = useCheckPermission("reportcard", "create");
+  const canPrintReportCard = useCheckPermission("reportcard.create");
 
   const [searchParams] = useQueryStates(reportcardSearchParamsSchema);
   const { termId, trimestreId } = searchParams;

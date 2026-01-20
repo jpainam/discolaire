@@ -78,8 +78,8 @@ export function ContactTable() {
 
   const queryClient = useQueryClient();
   const confirm = useConfirm();
-  const canDeleteContact = useCheckPermission("contact", "delete");
-  const canUpdateContact = useCheckPermission("contact", "update");
+  const canDeleteContact = useCheckPermission("contact.delete");
+  const canUpdateContact = useCheckPermission("contact.update");
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
       onError: (error) => {

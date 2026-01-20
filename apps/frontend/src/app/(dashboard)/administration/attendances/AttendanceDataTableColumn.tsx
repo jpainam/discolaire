@@ -222,8 +222,8 @@ function ActionCells({ attendance }: { attendance: ProcedureOutput }) {
 
   const t = useTranslations();
 
-  const canDeleteClassroom = useCheckPermission("classroom", "delete");
-  const canUpdateClassroom = useCheckPermission("classroom", "update");
+  const canDeleteClassroom = useCheckPermission("classroom.delete");
+  const canUpdateClassroom = useCheckPermission("classroom.update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

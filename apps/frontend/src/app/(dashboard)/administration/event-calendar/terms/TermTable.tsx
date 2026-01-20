@@ -71,7 +71,7 @@ export function TermTable() {
     }),
   );
   const terms = termsQuery.data ?? [];
-  const canDeleteTerm = useCheckPermission("term", "delete");
+  const canDeleteTerm = useCheckPermission("term.delete");
   return (
     <div className="">
       <div className="bg-background overflow-hidden rounded-md border">

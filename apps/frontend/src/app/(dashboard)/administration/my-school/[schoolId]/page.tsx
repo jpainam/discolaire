@@ -57,10 +57,10 @@ export default async function Page(props: {
   ) {
     return <NoPermission />;
   }
-  const canReadSchool = await checkPermission("school", "read");
+  const canReadSchool = await checkPermission("school.read");
   if (!canReadSchool) return <NoPermission />;
 
-  const canUpdateSchool = await checkPermission("school", "update");
+  const canUpdateSchool = await checkPermission("school.update");
 
   const t = await getTranslations();
   return (

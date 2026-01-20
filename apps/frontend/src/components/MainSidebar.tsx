@@ -102,7 +102,7 @@ export function MainSidebar({
     url: `/contacts`,
     icon: <ContactIcon />,
   });
-  const canReadLibrary = useCheckPermission("menu:library", "read");
+  const canReadLibrary = useCheckPermission("menu:library.read");
   if (canReadLibrary) {
     tools.push({
       name: "library",
@@ -110,10 +110,7 @@ export function MainSidebar({
       icon: <LibraryIcon />,
     });
   }
-  const canReadAdministration = useCheckPermission(
-    "menu:administration",
-    "read",
-  );
+  const canReadAdministration = useCheckPermission("menu:administration.read");
   if (canReadAdministration) {
     data.push({
       name: "administration",

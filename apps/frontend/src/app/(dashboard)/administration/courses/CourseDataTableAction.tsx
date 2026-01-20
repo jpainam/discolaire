@@ -27,7 +27,7 @@ export function CourseDataTableActions({
 
   const t = useTranslations();
 
-  const canDeleteCourse = useCheckPermission("classroom", "delete");
+  const canDeleteCourse = useCheckPermission("classroom.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

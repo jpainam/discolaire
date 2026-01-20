@@ -56,7 +56,7 @@ export function GradeSheetHeader() {
   const t = useTranslations();
   const router = useRouter();
 
-  const canCreateGradeSheet = useCheckPermission("gradesheet", "create");
+  const canCreateGradeSheet = useCheckPermission("gradesheet.create");
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) {

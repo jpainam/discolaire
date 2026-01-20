@@ -12,7 +12,7 @@ export function UserDataTable() {
   const { data: usersResponse } = useSuspenseQuery(
     trpc.user.all.queryOptions({}),
   );
-  const users = usersResponse?.data ?? [];
+  const users = usersResponse.data;
 
   const columns = useUserColumns();
 

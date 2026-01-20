@@ -7,7 +7,7 @@ import { checkPermission } from "~/permissions/server";
 
 export default async function Layout({ children }: PropsWithChildren) {
   //const session = await getSession();
-  const canSeeAdminMenu = await checkPermission("menu:administration", "read");
+  const canSeeAdminMenu = await checkPermission("menu:administration.read");
   if (!canSeeAdminMenu) {
     redirect("/");
   }

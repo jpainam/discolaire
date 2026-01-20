@@ -92,7 +92,7 @@ export function StudentSidebar({
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const canReadTransaction = useCheckPermission("transaction", "read");
+  const canReadTransaction = useCheckPermission("transaction.read");
   //if (!canReadTransaction) {
   informations.push({
     name: "transactions",

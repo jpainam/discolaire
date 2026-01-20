@@ -50,8 +50,8 @@ export function ClassroomFeeTable() {
   const t = useTranslations();
   const queryClient = useQueryClient();
 
-  const canDeleteClassroomFee = useCheckPermission("fee", "delete");
-  const canUpdateClassroomFee = useCheckPermission("fee", "update");
+  const canDeleteClassroomFee = useCheckPermission("fee.delete");
+  const canUpdateClassroomFee = useCheckPermission("fee.update");
 
   const deleteFeeMutation = useMutation(
     trpc.fee.delete.mutationOptions({

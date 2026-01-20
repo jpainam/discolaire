@@ -19,8 +19,8 @@ export function ContactHeader() {
 
   const { openSheet } = useSheet();
 
-  const canCreateContact = useCheckPermission("contact", "create");
-  //const canReadStudent = useCheckPermission("student", "read");
+  const canCreateContact = useCheckPermission("contact.create");
+  //const canReadStudent = useCheckPermission("student.read");
   return (
     <header className="bg-background border-b px-4 py-2">
       <div className="grid grid-cols-1 items-center justify-between gap-2 md:flex">

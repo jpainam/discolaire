@@ -171,8 +171,8 @@ function ActionCell({
 
   const t = useTranslations();
 
-  const canDeleteInventory = useCheckPermission("inventory", "delete");
-  const canUpdateInventory = useCheckPermission("inventory", "update");
+  const canDeleteInventory = useCheckPermission("inventory.delete");
+  const canUpdateInventory = useCheckPermission("inventory.update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const deleteConsumableMutation = useMutation(

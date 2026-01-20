@@ -283,8 +283,8 @@ function ActionCells({ classroom }: { classroom: ClassroomProcedureOutput }) {
   const t = useTranslations();
   const router = useRouter();
 
-  const canDeleteClassroom = useCheckPermission("classroom", "delete");
-  const canUpdateClassroom = useCheckPermission("classroom", "update");
+  const canDeleteClassroom = useCheckPermission("classroom.delete");
+  const canUpdateClassroom = useCheckPermission("classroom.update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

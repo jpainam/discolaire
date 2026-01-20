@@ -8,7 +8,7 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
 
-  const canUpdateSchool = await checkPermission("school", "update");
+  const canUpdateSchool = await checkPermission("school.update");
   if (!canUpdateSchool) {
     return <NoPermission className="my-8" />;
   }

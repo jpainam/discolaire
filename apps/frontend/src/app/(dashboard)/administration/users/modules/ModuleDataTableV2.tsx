@@ -42,7 +42,7 @@ type Module = RouterOutputs["module"]["all"][number];
 export function ModuleDataTableV2() {
   const t = useTranslations();
   const trpc = useTRPC();
-  const canReadModule = useCheckPermission("module", "read");
+  const canReadModule = useCheckPermission("module.read");
   const { data: modules, isLoading } = useSuspenseQuery(
     trpc.module.all.queryOptions(),
   );
@@ -183,8 +183,8 @@ function ModuleActions({ module }: { module: Module }) {
   const trpc = useTRPC();
   const confirm = useConfirm();
   const queryClient = useQueryClient();
-  const canDeleteModule = useCheckPermission("module", "delete");
-  const canUpdateModule = useCheckPermission("module", "update");
+  const canDeleteModule = useCheckPermission("module.delete");
+  const canUpdateModule = useCheckPermission("module.update");
   const { openModal } = useModal();
 
   const deleteModuleMutation = useMutation(

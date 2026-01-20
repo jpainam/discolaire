@@ -47,7 +47,7 @@ export function UserDataTableAction({ table }: { table: Table<User> }) {
   }, [table]);
 
   const confirm = useConfirm();
-  const canDeleteUser = useCheckPermission("user", "delete");
+  const canDeleteUser = useCheckPermission("user.delete");
   return (
     <>
       {canDeleteUser && table.getSelectedRowModel().rows.length > 0 && (

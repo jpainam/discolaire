@@ -46,8 +46,8 @@ export function ClassroomHeader() {
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
   const router = useRouter();
-  const canDeleteClassroom = useCheckPermission("classroom", "delete");
-  const canUpdateClassroom = useCheckPermission("classroom", "update");
+  const canDeleteClassroom = useCheckPermission("classroom.delete");
+  const canUpdateClassroom = useCheckPermission("classroom.update");
   const deleteClassroomMutation = useMutation(
     trpc.classroom.delete.mutationOptions({
       onSuccess: async () => {
@@ -78,7 +78,7 @@ export function ClassroomHeader() {
       router.push(routes.classrooms.details(value));
     }
   };
-  const canCreateClassroom = useCheckPermission("classroom", "create");
+  const canCreateClassroom = useCheckPermission("classroom.create");
   const { openSheet } = useSheet();
 
   return (

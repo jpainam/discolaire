@@ -69,14 +69,14 @@ export function ContactDetailsHeader() {
       },
     }),
   );
-  const canDeleteContact = useCheckPermission("contact", "delete");
+  const canDeleteContact = useCheckPermission("contact.delete");
 
   const t = useTranslations();
   const { openSheet } = useSheet();
   const { openModal } = useModal();
 
-  const canUpdateContact = useCheckPermission("contact", "update");
-  const canCreateContact = useCheckPermission("contact", "create");
+  const canUpdateContact = useCheckPermission("contact.update");
+  const canCreateContact = useCheckPermission("contact.create");
 
   return (
     <div className="flex flex-row items-start gap-2">

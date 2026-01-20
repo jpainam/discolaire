@@ -156,7 +156,7 @@ function ActionCell({ user }: { user: User }) {
   const confirm = useConfirm();
   const router = useRouter();
 
-  const canDeleteUser = useCheckPermission("user", "delete");
+  const canDeleteUser = useCheckPermission("user.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

@@ -32,7 +32,7 @@ export function StudentEnrollmentHeader({
   const params = useParams<{ id: string }>();
   const { schoolYear } = useSchool();
 
-  const canEnroll = useCheckPermission("enrollment", "create");
+  const canEnroll = useCheckPermission("enrollment.create");
   const isEnrolled = !!student.classroom;
   const disabled = student.status !== StudentStatus.ACTIVE;
 

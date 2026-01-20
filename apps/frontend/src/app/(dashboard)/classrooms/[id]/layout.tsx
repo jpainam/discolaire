@@ -47,7 +47,7 @@ export default async function Layout(props: {
     const classroomIds = classrooms.map((c) => c.id);
     canReadClassroom = classroomIds.includes(params.id);
   } else {
-    canReadClassroom = await checkPermission("classroom", "read");
+    canReadClassroom = await checkPermission("classroom.read");
 
     if (!canReadClassroom) {
       const staff = await caller.staff.getFromUserId(user.id);

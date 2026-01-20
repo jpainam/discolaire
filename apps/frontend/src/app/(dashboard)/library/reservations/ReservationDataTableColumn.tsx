@@ -167,8 +167,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
     }),
   );
 
-  const canUpdateLoan = useCheckPermission("library", "update");
-  const canDeleteLoan = useCheckPermission("library", "delete");
+  const canUpdateLoan = useCheckPermission("library.update");
+  const canDeleteLoan = useCheckPermission("library.delete");
 
   return (
     <div className="flex justify-end">

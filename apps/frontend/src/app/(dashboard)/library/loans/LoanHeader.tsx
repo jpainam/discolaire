@@ -38,7 +38,7 @@ export function LoanHeader() {
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   const { openSheet } = useSheet();
-  const canCreateLoan = useCheckPermission("library", "create");
+  const canCreateLoan = useCheckPermission("library.create");
   return (
     <div className="grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
       <div className="flex flex-row items-center gap-2">

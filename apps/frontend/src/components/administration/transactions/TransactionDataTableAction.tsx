@@ -40,7 +40,7 @@ export function TransactionDataTableAction({
   const t = useTranslations();
   const rows = table.getFilteredSelectedRowModel().rows;
 
-  const canDeleteTransaction = useCheckPermission("transaction", "delete");
+  const canDeleteTransaction = useCheckPermission("transaction.delete");
   const { openModal } = useModal();
 
   const trpc = useTRPC();

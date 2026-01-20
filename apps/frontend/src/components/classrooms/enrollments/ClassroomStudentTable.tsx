@@ -59,7 +59,7 @@ export function ClassroomStudentTable({
   const [query, setQuery] = useState("");
 
   const router = useRouter();
-  const canDeleteEnrollment = useCheckPermission("enrollment", "delete");
+  const canDeleteEnrollment = useCheckPermission("enrollment.delete");
   const queryClient = useQueryClient();
 
   const unenrollStudentsMutation = useMutation(

@@ -29,7 +29,7 @@ export function BookTab() {
   const { openSheet } = useSheet();
   const trpc = useTRPC();
   const bookQuery = useQuery(trpc.book.recentlyUsed.queryOptions());
-  const canCreateBook = useCheckPermission("library", "create");
+  const canCreateBook = useCheckPermission("library.create");
 
   return (
     <div className="flex flex-col gap-2">

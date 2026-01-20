@@ -12,7 +12,7 @@ export function TransactionDetailsHeader() {
   const params = useParams<{ transactionId: string }>();
 
   const t = useTranslations();
-  const canCreateTransaction = useCheckPermission("transaction", "create");
+  const canCreateTransaction = useCheckPermission("transaction.create");
 
   return (
     <div className="bg-secondary text-secondary-foreground flex flex-row items-center gap-2 border-b px-4 py-1">

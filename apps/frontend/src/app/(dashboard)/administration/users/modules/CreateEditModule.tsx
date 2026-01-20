@@ -78,7 +78,7 @@ export function CreateEditModule({ module }: { module?: Module }) {
         name: value.name,
         code: value.code,
         description: value.description,
-        isActive: value.isActive ?? true,
+        isActive: value.isActive,
       };
 
       if (module) {
@@ -180,7 +180,7 @@ export function CreateEditModule({ module }: { module?: Module }) {
           children={(field) => (
             <Field orientation="horizontal">
               <Checkbox
-                checked={field.state.value ?? false}
+                checked={field.state.value}
                 onCheckedChange={(value) => field.handleChange(Boolean(value))}
                 id={`${field.name}-toggle`}
               />

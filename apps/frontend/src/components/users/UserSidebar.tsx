@@ -75,7 +75,7 @@ export function UserSidebar({
 
   const t = useTranslations();
   const { data: session } = authClient.useSession();
-  const canReadPermission = useCheckPermission("policy", "read");
+  const canReadPermission = useCheckPermission("policy.read");
   if (canReadPermission && session?.user.profile === "staff") {
     data.information.push({
       name: "permissions",

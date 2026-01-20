@@ -81,7 +81,7 @@ export function QuickStudentList() {
 
   const queryClient = useQueryClient();
   const confirm = useConfirm();
-  const canDeleteStudent = useCheckPermission("student", "delete");
+  const canDeleteStudent = useCheckPermission("student.delete");
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({

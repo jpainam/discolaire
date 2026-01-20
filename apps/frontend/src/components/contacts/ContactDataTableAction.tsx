@@ -18,7 +18,7 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const t = useTranslations();
-  const canDeleteContact = useCheckPermission("contact", "delete");
+  const canDeleteContact = useCheckPermission("contact.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const deleteContactMutation = useMutation(

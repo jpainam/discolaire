@@ -52,8 +52,8 @@ export function StaffProfileHeader({
   const params = useParams<{ id: string }>();
   const router = useRouter();
 
-  const canDeleteStaff = useCheckPermission("staff", "delete");
-  const canEditStaff = useCheckPermission("staff", "update");
+  const canDeleteStaff = useCheckPermission("staff.delete");
+  const canEditStaff = useCheckPermission("staff.update");
   const deleteStaffMutation = useMutation(
     trpc.staff.delete.mutationOptions({
       onSuccess: async () => {

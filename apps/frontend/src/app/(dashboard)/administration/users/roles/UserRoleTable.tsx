@@ -4,23 +4,40 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AddInvoiceIcon, AddTeamIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { MoreHorizontal, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-
-
 import { UserRoleLevel } from "@repo/db/enums";
-
-
 
 import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "~/components/ui/input-group";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
@@ -29,7 +46,6 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { AddUserSelector } from "./AddUserSelector";
 import { AddPermissionToRole, CreateEditUserRole } from "./CreateEditUserRole";
-
 
 export function UserRoleTable() {
   const trpc = useTRPC();
@@ -42,10 +58,10 @@ export function UserRoleTable() {
   const { openModal } = useModal();
   const { openSheet } = useSheet();
 
-  const canDeleteRole = useCheckPermission("role", "delete");
-  const canAddPermission = useCheckPermission("role", "update");
-  const canUpdateRole = useCheckPermission("role", "update");
-  const canUpdateUser = useCheckPermission("user", "update");
+  const canDeleteRole = useCheckPermission("role.delete");
+  const canAddPermission = useCheckPermission("role.update");
+  const canUpdateRole = useCheckPermission("role.update");
+  const canUpdateUser = useCheckPermission("user.update");
   const deleteRoleMutation = useMutation(
     trpc.userRole.delete.mutationOptions({
       onError: (error) => {

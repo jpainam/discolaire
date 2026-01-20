@@ -22,7 +22,7 @@ export function StaffDataTableActions({
   table: Table<StaffProcedureOutput>;
 }) {
   const t = useTranslations();
-  const canDeleteStaff = useCheckPermission("staff", "delete");
+  const canDeleteStaff = useCheckPermission("staff.delete");
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();

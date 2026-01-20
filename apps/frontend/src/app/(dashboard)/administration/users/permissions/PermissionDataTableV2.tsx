@@ -48,7 +48,7 @@ type Permission = RouterOutputs["permission"]["all"][number];
 export function PermissionDataTableV2() {
   const t = useTranslations();
   const trpc = useTRPC();
-  const canReadPermission = useCheckPermission("policy", "read");
+  const canReadPermission = useCheckPermission("policy.read");
   const { data: permissions, isLoading } = useSuspenseQuery(
     trpc.permission.all.queryOptions(),
   );
@@ -208,8 +208,8 @@ function PermissionActions({ permission }: { permission: Permission }) {
   const trpc = useTRPC();
   const confirm = useConfirm();
   const queryClient = useQueryClient();
-  const canDeletePermission = useCheckPermission("policy", "delete");
-  const canUpdatePermission = useCheckPermission("policy", "update");
+  const canDeletePermission = useCheckPermission("policy.delete");
+  const canUpdatePermission = useCheckPermission("policy.update");
 
   const deletePermissionMutation = useMutation(
     trpc.permission.delete.mutationOptions({
