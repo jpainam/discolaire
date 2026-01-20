@@ -5,7 +5,6 @@ import { caller } from "~/trpc/server";
 
 export async function checkPermission(
   resource: string,
-  action: "read" | "update" | "delete" | "create",
   condition: Record<string, any> = {},
 ) {
   const session = await getSession();
@@ -16,7 +15,7 @@ export async function checkPermission(
   let isAllowed = false;
 
   for (const perm of permissions) {
-    if (perm.resource === resource && perm.action === action) {
+    if (perm.resource === resource) {
       if (perm.effect === "deny") {
         if (perm.condition) {
           // If deny condition matches, return false

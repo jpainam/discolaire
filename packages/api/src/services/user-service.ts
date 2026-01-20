@@ -9,30 +9,10 @@ export class UserService {
   constructor(db: PrismaClient) {
     this.db = db;
   }
-  private parseRolePermission(resourceName: string, effect: string) {
-    const lastDotIndex = resourceName.lastIndexOf(".");
-    if (lastDotIndex <= 0 || lastDotIndex === resourceName.length - 1) {
-      return null;
-    }
-    const action = resourceName.slice(lastDotIndex + 1) as
-      | "read"
-      | "update"
-      | "create"
-      | "delete";
-    if (!["read", "update", "create", "delete"].includes(action)) {
-      return null;
-    }
-    return {
-      resource: resourceName.slice(0, lastDotIndex),
-      action: action,
-      effect: effect as "allow" | "deny",
-      condition: null,
-    };
-  }
+
   private mergePermissions(
     permissions: {
       resource: string;
-      action: "read" | "update" | "create" | "delete";
       effect: "allow" | "deny";
       condition?: Record<string, unknown> | null;
     }[],
@@ -41,14 +21,13 @@ export class UserService {
       string,
       {
         resource: string;
-        action: "read" | "update" | "create" | "delete";
         effect: "allow" | "deny";
         condition?: Record<string, unknown> | null;
       }
     >();
 
     for (const permission of permissions) {
-      const key = `${permission.resource}:${permission.action}`;
+      const key = `${permission.resource}`;
       const existing = merged.get(key);
       if (!existing) {
         merged.set(key, permission);
@@ -88,12 +67,13 @@ export class UserService {
       condition?: Record<string, unknown> | null;
     }[];
 
-    return perms as {
-      resource: string;
-      action: "read" | "update" | "create" | "delete";
-      effect: "allow" | "deny";
-      condition?: Record<string, unknown> | null;
-    }[];
+    return perms.map((p) => {
+      return {
+        resource: `${p.resource}.${p.action}`.toLowerCase(),
+        effect: p.effect.toLowerCase(),
+        condition: p.condition,
+      };
+    });
   }
   async updatePermission({
     userId,
@@ -129,7 +109,7 @@ export class UserService {
       }
     } else {
       updatedPermissions = permissions.filter(
-        (perm) => !(perm.resource === resource && perm.action === action),
+        (perm) => !(perm.resource === resource),
       );
     }
     return this.db.user.update({
@@ -224,27 +204,26 @@ export class UserService {
       effect: string;
       condition?: Record<string, unknown> | null;
     }[];
-    const directPermissions = perms as {
-      resource: string;
-      action: "read" | "update" | "create" | "delete";
-      effect: "allow" | "deny";
-      condition?: Record<string, unknown> | null;
-    }[];
+    const directPermissions = perms.map((p) => {
+      return {
+        resource: `${p.resource}.${p.action}`.toLowerCase(),
+        effect: p.effect.toLowerCase() as "allow" | "deny",
+        condition: p.condition,
+      };
+    });
     const rolePermissions =
-      user.userRole?.permissionRoles
-        .map((permissionRole) =>
-          this.parseRolePermission(
-            permissionRole.permission.resource,
-            permissionRole.effect,
-          ),
-        )
-        .filter((permission) => permission !== null) ?? [];
+      user.userRole?.permissionRoles.map((permissionRole) => {
+        return {
+          effect: permissionRole.effect,
+          resource: permissionRole.permission.resource,
+          condition: permissionRole.condition,
+        };
+      }) ?? [];
 
     return this.mergePermissions([
       ...directPermissions,
       ...(rolePermissions as {
         resource: string;
-        action: "read" | "update" | "create" | "delete";
         effect: "allow" | "deny";
         condition?: Record<string, unknown> | null;
       }[]),

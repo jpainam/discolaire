@@ -6,11 +6,10 @@ const cache = new Map<string, boolean>();
 
 export const useCheckPermission = (
   resource: string,
-  action: "read" | "update" | "delete" | "create",
   condition: Record<string, any> = {},
 ): boolean => {
   const { permissions } = useSchool();
-  const key = `${resource}-${action}-${JSON.stringify(condition)}`;
+  const key = `${resource}-${JSON.stringify(condition)}`;
   if (cache.has(key)) {
     // TODO I need to update the cache when the permissions are assigned
     //return cache.get(key)!;
@@ -19,7 +18,7 @@ export const useCheckPermission = (
   let isAllowed = false;
 
   for (const perm of permissions) {
-    if (perm.resource === resource && perm.action === action) {
+    if (perm.resource === resource) {
       if (perm.effect === "deny") {
         if (perm.condition) {
           // If deny condition matches, return false

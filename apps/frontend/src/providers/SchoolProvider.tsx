@@ -9,7 +9,6 @@ interface SchoolContextProps {
   school: School;
   permissions: {
     resource: string;
-    action: "read" | "update" | "create" | "delete";
     effect: "allow" | "deny";
     condition?: Record<string, unknown> | null;
   }[];
@@ -42,7 +41,6 @@ export const SchoolContextProvider = ({
   schoolYear: SchoolYear;
   permissions: {
     resource: string;
-    action: "read" | "update" | "create" | "delete";
     effect: "allow" | "deny";
     condition?: Record<string, unknown> | null;
   }[];
