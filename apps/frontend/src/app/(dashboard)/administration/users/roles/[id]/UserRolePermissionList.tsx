@@ -22,8 +22,14 @@ export async function UserRolePermissionList({
   const modules = await queryClient.fetchQuery(trpc.module.all.queryOptions());
 
   return (
-    <div className={cn("",className)}>
-      <Accordion type="multiple">
+    <div className={cn("pb-4", className)}>
+      <Accordion
+        type="multiple"
+        defaultValue={modules
+          .filter((m) => m._count.permissions > 0)
+          .map((m) => m.id)
+          .slice(0, 3)}
+      >
         {modules.map((module, index) => {
           const permissions = permissionRoles
             .filter((pr) => pr.permission.moduleId == module.id)
@@ -41,9 +47,12 @@ export async function UserRolePermissionList({
                   return (
                     <div className="flex flex-col gap-1" key={`${p.id}-${idx}`}>
                       <span>{p.name}</span>
-                      <Badge variant={"secondary"} className="text-primary">
-                        {p.resource}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={"secondary"} className="text-primary">
+                          {p.resource}
+                        </Badge>
+                        <Badge variant={"secondary"}>{p.type}</Badge>
+                      </div>
                     </div>
                   );
                 })}

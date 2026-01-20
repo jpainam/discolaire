@@ -11,6 +11,9 @@ export const userRoleRouter = {
       where: {
         schoolId: ctx.schoolId,
       },
+      orderBy: {
+        level: "asc",
+      },
       include: {
         _count: {
           select: {
@@ -194,6 +197,24 @@ export const userRoleRouter = {
           level: input.level,
           description: input.description,
           schoolId: ctx.schoolId,
+        },
+      });
+    }),
+
+  removeUser: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string().min(1),
+        userId: z.string().min(1),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.user.update({
+        data: {
+          userRoleId: null,
+        },
+        where: {
+          id: input.userId,
         },
       });
     }),

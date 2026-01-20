@@ -4,47 +4,32 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AddInvoiceIcon, AddTeamIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { MoreHorizontal, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
+
+
 import { UserRoleLevel } from "@repo/db/enums";
+
+
 
 import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "~/components/ui/input-group";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "~/components/ui/input-group";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon } from "~/icons";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { AddUserSelector } from "./AddUserSelector";
 import { AddPermissionToRole, CreateEditUserRole } from "./CreateEditUserRole";
+
 
 export function UserRoleTable() {
   const trpc = useTRPC();
@@ -56,22 +41,24 @@ export function UserRoleTable() {
   }, 200);
   const { openModal } = useModal();
   const { openSheet } = useSheet();
-  const addUserMutation = useMutation(
-    trpc.userRole.addUsers.mutationOptions({
+
+  const canDeleteRole = useCheckPermission("role", "delete");
+  const canAddPermission = useCheckPermission("role", "update");
+  const canUpdateRole = useCheckPermission("role", "update");
+  const canUpdateUser = useCheckPermission("user", "update");
+  const deleteRoleMutation = useMutation(
+    trpc.userRole.delete.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.userRole.pathFilter());
         await queryClient.invalidateQueries(trpc.permission.pathFilter());
-        toast.success(t("updated_successfully"), { id: 0 });
+        toast.success(t("deleted_successfully"), { id: 0 });
       },
     }),
   );
-  const canDeleteRole = useCheckPermission("role", "delete");
-  const canAddPermission = useCheckPermission("role", "update");
-  const canUpdateRole = useCheckPermission("role", "update");
-  const canUpdateUser = useCheckPermission("user", "update");
+  const confirm = useConfirm();
   const { data: roles } = useSuspenseQuery(trpc.userRole.all.queryOptions());
   const t = useTranslations();
   const filtered = useMemo(() => {
@@ -167,6 +154,7 @@ export function UserRoleTable() {
                             <DropdownMenuItem
                               onSelect={() => {
                                 openModal({
+                                  className: "sm:max-w-xl",
                                   title: `${t("edit")} - ${r.name}`,
                                   description: r.description,
                                   view: <CreateEditUserRole role={r} />,
@@ -205,19 +193,7 @@ export function UserRoleTable() {
                                   description:
                                     "Choisir un utilisateur et ajouter",
                                   className: "sm:max-w-xl",
-                                  view: (
-                                    <AddUserSelector
-                                      onSelectAction={(values) => {
-                                        toast.loading(t("Processing"), {
-                                          id: 0,
-                                        });
-                                        addUserMutation.mutate({
-                                          roleId: r.id,
-                                          userIds: values,
-                                        });
-                                      }}
-                                    />
-                                  ),
+                                  view: <AddUserSelector roleId={r.id} />,
                                 });
                               }}
                             >
@@ -234,10 +210,21 @@ export function UserRoleTable() {
                             <>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
+                                onSelect={async () => {
+                                  const isConfirmed = await confirm({
+                                    title: t("delete"),
+                                    description: t("delete_confirmation"),
+                                  });
+                                  if (isConfirmed) {
+                                    toast.loading(t("Processing"), { id: 0 });
+                                    deleteRoleMutation.mutate(r.id);
+                                  }
+                                }}
                                 disabled={!canDeleteRole}
                                 variant="destructive"
                               >
-                                <DeleteIcon className="text-destructive" />
+                                <DeleteIcon />
+                                {t("delete")}
                               </DropdownMenuItem>
                             </>
                           )}

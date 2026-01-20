@@ -15,6 +15,7 @@ export const userRouter = {
       z.object({
         limit: z.number().optional().default(130),
         query: z.string().optional().default(""),
+        roleId: z.string().optional(),
       }),
     )
     .query(({ ctx, input }) => {
@@ -26,6 +27,7 @@ export const userRouter = {
         },
         where: {
           schoolId: ctx.schoolId,
+          ...(input.roleId ? { userRoleId: input.roleId } : {}),
           OR: [
             { name: { startsWith: q } },
             { profile: { startsWith: q } },

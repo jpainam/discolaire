@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckIcon, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -18,16 +19,28 @@ import {
 } from "~/components/ui/input-group";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
-export function AddUserSelector({
-  onSelectAction,
-}: {
-  onSelectAction: (values: string[]) => void;
-}) {
+export function AddUserSelector({ roleId }: { roleId: string }) {
   const trpc = useTRPC();
   const { closeModal } = useModal();
+  const queryClient = useQueryClient();
+  const addUserMutation = useMutation(
+    trpc.userRole.addUsers.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.userRole.pathFilter());
+        await queryClient.invalidateQueries(trpc.permission.pathFilter());
+        await queryClient.invalidateQueries(trpc.user.search.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeModal();
+      },
+    }),
+  );
   const [selected, setSelected] = useState<{ id: string; name: string }[]>([]);
   const [queryText, setQueryText] = useState<string>();
   const debounce = useDebouncedCallback((value: string) => {
@@ -42,7 +55,7 @@ export function AddUserSelector({
   const t = useTranslations();
 
   return (
-    <div className="grid grid-cols-1 gap-6">
+    <div className="grid grid-cols-1 gap-4">
       <div>
         <InputGroup>
           <InputGroupInput
@@ -102,7 +115,7 @@ export function AddUserSelector({
           );
         })}
       </ScrollArea>
-      <div className="flex items-center gap-1">
+      <div className="flex h-5 items-center gap-1">
         {selected.map((s, index) => {
           const av = createAvatar(initials, {
             seed: s.name,
@@ -115,8 +128,9 @@ export function AddUserSelector({
           );
         })}
       </div>
-      <div className="flex items-center justify-end gap-4">
+      <div className="flex items-center justify-end gap-2">
         <Button
+          disabled={addUserMutation.isPending}
           onClick={() => {
             closeModal();
           }}
@@ -125,11 +139,19 @@ export function AddUserSelector({
           {t("close")}
         </Button>
         <Button
+          disabled={addUserMutation.isPending}
           onClick={() => {
-            onSelectAction(selected.map((s) => s.id));
-            closeModal();
+            const values = selected.map((s) => s.id);
+            toast.loading(t("Processing"), {
+              id: 0,
+            });
+            addUserMutation.mutate({
+              roleId,
+              userIds: values,
+            });
           }}
         >
+          {addUserMutation.isPending && <Spinner />}
           {t("submit")}
         </Button>
       </div>
