@@ -182,7 +182,7 @@ export function UserRoleTable() {
                                 strokeWidth={2}
                                 className="size-4"
                               />
-                              Ajouter permission
+                              Ajouter permissions
                             </DropdownMenuItem>
                           )}
                           {canUpdateUser && (

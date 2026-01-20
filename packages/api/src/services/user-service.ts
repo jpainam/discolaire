@@ -9,6 +9,92 @@ export class UserService {
   constructor(db: PrismaClient) {
     this.db = db;
   }
+  private parseRolePermission(resourceName: string, effect: string) {
+    const lastDotIndex = resourceName.lastIndexOf(".");
+    if (lastDotIndex <= 0 || lastDotIndex === resourceName.length - 1) {
+      return null;
+    }
+    const action = resourceName.slice(lastDotIndex + 1) as
+      | "read"
+      | "update"
+      | "create"
+      | "delete";
+    if (!["read", "update", "create", "delete"].includes(action)) {
+      return null;
+    }
+    return {
+      resource: resourceName.slice(0, lastDotIndex),
+      action: action,
+      effect: effect as "allow" | "deny",
+      condition: null,
+    };
+  }
+  private mergePermissions(
+    permissions: {
+      resource: string;
+      action: "read" | "update" | "create" | "delete";
+      effect: "allow" | "deny";
+      condition?: Record<string, unknown> | null;
+    }[],
+  ) {
+    const merged = new Map<
+      string,
+      {
+        resource: string;
+        action: "read" | "update" | "create" | "delete";
+        effect: "allow" | "deny";
+        condition?: Record<string, unknown> | null;
+      }
+    >();
+
+    for (const permission of permissions) {
+      const key = `${permission.resource}:${permission.action}`;
+      const existing = merged.get(key);
+      if (!existing) {
+        merged.set(key, permission);
+        continue;
+      }
+      if (existing.effect === "deny") {
+        if (permission.effect === "deny" && !existing.condition) {
+          continue;
+        }
+        if (permission.effect === "deny" && !permission.condition) {
+          merged.set(key, permission);
+        }
+        continue;
+      }
+      if (permission.effect === "deny") {
+        merged.set(key, permission);
+        continue;
+      }
+      if (!existing.condition && permission.condition) {
+        continue;
+      }
+      if (existing.condition && !permission.condition) {
+        merged.set(key, permission);
+      }
+    }
+
+    return Array.from(merged.values());
+  }
+  private async getDirectPermissions(userId: string) {
+    const user = await this.db.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
+    const perms = user.permissions as {
+      resource: string;
+      action: string;
+      effect: string;
+      condition?: Record<string, unknown> | null;
+    }[];
+
+    return perms as {
+      resource: string;
+      action: "read" | "update" | "create" | "delete";
+      effect: "allow" | "deny";
+      condition?: Record<string, unknown> | null;
+    }[];
+  }
   async updatePermission({
     userId,
     resource,
@@ -20,7 +106,7 @@ export class UserService {
     action: "read" | "update" | "create" | "delete";
     effect: "allow" | "deny";
   }) {
-    const permissions = await this.getPermissions(userId);
+    const permissions = await this.getDirectPermissions(userId);
 
     let updatedPermissions = [];
     if (effect === "allow") {
@@ -120,6 +206,17 @@ export class UserService {
   async getPermissions(userId: string) {
     const user = await this.db.user.findUniqueOrThrow({
       where: { id: userId },
+      include: {
+        userRole: {
+          include: {
+            permissionRoles: {
+              include: {
+                permission: true,
+              },
+            },
+          },
+        },
+      },
     });
     const perms = user.permissions as {
       resource: string;
@@ -127,18 +224,31 @@ export class UserService {
       effect: string;
       condition?: Record<string, unknown> | null;
     }[];
-    return perms.map((p) => {
-      return {
-        resource: p.resource.toLowerCase(),
-        action: p.action.toLowerCase() as
-          | "read"
-          | "update"
-          | "create"
-          | "delete",
-        effect: p.effect.toLowerCase() as "allow" | "deny",
-        condition: p.condition,
-      };
-    });
+    const directPermissions = perms as {
+      resource: string;
+      action: "read" | "update" | "create" | "delete";
+      effect: "allow" | "deny";
+      condition?: Record<string, unknown> | null;
+    }[];
+    const rolePermissions =
+      user.userRole?.permissionRoles
+        .map((permissionRole) =>
+          this.parseRolePermission(
+            permissionRole.permission.resource,
+            permissionRole.effect,
+          ),
+        )
+        .filter((permission) => permission !== null) ?? [];
+
+    return this.mergePermissions([
+      ...directPermissions,
+      ...(rolePermissions as {
+        resource: string;
+        action: "read" | "update" | "create" | "delete";
+        effect: "allow" | "deny";
+        condition?: Record<string, unknown> | null;
+      }[]),
+    ]);
   }
   async attachUser({
     entityId,

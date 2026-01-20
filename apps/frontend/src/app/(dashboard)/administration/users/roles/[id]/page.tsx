@@ -107,10 +107,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="grid grid-cols-1 grid-cols-2 gap-3">
-                <Skeleton className="h-20" />
-                <Skeleton className="h-20" />
-                <Skeleton className="h-20" />
+              <div className="col-span-2 grid grid-cols-1 gap-3">
+                {Array.from({ length: 10 }).map((_, t) => (
+                  <Skeleton className="h-8" key={t} />
+                ))}
               </div>
             }
           >

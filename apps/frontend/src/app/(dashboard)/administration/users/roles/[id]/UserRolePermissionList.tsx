@@ -1,3 +1,6 @@
+import Link from "next/link";
+
+import { EmptyComponent } from "~/components/EmptyComponent";
 import {
   Accordion,
   AccordionContent,
@@ -5,6 +8,7 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { getQueryClient, trpc } from "~/trpc/server";
 
@@ -20,17 +24,39 @@ export async function UserRolePermissionList({
     trpc.userRole.permissions.queryOptions(roleId),
   );
   const modules = await queryClient.fetchQuery(trpc.module.all.queryOptions());
+  const modulesWithPermission = permissionRoles.map(
+    (pr) => pr.permission.moduleId,
+  );
 
+  const usedModules = modules.filter((m) =>
+    modulesWithPermission.includes(m.id),
+  );
+  if (usedModules.length == 0) {
+    return (
+      <div className={className}>
+        <EmptyComponent
+          title="Aucune permission"
+          description="Commencer par ajouter des permissions à ce rôle"
+          content={
+            <Button asChild>
+              <Link href={`/administration/users/roles`}>Ajouter</Link>
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
   return (
     <div className={cn("pb-4", className)}>
       <Accordion
         type="multiple"
-        defaultValue={modules
+        defaultValue={usedModules
+
           .filter((m) => m._count.permissions > 0)
           .map((m) => m.id)
           .slice(0, 3)}
       >
-        {modules.map((module, index) => {
+        {usedModules.map((module, index) => {
           const permissions = permissionRoles
             .filter((pr) => pr.permission.moduleId == module.id)
             .map((p) => p.permission);

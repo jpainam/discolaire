@@ -273,6 +273,7 @@ model PermissionRole {
     createdAt    DateTime   @default(now())
     updatedAt    DateTime   @default(now()) @updatedAt
     effect       String     @default("allow") // allow or deny
+    condition Json?
 
     @@id([permissionId, roleId])
 }
