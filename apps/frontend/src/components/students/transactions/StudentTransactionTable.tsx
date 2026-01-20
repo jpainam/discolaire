@@ -58,7 +58,7 @@ import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { DeleteTransaction } from "./DeleteTransaction";
 
-export function TransactionTable() {
+export function StudentTransactionTable() {
   const params = useParams<{ id: string }>();
   const t = useTranslations();
   const locale = useLocale();

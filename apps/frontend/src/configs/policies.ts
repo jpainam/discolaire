@@ -237,6 +237,26 @@ export const policies: {
     action: PermissionAction.Read,
   },
   {
+    title: "roles",
+    resource: "role",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "roles",
+    resource: "role",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "roles",
+    resource: "role",
+    action: PermissionAction.Delete,
+  },
+  {
+    title: "roles",
+    resource: "role",
+    action: PermissionAction.Create,
+  },
+  {
     title: "gradesheets",
     resource: "gradesheet",
     action: PermissionAction.Update,
@@ -250,6 +270,26 @@ export const policies: {
     title: "gradesheets",
     resource: "gradesheet",
     action: PermissionAction.Delete,
+  },
+  {
+    title: "permissions",
+    resource: "permission",
+    action: PermissionAction.Read,
+  },
+  {
+    title: "permissions",
+    resource: "permission",
+    action: PermissionAction.Update,
+  },
+  {
+    title: "permissions",
+    resource: "permission",
+    action: PermissionAction.Delete,
+  },
+  {
+    title: "permissions",
+    resource: "permission",
+    action: PermissionAction.Create,
   },
   {
     title: "attendance",

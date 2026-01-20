@@ -2,17 +2,20 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
+import { AddInvoiceIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { MoreHorizontal } from "lucide-react";
+import { BadgeCheckIcon, MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { Badge } from "~/components/base-badge";
 import {
   DataTableToolbarV2,
   DataTableV2,
@@ -21,7 +24,6 @@ import {
 } from "~/components/datatable_v2";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { NoPermission } from "~/components/no-permission";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -163,8 +165,10 @@ function usePermissionColumns() {
           />
         ),
         cell: ({ row }) => (
-          <div className="text-muted-foreground flex justify-center">
-            {row.original._count.permissionRoles}
+          <div className="flex justify-center">
+            <Badge className="rounded-full" variant={"info"}>
+              {row.original._count.permissionRoles}
+            </Badge>
           </div>
         ),
       },
@@ -177,7 +181,11 @@ function usePermissionColumns() {
         cell: ({ row }) => {
           const isActive = row.original.isActive;
           return (
-            <Badge variant={isActive ? "default" : "destructive"}>
+            <Badge
+              variant={isActive ? "success" : "destructive"}
+              appearance={"outline"}
+            >
+              <BadgeCheckIcon />
               {isActive ? t("active") : t("inactive")}
             </Badge>
           );
@@ -252,7 +260,11 @@ function PermissionActions({ permission }: { permission: Permission }) {
                   });
                 }}
               >
-                <EditIcon />
+                <HugeiconsIcon
+                  icon={AddInvoiceIcon}
+                  strokeWidth={2}
+                  className="size-4"
+                />
                 Ajouter au role
               </DropdownMenuItem>
             </>

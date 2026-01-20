@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentTransactionSummary } from "~/components/students/transactions/StudentTransactionSummary";
-import { TransactionTable } from "~/components/students/transactions/TransactionTable";
+import { StudentTransactionTable } from "~/components/students/transactions/StudentTransactionTable";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { PlusIcon } from "~/icons";
@@ -91,7 +91,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 </div>
               }
             >
-              <TransactionTable />
+              <StudentTransactionTable />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>

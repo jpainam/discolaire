@@ -19,7 +19,7 @@ import { Badge } from "~/components/base-badge";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
 import { DeleteTransaction } from "~/components/students/transactions/DeleteTransaction";
-import { TransactionStatus } from "~/components/students/transactions/TransactionTable";
+import { TransactionStatus } from "~/components/students/transactions/StudentTransactionTable";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {

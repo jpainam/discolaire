@@ -2,7 +2,9 @@
 
 import { LockKeyhole, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
+import { updatePermission } from "~/actions/update_policies";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
@@ -31,6 +33,15 @@ export function PermissionHeader() {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
+        <Button
+          onClick={async () => {
+            toast.loading("Updating....", { id: 0 });
+            await updatePermission();
+            toast.success("Update completed", { id: 0 });
+          }}
+        >
+          Update Permission
+        </Button>
         <Button
           onClick={() => {
             openModal({

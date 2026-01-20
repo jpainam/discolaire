@@ -1,11 +1,15 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useDebouncedCallback } from "use-debounce";
 import { z } from "zod";
 
+import type { RouterOutputs } from "@repo/api";
 import { UserRoleLevel } from "@repo/db/enums";
 
 import { Button } from "~/components/ui/button";
@@ -18,15 +22,31 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
+import { Label } from "~/components/ui/label";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Skeleton } from "~/components/ui/skeleton";
 import { Spinner } from "~/components/ui/spinner";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
+import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 
 const formSchema = z.object({
@@ -36,7 +56,11 @@ const formSchema = z.object({
   isActive: z.boolean().optional().default(true),
 });
 
-export function CreateEditUserRole() {
+export function CreateEditUserRole({
+  role,
+}: {
+  role?: RouterOutputs["userRole"]["all"][number];
+}) {
   const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -57,10 +81,10 @@ export function CreateEditUserRole() {
 
   const form = useForm({
     defaultValues: {
-      name: "",
-      description: "",
-      level: UserRoleLevel.LEVEL4,
-      isActive: true,
+      name: role?.name ?? "",
+      description: role?.description ?? "",
+      level: role?.level ?? UserRoleLevel.LEVEL4,
+      isActive: role?.isActive ?? true,
     },
     validators: {
       onSubmit: formSchema,
@@ -71,7 +95,7 @@ export function CreateEditUserRole() {
         name: value.name,
         description: value.description,
         level: value.level,
-        isActive: value.isActive ?? true,
+        isActive: value.isActive,
       });
     },
   });
@@ -173,7 +197,7 @@ export function CreateEditUserRole() {
           children={(field) => (
             <Field orientation="horizontal">
               <Checkbox
-                checked={field.state.value ?? false}
+                checked={field.state.value}
                 onCheckedChange={(value) => field.handleChange(Boolean(value))}
                 id={`${field.name}-toggle`}
               />
@@ -200,6 +224,197 @@ export function CreateEditUserRole() {
           {t("submit")}
         </Button>
       </Field>
+    </div>
+  );
+}
+
+export function AddPermissionToRole({ roleId }: { roleId: string }) {
+  const { closeSheet } = useSheet();
+  const t = useTranslations();
+  const [queryText, setQueryText] = useState<string>("");
+  const debounce = useDebouncedCallback((value: string) => {
+    setQueryText(value);
+  }, 200);
+  const trpc = useTRPC();
+  const [effects, setEffects] = useState<Map<string, "deny" | "allow">>(
+    new Map(),
+  );
+  const [permissionIds, setPermissionIds] = useState<string[]>([]);
+  const { data: permissions, isPending: permissionIsPending } = useQuery(
+    trpc.permission.all.queryOptions(),
+  );
+
+  const queryClient = useQueryClient();
+  const addPermissionsToRole = useMutation(
+    trpc.userRole.addPermissions.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.permission.pathFilter());
+        await queryClient.invalidateQueries(trpc.userRole.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+    }),
+  );
+
+  const { data: role, isPending: roleIsPending } = useQuery(
+    trpc.userRole.get.queryOptions(roleId),
+  );
+  const filtered = useMemo(() => {
+    if (!queryText) return permissions;
+    const q = queryText.toLowerCase();
+    return permissions?.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.resource.toLowerCase().includes(q),
+    );
+  }, [permissions, queryText]);
+
+  useEffect(() => {
+    if (!role) return;
+    const initials = new Map<string, "deny" | "allow">();
+    const pIds: string[] = [];
+    role.permissionRoles.forEach((p) => {
+      pIds.push(p.permissionId);
+      initials.set(p.permissionId, p.effect as "deny" | "allow");
+    });
+    void setPermissionIds(pIds);
+    void setEffects(initials);
+  }, [role]);
+
+  if (permissionIsPending || roleIsPending) {
+    return (
+      <div className="grid grid-cols-1 gap-4">
+        {Array.from({ length: 4 }).map((_, t) => (
+          <Skeleton className="h-20" key={t} />
+        ))}
+      </div>
+    );
+  }
+  if (permissions?.length == 0) {
+    return <div>Aucune permission</div>;
+  }
+  return (
+    <div className="flex flex-col gap-2 pb-4">
+      <div>
+        <InputGroup className="w-full lg:w-1/2">
+          <InputGroupInput
+            placeholder={t("search")}
+            onChange={(e) => debounce(e.target.value)}
+          />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <div className="overflow-hidden rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead className="w-[20px]"></TableHead>
+              <TableHead>{t("Label")}</TableHead>
+              <TableHead className="w-[120px] text-right">Effect</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered?.map((p, index) => {
+              return (
+                <TableRow
+                  key={index}
+                  //className={cn(permissionIds.has(pd))}
+                  data-state={permissionIds.includes(p.id) && "selected"}
+                >
+                  <TableCell>
+                    <Checkbox
+                      id={`checkbox-${p.id}`}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setPermissionIds([...permissionIds, p.id]);
+                        } else {
+                          setPermissionIds(
+                            permissionIds.filter((id) => id !== p.id),
+                          );
+                        }
+                      }}
+                      defaultChecked={permissionIds.includes(p.id)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Label htmlFor={`checkbox-${p.id}`}>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-muted-foreground">{p.name}</span>
+                        <span className="text-primary text-xs">
+                          {p.resource}
+                        </span>
+                      </div>
+                    </Label>
+                  </TableCell>
+
+                  <TableCell className="text-right">
+                    <Select
+                      defaultValue={effects.get(p.id)}
+                      onValueChange={(value) => {
+                        setEffects((e) =>
+                          e.set(p.id, value as "allow" | "deny"),
+                        );
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={"Choisir l'autorisation"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="allow">{t("Allow")}</SelectItem>
+                        <SelectItem value="deny">{t("Deny")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="grid grid-cols-1 gap-4">
+        <Button
+          disabled={addPermissionsToRole.isPending}
+          onClick={() => {
+            // check map
+            const permissionMap: { id: string; effect: "deny" | "allow" }[] =
+              [];
+            let error = false;
+            for (const pId of permissionIds) {
+              const ef = effects.get(pId);
+              if (!ef) {
+                const p = permissions?.find((p) => p.id == pId);
+                toast.error(`Choisir une autorisation pour ${p?.name}`);
+                error = true;
+              } else {
+                permissionMap.push({ id: pId, effect: ef });
+              }
+            }
+            if (error) return;
+            toast.loading(t("Processing"), { id: 0 });
+            addPermissionsToRole.mutate({
+              roleId,
+              permissionIds: permissionMap,
+            });
+          }}
+        >
+          {addPermissionsToRole.isPending && <Spinner />}
+          {t("submit")}
+        </Button>
+        <Button
+          disabled={addPermissionsToRole.isPending}
+          variant={"outline"}
+          onClick={() => {
+            closeSheet();
+          }}
+        >
+          {t("close")}
+        </Button>
+      </div>
     </div>
   );
 }

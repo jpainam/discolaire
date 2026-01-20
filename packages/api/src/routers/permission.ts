@@ -16,6 +16,7 @@ export const permissionRouter = {
             code: true,
           },
         },
+
         _count: {
           select: {
             permissionRoles: true,

@@ -15,12 +15,58 @@ export const userRoleRouter = {
         _count: {
           select: {
             permissionRoles: true,
-            users: true
+            users: true,
           },
         },
       },
     });
   }),
+  addPermissions: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string().min(1),
+        permissionIds: z
+          .object({
+            id: z.string().min(1),
+            effect: z.enum(["allow", "deny"]),
+          })
+          .array(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (const p of input.permissionIds) {
+        await ctx.db.permissionRole.upsert({
+          create: {
+            effect: p.effect,
+            roleId: input.roleId,
+            permissionId: p.id,
+            
+          },
+          update: {
+            effect: p.effect,
+            
+          },
+          where: {
+            permissionId_roleId: {
+              permissionId: p.id,
+              roleId: input.roleId,
+            },
+          },
+        });
+      }
+      return ctx.db.userRole.findUniqueOrThrow({
+        include: {
+          _count: {
+            select: {
+              permissionRoles: true,
+            },
+          },
+        },
+        where: {
+          id: input.roleId,
+        },
+      });
+    }),
   get: protectedProcedure.input(z.string().min(1)).query(({ ctx, input }) => {
     return ctx.db.userRole.findUniqueOrThrow({
       where: {
@@ -28,6 +74,7 @@ export const userRoleRouter = {
         schoolId: ctx.schoolId,
       },
       include: {
+        permissionRoles: true,
         _count: {
           select: {
             permissionRoles: true,
