@@ -21,6 +21,37 @@ export const userRoleRouter = {
       },
     });
   }),
+  addUsers: protectedProcedure
+    .input(
+      z.object({
+        roleId: z.string().min(1),
+        userIds: z.string().array(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (const userId of input.userIds) {
+        await ctx.db.user.update({
+          data: {
+            userRoleId: input.roleId,
+          },
+          where: {
+            id: userId,
+          },
+        });
+      }
+      return ctx.db.userRole.findUniqueOrThrow({
+        include: {
+          _count: {
+            select: {
+              permissionRoles: true,
+            },
+          },
+        },
+        where: {
+          id: input.roleId,
+        },
+      });
+    }),
   addPermissions: protectedProcedure
     .input(
       z.object({
@@ -40,11 +71,9 @@ export const userRoleRouter = {
             effect: p.effect,
             roleId: input.roleId,
             permissionId: p.id,
-            
           },
           update: {
             effect: p.effect,
-            
           },
           where: {
             permissionId_roleId: {

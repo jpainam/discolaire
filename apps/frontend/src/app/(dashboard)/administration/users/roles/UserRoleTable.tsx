@@ -1,44 +1,77 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AddInvoiceIcon } from "@hugeicons/core-free-icons";
+import Link from "next/link";
+import { AddInvoiceIcon, AddTeamIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { MoreHorizontal, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
-
-
 
 import { UserRoleLevel } from "@repo/db/enums";
 
-
-
 import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "~/components/ui/input-group";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
+import { AddUserSelector } from "./AddUserSelector";
 import { AddPermissionToRole, CreateEditUserRole } from "./CreateEditUserRole";
-
 
 export function UserRoleTable() {
   const trpc = useTRPC();
 
   const [queryText, setQueryText] = useState<string>("");
+  const queryClient = useQueryClient();
   const debounce = useDebouncedCallback((value: string) => {
     setQueryText(value);
   }, 200);
   const { openModal } = useModal();
   const { openSheet } = useSheet();
+  const addUserMutation = useMutation(
+    trpc.userRole.addUsers.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.userRole.pathFilter());
+        await queryClient.invalidateQueries(trpc.permission.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
+    }),
+  );
   const canDeleteRole = useCheckPermission("role", "delete");
   const canAddPermission = useCheckPermission("role", "update");
   const canUpdateRole = useCheckPermission("role", "update");
+  const canUpdateUser = useCheckPermission("user", "update");
   const { data: roles } = useSuspenseQuery(trpc.userRole.all.queryOptions());
   const t = useTranslations();
   const filtered = useMemo(() => {
@@ -81,7 +114,14 @@ export function UserRoleTable() {
               return (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{r.name}</TableCell>
+                  <TableCell>
+                    <Link
+                      href={`/administration/users/roles/${r.id}`}
+                      className="hover:underline"
+                    >
+                      {r.name}
+                    </Link>
+                  </TableCell>
                   <TableCell className="text-muted-foreground">
                     {r.description}
                   </TableCell>
@@ -155,6 +195,38 @@ export function UserRoleTable() {
                                 className="size-4"
                               />
                               Ajouter permission
+                            </DropdownMenuItem>
+                          )}
+                          {canUpdateUser && (
+                            <DropdownMenuItem
+                              onSelect={() => {
+                                openModal({
+                                  title: "Ajouter un utilisateur",
+                                  description:
+                                    "Choisir un utilisateur et ajouter",
+                                  className: "sm:max-w-xl",
+                                  view: (
+                                    <AddUserSelector
+                                      onSelectAction={(values) => {
+                                        toast.loading(t("Processing"), {
+                                          id: 0,
+                                        });
+                                        addUserMutation.mutate({
+                                          roleId: r.id,
+                                          userIds: values,
+                                        });
+                                      }}
+                                    />
+                                  ),
+                                });
+                              }}
+                            >
+                              <HugeiconsIcon
+                                icon={AddTeamIcon}
+                                strokeWidth={2}
+                                className="size-4"
+                              />
+                              {t("Add user")}
                             </DropdownMenuItem>
                           )}
 

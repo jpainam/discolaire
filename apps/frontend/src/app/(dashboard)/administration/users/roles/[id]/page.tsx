@@ -32,7 +32,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <UserRoleDetailHeader roleId={params.id} />
         </Suspense>
       </ErrorBoundary>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="lg: grid grid-cols-1 gap-4 lg:grid-cols-3 px-4">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
@@ -77,10 +77,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
             }
           >
-            <UserRolePermissionList
-              className="grid-cols-2"
-              roleId={params.id}
-            />
+            <UserRolePermissionList className="col-span-2" roleId={params.id} />
           </Suspense>
         </ErrorBoundary>
       </div>

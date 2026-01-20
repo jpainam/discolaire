@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Search } from "lucide-react";
+import { CheckIcon, Search, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
@@ -229,6 +229,49 @@ export function CreateEditUserRole({
 }
 
 export function AddPermissionToRole({ roleId }: { roleId: string }) {
+  const trpc = useTRPC();
+  const { data: permissions, isPending: permissionIsPending } = useQuery(
+    trpc.permission.all.queryOptions(),
+  );
+
+  const { data: role, isPending: roleIsPending } = useQuery(
+    trpc.userRole.get.queryOptions(roleId),
+  );
+
+  if (permissionIsPending || roleIsPending) {
+    return (
+      <div className="grid grid-cols-1 gap-4">
+        {Array.from({ length: 4 }).map((_, t) => (
+          <Skeleton className="h-20" key={t} />
+        ))}
+      </div>
+    );
+  }
+  if (!permissions || permissions.length == 0) {
+    return <div>Aucune permission</div>;
+  }
+  if (!role) {
+    return <div>Aucun role</div>;
+  }
+  return (
+    <AddPermissionToRoleForm
+      key={role.id}
+      roleId={roleId}
+      role={role}
+      permissions={permissions}
+    />
+  );
+}
+
+function AddPermissionToRoleForm({
+  roleId,
+  role,
+  permissions,
+}: {
+  roleId: string;
+  role: NonNullable<RouterOutputs["userRole"]["get"]>;
+  permissions: NonNullable<RouterOutputs["permission"]["all"]>;
+}) {
   const { closeSheet } = useSheet();
   const t = useTranslations();
   const [queryText, setQueryText] = useState<string>("");
@@ -236,15 +279,17 @@ export function AddPermissionToRole({ roleId }: { roleId: string }) {
     setQueryText(value);
   }, 200);
   const trpc = useTRPC();
-  const [effects, setEffects] = useState<Map<string, "deny" | "allow">>(
-    new Map(),
-  );
-  const [permissionIds, setPermissionIds] = useState<string[]>([]);
-  const { data: permissions, isPending: permissionIsPending } = useQuery(
-    trpc.permission.all.queryOptions(),
-  );
-
   const queryClient = useQueryClient();
+  const [effects, setEffects] = useState<Map<string, "deny" | "allow">>(() => {
+    const initials = new Map<string, "deny" | "allow">();
+    role.permissionRoles.forEach((p) => {
+      initials.set(p.permissionId, p.effect as "deny" | "allow");
+    });
+    return initials;
+  });
+  const [permissionIds, setPermissionIds] = useState<string[]>(() =>
+    role.permissionRoles.map((p) => p.permissionId),
+  );
   const addPermissionsToRole = useMutation(
     trpc.userRole.addPermissions.mutationOptions({
       onError: (error) => {
@@ -258,44 +303,16 @@ export function AddPermissionToRole({ roleId }: { roleId: string }) {
       },
     }),
   );
-
-  const { data: role, isPending: roleIsPending } = useQuery(
-    trpc.userRole.get.queryOptions(roleId),
-  );
   const filtered = useMemo(() => {
     if (!queryText) return permissions;
     const q = queryText.toLowerCase();
-    return permissions?.filter(
+    return permissions.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
         p.resource.toLowerCase().includes(q),
     );
   }, [permissions, queryText]);
 
-  useEffect(() => {
-    if (!role) return;
-    const initials = new Map<string, "deny" | "allow">();
-    const pIds: string[] = [];
-    role.permissionRoles.forEach((p) => {
-      pIds.push(p.permissionId);
-      initials.set(p.permissionId, p.effect as "deny" | "allow");
-    });
-    void setPermissionIds(pIds);
-    void setEffects(initials);
-  }, [role]);
-
-  if (permissionIsPending || roleIsPending) {
-    return (
-      <div className="grid grid-cols-1 gap-4">
-        {Array.from({ length: 4 }).map((_, t) => (
-          <Skeleton className="h-20" key={t} />
-        ))}
-      </div>
-    );
-  }
-  if (permissions?.length == 0) {
-    return <div>Aucune permission</div>;
-  }
   return (
     <div className="flex flex-col gap-2 pb-4">
       <div>
@@ -319,7 +336,7 @@ export function AddPermissionToRole({ roleId }: { roleId: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered?.map((p, index) => {
+            {filtered.map((p, index) => {
               return (
                 <TableRow
                   key={index}
@@ -329,6 +346,7 @@ export function AddPermissionToRole({ roleId }: { roleId: string }) {
                   <TableCell>
                     <Checkbox
                       id={`checkbox-${p.id}`}
+                      checked={permissionIds.includes(p.id)}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           setPermissionIds([...permissionIds, p.id]);
@@ -359,14 +377,23 @@ export function AddPermissionToRole({ roleId }: { roleId: string }) {
                         setEffects((e) =>
                           e.set(p.id, value as "allow" | "deny"),
                         );
+                        if (value.trim()) {
+                          setPermissionIds([...permissionIds, p.id]);
+                        }
                       }}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={"Choisir l'autorisation"} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="allow">{t("Allow")}</SelectItem>
-                        <SelectItem value="deny">{t("Deny")}</SelectItem>
+                        <SelectItem value="allow">
+                          <CheckIcon className="text-green-500" />
+                          {t("Allow")}
+                        </SelectItem>
+                        <SelectItem value="deny">
+                          <XIcon className="text-red-500" />
+                          {t("Deny")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>
@@ -387,7 +414,7 @@ export function AddPermissionToRole({ roleId }: { roleId: string }) {
             for (const pId of permissionIds) {
               const ef = effects.get(pId);
               if (!ef) {
-                const p = permissions?.find((p) => p.id == pId);
+                const p = permissions.find((p) => p.id == pId);
                 toast.error(`Choisir une autorisation pour ${p?.name}`);
                 error = true;
               } else {
