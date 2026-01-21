@@ -1,46 +1,36 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { PermissionIndex } from "@repo/utils";
+import {
+  buildPermissionIndex,
+  checkPermission as checkPermissionBase,
+} from "@repo/utils";
 
 import { getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
 
+const permissionIndexCache = new Map<string, PermissionIndex>();
+
+export const clearPermissionIndexCache = (userId?: string) => {
+  if (userId) {
+    permissionIndexCache.delete(userId);
+    return;
+  }
+  permissionIndexCache.clear();
+};
+
 export async function checkPermission(
   resource: string,
-  condition: Record<string, any> = {},
+  condition: Record<string, unknown> = {},
 ) {
   const session = await getSession();
   if (!session) return false;
   const userId = session.user.id;
 
-  const permissions = await caller.user.getPermissions(userId);
-  let isAllowed = false;
-
-  for (const perm of permissions) {
-    if (perm.resource === resource) {
-      if (perm.effect === "deny") {
-        if (perm.condition) {
-          // If deny condition matches, return false
-          const conditionMatches = Object.entries(perm.condition).every(
-            ([key, value]) => condition[key] === value,
-          );
-          if (conditionMatches) {
-            return false;
-          }
-        } else {
-          return false; // Deny without condition overrides allow
-        }
-      }
-
-      if (perm.effect === "allow") {
-        if (perm.condition) {
-          const conditionMatches = Object.entries(perm.condition).every(
-            ([key, value]) => condition[key] === value,
-          );
-          if (conditionMatches) isAllowed = true;
-        } else {
-          isAllowed = true;
-        }
-      }
-    }
+  let permissionIndex = permissionIndexCache.get(userId);
+  if (!permissionIndex) {
+    const permissions = await caller.user.getPermissions(userId);
+    permissionIndex = buildPermissionIndex(permissions);
+    permissionIndexCache.set(userId, permissionIndex);
   }
-  return isAllowed;
+
+  return checkPermissionBase(resource, condition, permissionIndex);
 }

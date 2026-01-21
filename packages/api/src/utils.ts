@@ -64,3 +64,5 @@ export function getFullName(pperson?: any): string {
   }
   return decode(fullName);
 }
+
+export { buildPermissionIndex, checkPermission } from "@repo/utils";

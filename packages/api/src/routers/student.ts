@@ -6,8 +6,8 @@ import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
 
-import { checkPermission } from "../permission";
 import { protectedProcedure } from "../trpc";
+import { buildPermissionIndex, checkPermission } from "../utils";
 
 const whereClause = (q: string): Prisma.StudentFindManyArgs => {
   const qq = q;
@@ -91,10 +91,11 @@ export const studentRouter = {
         );
         studentIds.push(...studentContacts.map((sc) => sc.studentId));
       } else {
+        const permissionIndex = buildPermissionIndex(ctx.permissions);
         const canReadStudent = checkPermission(
           "student.read",
           {},
-          ctx.permissions,
+          permissionIndex,
         );
         if (!canReadStudent) {
           const staff = await ctx.services.staff.getFromUserId(
