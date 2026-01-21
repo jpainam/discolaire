@@ -53,7 +53,7 @@ const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   level: z.enum(UserRoleLevel),
-  isActive: z.boolean().optional().default(true),
+  isActive: z.boolean(),
 });
 
 export function CreateEditUserRole({

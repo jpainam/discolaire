@@ -51,7 +51,7 @@ const formSchema = z.object({
   moduleId: z.string().min(1),
   resource: z.string().min(1),
   type: z.enum(PermissionType),
-  isActive: z.boolean().optional().default(true),
+  isActive: z.boolean(),
 });
 
 export function CreateEditPermission({

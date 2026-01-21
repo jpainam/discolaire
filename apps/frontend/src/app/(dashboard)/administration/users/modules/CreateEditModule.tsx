@@ -28,7 +28,7 @@ const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   code: z.string().min(1),
-  isActive: z.boolean().optional().default(true),
+  isActive: z.boolean(),
 });
 
 export function CreateEditModule({ module }: { module?: Module }) {
