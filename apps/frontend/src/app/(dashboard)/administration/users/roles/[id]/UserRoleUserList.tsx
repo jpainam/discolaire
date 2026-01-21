@@ -56,19 +56,19 @@ export function UserRoleUserList({ roleId }: { roleId: string }) {
     }),
   );
   const { data: role } = useSuspenseQuery(
-    trpc.userRole.get.queryOptions(roleId),
+    trpc.role.get.queryOptions(roleId),
   );
   const queryClient = useQueryClient();
   const confirm = useConfirm();
   const removeUserFromRole = useMutation(
-    trpc.userRole.removeUser.mutationOptions({
+    trpc.role.removeUser.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
         toast.success(t("deleted_successfully"), { id: 0 });
         await queryClient.invalidateQueries(trpc.user.search.pathFilter());
-        await queryClient.invalidateQueries(trpc.userRole.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.pathFilter());
         await queryClient.invalidateQueries(trpc.permission.pathFilter());
       },
     }),
@@ -172,7 +172,7 @@ export function UserRoleUserList({ roleId }: { roleId: string }) {
       </CardContent>
       <CardFooter>
         <p className="text-muted-foreground">
-          Nombre d'utilisateurs: {role._count.users}
+          Nombre d'utilisateurs: {role._count.userRoles}
         </p>
       </CardFooter>
     </Card>

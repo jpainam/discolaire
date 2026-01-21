@@ -21,7 +21,7 @@ export async function UserRolePermissionList({
 }) {
   const queryClient = getQueryClient();
   const permissionRoles = await queryClient.fetchQuery(
-    trpc.userRole.permissions.queryOptions(roleId),
+    trpc.role.permissions.queryOptions(roleId),
   );
   const modules = await queryClient.fetchQuery(trpc.module.all.queryOptions());
   const modulesWithPermission = permissionRoles.map(

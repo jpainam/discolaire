@@ -27,7 +27,15 @@ export const userRouter = {
         },
         where: {
           schoolId: ctx.schoolId,
-          ...(input.roleId ? { userRoleId: input.roleId } : {}),
+          ...(input.roleId
+            ? {
+                userRoles: {
+                  some: {
+                    roleId: input.roleId,
+                  },
+                },
+              }
+            : {}),
           OR: [
             { name: { startsWith: q } },
             { profile: { startsWith: q } },
@@ -168,14 +176,11 @@ export const userRouter = {
             : {}),
         }),
       ]);
-      console.log(">>>>>>>>>>>>>>>>>>>");
-      console.log(rowCount, data.length);
 
       const hasNextPage = data.length > input.pageSize;
       const items = hasNextPage ? data.slice(0, -1) : data;
       const nextCursor = hasNextPage ? items[items.length - 1]?.id : undefined;
-      console.log(">>>>>>>>>>>>.2");
-      console.log(">>>>>", items.length, rowCount, nextCursor);
+
       return { data: items, rowCount, nextCursor };
     }),
   count: protectedProcedure

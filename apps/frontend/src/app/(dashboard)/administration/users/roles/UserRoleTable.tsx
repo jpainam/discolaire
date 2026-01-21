@@ -14,7 +14,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import { UserRoleLevel } from "@repo/db/enums";
+import { RoleLevel } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
@@ -63,19 +63,19 @@ export function UserRoleTable() {
   const canUpdateRole = useCheckPermission("role.update");
   const canUpdateUser = useCheckPermission("user.update");
   const deleteRoleMutation = useMutation(
-    trpc.userRole.delete.mutationOptions({
+    trpc.role.delete.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.userRole.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.pathFilter());
         await queryClient.invalidateQueries(trpc.permission.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
     }),
   );
   const confirm = useConfirm();
-  const { data: roles } = useSuspenseQuery(trpc.userRole.all.queryOptions());
+  const { data: roles } = useSuspenseQuery(trpc.role.all.queryOptions());
   const t = useTranslations();
   const filtered = useMemo(() => {
     if (!queryText) return roles;
@@ -131,13 +131,13 @@ export function UserRoleTable() {
                   <TableCell className="text-center">
                     <Badge
                       variant={
-                        r.level == UserRoleLevel.LEVEL1
+                        r.level == RoleLevel.LEVEL1
                           ? "destructive"
-                          : r.level == UserRoleLevel.LEVEL2
+                          : r.level == RoleLevel.LEVEL2
                             ? "primary"
-                            : r.level == UserRoleLevel.LEVEL3
+                            : r.level == RoleLevel.LEVEL3
                               ? "info"
-                              : r.level == UserRoleLevel.LEVEL4
+                              : r.level == RoleLevel.LEVEL4
                                 ? "secondary"
                                 : "warning"
                       }
@@ -148,7 +148,7 @@ export function UserRoleTable() {
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant={"warning"} appearance={"light"}>
-                      {r._count.users}
+                      {r._count.userRoles}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center">
@@ -222,7 +222,7 @@ export function UserRoleTable() {
                             </DropdownMenuItem>
                           )}
 
-                          {canDeleteRole && r.level != UserRoleLevel.LEVEL1 && (
+                          {canDeleteRole && r.level != RoleLevel.LEVEL1 && (
                             <>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem

@@ -188,15 +188,19 @@ export class UserService {
       where: { id: userId },
       select: {
         permissions: true,
-        userRole: {
+        userRoles: {
           select: {
-            permissionRoles: {
+            role: {
               select: {
-                effect: true,
-                condition: true,
-                permission: {
+                permissionRoles: {
                   select: {
-                    resource: true,
+                    effect: true,
+                    condition: true,
+                    permission: {
+                      select: {
+                        resource: true,
+                      },
+                    },
                   },
                 },
               },
@@ -218,14 +222,15 @@ export class UserService {
         condition: p.condition,
       };
     });
-    const rolePermissions =
-      user.userRole?.permissionRoles.map((permissionRole) => {
+    const rolePermissions = user.userRoles.flatMap((userRole) =>
+      userRole.role.permissionRoles.map((permissionRole) => {
         return {
           effect: permissionRole.effect,
           resource: permissionRole.permission.resource,
           condition: permissionRole.condition,
         };
-      }) ?? [];
+      }),
+    );
 
     return this.mergePermissions([
       ...directPermissions,

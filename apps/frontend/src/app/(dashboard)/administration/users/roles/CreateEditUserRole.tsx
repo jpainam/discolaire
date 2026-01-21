@@ -10,7 +10,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { UserRoleLevel } from "@repo/db/enums";
+import { RoleLevel } from "@repo/db/enums";
 
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -52,14 +52,14 @@ import { useTRPC } from "~/trpc/react";
 const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
-  level: z.enum(UserRoleLevel),
+  level: z.enum(RoleLevel),
   isActive: z.boolean(),
 });
 
 export function CreateEditUserRole({
   role,
 }: {
-  role?: RouterOutputs["userRole"]["all"][number];
+  role?: RouterOutputs["role"]["all"][number];
 }) {
   const t = useTranslations();
   const trpc = useTRPC();
@@ -67,9 +67,9 @@ export function CreateEditUserRole({
   const { closeModal } = useModal();
 
   const createUserRoleMutation = useMutation(
-    trpc.userRole.create.mutationOptions({
+    trpc.role.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.userRole.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.all.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
@@ -83,7 +83,7 @@ export function CreateEditUserRole({
     defaultValues: {
       name: role?.name ?? "",
       description: role?.description ?? "",
-      level: role?.level ?? UserRoleLevel.LEVEL4,
+      level: role?.level ?? RoleLevel.LEVEL4,
       isActive: role?.isActive ?? true,
     },
     validators: {
@@ -145,7 +145,7 @@ export function CreateEditUserRole({
                     name={field.name}
                     value={field.state.value}
                     onValueChange={(value) =>
-                      value && field.handleChange(value as UserRoleLevel)
+                      value && field.handleChange(value as RoleLevel)
                     }
                     aria-invalid={isInvalid}
                   >
@@ -153,7 +153,7 @@ export function CreateEditUserRole({
                       <SelectValue placeholder={t("select_an_option")} />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.values(UserRoleLevel).map((level) => (
+                      {Object.values(RoleLevel).map((level) => (
                         <SelectItem key={level} value={level}>
                           {level}
                         </SelectItem>
@@ -235,7 +235,7 @@ export function AddPermissionToRole({ roleId }: { roleId: string }) {
   );
 
   const { data: role, isPending: roleIsPending } = useQuery(
-    trpc.userRole.get.queryOptions(roleId),
+    trpc.role.get.queryOptions(roleId),
   );
 
   if (permissionIsPending || roleIsPending) {
@@ -269,7 +269,7 @@ function AddPermissionToRoleForm({
   permissions,
 }: {
   roleId: string;
-  role: NonNullable<RouterOutputs["userRole"]["get"]>;
+  role: NonNullable<RouterOutputs["role"]["get"]>;
   permissions: NonNullable<RouterOutputs["permission"]["all"]>;
 }) {
   const { closeSheet } = useSheet();
@@ -291,13 +291,13 @@ function AddPermissionToRoleForm({
     role.permissionRoles.map((p) => p.permissionId),
   );
   const addPermissionsToRole = useMutation(
-    trpc.userRole.addPermissions.mutationOptions({
+    trpc.role.addPermissions.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.permission.pathFilter());
-        await queryClient.invalidateQueries(trpc.userRole.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
         closeSheet();
       },

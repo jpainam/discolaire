@@ -8,7 +8,7 @@ import { UserRoleHeader } from "./UserRoleHeader";
 import { UserRoleTable } from "./UserRoleTable";
 
 export default function Page() {
-  batchPrefetch([trpc.userRole.all.queryOptions()]);
+  batchPrefetch([trpc.role.all.queryOptions()]);
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>

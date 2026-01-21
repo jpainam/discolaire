@@ -19,7 +19,7 @@ export function UserRoleDetailHeader({ roleId }: { roleId: string }) {
   const trpc = useTRPC();
   const { openSheet } = useSheet();
   const { data: role, isPending } = useQuery(
-    trpc.userRole.get.queryOptions(roleId),
+    trpc.role.get.queryOptions(roleId),
   );
   const { openModal } = useModal();
   if (isPending) {

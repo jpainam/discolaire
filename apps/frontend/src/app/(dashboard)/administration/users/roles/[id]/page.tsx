@@ -28,9 +28,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const roleId = params.id;
   const queryClient = getQueryClient();
-  batchPrefetch([trpc.userRole.get.queryOptions(roleId)]);
+  batchPrefetch([trpc.role.get.queryOptions(roleId)]);
   const role = await queryClient.fetchQuery(
-    trpc.userRole.get.queryOptions(roleId),
+    trpc.role.get.queryOptions(roleId),
   );
 
   const t = await getTranslations();

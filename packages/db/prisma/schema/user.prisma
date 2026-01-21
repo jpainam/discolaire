@@ -10,8 +10,7 @@ model User {
     username                     String
     displayUsername              String?
     role                         String? // role is used by better-auth
-    userRoleId                   String?
-    userRole                     UserRole?                  @relation(fields: [userRoleId], references: [id], onDelete: SetNull)
+    userRoles                    UserRole[]
     banned                       Boolean?
     banReason                    String?
     banExpires                   DateTime?
@@ -269,16 +268,16 @@ model PermissionRole {
     permissionId String
     permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
     roleId       String
-    role         UserRole   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+    role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
     createdAt    DateTime   @default(now())
     updatedAt    DateTime   @default(now()) @updatedAt
     effect       String     @default("allow") // allow or deny
-    condition Json?
+    condition    Json?
 
     @@id([permissionId, roleId])
 }
 
-enum UserRoleLevel {
+enum RoleLevel {
     LEVEL1
     LEVEL2
     LEVEL3
@@ -286,14 +285,23 @@ enum UserRoleLevel {
     LEVEL5
 }
 
-model UserRole {
+model Role {
     id              String           @id @default(cuid())
     name            String
     description     String
-    level           UserRoleLevel    @default(LEVEL4)
+    level           RoleLevel        @default(LEVEL4)
     isActive        Boolean          @default(true)
     permissionRoles PermissionRole[]
-    users           User[]
+    userRoles       UserRole[]
     schoolId        String
     school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model UserRole {
+    roleId String
+    role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@id([roleId, userId])
 }

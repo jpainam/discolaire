@@ -575,7 +575,7 @@ model School {
     employmentTypes           EmploymentType[]
     modules                   Module[]
     permissions               Permission[]
-    userRoles                 UserRole[]
+    roles                     Role[]
 }
 
 model RequiredAccountingJournal {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-import { UserRoleLevel } from "@repo/db/enums";
+import { RoleLevel } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
@@ -32,7 +32,7 @@ import { useTRPC } from "~/trpc/react";
 export function CreateEditUser() {
   const trpc = useTRPC();
   const [roleIds, setRoleIds] = useState<string[]>([]);
-  const { data: roles } = useSuspenseQuery(trpc.userRole.all.queryOptions());
+  const { data: roles } = useSuspenseQuery(trpc.role.all.queryOptions());
   const t = useTranslations();
   return (
     <div className="grid grid-cols-1 items-start gap-4 p-4 lg:grid-cols-2">
@@ -101,13 +101,13 @@ export function CreateEditUser() {
                           className=""
                           //className="size-1.5 h-5 text-[8px]"
                           variant={
-                            r.level == UserRoleLevel.LEVEL1
+                            r.level == RoleLevel.LEVEL1
                               ? "destructive"
-                              : r.level == UserRoleLevel.LEVEL2
+                              : r.level == RoleLevel.LEVEL2
                                 ? "primary"
-                                : r.level == UserRoleLevel.LEVEL3
+                                : r.level == RoleLevel.LEVEL3
                                   ? "info"
-                                  : r.level == UserRoleLevel.LEVEL4
+                                  : r.level == RoleLevel.LEVEL4
                                     ? "secondary"
                                     : "warning"
                           }

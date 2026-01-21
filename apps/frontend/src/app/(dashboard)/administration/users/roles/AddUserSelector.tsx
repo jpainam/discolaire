@@ -28,12 +28,12 @@ export function AddUserSelector({ roleId }: { roleId: string }) {
   const { closeModal } = useModal();
   const queryClient = useQueryClient();
   const addUserMutation = useMutation(
-    trpc.userRole.addUsers.mutationOptions({
+    trpc.role.addUsers.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.userRole.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.pathFilter());
         await queryClient.invalidateQueries(trpc.permission.pathFilter());
         await queryClient.invalidateQueries(trpc.user.search.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });

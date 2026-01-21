@@ -1,13 +1,13 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { UserRoleLevel } from "@repo/db";
+import { RoleLevel } from "@repo/db";
 
 import { protectedProcedure } from "../trpc";
 
-export const userRoleRouter = {
+export const roleRouter = {
   all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.userRole.findMany({
+    return ctx.db.role.findMany({
       where: {
         schoolId: ctx.schoolId,
       },
@@ -18,7 +18,7 @@ export const userRoleRouter = {
         _count: {
           select: {
             permissionRoles: true,
-            users: true,
+            userRoles: true,
           },
         },
       },
@@ -32,21 +32,19 @@ export const userRoleRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      for (const userId of input.userIds) {
-        await ctx.db.user.update({
-          data: {
-            userRoleId: input.roleId,
-          },
-          where: {
-            id: userId,
-          },
-        });
-      }
-      return ctx.db.userRole.findUniqueOrThrow({
+      await ctx.db.userRole.createMany({
+        data: input.userIds.map((userId) => ({
+          userId,
+          roleId: input.roleId,
+        })),
+        skipDuplicates: true,
+      });
+      return ctx.db.role.findUniqueOrThrow({
         include: {
           _count: {
             select: {
               permissionRoles: true,
+              userRoles: true,
             },
           },
         },
@@ -86,7 +84,7 @@ export const userRoleRouter = {
           },
         });
       }
-      return ctx.db.userRole.findUniqueOrThrow({
+      return ctx.db.role.findUniqueOrThrow({
         include: {
           _count: {
             select: {
@@ -100,7 +98,7 @@ export const userRoleRouter = {
       });
     }),
   get: protectedProcedure.input(z.string().min(1)).query(({ ctx, input }) => {
-    return ctx.db.userRole.findUniqueOrThrow({
+    return ctx.db.role.findUniqueOrThrow({
       where: {
         id: input,
         schoolId: ctx.schoolId,
@@ -110,7 +108,7 @@ export const userRoleRouter = {
         _count: {
           select: {
             permissionRoles: true,
-            users: true,
+            userRoles: true,
           },
         },
       },
@@ -124,7 +122,7 @@ export const userRoleRouter = {
       }),
     )
     .query(async ({ ctx, input }) => {
-      return ctx.db.userRole.findMany({
+      return ctx.db.role.findMany({
         where: {
           schoolId: ctx.schoolId,
           ...(input.q ? {} : {}),
@@ -161,12 +159,12 @@ export const userRoleRouter = {
       z.object({
         name: z.string().min(1),
         description: z.string().min(1),
-        level: z.enum(UserRoleLevel).default(UserRoleLevel.LEVEL4),
+        level: z.enum(RoleLevel).default(RoleLevel.LEVEL4),
         isActive: z.boolean().optional().default(true),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.userRole.create({
+      return ctx.db.role.create({
         data: {
           name: input.name,
           isActive: input.isActive,
@@ -182,12 +180,12 @@ export const userRoleRouter = {
         id: z.string().min(1),
         name: z.string().min(1),
         description: z.string().min(1),
-        level: z.enum(UserRoleLevel).default(UserRoleLevel.LEVEL4),
+        level: z.enum(RoleLevel).default(RoleLevel.LEVEL4),
         isActive: z.boolean().optional().default(true),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.userRole.update({
+      return ctx.db.role.update({
         where: {
           id: input.id,
         },
@@ -209,19 +207,17 @@ export const userRoleRouter = {
       }),
     )
     .mutation(({ ctx, input }) => {
-      return ctx.db.user.update({
-        data: {
-          userRoleId: null,
-        },
+      return ctx.db.userRole.deleteMany({
         where: {
-          id: input.userId,
+          roleId: input.roleId,
+          userId: input.userId,
         },
       });
     }),
   delete: protectedProcedure
     .input(z.string().min(1))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.userRole.delete({
+      return ctx.db.role.delete({
         where: {
           id: input,
         },

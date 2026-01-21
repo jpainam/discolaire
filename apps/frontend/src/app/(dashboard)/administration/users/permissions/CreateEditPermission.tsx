@@ -309,7 +309,7 @@ export function AddPermissionToRole({
   const t = useTranslations();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const rolesQuery = useQuery(trpc.userRole.all.queryOptions());
+  const rolesQuery = useQuery(trpc.role.all.queryOptions());
   const [permissionIds, setPermissionIds] = useState<string[]>([]);
   const addToRoleMutation = useMutation(
     trpc.permission.addToRole.mutationOptions({

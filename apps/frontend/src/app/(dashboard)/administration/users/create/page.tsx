@@ -9,7 +9,7 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { CreateEditUser } from "./CreateEditUser";
 
 export default async function Page() {
-  batchPrefetch([trpc.userRole.all.queryOptions()]);
+  batchPrefetch([trpc.role.all.queryOptions()]);
   const t = await getTranslations();
   return (
     <HydrateClient>

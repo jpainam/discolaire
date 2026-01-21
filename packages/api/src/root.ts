@@ -47,6 +47,7 @@ import { photoRouter } from "./routers/photo";
 import { recipientRouter } from "./routers/recipient";
 import { religionRouter } from "./routers/religion";
 import { reportCardRouter } from "./routers/reportCard";
+import { roleRouter } from "./routers/role";
 import { scheduleDivisionRouter } from "./routers/scheduleDivision";
 import { scheduleTaskRouter } from "./routers/scheduleTask";
 import { schoolRouter } from "./routers/school";
@@ -69,7 +70,6 @@ import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
 import { userRouter } from "./routers/user";
 import { userNotificationRouter } from "./routers/userNotification";
-import { userRoleRouter } from "./routers/userRole";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
@@ -107,7 +107,7 @@ export const appRouter = createTRPCRouter({
   schoolYearEvent: schoolYearEventRouter,
   school: schoolRouter,
   email: emailRouter,
-  userRole: userRoleRouter,
+  role: roleRouter,
   inventoryUsage: inventoryUsageRouter,
   studentContact: studentContactRouter,
   calendarEvent: calendarEventRouter,
