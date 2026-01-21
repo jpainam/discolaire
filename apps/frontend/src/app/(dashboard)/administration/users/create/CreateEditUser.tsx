@@ -32,9 +32,7 @@ import { useTRPC } from "~/trpc/react";
 export function CreateEditUser() {
   const trpc = useTRPC();
   const [roleIds, setRoleIds] = useState<string[]>([]);
-  const { data: roles, isPending } = useSuspenseQuery(
-    trpc.userRole.all.queryOptions(),
-  );
+  const { data: roles } = useSuspenseQuery(trpc.userRole.all.queryOptions());
   const t = useTranslations();
   return (
     <div className="grid grid-cols-1 items-start gap-4 p-4 lg:grid-cols-2">

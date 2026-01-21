@@ -42,7 +42,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <CardFooter>
           <p className="text-muted-foreground text-xs">
             Dernière connexion:{" "}
-            {lastSession?.updatedAt?.toLocaleDateString(locale, {
+            {lastSession?.updatedAt.toLocaleDateString(locale, {
               day: "2-digit",
               month: "short",
               year: "numeric",
