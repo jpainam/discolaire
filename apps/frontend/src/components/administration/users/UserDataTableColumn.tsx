@@ -1,6 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Link from "next/link";
+import { AddInvoiceIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -20,7 +22,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { DeleteIcon, ViewIcon } from "~/icons";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
@@ -76,8 +78,8 @@ export function useUserColumns() {
             const user = row.original;
             return (
               <Link
-                href={`/users/${user.id}`}
-                className="hover:text-blue-600 hover:underline"
+                href={`/administration/users/${user.id}`}
+                className="hover:underline"
               >
                 {user.username}
               </Link>
@@ -187,6 +189,26 @@ function ActionCell({ user }: { user: User }) {
           >
             <ViewIcon />
             {t("details")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(`/administration/users/${user.id}/edit`);
+            }}
+          >
+            <EditIcon />
+            {t("edit")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              router.push(`/administration/users/${user.id}/permissions`);
+            }}
+          >
+            <HugeiconsIcon
+              icon={AddInvoiceIcon}
+              strokeWidth={2}
+              className="size-4"
+            />
+            Permissions
           </DropdownMenuItem>
           {canDeleteUser && (
             <>

@@ -11,7 +11,6 @@ import {
   DataTableViewOptionsV2,
   useDataTableV2,
 } from "~/components/datatable_v2";
-import { Button } from "~/components/ui/button";
 import { useTRPC } from "~/trpc/react";
 import { useUserColumns } from "./UserDataTableColumn";
 
@@ -26,7 +25,7 @@ export function UserDataTableV2Test() {
   const { table, state } = useDataTableV2({
     data: tableData,
     columns,
-    pageSize: 30,
+    pageSize: 20,
     rowCount,
     manualPagination: true,
     manualSorting: true,
@@ -107,31 +106,25 @@ export function UserDataTableV2Test() {
   }, [data, state.pagination.pageIndex]);
 
   return (
-    <>
-      {/* <div className="text-muted-foreground bg-muted/40 rounded-md border p-2 text-xs">
-        pages: {data?.pages.length ?? 0} | rowCount: {rowCount} | tableData:{" "}
-        {tableData.length} | pageIndex: {state.pagination.pageIndex}
-      </div> */}
-      <DataTableV2
-        table={table}
-        isLoading={isFetching || isFetchingNextPage}
-        toolbar={
-          <DataTableToolbarV2
-            table={table}
-            rightActions={<Button variant="outline">Print</Button>}
-            searchPlaceholder="Search users..."
-            filterFields={[
-              {
-                id: "profile",
-                label: "Profile",
-                options: profileOptions,
-              },
-            ]}
-          >
-            <DataTableViewOptionsV2 table={table} />
-          </DataTableToolbarV2>
-        }
-      />
-    </>
+    <DataTableV2
+      table={table}
+      isLoading={isFetching || isFetchingNextPage}
+      toolbar={
+        <DataTableToolbarV2
+          table={table}
+          // rightActions={<Button variant="outline">Print</Button>}
+          searchPlaceholder="Search users..."
+          filterFields={[
+            {
+              id: "profile",
+              label: "Profile",
+              options: profileOptions,
+            },
+          ]}
+        >
+          <DataTableViewOptionsV2 table={table} />
+        </DataTableToolbarV2>
+      }
+    />
   );
 }

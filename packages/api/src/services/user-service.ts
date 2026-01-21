@@ -186,19 +186,26 @@ export class UserService {
   async getPermissions(userId: string) {
     const user = await this.db.user.findUniqueOrThrow({
       where: { id: userId },
-      include: {
+      select: {
+        permissions: true,
         userRole: {
-          include: {
+          select: {
             permissionRoles: {
-              include: {
-                permission: true,
+              select: {
+                effect: true,
+                condition: true,
+                permission: {
+                  select: {
+                    resource: true,
+                  },
+                },
               },
             },
           },
         },
       },
     });
-    const perms = user.permissions as {
+    const perms = (user.permissions ?? []) as {
       resource: string;
       action: string;
       effect: string;
