@@ -108,6 +108,10 @@ export function AdminSidebar({
             url: "/administration/users",
           },
           {
+            title: "Create",
+            url: "/administration/users/create",
+          },
+          {
             title: "Permissions",
             url: "/administration/users/permissions",
           },

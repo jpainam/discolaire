@@ -1,4 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
+import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod/v4";
 
@@ -362,5 +363,22 @@ export const staffRouter = {
     .input(z.string().min(1))
     .query(({ ctx, input }) => {
       return ctx.services.staff.getStudents(input, ctx.schoolYearId);
+    }),
+
+  permissions: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      const staff = await ctx.db.staff.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+      });
+      if (!staff.userId) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Le staff n'est pas de compte utilisateur",
+        });
+      }
+      return ctx.services.user.getPermissions(staff.userId);
     }),
 } satisfies TRPCRouterRecord;

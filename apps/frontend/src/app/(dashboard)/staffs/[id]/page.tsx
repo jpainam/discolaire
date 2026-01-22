@@ -17,6 +17,7 @@ import { StaffTeachingTable } from "~/components/staffs/StaffTeachingTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { GradeIcon } from "~/icons";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { StaffPermissionTable } from "./permissions/StaffPermissionTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -56,7 +57,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="timeline">timeline</TabsContent>
-        <TabsContent value="permissions">permissions</TabsContent>
+
         <TabsContent value="teachings">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<TableSkeleton rows={3} cols={4} />}>
@@ -69,6 +70,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<TableSkeleton rows={8} cols={4} />}>
               <StaffGradesheetTable staffId={params.id} />
+            </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
+        <TabsContent value="permissions">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<TableSkeleton rows={8} cols={2} />}>
+              <StaffPermissionTable />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
