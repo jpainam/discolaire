@@ -89,7 +89,7 @@ export default async function Layout(props: {
       <BreadcrumbsSetter
         items={[
           { label: t("home"), href: "/" },
-          { label: t("students"), href: "/students", icon: "students" },
+          { label: t("students"), href: "/students", },
           { label: getFullName(student) },
         ]}
       />

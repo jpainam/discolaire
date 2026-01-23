@@ -49,8 +49,8 @@ export function ContactHeader() {
     <div className="grid flex-row items-center gap-2 border-b px-4 py-1 md:flex">
       <BreadcrumbsSetter
         items={[
-          { label: t("home"), href: "/", icon: "home" },
-          { label: t("contacts"), href: "/contacts", icon: "contact" },
+          { label: t("home"), href: "/", },
+          { label: t("contacts"), href: "/contacts", },
         ]}
       />
       <Label className="hidden md:block">{t("contacts")}</Label>

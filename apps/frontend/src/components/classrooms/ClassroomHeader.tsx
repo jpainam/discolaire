@@ -85,7 +85,7 @@ export function ClassroomHeader() {
     <div className="grid w-full flex-row items-center gap-2 px-4 py-1 md:flex">
       <BreadcrumbsSetter
         items={[
-          { label: t("home"), href: "/", icon: "home" },
+          { label: t("home"), href: "/", },
           { label: t("classrooms"), href: "/classrooms" },
         ]}
       />

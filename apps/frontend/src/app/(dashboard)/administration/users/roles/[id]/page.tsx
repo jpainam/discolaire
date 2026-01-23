@@ -84,7 +84,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   </Badge>
                   <Label>{t("Users")}</Label>
                   <Badge variant={"default"} className="rounded-full">
-                    {role._count.users}
+                    {role._count.userRoles}
                   </Badge>
                 </CardContent>
               </Card>

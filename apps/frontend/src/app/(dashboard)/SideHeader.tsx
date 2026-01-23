@@ -36,7 +36,7 @@ export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" />
-        <Breadcrumb>
+        <Breadcrumb className="hidden lg:flex">
           <BreadcrumbList>
             {breadcrumbs.map((it, idx) => {
               const last = idx === breadcrumbs.length - 1;

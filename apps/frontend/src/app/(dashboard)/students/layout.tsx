@@ -11,8 +11,8 @@ export default async function Layout(props: PropsWithChildren) {
     <ErrorBoundary errorComponent={ErrorFallback}>
       <BreadcrumbsSetter
         items={[
-          { label: t("home"), href: "/", icon: "home" },
-          { label: t("students"), href: "/students", icon: "students" },
+          { label: t("home"), href: "/", },
+          { label: t("students"), href: "/students" },
         ]}
       />
       {props.children}

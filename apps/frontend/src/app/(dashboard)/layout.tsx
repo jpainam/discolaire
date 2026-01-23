@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
+export const dynamic = "force-dynamic";
+
 import { getSession } from "~/auth/server";
 import { AppSidebar } from "~/components/app-sidebar";
 import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
