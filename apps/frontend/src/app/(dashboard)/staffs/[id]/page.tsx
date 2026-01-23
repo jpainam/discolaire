@@ -33,6 +33,7 @@ export default async function Page(props: {
     trpc.staff.permissions.queryOptions(staffId),
     trpc.module.all.queryOptions(),
     trpc.permission.all.queryOptions(),
+    trpc.subject.gradesheetCount.queryOptions({ teacherId: staffId }),
   ]);
   return (
     <HydrateClient>

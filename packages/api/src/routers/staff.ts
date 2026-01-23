@@ -314,6 +314,8 @@ export const staffRouter = {
         include: {
           teacher: true,
           subjectGroup: true,
+          programs: true,
+          timetables: true,
           course: true,
           classroom: {
             include: {

@@ -164,12 +164,18 @@ export const subjectRouter = {
       });
     }),
   gradesheetCount: protectedProcedure
-    .input(z.object({ classroomId: z.string() }))
+    .input(
+      z.object({
+        classroomId: z.string().optional(),
+        teacherId: z.string().optional(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const data = await ctx.db.gradeSheet.findMany({
         where: {
           subject: {
-            classroomId: input.classroomId,
+            ...(input.classroomId ? { classroomId: input.classroomId } : {}),
+            ...(input.teacherId ? { teacherId: input.teacherId } : {}),
           },
         },
       });
