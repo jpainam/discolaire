@@ -182,7 +182,7 @@ export function StudentContactRelationship({
                 <CheckboxField
                   disabled={disabled}
                   name="accessAttendance"
-                  label={t("attendance")}
+                  label={t("Attendance")}
                 />
                 <CheckboxField
                   disabled={disabled}

@@ -140,7 +140,7 @@ export function StudentAttendanceCount({
           {/* Attendance Overview */}
           <div>
             <Label className="mb-2.5 font-medium">
-              {t("attendance")} {terms.find((t) => t.id == termId)?.name}
+              {t("Attendance")} {terms.find((t) => t.id == termId)?.name}
             </Label>
             <div className="grid grid-cols-4 gap-1">
               {performance.map((item) => (

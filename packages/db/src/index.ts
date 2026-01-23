@@ -25,7 +25,7 @@ function withTenantSchema(connectionString: string, tenant: string): string {
   }
 }
 // DO NOT USE public as it's the default schema
-const tenants = ["csac", "demo", "ipbw", "app"];
+const tenants = ["csac", "demo", "ipbw", "app", "public"];
 export function getDb({ connectionString, tenant }: GetDbParams): PrismaClient {
   if (!tenants.includes(tenant)) {
     throw new Error(
@@ -43,7 +43,7 @@ export function getDb({ connectionString, tenant }: GetDbParams): PrismaClient {
   }
   const adapter = new PrismaPg(
     { connectionString: connectionString },
-    { schema: tenant },
+    { schema: "public" }, // -- update this this tenant when migration complete
   );
 
   const prisma = new PrismaClient({ adapter });

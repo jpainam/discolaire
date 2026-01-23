@@ -92,8 +92,8 @@ export function MainSidebar({
       icon: <GroupsIcon />,
       items: [
         { name: "List", url: "/staffs" },
-        { name: "Presence", url: "/staffs/attendances" },
-        { name: "Ajouter", url: "/staffs/create" },
+        { name: "Attendance", url: "/staffs/attendances" },
+        { name: "add", url: "/staffs/create" },
       ],
     });
   }

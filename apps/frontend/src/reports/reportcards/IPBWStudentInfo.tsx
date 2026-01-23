@@ -30,14 +30,17 @@ export function IPBWStudentInfo({
   const avatarDataUri = student.avatar
     ? `${getAssetUrl("avatar")}/${student.avatar}`
     : null;
-  let naiss =
-    student.dateOfBirth &&
-    Intl.DateTimeFormat(classroom.section?.name == "ANG" ? "en" : "fr", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(student.dateOfBirth);
-  naiss += "  " + t("à") + " " + student.placeOfBirth;
+  const dobLocale = classroom.section?.name == "ANG" ? "en" : "fr";
+  const formattedDob = student.dateOfBirth
+    ? Intl.DateTimeFormat(dobLocale, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(student.dateOfBirth)
+    : "";
+  const naiss =
+    `${formattedDob}  ${t("à")} ${student.placeOfBirth ?? ""}`.trim();
   return (
     <View
       style={{
@@ -115,7 +118,7 @@ export function IPBWStudentInfo({
           <InfoItem
             style={{ width: "60%" }}
             label={t("Date et lieu de naissance")}
-            value={naiss?.toString() ?? ""}
+            value={naiss}
           />
           <InfoItem
             style={{ width: "15%" }}
