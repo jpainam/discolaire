@@ -4,6 +4,18 @@ import { generateRandomString } from "better-auth/crypto";
 import type { Auth } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
 
+type PermissionSource =
+  | {
+      type: "direct";
+    }
+  | {
+      type: "role";
+      role: {
+        id: string;
+        name: string;
+      };
+    };
+
 export class UserService {
   private db: PrismaClient;
   constructor(db: PrismaClient) {
@@ -15,6 +27,7 @@ export class UserService {
       resource: string;
       effect: "allow" | "deny";
       condition?: Record<string, unknown> | null;
+      sources: PermissionSource[];
     }[],
   ) {
     const merged = new Map<
@@ -23,6 +36,7 @@ export class UserService {
         resource: string;
         effect: "allow" | "deny";
         condition?: Record<string, unknown> | null;
+        sources: PermissionSource[];
       }
     >();
 
@@ -33,25 +47,41 @@ export class UserService {
         merged.set(key, permission);
         continue;
       }
+      const sourceKey = (source: PermissionSource) =>
+        source.type === "direct" ? "direct" : `role:${source.role.id}`;
+      const combinedSources = [
+        ...existing.sources,
+        ...permission.sources,
+      ].filter(
+        (source, index, self) =>
+          self.findIndex((entry) => sourceKey(entry) === sourceKey(source)) ===
+          index,
+      );
       if (existing.effect === "deny") {
         if (permission.effect === "deny" && !existing.condition) {
+          merged.set(key, { ...existing, sources: combinedSources });
           continue;
         }
         if (permission.effect === "deny" && !permission.condition) {
-          merged.set(key, permission);
+          merged.set(key, { ...permission, sources: combinedSources });
+          continue;
         }
+        merged.set(key, { ...existing, sources: combinedSources });
         continue;
       }
       if (permission.effect === "deny") {
-        merged.set(key, permission);
+        merged.set(key, { ...permission, sources: combinedSources });
         continue;
       }
       if (!existing.condition && permission.condition) {
+        merged.set(key, { ...existing, sources: combinedSources });
         continue;
       }
       if (existing.condition && !permission.condition) {
-        merged.set(key, permission);
+        merged.set(key, { ...permission, sources: combinedSources });
+        continue;
       }
+      merged.set(key, { ...existing, sources: combinedSources });
     }
 
     return Array.from(merged.values());
@@ -192,6 +222,8 @@ export class UserService {
           select: {
             role: {
               select: {
+                id: true,
+                name: true,
                 permissionRoles: {
                   select: {
                     effect: true,
@@ -220,26 +252,36 @@ export class UserService {
         resource: `${p.resource}.${p.action}`.toLowerCase(),
         effect: p.effect.toLowerCase() as "allow" | "deny",
         condition: p.condition,
+        sources: [
+          {
+            type: "direct" as const,
+          },
+        ],
       };
     });
     const rolePermissions = user.userRoles.flatMap((userRole) =>
       userRole.role.permissionRoles.map((permissionRole) => {
         return {
-          effect: permissionRole.effect,
+          effect: permissionRole.effect.toLowerCase() as "allow" | "deny",
           resource: permissionRole.permission.resource,
-          condition: permissionRole.condition,
+          condition: permissionRole.condition as
+            | Record<string, unknown>
+            | null
+            | undefined,
+          sources: [
+            {
+              type: "role" as const,
+              role: {
+                id: userRole.role.id,
+                name: userRole.role.name,
+              },
+            },
+          ],
         };
       }),
     );
 
-    return this.mergePermissions([
-      ...directPermissions,
-      ...(rolePermissions as {
-        resource: string;
-        effect: "allow" | "deny";
-        condition?: Record<string, unknown> | null;
-      }[]),
-    ]);
+    return this.mergePermissions([...directPermissions, ...rolePermissions]);
   }
   async attachUser({
     entityId,

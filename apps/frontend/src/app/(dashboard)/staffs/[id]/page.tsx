@@ -19,16 +19,24 @@ import { GradeIcon } from "~/icons";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StaffPermissionTable } from "./permissions/StaffPermissionTable";
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ tabId?: string }>;
+}) {
   const params = await props.params;
+  const staffId = params.id;
+  const searchParams = await props.searchParams;
   const t = await getTranslations();
   batchPrefetch([
-    trpc.staff.teachings.queryOptions(params.id),
-    trpc.staff.gradesheets.queryOptions(params.id),
+    trpc.staff.teachings.queryOptions(staffId),
+    trpc.staff.gradesheets.queryOptions(staffId),
+    trpc.staff.permissions.queryOptions(staffId),
+    trpc.module.all.queryOptions(),
+    trpc.permission.all.queryOptions(),
   ]);
   return (
     <HydrateClient>
-      <Tabs defaultValue="timeline" className="w-full">
+      <Tabs defaultValue={searchParams.tabId ?? "timeline"} className="w-full">
         <TabsList>
           <TabsTrigger value="timeline">
             <History className="h-4 w-4" />
@@ -76,7 +84,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <TabsContent value="permissions">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<TableSkeleton rows={8} cols={2} />}>
-              <StaffPermissionTable />
+              <StaffPermissionTable staffId={staffId} />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>

@@ -10,6 +10,7 @@ export const moduleRouter = {
         schoolId: ctx.schoolId,
       },
       include: {
+        permissions: true,
         _count: {
           select: {
             permissions: true,

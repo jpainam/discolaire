@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Link from "next/link";
-import { AddInvoiceIcon } from "@hugeicons/core-free-icons";
+import { AbacusIcon, AddInvoiceIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal } from "lucide-react";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { Badge } from "~/components/base-badge";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -25,6 +26,7 @@ import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { useSheet } from "~/hooks/use-sheet";
 
 type User = RouterOutputs["user"]["all"]["data"][number];
 
@@ -124,6 +126,32 @@ export function useUserColumns() {
             );
           },
         },
+        {
+          accessorKey: "userRoles",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("roles")} />
+          ),
+          cell: ({ row }) => {
+            const userRoles = row.original.userRoles;
+            return (
+              <div className="flex items-center gap-2">
+                {userRoles.length == 0 && (
+                  <span className="text-destructive">Aucun rôle</span>
+                )}
+                {userRoles.map((ur, index) => (
+                  <Badge
+                    key={index}
+                    size={"xs"}
+                    variant={"secondary"}
+                    appearance={"light"}
+                  >
+                    {ur.role.name}
+                  </Badge>
+                ))}
+              </div>
+            );
+          },
+        },
         // {
         //   accessorKey: "emailVerified",
         //   header: ({ column }) => (
@@ -161,6 +189,7 @@ function ActionCell({ user }: { user: User }) {
   const canDeleteUser = useCheckPermission("user.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const {openSheet} = useSheet();
 
   const deleteUserMutation = useMutation(
     trpc.user.delete.mutationOptions({
@@ -197,6 +226,21 @@ function ActionCell({ user }: { user: User }) {
           >
             <EditIcon />
             {t("edit")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              // assign roles
+              openSheet({
+                view: <AddRole
+              })
+            }}
+          >
+            <HugeiconsIcon
+              icon={AbacusIcon}
+              strokeWidth={2}
+              className="size-4"
+            />
+            {t("roles")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {

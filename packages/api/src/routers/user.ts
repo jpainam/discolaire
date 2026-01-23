@@ -166,6 +166,13 @@ export const userRouter = {
         ctx.db.user.count({ where }),
         ctx.db.user.findMany({
           where,
+          include: {
+            userRoles: {
+              select: {
+                role: true,
+              },
+            },
+          },
           orderBy: resolvedOrderBy,
           take,
           ...(input.cursor
