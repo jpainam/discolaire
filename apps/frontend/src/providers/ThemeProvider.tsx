@@ -4,8 +4,10 @@ import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
+import { defaultThemes } from "~/themes";
+
 const COOKIE_NAME = "active_theme";
-const DEFAULT_THEME = "caffeine";
+const DEFAULT_THEME = "default";
 
 function setThemeCookie(theme: string) {
   if (typeof window === "undefined") return;
@@ -30,19 +32,32 @@ export function ThemeProvider({
   initialTheme?: string;
   isScaled?: boolean;
 }) {
-  const [activeTheme, setActiveTheme] = useState<string>(
-    () => initialTheme ?? DEFAULT_THEME,
+  const [activeTheme, setActiveTheme] = useState<string>(() =>
+    initialTheme && Object.keys(defaultThemes).includes(initialTheme)
+      ? initialTheme
+      : DEFAULT_THEME,
   );
+  const setActiveThemeSafe = (theme: string) => {
+    setActiveTheme(
+      Object.keys(defaultThemes).includes(theme) ? theme : DEFAULT_THEME,
+    );
+  };
 
   useEffect(() => {
-    setThemeCookie(activeTheme);
+    const nextTheme = Object.keys(defaultThemes).includes(activeTheme)
+      ? activeTheme
+      : DEFAULT_THEME;
+
+    setThemeCookie(nextTheme);
 
     Array.from(document.body.classList)
       .filter((className) => className.startsWith("theme-"))
       .forEach((className) => {
         document.body.classList.remove(className);
       });
-    document.body.classList.add(`theme-${activeTheme}`);
+    if (nextTheme !== "default") {
+      document.body.classList.add(`theme-${nextTheme}`);
+    }
     if (isScaled) document.body.classList.add("theme-scaled");
     // if (activeTheme.endsWith("-scaled")) {
     //   document.body.classList.add("theme-scaled");
@@ -58,7 +73,11 @@ export function ThemeProvider({
       enableColorScheme
     >
       <ThemeContext.Provider
-        value={{ activeTheme, setActiveTheme, isScaled: isScaled ?? false }}
+        value={{
+          activeTheme,
+          setActiveTheme: setActiveThemeSafe,
+          isScaled: isScaled ?? false,
+        }}
       >
         {children}
       </ThemeContext.Provider>

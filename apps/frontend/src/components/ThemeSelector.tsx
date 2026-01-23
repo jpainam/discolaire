@@ -48,7 +48,7 @@ export function ThemeSelector() {
   let themeKey: ThemeKey = activeTheme as ThemeKey;
   if (!Object.keys(defaultThemes).includes(activeTheme)) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    themeKey = "amber_minimal";
+    themeKey = "default";
   }
 
   return (
@@ -131,7 +131,7 @@ function ThemeControls() {
 
   const randomize = useCallback(() => {
     const random = Math.floor(Math.random() * presetNames.length);
-    setActiveTheme(presetNames[random] ?? "amber_minimal");
+    setActiveTheme(presetNames[random] ?? "default");
   }, [presetNames, setActiveTheme]);
 
   const toggleTheme = useCallback(() => {

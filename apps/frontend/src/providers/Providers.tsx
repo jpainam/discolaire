@@ -8,16 +8,27 @@ import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/lib/utils";
 import ConfirmDialogProvider from "~/providers/confirm-dialog-provider";
 import { ThemeProvider } from "~/providers/ThemeProvider";
+import { defaultThemes } from "~/themes";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ProgressBarProvider } from "./progress-bar-provider";
 
 export async function Providers(props: PropsWithChildren) {
   const cookieStore = await cookies();
-  const activeThemeValue = cookieStore.get("active_theme")?.value ?? "caffeine";
+  const storedTheme = cookieStore.get("active_theme")?.value;
+  const activeThemeValue =
+    storedTheme && Object.keys(defaultThemes).includes(storedTheme)
+      ? storedTheme
+      : "default";
   const isScaled = cookieStore.get("theme-scaled")?.value == "true";
 
   return (
-    <div className={cn(activeThemeValue ? `theme-${activeThemeValue}` : "")}>
+    <div
+      className={cn(
+        activeThemeValue && activeThemeValue !== "default"
+          ? `theme-${activeThemeValue}`
+          : "",
+      )}
+    >
       <NextIntlClientProvider>
         <ThemeProvider initialTheme={activeThemeValue} isScaled={isScaled}>
           <NuqsAdapter>
