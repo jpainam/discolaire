@@ -26,7 +26,6 @@ import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { useSheet } from "~/hooks/use-sheet";
 
 type User = RouterOutputs["user"]["all"]["data"][number];
 
@@ -189,7 +188,7 @@ function ActionCell({ user }: { user: User }) {
   const canDeleteUser = useCheckPermission("user.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const {openSheet} = useSheet();
+  //const { openSheet } = useSheet();
 
   const deleteUserMutation = useMutation(
     trpc.user.delete.mutationOptions({
@@ -230,9 +229,6 @@ function ActionCell({ user }: { user: User }) {
           <DropdownMenuItem
             onSelect={() => {
               // assign roles
-              openSheet({
-                view: <AddRole
-              })
             }}
           >
             <HugeiconsIcon

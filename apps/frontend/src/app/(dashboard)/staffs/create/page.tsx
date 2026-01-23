@@ -903,3 +903,7 @@
 //     </div>
 //   );
 // }
+
+export default function Page() {
+  return <div>Create staff</div>;
+}
