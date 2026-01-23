@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useMemo, useState } from "react";
@@ -105,7 +106,7 @@ export function StaffPermissionTable({ staffId }: { staffId: string }) {
                     </AccordionTrigger>
                     <AccordionContent className="grid grid-cols-1 gap-2 pt-1">
                       {perms?.map((p, idx) => {
-                        const staffperm = staffperms.get(p.resource);
+                        //const staffperm = staffperms.get(p.resource);
                         return (
                           <Card
                             key={`${p.resource}-${idx}`}

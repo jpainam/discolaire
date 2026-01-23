@@ -55,9 +55,7 @@ export function UserRoleUserList({ roleId }: { roleId: string }) {
       limit: 10,
     }),
   );
-  const { data: role } = useSuspenseQuery(
-    trpc.role.get.queryOptions(roleId),
-  );
+  const { data: role } = useSuspenseQuery(trpc.role.get.queryOptions(roleId));
   const queryClient = useQueryClient();
   const confirm = useConfirm();
   const removeUserFromRole = useMutation(

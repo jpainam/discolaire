@@ -67,7 +67,7 @@ export default async function Layout(props: {
     <div className="grid grid-cols-1">
       <BreadcrumbsSetter
         items={[
-          { label: "home", href: "/", },
+          { label: "home", href: "/" },
           { label: "classrooms", href: "/classrooms" },
           { label: classroom.name },
         ]}
