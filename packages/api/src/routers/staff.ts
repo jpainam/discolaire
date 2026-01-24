@@ -297,33 +297,10 @@ export const staffRouter = {
         },
       });
     }),
-  teachings: protectedProcedure
+  subjects: protectedProcedure
     .input(z.string().min(1))
     .query(({ ctx, input }) => {
-      return ctx.db.subject.findMany({
-        orderBy: {
-          classroomId: "asc",
-        },
-        where: {
-          teacherId: input,
-          classroom: {
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          },
-        },
-        include: {
-          teacher: true,
-          subjectGroup: true,
-          programs: true,
-          timetables: true,
-          course: true,
-          classroom: {
-            include: {
-              headTeacher: true,
-            },
-          },
-        },
-      });
+      return ctx.services.staff.getSubjects(input, ctx.schoolYearId);
     }),
   documents: protectedProcedure
     .input(z.string().min(1))
@@ -383,4 +360,42 @@ export const staffRouter = {
       }
       return ctx.services.user.getPermissions(staff.userId);
     }),
+  stats: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const classrooms = await ctx.services.staff.getClassrooms(
+      input,
+      ctx.schoolYearId,
+    );
+
+    const subjects = await ctx.services.staff.getSubjects(
+      input,
+      ctx.schoolYearId,
+    );
+    const subjectIds = subjects.map((s) => s.id);
+    const grades = await ctx.db.gradeSheet.groupBy({
+        by: ["g"],
+      _avg: {
+        grade: true,
+      },
+
+      where: {
+        gradeSheet: {
+          subjectId: {
+            in: subjectIds,
+          },
+        },
+      },
+    });
+    const students = await ctx.services.staff.getStudents(
+      input,
+      ctx.schoolYearId,
+    );
+    return {
+      classrooms: classrooms.length,
+      students: students.length,
+      subjects: subjects.length,
+      gradesheets: subjects
+        .map((s) => s._count.gradeSheets)
+        .reduce((prev, curr) => prev + curr, 0),
+    };
+  }),
 } satisfies TRPCRouterRecord;

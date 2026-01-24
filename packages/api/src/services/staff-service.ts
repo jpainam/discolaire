@@ -12,6 +12,38 @@ export class StaffService {
       },
     });
   }
+  getSubjects(staffId: string, schoolYearId: string) {
+    return this.db.subject.findMany({
+      orderBy: {
+        classroomId: "asc",
+      },
+      where: {
+        teacherId: staffId,
+        classroom: {
+          //schoolId: ctx.schoolId,
+          schoolYearId: schoolYearId,
+        },
+      },
+
+      include: {
+        _count: {
+          select: {
+            gradeSheets: true,
+          },
+        },
+        teacher: true,
+        subjectGroup: true,
+        programs: true,
+        timetables: true,
+        course: true,
+        classroom: {
+          include: {
+            headTeacher: true,
+          },
+        },
+      },
+    });
+  }
   getClassrooms(staffId: string, schoolYearId: string) {
     return this.db.classroom.findMany({
       where: {

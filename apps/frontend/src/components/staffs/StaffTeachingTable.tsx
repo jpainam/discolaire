@@ -29,7 +29,7 @@ export function StaffTeachingTable({ staffId }: { staffId: string }) {
   );
 
   const { data: teachings } = useSuspenseQuery(
-    trpc.staff.teachings.queryOptions(staffId),
+    trpc.staff.subjects.queryOptions(staffId),
   );
   const { openSheet } = useSheet();
   const t = useTranslations();

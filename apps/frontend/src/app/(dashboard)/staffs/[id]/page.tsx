@@ -17,7 +17,13 @@ import { StaffTeachingTable } from "~/components/staffs/StaffTeachingTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { GradeIcon } from "~/icons";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import { ActivityTimeline } from "./ActivityTimeline2";
+import { ClassPerformance } from "./ClassPerformance";
+import { PendingTasks } from "./PendingTasks";
 import { StaffPermissionTable } from "./permissions/StaffPermissionTable";
+import { QuickActions } from "./QuickActions";
+import { StatsCards } from "./StatsCards";
+import { TodaySchedule } from "./TodaySchedule";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -28,12 +34,13 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const t = await getTranslations();
   batchPrefetch([
-    trpc.staff.teachings.queryOptions(staffId),
+    trpc.staff.subjects.queryOptions(staffId),
     trpc.staff.gradesheets.queryOptions(staffId),
     trpc.staff.permissions.queryOptions(staffId),
     trpc.module.all.queryOptions(),
     trpc.permission.all.queryOptions(),
     trpc.subject.gradesheetCount.queryOptions({ teacherId: staffId }),
+    trpc.staff.stats.queryOptions(staffId),
   ]);
   return (
     <HydrateClient>
@@ -65,7 +72,38 @@ export default async function Page(props: {
             <Folders className="h-4 w-4" /> {t("documents")}
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="timeline">timeline</TabsContent>
+        <TabsContent value="timeline">
+          <div className="space-y-4">
+            <StatsCards staffId={staffId} />
+            <div className="grid gap-4 lg:grid-cols-3">
+              <div className="lg:col-span-1">
+                <ClassPerformance />
+              </div>
+
+              <div className="lg:col-span-2">
+                <ActivityTimeline />
+              </div>
+            </div>
+
+            {/* Bottom Section */}
+            <div className="grid gap-6 lg:grid-cols-3">
+              {/* Quick Actions */}
+              <div className="lg:col-span-1">
+                <QuickActions />
+              </div>
+
+              {/* Pending Tasks */}
+              <div className="lg:col-span-1">
+                <PendingTasks />
+              </div>
+
+              {/* Class Performance */}
+              <div className="lg:col-span-1">
+                <TodaySchedule />
+              </div>
+            </div>
+          </div>
+        </TabsContent>
 
         <TabsContent value="teachings">
           <ErrorBoundary errorComponent={ErrorFallback}>
