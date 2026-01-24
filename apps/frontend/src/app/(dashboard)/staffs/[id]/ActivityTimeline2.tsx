@@ -1,3 +1,6 @@
+"use client";
+
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { GitCompare, GitFork, GitMerge, GitPullRequest } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -11,6 +14,7 @@ import {
   TimelineSeparator,
   TimelineTitle,
 } from "~/components/ui/timeline";
+import { useTRPC } from "~/trpc/react";
 
 const items = [
   {
@@ -46,30 +50,38 @@ const items = [
   },
 ];
 
-export function ActivityTimeline() {
+export function ActivityTimeline({ staffId }: { staffId: string }) {
+  const trpc = useTRPC();
+  const { data: timeline } = useSuspenseQuery(
+    trpc.staff.timelines.queryOptions(staffId),
+  );
   return (
     <Card>
       <CardHeader>
         <CardTitle>Recent Activity</CardTitle>
       </CardHeader>
       <CardContent className="space-y-0">
-        <Timeline defaultValue={3}>
-          {items.map((item) => (
+        <Timeline defaultValue={3} className="text-xs">
+          {items.slice(0, 4).map((item) => (
             <TimelineItem
-              className="group-data-[orientation=vertical]/timeline:ms-10"
+              className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-4"
               key={item.id}
               step={item.id}
             >
               <TimelineHeader>
                 <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                <TimelineTitle className="mt-0.5">{item.title}</TimelineTitle>
+                <TimelineTitle className="mt-0.5 text-xs">
+                  {item.title}
+                </TimelineTitle>
                 <TimelineIndicator className="bg-primary/10 group-data-completed/timeline-item:bg-primary group-data-completed/timeline-item:text-primary-foreground flex size-6 items-center justify-center border-none group-data-[orientation=vertical]/timeline:-left-7">
                   <item.icon size={14} />
                 </TimelineIndicator>
               </TimelineHeader>
-              <TimelineContent>
+              <TimelineContent className="text-xs">
                 {item.description}
-                <TimelineDate className="mt-2 mb-0">{item.date}</TimelineDate>
+                <TimelineDate className="mt-2 mb-0 text-xs">
+                  {item.date}
+                </TimelineDate>
               </TimelineContent>
             </TimelineItem>
           ))}

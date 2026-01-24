@@ -370,21 +370,7 @@ export const staffRouter = {
       input,
       ctx.schoolYearId,
     );
-    const subjectIds = subjects.map((s) => s.id);
-    const grades = await ctx.db.gradeSheet.groupBy({
-        by: ["g"],
-      _avg: {
-        grade: true,
-      },
 
-      where: {
-        gradeSheet: {
-          subjectId: {
-            in: subjectIds,
-          },
-        },
-      },
-    });
     const students = await ctx.services.staff.getStudents(
       input,
       ctx.schoolYearId,

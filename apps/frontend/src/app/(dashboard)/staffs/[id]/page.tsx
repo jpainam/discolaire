@@ -14,6 +14,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { TableSkeleton } from "~/components/skeletons/table-skeleton";
 import { StaffGradesheetTable } from "~/components/staffs/profile/StaffGradesheetTable";
 import { StaffTeachingTable } from "~/components/staffs/StaffTeachingTable";
+import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { GradeIcon } from "~/icons";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
@@ -22,6 +23,7 @@ import { ClassPerformance } from "./ClassPerformance";
 import { PendingTasks } from "./PendingTasks";
 import { StaffPermissionTable } from "./permissions/StaffPermissionTable";
 import { QuickActions } from "./QuickActions";
+import { StaffTimetable } from "./StaffTimetable";
 import { StatsCards } from "./StatsCards";
 import { TodaySchedule } from "./TodaySchedule";
 
@@ -38,7 +40,9 @@ export default async function Page(props: {
     trpc.staff.gradesheets.queryOptions(staffId),
     trpc.staff.permissions.queryOptions(staffId),
     trpc.module.all.queryOptions(),
+    trpc.staff.timelines.queryOptions(staffId),
     trpc.permission.all.queryOptions(),
+    trpc.term.all.queryOptions(),
     trpc.subject.gradesheetCount.queryOptions({ teacherId: staffId }),
     trpc.staff.stats.queryOptions(staffId),
   ]);
@@ -77,11 +81,34 @@ export default async function Page(props: {
             <StatsCards staffId={staffId} />
             <div className="grid gap-4 lg:grid-cols-3">
               <div className="lg:col-span-1">
-                <ClassPerformance />
+                <ErrorBoundary errorComponent={ErrorFallback}>
+                  <Suspense
+                    fallback={
+                      <div className="grid grid-cols-1 gap-4">
+                        <Skeleton className="h-20" />
+                        <Skeleton className="h-20" />
+                      </div>
+                    }
+                  >
+                    <ClassPerformance staffId={staffId} />
+                  </Suspense>
+                </ErrorBoundary>
               </div>
 
               <div className="lg:col-span-2">
-                <ActivityTimeline />
+                <ErrorBoundary errorComponent={ErrorFallback}>
+                  <Suspense
+                    fallback={
+                      <div className="grid grid-cols-1 gap-2">
+                        {Array.from({ length: 4 }).map((_, t) => (
+                          <Skeleton className="h-10" key={t} />
+                        ))}
+                      </div>
+                    }
+                  >
+                    <ActivityTimeline staffId={staffId} />
+                  </Suspense>
+                </ErrorBoundary>
               </div>
             </div>
 
@@ -112,7 +139,9 @@ export default async function Page(props: {
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
-        <TabsContent value="timetables">timetables</TabsContent>
+        <TabsContent value="timetables">
+          <StaffTimetable />
+        </TabsContent>
         <TabsContent value="grades">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<TableSkeleton rows={8} cols={4} />}>

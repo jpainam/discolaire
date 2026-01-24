@@ -95,25 +95,24 @@ export function ContactTable() {
   const { openSheet } = useSheet();
 
   return (
-    <div className="">
-      <div className="border-border flex flex-col items-stretch gap-3 border-b p-4 sm:flex-row sm:items-center sm:gap-4">
-        <div className="flex flex-1 items-center gap-2 sm:gap-4">
-          <InputGroup className="h-8">
-            <InputGroupInput
-              className="w-full pl-8"
-              onChange={(e) => debounced(e.target.value)}
-              placeholder={t("search")}
-            />
-            <InputGroupAddon>
-              <Search />
-            </InputGroupAddon>
-            <InputGroupAddon align="inline-end">
-              {contacts?.length} results
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
+    <div className="space-y-2 px-4 pb-8">
+      <div className="">
+        <InputGroup>
+          <InputGroupInput
+            className="w-full pl-8"
+            onChange={(e) => debounced(e.target.value)}
+            placeholder={t("search")}
+          />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+          <InputGroupAddon align="inline-end">
+            {contacts?.length} results
+          </InputGroupAddon>
+        </InputGroup>
       </div>
-      <div className="overflow-hidden">
+
+      <div className="overflow-hidden rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>

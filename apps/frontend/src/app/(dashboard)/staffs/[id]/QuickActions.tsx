@@ -38,8 +38,8 @@ const actions = [
 export function QuickActions() {
   return (
     <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold">Quick Actions</CardTitle>
+      <CardHeader>
+        <CardTitle>Quick Actions</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-3">

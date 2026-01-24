@@ -11,6 +11,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 
@@ -24,16 +25,10 @@ export function ContactHeader() {
   return (
     <header className="bg-background border-b px-4 py-2">
       <div className="grid grid-cols-1 items-center justify-between gap-2 md:flex">
-        <div>
-          <h1 className="text-xl font-bold">{t("Contact Management")}</h1>
-          <p className="text-muted-foreground hidden text-sm md:flex">
-            {t("contact_title_description")}
-          </p>
-        </div>
-        <div className="grid grid-cols-2 items-center gap-3 md:flex">
+        <Label>{t("Contacts")}</Label>
+        <div className="grid grid-cols-2 items-center gap-2 md:flex">
           {canCreateContact && (
             <Button
-              size={"sm"}
               onClick={() => {
                 openSheet({
                   title: t("create"),
@@ -45,12 +40,12 @@ export function ContactHeader() {
               }}
             >
               <PlusIcon />
-              {t("Add a parent")}
+              {t("add")}
             </Button>
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} className="size-8" size={"icon"}>
+              <Button variant={"outline"} size={"icon"}>
                 <MoreVertical />
               </Button>
             </DropdownMenuTrigger>

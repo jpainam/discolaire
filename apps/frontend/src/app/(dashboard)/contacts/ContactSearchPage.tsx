@@ -36,24 +36,22 @@ export function ContactSearchPage() {
     setIsSearching(false);
   };
   return (
-    <div className="flex flex-col gap-2 px-4 py-2">
-      <div className="flex max-w-4xl flex-row items-center gap-4">
-        <InputGroup className="flex-1">
-          <InputGroupInput
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t("search")}
-          />
-          <InputGroupAddon>
-            <Search />
-          </InputGroupAddon>
-          <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
-        </InputGroup>
+    <div className="flex flex-col gap-2 px-4">
+      <InputGroup>
+        <InputGroupInput
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder={t("search")}
+        />
+        <InputGroupAddon>
+          <Search />
+        </InputGroupAddon>
+        <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+      </InputGroup>
 
-        <Button disabled={isSearching} onClick={handleSearch}>
-          {isSearching && <Spinner />}
-          {t("search")}
-        </Button>
-      </div>
+      <Button disabled={isSearching} onClick={handleSearch}>
+        {isSearching && <Spinner />}
+        {t("search")}
+      </Button>
 
       {searchResults.length === 0 ? (
         <div className="py-12 text-center text-sm">

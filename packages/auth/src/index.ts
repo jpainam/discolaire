@@ -90,11 +90,14 @@ export function initAuth(options: {
       sendResetPassword: async ({ user, url, token }, request) => {
         console.log(">>> sendResetPassword:", user.email);
         if (user.email.includes("@discolaire.com")) {
+          console.warn(`Cannot send email to a @discolaire: ${user.email}`);
           return;
         }
         if (url.includes("complete-registration")) {
+          console.log("Completing registration");
           await completeRegistration({ user, url });
         } else {
+          console.log("Sending reset password");
           await sendResetPassword({ user, url });
         }
       },

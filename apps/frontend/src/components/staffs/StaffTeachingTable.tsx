@@ -34,7 +34,12 @@ export function StaffTeachingTable({ staffId }: { staffId: string }) {
   const { openSheet } = useSheet();
   const t = useTranslations();
   if (teachings.length === 0) {
-    return <EmptyComponent />;
+    return (
+      <EmptyComponent
+        title="Aucune matière"
+        description="Ce personnel n'a aucune matière enseignée"
+      />
+    );
   }
 
   return (
