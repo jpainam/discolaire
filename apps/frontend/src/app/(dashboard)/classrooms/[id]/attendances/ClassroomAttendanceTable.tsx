@@ -177,7 +177,7 @@ export function ClassroomAttendanceTable({
       <div className="overflow-hidden rounded-lg border">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow >
               <TableHead className="w-[80px]">Date</TableHead>
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("registrationNumber")}</TableHead>

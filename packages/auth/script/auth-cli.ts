@@ -6,6 +6,8 @@
  *
  * This configuration is consumed by the CLI command:
  * `pnpx @better-auth/cli generate --config script/auth-cli.ts --output ../db/src/auth-schema.ts`
+ *  What i run:
+ *  pnpm dlx @better-auth/cli generate --config packages/auth/script/auth-cli.ts --output packages/db/src/auth-schema.prisma
  *
  * For actual authentication usage, import from "../src/index.ts" instead.
  */
@@ -19,9 +21,9 @@ import { initAuth } from "../src/index";
  * @warning Use the main auth configuration from "../src/index.ts" for your application.
  */
 export const auth = initAuth({
-  baseUrl: "http://localhost:3000",
-  //productionUrl: "http://localhost:3000",
-  secret: "secret",
+  secret: process.env.AUTH_SECRET,
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
+  tenant: "demo",
   //discordClientId: "1234567890",
   //discordClientSecret: "1234567890",
 });

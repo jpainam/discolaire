@@ -5,8 +5,10 @@ import { Mail, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { authClient } from "~/auth/client";
 import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
 import { useConfirm } from "~/providers/confirm-dialog";
+import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 
 export function DropdownInvitation({
@@ -19,6 +21,7 @@ export function DropdownInvitation({
   email?: string | null;
 }) {
   const t = useTranslations();
+  const { school } = useSchool();
 
   const confirm = useConfirm();
   const trpc = useTRPC();
@@ -57,11 +60,19 @@ export function DropdownInvitation({
         });
         if (isConfirmed) {
           toast.loading(t("sending_invite"), { id: 0 });
-          createUserMutation.mutate({
-            entityId: entityId,
-            entityType: entityType,
+          const { data, error } = await authClient.organization.inviteMember({
             email: email,
+            role: "member",
+            organizationId: school.id,
+            resend: true,
+            //teamId: school.id,
           });
+          
+          // createUserMutation.mutate({
+          //   entityId: entityId,
+          //   entityType: entityType,
+          //   email: email,
+          // });
 
           // await authClient.forgetPassword({
           //   email: email,

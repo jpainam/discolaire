@@ -2,8 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@import "../themes/twitter.css";
-@import "../themes/t3tchat.css";
+/* @import "../themes/twitter.css";
+@import "../themes/t3tchat.css"; */
 /* always put scaled in last */
 @import "../themes/scaled.css";
 

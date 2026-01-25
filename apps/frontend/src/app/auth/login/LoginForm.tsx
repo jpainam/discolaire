@@ -151,7 +151,7 @@ export function LoginForm() {
                         name="password"
                       />
                       <Link
-                        href="/auth/password/forgot"
+                        href="/auth/request-reset-password"
                         className="text-primary ml-auto text-sm hover:underline"
                       >
                         {t("Forgot password")}?

@@ -5,13 +5,23 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
-import { admin, apiKey, oAuthProxy, username } from "better-auth/plugins";
+import {
+  admin,
+  apiKey,
+  oAuthProxy,
+  organization,
+  username,
+} from "better-auth/plugins";
 
 import { getDb } from "@repo/db";
 import { sendEmail } from "@repo/utils/resend";
 
 import { authEnv } from "../env";
-import { completeRegistration, sendResetPassword } from "./utils";
+import {
+  completeRegistration,
+  sendOrganizationInvitation,
+  sendResetPassword,
+} from "./utils";
 
 const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */
@@ -88,7 +98,6 @@ export function initAuth(options: {
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url, token }, request) => {
-        console.log(">>> sendResetPassword:", user.email);
         if (user.email.includes("@discolaire.com")) {
           console.warn(`Cannot send email to a @discolaire: ${user.email}`);
           return;
@@ -97,7 +106,7 @@ export function initAuth(options: {
           console.log("Completing registration");
           await completeRegistration({ user, url });
         } else {
-          console.log("Sending reset password");
+        
           await sendResetPassword({ user, url });
         }
       },
@@ -133,6 +142,18 @@ export function initAuth(options: {
       apiKey({
         enableMetadata: true,
         // apiKeyHeaders: ["x-api-key", "xyz-api-key"]
+      }),
+      organization({
+        async sendInvitationEmail(data) {
+          const inviteLink = `${env.NEXT_PUBLIC_BASE_URL}/auth/accept-invitation/${data.id}`;
+          await sendOrganizationInvitation({
+            email: data.email,
+            invitedByUsername: data.inviter.user.name,
+            invitedByEmail: data.inviter.user.email,
+            teamName: data.organization.name,
+            inviteLink,
+          });
+        },
       }),
       oAuthProxy(),
       expo(),

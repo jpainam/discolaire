@@ -257,3 +257,7 @@ as this will no longer return all grades (e.g. if student is logged)
 or parent.
 
 https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/bases/radix/examples/dialog-example.tsx
+
+
+https://mailbluster.com/blog/get-out-of-aws-ses-sandbox-and-increase-send-limit-and-or-send-rate-2022
+https://mailbluster.com/blog/getting-out-of-amazon-ses-sandbox

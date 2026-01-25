@@ -198,21 +198,7 @@ export class UserService {
       },
     });
   }
-  async validateUsername(username: string) {
-    const registeredUser = await this.db.user.findFirst({
-      where: {
-        username,
-      },
-    });
-    if (registeredUser) {
-      return {
-        error: "Username already exists",
-      };
-    }
-    return {
-      error: null,
-    };
-  }
+
   async getPermissions(userId: string) {
     const user = await this.db.user.findUniqueOrThrow({
       where: { id: userId },
@@ -344,7 +330,7 @@ export class UserService {
       name: `${ddd.lastName} ${ddd.firstName}`,
     };
   }
-  async getByEntity({
+  async getUserByEntity({
     entityId,
     entityType,
   }: {
@@ -352,7 +338,7 @@ export class UserService {
     entityType: "staff" | "student" | "contact";
   }) {
     if (entityType == "staff") {
-      const dd = await this.db.staff.findUniqueOrThrow({
+      const dd = await this.db.staff.findUnique({
         where: {
           id: entityId,
         },
@@ -361,15 +347,15 @@ export class UserService {
         },
       });
       return {
-        name: `${dd.lastName} ${dd.firstName}`,
-        id: dd.id,
-        userId: dd.userId,
-        email: dd.user?.email,
+        name: `${dd?.lastName} ${dd?.firstName}`,
+        id: dd?.id,
+        userId: dd?.userId,
+        email: dd?.user?.email,
         entityType: "staff",
       };
     }
     if (entityType == "student") {
-      const dd = await this.db.student.findUniqueOrThrow({
+      const dd = await this.db.student.findUnique({
         where: {
           id: entityType,
         },
@@ -378,15 +364,15 @@ export class UserService {
         },
       });
       return {
-        name: `${dd.lastName} ${dd.firstName}`,
-        id: dd.id,
-        userId: dd.userId,
-        email: dd.user?.email,
+        name: `${dd?.lastName} ${dd?.firstName}`,
+        id: dd?.id,
+        userId: dd?.userId,
+        email: dd?.user?.email,
         entityType: "student",
       };
     }
 
-    const dd = await this.db.contact.findFirstOrThrow({
+    const dd = await this.db.contact.findUnique({
       where: {
         id: entityId,
       },
@@ -395,11 +381,11 @@ export class UserService {
       },
     });
     return {
-      name: `${dd.lastName} ${dd.firstName}`,
-      id: dd.id,
-      userId: dd.userId,
+      name: `${dd?.lastName} ${dd?.firstName}`,
+      id: dd?.id,
+      userId: dd?.userId,
       entityType: "contact",
-      email: dd.user?.email,
+      email: dd?.user?.email,
     };
   }
   async createUser({

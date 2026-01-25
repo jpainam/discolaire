@@ -49,7 +49,7 @@ export function ClassroomAttendanceHeader() {
   const confirm = useConfirm();
 
   return (
-    <div className="bg-muted grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
+    <div className="bg-muted/50 grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
       <div className="flex flex-row items-center gap-2">
         <Label className="hidden md:block">{t("periods")}</Label>
         <TermSelector
