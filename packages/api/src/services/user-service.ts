@@ -7,6 +7,7 @@ import type { PrismaClient } from "@repo/db";
 
 import type { PubSubLogger } from "../pubsub-logger";
 import { env } from "../env";
+import { getBaseUrlFromHeaders } from "../lib/base-url";
 
 type PermissionSource =
   | {
@@ -286,6 +287,7 @@ export class UserService {
         message: `Impossible de créer l'org ${school.code}`,
       });
     }
+    const baseUrl = getBaseUrlFromHeaders(requestHeaders);
     // 2. Send invitation
     await authApi.createInvitation({
       body: {
@@ -306,7 +308,7 @@ export class UserService {
     await authApi.requestPasswordReset({
       body: {
         email: newUser.email,
-        redirectTo: `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
+        redirectTo: `${baseUrl}/auth/reset-password`,
       },
       headers: requestHeaders,
     });
@@ -374,10 +376,11 @@ export class UserService {
         });
       }
       const email = input.email ?? `${input.username}@discolaire.com`;
+      const baseUrl = getBaseUrlFromHeaders(requestHeaders);
       await authApi.requestPasswordReset({
         body: {
           email: email,
-          redirectTo: `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
+          redirectTo: `${baseUrl}/auth/reset-password`,
         },
         headers: requestHeaders,
       });

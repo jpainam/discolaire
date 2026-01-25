@@ -32,15 +32,12 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_MINIO_URL: z.string().min(1).url(),
-    NEXT_PUBLIC_BASE_URL: z.string().min(1).url(),
-
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     S3_AVATAR_BUCKET_NAME: process.env.S3_AVATAR_BUCKET_NAME,
     MESSAGING_SERVICE_URL: process.env.MESSAGING_SERVICE_URL,
     NEXT_PUBLIC_MINIO_URL: process.env.NEXT_PUBLIC_MINIO_URL,

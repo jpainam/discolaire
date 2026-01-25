@@ -17,18 +17,7 @@ export default function Page() {
 
   return (
     <HydrateClient>
-      {/* <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense
-          key={"students"}
-          fallback={
-            <div className="px-4 py-2">
-              <Skeleton className="h-8" />
-            </div>
-          }
-        >
-          <ClassroomHeader />
-        </Suspense>
-      </ErrorBoundary> */}
+     
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           fallback={

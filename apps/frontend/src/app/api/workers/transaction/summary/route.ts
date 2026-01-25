@@ -3,6 +3,7 @@ import z from "zod/v4";
 
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
 import { getQueryClient, trpc } from "~/trpc/server";
 import { isValidCron } from "~/utils/worker";
 
@@ -20,6 +21,7 @@ export async function GET() {
   if (!session) {
     return new Response("Not authorized", { status: 401 });
   }
+  const baseUrl = await getRequestBaseUrl();
   const queryClient = getQueryClient();
 
   const tasks = await queryClient.fetchQuery(
@@ -76,6 +78,7 @@ export async function GET() {
         `running a task for ${task.cron} with ${JSON.stringify(data)}`,
       );
       runJob({
+        baseUrl,
         schoolYearId: data.schoolYearId,
         schoolId: data.schoolId,
         userId: data.userId,
@@ -96,12 +99,13 @@ export async function GET() {
 }
 
 async function runJob(result: {
+  baseUrl: string;
   schoolYearId: string;
   schoolId: string;
   userId: string;
 }) {
-  const { schoolId, userId, schoolYearId } = result;
-  await fetch(`${env.NEXT_PUBLIC_BASE_URL}/api/emails/transaction/summary`, {
+  const { baseUrl, schoolId, userId, schoolYearId } = result;
+  await fetch(`${baseUrl}/api/emails/transaction/summary`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

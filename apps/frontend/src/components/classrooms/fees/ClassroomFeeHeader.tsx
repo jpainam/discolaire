@@ -33,7 +33,7 @@ export function ClassroomFeeHeader() {
   const canCreateClassroomFee = useCheckPermission("fee.create");
   const Icon = sidebarIcons.fees;
   return (
-    <div className="bg-muted text-muted-foreground flex flex-row items-center gap-2 border-y px-4 py-1">
+    <div className="bg-muted/50 flex flex-row items-center gap-2 border-y px-4 py-1">
       {Icon && <Icon className="h-4 w-4" />}
       <Label>{t("fees")}</Label>
       <div className="ml-auto flex flex-row items-center gap-2">

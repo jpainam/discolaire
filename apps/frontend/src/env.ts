@@ -38,7 +38,6 @@ export const env = createEnv({
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_BASE_URL: z.url(),
     NEXT_PUBLIC_DEFAULT_TENANT: z.string().min(1).optional(),
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]).default("local"),
     NEXT_PUBLIC_MINIO_URL: z.url(),
@@ -59,7 +58,6 @@ export const env = createEnv({
     WHATSAPP_VERIFY_TOKEN: process.env.WHATSAPP_VERIFY_TOKEN,
     WHATSAPP_API_TOKEN: process.env.WHATSAPP_API_TOKEN,
     SUPER_ADMIN_USERNAME: process.env.SUPER_ADMIN_USERNAME,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_DEFAULT_TENANT: process.env.NEXT_PUBLIC_DEFAULT_TENANT,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     REDIS_URL: process.env.REDIS_URL,

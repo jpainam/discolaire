@@ -6,6 +6,7 @@ import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary"
 import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
 import { getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify(error), { status: 400 });
     }
     const { userId, startDate, endDate } = result.data;
+    const baseUrl = await getRequestBaseUrl();
     const queryClient = getQueryClient();
     const transactions = await queryClient.fetchQuery(
       trpc.transaction.all.queryOptions({
@@ -51,6 +53,7 @@ export async function POST(req: Request) {
 
     const plainText = await render(
       TransactionsSummary({
+        baseUrl,
         locale: school.defaultLocale,
         school: {
           name: school.name,
@@ -80,6 +83,7 @@ export async function POST(req: Request) {
       from: `${school.name} <contact@discolaire.com>`,
       text: plainText,
       react: TransactionsSummary({
+        baseUrl,
         locale: school.defaultLocale,
         school: {
           name: school.name,

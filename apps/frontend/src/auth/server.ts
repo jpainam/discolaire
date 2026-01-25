@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { initAuth } from "@repo/auth";
 
 import { env } from "~/env";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
 
 export const getAuth = cache(async (requestHeaders?: Headers) => {
   const heads = requestHeaders ?? (await headers());
@@ -25,9 +26,10 @@ export const getAuth = cache(async (requestHeaders?: Headers) => {
   if (!tenant) {
     throw new Error("Tenant could not be determined.");
   }
+  const baseUrl = await getRequestBaseUrl(heads);
   return initAuth({
     secret: env.AUTH_SECRET,
-    baseUrl: env.NEXT_PUBLIC_BASE_URL,
+    baseUrl,
     tenant,
   });
 });

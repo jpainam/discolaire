@@ -111,7 +111,20 @@ export function StudentContactTable({
   const { openSheet } = useSheet();
 
   if (studentContacts.length == 0) {
-    return <></>;
+    return (
+      <div className="text-muted-foreground flex items-center gap-2 px-2 text-xs">
+        Aucun parents,{" "}
+        <Button
+          onClick={() => {
+            router.push(`/students/${studentId}/contacts`);
+          }}
+          variant={"link"}
+          size={"sm"}
+        >
+          cliquez ici pour ajouter.
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -124,7 +137,7 @@ export function StudentContactTable({
               <TableHead></TableHead>
               {/* <TableHead>{t("email")}</TableHead> */}
               {/* <TableHead>{t("phone")}</TableHead> */}
-              <TableHead>{t("status")}</TableHead>
+
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -162,7 +175,7 @@ export function StudentContactTable({
                     />
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
+                    <div className="grid items-center gap-2 xl:flex">
                       <Pill>
                         <PillIcon className="text-red-500" icon={HeartIcon} />
                         {relationship?.name}
@@ -171,22 +184,21 @@ export function StudentContactTable({
                         <PillIcon className="text-blue-500" icon={Phone} />
                         {contact.phoneNumber1}
                       </Pill>
+                      <Badge variant="outline" className="gap-1.5">
+                        <span
+                          className={cn(
+                            "size-1.5 rounded-full",
+                            contact.user ? "bg-emerald-500" : "bg-red-500",
+                          )}
+                          aria-hidden="true"
+                        ></span>
+                        {!contact.userId ? t("not_invited") : t("invited")}
+                      </Badge>
                     </div>
                   </TableCell>
                   {/* <TableCell>{contact.email ?? "N/A"}</TableCell> */}
                   {/* <TableCell>{contact.phoneNumber1} </TableCell> */}
-                  <TableCell>
-                    <Badge variant="outline" className="gap-1.5">
-                      <span
-                        className={cn(
-                          "size-1.5 rounded-full",
-                          contact.user ? "bg-emerald-500" : "bg-red-500",
-                        )}
-                        aria-hidden="true"
-                      ></span>
-                      {!contact.userId ? t("not_invited") : t("invited")}
-                    </Badge>
-                  </TableCell>
+
                   <TableCell>
                     <div className="flex items-center justify-end gap-2">
                       {canUpdateStudentContact && (

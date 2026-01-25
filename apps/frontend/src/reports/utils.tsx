@@ -5,7 +5,10 @@ export function getCdnUrl() {
   if (env.NODE_ENV == "production") {
     return "https://discolaire-public.s3.eu-central-1.amazonaws.com";
   }
-  return env.NEXT_PUBLIC_BASE_URL;
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return `http://localhost:${process.env.PORT ?? 3000}`;
 }
 
 export function getTitle({ trimestreId }: { trimestreId: string }) {

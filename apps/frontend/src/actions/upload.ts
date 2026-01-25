@@ -5,6 +5,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
 import { minioClient, runWithConcurrency, s3client } from "~/lib/s3-client";
 
 const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV == "local";
@@ -14,8 +15,9 @@ export async function downloadFileFromAws(key: string): Promise<string> {
     if (!session) {
       throw new Error("Unauthorized");
     }
+    const baseUrl = await getRequestBaseUrl();
     const response = await fetch(
-      `${env.NEXT_PUBLIC_BASE_URL}/api/upload?key=${key}`,
+      `${baseUrl}/api/upload?key=${key}`,
     );
     if (!response.ok) {
       throw new Error("Failed to download file");
@@ -35,7 +37,8 @@ export async function handleDeleteAvatar(
   const session = await getSession();
   if (!session) throw new Error("Unauthorized");
 
-  const url = new URL("/api/upload/avatars", env.NEXT_PUBLIC_BASE_URL);
+  const baseUrl = await getRequestBaseUrl();
+  const url = new URL("/api/upload/avatars", baseUrl);
   url.searchParams.set("filename", key);
   url.searchParams.set("profile", profile);
 
@@ -61,7 +64,8 @@ export async function handleUploadAvatar(
 
   const formData = new FormData();
   formData.append("file", file, file.name);
-  const url = new URL("/api/upload/avatars", env.NEXT_PUBLIC_BASE_URL);
+  const baseUrl = await getRequestBaseUrl();
+  const url = new URL("/api/upload/avatars", baseUrl);
   url.searchParams.set("id", id);
   url.searchParams.set("profile", profile);
 

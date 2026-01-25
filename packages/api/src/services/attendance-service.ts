@@ -117,13 +117,15 @@ function addTotals(
   };
 }
 
-export async function sendAttendanceEmail(
-  id: number,
-  type: "absence" | "chatter",
-) {
+export async function sendAttendanceEmail(opts: {
+  id: number;
+  type: "absence" | "chatter";
+  baseUrl: string;
+}) {
+  const { id, type, baseUrl } = opts;
   try {
     const response = await fetch(
-      `${env.NEXT_PUBLIC_BASE_URL}/api/emails/attendance`,
+      `${baseUrl}/api/emails/attendance`,
       {
         method: "POST",
         headers: {

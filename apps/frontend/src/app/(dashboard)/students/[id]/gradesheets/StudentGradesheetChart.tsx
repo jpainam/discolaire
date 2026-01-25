@@ -183,6 +183,8 @@ export function StudentGradesheetChart({
     chartData && chartData.length > 0
       ? chartData.reduce((max, item) => (item.grade > max.grade ? item : max))
       : undefined;
+
+  return <></>;
   return (
     <Card className="rounded-none bg-transparent px-0 py-2 shadow-none ring-0">
       <CardHeader className="">

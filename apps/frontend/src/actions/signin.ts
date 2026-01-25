@@ -85,9 +85,6 @@ export async function setCookieFromSignIn({ userId }: { userId: string }) {
 }
 
 export async function setSchoolYearCookie(schoolYearId: string) {
-  // const isSecure =
-  //   env.NODE_ENV === "production" &&
-  //   env.NEXT_PUBLIC_BASE_URL.startsWith("https");
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
   (await cookies()).set("x-school-year", schoolYearId, {
     expires: expiresInOneDay,

@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 
-import { siteConfig } from "~/configs/site";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = await getRequestBaseUrl();
   const routes = [""].map((route) => ({
-    url: `${siteConfig.url}${route}`,
+    url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString(),
   }));
 

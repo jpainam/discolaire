@@ -104,7 +104,7 @@ export function initAuth(options: {
         }
         if (url.includes("complete-registration")) {
           console.log("Completing registration");
-          await completeRegistration({ user, url });
+          await completeRegistration({ user, url, baseUrl: options.baseUrl });
         } else {
           await sendResetPassword({ user, url });
         }
@@ -144,7 +144,7 @@ export function initAuth(options: {
       }),
       organization({
         async sendInvitationEmail(data) {
-          const inviteLink = `${env.NEXT_PUBLIC_BASE_URL}/auth/accept-invitation/${data.id}`;
+          const inviteLink = `${options.baseUrl}/auth/accept-invitation/${data.id}`;
           await sendOrganizationInvitation({
             email: data.email,
             invitedByUsername: data.inviter.user.name,
@@ -160,7 +160,9 @@ export function initAuth(options: {
     ],
     trustedOrigins: [
       "expo://",
-      env.NEXT_PUBLIC_BASE_URL,
+      options.baseUrl,
+      // eslint-disable-next-line no-restricted-properties
+      process.env.NEXT_PUBLIC_BASE_URL ?? "",
       "http://localhost:3000",
     ],
   } satisfies BetterAuthOptions;

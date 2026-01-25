@@ -37,7 +37,7 @@ export default async function Page(props: {
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense>
-            <div className="grid grid-cols-3 gap-2 px-4">
+            <div className="grid grid-cols-1 gap-2 px-4 lg:grid-cols-3">
               {gradesheets.map((gs, index) => (
                 <CreatedGradesheetCard
                   termName={gs.term.name}

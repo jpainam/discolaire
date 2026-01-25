@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useState } from "react";
 
-import { env } from "../env";
-
 interface UploadState {
   file: File;
   isPending: boolean;
@@ -51,7 +49,7 @@ export const useUpload = () => {
         updateFileState(index, { isPending: true });
         try {
           const response = await fetch(
-            env.NEXT_PUBLIC_BASE_URL + "/api/upload",
+            "/api/upload",
             {
               method: "POST",
               headers: {
@@ -118,7 +116,7 @@ export const useUpload = () => {
     const file = input;
 
     console.log(`Uploading file`, file.name);
-    const response = await fetch(env.NEXT_PUBLIC_BASE_URL + "/api/upload", {
+    const response = await fetch("/api/upload", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

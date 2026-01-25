@@ -22,7 +22,7 @@ import { initAuth } from "../src/index";
  */
 export const auth = initAuth({
   secret: process.env.AUTH_SECRET,
-  baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL ?? "http://example.domain.com",
   tenant: "demo",
   //discordClientId: "1234567890",
   //discordClientSecret: "1234567890",

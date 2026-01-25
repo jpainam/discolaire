@@ -6,7 +6,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { MoreVertical, Plus, Trash2 } from "lucide-react";
+import { MoreVertical, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -78,7 +78,6 @@ export function ClassroomHeader() {
       router.push(routes.classrooms.details(value));
     }
   };
-  const canCreateClassroom = useCheckPermission("classroom.create");
   const { openSheet } = useSheet();
 
   return (
@@ -98,49 +97,27 @@ export function ClassroomHeader() {
         }}
       />
       <div className="flex items-center gap-2 md:ml-auto">
-        {canCreateClassroom && pathname == "/classrooms" && (
+        {canUpdateClassroom && pathname == `/classrooms/${params.id}` && (
           <Button
-            disabled={!canCreateClassroom}
+            variant={"outline"}
             onClick={() => {
-              const formId = "create-classroom-form";
+              const classroom = classrooms.find((c) => c.id === params.id);
+              if (!classroom) return;
+              const formId = `edit-classroom-${classroom.id}`;
               openSheet({
                 formId,
-                title: t("create"),
-                description: t("classroom"),
-                view: <CreateEditClassroom formId={formId} />,
+                title: t("edit"),
+                description: classroom.name,
+                view: (
+                  <CreateEditClassroom classroom={classroom} formId={formId} />
+                ),
               });
             }}
           >
-            <Plus aria-hidden="true" />
-            {t("add")}
+            <EditIcon />
+            {t("edit")}
           </Button>
         )}
-        {params.id &&
-          canUpdateClassroom &&
-          pathname == `/classrooms/${params.id}` && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                const classroom = classrooms.find((c) => c.id === params.id);
-                if (!classroom) return;
-                const formId = `edit-classroom-${classroom.id}`;
-                openSheet({
-                  formId,
-                  title: t("edit"),
-                  description: classroom.name,
-                  view: (
-                    <CreateEditClassroom
-                      classroom={classroom}
-                      formId={formId}
-                    />
-                  ),
-                });
-              }}
-              size="icon"
-            >
-              <EditIcon />
-            </Button>
-          )}
         {pathname == `/classrooms` && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

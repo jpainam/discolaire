@@ -18,7 +18,6 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { env } from "~/env";
 import { useRouter } from "~/hooks/use-router";
 
 export default function Page() {
@@ -60,7 +59,10 @@ export default function Page() {
                 setIsLoading(true);
                 const { error } = await authClient.requestPasswordReset({
                   email,
-                  redirectTo: `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
+                  redirectTo: new URL(
+                    "/auth/reset-password",
+                    window.location.origin,
+                  ).toString(),
                 });
                 if (error) {
                   console.error(error);

@@ -38,7 +38,7 @@ export function StudentAttendanceSummary({ studentId }: { studentId: string }) {
     );
   }, [attendances]);
   return (
-    <div className="grid grid-cols-1 gap-4 p-2">
+    <div className="grid grid-cols-1 gap-2 p-2">
       <Card>
         <CardHeader>
           <CardTitle>{absence}</CardTitle>

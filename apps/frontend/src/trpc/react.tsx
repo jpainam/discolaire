@@ -43,7 +43,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
               typeof window !== "undefined" &&
               !window.location.pathname.includes("/login")
             ) {
-              window.location.href = `${env.NEXT_PUBLIC_BASE_URL}/auth/login`;
+              window.location.href = "/auth/login";
             }
             return false;
           },

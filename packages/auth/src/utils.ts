@@ -8,9 +8,11 @@ const env = authEnv();
 export async function completeRegistration({
   user,
   url,
+  baseUrl,
 }: {
   user: { id: string; email: string; name: string };
   url: string;
+  baseUrl: string;
 }) {
   if (user.email.includes("@example.com")) {
     console.warn("User email is a placeholder, skipping email sending.");
@@ -18,7 +20,7 @@ export async function completeRegistration({
   }
 
   const response = await fetch(
-    `${env.NEXT_PUBLIC_BASE_URL}/api/emails/invitation`,
+    `${baseUrl}/api/emails/invitation`,
     {
       method: "POST",
       headers: {

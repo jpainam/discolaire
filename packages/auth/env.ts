@@ -14,16 +14,13 @@ export function authEnv() {
       DATABASE_URL: z.string().min(1),
       DEFAULT_TENANT: z.string().min(1).optional(),
     },
-    client: {
-      NEXT_PUBLIC_BASE_URL: z.url(),
-    },
+    client: {},
     runtimeEnv: {
       AUTH_SECRET: process.env.AUTH_SECRET,
       DATABASE_URL: process.env.DATABASE_URL,
       NODE_ENV: process.env.NODE_ENV,
       RESEND_API_KEY: process.env.RESEND_API_KEY,
       DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
-      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
       DEFAULT_TENANT: process.env.DEFAULT_TENANT,
     },
 

@@ -18,7 +18,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { DeleteIcon } from "~/icons";
@@ -65,7 +64,7 @@ export function SubjectJournalHeader({
         <Skeleton className="h-8 w-96" />
       ) : (
         <Link
-          className="text-sm leading-none font-medium hover:underline"
+          className="hover:underline"
           href={`/staffs/${subject?.teacherId}`}
         >
           {subject?.teacher?.prefix} {getFullName(subject?.teacher)}
@@ -74,7 +73,12 @@ export function SubjectJournalHeader({
       {subjectQuery.isPending ? (
         <Skeleton className="h-8 w-56" />
       ) : (
-        <Label className="font-bold">{subjectQuery.data?.course.name}</Label>
+        <Link
+          className="hover:underline"
+          href={`/classrooms/${subject?.classroomId}/subjects/${subject?.id}`}
+        >
+          {subjectQuery.data?.course.name}
+        </Link>
       )}
       <div className="flex flex-row items-center gap-2">
         <Button variant={"secondary"}>

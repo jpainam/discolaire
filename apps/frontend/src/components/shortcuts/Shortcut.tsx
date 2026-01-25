@@ -18,7 +18,6 @@ import {
 } from "~/components/ui/popover";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { SidebarMenuButton, useSidebar } from "~/components/ui/sidebar";
-import { env } from "~/env";
 import { useModal } from "~/hooks/use-modal";
 import { BookmarkIcon, DeleteIcon, EditIcon, PlusIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
@@ -73,12 +72,11 @@ export function Shortcut() {
   );
 
   const addCurrentPageToShortcuts = () => {
+    const baseUrl = window.location.origin;
     const newShortcut = {
       title: document.title,
       url:
-        pathname === "/"
-          ? env.NEXT_PUBLIC_BASE_URL
-          : env.NEXT_PUBLIC_BASE_URL + pathname,
+        pathname === "/" ? baseUrl : new URL(pathname, baseUrl).toString(),
     };
     addShortcut.mutate(newShortcut);
   };

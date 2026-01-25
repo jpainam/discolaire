@@ -15,7 +15,6 @@ import { format } from "date-fns";
 import { Footer } from "../components/footer";
 import { Head } from "../components/Head";
 import { Logo } from "../components/logo";
-import { env } from "../env";
 import { geti18n } from "../locales";
 import { cn } from "../utils";
 
@@ -48,6 +47,7 @@ interface Props {
   transactions: Transaction[];
   locale: string;
   school: School;
+  baseUrl: string;
 }
 
 const defaultTransactions = [
@@ -99,6 +99,7 @@ export const TransactionsSummary = ({
   transactions = defaultTransactions,
   locale = "fr",
   school = defaultSchool,
+  baseUrl = "http://example.domain.com",
 }: Props) => {
   const { t } = geti18n({ locale });
   const firstName = fullName.split(" ").at(0) ?? "";
@@ -179,7 +180,7 @@ export const TransactionsSummary = ({
                     </td>
                     <td align="left" style={{ width: "50%" }}>
                       <Link
-                        href={`${env.NEXT_PUBLIC_BASE_URL}/transactions?id=${transaction.id}`}
+                        href={`${baseUrl}/transactions?id=${transaction.id}`}
                         className={cn(
                           "text-[#121212]",
                           transaction.category === "income" &&
@@ -242,7 +243,7 @@ export const TransactionsSummary = ({
                   paddingTop: 12,
                   paddingBottom: 12,
                 }}
-                href={`${env.NEXT_PUBLIC_BASE_URL}/transactions?start=${transactions.at(0)?.date}&end=${transactions[transactions.length - 1]?.date}`}
+                href={`${baseUrl}/transactions?start=${transactions.at(0)?.date}&end=${transactions[transactions.length - 1]?.date}`}
               >
                 {t("transactions.view")}
               </Button>

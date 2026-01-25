@@ -5,7 +5,7 @@ import "./globals.css";
 import { Suspense } from "react";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 
-import { env } from "~/env";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
 import { cn } from "~/lib/utils";
 import { Providers } from "~/providers/Providers";
 
@@ -21,11 +21,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
-  title: "Gestion Scolaire",
-  description: "Gestion scolaire pour les écoles",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = await getRequestBaseUrl();
+  return {
+    metadataBase: new URL(baseUrl),
+    title: "Gestion Scolaire",
+    description: "Gestion scolaire pour les écoles",
+  };
+}
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
