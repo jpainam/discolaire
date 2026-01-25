@@ -165,7 +165,7 @@ export function StudentGradesheetTable({
   }
 
   return (
-    <div className={cn("py-2", className)}>
+    <div className={cn("flex grid grid-cols-1 py-2", className)}>
       <div className={cn("bg-background overflow-hidden", tableClassName)}>
         <Table>
           <TableHeader>

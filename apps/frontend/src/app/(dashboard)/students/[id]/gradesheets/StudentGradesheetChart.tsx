@@ -184,145 +184,149 @@ export function StudentGradesheetChart({
       ? chartData.reduce((max, item) => (item.grade > max.grade ? item : max))
       : undefined;
 
-  return <></>;
   return (
-    <Card className="rounded-none bg-transparent px-0 py-2 shadow-none ring-0">
-      <CardHeader className="">
-        <CardTitle>
-          <TermSelector
-            className="w-65"
-            onChange={(val) => setSelectedTerm(val)}
-          />
-        </CardTitle>
-        <CardAction>
-          <div className="flex items-center gap-4 text-sm">
-            <ChartLabel label={t("grade")} color={chartConfig.grade.color} />
-            <ChartLabel label="Moy C" color={chartConfig.classroomAvg.color} />
-          </div>
-        </CardAction>
-      </CardHeader>
+    <div className="grid grid-cols-1">
+      <Card className="rounded-none bg-transparent px-0 py-2 shadow-none ring-0">
+        <CardHeader className="">
+          <CardTitle>
+            <TermSelector
+              className="w-65"
+              onChange={(val) => setSelectedTerm(val)}
+            />
+          </CardTitle>
+          <CardAction>
+            <div className="flex items-center gap-4 text-sm">
+              <ChartLabel label={t("grade")} color={chartConfig.grade.color} />
+              <ChartLabel
+                label="Moy C"
+                color={chartConfig.classroomAvg.color}
+              />
+            </div>
+          </CardAction>
+        </CardHeader>
 
-      <CardContent className="flex flex-col items-end">
-        {chartData?.length === 0 && (
-          <Empty>
-            <EmptyTitle>Aucune notes</EmptyTitle>
-          </Empty>
-        )}
-        <ChartContainer
-          config={chartConfig}
-          className="[&_.recharts-curve.recharts-tooltip-cursor]:stroke-initial h-[350px] w-full"
-        >
-          <ComposedChart
-            data={chartData}
-            margin={{
-              top: 5,
-              right: 15,
-              left: 5,
-              bottom: 5,
-            }}
+        <CardContent className="flex flex-col items-end">
+          {chartData?.length === 0 && (
+            <Empty>
+              <EmptyTitle>Aucune notes</EmptyTitle>
+            </Empty>
+          )}
+          <ChartContainer
+            config={chartConfig}
+            className="[&_.recharts-curve.recharts-tooltip-cursor]:stroke-initial h-[350px] w-full"
           >
-            <defs>
-              <linearGradient id="gradeGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor={chartConfig.grade.color}
-                  stopOpacity={0.3}
-                />
-                <stop
-                  offset="100%"
-                  stopColor={chartConfig.grade.color}
-                  stopOpacity={0.05}
-                />
-              </linearGradient>
-            </defs>
-
-            <CartesianGrid
-              strokeDasharray="4 4"
-              stroke="var(--input)"
-              strokeOpacity={1}
-              horizontal={true}
-              vertical={false}
-            />
-
-            <XAxis
-              dataKey="subject"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 11, className: "text-muted-foreground" }}
-              dy={5}
-              tickMargin={12}
-            />
-
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              width={30}
-              tick={{ fontSize: 11, className: "text-muted-foreground" }}
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-              tickFormatter={(value) => `${value.toFixed(1)}`}
-              //domain={["dataMin - 20", "dataMax + 20"]}
-              tickMargin={12}
-            />
-
-            {/* Current subject reference line */}
-            <ReferenceLine
-              x={refLine?.subject ?? ""}
-              stroke={chartConfig.grade.color}
-              strokeWidth={1}
-            />
-
-            {/* Tooltip */}
-            <ChartTooltip
-              content={<CustomTooltip />}
-              cursor={{
-                stroke: "var(--input)",
-                strokeWidth: 1,
-                strokeDasharray: "none",
+            <ComposedChart
+              data={chartData}
+              margin={{
+                top: 5,
+                right: 15,
+                left: 5,
+                bottom: 5,
               }}
-            />
+            >
+              <defs>
+                <linearGradient id="gradeGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="0%"
+                    stopColor={chartConfig.grade.color}
+                    stopOpacity={0.3}
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={chartConfig.grade.color}
+                    stopOpacity={0.05}
+                  />
+                </linearGradient>
+              </defs>
 
-            {/* grade area with gradient background */}
-            <Area
-              type="linear"
-              dataKey="gradeArea"
-              stroke="transparent"
-              fill="url(#gradeGradient)"
-              strokeWidth={0}
-              dot={false}
-            />
+              <CartesianGrid
+                strokeDasharray="4 4"
+                stroke="var(--input)"
+                strokeOpacity={1}
+                horizontal={true}
+                vertical={false}
+              />
 
-            {/* grade line with dots */}
-            <Line
-              type="linear"
-              dataKey="grade"
-              stroke={chartConfig.grade.color}
-              strokeWidth={2}
-              dot={{
-                fill: "var(--background)",
-                strokeWidth: 2,
-                r: 6,
-                stroke: chartConfig.grade.color,
-              }}
-            />
+              <XAxis
+                dataKey="subject"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 11, className: "text-muted-foreground" }}
+                dy={5}
+                tickMargin={12}
+              />
 
-            {/* classroomAvg line (dashed) */}
-            <Line
-              type="linear"
-              dataKey="classroomAvg"
-              stroke={chartConfig.classroomAvg.color}
-              strokeWidth={2}
-              strokeDasharray="4 4"
-              dot={{
-                fill: "var(--background)",
-                strokeWidth: 2,
-                r: 6,
-                stroke: chartConfig.classroomAvg.color,
-                strokeDasharray: "0",
-              }}
-            />
-          </ComposedChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                width={30}
+                tick={{ fontSize: 11, className: "text-muted-foreground" }}
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+                tickFormatter={(value) => `${value.toFixed(1)}`}
+                //domain={["dataMin - 20", "dataMax + 20"]}
+                tickMargin={12}
+              />
+
+              {/* Current subject reference line */}
+              <ReferenceLine
+                x={refLine?.subject ?? ""}
+                stroke={chartConfig.grade.color}
+                strokeWidth={1}
+              />
+
+              {/* Tooltip */}
+              <ChartTooltip
+                content={<CustomTooltip />}
+                cursor={{
+                  stroke: "var(--input)",
+                  strokeWidth: 1,
+                  strokeDasharray: "none",
+                }}
+              />
+
+              {/* grade area with gradient background */}
+              <Area
+                type="linear"
+                dataKey="gradeArea"
+                stroke="transparent"
+                fill="url(#gradeGradient)"
+                strokeWidth={0}
+                dot={false}
+              />
+
+              {/* grade line with dots */}
+              <Line
+                type="linear"
+                dataKey="grade"
+                stroke={chartConfig.grade.color}
+                strokeWidth={2}
+                dot={{
+                  fill: "var(--background)",
+                  strokeWidth: 2,
+                  r: 6,
+                  stroke: chartConfig.grade.color,
+                }}
+              />
+
+              {/* classroomAvg line (dashed) */}
+              <Line
+                type="linear"
+                dataKey="classroomAvg"
+                stroke={chartConfig.classroomAvg.color}
+                strokeWidth={2}
+                strokeDasharray="4 4"
+                dot={{
+                  fill: "var(--background)",
+                  strokeWidth: 2,
+                  r: 6,
+                  stroke: chartConfig.classroomAvg.color,
+                  strokeDasharray: "0",
+                }}
+              />
+            </ComposedChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
