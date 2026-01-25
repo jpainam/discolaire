@@ -124,17 +124,14 @@ export async function sendAttendanceEmail(opts: {
 }) {
   const { id, type, baseUrl } = opts;
   try {
-    const response = await fetch(
-      `${baseUrl}/api/emails/attendance`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": env.DISCOLAIRE_API_KEY,
-        },
-        body: JSON.stringify({ id, type }),
+    const response = await fetch(`${baseUrl}/api/emails/attendance`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.DISCOLAIRE_API_KEY,
       },
-    );
+      body: JSON.stringify({ id, type }),
+    });
     if (!response.ok) {
       throw new Error(`Failed to send email: ${response.statusText}`);
     }

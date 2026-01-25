@@ -16,9 +16,7 @@ export async function downloadFileFromAws(key: string): Promise<string> {
       throw new Error("Unauthorized");
     }
     const baseUrl = await getRequestBaseUrl();
-    const response = await fetch(
-      `${baseUrl}/api/upload?key=${key}`,
-    );
+    const response = await fetch(`${baseUrl}/api/upload?key=${key}`);
     if (!response.ok) {
       throw new Error("Failed to download file");
     }

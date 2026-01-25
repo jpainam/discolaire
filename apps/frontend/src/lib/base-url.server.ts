@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-properties */
 import "server-only";
 
 import { headers } from "next/headers";

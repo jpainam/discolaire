@@ -75,8 +75,7 @@ export function Shortcut() {
     const baseUrl = window.location.origin;
     const newShortcut = {
       title: document.title,
-      url:
-        pathname === "/" ? baseUrl : new URL(pathname, baseUrl).toString(),
+      url: pathname === "/" ? baseUrl : new URL(pathname, baseUrl).toString(),
     };
     addShortcut.mutate(newShortcut);
   };

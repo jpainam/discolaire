@@ -48,21 +48,18 @@ export const useUpload = () => {
       files.map(async (file, index) => {
         updateFileState(index, { isPending: true });
         try {
-          const response = await fetch(
-            "/api/upload",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                filename: file.name,
-                destination: metadata?.destination,
-                bucket: metadata?.bucket,
-                contentType: file.type,
-              }),
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
             },
-          );
+            body: JSON.stringify({
+              filename: file.name,
+              destination: metadata?.destination,
+              bucket: metadata?.bucket,
+              contentType: file.type,
+            }),
+          });
           if (response.ok) {
             const {
               url,

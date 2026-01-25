@@ -19,22 +19,19 @@ export async function completeRegistration({
     return;
   }
 
-  const response = await fetch(
-    `${baseUrl}/api/emails/invitation`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": env.DISCOLAIRE_API_KEY,
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        email: user.email,
-        name: user.name,
-        url: url,
-      }),
+  const response = await fetch(`${baseUrl}/api/emails/invitation`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": env.DISCOLAIRE_API_KEY,
     },
-  );
+    body: JSON.stringify({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      url: url,
+    }),
+  });
   if (!response.ok) {
     const error = (await response.json()) as Error;
     console.error(error);

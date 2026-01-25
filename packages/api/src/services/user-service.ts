@@ -6,7 +6,6 @@ import type { Auth } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
 
 import type { PubSubLogger } from "../pubsub-logger";
-import { env } from "../env";
 import { getBaseUrlFromHeaders } from "../lib/base-url";
 
 type PermissionSource =

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-properties */
 import { env } from "~/env";
 import { CURRENCY } from "~/lib/constants";
 
