@@ -43,7 +43,7 @@ export function getDb({ connectionString, tenant }: GetDbParams): PrismaClient {
   }
   const adapter = new PrismaPg(
     { connectionString: connectionString },
-    { schema: tenant },
+    { schema: "public" },
   );
 
   const prisma = new PrismaClient({ adapter });
