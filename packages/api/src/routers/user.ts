@@ -1,13 +1,9 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { headers } from "next/headers";
-import { TRPCError } from "@trpc/server";
-import { generateRandomString, hashPassword } from "better-auth/crypto";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
 
-import { env } from "../env";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = {
@@ -297,112 +293,14 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const entity = await ctx.services.user.getUserFromEntity({
-        entityId: input.entityId,
-        entityType: input.profile,
+      const requestHeaders = await headers();
+      return ctx.services.user.createUser({
+        input,
+        authApi: ctx.authApi,
+        requestHeaders,
+        schoolId: ctx.schoolId,
+        pubsub: ctx.pubsub,
       });
-      // check if the entity has un userId already
-      if (entity.userId) {
-        // should never happened, we shoud handle this in frontend with update
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Cet utilisateur possède deja un compte",
-        });
-      }
-      //check for duplicate
-      const exitingUser = await ctx.db.user.findFirst({
-        where: {
-          username: input.username,
-        },
-      });
-      if (exitingUser) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: `${input.username} est déjà utilisé, choisissez un autre nom d'utilisateur`,
-        });
-      }
-      // 1. Create user
-      const email = input.email ?? `${input.username}@discolaire.com`;
-      const { user: newUser } = await ctx.authApi.createUser({
-        body: {
-          email,
-          password: input.password ?? generateRandomString(12),
-          name: entity.name,
-          role: "user",
-          data: { entityId: entity.id, entityType: entity.entityType },
-        },
-        // This endpoint requires session cookies.
-        headers: await headers(),
-      });
-      const school = await ctx.db.school.findUniqueOrThrow({
-        where: {
-          id: ctx.schoolId,
-        },
-      });
-      const org = await ctx.authApi.getFullOrganization({
-        query: {
-          organizationSlug: school.code,
-        },
-        headers: await headers(),
-      });
-      let orgId = org?.id;
-      if (!org) {
-        const metadata = { schoolId: school.id };
-        const newOrg = await ctx.authApi.createOrganization({
-          body: {
-            name: school.name,
-            slug: school.code,
-            logo: school.logo ?? undefined,
-            metadata,
-            keepCurrentActiveOrganization: false,
-          },
-          // This endpoint requires session cookies.
-          headers: await headers(),
-        });
-        orgId = newOrg?.id;
-      }
-      if (!orgId) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: `Impossible de créer l'org ${school.code}`,
-        });
-      }
-      // 2. Send invitation
-      await ctx.authApi.createInvitation({
-        body: {
-          email: newUser.email,
-          role: "member",
-          organizationId: orgId,
-          resend: true,
-        },
-        headers: await headers(),
-      });
-
-      await ctx.services.user.attachUser({
-        entityType: input.profile,
-        entityId: input.entityId,
-        userId: newUser.id,
-      });
-
-      await ctx.authApi.requestPasswordReset({
-        body: {
-          email: newUser.email,
-          redirectTo: `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
-        },
-        headers: await headers(),
-      });
-
-      await ctx.pubsub.publish("user", {
-        type: "create",
-        data: {
-          id: input.entityId,
-          metadata: {
-            profile: input.profile,
-            entityId: input.entityId,
-          },
-        },
-      });
-      return newUser;
     }),
 
   update: protectedProcedure
@@ -416,87 +314,12 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const userExist = await ctx.db.user.findFirst({
-        where: {
-          username: input.username,
-        },
-      });
-      if (userExist && userExist.id !== input.id) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: `Le nom utilisateur ${input.username} est déjà pris, choisissez-en un autre.`,
-        });
-      }
-      if (input.password) {
-        // due to better-auth migration, i needed to create account for existing user
-        const account = await ctx.db.account.findFirst({
-          where: {
-            userId: input.id,
-            providerId: "credential",
-          },
-        });
-        if (!account) {
-          await ctx.db.account.create({
-            data: {
-              id: uuidv4(),
-              userId: input.id,
-              accountId: input.id,
-              providerId: "credential",
-              password: await hashPassword(input.password),
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          });
-        }
-        const email = input.email ?? `${input.username}@discolaire.com`;
-        await ctx.authApi.requestPasswordReset({
-          body: {
-            email: email,
-            redirectTo: `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
-          },
-          headers: await headers(),
-        });
-        await ctx.authApi.setUserPassword({
-          body: {
-            userId: input.id,
-            newPassword: input.password,
-          },
-          headers: await headers(),
-        });
-      }
-
-      await ctx.db.user.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          username: input.username,
-          ...(input.email && { email: input.email }),
-          isActive: true,
-          ...(input.name && { name: input.name }),
-        },
-      });
-      if (input.email && userExist?.email !== input.email) {
-        await ctx.authApi.sendVerificationEmail({
-          body: {
-            email: input.email,
-          },
-          headers: await headers(),
-        });
-      }
-      await ctx.pubsub.publish("user", {
-        type: "update",
-        data: {
-          id: input.id,
-          metadata: {
-            name: input.name,
-          },
-        },
-      });
-      return ctx.db.user.findUniqueOrThrow({
-        where: {
-          id: input.id,
-        },
+      const requestHeaders = await headers();
+      return ctx.services.user.updateUser({
+        input,
+        authApi: ctx.authApi,
+        requestHeaders,
+        pubsub: ctx.pubsub,
       });
     }),
 

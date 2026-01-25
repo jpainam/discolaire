@@ -34,11 +34,14 @@ export function DropdownInvitation({
       onSelect={async () => {
         const user = await getUserFromEntity({ entityId, entityType });
         openModal({
-          className: "sm:max-w-xl",
+          className: "sm:max-w-lg",
+          title: user.userId ? t("edit") : t("create"),
+          description: `${user.name} - ${user.email}`,
           view: (
             <CreateNewUserForm
               userId={user.userId}
               username={user.username}
+              email={user.email}
               entityId={entityId}
               entityType={entityType}
             />
@@ -55,12 +58,14 @@ export function DropdownInvitation({
 function CreateNewUserForm({
   entityId,
   entityType,
+  email,
   userId,
   username,
 }: {
   entityId: string;
   username?: string;
   userId?: string | null;
+  email?: string;
   entityType: "staff" | "contact" | "student";
 }) {
   const t = useTranslations();
@@ -68,7 +73,7 @@ function CreateNewUserForm({
     username ?? null,
   );
   const [password, setPassword] = useState<string | null>();
-  const [email, setEmail] = useState<string | null>();
+  const [newEmail, setNewEmail] = useState<string | null>(email ?? null);
   const { closeModal } = useModal();
 
   const trpc = useTRPC();
@@ -103,14 +108,14 @@ function CreateNewUserForm({
       updateUserMutation.mutate({
         id: userId,
         username: newUsername,
-        email: email ?? undefined,
+        email: newEmail ?? undefined,
         password: password ?? undefined,
       });
     } else {
       createUserMutation.mutate({
         entityId,
         username: newUsername,
-        email: email ?? undefined,
+        email: newEmail ?? undefined,
         password: password ?? undefined,
         profile: entityType,
       });
@@ -129,6 +134,7 @@ function CreateNewUserForm({
         <Input
           id="username"
           name="username"
+          defaultValue={username}
           required
           placeholder={t("username")}
           onChange={(e) => setNewUsername(e.target.value)}
@@ -140,8 +146,9 @@ function CreateNewUserForm({
           type="email"
           name="email"
           id="email"
+          defaultValue={email}
           placeholder={t("username")}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setNewEmail(e.target.value)}
         />
       </div>
 
@@ -154,7 +161,7 @@ function CreateNewUserForm({
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <div className="col-span-2 flex items-center gap-2">
+      <div className="col-span-2 flex items-center justify-end gap-2">
         <Button
           onClick={() => {
             closeModal();
@@ -164,8 +171,15 @@ function CreateNewUserForm({
         >
           {t("cancel")}
         </Button>
-        <Button type="submit" disabled={createUserMutation.isPending}>
-          {createUserMutation.isPending && <Spinner />}
+        <Button
+          type="submit"
+          disabled={
+            createUserMutation.isPending || updateUserMutation.isPending
+          }
+        >
+          {(createUserMutation.isPending || updateUserMutation.isPending) && (
+            <Spinner />
+          )}
           {userId ? t("update") : t("submit")}
         </Button>
       </div>

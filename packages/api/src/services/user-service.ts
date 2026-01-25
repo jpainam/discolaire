@@ -1,4 +1,12 @@
+import { TRPCError } from "@trpc/server";
+import { generateRandomString, hashPassword } from "better-auth/crypto";
+import { v4 as uuidv4 } from "uuid";
+
+import type { Auth } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
+
+import type { PubSubLogger } from "../pubsub-logger";
+import { env } from "../env";
 
 type PermissionSource =
   | {
@@ -188,6 +196,234 @@ export class UserService {
       };
     }
   }
+
+  async createUser({
+    input,
+    authApi,
+    requestHeaders,
+    schoolId,
+    pubsub,
+  }: {
+    input: {
+      username: string;
+      password?: string;
+      entityId: string;
+      profile: "staff" | "contact" | "student";
+      email?: string;
+    };
+    authApi: Auth["api"];
+    requestHeaders: Headers;
+    schoolId: string;
+    pubsub: PubSubLogger;
+  }) {
+    const entity = await this.getUserFromEntity({
+      entityId: input.entityId,
+      entityType: input.profile,
+    });
+    // check if the entity has un userId already
+    if (entity.userId) {
+      // should never happened, we shoud handle this in frontend with update
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Cet utilisateur possède deja un compte",
+      });
+    }
+    //check for duplicate
+    const exitingUser = await this.db.user.findFirst({
+      where: {
+        username: input.username,
+      },
+    });
+    if (exitingUser) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: `${input.username} est déjà utilisé, choisissez un autre nom d'utilisateur`,
+      });
+    }
+    // 1. Create user
+    const email = input.email ?? `${input.username}@discolaire.com`;
+    const { user: newUser } = await authApi.createUser({
+      body: {
+        email,
+        password: input.password ?? generateRandomString(12),
+        name: entity.name,
+        role: "user",
+        data: { entityId: entity.id, entityType: entity.entityType },
+      },
+      // This endpoint requires session cookies.
+      headers: requestHeaders,
+    });
+    const school = await this.db.school.findUniqueOrThrow({
+      where: {
+        id: schoolId,
+      },
+    });
+    const org = await authApi.getFullOrganization({
+      query: {
+        organizationSlug: school.code,
+      },
+      headers: requestHeaders,
+    });
+    let orgId = org?.id;
+    if (!org) {
+      const metadata = { schoolId: school.id };
+      const newOrg = await authApi.createOrganization({
+        body: {
+          name: school.name,
+          slug: school.code,
+          logo: school.logo ?? undefined,
+          metadata,
+          keepCurrentActiveOrganization: false,
+        },
+        // This endpoint requires session cookies.
+        headers: requestHeaders,
+      });
+      orgId = newOrg?.id;
+    }
+    if (!orgId) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Impossible de créer l'org ${school.code}`,
+      });
+    }
+    // 2. Send invitation
+    await authApi.createInvitation({
+      body: {
+        email: newUser.email,
+        role: "member",
+        organizationId: orgId,
+        resend: true,
+      },
+      headers: requestHeaders,
+    });
+
+    await this.attachUser({
+      entityType: input.profile,
+      entityId: input.entityId,
+      userId: newUser.id,
+    });
+
+    await authApi.requestPasswordReset({
+      body: {
+        email: newUser.email,
+        redirectTo: `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
+      },
+      headers: requestHeaders,
+    });
+
+    await pubsub.publish("user", {
+      type: "create",
+      data: {
+        id: input.entityId,
+        metadata: {
+          profile: input.profile,
+          entityId: input.entityId,
+        },
+      },
+    });
+    return newUser;
+  }
+
+  async updateUser({
+    input,
+    authApi,
+    requestHeaders,
+    pubsub,
+  }: {
+    input: {
+      id: string;
+      username: string;
+      password?: string;
+      email?: string;
+      name?: string;
+    };
+    authApi: Auth["api"];
+    requestHeaders: Headers;
+    pubsub: PubSubLogger;
+  }) {
+    const userExist = await this.db.user.findFirst({
+      where: {
+        username: input.username,
+      },
+    });
+    if (userExist && userExist.id !== input.id) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: `Le nom utilisateur ${input.username} est déjà pris, choisissez-en un autre.`,
+      });
+    }
+    if (input.password) {
+      // due to better-auth migration, i needed to create account for existing user
+      const account = await this.db.account.findFirst({
+        where: {
+          userId: input.id,
+          providerId: "credential",
+        },
+      });
+      if (!account) {
+        await this.db.account.create({
+          data: {
+            id: uuidv4(),
+            userId: input.id,
+            accountId: input.id,
+            providerId: "credential",
+            password: await hashPassword(input.password),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        });
+      }
+      const email = input.email ?? `${input.username}@discolaire.com`;
+      await authApi.requestPasswordReset({
+        body: {
+          email: email,
+          redirectTo: `${env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
+        },
+        headers: requestHeaders,
+      });
+      await authApi.setUserPassword({
+        body: {
+          userId: input.id,
+          newPassword: input.password,
+        },
+        headers: requestHeaders,
+      });
+    }
+
+    await this.db.user.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        username: input.username,
+        ...(input.email && { email: input.email }),
+        isActive: true,
+        ...(input.name && { name: input.name }),
+      },
+    });
+    if (input.email && userExist?.email !== input.email) {
+      await authApi.sendVerificationEmail({
+        body: {
+          email: input.email,
+        },
+        headers: requestHeaders,
+      });
+    }
+    await pubsub.publish("user", {
+      type: "update",
+      data: {
+        id: input.id,
+        metadata: {
+          name: input.name,
+        },
+      },
+    });
+    return this.db.user.findUniqueOrThrow({
+      where: {
+        id: input.id,
+      },
+    });
+  }
   deleteUsers(userIds: string[]) {
     return this.db.user.deleteMany({
       where: {
@@ -360,11 +596,10 @@ export class UserService {
         email: dd?.user?.email,
         entityType: "staff",
       };
-    }
-    if (entityType == "student") {
+    } else if (entityType == "student") {
       const dd = await this.db.student.findUnique({
         where: {
-          id: entityType,
+          id: entityId,
         },
         include: {
           user: true,

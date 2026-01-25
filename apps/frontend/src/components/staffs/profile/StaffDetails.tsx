@@ -194,6 +194,7 @@ export function StaffDetails({ staffId }: { staffId: string }) {
                     if (!staff.userId) return;
                     openModal({
                       title: t("change_password"),
+                      className: "sm:max-w-lg",
                       view: (
                         <CreateEditUser
                           userId={staff.userId}
