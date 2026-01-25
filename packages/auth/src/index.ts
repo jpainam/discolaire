@@ -106,7 +106,6 @@ export function initAuth(options: {
           console.log("Completing registration");
           await completeRegistration({ user, url });
         } else {
-        
           await sendResetPassword({ user, url });
         }
       },

@@ -27,7 +27,6 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 
 const passwordFormSchema = z.object({
@@ -106,7 +105,7 @@ export function ReinitializePassword() {
                       <Link
                         target="_blank"
                         className="underline"
-                        href={routes.auth.forgotPassword}
+                        href={"/auth/request-reset-password"}
                       >
                         {t("Forgot password")}
                       </Link>

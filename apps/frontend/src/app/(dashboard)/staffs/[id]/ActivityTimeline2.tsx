@@ -52,6 +52,7 @@ const items = [
 
 export function ActivityTimeline({ staffId }: { staffId: string }) {
   const trpc = useTRPC();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: timeline } = useSuspenseQuery(
     trpc.staff.timelines.queryOptions(staffId),
   );
