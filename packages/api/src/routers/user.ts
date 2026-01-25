@@ -273,7 +273,7 @@ export const userRouter = {
           id: input,
         },
       });
-      const entity = await ctx.services.user.getEntity(
+      const entity = await ctx.services.user.getEntityFromUser(
         user.id,
         user.profile as "student" | "contact" | "staff",
       );
@@ -297,7 +297,7 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const entity = await ctx.services.user.getUserByEntity({
+      const entity = await ctx.services.user.getUserFromEntity({
         entityId: input.entityId,
         entityType: input.profile,
       });
@@ -497,6 +497,20 @@ export const userRouter = {
         where: {
           id: input.id,
         },
+      });
+    }),
+
+  getUserFromEntity: protectedProcedure
+    .input(
+      z.object({
+        entityId: z.string(),
+        entityType: z.enum(["staff", "contact", "student"]),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.services.user.getUserFromEntity({
+        entityId: input.entityId,
+        entityType: input.entityType,
       });
     }),
 

@@ -1,7 +1,3 @@
-import { headers } from "next/headers";
-import { generateRandomString } from "better-auth/crypto";
-
-import type { Auth } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
 
 type PermissionSource =
@@ -150,7 +146,10 @@ export class UserService {
       },
     });
   }
-  async getEntity(userId: string, profile: "student" | "staff" | "contact") {
+  async getEntityFromUser(
+    userId: string,
+    profile: "student" | "staff" | "contact",
+  ) {
     if (profile == "staff") {
       const s = await this.db.staff.findFirst({
         where: {
@@ -330,13 +329,21 @@ export class UserService {
       name: `${ddd.lastName} ${ddd.firstName}`,
     };
   }
-  async getUserByEntity({
+  async getUserFromEntity({
     entityId,
     entityType,
   }: {
     entityId: string;
     entityType: "staff" | "student" | "contact";
   }) {
+    let ret: {
+      name: string;
+      id?: string;
+      userId?: string | null;
+      username?: string;
+      email?: string;
+      entityType: "staff" | "student" | "contact";
+    } | null = null;
     if (entityType == "staff") {
       const dd = await this.db.staff.findUnique({
         where: {
@@ -346,7 +353,7 @@ export class UserService {
           user: true,
         },
       });
-      return {
+      ret = {
         name: `${dd?.lastName} ${dd?.firstName}`,
         id: dd?.id,
         userId: dd?.userId,
@@ -363,78 +370,41 @@ export class UserService {
           user: true,
         },
       });
-      return {
+      ret = {
         name: `${dd?.lastName} ${dd?.firstName}`,
         id: dd?.id,
         userId: dd?.userId,
         email: dd?.user?.email,
         entityType: "student",
       };
+    } else {
+      const dd = await this.db.contact.findUnique({
+        where: {
+          id: entityId,
+        },
+        include: {
+          user: true,
+        },
+      });
+      ret = {
+        name: `${dd?.lastName} ${dd?.firstName}`,
+        id: dd?.id,
+        userId: dd?.userId,
+        entityType: "contact",
+        email: dd?.user?.email,
+      };
     }
-
-    const dd = await this.db.contact.findUnique({
-      where: {
-        id: entityId,
-      },
-      include: {
-        user: true,
-      },
-    });
-    return {
-      name: `${dd?.lastName} ${dd?.firstName}`,
-      id: dd?.id,
-      userId: dd?.userId,
-      entityType: "contact",
-      email: dd?.user?.email,
-    };
-  }
-  async createUser({
-    email,
-    username,
-    authApi,
-    entityId,
-    password,
-    profile,
-    schoolId,
-    name,
-    isActive,
-  }: {
-    email?: string;
-    username: string;
-    entityId: string;
-    name: string;
-    authApi: Auth["api"];
-    password?: string;
-    profile: "student" | "staff" | "contact";
-    schoolId: string;
-    isActive?: boolean;
-  }) {
-    const finalEmail = email?.trim() ? email : `${username}@discolaire.com`;
-    const newUser = await authApi.signUpEmail({
-      body: {
-        email: finalEmail,
-        username: username.toLowerCase(),
-        name: name,
-        profile: profile,
-        schoolId: schoolId,
-        password: password ?? generateRandomString(12),
-        isActive: isActive ?? true,
-      },
-      headers: await headers(),
-    });
-    await this.attachUser({
-      userId: newUser.user.id,
-      entityId: entityId,
-      entityType: profile,
-    });
-
-    await authApi.requestPasswordReset({
-      body: {
-        email: newUser.user.email,
-        redirectTo: `/auth/complete-registration/${newUser.user.id}`,
-      },
-      headers: await headers(),
-    });
-    return newUser.user;
+    if (ret.userId) {
+      const user = await this.db.user.findUniqueOrThrow({
+        where: {
+          id: ret.userId,
+        },
+      });
+      return {
+        ...ret,
+        username: user.username,
+      };
+    }
+    return ret;
   }
 }

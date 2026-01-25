@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Mail, SendIcon } from "lucide-react";
+import { SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { authClient } from "~/auth/client";
+import { getUserFromEntity } from "~/actions/user_action";
+import { Button } from "~/components/ui/button";
 import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
-import { useConfirm } from "~/providers/confirm-dialog";
-import { useSchool } from "~/providers/SchoolProvider";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Spinner } from "~/components/ui/spinner";
+import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
 export function DropdownInvitation({
@@ -21,69 +25,150 @@ export function DropdownInvitation({
   email?: string | null;
 }) {
   const t = useTranslations();
-  const { school } = useSchool();
 
-  const confirm = useConfirm();
-  const trpc = useTRPC();
-  const createUserMutation = useMutation(
-    trpc.user.invite.mutationOptions({
-      onSuccess: () => {
-        toast.success(t("email_sent_successfully"), { id: 0 });
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
+  const { openModal } = useModal();
 
   return (
     <DropdownMenuItem
       disabled={!email}
       onSelect={async () => {
-        if (!email) {
-          toast.error(t("email_not_found"));
-          return;
-        }
-
-        const isConfirmed = await confirm({
-          title: t("send_invite"),
-          icon: <Mail className="h-4 w-4" />,
-          description: t("would_you_like_to_invite_this_person"),
-          confirmText: t("yes"),
-          confirmButton: {
-            className: "",
-          },
-          cancelText: t("no"),
-          alertDialogTitle: {
-            className: "flex items-center gap-2",
-          },
+        const user = await getUserFromEntity({ entityId, entityType });
+        openModal({
+          className: "sm:max-w-xl",
+          view: (
+            <CreateNewUserForm
+              userId={user.userId}
+              username={user.username}
+              entityId={entityId}
+              entityType={entityType}
+            />
+          ),
         });
-        if (isConfirmed) {
-          toast.loading(t("sending_invite"), { id: 0 });
-          const { data, error } = await authClient.organization.inviteMember({
-            email: email,
-            role: "member",
-            organizationId: school.id,
-            resend: true,
-            //teamId: school.id,
-          });
-          
-          // createUserMutation.mutate({
-          //   entityId: entityId,
-          //   entityType: entityType,
-          //   email: email,
-          // });
-
-          // await authClient.forgetPassword({
-          //   email: email,
-          //   //redirectTo: `/auth/complete-registration/${newUser.user.id}`,
-          // });
-          // toast.success(t("email_sent_successfully"), { id: 0 });
-        }
       }}
     >
       <SendIcon />
       {t("send_invite")}
     </DropdownMenuItem>
+  );
+}
+
+function CreateNewUserForm({
+  entityId,
+  entityType,
+  userId,
+  username,
+}: {
+  entityId: string;
+  username?: string;
+  userId?: string | null;
+  entityType: "staff" | "contact" | "student";
+}) {
+  const t = useTranslations();
+  const [newUsername, setNewUsername] = useState<string | null>(
+    username ?? null,
+  );
+  const [password, setPassword] = useState<string | null>();
+  const [email, setEmail] = useState<string | null>();
+  const { closeModal } = useModal();
+
+  const trpc = useTRPC();
+  const createUserMutation = useMutation(
+    trpc.user.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message);
+      },
+      onSuccess: () => {
+        toast.success(t("created_successfully"));
+        closeModal();
+      },
+    }),
+  );
+  const updateUserMutation = useMutation(
+    trpc.user.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message);
+      },
+      onSuccess: () => {
+        toast.success(t("updated_successfully"));
+        closeModal();
+      },
+    }),
+  );
+  const handleSubmit = () => {
+    if (!newUsername) {
+      toast.warning("Veuillez entrer tous les champs obligatoires");
+      return;
+    }
+    if (userId) {
+      updateUserMutation.mutate({
+        id: userId,
+        username: newUsername,
+        email: email ?? undefined,
+        password: password ?? undefined,
+      });
+    } else {
+      createUserMutation.mutate({
+        entityId,
+        username: newUsername,
+        email: email ?? undefined,
+        password: password ?? undefined,
+        profile: entityType,
+      });
+    }
+  };
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        void handleSubmit();
+      }}
+      className="grid grid-cols-2 gap-6"
+    >
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="username">{t("username")}</Label>
+        <Input
+          id="username"
+          name="username"
+          required
+          placeholder={t("username")}
+          onChange={(e) => setNewUsername(e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="email">{t("email")}</Label>
+        <Input
+          type="email"
+          name="email"
+          id="email"
+          placeholder={t("username")}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+
+      <div className="col-span-2 flex flex-col gap-2">
+        <Label htmlFor="password">{t("password")}</Label>
+        <Input
+          required
+          name="password"
+          id="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+      <div className="col-span-2 flex items-center gap-2">
+        <Button
+          onClick={() => {
+            closeModal();
+          }}
+          type="button"
+          variant={"secondary"}
+        >
+          {t("cancel")}
+        </Button>
+        <Button type="submit" disabled={createUserMutation.isPending}>
+          {createUserMutation.isPending && <Spinner />}
+          {userId ? t("update") : t("submit")}
+        </Button>
+      </div>
+    </form>
   );
 }

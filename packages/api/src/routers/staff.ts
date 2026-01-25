@@ -1,4 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
+import { headers } from "next/headers";
 import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod/v4";
@@ -120,29 +121,14 @@ export const staffRouter = {
   create: protectedProcedure
     .input(createUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { email, ...data } = input;
       const staff = await ctx.db.staff.create({
         data: {
-          ...data,
+          ...input,
           email: input.email,
           dateOfBirth: input.dateOfBirth,
           schoolId: ctx.schoolId,
         },
       });
-      if (email) {
-        await ctx.services.user.createUser({
-          email,
-          entityId: staff.id,
-          username: getFullName(staff)
-            .replace(/[^a-zA-Z0-9]/g, "")
-            .toLowerCase(),
-          authApi: ctx.authApi,
-          schoolId: ctx.schoolId,
-          name: getFullName(staff),
-          profile: "staff",
-          isActive: true,
-        });
-      }
       await ctx.pubsub.publish("staff", {
         type: "create",
         data: {
@@ -158,41 +144,27 @@ export const staffRouter = {
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, email, ...data } = input;
-
-      const staff = await ctx.db.staff.findUniqueOrThrow({
+      const { id, ...data } = input;
+      const staff = await ctx.db.staff.update({
         where: {
           id: id,
         },
         include: {
           user: true,
         },
+        data: {
+          ...data,
+        },
       });
-      if (email && staff.user?.email !== email) {
-        if (staff.user) {
-          // If the email is changed, we need to update the user email as well
-          await ctx.db.user.update({
-            where: {
-              id: staff.user.id,
-            },
-            data: {
-              email: email,
-            },
-          });
-        } else {
-          await ctx.services.user.createUser({
-            email,
-            entityId: id,
-            username: getFullName(staff)
-              .replace(/[^a-zA-Z0-9]/g, "")
-              .toLowerCase(),
-            authApi: ctx.authApi,
-            schoolId: ctx.schoolId,
-            name: getFullName(staff),
-            profile: "staff",
-            isActive: true,
-          });
-        }
+
+      if (staff.userId && input.email && staff.user?.email !== input.email) {
+        await ctx.authApi.adminUpdateUser({
+          body: {
+            userId: staff.userId,
+            data: { email: input.email, name: getFullName(staff) },
+          },
+          headers: await headers(),
+        });
       }
       await ctx.pubsub.publish("staff", {
         type: "update",
@@ -201,16 +173,6 @@ export const staffRouter = {
           metadata: {
             name: data.lastName,
           },
-        },
-      });
-      return ctx.db.staff.update({
-        where: {
-          id: id,
-        },
-        data: {
-          ...data,
-          email: input.email,
-          dateOfBirth: data.dateOfBirth,
         },
       });
     }),
