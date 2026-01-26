@@ -1,12 +1,16 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
+
+
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { Skeleton } from "~/components/ui/skeleton";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient } from "~/trpc/server";
 import { CreateEditStudent } from "./CreateEditStudent";
+import { StudentFormProvider } from "./StudentFormContext";
+
 
 export default async function Page() {
   const canCreateStudent = await checkPermission("student.create");
@@ -25,7 +29,9 @@ export default async function Page() {
             </div>
           }
         >
-          <CreateEditStudent />
+          <StudentFormProvider>
+            <CreateEditStudent />
+          </StudentFormProvider>
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
