@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { decode } from "entities";
+import z from "zod";
 
 type Person = {
   firstName?: string | null;
@@ -66,3 +67,25 @@ export function isAnniversary(dateOfBirth: Date): boolean {
 
 export const xlsxType =
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+// Source - https://stackoverflow.com/a/79475906
+// Posted by vzsoares
+// Retrieved 2026-01-25, License - CC BY-SA 4.0
+
+export const fixHtmlFormOptionalFields = <T extends z.ZodObject<any, any>>(
+  schema: T,
+): T => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const entries = Object.entries(schema.shape);
+
+  const transformedEntries = entries.map(([key, value]) => {
+    // Only transform optional schemas
+    if (value instanceof z.ZodOptional) {
+      return [key, z.union([value, z.literal("")])];
+    }
+
+    return [key, value];
+  });
+
+  return z.object(Object.fromEntries(transformedEntries)) as T;
+};

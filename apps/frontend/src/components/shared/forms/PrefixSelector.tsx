@@ -21,13 +21,13 @@ export default function PrefixSelector({
   defaultValue?: string;
   onChange?: (value: string) => void;
 }) {
-  const t = useTranslations();
   const items: { label: string; value: string }[] = [
-    { label: t("M"), value: "M" },
-    { label: t("Mme"), value: "Mme" },
-    { label: t("Mlle"), value: "Mlle" },
-    { label: t("Dr"), value: "Dr" },
+    { label: "M", value: "M" },
+    { label: "Mme", value: "Mme" },
+    { label: "Mlle", value: "Mlle" },
+    { label: "Dr", value: "Dr" },
   ];
+  const t = useTranslations();
   return (
     <Select
       onValueChange={(val) => {
@@ -35,7 +35,7 @@ export default function PrefixSelector({
       }}
       defaultValue={defaultValue ?? "M"}
     >
-      <SelectTrigger className={cn("w-[180px]", className)}>
+      <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder={placeholder ?? t("prefix")} />
       </SelectTrigger>
       <SelectContent>

@@ -572,7 +572,6 @@ model School {
     accountingJournals        AccountingJournal[]
     requiredJournals          RequiredAccountingJournal[]
     notificationSubscriptions NotificationSubscription[]
-    employmentTypes           EmploymentType[]
     modules                   Module[]
     permissions               Permission[]
     roles                     Role[]
