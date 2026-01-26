@@ -1,11 +1,24 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Building, Check, User, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building,
+  Check,
+  User,
+  Users,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
-
-
-import { Stepper, StepperDescription, StepperIndicator, StepperItem, StepperSeparator, StepperTitle, StepperTrigger } from "~/components/stepper";
+import {
+  Stepper,
+  StepperDescription,
+  StepperIndicator,
+  StepperItem,
+  StepperSeparator,
+  StepperTitle,
+  StepperTrigger,
+} from "~/components/stepper";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { AcademicInfoStep } from "./AcademicInfoStep";
@@ -14,7 +27,6 @@ import { ParentsStep } from "./ParentsStep";
 import { ReviewSubmitStep } from "./ReviewSubmitStep";
 import { useStudentFormContext } from "./StudentFormContext";
 import { studentSchema } from "./validation";
-
 
 const stepFormIdMap: Record<number, string> = {
   1: "student-basic-info-form",
