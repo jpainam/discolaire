@@ -1,8 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -13,6 +13,7 @@ import { useStudentFormContext } from "./StudentFormContext";
 export function ReviewSubmitStep() {
   const t = useTranslations();
   const trpc = useTRPC();
+  const locale = useLocale();
   const classroomsQuery = useQuery(trpc.classroom.all.queryOptions());
   const classrooms = classroomsQuery.data ?? [];
   const { basicInfo, academicInfo, selectedParents } = useStudentFormContext();
@@ -36,21 +37,26 @@ export function ReviewSubmitStep() {
             </div>
             <p>
               <strong>{t("dateOfBirth")}</strong>{" "}
-              {basicInfo.dateOfBirth?.toString()}
+              {basicInfo.dateOfBirth.toLocaleDateString(locale, {
+                timeZone: "UTC",
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
             </p>
             <div>
               <strong>{t("gender")}</strong> {basicInfo.gender}
             </div>
             <div>
-              <strong>{t("nationality")}</strong> {basicInfo.countryId}
+              <strong>{t("country")}</strong> {basicInfo.countryId}
             </div>
             <div>
               <strong>{t("classroom")}</strong>{" "}
-              {classrooms.find((c) => c.id === academicInfo.classroomId)?.name ??
-                "N/A"}
+              {classrooms.find((c) => c.id === academicInfo.classroomId)
+                ?.name ?? "N/A"}
             </div>
             <div>
-              <strong>{t("status")}</strong> {t(academicInfo.status ?? "")}
+              <strong>{t("status")}</strong> {t(academicInfo.status)}
             </div>
           </div>
 

@@ -87,7 +87,7 @@ export function CreateEditStudent() {
       case 2:
         return <AcademicInfoStep onNextAction={nextStep} />;
       case 3:
-        return <ParentsStep onNextAction={nextStep} />;
+        return <ParentsStep />;
       case 4:
         return <ReviewSubmitStep />;
       default:
@@ -110,14 +110,21 @@ export function CreateEditStudent() {
             {t("previous")}
           </Button>
           {currentStep < steps.length ? (
-            <Button
-              variant="default"
-              type="submit"
-              form={stepFormIdMap[currentStep]}
-            >
-              {t("next")}
-              <ArrowRight />
-            </Button>
+            currentStep === 3 ? (
+              <Button variant="default" type="button" onClick={nextStep}>
+                {t("next")}
+                <ArrowRight />
+              </Button>
+            ) : (
+              <Button
+                variant="default"
+                type="submit"
+                form={stepFormIdMap[currentStep]}
+              >
+                {t("next")}
+                <ArrowRight />
+              </Button>
+            )
           ) : (
             <Button type="button" variant="default" onClick={handleSubmit}>
               {t("submit")}

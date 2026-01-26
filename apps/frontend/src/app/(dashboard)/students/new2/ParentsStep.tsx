@@ -1,23 +1,30 @@
 "use client";
 
-import type { z } from "zod/v4";
 import { useState } from "react";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import { useForm } from "@tanstack/react-form";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Search, Users } from "lucide-react";
+import { ArrowRight, Search, Users, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useDebouncedCallback } from "use-debounce";
-
-
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "~/components/ui/input-group";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import { Label } from "~/components/ui/label";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useModal } from "~/hooks/use-modal";
@@ -25,14 +32,13 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { CreateParent } from "./CreateParent";
 import { useStudentFormContext } from "./StudentFormContext";
-import { parentsSchema } from "./validation";
 
-
-export function ParentsStep({ onNextAction }: { onNextAction: () => void }) {
+export function ParentsStep() {
   const trpc = useTRPC();
   const t = useTranslations();
   const { openModal } = useModal();
-  const { selectedParents, setSelectedParents } = useStudentFormContext();
+  const { selectedParents, setSelectedParents, removeParent } =
+    useStudentFormContext();
 
   const [query, setQuery] = useState("");
   const [relationshipId, setRelationshipId] = useState<string | null>(null);
@@ -44,39 +50,30 @@ export function ParentsStep({ onNextAction }: { onNextAction: () => void }) {
     trpc.contact.all.queryOptions({ query, limit: 10 }),
   );
 
-  const defaultValues: z.input<typeof parentsSchema> = { selectedParents };
-
-  const form = useForm({
-    defaultValues,
-    validators: { onSubmit: parentsSchema },
-    onSubmit: ({ value }) => {
-      setSelectedParents(value.selectedParents ?? []);
-      onNextAction();
-    },
-  });
-
   const handleAddParent = (parent: {
     id: string;
     name: string;
-    relationshipId: string;
+    relationshipId?: string | null;
   }) => {
-    const nextParents = selectedParents.some((item) => item.id === parent.id)
-      ? selectedParents
-      : [...selectedParents, parent];
+    const resolvedRelationshipId =
+      parent.relationshipId ?? relationshipId ?? "";
+    setSelectedParents([...selectedParents]);
+    const existingIndex = selectedParents.findIndex(
+      (item) => item.id === parent.id,
+    );
+    const nextParent = { ...parent, relationshipId: resolvedRelationshipId };
 
-    setSelectedParents(nextParents);
-    form.setFieldValue("selectedParents", nextParents);
+    if (existingIndex >= 0) {
+      const next = [...selectedParents];
+      next[existingIndex] = nextParent;
+      setSelectedParents(next);
+    } else {
+      setSelectedParents([...selectedParents, nextParent]);
+    }
   };
 
   return (
-    <form
-      id="student-parents-form"
-      className="flex flex-col gap-4"
-      onSubmit={(event) => {
-        event.preventDefault();
-        void form.handleSubmit();
-      }}
-    >
+    <div className="flex flex-col gap-4">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -198,14 +195,35 @@ export function ParentsStep({ onNextAction }: { onNextAction: () => void }) {
               })}
             </div>
             <div className="max-h-[500px] overflow-y-auto rounded-lg border">
-              <EmptyComponent
-                title="Séléctionner à gauche"
-                description="Commencer par sélectionner les parent à ajouter à l'élève"
-              />
+              {selectedParents.map((p, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="hover:bg-muted/50 flex items-center justify-between border-b p-2 last:border-b-0"
+                  >
+                    <Label>{p.name}</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => {
+                        removeParent(p.id);
+                      }}
+                    >
+                      <XIcon className="text-destructive" />
+                    </Button>
+                  </div>
+                );
+              })}
+              {selectedParents.length == 0 && (
+                <EmptyComponent
+                  title="Séléctionner à gauche"
+                  description="Commencer par sélectionner les parent à ajouter à l'élève"
+                />
+              )}
             </div>
           </div>
         </CardContent>
       </Card>
-    </form>
+    </div>
   );
 }

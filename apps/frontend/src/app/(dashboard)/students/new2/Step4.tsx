@@ -42,7 +42,7 @@ export function Step4() {
               <strong>{t("gender")}</strong> {studentData.gender}
             </div>
             <div>
-              <strong>{t("nationality")}</strong> {studentData.countryId}
+              <strong>{t("country")}</strong> {studentData.countryId}
             </div>
             <div>
               <strong>{t("classroom")}</strong>{" "}

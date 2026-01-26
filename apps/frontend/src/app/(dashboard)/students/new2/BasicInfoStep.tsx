@@ -396,7 +396,7 @@ export function BasicInfoStep({ onNextAction }: { onNextAction: () => void }) {
                     defaultValue={field.state.value ?? undefined}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder={t("Select")} />
+                      <SelectValue placeholder={"Select"} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="A+">A+</SelectItem>
