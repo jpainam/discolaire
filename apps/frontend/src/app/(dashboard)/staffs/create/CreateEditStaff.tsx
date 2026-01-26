@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Search } from "lucide-react";
@@ -46,12 +47,15 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
+import { Spinner } from "~/components/ui/spinner";
+import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
 import { StaffAvatarDropzone } from "./StaffAvatarDropzone";
 
 const staffCreateSchema = z.object({
   prefix: z.string().min(1),
   lastName: z.string().min(1),
+  avatar: z.string().optional(),
   firstName: z.string().optional(),
   dateOfBirth: z.date().optional(),
   placeOfBirth: z.string().optional(),
@@ -97,14 +101,46 @@ export default function CreateEditStaff({
   const t = useTranslations();
   const queryClient = useQueryClient();
   const trpc = useTRPC();
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const router = useRouter();
+  const uploadAvatar = async (ownerId: string) => {
+    if (!avatarFile) return;
+    setIsUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", avatarFile, avatarFile.name);
+      const response = await fetch(
+        `/api/upload/avatars?id=${ownerId}&profile=staff`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      setAvatarFile(null);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Avatar upload failed",
+        { id: 0 },
+      );
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
   const createStaffMutation = useMutation(
     trpc.staff.create.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-      onSuccess: async () => {
+      onSuccess: async (created) => {
+        await uploadAvatar(created.id);
         await queryClient.invalidateQueries(trpc.staff.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
+        router.push(`/staffs/${created.id}`);
       },
     }),
   );
@@ -113,9 +149,11 @@ export default function CreateEditStaff({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-      onSuccess: async () => {
+      onSuccess: async (updated) => {
+        await uploadAvatar(updated.id);
         await queryClient.invalidateQueries(trpc.staff.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
+        router.push(`/staffs/${updated.id}`);
       },
     }),
   );
@@ -123,12 +161,19 @@ export default function CreateEditStaff({
     prefix: "M",
     lastName: "",
     firstName: "",
+    avatar: staff?.avatar ?? undefined,
     dateOfBirth: staff?.dateOfBirth ?? undefined,
-    placeOfBirth: "",
+    placeOfBirth: staff?.placeOfBirth ?? "",
     gender: staff?.gender ?? "male",
+    bloodType: staff?.bloodType ?? "",
     phoneNumber1: staff?.phoneNumber1 ?? "",
     phoneNumber2: staff?.phoneNumber2 ?? "",
+    isTeacher: staff?.isTeacher ?? true,
+    degreeId: staff?.degreeId ?? "",
     countryId: staff?.countryId ?? "",
+    dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck ?? undefined,
+    dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? undefined,
+    sendAgendaFrequency: staff?.sendAgendaFrequency ?? "",
     email: staff?.email ?? "",
     address: staff?.address ?? "",
     dateOfHire: staff?.dateOfHire ?? undefined,
@@ -140,20 +185,32 @@ export default function CreateEditStaff({
       | "internship"
       | "freelance",
     specialty: staff?.specialty ?? "",
-    weeklyWorkingHours: 40,
-    baseSalary: "",
-    travelAllowance: "",
-    phoneAllowance: "",
-    housingAllowance: "",
-    transportAllowance: "",
-    performanceBonus: "",
-    bankName: "",
-    accountNumber: "",
-    bankCode: "",
+    weeklyWorkingHours: staff?.weeklyWorkingHours ?? 40,
+    baseSalary: staff?.baseSalary != null ? `${staff.baseSalary}` : "",
+    travelAllowance:
+      staff?.travelAllowance != null ? `${staff.travelAllowance}` : "",
+    phoneAllowance:
+      staff?.phoneAllowance != null ? `${staff.phoneAllowance}` : "",
+    housingAllowance:
+      staff?.housingAllowance != null ? `${staff.housingAllowance}` : "",
+    transportAllowance:
+      staff?.transportAllowance != null ? `${staff.transportAllowance}` : "",
+    performanceBonus:
+      staff?.performanceBonus != null ? `${staff.performanceBonus}` : "",
+    bankName: staff?.bankName ?? "",
+    accountNumber: staff?.accountNumber ?? "",
+    bankCode: staff?.bankCode ?? "",
     cnps: staff?.cnps ?? "",
     cnss: staff?.cnss ?? "",
     tax: staff?.tax ?? "",
+    observation: staff?.observation ?? "",
   };
+  const toNumber = (value?: string) => {
+    if (value == null || value.trim() === "") return undefined;
+    const parsed = Number(value);
+    return Number.isNaN(parsed) ? undefined : parsed;
+  };
+
   const form = useForm({
     defaultValues,
     validators: {
@@ -162,7 +219,14 @@ export default function CreateEditStaff({
     onSubmit: ({ value }) => {
       const values = {
         ...value,
-        housingAllowance: Number(value.housingAllowance),
+        firstName: value.firstName ?? "",
+        degreeId: value.degreeId?.trim() ? value.degreeId : undefined,
+        baseSalary: toNumber(value.baseSalary),
+        travelAllowance: toNumber(value.travelAllowance),
+        phoneAllowance: toNumber(value.phoneAllowance),
+        housingAllowance: toNumber(value.housingAllowance),
+        transportAllowance: toNumber(value.transportAllowance),
+        performanceBonus: toNumber(value.performanceBonus),
       };
       if (staff) {
         updateStaffMutation.mutate({
@@ -240,54 +304,54 @@ export default function CreateEditStaff({
                       );
                     }}
                   />
-                  <form.Field
-                    name="lastName"
-                    children={(field) => {
-                      const isInvalid =
-                        field.state.meta.isTouched && !field.state.meta.isValid;
-                      return (
-                        <Field data-invalid={isInvalid}>
-                          <FieldLabel htmlFor={field.name}>
-                            Nom <span className="text-destructive">*</span>
-                          </FieldLabel>
+                  <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    <form.Field
+                      name="lastName"
+                      children={(field) => {
+                        const isInvalid =
+                          field.state.meta.isTouched &&
+                          !field.state.meta.isValid;
+                        return (
+                          <Field data-invalid={isInvalid}>
+                            <FieldLabel htmlFor={field.name}>Nom</FieldLabel>
+                            <Input
+                              id={field.name}
+                              name={field.name}
+                              value={field.state.value}
+                              onBlur={field.handleBlur}
+                              onChange={(event) =>
+                                field.handleChange(event.target.value)
+                              }
+                              aria-invalid={isInvalid}
+                              autoComplete="off"
+                            />
+                            {isInvalid && (
+                              <FieldError errors={field.state.meta.errors} />
+                            )}
+                          </Field>
+                        );
+                      }}
+                    />
+                    <form.Field
+                      name="firstName"
+                      children={(field) => (
+                        <Field>
+                          <FieldLabel htmlFor={field.name}>Prénom</FieldLabel>
                           <Input
                             id={field.name}
                             name={field.name}
-                            value={field.state.value}
+                            value={field.state.value ?? ""}
                             onBlur={field.handleBlur}
                             onChange={(event) =>
                               field.handleChange(event.target.value)
                             }
-                            aria-invalid={isInvalid}
                             autoComplete="off"
                           />
-                          {isInvalid && (
-                            <FieldError errors={field.state.meta.errors} />
-                          )}
                         </Field>
-                      );
-                    }}
-                  />
+                      )}
+                    />
+                  </div>
                 </FieldGroup>
-
-                <form.Field
-                  name="firstName"
-                  children={(field) => (
-                    <Field>
-                      <FieldLabel htmlFor={field.name}>Prénom</FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value ?? ""}
-                        onBlur={field.handleBlur}
-                        onChange={(event) =>
-                          field.handleChange(event.target.value)
-                        }
-                        autoComplete="off"
-                      />
-                    </Field>
-                  )}
-                />
 
                 <form.Field
                   name="dateOfBirth"
@@ -459,7 +523,6 @@ export default function CreateEditStaff({
                           name={field.name}
                           type="email"
                           placeholder="example@kelasi.com"
-                          disabled={autoGenerateEmail}
                           value={field.state.value}
                           onBlur={field.handleBlur}
                           onChange={(event) =>
@@ -496,7 +559,15 @@ export default function CreateEditStaff({
                 />
               </FieldGroup>
               <FieldGroup>
-                <StaffAvatarDropzone />
+                <StaffAvatarDropzone
+                  initialImage={staff?.avatar ?? null}
+                  disabled={
+                    createStaffMutation.isPending ||
+                    updateStaffMutation.isPending ||
+                    isUploadingAvatar
+                  }
+                  onFileChange={setAvatarFile}
+                />
               </FieldGroup>
             </AccordionContent>
           </AccordionItem>
@@ -919,11 +990,20 @@ export default function CreateEditStaff({
         </Accordion>
 
         {/* Form Actions */}
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 pt-2">
           <Button type="button" variant="outline">
             Annuler
           </Button>
-          <Button type="submit">{t("add")}</Button>
+          <Button
+            type="submit"
+            disabled={
+              createStaffMutation.isPending || updateStaffMutation.isPending
+            }
+          >
+            {(createStaffMutation.isPending ||
+              updateStaffMutation.isPending) && <Spinner />}
+            {staff ? t("update") : t("add")}
+          </Button>
         </div>
       </form>
     </div>

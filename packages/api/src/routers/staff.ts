@@ -1,6 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { headers } from "next/headers";
-import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod/v4";
 
@@ -16,6 +15,9 @@ const createUpdateSchema = z.object({
   jobTitle: z.string().optional(),
   employmentType: z.string().optional(),
   dateOfHire: z.coerce.date().optional(),
+  dateOfRelease: z.coerce.date().optional(),
+  placeOfBirth: z.string().optional(),
+  bloodType: z.string().optional(),
   dateOfBirth: z.coerce.date().optional(),
   isTeacher: z.boolean().default(false),
   gender: z.enum(["female", "male"]).default("male"),
@@ -29,6 +31,20 @@ const createUpdateSchema = z.object({
   address: z.string().optional(),
   countryId: z.string().optional(),
   degreeId: z.string().optional(),
+  specialty: z.string().optional(),
+  weeklyWorkingHours: z.coerce.number().int().min(1).max(168).optional(),
+  baseSalary: z.number().optional(),
+  travelAllowance: z.number().optional(),
+  phoneAllowance: z.number().optional(),
+  housingAllowance: z.number().optional(),
+  transportAllowance: z.number().optional(),
+  performanceBonus: z.number().optional(),
+  bankName: z.string().optional(),
+  accountNumber: z.string().optional(),
+  bankCode: z.string().optional(),
+  cnps: z.string().optional(),
+  cnss: z.string().optional(),
+  tax: z.string().optional(),
 });
 export const staffRouter = {
   all: protectedProcedure.query(({ ctx }) => {
@@ -175,6 +191,7 @@ export const staffRouter = {
           },
         },
       });
+      return staff;
     }),
   count: protectedProcedure
     .input(
@@ -315,10 +332,11 @@ export const staffRouter = {
         },
       });
       if (!staff.userId) {
-        throw new TRPCError({
-          code: "PRECONDITION_FAILED",
-          message: "Le staff n'est pas de compte utilisateur",
-        });
+        // throw new TRPCError({
+        //   code: "PRECONDITION_FAILED",
+        //   message: "Le staff n'est pas de compte utilisateur",
+        // });
+        return [];
       }
       return ctx.services.user.getPermissions(staff.userId);
     }),

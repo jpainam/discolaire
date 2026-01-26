@@ -20,7 +20,6 @@ import { directoryRouter } from "./routers/directory";
 import { disciplineRouter } from "./routers/discipline";
 import { documentRouter } from "./routers/document";
 import { emailRouter } from "./routers/email";
-import { employmentTypeRouter } from "./routers/employmentType";
 import { enrollmentRouter } from "./routers/enrollment";
 import { feeRouter } from "./routers/fee";
 import { feedbackRouter } from "./routers/feedback";
@@ -98,7 +97,6 @@ export const appRouter = createTRPCRouter({
   convocation: convocationRouter,
   student: studentRouter,
   permission: permissionRouter,
-  employmentType: employmentTypeRouter,
   scheduleTask: scheduleTaskRouter,
   assignment: assignmentRouter,
   term: termRouter,

@@ -1,7 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import type React from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ImageIcon, Upload, X } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -9,22 +10,34 @@ import { cn } from "~/lib/utils";
 
 interface ImageDropzoneProps {
   className?: string;
+  initialImage?: string | null;
+  disabled?: boolean;
+  onFileChange?: (file: File | null) => void;
 }
 
-export function StaffAvatarDropzone({ className }: ImageDropzoneProps) {
-  const [image, setImage] = useState<string | null>(null);
+export function StaffAvatarDropzone({
+  className,
+  initialImage = null,
+  disabled = false,
+  onFileChange,
+}: ImageDropzoneProps) {
+  const [image, setImage] = useState<string | null>(initialImage);
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = useCallback((file: File) => {
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  }, []);
+  const handleFile = useCallback(
+    (file: File) => {
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setImage(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+        onFileChange?.(file);
+      }
+    },
+    [onFileChange],
+  );
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -61,11 +74,18 @@ export function StaffAvatarDropzone({ className }: ImageDropzoneProps) {
     if (inputRef.current) {
       inputRef.current.value = "";
     }
-  }, []);
+    onFileChange?.(null);
+  }, [onFileChange]);
 
   const handleClick = useCallback(() => {
-    inputRef.current?.click();
-  }, []);
+    if (!disabled) {
+      inputRef.current?.click();
+    }
+  }, [disabled]);
+
+  useEffect(() => {
+    setImage(initialImage);
+  }, [initialImage]);
 
   return (
     <div className={cn("w-full max-w-xl", className)}>
@@ -75,17 +95,19 @@ export function StaffAvatarDropzone({ className }: ImageDropzoneProps) {
         accept="image/*"
         onChange={handleChange}
         className="hidden"
+        disabled={disabled}
       />
 
       {!image ? (
         <div
           onClick={handleClick}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
+          onDrop={disabled ? undefined : handleDrop}
+          onDragOver={disabled ? undefined : handleDragOver}
+          onDragLeave={disabled ? undefined : handleDragLeave}
           className={cn(
-            "relative flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-4 transition-all",
-            isDragging
+            "relative flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-4 transition-all",
+            disabled ? "cursor-not-allowed opacity-70" : "cursor-pointer",
+            isDragging && !disabled
               ? "border-primary bg-primary/5 scale-[1.02]"
               : "border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50",
           )}
@@ -104,10 +126,10 @@ export function StaffAvatarDropzone({ className }: ImageDropzoneProps) {
             />
           </div>
           <div className="text-center">
-            <p className="text-foreground text-base font-medium">
+            <p className="text-foreground text-base text-xs font-medium">
               {isDragging ? "Drop your image here" : "Drag & drop your image"}
             </p>
-            <p className="text-muted-foreground mt-1 text-sm">
+            <p className="text-muted-foreground mt-1 text-xs">
               or click to browse from your device
             </p>
           </div>

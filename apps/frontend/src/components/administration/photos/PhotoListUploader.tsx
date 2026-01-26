@@ -240,10 +240,16 @@ export function PhotoListUploader({ initialFiles }: { initialFiles: File[] }) {
 
         <Button
           disabled={isUploading || files.length === 0}
-          onClick={() => void handleUpload()}
+          onClick={() => {
+            if (uploadedCount != files.length) {
+              void handleUpload();
+            } else {
+              closeModal();
+            }
+          }}
         >
           {isUploading && <Spinner />}
-          {t("upload")}
+          {uploadedCount == files.length ? t("upload") : t("close")}
         </Button>
       </div>
     </div>

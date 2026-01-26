@@ -3,43 +3,15 @@
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
 
-import { EmploymentTypeSelector } from "~/components/shared/selects/EmploymentTypeSelector";
+
+
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import {
-  Combobox,
-  ComboboxChip,
-  ComboboxChips,
-  ComboboxChipsInput,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxValue,
-  useComboboxAnchor,
-} from "~/components/ui/combobox";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "~/components/ui/field";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from "~/components/ui/combobox";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+
 
 const documentOptions = [
   "cv",
@@ -117,11 +89,11 @@ export function ContractHiring() {
                     <FieldDescription>
                       Choisissez le type appliqué par défaut.
                     </FieldDescription>
-                    <EmploymentTypeSelector
+                    {/* <EmploymentTypeSelector
                       onSelectAction={(value) =>
                         field.handleChange(value ?? "")
                       }
-                    />
+                    /> */}
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}

@@ -12,7 +12,7 @@ import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const postSchema = z.object({
   id: z.string(),
-  profile: z.enum(["student", "contact", "student"]),
+  profile: z.enum(["student", "contact", "staff"]),
 });
 export async function POST(request: NextRequest) {
   const session = await getSession();
