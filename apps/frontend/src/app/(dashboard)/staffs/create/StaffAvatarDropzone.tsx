@@ -142,7 +142,7 @@ export function StaffAvatarDropzone({
         <div className="bg-muted/30 relative overflow-hidden rounded-xl border">
           <div className="relative aspect-video w-full">
             <img
-              src={image || "/placeholder.svg"}
+              src={image ? `/api/avatars/${image}` : "/placeholder.svg"}
               alt="Preview"
               className="h-full w-full object-contain"
             />

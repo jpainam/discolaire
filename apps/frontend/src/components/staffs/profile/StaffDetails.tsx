@@ -3,33 +3,50 @@
 import type { ReactNode } from "react";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import { Call02Icon, CapIcon, FileEmpty02Icon, GraduationScrollIcon, UserIcon } from "@hugeicons/core-free-icons";
+import {
+  Call02Icon,
+  CapIcon,
+  FileEmpty02Icon,
+  GraduationScrollIcon,
+  UserIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { KeyRound, MoreVertical, UserPlus2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-
-
 
 import { DropdownHelp } from "~/components/shared/DropdownHelp";
 import { DropdownInvitation } from "~/components/shared/invitations/DropdownInvitation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Card, CardAction, CardHeader, CardTitle } from "~/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "~/components/ui/item";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "~/components/ui/item";
 import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useSheet } from "~/hooks/use-sheet";
 import { CalendarDays, DeleteIcon, EditIcon, MailIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
-import { CreateEditStaff } from "../CreateEditStaff";
-
 
 export function StaffDetails({ staffId }: { staffId: string }) {
   const trpc = useTRPC();
@@ -41,7 +58,7 @@ export function StaffDetails({ staffId }: { staffId: string }) {
   });
   const t = useTranslations();
   const locale = useLocale();
-  const { openSheet } = useSheet();
+  //const { openSheet } = useSheet();
 
   const confirm = useConfirm();
 
@@ -73,7 +90,9 @@ export function StaffDetails({ staffId }: { staffId: string }) {
           <Avatar className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]">
             <AvatarImage
               src={
-                "http://localhost:9310/avatars/IPBW/staff/175a20e3-cb95-436a-8535-3ac673221b50.jpeg"
+                staff.avatar
+                  ? `/api/avatars/${staff.avatar}`
+                  : avatar.toDataUri()
               }
             />
             <AvatarFallback>CN</AvatarFallback>
@@ -134,17 +153,18 @@ export function StaffDetails({ staffId }: { staffId: string }) {
           {canEditStaff && (
             <Button
               onClick={() => {
-                openSheet({
-                  view: (
-                    <CreateEditStaff
-                      staff={staff}
-                      formId="create-edit-staff-form"
-                    />
-                  ),
-                  title: t("edit"),
-                  description: `${t("staff")} - ${getFullName(staff)}`,
-                  formId: "create-edit-staff-form",
-                });
+                router.push(`/staffs/${staffId}/edit`);
+                // openSheet({
+                //   view: (
+                //     <CreateEditStaff
+                //       staff={staff}
+                //       formId="create-edit-staff-form"
+                //     />
+                //   ),
+                //   title: t("edit"),
+                //   description: `${t("staff")} - ${getFullName(staff)}`,
+                //   formId: "create-edit-staff-form",
+                // });
               }}
               variant={"outline"}
             >
