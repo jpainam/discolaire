@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
@@ -45,6 +46,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
+import { useTRPC } from "~/trpc/react";
 import { StaffAvatarDropzone } from "./StaffAvatarDropzone";
 
 const staffCreateSchema = z.object({
@@ -92,8 +94,31 @@ export default function CreateEditStaff({
 }: {
   staff?: RouterOutputs["staff"]["all"][number];
 }) {
-  const [autoGenerateEmail] = useState(false);
   const t = useTranslations();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const createStaffMutation = useMutation(
+    trpc.staff.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+      },
+    }),
+  );
+  const updateStaffMutation = useMutation(
+    trpc.staff.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+      },
+    }),
+  );
   const defaultValues: StaffFormInput = {
     prefix: "M",
     lastName: "",
@@ -134,7 +159,20 @@ export default function CreateEditStaff({
     validators: {
       onSubmit: staffCreateSchema,
     },
-    onSubmit: () => {},
+    onSubmit: ({ value }) => {
+      const values = {
+        ...value,
+        housingAllowance: Number(value.housingAllowance),
+      };
+      if (staff) {
+        updateStaffMutation.mutate({
+          id: staff.id,
+          ...values,
+        });
+      } else {
+        createStaffMutation.mutate(values);
+      }
+    },
   });
 
   return (
@@ -259,20 +297,13 @@ export default function CreateEditStaff({
                     return (
                       <Field data-invalid={isInvalid}>
                         <FieldLabel htmlFor={field.name}>
-                          Date de naissance{" "}
-                          <span className="text-destructive">*</span>
+                          Date de naissance
                         </FieldLabel>
-                        <Input
-                          id={field.name}
-                          name={field.name}
-                          type="date"
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(event) =>
-                            field.handleChange(event.target.value)
-                          }
-                          aria-invalid={isInvalid}
+                        <DatePicker
+                          defaultValue={field.state.value}
+                          onSelectAction={(date) => field.handleChange(date)}
                         />
+
                         {isInvalid && (
                           <FieldError errors={field.state.meta.errors} />
                         )}
@@ -282,7 +313,7 @@ export default function CreateEditStaff({
                 />
 
                 <form.Field
-                  name="plateOfBirth"
+                  name="placeOfBirth"
                   children={(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
@@ -488,26 +519,13 @@ export default function CreateEditStaff({
                   return (
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>
-                        Date d&apos;embauche{" "}
+                        Date d&apos;embauche
                       </FieldLabel>
                       <DatePicker
-                        defaultValue={field.state.value ?? undefined}
+                        defaultValue={field.state.value}
                         onSelectAction={(date) => field.handleChange(date)}
                       />
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="date"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(event) =>
-                          field.handleChange(event.target.value)
-                        }
-                        aria-invalid={isInvalid}
-                      />
+
                       {isInvalid && (
                         <FieldError errors={field.state.meta.errors} />
                       )}
@@ -523,15 +541,11 @@ export default function CreateEditStaff({
                     <FieldLabel htmlFor={field.name}>
                       Date de fin de contrat
                     </FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="date"
-                      value={field.state.value ?? ""}
-                      onBlur={field.handleBlur}
-                      onChange={(event) =>
-                        field.handleChange(event.target.value)
-                      }
+                    <DatePicker
+                      defaultValue={field.state.value}
+                      onSelectAction={(date) => {
+                        field.handleChange(date);
+                      }}
                     />
                   </Field>
                 )}
@@ -626,7 +640,6 @@ export default function CreateEditStaff({
                       id={field.name}
                       name={field.name}
                       type="number"
-                      value={field.state.value}
                       min="1"
                       max="168"
                       onBlur={field.handleBlur}
