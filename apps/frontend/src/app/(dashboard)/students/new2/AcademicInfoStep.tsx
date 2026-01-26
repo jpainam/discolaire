@@ -1,10 +1,9 @@
 "use client";
 
+import type { z } from "zod/v4";
 import { useForm } from "@tanstack/react-form";
 import { Building } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-
 
 import { DatePicker } from "~/components/DatePicker";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
@@ -12,20 +11,36 @@ import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSe
 import { StudentStatusSelector } from "~/components/shared/selects/StudentStatusSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Field, FieldError, FieldLabel } from "~/components/ui/field";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { useStudentFormContext } from "./StudentFormContext";
 import { academicInfoSchema } from "./validation";
 
-
-export function AcademicInfoStep({ onNextAction }: { onNextAction: () => void }) {
+export function AcademicInfoStep({
+  onNextAction,
+}: {
+  onNextAction: () => void;
+}) {
   const t = useTranslations();
   const { academicInfo, setAcademicInfo } = useStudentFormContext();
+  const defaultValues: z.input<typeof academicInfoSchema> = academicInfo;
 
   const form = useForm({
-    defaultValues: academicInfo,
+    defaultValues,
     validators: { onSubmit: academicInfoSchema },
     onSubmit: ({ value }) => {
-      setAcademicInfo(value);
+      setAcademicInfo({
+        ...value,
+        dateOfEntry: value.dateOfEntry ?? new Date(),
+        isRepeating: value.isRepeating ?? false,
+        isNew: value.isNew ?? true,
+        status: value.status ?? "ACTIVE",
+      });
       onNextAction();
     },
   });
@@ -56,7 +71,7 @@ export function AcademicInfoStep({ onNextAction }: { onNextAction: () => void })
                 <Field data-invalid={isInvalid} className="flex-1">
                   <FieldLabel>{t("classroom")}</FieldLabel>
                   <ClassroomSelector
-                    onSelect={field.handleChange}
+                    onSelect={(value) => field.handleChange(value ?? undefined)}
                     defaultValue={field.state.value}
                     className="w-full"
                   />

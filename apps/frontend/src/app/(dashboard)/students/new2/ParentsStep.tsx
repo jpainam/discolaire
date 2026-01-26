@@ -1,19 +1,25 @@
 "use client";
 
+import type { z } from "zod/v4";
 import { useState } from "react";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
 import { useForm } from "@tanstack/react-form";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, Search, Users } from "lucide-react";
+import { ArrowRight, Search, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useDebouncedCallback } from "use-debounce";
 
 
 
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { RelationshipSelector } from "~/components/shared/selects/RelationshipSelector";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
-import { Separator } from "~/components/ui/separator";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "~/components/ui/input-group";
+import { Label } from "~/components/ui/label";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -32,15 +38,19 @@ export function ParentsStep({ onNextAction }: { onNextAction: () => void }) {
   const [relationshipId, setRelationshipId] = useState<string | null>(null);
   const debounce = useDebouncedCallback((value: string) => {
     setQuery(value);
-  }, 300);
+  }, 200);
 
-  const parentSearchQuery = useQuery(trpc.contact.all.queryOptions({ query }));
+  const { data: parents, isPending } = useQuery(
+    trpc.contact.all.queryOptions({ query, limit: 10 }),
+  );
+
+  const defaultValues: z.input<typeof parentsSchema> = { selectedParents };
 
   const form = useForm({
-    defaultValues: { selectedParents },
+    defaultValues,
     validators: { onSubmit: parentsSchema },
     onSubmit: ({ value }) => {
-      setSelectedParents(value.selectedParents);
+      setSelectedParents(value.selectedParents ?? []);
       onNextAction();
     },
   });
@@ -73,27 +83,16 @@ export function ParentsStep({ onNextAction }: { onNextAction: () => void }) {
             <Users className="h-4 w-4" />
             {t("Parents Guardians")}
           </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-            <div className="relative flex-1">
-              <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-              <Input
-                placeholder={t("search")}
-                value={query}
-                onChange={(e) => debounce(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <RelationshipSelector
-              defaultValue={relationshipId}
-              onChange={(val) => {
-                setRelationshipId(val);
-              }}
-            />
+          <CardDescription>
+            Veuillez rechercher si le parent existe avant d'ajouter
+          </CardDescription>
+          <CardAction>
             <Button
               onClick={() => {
                 openModal({
+                  className: "sm:max-w-xl",
+                  title: t("add"),
+                  description: "Nouveau parent/contact",
                   view: (
                     <CreateParent
                       setParentIdAction={(id, name, relationship) => {
@@ -107,52 +106,104 @@ export function ParentsStep({ onNextAction }: { onNextAction: () => void }) {
                   ),
                 });
               }}
+              variant={"secondary"}
               type="button"
-              className="gap-2"
             >
-              <Plus className="h-4 w-4" />
-              {t("add")}
+              {t("new")}
             </Button>
-          </div>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+            <InputGroup>
+              <InputGroupInput
+                placeholder={t("search")}
+                value={query}
+                onChange={(e) => debounce(e.target.value)}
+              />
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+            </InputGroup>
 
-          <div className="max-h-48 overflow-y-auto rounded-lg border">
-            {parentSearchQuery.data && parentSearchQuery.data.length > 0 ? (
-              parentSearchQuery.data.map((parent) => (
-                <div
-                  key={parent.id}
-                  className="hover:bg-primary/40 hover:text-primary-foreground flex items-center justify-between border-b p-3 last:border-b-0"
-                >
-                  <div>
-                    <p className="text-sm font-medium">
-                      {parent.prefix} {getFullName(parent)}
-                    </p>
-                    <p className="text-muted-foreground text-xs">
-                      {parent.phoneNumber1} • {parent.occupation}
-                    </p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="default"
-                    onClick={() => {
-                      handleAddParent({
-                        id: parent.id,
-                        name: getFullName(parent),
-                        relationshipId: relationshipId ?? "",
-                      });
-                    }}
-                  >
-                    {t("add")}
-                  </Button>
+            <RelationshipSelector
+              className="w-full"
+              defaultValue={relationshipId}
+              onChange={(val) => {
+                setRelationshipId(val);
+              }}
+            />
+            <div className="flex items-center justify-end"></div>
+          </div>
+          <div className="grid gap-4 xl:grid-cols-2">
+            <div className="max-h-[500px] overflow-y-auto rounded-lg border">
+              {isPending ? (
+                <div className="grid grid-cols-1 gap-4 px-4 py-2">
+                  {Array.from({ length: 15 }).map((_, t) => (
+                    <Skeleton className="h-8" key={t} />
+                  ))}
                 </div>
-              ))
-            ) : (
-              <div className="text-muted-foreground p-4 text-center">
-                {t("no_data")}
-              </div>
-            )}
+              ) : parents?.length == 0 ? (
+                <EmptyComponent
+                  title="Ajouter parents/contacts"
+                  description="Veuillez rechercher le parent à ajouter"
+                />
+              ) : null}
+              {parents?.map((parent) => {
+                const avatar = createAvatar(initials, {
+                  seed: getFullName(parent),
+                });
+                return (
+                  <div
+                    key={parent.id}
+                    className="hover:bg-muted/50 flex items-center justify-between border-b p-2 last:border-b-0"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Avatar>
+                        <AvatarImage
+                          src={
+                            parent.avatar
+                              ? `/api/avatars/${parent.avatar}`
+                              : avatar.toDataUri()
+                          }
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col gap-2">
+                        <Label>
+                          {parent.prefix} {getFullName(parent)}
+                        </Label>
+                        <span className="text-muted-foreground text-xs">
+                          {parent.phoneNumber1} • {parent.occupation}
+                        </span>
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      size={"xs"}
+                      variant="outline"
+                      onClick={() => {
+                        handleAddParent({
+                          id: parent.id,
+                          name: getFullName(parent),
+                          relationshipId: relationshipId ?? "",
+                        });
+                      }}
+                    >
+                      Sélectionner
+                      <ArrowRight />
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="max-h-[500px] overflow-y-auto rounded-lg border">
+              <EmptyComponent
+                title="Séléctionner à gauche"
+                description="Commencer par sélectionner les parent à ajouter à l'élève"
+              />
+            </div>
           </div>
-
-          <Separator />
         </CardContent>
       </Card>
     </form>

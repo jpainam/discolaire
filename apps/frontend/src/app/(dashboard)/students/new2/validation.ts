@@ -23,7 +23,7 @@ export const basicInfoSchema = z.object({
 });
 
 export const academicInfoSchema = z.object({
-  classroomId: z.string().optional().default(""),
+  classroomId: z.string().optional(),
   dateOfEntry: z.date().default(new Date()),
   dateOfExit: z.date().optional(),
   isRepeating: z.boolean().default(false),

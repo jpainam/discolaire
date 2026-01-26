@@ -272,23 +272,20 @@ export function CreateParent({
 
         <div className="flex items-center justify-end gap-2">
           <Button
-            disabled={createContactMutation.isPending}
-            type="submit"
-            size={"sm"}
-            variant={"default"}
-          >
-            {t("submit")}
-          </Button>
-
-          <Button
             onClick={() => {
               closeModal();
             }}
             type="button"
             variant="outline"
-            size={"sm"}
           >
             {t("close")}
+          </Button>
+          <Button
+            disabled={createContactMutation.isPending}
+            type="submit"
+            variant={"default"}
+          >
+            {t("submit")}
           </Button>
         </div>
       </form>

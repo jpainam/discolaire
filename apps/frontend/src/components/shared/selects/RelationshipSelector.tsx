@@ -42,7 +42,7 @@ export function RelationshipSelector({
       }}
     >
       {!relationshipsQuery.isPending ? (
-        <SelectTrigger className={cn(className)}>
+        <SelectTrigger className={cn("w-full", className)}>
           <SelectValue placeholder={placeholder ?? t("select_relationship")} />
         </SelectTrigger>
       ) : (

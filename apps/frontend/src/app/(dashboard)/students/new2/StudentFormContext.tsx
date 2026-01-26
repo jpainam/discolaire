@@ -1,17 +1,16 @@
 "use client";
 
+import type { Dispatch, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
   useContext,
   useMemo,
   useState,
-  type Dispatch,
-  type SetStateAction,
 } from "react";
 
-import { initialStudentData } from "./store";
 import type { AcademicInfo, BasicInfo, ParentInfo } from "./validation";
+import { initialStudentData } from "./store";
 
 interface StudentFormContextValue {
   currentStep: number;
@@ -31,7 +30,7 @@ const StudentFormContext = createContext<StudentFormContextValue | null>(null);
 const initialBasicInfo: BasicInfo = {
   firstName: initialStudentData.firstName ?? "",
   lastName: initialStudentData.lastName ?? "",
-  dateOfBirth: initialStudentData.dateOfBirth,
+  dateOfBirth: initialStudentData.dateOfBirth ?? new Date(),
   placeOfBirth: initialStudentData.placeOfBirth ?? "",
   gender: initialStudentData.gender ?? "male",
   countryId: initialStudentData.countryId ?? "",
@@ -80,7 +79,9 @@ export function StudentFormProvider({
   }, []);
 
   const removeParent = useCallback((parentId: string) => {
-    setSelectedParents((prev) => prev.filter((parent) => parent.id !== parentId));
+    setSelectedParents((prev) =>
+      prev.filter((parent) => parent.id !== parentId),
+    );
   }, []);
 
   const value = useMemo(
