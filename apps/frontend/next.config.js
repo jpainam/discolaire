@@ -1,11 +1,37 @@
+;
+
 //import { createJiti } from "jiti";
 import createNextIntlPlugin from "next-intl/plugin";
+
+
+
+
+
+;
+
+
+
+
+
+
+
+
+;
+
+
+
+
+
+
 
 //const jiti = createJiti(import.meta.url);
 
 // Import env files to validate at build time. Use jiti so we can load .ts files in here.
 //await jiti.import("./src/env");
 //import "./src/env";
+
+const isProd = process.env.NODE_ENV === "production";
+const internalHost = process.env.TAURI_DEV_HOST || "localhost";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -20,6 +46,7 @@ const config = {
   ],
 
   images: {
+    unoptimized: true,
     localPatterns: [
       {
         pathname: "/api/download/images/**",
@@ -66,6 +93,7 @@ const config = {
       },
     ],
   },
+  assetPrefix: isProd ? undefined : `http://${internalHost}:3000`,
 
   typescript: { ignoreBuildErrors: true },
 };
