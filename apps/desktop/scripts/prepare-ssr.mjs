@@ -7,7 +7,7 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
-import { resolve } from "node:path";
+import { relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = resolve(fileURLToPath(new URL(".", import.meta.url)));
@@ -51,11 +51,17 @@ if (!serverRoot) {
   throw new Error(`Could not find server.js under ${standaloneDir}`);
 }
 
-cpSync(serverRoot, serverDir, { recursive: true });
-cpSync(staticDir, resolve(serverDir, ".next/static"), { recursive: true });
+const appRel = relative(standaloneDir, serverRoot) || ".";
+
+cpSync(standaloneDir, serverDir, { recursive: true });
+cpSync(staticDir, resolve(serverDir, appRel, ".next/static"), {
+  recursive: true,
+});
 if (existsSync(publicDir)) {
-  cpSync(publicDir, resolve(serverDir, "public"), { recursive: true });
+  cpSync(publicDir, resolve(serverDir, appRel, "public"), { recursive: true });
 }
+
+writeFileSync(resolve(serverDir, "server-entry.txt"), appRel, "utf8");
 
 const loaderHtml = `<!doctype html>
 <html lang="en">

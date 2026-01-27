@@ -13,8 +13,17 @@ fn start_ssr_server<R: tauri::Runtime>(
     use std::process::Command;
 
     let resource_dir = app.path().resource_dir()?;
+    use std::fs;
+
     let next_dir = resource_dir.join("next").join("server");
-    let server_js = next_dir.join("server.js");
+    let entry_path = next_dir.join("server-entry.txt");
+    let entry = fs::read_to_string(entry_path).unwrap_or_else(|_| ".".into());
+    let entry = entry.trim();
+    let server_js = if entry.is_empty() || entry == "." {
+        next_dir.join("server.js")
+    } else {
+        next_dir.join(entry).join("server.js")
+    };
 
     if !server_js.exists() {
         return Ok(());
@@ -30,6 +39,13 @@ fn start_ssr_server<R: tauri::Runtime>(
     Ok(())
 }
 
+#[cfg(not(debug_assertions))]
+fn start_ssr_server_from_app<R: tauri::Runtime>(
+    app: &tauri::App<R>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    start_ssr_server(&app.handle())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -37,7 +53,7 @@ pub fn run() {
         .setup(|app| {
             #[cfg(not(debug_assertions))]
             {
-                start_ssr_server(app)?;
+                start_ssr_server_from_app(app)?;
             }
             Ok(())
         })

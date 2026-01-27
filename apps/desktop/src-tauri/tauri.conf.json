@@ -25,7 +25,7 @@
     "active": true,
     "targets": "all",
     "resources": [
-      "next/server/**"
+      "next/server"
     ],
     "icon": [
       "icons/32x32.png",
