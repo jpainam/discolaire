@@ -1,28 +1,5 @@
-;
-
 //import { createJiti } from "jiti";
 import createNextIntlPlugin from "next-intl/plugin";
-
-
-
-
-
-;
-
-
-
-
-
-
-
-
-;
-
-
-
-
-
-
 
 //const jiti = createJiti(import.meta.url);
 

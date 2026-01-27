@@ -3,6 +3,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Search } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { Button } from "~/components/ui/button";
@@ -33,6 +34,13 @@ export default async function Page() {
   return (
     <HydrateClient>
       <div className="flex flex-col gap-4 p-4">
+        <BreadcrumbsSetter
+          items={[
+            { label: t("home"), href: "/" },
+            { label: t("staffs"), href: "/staffs" },
+            { label: t("create") },
+          ]}
+        />
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Card>
             <CardHeader>

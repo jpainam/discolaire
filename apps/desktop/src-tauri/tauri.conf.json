@@ -6,8 +6,8 @@
   "build": {
     "beforeDevCommand": "pnpm dev:next",
     "devUrl": "http://localhost:3000",
-    "beforeBuildCommand": "pnpm --filter frontend build",
-    "frontendDist": "../../frontend/.next/standalone/apps/frontend"
+    "beforeBuildCommand": "pnpm --filter frontend build && pnpm --filter desktop tauri:prepare-ssr",
+    "frontendDist": "next/loader"
   },
   "app": {
     "windows": [
@@ -24,6 +24,9 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "resources": [
+      "next/server/**"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
