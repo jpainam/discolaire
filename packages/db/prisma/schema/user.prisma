@@ -61,6 +61,7 @@ model User {
     subjectJournals              SubjectJournal[]           @relation("SubjectJournalCreatedBy")
     subjectPrograms              SubjectProgram[]           @relation("SubjectProgramCreatedBy")
     skillAcquisitions            SkillAcquisition[]         @relation("SkillAcquisitionCreatedBy")
+    staffAttendances             StaffAttendance[]          @relation("StaffAttendanceCreatedBy")
     members                      Member[]
     invitations                  Invitation[]
 

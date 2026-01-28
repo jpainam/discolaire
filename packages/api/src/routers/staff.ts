@@ -340,6 +340,19 @@ export const staffRouter = {
       }
       return ctx.services.user.getPermissions(staff.userId);
     }),
+  attendances: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.staffAttendance.findMany({
+      orderBy: {
+        date: "desc",
+      },
+      include: {
+        createdBy: true,
+      },
+      where: {
+        id: input,
+      },
+    });
+  }),
   stats: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const classrooms = await ctx.services.staff.getClassrooms(
       input,

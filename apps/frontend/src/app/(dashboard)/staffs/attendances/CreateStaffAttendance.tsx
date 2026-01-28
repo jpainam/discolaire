@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 import { DatePicker } from "~/components/DatePicker";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
@@ -23,12 +25,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
+import { useTRPC } from "~/trpc/react";
 
 export function CreateStaffAttendance() {
   const t = useTranslations();
   const [staffId, setStaffId] = useQueryState("staffId");
   const [today, _] = useState(() => new Date());
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createStaffAttendanceMutation = useMutation(
+    trpc.staffAttendance.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staffAttendance.pathFilter());
+        toast.success(t("created_successfully"), { id: 0 });
+      },
+    }),
+  );
   return (
     <Card>
       <CardHeader>
@@ -66,15 +84,13 @@ export function CreateStaffAttendance() {
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>H. Arrivée</Label>
-              <Input type="datetime" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>H. Départ</Label>
-              <Input type="datetime" />
-            </div>
+          <div className="flex flex-col gap-2">
+            <Label>H. Arrivée</Label>
+            <Input type="datetime-local" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label>H. Départ</Label>
+            <Input type="datetime-local" />
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
@@ -83,7 +99,13 @@ export function CreateStaffAttendance() {
             <Textarea />
           </div>
           <div className="mt-5 flex flex-col gap-2">
-            <Button className="w-full">{t("submit")}</Button>
+            <Button
+              disabled={createStaffAttendanceMutation.isPending}
+              className="w-full"
+            >
+              {createStaffAttendanceMutation.isPending && <Spinner />}
+              {t("submit")}
+            </Button>
             <Button variant={"secondary"} className="w-full">
               {t("cancel")}
             </Button>

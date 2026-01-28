@@ -56,6 +56,7 @@ import { settingRouter } from "./routers/setting";
 import { shortcutRouter } from "./routers/shortcut";
 import { skillAcquisitionRouter } from "./routers/skillAcquisition";
 import { staffRouter } from "./routers/staff";
+import { staffAttendanceRouter } from "./routers/staffAttendance";
 import { studentRouter } from "./routers/student";
 import { studentAccountRouter } from "./routers/studentAccount";
 import { studentContactRouter } from "./routers/studentContact";
@@ -99,6 +100,7 @@ export const appRouter = createTRPCRouter({
   permission: permissionRouter,
   scheduleTask: scheduleTaskRouter,
   assignment: assignmentRouter,
+  staffAttendance: staffAttendanceRouter,
   term: termRouter,
   module: moduleRouter,
   document: documentRouter,
