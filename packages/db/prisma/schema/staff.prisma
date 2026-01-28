@@ -56,9 +56,9 @@ model StaffAttendance {
     id          String   @id @default(cuid())
     staffId     String
     staff       Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
-    startDate   DateTime
-    endDate     DateTime
-    date        DateTime
+    startDate   DateTime @db.Timestamp(6)
+    endDate     DateTime @db.Timestamp(6)
+    date        DateTime @db.Timestamp(6)
     status      String
     observation String?
     createdById String?

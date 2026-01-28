@@ -17,12 +17,23 @@ export const staffAttendanceRouter = {
       //const q = input.query;
       return ctx.db.staffAttendance.findMany({
         take: input.limit,
+        include: {
+          staff: true,
+          createdBy: true,
+        },
         where: {
           ...(input.date ? { date: input.date } : {}),
           ...(input.staffId ? { staffId: input.staffId } : {}),
         },
       });
     }),
+  delete: protectedProcedure.input(z.string()).mutation(({ ctx, input }) => {
+    return ctx.db.staffAttendance.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
   create: protectedProcedure
     .input(
       z.object({
@@ -30,7 +41,15 @@ export const staffAttendanceRouter = {
         date: z.date().optional().default(new Date()),
         startDate: z.date(),
         endDate: z.date(),
-        status: z.enum(["in_mission"]),
+        status: z.enum([
+          "present",
+          "absent",
+          "late",
+          "holiday",
+          "mission",
+          "in_mission",
+        ]),
+        observation: z.string().optional(),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -46,7 +65,8 @@ export const staffAttendanceRouter = {
         date: z.date().optional().default(new Date()),
         startDate: z.date(),
         endDate: z.date(),
-        status: z.enum(["in_mission"]),
+        status: z.enum(["present", "absent", "late", "holiday", "mission"]),
+        observation: z.string().optional(),
       }),
     )
     .mutation(({ ctx, input }) => {
