@@ -198,7 +198,8 @@ export const studentRouter = {
           formerSchoolId: input.formerSchoolId,
           countryId: input.countryId,
           isBaptized: input.isBaptized,
-          religionId: input.religionId,
+          religionId:
+            input.religionId?.trim() == "" ? undefined : input.religionId,
           dateOfEntry: input.dateOfEntry
             ? fromZonedTime(input.dateOfEntry, "UTC")
             : undefined,

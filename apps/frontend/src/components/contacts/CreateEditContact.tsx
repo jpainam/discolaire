@@ -92,13 +92,13 @@ export default function CreateEditContact({
         if (studentId && relationshipsQuery.data) {
           const relationshipId = relationshipsQuery.data[0]?.id;
           if (relationshipId) {
-            createStudentContactMutation.mutate({
-              contactId: data.id,
-              studentId: studentId,
-              data: {
+            createStudentContactMutation.mutate([
+              {
+                contactId: data.id,
+                studentId: studentId,
                 relationshipId: relationshipId,
               },
-            });
+            ]);
           }
         }
         toast.success(t("created_successfully"), { id: 0 });

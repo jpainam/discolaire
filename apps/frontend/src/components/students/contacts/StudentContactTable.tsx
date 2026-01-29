@@ -220,13 +220,13 @@ export function StudentContactTable({
                               }
                               onChange={(v) => {
                                 toast.loading(t("updating"), { id: 0 });
-                                updateStudentContactMutation.mutate({
-                                  studentId: c.studentId,
-                                  contactId: c.contactId,
-                                  data: {
+                                updateStudentContactMutation.mutate([
+                                  {
+                                    studentId: c.studentId,
+                                    contactId: c.contactId,
                                     relationshipId: Number(v),
                                   },
-                                });
+                                ]);
                               }}
                             />
                           </PopoverContent>

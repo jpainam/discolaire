@@ -182,13 +182,13 @@ export function LinkStudent({ contactId }: { contactId: string }) {
             toast.loading(t("loading"), {
               id: 0,
             });
-            createStudentContactMutation.mutate({
-              studentId: selectedStudents.map((stud) => stud.id as string),
-              contactId: contactId,
-              data: {
+            createStudentContactMutation.mutate(
+              selectedStudents.map((stud) => ({
+                studentId: stud.id as string,
+                contactId: contactId,
                 relationshipId: Number(relationship),
-              },
-            });
+              })),
+            );
           }}
         >
           {createStudentContactMutation.isPending && <Spinner />}

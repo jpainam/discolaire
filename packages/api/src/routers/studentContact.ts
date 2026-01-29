@@ -1,9 +1,14 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
+
+
 import { protectedProcedure } from "../trpc";
 
+
 const createUpdateSchema = z.object({
+  contactId: z.string(),
+  studentId: z.string(),
   relationshipId: z.number().optional(),
   livesWith: z.boolean().optional().default(true),
   schoolPickup: z.boolean().optional().default(true),
@@ -59,51 +64,28 @@ export const studentContactRouter = {
     });
   }),
   create: protectedProcedure
-    .input(
-      z.object({
-        contactId: z.union([z.string(), z.array(z.string())]),
-        studentId: z.union([z.string(), z.array(z.string())]),
-        data: createUpdateSchema,
-      }),
-    )
+    .input(createUpdateSchema.array())
     .mutation(async ({ ctx, input }) => {
-      const contactIds = Array.isArray(input.contactId)
-        ? input.contactId
-        : [input.contactId];
-      const studentIds = Array.isArray(input.studentId)
-        ? input.studentId
-        : [input.studentId];
-
-      // Prepare data combinations
-      const data = contactIds.flatMap((contactId) =>
-        studentIds.map((studentId) => ({
-          contactId,
-          studentId,
-          ...input.data,
-        })),
-      );
-
-      return ctx.db.studentContact.createMany({ data });
+      return ctx.db.studentContact.createMany({ data: input });
     }),
 
   update: protectedProcedure
-    .input(
-      z.object({
-        contactId: z.string(),
-        studentId: z.string(),
-        data: createUpdateSchema,
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.studentContact.update({
-        where: {
-          studentId_contactId: {
-            studentId: input.studentId,
-            contactId: input.contactId,
+    .input(createUpdateSchema.array())
+    .mutation(async ({ ctx, input }) => {
+      const updates = input.map((item) => {
+        const { contactId, studentId, ...data } = item;
+        return ctx.db.studentContact.update({
+          where: {
+            studentId_contactId: {
+              studentId,
+              contactId,
+            },
           },
-        },
-        data: input.data,
+          data,
+        });
       });
+
+      return Promise.all(updates);
     }),
   createRelationship: protectedProcedure
     .input(

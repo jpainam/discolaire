@@ -1,13 +1,26 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, Building, Check, User, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building,
+  Check,
+  User,
+  Users,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-
-
-import { Stepper, StepperDescription, StepperIndicator, StepperItem, StepperSeparator, StepperTitle, StepperTrigger } from "~/components/stepper";
+import {
+  Stepper,
+  StepperDescription,
+  StepperIndicator,
+  StepperItem,
+  StepperSeparator,
+  StepperTitle,
+  StepperTrigger,
+} from "~/components/stepper";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Spinner } from "~/components/ui/spinner";
@@ -19,7 +32,6 @@ import { ParentsStep } from "./ParentsStep";
 import { ReviewSubmitStep } from "./ReviewSubmitStep";
 import { useStudentFormContext } from "./StudentFormContext";
 import { studentSchema } from "./validation";
-
 
 const stepFormIdMap: Record<number, string> = {
   1: "student-basic-info-form",
@@ -79,14 +91,17 @@ export function CreateEditStudent() {
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
-      onSuccess: (created) => {
-        createStudentContact.mutate({
+      onSuccess: async (created) => {
+        const studentContacts = selectedParents.map((parent) => ({
           studentId: created.id,
-          contactId: selectedParents.map(sp => sp.id),
-          data: {
-            relationshipId:
-          }
-        })
+          contactId: parent.id,
+          relationshipId: parent.relationshipId
+            ? Number(parent.relationshipId)
+            : undefined,
+        }));
+        if (studentContacts.length > 0) {
+          await createStudentContact.mutateAsync(studentContacts);
+        }
         toast.success(t("created_successfully", { id: 0 }));
         router.push(`/students/${created.id}`);
       },
@@ -105,7 +120,7 @@ export function CreateEditStudent() {
       ...basicInfo,
       ...academicInfo,
     });
-
+    toast.loading(t("Processing"), { id: 0 });
     createStudentMutation.mutate(parsed);
   };
 

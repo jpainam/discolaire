@@ -99,11 +99,13 @@ export function StudentContactDetails({
   function onSubmit(data: z.infer<typeof editRelationshipSchema>) {
     if (studentContact.studentId && studentContact.contactId) {
       toast.loading(t("updating"), { id: 0 });
-      updateStudentContactMutation.mutate({
-        data: data,
-        studentId: studentContact.studentId,
-        contactId: studentContact.contactId,
-      });
+      updateStudentContactMutation.mutate([
+        {
+          studentId: studentContact.studentId,
+          contactId: studentContact.contactId,
+          ...data,
+        },
+      ]);
     }
   }
 
