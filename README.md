@@ -46,6 +46,22 @@ cp .env.example .env
 pnpm db:push
 ```
 
+## Electron (desktop)
+
+The desktop app wraps the Next.js frontend in Electron.
+
+### Dev
+
+```bash
+pnpm dev:desktop
+```
+
+### Build
+
+```bash
+pnpm build:desktop
+```
+
 ## Deployment
 
 ### AWS S3 or MINIO

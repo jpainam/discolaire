@@ -1,0 +1,40 @@
+name: Release Desktop
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.10.0
+          cache: pnpm
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.27.0
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Seed env file for Next.js build
+        run: node -e "require('fs').copyFileSync('env.example', '.env')"
+
+      - name: Build and publish desktop apps
+        env:
+          CI: true
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm --filter @repo/desktop build:frontend
+          pnpm --filter @repo/desktop build:electron -- --publish always

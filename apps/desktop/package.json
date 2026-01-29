@@ -1,0 +1,60 @@
+{
+  "name": "@repo/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "concurrently -k -n next,main,electron -c blue,magenta,green \"pnpm --filter @repo/frontend dev\" \"tsup src/main.ts --format cjs --out-dir dist --watch --external electron\" \"wait-on dist/main.js http://localhost:3000 && electronmon dist/main.js\"",
+    "build": "pnpm run build:frontend && pnpm run build:electron",
+    "build:frontend": "node scripts/prepare-frontend.mjs",
+    "build:electron": "tsup src/main.ts --format cjs --out-dir dist --clean --external electron && electron-builder"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "electron": "^36.2.0",
+    "electron-builder": "^26.0.12",
+    "electronmon": "^2.0.3",
+    "tsup": "8.5.1",
+    "typescript": "catalog:",
+    "wait-on": "^8.0.5"
+  },
+  "build": {
+    "appId": "com.discolaire.app",
+    "productName": "Discolaire",
+    "asar": true,
+    "directories": {
+      "output": "dist/app"
+    },
+    "files": [
+      "dist/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/frontend",
+        "to": "frontend"
+      }
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    },
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ]
+  }
+}

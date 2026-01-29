@@ -36,6 +36,8 @@ onlyBuiltDependencies:
   - '@swc/core'
   - '@tailwindcss/oxide'
   - core-js-pure
+  - electron
+  - electron-winstaller
   - esbuild
   - msgpackr-extract
   - msw
