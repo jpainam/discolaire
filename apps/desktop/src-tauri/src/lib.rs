@@ -39,13 +39,14 @@ fn start_ssr_server<R: tauri::Runtime>(
         .stdout(std::process::Stdio::null())
         .stderr(std::process::Stdio::null());
 
-    let env_path = app.path().app_config_dir()?.join(".env");
+    let env_path = resolve_env_path();
     if env_path.exists() {
+        let _ = dotenvy::from_filename(&env_path);
         if let Ok(vars) = read_env_file(&env_path) {
             for (key, value) in &vars {
                 cmd.env(key, value);
             }
-            log_missing_env_vars(&env_path, &vars);
+            log_missing_env_vars(app, &env_path, &vars);
         } else {
             eprintln!("Failed to read .env file at {}", env_path.display());
         }
@@ -56,6 +57,7 @@ fn start_ssr_server<R: tauri::Runtime>(
         } else {
             eprintln!("{msg}");
         }
+        write_env_log(&env_path, "missing .env file\n");
     }
 
     cmd.spawn().map_err(|e| -> Box<dyn std::error::Error> {
@@ -90,10 +92,15 @@ fn read_env_file(path: &Path) -> io::Result<Vec<(String, String)>> {
 }
 
 #[cfg(not(debug_assertions))]
-fn log_missing_env_vars(env_path: &Path, vars: &[(String, String)]) {
-    use std::collections::HashSet;
+fn log_missing_env_vars<R: tauri::Runtime>(
+    app: &tauri::AppHandle<R>,
+    env_path: &Path,
+    vars: &[(String, String)],
+) {
+    use std::collections::{HashMap, HashSet};
 
-    let present: HashSet<&str> = vars.iter().map(|(k, _)| k.as_str()).collect();
+    let map: HashMap<&str, &str> = vars.iter().map(|(k, v)| (k.as_str(), v.as_str())).collect();
+    let present: HashSet<&str> = map.keys().copied().collect();
     let required = [
         "AUTH_SECRET",
         "DATABASE_URL",
@@ -119,16 +126,64 @@ fn log_missing_env_vars(env_path: &Path, vars: &[(String, String)]) {
         .copied()
         .filter(|key| !present.contains(key))
         .collect();
+    let empty: Vec<&str> = required
+        .iter()
+        .copied()
+        .filter(|key| {
+            map.get(key)
+                .map(|v| v.trim().is_empty())
+                .unwrap_or(false)
+        })
+        .collect();
+
+    let mut log = String::new();
+    log.push_str("env path: ");
+    log.push_str(&env_path.display().to_string());
+    log.push('\n');
+    log.push_str("present keys: ");
+    log.push_str(&present.len().to_string());
+    log.push('\n');
 
     if !missing.is_empty() {
-        eprintln!(
-            "Missing required env vars in {}: {}",
+        log.push_str("missing: ");
+        log.push_str(&missing.join(", "));
+        log.push('\n');
+    }
+    if !empty.is_empty() {
+        log.push_str("empty: ");
+        log.push_str(&empty.join(", "));
+        log.push('\n');
+    }
+
+    log.push_str("values:\n");
+    let mut sorted_vars: Vec<(&str, &str)> = map.into_iter().collect();
+    sorted_vars.sort_by(|a, b| a.0.cmp(b.0));
+    for (key, value) in sorted_vars {
+        log.push_str("  ");
+        log.push_str(key);
+        log.push('=');
+        log.push_str(value);
+        log.push('\n');
+    }
+
+    if !missing.is_empty() || !empty.is_empty() {
+        let msg = format!(
+            "Invalid env vars in {}: missing [{}], empty [{}]",
             env_path.display(),
-            missing.join(", ")
+            missing.join(", "),
+            empty.join(", ")
         );
+        if let Some(window) = app.get_webview_window("main") {
+            let _ = window.eval(&format!("alert('{}')", escape_js_string(&msg)));
+        } else {
+            eprintln!("{msg}");
+        }
     } else {
+        log.push_str("status: ok\n");
         eprintln!("Loaded .env from {}", env_path.display());
     }
+
+    write_env_log(env_path, &log);
 }
 
 #[cfg(not(debug_assertions))]
@@ -151,6 +206,35 @@ fn escape_js_string(value: &str) -> String {
         .replace('\'', "\\'")
         .replace('\n', "\\n")
         .replace('\r', "\\r")
+}
+
+#[cfg(not(debug_assertions))]
+fn resolve_env_path() -> std::path::PathBuf {
+    use std::env;
+
+    match env::consts::OS {
+        "macos" => {
+            let user = env::var("USER").unwrap_or_else(|_| "unknown".to_string());
+            Path::new("/Users")
+                .join(user)
+                .join("Developer")
+                .join("discolaire")
+                .join(".env")
+        }
+        "linux" => {
+            let home = env::var("HOME").unwrap_or_else(|_| "/home/unknown".to_string());
+            Path::new(&home).join("discolaire").join(".env")
+        }
+        _ => Path::new(".env").to_path_buf(),
+    }
+}
+
+#[cfg(not(debug_assertions))]
+fn write_env_log(env_path: &Path, contents: &str) {
+    if let Some(dir) = env_path.parent() {
+        let _ = fs::create_dir_all(dir);
+        let _ = fs::write(dir.join("env-check.log"), contents);
+    }
 }
 
 #[cfg(not(debug_assertions))]

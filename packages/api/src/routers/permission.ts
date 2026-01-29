@@ -9,6 +9,7 @@ export const permissionRouter = {
   all: protectedProcedure.query(({ ctx }) => {
     return ctx.db.permission.findMany({
       include: {
+        permissionRoles: true,
         module: {
           select: {
             id: true,
@@ -52,27 +53,30 @@ export const permissionRouter = {
     .input(
       z.object({
         permissionId: z.string().min(1),
-        roleId: z.string().min(1),
+        roleIds: z.string().array(),
         effect: z.enum(["allow", "deny"]),
       }),
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.permissionRole.upsert({
-        create: {
-          permissionId: input.permissionId,
-          effect: input.effect,
-          roleId: input.roleId,
-        },
-        update: {
-          effect: input.effect,
-        },
-        where: {
-          permissionId_roleId: {
+    .mutation(async ({ ctx, input }) => {
+      for (const roleId of input.roleIds) {
+        await ctx.db.permissionRole.upsert({
+          create: {
             permissionId: input.permissionId,
-            roleId: input.roleId,
+            effect: input.effect,
+            roleId,
           },
-        },
-      });
+          update: {
+            effect: input.effect,
+          },
+          where: {
+            permissionId_roleId: {
+              permissionId: input.permissionId,
+              roleId,
+            },
+          },
+        });
+      }
+      return true;
     }),
   update: protectedProcedure
     .input(

@@ -1,17 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { FileTextIcon } from "lucide-react";
+import { CheckIcon, FileTextIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
-import { PermissionType } from "@repo/db/enums";
+import { PermissionType, RoleLevel } from "@repo/db/enums";
 
+import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -24,9 +24,12 @@ import {
 } from "~/components/ui/empty";
 import {
   Field,
+  FieldContent,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldTitle,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -310,15 +313,20 @@ export function AddPermissionToRole({
   const queryClient = useQueryClient();
   const router = useRouter();
   const rolesQuery = useQuery(trpc.role.all.queryOptions());
-  const [permissionIds, setPermissionIds] = useState<string[]>([]);
-  const addToRoleMutation = useMutation(
+  const [effect, setEffect] = useState<string | null>();
+  const [roleIds, setRoleIds] = useState<string[]>(
+    permission.permissionRoles.map((pr) => pr.roleId),
+  );
+  const addToRolesMutation = useMutation(
     trpc.permission.addToRole.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.permission.pathFilter());
+        await queryClient.invalidateQueries(trpc.role.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
       },
     }),
   );
@@ -357,35 +365,98 @@ export function AddPermissionToRole({
     );
   }
   return (
-    <div className="flex flex-col gap-2">
-      {roles.map((r) => {
-        return (
-          <Label htmlFor={r.id.toString()} key={r.id} className="!w-fit">
-            <div className="flex gap-1.5 overflow-hidden !px-3 !py-1.5 transition-all duration-100 ease-linear group-has-data-[state=checked]/field-label:!px-2">
-              <Checkbox
-                value={r.id.toString()}
-                id={r.id.toString()}
-                onCheckedChange={(checked) => {
-                  if (!checked) {
-                    setPermissionIds((w) => w.filter((pId) => pId !== r.id));
-                  } else {
-                    setPermissionIds((w) => [...w, r.id]);
-                  }
-                }}
-                defaultChecked={permissionIds.includes(r.id)}
-                className="-ml-6 -translate-x-1 rounded-full transition-all duration-100 ease-linear data-[state=checked]:ml-0 data-[state=checked]:translate-x-0"
-              />
-              <Label>{r.name}</Label>
-            </div>
-          </Label>
-        );
-      })}
+    <div className="flex flex-col gap-2 pb-4">
+      <div className="flex flex-col gap-2">
+        <Label>Sélectionner l'autorisation</Label>
+        <Select
+          onValueChange={(value) => {
+            setEffect(value);
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t("Authorization")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="allow">
+              <CheckIcon className="text-green-600" />
+              {t("Allow")}
+            </SelectItem>
+            <SelectItem value="dark">
+              <XIcon className="text-red-500" />
+              {t("Deny")}
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <FieldGroup className="w-full max-w-sm gap-3">
+        {roles.map((r, index) => {
+          return (
+            <FieldLabel key={index} htmlFor={r.id}>
+              <Field orientation="horizontal">
+                <FieldContent>
+                  <FieldTitle>
+                    {r.name}
+                    <Badge
+                      size={"xs"}
+                      variant={
+                        r.level == RoleLevel.LEVEL1
+                          ? "destructive"
+                          : r.level == RoleLevel.LEVEL2
+                            ? "primary"
+                            : r.level == RoleLevel.LEVEL3
+                              ? "info"
+                              : r.level == RoleLevel.LEVEL4
+                                ? "secondary"
+                                : "warning"
+                      }
+                      appearance={"outline"}
+                    >
+                      {r.level}
+                    </Badge>
+                  </FieldTitle>
+                  <FieldDescription>{r.description}</FieldDescription>
+                </FieldContent>
+                <Checkbox
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setRoleIds([...roleIds, r.id]);
+                    } else {
+                      setRoleIds(roleIds.filter((roleId) => roleId != r.id));
+                    }
+                  }}
+                  checked={roleIds.includes(r.id)}
+                  id={r.id}
+                />
+              </Field>
+            </FieldLabel>
+          );
+        })}
+      </FieldGroup>
+      <Button
+        disabled={addToRolesMutation.isPending}
+        onClick={() => {
+          if (!effect) {
+            toast.warning("Veuillez choisir le type d'autorisation");
+            return;
+          }
+          addToRolesMutation.mutate({
+            roleIds,
+            permissionId: permission.id,
+            effect: effect as "deny" | "allow",
+          });
+        }}
+      >
+        {addToRolesMutation.isPending && <Spinner />}
+        {t("submit")}
+      </Button>
       <Button
         variant={"outline"}
         onClick={() => {
           closeSheet();
         }}
-      ></Button>
+      >
+        {t("close")}
+      </Button>
     </div>
   );
 }
