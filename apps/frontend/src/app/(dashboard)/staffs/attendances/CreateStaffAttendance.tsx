@@ -330,7 +330,7 @@ export function CreateStaffAttendance() {
             </div>
             <div className="mt-5 flex flex-col gap-2">
               <Button
-                disabled={createStaffAttendanceMutation.isPending}
+                disabled={createStaffAttendanceMutation.isPending || !staffId}
                 className="w-full"
                 type="submit"
               >

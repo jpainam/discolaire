@@ -15,7 +15,7 @@ interface BreadcrumbState {
   reset: () => void;
 }
 
-const HOME: BreadcrumbItem[] = [{ label: "Home", href: "/", icon: "home" }];
+const HOME: BreadcrumbItem[] = [];
 
 export const useBreadcrumbsStore = create<BreadcrumbState>((set) => ({
   items: HOME,

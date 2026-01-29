@@ -6,6 +6,7 @@ import { createAvatar } from "@dicebear/core";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Search, Users, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
@@ -37,6 +38,9 @@ export function ParentsStep() {
   const trpc = useTRPC();
   const t = useTranslations();
   const { openModal } = useModal();
+  const { data: relationships, isPending: relationshipIsPending } = useQuery(
+    trpc.contactRelationship.all.queryOptions(),
+  );
   const { selectedParents, setSelectedParents, removeParent } =
     useStudentFormContext();
 
@@ -123,13 +127,17 @@ export function ParentsStep() {
               </InputGroupAddon>
             </InputGroup>
 
-            <RelationshipSelector
-              className="w-full"
-              defaultValue={relationshipId}
-              onChange={(val) => {
-                setRelationshipId(val);
-              }}
-            />
+            {relationshipIsPending ? (
+              <Skeleton className="h-8 w-full" />
+            ) : (
+              <RelationshipSelector
+                className="w-full"
+                defaultValue={relationshipId}
+                onChange={(val) => {
+                  setRelationshipId(val);
+                }}
+              />
+            )}
             <div className="flex items-center justify-end"></div>
           </div>
           <div className="grid gap-4 xl:grid-cols-2">
@@ -180,10 +188,16 @@ export function ParentsStep() {
                       size={"xs"}
                       variant="outline"
                       onClick={() => {
+                        if (!relationshipId) {
+                          toast.warning(
+                            "Veuillez sélectionner le type de relation",
+                          );
+                          return;
+                        }
                         handleAddParent({
                           id: parent.id,
                           name: getFullName(parent),
-                          relationshipId: relationshipId ?? "",
+                          relationshipId: relationshipId,
                         });
                       }}
                     >
@@ -201,7 +215,16 @@ export function ParentsStep() {
                     key={index}
                     className="hover:bg-muted/50 flex items-center justify-between border-b p-2 last:border-b-0"
                   >
-                    <Label>{p.name}</Label>
+                    <div className="flex items-center gap-2">
+                      <Label>{p.name}</Label>
+                      <span className="text-muted-foreground text-xs">
+                        {
+                          relationships?.find(
+                            (r) => r.id.toString() == p.relationshipId,
+                          )?.name
+                        }
+                      </span>
+                    </div>
                     <Button
                       type="button"
                       variant="ghost"

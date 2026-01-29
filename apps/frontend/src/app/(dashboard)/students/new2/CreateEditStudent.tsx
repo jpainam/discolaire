@@ -1,32 +1,25 @@
 "use client";
 
-import {
-  ArrowLeft,
-  ArrowRight,
-  Building,
-  Check,
-  User,
-  Users,
-} from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { ArrowLeft, ArrowRight, Building, Check, User, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
-import {
-  Stepper,
-  StepperDescription,
-  StepperIndicator,
-  StepperItem,
-  StepperSeparator,
-  StepperTitle,
-  StepperTrigger,
-} from "~/components/stepper";
+
+
+import { Stepper, StepperDescription, StepperIndicator, StepperItem, StepperSeparator, StepperTitle, StepperTrigger } from "~/components/stepper";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
+import { Spinner } from "~/components/ui/spinner";
+import { useRouter } from "~/hooks/use-router";
+import { useTRPC } from "~/trpc/react";
 import { AcademicInfoStep } from "./AcademicInfoStep";
 import { BasicInfoStep } from "./BasicInfoStep";
 import { ParentsStep } from "./ParentsStep";
 import { ReviewSubmitStep } from "./ReviewSubmitStep";
 import { useStudentFormContext } from "./StudentFormContext";
 import { studentSchema } from "./validation";
+
 
 const stepFormIdMap: Record<number, string> = {
   1: "student-basic-info-form",
@@ -79,17 +72,41 @@ export function CreateEditStudent() {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
+  const trpc = useTRPC();
+  const router = useRouter();
+  const createStudentMutation = useMutation(
+    trpc.student.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: (created) => {
+        createStudentContact.mutate({
+          studentId: created.id,
+          contactId: selectedParents.map(sp => sp.id),
+          data: {
+            relationshipId:
+          }
+        })
+        toast.success(t("created_successfully", { id: 0 }));
+        router.push(`/students/${created.id}`);
+      },
+    }),
+  );
+  const createStudentContact = useMutation(
+    trpc.studentContact.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+
   const handleSubmit = () => {
     const parsed = studentSchema.parse({
       ...basicInfo,
       ...academicInfo,
     });
 
-    // TODO: replace with API submission
-    console.log("[students/new2] Submitting student data:", {
-      studentData: parsed,
-      selectedParents,
-    });
+    createStudentMutation.mutate(parsed);
   };
 
   const getStepContent = (step: number) => {
@@ -131,8 +148,10 @@ export function CreateEditStudent() {
               <Button
                 variant="default"
                 type="submit"
+                disabled={createStudentMutation.isPending}
                 form={stepFormIdMap[currentStep]}
               >
+                {createStudentMutation.isPending && <Spinner />}
                 {t("next")}
                 <ArrowRight />
               </Button>
