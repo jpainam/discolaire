@@ -1,10 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-
-
 import { protectedProcedure } from "../trpc";
-
 
 const createUpdateSchema = z.object({
   contactId: z.string(),
