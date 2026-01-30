@@ -10,6 +10,7 @@ const root = path.resolve(__dirname, "..", "..", "..");
 const frontendDir = path.join(root, "apps", "frontend");
 const desktopDir = path.join(root, "apps", "desktop");
 const buildDir = path.join(desktopDir, "build", "frontend");
+const appBundleDir = path.join(buildDir, "apps", "frontend");
 const standaloneDir = path.join(frontendDir, ".next", "standalone");
 const staticDir = path.join(frontendDir, ".next", "static");
 const publicDir = path.join(frontendDir, "public");
@@ -26,7 +27,8 @@ const cleanDir = (dir) => {
 const copyDir = (from, to) => {
   if (!fs.existsSync(from)) return;
   fs.mkdirSync(path.dirname(to), { recursive: true });
-  fs.cpSync(from, to, { recursive: true });
+  // Avoid symlinks inside the Electron bundle (breaks codesign on macOS)
+  fs.cpSync(from, to, { recursive: true, dereference: true });
 };
 
 cleanDir(buildDir);
@@ -34,5 +36,13 @@ cleanDir(buildDir);
 run("pnpm --filter @repo/frontend build");
 
 copyDir(standaloneDir, buildDir);
-copyDir(staticDir, path.join(buildDir, ".next", "static"));
-copyDir(publicDir, path.join(buildDir, "public"));
+copyDir(staticDir, path.join(appBundleDir, ".next", "static"));
+copyDir(publicDir, path.join(appBundleDir, "public"));
+
+const rootNodeModules = path.join(buildDir, "node_modules");
+const appNodeModules = path.join(appBundleDir, "node_modules");
+if (fs.existsSync(rootNodeModules)) {
+  fs.rmSync(appNodeModules, { recursive: true, force: true });
+  fs.mkdirSync(appBundleDir, { recursive: true });
+  fs.renameSync(rootNodeModules, appNodeModules);
+}

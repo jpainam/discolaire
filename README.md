@@ -49,6 +49,22 @@ pnpm db:push
 ## Electron (desktop)
 
 The desktop app wraps the Next.js frontend in Electron.
+`open apps/desktop/dist/app/mac-arm64/Discolaire.app`
+### Runtime environment file
+
+The desktop app reads server-side env vars from a local file at runtime (not bundled).
+Create a `discolaire.env` file in your OS-specific app data directory:
+
+- macOS: `~/Library/Application Support/Discolaire/discolaire.env`
+- Linux: `~/.config/Discolaire/discolaire.env`
+- Windows: `%APPDATA%\\Discolaire\\discolaire.env`
+
+Example:
+
+```env
+AUTH_SECRET=...
+DATABASE_URL=...
+```
 
 ### Dev
 

@@ -2,6 +2,12 @@
   "name": "@repo/desktop",
   "version": "0.1.0",
   "private": true,
+  "description": "Desktop version of Discolaire",
+  "author": {
+    "name": "Jean P. Ainam",
+    "email": "jpainam@gmail.com",
+    "url": "https://discolaire.com"
+  },
   "main": "dist/main.js",
   "type": "commonjs",
   "scripts": {
@@ -12,7 +18,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
-    "electron": "^36.2.0",
+    "electron": "36.2.0",
     "electron-builder": "^26.0.12",
     "electronmon": "^2.0.3",
     "tsup": "8.5.1",
@@ -39,7 +45,10 @@
     "mac": {
       "target": [
         "dmg"
-      ]
+      ],
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
     },
     "win": {
       "target": [
@@ -56,5 +65,9 @@
         "provider": "github"
       }
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpainam/discolaire.git"
   }
 }
