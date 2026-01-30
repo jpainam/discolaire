@@ -40,6 +40,16 @@ const appendStream = (label: string, data: Buffer | string) => {
   logLine(`${label}: ${text.trim()}`);
 };
 
+const stripQuotes = (value: string) => {
+  if (
+    (value.startsWith("\"") && value.endsWith("\"")) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+  return value;
+};
+
 const loadEnvFile = (filePath: string) => {
   if (!fs.existsSync(filePath)) return;
   const content = fs.readFileSync(filePath, "utf8");
@@ -49,10 +59,8 @@ const loadEnvFile = (filePath: string) => {
     const eq = trimmed.indexOf("=");
     if (eq === -1) continue;
     const key = trimmed.slice(0, eq).trim();
-    const value = trimmed.slice(eq + 1).trim();
-    if (!process.env[key]) {
-      process.env[key] = value;
-    }
+    const value = stripQuotes(trimmed.slice(eq + 1).trim());
+    process.env[key] = value;
   }
 };
 
@@ -84,6 +92,15 @@ function startServer() {
   logLine(`Frontend root: ${frontendRoot}`);
   logLine(`Port: ${port}`);
   loadEnvFile(userEnvPath);
+  try {
+    const dbUrl = process.env.DATABASE_URL;
+    if (dbUrl) {
+      const { hostname, port: dbPort } = new URL(dbUrl);
+      logLine(`DATABASE_URL host: ${hostname}${dbPort ? `:${dbPort}` : ""}`);
+    }
+  } catch {
+    logLine("DATABASE_URL host: invalid URL");
+  }
   process.env.NODE_ENV = "production";
   process.env.PORT = port;
 
