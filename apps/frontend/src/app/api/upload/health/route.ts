@@ -66,14 +66,11 @@ export async function DELETE(request: Request) {
       );
     }
     const document = await caller.document.get(documentId);
-    await Promise.all(
-      document.attachments.map((attachment) =>
-        deleteFile({
-          bucket: env.S3_DOCUMENT_BUCKET_NAME,
-          key: attachment,
-        }),
-      ),
-    );
+
+    await deleteFile({
+      bucket: env.S3_DOCUMENT_BUCKET_NAME,
+      key: document.url,
+    });
 
     return Response.json({ message: "Avatar deleted successfully" });
   } catch (error) {

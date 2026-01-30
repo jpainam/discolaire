@@ -50,6 +50,7 @@ pnpm db:push
 
 The desktop app wraps the Next.js frontend in Electron.
 `open apps/desktop/dist/app/mac-arm64/Discolaire.app`
+
 ### Runtime environment file
 
 The desktop app reads server-side env vars from a local file at runtime (not bundled).
@@ -294,3 +295,5 @@ https://mailbluster.com/blog/get-out-of-aws-ses-sandbox-and-increase-send-limit-
 https://mailbluster.com/blog/getting-out-of-amazon-ses-sandbox
 
 https://screenzy.io/
+
+https://square.lndev.me/

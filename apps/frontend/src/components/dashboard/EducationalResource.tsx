@@ -81,9 +81,9 @@ export function EducationalResource({ className }: { className?: string }) {
                   <div className="flex items-center gap-2 text-xs">
                     <FileIcon className="text-muted-foreground h-4 w-4" />
                     <Link href={"#"} target="_blank" className="truncate">
-                      {resource.attachments.length > 0
+                      {/* {resource.attachments.length > 0
                         ? resource.attachments[0]
-                        : ""}
+                        : ""} */}
                     </Link>
                   </div>
                 </div>

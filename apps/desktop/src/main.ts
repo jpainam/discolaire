@@ -8,12 +8,9 @@ let serverStarted = false;
 
 const isDev = !app.isPackaged;
 const port = process.env.ELECTRON_PORT || process.env.PORT || "3000";
-const devUrl =
-  process.env.ELECTRON_DEV_URL || `http://localhost:${port}`;
+const devUrl = process.env.ELECTRON_DEV_URL || `http://localhost:${port}`;
 
-const appRoot = isDev
-  ? path.resolve(__dirname, "..")
-  : process.resourcesPath;
+const appRoot = isDev ? path.resolve(__dirname, "..") : process.resourcesPath;
 
 const frontendRoot = isDev
   ? path.resolve(appRoot, "..", "frontend")
@@ -37,7 +34,7 @@ const logLine = (message: string) => {
 
 const stripQuotes = (value: string) => {
   if (
-    (value.startsWith("\"") && value.endsWith("\"")) ||
+    (value.startsWith('"') && value.endsWith('"')) ||
     (value.startsWith("'") && value.endsWith("'"))
   ) {
     return value.slice(1, -1);
@@ -75,7 +72,11 @@ const isLocalHost = (urlString: string) => {
     const url = new URL(urlString);
     const host = url.hostname;
     if (host === "localhost") return true;
-    if (host.startsWith("127.") || host.startsWith("192.168.") || host.startsWith("10.")) {
+    if (
+      host.startsWith("127.") ||
+      host.startsWith("192.168.") ||
+      host.startsWith("10.")
+    ) {
       return true;
     }
     const isIpv4 = /^\d{1,3}(\.\d{1,3}){3}$/.test(host);
@@ -136,7 +137,7 @@ function startServer() {
 
   const nextModulePath = path.join(frontendRoot, "node_modules", "next");
   logLine(
-    `Next module exists: ${fs.existsSync(nextModulePath)} (${nextModulePath})`
+    `Next module exists: ${fs.existsSync(nextModulePath)} (${nextModulePath})`,
   );
 
   try {
@@ -204,7 +205,7 @@ app.on("ready", async () => {
           `Log file: ${logPath}`,
           `Error: ${String(error)}`,
           "Then restart the app.",
-        ].join("\n")
+        ].join("\n"),
       );
     }
     app.quit();
