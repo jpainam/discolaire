@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { getSession } from "~/auth/server";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { NoPermission } from "~/components/no-permission";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
@@ -14,7 +16,8 @@ export default async function Layout(props: {
   if (!session) {
     redirect("/auth/login");
   }
-  if (session.user.id !== params.id) {
+  const user = session.user;
+  if (user.id !== params.id) {
     if (session.user.profile == "staff") {
       const canReadUser = await checkPermission("user.read");
       if (!canReadUser) {
@@ -32,9 +35,17 @@ export default async function Layout(props: {
   const { children } = props;
 
   prefetch(trpc.user.get.queryOptions(params.id));
+  const t = await getTranslations();
 
   return (
     <HydrateClient>
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/" },
+          { label: t("users"), href: "/users" },
+          { label: `${user.name} - ${user.username}` },
+        ]}
+      />
       {/* <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           key={params.id}
