@@ -1,9 +1,10 @@
 import { app, BrowserWindow, dialog } from "electron";
 import fs from "fs";
 import path from "path";
+import { Module } from "module";
 
 let mainWindow: BrowserWindow | null = null;
-let serverProcess: ReturnType<typeof import("child_process").spawn> | null = null;
+let serverStarted = false;
 
 const isDev = !app.isPackaged;
 const port = process.env.ELECTRON_PORT || process.env.PORT || "3000";
@@ -34,12 +35,6 @@ const logLine = (message: string) => {
   }
 };
 
-const appendStream = (label: string, data: Buffer | string) => {
-  const text = typeof data === "string" ? data : data.toString("utf8");
-  if (!text.trim()) return;
-  logLine(`${label}: ${text.trim()}`);
-};
-
 const stripQuotes = (value: string) => {
   if (
     (value.startsWith("\"") && value.endsWith("\"")) ||
@@ -61,6 +56,32 @@ const loadEnvFile = (filePath: string) => {
     const key = trimmed.slice(0, eq).trim();
     const value = stripQuotes(trimmed.slice(eq + 1).trim());
     process.env[key] = value;
+  }
+};
+
+const resolveBaseUrl = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  if (!baseUrl) return `http://127.0.0.1:${port}`;
+  try {
+    const url = new URL(baseUrl);
+    return url.toString();
+  } catch {
+    return `http://127.0.0.1:${port}`;
+  }
+};
+
+const isLocalHost = (urlString: string) => {
+  try {
+    const url = new URL(urlString);
+    const host = url.hostname;
+    if (host === "localhost") return true;
+    if (host.startsWith("127.") || host.startsWith("192.168.") || host.startsWith("10.")) {
+      return true;
+    }
+    const isIpv4 = /^\d{1,3}(\.\d{1,3}){3}$/.test(host);
+    return isIpv4;
+  } catch {
+    return true;
   }
 };
 
@@ -92,6 +113,12 @@ function startServer() {
   logLine(`Frontend root: ${frontendRoot}`);
   logLine(`Port: ${port}`);
   loadEnvFile(userEnvPath);
+  const baseUrl = resolveBaseUrl();
+  logLine(`Base URL: ${baseUrl}`);
+  if (!isLocalHost(baseUrl)) {
+    logLine("Base URL is remote; skipping embedded server start.");
+    return;
+  }
   try {
     const dbUrl = process.env.DATABASE_URL;
     if (dbUrl) {
@@ -103,34 +130,23 @@ function startServer() {
   }
   process.env.NODE_ENV = "production";
   process.env.PORT = port;
+  process.chdir(frontendRoot);
+  process.env.NODE_PATH = path.join(frontendRoot, "node_modules");
+  Module._initPaths();
 
   const nextModulePath = path.join(frontendRoot, "node_modules", "next");
   logLine(
     `Next module exists: ${fs.existsSync(nextModulePath)} (${nextModulePath})`
   );
 
-  // Run server.js with Electron-as-Node in production.
-  const { spawn } = require("child_process") as typeof import("child_process");
-  serverProcess = spawn(process.execPath, [serverEntry], {
-    cwd: frontendRoot,
-    env: {
-      ...process.env,
-      NODE_ENV: "production",
-      PORT: port,
-      ELECTRON_RUN_AS_NODE: "1",
-    },
-    stdio: ["ignore", "pipe", "pipe"],
-  });
-  serverProcess.stdout?.on("data", (data) => appendStream("stdout", data));
-  serverProcess.stderr?.on("data", (data) => appendStream("stderr", data));
-  serverProcess.on("error", (err) => {
-    logLine(`Server process error: ${String(err)}`);
-  });
-  serverProcess.on("exit", (code) => {
-    const message = `Next.js server exited with code ${code}`;
-    console.error(message);
-    logLine(message);
-  });
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require(serverEntry);
+    serverStarted = true;
+  } catch (error) {
+    logLine(`Server start error: ${String(error)}`);
+    throw error;
+  }
 }
 
 function createWindow() {
@@ -148,7 +164,7 @@ function createWindow() {
     mainWindow.loadURL(devUrl);
     mainWindow.webContents.openDevTools({ mode: "detach" });
   } else {
-    const prodUrl = `http://127.0.0.1:${port}`;
+    const prodUrl = resolveBaseUrl();
     mainWindow.loadURL(prodUrl);
   }
 }
@@ -169,7 +185,10 @@ app.on("ready", async () => {
   try {
     startServer();
     if (!isDev) {
-      await waitForServer(`http://127.0.0.1:${port}`);
+      const baseUrl = resolveBaseUrl();
+      if (isLocalHost(baseUrl)) {
+        await waitForServer(baseUrl);
+      }
     }
     createWindow();
   } catch (error) {
@@ -199,8 +218,8 @@ app.on("window-all-closed", () => {
 });
 
 app.on("before-quit", () => {
-  if (serverProcess) {
-    serverProcess.kill();
+  if (serverStarted) {
+    logLine("App exiting; server was started in-process.");
   }
 });
 
