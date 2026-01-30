@@ -90,8 +90,11 @@ export function StudentDocumentTable({ studentId }: { studentId: string }) {
           <TableBody>
             {documents.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6}>
-                  <EmptyComponent title={t("no_data")} />
+                <TableCell colSpan={7}>
+                  <EmptyComponent
+                    title={"Aucun document"}
+                    description="Veuillez télécharger les documents de l'élève"
+                  />
                 </TableCell>
               </TableRow>
             )}

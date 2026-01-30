@@ -78,7 +78,8 @@ export function StaffDocumentTable() {
             <TableRow className="bg-muted/50">
               <TableHead>{t("date")}</TableHead>
               <TableHead>{t("title")}</TableHead>
-              <TableHead>{t("description")}</TableHead>
+              <TableHead>{t("mime")}</TableHead>
+              <TableHead>{t("type")}</TableHead>
               <TableHead>{t("created_by")}</TableHead>
               <TableHead>{t("files")}</TableHead>
               <TableHead className="text-right"></TableHead>
@@ -87,7 +88,7 @@ export function StaffDocumentTable() {
           <TableBody>
             {documents.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6}>
+                <TableCell colSpan={7}>
                   <EmptyComponent title={t("no_data")} />
                 </TableCell>
               </TableRow>
@@ -103,24 +104,24 @@ export function StaffDocumentTable() {
                     })}
                   </TableCell>
                   <TableCell>{document.title}</TableCell>
-                  <TableCell>{document.description}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {document.mime}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {document.type}
+                  </TableCell>
                   <TableCell>{document.createdBy.name}</TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap gap-2">
-                      {document.attachments.map((attachment, index) => {
-                        return (
-                          <Link
-                            href={`/api/download/documents/${attachment}`}
-                            className="flex items-center gap-1 text-blue-600 underline"
-                            target="_blank"
-                            key={attachment}
-                          >
-                            File {index + 1}
-                            <DownloadCloud className="size-4" />
-                          </Link>
-                        );
-                      })}
-                    </div>
+                    {document.url && (
+                      <Link
+                        href={`/api/download/documents/${document.url}`}
+                        className="flex items-center gap-1 text-blue-600 underline"
+                        target="_blank"
+                      >
+                        Fichier
+                        <DownloadCloud className="size-4" />
+                      </Link>
+                    )}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>

@@ -11,19 +11,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   prefetch(trpc.staff.documents.queryOptions(params.id));
   const staff = await caller.staff.get(params.id);
-  let userId = staff.userId;
-  if (!userId) {
-    const user = await caller.user.create({
-      entityId: staff.id,
-      profile: "staff",
-      username:
-        `${staff.firstName?.toLowerCase()}.${staff.lastName?.toLowerCase()}`.replace(
-          /[^a-zA-Z0-9]/g,
-          "",
-        ),
-    });
-    userId = user.id;
-  }
 
   return (
     <HydrateClient>
@@ -36,7 +23,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StaffDocumentHeader userId={userId} />
+          <StaffDocumentHeader staffId={staff.id} />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>

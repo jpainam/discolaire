@@ -5,7 +5,7 @@ import { DocumentType } from "@repo/db";
 
 import { protectedProcedure } from "../trpc";
 
-const createEditDocumentSchema = z.object({
+const createDocumentSchema = z.object({
   type: z.enum(DocumentType),
   title: z.string().optional(),
   mime: z.string().optional(),
@@ -14,6 +14,10 @@ const createEditDocumentSchema = z.object({
   entityId: z.string(),
   entityType: z.enum(["student", "staff", "contact"]),
 });
+
+const updateDocumentSchema = createDocumentSchema
+  .partial()
+  .extend({ id: z.string().min(1) });
 
 export const documentRouter = {
   delete: protectedProcedure
@@ -28,7 +32,7 @@ export const documentRouter = {
       });
     }),
   update: protectedProcedure
-    .input(createEditDocumentSchema.extend({ id: z.string().min(1) }))
+    .input(updateDocumentSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.document.update({
         where: {
@@ -45,7 +49,7 @@ export const documentRouter = {
       });
     }),
   create: protectedProcedure
-    .input(createEditDocumentSchema)
+    .input(createDocumentSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.db.document.create({
         data: {

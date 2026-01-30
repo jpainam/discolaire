@@ -4,7 +4,7 @@ import { uploadFiles } from "~/actions/upload";
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { deleteFile } from "~/lib/s3-client";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 export async function POST(request: Request) {
   const session = await getSession();
@@ -13,32 +13,29 @@ export async function POST(request: Request) {
   }
   try {
     const formData = await request.formData();
-    const files = formData.getAll("files") as File[] | null;
+    const file = formData.get("file") as File | null;
 
-    const userId = formData.get("userId") as string | null;
-    if (!userId) {
+    const entityId = formData.get("entityId") as string | null;
+    const entityType = formData.get("entityType") as string | null;
+    if (!entityId || !entityType) {
       return Response.json({ error: "User Id missing" }, { status: 400 });
     }
-    if (!files) {
-      return Response.json({ error: "Files missing" }, { status: 400 });
+    if (!file) {
+      return Response.json({ error: "File missing" }, { status: 400 });
     }
-    if (
-      !Array.isArray(files) ||
-      files.some((file) => !(file instanceof File))
-    ) {
-      return Response.json({ error: "Invalid file type" }, { status: 400 });
-    }
-    const user = await caller.user.get(userId);
-    const destinations = [];
-    for (const file of files) {
-      const ext = file.name.split(".").pop();
-      const key = randomUUID();
-      destinations.push(`${user.school.code}/${user.profile}/${key}.${ext}`);
-    }
+    const queryClient = getQueryClient();
+    const school = await queryClient.fetchQuery(
+      trpc.school.getSchool.queryOptions(),
+    );
+
+    const ext = file.name.split(".").pop();
+    const key = randomUUID();
+    const destination = `${school.code}/${entityType}/${key}.${ext}`;
+
     const results = await uploadFiles({
-      files: files,
+      files: [file],
       bucket: env.S3_DOCUMENT_BUCKET_NAME,
-      destinations: destinations,
+      destinations: [destination],
     });
     // TODO Send an email to the user to confirm the change
     return Response.json(results);
@@ -61,14 +58,10 @@ export async function DELETE(request: Request) {
       );
     }
     const document = await caller.document.get(documentId);
-    await Promise.all(
-      document.attachments.map((attachment) =>
-        deleteFile({
-          bucket: env.S3_DOCUMENT_BUCKET_NAME,
-          key: attachment,
-        }),
-      ),
-    );
+    await deleteFile({
+      bucket: env.S3_DOCUMENT_BUCKET_NAME,
+      key: document.url,
+    });
 
     return Response.json({ message: "Avatar deleted successfully" });
   } catch (error) {
