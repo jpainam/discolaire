@@ -336,20 +336,13 @@ export const contactRouter = {
   documents: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
-      const contact = await ctx.db.contact.findUniqueOrThrow({
-        where: {
-          id: input,
-        },
-      });
-      if (!contact.userId) {
-        return [];
-      }
       return ctx.db.document.findMany({
         where: {
-          userId: contact.userId,
+          contactId: input,
         },
         include: {
           createdBy: true,
+          contact: true,
         },
       });
     }),

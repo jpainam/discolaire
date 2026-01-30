@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import {
   useMutation,
   useQueryClient,
@@ -31,11 +30,11 @@ import {
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-export function StudentDocumentTable() {
+export function StudentDocumentTable({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
-  const params = useParams<{ id: string }>();
+
   const { data: documents } = useSuspenseQuery(
-    trpc.student.documents.queryOptions(params.id),
+    trpc.student.documents.queryOptions(studentId),
   );
 
   const t = useTranslations();
@@ -81,7 +80,8 @@ export function StudentDocumentTable() {
             <TableRow className="bg-muted/50">
               <TableHead>{t("date")}</TableHead>
               <TableHead>{t("title")}</TableHead>
-              <TableHead>{t("description")}</TableHead>
+              <TableHead>{t("mime")}</TableHead>
+              <TableHead>{t("type")}</TableHead>
               <TableHead>{t("created_by")}</TableHead>
               <TableHead>{t("files")}</TableHead>
               <TableHead className="text-right"></TableHead>
@@ -107,28 +107,24 @@ export function StudentDocumentTable() {
                   </TableCell>
                   <TableCell>{document.title}</TableCell>
                   <TableCell className="text-muted-foreground">
-                    {document.description}
+                    {document.mime}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {document.type}
                   </TableCell>
 
                   <TableCell className="text-muted-foreground">
                     {document.createdBy.name}
                   </TableCell>
                   <TableCell className="text-center">
-                    <div className="flex flex-wrap gap-2">
-                      {document.attachments.map((attachment, index) => {
-                        return (
-                          <Link
-                            href={`/api/download/documents/${attachment}`}
-                            className="flex items-center gap-1 text-blue-600 underline"
-                            target="_blank"
-                            key={attachment}
-                          >
-                            File {index + 1}
-                            <DownloadCloud className="size-4" />
-                          </Link>
-                        );
-                      })}
-                    </div>
+                    <Link
+                      href={`/api/download/documents/${document.url}`}
+                      className="flex items-center gap-1 text-blue-600 underline"
+                      target="_blank"
+                    >
+                      Fichier
+                      <DownloadCloud className="size-4" />
+                    </Link>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>

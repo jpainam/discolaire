@@ -1,13 +1,18 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
+import { DocumentType } from "@repo/db";
+
 import { protectedProcedure } from "../trpc";
 
 const createEditDocumentSchema = z.object({
-  title: z.string().min(1),
-  description: z.string().optional(),
-  attachments: z.array(z.string()).optional().default([]),
-  userId: z.string().min(1),
+  type: z.enum(DocumentType),
+  title: z.string().optional(),
+  mime: z.string().optional(),
+  size: z.number().optional(),
+  url: z.string(),
+  entityId: z.string(),
+  entityType: z.enum(["student", "staff", "contact"]),
 });
 
 export const documentRouter = {
@@ -31,8 +36,10 @@ export const documentRouter = {
         },
         data: {
           title: input.title,
-          description: input.description,
-          //attachments: input.attachments,
+          type: input.type,
+          mime: input.mime,
+          size: input.size,
+          url: input.url,
           createdById: ctx.session.user.id,
         },
       });
@@ -42,19 +49,25 @@ export const documentRouter = {
     .mutation(async ({ ctx, input }) => {
       return ctx.db.document.create({
         data: {
+          type: input.type,
           title: input.title,
-          description: input.description,
-          userId: input.userId,
-          attachments: input.attachments,
+          mime: input.mime,
+          size: input.size,
+          url: input.url,
           createdById: ctx.session.user.id,
           schoolId: ctx.schoolId,
+          studentId: input.entityType == "student" ? input.entityId : null,
+          staffId: input.entityType == "staff" ? input.entityId : null,
+          contactId: input.entityType == "contact" ? input.entityId : null,
         },
       });
     }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.document.findUniqueOrThrow({
       include: {
-        user: true,
+        student: true,
+        staff: true,
+        contact: true,
         createdBy: true,
       },
       where: {
@@ -75,7 +88,9 @@ export const documentRouter = {
           createdAt: "desc",
         },
         include: {
-          user: true,
+          staff: true,
+          contact: true,
+          student: true,
           createdBy: true,
         },
       });

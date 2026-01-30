@@ -37,12 +37,14 @@ export function CreateEditDocument({
   documentId,
   title,
   description,
-  userId,
+  entityId,
+  entityType,
 }: {
   documentId?: string;
   title?: string;
   description?: string;
-  userId: string;
+  entityId: string;
+  entityType: "staff" | "student" | "contact";
 }) {
   const form = useForm({
     resolver: standardSchemaResolver(createEditDocumentSchema),

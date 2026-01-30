@@ -1,32 +1,39 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { getTranslations } from "next-intl/server";
 
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { StudentDocumentHeader } from "~/components/students/documents/StudentDocumentHeader";
 import { Skeleton } from "~/components/ui/skeleton";
-import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
+import { getFullName } from "~/utils";
 import { StudentDocumentTable } from "./StudentDocumentTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  prefetch(trpc.student.documents.queryOptions(params.id));
-  const student = await caller.student.get(params.id);
-  let userId = student.userId;
-  if (!userId) {
-    const user = await caller.user.create({
-      entityId: student.id,
-      profile: "student",
-      username:
-        `${student.firstName?.toLowerCase()}.${student.lastName?.toLowerCase()}`.replace(
-          /[^a-zA-Z0-9]/g,
-          "",
-        ),
-    });
-    userId = user.id;
-  }
+  const queryClient = getQueryClient();
+  const student = await queryClient.fetchQuery(
+    trpc.student.get.queryOptions(params.id),
+  );
+  batchPrefetch([trpc.student.documents.queryOptions(params.id)]);
+  const t = await getTranslations();
 
   return (
     <HydrateClient>
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/" },
+          { label: t("student"), href: "/students" },
+          { label: getFullName(student), href: `/students/${student.id}` },
+          { label: t("documents") },
+        ]}
+      />
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense
           key={params.id}
@@ -36,7 +43,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StudentDocumentHeader userId={userId} />
+          <StudentDocumentHeader studentId={student.id} />
         </Suspense>
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
@@ -50,7 +57,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StudentDocumentTable />
+          <StudentDocumentTable studentId={student.id} />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

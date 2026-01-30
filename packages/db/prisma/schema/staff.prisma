@@ -50,6 +50,7 @@ model Staff {
     school                    School            @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId                  String
     attendances               StaffAttendance[]
+    documents                 Document[]
 }
 
 model StaffAttendance {

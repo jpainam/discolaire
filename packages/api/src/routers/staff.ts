@@ -284,20 +284,13 @@ export const staffRouter = {
   documents: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
-      const staff = await ctx.db.staff.findUniqueOrThrow({
-        where: {
-          id: input,
-        },
-      });
-      if (!staff.userId) {
-        return [];
-      }
       return ctx.db.document.findMany({
         where: {
-          userId: staff.userId,
+          staffId: input,
         },
         include: {
           createdBy: true,
+          staff: true,
         },
       });
     }),

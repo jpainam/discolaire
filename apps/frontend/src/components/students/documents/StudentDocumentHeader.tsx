@@ -8,7 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 
-export function StudentDocumentHeader({ userId }: { userId: string }) {
+export function StudentDocumentHeader({ studentId }: { studentId: string }) {
   const t = useTranslations();
   const { openModal } = useModal();
   return (
@@ -20,7 +20,9 @@ export function StudentDocumentHeader({ userId }: { userId: string }) {
           onClick={() => {
             openModal({
               title: `${t("upload")} ${t("document")}`,
-              view: <CreateEditDocument userId={userId} />,
+              view: (
+                <CreateEditDocument entityId={studentId} entityType="student" />
+              ),
             });
           }}
         >

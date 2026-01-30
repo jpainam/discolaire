@@ -336,18 +336,37 @@ model StaffDegree {
 }
 
 model Document {
-    id          String   @id @default(uuid())
-    title       String
-    description String?
-    user        User     @relation("owner", fields: [userId], references: [id])
-    userId      String
-    createdAt   DateTime @default(now()) @db.Timestamp(6)
-    updatedAt   DateTime @updatedAt
-    createdById String
-    createdBy   User     @relation("createdBy", fields: [createdById], references: [id])
-    attachments String[]
-    school      School   @relation(fields: [schoolId], references: [id])
+    id          String       @id @default(cuid())
     schoolId    String
+    type        DocumentType
+    title       String?
+    mime        String?
+    size        Int?
+    url         String
+    createdById String
+    createdBy   User         @relation("DocumentCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    studentId   String?
+    contactId   String?
+    staffId     String?
+    student     Student?     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    contact     Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+    staff       Staff?       @relation(fields: [staffId], references: [id], onDelete: Cascade)
+    school      School       @relation(fields: [schoolId], references: [id])
+
+    @@index([schoolId, createdAt])
+    @@index([schoolId, studentId])
+    @@index([schoolId, contactId])
+    @@index([schoolId, staffId])
+}
+
+enum DocumentType {
+    ID_CARD
+    TRANSCRIPT
+    CONTRACT
+    PHOTO
+    OTHER
 }
 
 model Student {
@@ -408,6 +427,7 @@ model Student {
     Attendance           Attendance[]
     councils             ClassroomCouncil[]
     academicSnapshots    StudentAcademicSnapshot[]
+    documents            Document[]
 }
 
 model StudentSibling {
@@ -500,6 +520,7 @@ model Contact {
     studentContacts StudentContact[]
     school          School           @relation(fields: [schoolId], references: [id])
     schoolId        String
+    documents       Document[]
 }
 
 model Country {
