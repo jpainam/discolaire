@@ -30,7 +30,7 @@ export default function Page() {
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense
             fallback={
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-4 gap-4 px-4">
                 {Array.from({ length: 16 }).map((_, i) => (
                   <Skeleton key={i} className="h-8" />
                 ))}
