@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
+import { AddTeamIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   MoreHorizontal,
@@ -12,7 +14,6 @@ import {
   Search,
   Trash2,
   UserCircle,
-  Users,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -47,15 +48,18 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { UsersIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { EmptyComponent } from "../EmptyComponent";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { UserLink } from "../UserLink";
+import { AddStudentToParent } from "./AddStudentToParent";
 import CreateEditContact from "./CreateEditContact";
 import StudentContactList from "./StudentContactList";
 
@@ -68,6 +72,7 @@ export function ContactTable() {
   }, 300);
 
   const trpc = useTRPC();
+  const { openModal } = useModal();
 
   const { data: contacts, isPending } = useQuery(
     trpc.contact.all.queryOptions({
@@ -229,14 +234,32 @@ export function ContactTable() {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onSelect={() => {
+                            openModal({
+                              className: "sm:max-w-xl",
+                              title: `Ajouter élèves à ${getFullName(c)}`,
+                              description:
+                                "Sélectionner les élèves à ajouter au contact",
+                              view: <AddStudentToParent contactId={c.id} />,
+                            });
+                          }}
+                        >
+                          <HugeiconsIcon
+                            icon={AddTeamIcon}
+                            strokeWidth={2}
+                            className="size-4"
+                          />
+                          Ajouter élèves
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() => {
                             openSheet({
                               title: t("students"),
                               view: <StudentContactList contactId={c.id} />,
                             });
                           }}
                         >
-                          <Users />
-                          <span className="text-sm">{t("students")}</span>
+                          <UsersIcon />
+                          {t("students")}
                         </DropdownMenuItem>
                         {canUpdateContact && (
                           <DropdownMenuItem
