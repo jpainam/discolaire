@@ -47,10 +47,10 @@ jobs:
       - name: Seed env file for Next.js build
         working-directory: ${{ github.workspace }}
         run: |
-          if [ -f env.example ]; then
-            cp env.example .env
+          if [ -f .env.example ]; then
+            cp .env.example .env
           else
-            echo "env.example not found in $(pwd)"
+            echo ".env.example not found in $(pwd)"
             ls -la
             exit 1
           fi
