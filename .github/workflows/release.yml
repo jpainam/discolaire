@@ -46,6 +46,7 @@ jobs:
 
       - name: Seed env file for Next.js build
         working-directory: ${{ github.workspace }}
+        shell: bash
         run: |
           if [ -f .env.example ]; then
             cp .env.example .env
