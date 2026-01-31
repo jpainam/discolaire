@@ -102,7 +102,7 @@ export function ConnectedStudents({ students }: ConnectedStudentsProps) {
                 <div className="mt-3 flex flex-wrap items-center gap-2">
                   <Badge
                     variant="outline"
-                    className={relationshipColors[student.relationship] || ""}
+                    className={relationshipColors[student.relationship]}
                   >
                     {student.relationship}
                   </Badge>

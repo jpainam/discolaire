@@ -79,7 +79,7 @@ export function DocumentsCard({ documents }: DocumentsCardProps) {
                 }`}
               >
                 <div className="bg-secondary text-muted-foreground flex h-12 w-12 items-center justify-center rounded-lg p-2 text-xs font-bold">
-                  {typeIcons[doc.type] || "DOC"}
+                  {typeIcons[doc.type]}
                 </div>
 
                 <div className="min-w-0 flex-1">

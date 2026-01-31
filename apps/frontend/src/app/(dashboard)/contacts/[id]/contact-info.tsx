@@ -20,8 +20,8 @@ interface ContactInfoProps {
 }
 
 export function ContactInfo({ parent }: ContactInfoProps) {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text);
   };
 
   return (

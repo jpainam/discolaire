@@ -1,7 +1,11 @@
 import { Document, Page, Text, View } from "@react-pdf/renderer";
 import _, { sum } from "lodash";
 
+
+
 import type { RouterOutputs } from "@repo/api";
+
+
 
 import { getAppreciations } from "~/utils/appreciations";
 import { getHeader } from "../headers";
@@ -11,6 +15,7 @@ import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
 import { IPBWTableHeader } from "./IPBWTableHeader";
 import { getTranslation } from "./translation";
+
 
 const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
 
@@ -202,7 +207,7 @@ export function IPBW({
                             justifyContent: "center",
                           }}
                         >
-                          <Text>{grade ? grade.rank : ""}</Text>
+                          <Text>{grade?.grade != null ? grade.rank : ""}</Text>
                         </View>
                         <View
                           style={{
@@ -212,7 +217,10 @@ export function IPBW({
                             borderRight: "1px solid black",
                           }}
                         >
-                          <Text>{subjectSummary?.average.toFixed(2)}</Text>
+                          <Text>
+                            {grade?.grade != null &&
+                              subjectSummary?.average.toFixed(2)}
+                          </Text>
                         </View>
                         <View
                           style={{
