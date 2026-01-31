@@ -29,7 +29,15 @@ jobs:
         run: pnpm i
 
       - name: Seed env file for Next.js build
-        run: node -e "require('fs').copyFileSync('env.example', '.env')"
+        working-directory: ${{ github.workspace }}
+        run: |
+          if [ -f env.example ]; then
+            cp env.example .env
+          else
+            echo "env.example not found in $(pwd)"
+            ls -la
+            exit 1
+          fi
 
       - name: Build and publish desktop apps
         env:
