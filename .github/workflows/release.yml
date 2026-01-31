@@ -19,12 +19,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24.10.0
-          cache: pnpm
 
       - name: Enable pnpm via Corepack
         run: |
           corepack enable
           corepack prepare pnpm@10.27.0 --activate
+
+      - name: Show pnpm version
+        run: pnpm --version
+
+      - name: Get pnpm store path
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
         run: pnpm i
