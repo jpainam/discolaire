@@ -60,13 +60,7 @@ const VIDEO_EXTS = new Set([
   ".mpeg",
   ".mpg",
 ]);
-const DOCUMENT_EXTS = new Set([
-  ".doc",
-  ".docx",
-  ".pdf",
-  ".xls",
-  ".xlsx",
-]);
+const DOCUMENT_EXTS = new Set([".doc", ".docx", ".pdf", ".xls", ".xlsx"]);
 const ARCHIVE_EXTS = new Set([".zip"]);
 
 const getExtension = (url: string) => {
@@ -84,10 +78,16 @@ export const getDocumentFileCategory = (
 ): DocumentFileCategory => {
   const normalizedMime = mime?.toLowerCase();
   if (normalizedMime) {
-    if (normalizedMime.startsWith("image/") || IMAGE_MIMES.has(normalizedMime)) {
+    if (
+      normalizedMime.startsWith("image/") ||
+      IMAGE_MIMES.has(normalizedMime)
+    ) {
       return "image";
     }
-    if (normalizedMime.startsWith("video/") || VIDEO_MIMES.has(normalizedMime)) {
+    if (
+      normalizedMime.startsWith("video/") ||
+      VIDEO_MIMES.has(normalizedMime)
+    ) {
       return "video";
     }
     if (DOCUMENT_MIMES.has(normalizedMime)) {

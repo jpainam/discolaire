@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
+import { DocumentOverview } from "~/components/documents/DocumentOverview";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { StaffDocumentHeader } from "./StaffDocumentHeader";
-import { StaffDocumentTable } from "./StaffDocumentTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -37,7 +37,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <StaffDocumentTable />
+          <DocumentOverview entityId={params.id} entityType="staff" />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

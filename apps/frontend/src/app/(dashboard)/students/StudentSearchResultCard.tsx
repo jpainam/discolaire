@@ -31,7 +31,14 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { DeleteIcon, EditIcon, GradeIcon, HeartIcon, IDCardIcon, ViewIcon } from "~/icons";
+import {
+  DeleteIcon,
+  EditIcon,
+  GradeIcon,
+  HeartIcon,
+  IDCardIcon,
+  ViewIcon,
+} from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";

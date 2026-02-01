@@ -11,12 +11,12 @@ import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { RightPanelSetter } from "~/components/RightPanelSetter";
+import { StudentRightPanelMeta } from "~/components/students/right-panel/StudentRightPanelMeta";
 import { StudentHeader } from "~/components/students/StudentHeader";
 import { Skeleton } from "~/components/ui/skeleton";
 import { checkPermission } from "~/permissions/server";
 import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
-import { StudentRightPanelMeta } from "~/components/students/right-panel/StudentRightPanelMeta";
 
 interface Props {
   params: Promise<{ id: string }>;
