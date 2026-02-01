@@ -2,6 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
 import { DocumentType } from "@repo/db";
+import { getDocumentFileCategory } from "@repo/utils";
 
 import { protectedProcedure } from "../trpc";
 
@@ -20,6 +21,34 @@ const updateDocumentSchema = createDocumentSchema
   .extend({ id: z.string().min(1) });
 
 export const documentRouter = {
+  all: protectedProcedure
+    .input(
+      z.object({
+        entityType: z.enum(["staff", "contact", "student"]).optional(),
+        entityId: z.string().optional(),
+        limit: z.number().optional().default(20),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.document.findMany({
+        include: {
+          staff: true,
+          student: true,
+          contact: true,
+          createdBy: true,
+        },
+        take: input.limit,
+        where: {
+          ...(input.entityType == "student"
+            ? { studentId: input.entityId }
+            : {}),
+          ...(input.entityType == "contact"
+            ? { contactId: input.entityId }
+            : {}),
+          ...(input.entityType == "staff" ? { staffId: input.entityId } : {}),
+        },
+      });
+    }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(({ ctx, input }) => {
@@ -98,5 +127,37 @@ export const documentRouter = {
           createdBy: true,
         },
       });
+    }),
+  stats: protectedProcedure
+    .input(
+      z.object({
+        entityType: z.enum(["student", "staff", "contact"]),
+        entityId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const docs = await ctx.db.document.findMany({
+        where: {
+          studentId: input.entityType == "student" ? input.entityId : null,
+          staffId: input.entityType == "staff" ? input.entityId : null,
+          contactId: input.entityType == "contact" ? input.entityId : null,
+        },
+      });
+
+      const stats = {
+        image: { count: 0, size: 0 },
+        video: { count: 0, size: 0 },
+        document: { count: 0, size: 0 },
+        archived: { count: 0, size: 0 },
+        other: { count: 0, size: 0 },
+      };
+
+      for (const doc of docs) {
+        const category = getDocumentFileCategory(doc.mime, doc.url);
+        stats[category].count += 1;
+        stats[category].size += doc.size ?? 0;
+      }
+
+      return stats;
     }),
 } satisfies TRPCRouterRecord;

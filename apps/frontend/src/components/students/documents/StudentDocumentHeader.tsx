@@ -1,6 +1,8 @@
 "use client";
 
-import { FolderOpen, UploadCloudIcon } from "lucide-react";
+import { UploadIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FolderOpen } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
@@ -26,7 +28,7 @@ export function StudentDocumentHeader({ studentId }: { studentId: string }) {
             });
           }}
         >
-          <UploadCloudIcon />
+          <HugeiconsIcon icon={UploadIcon} strokeWidth={2} />
           {t("upload")}
         </Button>
       </div>

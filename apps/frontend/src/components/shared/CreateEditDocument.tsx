@@ -56,6 +56,7 @@ export function CreateEditDocument({
           trpc.student.documents.pathFilter(),
         );
         await queryClient.invalidateQueries(trpc.staff.documents.pathFilter());
+        await queryClient.invalidateQueries(trpc.document.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeModal();
       },
@@ -70,6 +71,7 @@ export function CreateEditDocument({
     trpc.document.update.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.staff.documents.pathFilter());
+        await queryClient.invalidateQueries(trpc.document.pathFilter());
         await queryClient.invalidateQueries(
           trpc.student.documents.pathFilter(),
         );
@@ -151,7 +153,7 @@ export function CreateEditDocument({
 
       setIsLoading(true);
       const formData = new FormData();
-      formData.append("files", file, file.name);
+      formData.append("file", file, file.name);
       formData.append("entityId", entityId);
       formData.append("entityType", entityType);
 
