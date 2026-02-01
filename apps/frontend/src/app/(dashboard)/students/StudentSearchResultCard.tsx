@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 
 import { AvatarState } from "~/components/AvatarState";
+import { UpdateRegistrationNumber } from "~/components/students/UpdateRegistrationNumber";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -27,9 +28,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { DeleteIcon, EditIcon, GradeIcon, HeartIcon, ViewIcon } from "~/icons";
+import { DeleteIcon, EditIcon, GradeIcon, HeartIcon, IDCardIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -45,8 +47,10 @@ export function StudentSearchResultCard({
   const trpc = useTRPC();
   const locale = useLocale();
   const queryClient = useQueryClient();
+  const { openModal } = useModal();
   const confirm = useConfirm();
   const canDeleteStudent = useCheckPermission("student.delete");
+  const canUpdateStudent = useCheckPermission("student.update");
 
   const deleteStudentMutation = useMutation(
     trpc.student.delete.mutationOptions({
@@ -176,6 +180,20 @@ export function StudentSearchResultCard({
                 <ViewIcon />
                 {t("View Profile")}
               </DropdownMenuItem>
+              {canUpdateStudent && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openModal({
+                      title: "Modifier matricule",
+                      description: getFullName(student),
+                      view: <UpdateRegistrationNumber student={student} />,
+                    });
+                  }}
+                >
+                  <IDCardIcon />
+                  Modifier matricule
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 onSelect={() => {
                   router.push(`/students/${student.id}/edit`);

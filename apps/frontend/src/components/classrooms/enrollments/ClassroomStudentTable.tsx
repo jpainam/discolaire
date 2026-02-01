@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 import { Badge } from "~/components/base-badge";
 import { StudentContactListSheet } from "~/components/students/contacts/StudentContactListSheet";
+import { UpdateRegistrationNumber } from "~/components/students/UpdateRegistrationNumber";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -35,10 +36,11 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { UserLink } from "~/components/UserLink";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { ContactIcon, DeleteIcon, ViewIcon } from "~/icons";
+import { ContactIcon, DeleteIcon, IDCardIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
@@ -76,6 +78,8 @@ export function ClassroomStudentTable({
       },
     }),
   );
+  const { openModal } = useModal();
+  const canUpdateStudent = useCheckPermission("student.update");
   const { openSheet } = useSheet();
 
   const confirm = useConfirm();
@@ -239,6 +243,22 @@ export function ClassroomStudentTable({
                           <ContactIcon />
                           {t("parents")}
                         </DropdownMenuItem>
+                        {canUpdateStudent && (
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              openModal({
+                                title: "Modifier le matricule",
+                                description: getFullName(stud),
+                                view: (
+                                  <UpdateRegistrationNumber student={stud} />
+                                ),
+                              });
+                            }}
+                          >
+                            <IDCardIcon />
+                            Modifier matricule
+                          </DropdownMenuItem>
+                        )}
                         {canDeleteEnrollment && (
                           <>
                             <DropdownMenuSeparator />

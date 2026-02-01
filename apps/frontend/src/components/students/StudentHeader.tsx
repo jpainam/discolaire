@@ -60,6 +60,7 @@ import { useRouter } from "~/hooks/use-router";
 import {
   DeleteIcon,
   EditIcon,
+  IDCardIcon,
   PlusIcon,
   PrinterIcon,
   UsersIcon,
@@ -76,6 +77,7 @@ import { UserAvatar } from "../UserAvatar";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
 import { SuccessProbability } from "./SuccessProbability";
+import { UpdateRegistrationNumber } from "./UpdateRegistrationNumber";
 
 export function StudentHeader() {
   const trpc = useTRPC();
@@ -143,9 +145,9 @@ export function StudentHeader() {
   const confirm = useConfirm();
 
   const canDeleteStudent = useCheckPermission("student.delete");
-  const canEditStudent = useCheckPermission("student.update");
-  const { data: session } = authClient.useSession();
 
+  const { data: session } = authClient.useSession();
+  const canUpdateStudent = useCheckPermission("student.update");
   const [value, setValue] = useState("");
   const [label, setLabel] = useState(getFullName(student));
   const [search, setSearch] = useState("");
@@ -231,9 +233,9 @@ export function StudentHeader() {
               </ChangeAvatarButton>
             )}
           </SimpleTooltip>
-          {canEditStudent && (
+          {canUpdateStudent && (
             <Button
-              disabled={!canEditStudent}
+              disabled={!canUpdateStudent}
               size={"icon-sm"}
               onClick={() => {
                 router.push(routes.students.edit(student.id));
@@ -369,6 +371,20 @@ export function StudentHeader() {
                   {t("change_password")}
                 </DropdownMenuItem>
               )}
+              {canUpdateStudent && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openModal({
+                      title: "Modifier le matricule",
+                      description: getFullName(student),
+                      view: <UpdateRegistrationNumber student={student} />,
+                    });
+                  }}
+                >
+                  <IDCardIcon />
+                  Modifier matricule
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <ShieldCheck />
@@ -450,7 +466,7 @@ export function StudentHeader() {
                 <ShieldBan />
                 {student.isActive ? t("disable") : t("enable")}
               </DropdownMenuItem> */}
-              {canEditStudent && (
+              {canUpdateStudent && (
                 <DropdownMenuItem
                   onSelect={() => {
                     router.push(routes.students.edit(student.id));

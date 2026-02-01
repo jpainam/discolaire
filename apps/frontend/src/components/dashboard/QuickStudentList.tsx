@@ -41,6 +41,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import {
@@ -49,6 +50,7 @@ import {
   EditIcon,
   GradeIcon,
   HeartIcon,
+  IDCardIcon,
   ViewIcon,
 } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -56,6 +58,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { Badge as BaseBadge } from "../base-badge";
 import { EmptyComponent } from "../EmptyComponent";
+import { UpdateRegistrationNumber } from "../students/UpdateRegistrationNumber";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { UserLink } from "../UserLink";
 
@@ -68,7 +71,8 @@ export function QuickStudentList() {
   const debounced = useDebouncedCallback((value: string) => {
     void setQueryText(value);
   }, 300);
-
+  const canUpdateStudent = useCheckPermission("student.update");
+  const { openModal } = useModal();
   const trpc = useTRPC();
   const { data: schoolYears } = useQuery(trpc.schoolYear.all.queryOptions());
   const { data: students, isPending } = useQuery(
@@ -272,6 +276,7 @@ export function QuickStudentList() {
                           <HeartIcon />
                           {t("Favorite")}
                         </DropdownMenuItem>
+
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(`/students/${st.id}`);
@@ -280,6 +285,20 @@ export function QuickStudentList() {
                           <ViewIcon />
                           {t("View Profile")}
                         </DropdownMenuItem>
+                        {canUpdateStudent && (
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              openModal({
+                                title: "Modifier matricule",
+                                description: getFullName(st),
+                                view: <UpdateRegistrationNumber student={st} />,
+                              });
+                            }}
+                          >
+                            <IDCardIcon />
+                            Modifier matricule
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem
                           onSelect={() => {
                             router.push(`/students/${st.id}/edit`);

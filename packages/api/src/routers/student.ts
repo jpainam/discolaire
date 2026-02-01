@@ -309,6 +309,46 @@ export const studentRouter = {
         },
       });
     }),
+  updateRegistration: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        registrationNumber: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (
+        await ctx.services.student.registrationNumberExists(
+          input.registrationNumber,
+          input.studentId,
+        )
+      ) {
+        console.warn(
+          "Registration number already exists",
+          input.registrationNumber,
+        );
+        // throw new TRPCError({
+        //   code: "BAD_REQUEST",
+        //   message: "Registration number already exists",
+        // });
+      }
+      await ctx.pubsub.publish("student", {
+        type: "update",
+        data: {
+          id: input.studentId,
+          metadata: {
+            name: input.registrationNumber,
+          },
+        },
+      });
+      return ctx.db.student.update({
+        where: { id: input.studentId },
+        data: {
+          registrationNumber: input.registrationNumber,
+          createdById: ctx.session.user.id,
+        },
+      });
+    }),
   count: protectedProcedure
     .input(
       z
