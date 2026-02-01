@@ -13,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { storageData } from "./mock-data";
 
 const getSize = (size: number) => {
   if (size >= 1024 ** 3) {
@@ -22,7 +21,7 @@ const getSize = (size: number) => {
   if (size >= 1024 ** 2) {
     return `${(size / 1024 ** 2).toFixed(1)} MB`;
   }
-  return `${Math.max(1, Math.round(size / 1024))} KB`;
+  return `${Math.round(size / 1024)} KB`;
 };
 const iconMap: Record<string, LucideIcon> = {
   images: Image,
@@ -76,11 +75,13 @@ export function DocumentStorageCard({
       },
     ];
   }, [stats]);
+  const totalSize = stats?.totalSize ?? 0;
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
       {breakdown.map((item) => {
         const Icon = iconMap[item.type] ?? File;
-        const percentage = ((item.size / storageData.total) * 100).toFixed(0);
+        const percentage =
+          totalSize > 0 ? ((item.size / totalSize) * 100).toFixed(0) : 0;
 
         return (
           <Card key={item.type}>

@@ -1,9 +1,11 @@
 import { DownloadIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { toast } from "sonner";
 
+import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { useModal } from "~/hooks/use-modal";
 import { DeleteIcon, IDCardIcon } from "~/icons";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { EmptyComponent } from "../EmptyComponent";
 import { Badge } from "../ui/badge";
@@ -51,6 +55,41 @@ export function DocumentFileList({
   );
   const t = useTranslations();
   const locale = useLocale();
+  const queryClient = useQueryClient();
+  const { openModal } = useModal();
+  const confirm = useConfirm();
+  const deleteFile = async (docId: string) => {
+    try {
+      toast.loading(t("deleting"), { id: 0 });
+      const response = await fetch("/api/upload/documents", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          documentId: docId,
+        }),
+      });
+      if (!response.ok) {
+        const { error } = (await response.json()) as {
+          error?: string;
+        };
+        toast.error(error ?? response.statusText, {
+          id: 0,
+        });
+        return;
+      }
+      await queryClient.invalidateQueries(trpc.document.pathFilter());
+      toast.success(t("deleted_successfully"), {
+        id: 0,
+      });
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete document",
+        { id: 0 },
+      );
+    }
+  };
   return (
     <div>
       <div className="overflow-hidden rounded-lg border bg-transparent">
@@ -102,14 +141,16 @@ export function DocumentFileList({
                       })}
                     </TableCell>
                     <TableCell className="text-center">
-                      {doc.createdAt.toLocaleDateString(locale, {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                      <Badge variant={"secondary"}>
-                        {doc.createdBy.username}
-                      </Badge>
+                      <div className="flex items-center justify-center gap-2">
+                        {doc.createdAt.toLocaleDateString(locale, {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                        <Badge variant={"secondary"}>
+                          {doc.createdBy.username}
+                        </Badge>
+                      </div>
                     </TableCell>
 
                     <TableCell className="text-right">
@@ -119,8 +160,13 @@ export function DocumentFileList({
                             <MoreVertical />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              const url = `/api/download/documents/${doc.url}`;
+                              window.open(url, "_blank", "noopener,noreferrer");
+                            }}
+                          >
                             <HugeiconsIcon
                               icon={DownloadIcon}
                               strokeWidth={2}
@@ -128,12 +174,36 @@ export function DocumentFileList({
                             />
                             Télécharger
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              openModal({
+                                title: "Rename document",
+                                description: doc.title,
+                                view: (
+                                  <CreateEditDocument
+                                    documentId={doc.id}
+                                    title={doc.title ?? ""}
+                                    entityId={entityId}
+                                    entityType={entityType}
+                                  />
+                                ),
+                              });
+                            }}
+                          >
                             <IDCardIcon />
                             Renommer
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>
+                          <DropdownMenuItem
+                            variant="destructive"
+                            onSelect={async () => {
+                              const isConfirmed = await confirm({
+                                title: t("delete"),
+                                description: t("delete_confirmation"),
+                              });
+                              if (isConfirmed) await deleteFile(doc.id);
+                            }}
+                          >
                             <DeleteIcon />
                             {t("delete")}
                           </DropdownMenuItem>

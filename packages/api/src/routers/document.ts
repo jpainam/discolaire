@@ -145,6 +145,8 @@ export const documentRouter = {
       });
 
       const stats = {
+        totalSize: 0,
+        totalCount: 0,
         image: { count: 0, size: 0 },
         video: { count: 0, size: 0 },
         document: { count: 0, size: 0 },
@@ -154,8 +156,11 @@ export const documentRouter = {
 
       for (const doc of docs) {
         const category = getDocumentFileCategory(doc.mime, doc.url);
+        const size = doc.size ?? 0;
+        stats.totalSize += size;
+        stats.totalCount += 1;
         stats[category].count += 1;
-        stats[category].size += doc.size ?? 0;
+        stats[category].size += size;
       }
 
       return stats;
