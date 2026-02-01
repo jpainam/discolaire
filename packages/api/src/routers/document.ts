@@ -20,6 +20,16 @@ const updateDocumentSchema = createDocumentSchema
   .partial()
   .extend({ id: z.string().min(1) });
 
+const activityFilterSchema = z.object({
+  entityType: z.enum(["student", "staff", "contact"]),
+  entityId: z.string().min(1),
+  limit: z.number().min(1).max(100).default(10),
+});
+
+const logDownloadSchema = z.object({
+  url: z.string().min(1),
+});
+
 export const documentRouter = {
   all: protectedProcedure
     .input(
@@ -50,12 +60,38 @@ export const documentRouter = {
       });
     }),
   delete: protectedProcedure
-    .input(z.union([z.string(), z.array(z.string())]))
-    .mutation(({ ctx, input }) => {
+    .input(z.string().array())
+    .mutation(async ({ ctx, input }) => {
+      const ids = input;
+      console.log("DEleting ......", input);
+      const documents = await ctx.db.document.findMany({
+        where: {
+          id: { in: ids },
+          schoolId: ctx.schoolId,
+        },
+        select: {
+          id: true,
+          title: true,
+          url: true,
+        },
+      });
+      console.log("DEleting ......", documents);
+      if (documents.length) {
+        console.log("Creating document activity ......", input);
+        await ctx.db.documentActivity.createMany({
+          data: documents.map((doc) => ({
+            documentId: doc.id,
+            action: "deleted",
+            filename: doc.title ?? doc.url,
+            createdById: ctx.session.user.id,
+          })),
+        });
+      }
+
       return ctx.db.document.deleteMany({
         where: {
           id: {
-            in: Array.isArray(input) ? input : [input],
+            in: ids,
           },
         },
       });
@@ -80,19 +116,32 @@ export const documentRouter = {
   create: protectedProcedure
     .input(createDocumentSchema)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.document.create({
-        data: {
-          type: input.type,
-          title: input.title,
-          mime: input.mime,
-          size: input.size,
-          url: input.url,
-          createdById: ctx.session.user.id,
-          schoolId: ctx.schoolId,
-          studentId: input.entityType == "student" ? input.entityId : null,
-          staffId: input.entityType == "staff" ? input.entityId : null,
-          contactId: input.entityType == "contact" ? input.entityId : null,
-        },
+      return ctx.db.$transaction(async (tx) => {
+        const document = await tx.document.create({
+          data: {
+            type: input.type,
+            title: input.title,
+            mime: input.mime,
+            size: input.size,
+            url: input.url,
+            createdById: ctx.session.user.id,
+            schoolId: ctx.schoolId,
+            studentId: input.entityType == "student" ? input.entityId : null,
+            staffId: input.entityType == "staff" ? input.entityId : null,
+            contactId: input.entityType == "contact" ? input.entityId : null,
+          },
+        });
+
+        await tx.documentActivity.create({
+          data: {
+            documentId: document.id,
+            action: "uploaded",
+            filename: document.title ?? document.url,
+            createdById: ctx.session.user.id,
+          },
+        });
+
+        return document;
       });
     }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
@@ -164,5 +213,56 @@ export const documentRouter = {
       }
 
       return stats;
+    }),
+  activities: protectedProcedure
+    .input(activityFilterSchema)
+    .query(({ ctx, input }) => {
+      return ctx.db.documentActivity.findMany({
+        take: input.limit,
+        orderBy: {
+          date: "desc",
+        },
+        include: {
+          createdBy: true,
+          document: true,
+        },
+        where: {
+          document: {
+            schoolId: ctx.schoolId,
+            ...(input.entityType == "student"
+              ? { studentId: input.entityId }
+              : {}),
+            ...(input.entityType == "contact"
+              ? { contactId: input.entityId }
+              : {}),
+            ...(input.entityType == "staff" ? { staffId: input.entityId } : {}),
+          },
+        },
+      });
+    }),
+  logDownload: protectedProcedure
+    .input(logDownloadSchema)
+    .mutation(async ({ ctx, input }) => {
+      const document = await ctx.db.document.findFirst({
+        where: {
+          url: input.url,
+          schoolId: ctx.schoolId,
+        },
+      });
+
+      if (!document) {
+        return null;
+      }
+
+      await ctx.db.documentActivity.create({
+        data: {
+          documentId: document.id,
+          action: "downloaded",
+          filename: document.title ?? document.url,
+          createdById: ctx.session.user.id,
+        },
+      });
+
+      return document.id;
     }),
 } satisfies TRPCRouterRecord;

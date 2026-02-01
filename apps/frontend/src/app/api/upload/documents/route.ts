@@ -63,7 +63,7 @@ export async function DELETE(request: Request) {
       key: document.url,
     });
 
-    await caller.document.delete(documentId);
+    await caller.document.delete([documentId]);
 
     return Response.json({ message: "Document deleted successfully" });
   } catch (error) {

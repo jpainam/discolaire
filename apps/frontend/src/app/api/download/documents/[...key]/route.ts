@@ -9,8 +9,10 @@ import type { Readable } from "stream";
 import { NextResponse } from "next/server";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 
+import { getSession } from "~/auth/server";
 import { env } from "~/env";
 import { minioClient, s3client } from "~/lib/s3-client";
+import { caller } from "~/trpc/server";
 
 export async function GET(
   req: NextRequest,
@@ -21,6 +23,13 @@ export async function GET(
   const isLocal = env.NEXT_PUBLIC_DEPLOYMENT_ENV === "local";
 
   try {
+    const session = await getSession();
+    if (session) {
+      void caller.document.logDownload({ url: objectKey }).catch((error) => {
+        console.error("Failed to log document download:", error);
+      });
+    }
+
     if (isLocal) {
       // Use MinIO client
       const stream = await minioClient.getObject(
