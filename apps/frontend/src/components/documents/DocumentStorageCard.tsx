@@ -1,11 +1,10 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
 import { useMemo } from "react";
-import { Archive, File, FileText, Image, Video } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 
+import type { DocumentDisplayType } from "./documentTypeStyles";
 import {
   Card,
   CardContent,
@@ -13,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { getColor, iconMap } from "./documentTypeStyles";
 
 const getSize = (size: number) => {
   if (size >= 1024 ** 3) {
@@ -23,24 +23,6 @@ const getSize = (size: number) => {
   }
   return `${Math.round(size / 1024)} KB`;
 };
-const iconMap: Record<string, LucideIcon> = {
-  images: Image,
-  videos: Video,
-  documents: FileText,
-  archives: Archive,
-  others: File,
-};
-const colorsMap = [
-  { type: "images", color: "#8B5CF6" },
-  { type: "videos", color: "#EC4899" },
-  { type: "documents", color: "#F59E0B" },
-  { type: "archives", color: "#10B981" },
-  { type: "others", color: "#6B7280" },
-];
-const getColor = (type: string) => {
-  return colorsMap.find((c) => c.type == type)?.color ?? "#6B7280";
-};
-
 export function DocumentStorageCard({
   stats,
 }: {
@@ -79,7 +61,7 @@ export function DocumentStorageCard({
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
       {breakdown.map((item) => {
-        const Icon = iconMap[item.type] ?? File;
+        const Icon = iconMap[item.type as DocumentDisplayType];
         const percentage =
           totalSize > 0 ? ((item.size / totalSize) * 100).toFixed(0) : 0;
 

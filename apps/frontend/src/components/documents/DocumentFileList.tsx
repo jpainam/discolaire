@@ -5,6 +5,8 @@ import { MoreVertical } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { getDocumentFileCategory } from "@repo/utils";
+
 import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
 import {
   DropdownMenu,
@@ -29,6 +31,11 @@ import { EmptyComponent } from "../EmptyComponent";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
+import {
+  getColor,
+  getDocumentDisplayType,
+  iconMap,
+} from "./documentTypeStyles";
 
 const getSize = (size: number) => {
   if (size >= 1024 ** 3) {
@@ -96,6 +103,7 @@ export function DocumentFileList({
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead className="w-10"></TableHead>
               <TableHead>{t("name")}</TableHead>
               <TableHead className="text-center">{t("Size")}</TableHead>
               <TableHead className="text-center">{t("Modified")}</TableHead>
@@ -108,7 +116,7 @@ export function DocumentFileList({
               Array.from({ length: 10 }).map((_, t) => {
                 return (
                   <TableRow key={t}>
-                    {Array.from({ length: 5 }).map((_, tt) => (
+                    {Array.from({ length: 6 }).map((_, tt) => (
                       <TableCell key={tt}>
                         <Skeleton className="h-8" />
                       </TableCell>
@@ -118,7 +126,7 @@ export function DocumentFileList({
               })
             ) : docs?.length == 0 ? (
               <TableRow>
-                <TableCell colSpan={5}>
+                <TableCell colSpan={6}>
                   <EmptyComponent
                     title="Aucun document"
                     description="Commencer par télécharger quelques documents"
@@ -127,8 +135,24 @@ export function DocumentFileList({
               </TableRow>
             ) : (
               docs?.map((doc) => {
+                const category = getDocumentFileCategory(
+                  doc.mime ?? null,
+                  doc.url,
+                );
+                const displayType = getDocumentDisplayType(category);
+                const iconColor = getColor(displayType);
+                const Icon = iconMap[displayType];
+
                 return (
                   <TableRow key={doc.id}>
+                    <TableCell>
+                      <span
+                        className="flex size-8 items-center justify-center rounded-md"
+                        style={{ backgroundColor: `${iconColor}15` }}
+                      >
+                        <Icon className="size-4" style={{ color: iconColor }} />
+                      </span>
+                    </TableCell>
                     <TableCell>{doc.title}</TableCell>
                     <TableCell className="text-center">
                       {getSize(doc.size ?? 0)}
