@@ -10,6 +10,8 @@ import {
   Phone,
 } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
+
 import type { ParentContact } from "./parent-data";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -17,22 +19,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 interface ContactInfoProps {
   parent: ParentContact;
+  contact: RouterOutputs["contact"]["get"];
 }
 
-export function ContactInfo({ parent }: ContactInfoProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function ContactInfo({ parent, contact }: ContactInfoProps) {
   const copyToClipboard = async (text: string) => {
     await navigator.clipboard.writeText(text);
   };
 
   return (
     <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Phone className="text-primary h-5 w-5" />
+      <CardHeader>
+        <CardTitle className="flex items-center gap-1">
+          <Phone className="text-primary h-4 w-4" />
           Contact Information
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-5">
+      <CardContent className="space-y-2">
         {/* Emails */}
         <div>
           <div className="mb-2 flex items-center gap-2">

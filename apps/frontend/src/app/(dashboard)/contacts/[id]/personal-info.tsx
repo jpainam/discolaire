@@ -1,104 +1,166 @@
 "use client";
 
-import {
-  Briefcase,
-  Building2,
-  Calendar,
-  CreditCard,
-  Globe,
-  User,
-} from "lucide-react";
+import type { ReactNode } from "react";
+import { AddTeamIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useLocale } from "next-intl";
+import { useTranslations } from "use-intl";
 
-import type { ParentContact } from "./parent-data";
+import type { RouterOutputs } from "@repo/api";
+
+import { AddStudentToParent } from "~/components/contacts/AddStudentToParent";
 import { Badge } from "~/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "~/components/ui/item";
+import { Separator } from "~/components/ui/separator";
+import { useModal } from "~/hooks/use-modal";
+import { ContactIcon, EditIcon, PrinterIcon } from "~/icons";
+import { getFullName } from "~/utils";
 
-interface PersonalInfoProps {
-  parent: ParentContact;
-}
-
-export function PersonalInfo({ parent }: PersonalInfoProps) {
-  const infoItems = [
-    {
-      icon: User,
-      label: "Full Name",
-      value: `${parent.firstName} ${parent.lastName}`,
-    },
-    {
-      icon: Calendar,
-      label: "Date of Birth",
-      value: new Date(parent.dateOfBirth).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-    },
-    {
-      icon: User,
-      label: "Gender",
-      value: parent.gender,
-    },
-    {
-      icon: Globe,
-      label: "Preferred Language",
-      value: parent.language,
-    },
-    {
-      icon: CreditCard,
-      label: "National ID",
-      value: parent.nationalId,
-    },
-    {
-      icon: Briefcase,
-      label: "Profession",
-      value: parent.profession,
-    },
-    {
-      icon: Building2,
-      label: "Employer",
-      value: parent.employer,
-    },
-  ];
+export function PersonalInfo({
+  contact,
+}: {
+  contact: RouterOutputs["contact"]["get"];
+}) {
+  const locale = useLocale();
+  const t = useTranslations();
+  const { openModal } = useModal();
 
   return (
     <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <User className="text-primary h-5 w-5" />
+      <CardHeader>
+        <CardTitle className="flex items-center gap-1">
+          <ContactIcon className="text-primary h-4 w-4" />
           Personal Information
         </CardTitle>
+        <CardAction></CardAction>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {infoItems.map((item, index) => (
-            <div
-              key={index}
-              className="border-border flex items-start gap-3 border-b pb-3 last:border-0 last:pb-0"
-            >
-              <item.icon className="text-muted-foreground mt-0.5 h-4 w-4" />
-              <div className="min-w-0 flex-1">
-                <p className="text-muted-foreground text-sm">{item.label}</p>
-                <p className="text-foreground truncate font-medium">
-                  {item.value}
-                </p>
-              </div>
-            </div>
-          ))}
-          <div className="border-border border-t pt-3">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground text-sm">
-                Account Created
-              </span>
-              <Badge variant="secondary">
-                {new Date(parent.accountCreated).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                })}
-              </Badge>
-            </div>
-          </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline">
+            <EditIcon />
+            Edit
+          </Button>
+          <Button variant="outline">
+            <PrinterIcon />
+            Print
+          </Button>
+          <Button
+            onClick={() => {
+              openModal({
+                className: "sm:max-w-xl",
+                title: `Ajouter élèves à ${getFullName(contact)}`,
+                description: "Sélectionner les élèves à ajouter au contact",
+                view: <AddStudentToParent contactId={contact.id} />,
+              });
+            }}
+            variant={"outline"}
+          >
+            <HugeiconsIcon
+              icon={AddTeamIcon}
+              strokeWidth={2}
+              className="size-4"
+            />
+            Ajouter élèves
+          </Button>
+        </div>
+        <div className="space-y-2">
+          <PersonalItem
+            label={t("fullName")}
+            value={getFullName(contact)}
+            icon={<ContactIcon />}
+          />
+          <Separator />
+          <PersonalItem
+            label={t("phoneNumber")}
+            value={`${contact.phoneNumber1} / ${contact.phoneNumber2}`}
+            icon={<ContactIcon />}
+          />
+          <Separator />
+          <PersonalItem
+            label={t("email")}
+            value={contact.email}
+            icon={<ContactIcon />}
+          />
+          <Separator />
+          <PersonalItem
+            label={t("created_at")}
+            value={contact.createdAt.toLocaleDateString(locale, {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+            icon={<ContactIcon />}
+          />
+          <Separator />
+          <PersonalItem
+            label={t("gender")}
+            value={contact.gender ?? "male"}
+            icon={<ContactIcon />}
+          />
+          <Separator />
+          <PersonalItem
+            label={t("occupation")}
+            value={contact.occupation ?? "-"}
+            icon={<ContactIcon />}
+          />
+          <Separator />
+          <PersonalItem
+            label={t("employer")}
+            value={contact.employer}
+            icon={<ContactIcon />}
+          />
         </div>
       </CardContent>
+      <CardFooter>
+        <div className="flex w-full items-center justify-between">
+          <div className="text-muted-foreground text-xs">
+            Dernière modification
+          </div>
+
+          <Badge variant={"secondary"}>
+            {contact.updatedAt.toLocaleDateString(locale, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </Badge>
+        </div>
+      </CardFooter>
     </Card>
+  );
+}
+
+function PersonalItem({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value?: string | null;
+}) {
+  return (
+    <Item className="p-0">
+      <ItemMedia variant="icon">{icon}</ItemMedia>
+      <ItemContent>
+        <ItemTitle>{label}</ItemTitle>
+        <ItemDescription>{value ?? "-"}</ItemDescription>
+      </ItemContent>
+    </Item>
   );
 }

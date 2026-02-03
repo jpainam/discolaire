@@ -1,22 +1,25 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
+import { AddTeamIcon, BlockedIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Camera,
   Clock,
-  Edit,
-  Mail,
   MessageCircle,
   MoreVertical,
   Phone,
-  Printer,
   Shield,
   ShieldCheck,
-  UserPlus,
 } from "lucide-react";
 
+import type { RouterOutputs } from "@repo/api";
+
 import type { ParentContact } from "./parent-data";
+import { Badge } from "~/components/base-badge";
+import { AddStudentToParent } from "~/components/contacts/AddStudentToParent";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -25,55 +28,58 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Label } from "~/components/ui/label";
+import { useModal } from "~/hooks/use-modal";
+import { EditIcon, MailIcon, PrinterIcon } from "~/icons";
+import { getFullName } from "~/utils";
 
 interface ProfileHeaderProps {
   parent: ParentContact;
+  contact: RouterOutputs["contact"]["get"];
 }
 
-export function ProfileHeader({ parent }: ProfileHeaderProps) {
-  const initials = `${parent.firstName.charAt(0)}${parent.lastName.charAt(0)}`;
-  const statusColors = {
-    active: "bg-success text-success-foreground",
-    inactive: "bg-muted text-muted-foreground",
-    blocked: "bg-destructive text-destructive-foreground",
-  };
+export function ProfileHeader({ parent, contact }: ProfileHeaderProps) {
+  const params = useParams<{ id: string }>();
+  const contactId = params.id;
+  const contact_initials = `${parent.firstName.charAt(0)}${parent.lastName.charAt(0)}`;
+
+  const { openModal } = useModal();
+  const avatar = createAvatar(initials, {
+    seed: getFullName(contact),
+  });
 
   return (
-    <div className="bg-card border-border rounded-xl border p-6 shadow-sm">
-      <div className="flex flex-col gap-6 lg:flex-row">
-        {/* Avatar Section */}
+    <div className="px-4 py-2">
+      <div className="flex flex-col gap-2 lg:flex-row">
         <div className="flex flex-col items-center gap-3">
-          <div className="relative">
-            <Avatar className="border-primary/20 h-28 w-28 border-4">
-              <AvatarImage
-                src={parent.photo || "/placeholder.svg"}
-                alt={`${parent.firstName} ${parent.lastName}`}
-              />
-              <AvatarFallback className="bg-primary/10 text-primary text-2xl font-semibold">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            <Button
-              size="icon"
-              variant="secondary"
-              className="absolute -right-1 -bottom-1 h-8 w-8 rounded-full shadow-md"
-            >
-              <Camera className="h-4 w-4" />
-            </Button>
-          </div>
-          <Badge className={statusColors[parent.status]}>
+          <Avatar className="border-primary/20 size-20">
+            <AvatarImage
+              src={
+                contact.avatar
+                  ? `/api/avatars/${contact.avatar}`
+                  : avatar.toDataUri()
+              }
+              alt={`${parent.firstName} ${parent.lastName}`}
+            />
+            <AvatarFallback className="bg-primary/10 text-primary text-2xl font-semibold">
+              {contact_initials}
+            </AvatarFallback>
+          </Avatar>
+
+          <Badge
+            variant={contact.isActive ? "success" : "destructive"}
+            appearance={"outline"}
+            size={"sm"}
+          >
             {parent.status.toUpperCase()}
           </Badge>
         </div>
 
-        {/* Info Section */}
         <div className="min-w-0 flex-1">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-foreground text-2xl font-bold">
-                  {parent.lastName.toUpperCase()}, {parent.firstName}
-                </h1>
+                <Label className="text-xl">{getFullName(contact)}</Label>
                 {parent.portalAccess && (
                   <Badge variant="outline" className="gap-1">
                     <ShieldCheck className="h-3 w-3" />
@@ -81,68 +87,69 @@ export function ProfileHeader({ parent }: ProfileHeaderProps) {
                   </Badge>
                 )}
               </div>
-              <p className="text-muted-foreground mt-1">
-                {parent.profession} at {parent.employer}
-              </p>
-              <p className="text-muted-foreground mt-0.5 text-sm">
-                ID: {parent.id}
-              </p>
+              <div className="text-muted-foreground text-md">
+                {contact.occupation} {contact.employer}
+              </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1 bg-transparent"
-              >
-                <Edit className="h-4 w-4" />
-                <span className="hidden sm:inline">Edit</span>
+              <Button variant="outline">
+                <EditIcon />
+                Edit
+              </Button>
+              <Button variant="outline">
+                <PrinterIcon />
+                Print
               </Button>
               <Button
-                variant="outline"
-                size="sm"
-                className="gap-1 bg-transparent"
+                onClick={() => {
+                  openModal({
+                    className: "sm:max-w-xl",
+                    title: `Ajouter élèves à ${getFullName(contact)}`,
+                    description: "Sélectionner les élèves à ajouter au contact",
+                    view: <AddStudentToParent contactId={contactId} />,
+                  });
+                }}
+                variant={"outline"}
               >
-                <Printer className="h-4 w-4" />
-                <span className="hidden sm:inline">Print</span>
-              </Button>
-              <Button
-                size="sm"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground gap-1"
-              >
-                <UserPlus className="h-4 w-4" />
-                Link Students
+                <HugeiconsIcon
+                  icon={AddTeamIcon}
+                  strokeWidth={2}
+                  className="size-4"
+                />
+                Ajouter élèves
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8 bg-transparent"
-                  >
-                    <MoreVertical className="h-4 w-4" />
+                  <Button variant="outline" size="icon">
+                    <MoreVertical />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <Mail className="mr-2 h-4 w-4" />
+                    <MailIcon />
                     Send Email
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Phone className="mr-2 h-4 w-4" />
+                    <Phone />
                     Call Now
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <MessageCircle className="mr-2 h-4 w-4" />
+                    <MessageCircle />
                     Send SMS
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Shield className="mr-2 h-4 w-4" />
+                    <Shield />
                     Manage Access
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">
+                  <DropdownMenuItem variant="destructive">
+                    <HugeiconsIcon
+                      icon={BlockedIcon}
+                      strokeWidth={2}
+                      className="size-4"
+                    />
                     Block Contact
                   </DropdownMenuItem>
                 </DropdownMenuContent>

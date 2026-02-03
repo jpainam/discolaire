@@ -1,6 +1,11 @@
-"use client";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { getTranslations } from "next-intl/server";
 
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
+import { ErrorFallback } from "~/components/error-fallback";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
+import { getFullName } from "~/utils";
 import { CommunicationLog } from "./communication-log";
 import { ConnectedStudents } from "./connected-students";
 import { ContactInfo } from "./contact-info";
@@ -11,17 +16,26 @@ import { NotesCard } from "./notes-card";
 import { NotificationPreferences } from "./notification-preferences";
 import { parentData } from "./parent-data";
 import { PersonalInfo } from "./personal-info";
-import { ProfileHeader } from "./profile-header";
 import { QuickActions } from "./quick-actions";
 
-export default function Page() {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const contactId = params.id;
+  const queryClient = getQueryClient();
+  const contact = await queryClient.fetchQuery(
+    trpc.contact.get.queryOptions(contactId),
+  );
+  const t = await getTranslations();
   return (
-    <div className="bg-background min-h-screen">
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
-        {/* Profile Header */}
-        <ProfileHeader parent={parentData} />
-
+    <HydrateClient>
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/" },
+          { label: t("contacts"), href: "/contacts" },
+          { label: getFullName(contact) },
+        ]}
+      />
+      <div className="py-2">
         {/* Tabbed Content for Mobile */}
         <div className="mt-6 lg:hidden">
           <Tabs defaultValue="overview" className="w-full">
@@ -33,13 +47,13 @@ export default function Page() {
             </TabsList>
 
             <TabsContent value="overview" className="space-y-4">
-              <PersonalInfo parent={parentData} />
-              <ContactInfo parent={parentData} />
+              <PersonalInfo contact={contact} />
+              <ContactInfo contact={contact} parent={parentData} />
               <QuickActions />
             </TabsContent>
 
             <TabsContent value="students" className="space-y-4">
-              <ConnectedStudents students={parentData.students} />
+              <ConnectedStudents contactId={contactId} />
               <NotificationPreferences
                 preferences={parentData.notificationPreferences}
               />
@@ -59,16 +73,20 @@ export default function Page() {
         </div>
 
         {/* Grid Layout for Desktop */}
-        <div className="mt-6 hidden grid-cols-12 gap-6 lg:grid">
+        <div className="hidden grid-cols-12 gap-2 px-4 lg:grid">
           {/* Left Column - Personal & Contact Info */}
-          <div className="col-span-3 space-y-6">
-            <PersonalInfo parent={parentData} />
-            <ContactInfo parent={parentData} />
+          <div className="col-span-3 space-y-4">
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <PersonalInfo contact={contact} />
+            </ErrorBoundary>
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <ContactInfo contact={contact} parent={parentData} />
+            </ErrorBoundary>
           </div>
 
           {/* Middle Column - Students, Communications, Events */}
           <div className="col-span-6 space-y-6">
-            <ConnectedStudents students={parentData.students} />
+            <ConnectedStudents contactId={contactId} />
             <div className="grid grid-cols-2 gap-6">
               <CommunicationLog communications={parentData.communicationLog} />
               <EventsHistory events={parentData.events} />
@@ -87,6 +105,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </div>
+    </HydrateClient>
   );
 }
