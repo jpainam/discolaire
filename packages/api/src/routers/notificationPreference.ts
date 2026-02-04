@@ -1,11 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import {
-  EntityProfile,
-  NotificationChannel,
-  NotificationSourceType,
-} from "@repo/db/enums";
+import { NotificationChannel, NotificationSourceType } from "@repo/db/enums";
 
 import { protectedProcedure } from "../trpc";
 
@@ -14,20 +10,21 @@ export const notificationPreferenceRouter = {
     .input(
       z.object({
         entityId: z.string(),
-        profile: z.enum(EntityProfile),
+        profile: z.enum(["student", "staff", "contact"]),
       }),
     )
     .query(async ({ input, ctx }) => {
       const prefs = await ctx.db.notificationPreference.findMany({
         where: {
-          entityId: input.entityId,
-          profile: input.profile,
+          studentId: input.profile == "student" ? input.entityId : null,
+          contactId: input.profile == "contact" ? input.entityId : null,
+          staffId: input.profile == "staff" ? input.entityId : null,
         },
       });
       // return as {event: string, channels: {email: boolean, sms: boolean, whatsapp: boolean}}
       const notificationPreferences = prefs.map((pref) => {
         return {
-          entityId: pref.entityId,
+          entityId: input.entityId,
           id: pref.id,
           channel: pref.channel,
           sourceType: pref.sourceType,
@@ -39,7 +36,7 @@ export const notificationPreferenceRouter = {
     .input(
       z.object({
         entityId: z.string(),
-        profile: z.enum(EntityProfile),
+        profile: z.enum(["staff", "contact", "student"]),
         sourceType: z.enum(NotificationSourceType),
         channel: z.enum(NotificationChannel),
         enabled: z.boolean(),
@@ -48,18 +45,29 @@ export const notificationPreferenceRouter = {
     .mutation(async ({ ctx, input }) => {
       return ctx.db.notificationPreference.upsert({
         create: {
-          entityId: input.entityId,
+          studentId: input.profile == "student" ? input.entityId : null,
+          contactId: input.profile == "contact" ? input.entityId : null,
+          staffId: input.profile == "staff" ? input.entityId : null,
           sourceType: input.sourceType,
           channel: input.channel,
-          profile: input.profile,
           enabled: input.enabled,
         },
         update: {
           enabled: input.enabled,
         },
         where: {
-          entityId_sourceType_channel: {
-            entityId: input.entityId,
+          staffId_sourceType_channel: {
+            staffId: input.entityId,
+            sourceType: input.sourceType,
+            channel: input.channel,
+          },
+          contactId_sourceType_channel: {
+            contactId: input.entityId,
+            sourceType: input.sourceType,
+            channel: input.channel,
+          },
+          studentId_sourceType_channel: {
+            studentId: input.entityId,
             sourceType: input.sourceType,
             channel: input.channel,
           },

@@ -3,11 +3,7 @@ import { addDays, format, subDays } from "date-fns";
 import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
-import {
-  AttendanceType,
-  EntityProfile,
-  NotificationSourceType,
-} from "@repo/db";
+import { AttendanceType, NotificationSourceType } from "@repo/db";
 
 import { attendanceToData } from "../services/attendance-service";
 import { protectedProcedure } from "../trpc";
@@ -436,7 +432,7 @@ export const attendanceRouter = {
         items: recipients.map((contact) => ({
           recipient: {
             id: contact.id,
-            profile: EntityProfile.CONTACT,
+            profile: "contact",
             email: contact.email,
             phone: contact.phoneNumber1 ?? contact.phoneNumber2,
           },

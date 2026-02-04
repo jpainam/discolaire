@@ -52,15 +52,21 @@ model Notification {
 
 model NotificationPreference {
     id         String                 @id @default(cuid())
-    entityId   String
-    profile    EntityProfile
+    studentId  String?
+    contactId  String?
+    staffId    String?
+    student    Student?               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    contact    Contact?               @relation(fields: [contactId], references: [id], onDelete: Cascade)
+    staff      Staff?                 @relation(fields: [staffId], references: [id], onDelete: Cascade)
     sourceType NotificationSourceType
     channel    NotificationChannel
     enabled    Boolean                @default(true)
     createdAt  DateTime               @default(now())
     updatedAt  DateTime               @updatedAt
 
-    @@unique([entityId, sourceType, channel])
+    @@unique([contactId, sourceType, channel])
+    @@unique([staffId, sourceType, channel])
+    @@unique([studentId, sourceType, channel])
 }
 
 enum NotificationChannel {
@@ -140,8 +146,12 @@ enum SubscriptionStatus {
 
 model NotificationSubscription {
     id          String              @id @default(cuid())
-    entityId    String
-    profile     EntityProfile
+    contactId   String?
+    studentId   String?
+    staffId     String?
+    contact     Contact?            @relation(fields: [contactId], references: [id], onDelete: Cascade)
+    student     Student?            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    staff       Staff?              @relation(fields: [staffId], references: [id], onDelete: Cascade)
     channel     NotificationChannel
     status      SubscriptionStatus  @default(ACTIVE)
     // Credits in "messages". Email will be free/unlimited  and large number of unlimited credit
@@ -155,5 +165,7 @@ model NotificationSubscription {
     updatedAt   DateTime            @updatedAt
     comment     String?
 
-    @@index([entityId, channel, status])
+    @@index([contactId, channel, status])
+    @@index([studentId, channel, status])
+    @@index([staffId, channel, status])
 }

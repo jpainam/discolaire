@@ -1,28 +1,28 @@
 model Staff {
-    id                        String            @id @default(uuid())
+    id                        String                     @id @default(uuid())
     prefix                    String?
     firstName                 String?
     lastName                  String?
     avatar                    String?
-    isActive                  Boolean           @default(true)
+    isActive                  Boolean                    @default(true)
     jobTitle                  String?
     employmentType            String?
     degreeId                  String?
-    dateOfHire                DateTime?         @db.Date
-    dateOfRelease             DateTime?         @db.Date
+    dateOfHire                DateTime?                  @db.Date
+    dateOfRelease             DateTime?                  @db.Date
     bloodType                 String?
     placeOfBirth              String?
-    dateOfBirth               DateTime?         @db.Date
+    dateOfBirth               DateTime?                  @db.Date
     sendAgendaFrequency       String?
-    isTeacher                 Boolean?          @default(true)
-    gender                    Gender            @default(male)
+    isTeacher                 Boolean?                   @default(true)
+    gender                    Gender                     @default(male)
     phoneNumber1              String?
     phoneNumber2              String?
     email                     String?
     address                   String?
     observation               String?
     specialty                 String?
-    weeklyWorkingHours        Int               @default(40)
+    weeklyWorkingHours        Int                        @default(40)
     baseSalary                Float?
     travelAllowance           Float?
     phoneAllowance            Float?
@@ -35,22 +35,24 @@ model Staff {
     cnps                      String?
     cnss                      String?
     tax                       String?
-    dateOfCriminalRecordCheck DateTime?         @db.Date
-    createdAt                 DateTime?         @default(now()) @db.Timestamp(6)
-    updatedAt                 DateTime          @updatedAt
+    dateOfCriminalRecordCheck DateTime?                  @db.Date
+    createdAt                 DateTime?                  @default(now()) @db.Timestamp(6)
+    updatedAt                 DateTime                   @updatedAt
     userId                    String?
     countryId                 String?
-    dateOfLastAdvancement     DateTime?         @db.Date
-    country                   Country?          @relation(fields: [countryId], references: [id])
-    user                      User?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    dateOfLastAdvancement     DateTime?                  @db.Date
+    country                   Country?                   @relation(fields: [countryId], references: [id])
+    user                      User?                      @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
     subjects                  Subject[]
-    degree                    StaffDegree?      @relation(fields: [degreeId], references: [id])
-    classrooms                Classroom[]       @relation("seniorAdvisor")
-    classrooms2               Classroom[]       @relation("headTeacher")
-    school                    School            @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    degree                    StaffDegree?               @relation(fields: [degreeId], references: [id])
+    classrooms                Classroom[]                @relation("seniorAdvisor")
+    classrooms2               Classroom[]                @relation("headTeacher")
+    school                    School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId                  String
     attendances               StaffAttendance[]
     documents                 Document[]
+    notificationPreferences   NotificationPreference[]
+    notificationSubscriptions NotificationSubscription[]
 }
 
 model StaffAttendance {

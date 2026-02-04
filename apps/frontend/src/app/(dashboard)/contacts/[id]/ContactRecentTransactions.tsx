@@ -69,7 +69,7 @@ export function ContactRecentTransactions({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.slice(0, 4).map((t) => {
+            {transactions.slice(0, 10).map((t) => {
               return (
                 <TableRow key={t.id}>
                   <TableCell>

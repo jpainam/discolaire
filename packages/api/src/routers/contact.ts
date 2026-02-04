@@ -374,6 +374,7 @@ export const contactRouter = {
           const trans = await ctx.services.student.getOverallBalance({
             studentId: st.studentId,
           });
+
           const stud = await ctx.services.student.get(
             st.studentId,
             ctx.schoolYearId,
@@ -385,5 +386,42 @@ export const contactRouter = {
           };
         }),
       );
+    }),
+  stats: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const students = await ctx.services.contact.getStudents(input);
+    let balance = 0;
+    for (const std of students) {
+      const g = await ctx.services.student.getOverallBalance({
+        studentId: std.studentId,
+      });
+      balance += g.balance;
+    }
+    const grades = await ctx.db.grade.findMany({
+      where: {
+        studentId: {
+          in: students.map((s) => s.studentId),
+        },
+        isAbsent: false,
+        gradeSheet: {
+          term: {
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+      },
+    });
+    return {
+      students: students.length,
+      balance: balance,
+      grade: grades.length,
+    };
+  }),
+  notificationPreferences: protectedProcedure
+    .input(z.string())
+    .query(({ ctx, input }) => {
+      return ctx.db.notificationPreference.findMany({
+        where: {
+          contactId: input,
+        },
+      });
     }),
 } satisfies TRPCRouterRecord;

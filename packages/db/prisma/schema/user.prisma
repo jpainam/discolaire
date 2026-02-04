@@ -69,12 +69,6 @@ model User {
     @@unique([username])
 }
 
-enum EntityProfile {
-    STUDENT
-    CONTACT
-    STAFF
-}
-
 model LogActivity {
     id        Int      @id @default(autoincrement())
     userId    String?

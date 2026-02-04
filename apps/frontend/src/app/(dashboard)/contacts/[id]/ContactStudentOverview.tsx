@@ -58,6 +58,7 @@ export function ContactStudentOverview({ contactId }: { contactId: string }) {
             <TableRow>
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("classroom")}</TableHead>
+              <TableHead className="text-center">{t("schoolYear")}</TableHead>
               <TableHead>{t("balance")}</TableHead>
             </TableRow>
           </TableHeader>
@@ -81,6 +82,9 @@ export function ContactStudentOverview({ contactId }: { contactId: string }) {
                     >
                       {student.classroom?.reportName}
                     </Link>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-center">
+                    {student.lastSchoolYear?.name}
                   </TableCell>
                   <TableCell>
                     <Badge
