@@ -33,7 +33,7 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
-import StudentContactList from "./ContactStudentList";
+import { ContactStudentList } from "./ContactStudentList";
 import CreateEditContact from "./CreateEditContact";
 
 type ContactAllProcedureOutput = NonNullable<
@@ -231,7 +231,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
             onSelect={() => {
               openSheet({
                 title: t("students"),
-                view: <StudentContactList contactId={contact.id} />,
+                view: <ContactStudentList contactId={contact.id} />,
               });
             }}
           >
