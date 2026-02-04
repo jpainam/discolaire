@@ -8,7 +8,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
@@ -29,6 +29,7 @@ import { cn } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
+import { Badge } from "../base-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Label } from "../ui/label";
 import { AddStudentToParent } from "./AddStudentToParent";
@@ -52,7 +53,7 @@ export function ContactStudentList({
   const { openModal } = useModal();
 
   const t = useTranslations();
-  const locale = useLocale();
+  //const locale = useLocale();
   const router = useRouter();
   const confirm = useConfirm();
 
@@ -111,6 +112,7 @@ export function ContactStudentList({
               <TableHead>{t("fullName")}</TableHead>
               <TableHead className="text-center">{t("dateOfBirth")}</TableHead>
               <TableHead className="text-center">{t("classroom")}</TableHead>
+              <TableHead className="w-full"></TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -164,11 +166,42 @@ export function ContactStudentList({
                     {student.classroom && (
                       <Link
                         href={`/classrooms/${student.classroom.id}`}
-                        className="text-muted-foreground"
+                        className="text-muted-foreground hover:underline"
                       >
                         {student.classroom.name}
                       </Link>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {studentcontact.primaryContact && (
+                        <Badge
+                          size={"xs"}
+                          variant={"success"}
+                          appearance={"light"}
+                        >
+                          Contact primaire
+                        </Badge>
+                      )}
+                      {studentcontact.emergencyContact && (
+                        <Badge
+                          size={"xs"}
+                          variant={"destructive"}
+                          appearance={"light"}
+                        >
+                          Contact d'urgence
+                        </Badge>
+                      )}
+                      {studentcontact.schoolPickup && (
+                        <Badge
+                          size={"xs"}
+                          variant={"info"}
+                          appearance={"light"}
+                        >
+                          Pickup
+                        </Badge>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">

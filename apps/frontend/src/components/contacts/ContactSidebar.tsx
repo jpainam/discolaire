@@ -13,9 +13,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "~/components/ui/sidebar";
-import { GradeIcon, NotificationIcon, UserIcon, UsersIcon } from "~/icons";
+import {
+  GradeIcon,
+  NotificationIcon,
+  ReportGradeIcon,
+  UserIcon,
+  UsersIcon,
+} from "~/icons";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function ContactSidebar({
@@ -39,6 +44,11 @@ export function ContactSidebar({
         name: "grades",
         url: `/contacts/${params.id}/grades`,
         icon: <GradeIcon />,
+      },
+      {
+        name: "documents",
+        url: `/contacts/${params.id}/documents`,
+        icon: <ReportGradeIcon />,
       },
       {
         name: "notifications",
@@ -89,7 +99,6 @@ export function ContactSidebar({
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   );
 }
