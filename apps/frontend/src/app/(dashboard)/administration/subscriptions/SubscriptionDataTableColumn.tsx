@@ -70,7 +70,7 @@ export function getColumns({
         return (
           <Link
             className="line-clamp-1 hover:text-blue-600 hover:underline"
-            href={`/users/${subscription.entityId}/subscriptions`}
+            href={`/users/${subscription.staffId}/subscriptions`}
           >
             {subscription.comment}
           </Link>
@@ -188,7 +188,7 @@ function ActionCells({
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             onSelect={() => {
-              router.push(`/users/${subscription.entityId}/subscriptions`);
+              router.push(`/users/${subscription.id}/subscriptions`);
             }}
           >
             <Receipt />

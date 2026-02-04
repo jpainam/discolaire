@@ -89,7 +89,7 @@ export function CreateEditSubscription({
       entityId: data.userId,
       plan: data.plan,
       channel: "EMAIL",
-      profile: "STUDENT",
+      profile: "student",
       balance: data.unlimitedSms ? -1 : data.sms,
       //email: data.unlimitedEmails ? -1 : data.emails,
       //whatsapp: data.unlimitedWhatsapp ? -1 : data.whatsapp,

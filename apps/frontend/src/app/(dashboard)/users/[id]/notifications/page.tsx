@@ -11,7 +11,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   prefetch(
     trpc.notificationPreference.user.queryOptions({
       entityId: params.id,
-      profile: "STUDENT",
+      profile: "student",
     }),
   );
   return (
