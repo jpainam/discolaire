@@ -1,8 +1,21 @@
 "use client";
 
-import { Mail, MessageCircle, MessageSquare, Smartphone } from "lucide-react";
+import type { ReactNode } from "react";
+import { useMemo, useState } from "react";
+import { PhoneCheckIcon, SmsCodeFreeIcons } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { MoreHorizontal } from "lucide-react";
+import { toast } from "sonner";
+
+import { NotificationChannel, NotificationSourceType } from "@repo/db/enums";
 
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -11,27 +24,151 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Switch } from "~/components/ui/switch";
-import { parentData } from "./parent-data";
+import { useRouter } from "~/hooks/use-router";
+import { ChatIcon, MailIcon } from "~/icons";
+import { useTRPC } from "~/trpc/react";
 
-const channelIcons = {
-  email: Mail,
-  sms: MessageSquare,
-  push: Smartphone,
-  whatsapp: MessageCircle,
+interface PreferenceRow {
+  channel: NotificationChannel;
+  sourceType: NotificationSourceType;
+  enabled: boolean;
+}
+
+const channelIcons: Record<NotificationChannel, ReactNode> = {
+  EMAIL: <MailIcon />,
+  SMS: <HugeiconsIcon icon={SmsCodeFreeIcons} />,
+  WHATSAPP: <ChatIcon />,
+  IN_APP: (
+    <HugeiconsIcon icon={PhoneCheckIcon} strokeWidth={2} className="size-4" />
+  ),
 };
 
-const channelLabels = {
-  email: "Email Notifications",
-  sms: "SMS Alerts",
-  push: "Push Notifications",
-  whatsapp: "WhatsApp Messages",
+const channelLabels: Record<NotificationChannel, string> = {
+  EMAIL: "Email Notifications",
+  SMS: "SMS Alerts",
+  WHATSAPP: "WhatsApp Messages",
+  IN_APP: "Push Notifications",
 };
 
-export function ContactNotificationSummary() {
-  const preferences = parentData.notificationPreferences;
+const sourceTypeLabels: Record<NotificationSourceType, string> = {
+  GRADES_UPDATES: "Grades Updates",
+  ABSENCE_ALERTS: "Absence Alerts",
+  PAYMENT_REMINDERS: "Payment Reminders",
+  EVENT_NOTIFICATIONS: "Event Notifications",
+  WEEKLY_SUMMARIES: "Weekly Summaries",
+};
+
+const DEFAULT_ENABLED_CHANNELS = new Set<NotificationChannel>([
+  NotificationChannel.EMAIL,
+  NotificationChannel.IN_APP,
+]);
+
+export function ContactNotificationSummary({
+  contactId,
+}: {
+  contactId: string;
+}) {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const [overrides, setOverrides] = useState<
+    Partial<Record<NotificationChannel, boolean>>
+  >({});
+
+  const { data } = useSuspenseQuery(
+    trpc.notificationPreference.user.queryOptions({
+      entityId: contactId,
+      profile: "contact",
+    }),
+  );
+
+  const upsertMutation = useMutation(
+    trpc.notificationPreference.upsert.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+
+  const preferencesByChannel = useMemo(() => {
+    const preferenceRows = data as PreferenceRow[];
+    const types = Object.values(NotificationSourceType);
+    const channels = Object.values(NotificationChannel);
+
+    return channels.map((channel) => {
+      let hasAnyPref = false;
+      const enabledTypes = types.filter((type) => {
+        const found = preferenceRows.find(
+          (pref) => pref.channel === channel && pref.sourceType === type,
+        );
+        if (!found) return false;
+        hasAnyPref = true;
+        return found.enabled;
+      });
+
+      const override = overrides[channel];
+      const defaultEnabled = DEFAULT_ENABLED_CHANNELS.has(channel);
+      const effectiveEnabled =
+        override ?? (hasAnyPref ? enabledTypes.length > 0 : defaultEnabled);
+
+      const displayedTypes =
+        override === undefined
+          ? hasAnyPref
+            ? enabledTypes
+            : defaultEnabled
+              ? types
+              : []
+          : override
+            ? types
+            : [];
+
+      return {
+        channel,
+        enabled: effectiveEnabled,
+        types: displayedTypes,
+      };
+    });
+  }, [data, overrides]);
+
+  const updateChannel = async (
+    channel: NotificationChannel,
+    enabled: boolean,
+  ) => {
+    setOverrides((prev) => ({ ...prev, [channel]: enabled }));
+    const types = Object.values(NotificationSourceType);
+    try {
+      await Promise.all(
+        types.map((sourceType) =>
+          upsertMutation.mutateAsync({
+            entityId: contactId,
+            profile: "contact",
+            sourceType,
+            channel,
+            enabled,
+          }),
+        ),
+      );
+      await queryClient.invalidateQueries(
+        trpc.notificationPreference.user.pathFilter(),
+      );
+      setOverrides((prev) => {
+        const next = { ...prev };
+        delete next[channel];
+        return next;
+      });
+      toast.success("Notification preferences updated", { id: 0 });
+    } catch {
+      setOverrides((prev) => {
+        const next = { ...prev };
+        delete next[channel];
+        return next;
+      });
+    }
+  };
+  const router = useRouter();
+
   return (
     <div className="grid grid-cols-2 gap-2">
-      {preferences.map((pref) => {
+      {preferencesByChannel.map((pref) => {
         const Icon = channelIcons[pref.channel];
         const label = channelLabels[pref.channel];
 
@@ -52,6 +189,7 @@ export function ContactNotificationSummary() {
                       pref.enabled ? "bg-primary/10" : "bg-muted"
                     }`}
                   >
+                    
                     <Icon
                       className={`h-4 w-4 ${
                         pref.enabled ? "text-primary" : "text-muted-foreground"
@@ -68,21 +206,35 @@ export function ContactNotificationSummary() {
               </CardTitle>
               {/* <CardDescription></CardDescription> */}
               <CardAction>
-                <Switch checked={pref.enabled} />
+                <Switch
+                  checked={pref.enabled}
+                  onCheckedChange={async (checked) => {
+                    await updateChannel(pref.channel, checked === true);
+                  }}
+                />
               </CardAction>
             </CardHeader>
             <CardContent>
               {pref.enabled && pref.types.length > 0 && (
                 <div className="border-border flex flex-wrap gap-1.5 border-t pt-3">
-                  {pref.types.map((type) => (
+                  {pref.types.slice(0, 2).map((type) => (
                     <Badge
                       key={type}
                       variant="secondary"
                       className="text-xs font-normal"
                     >
-                      {type}
+                      {sourceTypeLabels[type]}
                     </Badge>
                   ))}
+                  <Button
+                    onClick={() => {
+                      router.push(`/contacts/${contactId}/notifications`);
+                    }}
+                    size={"xs"}
+                    variant={"ghost"}
+                  >
+                    <MoreHorizontal />
+                  </Button>
                 </div>
               )}
 

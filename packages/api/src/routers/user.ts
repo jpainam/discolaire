@@ -276,9 +276,16 @@ export const userRouter = {
       if (!entity.entityId) {
         return null;
       }
+      const where =
+        entity.entityType == "staff"
+          ? { staffId: entity.entityId }
+          : entity.entityType == "contact"
+            ? { contactId: entity.entityId }
+            : { studentId: entity.entityId };
       return ctx.db.notificationSubscription.findFirst({
         where: {
-          entityId: entity.entityId,
+          ...where,
+          schoolId: ctx.schoolId,
         },
       });
     }),

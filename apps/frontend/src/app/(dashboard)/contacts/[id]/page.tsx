@@ -43,7 +43,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <ErrorBoundary errorComponent={ErrorFallback}>
             <ContactStudentOverview contactId={contactId} />
           </ErrorBoundary>
-          <ContactNotificationSummary />
+          <ContactNotificationSummary contactId={contactId} />
         </div>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Skeleton className="h-50" />}>

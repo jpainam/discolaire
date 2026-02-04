@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import {
+  ChatIcon,
   GradeIcon,
   NotificationIcon,
   ReportGradeIcon,
@@ -49,6 +50,11 @@ export function ContactSidebar({
         name: "documents",
         url: `/contacts/${params.id}/documents`,
         icon: <ReportGradeIcon />,
+      },
+      {
+        name: "communications",
+        url: `/contacts/${params.id}/communications`,
+        icon: <ChatIcon />,
       },
       {
         name: "notifications",

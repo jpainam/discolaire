@@ -1,6 +1,9 @@
 enum NotificationSourceType {
-    ATTENDANCE
-    GRADE_PUBLISHED
+    GRADES_UPDATES
+    ABSENCE_ALERTS
+    PAYMENT_REMINDERS
+    EVENT_NOTIFICATIONS
+    WEEKLY_SUMMARIES
 }
 
 enum NotificationStatus {

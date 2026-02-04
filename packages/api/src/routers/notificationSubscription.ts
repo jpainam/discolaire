@@ -2,7 +2,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { EntityProfile, NotificationChannel } from "@repo/db";
+import { NotificationChannel } from "@repo/db";
 
 import { protectedProcedure } from "../trpc";
 
@@ -11,7 +11,7 @@ export const notificationSubscriptionRouter = {
     .input(
       z.object({
         entityId: z.string().min(1),
-        profile: z.enum(EntityProfile),
+        profile: z.enum(["student", "staff", "contact"]),
         balance: z.number().default(0),
         channel: z.enum(NotificationChannel),
         plan: z.string(),
@@ -20,8 +20,9 @@ export const notificationSubscriptionRouter = {
     .mutation(async ({ ctx, input }) => {
       return ctx.db.notificationSubscription.create({
         data: {
-          entityId: input.entityId,
-          profile: input.profile,
+          studentId: input.profile == "student" ? input.entityId : null,
+          contactId: input.profile == "contact" ? input.entityId : null,
+          staffId: input.profile == "staff" ? input.entityId : null,
           plan: input.plan,
           balance: input.balance,
           channel: input.channel,
@@ -83,15 +84,13 @@ export const notificationSubscriptionRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      const studentIds = counts
-        .filter((c) => c.profile == EntityProfile.STUDENT)
-        .map((c) => c.entityId);
-      const staffIds = counts
-        .filter((c) => c.profile == EntityProfile.STAFF)
-        .map((c) => c.entityId);
-      const contactIds = counts
-        .filter((c) => c.profile == EntityProfile.CONTACT)
-        .map((c) => c.entityId);
+      const studentIds = counts.flatMap((c) =>
+        c.studentId ? [c.studentId] : [],
+      );
+      const staffIds = counts.flatMap((c) => (c.staffId ? [c.staffId] : []));
+      const contactIds = counts.flatMap((c) =>
+        c.contactId ? [c.contactId] : [],
+      );
       const students = await ctx.db.student.findMany({
         take: input.limit,
         where: {

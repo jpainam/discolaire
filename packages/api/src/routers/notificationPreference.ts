@@ -28,6 +28,7 @@ export const notificationPreferenceRouter = {
           id: pref.id,
           channel: pref.channel,
           sourceType: pref.sourceType,
+          enabled: pref.enabled,
         };
       });
       return notificationPreferences;
@@ -43,6 +44,30 @@ export const notificationPreferenceRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const where =
+        input.profile == "staff"
+          ? {
+              staffId_sourceType_channel: {
+                staffId: input.entityId,
+                sourceType: input.sourceType,
+                channel: input.channel,
+              },
+            }
+          : input.profile == "contact"
+            ? {
+                contactId_sourceType_channel: {
+                  contactId: input.entityId,
+                  sourceType: input.sourceType,
+                  channel: input.channel,
+                },
+              }
+            : {
+                studentId_sourceType_channel: {
+                  studentId: input.entityId,
+                  sourceType: input.sourceType,
+                  channel: input.channel,
+                },
+              };
       return ctx.db.notificationPreference.upsert({
         create: {
           studentId: input.profile == "student" ? input.entityId : null,
@@ -55,23 +80,7 @@ export const notificationPreferenceRouter = {
         update: {
           enabled: input.enabled,
         },
-        where: {
-          staffId_sourceType_channel: {
-            staffId: input.entityId,
-            sourceType: input.sourceType,
-            channel: input.channel,
-          },
-          contactId_sourceType_channel: {
-            contactId: input.entityId,
-            sourceType: input.sourceType,
-            channel: input.channel,
-          },
-          studentId_sourceType_channel: {
-            studentId: input.entityId,
-            sourceType: input.sourceType,
-            channel: input.channel,
-          },
-        },
+        where,
       });
     }),
 } satisfies TRPCRouterRecord;

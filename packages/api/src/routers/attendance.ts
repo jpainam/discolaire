@@ -391,7 +391,7 @@ export const attendanceRouter = {
           await ctx.db.notificationTemplate.findFirst({
             where: {
               schoolId: ctx.schoolId,
-              sourceType: NotificationSourceType.ATTENDANCE,
+              sourceType: NotificationSourceType.ABSENCE_ALERTS,
               status: "ACTIVE",
               channel: "EMAIL",
             },
@@ -428,7 +428,7 @@ export const attendanceRouter = {
 
       return ctx.services.notification.notifyMany({
         schoolId: ctx.schoolId,
-        sourceType: NotificationSourceType.ATTENDANCE,
+        sourceType: NotificationSourceType.ABSENCE_ALERTS,
         items: recipients.map((contact) => ({
           recipient: {
             id: contact.id,
