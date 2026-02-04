@@ -777,4 +777,9 @@ export const studentRouter = {
       },
     });
   }),
+  getStatements: protectedProcedure
+    .input(z.string())
+    .query(({ ctx, input }) => {
+      return ctx.services.student.getStatements(input);
+    }),
 } satisfies TRPCRouterRecord;

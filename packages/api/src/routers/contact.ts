@@ -346,4 +346,44 @@ export const contactRouter = {
         },
       });
     }),
+  transactions: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const students = await ctx.services.contact.getStudents(input);
+      return ctx.db.transaction.findMany({
+        orderBy: {
+          updatedAt: "desc",
+        },
+        include: {
+          student: true,
+          journal: true,
+        },
+        where: {
+          studentId: {
+            in: students.map((st) => st.studentId),
+          },
+        },
+      });
+    }),
+  studentOverview: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const students = await ctx.services.contact.getStudents(input);
+      return await Promise.all(
+        students.map(async (st) => {
+          const trans = await ctx.services.student.getOverallBalance({
+            studentId: st.studentId,
+          });
+          const stud = await ctx.services.student.get(
+            st.studentId,
+            ctx.schoolYearId,
+            ctx.schoolId,
+          );
+          return {
+            student: stud,
+            ...trans,
+          };
+        }),
+      );
+    }),
 } satisfies TRPCRouterRecord;

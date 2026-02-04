@@ -30,7 +30,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.unpaidRequiredFees.queryOptions(params.id),
     trpc.student.contacts.queryOptions(params.id),
     trpc.accountingJournal.all.queryOptions(),
-    trpc.studentAccount.getStatements.queryOptions({
+    trpc.student.getStatements.queryOptions({
       studentId: params.id,
     }),
   ]);

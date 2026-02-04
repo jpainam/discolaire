@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@repo/db";
-import { TransactionType } from "@repo/db/enums";
+import { TransactionStatus, TransactionType } from "@repo/db/enums";
 import redisClient from "@repo/kv";
 
 import { getFullName } from "../utils";
@@ -260,6 +260,92 @@ export class StudentService {
     });
 
     return `${startWidth}${school.registrationPrefix}2001`;
+  }
+  async getStatements(studentId: string) {
+    const fees = await this.db.fee.findMany({
+      orderBy: {
+        dueDate: "asc",
+      },
+      include: {
+        classroom: true,
+        journal: true,
+      },
+      where: {
+        dueDate: {
+          lte: new Date(),
+        },
+        classroom: {
+          enrollments: {
+            some: {
+              studentId: studentId,
+            },
+          },
+        },
+      },
+    });
+    const classrooms = await this.db.classroom.findMany({
+      where: {
+        enrollments: {
+          some: {
+            studentId: studentId,
+          },
+        },
+      },
+    });
+    const transactions = await this.db.transaction.findMany({
+      where: {
+        deletedAt: null,
+        status: TransactionStatus.VALIDATED,
+        studentId: studentId,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+    const items: {
+      transactionDate: Date;
+      transactionRef: string;
+      description: string;
+      reference: string;
+      classroom: string;
+      type: string;
+      id: string;
+      operation: "fee" | "transaction";
+      amount: number;
+    }[] = [];
+    for (const fee of fees) {
+      items.push({
+        transactionDate: fee.dueDate,
+        id: fee.classroom.id, // This is not an mistake, we are using the classroom id as the id
+        reference: `${fee.id}`,
+        classroom: fee.classroom.reportName,
+        transactionRef:
+          `${fee.description?.substring(8)}${fee.id}`.toUpperCase(),
+        description: fee.description ?? "",
+        type: "DEBIT",
+        operation: "fee",
+        amount: fee.amount,
+      });
+    }
+    for (const transaction of transactions) {
+      items.push({
+        transactionDate: transaction.createdAt,
+        id: `${transaction.id}`,
+        reference: transaction.method,
+        classroom:
+          classrooms.find((cl) => cl.schoolYearId === transaction.schoolYearId)
+            ?.reportName ?? "",
+        transactionRef: (transaction.transactionRef ?? "").toUpperCase(),
+        description: transaction.description ?? "",
+        type: transaction.transactionType,
+        amount: transaction.amount,
+        operation: "transaction",
+      });
+    }
+    const sortedItems = items.sort((a, b) => {
+      return a.transactionDate.getTime() - b.transactionDate.getTime();
+    });
+    return sortedItems;
   }
   async getOverallBalance({ studentId }: { studentId: string }) {
     const student = await this.db.student.findUniqueOrThrow({

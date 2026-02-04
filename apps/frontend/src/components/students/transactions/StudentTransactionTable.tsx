@@ -83,7 +83,9 @@ export function StudentTransactionTable() {
         await queryClient.invalidateQueries(
           trpc.student.transactions.pathFilter(),
         );
-        await queryClient.invalidateQueries(trpc.studentAccount.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.student.getStatements.pathFilter(),
+        );
         toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (error) => {

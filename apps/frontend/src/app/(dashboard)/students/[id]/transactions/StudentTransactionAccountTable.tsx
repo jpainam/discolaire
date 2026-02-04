@@ -31,7 +31,7 @@ export function StudentTransactionAccountTable() {
     trpc.student.get.queryOptions(params.id),
   );
   const { data: statements } = useSuspenseQuery(
-    trpc.studentAccount.getStatements.queryOptions({
+    trpc.student.getStatements.queryOptions({
       studentId: params.id,
     }),
   );
