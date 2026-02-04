@@ -6,6 +6,27 @@ import { NotificationSourceType } from "@repo/db/enums";
 import { protectedProcedure } from "../trpc";
 
 export const notificationRouter = {
+  all: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(20),
+        recipientId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.notification.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.limit,
+        include: {
+          deliveries: true,
+        },
+        where: {
+          ...(input.recipientId ? { recipientId: input.recipientId } : {}),
+        },
+      });
+    }),
   getStatuses: protectedProcedure
     .input(
       z.object({
@@ -21,14 +42,4 @@ export const notificationRouter = {
         schoolId: ctx.schoolId,
       });
     }),
-  // notify: protectedProcedure
-  //   .input(
-  //     z.object({
-  //       sourceId: z.string().min(1),
-  //       sourceType: z.enum(NotificationSourceType),
-  //     }),
-  //   )
-  //   .mutation(({ ctx, input }) => {
-  //       return ctx.d
-  //   }),
 } satisfies TRPCRouterRecord;

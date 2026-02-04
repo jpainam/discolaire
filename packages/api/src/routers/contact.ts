@@ -415,6 +415,7 @@ export const contactRouter = {
       grade: grades.length,
     };
   }),
+  
   notificationPreferences: protectedProcedure
     .input(z.string())
     .query(({ ctx, input }) => {
