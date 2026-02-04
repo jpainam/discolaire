@@ -1,9 +1,18 @@
 import type { PropsWithChildren } from "react";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { getSession } from "~/auth/server";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
+import { ContactDetails } from "~/components/contacts/ContactDetails";
+import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
-import { caller } from "~/trpc/server";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { caller, HydrateClient } from "~/trpc/server";
+import { getFullName } from "~/utils";
 
 export default async function Layout({
   children,
@@ -35,5 +44,28 @@ export default async function Layout({
     //   return <NoPermission className="my-8" />;
     // }
   }
-  return <>{children}</>;
+  const t = await getTranslations();
+  return (
+    <HydrateClient>
+      <div className="flex flex-col gap-2">
+        <BreadcrumbsSetter
+          items={[
+            { label: t("home"), href: "/" },
+            {
+              label: t("contacts"),
+              href: "/contacts",
+            },
+            { label: getFullName(contact) },
+          ]}
+        />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense fallback={<Skeleton className="h-20" />}>
+            <ContactDetails contactId={contact.id} />
+          </Suspense>
+        </ErrorBoundary>
+        <Separator />
+        {children}
+      </div>
+    </HydrateClient>
+  );
 }
