@@ -431,10 +431,8 @@ export const attendanceRouter = {
         sourceType: NotificationSourceType.ABSENCE_ALERTS,
         items: recipients.map((contact) => ({
           recipient: {
-            id: contact.id,
+            entityId: contact.id,
             profile: "contact",
-            email: contact.email,
-            phone: contact.phoneNumber1 ?? contact.phoneNumber2,
           },
           sourceId: String(attendance.id),
           templateId,

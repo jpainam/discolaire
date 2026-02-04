@@ -40,6 +40,7 @@ model Notification {
     id          String                 @id @default(cuid())
     schoolId    String
     recipientId String
+    recipient   NotificationRecipient  @relation(fields: [recipientId], references: [id], onDelete: Cascade)
     sourceType  NotificationSourceType
     sourceId    String
     templateId  String?
@@ -55,21 +56,16 @@ model Notification {
 
 model NotificationPreference {
     id         String                 @id @default(cuid())
-    studentId  String?
-    contactId  String?
-    staffId    String?
-    student    Student?               @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    contact    Contact?               @relation(fields: [contactId], references: [id], onDelete: Cascade)
-    staff      Staff?                 @relation(fields: [staffId], references: [id], onDelete: Cascade)
+    recipientId String
+    recipient   NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
     sourceType NotificationSourceType
     channel    NotificationChannel
     enabled    Boolean                @default(true)
     createdAt  DateTime               @default(now())
     updatedAt  DateTime               @updatedAt
 
-    @@unique([contactId, sourceType, channel])
-    @@unique([staffId, sourceType, channel])
-    @@unique([studentId, sourceType, channel])
+    @@unique([recipientId, sourceType, channel])
+    @@index([recipientId])
 }
 
 enum NotificationChannel {
@@ -77,6 +73,33 @@ enum NotificationChannel {
     SMS
     WHATSAPP
     IN_APP
+}
+
+enum NotificationRecipientProfile {
+    STUDENT
+    CONTACT
+    STAFF
+}
+
+model NotificationRecipient {
+    id            String                       @id @default(cuid())
+    schoolId      String
+    profile       NotificationRecipientProfile
+    entityId      String
+    userId        String?
+    primaryEmail  String?
+    primaryPhone  String?
+    createdAt     DateTime                     @default(now())
+    updatedAt     DateTime                     @updatedAt
+    school        School                       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    user          User?                        @relation(fields: [userId], references: [id], onDelete: SetNull)
+    notifications Notification[]
+    preferences   NotificationPreference[]
+    subscriptions NotificationSubscription[]
+
+    @@unique([schoolId, profile, entityId])
+    @@index([schoolId, profile])
+    @@index([userId])
 }
 
 model NotificationEvent {
@@ -149,12 +172,8 @@ enum SubscriptionStatus {
 
 model NotificationSubscription {
     id          String              @id @default(cuid())
-    contactId   String?
-    studentId   String?
-    staffId     String?
-    contact     Contact?            @relation(fields: [contactId], references: [id], onDelete: Cascade)
-    student     Student?            @relation(fields: [studentId], references: [id], onDelete: Cascade)
-    staff       Staff?              @relation(fields: [staffId], references: [id], onDelete: Cascade)
+    recipientId String
+    recipient   NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
     channel     NotificationChannel
     status      SubscriptionStatus  @default(ACTIVE)
     // Credits in "messages". Email will be free/unlimited  and large number of unlimited credit
@@ -168,7 +187,6 @@ model NotificationSubscription {
     updatedAt   DateTime            @updatedAt
     comment     String?
 
-    @@index([contactId, channel, status])
-    @@index([studentId, channel, status])
-    @@index([staffId, channel, status])
+    @@index([recipientId, channel, status])
+    @@index([schoolId, channel, status])
 }

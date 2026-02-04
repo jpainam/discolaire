@@ -39,6 +39,7 @@ import { messagingRouter } from "./routers/messaging";
 import { moduleRouter } from "./routers/module";
 import { notificationRouter } from "./routers/notification";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
+import { notificationRecipientRouter } from "./routers/notificationRecipient";
 import { notificationSubscriptionRouter } from "./routers/notificationSubscription";
 import { notificationTemplateRouter } from "./routers/notificationTemplate";
 import { permissionRouter } from "./routers/permission";
@@ -112,6 +113,7 @@ export const appRouter = createTRPCRouter({
   calendarEvent: calendarEventRouter,
   communicationChannel: communicationChannelRouter,
   notificationPreference: notificationPreferenceRouter,
+  notificationRecipient: notificationRecipientRouter,
   formerSchool: formerShoolRouter,
   contactRelationship: contactRelationshipRouter,
   inventory: inventoryRouter,

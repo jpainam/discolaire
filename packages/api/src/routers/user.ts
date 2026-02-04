@@ -276,15 +276,16 @@ export const userRouter = {
       if (!entity.entityId) {
         return null;
       }
-      const where =
-        entity.entityType == "staff"
-          ? { staffId: entity.entityId }
-          : entity.entityType == "contact"
-            ? { contactId: entity.entityId }
-            : { studentId: entity.entityId };
+      const recipient = await ctx.services.notification.ensureRecipient({
+        schoolId: ctx.schoolId,
+        recipient: {
+          entityId: entity.entityId,
+          profile: entity.entityType,
+        },
+      });
       return ctx.db.notificationSubscription.findFirst({
         where: {
-          ...where,
+          recipientId: recipient.id,
           schoolId: ctx.schoolId,
         },
       });

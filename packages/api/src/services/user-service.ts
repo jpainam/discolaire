@@ -157,7 +157,12 @@ export class UserService {
   async getEntityFromUser(
     userId: string,
     profile: "student" | "staff" | "contact",
-  ) {
+  ): Promise<{
+    entityId?: string;
+    entityType: "staff" | "contact" | "student";
+    lastName?: string | null;
+    firstName?: string | null;
+  }> {
     if (profile == "staff") {
       const s = await this.db.staff.findFirst({
         where: {

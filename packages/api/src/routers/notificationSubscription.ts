@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
@@ -18,11 +17,16 @@ export const notificationSubscriptionRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const recipient = await ctx.services.notification.ensureRecipient({
+        schoolId: ctx.schoolId,
+        recipient: {
+          entityId: input.entityId,
+          profile: input.profile,
+        },
+      });
       return ctx.db.notificationSubscription.create({
         data: {
-          studentId: input.profile == "student" ? input.entityId : null,
-          contactId: input.profile == "contact" ? input.entityId : null,
-          staffId: input.profile == "staff" ? input.entityId : null,
+          recipientId: recipient.id,
           plan: input.plan,
           balance: input.balance,
           channel: input.channel,
@@ -84,45 +88,22 @@ export const notificationSubscriptionRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      const studentIds = counts.flatMap((c) =>
-        c.studentId ? [c.studentId] : [],
-      );
-      const staffIds = counts.flatMap((c) => (c.staffId ? [c.staffId] : []));
-      const contactIds = counts.flatMap((c) =>
-        c.contactId ? [c.contactId] : [],
-      );
-      const students = await ctx.db.student.findMany({
+      const recipientIds = counts.map((c) => c.recipientId);
+      const recipients = await ctx.db.notificationRecipient.findMany({
         take: input.limit,
         where: {
-          id: { in: studentIds },
+          id: { in: recipientIds },
         },
+        select: { id: true, profile: true, entityId: true },
       });
-      const contacts = await ctx.db.contact.findMany({
-        take: input.limit,
-        where: {
-          id: { in: contactIds },
-        },
-      });
-      const staffs = await ctx.db.staff.findMany({
-        take: input.limit,
-        where: {
-          id: { in: staffIds },
-        },
-      });
-      const user = await ctx.db.user.findUniqueOrThrow({
-        where: {
-          id: "1",
-        },
-      });
-      return counts.map((_count) => {
-        //const user = users.find((user) => user.id === count.userId);
-        return {
-          ...user,
-          sms: 0, //count._sum.sms,
-          email: 0, //count._sum.email,
-          whatsapp: 0, //count._sum.whatsapp,
-        };
-      });
+      return recipients.map((recipient) => ({
+        recipientId: recipient.id,
+        profile: recipient.profile,
+        entityId: recipient.entityId,
+        sms: 0,
+        email: 0,
+        whatsapp: 0,
+      }));
     }),
   all: protectedProcedure
     .input(

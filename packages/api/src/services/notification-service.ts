@@ -1,5 +1,6 @@
 import type {
   NotificationChannel,
+  NotificationRecipientProfile,
   NotificationSourceType,
   NotificationStatus,
   Prisma,
@@ -15,10 +16,16 @@ const DEFAULT_FREE_CHANNELS: NotificationChannel[] = ["EMAIL", "IN_APP"];
 const METERED_CHANNELS: NotificationChannel[] = ["SMS", "WHATSAPP"];
 
 interface Recipient {
-  id: string;
+  entityId: string;
   profile: "staff" | "contact" | "student";
-  phone?: string | null;
-  email?: string | null;
+}
+
+interface RecipientRecord {
+  id: string;
+  entityId: string;
+  profile: NotificationRecipientProfile;
+  primaryEmail: string | null;
+  primaryPhone: string | null;
 }
 
 interface ChannelResolution {
@@ -87,55 +94,61 @@ export class NotificationService {
   }
 
   async resolveChannels(params: {
-    recipientId: string;
+    schoolId: string;
+    recipientEntityId: string;
     recipientProfile: "student" | "staff" | "contact";
     sourceType: NotificationSourceType;
   }) {
     const resolutions = await this.resolveChannelsForRecipients({
+      schoolId: params.schoolId,
       recipients: [
-        { id: params.recipientId, profile: params.recipientProfile },
+        {
+          entityId: params.recipientEntityId,
+          profile: params.recipientProfile,
+        },
       ],
       sourceType: params.sourceType,
     });
     const key = this.buildRecipientKey(
-      params.recipientId,
+      params.recipientEntityId,
       params.recipientProfile,
     );
     return resolutions.get(key) ?? { eligible: [], ineligible: [] };
   }
 
   async resolveChannelsForRecipients(params: {
-    recipients: Pick<Recipient, "id" | "profile">[];
+    schoolId: string;
+    recipients: Pick<Recipient, "entityId" | "profile">[];
     sourceType: NotificationSourceType;
   }) {
     const uniqueRecipients = new Map<
       string,
-      Pick<Recipient, "id" | "profile">
+      Pick<Recipient, "entityId" | "profile">
     >();
     for (const recipient of params.recipients) {
       uniqueRecipients.set(
-        this.buildRecipientKey(recipient.id, recipient.profile),
+        this.buildRecipientKey(recipient.entityId, recipient.profile),
         recipient,
       );
     }
     const recipientPairs = Array.from(uniqueRecipients.values());
     const recipientKeys = new Set(
-      recipientPairs.map((r) => this.buildRecipientKey(r.id, r.profile)),
+      recipientPairs.map((r) => this.buildRecipientKey(r.entityId, r.profile)),
     );
+
+    const recipientRecords = await this.ensureRecipients({
+      schoolId: params.schoolId,
+      recipients: recipientPairs,
+    });
+    const recipientById = new Map(recipientRecords.map((r) => [r.id, r]));
 
     const preferences = await this.db.notificationPreference.findMany({
       where: {
         sourceType: params.sourceType,
-        OR: recipientPairs.map((r) => ({
-          studentId: r.profile == "student" ? r.id : null,
-          contactId: r.profile == "contact" ? r.id : null,
-          staffId: r.profile == "staff" ? r.id : null,
-        })),
+        recipientId: { in: recipientRecords.map((r) => r.id) },
       },
       select: {
-        staffId: true,
-        contactId: true,
-        studentId: true,
+        recipientId: true,
         channel: true,
         enabled: true,
       },
@@ -149,13 +162,11 @@ export class NotificationService {
       preferenceMap.set(key, { hasAny: false, enabled: new Set() });
     }
     for (const pref of preferences) {
-      const entityId = pref.staffId ?? pref.studentId ?? pref.contactId;
-      if (!entityId) {
-        throw Error(`Expected an entityId to be not null, found ${entityId}`);
-      }
+      const recipient = recipientById.get(pref.recipientId);
+      if (!recipient) continue;
       const key = this.buildRecipientKey(
-        entityId,
-        pref.staffId ? "staff" : pref.studentId ? "student" : "contact",
+        recipient.entityId,
+        this.fromProfileEnum(recipient.profile),
       );
       const entry = preferenceMap.get(key);
       if (!entry) continue;
@@ -167,16 +178,10 @@ export class NotificationService {
       where: {
         status: "ACTIVE",
         channel: { in: METERED_CHANNELS },
-        OR: recipientPairs.map((r) => ({
-          studentId: r.profile == "student" ? r.id : null,
-          contactId: r.profile == "contact" ? r.id : null,
-          staffId: r.profile == "staff" ? r.id : null,
-        })),
+        recipientId: { in: recipientRecords.map((r) => r.id) },
       },
       select: {
-        studentId: true,
-        contactId: true,
-        staffId: true,
+        recipientId: true,
         channel: true,
         balance: true,
       },
@@ -184,13 +189,11 @@ export class NotificationService {
 
     const balanceMap = new Map<string, Map<NotificationChannel, number>>();
     for (const sub of subscriptions) {
-      const entityId = sub.contactId ?? sub.staffId ?? sub.studentId;
-      if (!entityId) {
-        throw Error(`Expected an entityId to be not null, found ${entityId}`);
-      }
+      const recipient = recipientById.get(sub.recipientId);
+      if (!recipient) continue;
       const key = this.buildRecipientKey(
-        entityId,
-        sub.studentId ? "student" : sub.contactId ? "contact" : "staff",
+        recipient.entityId,
+        this.fromProfileEnum(recipient.profile),
       );
       const byChannel =
         balanceMap.get(key) ?? new Map<NotificationChannel, number>();
@@ -203,7 +206,7 @@ export class NotificationService {
 
     const resolutions = new Map<string, ChannelResolution>();
     for (const recipient of recipientPairs) {
-      const key = this.buildRecipientKey(recipient.id, recipient.profile);
+      const key = this.buildRecipientKey(recipient.entityId, recipient.profile);
       const pref = preferenceMap.get(key);
       const requestedChannels =
         pref?.hasAny === true
@@ -241,6 +244,187 @@ export class NotificationService {
     return `${profile}:${id}`;
   }
 
+  private toProfileEnum(
+    profile: "student" | "contact" | "staff",
+  ): NotificationRecipientProfile {
+    return profile === "student"
+      ? "STUDENT"
+      : profile === "contact"
+        ? "CONTACT"
+        : "STAFF";
+  }
+
+  private fromProfileEnum(
+    profile: NotificationRecipientProfile,
+  ): "student" | "contact" | "staff" {
+    return profile === "STUDENT"
+      ? "student"
+      : profile === "CONTACT"
+        ? "contact"
+        : "staff";
+  }
+
+  private async loadEntityContactInfo(params: {
+    schoolId: string;
+    profile: "student" | "contact" | "staff";
+    entityId: string;
+  }) {
+    if (params.profile === "student") {
+      const student = await this.db.student.findFirst({
+        where: { id: params.entityId, schoolId: params.schoolId },
+        select: { phoneNumber: true, userId: true },
+      });
+      if (!student) return null;
+      return {
+        primaryEmail: null,
+        primaryPhone: student.phoneNumber ?? null,
+        userId: student.userId ?? null,
+      };
+    }
+    if (params.profile === "contact") {
+      const contact = await this.db.contact.findFirst({
+        where: { id: params.entityId, schoolId: params.schoolId },
+        select: {
+          email: true,
+          phoneNumber1: true,
+          phoneNumber2: true,
+          userId: true,
+        },
+      });
+      if (!contact) return null;
+      return {
+        primaryEmail: contact.email ?? null,
+        primaryPhone: contact.phoneNumber1 ?? contact.phoneNumber2 ?? null,
+        userId: contact.userId ?? null,
+      };
+    }
+    const staff = await this.db.staff.findFirst({
+      where: { id: params.entityId, schoolId: params.schoolId },
+      select: {
+        email: true,
+        phoneNumber1: true,
+        phoneNumber2: true,
+        userId: true,
+      },
+    });
+    if (!staff) return null;
+    return {
+      primaryEmail: staff.email ?? null,
+      primaryPhone: staff.phoneNumber1 ?? staff.phoneNumber2 ?? null,
+      userId: staff.userId ?? null,
+    };
+  }
+
+  async ensureRecipient(params: { schoolId: string; recipient: Recipient }) {
+    const existing = await this.db.notificationRecipient.findUnique({
+      where: {
+        schoolId_profile_entityId: {
+          schoolId: params.schoolId,
+          profile: this.toProfileEnum(params.recipient.profile),
+          entityId: params.recipient.entityId,
+        },
+      },
+      select: {
+        id: true,
+        entityId: true,
+        profile: true,
+        primaryEmail: true,
+        primaryPhone: true,
+      },
+    });
+    if (existing) return existing;
+
+    const contactInfo = await this.loadEntityContactInfo({
+      schoolId: params.schoolId,
+      profile: params.recipient.profile,
+      entityId: params.recipient.entityId,
+    });
+    if (!contactInfo) {
+      throw new Error(
+        `Recipient not found for ${params.recipient.profile}:${params.recipient.entityId}`,
+      );
+    }
+
+    return this.db.notificationRecipient.create({
+      data: {
+        schoolId: params.schoolId,
+        profile: this.toProfileEnum(params.recipient.profile),
+        entityId: params.recipient.entityId,
+        userId: contactInfo.userId,
+        primaryEmail: contactInfo.primaryEmail,
+        primaryPhone: contactInfo.primaryPhone,
+      },
+      select: {
+        id: true,
+        entityId: true,
+        profile: true,
+        primaryEmail: true,
+        primaryPhone: true,
+      },
+    });
+  }
+
+  async syncRecipientFromEntity(params: {
+    schoolId: string;
+    recipient: Recipient;
+  }) {
+    const contactInfo = await this.loadEntityContactInfo({
+      schoolId: params.schoolId,
+      profile: params.recipient.profile,
+      entityId: params.recipient.entityId,
+    });
+    if (!contactInfo) {
+      throw new Error(
+        `Recipient not found for ${params.recipient.profile}:${params.recipient.entityId}`,
+      );
+    }
+
+    return this.db.notificationRecipient.upsert({
+      where: {
+        schoolId_profile_entityId: {
+          schoolId: params.schoolId,
+          profile: this.toProfileEnum(params.recipient.profile),
+          entityId: params.recipient.entityId,
+        },
+      },
+      create: {
+        schoolId: params.schoolId,
+        profile: this.toProfileEnum(params.recipient.profile),
+        entityId: params.recipient.entityId,
+        userId: contactInfo.userId,
+        primaryEmail: contactInfo.primaryEmail,
+        primaryPhone: contactInfo.primaryPhone,
+      },
+      update: {
+        userId: contactInfo.userId,
+        primaryEmail: contactInfo.primaryEmail,
+        primaryPhone: contactInfo.primaryPhone,
+      },
+      select: {
+        id: true,
+        entityId: true,
+        profile: true,
+        primaryEmail: true,
+        primaryPhone: true,
+      },
+    });
+  }
+
+  async ensureRecipients(params: {
+    schoolId: string;
+    recipients: Pick<Recipient, "entityId" | "profile">[];
+  }) {
+    const out: RecipientRecord[] = [];
+    for (const recipient of params.recipients) {
+      const record = await this.ensureRecipient({
+        schoolId: params.schoolId,
+        recipient,
+      });
+      out.push(record);
+    }
+    return out;
+  }
+
   async notify(params: {
     schoolId: string;
     recipient: Recipient;
@@ -251,19 +435,23 @@ export class NotificationService {
   }) {
     const { schoolId, recipient, sourceType, sourceId, templateId, payload } =
       params;
+    const recipientRecord = await this.ensureRecipient({
+      schoolId,
+      recipient,
+    });
     // 1) Create or get Notification (unique constraint prevents duplicates)
     const notification = await this.db.notification.upsert({
       where: {
         schoolId_recipientId_sourceType_sourceId: {
           schoolId,
-          recipientId: recipient.id,
+          recipientId: recipientRecord.id,
           sourceType,
           sourceId,
         },
       },
       create: {
         schoolId,
-        recipientId: recipient.id,
+        recipientId: recipientRecord.id,
         sourceType,
         sourceId,
         templateId,
@@ -278,19 +466,23 @@ export class NotificationService {
     });
     // 2) Resolve channels: school rules + recipient subscription + credit
     const resolutions = await this.resolveChannelsForRecipients({
-      recipients: [{ id: recipient.id, profile: recipient.profile }],
+      schoolId,
+      recipients: [
+        { entityId: recipient.entityId, profile: recipient.profile },
+      ],
       sourceType,
     });
     const resolution = resolutions.get(
-      this.buildRecipientKey(recipient.id, recipient.profile),
+      this.buildRecipientKey(recipient.entityId, recipient.profile),
     ) ?? { eligible: [], ineligible: [] };
 
     return this.deliverNotification({
       notificationId: notification.id,
-      recipient,
+      recipient: recipientRecord,
       templateId,
       payload,
       eligible: resolution.eligible,
+      ineligible: resolution.ineligible,
     });
   }
 
@@ -307,28 +499,51 @@ export class NotificationService {
     const { schoolId, sourceType, items } = params;
     if (items.length === 0) return [];
 
+    const recipientRecords = await this.ensureRecipients({
+      schoolId,
+      recipients: items.map((item) => item.recipient),
+    });
+    const recipientMap = new Map(
+      recipientRecords.map((r) => [
+        this.buildRecipientKey(r.entityId, this.fromProfileEnum(r.profile)),
+        r,
+      ]),
+    );
+    const normalizedItems = items.map((item) => {
+      const key = this.buildRecipientKey(
+        item.recipient.entityId,
+        item.recipient.profile,
+      );
+      const recipientRecord = recipientMap.get(key);
+      if (!recipientRecord) {
+        throw new Error(`Recipient not found for ${key}`);
+      }
+      return { item, recipientRecord, key };
+    });
+
     const resolutions = await this.resolveChannelsForRecipients({
-      recipients: items.map((item) => ({
-        id: item.recipient.id,
+      schoolId,
+      recipients: normalizedItems.map(({ item }) => ({
+        entityId: item.recipient.entityId,
         profile: item.recipient.profile,
       })),
       sourceType,
     });
 
     const notifications = await this.db.$transaction(
-      items.map((item) =>
+      normalizedItems.map(({ item, recipientRecord }) =>
         this.db.notification.upsert({
           where: {
             schoolId_recipientId_sourceType_sourceId: {
               schoolId,
-              recipientId: item.recipient.id,
+              recipientId: recipientRecord.id,
               sourceType,
               sourceId: item.sourceId,
             },
           },
           create: {
             schoolId,
-            recipientId: item.recipient.id,
+            recipientId: recipientRecord.id,
             sourceType,
             sourceId: item.sourceId,
             templateId: item.templateId,
@@ -344,22 +559,20 @@ export class NotificationService {
 
     const results = [];
     for (const [index, notification] of notifications.entries()) {
-      const item = items[index];
-      if (!item) continue;
-      const key = this.buildRecipientKey(
-        item.recipient.id,
-        item.recipient.profile,
-      );
+      const normalized = normalizedItems[index];
+      if (!normalized) continue;
+      const { item, key, recipientRecord } = normalized;
       const resolution = resolutions.get(key) ?? {
         eligible: [],
         ineligible: [],
       };
       const delivered = await this.deliverNotification({
         notificationId: notification.id,
-        recipient: item.recipient,
+        recipient: recipientRecord,
         templateId: item.templateId,
         payload: item.payload,
         eligible: resolution.eligible,
+        ineligible: resolution.ineligible,
       });
       results.push(delivered);
     }
@@ -369,19 +582,97 @@ export class NotificationService {
 
   private async deliverNotification(params: {
     notificationId: string;
-    recipient: Recipient;
+    recipient: RecipientRecord;
     templateId: string;
     payload: Record<string, unknown>;
     eligible: NotificationChannel[];
+    ineligible: { channel: NotificationChannel; reason: string }[];
   }) {
-    const { notificationId, recipient, templateId, payload, eligible } = params;
+    const {
+      notificationId,
+      recipient,
+      templateId,
+      payload,
+      eligible,
+      ineligible,
+    } = params;
+    for (const skipped of ineligible) {
+      await this.db.notificationDelivery.upsert({
+        where: {
+          notificationId_channel: {
+            notificationId,
+            channel: skipped.channel,
+          },
+        },
+        create: {
+          notificationId,
+          channel: skipped.channel,
+          status: "SKIPPED",
+          skipReason: skipped.reason,
+        },
+        update: {
+          status: "SKIPPED",
+          skipReason: skipped.reason,
+          error: null,
+        },
+      });
+    }
     const actionable = eligible.filter((channel) => {
-      if (channel === "EMAIL") return Boolean(recipient.email);
+      if (channel === "EMAIL") return Boolean(recipient.primaryEmail);
       if (channel === "SMS" || channel === "WHATSAPP") {
-        return Boolean(recipient.phone);
+        return Boolean(recipient.primaryPhone);
       }
       return true;
     });
+
+    for (const channel of eligible) {
+      if (channel === "IN_APP") continue;
+      if (channel === "EMAIL" && !recipient.primaryEmail) {
+        await this.db.notificationDelivery.upsert({
+          where: {
+            notificationId_channel: {
+              notificationId,
+              channel,
+            },
+          },
+          create: {
+            notificationId,
+            channel,
+            status: "SKIPPED",
+            skipReason: "Missing email",
+          },
+          update: {
+            status: "SKIPPED",
+            skipReason: "Missing email",
+            error: null,
+          },
+        });
+      }
+      if (
+        (channel === "SMS" || channel === "WHATSAPP") &&
+        !recipient.primaryPhone
+      ) {
+        await this.db.notificationDelivery.upsert({
+          where: {
+            notificationId_channel: {
+              notificationId,
+              channel,
+            },
+          },
+          create: {
+            notificationId,
+            channel,
+            status: "SKIPPED",
+            skipReason: "Missing phone",
+          },
+          update: {
+            status: "SKIPPED",
+            skipReason: "Missing phone",
+            error: null,
+          },
+        });
+      }
+    }
 
     if (actionable.length === 0) {
       return this.db.notification.findUniqueOrThrow({
@@ -422,19 +713,20 @@ export class NotificationService {
         continue;
       }
 
-      if (channel === "EMAIL" && !recipient.email) {
+      if (channel === "EMAIL" && !recipient.primaryEmail) {
         continue;
       }
-      if ((channel === "SMS" || channel === "WHATSAPP") && !recipient.phone) {
+      if (
+        (channel === "SMS" || channel === "WHATSAPP") &&
+        !recipient.primaryPhone
+      ) {
         continue;
       }
       const delivery = await this.db.$transaction(async (tx) => {
         if (METERED_CHANNELS.includes(channel)) {
           const subscription = await tx.notificationSubscription.findFirst({
             where: {
-              staffId: recipient.profile == "staff" ? recipient.id : null,
-              contactId: recipient.profile == "contact" ? recipient.id : null,
-              studentId: recipient.profile == "student" ? recipient.id : null,
+              recipientId: recipient.id,
               channel,
               status: "ACTIVE",
               balance: { gt: 0 },
@@ -478,16 +770,19 @@ export class NotificationService {
         const subject = rendered.subject ?? "Notification";
 
         let res: { provider: string; providerMsgId: string } | null = null;
-        if (channel === "EMAIL" && recipient.email) {
+        if (channel === "EMAIL" && recipient.primaryEmail) {
           res = await sendEmail({
-            toEmail: recipient.email,
+            toEmail: recipient.primaryEmail,
             subject,
             bodyText,
           });
-        } else if (channel === "SMS" && recipient.phone) {
-          res = await sendSms({ toPhone: recipient.phone, bodyText });
-        } else if (channel === "WHATSAPP" && recipient.phone) {
-          res = await sendWhatsapp({ toPhone: recipient.phone, bodyText });
+        } else if (channel === "SMS" && recipient.primaryPhone) {
+          res = await sendSms({ toPhone: recipient.primaryPhone, bodyText });
+        } else if (channel === "WHATSAPP" && recipient.primaryPhone) {
+          res = await sendWhatsapp({
+            toPhone: recipient.primaryPhone,
+            bodyText,
+          });
         }
 
         await this.db.notificationDelivery.update({

@@ -14,11 +14,16 @@ export const notificationPreferenceRouter = {
       }),
     )
     .query(async ({ input, ctx }) => {
+      const recipient = await ctx.services.notification.ensureRecipient({
+        schoolId: ctx.schoolId,
+        recipient: {
+          entityId: input.entityId,
+          profile: input.profile,
+        },
+      });
       const prefs = await ctx.db.notificationPreference.findMany({
         where: {
-          studentId: input.profile == "student" ? input.entityId : null,
-          contactId: input.profile == "contact" ? input.entityId : null,
-          staffId: input.profile == "staff" ? input.entityId : null,
+          recipientId: recipient.id,
         },
       });
       // return as {event: string, channels: {email: boolean, sms: boolean, whatsapp: boolean}}
@@ -44,35 +49,16 @@ export const notificationPreferenceRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const where =
-        input.profile == "staff"
-          ? {
-              staffId_sourceType_channel: {
-                staffId: input.entityId,
-                sourceType: input.sourceType,
-                channel: input.channel,
-              },
-            }
-          : input.profile == "contact"
-            ? {
-                contactId_sourceType_channel: {
-                  contactId: input.entityId,
-                  sourceType: input.sourceType,
-                  channel: input.channel,
-                },
-              }
-            : {
-                studentId_sourceType_channel: {
-                  studentId: input.entityId,
-                  sourceType: input.sourceType,
-                  channel: input.channel,
-                },
-              };
+      const recipient = await ctx.services.notification.ensureRecipient({
+        schoolId: ctx.schoolId,
+        recipient: {
+          entityId: input.entityId,
+          profile: input.profile,
+        },
+      });
       return ctx.db.notificationPreference.upsert({
         create: {
-          studentId: input.profile == "student" ? input.entityId : null,
-          contactId: input.profile == "contact" ? input.entityId : null,
-          staffId: input.profile == "staff" ? input.entityId : null,
+          recipientId: recipient.id,
           sourceType: input.sourceType,
           channel: input.channel,
           enabled: input.enabled,
@@ -80,7 +66,13 @@ export const notificationPreferenceRouter = {
         update: {
           enabled: input.enabled,
         },
-        where,
+        where: {
+          recipientId_sourceType_channel: {
+            recipientId: recipient.id,
+            sourceType: input.sourceType,
+            channel: input.channel,
+          },
+        },
       });
     }),
 } satisfies TRPCRouterRecord;

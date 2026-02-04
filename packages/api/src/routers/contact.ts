@@ -415,13 +415,20 @@ export const contactRouter = {
       grade: grades.length,
     };
   }),
-  
+
   notificationPreferences: protectedProcedure
     .input(z.string())
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
+      const recipient = await ctx.services.notification.ensureRecipient({
+        schoolId: ctx.schoolId,
+        recipient: {
+          entityId: input,
+          profile: "contact",
+        },
+      });
       return ctx.db.notificationPreference.findMany({
         where: {
-          contactId: input,
+          recipientId: recipient.id,
         },
       });
     }),

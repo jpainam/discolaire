@@ -11,9 +11,22 @@ export const notificationRouter = {
       z.object({
         limit: z.number().optional().default(20),
         recipientId: z.string().optional(),
+        recipientProfile: z.enum(["student", "staff", "contact"]).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
+      const recipientId =
+        input.recipientId && input.recipientProfile
+          ? (
+              await ctx.services.notification.ensureRecipient({
+                schoolId: ctx.schoolId,
+                recipient: {
+                  entityId: input.recipientId,
+                  profile: input.recipientProfile,
+                },
+              })
+            ).id
+          : input.recipientId;
       return ctx.db.notification.findMany({
         orderBy: {
           createdAt: "desc",
@@ -23,7 +36,8 @@ export const notificationRouter = {
           deliveries: true,
         },
         where: {
-          ...(input.recipientId ? { recipientId: input.recipientId } : {}),
+          schoolId: ctx.schoolId,
+          ...(recipientId ? { recipientId } : {}),
         },
       });
     }),
@@ -33,13 +47,27 @@ export const notificationRouter = {
         sourceType: z.enum(NotificationSourceType),
         sourceIds: z.string().array(),
         recipientId: z.string().optional(),
+        recipientProfile: z.enum(["student", "staff", "contact"]).optional(),
       }),
     )
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
+      const recipientId =
+        input.recipientId && input.recipientProfile
+          ? (
+              await ctx.services.notification.ensureRecipient({
+                schoolId: ctx.schoolId,
+                recipient: {
+                  entityId: input.recipientId,
+                  profile: input.recipientProfile,
+                },
+              })
+            ).id
+          : input.recipientId;
       return ctx.services.notification.getStatuses({
         sourceIds: input.sourceIds,
         sourceType: input.sourceType,
         schoolId: ctx.schoolId,
+        recipientId,
       });
     }),
 } satisfies TRPCRouterRecord;

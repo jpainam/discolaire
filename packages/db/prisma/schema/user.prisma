@@ -64,6 +64,7 @@ model User {
     documentActivityCreatedBy    DocumentActivity[]         @relation("DocumentActivityCreatedBy")
     members                      Member[]
     invitations                  Invitation[]
+    notificationRecipients       NotificationRecipient[]
 
     @@unique([email])
     @@unique([username])
