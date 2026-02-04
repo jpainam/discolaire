@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
-import type { ReactNode } from "react";
+import type { ComponentType } from "react";
 import { useMemo, useState } from "react";
 import { PhoneCheckIcon, SmsCodeFreeIcons } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -34,12 +35,15 @@ interface PreferenceRow {
   enabled: boolean;
 }
 
-const channelIcons: Record<NotificationChannel, ReactNode> = {
-  EMAIL: <MailIcon />,
-  SMS: <HugeiconsIcon icon={SmsCodeFreeIcons} />,
-  WHATSAPP: <ChatIcon />,
-  IN_APP: (
-    <HugeiconsIcon icon={PhoneCheckIcon} strokeWidth={2} className="size-4" />
+const channelIcons: Record<
+  NotificationChannel,
+  ComponentType<{ className?: string }>
+> = {
+  EMAIL: MailIcon,
+  SMS: (props) => <HugeiconsIcon icon={SmsCodeFreeIcons} {...props} />,
+  WHATSAPP: ChatIcon,
+  IN_APP: (props) => (
+    <HugeiconsIcon icon={PhoneCheckIcon} strokeWidth={2} {...props} />
   ),
 };
 
@@ -189,7 +193,6 @@ export function ContactNotificationSummary({
                       pref.enabled ? "bg-primary/10" : "bg-muted"
                     }`}
                   >
-                    
                     <Icon
                       className={`h-4 w-4 ${
                         pref.enabled ? "text-primary" : "text-muted-foreground"
