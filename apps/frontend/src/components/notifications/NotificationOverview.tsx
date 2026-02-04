@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Bell } from "lucide-react";
+import { MailOpen, Trash2 } from "lucide-react";
 
 import type {
   Notification,
@@ -9,6 +9,7 @@ import type {
   NotificationSourceType,
   NotificationStatus,
 } from "./types";
+import { Button } from "../ui/button";
 import { calculateStats, mockNotifications } from "./mock-data";
 import { NotificationFilters } from "./NotificationFilters";
 import { NotificationStatsCards } from "./NotificationStats";
@@ -17,6 +18,7 @@ import { NotificationTable } from "./NotificationTable";
 export function NotificationOverview() {
   const [notifications, setNotifications] =
     useState<Notification[]>(mockNotifications);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
   const [channelFilter, setChannelFilter] = useState<
     NotificationChannel | "all"
@@ -27,6 +29,10 @@ export function NotificationOverview() {
   const [sourceFilter, setSourceFilter] = useState<
     NotificationSourceType | "all"
   >("all");
+
+  const setSelectedIds2 = (val: string[]) => {
+    setSelectedIds(new Set(val));
+  };
 
   const filteredNotifications = useMemo(() => {
     return notifications.filter((notification) => {
@@ -88,7 +94,7 @@ export function NotificationOverview() {
       />
 
       {/* Results Count */}
-      <div className="mb-4">
+      <div className="mb-4 flex items-center justify-between gap-2">
         <p className="text-muted-foreground text-sm">
           Showing{" "}
           <span className="text-foreground font-medium">
@@ -100,6 +106,29 @@ export function NotificationOverview() {
           </span>{" "}
           notifications
         </p>
+        <div className="border-border bg-accent/50 flex items-center gap-4 border-b px-4 py-3">
+          <span className="text-muted-foreground text-sm">
+            {selectedIds.size} selected
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            //onClick={handleBulkMarkAsRead}
+            className="gap-2 bg-transparent"
+          >
+            <MailOpen className="h-4 w-4" />
+            Mark as Read
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            //onClick={handleBulkDelete}
+            className="gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Table */}
@@ -107,22 +136,9 @@ export function NotificationOverview() {
         notifications={filteredNotifications}
         onDelete={handleDelete}
         onMarkAsRead={handleMarkAsRead}
+        selectedIds={selectedIds}
+        setSelectedIds={setSelectedIds2}
       />
-
-      {/* Empty State */}
-      {filteredNotifications.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="bg-accent rounded-full p-4">
-            <Bell className="text-muted-foreground h-8 w-8" />
-          </div>
-          <h3 className="text-foreground mt-4 text-lg font-medium">
-            No notifications found
-          </h3>
-          <p className="text-muted-foreground mt-1 text-sm">
-            Try adjusting your filters or search query
-          </p>
-        </div>
-      )}
     </div>
   );
 }

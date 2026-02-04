@@ -12,7 +12,6 @@ import {
   FileText,
   GraduationCap,
   Mail,
-  MailOpen,
   Megaphone,
   MessageSquare,
   MoreHorizontal,
@@ -56,6 +55,8 @@ interface NotificationTableProps {
   notifications: Notification[];
   onDelete: (ids: string[]) => void;
   onMarkAsRead: (ids: string[]) => void;
+  selectedIds: Set<string>;
+  setSelectedIds: (ids: string[]) => void;
 }
 
 const channelConfig: Record<
@@ -130,16 +131,17 @@ export function NotificationTable({
   notifications,
   onDelete,
   onMarkAsRead,
+  setSelectedIds,
+  selectedIds,
 }: NotificationTableProps) {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [viewingNotification, setViewingNotification] =
     useState<Notification | null>(null);
 
   const toggleSelectAll = () => {
     if (selectedIds.size === notifications.length) {
-      setSelectedIds(new Set());
+      setSelectedIds([]);
     } else {
-      setSelectedIds(new Set(notifications.map((n) => n.id)));
+      setSelectedIds(notifications.map((n) => n.id));
     }
   };
 
@@ -150,17 +152,17 @@ export function NotificationTable({
     } else {
       newSelected.add(id);
     }
-    setSelectedIds(newSelected);
+    setSelectedIds(Array.from(newSelected));
   };
 
   const handleBulkDelete = () => {
     onDelete(Array.from(selectedIds));
-    setSelectedIds(new Set());
+    setSelectedIds([]);
   };
 
   const handleBulkMarkAsRead = () => {
     onMarkAsRead(Array.from(selectedIds));
-    setSelectedIds(new Set());
+    setSelectedIds([]);
   };
 
   const getCreditInfo = (channel: NotificationChannel) => {
@@ -173,35 +175,10 @@ export function NotificationTable({
 
   return (
     <>
-      <div className="border-border bg-card rounded-lg border">
-        {selectedIds.size > 0 && (
-          <div className="border-border bg-accent/50 flex items-center gap-4 border-b px-4 py-3">
-            <span className="text-muted-foreground text-sm">
-              {selectedIds.size} selected
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleBulkMarkAsRead}
-              className="gap-2 bg-transparent"
-            >
-              <MailOpen className="h-4 w-4" />
-              Mark as Read
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={handleBulkDelete}
-              className="gap-2"
-            >
-              <Trash2 className="h-4 w-4" />
-              Delete
-            </Button>
-          </div>
-        )}
+      <div className="border-border bg-card rounded-lg border bg-transparent">
         <Table>
           <TableHeader>
-            <TableRow className="border-border hover:bg-transparent">
+            <TableRow className="bg-muted/50">
               <TableHead className="w-12">
                 <Checkbox
                   checked={
@@ -212,13 +189,13 @@ export function NotificationTable({
                   aria-label="Select all"
                 />
               </TableHead>
-              <TableHead className="text-muted-foreground">Source</TableHead>
-              <TableHead className="text-muted-foreground">Content</TableHead>
-              <TableHead className="text-muted-foreground">Recipient</TableHead>
-              <TableHead className="text-muted-foreground">Channel</TableHead>
-              <TableHead className="text-muted-foreground">Cost</TableHead>
-              <TableHead className="text-muted-foreground">Status</TableHead>
-              <TableHead className="text-muted-foreground">Time</TableHead>
+              <TableHead>Source</TableHead>
+              <TableHead>Content</TableHead>
+              <TableHead>Recipient</TableHead>
+              <TableHead>Channel</TableHead>
+              <TableHead>Cost</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Time</TableHead>
               <TableHead className="w-12"></TableHead>
             </TableRow>
           </TableHeader>
