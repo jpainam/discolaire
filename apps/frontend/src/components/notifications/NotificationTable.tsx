@@ -12,18 +12,23 @@ import {
   FileText,
   GraduationCap,
   Mail,
-  Megaphone,
+  MailOpen,
   MessageSquare,
   MoreHorizontal,
+  SearchIcon,
   Send,
   Trash2,
+  X,
 } from "lucide-react";
+import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+
+import type { NotificationChannel } from "@repo/db/enums";
+import { NotificationSourceType, NotificationStatus } from "@repo/db/enums";
 
 import type {
-  Notification,
-  NotificationChannel,
-  NotificationSourceType,
-  NotificationStatus,
+  NotificationRow,
+  NotificationSourceFilterValue,
+  NotificationStatusFilterValue,
 } from "./types";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -42,6 +47,13 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -49,10 +61,26 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { CHANNEL_CREDITS } from "./types";
+import { EmptyComponent } from "../EmptyComponent";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../ui/input-group";
+import {
+  CHANNEL_CREDITS,
+  NOTIFICATION_SOURCE_FILTER_VALUES,
+  NOTIFICATION_STATUS_FILTER_VALUES,
+} from "./types";
 
+const toLabel = (value: string) =>
+  value
+    .toLowerCase()
+    .split("_")
+    .map((part) => part[0]?.toUpperCase() + part.slice(1))
+    .join(" ");
 interface NotificationTableProps {
-  notifications: Notification[];
+  notifications: NotificationRow[];
   onDelete: (ids: string[]) => void;
   onMarkAsRead: (ids: string[]) => void;
   selectedIds: Set<string>;
@@ -63,22 +91,22 @@ const channelConfig: Record<
   NotificationChannel,
   { icon: typeof Mail; label: string; color: string }
 > = {
-  email: {
+  EMAIL: {
     icon: Mail,
     label: "Email",
     color: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   },
-  sms: {
+  SMS: {
     icon: MessageSquare,
     label: "SMS",
     color: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
   },
-  in_app: {
+  IN_APP: {
     icon: Bell,
     label: "In-App",
     color: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   },
-  whatsapp: {
+  WHATSAPP: {
     icon: Send,
     label: "WhatsApp",
     color: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -89,20 +117,24 @@ const statusConfig: Record<
   NotificationStatus,
   { label: string; color: string }
 > = {
-  delivered: {
-    label: "Delivered",
+  SENT: {
+    label: "Sent",
     color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   },
-  failed: {
+  FAILED: {
     label: "Failed",
     color: "bg-red-500/20 text-red-400 border-red-500/30",
   },
-  pending: {
+  PENDING: {
     label: "Pending",
     color: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   },
-  skipped: {
+  SKIPPED: {
     label: "Skipped",
+    color: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+  },
+  CANCELED: {
+    label: "Canceled",
     color: "bg-gray-500/20 text-gray-400 border-gray-500/30",
   },
 };
@@ -111,20 +143,31 @@ const sourceConfig: Record<
   NotificationSourceType,
   { icon: typeof GraduationCap; label: string; color: string }
 > = {
-  grades: { icon: GraduationCap, label: "Grades", color: "text-indigo-400" },
-  absence_alert: {
+  GRADES_UPDATES: {
+    icon: GraduationCap,
+    label: "Grades Updates",
+    color: "text-indigo-400",
+  },
+  ABSENCE_ALERTS: {
     icon: AlertTriangle,
-    label: "Absence Alert",
+    label: "Absence Alerts",
     color: "text-orange-400",
   },
-  announcement: {
-    icon: Megaphone,
-    label: "Announcement",
-    color: "text-blue-400",
+  PAYMENT_REMINDERS: {
+    icon: CreditCard,
+    label: "Payment Reminders",
+    color: "text-emerald-400",
   },
-  payment: { icon: CreditCard, label: "Payment", color: "text-emerald-400" },
-  schedule: { icon: Calendar, label: "Schedule", color: "text-purple-400" },
-  report: { icon: FileText, label: "Report", color: "text-pink-400" },
+  EVENT_NOTIFICATIONS: {
+    icon: Calendar,
+    label: "Event Notifications",
+    color: "text-purple-400",
+  },
+  WEEKLY_SUMMARIES: {
+    icon: FileText,
+    label: "Weekly Summaries",
+    color: "text-pink-400",
+  },
 };
 
 export function NotificationTable({
@@ -135,7 +178,7 @@ export function NotificationTable({
   selectedIds,
 }: NotificationTableProps) {
   const [viewingNotification, setViewingNotification] =
-    useState<Notification | null>(null);
+    useState<NotificationRow | null>(null);
 
   const toggleSelectAll = () => {
     if (selectedIds.size === notifications.length) {
@@ -154,6 +197,32 @@ export function NotificationTable({
     }
     setSelectedIds(Array.from(newSelected));
   };
+
+  const [searchQuery, setSearchQuery] = useQueryState(
+    "searchQuery",
+    parseAsString.withDefault(""),
+  );
+  const [statusFilter, setStatusFilter] = useQueryState(
+    "statusFilter",
+    parseAsStringEnum<NotificationStatusFilterValue>(
+      NOTIFICATION_STATUS_FILTER_VALUES,
+    ).withDefault("all"),
+  );
+  const [sourceFilter, setSourceFilter] = useQueryState(
+    "sourceFilter",
+    parseAsStringEnum<NotificationSourceFilterValue>(
+      NOTIFICATION_SOURCE_FILTER_VALUES,
+    ).withDefault("all"),
+  );
+
+  const handleClearFilters = () => {
+    void setSearchQuery("");
+    void setStatusFilter("all");
+    void setSourceFilter("all");
+  };
+
+  const hasFilters =
+    searchQuery || statusFilter !== "all" || sourceFilter !== "all";
 
   const handleBulkDelete = () => {
     onDelete(Array.from(selectedIds));
@@ -174,7 +243,82 @@ export function NotificationTable({
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center gap-3">
+        <InputGroup className="md:w-1/2 lg:w-1/3">
+          <InputGroupInput
+            value={searchQuery}
+            placeholder="Search notifications..."
+            onChange={(e) => void setSearchQuery(e.target.value)}
+          />
+          <InputGroupAddon>
+            <SearchIcon />
+          </InputGroupAddon>
+        </InputGroup>
+
+        <Select value={sourceFilter} onValueChange={setSourceFilter}>
+          <SelectTrigger className="bg-card border-border w-[150px]">
+            <SelectValue placeholder="Source" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover">
+            <SelectItem value="all">All Sources</SelectItem>
+            {Object.values(NotificationSourceType).map((value) => (
+              <SelectItem key={value} value={value}>
+                {toLabel(value)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="bg-card border-border w-[140px]">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover">
+            <SelectItem value="all">All Status</SelectItem>
+            {Object.values(NotificationStatus).map((value) => (
+              <SelectItem key={value} value={value}>
+                {toLabel(value)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {hasFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleClearFilters}
+            className="text-muted-foreground hover:text-foreground gap-2"
+          >
+            <X className="h-4 w-4" />
+            Clear
+          </Button>
+        )}
+        <div className="ml-auto flex items-center gap-2">
+          <span className="text-muted-foreground text-sm">
+            {selectedIds.size} selected
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            //onClick={handleBulkMarkAsRead}
+            className="gap-2 bg-transparent"
+          >
+            <MailOpen className="h-4 w-4" />
+            Mark as Read
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            //onClick={handleBulkDelete}
+            className="gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            Delete
+          </Button>
+        </div>
+      </div>
       <div className="border-border bg-card rounded-lg border bg-transparent">
         <Table>
           <TableHeader>
@@ -200,118 +344,133 @@ export function NotificationTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {notifications.map((notification) => {
-              const source = sourceConfig[notification.sourceType];
-              const channel = channelConfig[notification.channel];
-              const status = statusConfig[notification.status];
-              const credit = getCreditInfo(notification.channel);
-              const SourceIcon = source.icon;
-              const ChannelIcon = channel.icon;
+            {notifications.length == 0 ? (
+              <TableRow>
+                <TableCell colSpan={9}>
+                  <EmptyComponent
+                    title="Aucune notifications"
+                    description="Veuillez souscrire, fournir votre email ou installer l'application"
+                  />
+                </TableCell>
+              </TableRow>
+            ) : (
+              notifications.map((notification) => {
+                const source = sourceConfig[notification.sourceType];
+                const channel = channelConfig[notification.channel];
+                const status = statusConfig[notification.status];
+                const credit = getCreditInfo(notification.channel);
+                const SourceIcon = source.icon;
+                const ChannelIcon = channel.icon;
 
-              return (
-                <TableRow
-                  key={notification.id}
-                  className={`border-border hover:bg-accent/50 transition-colors ${
-                    !notification.isRead ? "bg-accent/30" : ""
-                  }`}
-                >
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedIds.has(notification.id)}
-                      onCheckedChange={() => toggleSelect(notification.id)}
-                      aria-label={`Select notification ${notification.id}`}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <SourceIcon className={`h-4 w-4 ${source.color}`} />
-                      <span className="text-foreground text-sm">
-                        {source.label}
+                return (
+                  <TableRow
+                    key={notification.id}
+                    className={`border-border hover:bg-accent/50 transition-colors ${
+                      !notification.isRead ? "bg-accent/30" : ""
+                    }`}
+                  >
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedIds.has(notification.id)}
+                        onCheckedChange={() => toggleSelect(notification.id)}
+                        aria-label={`Select notification ${notification.id}`}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <SourceIcon className={`h-4 w-4 ${source.color}`} />
+                        <span className="text-foreground text-sm">
+                          {source.label}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        {!notification.isRead && (
+                          <span className="h-2 w-2 rounded-full bg-blue-500" />
+                        )}
+                        <span className="text-foreground max-w-[300px] truncate text-sm">
+                          {notification.content}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="text-foreground text-sm">
+                          {notification.recipientName}
+                        </span>
+                        <span className="text-muted-foreground text-xs">
+                          {notification.recipientEmail}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className={`gap-1 ${channel.color}`}
+                      >
+                        <ChannelIcon className="h-3 w-3" />
+                        {channel.label}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className={`text-sm font-medium ${credit.color}`}>
+                        {credit.text}
                       </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      {!notification.isRead && (
-                        <span className="h-2 w-2 rounded-full bg-blue-500" />
-                      )}
-                      <span className="text-foreground max-w-[300px] truncate text-sm">
-                        {notification.content}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={status.color}>
+                        {status.label}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-muted-foreground text-sm whitespace-nowrap">
+                        {formatDistanceToNow(notification.createdAt, {
+                          addSuffix: true,
+                        })}
                       </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className="text-foreground text-sm">
-                        {notification.recipientName}
-                      </span>
-                      <span className="text-muted-foreground text-xs">
-                        {notification.recipientEmail}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={`gap-1 ${channel.color}`}
-                    >
-                      <ChannelIcon className="h-3 w-3" />
-                      {channel.label}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <span className={`text-sm font-medium ${credit.color}`}>
-                      {credit.text}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className={status.color}>
-                      {status.label}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-muted-foreground text-sm whitespace-nowrap">
-                      {formatDistanceToNow(notification.createdAt, {
-                        addSuffix: true,
-                      })}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Open menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-popover">
-                        <DropdownMenuItem
-                          onClick={() => setViewingNotification(notification)}
-                          className="gap-2"
-                        >
-                          <Eye className="h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onMarkAsRead([notification.id])}
-                          className="gap-2"
-                        >
-                          <Check className="h-4 w-4" />
-                          Mark as Read
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onDelete([notification.id])}
-                          className="gap-2 text-red-400 focus:text-red-400"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-popover">
+                          <DropdownMenuItem
+                            onClick={() => setViewingNotification(notification)}
+                            className="gap-2"
+                          >
+                            <Eye className="h-4 w-4" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => onMarkAsRead([notification.id])}
+                            className="gap-2"
+                          >
+                            <Check className="h-4 w-4" />
+                            Mark as Read
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => onDelete([notification.id])}
+                            className="gap-2 text-red-400 focus:text-red-400"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </div>
@@ -406,6 +565,6 @@ export function NotificationTable({
           )}
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }

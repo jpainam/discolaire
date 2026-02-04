@@ -1,144 +1,168 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { MailOpen, Trash2 } from "lucide-react";
+import { Suspense, useMemo, useState } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { useQuery } from "@tanstack/react-query";
+import { parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+
+import type { RouterOutputs } from "@repo/api";
+import { NotificationChannel, NotificationStatus } from "@repo/db/enums";
 
 import type {
-  Notification,
-  NotificationChannel,
-  NotificationSourceType,
-  NotificationStatus,
+  NotificationRow,
+  NotificationSourceFilterValue,
+  NotificationStatusFilterValue,
 } from "./types";
-import { Button } from "../ui/button";
-import { calculateStats, mockNotifications } from "./mock-data";
-import { NotificationFilters } from "./NotificationFilters";
+import { useTRPC } from "~/trpc/react";
+import { ErrorFallback } from "../error-fallback";
+import { Skeleton } from "../ui/skeleton";
 import { NotificationStatsCards } from "./NotificationStats";
 import { NotificationTable } from "./NotificationTable";
+import {
+  NOTIFICATION_SOURCE_FILTER_VALUES,
+  NOTIFICATION_STATUS_FILTER_VALUES,
+} from "./types";
 
-export function NotificationOverview() {
-  const [notifications, setNotifications] =
-    useState<Notification[]>(mockNotifications);
+type NotificationRecord = RouterOutputs["notification"]["all"][number];
+type NotificationDelivery = NotificationRecord["deliveries"][number];
+
+const getPrimaryDelivery = (
+  deliveries: NotificationDelivery[],
+): NotificationDelivery | undefined => {
+  return deliveries.reduce<NotificationDelivery | undefined>((latest, item) => {
+    const latestDate = latest?.sentAt ?? latest?.createdAt ?? new Date(0);
+    const itemDate = item.sentAt ?? item.createdAt ?? new Date(0);
+    return itemDate.getTime() > latestDate.getTime() ? item : latest;
+  }, undefined);
+};
+
+export function NotificationOverview({
+  recipientId,
+  recipientProfile,
+}: {
+  recipientId: string;
+  recipientProfile: "student" | "staff" | "contact";
+}) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [searchQuery, setSearchQuery] = useState("");
-  const [channelFilter, setChannelFilter] = useState<
-    NotificationChannel | "all"
-  >("all");
-  const [statusFilter, setStatusFilter] = useState<NotificationStatus | "all">(
-    "all",
+  const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
+  const [readIds, setReadIds] = useState<Set<string>>(new Set());
+  const [statusFilter] = useQueryState(
+    "statusFilter",
+    parseAsStringEnum<NotificationStatusFilterValue>(
+      NOTIFICATION_STATUS_FILTER_VALUES,
+    ).withDefault("all"),
   );
-  const [sourceFilter, setSourceFilter] = useState<
-    NotificationSourceType | "all"
-  >("all");
+  const [sourceFilter] = useQueryState(
+    "sourceFilter",
+    parseAsStringEnum<NotificationSourceFilterValue>(
+      NOTIFICATION_SOURCE_FILTER_VALUES,
+    ).withDefault("all"),
+  );
+  const [searchQuery] = useQueryState(
+    "searchQuery",
+    parseAsString.withDefault(""),
+  );
 
   const setSelectedIds2 = (val: string[]) => {
     setSelectedIds(new Set(val));
   };
 
-  const filteredNotifications = useMemo(() => {
-    return notifications.filter((notification) => {
-      const matchesSearch =
-        searchQuery === "" ||
-        notification.content
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        notification.recipientName
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        notification.recipientEmail
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+  const trpc = useTRPC();
+  const notificationsQuery = useQuery(
+    trpc.notification.all.queryOptions({
+      recipientId,
+      recipientProfile,
+      query: searchQuery || undefined,
+      sourceType: sourceFilter === "all" ? undefined : sourceFilter,
+      status: statusFilter === "all" ? undefined : statusFilter,
+    }),
+  );
+  const statsQuery = useQuery(
+    trpc.notification.stats.queryOptions({
+      recipientId,
+      recipientProfile,
+    }),
+  );
 
-      const matchesChannel =
-        channelFilter === "all" || notification.channel === channelFilter;
-      const matchesStatus =
-        statusFilter === "all" || notification.status === statusFilter;
-      const matchesSource =
-        sourceFilter === "all" || notification.sourceType === sourceFilter;
-
-      return matchesSearch && matchesChannel && matchesStatus && matchesSource;
-    });
-  }, [notifications, searchQuery, channelFilter, statusFilter, sourceFilter]);
-
-  const stats = useMemo(() => calculateStats(notifications), [notifications]);
+  const notifications = notificationsQuery.data ?? [];
+  const stats = statsQuery.data ?? {
+    total: 0,
+    sent: 0,
+    failed: 0,
+    pending: 0,
+    skipped: 0,
+    canceled: 0,
+    smsCreditsUsed: 0,
+    whatsappCreditsUsed: 0,
+  };
+  const rows = useMemo<NotificationRow[]>(() => {
+    return notifications
+      .filter((notification) => !hiddenIds.has(notification.id))
+      .map((notification) => {
+        const primaryDelivery = getPrimaryDelivery(
+          notification.deliveries ?? [],
+        );
+        const channel = primaryDelivery?.channel ?? NotificationChannel.IN_APP;
+        const status = primaryDelivery?.status ?? NotificationStatus.PENDING;
+        const recipientLabel =
+          notification.recipient.primaryEmail ??
+          notification.recipient.primaryPhone ??
+          notification.recipient.entityId;
+        return {
+          id: notification.id,
+          sourceType: notification.sourceType,
+          channel,
+          status,
+          content: notification.template?.name ?? notification.sourceId,
+          payload: notification.payload ?? {},
+          recipientName: recipientLabel,
+          recipientEmail:
+            notification.recipient.primaryEmail ??
+            notification.recipient.primaryPhone ??
+            "",
+          isRead: readIds.has(notification.id),
+          createdAt: notification.createdAt,
+          deliveredAt: primaryDelivery?.sentAt ?? primaryDelivery?.createdAt,
+        };
+      });
+  }, [hiddenIds, notifications, readIds]);
 
   const handleDelete = (ids: string[]) => {
-    setNotifications((prev) => prev.filter((n) => !ids.includes(n.id)));
+    setHiddenIds((prev) => new Set([...prev, ...ids]));
   };
 
   const handleMarkAsRead = (ids: string[]) => {
-    setNotifications((prev) =>
-      prev.map((n) => (ids.includes(n.id) ? { ...n, isRead: true } : n)),
-    );
-  };
-
-  const handleClearFilters = () => {
-    setSearchQuery("");
-    setChannelFilter("all");
-    setStatusFilter("all");
-    setSourceFilter("all");
+    setReadIds((prev) => new Set([...prev, ...ids]));
   };
 
   return (
-    <div className="flex flex-col gap-2 px-4 py-2">
-      <NotificationStatsCards stats={stats} />
-      <NotificationFilters
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        channelFilter={channelFilter}
-        onChannelChange={setChannelFilter}
-        statusFilter={statusFilter}
-        onStatusChange={setStatusFilter}
-        sourceFilter={sourceFilter}
-        onSourceChange={setSourceFilter}
-        onClearFilters={handleClearFilters}
-      />
+    <div className="flex flex-col gap-4 px-4 py-2">
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
+              {Array.from({ length: 7 }).map((_, t) => (
+                <Skeleton className="h-20" key={t} />
+              ))}
+            </div>
+          }
+        >
+          <NotificationStatsCards
+            recipientId={recipientId}
+            profile={recipientProfile}
+          />
+        </Suspense>
+      </ErrorBoundary>
 
-      {/* Results Count */}
-      <div className="mb-4 flex items-center justify-between gap-2">
-        <p className="text-muted-foreground text-sm">
-          Showing{" "}
-          <span className="text-foreground font-medium">
-            {filteredNotifications.length}
-          </span>{" "}
-          of{" "}
-          <span className="text-foreground font-medium">
-            {notifications.length}
-          </span>{" "}
-          notifications
-        </p>
-        <div className="border-border bg-accent/50 flex items-center gap-4 border-b px-4 py-3">
-          <span className="text-muted-foreground text-sm">
-            {selectedIds.size} selected
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            //onClick={handleBulkMarkAsRead}
-            className="gap-2 bg-transparent"
-          >
-            <MailOpen className="h-4 w-4" />
-            Mark as Read
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            //onClick={handleBulkDelete}
-            className="gap-2"
-          >
-            <Trash2 className="h-4 w-4" />
-            Delete
-          </Button>
-        </div>
-      </div>
-
-      {/* Table */}
-      <NotificationTable
-        notifications={filteredNotifications}
-        onDelete={handleDelete}
-        onMarkAsRead={handleMarkAsRead}
-        selectedIds={selectedIds}
-        setSelectedIds={setSelectedIds2}
-      />
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <NotificationTable
+          notifications={rows}
+          onDelete={handleDelete}
+          onMarkAsRead={handleMarkAsRead}
+          selectedIds={selectedIds}
+          setSelectedIds={setSelectedIds2}
+        />
+      </ErrorBoundary>
     </div>
   );
 }

@@ -1,22 +1,32 @@
-export type NotificationChannel = "in_app" | "sms" | "email" | "whatsapp";
+import {
+  NotificationSourceType,
+  NotificationStatus,
+  type NotificationChannel,
+} from "@repo/db/enums";
 
-export type NotificationStatus = "delivered" | "failed" | "skipped" | "pending";
+export const NOTIFICATION_SOURCE_FILTER_VALUES = [
+  "all",
+  ...Object.values(NotificationSourceType),
+] as const;
 
-export type NotificationSourceType =
-  | "grades"
-  | "absence_alert"
-  | "announcement"
-  | "payment"
-  | "schedule"
-  | "report";
+export type NotificationSourceFilterValue =
+  (typeof NOTIFICATION_SOURCE_FILTER_VALUES)[number];
 
-export interface Notification {
+export const NOTIFICATION_STATUS_FILTER_VALUES = [
+  "all",
+  ...Object.values(NotificationStatus),
+] as const;
+
+export type NotificationStatusFilterValue =
+  (typeof NOTIFICATION_STATUS_FILTER_VALUES)[number];
+
+export interface NotificationRow {
   id: string;
   sourceType: NotificationSourceType;
   channel: NotificationChannel;
   status: NotificationStatus;
   content: string;
-  payload: Record<string, unknown>;
+  payload: unknown;
   recipientName: string;
   recipientEmail: string;
   isRead: boolean;
@@ -26,10 +36,11 @@ export interface Notification {
 
 export interface NotificationStats {
   total: number;
-  delivered: number;
+  sent: number;
   failed: number;
   pending: number;
   skipped: number;
+  canceled: number;
   smsCreditsUsed: number;
   whatsappCreditsUsed: number;
 }
@@ -38,8 +49,8 @@ export const CHANNEL_CREDITS: Record<
   NotificationChannel,
   { type: "sms" | "whatsapp" | "free"; amount: number }
 > = {
-  sms: { type: "sms", amount: 1 },
-  whatsapp: { type: "whatsapp", amount: 1 },
-  email: { type: "free", amount: 0 },
-  in_app: { type: "free", amount: 0 },
+  SMS: { type: "sms", amount: 1 },
+  WHATSAPP: { type: "whatsapp", amount: 1 },
+  EMAIL: { type: "free", amount: 0 },
+  IN_APP: { type: "free", amount: 0 },
 };

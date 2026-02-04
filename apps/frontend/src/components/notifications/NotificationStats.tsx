@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   Bell,
   CheckCircle,
@@ -10,65 +12,76 @@ import {
   XCircle,
 } from "lucide-react";
 
-import type { NotificationStats } from "./types";
 import { Card } from "~/components/ui/card";
+import { useTRPC } from "~/trpc/react";
 
-interface NotificationStatsProps {
-  stats: NotificationStats;
-}
-
-export function NotificationStatsCards({ stats }: NotificationStatsProps) {
-  const statItems = [
-    {
-      label: "Total Notifications",
-      value: stats.total,
-      icon: Bell,
-      color: "text-blue-400",
-      bgColor: "bg-blue-400/10",
-    },
-    {
-      label: "Delivered",
-      value: stats.delivered,
-      icon: CheckCircle,
-      color: "text-emerald-400",
-      bgColor: "bg-emerald-400/10",
-    },
-    {
-      label: "Failed",
-      value: stats.failed,
-      icon: XCircle,
-      color: "text-red-400",
-      bgColor: "bg-red-400/10",
-    },
-    {
-      label: "Pending",
-      value: stats.pending,
-      icon: Clock,
-      color: "text-amber-400",
-      bgColor: "bg-amber-400/10",
-    },
-    {
-      label: "Skipped",
-      value: stats.skipped,
-      icon: SkipForward,
-      color: "text-gray-400",
-      bgColor: "bg-gray-400/10",
-    },
-    {
-      label: "SMS Credits Used",
-      value: stats.smsCreditsUsed,
-      icon: MessageSquare,
-      color: "text-cyan-400",
-      bgColor: "bg-cyan-400/10",
-    },
-    {
-      label: "WhatsApp Credits Used",
-      value: stats.whatsappCreditsUsed,
-      icon: Send,
-      color: "text-green-400",
-      bgColor: "bg-green-400/10",
-    },
-  ];
+export function NotificationStatsCards({
+  recipientId,
+  profile,
+}: {
+  recipientId: string;
+  profile: "staff" | "student" | "contact";
+}) {
+  const trpc = useTRPC();
+  const { data: stats } = useSuspenseQuery(
+    trpc.notification.stats.queryOptions({
+      recipientId,
+      recipientProfile: profile,
+    }),
+  );
+  const statItems = useMemo(() => {
+    return [
+      {
+        label: "Total Notifications",
+        value: stats.total,
+        icon: Bell,
+        color: "text-blue-400",
+        bgColor: "bg-blue-400/10",
+      },
+      {
+        label: "Sent",
+        value: stats.sent,
+        icon: CheckCircle,
+        color: "text-emerald-400",
+        bgColor: "bg-emerald-400/10",
+      },
+      {
+        label: "Failed",
+        value: stats.failed,
+        icon: XCircle,
+        color: "text-red-400",
+        bgColor: "bg-red-400/10",
+      },
+      {
+        label: "Pending",
+        value: stats.pending,
+        icon: Clock,
+        color: "text-amber-400",
+        bgColor: "bg-amber-400/10",
+      },
+      {
+        label: "Skipped",
+        value: stats.skipped,
+        icon: SkipForward,
+        color: "text-gray-400",
+        bgColor: "bg-gray-400/10",
+      },
+      {
+        label: "SMS Credits Used",
+        value: stats.smsCreditsUsed,
+        icon: MessageSquare,
+        color: "text-cyan-400",
+        bgColor: "bg-cyan-400/10",
+      },
+      {
+        label: "WhatsApp Credits Used",
+        value: stats.whatsappCreditsUsed,
+        icon: Send,
+        color: "text-green-400",
+        bgColor: "bg-green-400/10",
+      },
+    ];
+  }, [stats]);
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
