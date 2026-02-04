@@ -18,7 +18,7 @@ export async function GET(
     const student = await caller.student.get(id);
     const school = await caller.school.getSchool();
 
-    const data = await caller.studentAccount.getStatements({ studentId: id });
+    const data = await caller.student.getStatements(id);
 
     const stream = await renderToStream(
       await AcccountStatement({

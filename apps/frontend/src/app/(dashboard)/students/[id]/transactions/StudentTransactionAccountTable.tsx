@@ -31,9 +31,7 @@ export function StudentTransactionAccountTable() {
     trpc.student.get.queryOptions(params.id),
   );
   const { data: statements } = useSuspenseQuery(
-    trpc.student.getStatements.queryOptions({
-      studentId: params.id,
-    }),
+    trpc.student.getStatements.queryOptions(params.id),
   );
 
   const formatAmount = (amount: number) =>

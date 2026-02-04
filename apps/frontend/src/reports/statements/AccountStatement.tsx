@@ -10,7 +10,7 @@ import { getHeader } from "../headers";
 
 interface Props {
   student: NonNullable<RouterOutputs["student"]["get"]>;
-  statements: RouterOutputs["studentAccount"]["getStatements"];
+  statements: RouterOutputs["student"]["getStatements"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
 }
 

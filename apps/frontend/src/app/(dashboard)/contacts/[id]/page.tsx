@@ -1,15 +1,9 @@
-import { getTranslations } from "next-intl/server";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
-import {
-  batchPrefetch,
-  getQueryClient,
-  HydrateClient,
-  trpc,
-} from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { ContactRecentTransactions } from "./ContactRecentTransactions";
 import { ContactStudentOverview } from "./ContactStudentOverview";
 import { StatCards } from "./StatCards";
@@ -25,12 +19,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.contact.transactions.queryOptions(contactId),
     trpc.contact.studentOverview.queryOptions(contactId),
   ]);
-  const t = await getTranslations();
-  //const locale = await getLocale();
-  const queryClient = getQueryClient();
-  const studentContacts = await queryClient.fetchQuery(
-    trpc.contact.students.queryOptions(contactId),
-  );
 
   return (
     <HydrateClient>
