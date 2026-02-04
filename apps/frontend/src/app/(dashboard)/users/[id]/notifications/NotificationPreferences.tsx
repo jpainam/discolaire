@@ -3,11 +3,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Mail, MessageSquare, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -49,12 +45,12 @@ export function NotificationPreferences() {
       },
     }),
   );
-  const { data: preferences } = useSuspenseQuery(
-    trpc.notificationPreference.user.queryOptions({
-      entityId: params.id,
-      profile: "STUDENT",
-    }),
-  );
+  // const { data: preferences } = useSuspenseQuery(
+  //   trpc.notificationPreference.user.queryOptions({
+  //     entityId: params.id,
+  //     profile: "STUDENT",
+  //   }),
+  // );
   const findPreferences = (
     event: string,
   ): { sms: boolean; email: boolean; whatsapp: boolean } => {
