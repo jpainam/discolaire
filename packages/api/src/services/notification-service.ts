@@ -1,5 +1,4 @@
 import type {
-  EntityProfile,
   NotificationChannel,
   NotificationSourceType,
   NotificationStatus,
@@ -17,7 +16,7 @@ const METERED_CHANNELS: NotificationChannel[] = ["SMS", "WHATSAPP"];
 
 interface Recipient {
   id: string;
-  profile: EntityProfile;
+  profile: "staff" | "contact" | "student";
   phone?: string | null;
   email?: string | null;
 }
@@ -89,7 +88,7 @@ export class NotificationService {
 
   async resolveChannels(params: {
     recipientId: string;
-    recipientProfile: EntityProfile;
+    recipientProfile: "student" | "staff" | "contact";
     sourceType: NotificationSourceType;
   }) {
     const resolutions = await this.resolveChannelsForRecipients({
@@ -128,13 +127,15 @@ export class NotificationService {
       where: {
         sourceType: params.sourceType,
         OR: recipientPairs.map((r) => ({
-          entityId: r.id,
-          profile: r.profile,
+          studentId: r.profile == "student" ? r.id : null,
+          contactId: r.profile == "contact" ? r.id : null,
+          staffId: r.profile == "staff" ? r.id : null,
         })),
       },
       select: {
-        entityId: true,
-        profile: true,
+        staffId: true,
+        contactId: true,
+        studentId: true,
         channel: true,
         enabled: true,
       },
@@ -148,7 +149,14 @@ export class NotificationService {
       preferenceMap.set(key, { hasAny: false, enabled: new Set() });
     }
     for (const pref of preferences) {
-      const key = this.buildRecipientKey(pref.entityId, pref.profile);
+      const entityId = pref.staffId ?? pref.studentId ?? pref.contactId;
+      if (!entityId) {
+        throw Error(`Expected an entityId to be not null, found ${entityId}`);
+      }
+      const key = this.buildRecipientKey(
+        entityId,
+        pref.staffId ? "staff" : pref.studentId ? "student" : "contact",
+      );
       const entry = preferenceMap.get(key);
       if (!entry) continue;
       entry.hasAny = true;
@@ -160,13 +168,15 @@ export class NotificationService {
         status: "ACTIVE",
         channel: { in: METERED_CHANNELS },
         OR: recipientPairs.map((r) => ({
-          entityId: r.id,
-          profile: r.profile,
+          studentId: r.profile == "student" ? r.id : null,
+          contactId: r.profile == "contact" ? r.id : null,
+          staffId: r.profile == "staff" ? r.id : null,
         })),
       },
       select: {
-        entityId: true,
-        profile: true,
+        studentId: true,
+        contactId: true,
+        staffId: true,
         channel: true,
         balance: true,
       },
@@ -174,7 +184,14 @@ export class NotificationService {
 
     const balanceMap = new Map<string, Map<NotificationChannel, number>>();
     for (const sub of subscriptions) {
-      const key = this.buildRecipientKey(sub.entityId, sub.profile);
+      const entityId = sub.contactId ?? sub.staffId ?? sub.studentId;
+      if (!entityId) {
+        throw Error(`Expected an entityId to be not null, found ${entityId}`);
+      }
+      const key = this.buildRecipientKey(
+        entityId,
+        sub.studentId ? "student" : sub.contactId ? "contact" : "staff",
+      );
       const byChannel =
         balanceMap.get(key) ?? new Map<NotificationChannel, number>();
       byChannel.set(
@@ -217,7 +234,10 @@ export class NotificationService {
     return resolutions;
   }
 
-  private buildRecipientKey(id: string, profile: EntityProfile) {
+  private buildRecipientKey(
+    id: string,
+    profile: "student" | "contact" | "staff",
+  ) {
     return `${profile}:${id}`;
   }
 
@@ -412,8 +432,9 @@ export class NotificationService {
         if (METERED_CHANNELS.includes(channel)) {
           const subscription = await tx.notificationSubscription.findFirst({
             where: {
-              entityId: recipient.id,
-              profile: recipient.profile,
+              staffId: recipient.profile == "staff" ? recipient.id : null,
+              contactId: recipient.profile == "contact" ? recipient.id : null,
+              studentId: recipient.profile == "student" ? recipient.id : null,
               channel,
               status: "ACTIVE",
               balance: { gt: 0 },
