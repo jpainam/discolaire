@@ -60,8 +60,8 @@ import { EmptyComponent } from "../EmptyComponent";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { UserLink } from "../UserLink";
 import { AddStudentToParent } from "./AddStudentToParent";
+import { ContactStudentSheetList } from "./ContactStudentSheetList";
 import CreateEditContact from "./CreateEditContact";
-import StudentContactList from "./StudentContactList";
 
 export function ContactTable() {
   const t = useTranslations();
@@ -254,7 +254,9 @@ export function ContactTable() {
                           onSelect={() => {
                             openSheet({
                               title: t("students"),
-                              view: <StudentContactList contactId={c.id} />,
+                              view: (
+                                <ContactStudentSheetList contactId={c.id} />
+                              ),
                             });
                           }}
                         >

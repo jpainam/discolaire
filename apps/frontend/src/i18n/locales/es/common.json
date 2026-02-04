@@ -323,7 +323,6 @@
     "link": "https://locize.com/blog/next-app-dir-i18n/",
     "text": "Consulte la <1>entrada del blog</1> correspondiente que describe este ejemplo."
   },
-  "bornOn": "Nacido el",
   "boys": "Niños",
   "bulk_actions": "Acciones masivas",
   "bySubject": "Por asignatura",
@@ -1035,7 +1034,6 @@
   "step_3_description": "Completar pago",
   "student": "Estudiante",
   "studentAccessHistory": "Estudiante",
-  "studentContactName": "Nombre del contacto",
   "studentGraph": "Gráfico del estudiante",
   "studentNotifications": "Notificaciones de estudiantes",
   "studentReportCard": "Boletín de calificaciones del estudiante",

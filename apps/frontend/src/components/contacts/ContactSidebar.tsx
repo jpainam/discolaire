@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { ArrowLeft, BellRing, User, Users } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "~/components/ui/sidebar";
+import { GradeIcon, NotificationIcon, UserIcon, UsersIcon } from "~/icons";
 import { SidebarLogo } from "../sidebar-logo";
 
 export function ContactSidebar({
@@ -25,18 +26,23 @@ export function ContactSidebar({
     information: [
       {
         name: "profile",
-        icon: User,
+        icon: <UserIcon />,
         url: `/contacts/${params.id}`,
       },
 
       {
         name: "students",
-        icon: Users,
+        icon: <UsersIcon />,
         url: `/contacts/${params.id}/students`,
       },
       {
+        name: "grades",
+        url: `/contacts/${params.id}/grades`,
+        icon: <GradeIcon />,
+      },
+      {
         name: "notifications",
-        icon: BellRing,
+        icon: <NotificationIcon />,
         url: `/contacts/${params.id}/notifications`,
       },
     ],
@@ -74,7 +80,7 @@ export function ContactSidebar({
                   isActive={pathname === item.url}
                 >
                   <Link href={item.url}>
-                    <item.icon />
+                    {item.icon}
                     <span>{t(item.name)}</span>
                   </Link>
                 </SidebarMenuButton>

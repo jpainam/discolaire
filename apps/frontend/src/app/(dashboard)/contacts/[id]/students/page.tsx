@@ -1,13 +1,33 @@
-import StudentContactList from "~/components/contacts/StudentContactList";
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
+import { ContactStudentList } from "~/components/contacts/ContactStudentList";
+import { ErrorFallback } from "~/components/error-fallback";
+import { Skeleton } from "~/components/ui/skeleton";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
 
-  const { id } = params;
+  const contactId = params.id;
+  batchPrefetch([
+    trpc.contact.students.queryOptions(contactId),
+    trpc.contact.get.queryOptions(contactId),
+  ]);
 
   return (
-    <div className="text-md grid w-full items-start gap-2 md:grid-cols-2">
-      <StudentContactList contactId={id} />
-    </div>
+    <HydrateClient>
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 gap-4 p-4">
+              <Skeleton className="h-40" />
+            </div>
+          }
+        >
+          <ContactStudentList contactId={contactId} />
+        </Suspense>
+      </ErrorBoundary>
+    </HydrateClient>
   );
 }

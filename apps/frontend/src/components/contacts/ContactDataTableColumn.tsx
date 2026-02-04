@@ -33,8 +33,8 @@ import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { AvatarState } from "../AvatarState";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import StudentContactList from "./ContactStudentList";
 import CreateEditContact from "./CreateEditContact";
-import StudentContactList from "./StudentContactList";
 
 type ContactAllProcedureOutput = NonNullable<
   RouterOutputs["contact"]["all"]
