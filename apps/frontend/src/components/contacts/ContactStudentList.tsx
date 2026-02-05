@@ -3,17 +3,31 @@
 import Link from "next/link";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-
-
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { Button } from "~/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -24,7 +38,6 @@ import { getFullName } from "~/utils";
 import { Badge } from "../base-badge";
 import { UpdateRegistrationNumber } from "../students/UpdateRegistrationNumber";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-
 
 export function ContactStudentList({ contactId }: { contactId: string }) {
   const trpc = useTRPC();
