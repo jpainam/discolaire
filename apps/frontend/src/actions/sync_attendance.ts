@@ -10,7 +10,6 @@
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function sync_attendance() {
-  const data = [];
   // for (const a of absence_data) {
   //   const uuid = studentIdMap[a.ELEVE.toString()];
   //   const termId = term_mapp[a.SEQUENCE.toString()];
@@ -31,7 +30,6 @@ export async function sync_attendance() {
   //     data.push(d);
   //   }
   // }
-  console.log(">>>>>>>> We have ", data.length);
   // const r = await db.attendance.createMany({
   //   data: data,
   // });

@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { APIError } from "better-auth/api";
 import { generateRandomString, hashPassword } from "better-auth/crypto";
 import { v4 as uuidv4 } from "uuid";
 
@@ -214,7 +215,7 @@ export class UserService {
       password?: string;
       entityId: string;
       profile: "staff" | "contact" | "student";
-      email?: string;
+      email?: string | null;
     };
     authApi: Auth["api"];
     requestHeaders: Headers;
@@ -245,52 +246,68 @@ export class UserService {
         message: `${input.username} est déjà utilisé, choisissez un autre nom d'utilisateur`,
       });
     }
-    // 1. Create user
-    const email = input.email ?? `${input.username}@discolaire.com`;
-    const { user: newUser } = await authApi.createUser({
-      body: {
-        email,
-        password: input.password ?? generateRandomString(12),
-        name: entity.name,
-        role: "user",
-        data: { entityId: entity.id, entityType: entity.entityType },
-      },
-      // This endpoint requires session cookies.
-      headers: requestHeaders,
-    });
     const school = await this.db.school.findUniqueOrThrow({
       where: {
         id: schoolId,
       },
     });
-    const org = await authApi.getFullOrganization({
-      query: {
-        organizationSlug: school.code,
-      },
-      headers: requestHeaders,
-    });
-    let orgId = org?.id;
-    if (!org) {
-      const metadata = { schoolId: school.id };
-      const newOrg = await authApi.createOrganization({
-        body: {
-          name: school.name,
-          slug: school.code,
-          logo: school.logo ?? undefined,
-          metadata,
-          keepCurrentActiveOrganization: false,
+    let orgId = null;
+    try {
+      const org = await authApi.getFullOrganization({
+        query: {
+          organizationSlug: school.code,
         },
-        // This endpoint requires session cookies.
         headers: requestHeaders,
       });
-      orgId = newOrg?.id;
+      orgId = org?.id;
+    } catch (err) {
+      if (
+        err instanceof APIError &&
+        err.body?.code === "ORGANIZATION_NOT_FOUND"
+      ) {
+        const metadata = { schoolId: school.id };
+
+        const newOrg = await authApi.createOrganization({
+          body: {
+            name: school.name,
+            slug: school.code,
+            logo: school.logo ?? undefined,
+            metadata,
+            keepCurrentActiveOrganization: true,
+          },
+          // This endpoint requires session cookies.
+          headers: requestHeaders,
+        });
+        orgId = newOrg?.id;
+        console.log(">>>>>>> Creating an org after an error", newOrg);
+      } else {
+        throw err;
+      }
     }
+
     if (!orgId) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: `Impossible de créer l'org ${school.code}`,
       });
     }
+    // 1. Create user
+    const email =
+      (input.email ?? "").trim() || `${input.username}@discolaire.com`;
+    const { user: newUser } = await authApi.signUpEmail({
+      body: {
+        email,
+        name: entity.name,
+        password: input.password ?? generateRandomString(12),
+        username: input.username,
+        displayUsername: entity.name,
+        schoolId,
+        profile: input.profile,
+        isActive: true,
+      },
+      headers: requestHeaders,
+    });
+
     const baseUrl = getBaseUrlFromHeaders(requestHeaders);
     // 2. Send invitation
     await authApi.createInvitation({
@@ -379,7 +396,8 @@ export class UserService {
           },
         });
       }
-      const email = input.email ?? `${input.username}@discolaire.com`;
+      const email =
+        (input.email ?? "").trim() || `${input.username}@discolaire.com`;
       const baseUrl = getBaseUrlFromHeaders(requestHeaders);
       await authApi.requestPasswordReset({
         body: {

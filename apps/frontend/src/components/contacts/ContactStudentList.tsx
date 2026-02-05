@@ -112,14 +112,14 @@ export function ContactStudentList({
               <TableHead>{t("fullName")}</TableHead>
               <TableHead className="text-center">{t("dateOfBirth")}</TableHead>
               <TableHead className="text-center">{t("classroom")}</TableHead>
-              <TableHead className="w-full"></TableHead>
+              <TableHead></TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {contactStudents.length === 0 && (
               <TableRow>
-                <TableCell>
+                <TableCell colSpan={7}>
                   <EmptyComponent
                     title={"Aucun élève"}
                     description="Commencer par ajouter des élèves"

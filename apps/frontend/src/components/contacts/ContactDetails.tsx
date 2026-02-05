@@ -42,6 +42,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
   const avatar = createAvatar(initials, { seed: getFullName(contact) });
   const canCreateContact = useCheckPermission("contact.create");
   const canDeleteContact = useCheckPermission("contact.delete");
+  const canUpdateContact = useCheckPermission("contact.update");
   const router = useRouter();
 
   const deleteContactMutation = useMutation(
@@ -71,9 +72,11 @@ export function ContactDetails({ contactId }: { contactId: string }) {
       <div className="flex flex-col gap-2">
         <span className="font-medium">{getFullName(contact)}</span>
         <div className="flex items-center gap-1">
-          <Button variant={"outline"} size={"icon"}>
-            <EditIcon />
-          </Button>
+          {canUpdateContact && (
+            <Button variant={"outline"} size={"icon"}>
+              <EditIcon />
+            </Button>
+          )}
           <Button
             onClick={() => {
               window.open(`/api/pdfs/contacts/${contact.id}`, "_blank");
@@ -137,6 +140,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
                   onSelect={() => {
                     if (!contact.userId) return;
                     openModal({
+                      className: "sm:max-w-xl",
                       title: t("change_password"),
                       view: (
                         <CreateEditUser
