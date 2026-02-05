@@ -205,11 +205,15 @@ export function NotificationTable({
     parseAsString.withDefault(""),
   );
   const [statusFilter, setStatusFilter] = useQueryState(
-    "statusFilter",
+    "status",
     parseAsStringEnum<NotificationStatus>(Object.values(NotificationStatus)),
   );
+  const [channelFilter, setChannelFilter] = useQueryState(
+    "channel",
+    parseAsStringEnum<NotificationChannel>(Object.values(NotificationChannel)),
+  );
   const [sourceFilter, setSourceFilter] = useQueryState(
-    "sourceFilter",
+    "source",
     parseAsStringEnum<NotificationSourceType>(
       Object.values(NotificationSourceType),
     ),
@@ -222,6 +226,7 @@ export function NotificationTable({
       query: searchQuery || undefined,
       sourceType: sourceFilter ?? undefined,
       status: statusFilter ?? undefined,
+      channel: channelFilter ?? undefined,
     }),
   );
 
@@ -305,7 +310,7 @@ export function NotificationTable({
             );
           }}
         >
-          <SelectTrigger className="bg-card border-border w-[150px]">
+          <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="Source" />
           </SelectTrigger>
           <SelectContent className="bg-popover">
@@ -317,6 +322,25 @@ export function NotificationTable({
             ))}
           </SelectContent>
         </Select>
+        <Select
+          value={channelFilter ?? undefined}
+          onValueChange={(value) => {
+            void setChannelFilter(
+              value == "all" ? null : (value as NotificationChannel),
+            );
+          }}
+        >
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Channel" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Channels</SelectItem>
+            <SelectItem value="IN_APP">In-App</SelectItem>
+            <SelectItem value="EMAIL">Email</SelectItem>
+            <SelectItem value="SMS">SMS</SelectItem>
+            <SelectItem value="WHATSAPP">WhatsApp</SelectItem>
+          </SelectContent>
+        </Select>
 
         <Select
           defaultValue={statusFilter ?? undefined}
@@ -326,7 +350,7 @@ export function NotificationTable({
             );
           }}
         >
-          <SelectTrigger className="bg-card border-border w-[140px]">
+          <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -408,8 +432,8 @@ export function NotificationTable({
                 return (
                   <TableRow key={t}>
                     {Array.from({ length: 9 }).map((_, tt) => (
-                      <TableCell>
-                        <Skeleton key={tt} className="h-8" />
+                      <TableCell key={tt}>
+                        <Skeleton className="h-8" />
                       </TableCell>
                     ))}
                   </TableRow>

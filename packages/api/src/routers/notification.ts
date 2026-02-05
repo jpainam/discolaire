@@ -6,7 +6,11 @@ import type {
   NotificationSourceType as NotificationSourceTypeEnum,
   NotificationStatus as NotificationStatusEnum,
 } from "@repo/db/enums";
-import { NotificationSourceType, NotificationStatus } from "@repo/db/enums";
+import {
+  NotificationChannel,
+  NotificationSourceType,
+  NotificationStatus,
+} from "@repo/db/enums";
 
 import { protectedProcedure } from "../trpc";
 
@@ -14,6 +18,7 @@ const buildNotificationWhere = (params: {
   schoolId: string;
   recipientId?: string;
   query?: string;
+  channel?: NotificationChannel;
   sourceType?: NotificationSourceTypeEnum;
   status?: NotificationStatusEnum;
 }): Prisma.NotificationWhereInput => {
@@ -147,6 +152,7 @@ export const notificationRouter = {
         query: z.string().optional(),
         sourceType: z.enum(NotificationSourceType).optional(),
         status: z.enum(NotificationStatus).optional(),
+        channel: z.enum(NotificationChannel).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -168,6 +174,7 @@ export const notificationRouter = {
         query: input.query,
         sourceType: input.sourceType,
         status: input.status,
+        channel: input.channel,
       });
       return ctx.db.notification.findMany({
         orderBy: {
