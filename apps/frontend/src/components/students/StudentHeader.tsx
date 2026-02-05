@@ -11,13 +11,10 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
-  BellRing,
   CheckIcon,
-  ContactIcon,
   ImageMinusIcon,
   ImagePlusIcon,
   KeyRound,
-  MessageCircleMore,
   MoreVertical,
   NotebookTabs,
   Phone,
@@ -58,9 +55,12 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import {
+  ChatIcon,
+  ContactIcon,
   DeleteIcon,
   EditIcon,
   IDCardIcon,
+  NotificationIcon,
   PlusIcon,
   PrinterIcon,
   UsersIcon,
@@ -204,7 +204,7 @@ export function StudentHeader() {
           />
         )}
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <SimpleTooltip
             content={student.avatar ? t("Remove avatar") : t("change_avatar")}
           >
@@ -247,7 +247,7 @@ export function StudentHeader() {
           )}
 
           <Button size={"icon-sm"} aria-label="Notification" variant="ghost">
-            <BellRing className="h-3 w-3" />
+            <NotificationIcon />
           </Button>
 
           {student.userId && (
@@ -270,7 +270,7 @@ export function StudentHeader() {
               router.push(`${routes.students.notifications(params.id)}`);
             }}
           >
-            <MessageCircleMore />
+            <ChatIcon />
           </Button>
 
           <Button
@@ -325,7 +325,7 @@ export function StudentHeader() {
                 <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-48" align="end">
+            <DropdownMenuContent align="end">
               <DropdownInvitation
                 entityId={student.id}
                 entityType="student"
@@ -339,6 +339,7 @@ export function StudentHeader() {
                   onSelect={() => {
                     openModal({
                       title: t("create_a_user"),
+                      className: "sm:max-w-xl",
                       view: (
                         <CreateEditUser entityId={params.id} type="student" />
                       ),
@@ -355,6 +356,7 @@ export function StudentHeader() {
                     if (!student.userId) return;
                     openModal({
                       title: t("change_password"),
+                      className: "sm:max-w-xl",
                       view: (
                         <CreateEditUser
                           userId={student.userId}
