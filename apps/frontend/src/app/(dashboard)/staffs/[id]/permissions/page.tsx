@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { getTranslations } from "next-intl/server";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
