@@ -4,11 +4,17 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { ErrorFallback } from "~/components/error-fallback";
 import { NotificationOverview } from "~/components/notifications/NotificationOverview";
 import { TableSkeleton } from "~/components/skeletons/table-skeleton";
-import { HydrateClient } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const contactId = params.id;
+  batchPrefetch([
+    trpc.notification.stats.queryOptions({
+      recipientId: contactId,
+      recipientProfile: "contact",
+    }),
+  ]);
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>

@@ -1,12 +1,5 @@
-import { DataTableSkeleton } from "~/components/datatable/data-table-skeleton";
+import { TableSkeleton } from "~/components/skeletons/table-skeleton";
 
 export default function Loading() {
-  return (
-    <DataTableSkeleton
-      rowCount={15}
-      withPagination={false}
-      showViewOptions={false}
-      columnCount={6}
-    />
-  );
+  return <TableSkeleton rows={20} cols={8} />;
 }

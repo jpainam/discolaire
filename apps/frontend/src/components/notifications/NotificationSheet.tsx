@@ -34,6 +34,13 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -199,6 +206,8 @@ export function NotificationTable({
 }) {
   const trpc = useTRPC();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [viewingNotification, setViewingNotification] =
+    useState<NotificationRow | null>(null);
 
   const [searchQuery, setSearchQuery] = useQueryState(
     "searchQuery",
@@ -514,7 +523,10 @@ export function NotificationTable({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="bg-popover">
-                          <DropdownMenuItem className="gap-2">
+                          <DropdownMenuItem
+                            onClick={() => setViewingNotification(notification)}
+                            className="gap-2"
+                          >
                             <Eye className="h-4 w-4" />
                             View Details
                           </DropdownMenuItem>
@@ -536,6 +548,97 @@ export function NotificationTable({
           </TableBody>
         </Table>
       </div>
+
+      <Dialog
+        open={!!viewingNotification}
+        onOpenChange={() => setViewingNotification(null)}
+      >
+        <DialogContent className="bg-card max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-foreground">
+              Notification Details
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              Full details of the notification
+            </DialogDescription>
+          </DialogHeader>
+          {viewingNotification && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-muted-foreground text-xs">Source Type</p>
+                  <p className="text-foreground text-sm font-medium">
+                    {sourceConfig[viewingNotification.sourceType].label}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Channel</p>
+                  <p className="text-foreground text-sm font-medium">
+                    {channelConfig[viewingNotification.channel].label}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Status</p>
+                  <Badge
+                    variant="outline"
+                    className={statusConfig[viewingNotification.status].color}
+                  >
+                    {statusConfig[viewingNotification.status].label}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Credit Cost</p>
+                  <p
+                    className={`text-sm font-medium ${getCreditInfo(viewingNotification.channel).color}`}
+                  >
+                    {getCreditInfo(viewingNotification.channel).text}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-muted-foreground text-xs">Recipient</p>
+                <p className="text-foreground text-sm font-medium">
+                  {viewingNotification.recipientName}
+                </p>
+                <p className="text-muted-foreground text-xs">
+                  {viewingNotification.recipientEmail}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-muted-foreground text-xs">Content</p>
+                <p className="text-foreground text-sm">
+                  {viewingNotification.content}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-muted-foreground mb-2 text-xs">Payload</p>
+                <pre className="bg-muted text-foreground overflow-auto rounded-lg p-3 text-xs">
+                  {JSON.stringify(viewingNotification.payload, null, 2)}
+                </pre>
+              </div>
+
+              <div className="text-muted-foreground grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <p>
+                    Created: {viewingNotification.createdAt.toLocaleString()}
+                  </p>
+                </div>
+                {viewingNotification.deliveredAt && (
+                  <div>
+                    <p>
+                      Delivered:{" "}
+                      {viewingNotification.deliveredAt.toLocaleString()}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
