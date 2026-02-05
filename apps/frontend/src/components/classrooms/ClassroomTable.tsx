@@ -256,9 +256,9 @@ export function ClassroomTable() {
           </TableHeader>
           <TableBody>
             {isPending ? (
-              Array.from({ length: 6 }).map((_, index) => (
+              Array.from({ length: 10 }).map((_, index) => (
                 <TableRow key={`row-${index}`}>
-                  {Array.from({ length: 7 }).map((_, ind) => (
+                  {Array.from({ length: 9 }).map((_, ind) => (
                     <TableCell key={`cell-${index}-${ind}`}>
                       <Skeleton className="h-8" />
                     </TableCell>
@@ -405,8 +405,12 @@ export function ClassroomTable() {
 
             {classrooms?.length == 0 && !isPending && (
               <TableRow>
-                <TableCell colSpan={5}>
-                  <EmptyComponent icon={<UserCircle />} />
+                <TableCell colSpan={9}>
+                  <EmptyComponent
+                    icon={<UserCircle />}
+                    title="Aucune classes"
+                    description="Commencer par creer des classes ou devenez parent d'eleves"
+                  />
                 </TableCell>
               </TableRow>
             )}
