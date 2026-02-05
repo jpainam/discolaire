@@ -19,9 +19,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { SheetClose, SheetFooter } from "~/components/ui/sheet";
 import { Textarea } from "~/components/ui/textarea";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
@@ -35,6 +35,7 @@ const createEditContactSchema = z.object({
   phoneNumber1: z.string().min(1),
   phoneNumber2: z.string().optional(),
   address: z.string().optional(),
+  email: z.email().optional().or(z.literal("")),
   observation: z.string().optional(),
 });
 
@@ -133,6 +134,7 @@ export default function CreateEditContact({
       phoneNumber2: data.phoneNumber2,
       address: data.address,
       observation: data.observation,
+      email: data.email,
     };
     if (contact) {
       toast.loading(t("updating"), { id: 0 });
@@ -146,10 +148,10 @@ export default function CreateEditContact({
   return (
     <Form {...form}>
       <form
-        className="flex flex-1 flex-col overflow-hidden"
+        className="flex flex-1 flex-col gap-6 overflow-hidden"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid flex-1 auto-rows-min gap-4 overflow-y-auto px-4">
+        <div className="grid flex-1 auto-rows-min gap-4 overflow-y-auto">
           <FormField
             control={form.control}
             name="prefix"
@@ -188,12 +190,24 @@ export default function CreateEditContact({
             className="col-span-2"
             label={t("firstName")}
           />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel>{t("email")}</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <InputField name="phoneNumber1" label={t("phoneNumber") + "1"} />
+          <InputField name="phoneNumber2" label={t("phoneNumber") + "2"} />
 
           <InputField name="occupation" label={t("occupation")} />
           <InputField name="employer" label={t("employer")} />
-
-          <InputField name="phoneNumber1" label={t("phoneNumber") + "1"} />
-          <InputField name="phoneNumber2" label={t("phoneNumber") + "2"} />
 
           <InputField
             name="address"
@@ -219,13 +233,12 @@ export default function CreateEditContact({
           />
         </div>
 
-        <SheetFooter>
+        <div className="flex flex-col gap-2">
           <Button
             disabled={
               createContactMutation.isPending || updateContactMutation.isPending
             }
             type="submit"
-            size={"sm"}
             variant={"default"}
           >
             {createContactMutation.isPending ||
@@ -234,12 +247,11 @@ export default function CreateEditContact({
               ))}
             {contact ? t("edit") : t("submit")}
           </Button>
-          <SheetClose asChild>
-            <Button type="button" variant="outline" size={"sm"}>
-              {t("close")}
-            </Button>
-          </SheetClose>
-        </SheetFooter>
+
+          <Button type="button" variant="outline">
+            {t("close")}
+          </Button>
+        </div>
       </form>
     </Form>
   );

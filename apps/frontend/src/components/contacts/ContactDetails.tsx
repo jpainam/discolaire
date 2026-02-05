@@ -4,11 +4,22 @@ import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
 import { AddTeamIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { KeyRound, MoreVertical, UserPlus2 } from "lucide-react";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import {
+  ImageMinusIcon,
+  ImagePlusIcon,
+  KeyRound,
+  MoreVertical,
+  UserPlus2,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { handleDeleteAvatar } from "~/actions/upload";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
@@ -20,16 +31,20 @@ import {
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
+import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon, PrinterIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
+import { SimpleTooltip } from "../simple-tooltip";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
 import { AddStudentToParent } from "./AddStudentToParent";
+import CreateEditContact from "./CreateEditContact";
 
 export function ContactDetails({ contactId }: { contactId: string }) {
   const trpc = useTRPC();
@@ -44,6 +59,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
   const canDeleteContact = useCheckPermission("contact.delete");
   const canUpdateContact = useCheckPermission("contact.update");
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
@@ -57,8 +73,9 @@ export function ContactDetails({ contactId }: { contactId: string }) {
     }),
   );
   const confirm = useConfirm();
+  const { openSheet } = useSheet();
   return (
-    <div className="flex items-center gap-2 px-4 pt-2 text-sm">
+    <div className="flex items-center gap-4 px-4 pt-2 text-sm">
       <Avatar className="size-20">
         <AvatarImage
           src={
@@ -70,10 +87,20 @@ export function ContactDetails({ contactId }: { contactId: string }) {
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="flex flex-col gap-2">
-        <span className="font-medium">{getFullName(contact)}</span>
+        <div className="font-medium">{getFullName(contact)}</div>
         <div className="flex items-center gap-1">
           {canUpdateContact && (
-            <Button variant={"outline"} size={"icon"}>
+            <Button
+              onClick={() => {
+                openSheet({
+                  title: "Modification de contact",
+                  description: getFullName(contact),
+                  view: <CreateEditContact contact={contact} />,
+                });
+              }}
+              variant={"ghost"}
+              size={"icon"}
+            >
               <EditIcon />
             </Button>
           )}
@@ -81,14 +108,42 @@ export function ContactDetails({ contactId }: { contactId: string }) {
             onClick={() => {
               window.open(`/api/pdfs/contacts/${contact.id}`, "_blank");
             }}
-            variant={"outline"}
+            variant={"ghost"}
             size={"icon"}
           >
             <PrinterIcon />
           </Button>
+          <SimpleTooltip
+            content={contact.avatar ? t("Remove avatar") : t("change_avatar")}
+          >
+            {contact.avatar ? (
+              <Button
+                onClick={async () => {
+                  if (!contact.avatar) return;
+                  await handleDeleteAvatar(contact.avatar, "student");
+                  toast.success(t("deleted_successfully"), {
+                    id: 0,
+                  });
+                  await queryClient.invalidateQueries(
+                    trpc.student.get.pathFilter(),
+                  );
+                }}
+                variant={"ghost"}
+                size={"icon"}
+              >
+                <ImageMinusIcon />
+              </Button>
+            ) : (
+              <ChangeAvatarButton id={contact.id} profile="contact">
+                <Button size={"icon"} variant={"ghost"}>
+                  <ImagePlusIcon />
+                </Button>
+              </ChangeAvatarButton>
+            )}
+          </SimpleTooltip>
           {canCreateContact && (
             <Button
-              variant={"outline"}
+              variant={"ghost"}
               size={"icon"}
               onClick={() => {
                 openModal({
@@ -108,7 +163,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"icon"}>
+              <Button variant={"ghost"} size={"icon"}>
                 <MoreVertical />
               </Button>
             </DropdownMenuTrigger>

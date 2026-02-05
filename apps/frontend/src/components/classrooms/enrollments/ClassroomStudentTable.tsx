@@ -250,7 +250,10 @@ export function ClassroomStudentTable({
                                 title: "Modifier le matricule",
                                 description: getFullName(stud),
                                 view: (
-                                  <UpdateRegistrationNumber student={stud} />
+                                  <UpdateRegistrationNumber
+                                    studentId={stud.id}
+                                    registrationNumber={stud.registrationNumber}
+                                  />
                                 ),
                               });
                             }}

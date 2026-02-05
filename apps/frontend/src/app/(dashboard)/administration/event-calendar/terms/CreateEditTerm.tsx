@@ -227,7 +227,7 @@ export function CreateEditTerm({ term }: { term?: Term }) {
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>
-                    Type de la période
+                    Ordre de la période
                   </FieldLabel>
                   <Select
                     name={field.name}

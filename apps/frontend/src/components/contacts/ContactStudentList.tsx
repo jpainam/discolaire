@@ -3,44 +3,30 @@
 import Link from "next/link";
 import { initials } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+
+
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { Button } from "~/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { DeleteIcon, UsersIcon, ViewIcon } from "~/icons";
-import { cn } from "~/lib/utils";
+import { DeleteIcon, IDCardIcon, UsersIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { Badge } from "../base-badge";
+import { UpdateRegistrationNumber } from "../students/UpdateRegistrationNumber";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Label } from "../ui/label";
-import { AddStudentToParent } from "./AddStudentToParent";
 
-export function ContactStudentList({
-  contactId,
-  className,
-}: {
-  contactId: string;
-  className?: string;
-}) {
+
+export function ContactStudentList({ contactId }: { contactId: string }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data: contactStudents } = useSuspenseQuery(
@@ -49,8 +35,6 @@ export function ContactStudentList({
   const { data: contact } = useSuspenseQuery(
     trpc.contact.get.queryOptions(contactId),
   );
-
-  const { openModal } = useModal();
 
   const t = useTranslations();
   //const locale = useLocale();
@@ -69,38 +53,13 @@ export function ContactStudentList({
       },
     }),
   );
+  const { openModal } = useModal();
+  const canUpdateStudent = useCheckPermission("student.update");
 
   const canDeleteContact = useCheckPermission("contact.delete");
-  const canCreateContact = useCheckPermission("contact.create");
 
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-2 overflow-y-auto px-4 py-2 text-sm",
-        className,
-      )}
-    >
-      <div className="flex items-center gap-4">
-        <Label>{t("students")}</Label>
-        <div className="ml-auto flex items-center gap-2">
-          {canCreateContact && (
-            <Button
-              variant={"outline"}
-              onClick={() => {
-                openModal({
-                  className: "sm:max-w-xl",
-                  title: t("link_students"),
-                  description: `Ajouter des élèves à ${getFullName(contact)}`,
-                  view: <AddStudentToParent contactId={contactId} />,
-                });
-              }}
-            >
-              <UsersIcon />
-              {t("link_students")}
-            </Button>
-          )}
-        </div>
-      </div>
+    <div className="px-4">
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
@@ -204,39 +163,67 @@ export function ContactStudentList({
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button
-                        onClick={() => {
-                          router.push(`/students/${student.id}`);
-                        }}
-                        size={"icon-sm"}
-                        variant={"ghost"}
-                      >
-                        <ViewIcon />
-                      </Button>
-                      {canDeleteContact && (
-                        <Button
-                          onClick={async () => {
-                            const isConfirmed = await confirm({
-                              title: t("delete"),
-                              description: t("delete_confirmation"),
-                            });
-
-                            if (isConfirmed) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deleteStudentContactMutation.mutate({
-                                studentId: studentcontact.studentId,
-                                contactId: contact.id,
-                              });
-                            }
-                          }}
-                          size={"icon-sm"}
-                          variant={"ghost"}
-                        >
-                          <DeleteIcon className="text-destructive" />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button size={"icon"} variant={"ghost"}>
+                          <MoreHorizontal />
                         </Button>
-                      )}
-                    </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            router.push(`/students/${student.id}`);
+                          }}
+                        >
+                          <ViewIcon />
+                          {t("details")}
+                        </DropdownMenuItem>
+                        {canUpdateStudent && (
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              openModal({
+                                title: "Modifier matricule",
+                                description: getFullName(student),
+                                view: (
+                                  <UpdateRegistrationNumber
+                                    studentId={studentcontact.studentId}
+                                    registrationNumber={
+                                      student.registrationNumber
+                                    }
+                                  />
+                                ),
+                              });
+                            }}
+                          >
+                            <IDCardIcon />
+                            Modifier matricule
+                          </DropdownMenuItem>
+                        )}
+
+                        {canDeleteContact && (
+                          <DropdownMenuItem
+                            variant="destructive"
+                            onSelect={async () => {
+                              const isConfirmed = await confirm({
+                                title: t("delete"),
+                                description: t("delete_confirmation"),
+                              });
+
+                              if (isConfirmed) {
+                                toast.loading(t("deleting"), { id: 0 });
+                                deleteStudentContactMutation.mutate({
+                                  studentId: studentcontact.studentId,
+                                  contactId: contact.id,
+                                });
+                              }
+                            }}
+                          >
+                            <DeleteIcon />
+                            {t("delete")}
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               );

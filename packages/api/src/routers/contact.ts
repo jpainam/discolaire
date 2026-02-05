@@ -396,6 +396,7 @@ export const contactRouter = {
       });
       balance += g.balance;
     }
+
     const grades = await ctx.db.grade.findMany({
       where: {
         studentId: {

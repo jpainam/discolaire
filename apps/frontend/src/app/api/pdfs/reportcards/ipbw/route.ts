@@ -72,7 +72,7 @@ async function classroomReportCard({
       title:
         classroom.section?.name == "FRA"
           ? `BULLETIN SCOLAIRE : ${term.name}`
-          : `MONTHLY PROGRESS REPORT CARD N° ${term.order + 1}`,
+          : `MONTHLY PROGRESS REPORT CARD N° ${term.order}`,
       subjects,
       report,
       contacts,
@@ -134,7 +134,7 @@ async function indvidualReportCard({
       title:
         lang == "fr"
           ? `BULLETIN SCOLAIRE : ${term.name}`
-          : `MONTHLY PROGRESS REPORT CARD N° ${term.order + 1}`,
+          : `MONTHLY PROGRESS REPORT CARD N° ${term.order}`,
       subjects,
       report,
       contact,

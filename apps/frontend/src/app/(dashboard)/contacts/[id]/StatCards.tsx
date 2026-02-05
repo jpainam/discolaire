@@ -33,7 +33,7 @@ export function StatCards({ contactId }: { contactId: string }) {
       },
       {
         title: "grades",
-        value: 320,
+        value: stat.grade,
         bg: "bg-blue-600",
       },
       {
@@ -42,7 +42,7 @@ export function StatCards({ contactId }: { contactId: string }) {
         bg: "bg-teal-600",
       },
     ];
-  }, [stat, locale, CURRENCY]);
+  }, [stat, locale]);
   const t = useTranslations();
   return (
     <div className="grid grid-cols-1 gap-4 px-4 py-2 sm:grid-cols-2 lg:grid-cols-4">

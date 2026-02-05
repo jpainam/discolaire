@@ -193,7 +193,12 @@ export function StudentSearchResultCard({
                     openModal({
                       title: "Modifier matricule",
                       description: getFullName(student),
-                      view: <UpdateRegistrationNumber student={student} />,
+                      view: (
+                        <UpdateRegistrationNumber
+                          studentId={student.id}
+                          registrationNumber={student.registrationNumber}
+                        />
+                      ),
                     });
                   }}
                 >

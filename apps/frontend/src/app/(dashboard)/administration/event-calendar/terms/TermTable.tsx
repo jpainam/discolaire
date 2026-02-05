@@ -78,6 +78,7 @@ export function TermTable() {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead className="w-[10px]">#</TableHead>
               <TableHead>{t("name")}</TableHead>
               <TableHead>Type</TableHead>
               <TableHead> Date Range</TableHead>
@@ -103,6 +104,7 @@ export function TermTable() {
             {terms.map((term) => {
               return (
                 <TableRow key={term.id}>
+                  <TableCell>{term.order}</TableCell>
                   <TableCell>
                     {term.name} ({term.shortName})
                   </TableCell>
@@ -197,6 +199,7 @@ export function TermTable() {
                         onClick={() => {
                           openModal({
                             title: term.name,
+                            className: "sm:max-w-xl",
                             description: `${term.shortName}-#${term.order}`,
                             view: <TermDetails term={term} />,
                           });

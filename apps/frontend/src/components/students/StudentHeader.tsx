@@ -379,7 +379,12 @@ export function StudentHeader() {
                     openModal({
                       title: "Modifier le matricule",
                       description: getFullName(student),
-                      view: <UpdateRegistrationNumber student={student} />,
+                      view: (
+                        <UpdateRegistrationNumber
+                          studentId={student.id}
+                          registrationNumber={student.registrationNumber}
+                        />
+                      ),
                     });
                   }}
                 >

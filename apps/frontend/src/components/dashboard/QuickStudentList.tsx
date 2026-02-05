@@ -291,7 +291,12 @@ export function QuickStudentList() {
                               openModal({
                                 title: "Modifier matricule",
                                 description: getFullName(st),
-                                view: <UpdateRegistrationNumber student={st} />,
+                                view: (
+                                  <UpdateRegistrationNumber
+                                    studentId={st.id}
+                                    registrationNumber={st.registrationNumber}
+                                  />
+                                ),
                               });
                             }}
                           >

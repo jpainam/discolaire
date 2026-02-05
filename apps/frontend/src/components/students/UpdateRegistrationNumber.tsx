@@ -6,8 +6,6 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { RouterOutputs } from "@repo/api";
-
 import { Field, FieldError, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { useModal } from "~/hooks/use-modal";
@@ -19,16 +17,13 @@ const updateRegistrationNumberSchema = z.object({
   registrationNumber: z.string().min(1),
 });
 
-type Student =
-  | RouterOutputs["student"]["get"]
-  | RouterOutputs["classroom"]["students"][number]
-  | RouterOutputs["student"]["all"][number];
-
 export function UpdateRegistrationNumber({
-  student,
+  studentId,
+  registrationNumber,
   formId = "update-registration-number-form",
 }: {
-  student: Student;
+  studentId: string;
+  registrationNumber?: string | null;
   formId?: string;
 }) {
   const t = useTranslations();
@@ -55,7 +50,7 @@ export function UpdateRegistrationNumber({
 
   const form = useForm({
     defaultValues: {
-      registrationNumber: student.registrationNumber ?? "",
+      registrationNumber: registrationNumber ?? "",
     },
     validators: {
       onSubmit: updateRegistrationNumberSchema,
@@ -64,7 +59,7 @@ export function UpdateRegistrationNumber({
       const registrationNumber = value.registrationNumber.trim();
       toast.loading(t("updating"), { id: 0 });
       updateRegistrationMutation.mutate({
-        studentId: student.id,
+        studentId: studentId,
         registrationNumber,
       });
     },

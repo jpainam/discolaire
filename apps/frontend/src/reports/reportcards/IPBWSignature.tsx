@@ -51,8 +51,7 @@ export function IPBWSignature({
         }}
       >
         <Text style={{ paddingVertical: 2 }}>
-          {" "}
-          {t(`Directeur des Etudes ${cycle}`)}
+          {t("Directeur des Etudes") + ` ${cycle}`}
         </Text>
       </View>
     </View>

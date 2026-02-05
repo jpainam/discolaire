@@ -9,6 +9,7 @@ import type { RouterOutputs } from "@repo/api";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { useModal } from "~/hooks/use-modal";
 import { cn } from "~/lib/utils";
@@ -32,15 +33,23 @@ export function TermDetails({
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">{t("Start date")}</span>
-            <span>{format(term.startDate, "MMM d, yyyy")}</span>
+            <Label>{t("Start date")}</Label>
+            <span className="text-muted-foreground">
+              {format(term.startDate, "MMM d, yyyy")}
+            </span>
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">{t("End date")}</span>
-            <span>{format(term.endDate, "MMM d, yyyy")}</span>
+            <Label>{t("End date")}</Label>
+            <span className="text-muted-foreground">
+              {format(term.endDate, "MMM d, yyyy")}
+            </span>
           </div>
           <Separator />
+          <div className="flex items-center justify-between">
+            <Label>{t("order")}</Label>
+            <span className="text-muted-foreground">{term.order}</span>
+          </div>
 
           <div className="text-muted-foreground flex justify-end">
             Duration:{" "}
@@ -91,8 +100,8 @@ export function TermDetails({
       )}
 
       <div className="border-border bg-muted/30 flex items-center justify-between rounded-lg border p-2">
-        <span className="text-muted-foreground text-sm">{t("schoolYear")}</span>
-        <span className="text-foreground font-mono font-medium">
+        <Label>{t("schoolYear")}</Label>
+        <span className="text-muted-foreground font-mono font-medium">
           {term.schoolYear.name}
         </span>
       </div>
