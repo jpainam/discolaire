@@ -10,20 +10,25 @@ import { AdminSidebar } from "./administration/admin-sidebar";
 //import { TimetableSidebar } from "./timetables/TimetableSidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
-//import { StaffSidebar } from "./staffs/StaffSidebar";
+import { StaffSidebar } from "./staffs/StaffSidebar";
 import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [mounted, setMounted] = React.useState(false);
+  const keepHomePaths = [
+    "/",
+    "/students",
+    "/classrooms",
+    "/contacts",
+    "/library",
+    "/cards",
+    "/staffs",
+    "/staffs/create",
+    "/staffs/attendances",
+  ];
   const pathname = usePathname();
-  const isHome =
-    pathname === "/" ||
-    pathname === "/students" ||
-    pathname === "/classrooms" ||
-    pathname === "/contacts" ||
-    pathname === "/library" ||
-    pathname === "/cards" ||
-    pathname.includes("/staffs");
+  const isHome = keepHomePaths.includes(pathname);
+  const segments = pathname.split("/").filter(Boolean);
   const isStudent =
     pathname.startsWith("/students") && pathname.split("/").length > 2;
 
@@ -37,8 +42,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isContact =
     pathname.startsWith("/contacts") && pathname.split("/").length > 2;
 
-  // const isStaff =
-  //   pathname.startsWith("/staffs") && pathname.split("/").length > 2;
+  const isStaff =
+    segments[0] === "staffs" &&
+    segments.length > 1 &&
+    !["create", "attendances"].includes(segments[1] ?? "");
 
   //const isTimetable = pathname.startsWith("/timetables");
 
@@ -58,7 +65,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       {isUser && <UserSidebar {...props} />}
       {isContact && <ContactSidebar {...props} />}
-      {/* {isStaff && <StaffSidebar {...props} />} */}
+      {isStaff && <StaffSidebar {...props} />}
       {/* {isTimetable && <TimetableSidebar {...props} />} */}
     </>
   );

@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 
 import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
+import { StaffDetails } from "~/components/staffs/profile/StaffDetails";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
@@ -13,7 +14,6 @@ import {
   trpc,
 } from "~/trpc/server";
 import { getFullName } from "~/utils";
-import { StaffDetails } from "../../../../components/staffs/profile/StaffDetails";
 
 export default async function Layout(
   props: PropsWithChildren<{ params: Promise<{ id: string }> }>,
@@ -31,7 +31,7 @@ export default async function Layout(
 
   return (
     <HydrateClient>
-      <div className="flex flex-col gap-4 px-4 py-2">
+      <div className="flex flex-col">
         <BreadcrumbsSetter
           items={[
             { label: t("home"), href: "/" },
@@ -52,14 +52,7 @@ export default async function Layout(
             <StaffDetails staffId={params.id} />
           </Suspense>
         </ErrorBoundary>
-        <div className="flex flex-col items-start gap-6 md:flex-row">
-          <div className="flex-1">{props.children}</div>
-          <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense fallback={<Skeleton className="h-20 w-[200px]" />}>
-              {/* <ShortCalendar /> */}
-            </Suspense>
-          </ErrorBoundary>
-        </div>
+        {props.children}
       </div>
     </HydrateClient>
   );

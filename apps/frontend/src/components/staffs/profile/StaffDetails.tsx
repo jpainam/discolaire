@@ -84,174 +84,178 @@ export function StaffDetails({ staffId }: { staffId: string }) {
   const { openModal } = useModal();
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-4">
-          <Avatar className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]">
-            <AvatarImage
-              src={
-                staff.avatar
-                  ? `/api/avatars/${staff.avatar}`
-                  : avatar.toDataUri()
-              }
-            />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className="grid flex-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
-            <ItemLabel
-              icon={<HugeiconsIcon icon={UserIcon} />}
-              label={t("lastName")}
-              value={staff.lastName}
-            />
-            <ItemLabel
-              icon={<HugeiconsIcon icon={UserIcon} />}
-              label={t("firstName")}
-              value={staff.lastName}
-            />
-            <ItemLabel
-              icon={<MailIcon />}
-              label={t("email")}
-              value={staff.user?.email}
-            />
-            <ItemLabel
-              icon={<HugeiconsIcon icon={Call02Icon} />}
-              label={t("phoneNumber")}
-              value={staff.phoneNumber1}
-            />
-            <ItemLabel
-              icon={<HugeiconsIcon icon={Call02Icon} />}
-              label={t("phoneNumber")}
-              value={staff.phoneNumber2}
-            />
-            <ItemLabel
-              icon={<HugeiconsIcon icon={GraduationScrollIcon} />}
-              label={t("jobTitle")}
-              value={staff.jobTitle}
-            />
-            <ItemLabel
-              icon={<HugeiconsIcon icon={FileEmpty02Icon} />}
-              label={t("employmentType")}
-              value={staff.employmentType}
-            />
-            <ItemLabel
-              icon={<HugeiconsIcon icon={CapIcon} strokeWidth={2} />}
-              label={t("degree")}
-              value={staff.degree?.name}
-            />
-            <ItemLabel
-              icon={<CalendarDays />}
-              label={t("dateOfHire")}
-              value={staff.dateOfHire?.toLocaleDateString(locale, {
-                month: "short",
-                year: "numeric",
-                day: "numeric",
-              })}
-            />
-          </div>
-        </CardTitle>
-        <CardAction className="flex items-center gap-2">
-          {canEditStaff && (
-            <Button
-              onClick={() => {
-                router.push(`/staffs/${staffId}/edit`);
-                // openSheet({
-                //   view: (
-                //     <CreateEditStaff
-                //       staff={staff}
-                //       formId="create-edit-staff-form"
-                //     />
-                //   ),
-                //   title: t("edit"),
-                //   description: `${t("staff")} - ${getFullName(staff)}`,
-                //   formId: "create-edit-staff-form",
-                // });
-              }}
-              variant={"outline"}
-            >
-              <EditIcon />
-              {t("edit")}
-            </Button>
-          )}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size={"icon"} variant={"outline"}>
-                <MoreVertical />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {!staff.userId && (
-                <DropdownMenuItem
-                  onSelect={() => {
-                    openModal({
-                      title: t("create_a_user"),
-                      className: "sm:max-w-xl",
-                      view: <CreateEditUser entityId={staffId} type="staff" />,
-                    });
-                  }}
-                >
-                  <UserPlus2 />
-                  {t("create_a_user")}
-                </DropdownMenuItem>
-              )}
-              {staff.userId && (
-                <DropdownMenuItem
-                  onSelect={() => {
-                    if (!staff.userId) return;
-                    openModal({
-                      title: t("change_password"),
-                      className: "sm:max-w-lg",
-                      view: (
-                        <CreateEditUser
-                          userId={staff.userId}
-                          type="staff"
-                          email={staff.user?.email}
-                          entityId={staffId}
-                          username={staff.user?.username}
-                        />
-                      ),
-                    });
-                  }}
-                >
-                  <KeyRound />
-                  {t("change_password")}
-                </DropdownMenuItem>
-              )}
-              <DropdownInvitation
-                entityId={staff.id}
-                entityType="staff"
-                email={staff.user?.email}
+    <div className="p-4 py-2">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-4">
+            <Avatar className="h-[50px] w-[50px] xl:h-[100px] xl:w-[100px]">
+              <AvatarImage
+                src={
+                  staff.avatar
+                    ? `/api/avatars/${staff.avatar}`
+                    : avatar.toDataUri()
+                }
               />
-              <DropdownHelp />
-              {canDeleteStaff && (
-                <>
-                  <DropdownMenuSeparator />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
+              <ItemLabel
+                icon={<HugeiconsIcon icon={UserIcon} />}
+                label={t("lastName")}
+                value={staff.lastName}
+              />
+              <ItemLabel
+                icon={<HugeiconsIcon icon={UserIcon} />}
+                label={t("firstName")}
+                value={staff.lastName}
+              />
+              <ItemLabel
+                icon={<MailIcon />}
+                label={t("email")}
+                value={staff.user?.email}
+              />
+              <ItemLabel
+                icon={<HugeiconsIcon icon={Call02Icon} />}
+                label={t("phoneNumber")}
+                value={staff.phoneNumber1}
+              />
+              <ItemLabel
+                icon={<HugeiconsIcon icon={Call02Icon} />}
+                label={t("phoneNumber")}
+                value={staff.phoneNumber2}
+              />
+              <ItemLabel
+                icon={<HugeiconsIcon icon={GraduationScrollIcon} />}
+                label={t("jobTitle")}
+                value={staff.jobTitle}
+              />
+              <ItemLabel
+                icon={<HugeiconsIcon icon={FileEmpty02Icon} />}
+                label={t("employmentType")}
+                value={staff.employmentType}
+              />
+              <ItemLabel
+                icon={<HugeiconsIcon icon={CapIcon} strokeWidth={2} />}
+                label={t("degree")}
+                value={staff.degree?.name}
+              />
+              <ItemLabel
+                icon={<CalendarDays />}
+                label={t("dateOfHire")}
+                value={staff.dateOfHire?.toLocaleDateString(locale, {
+                  month: "short",
+                  year: "numeric",
+                  day: "numeric",
+                })}
+              />
+            </div>
+          </CardTitle>
+          <CardAction className="flex items-center gap-2">
+            {canEditStaff && (
+              <Button
+                onClick={() => {
+                  router.push(`/staffs/${staffId}/edit`);
+                  // openSheet({
+                  //   view: (
+                  //     <CreateEditStaff
+                  //       staff={staff}
+                  //       formId="create-edit-staff-form"
+                  //     />
+                  //   ),
+                  //   title: t("edit"),
+                  //   description: `${t("staff")} - ${getFullName(staff)}`,
+                  //   formId: "create-edit-staff-form",
+                  // });
+                }}
+                variant={"outline"}
+              >
+                <EditIcon />
+                {t("edit")}
+              </Button>
+            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size={"icon"} variant={"outline"}>
+                  <MoreVertical />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {!staff.userId && (
                   <DropdownMenuItem
-                    variant="destructive"
-                    onSelect={async () => {
-                      const isConfirmed = await confirm({
-                        title: t("delete"),
-                        description: t("delete_confirmation"),
-                        // icon: <Trash2 className="text-destructive" />,
-                        // alertDialogTitle: {
-                        //   className: "flex items-center gap-1",
-                        // },
+                    onSelect={() => {
+                      openModal({
+                        title: t("create_a_user"),
+                        className: "sm:max-w-xl",
+                        view: (
+                          <CreateEditUser entityId={staffId} type="staff" />
+                        ),
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteStaffMutation.mutate(staffId);
-                      }
                     }}
                   >
-                    <DeleteIcon />
-                    {t("delete")}
+                    <UserPlus2 />
+                    {t("create_a_user")}
                   </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardAction>
-      </CardHeader>
-    </Card>
+                )}
+                {staff.userId && (
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      if (!staff.userId) return;
+                      openModal({
+                        title: t("change_password"),
+                        className: "sm:max-w-lg",
+                        view: (
+                          <CreateEditUser
+                            userId={staff.userId}
+                            type="staff"
+                            email={staff.user?.email}
+                            entityId={staffId}
+                            username={staff.user?.username}
+                          />
+                        ),
+                      });
+                    }}
+                  >
+                    <KeyRound />
+                    {t("change_password")}
+                  </DropdownMenuItem>
+                )}
+                <DropdownInvitation
+                  entityId={staff.id}
+                  entityType="staff"
+                  email={staff.user?.email}
+                />
+                <DropdownHelp />
+                {canDeleteStaff && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={async () => {
+                        const isConfirmed = await confirm({
+                          title: t("delete"),
+                          description: t("delete_confirmation"),
+                          // icon: <Trash2 className="text-destructive" />,
+                          // alertDialogTitle: {
+                          //   className: "flex items-center gap-1",
+                          // },
+                        });
+                        if (isConfirmed) {
+                          toast.loading(t("deleting"), { id: 0 });
+                          deleteStaffMutation.mutate(staffId);
+                        }
+                      }}
+                    >
+                      <DeleteIcon />
+                      {t("delete")}
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardAction>
+        </CardHeader>
+      </Card>
+    </div>
   );
 }
 

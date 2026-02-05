@@ -85,7 +85,64 @@ export function StaffPermissionTable({ staffId }: { staffId: string }) {
     return { mmp, staffperms };
   }, [modules, permissions, staffPermissions]);
   return (
-    <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-3">
+    <div className="grid grid-cols-1 items-start gap-4 px-4 xl:grid-cols-2">
+      <Card className="col-span-full">
+        <CardHeader>
+          <CardTitle>Roles de l'utilisateur</CardTitle>
+          <CardDescription>
+            Sélectionner un ou plusieurs rôles pour cet utilisateurs. Les
+            permissions seront héritées des rôles
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FieldGroup className="gap-2">
+            {roles.map((r, index) => {
+              return (
+                <FieldLabel key={index}>
+                  <Field orientation="horizontal">
+                    <Checkbox
+                      id="toggle-checkbox-2"
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setRoleIds([...roleIds, r.id]);
+                        } else {
+                          setRoleIds((ids) => ids.filter((id) => id != r.id));
+                        }
+                      }}
+                      name="toggle-checkbox-2"
+                    />
+                    <FieldContent>
+                      <FieldTitle>
+                        {r.name}
+                        <Badge
+                          size={"xs"}
+                          className=""
+                          //className="size-1.5 h-5 text-[8px]"
+                          variant={
+                            r.level == RoleLevel.LEVEL1
+                              ? "destructive"
+                              : r.level == RoleLevel.LEVEL2
+                                ? "primary"
+                                : r.level == RoleLevel.LEVEL3
+                                  ? "info"
+                                  : r.level == RoleLevel.LEVEL4
+                                    ? "secondary"
+                                    : "warning"
+                          }
+                          appearance={"light"}
+                        >
+                          {r.level}
+                        </Badge>
+                      </FieldTitle>
+                      <FieldDescription>{r.description}</FieldDescription>
+                    </FieldContent>
+                  </Field>
+                </FieldLabel>
+              );
+            })}
+          </FieldGroup>
+        </CardContent>
+      </Card>
       <div className="col-span-2 grid items-start gap-2 xl:grid-cols-2">
         {[
           modules.slice(0, modules.length / 2),
@@ -177,63 +234,6 @@ export function StaffPermissionTable({ staffId }: { staffId: string }) {
           );
         })}
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Roles de l'utilisateur</CardTitle>
-          <CardDescription>
-            Sélectionner un ou plusieurs rôles pour cet utilisateurs. Les
-            permissions seront héritées des rôles
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <FieldGroup className="gap-2">
-            {roles.map((r, index) => {
-              return (
-                <FieldLabel key={index}>
-                  <Field orientation="horizontal">
-                    <Checkbox
-                      id="toggle-checkbox-2"
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setRoleIds([...roleIds, r.id]);
-                        } else {
-                          setRoleIds((ids) => ids.filter((id) => id != r.id));
-                        }
-                      }}
-                      name="toggle-checkbox-2"
-                    />
-                    <FieldContent>
-                      <FieldTitle>
-                        {r.name}
-                        <Badge
-                          size={"xs"}
-                          className=""
-                          //className="size-1.5 h-5 text-[8px]"
-                          variant={
-                            r.level == RoleLevel.LEVEL1
-                              ? "destructive"
-                              : r.level == RoleLevel.LEVEL2
-                                ? "primary"
-                                : r.level == RoleLevel.LEVEL3
-                                  ? "info"
-                                  : r.level == RoleLevel.LEVEL4
-                                    ? "secondary"
-                                    : "warning"
-                          }
-                          appearance={"light"}
-                        >
-                          {r.level}
-                        </Badge>
-                      </FieldTitle>
-                      <FieldDescription>{r.description}</FieldDescription>
-                    </FieldContent>
-                  </Field>
-                </FieldLabel>
-              );
-            })}
-          </FieldGroup>
-        </CardContent>
-      </Card>
     </div>
   );
 }

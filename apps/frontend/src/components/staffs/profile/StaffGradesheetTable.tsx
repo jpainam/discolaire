@@ -50,7 +50,7 @@ export function StaffGradesheetTable({ staffId }: { staffId: string }) {
   const locale = useLocale();
   const router = useRouter();
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 px-4">
       <div className="flex items-center gap-2">
         <Label>{t("terms")}</Label>
         <TermSelector

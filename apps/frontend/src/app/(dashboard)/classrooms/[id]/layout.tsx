@@ -61,7 +61,7 @@ export default async function Layout(props: {
   }
 
   if (!canReadClassroom) {
-    return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
+    return <NoPermission />;
   }
   return (
     <div className="grid grid-cols-1">

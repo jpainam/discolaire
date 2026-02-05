@@ -25,7 +25,7 @@ export default async function Layout({
   }
   const contact = await caller.contact.get(id);
   if (session.user.profile == "contact" && session.user.id != contact.userId) {
-    return <NoPermission className="my-8" />;
+    return <NoPermission />;
   }
   if (session.user.profile == "student") {
     const studentContacts = await caller.contact.students(id);
@@ -33,7 +33,7 @@ export default async function Layout({
       .map((stdc) => stdc.student.userId)
       .filter((userId) => userId != null);
     if (!userIds.includes(session.user.id)) {
-      return <NoPermission className="my-8" />;
+      return <NoPermission />;
     }
   } else {
     // const canReadContact = await checkPermission(
@@ -41,7 +41,7 @@ export default async function Layout({
     //   "read",
     // );
     // if (!canReadContact) {
-    //   return <NoPermission className="my-8" />;
+    //   return <NoPermission  />;
     // }
   }
   const t = await getTranslations();

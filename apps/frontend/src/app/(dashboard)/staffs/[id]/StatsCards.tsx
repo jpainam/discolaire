@@ -45,7 +45,7 @@ export function StatsCards({ staffId }: { staffId: string }) {
     ];
   }, [allstats]);
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
         <Card key={stat.name} className="overflow-hidden">
           <CardContent>

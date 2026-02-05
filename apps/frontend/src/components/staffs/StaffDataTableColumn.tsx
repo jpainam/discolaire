@@ -1,8 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ReceiptText } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
@@ -23,7 +22,7 @@ import {
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
-import { DeleteIcon, EditIcon } from "~/icons";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -202,8 +201,8 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"}>
-            <DotsHorizontalIcon />
+          <Button size={"icon"} variant={"ghost"}>
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -212,8 +211,8 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
               router.push(`/staffs/${staff.id}`);
             }}
           >
-            <ReceiptText />
-            <span className="text-sm">{t("details")}</span>
+            <ViewIcon />
+            {t("details")}
           </DropdownMenuItem>
           {canUpdateStaff && (
             <DropdownMenuItem
@@ -235,7 +234,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
               <EditIcon /> {t("edit")}
             </DropdownMenuItem>
           )}
-          <DropdownMenuSeparator />
+
           <DropdownInvitation
             entityId={staff.id}
             entityType="staff"

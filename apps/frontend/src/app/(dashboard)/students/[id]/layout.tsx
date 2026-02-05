@@ -80,7 +80,7 @@ export default async function Layout(props: {
   }
 
   if (!canReadStudent) {
-    return <NoPermission className="my-8" />;
+    return <NoPermission />;
   }
   const t = await getTranslations();
 

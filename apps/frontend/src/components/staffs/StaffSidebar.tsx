@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   BookOpenCheck,
   CalendarDays,
+  FileText,
   Folders,
   HistoryIcon,
   KeySquare,
@@ -21,7 +22,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "~/components/ui/sidebar";
 import { SidebarLogo } from "../sidebar-logo";
 
@@ -37,12 +37,6 @@ export function StaffSidebar({
         url: `/staffs/${params.id}`,
       },
       {
-        name: "permissions",
-        icon: KeySquare,
-        url: `/staffs/${params.id}/permissions`,
-      },
-
-      {
         name: "activities",
         icon: HistoryIcon,
         url: `/staffs/${params.id}/activities`,
@@ -53,9 +47,19 @@ export function StaffSidebar({
         url: `/staffs/${params.id}/teachings`,
       },
       {
+        name: "grades",
+        icon: FileText,
+        url: `/staffs/${params.id}/grades`,
+      },
+      {
         name: "timetables",
         icon: CalendarDays,
         url: `/staffs/${params.id}/timetables`,
+      },
+      {
+        name: "permissions",
+        icon: KeySquare,
+        url: `/staffs/${params.id}/permissions`,
       },
       {
         icon: Folders,
@@ -106,7 +110,7 @@ export function StaffSidebar({
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarRail />
+      {/* <SidebarRail /> */}
     </Sidebar>
   );
 }

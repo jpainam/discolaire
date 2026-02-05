@@ -10,7 +10,6 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditStaff } from "./CreateEditStaff";
-import { StaffEffectif } from "./StaffEffectif";
 
 export function StaffHeader() {
   const t = useTranslations();
@@ -20,13 +19,22 @@ export function StaffHeader() {
   const canCreateStaff = useCheckPermission("staff.create");
 
   const { openSheet } = useSheet();
+  const females = staffs.filter((staff) => staff.gender == "female").length;
+  const total = staffs.length;
+  const males = total - females;
+
+  const COLORS = ["#6741D9", "#E0C6FD", "#FFBC75", "#FF7272"];
 
   return (
     <div className="flex items-center justify-between p-2 px-4 lg:flex-row">
-      <Label>{t("staffs")}</Label>
+      <Label className="hidden md:flex">{t("staffs")}</Label>
       <div className="grid grid-cols-1 items-center justify-between md:flex">
         <div className="grid grid-cols-1 items-center gap-3 md:flex">
-          <StaffEffectif staffs={staffs} />
+          <div className="grid grid-cols-2 flex-row items-center gap-4 text-sm md:flex">
+            <Detail color={COLORS[0]} value={total} text={t("total")} />
+            <Detail color={COLORS[2]} value={males} text={t("male")} />
+            <Detail color={COLORS[3]} value={females} text={t("female")} />
+          </div>
           {canCreateStaff && (
             <Button
               onClick={() => {
@@ -55,6 +63,34 @@ export function StaffHeader() {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function Detail({
+  color,
+  value,
+  text,
+}: {
+  color?: string;
+  value: number;
+  text: string;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex items-center justify-start gap-1">
+        <span
+          style={{ background: color }}
+          className="block h-2.5 w-2.5 rounded"
+        />
+        <Label>{text}</Label>
+      </div>
+      <span
+        style={{ borderColor: color }}
+        className="rounded-full border-2 px-2 py-0.5 text-xs font-bold"
+      >
+        {value}
+      </span>
     </div>
   );
 }

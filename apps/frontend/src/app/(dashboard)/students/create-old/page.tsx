@@ -5,7 +5,7 @@ import { checkPermission } from "~/permissions/server";
 export default async function Page() {
   const canCreateStudent = await checkPermission("student.create");
   if (!canCreateStudent) {
-    return <NoPermission className="my-8" />;
+    return <NoPermission />;
   }
 
   return <CreateStudent />;

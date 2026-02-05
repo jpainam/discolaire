@@ -15,7 +15,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   //   "read",
   // );
   // if (!canReadClassroom) {
-  //   return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
+  //   return <NoPermission    />;
   // }
 
   void batchPrefetch([

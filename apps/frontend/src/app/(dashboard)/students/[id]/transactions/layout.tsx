@@ -30,7 +30,7 @@ export default async function Layout(
   }
 
   if (!canReadTransaction) {
-    return <NoPermission className="my-8" />;
+    return <NoPermission />;
   }
 
   return <>{props.children}</>;

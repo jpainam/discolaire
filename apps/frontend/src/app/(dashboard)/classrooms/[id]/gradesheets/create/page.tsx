@@ -33,7 +33,7 @@ export default async function Page(props: PageProps) {
   const searchParams = await searchParamsLoader(props.searchParams);
 
   if (!canCreateGradeSheet) {
-    return <NoPermission className="my-8" isFullPage={true} resourceText="" />;
+    return <NoPermission />;
   }
   const queryClient = getQueryClient();
 
