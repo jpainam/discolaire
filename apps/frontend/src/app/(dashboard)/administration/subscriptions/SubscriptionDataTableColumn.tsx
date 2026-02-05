@@ -70,7 +70,7 @@ export function getColumns({
         return (
           <Link
             className="line-clamp-1 hover:text-blue-600 hover:underline"
-            href={`/users/${subscription.staffId}/subscriptions`}
+            href={`/administration/subscriptions/${subscription.id}`}
           >
             {subscription.comment}
           </Link>
