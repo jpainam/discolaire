@@ -368,11 +368,14 @@ model DocumentActivity {
     filename    String
     date        DateTime  @default(now())
     documentId  String?
+    entityType  String?
+    entityId    String?
     createdById String
     createdBy   User      @relation("DocumentActivityCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
     document    Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
 
     @@index([documentId, date])
+    @@index([entityType, entityId, date])
 }
 
 enum DocumentType {

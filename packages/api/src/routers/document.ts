@@ -30,6 +30,23 @@ const logDownloadSchema = z.object({
   url: z.string().min(1),
 });
 
+const resolveDocumentEntity = (doc: {
+  studentId?: string | null;
+  staffId?: string | null;
+  contactId?: string | null;
+}) => {
+  if (doc.studentId) {
+    return { entityType: "student" as const, entityId: doc.studentId };
+  }
+  if (doc.staffId) {
+    return { entityType: "staff" as const, entityId: doc.staffId };
+  }
+  if (doc.contactId) {
+    return { entityType: "contact" as const, entityId: doc.contactId };
+  }
+  return { entityType: null, entityId: null };
+};
+
 export const documentRouter = {
   all: protectedProcedure
     .input(
@@ -63,37 +80,73 @@ export const documentRouter = {
     .input(z.string().array())
     .mutation(async ({ ctx, input }) => {
       const ids = input;
-      console.log("DEleting ......", input);
-      const documents = await ctx.db.document.findMany({
-        where: {
-          id: { in: ids },
-          schoolId: ctx.schoolId,
-        },
-        select: {
-          id: true,
-          title: true,
-          url: true,
-        },
-      });
-      console.log("DEleting ......", documents);
-      if (documents.length) {
-        console.log("Creating document activity ......", input);
-        await ctx.db.documentActivity.createMany({
-          data: documents.map((doc) => ({
-            documentId: doc.id,
-            action: "deleted",
-            filename: doc.title ?? doc.url,
-            createdById: ctx.session.user.id,
-          })),
-        });
-      }
-
-      return ctx.db.document.deleteMany({
-        where: {
-          id: {
-            in: ids,
+      return ctx.db.$transaction(async (tx) => {
+        const documents = await tx.document.findMany({
+          where: {
+            id: { in: ids },
+            schoolId: ctx.schoolId,
           },
-        },
+          select: {
+            id: true,
+            title: true,
+            url: true,
+            studentId: true,
+            staffId: true,
+            contactId: true,
+          },
+        });
+
+        if (documents.length) {
+          const documentIds = documents.map((doc) => doc.id);
+
+          for (const doc of documents) {
+            const entity = resolveDocumentEntity(doc);
+            if (entity.entityType && entity.entityId) {
+              await tx.documentActivity.updateMany({
+                where: {
+                  documentId: doc.id,
+                  entityType: null,
+                  entityId: null,
+                },
+                data: {
+                  entityType: entity.entityType,
+                  entityId: entity.entityId,
+                },
+              });
+            }
+          }
+
+          await tx.documentActivity.createMany({
+            data: documents.map((doc) => {
+              const entity = resolveDocumentEntity(doc);
+              return {
+                documentId: doc.id,
+                action: "deleted",
+                filename: doc.title ?? doc.url,
+                createdById: ctx.session.user.id,
+                entityType: entity.entityType,
+                entityId: entity.entityId,
+              };
+            }),
+          });
+
+          await tx.documentActivity.updateMany({
+            where: {
+              documentId: { in: documentIds },
+            },
+            data: {
+              documentId: null,
+            },
+          });
+        }
+
+        return tx.document.deleteMany({
+          where: {
+            id: {
+              in: ids,
+            },
+          },
+        });
       });
     }),
   update: protectedProcedure
@@ -138,6 +191,8 @@ export const documentRouter = {
             action: "uploaded",
             filename: document.title ?? document.url,
             createdById: ctx.session.user.id,
+            entityType: input.entityType,
+            entityId: input.entityId,
           },
         });
 
@@ -227,16 +282,26 @@ export const documentRouter = {
           document: true,
         },
         where: {
-          document: {
-            schoolId: ctx.schoolId,
-            ...(input.entityType == "student"
-              ? { studentId: input.entityId }
-              : {}),
-            ...(input.entityType == "contact"
-              ? { contactId: input.entityId }
-              : {}),
-            ...(input.entityType == "staff" ? { staffId: input.entityId } : {}),
-          },
+          OR: [
+            {
+              entityType: input.entityType,
+              entityId: input.entityId,
+            },
+            {
+              document: {
+                schoolId: ctx.schoolId,
+                ...(input.entityType == "student"
+                  ? { studentId: input.entityId }
+                  : {}),
+                ...(input.entityType == "contact"
+                  ? { contactId: input.entityId }
+                  : {}),
+                ...(input.entityType == "staff"
+                  ? { staffId: input.entityId }
+                  : {}),
+              },
+            },
+          ],
         },
       });
     }),
@@ -254,12 +319,15 @@ export const documentRouter = {
         return null;
       }
 
+      const entity = resolveDocumentEntity(document);
       await ctx.db.documentActivity.create({
         data: {
           documentId: document.id,
           action: "downloaded",
           filename: document.title ?? document.url,
           createdById: ctx.session.user.id,
+          entityType: entity.entityType,
+          entityId: entity.entityId,
         },
       });
 
