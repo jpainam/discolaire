@@ -3,7 +3,6 @@ import { renderToStream } from "@react-pdf/renderer";
 import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
-import { IPBWClassroomTrimestre } from "~/reports/reportcards/IPBWClassroomTrimestre";
 import { IPBWTrimestre } from "~/reports/reportcards/IPBWTrimestre";
 import { caller } from "~/trpc/server";
 
@@ -64,7 +63,7 @@ async function classroomReportCard({
   const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
   const stream = await renderToStream(
-    IPBWClassroomTrimestre({
+    IPBWTrimestre({
       school,
       students,
       disciplines,
@@ -111,7 +110,9 @@ async function indvidualReportCard({
     return new Response("Student has no grades", { status: 400 });
   }
 
-  const contact = await caller.student.getPrimaryContact(student.id);
+  const contacts = await caller.student.getPrimaryContacts({
+    classroomId: student.classroom.id,
+  });
   const school = await caller.school.getSchool();
 
   const disciplines = await caller.discipline.trimestre({
@@ -123,13 +124,13 @@ async function indvidualReportCard({
   const stream = await renderToStream(
     IPBWTrimestre({
       school,
-      student,
+      students: [student],
       classroom,
       trimestreId,
       disciplines,
       subjects,
       report,
-      contact,
+      contacts: contacts.filter((contact) => contact.studentId === student.id),
       lang,
       schoolYear: classroom.schoolYear,
     }),

@@ -24,7 +24,11 @@ export function IPBWStudentInfo({
   };
   lang: "fr" | "en";
   classroom: RouterOutputs["classroom"]["get"];
-  contact: RouterOutputs["student"]["getPrimaryContact"];
+  contact:
+    | RouterOutputs["student"]["getPrimaryContact"]
+    | RouterOutputs["student"]["getPrimaryContacts"][number]
+    | null
+    | undefined;
 }) {
   const t = getTranslation(lang);
   const avatarDataUri = student.avatar

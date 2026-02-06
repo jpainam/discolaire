@@ -6,7 +6,6 @@ import { z } from "zod/v4";
 import { parseSearchParams } from "~/app/api/utils";
 import { getSession } from "~/auth/server";
 import IPBW from "~/reports/reportcards/IPBW";
-import IPBWClassroom from "~/reports/reportcards/IPBWClassroom";
 import { caller } from "~/trpc/server";
 
 const searchSchema = z.object({
@@ -64,7 +63,7 @@ async function classroomReportCard({
   const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
   const stream = await renderToStream(
-    IPBWClassroom({
+    IPBW({
       school,
       students,
       disciplines,
@@ -114,7 +113,9 @@ async function indvidualReportCard({
     return new Response("Student has no grades", { status: 400 });
   }
 
-  const contact = await caller.student.getPrimaryContact(student.id);
+  const contacts = await caller.student.getPrimaryContacts({
+    classroomId: classroom.id,
+  });
   const school = await caller.school.getSchool();
   const term = await caller.term.get(termId);
 
@@ -128,7 +129,7 @@ async function indvidualReportCard({
     IPBW({
       school,
       disciplines: disciplines,
-      student,
+      students: [student],
       lang: lang,
       classroom,
       title:
@@ -137,7 +138,7 @@ async function indvidualReportCard({
           : `MONTHLY PROGRESS REPORT CARD N° ${term.order}`,
       subjects,
       report,
-      contact,
+      contacts: contacts.filter((contact) => contact.studentId === student.id),
       schoolYear: classroom.schoolYear,
     }),
   );

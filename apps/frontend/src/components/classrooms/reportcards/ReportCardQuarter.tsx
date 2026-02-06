@@ -140,7 +140,7 @@ export function ReportCardQuarter({
                           avatar={student.avatar}
                           name={getFullName(student)}
                           id={student.id}
-                          href={`/students/${student.id}/reportcards/trimestres?trimestreId=${trimestreId}&studentId=${student.id}&classroomId=${classroomId}`}
+                          href={`/students/${student.id}/reportcards?termId=${trimestreId}&studentId=${student.id}&classroomId=${classroomId}`}
                         />
                       </TableCell>
 

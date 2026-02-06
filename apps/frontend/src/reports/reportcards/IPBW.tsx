@@ -16,353 +16,382 @@ const W = ["40%", "6%", "6%", "6%", "6%", "6%", "10%", "10%"];
 
 export function IPBW({
   school,
-  student,
-  classroom,
   subjects,
   report,
-  contact,
+  students,
+  classroom,
+  contacts,
   title,
   schoolYear,
   disciplines,
   lang,
 }: {
   subjects: RouterOutputs["classroom"]["subjects"];
-  student: RouterOutputs["student"]["get"];
+  students: RouterOutputs["classroom"]["students"];
   title: string;
   classroom: RouterOutputs["classroom"]["get"];
   report: RouterOutputs["reportCard"]["getSequence"];
   schoolYear: RouterOutputs["schoolYear"]["get"];
-  contact: RouterOutputs["student"]["getPrimaryContact"];
+  contacts: RouterOutputs["student"]["getPrimaryContacts"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["sequence"];
   lang: "fr" | "en";
 }) {
   const { studentsReport, summary, globalRanks } = report;
-  const studentReport = studentsReport.get(student.id);
-
-  const globalRank = globalRanks.get(student.id);
-  if (!studentReport || !globalRank) return <></>;
+  const studentsMap = new Map(students.map((s) => [s.id, s]));
+  const primaryContactsMap = new Map(
+    contacts.filter((c) => c.studentId).map((c) => [c.studentId, c]),
+  );
   const groups = _.groupBy(subjects, "subjectGroupId");
   const values = Array.from(globalRanks.values());
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
-  const disc = disciplines.get(student.id);
+  const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
   const t = getTranslation(lang);
   return (
     <Document>
-      <Page
-        size={"A4"}
-        style={{
-          paddingVertical: 15,
-          paddingHorizontal: 40,
-          fontSize: 7,
-          backgroundColor: "#fff",
-          color: "#000",
-          fontFamily: "Helvetica",
-        }}
-      >
-        <View style={{ flexDirection: "column" }}>
-          {getHeader(school)}
-          <View
+      {Array.from(globalRanks).map(([key, value], index) => {
+        const studentReport = studentsReport.get(key);
+        const student = studentsMap.get(key);
+        const contact = primaryContactsMap.get(key);
+        if (!studentReport || !student) {
+          return null;
+        }
+        const disc = disciplines.get(student.id);
+        return (
+          <Page
+            size={"A4"}
+            key={`page-${index}-${key}`}
             style={{
-              flexDirection: "column",
-              display: "flex",
+              paddingVertical: 15,
+              paddingHorizontal: 40,
+              fontSize: 7,
+              backgroundColor: "#fff",
+              color: "#000",
+              fontFamily: "Helvetica",
             }}
           >
-            <Text
-              style={{
-                fontWeight: "bold",
-                alignSelf: "center",
-                fontSize: 10,
-                textTransform: "uppercase",
-              }}
-            >
-              {title}
-            </Text>
-            <Text
-              style={{
-                alignSelf: "center",
-                fontSize: 9,
-              }}
-            >
-              {t("Année scolaire")} {schoolYear.name}
-            </Text>
-          </View>
-          <IPBWStudentInfo
-            student={{
-              avatar: student.avatar,
-              firstName: student.firstName,
-              lastName: student.lastName,
-              gender: student.gender ?? "male",
-              isRepeating: student.isRepeating,
-              dateOfBirth: student.dateOfBirth,
-              placeOfBirth: student.placeOfBirth,
-              registrationNumber: student.registrationNumber,
-            }}
-            classroom={classroom}
-            contact={contact}
-            lang={lang}
-          />
+            <View style={{ flexDirection: "column" }}>
+              {getHeader(school)}
+              <View
+                style={{
+                  flexDirection: "column",
+                  display: "flex",
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    alignSelf: "center",
+                    fontSize: 10,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {title}
+                </Text>
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    fontSize: 9,
+                  }}
+                >
+                  {t("Année scolaire")} {schoolYear.name}
+                </Text>
+              </View>
+              <IPBWStudentInfo
+                student={{
+                  avatar: student.avatar,
+                  firstName: student.firstName,
+                  lastName: student.lastName,
+                  gender: student.gender ?? "male",
+                  isRepeating: student.isRepeating,
+                  dateOfBirth: student.dateOfBirth,
+                  placeOfBirth: student.placeOfBirth,
+                  registrationNumber: student.registrationNumber,
+                }}
+                classroom={classroom}
+                contact={contact}
+                lang={lang}
+              />
 
-          <View
-            style={{
-              display: "flex",
-              padding: 0,
-              border: "1px solid black",
-              flexDirection: "column",
-            }}
-          >
-            <IPBWTableHeader W={W} lang={lang} />
-            {Object.keys(groups).map((groupId: string, index: number) => {
-              const items = groups[Number(groupId)]?.sort(
-                (a, b) => a.order - b.order,
-              );
+              <View
+                style={{
+                  display: "flex",
+                  padding: 0,
+                  border: "1px solid black",
+                  flexDirection: "column",
+                }}
+              >
+                <IPBWTableHeader W={W} lang={lang} />
+                {Object.keys(groups).map((groupId: string, index: number) => {
+                  const items = groups[Number(groupId)]?.sort(
+                    (a, b) => a.order - b.order,
+                  );
 
-              if (!items) return null;
-              const group = items[0]?.subjectGroup;
-              let coeff = 0;
-              return (
-                <>
-                  {items.map((subject, index2) => {
-                    const grade = studentReport.studentCourses.find(
-                      (c) => c.subjectId === subject.id,
-                    );
-                    const subjectSummary = summary.get(subject.id);
-                    coeff += grade?.grade != null ? subject.coefficient : 0;
-                    return (
+                  if (!items) return null;
+                  const group = items[0]?.subjectGroup;
+                  let coeff = 0;
+                  return (
+                    <>
+                      {items.map((subject, index2) => {
+                        const grade = studentReport.studentCourses.find(
+                          (c) => c.subjectId === subject.id,
+                        );
+                        const subjectSummary = summary.get(subject.id);
+                        coeff +=
+                          grade?.grade != null ? subject.coefficient : 0;
+                        return (
+                          <View
+                            style={{
+                              borderBottom: "1px solid black",
+                              flexDirection: "row",
+                              display: "flex",
+                            }}
+                            key={`group-${groupId}-${index2}`}
+                          >
+                            <View
+                              style={{
+                                width: W[0],
+                                flexDirection: "column",
+                                display: "flex",
+                                borderRight: "1px solid black",
+                                paddingHorizontal: 2,
+                                alignItems: "flex-start",
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontWeight: "bold",
+                                  overflow: "hidden",
+                                  maxLines: 1,
+                                }}
+                              >
+                                {subject.course.reportName}
+                              </Text>
+                              <Text style={{ paddingLeft: "8px" }}>
+                                {subject.teacher?.prefix}{" "}
+                                {subject.teacher?.lastName}
+                              </Text>
+                            </View>
+
+                            <View
+                              style={{
+                                width: W[1],
+                                borderRight: "1px solid black",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text>
+                                {" "}
+                                {grade ? grade.average?.toFixed(2) : ""}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                width: W[2],
+                                borderRight: "1px solid black",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text>
+                                {" "}
+                                {grade?.grade != null
+                                  ? subject.coefficient
+                                  : ""}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                width: W[3],
+                                borderRight: "1px solid black",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text>
+                                {grade?.grade != null
+                                  ? grade.total?.toFixed(2)
+                                  : ""}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                width: W[4],
+                                borderRight: "1px solid black",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text>
+                                {grade?.grade != null ? grade.rank : ""}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                width: W[5],
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRight: "1px solid black",
+                              }}
+                            >
+                              <Text>
+                                {grade?.grade != null &&
+                                  subjectSummary?.average.toFixed(2)}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                width: W[6],
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRight: "1px solid black",
+                              }}
+                            >
+                              {subjectSummary && grade?.grade != null && (
+                                <Text>
+                                  {subjectSummary.min.toFixed(2)}/
+                                  {subjectSummary.max.toFixed(2)}
+                                </Text>
+                              )}
+                            </View>
+                            <View
+                              style={{
+                                width: W[7],
+                                textTransform: "uppercase",
+                                paddingLeft: 4,
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Text>
+                                {" "}
+                                {getAppreciations(grade?.average)}
+                              </Text>
+                            </View>
+                          </View>
+                        );
+                      })}
                       <View
                         style={{
-                          borderBottom: "1px solid black",
+                          backgroundColor: "#D7D7D7",
+                          fontSize: 8,
                           flexDirection: "row",
                           display: "flex",
+                          fontWeight: "bold",
+                          width: "100%",
+                          borderBottom:
+                            index === Object.keys(groups).length - 1
+                              ? ""
+                              : "1px solid black",
                         }}
-                        key={`group-${groupId}-${index2}`}
                       >
                         <View
                           style={{
-                            width: W[0],
-                            flexDirection: "column",
-                            display: "flex",
+                            width: "46%",
+                            paddingVertical: 2,
                             borderRight: "1px solid black",
-                            paddingHorizontal: 2,
-                            alignItems: "flex-start",
+
+                            justifyContent: "center",
                           }}
                         >
-                          <Text
-                            style={{
-                              fontWeight: "bold",
-                              overflow: "hidden",
-                              maxLines: 1,
-                            }}
-                          >
-                            {subject.course.reportName}
+                          <Text style={{ paddingLeft: 4 }}>
+                            {t(group?.name ?? "")}
                           </Text>
-                          <Text style={{ paddingLeft: "8px" }}>
-                            {subject.teacher?.prefix}{" "}
-                            {subject.teacher?.lastName}
-                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            width: "6%",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRight: "1px solid black",
+                          }}
+                        >
+                          <Text> {coeff}</Text>
                         </View>
 
                         <View
                           style={{
-                            width: W[1],
-                            borderRight: "1px solid black",
-                            alignItems: "center",
                             justifyContent: "center",
-                          }}
-                        >
-                          <Text> {grade ? grade.average?.toFixed(2) : ""}</Text>
-                        </View>
-                        <View
-                          style={{
-                            width: W[2],
-                            borderRight: "1px solid black",
+                            width: "6%",
                             alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Text> {grade?.average && subject.coefficient}</Text>
-                        </View>
-                        <View
-                          style={{
-                            width: W[3],
-                            borderRight: "1px solid black",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Text>{grade ? grade.total?.toFixed(2) : ""}</Text>
-                        </View>
-                        <View
-                          style={{
-                            width: W[4],
-                            borderRight: "1px solid black",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Text>{grade?.grade != null ? grade.rank : ""}</Text>
-                        </View>
-                        <View
-                          style={{
-                            width: W[5],
-                            alignItems: "center",
-                            justifyContent: "center",
                             borderRight: "1px solid black",
                           }}
                         >
                           <Text>
-                            {grade?.grade != null &&
-                              subjectSummary?.average.toFixed(2)}
+                            {sum(
+                              items.map(
+                                (subject) =>
+                                  studentReport.studentCourses.find(
+                                    (c) => c.subjectId === subject.id,
+                                  )?.total ?? 0,
+                              ),
+                            ).toFixed(1)}
                           </Text>
                         </View>
                         <View
                           style={{
-                            width: W[6],
-                            alignItems: "center",
                             justifyContent: "center",
+                            width: "22%",
+                            alignItems: "center",
                             borderRight: "1px solid black",
                           }}
                         >
-                          {grade?.grade && (
-                            <Text>
-                              {subjectSummary?.min.toFixed(2)}/
-                              {subjectSummary?.max.toFixed(2)}
-                            </Text>
-                          )}
-                        </View>
-                        <View
-                          style={{
-                            width: W[7],
-                            textTransform: "uppercase",
-                            paddingLeft: 4,
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Text> {getAppreciations(grade?.average)}</Text>
+                          <Text>
+                            {t("MOY")} :{" "}
+                            {(
+                              sum(
+                                items.map(
+                                  (subject) =>
+                                    studentReport.studentCourses.find(
+                                      (c) => c.subjectId === subject.id,
+                                    )?.total ?? 0,
+                                ),
+                              ) / (coeff || 1)
+                            ).toFixed(2)}
+                          </Text>
                         </View>
                       </View>
-                    );
-                  })}
-                  <View
-                    style={{
-                      backgroundColor: "#D7D7D7",
-                      fontSize: 8,
-                      flexDirection: "row",
-                      display: "flex",
-                      fontWeight: "bold",
-                      width: "100%",
-                      borderBottom:
-                        index === Object.keys(groups).length - 1
-                          ? ""
-                          : "1px solid black",
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: "46%",
-                        paddingVertical: 2,
-                        borderRight: "1px solid black",
-
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Text style={{ paddingLeft: 4 }}>
-                        {t(group?.name ?? "")}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: "6%",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRight: "1px solid black",
-                      }}
-                    >
-                      <Text>{coeff}</Text>
-                    </View>
-
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        width: "6%",
-                        alignItems: "center",
-                        borderRight: "1px solid black",
-                      }}
-                    >
-                      <Text>
-                        {sum(
-                          items.map(
-                            (subject) =>
-                              studentReport.studentCourses.find(
-                                (c) => c.subjectId === subject.id,
-                              )?.total ?? 0,
-                          ),
-                        ).toFixed(1)}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        width: "22%",
-                        alignItems: "center",
-                        borderRight: "1px solid black",
-                      }}
-                    >
-                      <Text>
-                        {t("MOY")} :{" "}
-                        {(
-                          sum(
-                            items.map(
-                              (subject) =>
-                                studentReport.studentCourses.find(
-                                  (c) => c.subjectId === subject.id,
-                                )?.total ?? 0,
-                            ),
-                          ) / (coeff || 1)
-                        ).toFixed(2)}
-                      </Text>
-                    </View>
-                  </View>
-                </>
-              );
-            })}
-          </View>
-          <IPBWSummary
-            effectif={classroom.size}
-            discipline={{
-              absence: disc?.absence ?? 0,
-              justifiedAbsence: disc?.justifiedAbsence ?? 0,
-              late: disc?.late ?? 0,
-              justifiedLate: disc?.justifiedLate ?? 0,
-              consigne: disc?.consigne ?? 0,
-            }}
-            average={globalRank.average}
-            successRate={successRate}
-            summary={{
-              min: Math.min(...averages),
-              max: Math.max(...averages),
-              average:
-                averages.reduce((acc, val) => acc + val, 0) / averages.length,
-            }}
-            rank={globalRank.aequoRank}
-            lang={lang}
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 2,
-              width: "100%",
-              display: "flex",
-              paddingTop: 4,
-            }}
-          >
-            <IPBWNotationSystem lang={lang} />
-            <IPBWSignature cycle={classroom.cycle?.name} lang={lang} />
-          </View>
-        </View>
-      </Page>
+                    </>
+                  );
+                })}
+              </View>
+              <IPBWSummary
+                effectif={classroom.size}
+                discipline={{
+                  absence: disc?.absence ?? 0,
+                  justifiedAbsence: disc?.justifiedAbsence ?? 0,
+                  late: disc?.late ?? 0,
+                  justifiedLate: disc?.justifiedLate ?? 0,
+                  consigne: disc?.consigne ?? 0,
+                }}
+                average={value.average}
+                successRate={successRate}
+                summary={{
+                  min: Math.min(...averages),
+                  max: Math.max(...averages),
+                  average: average,
+                }}
+                rank={value.aequoRank}
+                lang={lang}
+              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 2,
+                  width: "100%",
+                  display: "flex",
+                  paddingTop: 4,
+                }}
+              >
+                <IPBWNotationSystem lang={lang} />
+                <IPBWSignature cycle={classroom.cycle?.name} lang={lang} />
+              </View>
+            </View>
+          </Page>
+        );
+      })}
     </Document>
   );
 }
