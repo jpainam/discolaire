@@ -139,8 +139,7 @@ export function IPBW({
                           (c) => c.subjectId === subject.id,
                         );
                         const subjectSummary = summary.get(subject.id);
-                        coeff +=
-                          grade?.grade != null ? subject.coefficient : 0;
+                        coeff += grade?.grade != null ? subject.coefficient : 0;
                         return (
                           <View
                             style={{
@@ -265,10 +264,7 @@ export function IPBW({
                                 justifyContent: "center",
                               }}
                             >
-                              <Text>
-                                {" "}
-                                {getAppreciations(grade?.average)}
-                              </Text>
+                              <Text> {getAppreciations(grade?.average)}</Text>
                             </View>
                           </View>
                         );
