@@ -49,6 +49,15 @@ export function IPBW({
   const successRate = successCount / averages.length;
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
   const t = getTranslation(lang);
+  const printedAt = new Date().toLocaleDateString(
+    lang == "fr" ? "fr-FR" : "en-US",
+    {
+      year: "numeric",
+      month: "numeric",
+      day: "2-digit",
+      hour12: true,
+    },
+  );
   return (
     <Document>
       {Array.from(globalRanks).map(([key, value], index) => {
@@ -385,6 +394,20 @@ export function IPBW({
                 <IPBWSignature cycle={classroom.cycle?.name} lang={lang} />
               </View>
             </View>
+            <Text
+              style={{
+                position: "absolute",
+                left: -40,
+                top: 500,
+                fontSize: 7,
+                //color: "#333",
+                //fontWeight: "bold",
+                transform: "rotate(-90deg)",
+                //letterSpacing: 0.6,
+              }}
+            >
+              Fait à Nkolfoulou 1, le {printedAt} par discolaire
+            </Text>
           </Page>
         );
       })}
