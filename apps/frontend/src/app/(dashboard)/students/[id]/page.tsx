@@ -25,15 +25,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     trpc.student.contacts.queryOptions(params.id),
     trpc.student.grades.queryOptions({ id: params.id }),
     trpc.attendance.student.queryOptions({ studentId: params.id }),
-    trpc.student.grades.queryOptions({ id: params.id }),
     trpc.student.classroom.queryOptions({ studentId: params.id }),
     trpc.term.all.queryOptions(),
   ]);
-  const queryClient = getQueryClient();
-  const terms = await queryClient.fetchQuery(trpc.term.all.queryOptions());
-  const classroom = await queryClient.fetchQuery(
-    trpc.student.classroom.queryOptions({ studentId: params.id }),
-  );
 
   return (
     <HydrateClient>
@@ -117,17 +111,50 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         </div>
         <div>
           <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense fallback={<Skeleton className="h-20" />}>
-              {classroom && (
-                <StudentGradesheetChart
-                  defaultTerm={terms[0]?.id ?? ""}
-                  classroomId={classroom.id}
-                />
-              )}
+            <Suspense fallback={<StudentGradesheetChartPanelSkeleton />}>
+              <StudentGradesheetChartSection studentId={params.id} />
             </Suspense>
           </ErrorBoundary>
         </div>
       </div>
     </HydrateClient>
+  );
+}
+
+async function StudentGradesheetChartSection({
+  studentId,
+}: {
+  studentId: string;
+}) {
+  const queryClient = getQueryClient();
+  const [terms, classroom] = await Promise.all([
+    queryClient.fetchQuery(trpc.term.all.queryOptions()),
+    queryClient.fetchQuery(trpc.student.classroom.queryOptions({ studentId })),
+  ]);
+
+  if (!classroom) {
+    return null;
+  }
+
+  return (
+    <StudentGradesheetChart
+      defaultTerm={terms[0]?.id ?? ""}
+      classroomId={classroom.id}
+    />
+  );
+}
+
+function StudentGradesheetChartPanelSkeleton() {
+  return (
+    <div className="p-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <Skeleton className="h-9 w-56" />
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+      </div>
+      <Skeleton className="h-[350px] w-full" />
+    </div>
   );
 }
