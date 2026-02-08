@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -78,7 +78,7 @@ export function SubscriptionPlans({ plan }: { plan: string }) {
   return (
     <div className="mx-auto w-full max-w-5xl p-4">
       {/* <h2 className="text-xl font-bold text-center mb-8">
-        {t("choose_your_plan")}
+      
       </h2> */}
       <RadioGroup
         value={selectedPlan}

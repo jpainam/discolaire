@@ -132,7 +132,7 @@ export function getColumns({
         let variant: FlatBadgeProps["variant"];
 
         if (publishFrom <= now && now <= publishTo) {
-          status = t("active_notice");
+          status = t("active");
           variant = statusVariants.active_notice;
         } else if (publishFrom > now) {
           status = t("future_notice");

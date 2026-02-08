@@ -155,21 +155,21 @@ export function ClassroomTimetable() {
               onClick={() => setView("month")}
               //className={cn(view === "month" && "bg-background shadow-sm")}
             >
-              {t("Month")}
+              {t("month")}
             </Button>
             <Button
               variant={view === "week" ? "default" : "ghost"}
               onClick={() => setView("week")}
               //className={cn(view === "week" && "bg-background shadow-sm")}
             >
-              {t("Week")}
+              {t("week")}
             </Button>
             <Button
               variant={view === "day" ? "default" : "ghost"}
               onClick={() => setView("day")}
               //className={cn(view === "day" && "bg-background shadow-sm")}
             >
-              {t("Day")}
+              {t("day")}
             </Button>
           </div>
         </div>

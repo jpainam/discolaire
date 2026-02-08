@@ -4,6 +4,7 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 
 import type { Sidebar } from "~/components/ui/sidebar";
+import { cn } from "~/lib/utils";
 import { MainSidebar } from "~/components/MainSidebar";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { AdminSidebar } from "./administration/admin-sidebar";
@@ -52,21 +53,66 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   React.useEffect(() => {
     setMounted(true);
   }, []);
-  if (!mounted) {
-    return <></>;
+  const activeSidebar = React.useMemo(() => {
+    if (isClassroom) {
+      return {
+        key: "classroom",
+        Component: ClassroomSidebar,
+      };
+    }
+    if (isHome) {
+      return {
+        key: "home",
+        Component: MainSidebar,
+      };
+    }
+    if (isStudent) {
+      return {
+        key: "student",
+        Component: StudentSidebar,
+      };
+    }
+    if (isAdmin) {
+      return {
+        key: "admin",
+        Component: AdminSidebar,
+      };
+    }
+    if (isUser) {
+      return {
+        key: "user",
+        Component: UserSidebar,
+      };
+    }
+    if (isContact) {
+      return {
+        key: "contact",
+        Component: ContactSidebar,
+      };
+    }
+    if (isStaff) {
+      return {
+        key: "staff",
+        Component: StaffSidebar,
+      };
+    }
+    return null;
+  }, [isAdmin, isClassroom, isContact, isHome, isStaff, isStudent, isUser]);
+
+  if (!mounted || !activeSidebar) {
+    return null;
   }
 
-  return (
-    <>
-      {isClassroom && <ClassroomSidebar {...props} />}
-      {isHome && <MainSidebar {...props} />}
-      {isStudent && <StudentSidebar {...props} />}
-      {isAdmin && <AdminSidebar {...props} />}
+  const ActiveSidebar = activeSidebar.Component;
 
-      {isUser && <UserSidebar {...props} />}
-      {isContact && <ContactSidebar {...props} />}
-      {isStaff && <StaffSidebar {...props} />}
-      {/* {isTimetable && <TimetableSidebar {...props} />} */}
-    </>
+  return (
+    <ActiveSidebar
+      key={activeSidebar.key}
+      {...props}
+      className={cn(
+        props.className,
+        "animate-in slide-in-from-right-8 duration-300 motion-reduce:animate-none",
+      )}
+    />
   );
 }

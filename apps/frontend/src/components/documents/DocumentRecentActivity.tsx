@@ -110,7 +110,7 @@ export function DocumentRecentActivity({
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-sm font-medium">{t("Recent Activities")}</h3>
         <Button variant={"link"} size={"sm"}>
-          {t("View all")}
+          {t("view_all")}
         </Button>
       </div>
       <div className="space-y-3">

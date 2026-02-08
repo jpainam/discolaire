@@ -91,7 +91,7 @@ export function MainSidebar({
       url: `/staffs`,
       icon: <GroupsIcon />,
       items: [
-        { name: "List", url: "/staffs" },
+        { name: "list", url: "/staffs" },
         { name: "Attendance", url: "/staffs/attendances" },
         { name: "add", url: "/staffs/create" },
       ],

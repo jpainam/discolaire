@@ -107,7 +107,7 @@ export function StudentSidebar({
       url: `/students/${params.id}/attendances`,
     },
     {
-      name: "timetables",
+      name: "timetable",
       icon: <CalendarDays />,
       url: `/students/${params.id}/timetables`,
     },

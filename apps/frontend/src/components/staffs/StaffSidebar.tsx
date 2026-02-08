@@ -52,7 +52,7 @@ export function StaffSidebar({
         url: `/staffs/${params.id}/grades`,
       },
       {
-        name: "timetables",
+        name: "timetable",
         icon: CalendarDays,
         url: `/staffs/${params.id}/timetables`,
       },

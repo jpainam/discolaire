@@ -62,7 +62,7 @@ export function ClassroomSidebar({
         icon: <AttendanceIcon />,
       },
       {
-        name: "timetables",
+        name: "timetable",
         url: `/classrooms/${params.id}/timetables`,
         icon: <CalendarDays />,
       },

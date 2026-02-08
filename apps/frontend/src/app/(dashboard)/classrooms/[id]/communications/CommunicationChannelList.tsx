@@ -157,7 +157,7 @@ export function CommunicationChannelList() {
                         description: t("delete_confirmation"),
                       });
                       if (isConfirmed) {
-                        toast.loading(t("loading"), { id: 0 });
+                        toast.loading(t("Processing"), { id: 0 });
                         deleteCommunicationChannel.mutate(channel.id);
                       }
                     }}

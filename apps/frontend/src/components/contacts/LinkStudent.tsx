@@ -179,7 +179,7 @@ export function LinkStudent({ contactId }: { contactId: string }) {
               toast.error(t("please_select_relationship"));
               return;
             }
-            toast.loading(t("loading"), {
+            toast.loading(t("Processing"), {
               id: 0,
             });
             createStudentContactMutation.mutate(

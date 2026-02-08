@@ -123,7 +123,7 @@ export function SchoolYearEventTypeTable() {
                             ),
                           });
                           if (isConfirmed) {
-                            toast.loading(t("loading"), { id: 0 });
+                            toast.loading(t("Processing"), { id: 0 });
                             deleteMutation.mutate(eventType.id);
                           }
                         }}

@@ -176,7 +176,7 @@ export default function EventForm({
       );
     } else {
       toast.promise(createCalendarEventMutation.mutateAsync(newEvent), {
-        loading: t("adding"),
+        loading: t("Processing"),
         error: (error) => {
           return getErrorMessage(error);
         },

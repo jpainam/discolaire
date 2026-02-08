@@ -81,7 +81,7 @@ export function CreateEditAssetUsage({
   );
 
   const handleSubmit = (data: z.infer<typeof schema>) => {
-    toast.loading(t("loading"), { id: 0 });
+    toast.loading(t("Processing"), { id: 0 });
     const values = {
       note: data.note,
       userId: data.userId,

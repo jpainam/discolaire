@@ -190,7 +190,7 @@ export function TermTable() {
                     >
                       {updateTermActiveMutation.isPending && <Spinner />}
                       {term.isActive ? <LockIcon /> : <LockOpen />}
-                      {term.isActive ? t("Lock") : t("Unlock")}
+                      {term.isActive ? t("lock") : t("Unlock")}
                     </Button>
                   </TableCell>
                   <TableCell className="py-0 text-right">
