@@ -1,1 +1,1 @@
-export type { User } from "./generated/client/client";
+export type { LogActivity, User } from "./generated/client/client";

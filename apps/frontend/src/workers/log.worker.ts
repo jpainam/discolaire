@@ -18,16 +18,24 @@ new Worker(
           const error = z.treeifyError(result.error);
           throw new Error(`${job.id} ${JSON.stringify(error)}`);
         }
-        const { userId, action, entity, schoolId, entityId, metadata } =
-          result.data;
+        const {
+          userId,
+          activityType,
+          action,
+          entity,
+          schoolId,
+          entityId,
+          data,
+        } = result.data;
         const response = await fetch(`/api/logs`, {
           body: JSON.stringify({
             userId,
+            activityType,
             action,
             entity,
             entityId,
             schoolId,
-            metadata,
+            data,
           }),
         });
         if (response.ok) {
@@ -47,11 +55,12 @@ new Worker(
 
 export const logAction = async (data: {
   userId?: string;
+  activityType: string;
   action: string;
   entity: string;
   entityId?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  metadata?: any;
+  data?: any;
 }) => {
   await logQueue.add("log-action", data);
 };

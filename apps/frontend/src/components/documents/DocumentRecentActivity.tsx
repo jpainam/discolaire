@@ -129,21 +129,24 @@ export function DocumentRecentActivity({
           activities.map((activity) => {
             const style =
               actionStyles[activity.action as keyof typeof actionStyles];
+            // fallbackStyle;
             const Icon = style.icon;
             const name =
-              activity.createdBy.name ||
-              activity.createdBy.username ||
-              "Unknown";
+              activity.user?.name ?? activity.user?.username ?? "Unknown";
             const user_initials = getInitials(name);
 
             const activityDate =
-              activity.date instanceof Date
-                ? activity.date
-                : new Date(activity.date);
-            const filename = activity.document?.title ?? activity.filename;
+              activity.createdAt instanceof Date
+                ? activity.createdAt
+                : new Date(activity.createdAt);
+            const data = activity.data as {
+              filename?: string;
+              title?: string;
+            } | null;
+            const filename = data?.filename ?? data?.title ?? "Document";
 
             const avatar = createAvatar(initials, {
-              seed: activity.createdBy.username,
+              seed: activity.user?.username ?? name,
             });
 
             return (
@@ -151,8 +154,8 @@ export function DocumentRecentActivity({
                 <Avatar className="size-8">
                   <AvatarImage
                     src={
-                      activity.createdBy.image
-                        ? `${activity.createdBy.image}`
+                      activity.user?.image
+                        ? `${activity.user.image}`
                         : avatar.toDataUri()
                     }
                   />

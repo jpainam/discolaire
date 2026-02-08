@@ -1,9 +1,31 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { TRPCRouterRecord } from "@trpc/server";
-import { z } from "zod/v4";
+import z from "zod";
+
+import { ActivityType } from "@repo/db";
 
 import { protectedProcedure } from "../trpc";
 
 export const logActivityRouter = {
+  create: protectedProcedure
+    .input(
+      z.object({
+        activityType: z.enum(ActivityType),
+        action: z.string().min(1),
+        entity: z.string().min(1),
+        entityId: z.string().optional(),
+        data: z.any().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.pubsub.log({
+        activityType: input.activityType,
+        action: input.action,
+        entity: input.entity,
+        entityId: input.entityId,
+        data: input.data,
+      });
+    }),
   user: protectedProcedure.input(z.string().min(1)).query(({ input, ctx }) => {
     return ctx.db.logActivity.findMany({
       take: 100,
@@ -15,6 +37,7 @@ export const logActivityRouter = {
       },
       where: {
         userId: input,
+        schoolId: ctx.schoolId,
       },
     });
   }),
@@ -36,8 +59,9 @@ export const logActivityRouter = {
     .input(
       z.object({
         query: z.string().optional(),
-        eventType: z.enum(["CREATE", "UPDATE", "DELETE", "READ"]).optional(),
-        source: z.string().optional(),
+        activityType: z.enum(ActivityType).optional(),
+        action: z.string().optional(),
+        entity: z.string().optional(),
         userId: z.string().optional(),
         from: z.coerce.date().optional(),
         to: z.coerce.date().optional(),
@@ -57,19 +81,12 @@ export const logActivityRouter = {
         },
         where: {
           schoolId: ctx.schoolId,
-          // OR: [
-          //   {
-          //     title: {
-          //       contains: q,
-          //       mode: "insensitive",
-          //     },
-          //     ...(input.eventType ? { eventType: input.eventType } : {}),
-          //     ...(input.source ? { source: input.source } : {}),
-          //     ...(input.userId ? { userId: input.userId } : {}),
-          //     ...(input.from ? { createdAt: { gte: input.from } } : {}),
-          //     ...(input.to ? { createdAt: { lte: input.to } } : {}),
-          //   },
-          // ],
+          ...(input.activityType ? { activityType: input.activityType } : {}),
+          ...(input.action ? { action: input.action } : {}),
+          ...(input.entity ? { entity: input.entity } : {}),
+          ...(input.userId ? { userId: input.userId } : {}),
+          ...(input.from ? { createdAt: { gte: input.from } } : {}),
+          ...(input.to ? { createdAt: { lte: input.to } } : {}),
         },
       });
     }),

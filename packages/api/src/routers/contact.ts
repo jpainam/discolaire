@@ -2,6 +2,8 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { z } from "zod/v4";
 
+import { ActivityType } from "@repo/db";
+
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -39,6 +41,19 @@ export const contactRouter = {
             },
           },
         });
+      }
+      if (contacts.length > 0) {
+        await ctx.pubsub.logMany(
+          contacts.map((contact) => ({
+            activityType: ActivityType.CONTACT,
+            action: "delete",
+            entity: "contact",
+            entityId: contact.id,
+            data: {
+              name: `${contact.firstName} ${contact.lastName}`.trim(),
+            },
+          })),
+        );
       }
       return ctx.db.contact.deleteMany({
         where: {
@@ -249,8 +264,8 @@ export const contactRouter = {
     }),
   create: protectedProcedure
     .input(createUpdateSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.contact.create({
+    .mutation(async ({ ctx, input }) => {
+      const contact = await ctx.db.contact.create({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
@@ -267,11 +282,21 @@ export const contactRouter = {
           schoolId: ctx.schoolId,
         },
       });
+      await ctx.pubsub.log({
+        activityType: ActivityType.CONTACT,
+        action: "create",
+        entity: "contact",
+        entityId: contact.id,
+        data: {
+          name: `${contact.firstName} ${contact.lastName}`.trim(),
+        },
+      });
+      return contact;
     }),
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.contact.update({
+      const contact = await ctx.db.contact.update({
         where: {
           id: input.id,
         },
@@ -290,6 +315,16 @@ export const contactRouter = {
           phoneNumber2: input.phoneNumber2,
         },
       });
+      await ctx.pubsub.log({
+        activityType: ActivityType.CONTACT,
+        action: "update",
+        entity: "contact",
+        entityId: contact.id,
+        data: {
+          name: `${contact.firstName} ${contact.lastName}`.trim(),
+        },
+      });
+      return contact;
     }),
   unlinkedStudents: protectedProcedure
     .input(
@@ -364,6 +399,29 @@ export const contactRouter = {
           },
         },
       });
+    }),
+  activities: protectedProcedure
+    .input(
+      z.object({
+        contactId: z.string().min(1),
+        activityType: z.enum(ActivityType).optional(),
+        limit: z.number().min(1).max(100).optional().default(20),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const logs = await ctx.db.logActivity.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          entity: "contact",
+          entityId: input.contactId,
+          ...(input.activityType ? { activityType: input.activityType } : {}),
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.limit,
+      });
+      return ctx.services.logActivity.formatLogActivities(logs);
     }),
   studentOverview: protectedProcedure
     .input(z.string())

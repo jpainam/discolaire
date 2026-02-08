@@ -61,7 +61,6 @@ model User {
     subjectPrograms              SubjectProgram[]           @relation("SubjectProgramCreatedBy")
     skillAcquisitions            SkillAcquisition[]         @relation("SkillAcquisitionCreatedBy")
     staffAttendances             StaffAttendance[]          @relation("StaffAttendanceCreatedBy")
-    documentActivityCreatedBy    DocumentActivity[]         @relation("DocumentActivityCreatedBy")
     members                      Member[]
     invitations                  Invitation[]
     notificationRecipients       NotificationRecipient[]
@@ -71,23 +70,28 @@ model User {
 }
 
 model LogActivity {
-    id        Int      @id @default(autoincrement())
-    userId    String?
-    action    String
-    entity    String
-    entityId  String?
-    metadata  Json?
-    createdAt DateTime @default(now())
-    user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    schoolId  String
-    school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    id           Int          @id @default(autoincrement())
+    userId       String?
+    activityType ActivityType
+    action       String
+    entity       String
+    entityId     String?
+    data         Json?
+    createdAt    DateTime     @default(now())
+    user         User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    schoolId     String
+    school       School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }
 
-enum LogActivityType {
-    UPDATE
-    DELETE
-    CREATE
-    READ
+enum ActivityType {
+    DOCUMENT
+    STUDENT
+    STAFF
+    CONTACT
+    USER
+    AUTH
+    SYSTEM
+    OTHER
 }
 
 model SchoolYearEvent {

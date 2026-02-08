@@ -226,6 +226,37 @@ export const staffRouter = {
       })),
     ];
   }),
+  activities: protectedProcedure
+    .input(
+      z.object({
+        staffId: z.string().min(1),
+        limit: z.number().min(1).max(100).optional().default(20),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const staff = await ctx.db.staff.findUniqueOrThrow({
+        where: {
+          id: input.staffId,
+        },
+        select: {
+          userId: true,
+        },
+      });
+      if (!staff.userId) {
+        return [];
+      }
+      const logs = await ctx.db.logActivity.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          userId: staff.userId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.limit,
+      });
+      return ctx.services.logActivity.formatLogActivities(logs);
+    }),
   gradesheets: protectedProcedure
     .input(z.string().min(2))
     .query(({ ctx, input }) => {

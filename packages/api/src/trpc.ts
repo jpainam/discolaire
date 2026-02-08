@@ -17,7 +17,6 @@ import { getDb } from "@repo/db";
 import type { Services } from "./services";
 import { env } from "./env";
 import { PubSubLogger } from "./pubsub-logger";
-import { logQueue } from "./queue";
 import { createServices } from "./services";
 import { getCookieValue } from "./utils";
 
@@ -176,7 +175,7 @@ export const protectedProcedure = t.procedure
         pubsub: new PubSubLogger(
           ctx.session.user.id,
           ctx.session.user.schoolId,
-          logQueue,
+          ctx.db,
         ),
       },
     });

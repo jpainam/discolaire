@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { DocumentType } from "@repo/db";
+import { ActivityType, DocumentType } from "@repo/db";
 import { getDocumentFileCategory } from "@repo/utils";
 
 import { protectedProcedure } from "../trpc";
@@ -45,6 +45,22 @@ const resolveDocumentEntity = (doc: {
     return { entityType: "contact" as const, entityId: doc.contactId };
   }
   return { entityType: null, entityId: null };
+};
+
+const toDocumentLogEntity = (doc: {
+  studentId?: string | null;
+  staffId?: string | null;
+  contactId?: string | null;
+  id?: string;
+}) => {
+  const entity = resolveDocumentEntity(doc);
+  if (entity.entityType && entity.entityId) {
+    return entity;
+  }
+  return {
+    entityType: "document" as const,
+    entityId: doc.id ?? null,
+  };
 };
 
 export const documentRouter = {
@@ -97,47 +113,23 @@ export const documentRouter = {
         });
 
         if (documents.length) {
-          const documentIds = documents.map((doc) => doc.id);
-
-          for (const doc of documents) {
-            const entity = resolveDocumentEntity(doc);
-            if (entity.entityType && entity.entityId) {
-              await tx.documentActivity.updateMany({
-                where: {
-                  documentId: doc.id,
-                  entityType: null,
-                  entityId: null,
-                },
-                data: {
-                  entityType: entity.entityType,
-                  entityId: entity.entityId,
-                },
-              });
-            }
-          }
-
-          await tx.documentActivity.createMany({
-            data: documents.map((doc) => {
-              const entity = resolveDocumentEntity(doc);
+          await ctx.pubsub.logMany(
+            documents.map((doc) => {
+              const entity = toDocumentLogEntity({ ...doc, id: doc.id });
               return {
-                documentId: doc.id,
+                activityType: ActivityType.DOCUMENT,
                 action: "deleted",
-                filename: doc.title ?? doc.url,
-                createdById: ctx.session.user.id,
-                entityType: entity.entityType,
+                entity: entity.entityType,
                 entityId: entity.entityId,
+                data: {
+                  documentId: doc.id,
+                  title: doc.title,
+                  filename: doc.title ?? doc.url,
+                  url: doc.url,
+                },
               };
             }),
-          });
-
-          await tx.documentActivity.updateMany({
-            where: {
-              documentId: { in: documentIds },
-            },
-            data: {
-              documentId: null,
-            },
-          });
+          );
         }
 
         return tx.document.deleteMany({
@@ -185,14 +177,16 @@ export const documentRouter = {
           },
         });
 
-        await tx.documentActivity.create({
+        await ctx.pubsub.log({
+          activityType: ActivityType.DOCUMENT,
+          action: "uploaded",
+          entity: input.entityType,
+          entityId: input.entityId,
           data: {
             documentId: document.id,
-            action: "uploaded",
+            title: document.title,
             filename: document.title ?? document.url,
-            createdById: ctx.session.user.id,
-            entityType: input.entityType,
-            entityId: input.entityId,
+            url: document.url,
           },
         });
 
@@ -272,36 +266,19 @@ export const documentRouter = {
   activities: protectedProcedure
     .input(activityFilterSchema)
     .query(({ ctx, input }) => {
-      return ctx.db.documentActivity.findMany({
+      return ctx.db.logActivity.findMany({
         take: input.limit,
         orderBy: {
-          date: "desc",
+          createdAt: "desc",
         },
         include: {
-          createdBy: true,
-          document: true,
+          user: true,
         },
         where: {
-          OR: [
-            {
-              entityType: input.entityType,
-              entityId: input.entityId,
-            },
-            {
-              document: {
-                schoolId: ctx.schoolId,
-                ...(input.entityType == "student"
-                  ? { studentId: input.entityId }
-                  : {}),
-                ...(input.entityType == "contact"
-                  ? { contactId: input.entityId }
-                  : {}),
-                ...(input.entityType == "staff"
-                  ? { staffId: input.entityId }
-                  : {}),
-              },
-            },
-          ],
+          schoolId: ctx.schoolId,
+          activityType: ActivityType.DOCUMENT,
+          entity: input.entityType,
+          entityId: input.entityId,
         },
       });
     }),
@@ -319,15 +296,17 @@ export const documentRouter = {
         return null;
       }
 
-      const entity = resolveDocumentEntity(document);
-      await ctx.db.documentActivity.create({
+      const entity = toDocumentLogEntity({ ...document, id: document.id });
+      await ctx.pubsub.log({
+        activityType: ActivityType.DOCUMENT,
+        action: "downloaded",
+        entity: entity.entityType,
+        entityId: entity.entityId,
         data: {
           documentId: document.id,
-          action: "downloaded",
+          title: document.title,
           filename: document.title ?? document.url,
-          createdById: ctx.session.user.id,
-          entityType: entity.entityType,
-          entityId: entity.entityId,
+          url: document.url,
         },
       });
 

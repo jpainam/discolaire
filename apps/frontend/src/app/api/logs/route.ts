@@ -1,16 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod/v4";
 
+import type { ActivityType } from "@repo/db";
+
+import { caller } from "~/trpc/server";
+
 const schema = z.object({
   userId: z.string().min(1),
   schoolId: z.string(),
+  activityType: z.string(),
   action: z.string(),
   entity: z.string(),
-  entityId: z.string(),
-  metadata: z.json(),
+  entityId: z.string().optional(),
+  data: z.any().optional(),
 });
 export async function POST(req: NextRequest) {
   try {
@@ -21,17 +25,15 @@ export async function POST(req: NextRequest) {
       const error = z.treeifyError(result.error);
       return NextResponse.json(error, { status: 400 });
     }
-    const { userId, schoolId, action, entity, entityId, metadata } =
-      result.data;
+    const { activityType, action, entity, entityId, data } = result.data;
 
-    // await caller.logActivity.create({
-    //   userId,
-    //   schoolId,
-    //   action,
-    //   entity,
-    //   entityId,
-    //   metadata,
-    // });
+    await caller.logActivity.create({
+      activityType: activityType as ActivityType,
+      action,
+      entity,
+      entityId,
+      data,
+    });
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {

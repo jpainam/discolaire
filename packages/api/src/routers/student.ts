@@ -2,9 +2,10 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { subMonths } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
-import { z } from "zod/v4";
+import z from "zod";
 
 import type { Prisma } from "@repo/db";
+import { ActivityType } from "@repo/db";
 
 import { protectedProcedure } from "../trpc";
 import { buildPermissionIndex, checkPermission } from "../utils";
@@ -463,6 +464,29 @@ export const studentRouter = {
       },
     });
   }),
+  activities: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string().min(1),
+        activityType: z.enum(ActivityType).optional(),
+        limit: z.number().min(1).max(100).optional().default(20),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const logs = await ctx.db.logActivity.findMany({
+        where: {
+          schoolId: ctx.schoolId,
+          entity: "student",
+          entityId: input.studentId,
+          ...(input.activityType ? { activityType: input.activityType } : {}),
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.limit,
+      });
+      return ctx.services.logActivity.formatLogActivities(logs);
+    }),
   grades: protectedProcedure
     .input(z.object({ id: z.string(), termId: z.string().optional() }))
     .query(({ ctx, input }) => {
