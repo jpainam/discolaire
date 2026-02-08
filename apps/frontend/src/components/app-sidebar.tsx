@@ -4,9 +4,9 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 
 import type { Sidebar } from "~/components/ui/sidebar";
-import { cn } from "~/lib/utils";
 import { MainSidebar } from "~/components/MainSidebar";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
+import { cn } from "~/lib/utils";
 import { AdminSidebar } from "./administration/admin-sidebar";
 //import { TimetableSidebar } from "./timetables/TimetableSidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
