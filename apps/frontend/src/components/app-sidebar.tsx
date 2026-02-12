@@ -12,6 +12,7 @@ import { AdminSidebar } from "./administration/admin-sidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
+import { TimetableSidebar } from "./timetables/TimetableSidebar";
 import { UserSidebar } from "./users/UserSidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -48,7 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     segments.length > 1 &&
     !["create", "attendances"].includes(segments[1] ?? "");
 
-  //const isTimetable = pathname.startsWith("/timetables");
+  const isTimetable = pathname.startsWith("/timetables");
 
   React.useEffect(() => {
     setMounted(true);
@@ -58,6 +59,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       return {
         key: "classroom",
         Component: ClassroomSidebar,
+      };
+    }
+    if (isTimetable) {
+      return {
+        key: "timetable",
+        Component: TimetableSidebar,
       };
     }
     if (isHome) {

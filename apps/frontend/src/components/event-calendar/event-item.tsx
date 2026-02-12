@@ -3,7 +3,7 @@
 import type { DraggableAttributes } from "@dnd-kit/core";
 import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { useMemo } from "react";
-import { differenceInMinutes, format, getMinutes, isPast } from "date-fns";
+import { differenceInMinutes, format, isPast } from "date-fns";
 
 import type { CalendarEvent } from "~/components/event-calendar";
 import {
@@ -12,12 +12,8 @@ import {
 } from "~/components/event-calendar";
 import { cn } from "~/lib/utils";
 
-// Using date-fns format with custom formatting:
-// 'h' - hours (1-12)
-// 'a' - am/pm
-// ':mm' - minutes with leading zero (only if the token 'mm' is present)
 const formatTimeWithOptionalMinutes = (date: Date) => {
-  return format(date, getMinutes(date) === 0 ? "ha" : "h:mma").toLowerCase();
+  return format(date, "HH:mm");
 };
 
 interface EventWrapperProps {
@@ -33,6 +29,7 @@ interface EventWrapperProps {
   dndAttributes?: DraggableAttributes;
   onMouseDown?: (e: React.MouseEvent) => void;
   onTouchStart?: (e: React.TouchEvent) => void;
+  "aria-hidden"?: boolean | "true" | "false";
 }
 
 // Shared wrapper component for event styling
@@ -49,6 +46,7 @@ function EventWrapper({
   dndAttributes,
   onMouseDown,
   onTouchStart,
+  "aria-hidden": ariaHidden,
 }: EventWrapperProps) {
   // Always use the currentTime (if provided) to determine if the event is in the past
   const displayEnd = currentTime
@@ -73,6 +71,7 @@ function EventWrapper({
       onClick={onClick}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
+      aria-hidden={ariaHidden}
       {...dndListeners}
       {...dndAttributes}
     >
@@ -96,6 +95,7 @@ interface EventItemProps {
   dndAttributes?: DraggableAttributes;
   onMouseDown?: (e: React.MouseEvent) => void;
   onTouchStart?: (e: React.TouchEvent) => void;
+  "aria-hidden"?: boolean | "true" | "false";
 }
 
 export function EventItem({
@@ -113,6 +113,7 @@ export function EventItem({
   dndAttributes,
   onMouseDown,
   onTouchStart,
+  "aria-hidden": ariaHidden,
 }: EventItemProps) {
   const eventColor = event.color;
 
@@ -164,6 +165,7 @@ export function EventItem({
         dndAttributes={dndAttributes}
         onMouseDown={onMouseDown}
         onTouchStart={onTouchStart}
+        aria-hidden={ariaHidden}
       >
         {children ?? (
           <span className="truncate">
@@ -198,6 +200,7 @@ export function EventItem({
         dndAttributes={dndAttributes}
         onMouseDown={onMouseDown}
         onTouchStart={onTouchStart}
+        aria-hidden={ariaHidden}
       >
         {durationMinutes < 45 ? (
           <div className="truncate">
@@ -234,6 +237,7 @@ export function EventItem({
       onClick={onClick}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
+      aria-hidden={ariaHidden}
       {...dndListeners}
       {...dndAttributes}
     >

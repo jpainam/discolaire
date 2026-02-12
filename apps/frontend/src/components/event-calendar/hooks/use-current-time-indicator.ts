@@ -8,6 +8,7 @@ import { EndHour, StartHour } from "~/components/event-calendar/constants";
 export function useCurrentTimeIndicator(
   currentDate: Date,
   view: "day" | "week",
+  weekStartsOn: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 1,
 ) {
   const [currentTimePosition, setCurrentTimePosition] = useState<number>(0);
   const [currentTimeVisible, setCurrentTimeVisible] = useState<boolean>(false);
@@ -33,8 +34,8 @@ export function useCurrentTimeIndicator(
         isCurrentTimeVisible = isSameDay(now, currentDate);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       } else if (view === "week") {
-        const startOfWeekDate = startOfWeek(currentDate, { weekStartsOn: 0 });
-        const endOfWeekDate = endOfWeek(currentDate, { weekStartsOn: 0 });
+        const startOfWeekDate = startOfWeek(currentDate, { weekStartsOn });
+        const endOfWeekDate = endOfWeek(currentDate, { weekStartsOn });
         isCurrentTimeVisible = isWithinInterval(now, {
           start: startOfWeekDate,
           end: endOfWeekDate,
@@ -52,7 +53,7 @@ export function useCurrentTimeIndicator(
     const interval = setInterval(calculateTimePosition, 60000);
 
     return () => clearInterval(interval);
-  }, [currentDate, view]);
+  }, [currentDate, view, weekStartsOn]);
 
   return { currentTimePosition, currentTimeVisible };
 }

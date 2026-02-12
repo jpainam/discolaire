@@ -174,7 +174,7 @@ export function StudentGradesheetTable({
               {terms
                 .filter((t) => t.type == TermType.MONTHLY)
                 .map((t) => (
-                  <TableHead key={t.id}>{t.name.split(" ")[0]}</TableHead>
+                  <TableHead key={t.id}>{t.shortName}</TableHead>
                 ))}
 
               <TableHead className="text-center">{t("avg")}</TableHead>

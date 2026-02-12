@@ -34,6 +34,7 @@ import { cn } from "~/lib/utils";
 interface WeekViewProps {
   currentDate: Date;
   events: CalendarEvent[];
+  weekStartsOn: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   onEventSelect: (event: CalendarEvent) => void;
   onEventCreate: (startTime: Date) => void;
 }
@@ -50,18 +51,19 @@ interface PositionedEvent {
 export function WeekView({
   currentDate,
   events,
+  weekStartsOn,
   onEventSelect,
   onEventCreate,
 }: WeekViewProps) {
   const days = useMemo(() => {
-    const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 });
-    const weekEnd = endOfWeek(currentDate, { weekStartsOn: 0 });
+    const weekStart = startOfWeek(currentDate, { weekStartsOn });
+    const weekEnd = endOfWeek(currentDate, { weekStartsOn });
     return eachDayOfInterval({ start: weekStart, end: weekEnd });
-  }, [currentDate]);
+  }, [currentDate, weekStartsOn]);
 
   const weekStart = useMemo(
-    () => startOfWeek(currentDate, { weekStartsOn: 0 }),
-    [currentDate],
+    () => startOfWeek(currentDate, { weekStartsOn }),
+    [currentDate, weekStartsOn],
   );
 
   const hours = useMemo(() => {
@@ -216,24 +218,30 @@ export function WeekView({
   const { currentTimePosition, currentTimeVisible } = useCurrentTimeIndicator(
     currentDate,
     "week",
+    weekStartsOn,
   );
 
   return (
     <div data-slot="week-view" className="flex h-full flex-col">
       <div className="border-border/70 bg-background/80 sticky top-0 z-30 grid grid-cols-8 border-b backdrop-blur-md">
-        <div className="text-muted-foreground/70 py-2 text-center text-sm">
-          <span className="max-[479px]:sr-only">{format(new Date(), "O")}</span>
-        </div>
+        <div className="text-muted-foreground/70 py-2 text-center text-sm" />
         {days.map((day) => (
           <div
             key={day.toString()}
-            className="text-muted-foreground/70 data-today:text-foreground py-2 text-center text-sm data-today:font-medium"
+            className="text-muted-foreground/70 py-2 text-center"
             data-today={isToday(day) || undefined}
           >
-            <span className="sm:hidden" aria-hidden="true">
-              {format(day, "E")[0]} {format(day, "d")}
-            </span>
-            <span className="max-sm:hidden">{format(day, "EEE dd")}</span>
+            <div className="text-sm font-medium">{format(day, "EEE")}</div>
+            <div className="mt-1 flex justify-center">
+              <span
+                className={cn(
+                  "inline-flex size-7 items-center justify-center rounded-full text-sm",
+                  isToday(day) && "bg-orange-400 text-white",
+                )}
+              >
+                {format(day, "d")}
+              </span>
+            </div>
           </div>
         ))}
       </div>
@@ -243,7 +251,7 @@ export function WeekView({
           <div className="grid grid-cols-8">
             <div className="border-border/70 relative border-r">
               <span className="text-muted-foreground/70 absolute bottom-0 left-0 h-6 w-16 max-w-full pe-2 text-right text-[10px] sm:pe-4 sm:text-xs">
-                All day
+                all-day
               </span>
             </div>
             {days.map((day, dayIndex) => {
@@ -312,7 +320,7 @@ export function WeekView({
             >
               {index > 0 && (
                 <span className="bg-background text-muted-foreground/70 absolute -top-3 left-0 flex h-6 w-16 max-w-full items-center justify-end pe-2 text-[10px] sm:pe-4 sm:text-xs">
-                  {format(hour, "h a")}
+                  {format(hour, "HH:mm")}
                 </span>
               )}
             </div>

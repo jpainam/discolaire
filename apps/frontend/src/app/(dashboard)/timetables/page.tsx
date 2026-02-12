@@ -1,3 +1,5 @@
+import { TimetablesCalendarClient } from "./TimetablesCalendarClient";
+
 export default function Page() {
-  return <div>Time table</div>;
+  return <TimetablesCalendarClient />;
 }
