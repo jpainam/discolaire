@@ -1,6 +1,7 @@
 "use client";
+
 import { useMemo, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -59,8 +60,12 @@ export function CreateClassroomTimetable({
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
 
-  const subjectsQuery = useQuery(trpc.classroom.subjects.queryOptions(classroomId));
-  const createTimetableSlot = useMutation(trpc.subjectTimetable.create.mutationOptions());
+  const subjectsQuery = useQuery(
+    trpc.classroom.subjects.queryOptions(classroomId),
+  );
+  const createTimetableSlot = useMutation(
+    trpc.subjectTimetable.create.mutationOptions(),
+  );
 
   const [subjectId, setSubjectId] = useState<string | null>(
     initialSubjectId ? `${initialSubjectId}` : null,
@@ -129,7 +134,9 @@ export function CreateClassroomTimetable({
     const duplicate = queuedSlots.some((slot) => {
       const sameWeekdays =
         slot.weekdays.length === payload.weekdays.length &&
-        slot.weekdays.every((weekday, index) => weekday === payload.weekdays[index]);
+        slot.weekdays.every(
+          (weekday, index) => weekday === payload.weekdays[index],
+        );
 
       return (
         slot.subjectId === payload.subjectId &&
@@ -176,7 +183,8 @@ export function CreateClassroomTimetable({
       toast.success(t("created_successfully"), { id: 0 });
       return true;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "An error occurred";
+      const message =
+        error instanceof Error ? error.message : "An error occurred";
       toast.error(message, { id: 0 });
       return false;
     } finally {
@@ -268,13 +276,22 @@ export function CreateClassroomTimetable({
       <Separator />
 
       <div className="flex flex-wrap items-center gap-2">
-        <Button type="button" variant="outline" onClick={queueCurrentSlot} disabled={isBusy}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={queueCurrentSlot}
+          disabled={isBusy}
+        >
           Queue Slot
         </Button>
         <Button
           type="button"
           onClick={createCurrentSlot}
-          disabled={isBusy || subjectsQuery.isPending || (subjectsQuery.data?.length ?? 0) === 0}
+          disabled={
+            isBusy ||
+            subjectsQuery.isPending ||
+            (subjectsQuery.data?.length ?? 0) === 0
+          }
         >
           {t("create")}
         </Button>
@@ -283,7 +300,12 @@ export function CreateClassroomTimetable({
             Create queued ({queuedSlots.length})
           </Button>
         )}
-        <Button type="button" variant="ghost" className="ml-auto" onClick={closeModal}>
+        <Button
+          type="button"
+          variant="ghost"
+          className="ml-auto"
+          onClick={closeModal}
+        >
           {t("close")}
         </Button>
       </div>
@@ -299,11 +321,14 @@ export function CreateClassroomTimetable({
               >
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-medium">
-                    {subjectById.get(slot.subjectId) ?? `${t("subject")} #${slot.subjectId}`}
+                    {subjectById.get(slot.subjectId) ??
+                      `${t("subject")} #${slot.subjectId}`}
                   </div>
                   <div className="text-muted-foreground truncate text-xs capitalize">
-                    {slot.weekdays.map((day) => getWeekdayName(day, locale)).join(", ")} ·{" "}
-                    {slot.start} - {slot.end}
+                    {slot.weekdays
+                      .map((day) => getWeekdayName(day, locale))
+                      .join(", ")}{" "}
+                    · {slot.start} - {slot.end}
                   </div>
                 </div>
                 <Button
@@ -312,7 +337,9 @@ export function CreateClassroomTimetable({
                   size="icon-sm"
                   onClick={() => {
                     setQueuedSlots((currentSlots) =>
-                      currentSlots.filter((currentSlot) => currentSlot.id !== slot.id),
+                      currentSlots.filter(
+                        (currentSlot) => currentSlot.id !== slot.id,
+                      ),
                     );
                   }}
                 >

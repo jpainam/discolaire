@@ -559,7 +559,11 @@ export const studentRouter = {
             continue;
           }
 
-          const eventStart = createDateAtTime(day, startTime.hour, startTime.minute);
+          const eventStart = createDateAtTime(
+            day,
+            startTime.hour,
+            startTime.minute,
+          );
           const eventEnd = createDateAtTime(day, endTime.hour, endTime.minute);
 
           if (eventStart < lesson.validFrom) {
@@ -578,7 +582,8 @@ export const studentRouter = {
             if (timetableColorSet.has(rawColor as TimetableColor)) {
               color = rawColor as TimetableColor;
             } else {
-              color = timetableColors[colorIndex % timetableColors.length] ?? "sky";
+              color =
+                timetableColors[colorIndex % timetableColors.length] ?? "sky";
               colorIndex += 1;
             }
             courseColorMap.set(courseId, color);
@@ -586,7 +591,8 @@ export const studentRouter = {
 
           events.push({
             id: `${lesson.id}-${eventStart.toISOString()}`,
-            title: lesson.subject.course.shortName || lesson.subject.course.name,
+            title:
+              lesson.subject.course.shortName || lesson.subject.course.name,
             description: lesson.subject.course.name,
             start: eventStart,
             end: eventEnd,

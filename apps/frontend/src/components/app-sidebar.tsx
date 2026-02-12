@@ -104,7 +104,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       };
     }
     return null;
-  }, [isAdmin, isClassroom, isContact, isHome, isStaff, isStudent, isTimetable, isUser]);
+  }, [
+    isAdmin,
+    isClassroom,
+    isContact,
+    isHome,
+    isStaff,
+    isStudent,
+    isTimetable,
+    isUser,
+  ]);
 
   if (!mounted || !activeSidebar) {
     return null;

@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { TimetablesCalendarClient } from "~/components/timetables/TimetablesCalendarClient";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
-import { CreateClassroomTimetable } from "./CreateClassroomTimetable";
 import { ClassroomTimetableEventDetails } from "./ClassroomTimetableEventDetails";
+import { CreateClassroomTimetable } from "./CreateClassroomTimetable";
 
 export function ClassroomTimetablesCalendar({
   classroomId,

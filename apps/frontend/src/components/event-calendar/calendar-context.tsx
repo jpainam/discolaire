@@ -1,10 +1,6 @@
 "use client";
 
-import type {
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
-} from "react";
+import type { Dispatch, PropsWithChildren, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
@@ -144,7 +140,15 @@ export function EventCalendarProvider({
       setEvents,
       setView,
     }),
-    [currentDate, events, setCurrentDate, setEvents, setView, view, weekStartsOn],
+    [
+      currentDate,
+      events,
+      setCurrentDate,
+      setEvents,
+      setView,
+      view,
+      weekStartsOn,
+    ],
   );
 
   return (

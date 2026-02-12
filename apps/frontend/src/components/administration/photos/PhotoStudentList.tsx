@@ -226,8 +226,10 @@ export function PhotoStudentList() {
                                   title: t("delete"),
                                   description: t("delete_confirmation"),
 
-                                  onConfirm: () => {
-                                    void deletePhoto(p.key);
+                                  onConfirm: async () => {
+                                    if (p.key) {
+                                      await deletePhoto(p.key);
+                                    }
                                   },
                                 });
                               }}

@@ -9,10 +9,7 @@ function StudentDetailsSkeleton() {
         <div key={`section-${sectionIndex}`} className="space-y-4 px-4 py-2">
           <div className="grid grid-cols-2 gap-x-8 gap-y-3 xl:grid-cols-4">
             {valueWidths.map((width, rowIndex) => (
-              <div
-                key={`row-${sectionIndex}-${rowIndex}`}
-                className="contents"
-              >
+              <div key={`row-${sectionIndex}-${rowIndex}`} className="contents">
                 <Skeleton className="h-4 w-24" />
                 <Skeleton className={`h-4 ${width}`} />
               </div>
