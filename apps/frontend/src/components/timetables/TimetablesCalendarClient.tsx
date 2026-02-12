@@ -216,12 +216,24 @@ const createInitialEvents = (): CalendarEvent[] => [
 
 const defaultFocusDate = new Date(2024, 0, 17, 9, 0, 0, 0);
 
-export function TimetablesCalendarClient() {
-  const [events, setEvents] = useState<CalendarEvent[]>(() =>
-    createInitialEvents(),
+interface TimetablesCalendarClientProps {
+  initialEvents?: CalendarEvent[];
+  initialDate?: Date;
+  initialView?: CalendarView;
+}
+
+export function TimetablesCalendarClient({
+  initialEvents,
+  initialDate,
+  initialView = "week",
+}: TimetablesCalendarClientProps) {
+  const [events, setEvents] = useState<CalendarEvent[]>(
+    () => initialEvents ?? createInitialEvents(),
   );
-  const [currentDate, setCurrentDate] = useState<Date>(defaultFocusDate);
-  const [view, setView] = useState<CalendarView>("week");
+  const [currentDate, setCurrentDate] = useState<Date>(
+    () => initialDate ?? (initialEvents ? new Date() : defaultFocusDate),
+  );
+  const [view, setView] = useState<CalendarView>(initialView);
 
   return (
     <EventCalendarProvider
@@ -234,7 +246,7 @@ export function TimetablesCalendarClient() {
       onViewChange={setView}
     >
       <EventCalendar
-        className="bg-red-500s rounded-none border-none"
+        className="rounded-none border-none"
         onEventAdd={(event) => setEvents((previous) => [...previous, event])}
       />
     </EventCalendarProvider>

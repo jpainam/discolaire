@@ -1,5 +1,5 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { subMonths } from "date-fns";
+import { addDays, isBefore, startOfDay, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
 import { ActivityType } from "@repo/db";
@@ -20,6 +20,51 @@ const createUpdateSchema = z.object({
   phoneNumber2: z.string().optional(),
   email: z.string().optional(),
 });
+
+const timetableColors = [
+  "sky",
+  "amber",
+  "violet",
+  "rose",
+  "emerald",
+  "orange",
+] as const;
+
+type TimetableColor = (typeof timetableColors)[number];
+
+const timetableColorSet = new Set<TimetableColor>(timetableColors);
+
+function parseTimetableTime(time: string) {
+  const [hourString, minuteString] = time.split(":");
+  const hour = Number(hourString);
+  const minute = Number(minuteString);
+
+  if (!Number.isInteger(hour) || !Number.isInteger(minute)) {
+    return null;
+  }
+
+  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+    return null;
+  }
+
+  return { hour, minute };
+}
+
+function createDateAtTime(day: Date, hour: number, minute: number) {
+  return new Date(
+    day.getFullYear(),
+    day.getMonth(),
+    day.getDate(),
+    hour,
+    minute,
+    0,
+    0,
+  );
+}
+
+function normalizeWeekday(weekday: number) {
+  return ((weekday % 7) + 7) % 7;
+}
 export const contactRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
@@ -93,6 +138,199 @@ export const contactRouter = {
         ctx.schoolYearId,
         ctx.schoolId,
       );
+    }),
+  timetables: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      const contact = await ctx.db.contact.findFirst({
+        where: {
+          id: input,
+          schoolId: ctx.schoolId,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!contact) {
+        return [];
+      }
+
+      const studentLinks = await ctx.db.studentContact.findMany({
+        where: {
+          contactId: contact.id,
+        },
+        select: {
+          studentId: true,
+        },
+      });
+
+      if (studentLinks.length === 0) {
+        return [];
+      }
+
+      const enrollments = await ctx.db.enrollment.findMany({
+        where: {
+          schoolYearId: ctx.schoolYearId,
+          studentId: {
+            in: studentLinks.map((studentLink) => studentLink.studentId),
+          },
+          classroom: {
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
+        },
+        include: {
+          classroom: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+
+      const classroomMap = new Map<string, { id: string; name: string }>();
+      for (const enrollment of enrollments) {
+        classroomMap.set(enrollment.classroom.id, enrollment.classroom);
+      }
+
+      const classroomIds = [...classroomMap.keys()];
+      if (classroomIds.length === 0) {
+        return [];
+      }
+
+      const subjects = await ctx.db.subject.findMany({
+        where: {
+          classroomId: {
+            in: classroomIds,
+          },
+        },
+        select: {
+          id: true,
+          classroomId: true,
+        },
+      });
+
+      if (subjects.length === 0) {
+        return [];
+      }
+
+      const subjectClassroomMap = new Map<number, string>();
+      for (const subject of subjects) {
+        subjectClassroomMap.set(subject.id, subject.classroomId);
+      }
+
+      const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
+        where: { id: ctx.schoolYearId },
+      });
+
+      const lessons = await ctx.db.subjectTimetable.findMany({
+        include: {
+          subject: {
+            include: {
+              course: true,
+            },
+          },
+        },
+        where: {
+          subjectId: {
+            in: subjects.map((subject) => subject.id),
+          },
+          validFrom: { lt: schoolYear.endDate },
+          OR: [{ validTo: null }, { validTo: { gt: schoolYear.startDate } }],
+        },
+        orderBy: [{ weekday: "asc" }, { start: "asc" }],
+      });
+
+      const lessonsByWeekday = new Map<number, (typeof lessons)[number][]>();
+      for (const lesson of lessons) {
+        const weekday = normalizeWeekday(lesson.weekday);
+        const lessonList = lessonsByWeekday.get(weekday);
+        if (lessonList) {
+          lessonList.push(lesson);
+        } else {
+          lessonsByWeekday.set(weekday, [lesson]);
+        }
+      }
+
+      const courseColorMap = new Map<string, TimetableColor>();
+      let colorIndex = 0;
+      const events: {
+        id: string;
+        title: string;
+        description: string;
+        start: Date;
+        end: Date;
+        allDay: false;
+        color: TimetableColor;
+        location: string;
+      }[] = [];
+
+      let day = startOfDay(schoolYear.startDate);
+      const hardEnd = startOfDay(schoolYear.endDate);
+
+      while (isBefore(day, hardEnd)) {
+        const dayLessons = lessonsByWeekday.get(day.getDay()) ?? [];
+
+        for (const lesson of dayLessons) {
+          const startTime = parseTimetableTime(lesson.start);
+          const endTime = parseTimetableTime(lesson.end);
+          if (!startTime || !endTime) {
+            continue;
+          }
+
+          const eventStart = createDateAtTime(day, startTime.hour, startTime.minute);
+          const eventEnd = createDateAtTime(day, endTime.hour, endTime.minute);
+
+          if (eventStart < lesson.validFrom) {
+            continue;
+          }
+
+          if (lesson.validTo && eventStart >= lesson.validTo) {
+            continue;
+          }
+
+          const classroomId = subjectClassroomMap.get(lesson.subjectId);
+          if (!classroomId) {
+            continue;
+          }
+
+          const classroom = classroomMap.get(classroomId);
+          if (!classroom) {
+            continue;
+          }
+
+          const rawColor = lesson.subject.course.color.toLowerCase();
+          const courseId = lesson.subject.course.id;
+
+          let color = courseColorMap.get(courseId);
+          if (!color) {
+            if (timetableColorSet.has(rawColor as TimetableColor)) {
+              color = rawColor as TimetableColor;
+            } else {
+              color = timetableColors[colorIndex % timetableColors.length] ?? "sky";
+              colorIndex += 1;
+            }
+            courseColorMap.set(courseId, color);
+          }
+
+          events.push({
+            id: `${lesson.id}-${eventStart.toISOString()}-${classroom.id}`,
+            title: `${lesson.subject.course.shortName || lesson.subject.course.name} (${classroom.name})`,
+            description: lesson.subject.course.name,
+            start: eventStart,
+            end: eventEnd,
+            allDay: false,
+            color,
+            location: classroom.name,
+          });
+        }
+
+        day = addDays(day, 1);
+      }
+
+      return events;
     }),
   getFromUserId: protectedProcedure
     .input(z.string().min(1))

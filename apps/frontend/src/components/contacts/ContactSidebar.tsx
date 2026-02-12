@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import {
+  CalendarDays,
   ChatIcon,
   GradeIcon,
   NotificationIcon,
@@ -45,6 +46,11 @@ export function ContactSidebar({
         name: "grades",
         url: `/contacts/${params.id}/grades`,
         icon: <GradeIcon />,
+      },
+      {
+        name: "timetable",
+        url: `/contacts/${params.id}/timetables`,
+        icon: <CalendarDays />,
       },
       {
         name: "documents",

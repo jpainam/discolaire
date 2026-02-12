@@ -4,40 +4,18 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { ClassroomTimetable } from "./ClassroomTimetable";
+import { ClassroomTimetablesCalendar } from "./ClassroomTimetablesCalendar";
 
-export default async function Page(props: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ mode: "day" | "week" | "month" | null | undefined }>;
-}) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const searchParams = await props.searchParams;
-  console.log(searchParams);
 
-  // const mode = searchParams.mode ?? "week";
-  batchPrefetch([
-    trpc.subjectTimetable.byClassroom.queryOptions({
-      classroomId: params.id,
-    }),
-    trpc.classroom.teachers.queryOptions(params.id),
-  ]);
+  batchPrefetch([trpc.classroom.timetables.queryOptions(params.id)]);
 
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense
-          fallback={
-            <div className="grid gap-4 p-4">
-              <Skeleton className="h-12" />
-              <div className="grid grid-cols-4 gap-4">
-                {Array.from({ length: 16 }).map((_, index) => (
-                  <Skeleton key={index} className="h-12" />
-                ))}
-              </div>
-            </div>
-          }
-        >
-          <ClassroomTimetable />
+        <Suspense fallback={<Skeleton className="m-4 h-[700px] w-full" />}>
+          <ClassroomTimetablesCalendar classroomId={params.id} />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>
