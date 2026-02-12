@@ -266,7 +266,7 @@ export function CreateEditDocument({
             >
               <UploadIcon className="text-muted-foreground size-5" />
               <div className="flex flex-col items-center justify-center gap-px">
-                <p className="text-muted-foreground text-sm font-medium">
+                <p className="text-muted-foreground text-xs">
                   {isDragging
                     ? "Drop the file here"
                     : "Drag and drop a file here, or click to select"}
@@ -302,7 +302,9 @@ export function CreateEditDocument({
                     />
                   </span>
                   <div>
-                    <p className="text-foreground text-sm">{file.name}</p>
+                    <p className="text-foreground max-w-[160px] truncate text-xs">
+                      {file.name}
+                    </p>
                     <p className="text-muted-foreground text-xs">
                       {formatBytes(file.size)}
                     </p>

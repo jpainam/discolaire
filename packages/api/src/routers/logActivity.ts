@@ -41,20 +41,42 @@ export const logActivityRouter = {
       },
     });
   }),
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.logActivity.findMany({
-      take: 100,
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        user: true,
-      },
-      where: {
-        schoolId: ctx.schoolId,
-      },
-    });
-  }),
+  all: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().optional(),
+        limit: z.number().optional().default(100),
+        entityId: z.string().optional(),
+        entityType: z.enum(["staff", "student", "contact"]),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const activities = await ctx.db.logActivity.findMany({
+        take: 100,
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          user: true,
+        },
+        where: {
+          schoolId: ctx.schoolId,
+          entityId: input.entityId,
+          entity: input.entityType,
+          ...(input.query
+            ? {
+                OR: [
+                  { action: { contains: input.query, mode: "insensitive" } },
+                  // { data: { contains: input.query, mode: "insensitive" } },
+                ],
+              }
+            : {}),
+        },
+      });
+      return activities.map((log) => {
+        return ctx.services.logActivity.formatLogActivity(log);
+      });
+    }),
   search: protectedProcedure
     .input(
       z.object({

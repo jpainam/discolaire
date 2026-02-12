@@ -287,3 +287,4 @@ directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 - https://screenzy.io/
 - https://square.lndev.me/
 - https://github.com/jpainam/discolaire/blob/4324613a0d0feec36b01a659a814b5a58ec8d4d5/apps/frontend/Dockerfile
+- https://miale.ac.ke/biometric-integration
