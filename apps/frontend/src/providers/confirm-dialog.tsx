@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type React from "react";
-import type { ComponentPropsWithRef, ReactNode } from "react";
+import type {
+  ComponentPropsWithRef,
+  MouseEvent as ReactMouseEvent,
+  ReactNode,
+} from "react";
 import {
   createContext,
   memo,
@@ -23,11 +27,13 @@ import {
   AlertDialogPortal,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
+import { Spinner } from "~/components/ui/spinner";
 
 export interface CustomActionsProps {
-  confirm: () => void;
+  confirm: (event?: ReactMouseEvent<HTMLButtonElement>) => void;
   cancel: () => void;
   config: ConfirmOptions;
+  isConfirming: boolean;
   setConfig: ConfigUpdater;
 }
 
@@ -46,6 +52,7 @@ export interface ConfirmOptions {
   title?: ReactNode;
   description?: ReactNode;
   contentSlot?: ReactNode;
+  onConfirm?: () => void | Promise<void>;
   confirmText?: string;
   cancelText?: string;
   icon?: ReactNode;
@@ -62,6 +69,7 @@ export interface ConfirmOptions {
 
 export interface ConfirmDialogState {
   isOpen: boolean;
+  isConfirming: boolean;
   config: ConfirmOptions;
   resolver: ((value: boolean) => void) | null;
 }
@@ -102,12 +110,13 @@ function isLegacyCustomActions(
 
 const ConfirmDialogContent: React.FC<{
   config: ConfirmOptions;
-  onConfirm: () => void;
+  isConfirming: boolean;
+  onConfirm: (event?: ReactMouseEvent<HTMLButtonElement>) => void;
   onCancel: () => void;
   setConfig: (
     config: ConfirmOptions | ((prev: ConfirmOptions) => ConfirmOptions),
   ) => void;
-}> = memo(({ config, onConfirm, onCancel, setConfig }) => {
+}> = memo(({ config, isConfirming, onConfirm, onCancel, setConfig }) => {
   const {
     title,
     description,
@@ -136,6 +145,7 @@ const ConfirmDialogContent: React.FC<{
             <AlertDialogCancel
               onClick={onCancel}
               {...cancelButton}
+              disabled={Boolean(cancelButton?.disabled) || isConfirming}
               variant={"secondary"}
             >
               {cancelText && t(cancelText)}
@@ -144,9 +154,13 @@ const ConfirmDialogContent: React.FC<{
           <AlertDialogAction
             onClick={onConfirm}
             {...confirmButton}
+            disabled={Boolean(confirmButton?.disabled) || isConfirming}
             variant={"destructive"}
           >
-            {confirmText && t(confirmText)}
+            <span className="inline-flex items-center gap-2">
+              {isConfirming && <Spinner />}
+              {confirmText && t(confirmText)}
+            </span>
           </AlertDialogAction>
         </>
       );
@@ -160,6 +174,7 @@ const ConfirmDialogContent: React.FC<{
       confirm: onConfirm,
       cancel: onCancel,
       config,
+      isConfirming,
       setConfig,
     });
   };
@@ -202,18 +217,28 @@ ConfirmDialogContent.displayName = "ConfirmDialogContent";
 
 const ConfirmDialog: React.FC<{
   isOpen: boolean;
+  isConfirming: boolean;
   onOpenChange: (isOpen: boolean) => void;
   config: ConfirmOptions;
-  onConfirm: () => void;
+  onConfirm: (event?: ReactMouseEvent<HTMLButtonElement>) => void;
   onCancel: () => void;
   setConfig: (
     config: ConfirmOptions | ((prev: ConfirmOptions) => ConfirmOptions),
   ) => void;
 }> = memo(
-  ({ isOpen, onOpenChange, config, onConfirm, onCancel, setConfig }) => (
+  ({
+    isOpen,
+    isConfirming,
+    onOpenChange,
+    config,
+    onConfirm,
+    onCancel,
+    setConfig,
+  }) => (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <ConfirmDialogContent
         config={config}
+        isConfirming={isConfirming}
         onConfirm={onConfirm}
         onCancel={onCancel}
         setConfig={setConfig}
@@ -230,6 +255,7 @@ export const ConfirmDialogProvider: React.FC<{
 }> = ({ defaultOptions = {}, children }) => {
   const [dialogState, setDialogState] = useState<ConfirmDialogState>({
     isOpen: false,
+    isConfirming: false,
     config: baseDefaultOptions,
     resolver: null,
   });
@@ -258,43 +284,72 @@ export const ConfirmDialogProvider: React.FC<{
   );
 
   const confirm = useCallback(
-    (options: ConfirmOptions) => {
-      setDialogState((prev) => ({
-        isOpen: true,
-        config: { ...mergedDefaultOptions, ...options },
-        resolver: prev.resolver,
-      }));
-      return new Promise<boolean>((resolve) => {
-        setDialogState((prev) => ({
-          ...prev,
+    (options: ConfirmOptions) =>
+      new Promise<boolean>((resolve) => {
+        setDialogState({
+          isOpen: true,
+          isConfirming: false,
+          config: { ...mergedDefaultOptions, ...options },
           resolver: resolve,
-        }));
-      });
-    },
+        });
+      }),
     [mergedDefaultOptions],
   );
 
-  const handleConfirm = useCallback(() => {
-    setDialogState((prev) => {
-      if (prev.resolver) {
-        prev.resolver(true);
+  const handleConfirm = useCallback(
+    async (event?: ReactMouseEvent<HTMLButtonElement>) => {
+      event?.preventDefault();
+
+      const confirmHandler = dialogState.config.onConfirm;
+      const resolver = dialogState.resolver;
+
+      if (!confirmHandler) {
+        resolver?.(true);
+        setDialogState((prev) => ({
+          ...prev,
+          isOpen: false,
+          isConfirming: false,
+          resolver: null,
+        }));
+        return;
       }
-      return {
+
+      setDialogState((prev) => ({
         ...prev,
-        isOpen: false,
-        resolver: null,
-      };
-    });
-  }, []);
+        isConfirming: true,
+      }));
+
+      try {
+        await confirmHandler();
+        resolver?.(true);
+        setDialogState((prev) => ({
+          ...prev,
+          isOpen: false,
+          isConfirming: false,
+          resolver: null,
+        }));
+      } catch {
+        setDialogState((prev) => ({
+          ...prev,
+          isConfirming: false,
+        }));
+      }
+    },
+    [dialogState.config.onConfirm, dialogState.resolver],
+  );
 
   const handleCancel = useCallback(() => {
     setDialogState((prev) => {
+      if (prev.isConfirming) {
+        return prev;
+      }
       if (prev.resolver) {
         prev.resolver(false);
       }
       return {
         ...prev,
         isOpen: false,
+        isConfirming: false,
         resolver: null,
       };
     });
@@ -322,6 +377,7 @@ export const ConfirmDialogProvider: React.FC<{
       {children}
       <ConfirmDialog
         isOpen={dialogState.isOpen}
+        isConfirming={dialogState.isConfirming}
         onOpenChange={handleOpenChange}
         config={dialogState.config}
         onConfirm={handleConfirm}

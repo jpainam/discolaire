@@ -290,14 +290,15 @@ export function ContactTable() {
                               disabled={deleteContactMutation.isPending}
                               variant="destructive"
                               onSelect={async () => {
-                                const isConfirmed = await confirm({
+                                await confirm({
                                   title: t("delete"),
                                   description: t("delete_confirmation"),
+                                  onConfirm: async () => {
+                                    await deleteContactMutation.mutateAsync(
+                                      c.id,
+                                    );
+                                  },
                                 });
-                                if (isConfirmed) {
-                                  toast.loading(t("deleting"), { id: 0 });
-                                  deleteContactMutation.mutate(c.id);
-                                }
                               }}
                             >
                               <Trash2 />
