@@ -220,16 +220,22 @@ interface TimetablesCalendarClientProps {
   initialEvents?: CalendarEvent[];
   initialDate?: Date;
   initialView?: CalendarView;
+  addCreatedEventToCalendar?: boolean;
+  onCreateSlot?: (slot: { start: Date; end: Date }) => void;
 }
 
 export function TimetablesCalendarClient({
   initialEvents,
   initialDate,
   initialView = "week",
+  addCreatedEventToCalendar = true,
+  onCreateSlot,
 }: TimetablesCalendarClientProps) {
-  const [events, setEvents] = useState<CalendarEvent[]>(
+  const [localEvents, setLocalEvents] = useState<CalendarEvent[]>(
     () => initialEvents ?? createInitialEvents(),
   );
+  const events = initialEvents ?? localEvents;
+  const isServerDriven = initialEvents !== undefined;
   const [currentDate, setCurrentDate] = useState<Date>(
     () => initialDate ?? (initialEvents ? new Date() : defaultFocusDate),
   );
@@ -241,13 +247,23 @@ export function TimetablesCalendarClient({
       currentDate={currentDate}
       view={view}
       weekStartsOn={1}
-      onEventsChange={setEvents}
+      onEventsChange={(nextEvents) => {
+        if (!isServerDriven) {
+          setLocalEvents(nextEvents);
+        }
+      }}
       onCurrentDateChange={setCurrentDate}
       onViewChange={setView}
     >
       <EventCalendar
         className="rounded-none border-none"
-        onEventAdd={(event) => setEvents((previous) => [...previous, event])}
+        onEventAdd={(event) => {
+          onCreateSlot?.({ start: event.start, end: event.end });
+
+          if (addCreatedEventToCalendar && !isServerDriven) {
+            setLocalEvents((previous) => [...previous, event]);
+          }
+        }}
       />
     </EventCalendarProvider>
   );

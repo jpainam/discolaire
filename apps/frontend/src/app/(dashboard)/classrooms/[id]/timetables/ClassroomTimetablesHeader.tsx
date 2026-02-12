@@ -32,6 +32,7 @@ export function ClassroomTimetablesHeader() {
             openModal({
               title: t("create"),
               description: `${classroom.name} - ${t("timetable")}`,
+              className: "sm:max-w-xl",
               view: <CreateClassroomTimetable classroomId={classroomId} />,
             });
           }}
