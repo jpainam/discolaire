@@ -120,14 +120,16 @@ export function StudentGradeHeader() {
                   disabled={!params.gradeId}
                   onSelect={async () => {
                     if (!params.gradeId) return;
-                    const isConfirmed = await confirm({
+                    await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
+
+                      onConfirm: async () => {
+                        await deleteGradeMutation.mutateAsync(
+                          Number(params.gradeId),
+                        );
+                      },
                     });
-                    if (isConfirmed) {
-                      toast.loading(t("deleting"), { id: 0 });
-                      deleteGradeMutation.mutate(Number(params.gradeId));
-                    }
                   }}
                 >
                   <DeleteIcon />

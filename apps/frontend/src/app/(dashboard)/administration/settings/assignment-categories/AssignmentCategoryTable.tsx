@@ -83,14 +83,16 @@ export function AssignmentCategoryTable() {
                     <DropdownMenuItem
                       disabled={deleteCategoryMutation.isPending}
                       onSelect={async () => {
-                        const isConfirmed = await confirm({
+                        await confirm({
                           title: t("delete"),
                           description: t("delete_confirmation"),
+
+                          onConfirm: async () => {
+                            await deleteCategoryMutation.mutateAsync(
+                              category.id,
+                            );
+                          },
                         });
-                        if (isConfirmed) {
-                          toast.loading(t("deleting"), { id: 0 });
-                          deleteCategoryMutation.mutate(category.id);
-                        }
                       }}
                       variant="destructive"
                       className="dark:data-[variant=destructive]:focus:bg-destructive/10"

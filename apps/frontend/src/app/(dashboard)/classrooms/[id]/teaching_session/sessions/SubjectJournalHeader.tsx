@@ -104,18 +104,20 @@ export function SubjectJournalHeader({
                 {type == "teaching_session" && (
                   <DropdownMenuItem
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("clear_all"),
                         description: t("delete_confirmation"),
                         // icon: <Trash2 className="text-destructive" />,
                         // alertDialogTitle: {
                         //   className: "flex items-center gap-2",
                         // },
+
+                        onConfirm: async () => {
+                          await deleteSubjectJournal.mutateAsync({
+                            subjectId: subjectId,
+                          });
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteSubjectJournal.mutate({ subjectId: subjectId });
-                      }
                     }}
                     variant="destructive"
                   >

@@ -113,18 +113,18 @@ export function SectionTable() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onSelect={async () => {
-                        const isConfirmed = await confirm({
+                        await confirm({
                           title: t("delete"),
                           description: t("delete_confirmation"),
                           icon: <Trash2 className="text-destructive" />,
                           alertDialogTitle: {
                             className: "flex items-center gap-2",
                           },
+
+                          onConfirm: async () => {
+                            await deleteSectionMutation.mutateAsync(cycle.id);
+                          },
                         });
-                        if (isConfirmed) {
-                          toast.loading(t("deleting"), { id: 0 });
-                          deleteSectionMutation.mutate(cycle.id);
-                        }
                       }}
                       variant="destructive"
                       className="dark:data-[variant=destructive]:focus:bg-destructive/10"

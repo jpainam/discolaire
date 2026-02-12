@@ -169,7 +169,7 @@ export function SchoolYearTable() {
                         <DropdownMenuItem
                           disabled={!schoolYear.isActive}
                           onSelect={async () => {
-                            const isConfirm = await confirm({
+                            await confirm({
                               icon: (
                                 <Trash2 className="text-destructive h-4 w-4" />
                               ),
@@ -178,11 +178,13 @@ export function SchoolYearTable() {
                               alertDialogTitle: {
                                 className: "flex items-center gap-2",
                               },
+
+                              onConfirm: async () => {
+                                await deleteSchoolYearMutation.mutateAsync(
+                                  schoolYear.id,
+                                );
+                              },
                             });
-                            if (isConfirm) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deleteSchoolYearMutation.mutate(schoolYear.id);
-                            }
                           }}
                           className="text-destructive"
                         >

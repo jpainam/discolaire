@@ -268,7 +268,7 @@ export function ClassroomSubjectTable() {
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 onSelect={async () => {
-                                  const isConfirmed = await confirm({
+                                  await confirm({
                                     title: t("delete"),
                                     description: t("delete_confirmation"),
                                     icon: (
@@ -277,11 +277,13 @@ export function ClassroomSubjectTable() {
                                     alertDialogTitle: {
                                       className: "flex items-center gap-2",
                                     },
+
+                                    onConfirm: async () => {
+                                      await deleteSubjectMutation.mutateAsync(
+                                        subject.id,
+                                      );
+                                    },
                                   });
-                                  if (isConfirmed) {
-                                    toast.loading(t("deleting"), { id: 0 });
-                                    deleteSubjectMutation.mutate(subject.id);
-                                  }
                                 }}
                                 variant="destructive"
                                 className="dark:data-[variant=destructive]:focus:bg-destructive/10"

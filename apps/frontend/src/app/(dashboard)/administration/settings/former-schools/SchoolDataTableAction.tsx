@@ -42,19 +42,19 @@ export function SchoolDataTableAction({
       {table.getSelectedRowModel().rows.length > 0 && (
         <Button
           onClick={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
               // icon: <Trash2 className="text-destructive" />,
               // alertDialogTitle: {
               //   className: "flex items-center gap-2",
               // },
+
+              onConfirm: async () => {
+                const selectedIds = rows.map((row) => row.original.id);
+                await deleteSchoolsMutation.mutateAsync(selectedIds);
+              },
             });
-            if (isConfirmed) {
-              toast.loading(t("deleting"), { id: 0 });
-              const selectedIds = rows.map((row) => row.original.id);
-              deleteSchoolsMutation.mutate(selectedIds);
-            }
           }}
           variant="destructive"
           className="dark:data-[variant=destructive]:focus:bg-destructive/10"

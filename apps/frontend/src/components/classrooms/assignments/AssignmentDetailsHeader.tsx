@@ -72,18 +72,18 @@ export function AssignmentDetailsHeader({
               variant="destructive"
               className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               onSelect={async () => {
-                const isConfirmed = await confirm({
+                await confirm({
                   title: t("delete"),
                   description: t("delete_confirmation"),
                   icon: <Trash2 className="text-destructive" />,
                   alertDialogTitle: {
                     className: "flex items-center gap-1",
                   },
+
+                  onConfirm: async () => {
+                    await deleteAssignmentMutation.mutateAsync(assignmentId);
+                  },
                 });
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  deleteAssignmentMutation.mutate(assignmentId);
-                }
               }}
             >
               <Trash2 />

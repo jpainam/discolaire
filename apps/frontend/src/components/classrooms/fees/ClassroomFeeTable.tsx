@@ -169,14 +169,16 @@ export function ClassroomFeeTable() {
                                     variant="destructive"
                                     className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                                     onSelect={async () => {
-                                      const isConfirmed = await confirm({
+                                      await confirm({
                                         title: t("delete"),
                                         description: t("delete_confirmation"),
+
+                                        onConfirm: async () => {
+                                          await deleteFeeMutation.mutateAsync(
+                                            fee.id,
+                                          );
+                                        },
                                       });
-                                      if (isConfirmed) {
-                                        toast.loading(t("deleting"), { id: 0 });
-                                        deleteFeeMutation.mutate(fee.id);
-                                      }
                                     }}
                                   >
                                     <DeleteIcon />

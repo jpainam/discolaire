@@ -56,21 +56,23 @@ export function InventoryDataTableAction({
       {table.getSelectedRowModel().rows.length > 0 && canDeleteInventory && (
         <Button
           onClick={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
+
+              onConfirm: async () => {
+                const selectedItems = rows.map((row) => row.original);
+                await Promise.all(
+                  selectedItems.map(async (item) => {
+                    if (item.type === "ASSET") {
+                      await deleteAssetMutation.mutateAsync(item.id);
+                      return;
+                    }
+                    await deleteConsumableMutation.mutateAsync(item.id);
+                  }),
+                );
+              },
             });
-            if (isConfirmed) {
-              toast.loading(t("deleting"), { id: 0 });
-              const selectedItems = rows.map((row) => row.original);
-              selectedItems.forEach((item) => {
-                if (item.type === "ASSET") {
-                  deleteAssetMutation.mutate(item.id);
-                } else {
-                  deleteConsumableMutation.mutate(item.id);
-                }
-              });
-            }
           }}
           variant="destructive"
         >

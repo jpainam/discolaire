@@ -206,14 +206,15 @@ export function ClassroomSubjectTimetable({
                   className="hover:text-destructive"
                   size="icon-sm"
                   onClick={async () => {
-                    const isconfirmed = await confirm({
+                    await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
+
+                      onConfirm: async () => {
+                        toast.loading(t("Processing"), { id: 0 });
+                        await deleteTimetableSlot.mutateAsync(slot.id);
+                      },
                     });
-                    if (isconfirmed) {
-                      toast.loading(t("Processing"), { id: 0 });
-                      deleteTimetableSlot.mutate(slot.id);
-                    }
                   }}
                 >
                   <Trash />

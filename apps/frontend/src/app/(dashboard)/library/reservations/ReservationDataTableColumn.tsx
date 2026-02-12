@@ -228,14 +228,14 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
               <DropdownMenuItem
                 variant="destructive"
                 onSelect={async () => {
-                  const isConfirmed = await confirm({
+                  await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
+
+                    onConfirm: async () => {
+                      await bookMutation.mutateAsync(book.id);
+                    },
                   });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    void bookMutation.mutate(book.id);
-                  }
                 }}
               >
                 <Trash2 />

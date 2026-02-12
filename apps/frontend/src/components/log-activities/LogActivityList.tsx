@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -59,6 +60,7 @@ export function LogActivityList({
   ];
 
   const locale = useLocale();
+
   const [range, setRange] = useQueryStates({
     from: parseAsIsoDate,
     to: parseAsIsoDate,

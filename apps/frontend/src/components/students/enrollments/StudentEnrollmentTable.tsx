@@ -141,7 +141,7 @@ export function StudentEnrollmentTable({
                             variant="destructive"
                             disabled={!c.schoolYear.isActive || disabled}
                             onSelect={async () => {
-                              const isConfirmed = await confirm({
+                              await confirm({
                                 title: t("delete"),
                                 description: t("delete_confirmation"),
                                 icon: (
@@ -150,11 +150,14 @@ export function StudentEnrollmentTable({
                                 alertDialogTitle: {
                                   className: "flex items-center gap-2",
                                 },
+
+                                onConfirm: async () => {
+                                  toast.loading(t("Processing"), { id: 0 });
+                                  await deleteEnrollmentMutation.mutateAsync(
+                                    c.id,
+                                  );
+                                },
                               });
-                              if (isConfirmed) {
-                                toast.loading(t("Processing"), { id: 0 });
-                                deleteEnrollmentMutation.mutate(c.id);
-                              }
                             }}
                           >
                             <Trash2 />

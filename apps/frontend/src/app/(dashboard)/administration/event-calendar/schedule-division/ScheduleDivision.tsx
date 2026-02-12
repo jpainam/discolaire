@@ -100,14 +100,14 @@ export function ScheduleDivision() {
                   size="icon"
                   className="size-7"
                   onClick={async () => {
-                    const isConfirmed = await confirm({
+                    await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
+
+                      onConfirm: async () => {
+                        await deleteScheduleMutation.mutateAsync(slot.id);
+                      },
                     });
-                    if (isConfirmed) {
-                      toast.loading(t("deleting"));
-                      deleteScheduleMutation.mutate(slot.id);
-                    }
                   }}
                 >
                   <Trash2 className="h-3 w-3" />

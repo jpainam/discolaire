@@ -62,15 +62,15 @@ export function StaffDataTableActions({
           <Button
             size={"sm"}
             onClick={async () => {
-              const isConfirmed = await confirm({
+              await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
+
+                onConfirm: async () => {
+                  const ids = rows.map((row) => row.original.id);
+                  await deleteStaffMutation.mutateAsync(ids);
+                },
               });
-              if (isConfirmed) {
-                const ids = rows.map((row) => row.original.id);
-                toast.loading(t("deleting"), { id: 0 });
-                deleteStaffMutation.mutate(ids);
-              }
             }}
             variant="destructive"
             //className="dark:data-[variant=destructive]:focus:bg-destructive/10"

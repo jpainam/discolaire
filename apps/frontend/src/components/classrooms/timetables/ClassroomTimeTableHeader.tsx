@@ -87,20 +87,20 @@ export function ClassroomTimeTableHeader() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={async () => {
-                    const isConfirmed = await confirm({
+                    await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
                       // icon: <Trash2 className="h-5 w-5 text-destructive" />,
                       // alertDialogTitle: {
                       //   className: "flex items-center gap-1",
                       // },
+
+                      onConfirm: async () => {
+                        await clearClassroomLessonMutation.mutateAsync({
+                          classroomId: params.id,
+                        });
+                      },
                     });
-                    if (isConfirmed) {
-                      toast.loading(t("deleting"), { id: 0 });
-                      clearClassroomLessonMutation.mutate({
-                        classroomId: params.id,
-                      });
-                    }
                   }}
                   variant="destructive"
                 >

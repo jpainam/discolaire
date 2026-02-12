@@ -239,14 +239,14 @@ function ActionCell({
               <DropdownMenuItem
                 variant="destructive"
                 onSelect={async () => {
-                  const isConfirmed = await confirm({
+                  await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
+
+                    onConfirm: async () => {
+                      await deleteUsageMutation.mutateAsync(inventory.id);
+                    },
                   });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteUsageMutation.mutate(inventory.id);
-                  }
                 }}
               >
                 <Trash2 />

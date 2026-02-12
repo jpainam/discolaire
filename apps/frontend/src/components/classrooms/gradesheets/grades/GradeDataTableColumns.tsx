@@ -257,18 +257,18 @@ function ActionCells({ grade }: { grade: GradeSheetGetGradeProcedureOutput }) {
               disabled={isClosed}
               variant="destructive"
               onSelect={async () => {
-                const isConfirmed = await confirm({
+                await confirm({
                   title: t("delete"),
                   description: t("delete_confirmation"),
+
+                  onConfirm: async () => {
+                    await markGradeAbsent.mutateAsync({
+                      id: grade.id,
+                      grade: 0,
+                      isAbsent: true,
+                    });
+                  },
                 });
-                if (isConfirmed) {
-                  toast.loading(t("deleting"), { id: 0 });
-                  markGradeAbsent.mutate({
-                    id: grade.id,
-                    grade: 0,
-                    isAbsent: true,
-                  });
-                }
               }}
             >
               <FlagOff />

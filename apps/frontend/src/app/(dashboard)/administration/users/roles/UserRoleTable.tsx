@@ -227,14 +227,17 @@ export function UserRoleTable() {
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 onSelect={async () => {
-                                  const isConfirmed = await confirm({
+                                  await confirm({
                                     title: t("delete"),
                                     description: t("delete_confirmation"),
+
+                                    onConfirm: async () => {
+                                      toast.loading(t("Processing"), { id: 0 });
+                                      await deleteRoleMutation.mutateAsync(
+                                        r.id,
+                                      );
+                                    },
                                   });
-                                  if (isConfirmed) {
-                                    toast.loading(t("Processing"), { id: 0 });
-                                    deleteRoleMutation.mutate(r.id);
-                                  }
                                 }}
                                 disabled={!canDeleteRole}
                                 variant="destructive"

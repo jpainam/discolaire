@@ -41,25 +41,21 @@ export function AssignmentDataTableActions({ table }: ToolbarActionsProps) {
               const assignmentIds = table
                 .getFilteredSelectedRowModel()
                 .rows.map((row) => row.original.id);
-              const isConfirmed = await confirm({
+              await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
+
+                onConfirm: async () => {
+                  try {
+                    await deleteAssignemntMutation.mutateAsync(assignmentIds);
+                    table.toggleAllRowsSelected(false);
+                    toast.success(t("deleted_successfully"), { id: 0 });
+                  } catch (err) {
+                    toast.error(getErrorMessage(err), { id: 0 });
+                    throw err;
+                  }
+                },
               });
-              if (isConfirmed) {
-                toast.promise(
-                  deleteAssignemntMutation.mutateAsync(assignmentIds),
-                  {
-                    loading: t("deleting"),
-                    success: () => {
-                      table.toggleAllRowsSelected(false);
-                      return t("deleted_successfully");
-                    },
-                    error: (err) => {
-                      return getErrorMessage(err);
-                    },
-                  },
-                );
-              }
             }}
             variant="destructive"
           >

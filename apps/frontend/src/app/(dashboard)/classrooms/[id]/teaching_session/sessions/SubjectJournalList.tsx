@@ -105,14 +105,14 @@ export function SubjectJournalList({
                   <DropdownMenuItem
                     variant="destructive"
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          await deleteSubjectJournal.mutateAsync(journal.id);
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteSubjectJournal.mutate(journal.id);
-                      }
                     }}
                   >
                     <Trash2 />

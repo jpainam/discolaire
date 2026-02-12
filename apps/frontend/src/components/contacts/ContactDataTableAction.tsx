@@ -54,19 +54,19 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
         <Button
           size={"sm"}
           onClick={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
               // icon: <Trash2 className="text-destructive" />,
               // alertDialogTitle: {
               //   className: "flex items-center gap-2",
               // },
+
+              onConfirm: async () => {
+                const selectedIds = rows.map((row) => row.original.id);
+                await deleteContactMutation.mutateAsync(selectedIds);
+              },
             });
-            if (isConfirmed) {
-              toast.loading(t("deleting"), { id: 0 });
-              const selectedIds = rows.map((row) => row.original.id);
-              deleteContactMutation.mutate(selectedIds);
-            }
           }}
           variant="destructive"
         >

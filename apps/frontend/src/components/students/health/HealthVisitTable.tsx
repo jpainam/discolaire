@@ -129,14 +129,14 @@ export function HealthVisitTable({ userId }: { userId: string }) {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onSelect={async () => {
-                              const isConfirmed = await confirm({
+                              await confirm({
                                 title: t("delete"),
                                 description: t("delete_confirmation"),
+
+                                onConfirm: async () => {
+                                  await deleteHealthVisit.mutateAsync(visit.id);
+                                },
                               });
-                              if (isConfirmed) {
-                                toast.loading(t("deleting"), { id: 0 });
-                                deleteHealthVisit.mutate(visit.id);
-                              }
                             }}
                             variant="destructive"
                           >

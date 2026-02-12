@@ -67,18 +67,21 @@ export function ClassroomLevelHeader() {
         {selectedLevels.length > 0 && (
           <Button
             onClick={async () => {
-              const isConfirm = await confirm({
+              await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
                 // icon: <Trash2 className="h-4 w-4 text-destructive" />,
                 // alertDialogTitle: {
                 //   className: "flex items-center gap-1",
                 // },
+
+                onConfirm: async () => {
+                  toast.loading(t("Processing"), { id: 0 });
+                  await deleteClassroomLevelMutation.mutateAsync(
+                    selectedLevels,
+                  );
+                },
               });
-              if (isConfirm) {
-                toast.loading(t("Processing"), { id: 0 });
-                deleteClassroomLevelMutation.mutate(selectedLevels);
-              }
             }}
             variant={"destructive"}
             size={"sm"}

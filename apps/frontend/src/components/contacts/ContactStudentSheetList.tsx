@@ -145,18 +145,17 @@ export function ContactStudentSheetList({
                           if (!contact?.id) {
                             return;
                           }
-                          const isConfirmed = await confirm({
+                          await confirm({
                             title: t("delete"),
                             description: t("delete_confirmation"),
-                          });
 
-                          if (isConfirmed) {
-                            toast.loading(t("deleting"), { id: 0 });
-                            deleteStudentContactMutation.mutate({
-                              studentId: studentcontact.studentId,
-                              contactId: contact.id,
-                            });
-                          }
+                            onConfirm: async () => {
+                              await deleteStudentContactMutation.mutateAsync({
+                                studentId: studentcontact.studentId,
+                                contactId: contact.id,
+                              });
+                            },
+                          });
                         }}
                         size="icon-xs"
                         variant="ghost"

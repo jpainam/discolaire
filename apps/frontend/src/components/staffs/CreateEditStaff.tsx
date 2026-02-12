@@ -138,7 +138,7 @@ export function CreateEditStaff({ staff, formId }: CreateEditStaffProps) {
         await queryClient.invalidateQueries(trpc.staff.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
         closeSheet();
-        router.push(`/staff/${result.id}`);
+        router.push(`/staffs/${result.id}`);
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });

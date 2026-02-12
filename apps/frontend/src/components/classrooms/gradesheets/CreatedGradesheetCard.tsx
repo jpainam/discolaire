@@ -151,14 +151,14 @@ export function CreatedGradesheetCard({
                     variant="destructive"
                     disabled={isClosed}
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          await deleteGradesheetMutation.mutateAsync(gs.id);
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteGradesheetMutation.mutate(gs.id);
-                      }
                     }}
                   >
                     <DeleteIcon />

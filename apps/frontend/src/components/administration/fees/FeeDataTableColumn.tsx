@@ -196,16 +196,16 @@ function ActionCell({
           <DropdownMenuItem
             disabled={feeMutation.isPending}
             onSelect={async () => {
-              const isConfirmed = await confirm({
+              await confirm({
                 title: t("delete"),
                 confirmText: t("delete"),
                 cancelText: t("cancel"),
                 description: t("delete_confirmation"),
+
+                onConfirm: async () => {
+                  await feeMutation.mutateAsync(fee.id);
+                },
               });
-              if (isConfirmed) {
-                toast.loading(t("deleting"), { id: 0 });
-                feeMutation.mutate(fee.id);
-              }
             }}
             variant="destructive"
             className="dark:data-[variant=destructive]:focus:bg-destructive/10"

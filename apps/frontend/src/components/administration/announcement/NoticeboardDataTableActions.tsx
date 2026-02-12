@@ -54,18 +54,18 @@ export function NoticeboardDataTableActions({
             const selectedNotices = table
               .getFilteredSelectedRowModel()
               .rows.map((row) => row.original);
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               confirmText: t("delete"),
               cancelText: t("cancel"),
               description: `${t("delete_confirmation")} ${selectedNotices.map((cl) => cl.title).join(", ")}?`,
+
+              onConfirm: async () => {
+                await deleteAnnouncementMutation.mutateAsync(
+                  selectedNotices.map((cl) => cl.id),
+                );
+              },
             });
-            if (isConfirmed) {
-              toast.loading(t("deleting"), { id: 0 });
-              deleteAnnouncementMutation.mutate(
-                selectedNotices.map((cl) => cl.id),
-              );
-            }
           }}
         >
           <Trash2 />

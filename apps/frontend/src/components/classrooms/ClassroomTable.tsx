@@ -381,14 +381,16 @@ export function ClassroomTable() {
                               disabled={!canDeleteClassroom}
                               variant="destructive"
                               onSelect={async () => {
-                                const isConfirmed = await confirm({
+                                await confirm({
                                   title: t("delete"),
                                   description: t("delete_confirmation"),
+
+                                  onConfirm: async () => {
+                                    await deleteClassroomMutation.mutateAsync(
+                                      cl.id,
+                                    );
+                                  },
                                 });
-                                if (isConfirmed) {
-                                  toast.loading(t("deleting"), { id: 0 });
-                                  deleteClassroomMutation.mutate(cl.id);
-                                }
                               }}
                             >
                               <DeleteIcon />

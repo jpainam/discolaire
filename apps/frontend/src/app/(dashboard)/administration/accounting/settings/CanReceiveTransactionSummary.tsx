@@ -178,18 +178,18 @@ export function CanReceiveTransactionSummary({
                           <DropdownMenuItem
                             variant="destructive"
                             onSelect={async () => {
-                              const isConfirmed = await confirm({
+                              await confirm({
                                 title: t("delete"),
                                 description: t("delete_confirmation"),
                                 icon: <Trash2 className="text-destructive" />,
                                 alertDialogTitle: {
                                   className: " flex gap-2 items-center",
                                 },
+
+                                onConfirm: async () => {
+                                  await deleteScheduleTask.mutateAsync(sch.id);
+                                },
                               });
-                              if (isConfirmed) {
-                                toast.loading(t("deleting"), { id: 0 });
-                                deleteScheduleTask.mutate(sch.id);
-                              }
                             }}
                           >
                             <Trash2 className="h-4 w-4" />

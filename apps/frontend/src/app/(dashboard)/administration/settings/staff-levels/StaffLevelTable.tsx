@@ -116,14 +116,16 @@ export function StaffLevelTable() {
                           variant="destructive"
                           className="dark:data-[variant=destructive]:focus:bg-destructive/10"
                           onSelect={async () => {
-                            const isConfirmed = await confirm({
+                            await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
+
+                              onConfirm: async () => {
+                                await deleteDegreeMutation.mutateAsync(
+                                  degree.id,
+                                );
+                              },
                             });
-                            if (isConfirmed) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deleteDegreeMutation.mutate(degree.id);
-                            }
                           }}
                         >
                           <Trash2 />

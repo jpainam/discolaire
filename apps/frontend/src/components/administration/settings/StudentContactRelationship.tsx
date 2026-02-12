@@ -118,14 +118,16 @@ export function StudentContactRelationship() {
                         <DropdownMenuItem
                           variant="destructive"
                           onSelect={async () => {
-                            const isConfirm = await confirm({
+                            await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
+
+                              onConfirm: async () => {
+                                await deleteRelationship.mutateAsync(
+                                  relationship.id,
+                                );
+                              },
                             });
-                            if (isConfirm) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deleteRelationship.mutate(relationship.id);
-                            }
                           }}
                         >
                           <Trash2 />

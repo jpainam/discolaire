@@ -222,13 +222,14 @@ export function PhotoStudentList() {
                                   toast.warning(`Nom du fichier non trouvé`);
                                   return;
                                 }
-                                const isConfirmed = await confirm({
+                                await confirm({
                                   title: t("delete"),
                                   description: t("delete_confirmation"),
+
+                                  onConfirm: () => {
+                                    void deletePhoto(p.key);
+                                  },
                                 });
-                                if (isConfirmed) {
-                                  void deletePhoto(p.key);
-                                }
                               }}
                               variant="destructive"
                             >

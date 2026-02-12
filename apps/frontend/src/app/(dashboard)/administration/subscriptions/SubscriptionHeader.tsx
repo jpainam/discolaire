@@ -196,14 +196,15 @@ export function SubscriptionHeader() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          toast.loading(t("Processing"), { id: 0 });
+                          await deleteSubscriptionMutation.mutateAsync([]);
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("Processing"), { id: 0 });
-                        deleteSubscriptionMutation.mutate([]);
-                      }
                     }}
                     variant="destructive"
                   >

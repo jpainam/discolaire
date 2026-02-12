@@ -231,18 +231,18 @@ export function StaffDetails({ staffId }: { staffId: string }) {
                     <DropdownMenuItem
                       variant="destructive"
                       onSelect={async () => {
-                        const isConfirmed = await confirm({
+                        await confirm({
                           title: t("delete"),
                           description: t("delete_confirmation"),
                           // icon: <Trash2 className="text-destructive" />,
                           // alertDialogTitle: {
                           //   className: "flex items-center gap-1",
                           // },
+
+                          onConfirm: async () => {
+                            await deleteStaffMutation.mutateAsync(staffId);
+                          },
                         });
-                        if (isConfirmed) {
-                          toast.loading(t("deleting"), { id: 0 });
-                          deleteStaffMutation.mutate(staffId);
-                        }
                       }}
                     >
                       <DeleteIcon />

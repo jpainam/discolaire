@@ -255,19 +255,18 @@ function ActionCell({ user }: { user: User }) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onSelect={async () => {
-                  const isConfirmed = await confirm({
+                  await confirm({
                     title: t("delete"),
                     // icon: <Trash2 className="size-4 text-destructive" />,
                     // alertDialogTitle: {
                     //   className: "flex items-center gap-2",
                     // },
                     description: t("delete_confirmation"),
-                  });
 
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteUserMutation.mutate(user.id);
-                  }
+                    onConfirm: async () => {
+                      await deleteUserMutation.mutateAsync(user.id);
+                    },
+                  });
                 }}
                 variant="destructive"
               >

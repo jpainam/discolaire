@@ -248,16 +248,16 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
                 disabled={deleteStaffMutation.isPending}
                 variant="destructive"
                 onClick={async () => {
-                  const isConfirmed = await confirm({
+                  await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation", {
                       name: getFullName(staff),
                     }),
+
+                    onConfirm: async () => {
+                      await deleteStaffMutation.mutateAsync(staff.id);
+                    },
                   });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteStaffMutation.mutate(staff.id);
-                  }
                 }}
               >
                 <DeleteIcon /> {t("delete")}

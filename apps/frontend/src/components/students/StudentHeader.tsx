@@ -488,18 +488,18 @@ export function StudentHeader() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onSelect={async () => {
-                      const isConfirm = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
 
                         alertDialogTitle: {
                           className: "flex items-center gap-2",
                         },
+
+                        onConfirm: async () => {
+                          await deleteStudentMutation.mutateAsync(student.id);
+                        },
                       });
-                      if (isConfirm) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteStudentMutation.mutate(student.id);
-                      }
                     }}
                     disabled={!canDeleteStudent}
                     variant="destructive"

@@ -232,15 +232,14 @@ function ModuleActions({ module }: { module: Module }) {
               {canUpdateModule && <DropdownMenuSeparator />}
               <DropdownMenuItem
                 onSelect={async () => {
-                  const isConfirmed = await confirm({
+                  await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
-                  });
 
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deleteModuleMutation.mutate(module.id);
-                  }
+                    onConfirm: async () => {
+                      await deleteModuleMutation.mutateAsync(module.id);
+                    },
+                  });
                 }}
                 variant="destructive"
               >

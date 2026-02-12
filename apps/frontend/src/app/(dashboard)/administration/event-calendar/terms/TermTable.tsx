@@ -240,18 +240,18 @@ export function TermTable() {
                         <Button
                           size="icon"
                           onClick={async () => {
-                            const isConfirm = await confirm({
+                            await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
                               // icon: <Trash2 className="h-4 w-4" />,
                               // alertDialogTitle: {
                               //   className: "flex items-center gap-2",
                               // },
+
+                              onConfirm: async () => {
+                                await deleteTermMutation.mutateAsync(term.id);
+                              },
                             });
-                            if (isConfirm) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deleteTermMutation.mutate(term.id);
-                            }
                           }}
                           variant="destructive"
                         >

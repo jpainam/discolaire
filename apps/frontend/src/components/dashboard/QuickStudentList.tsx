@@ -333,16 +333,18 @@ export function QuickStudentList() {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onSelect={async () => {
-                                const isConfirmed = await confirm({
+                                await confirm({
                                   title: t("delete"),
                                   description: t("delete_confirmation", {
                                     name: getFullName(st),
                                   }),
+
+                                  onConfirm: async () => {
+                                    await deleteStudentMutation.mutateAsync(
+                                      st.id,
+                                    );
+                                  },
                                 });
-                                if (isConfirmed) {
-                                  toast.loading(t("deleting"), { id: 0 });
-                                  deleteStudentMutation.mutate(st.id);
-                                }
                               }}
                               variant="destructive"
                             >

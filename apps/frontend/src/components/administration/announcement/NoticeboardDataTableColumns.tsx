@@ -251,14 +251,14 @@ function ActionCells({
           <DropdownMenuItem
             className="bg-destructive text-destructive-foreground"
             onSelect={async () => {
-              const isConfirmed = await confirm({
+              await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
+
+                onConfirm: async () => {
+                  await deleteAnnouncementMutation.mutateAsync(noticeboard.id);
+                },
               });
-              if (isConfirmed) {
-                toast.loading(t("deleting"), { id: 0 });
-                deleteAnnouncementMutation.mutate(noticeboard.id);
-              }
             }}
           >
             <Trash2 />

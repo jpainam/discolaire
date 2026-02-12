@@ -221,11 +221,14 @@ export function DocumentFileList({
                           <DropdownMenuItem
                             variant="destructive"
                             onSelect={async () => {
-                              const isConfirmed = await confirm({
+                              await confirm({
                                 title: t("delete"),
                                 description: t("delete_confirmation"),
+
+                                onConfirm: async () => {
+                                  await deleteFile(doc.id);
+                                },
                               });
-                              if (isConfirmed) await deleteFile(doc.id);
                             }}
                           >
                             <DeleteIcon />

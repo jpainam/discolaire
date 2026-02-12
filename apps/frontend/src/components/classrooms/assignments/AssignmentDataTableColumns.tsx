@@ -232,14 +232,14 @@ function ActionsCell({
           <DropdownMenuItem
             variant="destructive"
             onClick={async () => {
-              const isConfirmed = await confirm({
+              await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation"),
+
+                onConfirm: async () => {
+                  await deleteAssignment.mutateAsync(assignment.id);
+                },
               });
-              if (isConfirmed) {
-                toast.loading(t("deleting"), { id: 0 });
-                deleteAssignment.mutate(assignment.id);
-              }
             }}
           >
             <DeleteIcon />

@@ -65,21 +65,21 @@ export function GradeSheetDataTableActions({
       {rows.length > 0 && canDeleteGradesheet && (
         <Button
           onSelect={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
               // icon: <Trash2 className="text-destructive" />,
               // alertDialogTitle: {
               //   className: "flex items-center gap-2",
               // },
+
+              onConfirm: async () => {
+                const selectedIds = table
+                  .getFilteredSelectedRowModel()
+                  .rows.map((row) => row.original.id);
+                await deleteGradeSheetMutation.mutateAsync(selectedIds);
+              },
             });
-            if (isConfirmed) {
-              const selectedIds = table
-                .getFilteredSelectedRowModel()
-                .rows.map((row) => row.original.id);
-              toast.loading(t("deleting"), { id: 0 });
-              deleteGradeSheetMutation.mutate(selectedIds);
-            }
           }}
           variant="destructive"
           className="dark:data-[variant=destructive]:focus:bg-destructive/10"

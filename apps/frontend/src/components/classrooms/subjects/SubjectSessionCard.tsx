@@ -194,14 +194,17 @@ export function SubjectSessionCard({
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onSelect={async () => {
-                      const isConfirm = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          toast.loading(t("Processing"), { id: 0 });
+                          await deleteSubjectSessionMutation.mutateAsync(
+                            program.id,
+                          );
+                        },
                       });
-                      if (isConfirm) {
-                        toast.loading(t("Processing"), { id: 0 });
-                        deleteSubjectSessionMutation.mutate(program.id);
-                      }
                     }}
                     variant="destructive"
                   >

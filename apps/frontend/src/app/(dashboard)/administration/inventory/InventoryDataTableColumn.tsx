@@ -272,18 +272,20 @@ function ActionCell({
               <DropdownMenuItem
                 variant="destructive"
                 onSelect={async () => {
-                  const isConfirmed = await confirm({
+                  await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
+
+                    onConfirm: async () => {
+                      if (inventory.type === "ASSET") {
+                        await deleteAssetMutation.mutateAsync(inventory.id);
+                      } else {
+                        await deleteConsumableMutation.mutateAsync(
+                          inventory.id,
+                        );
+                      }
+                    },
                   });
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    if (inventory.type === "ASSET") {
-                      deleteAssetMutation.mutate(inventory.id);
-                    } else {
-                      deleteConsumableMutation.mutate(inventory.id);
-                    }
-                  }
                 }}
               >
                 <Trash2 />

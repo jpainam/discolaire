@@ -116,16 +116,17 @@ export function SchoolYearEventTypeTable() {
                         variant={"ghost"}
                         className="size-8"
                         onClick={async () => {
-                          const isConfirmed = await confirm({
+                          await confirm({
                             title: t("Are you sure?"),
                             description: t(
                               "Are you sure you want to delete this event type?",
                             ),
+
+                            onConfirm: async () => {
+                              toast.loading(t("Processing"), { id: 0 });
+                              await deleteMutation.mutateAsync(eventType.id);
+                            },
                           });
-                          if (isConfirmed) {
-                            toast.loading(t("Processing"), { id: 0 });
-                            deleteMutation.mutate(eventType.id);
-                          }
                         }}
                       >
                         <Trash className="text-destructive" />

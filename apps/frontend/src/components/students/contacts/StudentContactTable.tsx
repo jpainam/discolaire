@@ -284,7 +284,7 @@ export function StudentContactTable({
                               <DropdownMenuItem
                                 variant="destructive"
                                 onSelect={async () => {
-                                  const isConfirmed = await confirm({
+                                  await confirm({
                                     title: t("delete"),
                                     icon: (
                                       <Trash2 className="text-destructive" />
@@ -295,14 +295,16 @@ export function StudentContactTable({
                                     description: t("delete_confirmation", {
                                       name: getFullName(contact),
                                     }),
+
+                                    onConfirm: async () => {
+                                      await deleteStudentContactMutation.mutateAsync(
+                                        {
+                                          studentId: c.studentId,
+                                          contactId: c.contactId,
+                                        },
+                                      );
+                                    },
                                   });
-                                  if (isConfirmed) {
-                                    toast.loading(t("deleting"), { id: 0 });
-                                    deleteStudentContactMutation.mutate({
-                                      studentId: c.studentId,
-                                      contactId: c.contactId,
-                                    });
-                                  }
                                 }}
                               >
                                 <DeleteIcon />

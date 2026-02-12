@@ -274,15 +274,14 @@ function PermissionActions({ permission }: { permission: Permission }) {
               {canUpdatePermission && <DropdownMenuSeparator />}
               <DropdownMenuItem
                 onSelect={async () => {
-                  const isConfirmed = await confirm({
+                  await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
-                  });
 
-                  if (isConfirmed) {
-                    toast.loading(t("deleting"), { id: 0 });
-                    deletePermissionMutation.mutate(permission.id);
-                  }
+                    onConfirm: async () => {
+                      await deletePermissionMutation.mutateAsync(permission.id);
+                    },
+                  });
                 }}
                 variant="destructive"
               >

@@ -200,14 +200,17 @@ export function StaffAttendanceTable() {
                               <DropdownMenuItem
                                 variant="destructive"
                                 onSelect={async () => {
-                                  const isConfirmed = await confirm({
+                                  await confirm({
                                     title: t("delete"),
                                     description: t("delete_confirmation"),
+
+                                    onConfirm: async () => {
+                                      toast.loading(t("Processing"), { id: 0 });
+                                      await deleteStaffAttendance.mutateAsync(
+                                        at.id,
+                                      );
+                                    },
                                   });
-                                  if (isConfirmed) {
-                                    toast.loading(t("Processing"), { id: 0 });
-                                    deleteStaffAttendance.mutate(at.id);
-                                  }
                                 }}
                               >
                                 <DeleteIcon />

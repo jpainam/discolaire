@@ -142,17 +142,18 @@ export function UserRoleUserList({ roleId }: { roleId: string }) {
                         )} */}
                         <Button
                           onClick={async () => {
-                            const isConfirmed = await confirm({
+                            await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
+
+                              onConfirm: async () => {
+                                toast.loading(t("Processing"), { id: 0 });
+                                await removeUserFromRole.mutateAsync({
+                                  roleId,
+                                  userId: u.id,
+                                });
+                              },
                             });
-                            if (isConfirmed) {
-                              toast.loading(t("Processing"), { id: 0 });
-                              removeUserFromRole.mutate({
-                                roleId,
-                                userId: u.id,
-                              });
-                            }
                           }}
                           variant={"ghost"}
                           size={"icon-xs"}

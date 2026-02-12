@@ -89,17 +89,17 @@ export function ClassroomAttendanceHeader() {
                 <DropdownMenuItem
                   variant="destructive"
                   onSelect={async () => {
-                    const isConfirmed = await confirm({
+                    await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
+
+                      onConfirm: async () => {
+                        await clearAllAttendance.mutateAsync({
+                          classroomId: params.id,
+                          termId: termId ?? undefined,
+                        });
+                      },
                     });
-                    if (isConfirmed) {
-                      toast.loading(t("deleting"), { id: 0 });
-                      clearAllAttendance.mutate({
-                        classroomId: params.id,
-                        termId: termId ?? undefined,
-                      });
-                    }
                   }}
                 >
                   <DeleteIcon />

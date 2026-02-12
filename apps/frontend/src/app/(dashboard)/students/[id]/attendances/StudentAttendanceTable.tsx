@@ -352,14 +352,15 @@ const AttendanceRowView = memo(function AttendanceRowView({
                 <DropdownMenuItem
                   variant="destructive"
                   onSelect={async () => {
-                    const isConfirmed = await confirm({
+                    await confirm({
                       title: t("delete"),
                       description: t("delete_confirmation"),
+
+                      onConfirm: () => {
+                        toast.loading(t("Processing"), { id: 0 });
+                        onDelete(record.id);
+                      },
                     });
-                    if (isConfirmed) {
-                      toast.loading(t("Processing"), { id: 0 });
-                      onDelete(record.id);
-                    }
                   }}
                 >
                   <Trash2 />

@@ -120,18 +120,20 @@ export function GradeDetailsHeader({
                   <DropdownMenuItem
                     disabled={deleteGradeSheetMutation.isPending || isClosed}
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
                         icon: <Trash2 className="text-destructive size-6" />,
                         alertDialogTitle: {
                           className: "flex items-center gap-2",
                         },
+
+                        onConfirm: async () => {
+                          await deleteGradeSheetMutation.mutateAsync(
+                            gradesheet.id,
+                          );
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteGradeSheetMutation.mutate(gradesheet.id);
-                      }
                     }}
                     variant="destructive"
                     className="dark:data-[variant=destructive]:focus:bg-destructive/10"

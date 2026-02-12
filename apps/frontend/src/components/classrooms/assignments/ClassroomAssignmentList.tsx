@@ -183,14 +183,14 @@ export function ClassroomAssignmentList({
                   <Button
                     disabled={deleteMutation.isPending}
                     onClick={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          await deleteMutation.mutateAsync(exam.id);
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteMutation.mutate(exam.id);
-                      }
                     }}
                     variant="ghost"
                     size="icon-sm"

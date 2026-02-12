@@ -51,16 +51,15 @@ export function SubscriptionDataTableAction({
       {table.getSelectedRowModel().rows.length > 0 && canDeleteSubscription && (
         <Button
           onClick={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
-            });
 
-            if (isConfirmed) {
-              const selectedIds = rows.map((row) => row.original.id);
-              toast.loading(t("deleting"), { id: 0 });
-              deleteSubscriptionMutation.mutate(selectedIds);
-            }
+              onConfirm: async () => {
+                const selectedIds = rows.map((row) => row.original.id);
+                await deleteSubscriptionMutation.mutateAsync(selectedIds);
+              },
+            });
           }}
           variant={"destructive"}
         >

@@ -42,19 +42,19 @@ export function FeeDataTableActions({
         <Button
           size={"sm"}
           onClick={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               confirmText: t("delete"),
               cancelText: t("cancel"),
               description: t("delete_confirmation"),
+
+              onConfirm: async () => {
+                const selectedRowIds = table
+                  .getFilteredSelectedRowModel()
+                  .rows.map((row) => row.original.id);
+                await feesMutation.mutateAsync(selectedRowIds);
+              },
             });
-            if (isConfirmed) {
-              const selectedRowIds = table
-                .getFilteredSelectedRowModel()
-                .rows.map((row) => row.original.id);
-              toast.loading(t("deleting"), { id: 0 });
-              feesMutation.mutate(selectedRowIds);
-            }
           }}
           variant={"destructive"}
         >

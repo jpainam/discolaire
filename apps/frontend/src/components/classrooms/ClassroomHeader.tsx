@@ -150,14 +150,14 @@ export function ClassroomHeader() {
                   <DropdownMenuItem
                     variant="destructive"
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          await deleteClassroomMutation.mutateAsync(params.id);
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteClassroomMutation.mutate(params.id);
-                      }
                     }}
                   >
                     <Trash2 /> {t("delete")}

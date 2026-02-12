@@ -83,18 +83,21 @@ export function LessonDetails({
         variant={"destructive"}
         onClick={async () => {
           closeModal();
-          const isConfirm = await confirm({
+          await confirm({
             title: t("delete"),
             description: t("delete_confirmation"),
             alertDialogTitle: {
               className: "flex items-center gap-2",
             },
             icon: <Trash2 className="text-destructive h-5 w-5" />,
+
+            onConfirm: async () => {
+              await deleteLessonMutation.mutateAsync({
+                id: event.id,
+                type: "after",
+              });
+            },
           });
-          if (isConfirm) {
-            toast.loading(t("deleting"), { id: 0 });
-            deleteLessonMutation.mutate({ id: event.id, type: "after" });
-          }
         }}
       >
         <Trash2 />

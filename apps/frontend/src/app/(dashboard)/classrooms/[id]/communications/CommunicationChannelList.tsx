@@ -152,14 +152,17 @@ export function CommunicationChannelList() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          toast.loading(t("Processing"), { id: 0 });
+                          await deleteCommunicationChannel.mutateAsync(
+                            channel.id,
+                          );
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("Processing"), { id: 0 });
-                        deleteCommunicationChannel.mutate(channel.id);
-                      }
                     }}
                     variant="destructive"
                   >

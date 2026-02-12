@@ -116,7 +116,7 @@ export function AssignmentTable() {
                         <DropdownMenuItem
                           className="text-destructive focus:text-destructive focus:bg-[#FF666618]"
                           onSelect={async () => {
-                            const isConfirmed = await confirm({
+                            await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
                               icon: (
@@ -125,11 +125,13 @@ export function AssignmentTable() {
                               alertDialogTitle: {
                                 className: "flex items-center gap-1",
                               },
+
+                              onConfirm: async () => {
+                                await deleteAssignmentMutation.mutateAsync(
+                                  assignment.id,
+                                );
+                              },
                             });
-                            if (isConfirmed) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deleteAssignmentMutation.mutate(assignment.id);
-                            }
                           }}
                         >
                           <Trash2 className="h-4 w-4" />

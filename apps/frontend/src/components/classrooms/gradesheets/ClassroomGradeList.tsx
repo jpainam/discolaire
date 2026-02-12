@@ -184,14 +184,16 @@ export function ClassroomGradeList({
                   <DropdownMenuItem
                     disabled={deleteGradeSheetMutation.isPending || isClosed}
                     onSelect={async () => {
-                      const isConfirmed = await confirm({
+                      await confirm({
                         title: t("delete"),
                         description: t("delete_confirmation"),
+
+                        onConfirm: async () => {
+                          await deleteGradeSheetMutation.mutateAsync(
+                            gradesheet.id,
+                          );
+                        },
                       });
-                      if (isConfirmed) {
-                        toast.loading(t("deleting"), { id: 0 });
-                        deleteGradeSheetMutation.mutate(gradesheet.id);
-                      }
                     }}
                     variant="destructive"
                   >
@@ -348,18 +350,18 @@ export function ClassroomGradeList({
                                   disabled={isClosed}
                                   variant="destructive"
                                   onSelect={async () => {
-                                    const isConfirmed = await confirm({
+                                    await confirm({
                                       title: t("delete"),
                                       description: t("delete_confirmation"),
+
+                                      onConfirm: async () => {
+                                        await markGradeAbsent.mutateAsync({
+                                          id: g.id,
+                                          grade: 0,
+                                          isAbsent: true,
+                                        });
+                                      },
                                     });
-                                    if (isConfirmed) {
-                                      toast.loading(t("deleting"), { id: 0 });
-                                      markGradeAbsent.mutate({
-                                        id: g.id,
-                                        grade: 0,
-                                        isAbsent: true,
-                                      });
-                                    }
                                   }}
                                 >
                                   <FlagOff />

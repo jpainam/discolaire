@@ -107,20 +107,21 @@ export function ClassroomStudentTable({
               variant="destructive"
               disabled={!schoolYear.isActive}
               onClick={async () => {
-                const isConfirmed = await confirm({
+                await confirm({
                   title: t("unenroll"),
                   description: t("delete_confirmation"),
                   alertDialogTitle: {
                     className: "flex items-center gap-2",
                   },
+
+                  onConfirm: async () => {
+                    toast.loading(t("Processing"), { id: 0 });
+                    await unenrollStudentsMutation.mutateAsync({
+                      studentId: selectedIds,
+                      classroomId,
+                    });
+                  },
                 });
-                if (isConfirmed) {
-                  toast.loading(t("Processing"), { id: 0 });
-                  unenrollStudentsMutation.mutate({
-                    studentId: selectedIds,
-                    classroomId,
-                  });
-                }
               }}
             >
               <DeleteIcon />
@@ -269,17 +270,18 @@ export function ClassroomStudentTable({
                               disabled={!schoolYear.isActive}
                               variant="destructive"
                               onSelect={async () => {
-                                const isConfirmed = await confirm({
+                                await confirm({
                                   title: t("unenroll") + " " + stud.lastName,
                                   description: t("delete_confirmation"),
+
+                                  onConfirm: async () => {
+                                    toast.loading(t("Processing"), { id: 0 });
+                                    await unenrollStudentsMutation.mutateAsync({
+                                      classroomId: classroomId,
+                                      studentId: stud.id,
+                                    });
+                                  },
                                 });
-                                if (isConfirmed) {
-                                  toast.loading(t("Processing"), { id: 0 });
-                                  unenrollStudentsMutation.mutate({
-                                    classroomId: classroomId,
-                                    studentId: stud.id,
-                                  });
-                                }
                               }}
                             >
                               <DeleteIcon /> {t("unenroll")}

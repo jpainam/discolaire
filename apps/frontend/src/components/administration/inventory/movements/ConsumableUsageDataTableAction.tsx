@@ -46,17 +46,19 @@ export function ConsumableUsageDataTableAction({
         <Button
           size={"sm"}
           onClick={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
+
+              onConfirm: async () => {
+                const selectedItems = rows.map((row) => row.original);
+                await Promise.all(
+                  selectedItems.map(async (item) => {
+                    await deleteConsumableMutation.mutateAsync(item.id);
+                  }),
+                );
+              },
             });
-            if (isConfirmed) {
-              toast.loading(t("deleting"), { id: 0 });
-              const selectedItems = rows.map((row) => row.original);
-              selectedItems.forEach((item) => {
-                deleteConsumableMutation.mutate(item.id);
-              });
-            }
           }}
           variant="destructive"
         >

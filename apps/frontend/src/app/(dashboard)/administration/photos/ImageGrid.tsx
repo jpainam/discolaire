@@ -239,20 +239,21 @@ export function ImageGrid({
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onSelect={async () => {
-                            const isConfirmed = await confirm({
+                            await confirm({
                               title: t("Are you sure?"),
                               description: t("This action cannot be undone."),
+
+                              onConfirm: async () => {
+                                if (!image.key) return;
+                                await handleDeleteAvatar(image.key, "student");
+                                toast.success(t("deleted_successfully"), {
+                                  id: 0,
+                                });
+                                await queryClient.invalidateQueries(
+                                  trpc.user.get.pathFilter(),
+                                );
+                              },
                             });
-                            if (isConfirmed) {
-                              if (!image.key) return;
-                              await handleDeleteAvatar(image.key, "student");
-                              toast.success(t("deleted_successfully"), {
-                                id: 0,
-                              });
-                              await queryClient.invalidateQueries(
-                                trpc.user.get.pathFilter(),
-                              );
-                            }
                           }}
                           variant="destructive"
                         >

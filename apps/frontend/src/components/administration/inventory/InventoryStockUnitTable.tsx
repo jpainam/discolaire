@@ -124,17 +124,20 @@ export function InventoryStockUnitTable() {
                           <Button
                             variant={"ghost"}
                             onClick={async () => {
-                              const isConfirmed = await confirm({
+                              await confirm({
                                 title: t("Are you sure?"),
                                 description: t(
                                   "This action will delete the stock unit and all its consumables. This action cannot be undone.",
                                 ),
                                 confirmText: t("Delete"),
+
+                                onConfirm: async () => {
+                                  toast.loading(t("Deleting..."), { id: 0 });
+                                  await deleteStockUnitMutation.mutateAsync(
+                                    unit.id,
+                                  );
+                                },
                               });
-                              if (isConfirmed) {
-                                toast.loading(t("Deleting..."), { id: 0 });
-                                deleteStockUnitMutation.mutate(unit.id);
-                              }
                             }}
                             size={"icon"}
                             className="size-8"

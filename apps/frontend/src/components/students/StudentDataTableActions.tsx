@@ -63,20 +63,19 @@ export function StudentDataTableActions({
         <Button
           size={"sm"}
           onClick={async () => {
-            const isConfirmed = await confirm({
+            await confirm({
               title: t("delete"),
               description: t("delete_confirmation"),
               // icon: <Trash2 className="text-destructive" />,
               // alertDialogTitle: {
               //   className: "flex items-center gap-2",
               // },
-            });
 
-            if (isConfirmed) {
-              const selectedStudentIds = rows.map((row) => row.original.id);
-              toast.loading(t("deleting"), { id: 0 });
-              deleteStudentMutation.mutate(selectedStudentIds);
-            }
+              onConfirm: async () => {
+                const selectedStudentIds = rows.map((row) => row.original.id);
+                await deleteStudentMutation.mutateAsync(selectedStudentIds);
+              },
+            });
           }}
           variant={"destructive"}
         >

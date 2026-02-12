@@ -395,16 +395,16 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
           <DropdownMenuItem
             variant="destructive"
             onSelect={async () => {
-              const isConfirmed = await confirm({
+              await confirm({
                 title: t("delete"),
                 description: t("delete_confirmation", {
                   name: getFullName(student),
                 }),
+
+                onConfirm: async () => {
+                  await deleteStudentMutation.mutateAsync(student.id);
+                },
               });
-              if (isConfirmed) {
-                toast.loading(t("deleting"), { id: 0 });
-                deleteStudentMutation.mutate(student.id);
-              }
             }}
           >
             <DeleteIcon />

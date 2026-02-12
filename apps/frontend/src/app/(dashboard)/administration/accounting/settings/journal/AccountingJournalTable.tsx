@@ -110,14 +110,16 @@ export function AccountingJournalTable() {
                             journal.transactionsCount > 0
                           }
                           onClick={async () => {
-                            const isConfirmed = await confirm({
+                            await confirm({
                               title: t("delete"),
                               description: t("delete_confirmation"),
+
+                              onConfirm: async () => {
+                                await deleteAccountingJournal.mutateAsync(
+                                  journal.id,
+                                );
+                              },
                             });
-                            if (isConfirmed) {
-                              toast.loading(t("deleting"), { id: 0 });
-                              deleteAccountingJournal.mutate(journal.id);
-                            }
                           }}
                           variant="destructive"
                           size="icon"
