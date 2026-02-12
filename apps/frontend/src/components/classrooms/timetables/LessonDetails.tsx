@@ -92,10 +92,7 @@ export function LessonDetails({
             icon: <Trash2 className="text-destructive h-5 w-5" />,
 
             onConfirm: async () => {
-              await deleteLessonMutation.mutateAsync({
-                id: event.id,
-                type: "after",
-              });
+              await deleteLessonMutation.mutateAsync(event.id);
             },
           });
         }}

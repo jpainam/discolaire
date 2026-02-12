@@ -7,8 +7,16 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { ClassroomTimetablesCalendar } from "./ClassroomTimetablesCalendar";
 import { ClassroomTimetablesHeader } from "./ClassroomTimetablesHeader";
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ subjectId?: string }>;
+}) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
+  const parsedSubjectId = Number(searchParams.subjectId);
+  const initialSubjectId = Number.isFinite(parsedSubjectId)
+    ? parsedSubjectId
+    : undefined;
 
   batchPrefetch([
     trpc.classroom.timetables.queryOptions(params.id),
@@ -17,15 +25,18 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <HydrateClient>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Skeleton className="mx-4 h-8" />}>
-            <ClassroomTimetablesHeader />
+            <ClassroomTimetablesHeader initialSubjectId={initialSubjectId} />
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Skeleton className="mx-4 h-[700px] w-full" />}>
-            <ClassroomTimetablesCalendar classroomId={params.id} />
+            <ClassroomTimetablesCalendar
+              classroomId={params.id}
+              initialSubjectId={initialSubjectId}
+            />
           </Suspense>
         </ErrorBoundary>
       </div>

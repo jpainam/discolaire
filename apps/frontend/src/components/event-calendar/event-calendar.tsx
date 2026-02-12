@@ -44,7 +44,16 @@ import { useCalendar } from "./calendar-context";
 export interface EventCalendarProps {
   onEventAdd?: (event: CalendarEvent) => void;
   onEventUpdate?: (event: CalendarEvent) => void;
-  onEventDelete?: (eventId: string) => void;
+  onEventDelete?: (event: CalendarEvent) => void;
+  getEventModalOptions?: (
+    event: CalendarEvent,
+    actions: { deleteEvent: () => void },
+  ) => {
+    title?: React.ReactNode;
+    description?: React.ReactNode;
+    className?: string;
+    view: React.ReactNode;
+  } | null;
   className?: string;
 }
 
@@ -52,6 +61,7 @@ export function EventCalendar({
   onEventAdd,
   onEventUpdate: _onEventUpdate,
   onEventDelete,
+  getEventModalOptions,
   className,
 }: EventCalendarProps) {
   const {
@@ -124,22 +134,32 @@ export function EventCalendar({
     });
   };
 
-  const handleEventDelete = (eventId: string) => {
-    const deletedEvent = events.find((event) => event.id === eventId);
+  const handleEventDelete = (eventToDelete: CalendarEvent) => {
     setEvents((previousEvents) =>
-      previousEvents.filter((event) => event.id !== eventId),
+      previousEvents.filter((event) => event.id !== eventToDelete.id),
     );
-    onEventDelete?.(eventId);
+    onEventDelete?.(eventToDelete);
 
-    if (deletedEvent) {
-      toast(`Event "${deletedEvent.title}" deleted`, {
-        description: format(new Date(deletedEvent.start), "MMM d, yyyy"),
-        position: "bottom-left",
-      });
-    }
+    toast(`Event "${eventToDelete.title}" deleted`, {
+      description: format(new Date(eventToDelete.start), "MMM d, yyyy"),
+      position: "bottom-left",
+    });
   };
 
   const handleEventSelect = (event: CalendarEvent) => {
+    const customModal = getEventModalOptions?.(event, {
+      deleteEvent: () => handleEventDelete(event),
+    });
+
+    if (customModal) {
+      openModal(customModal);
+      return;
+    }
+
+    if (customModal === null) {
+      return;
+    }
+
     openModal({
       title: event.title,
       view: (
@@ -151,7 +171,7 @@ export function EventCalendar({
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => handleEventDelete(event.id)}
+            onClick={() => handleEventDelete(event)}
           >
             Delete event
           </Button>

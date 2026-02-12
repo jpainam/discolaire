@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { useState } from "react";
 
 import type { CalendarEvent, CalendarView } from "~/components/event-calendar";
@@ -222,6 +223,16 @@ interface TimetablesCalendarClientProps {
   initialView?: CalendarView;
   addCreatedEventToCalendar?: boolean;
   onCreateSlot?: (slot: { start: Date; end: Date }) => void;
+  onEventDelete?: (event: CalendarEvent) => void;
+  getEventModalOptions?: (
+    event: CalendarEvent,
+    actions: { deleteEvent: () => void },
+  ) => {
+    title?: React.ReactNode;
+    description?: React.ReactNode;
+    className?: string;
+    view: React.ReactNode;
+  } | null;
 }
 
 export function TimetablesCalendarClient({
@@ -230,6 +241,8 @@ export function TimetablesCalendarClient({
   initialView = "week",
   addCreatedEventToCalendar = true,
   onCreateSlot,
+  onEventDelete,
+  getEventModalOptions,
 }: TimetablesCalendarClientProps) {
   const [localEvents, setLocalEvents] = useState<CalendarEvent[]>(
     () => initialEvents ?? createInitialEvents(),
@@ -257,6 +270,8 @@ export function TimetablesCalendarClient({
     >
       <EventCalendar
         className="rounded-none border-none"
+        onEventDelete={onEventDelete}
+        getEventModalOptions={getEventModalOptions}
         onEventAdd={(event) => {
           onCreateSlot?.({ start: event.start, end: event.end });
 

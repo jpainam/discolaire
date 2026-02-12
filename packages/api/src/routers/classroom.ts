@@ -228,6 +228,7 @@ export const classroomRouter = {
         include: {
           subject: {
             include: {
+              teacher: true,
               course: true,
             },
           },
@@ -264,6 +265,15 @@ export const classroomRouter = {
         allDay: false;
         color: TimetableColor;
         location: string;
+        metadata: {
+          timetableId: number;
+          subjectId: number;
+          subjectName: string;
+          teacherName: string | null;
+          classroomId: string;
+          classroomName: string;
+          occurrenceDate: string;
+        };
       }[] = [];
 
       let day = startOfDay(schoolYear.startDate);
@@ -313,6 +323,23 @@ export const classroomRouter = {
             allDay: false,
             color,
             location: classroom.name,
+            metadata: {
+              timetableId: lesson.id,
+              subjectId: lesson.subject.id,
+              subjectName: lesson.subject.course.name,
+              teacherName: lesson.subject.teacher
+                ? [
+                    lesson.subject.teacher.prefix,
+                    lesson.subject.teacher.lastName,
+                    lesson.subject.teacher.firstName,
+                  ]
+                    .filter(Boolean)
+                    .join(" ")
+                : null,
+              classroomId: classroom.id,
+              classroomName: classroom.name,
+              occurrenceDate: eventStart.toISOString(),
+            },
           });
         }
 

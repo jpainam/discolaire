@@ -4,6 +4,7 @@ import { z } from "zod/v4";
 import { protectedProcedure } from "../trpc";
 
 const timeRegex = /^\d{2}:\d{2}$/;
+const deleteScopeSchema = z.enum(["today", "past", "future"]);
 
 export const subjectTimetableRouter = {
   create: protectedProcedure
@@ -121,19 +122,53 @@ export const subjectTimetableRouter = {
 
   // soft delete one entry
   delete: protectedProcedure
-    .input(z.coerce.number())
-    .mutation(({ ctx, input }) => {
-      // return ctx.db.subjectTimetable.update({
-      //   data: {
-      //     validTo: new Date(), // stop being active now
-      //   },
-      //   where: {
-      //     id: input,
-      //   },
-      // });
-      return ctx.db.subjectTimetable.delete({
+    .input(
+      z.union([
+        z.coerce.number(),
+        z.object({
+          id: z.coerce.number(),
+          scope: deleteScopeSchema.default("today"),
+          occurrenceDate: z.coerce.date().optional(),
+        }),
+      ]),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const normalizedInput =
+        typeof input === "number"
+          ? { id: input, scope: "today" as const, occurrenceDate: new Date() }
+          : {
+              id: input.id,
+              scope: input.scope,
+              occurrenceDate: input.occurrenceDate ?? new Date(),
+            };
+
+      const occurrenceDate = new Date(normalizedInput.occurrenceDate);
+      const startOfOccurrence = new Date(occurrenceDate);
+      startOfOccurrence.setHours(0, 0, 0, 0);
+
+      if (normalizedInput.scope === "past") {
+        const nextDay = new Date(startOfOccurrence);
+        nextDay.setDate(nextDay.getDate() + 1);
+
+        return ctx.db.subjectTimetable.update({
+          where: {
+            id: normalizedInput.id,
+          },
+          data: {
+            validFrom: nextDay,
+          },
+        });
+      }
+
+      const validTo =
+        normalizedInput.scope === "future" ? startOfOccurrence : new Date();
+
+      return ctx.db.subjectTimetable.update({
         where: {
-          id: input,
+          id: normalizedInput.id,
+        },
+        data: {
+          validTo,
         },
       });
     }),

@@ -46,10 +46,12 @@ export function CreateClassroomTimetable({
   classroomId,
   initialStart,
   initialEnd,
+  initialSubjectId,
 }: {
   classroomId: string;
   initialStart?: Date;
   initialEnd?: Date;
+  initialSubjectId?: number;
 }) {
   const t = useTranslations();
   const locale = useLocale();
@@ -60,7 +62,9 @@ export function CreateClassroomTimetable({
   const subjectsQuery = useQuery(trpc.classroom.subjects.queryOptions(classroomId));
   const createTimetableSlot = useMutation(trpc.subjectTimetable.create.mutationOptions());
 
-  const [subjectId, setSubjectId] = useState<string | null>(null);
+  const [subjectId, setSubjectId] = useState<string | null>(
+    initialSubjectId ? `${initialSubjectId}` : null,
+  );
   const [slotStart, setSlotStart] = useState(() =>
     initialStart ? toTimeString(initialStart) : "08:00",
   );

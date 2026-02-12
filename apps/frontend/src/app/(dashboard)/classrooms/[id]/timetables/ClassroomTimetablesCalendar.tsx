@@ -7,11 +7,14 @@ import { TimetablesCalendarClient } from "~/components/timetables/TimetablesCale
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { CreateClassroomTimetable } from "./CreateClassroomTimetable";
+import { ClassroomTimetableEventDetails } from "./ClassroomTimetableEventDetails";
 
 export function ClassroomTimetablesCalendar({
   classroomId,
+  initialSubjectId,
 }: {
   classroomId: string;
+  initialSubjectId?: number;
 }) {
   const t = useTranslations();
   const { openModal } = useModal();
@@ -28,6 +31,12 @@ export function ClassroomTimetablesCalendar({
       initialEvents={events}
       initialView="week"
       addCreatedEventToCalendar={false}
+      getEventModalOptions={(event) => ({
+        title: event.title,
+        description: `${classroom.name} - ${t("timetable")}`,
+        className: "sm:max-w-md",
+        view: <ClassroomTimetableEventDetails event={event} />,
+      })}
       onCreateSlot={(slot) => {
         openModal({
           title: t("create"),
@@ -36,6 +45,7 @@ export function ClassroomTimetablesCalendar({
           view: (
             <CreateClassroomTimetable
               classroomId={classroomId}
+              initialSubjectId={initialSubjectId}
               initialStart={slot.start}
               initialEnd={slot.end}
             />

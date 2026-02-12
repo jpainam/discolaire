@@ -11,7 +11,11 @@ import { CalendarDays, PlusIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
 import { CreateClassroomTimetable } from "./CreateClassroomTimetable";
 
-export function ClassroomTimetablesHeader() {
+export function ClassroomTimetablesHeader({
+  initialSubjectId,
+}: {
+  initialSubjectId?: number;
+}) {
   const t = useTranslations();
   const params = useParams<{ id: string }>();
   const classroomId = params.id;
@@ -33,7 +37,12 @@ export function ClassroomTimetablesHeader() {
               title: t("create"),
               description: `${classroom.name} - ${t("timetable")}`,
               className: "sm:max-w-xl",
-              view: <CreateClassroomTimetable classroomId={classroomId} />,
+              view: (
+                <CreateClassroomTimetable
+                  classroomId={classroomId}
+                  initialSubjectId={initialSubjectId}
+                />
+              ),
             });
           }}
         >
