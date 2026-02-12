@@ -5,9 +5,15 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
-import { CalendarDays, PlusIcon } from "~/icons";
+import { CalendarDays, MailIcon, PlusIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
 import { CreateClassroomTimetable } from "./CreateClassroomTimetable";
 
@@ -31,6 +37,20 @@ export function ClassroomTimetablesHeader({
         <Label>{t("timetable")}</Label>
       </div>
       <div className="ml-auto flex items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"}>
+              <MailIcon />
+              {t("notify")}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>{t("teachers")}</DropdownMenuItem>
+            <DropdownMenuItem>{t("parents")}</DropdownMenuItem>
+            <DropdownMenuItem>{t("students")}</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <Button
           onClick={() => {
             openModal({
