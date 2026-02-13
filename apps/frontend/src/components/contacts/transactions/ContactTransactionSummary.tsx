@@ -131,7 +131,7 @@ export async function ContactTransactionSummary({
   const t = await getTranslations();
 
   return (
-    <MetricCardGroup className="gap-2 md:grid-cols-3 lg:grid-cols-6">
+    <MetricCardGroup className="gap-2 text-xs md:grid-cols-3 lg:grid-cols-6">
       {Object.entries(feesByJournal).map(([journalId, feeAmount]) => {
         const title = journalNameById.get(journalId) ?? "Autres";
         const {

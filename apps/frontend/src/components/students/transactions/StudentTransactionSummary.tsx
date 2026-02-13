@@ -74,7 +74,7 @@ export async function StudentTransactionSummary({
   const t = await getTranslations();
 
   return (
-    <MetricCardGroup className="gap-2 md:grid-cols-3 lg:grid-cols-6">
+    <MetricCardGroup className="gap-2 text-xs md:grid-cols-3 lg:grid-cols-6">
       {Object.entries(feesByJournal).map(([journalId, feeAmount], index) => {
         const title =
           journals.find((j) => j.id === journalId)?.name ?? "Autres";
