@@ -87,6 +87,12 @@ export function StaffAvatarDropzone({
     setImage(initialImage);
   }, [initialImage]);
 
+  const previewSrc = image
+    ? image.startsWith("data:")
+      ? image
+      : `/api/avatars/${image}`
+    : "/placeholder.svg";
+
   return (
     <div className={cn("w-full max-w-xl", className)}>
       <input
@@ -142,13 +148,18 @@ export function StaffAvatarDropzone({
         <div className="bg-muted/30 relative overflow-hidden rounded-xl border">
           <div className="relative aspect-video w-full">
             <img
-              src={image ? `/api/avatars/${image}` : "/placeholder.svg"}
+              src={previewSrc}
               alt="Preview"
               className="h-full w-full object-contain"
             />
           </div>
           <div className="absolute top-3 right-3">
-            <Button variant="destructive" size="icon-xs" onClick={handleRemove}>
+            <Button
+              type="button"
+              variant="destructive"
+              size="icon-xs"
+              onClick={handleRemove}
+            >
               <X />
               <span className="sr-only">Remove image</span>
             </Button>

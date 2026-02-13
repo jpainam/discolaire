@@ -21,14 +21,12 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { UserLink } from "../UserLink";
-import { CreateEditStaff } from "./CreateEditStaff";
 
 //  const defaultVisibles = [
 //       "select",
@@ -177,7 +175,6 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
 
 function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
   const t = useTranslations();
-  const { openSheet } = useSheet();
   const confirm = useConfirm();
   const queryClient = useQueryClient();
   const trpc = useTRPC();
@@ -218,17 +215,7 @@ function ActionsCell({ staff }: { staff: StaffProcedureOutput }) {
             <DropdownMenuItem
               className=""
               onClick={() => {
-                openSheet({
-                  view: (
-                    <CreateEditStaff
-                      staff={staff}
-                      formId="create-edit-staff-form"
-                    />
-                  ),
-                  title: t("edit"),
-                  description: `${t("staff")} - ${getFullName(staff)}`,
-                  formId: "create-edit-staff-form",
-                });
+                router.push(`/staffs/${staff.id}/edit`);
               }}
             >
               <EditIcon /> {t("edit")}

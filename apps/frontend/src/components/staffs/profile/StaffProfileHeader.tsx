@@ -32,12 +32,9 @@ import { CreateEditUser } from "~/components/users/CreateEditUser";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { getFullName } from "~/utils";
-import { CreateEditStaff } from "../CreateEditStaff";
 
 export function StaffProfileHeader({
   staff,
@@ -68,7 +65,6 @@ export function StaffProfileHeader({
   );
 
   const { openModal } = useModal();
-  const { openSheet } = useSheet();
 
   return (
     <div className="flex flex-col gap-1">
@@ -110,17 +106,7 @@ export function StaffProfileHeader({
               <>
                 <DropdownMenuItem
                   onSelect={() => {
-                    openSheet({
-                      view: (
-                        <CreateEditStaff
-                          staff={staff}
-                          formId="create-edit-staff-form"
-                        />
-                      ),
-                      title: t("edit"),
-                      description: `${t("staff")} - ${getFullName(staff)}`,
-                      formId: "create-edit-staff-form",
-                    });
+                    router.push(`/staffs/${staff.id}/edit`);
                   }}
                 >
                   <EditIcon />

@@ -49,7 +49,6 @@ export function SMSHistoryDataTableActions({
           //     className: "w-[700px]",
           //     title: t("add"),
           //     description: t("create"),
-          //     view: <CreateEditStaff />,
           //   });
         }}
         className="h-8"

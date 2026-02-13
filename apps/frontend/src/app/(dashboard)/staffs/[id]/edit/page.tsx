@@ -9,8 +9,8 @@ import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import CreateEditStaff from "../../create/CreateEditStaff";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
-  const canCreateStaff = await checkPermission("staff.create");
-  if (!canCreateStaff) {
+  const canUpdateStaff = await checkPermission("staff.update");
+  if (!canUpdateStaff) {
     return <NoPermission />;
   }
   const params = await props.params;
@@ -31,7 +31,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </div>
           }
         >
-          <CreateEditStaff staff={staff} />
+          <div className="px-4 pb-8">
+            <CreateEditStaff staff={staff} />
+          </div>
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

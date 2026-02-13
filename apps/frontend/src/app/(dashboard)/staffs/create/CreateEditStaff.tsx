@@ -12,6 +12,7 @@ import type { RouterOutputs } from "@repo/api";
 import { DatePicker } from "~/components/DatePicker";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import PrefixSelector from "~/components/shared/forms/PrefixSelector";
+import { StaffLevelSelector } from "~/components/shared/selects/StaffLevelSelector";
 import {
   Accordion,
   AccordionContent,
@@ -35,6 +36,7 @@ import {
 } from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
 import { Spinner } from "~/components/ui/spinner";
+import { Textarea } from "~/components/ui/textarea";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -61,7 +63,7 @@ const staffCreateSchema = z.object({
   address: z.string().optional(),
   dateOfHire: z.date().optional(),
   dateOfRelease: z.date().optional(),
-  employmentType: z.enum(["cdi", "cdd", "internship", "freelance"]),
+  employmentType: z.string().min(1).default("cdi"),
   jobTitle: z.string().optional(),
   specialty: z.string().optional(),
   weeklyWorkingHours: z.coerce.number().min(1).max(168),
@@ -81,6 +83,16 @@ const staffCreateSchema = z.object({
 });
 
 type StaffFormInput = z.input<typeof staffCreateSchema>;
+const employmentTypeValues = ["cdi", "cdd", "internship", "freelance"] as const;
+const sendAgendaFrequencyValues = [
+  "no",
+  "daily",
+  "weekly",
+  "monthly",
+  "quarterly",
+  "yearly",
+] as const;
+
 export default function CreateEditStaff({
   staff,
   className,
@@ -142,15 +154,15 @@ export default function CreateEditStaff({
       onSuccess: async (updated) => {
         await uploadAvatar(updated.id);
         await queryClient.invalidateQueries(trpc.staff.pathFilter());
-        toast.success(t("created_successfully"), { id: 0 });
+        toast.success(t("updated_successfully"), { id: 0 });
         router.push(`/staffs/${updated.id}`);
       },
     }),
   );
   const defaultValues: StaffFormInput = {
-    prefix: "M",
-    lastName: "",
-    firstName: "",
+    prefix: staff?.prefix ?? "M",
+    lastName: staff?.lastName ?? "",
+    firstName: staff?.firstName ?? "",
     avatar: staff?.avatar ?? undefined,
     dateOfBirth: staff?.dateOfBirth ?? undefined,
     placeOfBirth: staff?.placeOfBirth ?? "",
@@ -163,17 +175,14 @@ export default function CreateEditStaff({
     countryId: staff?.countryId ?? "",
     dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck ?? undefined,
     dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? undefined,
-    sendAgendaFrequency: staff?.sendAgendaFrequency ?? "",
-    email: staff?.email ?? "",
+    sendAgendaFrequency:
+      staff?.sendAgendaFrequency?.trim() ? staff.sendAgendaFrequency : "no",
+    email: staff?.email ?? staff?.user?.email ?? "",
     address: staff?.address ?? "",
     dateOfHire: staff?.dateOfHire ?? undefined,
     dateOfRelease: staff?.dateOfRelease ?? undefined,
     jobTitle: staff?.jobTitle ?? "",
-    employmentType: (staff?.employmentType ?? "cdi") as
-      | "cdi"
-      | "cdd"
-      | "internship"
-      | "freelance",
+    employmentType: staff?.employmentType?.trim() ? staff.employmentType : "cdi",
     specialty: staff?.specialty ?? "",
     weeklyWorkingHours: staff?.weeklyWorkingHours ?? 40,
     baseSalary: staff?.baseSalary != null ? `${staff.baseSalary}` : "",
@@ -211,6 +220,7 @@ export default function CreateEditStaff({
         ...value,
         firstName: value.firstName ?? "",
         degreeId: value.degreeId?.trim() ? value.degreeId : undefined,
+        countryId: value.countryId?.trim() ? value.countryId : undefined,
         baseSalary: toNumber(value.baseSalary),
         travelAllowance: toNumber(value.travelAllowance),
         phoneAllowance: toNumber(value.phoneAllowance),
@@ -239,7 +249,7 @@ export default function CreateEditStaff({
     >
       <Accordion
         type="multiple"
-        defaultValue={["personal", "professional", "contractual"]}
+        defaultValue={["personal", "contractual", "allocations", "banquesInformation"]}
         className="w-full space-y-4 border-0"
       >
         {/* Personal Information Section */}
@@ -469,6 +479,7 @@ export default function CreateEditStaff({
                       onChange={(value) => {
                         field.handleChange(value);
                       }}
+                      defaultValue={field.state.value ?? undefined}
                     />
                   </Field>
                 )}
@@ -598,11 +609,7 @@ export default function CreateEditStaff({
                     </FieldLabel>
                     <Select
                       value={field.state.value}
-                      onValueChange={(value) =>
-                        field.handleChange(
-                          value as "cdi" | "cdd" | "internship" | "freelance",
-                        )
-                      }
+                      onValueChange={field.handleChange}
                     >
                       <SelectTrigger id={field.name} className="w-full">
                         <SelectValue placeholder="Sélectionner un type" />
@@ -616,6 +623,14 @@ export default function CreateEditStaff({
                         </SelectItem>
                         <SelectItem value="internship">Stage</SelectItem>
                         <SelectItem value="freelance">Freelance</SelectItem>
+                        {!employmentTypeValues.includes(
+                          field.state.value as (typeof employmentTypeValues)[number],
+                        ) &&
+                          field.state.value && (
+                            <SelectItem value={field.state.value}>
+                              {field.state.value}
+                            </SelectItem>
+                          )}
                       </SelectContent>
                     </Select>
                     {isInvalid && (
@@ -659,6 +674,77 @@ export default function CreateEditStaff({
                 </Field>
               )}
             />
+            <form.Field
+              name="degreeId"
+              children={(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Niveau d&apos;étude</FieldLabel>
+                  <StaffLevelSelector
+                    className="w-full"
+                    onChange={(value) => {
+                      field.handleChange(value ?? "");
+                    }}
+                    defaultValue={field.state.value ?? undefined}
+                  />
+                </Field>
+              )}
+            />
+            <form.Field
+              name="isTeacher"
+              children={(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Enseignant</FieldLabel>
+                  <Select
+                    value={field.state.value ? "yes" : "no"}
+                    onValueChange={(value) => {
+                      field.handleChange(value === "yes");
+                    }}
+                  >
+                    <SelectTrigger id={field.name} className="w-full">
+                      <SelectValue placeholder="Sélectionner une option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="yes">Oui</SelectItem>
+                      <SelectItem value="no">Non</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            />
+            <form.Field
+              name="sendAgendaFrequency"
+              children={(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>
+                    Fréquence d&apos;envoi de l&apos;agenda
+                  </FieldLabel>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={field.handleChange}
+                  >
+                    <SelectTrigger id={field.name} className="w-full">
+                      <SelectValue placeholder="Sélectionner une fréquence" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="no">Jamais</SelectItem>
+                      <SelectItem value="daily">Quotidienne</SelectItem>
+                      <SelectItem value="weekly">Hebdomadaire</SelectItem>
+                      <SelectItem value="monthly">Mensuelle</SelectItem>
+                      <SelectItem value="quarterly">Trimestrielle</SelectItem>
+                      <SelectItem value="yearly">Annuelle</SelectItem>
+                      {!sendAgendaFrequencyValues.includes(
+                        field.state.value as (typeof sendAgendaFrequencyValues)[number],
+                      ) &&
+                        field.state.value && (
+                          <SelectItem value={field.state.value}>
+                            {field.state.value}
+                          </SelectItem>
+                        )}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            />
 
             <form.Field
               name="weeklyWorkingHours"
@@ -671,6 +757,7 @@ export default function CreateEditStaff({
                     id={field.name}
                     name={field.name}
                     type="number"
+                    value={field.state.value ?? ""}
                     min="1"
                     max="168"
                     onBlur={field.handleBlur}
@@ -680,6 +767,21 @@ export default function CreateEditStaff({
                         Number.isNaN(nextValue) ? 0 : nextValue,
                       );
                     }}
+                  />
+                </Field>
+              )}
+            />
+            <form.Field
+              name="observation"
+              children={(field) => (
+                <Field className="md:col-span-2 lg:col-span-3">
+                  <FieldLabel htmlFor={field.name}>Observation</FieldLabel>
+                  <Textarea
+                    id={field.name}
+                    value={field.state.value ?? ""}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    className="resize-none"
+                    rows={4}
                   />
                 </Field>
               )}

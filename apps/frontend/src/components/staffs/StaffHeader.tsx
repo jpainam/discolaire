@@ -7,9 +7,8 @@ import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useSheet } from "~/hooks/use-sheet";
+import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditStaff } from "./CreateEditStaff";
 
 export function StaffHeader() {
   const t = useTranslations();
@@ -17,8 +16,7 @@ export function StaffHeader() {
   const { data: staffs } = useSuspenseQuery(trpc.staff.all.queryOptions());
 
   const canCreateStaff = useCheckPermission("staff.create");
-
-  const { openSheet } = useSheet();
+  const router = useRouter();
   const females = staffs.filter((staff) => staff.gender == "female").length;
   const total = staffs.length;
   const males = total - females;
@@ -49,12 +47,7 @@ export function StaffHeader() {
           {canCreateStaff && (
             <Button
               onClick={() => {
-                openSheet({
-                  title: t("add"),
-                  description: t("staff"),
-                  view: <CreateEditStaff formId="create-edit-staff-form" />,
-                  formId: "create-edit-staff-form",
-                });
+                router.push("/staffs/create");
               }}
             >
               <Plus />
