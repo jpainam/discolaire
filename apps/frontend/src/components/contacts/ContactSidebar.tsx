@@ -18,6 +18,7 @@ import {
   CalendarDays,
   ChatIcon,
   GradeIcon,
+  MoneyIcon,
   NotificationIcon,
   ReportGradeIcon,
   UserIcon,
@@ -46,6 +47,11 @@ export function ContactSidebar({
         name: "grades",
         url: `/contacts/${params.id}/grades`,
         icon: <GradeIcon />,
+      },
+      {
+        name: "transactions",
+        url: `/contacts/${params.id}/transactions`,
+        icon: <MoneyIcon />,
       },
       {
         name: "timetable",

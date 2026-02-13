@@ -36,6 +36,8 @@ export function UpdateRegistrationNumber({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.student.get.pathFilter());
         await queryClient.invalidateQueries(trpc.student.pathFilter());
+        await queryClient.invalidateQueries(trpc.contact.pathFilter());
+        await queryClient.invalidateQueries(trpc.studentContact.pathFilter());
         await queryClient.invalidateQueries(
           trpc.classroom.students.pathFilter(),
         );

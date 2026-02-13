@@ -77,11 +77,10 @@ export function ContactStudentList({ contactId }: { contactId: string }) {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="w-[100px]"></TableHead>
+              <TableHead>{t("fullName")}</TableHead>
               <TableHead className="text-center">
                 {t("registrationNumber")}
               </TableHead>
-              <TableHead>{t("fullName")}</TableHead>
               <TableHead className="text-center">{t("dateOfBirth")}</TableHead>
               <TableHead className="text-center">{t("classroom")}</TableHead>
               <TableHead></TableHead>
@@ -109,27 +108,25 @@ export function ContactStudentList({ contactId }: { contactId: string }) {
               return (
                 <TableRow key={student.id}>
                   <TableCell>
-                    <Avatar>
-                      <AvatarImage
-                        src={
-                          student.avatar
-                            ? `/api/avatars/${student.avatar}`
-                            : avatar.toDataUri()
-                        }
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
+                    <Link
+                      href={`/students/${student.id}`}
+                      className="flex items-center gap-2 hover:underline"
+                    >
+                      <Avatar>
+                        <AvatarImage
+                          src={
+                            student.avatar
+                              ? `/api/avatars/${student.avatar}`
+                              : avatar.toDataUri()
+                          }
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      {getFullName(student)}
+                    </Link>
                   </TableCell>
                   <TableCell className="text-muted-foreground text-center">
                     {student.registrationNumber}
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      href={`/students/${student.id}`}
-                      className="hover:underline"
-                    >
-                      {getFullName(student)}
-                    </Link>
                   </TableCell>
                   <TableCell className="text-center">
                     {student.dateOfBirth?.toLocaleDateString()}
