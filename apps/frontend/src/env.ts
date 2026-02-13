@@ -44,7 +44,9 @@ export const env = createEnv({
     NEXT_PUBLIC_DEFAULT_TENANT: z.string().min(1).optional(),
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]).default("local"),
     NEXT_PUBLIC_MINIO_URL: z.url(),
-    NEXT_PUBLIC_AI_PROVIDER: z.enum(["openai", "anthropic", "google"]).optional(),
+    NEXT_PUBLIC_AI_PROVIDER: z
+      .enum(["openai", "anthropic", "google"])
+      .optional(),
     NEXT_PUBLIC_AI_MODEL: z.string().min(1).optional(),
   },
   /**

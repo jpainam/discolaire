@@ -46,4 +46,8 @@ export {
   updateChatMessages,
 } from "./lib/ai-chat-repository";
 export type { AppRouter, RouterInputs, RouterOutputs };
-export type { ChatDetail, ChatListItem, ChatPageResult } from "./lib/ai-chat-repository";
+export type {
+  ChatDetail,
+  ChatListItem,
+  ChatPageResult,
+} from "./lib/ai-chat-repository";

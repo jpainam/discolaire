@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import type { UIMessage } from "ai";
+import { NextResponse } from "next/server";
 import { z } from "zod/v4";
 
 import { ChatSDKError } from "~/lib/errors";
@@ -57,7 +57,10 @@ export async function PUT(request: Request, context: RouteContext) {
     const parsed = bodySchema.safeParse(await request.json());
 
     if (!parsed.success) {
-      return new ChatSDKError("bad_request:api", "Invalid body payload.").toResponse();
+      return new ChatSDKError(
+        "bad_request:api",
+        "Invalid body payload.",
+      ).toResponse();
     }
 
     const { db, userId } = await getAiAuthContext();

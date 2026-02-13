@@ -23,7 +23,10 @@ export async function GET(request: NextRequest) {
     });
 
     if (!parseResult.success) {
-      return new ChatSDKError("bad_request:api", "Invalid query params.").toResponse();
+      return new ChatSDKError(
+        "bad_request:api",
+        "Invalid query params.",
+      ).toResponse();
     }
 
     const { db, userId } = await getAiAuthContext();

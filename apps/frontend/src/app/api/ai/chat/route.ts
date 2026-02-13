@@ -1,5 +1,5 @@
-import { streamText } from "ai";
 import type { UIMessage } from "ai";
+import { streamText } from "ai";
 import { z } from "zod/v4";
 
 import { ChatSDKError } from "~/lib/errors";
@@ -32,14 +32,20 @@ export async function POST(request: Request) {
     const parsed = bodySchema.safeParse(await request.json());
 
     if (!parsed.success) {
-      return new ChatSDKError("bad_request:api", "Invalid body payload.").toResponse();
+      return new ChatSDKError(
+        "bad_request:api",
+        "Invalid body payload.",
+      ).toResponse();
     }
 
     const messages = parsed.data.messages as unknown as UIMessage[];
     const coreMessages = toCoreMessages(messages);
 
     if (coreMessages.length === 0) {
-      return new ChatSDKError("bad_request:api", "Chat messages are empty.").toResponse();
+      return new ChatSDKError(
+        "bad_request:api",
+        "Chat messages are empty.",
+      ).toResponse();
     }
 
     const runtimeConfig = resolveAiRuntimeConfig({

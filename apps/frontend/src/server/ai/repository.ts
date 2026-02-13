@@ -1,5 +1,8 @@
 import "server-only";
 
+import { headers } from "next/headers";
+
+import type { ChatDetail, ChatListItem, ChatPageResult } from "@repo/api";
 import {
   createChat,
   createTRPCContext,
@@ -8,11 +11,7 @@ import {
   softDeleteAllChats,
   softDeleteChat,
   updateChatMessages,
-  type ChatDetail,
-  type ChatListItem,
-  type ChatPageResult,
 } from "@repo/api";
-import { headers } from "next/headers";
 
 import { getAuth } from "~/auth/server";
 import { ChatSDKError } from "~/lib/errors";

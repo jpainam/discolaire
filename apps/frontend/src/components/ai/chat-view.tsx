@@ -1,21 +1,20 @@
 "use client";
 
-import { DefaultChatTransport, isTextUIPart } from "ai";
 import type { UIMessage } from "ai";
-import { useChat } from "@ai-sdk/react";
-import { SendHorizontalIcon, SquareIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, isTextUIPart } from "ai";
+import { SendHorizontalIcon, SquareIcon } from "lucide-react";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
+import type { AiChatDetail } from "./types";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { env } from "~/env";
 import { cn, fetcher } from "~/lib/utils";
-
-import type { AiChatDetail } from "./types";
 
 function getMessageText(message: UIMessage): string {
   if (!Array.isArray(message.parts)) {
@@ -71,7 +70,8 @@ export function ChatView({ chatId }: { chatId?: string }) {
             setActiveChatId(responseChatId);
             router.replace(`/ai/${responseChatId}`);
             void mutate(
-              (key) => typeof key === "string" && key.startsWith("/api/ai/history"),
+              (key) =>
+                typeof key === "string" && key.startsWith("/api/ai/history"),
               undefined,
               { revalidate: true },
             );
@@ -170,19 +170,19 @@ export function ChatView({ chatId }: { chatId?: string }) {
   }, [activeChatId, isLoading, messages.length, mutate, savePayload]);
 
   return (
-    <div className="flex h-dvh flex-col bg-background">
+    <div className="bg-background flex h-dvh flex-col">
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-6">
         <div className="flex-1 space-y-4 overflow-y-auto pr-1">
           {isLoadingChat && (
-            <p className="text-center text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-center text-sm">
               Loading conversation...
             </p>
           )}
 
           {isIdleWithoutMessages && (
             <div className="mx-auto mt-16 max-w-xl text-center">
-              <h1 className="font-semibold text-2xl">AI Assistant</h1>
-              <p className="mt-2 text-muted-foreground text-sm">
+              <h1 className="text-2xl font-semibold">AI Assistant</h1>
+              <p className="text-muted-foreground mt-2 text-sm">
                 Ask anything to start a new conversation.
               </p>
             </div>
@@ -208,7 +208,9 @@ export function ChatView({ chatId }: { chatId?: string }) {
                   {text ? (
                     <p className="whitespace-pre-wrap">{text}</p>
                   ) : (
-                    <p className="italic opacity-70">Unsupported message format.</p>
+                    <p className="italic opacity-70">
+                      Unsupported message format.
+                    </p>
                   )}
                 </div>
               </div>
@@ -216,14 +218,16 @@ export function ChatView({ chatId }: { chatId?: string }) {
           })}
 
           {error ? (
-            <p className="text-center text-destructive text-sm">{error.message}</p>
+            <p className="text-destructive text-center text-sm">
+              {error.message}
+            </p>
           ) : null}
 
           <div ref={scrollAnchorRef} />
         </div>
 
         <form className="mt-4 border-t pt-4" onSubmit={handleFormSubmit}>
-          <div className="rounded-xl border bg-card p-3">
+          <div className="bg-card rounded-xl border p-3">
             <Textarea
               className="min-h-[100px] border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
               onChange={(event) => setInput(event.target.value)}

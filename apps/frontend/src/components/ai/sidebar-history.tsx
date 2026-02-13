@@ -1,13 +1,14 @@
 "use client";
 
+import type { CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { isToday, isYesterday, subMonths, subWeeks } from "date-fns";
 import { Loader2Icon } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties } from "react";
 import { toast } from "sonner";
 import useSWRInfinite from "swr/infinite";
 
+import type { AiChatHistory, AiChatListItem } from "./types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,9 +26,7 @@ import {
   useSidebar,
 } from "~/components/ui/sidebar";
 import { fetcher } from "~/lib/utils";
-
 import { ChatItem } from "./sidebar-history-item";
-import type { AiChatHistory, AiChatListItem } from "./types";
 
 interface SidebarHistoryUser {
   id: string;
@@ -100,10 +99,16 @@ export function getChatHistoryPaginationKey(
   return `/api/ai/history?ending_before=${lastChat.id}&limit=${PAGE_SIZE}`;
 }
 
-export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined }) {
+export function SidebarHistory({
+  user,
+}: {
+  user: SidebarHistoryUser | undefined;
+}) {
   const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
-  const activeChatId = pathname.startsWith("/ai/") ? pathname.split("/")[2] : null;
+  const activeChatId = pathname.startsWith("/ai/")
+    ? pathname.split("/")[2]
+    : null;
 
   const {
     data: paginatedChatHistories,
@@ -122,8 +127,9 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
 
   const chatsFromHistory = useMemo(
     () =>
-      paginatedChatHistories?.flatMap((chatHistoryPage) => chatHistoryPage.chats) ??
-      [],
+      paginatedChatHistories?.flatMap(
+        (chatHistoryPage) => chatHistoryPage.chats,
+      ) ?? [],
     [paginatedChatHistories],
   );
 
@@ -177,7 +183,9 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
 
           return chatHistoryPages.map((chatHistoryPage) => ({
             ...chatHistoryPage,
-            chats: chatHistoryPage.chats.filter((chat) => chat.id !== chatToDelete),
+            chats: chatHistoryPage.chats.filter(
+              (chat) => chat.id !== chatToDelete,
+            ),
           }));
         });
 
@@ -207,13 +215,18 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
   if (isLoading) {
     return (
       <SidebarGroup>
-        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">Today</div>
+        <div className="text-sidebar-foreground/50 px-2 py-1 text-xs">
+          Today
+        </div>
         <SidebarGroupContent>
           <div className="flex flex-col">
             {[44, 32, 28, 64, 52].map((item) => (
-              <div className="flex h-8 items-center gap-2 rounded-md px-2" key={item}>
+              <div
+                className="flex h-8 items-center gap-2 rounded-md px-2"
+                key={item}
+              >
                 <div
-                  className="h-4 max-w-(--skeleton-width) flex-1 rounded-md bg-sidebar-accent-foreground/10"
+                  className="bg-sidebar-accent-foreground/10 h-4 max-w-(--skeleton-width) flex-1 rounded-md"
                   style={{ "--skeleton-width": `${item}%` } as CSSProperties}
                 />
               </div>
@@ -246,7 +259,9 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
             <div className="flex flex-col gap-6">
               {groupedChats.today.length > 0 && (
                 <div>
-                  <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">Today</div>
+                  <div className="text-sidebar-foreground/50 px-2 py-1 text-xs">
+                    Today
+                  </div>
                   {groupedChats.today.map((chat) => (
                     <ChatItem
                       chat={chat}
@@ -264,7 +279,7 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
 
               {groupedChats.yesterday.length > 0 && (
                 <div>
-                  <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
+                  <div className="text-sidebar-foreground/50 px-2 py-1 text-xs">
                     Yesterday
                   </div>
                   {groupedChats.yesterday.map((chat) => (
@@ -284,7 +299,7 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
 
               {groupedChats.lastWeek.length > 0 && (
                 <div>
-                  <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
+                  <div className="text-sidebar-foreground/50 px-2 py-1 text-xs">
                     Last 7 days
                   </div>
                   {groupedChats.lastWeek.map((chat) => (
@@ -304,7 +319,7 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
 
               {groupedChats.lastMonth.length > 0 && (
                 <div>
-                  <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
+                  <div className="text-sidebar-foreground/50 px-2 py-1 text-xs">
                     Last 30 days
                   </div>
                   {groupedChats.lastMonth.map((chat) => (
@@ -324,7 +339,9 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
 
               {groupedChats.older.length > 0 && (
                 <div>
-                  <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">Older</div>
+                  <div className="text-sidebar-foreground/50 px-2 py-1 text-xs">
+                    Older
+                  </div>
                   {groupedChats.older.map((chat) => (
                     <ChatItem
                       chat={chat}
@@ -362,7 +379,8 @@ export function SidebarHistory({ user }: { user: SidebarHistoryUser | undefined 
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this chat?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. The chat will be removed from your history.
+              This action cannot be undone. The chat will be removed from your
+              history.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

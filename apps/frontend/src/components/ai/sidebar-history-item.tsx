@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { memo } from "react";
+import Link from "next/link";
 import { MoreHorizontalIcon, Trash2Icon } from "lucide-react";
 
+import type { AiChatListItem } from "./types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +14,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
-
-import type { AiChatListItem } from "./types";
 
 interface Props {
   chat: AiChatListItem;
@@ -35,7 +34,7 @@ function PureChatItem({ chat, isActive, onDelete, setOpenMobile }: Props) {
       <DropdownMenu modal={true}>
         <DropdownMenuTrigger asChild>
           <SidebarMenuAction
-            className="mr-0.5 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mr-0.5"
             showOnHover={!isActive}
           >
             <MoreHorizontalIcon className="size-4" />
@@ -45,7 +44,7 @@ function PureChatItem({ chat, isActive, onDelete, setOpenMobile }: Props) {
 
         <DropdownMenuContent align="end" side="bottom">
           <DropdownMenuItem
-            className="cursor-pointer text-destructive focus:bg-destructive/15 focus:text-destructive"
+            className="text-destructive focus:bg-destructive/15 focus:text-destructive cursor-pointer"
             onSelect={() => onDelete(chat.id)}
           >
             <Trash2Icon className="size-4" />
