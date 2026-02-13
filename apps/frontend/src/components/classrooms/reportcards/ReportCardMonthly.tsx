@@ -25,6 +25,7 @@ import {
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 
 export function ReportCardMontly({
   termId,
@@ -139,6 +140,7 @@ export function ReportCardMontly({
                   <TableRow className="bg-transparent" key={student.id}>
                     <TableCell className="w-[10px]">
                       <AvatarState
+                        name={getFullName(student)}
                         className="h-8 w-8"
                         avatar={student.avatar}
                         pos={index}

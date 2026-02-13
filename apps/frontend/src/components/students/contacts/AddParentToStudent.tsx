@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { initials } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckIcon, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
+import { AvatarState } from "~/components/AvatarState";
 import { EmptyComponent } from "~/components/EmptyComponent";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   InputGroup,
@@ -86,9 +84,6 @@ export function AddToParentToStudent({ studentId }: { studentId: string }) {
             />
           ) : (
             contacts?.map((contact) => {
-              const avatar = createAvatar(initials, {
-                seed: getFullName(contact),
-              });
               return (
                 <Item
                   className="p-1"
@@ -107,16 +102,13 @@ export function AddToParentToStudent({ studentId }: { studentId: string }) {
                   }}
                 >
                   <ItemMedia>
-                    <Avatar className="size-8">
-                      <AvatarImage
-                        src={
-                          contact.avatar
-                            ? `/api/avatars/${contact.avatar}`
-                            : avatar.toDataUri()
-                        }
-                      />
-                      <AvatarFallback>ER</AvatarFallback>
-                    </Avatar>
+                    <AvatarState
+                      className="size-8"
+                      name={getFullName(contact)}
+                      avatar={contact.avatar}
+                      avatarBasePath="/api/avatars"
+                      zoomable={false}
+                    />
                   </ItemMedia>
                   <ItemContent>
                     <ItemTitle>{getFullName(contact)}</ItemTitle>

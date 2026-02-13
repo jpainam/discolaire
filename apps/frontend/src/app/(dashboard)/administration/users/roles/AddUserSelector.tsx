@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { initials } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckIcon, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { AvatarState } from "~/components/AvatarState";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -76,9 +74,6 @@ export function AddUserSelector({ roleId }: { roleId: string }) {
           </div>
         )}
         {users?.map((u, index) => {
-          const avatar = createAvatar(initials, {
-            seed: u.name,
-          });
           return (
             <div
               onClick={() => {
@@ -98,10 +93,7 @@ export function AddUserSelector({ roleId }: { roleId: string }) {
               key={index}
               className="flex items-center gap-2 border-b py-1"
             >
-              <Avatar>
-                <AvatarImage src={avatar.toDataUri()} />
-                <AvatarFallback>{u.name.slice(0, 2)}</AvatarFallback>
-              </Avatar>
+              <AvatarState name={u.name} zoomable={false} />
               <div className="text-muted-foreground text-xs">{u.name}</div>
               <Badge variant={"secondary"} className="text-primary">
                 {u.username}
@@ -117,14 +109,8 @@ export function AddUserSelector({ roleId }: { roleId: string }) {
       </ScrollArea>
       <div className="flex h-5 items-center gap-1">
         {selected.map((s, index) => {
-          const av = createAvatar(initials, {
-            seed: s.name,
-          });
           return (
-            <Avatar key={index}>
-              <AvatarImage src={av.toDataUri()} />
-              <AvatarFallback>{s.name.slice(0, 2)}</AvatarFallback>
-            </Avatar>
+            <AvatarState key={index} name={s.name} zoomable={false} />
           );
         })}
       </div>

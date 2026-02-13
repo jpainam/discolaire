@@ -1,19 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { initials } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckIcon, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
+import { AvatarState } from "~/components/AvatarState";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 import { EmptyComponent } from "../EmptyComponent";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
   InputGroup,
@@ -85,9 +83,6 @@ export function AddStudentToParent({ contactId }: { contactId: string }) {
             />
           ) : (
             students?.map((stud) => {
-              const avatar = createAvatar(initials, {
-                seed: getFullName(stud),
-              });
               return (
                 <Item
                   className="p-1"
@@ -104,16 +99,13 @@ export function AddStudentToParent({ contactId }: { contactId: string }) {
                   }}
                 >
                   <ItemMedia>
-                    <Avatar className="size-8">
-                      <AvatarImage
-                        src={
-                          stud.avatar
-                            ? `/api/avatars/${stud.avatar}`
-                            : avatar.toDataUri()
-                        }
-                      />
-                      <AvatarFallback>ER</AvatarFallback>
-                    </Avatar>
+                    <AvatarState
+                      className="size-8"
+                      name={getFullName(stud)}
+                      avatar={stud.avatar}
+                      avatarBasePath="/api/avatars"
+                      zoomable={false}
+                    />
                   </ItemMedia>
                   <ItemContent>
                     <ItemTitle>{getFullName(stud)}</ItemTitle>
