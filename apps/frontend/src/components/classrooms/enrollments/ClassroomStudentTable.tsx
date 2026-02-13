@@ -202,7 +202,6 @@ export function ClassroomStudentTable({
                   </TableCell>
                   <TableCell>
                     <Badge
-                     
                       variant={"outline"}
                       appearance={"light"}
                       className={cn(stud.isRepeating && "text-destructive")}
@@ -212,7 +211,6 @@ export function ClassroomStudentTable({
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     <Badge
-                      
                       appearance={"light"}
                       variant={stud.gender == "male" ? "info" : "destructive"}
                     >

@@ -80,7 +80,7 @@ export const discountPolicyRouter = {
         where: { id: input.id },
         select: { schoolId: true },
       });
-      if (!policy || policy.schoolId !== ctx.schoolId) {
+      if (policy?.schoolId !== ctx.schoolId) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Policy not found" });
       }
       const { id, criterionConfig: _criterionConfig, ...rest } = input;
@@ -102,18 +102,20 @@ export const discountPolicyRouter = {
       });
     }),
 
-  delete: protectedProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    const policy = await ctx.db.discountPolicy.findUnique({
-      where: { id: input },
-      select: { schoolId: true },
-    });
-    if (!policy || policy.schoolId !== ctx.schoolId) {
-      throw new TRPCError({ code: "NOT_FOUND", message: "Policy not found" });
-    }
-    return ctx.db.discountPolicy.delete({
-      where: { id: input },
-    });
-  }),
+  delete: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const policy = await ctx.db.discountPolicy.findUnique({
+        where: { id: input },
+        select: { schoolId: true },
+      });
+      if (policy?.schoolId !== ctx.schoolId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Policy not found" });
+      }
+      return ctx.db.discountPolicy.delete({
+        where: { id: input },
+      });
+    }),
 
   assignments: protectedProcedure
     .input(z.object({ policyId: z.string() }))
@@ -122,7 +124,7 @@ export const discountPolicyRouter = {
         where: { id: input.policyId },
         select: { schoolId: true },
       });
-      if (!policy || policy.schoolId !== ctx.schoolId) {
+      if (policy?.schoolId !== ctx.schoolId) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Policy not found" });
       }
       return ctx.db.discountPolicyAssignment.findMany({
@@ -143,8 +145,11 @@ export const discountPolicyRouter = {
         where: { id: input.studentId },
         select: { schoolId: true },
       });
-      if (!student || student.schoolId !== ctx.schoolId) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Student not found" });
+      if (student?.schoolId !== ctx.schoolId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Student not found",
+        });
       }
       return ctx.db.discountPolicyAssignment.findMany({
         where: {
@@ -178,11 +183,14 @@ export const discountPolicyRouter = {
           select: { schoolId: true },
         }),
       ]);
-      if (!policy || policy.schoolId !== ctx.schoolId) {
+      if (policy?.schoolId !== ctx.schoolId) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Policy not found" });
       }
-      if (!student || student.schoolId !== ctx.schoolId) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Student not found" });
+      if (student?.schoolId !== ctx.schoolId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Student not found",
+        });
       }
       return ctx.services.billing.setManualAssignment({
         policyId: input.policyId,
@@ -220,8 +228,11 @@ export const discountPolicyRouter = {
         where: { id: input.studentId },
         select: { schoolId: true },
       });
-      if (!student || student.schoolId !== ctx.schoolId) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Student not found" });
+      if (student?.schoolId !== ctx.schoolId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Student not found",
+        });
       }
       await ctx.services.billing.syncAutoDiscountAssignmentsForStudent({
         studentId: input.studentId,

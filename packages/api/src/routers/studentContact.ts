@@ -64,7 +64,9 @@ export const studentContactRouter = {
     .input(createUpdateSchema.array())
     .mutation(async ({ ctx, input }) => {
       const created = await ctx.db.studentContact.createMany({ data: input });
-      const contactIds = Array.from(new Set(input.map((item) => item.contactId)));
+      const contactIds = Array.from(
+        new Set(input.map((item) => item.contactId)),
+      );
       await ctx.services.billing.syncAutoDiscountAssignmentsForContacts({
         contactIds,
         schoolId: ctx.schoolId,
@@ -90,7 +92,9 @@ export const studentContactRouter = {
       });
 
       const result = await Promise.all(updates);
-      const contactIds = Array.from(new Set(input.map((item) => item.contactId)));
+      const contactIds = Array.from(
+        new Set(input.map((item) => item.contactId)),
+      );
       await ctx.services.billing.syncAutoDiscountAssignmentsForContacts({
         contactIds,
         schoolId: ctx.schoolId,

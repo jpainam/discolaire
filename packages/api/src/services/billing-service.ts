@@ -7,26 +7,26 @@ import {
   TransactionType,
 } from "@repo/db/enums";
 
-type TransactionLike = {
+interface TransactionLike {
   amount: number;
   transactionType: TransactionType;
-};
+}
 
-type DiscountConfig = {
+interface DiscountConfig {
   minChildren?: number;
   religionId?: string;
   religionName?: string;
   isBaptized?: boolean;
-};
+}
 
-export type BillingTransactionSummary = {
+export interface BillingTransactionSummary {
   credit: number;
   debit: number;
   manualDiscount: number;
   net: number;
-};
+}
 
-export type DiscountEligibilityContext = {
+export interface DiscountEligibilityContext {
   studentId: string;
   schoolId: string;
   schoolYearId: string;
@@ -35,15 +35,15 @@ export type DiscountEligibilityContext = {
   religionId: string | null;
   religionName: string | null;
   isBaptized: boolean;
-};
+}
 
-export type AppliedAutomaticDiscount = {
+export interface AppliedAutomaticDiscount {
   policyId: string;
   name: string;
   amount: number;
   valueType: DiscountValueType;
   value: number;
-};
+}
 
 type ApplicablePolicy = Awaited<
   ReturnType<BillingService["getApplicablePolicies"]>
@@ -68,6 +68,7 @@ export class BillingService {
         credit += tx.amount;
       } else if (tx.transactionType === TransactionType.DEBIT) {
         debit += tx.amount;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       } else if (tx.transactionType === TransactionType.DISCOUNT) {
         manualDiscount += tx.amount;
       }
@@ -414,7 +415,7 @@ export class BillingService {
         },
       },
     });
-    if (!assignment || assignment.source !== DiscountAssignmentSource.MANUAL) {
+    if (assignment?.source !== DiscountAssignmentSource.MANUAL) {
       return assignment;
     }
     return this.db.discountPolicyAssignment.delete({

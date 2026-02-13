@@ -402,7 +402,10 @@ export class StudentService {
     const feesTotal = fees.reduce((acc, fee) => acc + fee.amount, 0);
 
     const feeBuckets = fees.reduce<
-      Record<string, { schoolYearId: string; classroomId: string; total: number }>
+      Record<
+        string,
+        { schoolYearId: string; classroomId: string; total: number }
+      >
     >((acc, fee) => {
       const bucketKey = `${fee.classroom.schoolYearId}:${fee.classroomId}`;
       const bucket = acc[bucketKey];
@@ -418,9 +421,10 @@ export class StudentService {
       return acc;
     }, {});
 
-    const contextCache = new Map<string, Awaited<
-      ReturnType<BillingService["buildEligibilityContext"]>
-    >>();
+    const contextCache = new Map<
+      string,
+      Awaited<ReturnType<BillingService["buildEligibilityContext"]>>
+    >();
     let automaticDiscount = 0;
 
     for (const bucket of Object.values(feeBuckets)) {

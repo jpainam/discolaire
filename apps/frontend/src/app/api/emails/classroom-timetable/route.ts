@@ -75,7 +75,7 @@ function buildWeeklyTimetable(
       endTime,
       event.title,
       teacherName ?? "",
-      event.location ?? "",
+      event.location,
     ].join("|");
 
     if (!slotsMap.has(key)) {
@@ -86,7 +86,7 @@ function buildWeeklyTimetable(
         endTime,
         description: event.description,
         teacherName,
-        location: event.location ?? "",
+        location: event.location,
         weekdayIndex,
         startMinutes: startDate.getHours() * 60 + startDate.getMinutes(),
       });
@@ -100,8 +100,8 @@ function buildWeeklyTimetable(
       }
       return a.weekdayIndex - b.weekdayIndex;
     })
-    .map(({ weekdayIndex: _weekdayIndex, startMinutes: _startMinutes, ...x }) =>
-      x,
+    .map(
+      ({ weekdayIndex: _weekdayIndex, startMinutes: _startMinutes, ...x }) => x,
     );
 }
 
@@ -112,6 +112,7 @@ export async function POST(req: Request) {
   }
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
     const result = bodySchema.safeParse(body);
     if (!result.success) {
