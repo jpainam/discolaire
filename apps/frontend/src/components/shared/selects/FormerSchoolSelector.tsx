@@ -15,13 +15,14 @@ interface FormerSchoolSelectorProps {
 
 export function FormerSchoolSelector({
   className,
+  defaultValue,
   onChange,
 }: FormerSchoolSelectorProps) {
   const trpc = useTRPC();
 
   const t = useTranslations();
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue ?? "");
   const [label, setLabel] = useState("");
   const [search, setSearch] = useState("");
   const formerSchoolsQuery = useQuery(

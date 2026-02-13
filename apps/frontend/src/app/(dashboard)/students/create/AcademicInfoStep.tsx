@@ -163,6 +163,7 @@ export function AcademicInfoStep({
                   </FieldLabel>
                   <FormerSchoolSelector
                     className="w-full"
+                    defaultValue={field.state.value}
                     onChange={(value) => {
                       field.handleChange(value ?? "");
                     }}

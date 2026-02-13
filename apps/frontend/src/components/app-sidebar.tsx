@@ -27,12 +27,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     "/staffs",
     "/staffs/create",
     "/staffs/attendances",
+    "/students/create",
   ];
   const pathname = usePathname();
   const isHome = keepHomePaths.includes(pathname);
   const segments = pathname.split("/").filter(Boolean);
   const isStudent =
-    pathname.startsWith("/students") && pathname.split("/").length > 2;
+    pathname.startsWith("/students") &&
+    pathname.split("/").length > 2 &&
+    !["create", "attendances"].includes(segments[1] ?? "");
 
   const isAdmin = pathname.startsWith("/administration");
   const isClassroom =

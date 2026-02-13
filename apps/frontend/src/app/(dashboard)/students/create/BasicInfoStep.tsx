@@ -33,7 +33,17 @@ import { useStudentFormContext } from "./StudentFormContext";
 import { basicInfoSchema } from "./validation";
 
 type BasicInfoType = z.input<typeof basicInfoSchema>;
-export function BasicInfoStep({ onNextAction }: { onNextAction: () => void }) {
+interface BasicInfoStepProps {
+  onNextAction: () => void;
+  initialAvatar?: string | null;
+  onAvatarFileChange?: (file: File | null) => void;
+}
+
+export function BasicInfoStep({
+  onNextAction,
+  initialAvatar,
+  onAvatarFileChange,
+}: BasicInfoStepProps) {
   const t = useTranslations();
   const { school } = useSchool();
   const { basicInfo, setBasicInfo } = useStudentFormContext();
@@ -306,7 +316,10 @@ export function BasicInfoStep({ onNextAction }: { onNextAction: () => void }) {
             />
           </FieldGroup>
           <FieldGroup>
-            <StudentAvatarDropzone />
+            <StudentAvatarDropzone
+              initialImage={initialAvatar}
+              onFileChange={onAvatarFileChange}
+            />
           </FieldGroup>
           <Separator className="col-span-full" />
 
@@ -432,6 +445,7 @@ export function BasicInfoStep({ onNextAction }: { onNextAction: () => void }) {
               <Field>
                 <FieldLabel>{t("sports")}</FieldLabel>
                 <SportMultiSelector
+                  defaultValue={field.state.value}
                   onChangeAction={(values) => field.handleChange(values)}
                 />
               </Field>

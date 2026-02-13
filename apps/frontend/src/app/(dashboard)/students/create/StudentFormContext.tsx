@@ -58,16 +58,71 @@ const initialAcademicInfo: AcademicInfo = {
   formerSchoolId: initialStudentData.formerSchoolId ?? "",
 };
 
+const toDate = (value: unknown, fallback: Date) => {
+  if (value instanceof Date) {
+    return value;
+  }
+  if (typeof value === "string" || typeof value === "number") {
+    const nextDate = new Date(value);
+    if (!Number.isNaN(nextDate.getTime())) {
+      return nextDate;
+    }
+  }
+  return fallback;
+};
+
+const toOptionalDate = (value: unknown) => {
+  if (!value) {
+    return undefined;
+  }
+  const nextDate = value instanceof Date ? value : new Date(value as string);
+  if (Number.isNaN(nextDate.getTime())) {
+    return undefined;
+  }
+  return nextDate;
+};
+
 export function StudentFormProvider({
   children,
+  initialStep = 1,
+  initialBasicValues,
+  initialAcademicValues,
+  initialSelectedParents,
 }: {
   children: React.ReactNode;
+  initialStep?: number;
+  initialBasicValues?: Partial<BasicInfo>;
+  initialAcademicValues?: Partial<AcademicInfo>;
+  initialSelectedParents?: ParentInfo[];
 }) {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [basicInfo, setBasicInfo] = useState<BasicInfo>(initialBasicInfo);
-  const [academicInfo, setAcademicInfo] =
-    useState<AcademicInfo>(initialAcademicInfo);
-  const [selectedParents, setSelectedParents] = useState<ParentInfo[]>([]);
+  const [currentStep, setCurrentStep] = useState(initialStep);
+  const [basicInfo, setBasicInfo] = useState<BasicInfo>({
+    ...initialBasicInfo,
+    ...initialBasicValues,
+    dateOfBirth: toDate(
+      initialBasicValues?.dateOfBirth,
+      initialBasicInfo.dateOfBirth,
+    ),
+    clubs: initialBasicValues?.clubs ?? initialBasicInfo.clubs,
+    sports: initialBasicValues?.sports ?? initialBasicInfo.sports,
+    tags: initialBasicValues?.tags ?? initialBasicInfo.tags,
+    isBaptized: initialBasicValues?.isBaptized ?? initialBasicInfo.isBaptized,
+  });
+  const [academicInfo, setAcademicInfo] = useState<AcademicInfo>({
+    ...initialAcademicInfo,
+    ...initialAcademicValues,
+    dateOfEntry: toDate(
+      initialAcademicValues?.dateOfEntry,
+      initialAcademicInfo.dateOfEntry,
+    ),
+    dateOfExit: toOptionalDate(initialAcademicValues?.dateOfExit),
+    isRepeating:
+      initialAcademicValues?.isRepeating ?? initialAcademicInfo.isRepeating,
+    isNew: initialAcademicValues?.isNew ?? initialAcademicInfo.isNew,
+  });
+  const [selectedParents, setSelectedParents] = useState<ParentInfo[]>(
+    initialSelectedParents ?? [],
+  );
 
   const addParent = useCallback((parent: ParentInfo) => {
     setSelectedParents((prev) => {

@@ -87,6 +87,12 @@ export function StudentAvatarDropzone({
     setImage(initialImage);
   }, [initialImage]);
 
+  const previewSrc = image?.startsWith("data:")
+    ? image
+    : image
+      ? `/api/avatars/${image}`
+      : "/placeholder.svg";
+
   return (
     <div className={cn("w-full max-w-xl", className)}>
       <input
@@ -142,7 +148,7 @@ export function StudentAvatarDropzone({
         <div className="bg-muted/30 relative overflow-hidden rounded-xl border">
           <div className="relative aspect-video w-full">
             <img
-              src={image ? `/api/avatars/${image}` : "/placeholder.svg"}
+              src={previewSrc}
               alt="Preview"
               className="h-full w-full object-contain"
             />

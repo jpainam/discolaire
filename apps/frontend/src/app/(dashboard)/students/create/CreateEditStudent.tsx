@@ -1,6 +1,8 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import type { z } from "zod/v4";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   ArrowRight,
@@ -11,6 +13,8 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+
+import type { RouterOutputs } from "@repo/api";
 
 import {
   Stepper,
@@ -39,8 +43,57 @@ const stepFormIdMap: Record<number, string> = {
   3: "student-parents-form",
 };
 
-export function CreateEditStudent() {
+const toRelationshipId = (value?: string) => {
+  if (!value) {
+    return undefined;
+  }
+  const parsed = Number(value);
+  return Number.isNaN(parsed) ? undefined : parsed;
+};
+
+const toStudentMutationInput = (data: z.output<typeof studentSchema>) => {
+  return {
+    registrationNumber: data.registrationNumber,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    dateOfBirth: data.dateOfBirth,
+    placeOfBirth: data.placeOfBirth,
+    gender: data.gender,
+    residence: data.residence,
+    externalAccountingNo: data.externalAccountingNo,
+    phoneNumber: data.phoneNumber,
+    formerSchoolId: data.formerSchoolId,
+    allergies: data.allergies,
+    isRepeating: data.isRepeating,
+    isNew: data.isNew,
+    countryId: data.countryId,
+    isBaptized: data.isBaptized,
+    religionId: data.religionId,
+    dateOfEntry: data.dateOfEntry,
+    bloodType: data.bloodType,
+    dateOfExit: data.dateOfExit,
+    tags: data.tags,
+    observation: data.observation,
+    clubs: data.clubs,
+    sports: data.sports,
+    status: data.status,
+    classroom: data.classroomId?.trim() ? data.classroomId : undefined,
+  };
+};
+
+type StudentDetails = RouterOutputs["student"]["get"];
+
+export function CreateEditStudent({ student }: { student?: StudentDetails }) {
   const t = useTranslations();
+  const trpc = useTRPC();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const isEditMode = Boolean(student);
+
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [isSyncingContacts, setIsSyncingContacts] = useState(false);
+
   const {
     currentStep,
     setCurrentStep,
@@ -76,6 +129,187 @@ export function CreateEditStudent() {
     },
   ];
 
+  const createStudentContact = useMutation(
+    trpc.studentContact.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const updateStudentContact = useMutation(
+    trpc.studentContact.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+  const deleteStudentContact = useMutation(
+    trpc.studentContact.delete.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
+
+  const uploadAvatar = async (ownerId: string) => {
+    if (!avatarFile) {
+      return;
+    }
+    setIsUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", avatarFile, avatarFile.name);
+      const response = await fetch(
+        `/api/upload/avatars?id=${ownerId}&profile=student`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+      setAvatarFile(null);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Avatar upload failed",
+        { id: 0 },
+      );
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
+
+  const syncStudentContacts = async (studentId: string) => {
+    setIsSyncingContacts(true);
+    try {
+      const existingLinks = student?.studentContacts ?? [];
+      const existingByContactId = new Map(
+        existingLinks.map((link) => [link.contactId, link]),
+      );
+      const selectedByContactId = new Map(
+        selectedParents.map((parent) => [parent.id, parent]),
+      );
+
+      const contactsToCreate = selectedParents
+        .filter((parent) => !existingByContactId.has(parent.id))
+        .map((parent) => ({
+          studentId,
+          contactId: parent.id,
+          relationshipId: toRelationshipId(parent.relationshipId),
+        }));
+
+      const contactsToUpdate = selectedParents
+        .filter((parent) => {
+          const existingLink = existingByContactId.get(parent.id);
+          if (!existingLink) {
+            return false;
+          }
+          const currentRelationship = existingLink.relationshipId?.toString() ?? "";
+          return currentRelationship !== parent.relationshipId;
+        })
+        .map((parent) => {
+          const existingLink = existingByContactId.get(parent.id);
+          if (!existingLink) {
+            return null;
+          }
+          return {
+            studentId,
+            contactId: parent.id,
+            relationshipId: toRelationshipId(parent.relationshipId),
+            livesWith: existingLink.livesWith ?? true,
+            schoolPickup: existingLink.schoolPickup ?? true,
+            emergencyContact: existingLink.emergencyContact ?? true,
+            observation: existingLink.observation ?? undefined,
+            accessAttendance: existingLink.accessAttendance ?? true,
+            accessBilling: existingLink.accessBilling ?? true,
+            accessReportCard: existingLink.accessReportCard ?? true,
+            accessScheduling: existingLink.accessScheduling ?? true,
+            canAccessData: existingLink.canAccessData ?? true,
+            enablePortalAccess: existingLink.enablePortalAccess ?? true,
+            primaryContact: existingLink.primaryContact ?? true,
+            paysFee: existingLink.paysFee ?? true,
+          };
+        })
+        .filter((item) => item !== null);
+
+      const contactsToDelete = existingLinks.filter(
+        (link) => !selectedByContactId.has(link.contactId),
+      );
+
+      if (contactsToCreate.length > 0) {
+        await createStudentContact.mutateAsync(contactsToCreate);
+      }
+      if (contactsToUpdate.length > 0) {
+        await updateStudentContact.mutateAsync(contactsToUpdate);
+      }
+      if (contactsToDelete.length > 0) {
+        await Promise.all(
+          contactsToDelete.map((link) =>
+            deleteStudentContact.mutateAsync({
+              studentId,
+              contactId: link.contactId,
+            }),
+          ),
+        );
+      }
+    } finally {
+      setIsSyncingContacts(false);
+    }
+  };
+
+  const finishSubmission = async (studentId: string) => {
+    let contactsSyncFailed = false;
+    try {
+      await syncStudentContacts(studentId);
+    } catch {
+      contactsSyncFailed = true;
+    }
+    await uploadAvatar(studentId);
+    await Promise.all([
+      queryClient.invalidateQueries(trpc.student.pathFilter()),
+      queryClient.invalidateQueries(trpc.student.contacts.pathFilter()),
+    ]);
+    if (contactsSyncFailed) {
+      toast.warning("Student saved, but parent links were not fully synced.", {
+        id: 0,
+      });
+    } else {
+      toast.success(
+        isEditMode ? t("updated_successfully") : t("created_successfully"),
+        { id: 0 },
+      );
+    }
+    router.push(`/students/${studentId}`);
+  };
+
+  const createStudentMutation = useMutation(
+    trpc.student.create.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async (created) => {
+        await finishSubmission(created.id);
+      },
+    }),
+  );
+  const updateStudentMutation = useMutation(
+    trpc.student.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+      onSuccess: async (updated) => {
+        await finishSubmission(updated.id);
+      },
+    }),
+  );
+
+  const isSubmitting =
+    createStudentMutation.isPending ||
+    updateStudentMutation.isPending ||
+    isUploadingAvatar ||
+    isSyncingContacts;
+
   const nextStep = () => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length));
   };
@@ -84,50 +318,39 @@ export function CreateEditStudent() {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const trpc = useTRPC();
-  const router = useRouter();
-  const createStudentMutation = useMutation(
-    trpc.student.create.mutationOptions({
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-      onSuccess: async (created) => {
-        const studentContacts = selectedParents.map((parent) => ({
-          studentId: created.id,
-          contactId: parent.id,
-          relationshipId: parent.relationshipId
-            ? Number(parent.relationshipId)
-            : undefined,
-        }));
-        if (studentContacts.length > 0) {
-          await createStudentContact.mutateAsync(studentContacts);
-        }
-        toast.success(t("created_successfully", { id: 0 }));
-        router.push(`/students/${created.id}`);
-      },
-    }),
-  );
-  const createStudentContact = useMutation(
-    trpc.studentContact.create.mutationOptions({
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
-
   const handleSubmit = () => {
-    const parsed = studentSchema.parse({
+    const parsed = studentSchema.safeParse({
       ...basicInfo,
       ...academicInfo,
     });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid student form", {
+        id: 0,
+      });
+      return;
+    }
     toast.loading(t("Processing"), { id: 0 });
-    createStudentMutation.mutate(parsed);
+    const payload = toStudentMutationInput(parsed.data);
+    if (student) {
+      updateStudentMutation.mutate({
+        ...payload,
+        id: student.id,
+      });
+      return;
+    }
+    createStudentMutation.mutate(payload);
   };
 
   const getStepContent = (step: number) => {
     switch (step) {
       case 1:
-        return <BasicInfoStep onNextAction={nextStep} />;
+        return (
+          <BasicInfoStep
+            onNextAction={nextStep}
+            initialAvatar={student?.avatar ?? null}
+            onAvatarFileChange={setAvatarFile}
+          />
+        );
       case 2:
         return <AcademicInfoStep onNextAction={nextStep} />;
       case 3:
@@ -142,11 +365,11 @@ export function CreateEditStudent() {
   return (
     <div className="flex flex-col gap-4">
       <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
-        <Label>{t("add")}</Label>
+        <Label>{isEditMode ? t("edit") : t("add")}</Label>
         <div className="ml-auto flex flex-row items-center gap-2">
           <Button
             onClick={prevStep}
-            disabled={currentStep === 1}
+            disabled={currentStep === 1 || isSubmitting}
             variant="secondary"
             type="button"
           >
@@ -155,7 +378,12 @@ export function CreateEditStudent() {
           </Button>
           {currentStep < steps.length ? (
             currentStep === 3 ? (
-              <Button variant="default" type="button" onClick={nextStep}>
+              <Button
+                variant="default"
+                type="button"
+                onClick={nextStep}
+                disabled={isSubmitting}
+              >
                 {t("next")}
                 <ArrowRight />
               </Button>
@@ -163,16 +391,22 @@ export function CreateEditStudent() {
               <Button
                 variant="default"
                 type="submit"
-                disabled={createStudentMutation.isPending}
+                disabled={isSubmitting}
                 form={stepFormIdMap[currentStep]}
               >
-                {createStudentMutation.isPending && <Spinner />}
+                {isSubmitting && <Spinner />}
                 {t("next")}
                 <ArrowRight />
               </Button>
             )
           ) : (
-            <Button type="button" variant="default" onClick={handleSubmit}>
+            <Button
+              type="button"
+              variant="default"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Spinner />}
               {t("submit")}
             </Button>
           )}
@@ -183,7 +417,7 @@ export function CreateEditStudent() {
         defaultValue={1}
         value={currentStep}
         onValueChange={(step) => {
-          if (step <= currentStep) {
+          if (step <= currentStep && !isSubmitting) {
             setCurrentStep(step);
           }
         }}
