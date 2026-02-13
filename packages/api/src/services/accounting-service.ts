@@ -1,10 +1,13 @@
 import type { PrismaClient } from "@repo/db";
-import { TransactionType } from "@repo/db/enums";
+
+import { BillingService } from "./billing-service";
 
 export class AccountingService {
   private db: PrismaClient;
+  private billing: BillingService;
   constructor(db: PrismaClient) {
     this.db = db;
+    this.billing = new BillingService(db);
   }
   async getUnpaidFeeDescription(studentId: string, classroomId: string) {
     const classroom = await this.db.classroom.findUniqueOrThrow({
@@ -54,16 +57,25 @@ export class AccountingService {
         },
       },
     });
-    const credit = transactions
-      .filter((t) => t.transactionType === TransactionType.CREDIT)
-      .reduce((acc, curr) => acc + curr.amount, 0);
-    const debit = transactions
-      .filter((t) => t.transactionType === TransactionType.DEBIT)
-      .reduce((acc, curr) => acc + curr.amount, 0);
-    const discount = transactions
-      .filter((t) => t.transactionType === TransactionType.DISCOUNT)
-      .reduce((acc, curr) => acc + curr.amount, 0);
-    const total = credit + discount - debit;
+    const txSummary = this.billing.summarizeTransactions(
+      transactions.map((tx) => ({
+        amount: tx.amount,
+        transactionType: tx.transactionType,
+      })),
+    );
+    const eligibilityContext = await this.billing.buildEligibilityContext({
+      studentId,
+      schoolId: classroom.schoolId,
+      schoolYearId: classroom.schoolYearId,
+    });
+    const autoDiscount = await this.billing.computeAutomaticDiscount({
+      schoolId: classroom.schoolId,
+      schoolYearId: classroom.schoolYearId,
+      classroomId,
+      feeTotal: amountDue,
+      eligibilityContext,
+    });
+    const total = txSummary.net + autoDiscount.amount;
 
     return {
       paid: total,

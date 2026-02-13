@@ -3,6 +3,7 @@ import { endOfDay, format, startOfDay, subDays } from "date-fns";
 import type { Prisma, PrismaClient } from "@repo/db";
 import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
+import { BillingService } from "./billing-service";
 import { ClassroomService } from "./classroom-service";
 import { StudentService } from "./student-service";
 
@@ -10,11 +11,13 @@ export class TransactionService {
   private db: PrismaClient;
   private student: StudentService;
   private classroom: ClassroomService;
+  private billing: BillingService;
 
   constructor(db: PrismaClient) {
     this.db = db;
     this.student = new StudentService(db);
     this.classroom = new ClassroomService(db);
+    this.billing = new BillingService(db);
   }
   async getReceiptInfo(transactionId: number) {
     const transaction = await this.db.transaction.findUniqueOrThrow({
@@ -52,7 +55,25 @@ export class TransactionService {
         journalId: transaction.journalId,
       },
     });
-    const paid = transactions.reduce((acc, t) => acc + t.amount, 0);
+    const txSummary = this.billing.summarizeTransactions(
+      transactions.map((tx) => ({
+        amount: tx.amount,
+        transactionType: tx.transactionType,
+      })),
+    );
+    const eligibilityContext = await this.billing.buildEligibilityContext({
+      studentId: transaction.studentId,
+      schoolId: classroom.schoolId,
+      schoolYearId: transaction.schoolYearId,
+    });
+    const autoDiscount = await this.billing.computeAutomaticDiscount({
+      schoolId: classroom.schoolId,
+      schoolYearId: transaction.schoolYearId,
+      classroomId: classroom.id,
+      feeTotal: totalFee,
+      eligibilityContext,
+    });
+    const paid = txSummary.net + autoDiscount.amount;
     const remaining = totalFee - paid;
 
     // Get the staff who created, printed and received the transaction
@@ -96,6 +117,8 @@ export class TransactionService {
       remaining,
       journal: transaction.journal,
       totalFee,
+      automaticDiscount: autoDiscount.amount,
+      appliedDiscountPolicies: autoDiscount.appliedPolicies,
       school,
       classroom,
       transaction,

@@ -4,6 +4,7 @@ import { AcademicSnapshotService } from "./academic-snapshot-service";
 import { AccountingService } from "./accounting-service";
 import { AnnualService } from "./annual-service";
 import { AttendanceService } from "./attendance-service";
+import { BillingService } from "./billing-service";
 import { ClassroomService } from "./classroom-service";
 import { ContactService } from "./contact-service";
 import { EnrollmentService } from "./enrollment-service";
@@ -35,6 +36,7 @@ const serviceRegistry = {
   transaction: TransactionService,
   classroom: ClassroomService,
   attendance: AttendanceService,
+  billing: BillingService,
   enrollment: EnrollmentService,
   accounting: AccountingService,
   annual: AnnualService,

@@ -47,6 +47,52 @@ model AccountingJournal {
     requiredJournals RequiredAccountingJournal[]
 }
 
+model DiscountPolicy {
+    id              String                @id @default(cuid())
+    name            String
+    description     String?
+    criterionType   DiscountCriterionType
+    criterionConfig Json?
+    valueType       DiscountValueType     @default(PERCENT)
+    value           Float
+    maxAmount       Float?
+    stackable       Boolean               @default(true)
+    priority        Int                   @default(100)
+    isActive        Boolean               @default(true)
+    activeFrom      DateTime?             @db.Timestamp(6)
+    activeTo        DateTime?             @db.Timestamp(6)
+    createdAt       DateTime              @default(now()) @db.Timestamp(6)
+    updatedAt       DateTime              @updatedAt
+    schoolId        String
+    schoolYearId    String?
+    classroomId     String?
+    school          School                @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    schoolYear      SchoolYear?           @relation(fields: [schoolYearId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    classroom       Classroom?            @relation(fields: [classroomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    assignments     DiscountPolicyAssignment[]
+
+    @@index([schoolId, isActive, criterionType])
+    @@index([schoolId, schoolYearId, classroomId, isActive])
+}
+
+model DiscountPolicyAssignment {
+    id         String                       @id @default(cuid())
+    policyId   String
+    studentId  String
+    status     DiscountAssignmentStatus     @default(ALLOW)
+    source     DiscountAssignmentSource     @default(AUTO)
+    note       String?
+    metadata   Json?
+    createdAt  DateTime                     @default(now()) @db.Timestamp(6)
+    updatedAt  DateTime                     @updatedAt
+    policy     DiscountPolicy               @relation(fields: [policyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    student    Student                      @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@unique([policyId, studentId])
+    @@index([studentId, status])
+    @@index([policyId, status])
+}
+
 enum TransactionStatus {
     PENDING
     CANCELED
@@ -57,6 +103,28 @@ enum TransactionType {
     CREDIT
     DEBIT
     DISCOUNT
+}
+
+enum DiscountCriterionType {
+    ALWAYS
+    SIBLING_COUNT
+    STAFF_CHILD
+    RELIGION
+}
+
+enum DiscountValueType {
+    PERCENT
+    FIXED
+}
+
+enum DiscountAssignmentStatus {
+    ALLOW
+    DENY
+}
+
+enum DiscountAssignmentSource {
+    AUTO
+    MANUAL
 }
 
 model ScheduleTask {

@@ -124,6 +124,7 @@ model Classroom {
     section               ClassroomSection?         @relation(fields: [sectionId], references: [id])
     enrollments           Enrollment[]
     fees                  Fee[]
+    discountPolicies      DiscountPolicy[]
     subjects              Subject[]
     assignments           Assignment[]
     reportCards           ReportCard[]
@@ -423,6 +424,7 @@ model Student {
     school               School                    @relation(fields: [schoolId], references: [id])
     schoolId             String
     requiredFees         RequiredFeeTransaction[]
+    discountAssignments  DiscountPolicyAssignment[]
     convocations         Convocation[]
     Attendance           Attendance[]
     councils             ClassroomCouncil[]
@@ -592,6 +594,7 @@ model School {
     appreciationRuleSetId     String?
     accountingJournals        AccountingJournal[]
     requiredJournals          RequiredAccountingJournal[]
+    discountPolicies          DiscountPolicy[]
     notificationSubscriptions NotificationSubscription[]
     modules                   Module[]
     permissions               Permission[]
@@ -655,6 +658,7 @@ model SchoolYear {
     events               SchoolYearEvent[]
     userNotifications    UserNotification[]
     accountingJournals   AccountingJournal[]
+    discountPolicies     DiscountPolicy[]
     scheduleDivisions    ScheduleDivision[]
 }
 

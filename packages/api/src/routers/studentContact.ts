@@ -63,7 +63,14 @@ export const studentContactRouter = {
   create: protectedProcedure
     .input(createUpdateSchema.array())
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.studentContact.createMany({ data: input });
+      const created = await ctx.db.studentContact.createMany({ data: input });
+      const contactIds = Array.from(new Set(input.map((item) => item.contactId)));
+      await ctx.services.billing.syncAutoDiscountAssignmentsForContacts({
+        contactIds,
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+      });
+      return created;
     }),
 
   update: protectedProcedure
@@ -82,7 +89,14 @@ export const studentContactRouter = {
         });
       });
 
-      return Promise.all(updates);
+      const result = await Promise.all(updates);
+      const contactIds = Array.from(new Set(input.map((item) => item.contactId)));
+      await ctx.services.billing.syncAutoDiscountAssignmentsForContacts({
+        contactIds,
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+      });
+      return result;
     }),
   createRelationship: protectedProcedure
     .input(

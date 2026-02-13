@@ -1,17 +1,20 @@
 import type { PrismaClient } from "@repo/db";
-import { TransactionStatus, TransactionType } from "@repo/db/enums";
+import { TransactionStatus } from "@repo/db/enums";
 import redisClient from "@repo/kv";
 
 import { getFullName } from "../utils";
+import { BillingService } from "./billing-service";
 import { ClassroomService } from "./classroom-service";
 
 export class StudentService {
   private db: PrismaClient;
   classroom: ClassroomService;
+  billing: BillingService;
 
   constructor(db: PrismaClient) {
     this.db = db;
     this.classroom = new ClassroomService(db);
+    this.billing = new BillingService(db);
   }
 
   async getClassroom(studentId: string, schoolYearId: string) {
@@ -366,6 +369,14 @@ export class StudentService {
     });
     const requiredJournalIds = requiredJournals.map((j) => j.journalId);
     const fees = await this.db.fee.findMany({
+      include: {
+        classroom: {
+          select: {
+            id: true,
+            schoolYearId: true,
+          },
+        },
+      },
       where: {
         classroomId: {
           in: classroomIds,
@@ -388,19 +399,58 @@ export class StudentService {
         deletedAt: null,
       },
     });
-    const debit = transactions
-      .filter((t) => t.transactionType === TransactionType.DEBIT)
-      .reduce((acc, t) => acc + t.amount, 0);
-    const credit = transactions
-      .filter((t) => t.transactionType === TransactionType.CREDIT)
-      .reduce((acc, t) => acc + t.amount, 0);
-
-    const discount = transactions
-      .filter((t) => t.transactionType === TransactionType.DISCOUNT)
-      .reduce((acc, t) => acc + t.amount, 0);
-
     const feesTotal = fees.reduce((acc, fee) => acc + fee.amount, 0);
-    const balance = credit + discount - (debit + feesTotal);
+
+    const feeBuckets = fees.reduce<
+      Record<string, { schoolYearId: string; classroomId: string; total: number }>
+    >((acc, fee) => {
+      const bucketKey = `${fee.classroom.schoolYearId}:${fee.classroomId}`;
+      const bucket = acc[bucketKey];
+      if (bucket) {
+        bucket.total += fee.amount;
+      } else {
+        acc[bucketKey] = {
+          schoolYearId: fee.classroom.schoolYearId,
+          classroomId: fee.classroomId,
+          total: fee.amount,
+        };
+      }
+      return acc;
+    }, {});
+
+    const contextCache = new Map<string, Awaited<
+      ReturnType<BillingService["buildEligibilityContext"]>
+    >>();
+    let automaticDiscount = 0;
+
+    for (const bucket of Object.values(feeBuckets)) {
+      let eligibilityContext = contextCache.get(bucket.schoolYearId);
+      if (!eligibilityContext) {
+        eligibilityContext = await this.billing.buildEligibilityContext({
+          studentId,
+          schoolId: student.schoolId,
+          schoolYearId: bucket.schoolYearId,
+        });
+        contextCache.set(bucket.schoolYearId, eligibilityContext);
+      }
+      const autoDiscount = await this.billing.computeAutomaticDiscount({
+        schoolId: student.schoolId,
+        schoolYearId: bucket.schoolYearId,
+        classroomId: bucket.classroomId,
+        feeTotal: bucket.total,
+        eligibilityContext,
+      });
+      automaticDiscount += autoDiscount.amount;
+    }
+
+    const txSummary = this.billing.summarizeTransactions(
+      transactions.map((tx) => ({
+        amount: tx.amount,
+        transactionType: tx.transactionType,
+      })),
+    );
+
+    const balance = txSummary.net + automaticDiscount - feesTotal;
     return { name: getFullName(student), balance: balance };
   }
   async isRepeating(studentId: string, schoolYearId: string) {

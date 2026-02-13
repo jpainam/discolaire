@@ -293,6 +293,12 @@ export const studentRouter = {
           },
         });
       }
+      await ctx.services.billing.syncAutoDiscountAssignmentsForStudent({
+        studentId: student.id,
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+        trigger: "STUDENT_CREATED",
+      });
       return student;
     }),
   update: protectedProcedure
@@ -322,7 +328,7 @@ export const studentRouter = {
           },
         },
       });
-      return ctx.db.student.update({
+      const student = await ctx.db.student.update({
         where: { id: input.id },
         data: {
           registrationNumber: input.registrationNumber,
@@ -355,6 +361,13 @@ export const studentRouter = {
           createdById: ctx.session.user.id,
         },
       });
+      await ctx.services.billing.syncAutoDiscountAssignmentsForStudent({
+        studentId: student.id,
+        schoolId: ctx.schoolId,
+        schoolYearId: ctx.schoolYearId,
+        trigger: "STUDENT_UPDATED",
+      });
+      return student;
     }),
   updateRegistration: protectedProcedure
     .input(
