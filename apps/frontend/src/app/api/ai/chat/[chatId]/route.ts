@@ -32,8 +32,10 @@ interface RouteContext {
 
 export async function GET(_: Request, context: RouteContext) {
   try {
-    const { chatId } = await context.params;
-    const { db, userId } = await getAiAuthContext();
+    const [{ chatId }, { db, userId }] = await Promise.all([
+      context.params,
+      getAiAuthContext(),
+    ]);
     const chat = await getChatById(db, userId, chatId);
 
     if (!chat) {
@@ -53,8 +55,13 @@ export async function GET(_: Request, context: RouteContext) {
 
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    const { chatId } = await context.params;
-    const parsed = bodySchema.safeParse(await request.json());
+    const [{ chatId }, rawBody, { db, userId }] = await Promise.all([
+      context.params,
+      request.json() as Promise<unknown>,
+      getAiAuthContext(),
+    ]);
+
+    const parsed = bodySchema.safeParse(rawBody);
 
     if (!parsed.success) {
       return new ChatSDKError(
@@ -62,8 +69,6 @@ export async function PUT(request: Request, context: RouteContext) {
         "Invalid body payload.",
       ).toResponse();
     }
-
-    const { db, userId } = await getAiAuthContext();
     const messages = parsed.data.messages as unknown as UIMessage[];
     const runtimeConfig = resolveAiRuntimeConfig({
       provider: parsed.data.provider,
@@ -96,8 +101,10 @@ export async function PUT(request: Request, context: RouteContext) {
 
 export async function DELETE(_: Request, context: RouteContext) {
   try {
-    const { chatId } = await context.params;
-    const { db, userId } = await getAiAuthContext();
+    const [{ chatId }, { db, userId }] = await Promise.all([
+      context.params,
+      getAiAuthContext(),
+    ]);
     await softDeleteChat(db, { userId, chatId });
     return NextResponse.json({ success: true });
   } catch (error) {

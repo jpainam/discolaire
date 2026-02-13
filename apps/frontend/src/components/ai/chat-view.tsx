@@ -1,57 +1,40 @@
 "use client";
 
-import type { UIMessage } from "ai";
-import type { FormEvent } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, isTextUIPart } from "ai";
-import { SendHorizontalIcon, SquareIcon } from "lucide-react";
+import { DefaultChatTransport } from "ai";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
+
+
 import type { AiChatDetail } from "./types";
-import { Button } from "~/components/ui/button";
-import { Textarea } from "~/components/ui/textarea";
 import { env } from "~/env";
-import { cn, fetcher } from "~/lib/utils";
+import { fetcher } from "~/lib/utils";
+import { ChatInput } from "./chat-input";
+import { ChatMessages } from "./chat-messages";
 
-function getMessageText(message: UIMessage): string {
-  if (!Array.isArray(message.parts)) {
-    return "";
-  }
-
-  return message.parts
-    .map((part) => {
-      if (isTextUIPart(part)) {
-        return part.text;
-      }
-
-      return "";
-    })
-    .join("\n")
-    .trim();
-}
 
 export function ChatView({ chatId }: { chatId?: string }) {
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const [activeChatId, setActiveChatId] = useState(chatId);
   const lastSavedHashRef = useRef<string>("");
-  const scrollAnchorRef = useRef<HTMLDivElement | null>(null);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const provider = env.NEXT_PUBLIC_AI_PROVIDER ?? "openai";
   const model = env.NEXT_PUBLIC_AI_MODEL;
-  const [input, setInput] = useState("");
 
   useEffect(() => {
     setActiveChatId(chatId);
   }, [chatId]);
 
-  const { data: chatDetail, isLoading: isLoadingChat } = useSWR<AiChatDetail>(
-    chatId ? `/api/ai/chat/${chatId}` : null,
-    fetcher,
-  );
+  const { data: chatDetail, isLoading: isLoadingChat } =
+    useSWR<AiChatDetail>(
+      chatId ? `/api/ai/chat/${chatId}` : null,
+      fetcher,
+    );
 
   const transport = useMemo(
     () =>
@@ -80,7 +63,9 @@ export function ChatView({ chatId }: { chatId?: string }) {
           return response;
         },
       }),
-    [activeChatId, model, mutate, provider, router],
+    // mutate and router are stable refs from SWR/Next.js
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeChatId, provider, model],
   );
 
   const { messages, setMessages, sendMessage, status, stop, error } = useChat({
@@ -101,159 +86,69 @@ export function ChatView({ chatId }: { chatId?: string }) {
     lastSavedHashRef.current = JSON.stringify(chatDetail.messages);
   }, [chatDetail, setMessages]);
 
-  useEffect(() => {
-    scrollAnchorRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [isLoading, messages]);
-
-  const isIdleWithoutMessages = !isLoading && messages.length === 0;
-
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const nextInput = input.trim();
-    if (!nextInput || isLoading) {
-      return;
-    }
-
-    setInput("");
-
-    void sendMessage({ text: nextInput }).catch((chatError) => {
-      setInput(nextInput);
-      if (chatError instanceof Error) {
-        toast.error(chatError.message || "Failed to send message.");
-      }
-    });
-  };
-
-  const savePayload = useMemo(
-    () =>
-      JSON.stringify({
-        messages,
-        provider,
-        model,
-      }),
-    [messages, provider, model],
-  );
-
+  // Debounced auto-save after streaming completes
   useEffect(() => {
     if (!activeChatId || isLoading || messages.length === 0) {
       return;
     }
 
-    if (savePayload === lastSavedHashRef.current) {
+    const payload = JSON.stringify({ messages, provider, model });
+    if (payload === lastSavedHashRef.current) {
       return;
     }
 
-    lastSavedHashRef.current = savePayload;
+    clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      lastSavedHashRef.current = payload;
 
-    void fetch(`/api/ai/chat/${activeChatId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: savePayload,
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Failed to persist chat.");
-        }
-
-        await mutate(
-          (key) => typeof key === "string" && key.startsWith("/api/ai/history"),
-          undefined,
-          { revalidate: true },
-        );
+      void fetch(`/api/ai/chat/${activeChatId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
       })
-      .catch(() => {
-        lastSavedHashRef.current = "";
-      });
-  }, [activeChatId, isLoading, messages.length, mutate, savePayload]);
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error("Failed to persist chat.");
+          }
+
+          await mutate(
+            (key) =>
+              typeof key === "string" && key.startsWith("/api/ai/history"),
+            undefined,
+            { revalidate: true },
+          );
+        })
+        .catch(() => {
+          lastSavedHashRef.current = "";
+        });
+    }, 500);
+
+    return () => clearTimeout(saveTimerRef.current);
+  }, [activeChatId, isLoading, messages, provider, model, mutate]);
+
+  const handleSend = useCallback(
+    (text: string) => sendMessage({ text }),
+    [sendMessage],
+  );
+
+  const handleStop = useCallback(() => {
+    void stop();
+  }, [stop]);
 
   return (
     <div className="bg-background flex h-dvh flex-col">
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-6">
-        <div className="flex-1 space-y-4 overflow-y-auto pr-1">
-          {isLoadingChat && (
-            <p className="text-muted-foreground text-center text-sm">
-              Loading conversation...
-            </p>
-          )}
-
-          {isIdleWithoutMessages && (
-            <div className="mx-auto mt-16 max-w-xl text-center">
-              <h1 className="text-2xl font-semibold">AI Assistant</h1>
-              <p className="text-muted-foreground mt-2 text-sm">
-                Ask anything to start a new conversation.
-              </p>
-            </div>
-          )}
-
-          {messages.map((message) => {
-            const text = getMessageText(message);
-            const isUser = message.role === "user";
-
-            return (
-              <div
-                className={cn("flex", isUser ? "justify-end" : "justify-start")}
-                key={message.id}
-              >
-                <div
-                  className={cn(
-                    "max-w-[90%] rounded-xl px-4 py-3 text-sm leading-relaxed",
-                    isUser
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground",
-                  )}
-                >
-                  {text ? (
-                    <p className="whitespace-pre-wrap">{text}</p>
-                  ) : (
-                    <p className="italic opacity-70">
-                      Unsupported message format.
-                    </p>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-
-          {error ? (
-            <p className="text-destructive text-center text-sm">
-              {error.message}
-            </p>
-          ) : null}
-
-          <div ref={scrollAnchorRef} />
-        </div>
-
-        <form className="mt-4 border-t pt-4" onSubmit={handleFormSubmit}>
-          <div className="bg-card rounded-xl border p-3">
-            <Textarea
-              className="min-h-[100px] border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
-              onChange={(event) => setInput(event.target.value)}
-              placeholder="Type your message..."
-              value={input}
-            />
-            <div className="mt-3 flex justify-end gap-2">
-              {isLoading ? (
-                <Button
-                  onClick={() => {
-                    void stop();
-                  }}
-                  type="button"
-                  variant="outline"
-                >
-                  <SquareIcon className="size-4" />
-                  Stop
-                </Button>
-              ) : null}
-              <Button disabled={!input.trim()} type="submit">
-                <SendHorizontalIcon className="size-4" />
-                Send
-              </Button>
-            </div>
-          </div>
-        </form>
+        <ChatMessages
+          error={error}
+          isLoading={isLoading}
+          isLoadingChat={isLoadingChat}
+          messages={messages}
+        />
+        <ChatInput
+          isLoading={isLoading}
+          onSend={handleSend}
+          onStop={handleStop}
+        />
       </div>
     </div>
   );

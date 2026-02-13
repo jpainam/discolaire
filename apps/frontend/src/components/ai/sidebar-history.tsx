@@ -133,6 +133,11 @@ export function SidebarHistory({
     [paginatedChatHistories],
   );
 
+  const groupedChats = useMemo(
+    () => groupChatsByDate(chatsFromHistory),
+    [chatsFromHistory],
+  );
+
   const hasReachedEnd = paginatedChatHistories
     ? paginatedChatHistories.some((page) => page.hasMore === false)
     : false;
@@ -248,8 +253,6 @@ export function SidebarHistory({
       </SidebarGroup>
     );
   }
-
-  const groupedChats = groupChatsByDate(chatsFromHistory);
 
   return (
     <>

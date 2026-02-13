@@ -14,6 +14,7 @@ export type AiProvider = KnownAiProvider | (string & {});
 export interface AiRuntimeConfig {
   provider: AiProvider;
   model: string;
+  systemPrompt?: string;
 }
 
 const DEFAULT_MODEL_BY_PROVIDER: Record<KnownAiProvider, string> = {
@@ -58,6 +59,7 @@ function inferProviderFromModel(modelId: string): AiProvider | null {
 export function resolveAiRuntimeConfig(input?: {
   provider?: string;
   model?: string;
+  systemPrompt?: string;
 }): AiRuntimeConfig {
   const requestedProvider = toProvider(input?.provider ?? env.AI_PROVIDER);
   const requestModel = input?.model?.trim();
@@ -74,6 +76,7 @@ export function resolveAiRuntimeConfig(input?: {
   return {
     provider: inferredProvider ?? requestedProvider,
     model,
+    systemPrompt: input?.systemPrompt ?? env.AI_SYSTEM_PROMPT,
   };
 }
 

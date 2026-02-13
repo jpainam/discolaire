@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { CoreMessage, UIMessage } from "ai";
+import type { ModelMessage, UIMessage } from "ai";
 
 function valueAsString(value: unknown): string {
   if (typeof value === "string") {
@@ -51,7 +51,7 @@ function normalizeRole(
   return undefined;
 }
 
-export function toCoreMessages(messages: UIMessage[]): CoreMessage[] {
+export function toCoreMessages(messages: UIMessage[]): ModelMessage[] {
   return messages.flatMap((message) => {
     const role = normalizeRole(message.role);
     const content = extractTextFromUIMessage(message);

@@ -1,10 +1,11 @@
 import type { UIMessage } from "ai";
-import { streamText } from "ai";
+import { convertToModelMessages, streamText } from "ai";
 import { z } from "zod/v4";
 
 import { ChatSDKError } from "~/lib/errors";
-import { deriveChatTitle, toCoreMessages } from "~/server/ai/messages";
+import { deriveChatTitle } from "~/server/ai/messages";
 import { getLanguageModel, resolveAiRuntimeConfig } from "~/server/ai/provider";
+import { aiTools } from "~/server/ai/tools";
 import {
   createChat,
   getAiAuthContext,
@@ -29,7 +30,12 @@ const bodySchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const parsed = bodySchema.safeParse(await request.json());
+    const [rawBody, { db, userId }] = await Promise.all([
+      request.json() as Promise<unknown>,
+      getAiAuthContext(),
+    ]);
+
+    const parsed = bodySchema.safeParse(rawBody);
 
     if (!parsed.success) {
       return new ChatSDKError(
@@ -39,9 +45,9 @@ export async function POST(request: Request) {
     }
 
     const messages = parsed.data.messages as unknown as UIMessage[];
-    const coreMessages = toCoreMessages(messages);
+    const modelMessages = await convertToModelMessages(messages);
 
-    if (coreMessages.length === 0) {
+    if (modelMessages.length === 0) {
       return new ChatSDKError(
         "bad_request:api",
         "Chat messages are empty.",
@@ -53,7 +59,6 @@ export async function POST(request: Request) {
       model: parsed.data.model,
     });
 
-    const { db, userId } = await getAiAuthContext();
     const title = deriveChatTitle(messages);
     let chatId = parsed.data.chatId;
 
@@ -85,7 +90,9 @@ export async function POST(request: Request) {
 
     const result = streamText({
       model: getLanguageModel(runtimeConfig),
-      messages: coreMessages,
+      system: runtimeConfig.systemPrompt,
+      messages: modelMessages,
+      tools: aiTools,
     });
 
     return result.toUIMessageStreamResponse({

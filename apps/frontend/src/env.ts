@@ -34,6 +34,7 @@ export const env = createEnv({
     AI_GATEWAY_API_KEY: z.string().min(1).optional(),
     AI_PROVIDER: z.enum(["openai", "anthropic", "google"]).optional(),
     AI_MODEL: z.string().min(1).optional(),
+    AI_SYSTEM_PROMPT: z.string().optional(),
   },
 
   /**
@@ -71,6 +72,7 @@ export const env = createEnv({
     AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
     AI_PROVIDER: process.env.AI_PROVIDER,
     AI_MODEL: process.env.AI_MODEL,
+    AI_SYSTEM_PROMPT: process.env.AI_SYSTEM_PROMPT,
     NEXT_PUBLIC_AI_PROVIDER: process.env.NEXT_PUBLIC_AI_PROVIDER,
     NEXT_PUBLIC_AI_MODEL: process.env.NEXT_PUBLIC_AI_MODEL,
 
