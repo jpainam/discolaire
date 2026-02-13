@@ -37,4 +37,13 @@ export enum PermissionAction {
 }
 
 export { appRouter, createCaller, createTRPCContext };
+export {
+  createChat,
+  getChatById,
+  listChats,
+  softDeleteAllChats,
+  softDeleteChat,
+  updateChatMessages,
+} from "./lib/ai-chat-repository";
 export type { AppRouter, RouterInputs, RouterOutputs };
+export type { ChatDetail, ChatListItem, ChatPageResult } from "./lib/ai-chat-repository";

@@ -121,7 +121,7 @@ export function MainSidebar({
 
   tools.push({
     name: "ai",
-    url: `https://chat.discolaire.com`,
+    url: `/ai`,
     icon: <AiIcon />,
   });
 

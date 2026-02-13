@@ -64,6 +64,7 @@ model User {
     members                      Member[]
     invitations                  Invitation[]
     notificationRecipients       NotificationRecipient[]
+    aiChats                      AiChat[]
 
     @@unique([email])
     @@unique([username])

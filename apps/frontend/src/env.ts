@@ -31,6 +31,9 @@ export const env = createEnv({
     DISCOLAIRE_API_KEY: z.string().min(1),
     SUPER_ADMIN_USERNAME: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
+    AI_GATEWAY_API_KEY: z.string().min(1).optional(),
+    AI_PROVIDER: z.enum(["openai", "anthropic", "google"]).optional(),
+    AI_MODEL: z.string().min(1).optional(),
   },
 
   /**
@@ -41,6 +44,8 @@ export const env = createEnv({
     NEXT_PUBLIC_DEFAULT_TENANT: z.string().min(1).optional(),
     NEXT_PUBLIC_DEPLOYMENT_ENV: z.enum(["local", "cloud"]).default("local"),
     NEXT_PUBLIC_MINIO_URL: z.url(),
+    NEXT_PUBLIC_AI_PROVIDER: z.enum(["openai", "anthropic", "google"]).optional(),
+    NEXT_PUBLIC_AI_MODEL: z.string().min(1).optional(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -61,6 +66,11 @@ export const env = createEnv({
     NEXT_PUBLIC_DEFAULT_TENANT: process.env.NEXT_PUBLIC_DEFAULT_TENANT,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     REDIS_URL: process.env.REDIS_URL,
+    AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
+    AI_PROVIDER: process.env.AI_PROVIDER,
+    AI_MODEL: process.env.AI_MODEL,
+    NEXT_PUBLIC_AI_PROVIDER: process.env.NEXT_PUBLIC_AI_PROVIDER,
+    NEXT_PUBLIC_AI_MODEL: process.env.NEXT_PUBLIC_AI_MODEL,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // AWS S3
