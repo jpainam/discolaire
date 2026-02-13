@@ -1,13 +1,13 @@
 model AiChat {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   title     String
-  messages  Json     @default("[]")
-  provider  String   @default("openai")
-  model     String   @default("gpt-4o-mini")
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  updatedAt DateTime @updatedAt
+  messages  Json      @default("[]")
+  provider  String    @default("openai")
+  model     String    @default("gpt-4o-mini")
+  createdAt DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime? @db.Timestamp(6)
 
   @@index([userId, createdAt(sort: Desc), id(sort: Desc)])
