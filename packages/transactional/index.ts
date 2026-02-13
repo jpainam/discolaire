@@ -1,5 +1,6 @@
 export * from "./emails/AbsenceEmail";
 export * from "./emails/ChatterEmail";
+export * from "./emails/ClassroomTimetableEmail";
 export * from "./emails/ConsigneEmail";
 export * from "./emails/ExclusionEmail";
 export * from "./emails/FakeGradeReportEmail";
