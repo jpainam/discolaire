@@ -66,7 +66,7 @@ const staffCreateSchema = z.object({
   employmentType: z.string().min(1).default("cdi"),
   jobTitle: z.string().optional(),
   specialty: z.string().optional(),
-  weeklyWorkingHours: z.coerce.number().min(1).max(168),
+  weeklyWorkingHours: z.number().min(1).max(168),
   baseSalary: z.string().optional(),
   travelAllowance: z.string().optional(),
   phoneAllowance: z.string().optional(),
@@ -175,14 +175,17 @@ export default function CreateEditStaff({
     countryId: staff?.countryId ?? "",
     dateOfCriminalRecordCheck: staff?.dateOfCriminalRecordCheck ?? undefined,
     dateOfLastAdvancement: staff?.dateOfLastAdvancement ?? undefined,
-    sendAgendaFrequency:
-      staff?.sendAgendaFrequency?.trim() ? staff.sendAgendaFrequency : "no",
+    sendAgendaFrequency: staff?.sendAgendaFrequency?.trim()
+      ? staff.sendAgendaFrequency
+      : "no",
     email: staff?.email ?? staff?.user?.email ?? "",
     address: staff?.address ?? "",
     dateOfHire: staff?.dateOfHire ?? undefined,
     dateOfRelease: staff?.dateOfRelease ?? undefined,
     jobTitle: staff?.jobTitle ?? "",
-    employmentType: staff?.employmentType?.trim() ? staff.employmentType : "cdi",
+    employmentType: staff?.employmentType?.trim()
+      ? staff.employmentType
+      : "cdi",
     specialty: staff?.specialty ?? "",
     weeklyWorkingHours: staff?.weeklyWorkingHours ?? 40,
     baseSalary: staff?.baseSalary != null ? `${staff.baseSalary}` : "",
@@ -249,7 +252,12 @@ export default function CreateEditStaff({
     >
       <Accordion
         type="multiple"
-        defaultValue={["personal", "contractual", "allocations", "banquesInformation"]}
+        defaultValue={[
+          "personal",
+          "contractual",
+          "allocations",
+          "banquesInformation",
+        ]}
         className="w-full space-y-4 border-0"
       >
         {/* Personal Information Section */}
@@ -624,7 +632,8 @@ export default function CreateEditStaff({
                         <SelectItem value="internship">Stage</SelectItem>
                         <SelectItem value="freelance">Freelance</SelectItem>
                         {!employmentTypeValues.includes(
-                          field.state.value as (typeof employmentTypeValues)[number],
+                          field.state
+                            .value as (typeof employmentTypeValues)[number],
                         ) &&
                           field.state.value && (
                             <SelectItem value={field.state.value}>
@@ -678,7 +687,9 @@ export default function CreateEditStaff({
               name="degreeId"
               children={(field) => (
                 <Field>
-                  <FieldLabel htmlFor={field.name}>Niveau d&apos;étude</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Niveau d&apos;étude
+                  </FieldLabel>
                   <StaffLevelSelector
                     className="w-full"
                     onChange={(value) => {
@@ -733,7 +744,8 @@ export default function CreateEditStaff({
                       <SelectItem value="quarterly">Trimestrielle</SelectItem>
                       <SelectItem value="yearly">Annuelle</SelectItem>
                       {!sendAgendaFrequencyValues.includes(
-                        field.state.value as (typeof sendAgendaFrequencyValues)[number],
+                        field.state
+                          .value as (typeof sendAgendaFrequencyValues)[number],
                       ) &&
                         field.state.value && (
                           <SelectItem value={field.state.value}>
@@ -757,7 +769,7 @@ export default function CreateEditStaff({
                     id={field.name}
                     name={field.name}
                     type="number"
-                    value={field.state.value ?? ""}
+                    value={field.state.value}
                     min="1"
                     max="168"
                     onBlur={field.handleBlur}
