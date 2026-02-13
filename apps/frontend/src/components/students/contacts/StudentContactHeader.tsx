@@ -22,7 +22,7 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { sidebarIcons } from "../sidebar-icons";
-import { LinkContact } from "./LinkContact";
+import { AddToParentToStudent } from "./AddParentToStudent";
 
 export function StudentContactHeader() {
   const params = useParams<{ id: string }>();
@@ -54,14 +54,10 @@ export function StudentContactHeader() {
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
-                      className: "sm:max-w-lg p-0",
-                      title: (
-                        <p className="px-4 pt-4">{t("add_from_existing")}</p>
-                      ),
-                      // description: (
-                      //   <div className="px-2">{t("add_from_existing")}</div>
-                      // ),
-                      view: <LinkContact studentId={params.id} />,
+                      className: "sm:max-w-xl",
+                      title: t("add"),
+                      description: `Ajouter des contacts a l'élève`,
+                      view: <AddToParentToStudent studentId={params.id} />,
                     });
                   }}
                 >

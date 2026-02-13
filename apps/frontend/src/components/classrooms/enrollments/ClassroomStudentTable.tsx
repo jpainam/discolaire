@@ -41,6 +41,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { ContactIcon, DeleteIcon, IDCardIcon, ViewIcon } from "~/icons";
+import { cn } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
@@ -200,17 +201,19 @@ export function ClassroomStudentTable({
                     })}
                   </TableCell>
                   <TableCell>
-                    {stud.isRepeating ? (
-                      <Badge variant={"outline"} className="text-destructive">
-                        {t("yes")}
-                      </Badge>
-                    ) : (
-                      <Badge variant={"outline"}>{t("no")}</Badge>
-                    )}
+                    <Badge
+                     
+                      variant={"outline"}
+                      appearance={"light"}
+                      className={cn(stud.isRepeating && "text-destructive")}
+                    >
+                      {stud.isRepeating ? t("yes") : t("no")}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     <Badge
-                      appearance={"outline"}
+                      
+                      appearance={"light"}
                       variant={stud.gender == "male" ? "info" : "destructive"}
                     >
                       {t(stud.gender ?? "male")}

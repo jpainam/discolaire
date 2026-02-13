@@ -38,13 +38,14 @@ import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { getFullName } from "~/utils";
 import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { SimpleTooltip } from "../simple-tooltip";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
+import { AddStudentToParent } from "./AddStudentToParent";
 import CreateEditContact from "./CreateEditContact";
-import { LinkStudent } from "./LinkStudent";
 
 export function ContactDetailsHeader() {
   const trpc = useTRPC();
@@ -239,9 +240,10 @@ export function ContactDetailsHeader() {
             <Button
               onClick={() => {
                 openModal({
-                  className: "p-0 w-[600px]",
-                  title: <p className="px-4 pt-2">{t("link_students")}</p>,
-                  view: <LinkStudent contactId={contact.id} />,
+                  className: "sm:max-w-xl",
+                  title: t("link_students"),
+                  description: `Ajouter des élèves à ${getFullName(contact)}`,
+                  view: <AddStudentToParent contactId={contact.id} />,
                 });
               }}
               size={"sm"}

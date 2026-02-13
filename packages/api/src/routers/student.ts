@@ -669,47 +669,6 @@ export const studentRouter = {
         schoolYearId: ctx.schoolYearId,
       });
     }),
-  unlinkedContacts: protectedProcedure
-    .input(
-      z.object({
-        limit: z.number().optional().default(10),
-        page: z.number().optional().default(1),
-        q: z.string().optional(),
-        studentId: z.string(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const qq = input.q;
-      return ctx.db.contact.findMany({
-        take: input.limit,
-        orderBy: {
-          lastName: "asc",
-        },
-        where: {
-          AND: [
-            {
-              schoolId: ctx.schoolId,
-            },
-            {
-              OR: [
-                { firstName: { contains: qq, mode: "insensitive" } },
-                { lastName: { contains: qq, mode: "insensitive" } },
-                { phoneNumber1: { contains: qq, mode: "insensitive" } },
-                { phoneNumber2: { contains: qq, mode: "insensitive" } },
-                { user: { email: { contains: qq, mode: "insensitive" } } },
-              ],
-            },
-            {
-              studentContacts: {
-                none: {
-                  studentId: input.studentId,
-                },
-              },
-            },
-          ],
-        },
-      });
-    }),
 
   transactions: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.transaction.findMany({
