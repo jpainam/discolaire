@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import type { z } from "zod/v4";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -205,7 +205,8 @@ export function CreateEditStudent({ student }: { student?: StudentDetails }) {
           if (!existingLink) {
             return false;
           }
-          const currentRelationship = existingLink.relationshipId?.toString() ?? "";
+          const currentRelationship =
+            existingLink.relationshipId?.toString() ?? "";
           return currentRelationship !== parent.relationshipId;
         })
         .map((parent) => {

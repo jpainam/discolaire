@@ -47,13 +47,15 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     formerSchoolId: student.formerSchoolId ?? "",
   };
 
-  const initialSelectedParents = student.studentContacts.map((studentContact) => {
-    return {
-      id: studentContact.contactId,
-      name: getFullName(studentContact.contact).trim(),
-      relationshipId: studentContact.relationshipId?.toString() ?? "",
-    };
-  });
+  const initialSelectedParents = student.studentContacts.map(
+    (studentContact) => {
+      return {
+        id: studentContact.contactId,
+        name: getFullName(studentContact.contact).trim(),
+        relationshipId: studentContact.relationshipId?.toString() ?? "",
+      };
+    },
+  );
 
   return (
     <HydrateClient>
