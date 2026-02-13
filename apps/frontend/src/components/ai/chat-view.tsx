@@ -7,14 +7,11 @@ import { DefaultChatTransport } from "ai";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
-
-
 import type { AiChatDetail } from "./types";
 import { env } from "~/env";
 import { fetcher } from "~/lib/utils";
 import { ChatInput } from "./chat-input";
 import { ChatMessages } from "./chat-messages";
-
 
 export function ChatView({ chatId }: { chatId?: string }) {
   const router = useRouter();
@@ -30,11 +27,10 @@ export function ChatView({ chatId }: { chatId?: string }) {
     setActiveChatId(chatId);
   }, [chatId]);
 
-  const { data: chatDetail, isLoading: isLoadingChat } =
-    useSWR<AiChatDetail>(
-      chatId ? `/api/ai/chat/${chatId}` : null,
-      fetcher,
-    );
+  const { data: chatDetail, isLoading: isLoadingChat } = useSWR<AiChatDetail>(
+    chatId ? `/api/ai/chat/${chatId}` : null,
+    fetcher,
+  );
 
   const transport = useMemo(
     () =>

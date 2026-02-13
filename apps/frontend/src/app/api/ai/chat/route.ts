@@ -5,13 +5,13 @@ import { z } from "zod/v4";
 import { ChatSDKError } from "~/lib/errors";
 import { deriveChatTitle } from "~/server/ai/messages";
 import { getLanguageModel, resolveAiRuntimeConfig } from "~/server/ai/provider";
-import { aiTools } from "~/server/ai/tools";
 import {
   createChat,
   getAiAuthContext,
   getChatById,
   updateChatMessages,
 } from "~/server/ai/repository";
+import { aiTools } from "~/server/ai/tools";
 
 const uiMessageSchema = z
   .object({

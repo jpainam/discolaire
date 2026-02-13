@@ -94,9 +94,7 @@ export function ChatMessages({
       })}
 
       {error ? (
-        <p className="text-destructive text-center text-sm">
-          {error.message}
-        </p>
+        <p className="text-destructive text-center text-sm">{error.message}</p>
       ) : null}
 
       <div ref={scrollAnchorRef} />

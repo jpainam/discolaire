@@ -109,9 +109,7 @@ export function AddUserSelector({ roleId }: { roleId: string }) {
       </ScrollArea>
       <div className="flex h-5 items-center gap-1">
         {selected.map((s, index) => {
-          return (
-            <AvatarState key={index} name={s.name} zoomable={false} />
-          );
+          return <AvatarState key={index} name={s.name} zoomable={false} />;
         })}
       </div>
       <div className="flex items-center justify-end gap-2">

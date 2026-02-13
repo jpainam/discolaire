@@ -72,8 +72,7 @@ export function SubjectSessionColumn({
               <Button
                 onClick={() => {
                   openModal({
-                    // className:
-                    //   "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                    className: "sm:max-w-xl",
                     title: `Programme ${subject?.course.name}`,
                     description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
                     view: (
@@ -116,7 +115,7 @@ export function SubjectSessionColumn({
               size="sm"
               onClick={() => {
                 openModal({
-                  // className: "lg:max-w-screen-lg overflow-y-scroll max-h-screen",
+                  className: "sm:max-w-xl",
                   title: `Programme ${subject?.course.name}`,
                   description: `${subject?.teacher?.prefix} ${getFullName(subject?.teacher)}`,
                   view: (
