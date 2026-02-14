@@ -94,7 +94,7 @@ export default async function Page() {
           </ErrorBoundary>
         </TabsContent>
         {/* Movement de tock */}
-        <TabsContent value="tab-3" className="flex flex-col gap-1">
+        <TabsContent value="tab-3">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
               fallback={
@@ -109,13 +109,12 @@ export default async function Page() {
             </Suspense>
           </ErrorBoundary>
           <Separator />
-          <div className="px-4">
-            <ErrorBoundary errorComponent={ErrorFallback}>
-              <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                <ConsumeEventDataTable />
-              </Suspense>
-            </ErrorBoundary>
-          </div>
+
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense fallback={<Skeleton className="h-[500px]" />}>
+              <ConsumeEventDataTable />
+            </Suspense>
+          </ErrorBoundary>
         </TabsContent>
 
         <TabsContent value="tab-4">

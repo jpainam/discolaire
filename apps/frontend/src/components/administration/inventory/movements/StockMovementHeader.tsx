@@ -1,11 +1,12 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { FileMinus, FunnelIcon, MoreVerticalIcon } from "lucide-react";
+import { FileMinus, MoreVerticalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsIsoDate, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
-import { DatePicker } from "~/components/DatePicker";
+import { DateRangePicker } from "~/components/DateRangePicker";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { Button } from "~/components/ui/button";
@@ -36,38 +37,31 @@ export function StockMovementHeader() {
   const t = useTranslations();
   const trpc = useTRPC();
   const { openModal } = useModal();
+  const [range, setRange] = useQueryStates({
+    from: parseAsIsoDate,
+    to: parseAsIsoDate,
+  });
 
   const { data: consumables } = useSuspenseQuery(
     trpc.inventory.consumables.queryOptions(),
   );
   return (
-    <div className="grid flex-row items-center gap-4 px-4 md:flex">
-      <div className="flex flex-row items-center gap-1">
-        <FunnelIcon className="h-4 w-4" />
-        <Label>{t("filter")}</Label>
-      </div>
+    <div className="grid flex-row items-center gap-4 py-2 md:flex">
       <div className="flex items-center gap-1">
-        <Label>{t("from")}</Label>
-        <DatePicker
-          defaultValue={undefined}
-          onSelectAction={(val) => {
-            router.push(
-              `?${createQueryString({ from: val?.toLocaleDateString() })}`,
+        <Label>{t("date")}</Label>
+        <DateRangePicker
+          defaultValue={range.from && range.to ? range : undefined}
+          onSelectAction={(range) => {
+            void setRange(
+              range?.from && range.to
+                ? { from: range.from, to: range.to }
+                : null,
             );
           }}
+          className="w-64"
         />
       </div>
-      <div className="flex items-center gap-1">
-        <Label>{t("to")}</Label>
-        <DatePicker
-          defaultValue={undefined}
-          onSelectAction={(val) => {
-            router.push(
-              `?${createQueryString({ to: val?.toLocaleDateString() })}`,
-            );
-          }}
-        />
-      </div>
+
       <div className="flex items-center gap-1">
         <Label>{t("consumable")}</Label>
         <Select
