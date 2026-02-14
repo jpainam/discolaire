@@ -50,7 +50,11 @@ export function StockMovementHeader() {
       <div className="flex items-center gap-1">
         <Label>{t("date")}</Label>
         <DateRangePicker
-          defaultValue={range.from && range.to ? range : undefined}
+          defaultValue={
+            range.from && range.to
+              ? { from: range.from, to: range.to }
+              : undefined
+          }
           onSelectAction={(range) => {
             void setRange(
               range?.from && range.to

@@ -1,16 +1,9 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
+import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardContent,
@@ -18,12 +11,28 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "~/components/ui/chart";
 import { useTRPC } from "~/trpc/react";
 import { InventoryPieChart } from "./InventoryPieChart";
 
+const chartConfig = {
+  stockIn: {
+    label: "stockIn",
+    color: "var(--chart-1)",
+  },
+  stockOut: {
+    label: "stockOut",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig;
+
 export function InventorySummary2() {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(
+  const { data: chartData } = useSuspenseQuery(
     trpc.inventoryUsage.monthlySummary.queryOptions(),
   );
 
@@ -36,17 +45,25 @@ export function InventorySummary2() {
             Monthly stock entries and withdrawals over the last 6 months
           </CardDescription>
         </CardHeader>
-        <CardContent className="pl-2">
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="stockIn" fill="var(--chart-1)" name="Stock in" />
-              <Bar dataKey="stockOut" fill="var(--chart-3)" name="Stock out" />
+        <CardContent>
+          <ChartContainer config={chartConfig} className="h-[350px] w-full">
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => String(value).slice(0, 3)}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="dashed" />}
+              />
+              <Bar dataKey="stockIn" fill="var(--color-stockIn)" radius={4} />
+              <Bar dataKey="stockOut" fill="var(--color-stockOut)" radius={4} />
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
       <InventoryPieChart />
