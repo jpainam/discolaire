@@ -8,12 +8,13 @@ import { protectedProcedure } from "../trpc";
 
 const createDocumentSchema = z.object({
   type: z.enum(DocumentType),
-  title: z.string().optional(),
+  title: z.string().min(1),
+  description: z.string().min(1),
   mime: z.string().optional(),
   size: z.number().optional(),
   url: z.string(),
   entityId: z.string(),
-  entityType: z.enum(["student", "staff", "contact"]),
+  entityType: z.enum(["student", "staff", "contact", "classroom"]),
 });
 
 const updateDocumentSchema = createDocumentSchema
@@ -21,7 +22,7 @@ const updateDocumentSchema = createDocumentSchema
   .extend({ id: z.string().min(1) });
 
 const activityFilterSchema = z.object({
-  entityType: z.enum(["student", "staff", "contact"]),
+  entityType: z.enum(["student", "staff", "contact", "classroom"]),
   entityId: z.string().min(1),
   limit: z.number().min(1).max(100).default(10),
 });
@@ -34,6 +35,7 @@ const resolveDocumentEntity = (doc: {
   studentId?: string | null;
   staffId?: string | null;
   contactId?: string | null;
+  classroomId?: string | null;
 }) => {
   if (doc.studentId) {
     return { entityType: "student" as const, entityId: doc.studentId };
@@ -44,6 +46,9 @@ const resolveDocumentEntity = (doc: {
   if (doc.contactId) {
     return { entityType: "contact" as const, entityId: doc.contactId };
   }
+  if (doc.classroomId) {
+    return { entityType: "classroom" as const, entityId: doc.classroomId };
+  }
   return { entityType: null, entityId: null };
 };
 
@@ -51,6 +56,7 @@ const toDocumentLogEntity = (doc: {
   studentId?: string | null;
   staffId?: string | null;
   contactId?: string | null;
+  classroomId?: string | null;
   id?: string;
 }) => {
   const entity = resolveDocumentEntity(doc);
@@ -67,7 +73,9 @@ export const documentRouter = {
   all: protectedProcedure
     .input(
       z.object({
-        entityType: z.enum(["staff", "contact", "student"]).optional(),
+        entityType: z
+          .enum(["staff", "contact", "student", "classroom"])
+          .optional(),
         entityId: z.string().optional(),
         limit: z.number().optional().default(20),
       }),
@@ -78,6 +86,7 @@ export const documentRouter = {
           staff: true,
           student: true,
           contact: true,
+          classroom: true,
           createdBy: true,
         },
         take: input.limit,
@@ -89,6 +98,9 @@ export const documentRouter = {
             ? { contactId: input.entityId }
             : {}),
           ...(input.entityType == "staff" ? { staffId: input.entityId } : {}),
+          ...(input.entityType == "classroom"
+            ? { classroomId: input.entityId }
+            : {}),
         },
       });
     }),
@@ -109,6 +121,7 @@ export const documentRouter = {
             studentId: true,
             staffId: true,
             contactId: true,
+            classroomId: true,
           },
         });
 
@@ -150,6 +163,7 @@ export const documentRouter = {
         },
         data: {
           title: input.title,
+          description: input.description,
           type: input.type,
           mime: input.mime,
           size: input.size,
@@ -166,6 +180,7 @@ export const documentRouter = {
           data: {
             type: input.type,
             title: input.title,
+            description: input.description,
             mime: input.mime,
             size: input.size,
             url: input.url,
@@ -174,6 +189,8 @@ export const documentRouter = {
             studentId: input.entityType == "student" ? input.entityId : null,
             staffId: input.entityType == "staff" ? input.entityId : null,
             contactId: input.entityType == "contact" ? input.entityId : null,
+            classroomId:
+              input.entityType == "classroom" ? input.entityId : null,
           },
         });
 
@@ -199,6 +216,7 @@ export const documentRouter = {
         student: true,
         staff: true,
         contact: true,
+        classroom: true,
         createdBy: true,
       },
       where: {
@@ -222,6 +240,7 @@ export const documentRouter = {
           staff: true,
           contact: true,
           student: true,
+          classroom: true,
           createdBy: true,
         },
       });
@@ -229,16 +248,23 @@ export const documentRouter = {
   stats: protectedProcedure
     .input(
       z.object({
-        entityType: z.enum(["student", "staff", "contact"]),
+        entityType: z.enum(["student", "staff", "contact", "classroom"]),
         entityId: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
       const docs = await ctx.db.document.findMany({
         where: {
-          studentId: input.entityType == "student" ? input.entityId : null,
-          staffId: input.entityType == "staff" ? input.entityId : null,
-          contactId: input.entityType == "contact" ? input.entityId : null,
+          ...(input.entityType == "student"
+            ? { studentId: input.entityId }
+            : {}),
+          ...(input.entityType == "staff" ? { staffId: input.entityId } : {}),
+          ...(input.entityType == "contact"
+            ? { contactId: input.entityId }
+            : {}),
+          ...(input.entityType == "classroom"
+            ? { classroomId: input.entityId }
+            : {}),
         },
       });
 

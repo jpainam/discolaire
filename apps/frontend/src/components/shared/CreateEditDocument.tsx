@@ -19,6 +19,7 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { cn, formatBytes } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -26,18 +27,21 @@ import { Spinner } from "../ui/spinner";
 
 const createEditDocumentSchema = z.object({
   title: z.string().min(1),
+  description: z.string().min(1),
 });
 
 export function CreateEditDocument({
   documentId,
   title,
+  description,
   entityId,
   entityType,
 }: {
   documentId?: string;
   title?: string;
+  description?: string;
   entityId: string;
-  entityType: "staff" | "student" | "contact";
+  entityType: "staff" | "student" | "contact" | "classroom";
 }) {
   const t = useTranslations();
   const { closeModal } = useModal();
@@ -132,6 +136,7 @@ export function CreateEditDocument({
   const form = useForm({
     defaultValues: {
       title: title ?? "",
+      description: description ?? "",
     },
     validators: {
       onSubmit: createEditDocumentSchema,
@@ -142,6 +147,7 @@ export function CreateEditDocument({
         updateDocumentMutation.mutate({
           id: documentId,
           title: value.title,
+          description: value.description,
         });
         return;
       }
@@ -184,6 +190,7 @@ export function CreateEditDocument({
       toast.loading(t("creating"), { id: 0 });
       createDocumentMutation.mutate({
         title: value.title,
+        description: value.description,
         type: "OTHER",
         mime: file.type || "application/octet-stream",
         size: file.size,
@@ -226,6 +233,28 @@ export function CreateEditDocument({
                     onBlur={field.handleBlur}
                     onChange={(event) => field.handleChange(event.target.value)}
                     aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+          <form.Field
+            name="description"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>{t("description")}</FieldLabel>
+                  <Textarea
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={isInvalid}
+                    rows={4}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>

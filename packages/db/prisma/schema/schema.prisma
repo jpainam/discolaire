@@ -128,6 +128,7 @@ model Classroom {
     subjects              Subject[]
     assignments           Assignment[]
     reportCards           ReportCard[]
+    documents             Document[]
     school                School                    @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId              String
     createdById           String?
@@ -341,6 +342,7 @@ model Document {
     schoolId    String
     type        DocumentType
     title       String?
+    description String?
     mime        String?
     size        Int?
     url         String
@@ -351,15 +353,18 @@ model Document {
     studentId   String?
     contactId   String?
     staffId     String?
+    classroomId String?
     student     Student?     @relation(fields: [studentId], references: [id], onDelete: Cascade)
     contact     Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
     staff       Staff?       @relation(fields: [staffId], references: [id], onDelete: Cascade)
+    classroom   Classroom?   @relation(fields: [classroomId], references: [id], onDelete: Cascade)
     school      School       @relation(fields: [schoolId], references: [id])
 
     @@index([schoolId, createdAt])
     @@index([schoolId, studentId])
     @@index([schoolId, contactId])
     @@index([schoolId, staffId])
+    @@index([schoolId, classroomId])
 }
 
 enum DocumentType {

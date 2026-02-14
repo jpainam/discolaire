@@ -1,0 +1,45 @@
+"use client";
+
+import { UploadIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FolderOpen } from "lucide-react";
+import { useTranslations } from "next-intl";
+
+import { CreateEditDocument } from "~/components/shared/CreateEditDocument";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
+import { useModal } from "~/hooks/use-modal";
+
+export function ClassroomDocumentHeader({
+  classroomId,
+}: {
+  classroomId: string;
+}) {
+  const t = useTranslations();
+  const { openModal } = useModal();
+
+  return (
+    <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
+      <FolderOpen className="hidden h-4 w-4 md:block" />
+      <Label className="hidden md:block">{t("documents")}</Label>
+      <div className="ml-auto flex items-center gap-2">
+        <Button
+          onClick={() => {
+            openModal({
+              title: `${t("upload")} ${t("document")}`,
+              view: (
+                <CreateEditDocument
+                  entityId={classroomId}
+                  entityType="classroom"
+                />
+              ),
+            });
+          }}
+        >
+          <HugeiconsIcon icon={UploadIcon} strokeWidth={2} />
+          {t("upload")}
+        </Button>
+      </div>
+    </div>
+  );
+}

@@ -20,7 +20,7 @@ export function DocumentOverview({
   entityType,
   entityId,
 }: {
-  entityType: "staff" | "student" | "contact";
+  entityType: "staff" | "student" | "contact" | "classroom";
   entityId: string;
 }) {
   const trpc = useTRPC();

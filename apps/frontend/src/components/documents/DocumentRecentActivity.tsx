@@ -92,7 +92,7 @@ export function DocumentRecentActivity({
   limit = 10,
 }: {
   entityId: string;
-  entityType: "staff" | "student" | "contact";
+  entityType: "staff" | "student" | "contact" | "classroom";
   limit?: number;
 }) {
   const trpc = useTRPC();

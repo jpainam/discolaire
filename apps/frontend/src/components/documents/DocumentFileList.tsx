@@ -50,7 +50,7 @@ export function DocumentFileList({
   entityType,
   entityId,
 }: {
-  entityType: "staff" | "student" | "contact";
+  entityType: "staff" | "student" | "contact" | "classroom";
   entityId: string;
 }) {
   const trpc = useTRPC();
@@ -153,7 +153,16 @@ export function DocumentFileList({
                         <Icon className="size-4" style={{ color: iconColor }} />
                       </span>
                     </TableCell>
-                    <TableCell>{doc.title}</TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <p className="font-medium">{doc.title}</p>
+                        {doc.description && (
+                          <p className="text-muted-foreground line-clamp-1 text-xs">
+                            {doc.description}
+                          </p>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="text-center">
                       {getSize(doc.size ?? 0)}
                     </TableCell>
@@ -179,7 +188,7 @@ export function DocumentFileList({
 
                     <TableCell className="text-right">
                       <DropdownMenu>
-                        <DropdownMenuTrigger>
+                        <DropdownMenuTrigger asChild>
                           <Button variant={"ghost"} size={"icon"}>
                             <MoreVertical />
                           </Button>
@@ -207,6 +216,7 @@ export function DocumentFileList({
                                   <CreateEditDocument
                                     documentId={doc.id}
                                     title={doc.title ?? ""}
+                                    description={doc.description ?? ""}
                                     entityId={entityId}
                                     entityType={entityType}
                                   />
