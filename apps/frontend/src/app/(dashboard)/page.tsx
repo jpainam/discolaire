@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { redirect } from "next/navigation";
 import { decode } from "entities";
 
 import { getSession } from "~/auth/server";
@@ -23,9 +24,13 @@ import {
 
 export default async function Page() {
   const session = await getSession();
+  if (!session) {
+    redirect("/auth/login");
+  }
+
   const queryClient = getQueryClient();
 
-  if (session?.user.profile === "student") {
+  if (session.user.profile === "student") {
     const student = await queryClient.fetchQuery(
       trpc.student.getFromUserId.queryOptions(session.user.id),
     );
@@ -66,7 +71,7 @@ export default async function Page() {
   }
 
   batchPrefetch([
-    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 15 }),
+    trpc.gradeSheet.getLatestGradesheet.queryOptions({ limit: 20 }),
     trpc.classroom.all.queryOptions(),
     trpc.enrollment.count.queryOptions({}),
     trpc.contact.count.queryOptions(),

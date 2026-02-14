@@ -15,16 +15,29 @@ import SuperJSON from "superjson";
 import type { AppRouter } from "@repo/api";
 
 import { env } from "~/env";
-import { createQueryClient } from "./query-client";
+import { createQueryClient, isUnauthorizedTRPCError } from "./query-client";
+
+const LOGIN_PATH = "/auth/login";
+const onUnauthorized = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+  if (window.location.pathname.startsWith(LOGIN_PATH)) {
+    return;
+  }
+  window.location.assign(LOGIN_PATH);
+};
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined;
 const getQueryClient = () => {
   if (typeof window === "undefined") {
     // Server: always make a new query client
-    return createQueryClient();
+    return createQueryClient({ onUnauthorized });
   } else {
     // Browser: use singleton pattern to keep the same query client
-    return (clientQueryClientSingleton ??= createQueryClient());
+    return (clientQueryClientSingleton ??= createQueryClient({
+      onUnauthorized,
+    }));
   }
 };
 
@@ -37,13 +50,8 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
       links: [
         retryLink({
           retry: (opts) => {
-            const code = opts.error.data?.code;
-            if (
-              code === "UNAUTHORIZED" &&
-              typeof window !== "undefined" &&
-              !window.location.pathname.includes("/login")
-            ) {
-              window.location.href = "/auth/login";
+            if (isUnauthorizedTRPCError(opts.error)) {
+              onUnauthorized();
             }
             return false;
           },

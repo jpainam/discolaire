@@ -36,6 +36,9 @@ const handler = async (req: NextRequest) => {
         headers: req.headers,
       }),
     onError({ error, path }) {
+      if (error.code === "UNAUTHORIZED") {
+        return;
+      }
       console.error(`>>> tRPC Error on '${path}'`, error.message);
       console.error(error);
     },

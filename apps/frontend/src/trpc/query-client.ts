@@ -4,17 +4,42 @@ import {
   QueryCache,
   QueryClient,
 } from "@tanstack/react-query";
+import { TRPCError } from "@trpc/server";
 import SuperJSON from "superjson";
 
-export const createQueryClient = () =>
+export const isUnauthorizedTRPCError = (error: unknown): boolean => {
+  if (error instanceof TRPCError) {
+    return error.code === "UNAUTHORIZED";
+  }
+
+  if (typeof error === "object" && error !== null && "code" in error) {
+    return (error as { code?: unknown }).code === "UNAUTHORIZED";
+  }
+
+  return false;
+};
+
+interface CreateQueryClientOptions {
+  onUnauthorized?: () => void;
+}
+
+export const createQueryClient = (options: CreateQueryClientOptions = {}) =>
   new QueryClient({
     queryCache: new QueryCache({
       onError: (error) => {
+        if (isUnauthorizedTRPCError(error)) {
+          options.onUnauthorized?.();
+          return;
+        }
         console.error("QueryCache", error.message);
       },
     }),
     mutationCache: new MutationCache({
       onError: (error) => {
+        if (isUnauthorizedTRPCError(error)) {
+          options.onUnauthorized?.();
+          return;
+        }
         console.error("MutationCache", error.message);
       },
     }),
