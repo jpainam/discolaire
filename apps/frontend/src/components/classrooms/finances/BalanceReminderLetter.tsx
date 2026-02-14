@@ -15,22 +15,29 @@ export function BalanceReminderLetter({
   classroomId,
   studentId,
   format,
+  defaultJournalId,
 }: {
   classroomId: string;
   studentId?: string;
   format: "pdf" | "csv";
+  defaultJournalId?: string;
 }) {
   const t = useTranslations();
   const [date, setDate] = useState<Date | null>(() => addDays(new Date(), 7));
   const { closeModal } = useModal();
 
-  const [journalId, setJournalId] = useState<string | null>();
+  const [journalId, setJournalId] = useState<string | null>(
+    defaultJournalId ?? null,
+  );
 
   return (
     <div className="grid grid-cols-1 gap-6">
       <div className="flex flex-col gap-2">
         <Label>{t("Accounting journals")}</Label>
-        <AccountingJournalSelector onChange={(val) => setJournalId(val)} />
+        <AccountingJournalSelector
+          defaultValue={defaultJournalId}
+          onChange={(val) => setJournalId(val)}
+        />
       </div>
       <div className="flex flex-col gap-2">
         <Label>{t("due_date")}</Label>

@@ -18,24 +18,27 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <HydrateClient>
-      <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense fallback={<Skeleton className="h-10" />}>
-          <ClassroomFinancialSituationHeader />
-        </Suspense>
-      </ErrorBoundary>
-      <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-2 gap-4 p-4">
-              {Array.from({ length: 6 }).map((_, idx) => (
-                <Skeleton key={idx} className="h-40" />
-              ))}
-            </div>
-          }
-        >
-          <ClassroomFinancialSituation />
-        </Suspense>
-      </ErrorBoundary>
+      <div className="flex flex-col gap-2">
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense fallback={<Skeleton className="h-8" />}>
+            <ClassroomFinancialSituationHeader />
+          </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="space-y-4 p-4">
+                <Skeleton className="h-10 w-full md:w-96" />
+                {Array.from({ length: 6 }).map((_, idx) => (
+                  <Skeleton key={idx} className="h-12" />
+                ))}
+              </div>
+            }
+          >
+            <ClassroomFinancialSituation />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
     </HydrateClient>
   );
 }
