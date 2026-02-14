@@ -1,13 +1,13 @@
 "use client";
 
+import { useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { isSameDay } from "date-fns";
 import { useLocale, useTranslations } from "next-intl";
 import { parseAsString, useQueryState } from "nuqs";
 
-import type { RouterOutputs } from "@repo/api";
-
+import { Badge } from "~/components/base-badge";
 import { EmptyComponent } from "~/components/EmptyComponent";
-import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";
 import {
   Table,
@@ -17,96 +17,112 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { ViewIcon } from "~/icons";
+import { useTRPC } from "~/trpc/react";
 
-type StudentAssignment = RouterOutputs["classroom"]["assignments"][number];
 export function StudentAssignmentTable({
-  assignments,
+  classroomId,
 }: {
-  assignments: StudentAssignment[];
+  classroomId: string;
 }) {
+  const trpc = useTRPC();
+  const { data: assignments } = useSuspenseQuery(
+    trpc.classroom.assignments.queryOptions(classroomId),
+  );
   const [term] = useQueryState("term", parseAsString);
-  const items = term
-    ? assignments.filter((item) => item.termId === term)
-    : assignments;
+
+  const items = useMemo(() => {
+    if (term) return assignments.filter((item) => item.termId === term);
+    return assignments;
+  }, [assignments, term]);
 
   const t = useTranslations();
 
   const router = useRouter();
   const locale = useLocale();
   return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/50">
-            <TableHead>{t("schedule_date")}</TableHead>
-            <TableHead>{t("title")}</TableHead>
-            <TableHead>{t("course")}</TableHead>
-            <TableHead>{t("teacher")}</TableHead>
-            <TableHead>{t("coefficient")}</TableHead>
-            <TableHead>{t("status")}</TableHead>
-            <TableHead className="text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={7}>
-                <EmptyComponent />
-              </TableCell>
+    <div className="px-4 py-2">
+      <div className="rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead>{t("schedule_date")}</TableHead>
+              <TableHead>{t("title")}</TableHead>
+              <TableHead>{t("course")}</TableHead>
+              <TableHead>{t("teacher")}</TableHead>
+              <TableHead className="text-center">{t("coefficient")}</TableHead>
+              <TableHead className="text-center">{t("status")}</TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
-          )}
-          {items.map((item) => {
-            const hasPassed = item.dueDate < new Date();
-            const current = isSameDay(item.dueDate, new Date());
-            return (
-              <TableRow key={item.id}>
-                <TableCell className="py-0">
-                  {item.dueDate.toLocaleDateString(locale, {
-                    month: "short",
-                    year: "numeric",
-                    day: "2-digit",
-                  })}
-                </TableCell>
-                <TableCell className="py-0">{item.title}</TableCell>
-                <TableCell className="py-0">
-                  {item.subject.course.name}
-                </TableCell>
-                <TableCell className="py-0">
-                  {item.subject.teacher?.lastName}
-                </TableCell>
-                <TableCell className="py-0">
-                  {item.subject.coefficient}
-                </TableCell>
-                <TableCell className="py-0">
-                  <FlatBadge
-                    variant={hasPassed ? "red" : current ? "green" : "yellow"}
-                  >
-                    {hasPassed
-                      ? t("passed")
-                      : current
-                        ? t("current")
-                        : t("incoming")}
-                  </FlatBadge>
-                </TableCell>
-                <TableCell className="py-0 text-right">
-                  <Button
-                    onClick={() => {
-                      router.push(routes.assignments.details(item.id));
-                    }}
-                    variant={"ghost"}
-                    size={"icon"}
-                  >
-                    <ViewIcon />
-                  </Button>
+          </TableHeader>
+          <TableBody>
+            {items.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <EmptyComponent />
                 </TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            )}
+            {items.map((item) => {
+              const hasPassed = item.dueDate < new Date();
+              const current = isSameDay(item.dueDate, new Date());
+              return (
+                <TableRow key={item.id}>
+                  <TableCell className="py-0">
+                    {item.dueDate.toLocaleDateString(locale, {
+                      month: "short",
+                      year: "numeric",
+                      day: "2-digit",
+                    })}
+                  </TableCell>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {item.subject.course.name}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {item.subject.teacher?.lastName}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-center">
+                    {item.subject.coefficient}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge
+                      appearance={"light"}
+                      variant={
+                        hasPassed
+                          ? "destructive"
+                          : current
+                            ? "success"
+                            : "warning"
+                      }
+                    >
+                      {hasPassed
+                        ? t("passed")
+                        : current
+                          ? t("current")
+                          : t("incoming")}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      onClick={() => {
+                        router.push(
+                          `/classrooms/${classroomId}/assignments/${item.id}`,
+                        );
+                      }}
+                      variant={"link"}
+                    >
+                      <ViewIcon />
+                      {t("details")}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
