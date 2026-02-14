@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -147,8 +147,8 @@ export default function DataExportPage() {
 
         <TabsContent value="all" className="mt-0">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredOptions.map((option) => {
-              return <>{option.content}</>;
+            {filteredOptions.map((option, index) => {
+              return <Fragment key={index}>{option.content}</Fragment>;
             })}
           </div>
         </TabsContent>
@@ -156,8 +156,8 @@ export default function DataExportPage() {
         {categories.map((category) => (
           <TabsContent key={category.id} value={category.id} className="mt-0">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {getOptionsByCategory(category.id).map((option) => (
-                <>{option.content}</>
+              {getOptionsByCategory(category.id).map((option, index) => (
+                <Fragment key={index}>{option.content}</Fragment>
               ))}
             </div>
           </TabsContent>
