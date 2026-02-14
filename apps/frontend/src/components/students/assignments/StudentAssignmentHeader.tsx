@@ -1,8 +1,8 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { Mail, MoreVertical, NotebookPen } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { parseAsString, useQueryState } from "nuqs";
 
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
@@ -15,27 +15,19 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
-import { useCreateQueryString } from "~/hooks/create-query-string";
-import { useRouter } from "~/hooks/use-router";
 
 export function StudentAssignmentHeader() {
   const t = useTranslations();
-  const searchParams = useSearchParams();
-  const term = searchParams.get("term");
-  const { createQueryString } = useCreateQueryString();
-  const router = useRouter();
+  const [termId, setTermId] = useQueryState("termId", parseAsString);
+
   return (
     <div className="bg-muted/50 grid flex-row items-center gap-2 border-b px-2 py-1 md:flex">
       <NotebookPen className="hidden h-4 w-4 md:flex" />
       <Label>{t("assignments")}</Label>
       <TermSelector
-        defaultValue={term}
+        defaultValue={termId ?? undefined}
         onChange={(val) => {
-          router.push(
-            `?${createQueryString({
-              term: val,
-            })}`,
-          );
+          void setTermId(val);
         }}
         className="w-full xl:w-1/3"
       />

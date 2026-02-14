@@ -30,12 +30,12 @@ export function StudentAssignmentTable({
   const { data: assignments } = useSuspenseQuery(
     trpc.classroom.assignments.queryOptions(classroomId),
   );
-  const [term] = useQueryState("term", parseAsString);
+  const [termId] = useQueryState("termId", parseAsString);
 
   const items = useMemo(() => {
-    if (term) return assignments.filter((item) => item.termId === term);
+    if (termId) return assignments.filter((item) => item.termId === termId);
     return assignments;
-  }, [assignments, term]);
+  }, [assignments, termId]);
 
   const t = useTranslations();
 
