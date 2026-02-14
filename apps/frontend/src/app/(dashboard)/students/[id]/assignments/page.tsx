@@ -7,7 +7,6 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { TableSkeleton } from "~/components/skeletons/table-skeleton";
 import { StudentAssignmentTable } from "~/components/students/assignments/StudentAssignementTable";
 import { StudentAssignmentHeader } from "~/components/students/assignments/StudentAssignmentHeader";
-import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   batchPrefetch,
@@ -39,7 +38,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <StudentAssignmentHeader />
           </Suspense>
         </ErrorBoundary>
-        <Separator />
+
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<TableSkeleton rows={4} cols={5} />}>
             <StudentAssignmentTable classroomId={classroom.id} />

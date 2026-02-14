@@ -43,7 +43,7 @@ export function StudentAssignmentTable({
   const locale = useLocale();
   return (
     <div className="px-4 py-2">
-      <div className="rounded-lg border">
+      <div className="overflow-hidden rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">

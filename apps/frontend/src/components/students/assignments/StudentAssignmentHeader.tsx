@@ -25,7 +25,7 @@ export function StudentAssignmentHeader() {
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
   return (
-    <div className="bg-muted/50 grid flex-row items-center gap-2 px-2 py-1 md:flex">
+    <div className="bg-muted/50 grid flex-row items-center gap-2 border-b px-2 py-1 md:flex">
       <NotebookPen className="hidden h-4 w-4 md:flex" />
       <Label>{t("assignments")}</Label>
       <TermSelector
