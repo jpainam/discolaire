@@ -18,7 +18,7 @@ export function InventorySummary() {
   ]);
   return (
     <HydrateClient>
-      <div className="grid gap-4 px-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <InventoryMonthlyUsage className="col-span-full" />
         <InventoryStockLevelSummary className="lg:col-span-3" />
         <InventorySummary2 />

@@ -28,6 +28,7 @@ import {
 } from "~/components/ui/select";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
+import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
 
@@ -63,7 +64,12 @@ export function CreateEditInventoryItem({
   const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const { closeModal } = useModal();
   const { closeSheet } = useSheet();
+  const closeContainer = () => {
+    closeSheet();
+    closeModal();
+  };
 
   const defaultTrackingType = item?.type === "ASSET" ? "RETURNABLE" : "CONSUMABLE";
 
@@ -85,6 +91,7 @@ export function CreateEditInventoryItem({
     },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const trackingType = form.watch("trackingType");
 
   const unitsQuery = useQuery(trpc.inventory.units.queryOptions());
@@ -94,7 +101,7 @@ export function CreateEditInventoryItem({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
-        closeSheet();
+        closeContainer();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -107,7 +114,7 @@ export function CreateEditInventoryItem({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
-        closeSheet();
+        closeContainer();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -303,7 +310,7 @@ export function CreateEditInventoryItem({
         />
 
         <div className="ml-auto flex items-center gap-2">
-          <Button type="button" variant="outline" onClick={() => closeSheet()}>
+          <Button type="button" variant="outline" onClick={closeContainer}>
             {t("cancel")}
           </Button>
           <Button type="submit" disabled={isPending}>

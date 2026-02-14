@@ -13,7 +13,6 @@ import { ConsumableUsageDataTable } from "~/components/administration/inventory/
 import { StockMovementHeader } from "~/components/administration/inventory/movements/StockMovementHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Badge } from "~/components/ui/badge";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -23,9 +22,8 @@ import {
   HydrateClient,
   trpc,
 } from "~/trpc/server";
-import { InventoryDataTable } from "./InventoryDataTable";
-import { InventoryHeader } from "./InventoryHeader";
 import { InventorySummary } from "./InventorySummary";
+import { InventoryTable } from "./InventoryTable";
 
 export default async function Page() {
   const queryClient = getQueryClient();
@@ -39,63 +37,28 @@ export default async function Page() {
   const t = await getTranslations();
   return (
     <HydrateClient>
-      <Tabs defaultValue="tab-1">
-        <ScrollArea>
-          <TabsList className="text-foreground h-auto w-full gap-2 rounded-none border-b bg-transparent px-0 py-1">
-            <TabsTrigger
-              value="tab-1"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <HouseIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
-              {t("dashboard")}
-            </TabsTrigger>
-            <TabsTrigger
-              value="tab-2"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <PanelsTopLeftIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
-              {t("Articles")}
-              <Badge
-                className="bg-primary/15 ms-1.5 min-w-5 px-1"
-                variant="secondary"
-              >
-                {items.length}
-              </Badge>
-            </TabsTrigger>
+      <Tabs defaultValue="tab-1" className="px-4 py-2">
+        <TabsList>
+          <TabsTrigger value="tab-1">
+            <HouseIcon size={16} aria-hidden="true" />
+            {t("dashboard")}
+          </TabsTrigger>
+          <TabsTrigger value="tab-2">
+            <PanelsTopLeftIcon size={16} aria-hidden="true" />
+            {t("Articles")}
+            <Badge variant="secondary">{items.length}</Badge>
+          </TabsTrigger>
 
-            <TabsTrigger
-              value="tab-3"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <ChartLine
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
-              {t("Stock movement")}
-            </TabsTrigger>
-            <TabsTrigger
-              value="tab-4"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <SettingsIcon
-                className="-ms-0.5 me-1.5 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
-              {t("settings")}
-            </TabsTrigger>
-          </TabsList>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+          <TabsTrigger value="tab-3">
+            <ChartLine size={16} aria-hidden="true" />
+            Emprunt
+          </TabsTrigger>
+          <TabsTrigger value="tab-4">
+            <SettingsIcon size={16} aria-hidden="true" />
+            {t("settings")}
+          </TabsTrigger>
+        </TabsList>
+
         <TabsContent value="tab-1">
           {/* <p className="text-muted-foreground pt-1 text-center text-xs">
           Content for Tab 1
@@ -115,8 +78,7 @@ export default async function Page() {
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
-        <TabsContent className="px-4" value="tab-2">
-          <InventoryHeader />
+        <TabsContent value="tab-2">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
               fallback={
@@ -127,7 +89,7 @@ export default async function Page() {
                 </div>
               }
             >
-              <InventoryDataTable />
+              <InventoryTable />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
