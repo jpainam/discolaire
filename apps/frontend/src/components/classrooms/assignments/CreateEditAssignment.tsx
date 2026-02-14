@@ -348,7 +348,7 @@ export function CreateEditAssignment({
         return;
       }
       setIsDragging(false);
-      handleAddFiles(Array.from(event.dataTransfer.files ?? []));
+      handleAddFiles(Array.from(event.dataTransfer.files));
     },
     [handleAddFiles, isBusy],
   );
