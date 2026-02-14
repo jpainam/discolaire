@@ -130,7 +130,12 @@ export function ClassroomAssignmentList({
     });
   };
   if (filtered.length == 0) {
-    return <EmptyComponent />;
+    return (
+      <EmptyComponent
+        title="Aucun devoir"
+        description="Commencer par programmér quelques devoir"
+      />
+    );
   }
 
   return (

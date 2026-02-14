@@ -16,17 +16,21 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function AssignmentDetailsHeader({
   assignmentId,
+  classroomId,
 }: {
   assignmentId: string;
+  classroomId: string;
 }) {
   const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const deleteAssignmentMutation = useMutation(
     trpc.assignment.delete.mutationOptions({
@@ -39,6 +43,7 @@ export function AssignmentDetailsHeader({
           trpc.classroom.assignments.pathFilter(),
         );
         toast.success(t("deleted_successfully"), { id: 0 });
+        router.push(`/classrooms/${classroomId}/assignments`);
       },
     }),
   );
@@ -70,15 +75,10 @@ export function AssignmentDetailsHeader({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               variant="destructive"
-              className="dark:data-[variant=destructive]:focus:bg-destructive/10"
               onSelect={async () => {
                 await confirm({
                   title: t("delete"),
                   description: t("delete_confirmation"),
-                  icon: <Trash2 className="text-destructive" />,
-                  alertDialogTitle: {
-                    className: "flex items-center gap-1",
-                  },
 
                   onConfirm: async () => {
                     await deleteAssignmentMutation.mutateAsync(assignmentId);
