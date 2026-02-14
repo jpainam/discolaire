@@ -1,6 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 
 import { protectedProcedure } from "../trpc";
+import { getFullName } from "../utils";
 
 function monthKey(date: Date) {
   const y = date.getUTCFullYear();
@@ -23,6 +24,29 @@ function computeConsumableStock(events: { type: string; quantity: number }[]) {
   }, 0);
 }
 
+function getAssigneeDisplayName(assignee?: {
+  firstName?: string | null;
+  lastName?: string | null;
+  middleName?: string | null;
+  name?: string | null;
+  email?: string | null;
+} | null): string {
+  if (!assignee) {
+    return "";
+  }
+
+  const fullName = getFullName(assignee).trim();
+  if (fullName.length > 0) {
+    return fullName;
+  }
+
+  if (assignee.name?.trim()) {
+    return assignee.name.trim();
+  }
+
+  return assignee.email?.trim() ?? "";
+}
+
 export const inventoryUsageRouter = {
   usageSummary: protectedProcedure.query(async ({ ctx }) => {
     const events = await ctx.db.inventoryEvent.findMany({
@@ -42,14 +66,14 @@ export const inventoryUsageRouter = {
       },
     });
 
-    const users = new Map<string, { name: string; count: number }>();
+    const staffs = new Map<string, { name: string; count: number }>();
 
     events.forEach((event) => {
       if (!event.assignee || !event.assigneeId) {
         return;
       }
-      const current = users.get(event.assigneeId) ?? {
-        name: event.assignee.name,
+      const current = staffs.get(event.assigneeId) ?? {
+        name: getAssigneeDisplayName(event.assignee),
         count: 0,
       };
 
@@ -59,12 +83,12 @@ export const inventoryUsageRouter = {
         current.count += 1;
       }
 
-      users.set(event.assigneeId, current);
+      staffs.set(event.assigneeId, current);
     });
 
-    return Array.from(users.entries())
-      .map(([userId, info]) => ({
-        userId,
+    return Array.from(staffs.entries())
+      .map(([staffId, info]) => ({
+        staffId,
         name: info.name,
         count: info.count,
       }))
@@ -187,7 +211,7 @@ export const inventoryUsageRouter = {
         } else {
           bucket.stockOut += Math.abs(event.quantity);
         }
-      } else if (event.type === "ASSIGN") {
+      } else {
         bucket.assetAssigned += 1;
         if (event.returnedAt) {
           const returnedKey = monthKey(event.returnedAt);

@@ -42,9 +42,9 @@ export function InventoryUsageDetail({
             <User className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Assigned to</h4>
-              <p>{item.user ? item.user.name : "-"}</p>
+              <p>{item.staff ? item.staff.name : "-"}</p>
               <p className="text-muted-foreground text-sm">
-                {item.user ? item.user.email : "-"}
+                {item.staff ? item.staff.email : "-"}
               </p>
             </div>
           </div>

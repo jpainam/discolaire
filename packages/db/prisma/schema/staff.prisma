@@ -49,6 +49,7 @@ model Staff {
     classrooms2               Classroom[]       @relation("headTeacher")
     school                    School            @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     schoolId                  String
+    inventoryAssignedEvents   InventoryEvent[]  @relation("InventoryEventAssignee")
     attendances               StaffAttendance[]
     documents                 Document[]
 }

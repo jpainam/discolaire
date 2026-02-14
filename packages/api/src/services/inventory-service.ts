@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@repo/db";
+import { getFullName } from "../utils";
 
 export class InventoryService {
   private db: PrismaClient;
@@ -22,6 +23,29 @@ export class InventoryService {
       }
       return acc;
     }, 0);
+  }
+
+  private getAssigneeDisplayName(assignee?: {
+    firstName?: string | null;
+    lastName?: string | null;
+    middleName?: string | null;
+    name?: string | null;
+    email?: string | null;
+  } | null): string {
+    if (!assignee) {
+      return "";
+    }
+
+    const fullName = getFullName(assignee).trim();
+    if (fullName.length > 0) {
+      return fullName;
+    }
+
+    if (assignee.name?.trim()) {
+      return assignee.name.trim();
+    }
+
+    return assignee.email?.trim() ?? "";
   }
 
   async getAllItems({
@@ -60,6 +84,9 @@ export class InventoryService {
       if (item.trackingType === "RETURNABLE") {
         const assignments = item.events.filter((event) => event.type === "ASSIGN");
         const activeAssignment = assignments.find((event) => event.returnedAt === null);
+        const activeAssigneeName = activeAssignment?.assignee
+          ? this.getAssigneeDisplayName(activeAssignment.assignee)
+          : null;
 
         return {
           id: item.id,
@@ -69,16 +96,19 @@ export class InventoryService {
           name: item.name,
           note: item.note ? item.note.replace(/(\r\n|\n|\r)/g, ",") : null,
           users: activeAssignment?.assignee
-            ? [{ name: activeAssignment.assignee.name, image: "" }]
+            ? [{ name: activeAssigneeName ?? "", image: "" }]
             : assignments
                 .filter((event) => event.assignee)
-                .map((event) => ({ name: event.assignee?.name ?? "", image: "" })),
+                .map((event) => ({
+                  name: this.getAssigneeDisplayName(event.assignee),
+                  image: "",
+                })),
           other: {
             sku: item.sku,
             serial: item.serial,
             activeUsageId: activeAssignment?.id ?? null,
             activeUserId: activeAssignment?.assigneeId ?? null,
-            activeUserName: activeAssignment?.assignee?.name ?? null,
+            activeUserName: activeAssigneeName,
             activeStatus: activeAssignment ? "ASSIGNED" : "AVAILABLE",
             dueAt: activeAssignment?.dueAt?.toISOString() ?? null,
             defaultReturnDate: item.defaultReturnDate?.toISOString() ?? null,
@@ -96,7 +126,10 @@ export class InventoryService {
       const currentStock = this.computeConsumableStock(stockEvents);
       const users = item.events
         .filter((event) => event.type === "CONSUME" && event.assignee)
-        .map((event) => ({ name: event.assignee?.name ?? "", image: "" }));
+        .map((event) => ({
+          name: this.getAssigneeDisplayName(event.assignee),
+          image: "",
+        }));
 
       return {
         id: item.id,

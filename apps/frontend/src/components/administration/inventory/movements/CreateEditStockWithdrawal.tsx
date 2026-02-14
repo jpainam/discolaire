@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { UserSelector } from "~/components/shared/selects/UserSelector";
+import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -25,7 +25,7 @@ import { useTRPC } from "~/trpc/react";
 import { ConsumableSelector } from "../ConsumableSelector";
 
 const schema = z.object({
-  userId: z.string().min(1),
+  staffId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
   consumableId: z.string().min(1),
@@ -33,13 +33,13 @@ const schema = z.object({
 
 export function CreateEditStockWithdrawal({
   id,
-  userId,
+  staffId,
   consumableId,
   quantity,
   note,
 }: {
   id?: string;
-  userId?: string;
+  staffId?: string;
   consumableId?: string;
   quantity?: number;
   note?: string;
@@ -47,7 +47,7 @@ export function CreateEditStockWithdrawal({
   const form = useForm({
     resolver: standardSchemaResolver(schema),
     defaultValues: {
-      userId: userId ?? "",
+      staffId: staffId ?? "",
       quantity: quantity ?? 1,
       consumableId: consumableId ?? "",
       note: note ?? "",
@@ -87,7 +87,7 @@ export function CreateEditStockWithdrawal({
     toast.loading(t("Processing"), { id: 0 });
     const values = {
       consumableId: data.consumableId,
-      userId: data.userId,
+      staffId: data.staffId,
       quantity: data.quantity,
       note: data.note,
     };
@@ -111,14 +111,14 @@ export function CreateEditStockWithdrawal({
         <div className="flex flex-col gap-6 px-4">
           <FormField
             control={form.control}
-            name="userId"
+            name="staffId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("user")}</FormLabel>
+                <FormLabel>{t("staff")}</FormLabel>
                 <FormControl>
-                  <UserSelector
+                  <StaffSelector
                     defaultValue={field.value}
-                    onChange={(value) => {
+                    onSelect={(value) => {
                       field.onChange(value);
                     }}
                   />

@@ -43,7 +43,6 @@ model User {
     receivedEmails               EmailRecipient[]
     createdSubscriptions         NotificationSubscription[] @relation("CreatedSubscriptions")
     accessedCommunicationChannel CommunicationChannel[]
-    inventoryAssignedEvents      InventoryEvent[]          @relation("InventoryEventAssignee")
     inventoryReturnedEvents      InventoryEvent[]          @relation("InventoryEventReturnedBy")
     inventoryCreatedEvents       InventoryEvent[]          @relation("InventoryEventCreatedBy")
     notifications                UserNotification[]

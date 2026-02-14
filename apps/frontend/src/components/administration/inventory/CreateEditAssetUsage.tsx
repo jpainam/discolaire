@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
-import { UserSelector } from "~/components/shared/selects/UserSelector";
+import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -25,7 +25,7 @@ import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   note: z.string().optional(),
-  userId: z.string().min(1),
+  staffId: z.string().min(1),
   location: z.string().optional(),
   dueAt: z.string().optional(),
 });
@@ -33,7 +33,7 @@ const schema = z.object({
 export function CreateEditAssetUsage({
   id,
   note,
-  userId,
+  staffId,
   assetId,
   location,
   dueAt,
@@ -42,14 +42,14 @@ export function CreateEditAssetUsage({
   assetId: string;
   id?: string;
   location?: string;
-  userId?: string;
+  staffId?: string;
   dueAt?: string;
 }) {
   const form = useForm({
     resolver: standardSchemaResolver(schema),
     defaultValues: {
       note: note ?? "",
-      userId: userId ?? "",
+      staffId: staffId ?? "",
       location: location ?? "",
       dueAt: dueAt ?? "",
     },
@@ -88,7 +88,7 @@ export function CreateEditAssetUsage({
     toast.loading(t("Processing"), { id: 0 });
     const values = {
       note: data.note,
-      userId: data.userId,
+      staffId: data.staffId,
       assetId: assetId,
       location: data.location,
       dueAt: data.dueAt,
@@ -111,13 +111,13 @@ export function CreateEditAssetUsage({
       >
         <FormField
           control={form.control}
-          name="userId"
+          name="staffId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("user")}</FormLabel>
+              <FormLabel>{t("staff")}</FormLabel>
               <FormControl>
-                <UserSelector
-                  onChange={field.onChange}
+                <StaffSelector
+                  onSelect={field.onChange}
                   defaultValue={field.value}
                 />
               </FormControl>

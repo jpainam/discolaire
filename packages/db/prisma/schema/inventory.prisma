@@ -50,7 +50,7 @@ model InventoryEvent {
     type         InventoryEventType
     quantity     Int                @default(1)
     assigneeId   String?
-    assignee     User?              @relation("InventoryEventAssignee", fields: [assigneeId], references: [id])
+    assignee     Staff?             @relation("InventoryEventAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
     location     String?
     dueAt        DateTime?
     returnedAt   DateTime?

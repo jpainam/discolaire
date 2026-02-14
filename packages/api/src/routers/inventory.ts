@@ -2,7 +2,10 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod/v4";
 
+import type { Prisma, PrismaClient } from "@repo/db";
+
 import { protectedProcedure } from "../trpc";
+import { getFullName } from "../utils";
 
 function computeConsumableStock(events: { type: string; quantity: number }[]) {
   return events.reduce((acc, event) => {
@@ -25,7 +28,7 @@ async function getConsumableStockTx({
   schoolId,
   schoolYearId,
 }: {
-  tx: any;
+  tx: Prisma.TransactionClient;
   itemId: string;
   schoolId: string;
   schoolYearId: string;
@@ -46,6 +49,33 @@ async function getConsumableStockTx({
   });
 
   return computeConsumableStock(events);
+}
+
+async function ensureStaffExists({
+  db,
+  staffId,
+  schoolId,
+}: {
+  db: PrismaClient | Prisma.TransactionClient;
+  staffId: string;
+  schoolId: string;
+}) {
+  const staff = await db.staff.findFirst({
+    where: {
+      id: staffId,
+      schoolId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!staff) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Staff not found",
+    });
+  }
 }
 
 const unifiedItemSchema = z
@@ -508,8 +538,14 @@ export const inventoryRouter = {
       .then((events) => {
         return events.map((event) => ({
           id: event.id,
-          userId: event.assigneeId ?? "",
-          user: event.assignee,
+          staffId: event.assigneeId ?? "",
+          staff: event.assignee
+            ? {
+                id: event.assigneeId,
+                name: getFullName(event.assignee),
+                email: event.assignee.email,
+              }
+            : null,
           quantity: event.quantity,
           note: event.note,
           createdAt: event.createdAt,
@@ -559,13 +595,19 @@ export const inventoryRouter = {
     .input(
       z.object({
         consumableId: z.string().min(1),
-        userId: z.string().min(1),
+        staffId: z.string().min(1),
         quantity: z.coerce.number().min(1).max(1000),
         note: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.$transaction(async (tx) => {
+        await ensureStaffExists({
+          db: tx,
+          staffId: input.staffId,
+          schoolId: ctx.schoolId,
+        });
+
         const item = await tx.inventoryItem.findFirst({
           where: {
             id: input.consumableId,
@@ -587,7 +629,7 @@ export const inventoryRouter = {
             itemId: input.consumableId,
             type: "CONSUME",
             quantity: input.quantity,
-            assigneeId: input.userId,
+            assigneeId: input.staffId,
             note: input.note,
             createdById: ctx.session.user.id,
             schoolId: ctx.schoolId,
@@ -618,13 +660,19 @@ export const inventoryRouter = {
       z.object({
         id: z.string().min(1),
         consumableId: z.string().min(1),
-        userId: z.string().min(1),
+        staffId: z.string().min(1),
         quantity: z.coerce.number().min(1).max(1000),
         note: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.$transaction(async (tx) => {
+        await ensureStaffExists({
+          db: tx,
+          staffId: input.staffId,
+          schoolId: ctx.schoolId,
+        });
+
         const event = await tx.inventoryEvent.findFirst({
           where: {
             id: input.id,
@@ -647,7 +695,7 @@ export const inventoryRouter = {
           },
           data: {
             itemId: input.consumableId,
-            assigneeId: input.userId,
+            assigneeId: input.staffId,
             quantity: input.quantity,
             note: input.note,
           },
@@ -829,7 +877,7 @@ export const inventoryRouter = {
   createAssetUsage: protectedProcedure
     .input(
       z.object({
-        userId: z.string().min(1),
+        staffId: z.string().min(1),
         assetId: z.string().min(1),
         location: z.string().optional(),
         note: z.string().optional(),
@@ -837,6 +885,12 @@ export const inventoryRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      await ensureStaffExists({
+        db: ctx.db,
+        staffId: input.staffId,
+        schoolId: ctx.schoolId,
+      });
+
       const item = await ctx.db.inventoryItem.findFirst({
         where: {
           id: input.assetId,
@@ -874,7 +928,7 @@ export const inventoryRouter = {
           itemId: input.assetId,
           type: "ASSIGN",
           quantity: 1,
-          assigneeId: input.userId,
+          assigneeId: input.staffId,
           location: input.location,
           note: input.note,
           dueAt: input.dueAt
@@ -891,7 +945,7 @@ export const inventoryRouter = {
     .input(
       z.object({
         id: z.string().min(1),
-        userId: z.string().min(1),
+        staffId: z.string().min(1),
         assetId: z.string().min(1),
         location: z.string().optional(),
         note: z.string().optional(),
@@ -899,6 +953,12 @@ export const inventoryRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      await ensureStaffExists({
+        db: ctx.db,
+        staffId: input.staffId,
+        schoolId: ctx.schoolId,
+      });
+
       const assignment = await ctx.db.inventoryEvent.findFirst({
         where: {
           id: input.id,
@@ -921,7 +981,7 @@ export const inventoryRouter = {
           id: assignment.id,
         },
         data: {
-          assigneeId: input.userId,
+          assigneeId: input.staffId,
           location: input.location,
           note: input.note,
           dueAt: input.dueAt ? new Date(input.dueAt) : assignment.dueAt,

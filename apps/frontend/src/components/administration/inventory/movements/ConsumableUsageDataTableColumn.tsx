@@ -127,7 +127,7 @@ export function useColumns(): ColumnDef<
       //   },
       // },
       {
-        accessorKey: "user.name",
+        accessorKey: "staff.name",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("to")} />
         ),
@@ -135,10 +135,10 @@ export function useColumns(): ColumnDef<
           const usage = row.original;
           return (
             <Link
-              href={`/users/${usage.userId}`}
+              href={`/staffs/${usage.staffId}`}
               className="text-muted-foreground hover:underline"
             >
-              {usage.user?.name ?? "-"}
+              {usage.staff?.name}
             </Link>
           );
         },
@@ -223,7 +223,7 @@ function ActionCell({
                   view: (
                     <CreateEditStockWithdrawal
                       id={inventory.id}
-                      userId={inventory.userId}
+                      staffId={inventory.staffId}
                       consumableId={inventory.consumableId}
                       quantity={inventory.quantity}
                       note={inventory.note ?? ""}
