@@ -24,13 +24,15 @@ function computeConsumableStock(events: { type: string; quantity: number }[]) {
   }, 0);
 }
 
-function getAssigneeDisplayName(assignee?: {
-  firstName?: string | null;
-  lastName?: string | null;
-  middleName?: string | null;
-  name?: string | null;
-  email?: string | null;
-} | null): string {
+function getAssigneeDisplayName(
+  assignee?: {
+    firstName?: string | null;
+    lastName?: string | null;
+    middleName?: string | null;
+    name?: string | null;
+    email?: string | null;
+  } | null,
+): string {
   if (!assignee) {
     return "";
   }
@@ -143,7 +145,9 @@ export const inventoryUsageRouter = {
   monthlySummary: protectedProcedure.query(async ({ ctx }) => {
     const now = new Date();
     const monthStarts = Array.from({ length: 6 }).map((_, i) => {
-      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
+      const d = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1),
+      );
       return d;
     });
     monthStarts.reverse();
@@ -283,13 +287,17 @@ export const inventoryUsageRouter = {
       }),
     ]);
 
-    const assetsInUse = returnableItems.filter((item) => item.events.length > 0).length;
+    const assetsInUse = returnableItems.filter(
+      (item) => item.events.length > 0,
+    ).length;
     const assetsAvailable = Math.max(returnableItems.length - assetsInUse, 0);
 
     const lowStock = consumables.filter((item) => {
       const currentStock = computeConsumableStock(item.events);
       const minStockLevel = item.minStockLevel ?? 0;
-      return minStockLevel > 0 && currentStock > 0 && currentStock <= minStockLevel;
+      return (
+        minStockLevel > 0 && currentStock > 0 && currentStock <= minStockLevel
+      );
     }).length;
 
     const outOfStock = consumables.filter((item) => {

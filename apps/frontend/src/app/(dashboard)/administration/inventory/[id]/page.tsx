@@ -44,10 +44,12 @@ export default async function InventoryItemPage({
           {item.type === "ASSET" ? (
             <div className="space-y-2">
               <p>
-                <span className="font-medium">SKU:</span> {item.other.sku ?? "-"}
+                <span className="font-medium">SKU:</span>{" "}
+                {item.other.sku ?? "-"}
               </p>
               <p>
-                <span className="font-medium">Serial:</span> {item.other.serial ?? "-"}
+                <span className="font-medium">Serial:</span>{" "}
+                {item.other.serial ?? "-"}
               </p>
               <p>
                 <span className="font-medium">Current assignee:</span>{" "}

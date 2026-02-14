@@ -23,7 +23,9 @@ import { InventoryPieChart } from "./InventoryPieChart";
 
 export function InventorySummary2() {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.inventoryUsage.monthlySummary.queryOptions());
+  const { data } = useSuspenseQuery(
+    trpc.inventoryUsage.monthlySummary.queryOptions(),
+  );
 
   return (
     <>

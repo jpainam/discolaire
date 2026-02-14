@@ -81,7 +81,9 @@ export function InventoryEventDetail({
             <div>
               <h4 className="font-medium">Recorded by</h4>
               <p>{item.createdBy.name}</p>
-              <p className="text-muted-foreground text-sm">{item.createdBy.email}</p>
+              <p className="text-muted-foreground text-sm">
+                {item.createdBy.email}
+              </p>
             </div>
           </div>
         </div>

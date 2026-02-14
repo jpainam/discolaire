@@ -36,7 +36,9 @@ const chartConfig = {
 export function InventoryMonthlyUsage({ className }: { className?: string }) {
   const t = useTranslations();
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.inventoryUsage.monthlySummary.queryOptions());
+  const { data } = useSuspenseQuery(
+    trpc.inventoryUsage.monthlySummary.queryOptions(),
+  );
 
   return (
     <Card className={cn(className)}>
@@ -50,7 +52,13 @@ export function InventoryMonthlyUsage({ className }: { className?: string }) {
         <ChartContainer config={chartConfig} className="h-[250px] w-full">
           <AreaChart data={data}>
             <defs>
-              <linearGradient id="fillConsumableUsage" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient
+                id="fillConsumableUsage"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
                 <stop
                   offset="5%"
                   stopColor="var(--color-consumableUsage)"
@@ -62,13 +70,32 @@ export function InventoryMonthlyUsage({ className }: { className?: string }) {
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="fillAssetAssigned" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-assetAssigned)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-assetAssigned)" stopOpacity={0.1} />
+              <linearGradient
+                id="fillAssetAssigned"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-assetAssigned)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-assetAssigned)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
-            <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+            />
             <YAxis allowDecimals={false} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <ChartLegend content={<ChartLegendContent />} />

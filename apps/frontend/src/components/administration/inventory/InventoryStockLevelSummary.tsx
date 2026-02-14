@@ -60,7 +60,9 @@ export function InventoryStockLevelSummary({
       </CardHeader>
       <CardContent>
         {chartData.length === 0 ? (
-          <div className="text-muted-foreground text-sm">No stock data yet.</div>
+          <div className="text-muted-foreground text-sm">
+            No stock data yet.
+          </div>
         ) : (
           <ChartContainer config={chartConfig} className="h-[260px] w-full">
             <BarChart accessibilityLayer data={chartData}>

@@ -106,105 +106,103 @@ export function CreateEditConsumeEvent({
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <div className="flex flex-col gap-6 px-4">
-          <FormField
-            control={form.control}
-            name="staffId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("staff")}</FormLabel>
-                <FormControl>
-                  <StaffSelector
-                    defaultValue={field.value}
-                    onSelect={(value) => {
-                      field.onChange(value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="consumableId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("consumable")}</FormLabel>
-                <FormControl>
-                  <InventoryItemSelector
-                    onChange={field.onChange}
-                    defaultValue={field.value}
-                  />
-                </FormControl>
+        <FormField
+          control={form.control}
+          name="staffId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("staff")}</FormLabel>
+              <FormControl>
+                <StaffSelector
+                  defaultValue={field.value}
+                  onSelect={(value) => {
+                    field.onChange(value);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="consumableId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("consumable")}</FormLabel>
+              <FormControl>
+                <InventoryItemSelector
+                  onChange={field.onChange}
+                  defaultValue={field.value}
+                />
+              </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="quantity"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("quantity")}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    value={
-                      typeof field.value === "number" ||
-                      typeof field.value === "string"
-                        ? field.value
-                        : ""
-                    }
-                    onChange={(event) => field.onChange(event.target.value)}
-                  />
-                </FormControl>
+        <FormField
+          control={form.control}
+          name="quantity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("quantity")}</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  value={
+                    typeof field.value === "number" ||
+                    typeof field.value === "string"
+                      ? field.value
+                      : ""
+                  }
+                  onChange={(event) => field.onChange(event.target.value)}
+                />
+              </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="note"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("observation")}</FormLabel>
-                <FormControl>
-                  <Textarea className="resize-none" {...field} />
-                </FormControl>
+        <FormField
+          control={form.control}
+          name="note"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("observation")}</FormLabel>
+              <FormControl>
+                <Textarea className="resize-none" {...field} />
+              </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="grid grid-cols-1 gap-2">
-            <Button
-              disabled={
-                createConsumableMutation.isPending ||
-                updateConsumableMutation.isPending
-              }
-            >
-              {(createConsumableMutation.isPending ||
-                updateConsumableMutation.isPending) && <Spinner />}
-              {t("submit")}
-            </Button>
-            <Button
-              onClick={() => {
-                closeModal();
-              }}
-              type="button"
-              variant={"outline"}
-            >
-              {t("close")}
-            </Button>
-          </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex items-center justify-end gap-2">
+          <Button
+            disabled={
+              createConsumableMutation.isPending ||
+              updateConsumableMutation.isPending
+            }
+          >
+            {(createConsumableMutation.isPending ||
+              updateConsumableMutation.isPending) && <Spinner />}
+            {t("submit")}
+          </Button>
+          <Button
+            onClick={() => {
+              closeModal();
+            }}
+            type="button"
+            variant={"outline"}
+          >
+            {t("close")}
+          </Button>
         </div>
       </form>
     </Form>

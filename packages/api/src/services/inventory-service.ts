@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@repo/db";
+
 import { getFullName } from "../utils";
 
 export class InventoryService {
@@ -25,13 +26,15 @@ export class InventoryService {
     }, 0);
   }
 
-  private getAssigneeDisplayName(assignee?: {
-    firstName?: string | null;
-    lastName?: string | null;
-    middleName?: string | null;
-    name?: string | null;
-    email?: string | null;
-  } | null): string {
+  private getAssigneeDisplayName(
+    assignee?: {
+      firstName?: string | null;
+      lastName?: string | null;
+      middleName?: string | null;
+      name?: string | null;
+      email?: string | null;
+    } | null,
+  ): string {
     if (!assignee) {
       return "";
     }
@@ -82,8 +85,12 @@ export class InventoryService {
 
     return items.map((item) => {
       if (item.trackingType === "RETURNABLE") {
-        const assignments = item.events.filter((event) => event.type === "ASSIGN");
-        const activeAssignment = assignments.find((event) => event.returnedAt === null);
+        const assignments = item.events.filter(
+          (event) => event.type === "ASSIGN",
+        );
+        const activeAssignment = assignments.find(
+          (event) => event.returnedAt === null,
+        );
         const activeAssigneeName = activeAssignment?.assignee
           ? this.getAssigneeDisplayName(activeAssignment.assignee)
           : null;

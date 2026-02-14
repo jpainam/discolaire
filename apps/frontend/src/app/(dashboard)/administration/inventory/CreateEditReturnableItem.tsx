@@ -36,11 +36,7 @@ type AssetItem = Extract<
   { type: "ASSET" }
 >;
 
-export function CreateEditReturnableItem({
-  asset,
-}: {
-  asset?: AssetItem;
-}) {
+export function CreateEditReturnableItem({ asset }: { asset?: AssetItem }) {
   const form = useForm({
     resolver: standardSchemaResolver(schema),
     defaultValues: {

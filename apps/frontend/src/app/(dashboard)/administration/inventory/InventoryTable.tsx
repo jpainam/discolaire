@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { CreateEditStockInEvent } from "~/components/administration/inventory/movements/CreateEditStockInEvent";
 import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";
 import {
@@ -27,7 +28,6 @@ import { useModal } from "~/hooks/use-modal";
 import { PlusIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditInventoryItem } from "./CreateEditInventoryItem";
-import { CreateEditStockInEvent } from "~/components/administration/inventory/movements/CreateEditStockInEvent";
 import { ActionCell, AvatarGroup4 } from "./InventoryDataTableColumn";
 
 export function InventoryTable() {
@@ -95,7 +95,7 @@ export function InventoryTable() {
             onClick={() => {
               openModal({
                 title: "Create inventory item",
-                className: "sm:max-w-2xl",
+                className: "sm:max-w-xl",
                 view: <CreateEditInventoryItem />,
               });
             }}

@@ -687,7 +687,8 @@ export const inventoryRouter = {
           eventType: input.type,
         });
 
-        const assigneeId = input.assigneeId ?? previousEvent.assigneeId ?? undefined;
+        const assigneeId =
+          input.assigneeId ?? previousEvent.assigneeId ?? undefined;
         const location = input.location ?? previousEvent.location ?? undefined;
         const note = input.note ?? previousEvent.note ?? undefined;
         const dueAt = parseOptionalDate(input.dueAt);
@@ -727,7 +728,10 @@ export const inventoryRouter = {
             location: input.type === "ASSIGN" ? (location ?? null) : null,
             dueAt:
               input.type === "ASSIGN"
-                ? (dueAt ?? previousEvent.dueAt ?? item.defaultReturnDate ?? null)
+                ? (dueAt ??
+                  previousEvent.dueAt ??
+                  item.defaultReturnDate ??
+                  null)
                 : null,
             returnedAt:
               input.type === "ASSIGN"

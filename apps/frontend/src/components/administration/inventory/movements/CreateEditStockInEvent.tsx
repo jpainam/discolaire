@@ -95,7 +95,7 @@ export function CreateEditStockInEvent({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="flex flex-col gap-6 px-4">
+        <div className="flex flex-col gap-6">
           <FormField
             control={form.control}
             name="consumableId"
@@ -154,7 +154,7 @@ export function CreateEditStockInEvent({
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-1 gap-2">
+          <div className="flex items-center justify-end gap-2">
             <Button
               disabled={
                 createMovementMutation.isPending ||

@@ -9,7 +9,9 @@ import { useConsumeEventColumns } from "./ConsumeEventDataTableColumn";
 
 export function ConsumeEventDataTable() {
   const trpc = useTRPC();
-  const { data: events } = useSuspenseQuery(trpc.inventory.events.queryOptions());
+  const { data: events } = useSuspenseQuery(
+    trpc.inventory.events.queryOptions(),
+  );
   const inventory = events.filter((event) => event.type === "CONSUME");
 
   const columns = useConsumeEventColumns();

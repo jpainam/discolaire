@@ -121,7 +121,10 @@ export function CreateEditInventoryItem({
     },
   });
 
-  const trackingType = useStore(form.store, (state) => state.values.trackingType);
+  const trackingType = useStore(
+    form.store,
+    (state) => state.values.trackingType,
+  );
 
   const unitsQuery = useQuery(trpc.inventory.units.queryOptions());
 
@@ -151,262 +154,273 @@ export function CreateEditInventoryItem({
     }),
   );
 
-  const isPending = createItemMutation.isPending || updateItemMutation.isPending;
+  const isPending =
+    createItemMutation.isPending || updateItemMutation.isPending;
 
   return (
-    <div className="grid gap-4">
-      <form
-        id="create-inventory-item-form"
-        onSubmit={(event) => {
-          event.preventDefault();
-          void form.handleSubmit();
-        }}
-        className="grid gap-4 px-4"
-      >
-        <FieldGroup>
-          <form.Field
-            name="name"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
+    <form
+      id="create-inventory-item-form"
+      onSubmit={(event) => {
+        event.preventDefault();
+        void form.handleSubmit();
+      }}
+      className="grid gap-6"
+    >
+      <FieldGroup>
+        <form.Field
+          name="name"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
 
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>{t("name")}</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={isInvalid}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{t("name")}</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={isInvalid}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
 
-          <form.Field
-            name="trackingType"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
+        <form.Field
+          name="trackingType"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
 
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>{"Tracking type"}</FieldLabel>
-                  <Select
-                    name={field.name}
-                    value={field.state.value}
-                    onValueChange={(value) =>
-                      field.handleChange(value as "CONSUMABLE" | "RETURNABLE")
-                    }
-                    aria-invalid={isInvalid}
-                  >
-                    <SelectTrigger id={field.name}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="CONSUMABLE">{"One-time usage"}</SelectItem>
-                      <SelectItem value="RETURNABLE">{"Returnable"}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{"Tracking type"}</FieldLabel>
+                <Select
+                  name={field.name}
+                  value={field.state.value}
+                  onValueChange={(value) =>
+                    field.handleChange(value as "CONSUMABLE" | "RETURNABLE")
+                  }
+                  aria-invalid={isInvalid}
+                >
+                  <SelectTrigger id={field.name}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="CONSUMABLE">
+                      {"One-time usage"}
+                    </SelectItem>
+                    <SelectItem value="RETURNABLE">{"Returnable"}</SelectItem>
+                  </SelectContent>
+                </Select>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
 
-          {trackingType === "CONSUMABLE" && (
-            <>
-              <form.Field
-                name="unitId"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
+        {trackingType === "CONSUMABLE" && (
+          <>
+            <form.Field
+              name="unitId"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
 
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>{t("Unit")}</FieldLabel>
-                      <Select
-                        name={field.name}
-                        value={field.state.value}
-                        onValueChange={field.handleChange}
-                        aria-invalid={isInvalid}
-                      >
-                        <SelectTrigger id={field.name}>
-                          <SelectValue placeholder={t("Unit")} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {unitsQuery.data?.map((unit) => (
-                            <SelectItem key={unit.id} value={unit.id}>
-                              {unit.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                    </Field>
-                  );
-                }}
-              />
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>{t("Unit")}</FieldLabel>
+                    <Select
+                      name={field.name}
+                      value={field.state.value}
+                      onValueChange={field.handleChange}
+                      aria-invalid={isInvalid}
+                    >
+                      <SelectTrigger id={field.name}>
+                        <SelectValue placeholder={t("Unit")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {unitsQuery.data?.map((unit) => (
+                          <SelectItem key={unit.id} value={unit.id}>
+                            {unit.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
 
-              <form.Field
-                name="minStockLevel"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
+            <form.Field
+              name="minStockLevel"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
 
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        {t("Min level stock")}
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="number"
-                        min={0}
-                        value={
-                          typeof field.state.value === "number" ||
-                          typeof field.state.value === "string"
-                            ? field.state.value
-                            : ""
-                        }
-                        onBlur={field.handleBlur}
-                        onChange={(event) =>
-                          field.handleChange(Number(event.target.value))
-                        }
-                        aria-invalid={isInvalid}
-                      />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                    </Field>
-                  );
-                }}
-              />
-            </>
-          )}
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      {t("Min level stock")}
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      type="number"
+                      min={0}
+                      value={
+                        typeof field.state.value === "number" ||
+                        typeof field.state.value === "string"
+                          ? field.state.value
+                          : ""
+                      }
+                      onBlur={field.handleBlur}
+                      onChange={(event) =>
+                        field.handleChange(Number(event.target.value))
+                      }
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
+          </>
+        )}
 
-          {trackingType === "RETURNABLE" && (
-            <>
-              <form.Field
-                name="sku"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
+        {trackingType === "RETURNABLE" && (
+          <>
+            <form.Field
+              name="sku"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
 
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>{t("Sku")}</FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(event) =>
-                          field.handleChange(event.target.value)
-                        }
-                        aria-invalid={isInvalid}
-                      />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                    </Field>
-                  );
-                }}
-              />
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>{t("Sku")}</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(event) =>
+                        field.handleChange(event.target.value)
+                      }
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
 
-              <form.Field
-                name="serial"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
+            <form.Field
+              name="serial"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
 
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        {t("Serial number")}
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(event) =>
-                          field.handleChange(event.target.value)
-                        }
-                        aria-invalid={isInvalid}
-                      />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                    </Field>
-                  );
-                }}
-              />
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      {t("Serial number")}
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(event) =>
+                        field.handleChange(event.target.value)
+                      }
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
 
-              <form.Field
-                name="defaultReturnDate"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
+            <form.Field
+              name="defaultReturnDate"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
 
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        {"Expected return date"}
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="date"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(event) =>
-                          field.handleChange(event.target.value)
-                        }
-                        aria-invalid={isInvalid}
-                      />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                    </Field>
-                  );
-                }}
-              />
-            </>
-          )}
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      {"Expected return date"}
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      type="date"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(event) =>
+                        field.handleChange(event.target.value)
+                      }
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
+          </>
+        )}
 
-          <form.Field
-            name="note"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
+        <form.Field
+          name="note"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
 
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>{t("note")}</FieldLabel>
-                  <Textarea
-                    id={field.name}
-                    name={field.name}
-                    className="resize-none"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    aria-invalid={isInvalid}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
-        </FieldGroup>
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{t("note")}</FieldLabel>
+                <Textarea
+                  id={field.name}
+                  name={field.name}
+                  className="resize-none"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={isInvalid}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+      </FieldGroup>
 
-        <div className="ml-auto flex items-center gap-2">
-          <Button type="button" variant="outline" onClick={closeContainer}>
-            {t("cancel")}
-          </Button>
-          <Button type="submit" disabled={isPending}>
-            {isPending && <Spinner />}
-            {t("submit")}
-          </Button>
-        </div>
-      </form>
-    </div>
+      <div className="ml-auto flex items-center gap-2">
+        <Button type="button" variant="outline" onClick={closeContainer}>
+          {t("cancel")}
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending && <Spinner />}
+          {t("submit")}
+        </Button>
+      </div>
+    </form>
   );
 }

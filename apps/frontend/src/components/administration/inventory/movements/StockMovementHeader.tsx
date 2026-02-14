@@ -103,8 +103,8 @@ export function StockMovementHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} variant={"outline"} >
-              <MoreVerticalIcon  />
+            <Button size={"icon"} variant={"outline"}>
+              <MoreVerticalIcon />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
