@@ -61,7 +61,6 @@ export function StudentGradeHeader() {
       </div>
       <TermSelector
         className="w-full md:w-[300px]"
-        showAllOption={true}
         onChange={(val) => {
           void setTermId(val);
         }}

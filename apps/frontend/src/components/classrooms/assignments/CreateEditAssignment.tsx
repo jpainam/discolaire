@@ -1,13 +1,14 @@
 "use client";
 
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDays } from "date-fns";
+import { FileText, Trash2, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import type { RouterOutputs } from "@repo/api";
 
@@ -19,94 +20,147 @@ import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { TiptapEditor } from "~/components/tiptap-editor";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { Field, FieldError, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Spinner } from "~/components/ui/spinner";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
+import { cn, formatBytes } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
-import { FileUploader } from "~/uploads/file-uploader";
 
-// const QuillEditor = dynamic(() => import("~/components/quill-editor"), {
-//   ssr: false,
-//   loading: () => <Skeleton className="min-h-[200px] w-full" />,
-// });
-
-type AssignemntGetProcedureOutput = NonNullable<
+type AssignmentGetProcedureOutput = NonNullable<
   RouterOutputs["assignment"]["get"]
 >;
 
-const assignmentSchema = z.object({
-  id: z.string().optional(),
-  title: z.string().min(1),
-  categoryId: z.string().min(1),
-  description: z.string().optional(),
-  dueDate: z.date(),
-  termId: z.string().min(1),
-  post: z.boolean().default(true),
-  notify: z.boolean(),
-  subjectId: z.coerce.number(),
-  attachments: z.array(z.string()).optional(),
-  from: z.date(),
-  to: z.date(),
+const visibleTargets = ["student", "parent"] as const;
+const maxAttachmentCount = 100;
+const maxAttachmentSize = 1 * 1024 * 1024;
+const assignmentFileAccept =
+  "application/pdf,image/*,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-  visibles: z.array(z.string()).default([]),
-});
+function fileKey(file: File) {
+  return `${file.name}-${file.size}-${file.lastModified}`;
+}
+
+function isAcceptedAssignmentFile(file: File) {
+  if (file.type.startsWith("image/")) {
+    return true;
+  }
+  if (
+    file.type === "application/pdf" ||
+    file.type ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ) {
+    return true;
+  }
+
+  const ext = file.name.toLowerCase().split(".").pop();
+  return ext === "pdf" || ext === "docx";
+}
+
+const createEditAssignmentSchema = z
+  .object({
+    title: z.string().min(1),
+    categoryId: z.string().min(1),
+    description: z.string(),
+    dueDate: z.date(),
+    termId: z.string().min(1),
+    post: z.boolean(),
+    notify: z.boolean(),
+    subjectId: z.number().int().positive(),
+    attachments: z.array(z.string()),
+    from: z.date(),
+    to: z.date(),
+    visibles: z.array(z.enum(visibleTargets)),
+  })
+  .superRefine((value, ctx) => {
+    if (value.to < value.from) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["to"],
+        message: "End date must be after start date",
+      });
+    }
+  });
+
+const assignmentPayloadSchema = z
+  .object({
+    title: z.string(),
+    description: z.string(),
+    categoryId: z.string(),
+    subjectId: z.number(),
+    classroomId: z.string(),
+    attachments: z.array(z.string()).optional(),
+    dueDate: z.date().optional(),
+    post: z.boolean().optional(),
+    from: z.date(),
+    termId: z.string().min(1),
+    to: z.date(),
+    notify: z.boolean().optional(),
+    visibles: z.array(z.string()).optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.to < value.from) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["to"],
+        message: "End date must be after start date",
+      });
+    }
+  });
+
+type CreateEditAssignmentFormValues = z.infer<
+  typeof createEditAssignmentSchema
+>;
+
+function toDate(value: Date | string | null | undefined, fallback: Date): Date {
+  if (!value) {
+    return fallback;
+  }
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? fallback : date;
+}
 
 export function CreateEditAssignment({
   assignment,
 }: {
-  assignment?: AssignemntGetProcedureOutput;
+  assignment?: AssignmentGetProcedureOutput;
 }) {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
+  const t = useTranslations();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const form = useForm({
-    resolver: standardSchemaResolver(assignmentSchema),
-    defaultValues: {
-      id: assignment?.id ?? "",
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const defaultValues = useMemo<CreateEditAssignmentFormValues>(
+    () => ({
       subjectId: assignment?.subjectId ?? 0,
       attachments: assignment?.attachments ?? [],
       title: assignment?.title ?? "",
       termId: assignment?.termId ?? "",
       categoryId: assignment?.categoryId ?? "",
       description: assignment?.description ?? "",
-      dueDate: assignment?.dueDate ? new Date(assignment.dueDate) : new Date(),
+      dueDate: toDate(assignment?.dueDate, new Date()),
       post: assignment?.post ?? true,
       notify: assignment?.notify ?? false,
-      from: assignment?.from ?? new Date(),
-      to: assignment?.to ?? addDays(new Date(), 7),
-      visibles: assignment?.visibles ?? [],
-    },
-  });
+      from: toDate(assignment?.from, new Date()),
+      to: toDate(assignment?.to, addDays(new Date(), 7)),
+      visibles: (assignment?.visibles ?? []).filter((value) =>
+        visibleTargets.includes(value as (typeof visibleTargets)[number]),
+      ) as (typeof visibleTargets)[number][],
+    }),
+    [assignment],
+  );
 
-  const visiblesTo = [
-    {
-      value: "student",
-      label: "Student",
-    },
-    {
-      value: "parent",
-      label: "Parent",
-    },
-  ];
-
-  const t = useTranslations();
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
-
-  const router = useRouter();
   const createAssignmentMutation = useMutation(
     trpc.assignment.create.mutationOptions({
-      onError: (err) => {
-        toast.error(err.message, { id: 0 });
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
       },
       onSuccess: async (result) => {
         await queryClient.invalidateQueries(trpc.assignment.pathFilter());
@@ -120,6 +174,7 @@ export function CreateEditAssignment({
       },
     }),
   );
+
   const updateAssignmentMutation = useMutation(
     trpc.assignment.update.mutationOptions({
       onSuccess: async (result) => {
@@ -132,283 +187,573 @@ export function CreateEditAssignment({
           routes.classrooms.assignments.details(params.id, result.id),
         );
       },
-      onError: (err) => {
-        toast.error(err.message, { id: 0 });
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
       },
     }),
   );
-  const onSubmit = (data: z.infer<typeof assignmentSchema>) => {
-    const values = {
-      title: data.title,
-      description: data.description ?? "",
-      categoryId: data.categoryId,
-      subjectId: data.subjectId,
-      classroomId: params.id,
-      attachments: data.attachments,
-      from: data.from,
-      termId: data.termId,
-      to: data.to,
-      notify: data.notify,
-      visibles: data.visibles,
-    };
-    if (assignment?.id) {
-      toast.loading(t("updating"), { id: 0 });
-      updateAssignmentMutation.mutate({
-        id: assignment.id,
-        ...values,
+
+  const form = useForm({
+    defaultValues,
+    validators: {
+      onSubmit: createEditAssignmentSchema,
+    },
+    onSubmit: async ({ value }) => {
+      let parsed: z.output<typeof createEditAssignmentSchema>;
+      try {
+        parsed = createEditAssignmentSchema.parse(value);
+      } catch {
+        return;
+      }
+
+      try {
+        const uploadedAttachments = await handleUpload();
+
+        const payload = assignmentPayloadSchema.parse({
+          title: parsed.title,
+          description: parsed.description,
+          categoryId: parsed.categoryId,
+          subjectId: parsed.subjectId,
+          classroomId: params.id,
+          attachments: Array.from(
+            new Set([...parsed.attachments, ...uploadedAttachments]),
+          ),
+          dueDate: parsed.dueDate,
+          post: parsed.post,
+          from: parsed.from,
+          termId: parsed.termId,
+          to: parsed.to,
+          notify: parsed.notify,
+          visibles: parsed.visibles,
+        });
+
+        if (assignment?.id) {
+          toast.loading(t("updating"), { id: 0 });
+          updateAssignmentMutation.mutate({
+            id: assignment.id,
+            ...payload,
+          });
+          return;
+        }
+
+        toast.loading(t("creating"), { id: 0 });
+        createAssignmentMutation.mutate(payload);
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Failed to upload attachments",
+          { id: 0 },
+        );
+      }
+    },
+  });
+
+  const isSubmitted = useStore(form.store, (state) => state.isSubmitted);
+  const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
+  const isBusy =
+    isSubmitting ||
+    createAssignmentMutation.isPending ||
+    updateAssignmentMutation.isPending;
+
+  const onUpload = useCallback(
+    async (inputFiles: File[]) => {
+      const formData = new FormData();
+      for (const file of inputFiles) {
+        formData.append("files", file, file.name);
+      }
+      formData.append("classroomId", params.id);
+
+      const response = await fetch("/api/upload/assignments", {
+        method: "POST",
+        body: formData,
       });
-    } else {
-      toast.loading(t("creating"), { id: 0 });
-      createAssignmentMutation.mutate({
-        ...values,
+
+      if (!response.ok) {
+        const payload = (await response
+          .json()
+          .catch(() => ({ error: response.statusText }))) as {
+          error?: string;
+        };
+        throw new Error(payload.error ?? response.statusText);
+      }
+
+      const results = (await response.json()) as {
+        key: string;
+        fullPath: string;
+      }[];
+      return results.map((result) => result.key);
+    },
+    [params.id],
+  );
+
+  const handleAddFiles = useCallback(
+    (incomingFiles: File[]) => {
+      if (incomingFiles.length === 0) {
+        return;
+      }
+      setFiles((previousFiles) => {
+        const nextFiles = [...previousFiles];
+        const keys = new Set(previousFiles.map((file) => fileKey(file)));
+
+        for (const file of incomingFiles) {
+          if (nextFiles.length >= maxAttachmentCount) {
+            toast.error(`Cannot upload more than ${maxAttachmentCount} files`, {
+              id: 0,
+            });
+            break;
+          }
+
+          if (file.size > maxAttachmentSize) {
+            toast.error(
+              `${file.name} exceeds ${formatBytes(maxAttachmentSize)}`,
+              {
+                id: 0,
+              },
+            );
+            continue;
+          }
+
+          if (!isAcceptedAssignmentFile(file)) {
+            toast.error(`${file.name} is not a supported file type`, { id: 0 });
+            continue;
+          }
+
+          const key = fileKey(file);
+          if (keys.has(key)) {
+            continue;
+          }
+
+          nextFiles.push(file);
+          keys.add(key);
+        }
+
+        return nextFiles;
       });
+    },
+    [setFiles],
+  );
+
+  const handleUpload = useCallback(async () => {
+    if (files.length === 0) {
+      return [];
     }
-  };
+    return onUpload(files);
+  }, [files, onUpload]);
+
+  const handleDrop = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      if (isBusy) {
+        return;
+      }
+      setIsDragging(false);
+      handleAddFiles(Array.from(event.dataTransfer.files ?? []));
+    },
+    [handleAddFiles, isBusy],
+  );
+
+  const handleDragOver = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      if (!isBusy) {
+        setIsDragging(true);
+      }
+    },
+    [isBusy],
+  );
+
+  const handleDragLeave = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      setIsDragging(false);
+    },
+    [],
+  );
+
+  const handlePickFiles = useCallback(() => {
+    if (!isBusy) {
+      fileInputRef.current?.click();
+    }
+  }, [isBusy]);
+
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      handleAddFiles(Array.from(event.target.files ?? []));
+      event.target.value = "";
+    },
+    [handleAddFiles],
+  );
+
+  const handleRemoveFile = useCallback((index: number) => {
+    setFiles((previousFiles) => previousFiles.filter((_, i) => i !== index));
+  }, []);
 
   return (
-    <Form {...form}>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <div className="bg-muted/50 flex flex-row items-center gap-2 border-b px-4 py-1">
-          <FormField
-            control={form.control}
-            name="termId"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center gap-2">
-                <FormLabel>{t("terms")}</FormLabel>
-                <FormControl>
-                  <TermSelector className="w-full md:w-64" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={(event) => {
+        event.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <div className="bg-muted/50 flex items-center gap-2 border-y px-4 py-1">
+        <form.Field name="termId">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field orientation={"horizontal"}>
+                <FieldLabel htmlFor={field.name}>{t("terms")}</FieldLabel>
+                <TermSelector
+                  className="w-full md:w-64"
+                  defaultValue={field.state.value || undefined}
+                  onChange={(value) => field.handleChange(value ?? "")}
+                />
 
-          <div className="ml-auto flex flex-row items-center gap-2">
-            <Button
-              onClick={() => {
-                router.push(routes.classrooms.assignments.index(params.id));
-              }}
-              variant={"outline"}
-              type="button"
-            >
-              {t("cancel")}
-            </Button>
-            <Button disabled={createAssignmentMutation.isPending} type="submit">
-              {createAssignmentMutation.isPending && <Spinner />}
-              {t("submit")}
-            </Button>
-          </div>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
+
+        <div className="ml-auto flex flex-row items-center gap-2">
+          <Button
+            onClick={() => {
+              router.push(routes.classrooms.assignments.index(params.id));
+            }}
+            variant="outline"
+            type="button"
+          >
+            {t("cancel")}
+          </Button>
+          <Button disabled={isBusy} type="submit">
+            {isBusy && <Spinner />}
+            {t("submit")}
+          </Button>
         </div>
-        <div className="grid grid-cols-1 gap-2 gap-y-4 px-4 md:grid-cols-3 md:gap-x-8">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("title")}</FormLabel>
-                <Input {...field} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      </div>
 
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("category")}</FormLabel>
-                <FormControl>
-                  <AssignmentCategorySelector
-                    defaultValue={field.value}
-                    onChange={(val) => field.onChange(val)}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+      <div className="grid grid-cols-1 gap-2 gap-y-4 px-4 md:grid-cols-3 md:gap-x-8">
+        <form.Field name="title">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{t("title")}</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  aria-invalid={isInvalid}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
 
-          <FormField
-            control={form.control}
-            name="subjectId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("subject")}</FormLabel>
-                <FormControl>
-                  <SubjectSelector
-                    onChange={(val) => field.onChange(val)}
-                    classroomId={params.id}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+        <form.Field name="categoryId">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{t("category")}</FieldLabel>
+                <AssignmentCategorySelector
+                  defaultValue={field.state.value || undefined}
+                  onChange={field.handleChange}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>{t("description")}</FormLabel>
-                <FormControl>
-                  <TiptapEditor
-                    defaultContent={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form.Field name="subjectId">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{t("subject")}</FieldLabel>
+                <SubjectSelector
+                  defaultValue={
+                    field.state.value > 0
+                      ? String(field.state.value)
+                      : undefined
+                  }
+                  onChange={(value) => field.handleChange(Number(value ?? 0))}
+                  classroomId={params.id}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
 
-          <div className="">
-            <Label className=" ">{t("attachments")}</Label>
-            <FileUploader
-              maxFileCount={100}
-              maxSize={1 * 1024 * 1024}
-              onValueChange={(files) => {
-                if (files.length === 0) {
-                  return;
-                }
-                // toast.promise(onUpload(files), {
-                //   loading: t("uploading"),
-                //   success: () => {
-                //     return t("uploaded_successfully");
-                //   },
-                //   error: (err) => {
-                //     return getErrorMessage(err);
-                //   },
-                // });
-              }}
-              //progresses={progresses}
-              //disabled={isUploading}
-            />
-          </div>
-          <FormField
-            control={form.control}
-            name="dueDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("due_date")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    onSelectAction={field.onChange}
-                    defaultValue={field.value}
-                  />
-                </FormControl>
+        <form.Field name="description">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field data-invalid={isInvalid} className="col-span-2">
+                <FieldLabel htmlFor={field.name}>{t("description")}</FieldLabel>
+                <TiptapEditor
+                  defaultContent={field.state.value}
+                  onChange={(value) => field.handleChange(value)}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form.Field name="attachments">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>{t("attachments")}</FieldLabel>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept={assignmentFileAccept}
+                className="hidden"
+                disabled={isBusy}
+                onChange={handleInputChange}
+              />
+              <div
+                role="button"
+                tabIndex={isBusy ? -1 : 0}
+                onClick={handlePickFiles}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onKeyDown={(event) => {
+                  if (isBusy) {
+                    return;
+                  }
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handlePickFiles();
+                  }
+                }}
+                className={cn(
+                  "relative flex min-h-36 cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-4 transition-all",
+                  isBusy ? "cursor-not-allowed opacity-70" : "",
+                  isDragging && !isBusy
+                    ? "border-primary bg-primary/5 scale-[1.01]"
+                    : "border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/30",
+                )}
+              >
+                <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
+                  <Upload className="text-muted-foreground h-4 w-4" />
+                </div>
+                <div className="text-center">
+                  <p className="text-xs font-medium">
+                    {isDragging
+                      ? "Drop files here"
+                      : "Drag and drop files or click to browse"}
+                  </p>
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    PDF, images, DOCX up to {formatBytes(maxAttachmentSize)}
+                  </p>
+                </div>
+              </div>
 
-          <FormField
-            control={form.control}
-            name="from"
-            render={() => (
-              <FormItem>
-                <FormLabel>{t("visble_from_to")}</FormLabel>
+              {files.length > 0 && (
+                <div className="mt-2 space-y-2">
+                  {files.map((file, index) => (
+                    <div
+                      key={fileKey(file)}
+                      className="bg-muted/40 flex items-center gap-3 rounded-md border p-2"
+                    >
+                      <FileText className="text-muted-foreground h-4 w-4" />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-xs font-medium">
+                          {file.name}
+                        </p>
+                        <p className="text-muted-foreground text-[11px]">
+                          {formatBytes(file.size)}
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => handleRemoveFile(index)}
+                      >
+                        <Trash2 className="text-destructive h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {field.state.value.length > 0 && (
+                <Label className="text-muted-foreground text-xs">
+                  {field.state.value.length} existing attachment(s)
+                </Label>
+              )}
+            </Field>
+          )}
+        </form.Field>
+
+        <form.Field name="dueDate">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>{t("due_date")}</FieldLabel>
+                <DatePicker
+                  onSelectAction={(value) =>
+                    field.handleChange(value ?? field.state.value)
+                  }
+                  defaultValue={field.state.value}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
+
+        <form.Field name="from">
+          {(field) => {
+            const toValue = form.getFieldValue("to");
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>
+                  {t("visble_from_to")}
+                </FieldLabel>
                 <DateRangePicker
                   className="w-full"
-                  onSelectAction={(val) => {
-                    if (val) {
-                      const dateRange = val as { from: Date; to: Date };
-                      form.setValue("from", dateRange.from);
-                      form.setValue("to", dateRange.to);
+                  defaultValue={{ from: field.state.value, to: toValue }}
+                  onSelectAction={(value) => {
+                    if (value?.from) {
+                      field.handleChange(value.from);
+                    }
+                    if (value?.to) {
+                      form.setFieldValue("to", value.to);
                     }
                   }}
                 />
-              </FormItem>
-            )}
-          />
-          <div></div>
-          <div className="flex flex-row items-center gap-8">
-            <FormField
-              control={form.control}
-              name="notify"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>{t("send_notifications")}</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="post"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>{t("post_to_calendar")}</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
 
-          <FormField
-            control={form.control}
-            name="visibles"
-            render={() => (
-              <FormItem className="flex flex-row items-start space-x-8">
-                <FormLabel>{t("visible_to")}</FormLabel>
+        <form.Field name="to">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field data-invalid={isInvalid} className="col-span-3 -mt-2">
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
 
-                {visiblesTo.map((item) => (
-                  <FormField
-                    key={item.value}
-                    control={form.control}
-                    name="visibles"
-                    render={({ field }) => {
-                      return (
-                        <FormItem
-                          key={item.value}
-                          className="flex flex-row items-start"
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(item.value)}
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([
-                                      ...(field.value ?? []),
-                                      item.value,
-                                    ])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item.value,
-                                      ),
-                                    );
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel>{item.label}</FormLabel>
-                        </FormItem>
-                      );
-                    }}
-                  />
-                ))}
-                <FormMessage />
-              </FormItem>
+        <div className="flex flex-row items-center gap-8">
+          <form.Field name="notify">
+            {(field) => (
+              <Field orientation="horizontal" className="items-start">
+                <Checkbox
+                  id={field.name}
+                  checked={field.state.value}
+                  onCheckedChange={(checked) =>
+                    field.handleChange(checked === true)
+                  }
+                />
+                <FieldLabel htmlFor={field.name}>
+                  {t("send_notifications")}
+                </FieldLabel>
+              </Field>
             )}
-          />
+          </form.Field>
+
+          <form.Field name="post">
+            {(field) => (
+              <Field orientation="horizontal" className="items-start">
+                <Checkbox
+                  id={field.name}
+                  checked={field.state.value}
+                  onCheckedChange={(checked) =>
+                    field.handleChange(checked === true)
+                  }
+                />
+                <FieldLabel htmlFor={field.name}>
+                  {t("post_to_calendar")}
+                </FieldLabel>
+              </Field>
+            )}
+          </form.Field>
         </div>
-      </form>
-    </Form>
+
+        <form.Field name="visibles">
+          {(field) => {
+            const isInvalid =
+              !field.state.meta.isValid &&
+              (field.state.meta.isTouched || isSubmitted);
+            return (
+              <Field
+                orientation="horizontal"
+                className="items-start justify-start gap-8"
+                data-invalid={isInvalid}
+              >
+                <FieldLabel>{t("visible_to")}</FieldLabel>
+                <div className="flex flex-row gap-4">
+                  {visibleTargets.map((target) => {
+                    const id = `visible-${target}`;
+                    const currentValue = field.state.value;
+                    const isChecked = currentValue.includes(target);
+                    return (
+                      <Label
+                        key={target}
+                        htmlFor={id}
+                        className="flex items-center gap-2"
+                      >
+                        <Checkbox
+                          id={id}
+                          checked={isChecked}
+                          onCheckedChange={(checked) => {
+                            if (checked === true) {
+                              field.handleChange([
+                                ...new Set([...currentValue, target]),
+                              ]);
+                              return;
+                            }
+                            field.handleChange(
+                              currentValue.filter((value) => value !== target),
+                            );
+                          }}
+                        />
+                        {target === "student" ? "Student" : "Parent"}
+                      </Label>
+                    );
+                  })}
+                </div>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        </form.Field>
+      </div>
+    </form>
   );
 }

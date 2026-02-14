@@ -117,7 +117,6 @@ export function GradeSheetHeader() {
     <div className="bg-muted/50 grid flex-row items-center gap-4 px-4 py-1 md:flex md:border-y">
       <Label className="hidden md:flex">{t("term")}</Label>
       <TermSelector
-        showAllOption={true}
         defaultValue={termId}
         onChange={(val) => {
           void setTermId(val ?? null);

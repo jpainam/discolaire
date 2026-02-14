@@ -113,7 +113,7 @@ export const useUpload = () => {
     const file = input;
 
     console.log(`Uploading file`, file.name);
-    const response = await fetch("/api/upload", {
+    const response = await fetch("/api/upload/documents", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

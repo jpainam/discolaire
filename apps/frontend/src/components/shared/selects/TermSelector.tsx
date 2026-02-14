@@ -2,7 +2,6 @@
 
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { LoaderIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -20,7 +19,6 @@ interface TermSelectorProps {
   placeholder?: string;
   className?: string;
   defaultValue?: string | null;
-  showAllOption?: boolean;
 }
 
 export function TermSelector({
@@ -28,11 +26,10 @@ export function TermSelector({
   placeholder,
   className,
   defaultValue,
-  showAllOption = true,
 }: TermSelectorProps) {
   const t = useTranslations();
   const trpc = useTRPC();
-  const { data: terms, isPending } = useQuery(trpc.term.all.queryOptions());
+  const { data: terms } = useQuery(trpc.term.all.queryOptions());
 
   const handleChange = useCallback(
     (value: string | null) => {
@@ -45,23 +42,17 @@ export function TermSelector({
     <Select
       defaultValue={defaultValue ?? undefined}
       onValueChange={(value) => {
-        handleChange(value);
+        handleChange(value == "all" ? null : value);
       }}
     >
       <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder={placeholder ?? t("select_terms")} />
       </SelectTrigger>
       <SelectContent>
-        {showAllOption && (
-          <SelectItem key="terms-all-key" value="all">
-            {t("all_terms")}
-          </SelectItem>
-        )}
-        {isPending && (
-          <SelectItem value="all">
-            <LoaderIcon className="animate-spn size-4" />
-          </SelectItem>
-        )}
+        <SelectItem key="terms-all-key" value="all">
+          {t("all_terms")}
+        </SelectItem>
+
         {terms?.map((term) => (
           <SelectItem key={term.id} value={term.id.toString()}>
             {term.name}
