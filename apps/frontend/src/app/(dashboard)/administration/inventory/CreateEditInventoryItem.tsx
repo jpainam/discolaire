@@ -1,9 +1,8 @@
 "use client";
 
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
@@ -11,13 +10,11 @@ import type { RouterOutputs } from "@repo/api";
 
 import { Button } from "~/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import {
   Select,
@@ -71,28 +68,60 @@ export function CreateEditInventoryItem({
     closeModal();
   };
 
-  const defaultTrackingType = item?.type === "ASSET" ? "RETURNABLE" : "CONSUMABLE";
+  const defaultTrackingType: z.input<typeof schema>["trackingType"] =
+    item?.type === "ASSET" ? "RETURNABLE" : "CONSUMABLE";
+
+  const defaultValues: z.input<typeof schema> = {
+    name: item?.name ?? "",
+    trackingType: defaultTrackingType,
+    unitId: item?.other.unitId ?? "",
+    minStockLevel: item?.other.minStockLevel
+      ? Number(item.other.minStockLevel)
+      : 0,
+    sku: item?.other.sku ?? "",
+    serial: item?.other.serial ?? "",
+    note: item?.note?.replace(/,/g, "\n") ?? "",
+    defaultReturnDate: item?.other.defaultReturnDate
+      ? item.other.defaultReturnDate.slice(0, 10)
+      : "",
+  };
 
   const form = useForm({
-    resolver: standardSchemaResolver(schema),
-    defaultValues: {
-      name: item?.name ?? "",
-      trackingType: defaultTrackingType,
-      unitId: item?.other.unitId ?? "",
-      minStockLevel: item?.other.minStockLevel
-        ? Number(item.other.minStockLevel)
-        : 0,
-      sku: item?.other.sku ?? "",
-      serial: item?.other.serial ?? "",
-      note: item?.note?.replace(/,/g, "\n") ?? "",
-      defaultReturnDate: item?.other.defaultReturnDate
-        ? item.other.defaultReturnDate.slice(0, 10)
-        : "",
+    defaultValues,
+    validators: {
+      onSubmit: schema,
+    },
+    onSubmit: ({ value }) => {
+      toast.loading(t("Processing"), { id: 0 });
+
+      const payload = {
+        name: value.name,
+        trackingType: value.trackingType,
+        unitId: value.trackingType === "CONSUMABLE" ? value.unitId : undefined,
+        minStockLevel:
+          value.trackingType === "CONSUMABLE" ? value.minStockLevel : undefined,
+        sku: value.trackingType === "RETURNABLE" ? value.sku : undefined,
+        serial: value.trackingType === "RETURNABLE" ? value.serial : undefined,
+        defaultReturnDate:
+          value.trackingType === "RETURNABLE"
+            ? value.defaultReturnDate
+            : undefined,
+        note: value.note,
+      };
+
+      if (item) {
+        updateItemMutation.mutate({
+          id: item.id,
+          ...payload,
+        });
+        return;
+      }
+
+      createItemMutation.mutate(payload);
     },
   });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const trackingType = form.watch("trackingType");
+  const trackingType = useStore(form.store, (state) => state.values.trackingType);
 
   const unitsQuery = useQuery(trpc.inventory.units.queryOptions());
 
@@ -122,192 +151,251 @@ export function CreateEditInventoryItem({
     }),
   );
 
-  const handleSubmit = (values: z.infer<typeof schema>) => {
-    toast.loading(t("Processing"), { id: 0 });
-
-    const payload = {
-      name: values.name,
-      trackingType: values.trackingType,
-      unitId: values.trackingType === "CONSUMABLE" ? values.unitId : undefined,
-      minStockLevel:
-        values.trackingType === "CONSUMABLE"
-          ? Number(values.minStockLevel ?? 0)
-          : undefined,
-      sku: values.trackingType === "RETURNABLE" ? values.sku : undefined,
-      serial: values.trackingType === "RETURNABLE" ? values.serial : undefined,
-      defaultReturnDate:
-        values.trackingType === "RETURNABLE" ? values.defaultReturnDate : undefined,
-      note: values.note,
-    };
-
-    if (item) {
-      updateItemMutation.mutate({
-        id: item.id,
-        ...payload,
-      });
-      return;
-    }
-
-    createItemMutation.mutate(payload);
-  };
-
   const isPending = createItemMutation.isPending || updateItemMutation.isPending;
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="grid gap-4 px-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("name")}</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+    <div className="grid gap-4">
+      <form
+        id="create-inventory-item-form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+        className="grid gap-4 px-4"
+      >
+        <FieldGroup>
+          <form.Field
+            name="name"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>{t("name")}</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+
+          <form.Field
+            name="trackingType"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>{"Tracking type"}</FieldLabel>
+                  <Select
+                    name={field.name}
+                    value={field.state.value}
+                    onValueChange={(value) =>
+                      field.handleChange(value as "CONSUMABLE" | "RETURNABLE")
+                    }
+                    aria-invalid={isInvalid}
+                  >
+                    <SelectTrigger id={field.name}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="CONSUMABLE">{"One-time usage"}</SelectItem>
+                      <SelectItem value="RETURNABLE">{"Returnable"}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+
+          {trackingType === "CONSUMABLE" && (
+            <>
+              <form.Field
+                name="unitId"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>{t("Unit")}</FieldLabel>
+                      <Select
+                        name={field.name}
+                        value={field.state.value}
+                        onValueChange={field.handleChange}
+                        aria-invalid={isInvalid}
+                      >
+                        <SelectTrigger id={field.name}>
+                          <SelectValue placeholder={t("Unit")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {unitsQuery.data?.map((unit) => (
+                            <SelectItem key={unit.id} value={unit.id}>
+                              {unit.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    </Field>
+                  );
+                }}
+              />
+
+              <form.Field
+                name="minStockLevel"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        {t("Min level stock")}
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="number"
+                        min={0}
+                        value={
+                          typeof field.state.value === "number" ||
+                          typeof field.state.value === "string"
+                            ? field.state.value
+                            : ""
+                        }
+                        onBlur={field.handleBlur}
+                        onChange={(event) =>
+                          field.handleChange(Number(event.target.value))
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    </Field>
+                  );
+                }}
+              />
+            </>
           )}
-        />
 
-        <FormField
-          control={form.control}
-          name="trackingType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{"Tracking type"}</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="CONSUMABLE">{"One-time usage"}</SelectItem>
-                    <SelectItem value="RETURNABLE">{"Returnable"}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          {trackingType === "RETURNABLE" && (
+            <>
+              <form.Field
+                name="sku"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>{t("Sku")}</FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(event) =>
+                          field.handleChange(event.target.value)
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    </Field>
+                  );
+                }}
+              />
+
+              <form.Field
+                name="serial"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        {t("Serial number")}
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(event) =>
+                          field.handleChange(event.target.value)
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    </Field>
+                  );
+                }}
+              />
+
+              <form.Field
+                name="defaultReturnDate"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        {"Expected return date"}
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="date"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(event) =>
+                          field.handleChange(event.target.value)
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    </Field>
+                  );
+                }}
+              />
+            </>
           )}
-        />
 
-        {trackingType === "CONSUMABLE" && (
-          <>
-            <FormField
-              control={form.control}
-              name="unitId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("Unit")}</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("Unit")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {unitsQuery.data?.map((unit) => (
-                          <SelectItem key={unit.id} value={unit.id}>
-                            {unit.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <form.Field
+            name="note"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
 
-            <FormField
-              control={form.control}
-              name="minStockLevel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("Min level stock")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={
-                        typeof field.value === "number" ||
-                        typeof field.value === "string"
-                          ? field.value
-                          : ""
-                      }
-                      onChange={(event) => field.onChange(event.target.value)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-
-        {trackingType === "RETURNABLE" && (
-          <>
-            <FormField
-              control={form.control}
-              name="sku"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("Sku")}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="serial"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("Serial number")}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="defaultReturnDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{"Expected return date"}</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-
-        <FormField
-          control={form.control}
-          name="note"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("note")}</FormLabel>
-              <FormControl>
-                <Textarea className="resize-none" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>{t("note")}</FieldLabel>
+                  <Textarea
+                    id={field.name}
+                    name={field.name}
+                    className="resize-none"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+        </FieldGroup>
 
         <div className="ml-auto flex items-center gap-2">
           <Button type="button" variant="outline" onClick={closeContainer}>
@@ -319,6 +407,6 @@ export function CreateEditInventoryItem({
           </Button>
         </div>
       </form>
-    </Form>
+    </div>
   );
 }

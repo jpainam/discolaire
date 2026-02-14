@@ -24,7 +24,6 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
-import { useSheet } from "~/hooks/use-sheet";
 import { PlusIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditInventoryItem } from "./CreateEditInventoryItem";
@@ -40,7 +39,6 @@ export function InventoryTable() {
   const [query, setQuery] = React.useState("");
   const normalizedQuery = query.trim().toLowerCase();
   const { openModal } = useModal();
-  const { openSheet } = useSheet();
 
   const filteredInventory = React.useMemo(() => {
     if (!normalizedQuery) {
@@ -82,8 +80,9 @@ export function InventoryTable() {
         <div className="ml-auto flex flex-row items-center gap-2">
           <Button
             onClick={() => {
-              openSheet({
+              openModal({
                 title: t("Stock addition"),
+                className: "sm:max-w-xl",
                 view: <CreateEditStockEntry />,
               });
             }}

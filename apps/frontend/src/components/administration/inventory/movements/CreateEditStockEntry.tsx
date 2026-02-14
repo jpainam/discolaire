@@ -20,7 +20,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
@@ -57,7 +57,7 @@ export function CreateEditStockEntry({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
-        closeSheet();
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -69,7 +69,7 @@ export function CreateEditStockEntry({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
-        closeSheet();
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -91,7 +91,7 @@ export function CreateEditStockEntry({
     }
   };
 
-  const { closeSheet } = useSheet();
+  const { closeModal } = useModal();
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -167,7 +167,7 @@ export function CreateEditStockEntry({
             </Button>
             <Button
               onClick={() => {
-                closeSheet();
+                closeModal();
               }}
               type="button"
               variant={"outline"}

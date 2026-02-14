@@ -1,13 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  ChevronDown,
-  FileMinus,
-  FilePlus,
-  FunnelIcon,
-  MoreVerticalIcon,
-} from "lucide-react";
+import { FileMinus, FunnelIcon, MoreVerticalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -30,10 +24,9 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
-import { useSheet } from "~/hooks/use-sheet";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditStockEntry } from "./CreateEditStockEntry";
 import { CreateEditStockWithdrawal } from "./CreateEditStockWithdrawal";
 
 export function StockMovementHeader() {
@@ -42,7 +35,7 @@ export function StockMovementHeader() {
 
   const t = useTranslations();
   const trpc = useTRPC();
-  const { openSheet } = useSheet();
+  const { openModal } = useModal();
 
   const { data: consumables } = useSuspenseQuery(
     trpc.inventory.consumables.queryOptions(),
@@ -95,44 +88,23 @@ export function StockMovementHeader() {
         </Select>
       </div>
       <div className="ml-auto flex flex-row items-center gap-2">
+        <Button
+          onClick={() => {
+            openModal({
+              title: t("Stock withdrawal"),
+              className: "sm:max-w-xl",
+              view: <CreateEditStockWithdrawal />,
+            });
+          }}
+        >
+          <FileMinus />
+          {t("Stock withdrawal")}
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"default"}>
-              {t("Stock movement")}
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onSelect={() => {
-                openSheet({
-                  title: t("Stock withdrawal"),
-                  view: <CreateEditStockWithdrawal />,
-                });
-              }}
-            >
-              <FileMinus />
-              {t("Stock withdrawal")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={() => {
-                openSheet({
-                  title: t("Stock addition"),
-
-                  view: <CreateEditStockEntry />,
-                });
-              }}
-            >
-              <FilePlus />
-
-              {t("Stock addition")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size={"icon"} variant={"outline"} className="size-8">
-              <MoreVerticalIcon className="h-4 w-4" />
+            <Button size={"icon"} variant={"outline"} >
+              <MoreVerticalIcon  />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

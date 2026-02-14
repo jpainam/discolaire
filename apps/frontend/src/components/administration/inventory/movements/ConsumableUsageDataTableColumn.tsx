@@ -23,6 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -186,7 +187,7 @@ function ActionCell({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const { openSheet } = useSheet();
+  const { openModal } = useModal();
 
   const deleteUsageMutation = useMutation(
     trpc.inventory.deleteUsage.mutationOptions({
@@ -216,8 +217,9 @@ function ActionCell({
           {canUpdateInventory && (
             <DropdownMenuItem
               onSelect={() => {
-                openSheet({
+                openModal({
                   title: t("Update asset"),
+                  className: "sm:max-w-xl",
                   view: (
                     <CreateEditStockWithdrawal
                       id={inventory.id}
