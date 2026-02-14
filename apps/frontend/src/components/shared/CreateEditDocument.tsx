@@ -246,7 +246,9 @@ export function CreateEditDocument({
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>{t("description")}</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    {t("description")}
+                  </FieldLabel>
                   <Textarea
                     id={field.name}
                     name={field.name}
