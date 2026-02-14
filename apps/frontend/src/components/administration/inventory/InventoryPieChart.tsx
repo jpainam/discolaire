@@ -1,5 +1,6 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Cell, Pie, PieChart } from "recharts";
 
 import type { ChartConfig } from "~/components/ui/chart";
@@ -17,41 +18,56 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "~/components/ui/chart";
-
-const statusData = [
-  { name: "available", value: 240, fill: "var(--color-available)" },
-  { name: "inuse", value: 45, fill: "var(--color-inuse)" },
-  { name: "lowstock", value: 15, fill: "var(--color-lowstock)" },
-  { name: "needsrepair", value: 8, fill: "var(--color-needsrepair)" },
-];
+import { useTRPC } from "~/trpc/react";
 
 export function InventoryPieChart() {
+  const trpc = useTRPC();
+  const { data: status } = useSuspenseQuery(
+    trpc.inventoryUsage.statusOverview.queryOptions(),
+  );
+
+  const statusData = [
+    {
+      name: "available",
+      value: status.assetsAvailable,
+      fill: "var(--color-available)",
+    },
+    { name: "inuse", value: status.assetsInUse, fill: "var(--color-inuse)" },
+    { name: "lowstock", value: status.lowStock, fill: "var(--color-lowstock)" },
+    {
+      name: "outofstock",
+      value: status.outOfStock,
+      fill: "var(--color-outofstock)",
+    },
+  ];
+
   const chartConfig = {
     value: {
       label: "Status",
     },
     available: {
-      label: "Available",
+      label: "Available assets",
       color: "var(--chart-1)",
     },
     inuse: {
-      label: "In Use",
+      label: "Assets in use",
       color: "var(--chart-2)",
     },
     lowstock: {
-      label: "Low Stock",
+      label: "Low stock",
       color: "var(--chart-3)",
     },
-    needsrepair: {
-      label: "Needs Repair",
+    outofstock: {
+      label: "Out of stock",
       color: "var(--chart-4)",
     },
   } satisfies ChartConfig;
+
   return (
-    <Card className="lg:col-span-4">
+    <Card className="lg:col-span-3">
       <CardHeader>
         <CardTitle>Item Status Overview</CardTitle>
-        <CardDescription>Current status of all inventory items</CardDescription>
+        <CardDescription>Current inventory status</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
@@ -68,7 +84,6 @@ export function InventoryPieChart() {
               cy="50%"
               labelLine={false}
               outerRadius={80}
-              //fill="#8884d8"
               dataKey="value"
               label={({ name, percent }) =>
                 `${name} ${(percent * 100).toFixed(0)}%`
@@ -79,8 +94,6 @@ export function InventoryPieChart() {
               ))}
             </Pie>
             <ChartLegend content={<ChartLegendContent />} />
-            {/* <Tooltip /> */}
-            {/* <Legend /> */}
           </PieChart>
         </ChartContainer>
       </CardContent>

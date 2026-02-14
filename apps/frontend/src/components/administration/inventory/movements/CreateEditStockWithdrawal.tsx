@@ -26,7 +26,7 @@ import { ConsumableSelector } from "../ConsumableSelector";
 
 const schema = z.object({
   userId: z.string().min(1),
-  quantity: z.number().min(1).max(1000),
+  quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
   consumableId: z.string().min(1),
 });
@@ -69,6 +69,18 @@ export function CreateEditStockWithdrawal({
       },
     }),
   );
+  const updateConsumableMutation = useMutation(
+    trpc.inventory.updateConsumableUsage.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+        closeSheet();
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: 0 });
+      },
+    }),
+  );
 
   const t = useTranslations();
   const handleSubmit = (data: z.infer<typeof schema>) => {
@@ -80,7 +92,10 @@ export function CreateEditStockWithdrawal({
       note: data.note,
     };
     if (id) {
-      //
+      updateConsumableMutation.mutate({
+        id,
+        ...values,
+      });
     } else {
       createConsumableMutation.mutate(values);
     }
@@ -137,7 +152,16 @@ export function CreateEditStockWithdrawal({
               <FormItem>
                 <FormLabel>{t("quantity")}</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input
+                    type="number"
+                    value={
+                      typeof field.value === "number" ||
+                      typeof field.value === "string"
+                        ? field.value
+                        : ""
+                    }
+                    onChange={(event) => field.onChange(event.target.value)}
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -160,8 +184,14 @@ export function CreateEditStockWithdrawal({
             )}
           />
           <div className="grid grid-cols-1 gap-2">
-            <Button disabled={createConsumableMutation.isPending}>
-              {createConsumableMutation.isPending && <Spinner />}
+            <Button
+              disabled={
+                createConsumableMutation.isPending ||
+                updateConsumableMutation.isPending
+              }
+            >
+              {(createConsumableMutation.isPending ||
+                updateConsumableMutation.isPending) && <Spinner />}
               {t("submit")}
             </Button>
             <Button

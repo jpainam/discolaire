@@ -27,6 +27,7 @@ const schema = z.object({
   note: z.string().optional(),
   userId: z.string().min(1),
   location: z.string().optional(),
+  dueAt: z.string().optional(),
 });
 
 export function CreateEditAssetUsage({
@@ -35,12 +36,14 @@ export function CreateEditAssetUsage({
   userId,
   assetId,
   location,
+  dueAt,
 }: {
   note?: string;
   assetId: string;
   id?: string;
   location?: string;
   userId?: string;
+  dueAt?: string;
 }) {
   const form = useForm({
     resolver: standardSchemaResolver(schema),
@@ -48,6 +51,7 @@ export function CreateEditAssetUsage({
       note: note ?? "",
       userId: userId ?? "",
       location: location ?? "",
+      dueAt: dueAt ?? "",
     },
   });
 
@@ -86,6 +90,8 @@ export function CreateEditAssetUsage({
       note: data.note,
       userId: data.userId,
       assetId: assetId,
+      location: data.location,
+      dueAt: data.dueAt,
     };
     if (!id) {
       createAssetUsageMutation.mutate(values);
@@ -134,6 +140,20 @@ export function CreateEditAssetUsage({
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="dueAt"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{"Expected return date"}</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -150,8 +170,14 @@ export function CreateEditAssetUsage({
           )}
         />
         <div className="grid grid-cols-1 gap-2">
-          <Button disabled={createAssetUsageMutation.isPending}>
-            {createAssetUsageMutation.isPending && <Spinner />}
+          <Button
+            disabled={
+              createAssetUsageMutation.isPending ||
+              updateAssetUsageMutation.isPending
+            }
+          >
+            {(createAssetUsageMutation.isPending ||
+              updateAssetUsageMutation.isPending) && <Spinner />}
             {t("submit")}
           </Button>
           <Button

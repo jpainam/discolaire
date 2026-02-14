@@ -24,22 +24,10 @@ export function InventoryDataTableAction({
   const canDeleteInventory = useCheckPermission("inventory.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const deleteAssetMutation = useMutation(
-    trpc.inventory.deleteAsset.mutationOptions({
+  const deleteItemMutation = useMutation(
+    trpc.inventory.deleteItem.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
-        toast.success(t("deleted_successfully"), { id: 0 });
-        table.toggleAllRowsSelected(false);
-      },
-      onError: (error) => {
-        toast.error(error.message, { id: 0 });
-      },
-    }),
-  );
-  const deleteConsumableMutation = useMutation(
-    trpc.inventory.deleteConsumable.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
         table.toggleAllRowsSelected(false);
       },
@@ -64,11 +52,7 @@ export function InventoryDataTableAction({
                 const selectedItems = rows.map((row) => row.original);
                 await Promise.all(
                   selectedItems.map(async (item) => {
-                    if (item.type === "ASSET") {
-                      await deleteAssetMutation.mutateAsync(item.id);
-                      return;
-                    }
-                    await deleteConsumableMutation.mutateAsync(item.id);
+                    await deleteItemMutation.mutateAsync(item.id);
                   }),
                 );
               },

@@ -37,7 +37,7 @@ import { useTRPC } from "~/trpc/react";
 
 const schema = z.object({
   name: z.string().min(5),
-  minStockLevel: z.number().default(0),
+  minStockLevel: z.coerce.number().min(0).default(0),
   unitId: z.string().min(1),
   note: z.string().optional(),
 });
@@ -129,7 +129,16 @@ export function CreateEditConsumable({
               <FormItem>
                 <FormLabel>{t("Min level stock")}</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input
+                    type="number"
+                    value={
+                      typeof field.value === "number" ||
+                      typeof field.value === "string"
+                        ? field.value
+                        : ""
+                    }
+                    onChange={(event) => field.onChange(event.target.value)}
+                  />
                 </FormControl>
 
                 <FormMessage />

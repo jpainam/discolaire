@@ -1,10 +1,9 @@
 import { format } from "date-fns";
-import { Calendar, ClipboardList, Clock, Package, User } from "lucide-react";
+import { Calendar, ClipboardList, Package, User } from "lucide-react";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import {
   SheetContent,
@@ -23,18 +22,16 @@ export function InventoryUsageDetail({
       <SheetHeader className="pb-4">
         <SheetTitle className="flex items-center gap-2 text-xl">
           <Package className="h-5 w-5" />
-          Item Details
+          Usage details
         </SheetTitle>
-        <SheetDescription>
-          Complete information about inventory transaction {item.id}
-        </SheetDescription>
+        <SheetDescription>Transaction {item.id}</SheetDescription>
       </SheetHeader>
 
       <div className="space-y-6 py-4">
         <div>
-          <h3 className="text-lg font-semibold">{item.consumable?.name}</h3>
-          <Badge variant="outline" className={`mt-2`}>
-            {"Returned"}
+          <h3 className="text-lg font-semibold">{item.consumable.name}</h3>
+          <Badge variant="outline" className="mt-2">
+            Withdrawal
           </Badge>
         </div>
 
@@ -44,30 +41,18 @@ export function InventoryUsageDetail({
           <div className="flex items-start gap-4">
             <User className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
-              <h4 className="font-medium">Assigned To</h4>
-              <div className="mt-1 flex items-center gap-2">
-                {/* <Avatar>
-                  <AvatarImage
-                    src={item.user.avatar ?? "/placeholder.svg"}
-                    alt={item.user.name}
-                  />
-                  <AvatarFallback>{item.user.name.charAt(0)}</AvatarFallback>
-                </Avatar> */}
-                <div>
-                  <p>{item.user.name}</p>
-                  <p className="text-muted-foreground text-sm">
-                    {item.user.email}
-                  </p>
-                </div>
-              </div>
-              <p className="mt-1 text-sm">Department: {item.user.profile}</p>
+              <h4 className="font-medium">Assigned to</h4>
+              <p>{item.user ? item.user.name : "-"}</p>
+              <p className="text-muted-foreground text-sm">
+                {item.user ? item.user.email : "-"}
+              </p>
             </div>
           </div>
 
           <div className="flex items-start gap-4">
             <Calendar className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
-              <h4 className="font-medium">Transaction Date</h4>
+              <h4 className="font-medium">Transaction date</h4>
               <p>{format(item.createdAt, "MMMM d, yyyy")}</p>
             </div>
           </div>
@@ -75,10 +60,11 @@ export function InventoryUsageDetail({
           <div className="flex items-start gap-4">
             <Package className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
-              <h4 className="font-medium">Item Details</h4>
-              <p>Quantity: {item.quantity}</p>
-              <p>Serial Number: {item.id}</p>
-              <p>Condition: {"Condition"}</p>
+              <h4 className="font-medium">Quantity</h4>
+              <p>
+                {item.quantity}{" "}
+                {item.consumable.unit ? item.consumable.unit.name : ""}
+              </p>
             </div>
           </div>
 
@@ -86,44 +72,18 @@ export function InventoryUsageDetail({
             <ClipboardList className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Notes</h4>
-              <p className="text-sm">{item.note}</p>
+              <p className="text-sm">{item.note ?? "-"}</p>
             </div>
           </div>
 
           <div className="flex items-start gap-4">
-            <Clock className="text-muted-foreground mt-0.5 h-5 w-5" />
+            <User className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
-              <h4 className="font-medium">Recorded By</h4>
-              <div className="mt-1 flex items-center gap-2">
-                {/* <Avatar>
-                  <AvatarImage
-                    src={item.createdBy.avatar ?? "/placeholder.svg"}
-                    alt={item.createdBy.name}
-                  />
-                  <AvatarFallback>
-                    {item.createdBy.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar> */}
-                <div>
-                  <p>{item.createdBy.name}</p>
-                  <p className="text-muted-foreground text-sm">
-                    {item.createdBy.email}
-                  </p>
-                </div>
-              </div>
+              <h4 className="font-medium">Recorded by</h4>
+              <p>{item.createdBy.name}</p>
+              <p className="text-muted-foreground text-sm">{item.createdBy.email}</p>
             </div>
           </div>
-        </div>
-
-        <Separator />
-
-        <div className="flex justify-end gap-2">
-          {item.createdAt.toString() === "checked-out" ? (
-            <Button variant="default">Mark as Returned</Button>
-          ) : (
-            <Button variant="outline">Check Out Again</Button>
-          )}
-          <Button variant="outline">Edit Details</Button>
         </div>
       </div>
     </SheetContent>

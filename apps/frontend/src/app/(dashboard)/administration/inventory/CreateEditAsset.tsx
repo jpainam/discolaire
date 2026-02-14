@@ -145,7 +145,7 @@ export function CreateEditAsset({
           name="note"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("Serial number")}</FormLabel>
+              <FormLabel>{t("note")}</FormLabel>
               <FormControl>
                 <Textarea className="resize-none" {...field} />
               </FormControl>

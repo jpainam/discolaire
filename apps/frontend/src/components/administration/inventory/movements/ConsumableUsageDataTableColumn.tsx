@@ -100,7 +100,8 @@ export function useColumns(): ColumnDef<
           const usage = row.original;
           return (
             <div className="text-muted-foreground">
-              {usage.quantity} {usage.consumable?.unit.name}
+              {usage.quantity}{" "}
+              {usage.consumable.unit ? usage.consumable.unit.name : ""}
             </div>
           );
         },
@@ -111,7 +112,7 @@ export function useColumns(): ColumnDef<
           <DataTableColumnHeader column={column} title={t("type")} />
         ),
         cell: () => {
-          return <FlatBadge variant={"pink"}>{t("IN")}</FlatBadge>;
+          return <FlatBadge variant={"pink"}>{t("OUT")}</FlatBadge>;
         },
       },
       // {
@@ -136,7 +137,7 @@ export function useColumns(): ColumnDef<
               href={`/users/${usage.userId}`}
               className="text-muted-foreground hover:underline"
             >
-              {usage.user.name}
+              {usage.user?.name ?? "-"}
             </Link>
           );
         },
@@ -265,12 +266,7 @@ function ItemCell({
 }: {
   item: RouterOutputs["inventory"]["consumableUsages"][number];
 }) {
-  const consumable = item.consumable;
   const { openSheet } = useSheet();
-
-  if (!consumable) {
-    return <div className="text-muted-foreground">-</div>;
-  }
 
   return (
     <Button
@@ -281,7 +277,7 @@ function ItemCell({
         });
       }}
     >
-      <span>{consumable.name}</span>
+      <span>{item.consumable.name}</span>
     </Button>
   );
 }

@@ -6,7 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Undo2, UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -29,13 +29,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditAsset } from "./CreateEditAsset";
-import { CreateEditConsumable } from "./CreateEditConsumable";
+import { CreateEditAssetUsage } from "~/components/administration/inventory/CreateEditAssetUsage";
+import { CreateEditInventoryItem } from "./CreateEditInventoryItem";
 
 export function getColumns({
   t,
@@ -129,20 +128,16 @@ export function getColumns({
           );
         }
         const currentStock = inventory.other.currentStock;
-        const minLevelStock = inventory.other.minLevelStock;
+        const minStockLevel = inventory.other.minStockLevel;
         const unit = inventory.other.unitName;
         return (
           <div className="flex flex-row items-center gap-2">
-            {currentStock && (
-              <FlatBadge variant={"green"}>
-                {t("Current stock")}: {currentStock} {unit}
-              </FlatBadge>
-            )}
-            {minLevelStock && (
-              <FlatBadge variant={"yellow"}>
-                {t("Min level")}: {minLevelStock} {unit}
-              </FlatBadge>
-            )}
+            <FlatBadge variant={"green"}>
+              {t("Current stock")}: {currentStock} {unit}
+            </FlatBadge>
+            <FlatBadge variant={"yellow"}>
+              {t("Min level")}: {minStockLevel} {unit}
+            </FlatBadge>
           </div>
         );
       },
@@ -175,10 +170,10 @@ function ActionCell({
   const canUpdateInventory = useCheckPermission("inventory.update");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const deleteConsumableMutation = useMutation(
-    trpc.inventory.deleteConsumable.mutationOptions({
+  const deleteItemMutation = useMutation(
+    trpc.inventory.deleteItem.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.inventory.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
@@ -186,13 +181,11 @@ function ActionCell({
       },
     }),
   );
-  const { openModal } = useModal();
-
-  const deleteAssetMutation = useMutation(
-    trpc.inventory.deleteAsset.mutationOptions({
+  const returnAssetUsageMutation = useMutation(
+    trpc.inventory.returnAssetUsage.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.inventory.all.pathFilter());
-        toast.success(t("deleted_successfully"), { id: 0 });
+        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -200,8 +193,10 @@ function ActionCell({
     }),
   );
 
-  //const currentStock = inventory.other.currentStock;
-  //const minLevelStock = inventory.other.minLevelStock;
+  const assetOther = inventory.type === "ASSET" ? inventory.other : null;
+  const activeUsageId = assetOther?.activeUsageId ?? null;
+  const activeUserName = assetOther?.activeUserName ?? null;
+  const isAssetAssigned = Boolean(activeUsageId && activeUserName);
 
   return (
     <div className="flex justify-end">
@@ -219,51 +214,65 @@ function ActionCell({
           {canUpdateInventory && (
             <DropdownMenuItem
               onSelect={() => {
-                if (inventory.type === "ASSET") {
-                  openModal({
-                    title: t("Update asset"),
-                    view: (
-                      <CreateEditAsset
-                        asset={{
-                          id: inventory.id,
-                          name: inventory.name,
-                          note: inventory.note,
-                          createdAt: new Date(),
-                          updatedAt: new Date(),
-                          schoolId: inventory.schoolId,
-                          serial: inventory.other.serial ?? "",
-                          sku: inventory.other.sku ?? "",
-                        }}
-                      />
-                    ),
-                  });
-                } else {
-                  openSheet({
-                    title: t("Update consumable"),
-                    view: (
-                      <CreateEditConsumable
-                        consumable={{
-                          id: inventory.id,
-                          name: inventory.name,
-                          note: inventory.note,
-                          schoolId: inventory.schoolId,
-                          schoolYearId: inventory.schoolYearId,
-                          currentStock: inventory.other.currentStock
-                            ? Number(inventory.other.currentStock)
-                            : 0,
-                          minStockLevel: inventory.other.minStockLevel
-                            ? Number(inventory.other.minStockLevel)
-                            : 0,
-                          unitId: inventory.other.unitId ?? "",
-                        }}
-                      />
-                    ),
-                  });
-                }
+                openSheet({
+                  title: "Update item",
+                  view: (
+                    <CreateEditInventoryItem
+                      item={{
+                        id: inventory.id,
+                        name: inventory.name,
+                        note: inventory.note,
+                        type: inventory.type,
+                        other: inventory.other,
+                      }}
+                    />
+                  ),
+                });
               }}
             >
               <Pencil />
               {t("edit")}
+            </DropdownMenuItem>
+          )}
+          {canUpdateInventory && inventory.type === "ASSET" && !isAssetAssigned && (
+            <DropdownMenuItem
+              onSelect={() => {
+                openSheet({
+                  title: "Assign asset",
+                  view: (
+                    <CreateEditAssetUsage
+                      assetId={inventory.id}
+                      dueAt={assetOther?.defaultReturnDate ?? ""}
+                    />
+                  ),
+                });
+              }}
+            >
+              <UserPlus />
+              {"Assign asset"}
+            </DropdownMenuItem>
+          )}
+          {canUpdateInventory && inventory.type === "ASSET" && isAssetAssigned && (
+            <DropdownMenuItem
+              onSelect={async () => {
+                await confirm({
+                  title: "Mark as returned",
+                  description: activeUserName
+                    ? `Return this asset from ${activeUserName}?`
+                    : "Return this asset?",
+                  onConfirm: async () => {
+                    if (!activeUsageId) {
+                      return;
+                    }
+                    await returnAssetUsageMutation.mutateAsync({
+                      id: activeUsageId,
+                    });
+                  },
+                });
+              }}
+            >
+              <Undo2 />
+              {"Mark as returned"}
             </DropdownMenuItem>
           )}
           {canDeleteInventory && (
@@ -277,13 +286,7 @@ function ActionCell({
                     description: t("delete_confirmation"),
 
                     onConfirm: async () => {
-                      if (inventory.type === "ASSET") {
-                        await deleteAssetMutation.mutateAsync(inventory.id);
-                      } else {
-                        await deleteConsumableMutation.mutateAsync(
-                          inventory.id,
-                        );
-                      }
+                      await deleteItemMutation.mutateAsync(inventory.id);
                     },
                   });
                 }}

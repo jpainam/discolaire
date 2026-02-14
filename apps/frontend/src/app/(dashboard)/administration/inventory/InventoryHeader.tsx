@@ -1,17 +1,12 @@
 "use client";
 
-import { BlocksIcon, StretchVerticalIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { PlusCircle } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
-import { useModal } from "~/hooks/use-modal";
 import { useSheet } from "~/hooks/use-sheet";
-import { CreateEditAsset } from "./CreateEditAsset";
-import { CreateEditConsumable } from "./CreateEditConsumable";
+import { CreateEditInventoryItem } from "./CreateEditInventoryItem";
 
 export function InventoryHeader() {
-  const t = useTranslations();
-  const { openModal } = useModal();
   const { openSheet } = useSheet();
   return (
     <div className="flex flex-row items-center gap-2">
@@ -19,26 +14,14 @@ export function InventoryHeader() {
         <Button
           onClick={() => {
             openSheet({
-              title: t("Create a consumable"),
-              view: <CreateEditConsumable />,
+              title: "Create inventory item",
+              view: <CreateEditInventoryItem />,
             });
           }}
           variant={"default"}
         >
-          <BlocksIcon />
-          {t("Create a consumable")}
-        </Button>
-        <Button
-          onClick={() => {
-            openModal({
-              title: t("Create an asset"),
-              view: <CreateEditAsset />,
-            });
-          }}
-          variant={"outline"}
-        >
-          <StretchVerticalIcon />
-          {t("Create an asset")}
+          <PlusCircle />
+          {"Create item"}
         </Button>
       </div>
     </div>

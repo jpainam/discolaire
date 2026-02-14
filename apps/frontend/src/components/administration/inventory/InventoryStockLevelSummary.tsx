@@ -1,18 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import type { ChartConfig } from "~/components/ui/chart";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -24,26 +20,16 @@ import {
   ChartTooltipContent,
 } from "~/components/ui/chart";
 import { cn } from "~/lib/utils";
-
-export const description = "A stacked bar chart with a legend";
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+import { useTRPC } from "~/trpc/react";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  current: {
+    label: "Current",
     color: "var(--chart-1)",
   },
-  mobile: {
-    label: "Mobile",
-    color: "var(--chart-2)",
+  minimum: {
+    label: "Minimum",
+    color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 
@@ -53,6 +39,17 @@ export function InventoryStockLevelSummary({
   className?: string;
 }) {
   const t = useTranslations();
+  const trpc = useTRPC();
+  const { data } = useSuspenseQuery(
+    trpc.inventoryUsage.stockLevelSummary.queryOptions(),
+  );
+
+  const chartData = data.slice(0, 8).map((item) => ({
+    name: item.name,
+    current: item.currentStock,
+    minimum: item.minStockLevel,
+  }));
+
   return (
     <Card className={cn(className)}>
       <CardHeader>
@@ -62,41 +59,30 @@ export function InventoryStockLevelSummary({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey="desktop"
-              stackId="a"
-              fill="var(--color-desktop)"
-              radius={[0, 0, 4, 4]}
-            />
-            <Bar
-              dataKey="mobile"
-              stackId="a"
-              fill="var(--color-mobile)"
-              radius={[4, 4, 0, 0]}
-            />
-          </BarChart>
-        </ChartContainer>
+        {chartData.length === 0 ? (
+          <div className="text-muted-foreground text-sm">No stock data yet.</div>
+        ) : (
+          <ChartContainer config={chartConfig} className="h-[260px] w-full">
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value: string) =>
+                  value.length > 12 ? `${value.slice(0, 12)}…` : value
+                }
+              />
+              <YAxis allowDecimals={false} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Bar dataKey="current" fill="var(--color-current)" radius={4} />
+              <Bar dataKey="minimum" fill="var(--color-minimum)" radius={4} />
+            </BarChart>
+          </ChartContainer>
+        )}
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   );
 }

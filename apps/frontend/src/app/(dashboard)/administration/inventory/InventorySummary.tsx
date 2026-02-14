@@ -13,6 +13,8 @@ export function InventorySummary() {
   batchPrefetch([
     trpc.inventoryUsage.usageSummary.queryOptions(),
     trpc.inventoryUsage.stockLevelSummary.queryOptions(),
+    trpc.inventoryUsage.monthlySummary.queryOptions(),
+    trpc.inventoryUsage.statusOverview.queryOptions(),
   ]);
   return (
     <HydrateClient>

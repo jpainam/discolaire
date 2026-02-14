@@ -1,104 +1,72 @@
-enum InventoryCategoryType {
+enum InventoryTrackingType {
     CONSUMABLE
-    ASSET
+    RETURNABLE
 }
 
-model InventoryAsset {
-    id        String                @id @default(uuid())
-    name      String
-    sku       String?
-    serial    String?               @unique
-    note      String?
-    createdAt DateTime              @default(now())
-    updatedAt DateTime              @updatedAt
-    usages    InventoryAssetUsage[]
-    schoolId  String
-    school    School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-}
-
-model InventoryConsumable {
-    id             String                     @id @default(uuid())
-    name           String                     @unique
-    note           String?
-    unitId         String
-    unit           InventoryUnit              @relation(fields: [unitId], references: [id])
-    currentStock   Int                        @default(0)
-    minStockLevel  Int                        @default(0)
-    stockMovements InventoryStockMovement[]
-    usages         InventoryConsumableUsage[]
-    schoolId       String
-    school         School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-    schoolYearId   String
-    schoolYear     SchoolYear                 @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-}
-
-model InventoryAssetUsage {
-    id           String                    @id @default(uuid())
-    assetId      String
-    asset        InventoryAsset            @relation(fields: [assetId], references: [id])
-    userId       String
-    user         User                      @relation(fields: [userId], references: [id])
-    location     String?
-    status       InventoryAssignmentStatus @default(PENDING)
-    note         String?
-    createdAt    DateTime                  @default(now())
-    createdById  String?
-    approvedAt   DateTime?
-    approvedBy   String?
-    returnedAt   DateTime?
-    schoolYearId String
-    schoolYear   SchoolYear                @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-}
-
-enum InventoryAssignmentStatus {
-    PENDING
-    ASSIGNED
-    RETURNED
-}
-
-model InventoryConsumableUsage {
-    id           String               @id @default(uuid())
-    userId       String
-    user         User                 @relation("UserConsumableUsages", fields: [userId], references: [id])
-    quantity     Int
-    note         String?
-    createdAt    DateTime             @default(now())
-    updatedAt    DateTime             @updatedAt
-    consumable   InventoryConsumable? @relation(fields: [consumableId], references: [id])
-    schoolYearId String
-    schoolYear   SchoolYear           @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
-    schoolId     String
-    school       School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-    consumableId String
-    createdById  String
-    createdBy    User                 @relation("CreatedConsumableUsages", fields: [createdById], references: [id])
-}
-
-model InventoryUnit {
-    id          String                @id @default(uuid())
-    name        String
-    schoolId    String
-    consumables InventoryConsumable[]
-}
-
-enum InventoryMovementType {
-    IN
-    OUT
+enum InventoryEventType {
+    STOCK_IN
+    CONSUME
+    ASSIGN
     ADJUST
 }
 
-model InventoryStockMovement {
+model InventoryUnit {
+    id       String          @id @default(uuid())
+    name     String
+    schoolId String
+    school   School          @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    items    InventoryItem[]
+
+    @@unique([schoolId, name])
+}
+
+model InventoryItem {
     id           String                @id @default(uuid())
-    quantity     Int
-    type         InventoryMovementType
+    name         String
+    trackingType InventoryTrackingType
+    sku          String?
+    serial       String?
     note         String?
+    defaultReturnDate DateTime?
+    minStockLevel Int?                 @default(0)
+    unitId       String?
+    unit         InventoryUnit?        @relation(fields: [unitId], references: [id], onDelete: SetNull)
+    isActive     Boolean               @default(true)
     createdAt    DateTime              @default(now())
-    consumable   InventoryConsumable   @relation(fields: [consumableId], references: [id])
-    createdById  String
-    createdBy    User                  @relation(fields: [createdById], references: [id])
-    consumableId String
-    schoolYearId String
-    schoolYear   SchoolYear            @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    updatedAt    DateTime              @updatedAt
+    events       InventoryEvent[]
     schoolId     String
     school       School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+    @@index([schoolId, trackingType])
+    @@index([schoolId, createdAt])
+    @@unique([schoolId, serial])
+}
+
+model InventoryEvent {
+    id           String             @id @default(uuid())
+    itemId       String
+    item         InventoryItem      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+    type         InventoryEventType
+    quantity     Int                @default(1)
+    assigneeId   String?
+    assignee     User?              @relation("InventoryEventAssignee", fields: [assigneeId], references: [id])
+    location     String?
+    dueAt        DateTime?
+    returnedAt   DateTime?
+    returnedById String?
+    returnedBy   User?              @relation("InventoryEventReturnedBy", fields: [returnedById], references: [id])
+    note         String?
+    createdAt    DateTime           @default(now())
+    updatedAt    DateTime           @updatedAt
+    createdById  String
+    createdBy    User               @relation("InventoryEventCreatedBy", fields: [createdById], references: [id])
+    schoolYearId String
+    schoolYear   SchoolYear         @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    schoolId     String
+    school       School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+    @@index([schoolId, schoolYearId, createdAt])
+    @@index([itemId, type, returnedAt])
+    @@index([assigneeId, createdAt])
 }

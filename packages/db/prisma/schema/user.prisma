@@ -43,10 +43,9 @@ model User {
     receivedEmails               EmailRecipient[]
     createdSubscriptions         NotificationSubscription[] @relation("CreatedSubscriptions")
     accessedCommunicationChannel CommunicationChannel[]
-    assetAssignmentUsages        InventoryAssetUsage[]
-    stockMovements               InventoryStockMovement[]
-    consumableUsages             InventoryConsumableUsage[] @relation("UserConsumableUsages")
-    createdConsumableUsages      InventoryConsumableUsage[] @relation("CreatedConsumableUsages")
+    inventoryAssignedEvents      InventoryEvent[]          @relation("InventoryEventAssignee")
+    inventoryReturnedEvents      InventoryEvent[]          @relation("InventoryEventReturnedBy")
+    inventoryCreatedEvents       InventoryEvent[]          @relation("InventoryEventCreatedBy")
     notifications                UserNotification[]
     enrollmentCreatedBy          Enrollment[]               @relation("EnrollmentCreatedBy")
     classroomCreatedBy           Classroom[]                @relation("ClassroomCreatedBy")

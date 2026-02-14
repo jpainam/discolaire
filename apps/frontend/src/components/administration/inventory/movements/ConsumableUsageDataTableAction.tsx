@@ -28,7 +28,7 @@ export function ConsumableUsageDataTableAction({
   const deleteConsumableMutation = useMutation(
     trpc.inventory.deleteUsage.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.classroom.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
         table.toggleAllRowsSelected(false);
       },

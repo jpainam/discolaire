@@ -87,16 +87,14 @@ export function InventoryStockUnitTable() {
               </TableRow>
             )}
             {units.map((unit, index) => {
+              const count =
+                (unit as { items?: unknown[] }).items?.length ??
+                (unit as { consumables?: unknown[] }).consumables?.length ??
+                0;
               return (
                 <TableRow key={index}>
                   <TableCell>{unit.name}</TableCell>
-                  <TableCell>
-                    {unit.consumables.reduce(
-                      (sum, c) => sum + c.currentStock,
-                      0,
-                    )}{" "}
-                    {unit.name}
-                  </TableCell>
+                  <TableCell>{count}</TableCell>
                   {(canDeleteStockUnit || canUpdateStockUnit) && (
                     <TableCell className="text-right">
                       <div className="flex flex-row items-center justify-end gap-1">
@@ -127,7 +125,7 @@ export function InventoryStockUnitTable() {
                               await confirm({
                                 title: t("Are you sure?"),
                                 description: t(
-                                  "This action will delete the stock unit and all its consumables. This action cannot be undone.",
+                                  "This action will delete the stock unit. This action cannot be undone.",
                                 ),
                                 confirmText: t("Delete"),
 
