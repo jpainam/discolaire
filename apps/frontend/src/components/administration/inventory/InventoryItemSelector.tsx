@@ -19,7 +19,7 @@ interface SelectorProps {
   className?: string;
 }
 
-export function ConsumableSelector({
+export function InventoryItemSelector({
   defaultValue,
   onChange,
   className,

@@ -5,7 +5,13 @@ import { z } from "zod/v4";
 import type { Prisma, PrismaClient } from "@repo/db";
 
 import { protectedProcedure } from "../trpc";
-import { getFullName } from "../utils";
+
+const STOCK_EVENT_TYPES = ["STOCK_IN", "CONSUME", "ADJUST"] as const;
+const STOCK_EVENT_TYPE_SET = new Set<string>(STOCK_EVENT_TYPES);
+
+function isStockEventType(type: string) {
+  return STOCK_EVENT_TYPE_SET.has(type);
+}
 
 function computeConsumableStock(events: { type: string; quantity: number }[]) {
   return events.reduce((acc, event) => {
@@ -98,6 +104,253 @@ const unifiedItemSchema = z
       });
     }
   });
+
+const createEventSchema = z
+  .object({
+    itemId: z.string().min(1),
+    type: z.enum(["STOCK_IN", "CONSUME", "ASSIGN", "ADJUST"]),
+    quantity: z.coerce.number().int().optional(),
+    assigneeId: z.string().optional(),
+    location: z.string().optional(),
+    dueAt: z.string().optional(),
+    note: z.string().optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.type === "CONSUME" && !value.assigneeId) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Assignee is required for consumption events",
+        path: ["assigneeId"],
+      });
+    }
+    if (value.type === "ASSIGN" && !value.assigneeId) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Assignee is required for assignment events",
+        path: ["assigneeId"],
+      });
+    }
+    if (
+      value.type === "STOCK_IN" &&
+      value.quantity !== undefined &&
+      value.quantity < 1
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Quantity must be at least 1 for stock in",
+        path: ["quantity"],
+      });
+    }
+    if (
+      value.type === "CONSUME" &&
+      value.quantity !== undefined &&
+      value.quantity < 1
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Quantity must be at least 1 for consumption",
+        path: ["quantity"],
+      });
+    }
+    if (value.type === "ADJUST" && value.quantity === 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Quantity cannot be 0 for adjustments",
+        path: ["quantity"],
+      });
+    }
+  });
+
+const updateEventSchema = z
+  .object({
+    id: z.string().min(1),
+    itemId: z.string().min(1),
+    type: z.enum(["STOCK_IN", "CONSUME", "ASSIGN", "ADJUST"]),
+    quantity: z.coerce.number().int().optional(),
+    assigneeId: z.string().optional(),
+    location: z.string().optional(),
+    dueAt: z.string().optional(),
+    returnedAt: z.string().optional(),
+    note: z.string().optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.type === "CONSUME" && !value.assigneeId) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Assignee is required for consumption events",
+        path: ["assigneeId"],
+      });
+    }
+    if (value.type === "ASSIGN" && !value.assigneeId && !value.returnedAt) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Assignee is required for active assignment events",
+        path: ["assigneeId"],
+      });
+    }
+    if (
+      value.type === "STOCK_IN" &&
+      value.quantity !== undefined &&
+      value.quantity < 1
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Quantity must be at least 1 for stock in",
+        path: ["quantity"],
+      });
+    }
+    if (
+      value.type === "CONSUME" &&
+      value.quantity !== undefined &&
+      value.quantity < 1
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Quantity must be at least 1 for consumption",
+        path: ["quantity"],
+      });
+    }
+    if (value.type === "ADJUST" && value.quantity === 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Quantity cannot be 0 for adjustments",
+        path: ["quantity"],
+      });
+    }
+  });
+
+function parseOptionalDate(input?: string) {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (!input.trim()) {
+    return null;
+  }
+
+  const value = new Date(input);
+  if (Number.isNaN(value.getTime())) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Invalid date format",
+    });
+  }
+
+  return value;
+}
+
+function resolveEventQuantity({
+  type,
+  quantity,
+  fallbackQuantity,
+}: {
+  type: "STOCK_IN" | "CONSUME" | "ASSIGN" | "ADJUST";
+  quantity?: number;
+  fallbackQuantity?: number;
+}) {
+  if (type === "ASSIGN") {
+    return 1;
+  }
+
+  if (quantity !== undefined) {
+    return quantity;
+  }
+
+  if (fallbackQuantity !== undefined) {
+    return fallbackQuantity;
+  }
+
+  if (type === "ADJUST") {
+    return 1;
+  }
+
+  return 1;
+}
+
+function validateEventItemCompatibility({
+  trackingType,
+  eventType,
+}: {
+  trackingType: "CONSUMABLE" | "RETURNABLE";
+  eventType: "STOCK_IN" | "CONSUME" | "ASSIGN" | "ADJUST";
+}) {
+  if (eventType === "ASSIGN" && trackingType !== "RETURNABLE") {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "ASSIGN events can only be used for returnable items",
+    });
+  }
+
+  if (eventType !== "ASSIGN" && trackingType !== "CONSUMABLE") {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Stock events can only be used for consumables",
+    });
+  }
+}
+
+async function ensureStockNotNegative({
+  tx,
+  itemIds,
+  schoolId,
+  schoolYearId,
+}: {
+  tx: Prisma.TransactionClient;
+  itemIds: string[];
+  schoolId: string;
+  schoolYearId: string;
+}) {
+  for (const itemId of itemIds) {
+    const currentStock = await getConsumableStockTx({
+      tx,
+      itemId,
+      schoolId,
+      schoolYearId,
+    });
+
+    if (currentStock < 0) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "This change would result in negative stock",
+      });
+    }
+  }
+}
+
+async function ensureNoActiveAssignment({
+  tx,
+  schoolId,
+  schoolYearId,
+  itemId,
+  excludeEventId,
+}: {
+  tx: Prisma.TransactionClient;
+  schoolId: string;
+  schoolYearId: string;
+  itemId: string;
+  excludeEventId?: string;
+}) {
+  const activeAssignment = await tx.inventoryEvent.findFirst({
+    where: {
+      itemId,
+      schoolId,
+      schoolYearId,
+      type: "ASSIGN",
+      returnedAt: null,
+      ...(excludeEventId ? { id: { not: excludeEventId } } : {}),
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (activeAssignment) {
+    throw new TRPCError({
+      code: "CONFLICT",
+      message: "Item is already assigned",
+    });
+  }
+}
 
 export const inventoryRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
@@ -311,111 +564,6 @@ export const inventoryRouter = {
       });
     }),
 
-  // Legacy endpoints kept for UI compatibility while migrating to unified item flow
-  assets: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.inventoryItem.findMany({
-      where: {
-        schoolId: ctx.schoolId,
-        trackingType: "RETURNABLE",
-        isActive: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }),
-
-  createAsset: protectedProcedure
-    .input(
-      z.object({
-        name: z.string().min(2),
-        sku: z.string().optional(),
-        serial: z.string().optional(),
-        note: z.string().optional(),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.inventoryItem.create({
-        data: {
-          name: input.name,
-          trackingType: "RETURNABLE",
-          sku: input.sku,
-          serial: input.serial,
-          note: input.note,
-          schoolId: ctx.schoolId,
-        },
-      });
-    }),
-
-  updateAsset: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        name: z.string().min(2),
-        sku: z.string().optional(),
-        serial: z.string().optional(),
-        note: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const item = await ctx.db.inventoryItem.findFirst({
-        where: {
-          id: input.id,
-          schoolId: ctx.schoolId,
-          trackingType: "RETURNABLE",
-          isActive: true,
-        },
-      });
-
-      if (!item) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Asset not found",
-        });
-      }
-
-      return ctx.db.inventoryItem.update({
-        where: {
-          id: item.id,
-        },
-        data: {
-          name: input.name,
-          sku: input.sku,
-          serial: input.serial,
-          note: input.note,
-        },
-      });
-    }),
-
-  deleteAsset: protectedProcedure
-    .input(z.string().min(1))
-    .mutation(async ({ ctx, input }) => {
-      const item = await ctx.db.inventoryItem.findFirst({
-        where: {
-          id: input,
-          schoolId: ctx.schoolId,
-          trackingType: "RETURNABLE",
-          isActive: true,
-        },
-      });
-
-      if (!item) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Asset not found",
-        });
-      }
-
-      return ctx.db.inventoryItem.update({
-        where: {
-          id: item.id,
-        },
-        data: {
-          isActive: false,
-        },
-      });
-    }),
-
   consumables: protectedProcedure.query(({ ctx }) => {
     return ctx.services.inventory.getConsumables({
       schoolId: ctx.schoolId,
@@ -423,196 +571,14 @@ export const inventoryRouter = {
     });
   }),
 
-  createConsumable: protectedProcedure
-    .input(
-      z.object({
-        name: z.string().min(2),
-        minStockLevel: z.number().min(0),
-        unitId: z.string().min(1),
-        note: z.string().optional(),
-      }),
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.inventoryItem.create({
-        data: {
-          name: input.name,
-          trackingType: "CONSUMABLE",
-          unitId: input.unitId,
-          minStockLevel: input.minStockLevel,
-          note: input.note,
-          schoolId: ctx.schoolId,
-        },
-      });
-    }),
-
-  updateConsumable: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        name: z.string().min(2),
-        minStockLevel: z.number().min(0),
-        unitId: z.string().min(1),
-        note: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const item = await ctx.db.inventoryItem.findFirst({
-        where: {
-          id: input.id,
-          schoolId: ctx.schoolId,
-          trackingType: "CONSUMABLE",
-          isActive: true,
-        },
-      });
-
-      if (!item) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Consumable not found",
-        });
-      }
-
-      return ctx.db.inventoryItem.update({
-        where: {
-          id: item.id,
-        },
-        data: {
-          name: input.name,
-          minStockLevel: input.minStockLevel,
-          unitId: input.unitId,
-          note: input.note,
-        },
-      });
-    }),
-
-  deleteConsumable: protectedProcedure
-    .input(z.string().min(1))
-    .mutation(async ({ ctx, input }) => {
-      const item = await ctx.db.inventoryItem.findFirst({
-        where: {
-          id: input,
-          schoolId: ctx.schoolId,
-          trackingType: "CONSUMABLE",
-          isActive: true,
-        },
-      });
-
-      if (!item) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Consumable not found",
-        });
-      }
-
-      return ctx.db.inventoryItem.update({
-        where: {
-          id: item.id,
-        },
-        data: {
-          isActive: false,
-        },
-      });
-    }),
-
-  consumableUsages: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.inventoryEvent
-      .findMany({
-        where: {
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          type: "CONSUME",
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
-          assignee: true,
-          createdBy: true,
-          item: {
-            include: {
-              unit: true,
-            },
-          },
-        },
-      })
-      .then((events) => {
-        return events.map((event) => ({
-          id: event.id,
-          staffId: event.assigneeId ?? "",
-          staff: event.assignee
-            ? {
-                id: event.assigneeId,
-                name: getFullName(event.assignee),
-                email: event.assignee.email,
-              }
-            : null,
-          quantity: event.quantity,
-          note: event.note,
-          createdAt: event.createdAt,
-          updatedAt: event.updatedAt,
-          consumableId: event.itemId,
-          consumable: {
-            id: event.item.id,
-            name: event.item.name,
-            unitId: event.item.unitId,
-            unit: event.item.unit,
-          },
-          schoolYearId: event.schoolYearId,
-          schoolId: event.schoolId,
-          createdById: event.createdById,
-          createdBy: event.createdBy,
-        }));
-      });
-  }),
-
-  deleteUsage: protectedProcedure
-    .input(z.string().min(1))
-    .mutation(async ({ ctx, input }) => {
-      const usage = await ctx.db.inventoryEvent.findFirst({
-        where: {
-          id: input,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          type: "CONSUME",
-        },
-      });
-
-      if (!usage) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Usage record not found",
-        });
-      }
-
-      return ctx.db.inventoryEvent.delete({
-        where: {
-          id: usage.id,
-        },
-      });
-    }),
-
-  createConsumableUsage: protectedProcedure
-    .input(
-      z.object({
-        consumableId: z.string().min(1),
-        staffId: z.string().min(1),
-        quantity: z.coerce.number().min(1).max(1000),
-        note: z.string().optional(),
-      }),
-    )
+  createEvent: protectedProcedure
+    .input(createEventSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.db.$transaction(async (tx) => {
-        await ensureStaffExists({
-          db: tx,
-          staffId: input.staffId,
-          schoolId: ctx.schoolId,
-        });
-
         const item = await tx.inventoryItem.findFirst({
           where: {
-            id: input.consumableId,
+            id: input.itemId,
             schoolId: ctx.schoolId,
-            trackingType: "CONSUMABLE",
             isActive: true,
           },
         });
@@ -620,156 +586,48 @@ export const inventoryRouter = {
         if (!item) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Consumable not found",
+            message: "Inventory item not found",
           });
         }
 
-        const usage = await tx.inventoryEvent.create({
-          data: {
-            itemId: input.consumableId,
-            type: "CONSUME",
-            quantity: input.quantity,
-            assigneeId: input.staffId,
-            note: input.note,
-            createdById: ctx.session.user.id,
+        validateEventItemCompatibility({
+          trackingType: item.trackingType,
+          eventType: input.type,
+        });
+
+        if (input.assigneeId) {
+          await ensureStaffExists({
+            db: tx,
+            staffId: input.assigneeId,
             schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-          },
-        });
-
-        const currentStock = await getConsumableStockTx({
-          tx,
-          itemId: input.consumableId,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-        });
-
-        if (currentStock < 0) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "Insufficient stock for this withdrawal",
           });
         }
 
-        return usage;
-      });
-    }),
-
-  updateConsumableUsage: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        consumableId: z.string().min(1),
-        staffId: z.string().min(1),
-        quantity: z.coerce.number().min(1).max(1000),
-        note: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.$transaction(async (tx) => {
-        await ensureStaffExists({
-          db: tx,
-          staffId: input.staffId,
-          schoolId: ctx.schoolId,
-        });
-
-        const event = await tx.inventoryEvent.findFirst({
-          where: {
-            id: input.id,
-            schoolId: ctx.schoolId,
-            schoolYearId: ctx.schoolYearId,
-            type: "CONSUME",
-          },
-        });
-
-        if (!event) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Usage record not found",
-          });
-        }
-
-        await tx.inventoryEvent.update({
-          where: {
-            id: event.id,
-          },
-          data: {
-            itemId: input.consumableId,
-            assigneeId: input.staffId,
-            quantity: input.quantity,
-            note: input.note,
-          },
-        });
-
-        const currentStock = await getConsumableStockTx({
-          tx,
-          itemId: input.consumableId,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-        });
-
-        if (currentStock < 0) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "Insufficient stock for this withdrawal",
-          });
-        }
-
-        if (event.itemId !== input.consumableId) {
-          const previousStock = await getConsumableStockTx({
+        if (input.type === "ASSIGN") {
+          await ensureNoActiveAssignment({
             tx,
-            itemId: event.itemId,
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
-          });
-          if (previousStock < 0) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: "Previous item stock became invalid",
-            });
-          }
-        }
-
-        return true;
-      });
-    }),
-
-  createStockMovement: protectedProcedure
-    .input(
-      z.object({
-        consumableId: z.string().min(1),
-        quantity: z.coerce.number().min(1).max(1000),
-        type: z.enum(["IN", "OUT", "ADJUST"]).default("IN"),
-        note: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.$transaction(async (tx) => {
-        const item = await tx.inventoryItem.findFirst({
-          where: {
-            id: input.consumableId,
-            schoolId: ctx.schoolId,
-            trackingType: "CONSUMABLE",
-            isActive: true,
-          },
-        });
-
-        if (!item) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Consumable not found",
+            itemId: input.itemId,
           });
         }
 
-        const movementType = input.type === "IN" ? "STOCK_IN" : "ADJUST";
-        const movementQuantity =
-          input.type === "OUT" ? -input.quantity : input.quantity;
+        const dueAt = parseOptionalDate(input.dueAt);
 
-        const movement = await tx.inventoryEvent.create({
+        const event = await tx.inventoryEvent.create({
           data: {
-            itemId: input.consumableId,
-            type: movementType,
-            quantity: movementQuantity,
+            itemId: input.itemId,
+            type: input.type,
+            quantity: resolveEventQuantity({
+              type: input.type,
+              quantity: input.quantity,
+            }),
+            assigneeId: input.assigneeId,
+            location: input.location,
+            dueAt:
+              input.type === "ASSIGN"
+                ? (dueAt ?? item.defaultReturnDate ?? null)
+                : null,
             note: input.note,
             createdById: ctx.session.user.id,
             schoolId: ctx.schoolId,
@@ -777,257 +635,170 @@ export const inventoryRouter = {
           },
         });
 
-        const currentStock = await getConsumableStockTx({
-          tx,
-          itemId: input.consumableId,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-        });
-
-        if (currentStock < 0) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "This movement would result in negative stock",
+        if (isStockEventType(input.type)) {
+          await ensureStockNotNegative({
+            tx,
+            itemIds: [input.itemId],
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
           });
         }
 
-        return movement;
+        return event;
       });
     }),
 
-  updateStockMovement: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        consumableId: z.string().min(1),
-        quantity: z.coerce.number().min(1).max(1000),
-        type: z.enum(["IN", "OUT", "ADJUST"]).default("IN"),
-        note: z.string().optional(),
-      }),
-    )
+  updateEvent: protectedProcedure
+    .input(updateEventSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.db.$transaction(async (tx) => {
-        const event = await tx.inventoryEvent.findFirst({
+        const previousEvent = await tx.inventoryEvent.findFirst({
           where: {
             id: input.id,
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
-            type: {
-              in: ["STOCK_IN", "ADJUST"],
-            },
           },
         });
 
-        if (!event) {
+        if (!previousEvent) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Stock movement not found",
+            message: "Inventory event not found",
           });
         }
 
-        const movementType = input.type === "IN" ? "STOCK_IN" : "ADJUST";
-        const movementQuantity =
-          input.type === "OUT" ? -input.quantity : input.quantity;
+        const item = await tx.inventoryItem.findFirst({
+          where: {
+            id: input.itemId,
+            schoolId: ctx.schoolId,
+            isActive: true,
+          },
+        });
+
+        if (!item) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Inventory item not found",
+          });
+        }
+
+        validateEventItemCompatibility({
+          trackingType: item.trackingType,
+          eventType: input.type,
+        });
+
+        const assigneeId = input.assigneeId ?? previousEvent.assigneeId ?? undefined;
+        const location = input.location ?? previousEvent.location ?? undefined;
+        const note = input.note ?? previousEvent.note ?? undefined;
+        const dueAt = parseOptionalDate(input.dueAt);
+        const returnedAt = parseOptionalDate(input.returnedAt);
+
+        if (assigneeId) {
+          await ensureStaffExists({
+            db: tx,
+            staffId: assigneeId,
+            schoolId: ctx.schoolId,
+          });
+        }
+
+        if (input.type === "ASSIGN" && !returnedAt) {
+          await ensureNoActiveAssignment({
+            tx,
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+            itemId: input.itemId,
+            excludeEventId: previousEvent.id,
+          });
+        }
 
         const updated = await tx.inventoryEvent.update({
           where: {
-            id: event.id,
+            id: previousEvent.id,
           },
           data: {
-            itemId: input.consumableId,
-            type: movementType,
-            quantity: movementQuantity,
-            note: input.note,
+            itemId: input.itemId,
+            type: input.type,
+            quantity: resolveEventQuantity({
+              type: input.type,
+              quantity: input.quantity,
+              fallbackQuantity: previousEvent.quantity,
+            }),
+            assigneeId: assigneeId ?? null,
+            location: input.type === "ASSIGN" ? (location ?? null) : null,
+            dueAt:
+              input.type === "ASSIGN"
+                ? (dueAt ?? previousEvent.dueAt ?? item.defaultReturnDate ?? null)
+                : null,
+            returnedAt:
+              input.type === "ASSIGN"
+                ? (returnedAt ?? previousEvent.returnedAt ?? null)
+                : null,
+            returnedById:
+              input.type === "ASSIGN"
+                ? returnedAt
+                  ? ctx.session.user.id
+                  : (previousEvent.returnedById ?? null)
+                : null,
+            note,
           },
         });
 
-        const currentStock = await getConsumableStockTx({
-          tx,
-          itemId: input.consumableId,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-        });
-
-        if (currentStock < 0) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "This movement would result in negative stock",
-          });
+        const stockItemIds = new Set<string>();
+        if (isStockEventType(previousEvent.type)) {
+          stockItemIds.add(previousEvent.itemId);
+        }
+        if (isStockEventType(input.type)) {
+          stockItemIds.add(input.itemId);
         }
 
-        if (event.itemId !== input.consumableId) {
-          const previousStock = await getConsumableStockTx({
+        if (stockItemIds.size > 0) {
+          await ensureStockNotNegative({
             tx,
-            itemId: event.itemId,
+            itemIds: [...stockItemIds],
             schoolId: ctx.schoolId,
             schoolYearId: ctx.schoolYearId,
           });
-          if (previousStock < 0) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: "Previous item stock became invalid",
-            });
-          }
         }
 
         return updated;
       });
     }),
 
-  createAssetUsage: protectedProcedure
-    .input(
-      z.object({
-        staffId: z.string().min(1),
-        assetId: z.string().min(1),
-        location: z.string().optional(),
-        note: z.string().optional(),
-        dueAt: z.string().optional(),
-      }),
-    )
+  deleteEvent: protectedProcedure
+    .input(z.string().min(1))
     .mutation(async ({ ctx, input }) => {
-      await ensureStaffExists({
-        db: ctx.db,
-        staffId: input.staffId,
-        schoolId: ctx.schoolId,
-      });
-
-      const item = await ctx.db.inventoryItem.findFirst({
-        where: {
-          id: input.assetId,
-          schoolId: ctx.schoolId,
-          trackingType: "RETURNABLE",
-          isActive: true,
-        },
-      });
-
-      if (!item) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Returnable item not found",
+      return ctx.db.$transaction(async (tx) => {
+        const event = await tx.inventoryEvent.findFirst({
+          where: {
+            id: input,
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          },
         });
-      }
 
-      const activeAssignment = await ctx.db.inventoryEvent.findFirst({
-        where: {
-          itemId: input.assetId,
-          schoolId: ctx.schoolId,
-          type: "ASSIGN",
-          returnedAt: null,
-        },
-      });
+        if (!event) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Inventory event not found",
+          });
+        }
 
-      if (activeAssignment) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "Item is already assigned",
+        await tx.inventoryEvent.delete({
+          where: {
+            id: event.id,
+          },
         });
-      }
 
-      return ctx.db.inventoryEvent.create({
-        data: {
-          itemId: input.assetId,
-          type: "ASSIGN",
-          quantity: 1,
-          assigneeId: input.staffId,
-          location: input.location,
-          note: input.note,
-          dueAt: input.dueAt
-            ? new Date(input.dueAt)
-            : (item.defaultReturnDate ?? null),
-          createdById: ctx.session.user.id,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-        },
-      });
-    }),
+        if (isStockEventType(event.type)) {
+          await ensureStockNotNegative({
+            tx,
+            itemIds: [event.itemId],
+            schoolId: ctx.schoolId,
+            schoolYearId: ctx.schoolYearId,
+          });
+        }
 
-  updateAssetUsage: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        staffId: z.string().min(1),
-        assetId: z.string().min(1),
-        location: z.string().optional(),
-        note: z.string().optional(),
-        dueAt: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      await ensureStaffExists({
-        db: ctx.db,
-        staffId: input.staffId,
-        schoolId: ctx.schoolId,
-      });
-
-      const assignment = await ctx.db.inventoryEvent.findFirst({
-        where: {
-          id: input.id,
-          itemId: input.assetId,
-          schoolId: ctx.schoolId,
-          schoolYearId: ctx.schoolYearId,
-          type: "ASSIGN",
-        },
-      });
-
-      if (!assignment) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Assignment not found",
-        });
-      }
-
-      return ctx.db.inventoryEvent.update({
-        where: {
-          id: assignment.id,
-        },
-        data: {
-          assigneeId: input.staffId,
-          location: input.location,
-          note: input.note,
-          dueAt: input.dueAt ? new Date(input.dueAt) : assignment.dueAt,
-        },
-      });
-    }),
-
-  returnAssetUsage: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        note: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const assignment = await ctx.db.inventoryEvent.findFirst({
-        where: {
-          id: input.id,
-          schoolId: ctx.schoolId,
-          type: "ASSIGN",
-        },
-      });
-
-      if (!assignment) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Assignment not found",
-        });
-      }
-
-      if (assignment.returnedAt) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Item is already returned",
-        });
-      }
-
-      return ctx.db.inventoryEvent.update({
-        where: {
-          id: assignment.id,
-        },
-        data: {
-          returnedAt: new Date(),
-          returnedById: ctx.session.user.id,
-          note: input.note ?? assignment.note,
-        },
+        return true;
       });
     }),
 } satisfies TRPCRouterRecord;

@@ -30,7 +30,7 @@ const schema = z.object({
   dueAt: z.string().optional(),
 });
 
-export function CreateEditAssetUsage({
+export function CreateEditAssignEvent({
   id,
   note,
   staffId,
@@ -60,7 +60,7 @@ export function CreateEditAssetUsage({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const createAssetUsageMutation = useMutation(
-    trpc.inventory.createAssetUsage.mutationOptions({
+    trpc.inventory.createEvent.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
@@ -72,7 +72,7 @@ export function CreateEditAssetUsage({
     }),
   );
   const updateAssetUsageMutation = useMutation(
-    trpc.inventory.updateAssetUsage.mutationOptions({
+    trpc.inventory.updateEvent.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
@@ -88,8 +88,9 @@ export function CreateEditAssetUsage({
     toast.loading(t("Processing"), { id: 0 });
     const values = {
       note: data.note,
-      staffId: data.staffId,
-      assetId: assetId,
+      assigneeId: data.staffId,
+      itemId: assetId,
+      type: "ASSIGN" as const,
       location: data.location,
       dueAt: data.dueAt,
     };

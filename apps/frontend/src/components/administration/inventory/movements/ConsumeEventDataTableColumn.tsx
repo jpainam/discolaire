@@ -11,7 +11,7 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { CreateEditStockWithdrawal } from "~/components/administration/inventory/movements/CreateEditStockWithdrawal";
+import { CreateEditConsumeEvent } from "~/components/administration/inventory/movements/CreateEditConsumeEvent";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import FlatBadge from "~/components/FlatBadge";
 import { Button } from "~/components/ui/button";
@@ -28,10 +28,11 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useSheet } from "~/hooks/use-sheet";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { InventoryUsageDetail } from "../InventoryUsageDetail";
+import { getFullName } from "~/utils";
+import { InventoryEventDetail } from "../InventoryEventDetail";
 
-export function useColumns(): ColumnDef<
-  RouterOutputs["inventory"]["consumableUsages"][number],
+export function useConsumeEventColumns(): ColumnDef<
+  RouterOutputs["inventory"]["events"][number],
   unknown
 >[] {
   const locale = useLocale();
@@ -101,8 +102,7 @@ export function useColumns(): ColumnDef<
           const usage = row.original;
           return (
             <div className="text-muted-foreground">
-              {usage.quantity}{" "}
-              {usage.consumable.unit ? usage.consumable.unit.name : ""}
+              {usage.quantity} {usage.item.unit ? usage.item.unit.name : ""}
             </div>
           );
         },
@@ -133,12 +133,18 @@ export function useColumns(): ColumnDef<
         ),
         cell: ({ row }) => {
           const usage = row.original;
+          const staffName = usage.assignee ? getFullName(usage.assignee) : "-";
+
+          if (!usage.assigneeId) {
+            return <div className="text-muted-foreground">-</div>;
+          }
+
           return (
             <Link
-              href={`/staffs/${usage.staffId}`}
+              href={`/staffs/${usage.assigneeId}`}
               className="text-muted-foreground hover:underline"
             >
-              {usage.staff?.name}
+              {staffName}
             </Link>
           );
         },
@@ -176,7 +182,7 @@ export function useColumns(): ColumnDef<
 function ActionCell({
   inventory,
 }: {
-  inventory: RouterOutputs["inventory"]["consumableUsages"][number];
+  inventory: RouterOutputs["inventory"]["events"][number];
 }) {
   const confirm = useConfirm();
 
@@ -190,7 +196,7 @@ function ActionCell({
   const { openModal } = useModal();
 
   const deleteUsageMutation = useMutation(
-    trpc.inventory.deleteUsage.mutationOptions({
+    trpc.inventory.deleteEvent.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
@@ -221,10 +227,10 @@ function ActionCell({
                   title: t("Update asset"),
                   className: "sm:max-w-xl",
                   view: (
-                    <CreateEditStockWithdrawal
+                    <CreateEditConsumeEvent
                       id={inventory.id}
-                      staffId={inventory.staffId}
-                      consumableId={inventory.consumableId}
+                      staffId={inventory.assigneeId ?? undefined}
+                      consumableId={inventory.itemId}
                       quantity={inventory.quantity}
                       note={inventory.note ?? ""}
                     />
@@ -266,7 +272,7 @@ function ActionCell({
 function ItemCell({
   item,
 }: {
-  item: RouterOutputs["inventory"]["consumableUsages"][number];
+  item: RouterOutputs["inventory"]["events"][number];
 }) {
   const { openSheet } = useSheet();
 
@@ -275,11 +281,11 @@ function ItemCell({
       variant="link"
       onClick={() => {
         openSheet({
-          view: <InventoryUsageDetail item={item} />,
+          view: <InventoryEventDetail item={item} />,
         });
       }}
     >
-      <span>{item.consumable.name}</span>
+      <span>{item.item.name}</span>
     </Button>
   );
 }

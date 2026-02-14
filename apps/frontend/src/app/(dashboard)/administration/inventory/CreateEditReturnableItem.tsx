@@ -30,24 +30,30 @@ const schema = z.object({
   serial: z.string().optional(),
   note: z.string().optional(),
 });
-export function CreateEditAsset({
+
+type AssetItem = Extract<
+  RouterOutputs["inventory"]["all"][number],
+  { type: "ASSET" }
+>;
+
+export function CreateEditReturnableItem({
   asset,
 }: {
-  asset?: RouterOutputs["inventory"]["assets"][number];
+  asset?: AssetItem;
 }) {
   const form = useForm({
     resolver: standardSchemaResolver(schema),
     defaultValues: {
       name: asset?.name ?? "",
-      sku: asset?.sku ?? "",
-      serial: asset?.serial ?? "",
+      sku: asset?.other.sku ?? "",
+      serial: asset?.other.serial ?? "",
       note: asset?.note?.replace(/,/g, "\n") ?? "",
     },
   });
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const createAssetMutation = useMutation(
-    trpc.inventory.createAsset.mutationOptions({
+    trpc.inventory.createItem.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("Success"), { id: 0 });
@@ -59,7 +65,7 @@ export function CreateEditAsset({
     }),
   );
   const updateAssetMutation = useMutation(
-    trpc.inventory.updateAsset.mutationOptions({
+    trpc.inventory.updateItem.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("Success"), { id: 0 });
@@ -74,6 +80,7 @@ export function CreateEditAsset({
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
       name: data.name,
+      trackingType: "RETURNABLE" as const,
       sku: data.sku,
       serial: data.serial,
       note: data.note,

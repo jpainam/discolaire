@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { ConsumableSelector } from "~/components/administration/inventory/ConsumableSelector";
+import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -22,38 +22,43 @@ import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
+import { InventoryItemSelector } from "../InventoryItemSelector";
 
 const schema = z.object({
-  consumableId: z.string().min(1),
+  staffId: z.string().min(1),
   quantity: z.coerce.number().min(1).max(1000),
   note: z.string().optional(),
+  consumableId: z.string().min(1),
 });
-export function CreateEditStockEntry({
+
+export function CreateEditConsumeEvent({
   id,
+  staffId,
+  consumableId,
   quantity,
   note,
-  consumableId,
 }: {
-  consumableId?: string;
   id?: string;
+  staffId?: string;
+  consumableId?: string;
   quantity?: number;
   note?: string;
 }) {
   const form = useForm({
     resolver: standardSchemaResolver(schema),
     defaultValues: {
-      consumableId: consumableId ?? "",
+      staffId: staffId ?? "",
       quantity: quantity ?? 1,
+      consumableId: consumableId ?? "",
       note: note ?? "",
     },
   });
 
   const trpc = useTRPC();
 
-  const t = useTranslations();
   const queryClient = useQueryClient();
-  const createMovementMutation = useMutation(
-    trpc.inventory.createStockMovement.mutationOptions({
+  const createConsumableMutation = useMutation(
+    trpc.inventory.createEvent.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("created_successfully"), { id: 0 });
@@ -64,8 +69,8 @@ export function CreateEditStockEntry({
       },
     }),
   );
-  const updateMovementMutation = useMutation(
-    trpc.inventory.updateStockMovement.mutationOptions({
+  const updateConsumableMutation = useMutation(
+    trpc.inventory.updateEvent.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
@@ -76,26 +81,53 @@ export function CreateEditStockEntry({
       },
     }),
   );
+
+  const t = useTranslations();
   const handleSubmit = (data: z.infer<typeof schema>) => {
     toast.loading(t("Processing"), { id: 0 });
     const values = {
-      consumableId: data.consumableId,
+      itemId: data.consumableId,
+      assigneeId: data.staffId,
+      type: "CONSUME" as const,
       quantity: data.quantity,
-      type: "IN" as const,
       note: data.note,
     };
     if (id) {
-      updateMovementMutation.mutate({ ...values, id });
+      updateConsumableMutation.mutate({
+        id,
+        ...values,
+      });
     } else {
-      createMovementMutation.mutate(values);
+      createConsumableMutation.mutate(values);
     }
   };
 
   const { closeModal } = useModal();
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <div className="flex flex-col gap-6 px-4">
+          <FormField
+            control={form.control}
+            name="staffId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("staff")}</FormLabel>
+                <FormControl>
+                  <StaffSelector
+                    defaultValue={field.value}
+                    onSelect={(value) => {
+                      field.onChange(value);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="consumableId"
@@ -103,11 +135,9 @@ export function CreateEditStockEntry({
               <FormItem>
                 <FormLabel>{t("consumable")}</FormLabel>
                 <FormControl>
-                  <ConsumableSelector
+                  <InventoryItemSelector
+                    onChange={field.onChange}
                     defaultValue={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                    }}
                   />
                 </FormControl>
 
@@ -157,12 +187,12 @@ export function CreateEditStockEntry({
           <div className="grid grid-cols-1 gap-2">
             <Button
               disabled={
-                createMovementMutation.isPending ||
-                updateMovementMutation.isPending
+                createConsumableMutation.isPending ||
+                updateConsumableMutation.isPending
               }
             >
-              {(createMovementMutation.isPending ||
-                updateMovementMutation.isPending) && <Spinner />}
+              {(createConsumableMutation.isPending ||
+                updateConsumableMutation.isPending) && <Spinner />}
               {t("submit")}
             </Button>
             <Button

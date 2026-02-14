@@ -41,18 +41,24 @@ const schema = z.object({
   unitId: z.string().min(1),
   note: z.string().optional(),
 });
-export function CreateEditConsumable({
+
+type ConsumableItem = Extract<
+  RouterOutputs["inventory"]["all"][number],
+  { type: "CONSUMABLE" }
+>;
+
+export function CreateEditConsumableItem({
   consumable,
 }: {
-  consumable?: RouterOutputs["inventory"]["consumables"][number];
+  consumable?: ConsumableItem;
 }) {
   const form = useForm({
     resolver: standardSchemaResolver(schema),
     defaultValues: {
       name: consumable?.name ?? "",
       //currentStock: consumable?.currentStock ?? 0,
-      minStockLevel: consumable?.minStockLevel ?? 0,
-      unitId: consumable?.unitId ?? "",
+      minStockLevel: Number(consumable?.other.minStockLevel ?? 0),
+      unitId: consumable?.other.unitId ?? "",
       note: consumable?.note ?? "",
     },
   });
@@ -60,7 +66,7 @@ export function CreateEditConsumable({
   const unitQuery = useQuery(trpc.inventory.units.queryOptions());
   const queryClient = useQueryClient();
   const createConsumableMutation = useMutation(
-    trpc.inventory.createConsumable.mutationOptions({
+    trpc.inventory.createItem.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success("Success", { id: 0 });
@@ -72,7 +78,7 @@ export function CreateEditConsumable({
     }),
   );
   const updateConsumableMutation = useMutation(
-    trpc.inventory.updateConsumable.mutationOptions({
+    trpc.inventory.updateItem.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success("Success", { id: 0 });
@@ -85,9 +91,12 @@ export function CreateEditConsumable({
   );
   const handleSubmit = (data: z.infer<typeof schema>) => {
     const values = {
-      ...data,
+      name: data.name,
+      trackingType: "CONSUMABLE" as const,
+      unitId: data.unitId,
       //currentStock: Number(data.currentStock),
       minStockLevel: Number(data.minStockLevel),
+      note: data.note,
     };
     if (consumable) {
       updateConsumableMutation.mutate({

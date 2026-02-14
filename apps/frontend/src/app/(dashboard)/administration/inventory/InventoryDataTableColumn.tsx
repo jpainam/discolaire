@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
-import { CreateEditAssetUsage } from "~/components/administration/inventory/CreateEditAssetUsage";
+import { CreateEditAssignEvent } from "~/components/administration/inventory/CreateEditAssignEvent";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -58,7 +58,7 @@ export function ActionCell({
     }),
   );
   const returnAssetUsageMutation = useMutation(
-    trpc.inventory.returnAssetUsage.mutationOptions({
+    trpc.inventory.updateEvent.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
@@ -71,6 +71,7 @@ export function ActionCell({
 
   const assetOther = inventory.type === "ASSET" ? inventory.other : null;
   const activeUsageId = assetOther?.activeUsageId ?? null;
+  const activeUserId = assetOther?.activeUserId ?? null;
   const activeUserName = assetOther?.activeUserName ?? null;
   const isAssetAssigned = Boolean(activeUsageId && activeUserName);
 
@@ -115,7 +116,7 @@ export function ActionCell({
                   openSheet({
                     title: "Assign asset",
                     view: (
-                      <CreateEditAssetUsage
+                      <CreateEditAssignEvent
                         assetId={inventory.id}
                         dueAt={assetOther?.defaultReturnDate ?? ""}
                       />
@@ -143,6 +144,10 @@ export function ActionCell({
                       }
                       await returnAssetUsageMutation.mutateAsync({
                         id: activeUsageId,
+                        itemId: inventory.id,
+                        type: "ASSIGN",
+                        assigneeId: activeUserId ?? undefined,
+                        returnedAt: new Date().toISOString(),
                       });
                     },
                   });

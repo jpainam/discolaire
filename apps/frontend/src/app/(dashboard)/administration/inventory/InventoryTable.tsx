@@ -27,7 +27,7 @@ import { useModal } from "~/hooks/use-modal";
 import { PlusIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditInventoryItem } from "./CreateEditInventoryItem";
-import { CreateEditStockEntry } from "~/components/administration/inventory/movements/CreateEditStockEntry";
+import { CreateEditStockInEvent } from "~/components/administration/inventory/movements/CreateEditStockInEvent";
 import { ActionCell, AvatarGroup4 } from "./InventoryDataTableColumn";
 
 export function InventoryTable() {
@@ -83,7 +83,7 @@ export function InventoryTable() {
               openModal({
                 title: t("Stock addition"),
                 className: "sm:max-w-xl",
-                view: <CreateEditStockEntry />,
+                view: <CreateEditStockInEvent />,
               });
             }}
             variant="outline"

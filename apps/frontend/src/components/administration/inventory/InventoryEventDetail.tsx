@@ -11,11 +11,12 @@ import {
   SheetHeader,
   SheetTitle,
 } from "~/components/ui/sheet";
+import { getFullName } from "~/utils";
 
-export function InventoryUsageDetail({
+export function InventoryEventDetail({
   item,
 }: {
-  item: RouterOutputs["inventory"]["consumableUsages"][number];
+  item: RouterOutputs["inventory"]["events"][number];
 }) {
   return (
     <SheetContent className="overflow-y-auto sm:max-w-md md:max-w-lg">
@@ -29,7 +30,7 @@ export function InventoryUsageDetail({
 
       <div className="space-y-6 py-4">
         <div>
-          <h3 className="text-lg font-semibold">{item.consumable.name}</h3>
+          <h3 className="text-lg font-semibold">{item.item.name}</h3>
           <Badge variant="outline" className="mt-2">
             Withdrawal
           </Badge>
@@ -42,9 +43,9 @@ export function InventoryUsageDetail({
             <User className="text-muted-foreground mt-0.5 h-5 w-5" />
             <div>
               <h4 className="font-medium">Assigned to</h4>
-              <p>{item.staff ? item.staff.name : "-"}</p>
+              <p>{item.assignee ? getFullName(item.assignee) : "-"}</p>
               <p className="text-muted-foreground text-sm">
-                {item.staff ? item.staff.email : "-"}
+                {item.assignee ? item.assignee.email : "-"}
               </p>
             </div>
           </div>
@@ -62,8 +63,7 @@ export function InventoryUsageDetail({
             <div>
               <h4 className="font-medium">Quantity</h4>
               <p>
-                {item.quantity}{" "}
-                {item.consumable.unit ? item.consumable.unit.name : ""}
+                {item.quantity} {item.item.unit ? item.item.unit.name : ""}
               </p>
             </div>
           </div>

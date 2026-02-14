@@ -13,10 +13,10 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-export function ConsumableUsageDataTableAction({
+export function ConsumeEventDataTableAction({
   table,
 }: {
-  table: Table<RouterOutputs["inventory"]["consumableUsages"][number]>;
+  table: Table<RouterOutputs["inventory"]["events"][number]>;
 }) {
   const rows = table.getFilteredSelectedRowModel().rows;
 
@@ -26,7 +26,7 @@ export function ConsumableUsageDataTableAction({
   const queryClient = useQueryClient();
 
   const deleteConsumableMutation = useMutation(
-    trpc.inventory.deleteUsage.mutationOptions({
+    trpc.inventory.deleteEvent.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.inventory.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });

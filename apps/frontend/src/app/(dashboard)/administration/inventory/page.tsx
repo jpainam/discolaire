@@ -9,7 +9,7 @@ import {
 import { getTranslations } from "next-intl/server";
 
 import { InventorySettings } from "~/components/administration/inventory/InventorySettings";
-import { ConsumableUsageDataTable } from "~/components/administration/inventory/movements/ConsumableUsageDataTable";
+import { ConsumeEventDataTable } from "~/components/administration/inventory/movements/ConsumeEventDataTable";
 import { StockMovementHeader } from "~/components/administration/inventory/movements/StockMovementHeader";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Badge } from "~/components/ui/badge";
@@ -31,7 +31,7 @@ export default async function Page() {
   //const items = await fetchQtrpc.inventory.all;
   batchPrefetch([
     trpc.inventory.all.queryOptions(),
-    trpc.inventory.consumableUsages.queryOptions(),
+    trpc.inventory.events.queryOptions(),
     trpc.inventory.consumables.queryOptions(),
   ]);
   const t = await getTranslations();
@@ -112,7 +112,7 @@ export default async function Page() {
           <div className="px-4">
             <ErrorBoundary errorComponent={ErrorFallback}>
               <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                <ConsumableUsageDataTable />
+                <ConsumeEventDataTable />
               </Suspense>
             </ErrorBoundary>
           </div>

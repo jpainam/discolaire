@@ -27,7 +27,7 @@ import { useCreateQueryString } from "~/hooks/create-query-string";
 import { useModal } from "~/hooks/use-modal";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
-import { CreateEditStockWithdrawal } from "./CreateEditStockWithdrawal";
+import { CreateEditConsumeEvent } from "./CreateEditConsumeEvent";
 
 export function StockMovementHeader() {
   const { createQueryString } = useCreateQueryString();
@@ -93,7 +93,7 @@ export function StockMovementHeader() {
             openModal({
               title: t("Stock withdrawal"),
               className: "sm:max-w-xl",
-              view: <CreateEditStockWithdrawal />,
+              view: <CreateEditConsumeEvent />,
             });
           }}
         >
