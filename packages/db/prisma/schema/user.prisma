@@ -43,9 +43,8 @@ model User {
     receivedEmails               EmailRecipient[]
     createdSubscriptions         NotificationSubscription[] @relation("CreatedSubscriptions")
     accessedCommunicationChannel CommunicationChannel[]
-    inventoryReturnedEvents      InventoryEvent[]          @relation("InventoryEventReturnedBy")
-    inventoryCreatedEvents       InventoryEvent[]          @relation("InventoryEventCreatedBy")
-    notifications                UserNotification[]
+    inventoryReturnedEvents      InventoryEvent[]           @relation("InventoryEventReturnedBy")
+    inventoryCreatedEvents       InventoryEvent[]           @relation("InventoryEventCreatedBy")
     enrollmentCreatedBy          Enrollment[]               @relation("EnrollmentCreatedBy")
     classroomCreatedBy           Classroom[]                @relation("ClassroomCreatedBy")
     transactionCreatedBy         Transaction[]              @relation("TransactionCreatedBy")
@@ -231,19 +230,6 @@ model Invitation {
 
     @@index([organizationId])
     @@index([email])
-}
-
-model UserNotification {
-    id           Int        @id @default(autoincrement())
-    userId       String
-    user         User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    title        String
-    message      String
-    schoolYearId String
-    schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    read         Boolean    @default(false)
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
 }
 
 model AppreciationRuleSet {

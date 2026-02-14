@@ -1,12 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { Check, Clock, XIcon } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
+import { Clock, Loader2, TriangleAlert, XIcon } from "lucide-react";
+import { toast } from "sonner";
 
+import type { RouterOutputs } from "@repo/api";
+
+import { authClient } from "~/auth/client";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -25,114 +27,147 @@ import {
 } from "~/components/ui/popover";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { routes } from "~/configs/routes";
+import { useRouter } from "~/hooks/use-router";
 import { NotificationIcon } from "~/icons";
 import { cn } from "~/lib/utils";
+import { useTRPC } from "~/trpc/react";
+import { EmptyComponent } from "../EmptyComponent";
 
-// Sample notification data
-const notifications = {
-  unread: [
-    {
-      id: 1,
-      title: "New deployment successful",
-      message:
-        "Your project 'my-app' has been deployed successfully to production.",
-      date: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-      type: "success",
-    },
-    {
-      id: 2,
-      title: "Domain verification required",
-      message:
-        "Please verify your custom domain to complete the setup process.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-      type: "warning",
-    },
-    {
-      id: 3,
-      title: "Team invitation received",
-      message: "You've been invited to join the 'Acme Corp' team workspace.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
-      type: "info",
-    },
-  ],
-  read: [
-    {
-      id: 4,
-      title: "Build completed",
-      message: "Your latest build has completed successfully with no errors.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-      type: "success",
-    },
-    {
-      id: 5,
-      title: "Usage alert",
-      message: "You've reached 75% of your monthly bandwidth limit.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
-      type: "warning",
-    },
-    {
-      id: 6,
-      title: "Security update",
-      message: "A security update has been applied to your account settings.",
-      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
-      type: "info",
-    },
-  ],
-};
-
-function formatDate(date: Date) {
-  const now = new Date();
-  const diffInMinutes = Math.floor(
-    (now.getTime() - date.getTime()) / (1000 * 60),
-  );
-
-  if (diffInMinutes < 60) {
-    return `${diffInMinutes}m ago`;
-  } else if (diffInMinutes < 1440) {
-    return `${Math.floor(diffInMinutes / 60)}h ago`;
-  } else {
-    return `${Math.floor(diffInMinutes / 1440)}d ago`;
-  }
-}
+type UserNotification = RouterOutputs["userNotification"]["user"][number];
 
 function NotificationItem({
   notification,
-  isRead,
+  onMarkAsRead,
+  isMutating,
 }: {
-  notification: any;
-  isRead: boolean;
+  notification: UserNotification;
+  onMarkAsRead?: (id: string) => void;
+  isMutating: boolean;
 }) {
+  const isRead = notification.read;
+
   return (
     <div
-      className={`bg-muted/50 hover:bg-muted flex items-start gap-3 rounded-lg p-3 transition-colors ${!isRead ? "bg-blue-50/50" : ""}`}
+      className={cn(
+        "bg-muted/50 hover:bg-muted flex items-start gap-3 rounded-lg p-3 transition-colors",
+        !isRead && "bg-blue-50/50",
+      )}
     >
       <div
-        className={`mt-1 h-2 w-2 flex-shrink-0 rounded-full ${!isRead ? "bg-blue-500" : "bg-transparent"}`}
+        className={cn(
+          "mt-1 h-2 w-2 flex-shrink-0 rounded-full",
+          !isRead ? "bg-blue-500" : "bg-transparent",
+        )}
       />
-      <div className="flex-1 space-y-1">
+      <div className="flex-1 space-y-1 overflow-hidden">
         <div className="flex items-center justify-between">
-          <Link
-            href=""
-            className={`line-clamp-1 overflow-hidden text-sm font-medium hover:underline ${!isRead ? "text-foreground" : "text-muted-foreground"}`}
+          <p
+            className={cn(
+              "line-clamp-1 overflow-hidden text-sm font-medium",
+              !isRead ? "text-foreground" : "text-muted-foreground",
+            )}
           >
             {notification.title}
-          </Link>
+          </p>
           <span className="text-muted-foreground flex w-[80px] items-center justify-end gap-1 text-xs">
             <Clock className="h-3 w-3" />
-            {formatDate(notification.date)}
+            {formatDistanceToNow(notification.createdAt, { addSuffix: true })}
           </span>
         </div>
         <p className="text-muted-foreground line-clamp-2 text-xs">
           {notification.message}
         </p>
+        {!isRead && onMarkAsRead && (
+          <Button
+            variant="link"
+            size="sm"
+            className="h-auto p-0 text-xs"
+            onClick={() => {
+              onMarkAsRead(notification.id);
+            }}
+            disabled={isMutating}
+          >
+            Mark as read
+          </Button>
+        )}
       </div>
     </div>
   );
 }
 
 export function NotificationList({ className }: { className?: string }) {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const unreadCount = notifications.unread.length;
+  const { data: session, isPending: isSessionPending } =
+    authClient.useSession();
+
+  const userId = session?.user.id;
+  const notificationQuery = useQuery({
+    ...trpc.userNotification.user.queryOptions({
+      userId: userId ?? "",
+      limit: 50,
+    }),
+    enabled: !!userId,
+  });
+
+  const markAsReadMutation = useMutation(
+    trpc.userNotification.udpateRead.mutationOptions(),
+  );
+
+  const sortedNotifications = useMemo(() => {
+    return [...(notificationQuery.data ?? [])].sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+  }, [notificationQuery.data]);
+
+  const unreadNotifications = useMemo(
+    () => sortedNotifications.filter((notification) => !notification.read),
+    [sortedNotifications],
+  );
+  const readNotifications = useMemo(
+    () => sortedNotifications.filter((notification) => notification.read),
+    [sortedNotifications],
+  );
+  const unreadCount = unreadNotifications.length;
+
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      await markAsReadMutation.mutateAsync({ id, read: true });
+      await queryClient.invalidateQueries(
+        trpc.userNotification.user.pathFilter(),
+      );
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Update failed", {
+        id: 0,
+      });
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    if (unreadNotifications.length === 0) {
+      return;
+    }
+    try {
+      await Promise.all(
+        unreadNotifications.map((notification) =>
+          markAsReadMutation.mutateAsync({
+            id: notification.id,
+            read: true,
+          }),
+        ),
+      );
+      await queryClient.invalidateQueries(
+        trpc.userNotification.user.pathFilter(),
+      );
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Update failed", {
+        id: 0,
+      });
+    }
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -160,9 +195,11 @@ export function NotificationList({ className }: { className?: string }) {
           <CardHeader>
             <CardTitle>Notification</CardTitle>
             <CardDescription>
-              {unreadCount > 0
-                ? `You have ${unreadCount} unread notifications`
-                : "All caught up!"}
+              {isSessionPending || notificationQuery.isPending
+                ? "Loading notifications..."
+                : unreadCount > 0
+                  ? `You have ${unreadCount} unread notifications`
+                  : "All caught up!"}
             </CardDescription>
             <CardAction>
               <Button
@@ -196,50 +233,90 @@ export function NotificationList({ className }: { className?: string }) {
 
               <TabsContent value="unread" className="m-0 min-h-0 flex-1">
                 <ScrollArea className="h-[calc(100vh-16rem)]">
-                  {notifications.unread.length > 0 ? (
+                  {isSessionPending || notificationQuery.isPending ? (
+                    <div className="flex h-32 items-center justify-center">
+                      <Loader2 className="text-muted-foreground h-5 w-5 animate-spin" />
+                    </div>
+                  ) : notificationQuery.isError ? (
+                    <div className="text-muted-foreground flex h-32 items-center justify-center gap-2 text-sm">
+                      <TriangleAlert className="h-4 w-4" />
+                      {notificationQuery.error.message}
+                    </div>
+                  ) : unreadNotifications.length > 0 ? (
                     <div className="space-y-2">
-                      {[
-                        ...notifications.unread,
-                        ...notifications.unread,
-                        ...notifications.unread,
-                        ...notifications.unread,
-                      ].map((notification, index) => (
+                      <div className="flex justify-end px-1">
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="h-auto p-0 text-xs"
+                          onClick={() => {
+                            void handleMarkAllAsRead();
+                          }}
+                          disabled={markAsReadMutation.isPending}
+                        >
+                          Mark all as read
+                        </Button>
+                      </div>
+                      {unreadNotifications.map((notification) => (
                         <NotificationItem
-                          key={index}
+                          key={notification.id}
                           notification={notification}
-                          isRead={false}
+                          isMutating={markAsReadMutation.isPending}
+                          onMarkAsRead={(id) => {
+                            void handleMarkAsRead(id);
+                          }}
                         />
                       ))}
                     </div>
                   ) : (
-                    <div className="flex h-32 flex-col items-center justify-center p-4 text-center">
-                      <Check className="mb-2 h-8 w-8 text-green-500" />
-                      <p className="text-muted-foreground text-sm">
-                        No unread notifications
-                      </p>
-                    </div>
+                    <EmptyComponent
+                      title="No unread notifications"
+                      description="Notifications will show here if you have any"
+                    />
                   )}
                 </ScrollArea>
               </TabsContent>
 
               <TabsContent value="read" className="m-0 min-h-0 flex-1">
                 <ScrollArea className="h-[calc(100vh-16rem)]">
-                  <div className="space-y-2">
-                    {notifications.read.map((notification, index) => (
-                      <NotificationItem
-                        key={index}
-                        notification={notification}
-                        isRead={true}
-                      />
-                    ))}
-                  </div>
+                  {isSessionPending || notificationQuery.isPending ? (
+                    <div className="flex h-32 items-center justify-center">
+                      <Loader2 className="text-muted-foreground h-5 w-5 animate-spin" />
+                    </div>
+                  ) : readNotifications.length > 0 ? (
+                    <div className="space-y-2">
+                      {readNotifications.map((notification) => (
+                        <NotificationItem
+                          key={notification.id}
+                          notification={notification}
+                          isMutating={markAsReadMutation.isPending}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <EmptyComponent
+                      title="No read notifications"
+                      description="Read notifications will be shown here"
+                    />
+                  )}
                 </ScrollArea>
               </TabsContent>
             </Tabs>
           </CardContent>
 
           <CardFooter className="mt-auto">
-            <Button variant="link" className="w-full text-xs">
+            <Button
+              variant="link"
+              className="w-full text-xs"
+              disabled={!userId}
+              onClick={() => {
+                if (!userId) {
+                  return;
+                }
+                setOpen(false);
+                router.push(routes.users.notifications(userId));
+              }}
+            >
               View all notifications
             </Button>
           </CardFooter>
