@@ -31,6 +31,7 @@ import {
   InputGroupInput,
 } from "~/components/ui/input-group";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { useRouter } from "~/hooks/use-router";
 import { ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -119,6 +120,7 @@ export function ClassroomAssignmentList({
   };
   const t = useTranslations();
   const confirm = useConfirm();
+  const router = useRouter();
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
@@ -176,7 +178,15 @@ export function ClassroomAssignmentList({
             <CardHeader>
               <CardTitle className="line-clamp-1">{exam.title}</CardTitle>
               <CardAction className="opacity-0 transition-opacity group-hover:opacity-100">
-                <Button variant="ghost" size="icon-sm">
+                <Button
+                  onClick={() => {
+                    router.push(
+                      `/classrooms/${exam.classroomId}/assignments/${exam.id}/edit`,
+                    );
+                  }}
+                  variant="ghost"
+                  size="icon-sm"
+                >
                   <Pencil />
                 </Button>
                 {canDeleteAssignment && (

@@ -114,6 +114,7 @@ export function FileUploader(props: FileUploaderProps) {
     onChange: onValueChange,
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const normalizedFiles = files ?? [];
   const previousFilesRef = React.useRef<File[]>(normalizedFiles);
 
@@ -236,7 +237,7 @@ export function FileUploader(props: FileUploaderProps) {
         return;
       }
       setIsDragging(false);
-      const droppedFiles = Array.from(event.dataTransfer.files ?? []);
+      const droppedFiles = Array.from(event.dataTransfer.files);
       processFiles(droppedFiles);
     },
     [disabled, processFiles],
