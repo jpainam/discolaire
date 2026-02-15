@@ -1,11 +1,13 @@
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsInteger } from "nuqs/server";
 
 import { getSession } from "~/auth/server";
 import { CreateEditProgram } from "~/components/classrooms/programs/CreateEditProgram";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -27,18 +29,31 @@ const programSearchParamsLoader = createLoader(programSchema);
 export default async function Page(props: PageProps) {
   const params = await props.params;
   const searchParams = await programSearchParamsLoader(props.searchParams);
-
-  const { id } = params;
   const session = await getSession();
 
   const t = await getTranslations();
-  const queryClient = getQueryClient();
-  const subjects = await queryClient.fetchQuery(
-    trpc.classroom.subjects.queryOptions(id),
-  );
+  const subjectId = searchParams.subjectId;
 
-  const subjectId = searchParams.subjectId ?? subjects[0]?.id;
-  //const categories = await queryClient.fetchQuery(trpc.term.all.queryOptions());
+  if (subjectId == null) {
+    const queryClient = getQueryClient();
+    const subjects = await queryClient.fetchQuery(
+      trpc.classroom.subjects.queryOptions(params.id),
+    );
+    const firstSubject = subjects[0];
+
+    if (firstSubject) {
+      redirect(
+        `/classrooms/${params.id}/teaching_session?subjectId=${firstSubject.id.toString()}`,
+      );
+    }
+
+    return (
+      <EmptyComponent
+        title={"Selectionner une matière"}
+        description="Commencer par séléctionner une matière à gauche"
+      />
+    );
+  }
 
   return (
     <Tabs defaultValue="teaching_session">
@@ -53,7 +68,7 @@ export default async function Page(props: PageProps) {
       </TabsList>
       <TabsContent value="teaching_session">
         <HydrateClient>
-          {subjectId && session?.user.profile == "staff" && (
+          {session?.user.profile == "staff" && (
             <ErrorBoundary errorComponent={ErrorFallback}>
               <Suspense
                 fallback={
@@ -74,52 +89,46 @@ export default async function Page(props: PageProps) {
             </ErrorBoundary>
           )}
 
-          {subjectId && (
-            <ErrorBoundary errorComponent={ErrorFallback}>
-              <Suspense
-                fallback={
-                  <div className="grid grid-cols-4 gap-4 px-4 py-2">
-                    {Array.from({ length: 16 }).map((_, i) => (
-                      <Skeleton key={i} className="h-10" />
-                    ))}
-                  </div>
-                }
-              >
-                <SubjectJournalList defaultSubjectId={subjectId} />
-              </Suspense>
-            </ErrorBoundary>
-          )}
-        </HydrateClient>
-      </TabsContent>
-      <TabsContent value="program_coverage">
-        {subjectId && (
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
               fallback={
                 <div className="grid grid-cols-4 gap-4 px-4 py-2">
-                  <Skeleton className="h-20 w-1/4" />
-                  <Skeleton className="h-20 w-1/4" />
-                  <Skeleton className="h-20 w-1/4" />
-                  <Skeleton className="h-20 w-1/4" />
+                  {Array.from({ length: 16 }).map((_, i) => (
+                    <Skeleton key={i} className="h-10" />
+                  ))}
                 </div>
               }
             >
-              <SubjectJournalHeader
-                type="program_coverage"
-                defaultSubjectId={subjectId}
-              />
-              <TeachingSessionCoverage defaultSubjectId={subjectId} />
+              <SubjectJournalList defaultSubjectId={subjectId} />
             </Suspense>
           </ErrorBoundary>
-        )}
+        </HydrateClient>
+      </TabsContent>
+      <TabsContent value="program_coverage">
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-4 gap-4 px-4 py-2">
+                <Skeleton className="h-20 w-1/4" />
+                <Skeleton className="h-20 w-1/4" />
+                <Skeleton className="h-20 w-1/4" />
+                <Skeleton className="h-20 w-1/4" />
+              </div>
+            }
+          >
+            <SubjectJournalHeader
+              type="program_coverage"
+              defaultSubjectId={subjectId}
+            />
+            <TeachingSessionCoverage defaultSubjectId={subjectId} />
+          </Suspense>
+        </ErrorBoundary>
       </TabsContent>
       <TabsContent value="program">
-        {subjectId && (
-          <>
-            <SubjectJournalHeader type="program" defaultSubjectId={subjectId} />
-            <CreateEditProgram defaultSubjectId={subjectId} />
-          </>
-        )}
+        <>
+          <SubjectJournalHeader type="program" defaultSubjectId={subjectId} />
+          <CreateEditProgram defaultSubjectId={subjectId} />
+        </>
       </TabsContent>
     </Tabs>
   );
