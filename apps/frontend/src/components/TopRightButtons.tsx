@@ -59,6 +59,7 @@ export function TopRightButtons() {
           variant="ghost"
           onClick={() => {
             openModal({
+              className: "sm:max-w-xl",
               title: t("Feedback"),
               view: <FeedBackDialog />,
             });

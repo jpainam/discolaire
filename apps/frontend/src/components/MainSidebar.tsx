@@ -165,6 +165,7 @@ export function MainSidebar({
                   <button
                     onClick={() => {
                       openModal({
+                        className: "sm:max-w-xl",
                         title: t("feedback"),
                         view: <FeedBackDialog />,
                       });
