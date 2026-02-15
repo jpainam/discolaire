@@ -1,12 +1,29 @@
 {
-  "servers": {
-    "shadcn": {
-      "command": "npx",
-      "args": ["shadcn@latest", "mcp"]
-    },
-    "heroui-native": {
-      "command": "npx",
-      "args": ["-y", "@heroui/native-mcp@latest"]
-    }
-  }
+	"servers": {
+		"shadcn": {
+			"command": "npx",
+			"args": [
+				"shadcn@latest",
+				"mcp"
+			],
+			"type": "stdio"
+		},
+		"heroui-native": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@heroui/native-mcp@latest"
+			],
+			"type": "stdio"
+		},
+		"heroui-react": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@heroui/react-mcp@latest"
+			]
+		}
+	},
+	"inputs": []
 }

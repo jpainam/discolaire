@@ -11,7 +11,7 @@ import {
   TextField,
   useToast,
 } from "heroui-native";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { TextInput } from "react-native";
 import { Text, View } from "react-native";
 import z from "zod";
@@ -20,15 +20,11 @@ import { authClient } from "@/utils/auth-client";
 import { queryClient } from "@/utils/trpc";
 
 const signInSchema = z.object({
-  email: z
+  username: z
     .string()
     .trim()
-    .min(1, "Email is required")
-    .email("Enter a valid email address"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(8, "Use at least 8 characters"),
+    .min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
 });
 
 function getErrorMessage(error: unknown): string | null {
@@ -58,38 +54,49 @@ function getErrorMessage(error: unknown): string | null {
   return null;
 }
 
-function SignIn() {
+interface SignInProps {
+  onSuccess?: () => void | Promise<void>;
+}
+
+function SignIn({ onSuccess }: SignInProps) {
   const passwordInputRef = useRef<TextInput>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const form = useForm({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validators: {
       onSubmit: signInSchema,
     },
     onSubmit: async ({ value, formApi }) => {
-      await authClient.signIn.email(
+      setSubmitError(null);
+      await authClient.signIn.username(
         {
-          email: value.email.trim(),
+          username: value.username.trim().toLowerCase(),
           password: value.password,
+          rememberMe: true,
         },
         {
           onError(error) {
+            const message = error.error?.message || "Failed to sign in";
+            setSubmitError(message);
             toast.show({
               variant: "danger",
-              label: error.error?.message || "Failed to sign in",
+              label: message,
             });
           },
           onSuccess() {
+            setSubmitError(null);
             formApi.reset();
             toast.show({
               variant: "success",
               label: "Signed in successfully",
             });
-            void queryClient.refetchQueries();
+            void queryClient.invalidateQueries();
+            void onSuccess?.();
           },
         },
       );
@@ -103,45 +110,48 @@ function SignIn() {
       <form.Subscribe
         selector={(state) => ({
           isSubmitting: state.isSubmitting,
-          validationError: getErrorMessage(state.errorMap.onSubmit),
         })}
       >
-        {({ isSubmitting, validationError }) => {
-          const formError = validationError;
+        {({ isSubmitting }) => (
+          <>
+            <FieldError isInvalid={!!submitError} className="mb-3">
+              {submitError}
+            </FieldError>
 
-          return (
-            <>
-              <FieldError isInvalid={!!formError} className="mb-3">
-                {formError}
-              </FieldError>
+            <View className="gap-3">
+              <form.Field name="username">
+                {(field) => {
+                  const fieldError = getErrorMessage(field.state.meta.errors);
 
-              <View className="gap-3">
-                <form.Field name="email">
-                  {(field) => (
-                    <TextField>
-                      <Label>Email</Label>
+                  return (
+                    <TextField isInvalid={!!fieldError}>
+                      <Label>Username</Label>
                       <Input
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChangeText={field.handleChange}
-                        placeholder="email@example.com"
-                        keyboardType="email-address"
+                        placeholder="username"
                         autoCapitalize="none"
-                        autoComplete="email"
-                        textContentType="emailAddress"
+                        autoComplete="username"
+                        textContentType="username"
                         returnKeyType="next"
                         blurOnSubmit={false}
                         onSubmitEditing={() => {
                           passwordInputRef.current?.focus();
                         }}
                       />
+                      <FieldError>{fieldError}</FieldError>
                     </TextField>
-                  )}
-                </form.Field>
+                  );
+                }}
+              </form.Field>
 
-                <form.Field name="password">
-                  {(field) => (
-                    <TextField>
+              <form.Field name="password">
+                {(field) => {
+                  const fieldError = getErrorMessage(field.state.meta.errors);
+
+                  return (
+                    <TextField isInvalid={!!fieldError}>
                       <Label>Password</Label>
                       <Input
                         ref={passwordInputRef}
@@ -155,25 +165,26 @@ function SignIn() {
                         returnKeyType="go"
                         onSubmitEditing={form.handleSubmit}
                       />
+                      <FieldError>{fieldError}</FieldError>
                     </TextField>
-                  )}
-                </form.Field>
+                  );
+                }}
+              </form.Field>
 
-                <Button
-                  onPress={form.handleSubmit}
-                  isDisabled={isSubmitting}
-                  className="mt-1"
-                >
-                  {isSubmitting ? (
-                    <Spinner size="sm" color="default" />
-                  ) : (
-                    <Button.Label>Sign In</Button.Label>
-                  )}
-                </Button>
-              </View>
-            </>
-          );
-        }}
+              <Button
+                onPress={form.handleSubmit}
+                isDisabled={isSubmitting}
+                className="mt-1"
+              >
+                {isSubmitting ? (
+                  <Spinner size="sm" color="default" />
+                ) : (
+                  <Button.Label>Sign In</Button.Label>
+                )}
+              </Button>
+            </View>
+          </>
+        )}
       </form.Subscribe>
     </Surface>
   );

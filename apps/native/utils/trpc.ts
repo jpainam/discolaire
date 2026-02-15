@@ -6,6 +6,8 @@ import superjson from "superjson";
 
 import { Platform } from "react-native";
 import { authClient } from "./auth-client";
+import { env } from "./env";
+import { getSchoolYearId } from "./school-year";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,16 +31,30 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
       }),
       httpBatchLink({
         transformer: superjson,
-        url: `${process.env.EXPO_PUBLIC_SERVER_URL}/api/trpc`,
+        url: `${env.EXPO_PUBLIC_SERVER_URL}/api/trpc`,
         headers() {
-          if (Platform.OS === "web") {
-            return {};
-          }
           const headers = new Map<string, string>();
-          const cookies = authClient.getCookie();
-          if (cookies) {
-            headers.set("Cookie", cookies);
+          headers.set("discolaire-tenant", env.EXPO_PUBLIC_TENANT);
+
+          if (Platform.OS === "web") {
+            return Object.fromEntries(headers);
           }
+
+          const cookieParts: string[] = [];
+          const authCookies = authClient.getCookie();
+          if (authCookies) {
+            cookieParts.push(authCookies);
+          }
+
+          const schoolYearId = getSchoolYearId();
+          if (schoolYearId) {
+            cookieParts.push(`x-school-year=${encodeURIComponent(schoolYearId)}`);
+          }
+
+          if (cookieParts.length > 0) {
+            headers.set("Cookie", cookieParts.join("; "));
+          }
+
           return Object.fromEntries(headers);
         },
       }),

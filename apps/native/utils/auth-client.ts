@@ -10,9 +10,15 @@ import {
   usernameClient,
 } from "better-auth/client/plugins";
 import type { Auth } from "@repo/auth";
+import { env } from "./env";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.EXPO_PUBLIC_SERVER_URL,
+  baseURL: env.EXPO_PUBLIC_SERVER_URL,
+  fetchOptions: {
+    headers: {
+      "discolaire-tenant": env.EXPO_PUBLIC_TENANT,
+    },
+  },
   plugins: [
     usernameClient(),
     adminClient(),
