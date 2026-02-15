@@ -30,7 +30,7 @@ import { formatCfaAmount } from "./StudentRightPanelMeta.utils";
 
 interface MetaFieldProps {
   label: string;
-  value: string | number | null | undefined;
+  value?: string | number | null | undefined;
   badge?: {
     variant: BadgeVariant;
     text: string;
@@ -41,7 +41,7 @@ export function MetaField({ label, value, badge }: MetaFieldProps) {
   const badgeColors = {
     success: "bg-success/10 text-success",
     warning: "bg-warning/10 text-warning",
-    danger: "bg-danger/10 text-danger",
+    danger: "bg-destructive/10 text-destructive",
     neutral: "bg-muted text-muted-foreground",
   };
 
@@ -49,9 +49,11 @@ export function MetaField({ label, value, badge }: MetaFieldProps) {
     <div className="flex items-center justify-between gap-2">
       <Label className="text-muted-foreground">{label}</Label>
       <div className="flex items-center gap-2">
-        <Label className="text-foreground text-right font-medium">
-          {formatValue(value)}
-        </Label>
+        {value && (
+          <Label className="text-foreground text-right font-medium">
+            {formatValue(value)}
+          </Label>
+        )}
         {badge ? (
           <span
             className={cn(
@@ -97,9 +99,9 @@ export function StudentIdentitySection({
           </p>
         </div>
       </div> */}
-      <MetaField label="Classroom" value={student.classroom?.name} />
-      <MetaField label="Level" value={student.classroom?.reportName} />
-      <MetaField label="Status" value={statusBadge.text} badge={statusBadge} />
+      <MetaField label="Classe" value={student.classroom?.name} />
+      <MetaField label="Niveau" value={student.classroom?.reportName} />
+      <MetaField label="Statut" value={statusBadge.text} badge={statusBadge} />
     </div>
   );
 }
@@ -120,9 +122,12 @@ export function StudentAcademicSection({
         }
         badge={summary.averageBadge ?? undefined}
       />
-      <MetaField label="Evaluated Grades" value={summary.gradeCount} />
       <MetaField
-        label="Strongest Subject"
+        label="Notes reçues"
+        value={`${summary.gradeCount} / ${summary.totalCount}`}
+      />
+      <MetaField
+        label="Forte Matière"
         value={
           summary.strongestSubject
             ? `${summary.strongestSubject.name} (${summary.strongestSubject.average.toFixed(1)}%)`
@@ -130,7 +135,7 @@ export function StudentAcademicSection({
         }
       />
       <MetaField
-        label="Weakest Subject"
+        label="Faible Matière"
         value={
           summary.weakestSubject
             ? `${summary.weakestSubject.name} (${summary.weakestSubject.average.toFixed(1)}%)`
@@ -147,20 +152,27 @@ export function StudentAttendanceSection({
   summary: AttendanceSummary;
 }) {
   return (
-    <div className="space-y-3 pt-2">
-      <MetaField label="Justified Absences" value={summary.justifiedAbsences} />
+    <div className="space-y-2">
+      <MetaField label="Abs. Just" value={summary.justifiedAbsences} />
       <MetaField
-        label="Unjustified Absences"
-        value={summary.unjustifiedAbsences}
+        label="Abs. Injust"
+        badge={
+          summary.unjustifiedAbsences > 0
+            ? {
+                variant: "danger",
+                text: summary.unjustifiedAbsences.toString(),
+              }
+            : { variant: "neutral", text: "None" }
+        }
+        //value={summary.unjustifiedAbsences}
       />
-      <MetaField label="Justified Lateness" value={summary.justifiedLateness} />
-      <MetaField
-        label="Unjustified Lateness"
-        value={summary.unjustifiedLateness}
-      />
+      <MetaField label="Retard just" value={summary.justifiedLateness} />
+      <MetaField label="Retard Injust" value={summary.unjustifiedLateness} />
       <MetaField
         label="Disciplinary Records"
-        value={summary.disciplinaryRecords}
+        value={
+          summary.disciplinaryRecords == 0 ? null : summary.disciplinaryRecords
+        }
         badge={
           summary.disciplinaryRecords === 0
             ? { text: "None", variant: "success" }

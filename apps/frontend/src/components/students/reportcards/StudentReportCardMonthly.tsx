@@ -10,6 +10,7 @@ import type { RouterOutputs } from "@repo/api";
 
 import type { FlatBadgeVariant } from "~/components/FlatBadge";
 import { ReportCardActionHeader } from "~/components/classrooms/reportcards/ReportCardActionHeader";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import FlatBadge from "~/components/FlatBadge";
 import { ReportCardDiscipline } from "~/components/students/reportcards/ReportCardDiscipline";
 import { ReportCardMention } from "~/components/students/reportcards/ReportCardMention";
@@ -65,7 +66,12 @@ export function StudentReportCardMontly({
   const studentReport = studentsReport.get(studentId);
   const globalRank = globalRanks.get(studentId);
   if (!studentReport || !globalRank) {
-    return null;
+    return (
+      <EmptyComponent
+        title="Aucune note"
+        description="Veuillez vous rassurer que l'élève possede des notes"
+      />
+    );
   }
 
   const values = Array.from(globalRanks.values());

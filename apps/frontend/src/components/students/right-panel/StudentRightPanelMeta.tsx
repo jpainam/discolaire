@@ -37,7 +37,7 @@ export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
 
   const studentQuery = useQuery(trpc.student.get.queryOptions(studentId));
-  const gradesQuery = useQuery(
+  const { data: grades } = useQuery(
     trpc.student.grades.queryOptions({ id: studentId }),
   );
   const attendanceQuery = useQuery(
@@ -54,10 +54,10 @@ export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
     trpc.student.activities.queryOptions({ studentId, limit: 20 }),
   );
 
-  const academicSummary = useMemo(
-    () => computeAcademicSummary(gradesQuery.data ?? []),
-    [gradesQuery.data],
-  );
+  const academicSummary = useMemo(() => {
+    return computeAcademicSummary(grades ?? []);
+  }, [grades]);
+
   const attendanceSummary = useMemo(
     () => computeAttendanceSummary(attendanceQuery.data ?? []),
     [attendanceQuery.data],
@@ -77,17 +77,12 @@ export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
   const timelineSummary = useMemo(
     () =>
       computeTimelineSummary({
-        grades: gradesQuery.data ?? [],
+        grades: grades ?? [],
         attendances: attendanceQuery.data ?? [],
         activities: activitiesQuery.data ?? [],
         documents: documentsQuery.data ?? [],
       }),
-    [
-      gradesQuery.data,
-      attendanceQuery.data,
-      activitiesQuery.data,
-      documentsQuery.data,
-    ],
+    [grades, attendanceQuery.data, activitiesQuery.data, documentsQuery.data],
   );
 
   if (studentQuery.isPending) {

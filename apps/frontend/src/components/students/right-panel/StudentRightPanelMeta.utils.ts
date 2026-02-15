@@ -17,6 +17,7 @@ export interface SubjectScoreSummary {
 
 export interface AcademicSummary {
   gradeCount: number;
+  totalCount: number;
   currentAverage: number | null;
   strongestSubject: SubjectScoreSummary | null;
   weakestSubject: SubjectScoreSummary | null;
@@ -100,10 +101,12 @@ export function computeAcademicSummary(grades: GradeData[]): AcademicSummary {
   const graded = grades.filter(
     (grade) => !grade.isAbsent && grade.gradeSheet.scale > 0,
   );
+  const allCount = new Set(grades.map((g) => g.gradeSheetId)).size;
 
   if (graded.length === 0) {
     return {
       gradeCount: 0,
+      totalCount: allCount,
       currentAverage: null,
       strongestSubject: null,
       weakestSubject: null,
@@ -156,6 +159,7 @@ export function computeAcademicSummary(grades: GradeData[]): AcademicSummary {
   return {
     gradeCount: graded.length,
     currentAverage,
+    totalCount: allCount,
     strongestSubject: subjectAverages[0] ?? null,
     weakestSubject: subjectAverages.at(-1) ?? null,
     averageBadge: getAverageBadge(currentAverage),
