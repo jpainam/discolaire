@@ -12,7 +12,12 @@ const appScheme =
     ? configuredScheme
     : "discolaire";
 
-const storageKey = `${appScheme}:school-year-context`;
+function toSecureStoreSafeKeyPart(value: string): string {
+  const sanitized = value.replace(/[^A-Za-z0-9._-]/g, "_");
+  return sanitized.length > 0 ? sanitized : "discolaire";
+}
+
+const storageKey = `${toSecureStoreSafeKeyPart(appScheme)}_school_year_context`;
 
 let cachedSchoolYearContext: SchoolYearContext | null = null;
 let isHydrated = false;

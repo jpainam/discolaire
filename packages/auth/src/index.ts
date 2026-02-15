@@ -160,10 +160,16 @@ export function initAuth(options: {
     ],
     trustedOrigins: [
       "expo://",
+      "exp://",
+      "exps://",
+      "discolaire://",
+      "exp+discolaire://",
       options.baseUrl,
       // eslint-disable-next-line no-restricted-properties
       process.env.NEXT_PUBLIC_BASE_URL ?? "",
       "http://localhost:3000",
+      "http://localhost:8081",
+      "http://127.0.0.1:8081",
     ],
   } satisfies BetterAuthOptions;
 

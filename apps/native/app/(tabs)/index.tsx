@@ -2,12 +2,13 @@ import { Card } from "heroui-native";
 import { Pressable, Text, View } from "react-native";
 
 import { Container } from "@/components/container";
+import { useAuth } from "@/contexts/auth-context";
 import { authClient } from "@/utils/auth-client";
 import { clearSchoolYearContext } from "@/utils/school-year";
 import { queryClient } from "@/utils/trpc";
 
 export default function Home() {
-  const { data: session } = authClient.useSession();
+  const { session } = useAuth();
 
   return (
     <Container className="p-6">

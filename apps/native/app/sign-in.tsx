@@ -4,10 +4,10 @@ import { Text, View } from "react-native";
 
 import { Container } from "@/components/container";
 import { SignIn } from "@/components/sign-in";
-import { authClient } from "@/utils/auth-client";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function SignInScreen() {
-  const { data: session, isPending } = authClient.useSession();
+  const { session, isAuthPending } = useAuth();
 
   if (session?.user) {
     return <Redirect href="/(tabs)" />;
@@ -25,7 +25,7 @@ export default function SignInScreen() {
           </Text>
         </View>
 
-        {isPending ? (
+        {isAuthPending ? (
           <Surface variant="secondary" className="p-6 rounded-lg">
             <View className="items-center gap-3">
               <Spinner size="sm" />

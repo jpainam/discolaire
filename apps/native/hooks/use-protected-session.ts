@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { authClient } from "@/utils/auth-client";
+import type { AuthSession } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts/auth-context";
 import {
   hydrateSchoolYearContext,
   setSchoolYearContext,
@@ -11,7 +12,7 @@ interface UseProtectedSessionResult {
   error: string | null;
   isPending: boolean;
   retry: () => Promise<void>;
-  session: ReturnType<typeof authClient.useSession>["data"];
+  session: AuthSession;
 }
 
 function getErrorMessage(error: unknown): string {
@@ -25,7 +26,7 @@ function getErrorMessage(error: unknown): string {
 }
 
 export function useProtectedSession(): UseProtectedSessionResult {
-  const { data: session, isPending: isSessionPending } = authClient.useSession();
+  const { session, isAuthPending } = useAuth();
   const [isSyncingSchoolYear, setIsSyncingSchoolYear] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,7 +77,7 @@ export function useProtectedSession(): UseProtectedSessionResult {
 
   return {
     session,
-    isPending: isSessionPending || (Boolean(userId) && isSyncingSchoolYear),
+    isPending: isAuthPending || (Boolean(userId) && isSyncingSchoolYear),
     error,
     retry: syncSchoolYearContext,
   };
