@@ -1,25 +1,50 @@
 {
   "expo": {
-    "scheme": "discolaireapp",
+    "scheme": "discolaire",
     "userInterfaceStyle": "automatic",
     "orientation": "default",
     "web": {
       "bundler": "metro"
     },
-    "name": "discolaireapp",
-    "slug": "discolaireapp",
+    "name": "discolaire",
+    "slug": "discolaire",
     "plugins": [
-      "expo-font"
+      "expo-router",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icons/splash-icon-dark.png",
+          "resizeMode": "cover",
+          "imageWidth": 200,
+          "backgroundColor": "#000000",
+          "dark": {
+            "image": "./assets/icons/splash-icon-light.png",
+            "backgroundColor": "#FFFFFF"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
-    "android": {
-      "package": "com.jpainam.discolaireapp"
-    },
     "ios": {
-      "bundleIdentifier": "com.jpainam.discolaireapp"
+      "bundleIdentifier": "com.discolaire.app",
+      "icon": {
+        "dark": "./assets/icons/ios-dark.png",
+        "light": "./assets/icons/ios-light.png",
+        "tinted": "./assets/icons/ios-tinted.png"
+      }
+    },
+    "android": {
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.discolaire.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "backgroundImage": "./assets/icons/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      }
     }
   }
 }

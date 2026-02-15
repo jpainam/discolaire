@@ -73,6 +73,7 @@ export function StudentAttendanceHeader() {
           <Button
             onClick={() => {
               openModal({
+                className: "sm:max-w-xl",
                 title: "Saisie d'une présence",
                 description: "Veuillez choisir la séquence",
                 view: <CreateStudentAttendance />,
