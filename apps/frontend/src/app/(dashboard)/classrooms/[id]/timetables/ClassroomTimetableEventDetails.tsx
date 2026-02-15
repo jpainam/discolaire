@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 
 type DeleteScope = "today" | "past" | "future";
@@ -71,6 +72,8 @@ export function ClassroomTimetableEventDetails({
   const fallbackTimetableId = Number.parseInt(event.id.split("-")[0] ?? "", 10);
   const timetableId = metadata?.timetableId ?? fallbackTimetableId;
 
+  const canDeleteTimetable = useCheckPermission("timetable.delete");
+
   const deleteEventMutation = useMutation(
     trpc.subjectTimetable.delete.mutationOptions({
       onError: (error) => {
@@ -110,22 +113,24 @@ export function ClassroomTimetableEventDetails({
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label>Delete scope</Label>
-        <Select
-          value={scope}
-          onValueChange={(value) => setScope(value as DeleteScope)}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="today">Today event</SelectItem>
-            <SelectItem value="past">Passed events</SelectItem>
-            <SelectItem value="future">All future events</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {canDeleteTimetable && (
+        <div className="space-y-2">
+          <Label>Delete scope</Label>
+          <Select
+            value={scope}
+            onValueChange={(value) => setScope(value as DeleteScope)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="today">Today event</SelectItem>
+              <SelectItem value="past">Passed events</SelectItem>
+              <SelectItem value="future">All future events</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div className="flex justify-end gap-2">
         <Button
@@ -135,24 +140,26 @@ export function ClassroomTimetableEventDetails({
         >
           {t("close")}
         </Button>
-        <Button
-          variant="destructive"
-          disabled={deleteEventMutation.isPending || isInvalidTimetableId}
-          onClick={async () => {
-            if (isInvalidTimetableId) {
-              toast.error("Missing timetable id", { id: 0 });
-              return;
-            }
+        {canDeleteTimetable && (
+          <Button
+            variant="destructive"
+            disabled={deleteEventMutation.isPending || isInvalidTimetableId}
+            onClick={async () => {
+              if (isInvalidTimetableId) {
+                toast.error("Missing timetable id", { id: 0 });
+                return;
+              }
 
-            await deleteEventMutation.mutateAsync({
-              id: timetableId,
-              scope,
-              occurrenceDate: event.start,
-            });
-          }}
-        >
-          {t("delete")}
-        </Button>
+              await deleteEventMutation.mutateAsync({
+                id: timetableId,
+                scope,
+                occurrenceDate: event.start,
+              });
+            }}
+          >
+            {t("delete")}
+          </Button>
+        )}
       </div>
     </div>
   );

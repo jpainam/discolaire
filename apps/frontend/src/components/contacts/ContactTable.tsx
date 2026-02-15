@@ -80,6 +80,7 @@ export function ContactTable() {
       limit: 20,
     }),
   );
+  const canCreateContact = useCheckPermission("contact.create");
 
   const queryClient = useQueryClient();
   const confirm = useConfirm();
@@ -232,24 +233,26 @@ export function ContactTable() {
                           <ReceiptText />
                           {t("details")}
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            openModal({
-                              className: "sm:max-w-xl",
-                              title: `Ajouter élèves à ${getFullName(c)}`,
-                              description:
-                                "Sélectionner les élèves à ajouter au contact",
-                              view: <AddStudentToParent contactId={c.id} />,
-                            });
-                          }}
-                        >
-                          <HugeiconsIcon
-                            icon={AddTeamIcon}
-                            strokeWidth={2}
-                            className="size-4"
-                          />
-                          Ajouter élèves
-                        </DropdownMenuItem>
+                        {canCreateContact && (
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              openModal({
+                                className: "sm:max-w-xl",
+                                title: `Ajouter élèves à ${getFullName(c)}`,
+                                description:
+                                  "Sélectionner les élèves à ajouter au contact",
+                                view: <AddStudentToParent contactId={c.id} />,
+                              });
+                            }}
+                          >
+                            <HugeiconsIcon
+                              icon={AddTeamIcon}
+                              strokeWidth={2}
+                              className="size-4"
+                            />
+                            Ajouter élèves
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem
                           onSelect={() => {
                             openSheet({

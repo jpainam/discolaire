@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { CalendarDays, MailIcon, PlusIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
@@ -140,73 +141,80 @@ export function ClassroomTimetablesHeader({
     }
   };
 
+  const canCreateTimetable = useCheckPermission("timetable.create");
+  const canCreateNotification = useCheckPermission("notification.create");
+
   return (
     <div className="bg-muted/50 grid items-center gap-2 border-y px-4 py-1 md:flex">
       <div className="hidden items-center gap-1 md:flex">
-        <CalendarDays />
+        <CalendarDays className="hidden md:flex" />
         <Label>{t("timetable")}</Label>
       </div>
       <StaffSelector
-        className="w-[180px]"
+        className="w-full lg:w-1/3"
         defaultValue={staffId ?? undefined}
         onSelect={(value) => {
           void setStaffId(value || null);
         }}
       />
       <div className="ml-auto flex items-center gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"outline"}>
-              <MailIcon />
-              {t("notify")}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              disabled={notifyTeachersMutation.isPending}
-              onSelect={() => {
-                void handleNotification("teachers");
-              }}
-            >
-              {t("teachers")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={notifyTeachersMutation.isPending}
-              onSelect={() => {
-                void handleNotification("parents");
-              }}
-            >
-              {t("parents")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={notifyTeachersMutation.isPending}
-              onSelect={() => {
-                void handleNotification("students");
-              }}
-            >
-              {t("students")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {canCreateNotification && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"outline"}>
+                <MailIcon />
+                {t("notify")}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                disabled={notifyTeachersMutation.isPending}
+                onSelect={() => {
+                  void handleNotification("teachers");
+                }}
+              >
+                {t("teachers")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={notifyTeachersMutation.isPending}
+                onSelect={() => {
+                  void handleNotification("parents");
+                }}
+              >
+                {t("parents")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={notifyTeachersMutation.isPending}
+                onSelect={() => {
+                  void handleNotification("students");
+                }}
+              >
+                {t("students")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
 
-        <Button
-          onClick={() => {
-            openModal({
-              title: t("create"),
-              description: `${classroom.name} - ${t("timetable")}`,
-              className: "sm:max-w-xl",
-              view: (
-                <CreateClassroomTimetable
-                  classroomId={classroomId}
-                  initialSubjectId={initialSubjectId}
-                />
-              ),
-            });
-          }}
-        >
-          <PlusIcon />
-          {t("add")}
-        </Button>
+        {canCreateTimetable && (
+          <Button
+            onClick={() => {
+              openModal({
+                title: t("create"),
+                description: `${classroom.name} - ${t("timetable")}`,
+                className: "sm:max-w-xl",
+                view: (
+                  <CreateClassroomTimetable
+                    classroomId={classroomId}
+                    initialSubjectId={initialSubjectId}
+                  />
+                ),
+              });
+            }}
+          >
+            <PlusIcon />
+            {t("add")}
+          </Button>
+        )}
       </div>
     </div>
   );

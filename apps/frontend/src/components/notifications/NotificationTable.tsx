@@ -54,6 +54,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon } from "~/icons";
 import { useTRPC } from "~/trpc/react";
 import { EmptyComponent } from "../EmptyComponent";
 import {
@@ -279,6 +281,7 @@ export function NotificationTable({
   };
 
   const hasFilters = searchQuery;
+  const canDeleteNotification = useCheckPermission("notification.delete");
 
   const getCreditInfo = (channel: NotificationChannel) => {
     const credit = CHANNEL_CREDITS[channel];
@@ -379,27 +382,25 @@ export function NotificationTable({
           </Button>
         )}
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-muted-foreground text-sm">
-            {selectedIds.size} selected
-          </span>
+          <Badge variant={"outline"}>{selectedIds.size} selected</Badge>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             //onClick={handleBulkMarkAsRead}
-            className="gap-2 bg-transparent"
           >
-            <MailOpen className="h-4 w-4" />
+            <MailOpen className="h-3 w-3" />
             Mark as Read
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            //onClick={handleBulkDelete}
-            className="gap-2"
-          >
-            <Trash2 className="h-4 w-4" />
-            Delete
-          </Button>
+          {canDeleteNotification && (
+            <Button
+              variant="destructive"
+              size="sm"
+              //onClick={handleBulkDelete}
+            >
+              <DeleteIcon className="size-3" />
+              Delete
+            </Button>
+          )}
         </div>
       </div>
       <div className="border-border bg-card rounded-lg border bg-transparent">
