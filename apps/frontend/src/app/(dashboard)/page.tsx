@@ -35,12 +35,21 @@ export default async function Page() {
       trpc.student.getFromUserId.queryOptions(session.user.id),
     );
     const grades = await queryClient.fetchQuery(
-      trpc.student.gradeTrends.queryOptions(student.id),
+      trpc.student.grades.queryOptions({ id: student.id }),
     );
-    const subjects = grades.map((grade) => ({
-      id: grade.subjectId,
-      name: grade.name,
-    }));
+    const subjects = Array.from(
+      new Map(
+        grades.map((grade) => [
+          grade.gradeSheet.subjectId,
+          {
+            id: grade.gradeSheet.subjectId,
+            name:
+              grade.gradeSheet.subject.course.reportName ||
+              grade.gradeSheet.subject.course.name,
+          },
+        ]),
+      ).values(),
+    );
 
     return (
       <div className="grid w-full gap-4 p-4 lg:grid-cols-2">
@@ -57,8 +66,8 @@ export default async function Page() {
           subjects={subjects}
           data={grades.map((g) => {
             return {
-              subjectId: g.subjectId,
-              maxGrade: g.maxGrade ?? 0,
+              subjectId: g.gradeSheet.subjectId,
+              maxGrade: g.gradeSheet.scale,
               grade: g.grade,
             };
           })}

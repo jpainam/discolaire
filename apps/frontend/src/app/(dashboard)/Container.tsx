@@ -13,7 +13,7 @@ export function Container(props: PropsWithChildren) {
         className={
           "grid flex-1 grid-cols-1 " +
           (isOpen
-            ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,16rem)]"
+            ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,20rem)]"
             : "lg:grid-cols-[minmax(0,1fr)_minmax(0,0px)]")
         }
       >
