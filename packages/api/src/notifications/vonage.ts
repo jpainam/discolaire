@@ -3,23 +3,28 @@ import { SMS } from "@vonage/sms";
 
 import { env } from "../env";
 
-const credentials = new Auth({
-  apiKey: env.VONAGE_API_KEY,
-  apiSecret: env.VONAGE_API_SECRET,
-});
-const options = {};
+let smsClient: SMS | null = null;
 
-const vonageFrom = env.VONAGE_SMS_FROM;
-const smsClient = new SMS(credentials, options);
+const getSmsClient = () => {
+  if (smsClient) return smsClient;
+  const credentials = new Auth({
+    apiKey: env.VONAGE_API_KEY,
+    apiSecret: env.VONAGE_API_SECRET,
+    privateKey: "",
+  });
+  smsClient = new SMS(credentials, {});
+  return smsClient;
+};
 
 export async function sendSmsVonage(opts: {
   toPhone: string;
   bodyText: string;
 }) {
+  const vonageFrom = env.VONAGE_SMS_FROM;
   if (!vonageFrom) {
     throw new Error("No Vonage From Number");
   }
-  const data = await smsClient.send({
+  const data = await getSmsClient().send({
     text: opts.bodyText,
     to: opts.toPhone,
     from: vonageFrom,
