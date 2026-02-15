@@ -20,13 +20,12 @@ import type {
   StudentData,
   TimelineSummary,
 } from "./StudentRightPanelMeta.utils";
-import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { routes } from "~/configs/routes";
 import { useRouter } from "~/hooks/use-router";
 import { cn } from "~/lib/utils";
-import { getFullName, getInitials } from "~/utils";
+import { getFullName } from "~/utils";
 import { formatCfaAmount } from "./StudentRightPanelMeta.utils";
 
 interface MetaFieldProps {
@@ -78,12 +77,12 @@ export function StudentIdentitySection({
     variant: BadgeVariant;
   };
 }) {
-  const fullName = getFullName(student).trim();
-  const initials = getInitials(fullName) || "ST";
+  //const fullName = getFullName(student).trim();
+  //const initials = getInitials(fullName) || "ST";
 
   return (
     <div className="space-y-3 pt-2">
-      <div className="mb-4 flex items-center gap-3">
+      {/* <div className="mb-4 flex items-center gap-3">
         <Avatar className="h-16 w-16">
           <AvatarFallback className="bg-primary text-primary-foreground text-lg font-semibold">
             {initials}
@@ -97,7 +96,7 @@ export function StudentIdentitySection({
             {student.registrationNumber ?? "No registration number"}
           </p>
         </div>
-      </div>
+      </div> */}
       <MetaField label="Classroom" value={student.classroom?.name} />
       <MetaField label="Level" value={student.classroom?.reportName} />
       <MetaField label="Status" value={statusBadge.text} badge={statusBadge} />
