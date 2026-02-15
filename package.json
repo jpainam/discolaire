@@ -10,6 +10,7 @@
     "db:studio": "turbo -F @repo/db studio",
     "dev": "turbo watch dev --continue",
     "dev:desktop": "pnpm --filter @repo/desktop dev",
+    "dev:native": "turbo watch dev --continue -F @repo/native -F @repo/frontend",
     "dev:next": "turbo watch dev -F @repo/frontend...",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "pnpm lint:ws && pnpm db:generate",

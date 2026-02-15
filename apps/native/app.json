@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "scheme": "discolaireapp",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "discolaireapp",
+    "slug": "discolaireapp",
+    "plugins": [
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "android": {
+      "package": "com.jpainam.discolaireapp"
+    },
+    "ios": {
+      "bundleIdentifier": "com.jpainam.discolaireapp"
+    }
+  }
+}

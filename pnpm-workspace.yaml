@@ -4,14 +4,16 @@ packages:
   - tooling/*
 
 catalog:
-  '@eslint/js': ^9.39.2
-  '@tailwindcss/postcss': ^4.1.18
-  '@tanstack/react-form': ^1.27.7
-  '@tanstack/react-query': ^5.90.16
-  '@trpc/client': ^11.8.1
-  '@trpc/server': ^11.8.1
-  '@trpc/tanstack-react-query': ^11.8.1
-  '@types/react-dom': ^19.2.3
+  "@eslint/js": ^9.39.2
+  "@tailwindcss/postcss": ^4.1.18
+  "@tanstack/react-form": ^1.27.7
+  "@tanstack/react-query": ^5.90.16
+  "@trpc/client": ^11.8.1
+  "@trpc/server": ^11.8.1
+  "@trpc/tanstack-react-query": ^11.8.1
+  "@types/react-dom": ^19.2.3
+  better-auth: ^1.4.18
+  "@better-auth/expo": ^1.4.18
   eslint: ^9.39.2
   prettier: ^3.7.4
   react: 19.2.3
@@ -22,19 +24,19 @@ catalog:
 
 catalogs:
   react19:
-    '@types/react': ^19.2.7
-    '@types/react-dom': ^19.2.3
+    "@types/react": ^19.2.7
+    "@types/react-dom": ^19.2.3
     react: 19.2.3
     react-dom: 19.2.3
 
 linkWorkspacePackages: true
 
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@prisma/client'
-  - '@prisma/engines'
-  - '@swc/core'
-  - '@tailwindcss/oxide'
+  - "@parcel/watcher"
+  - "@prisma/client"
+  - "@prisma/engines"
+  - "@swc/core"
+  - "@tailwindcss/oxide"
   - core-js-pure
   - electron
   - electron-winstaller
@@ -46,8 +48,8 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 overrides:
-  '@types/minimatch': 5.1.2
+  "@types/minimatch": 5.1.2
 
 publicHoistPattern:
-  - '@ianvs/prettier-plugin-sort-imports'
+  - "@ianvs/prettier-plugin-sort-imports"
   - prettier-plugin-tailwindcss
