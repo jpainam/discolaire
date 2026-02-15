@@ -59,7 +59,9 @@ export default function NotificationMenu({ userId }: { userId: string }) {
           }),
         ),
       );
-      await queryClient.invalidateQueries(trpc.userNotification.user.pathFilter());
+      await queryClient.invalidateQueries(
+        trpc.userNotification.user.pathFilter(),
+      );
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Update failed", {
         id: 0,
@@ -70,7 +72,9 @@ export default function NotificationMenu({ userId }: { userId: string }) {
   const handleNotificationClick = async (id: string) => {
     try {
       await markAsReadMutation.mutateAsync({ id, read: true });
-      await queryClient.invalidateQueries(trpc.userNotification.user.pathFilter());
+      await queryClient.invalidateQueries(
+        trpc.userNotification.user.pathFilter(),
+      );
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Update failed", {
         id: 0,

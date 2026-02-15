@@ -22,7 +22,9 @@ const chartConfig = {
 
 export function StudentPerformanceTrend({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
-  const trendQuery = useQuery(trpc.student.academicSnapshots.queryOptions(studentId));
+  const trendQuery = useQuery(
+    trpc.student.academicSnapshots.queryOptions(studentId),
+  );
 
   const chartData = useMemo(() => {
     if (!trendQuery.data) {
@@ -69,7 +71,10 @@ export function StudentPerformanceTrend({ studentId }: { studentId: string }) {
           tickMargin={8}
           interval="preserveStartEnd"
         />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+        <ChartTooltip
+          cursor={false}
+          content={<ChartTooltipContent indicator="line" />}
+        />
         <Line
           dataKey="average"
           type="linear"

@@ -21,16 +21,17 @@ const toTitle = (value: string) =>
     .join(" ");
 
 const getPayloadRecord = (payload: unknown): Record<string, unknown> => {
-  if (typeof payload === "object" && payload !== null && !Array.isArray(payload)) {
+  if (
+    typeof payload === "object" &&
+    payload !== null &&
+    !Array.isArray(payload)
+  ) {
     return payload as Record<string, unknown>;
   }
   return {};
 };
 
-const getMessageFromPayload = (
-  payload: unknown,
-  sourceId: string,
-): string => {
+const getMessageFromPayload = (payload: unknown, sourceId: string): string => {
   const record = getPayloadRecord(payload);
   const directMessage =
     (typeof record.message === "string" && record.message) ||
@@ -73,13 +74,15 @@ export const userNotificationRouter = {
       if (!entity.entityId) {
         return [];
       }
-      const recipient = await ctx.services.notification.syncRecipientFromEntity({
-        schoolId: ctx.schoolId,
-        recipient: {
-          entityId: entity.entityId,
-          profile: entity.entityType,
+      const recipient = await ctx.services.notification.syncRecipientFromEntity(
+        {
+          schoolId: ctx.schoolId,
+          recipient: {
+            entityId: entity.entityId,
+            profile: entity.entityType,
+          },
         },
-      });
+      );
 
       const notifications = await ctx.db.notification.findMany({
         orderBy: {
@@ -125,7 +128,8 @@ export const userNotificationRouter = {
         const inAppDelivery = notification.deliveries[0];
         return {
           id: notification.id,
-          title: notification.template?.name ?? toTitle(notification.sourceType),
+          title:
+            notification.template?.name ?? toTitle(notification.sourceType),
           message: getMessageFromPayload(
             notification.payload,
             notification.sourceId,
@@ -162,13 +166,15 @@ export const userNotificationRouter = {
         });
       }
 
-      const recipient = await ctx.services.notification.syncRecipientFromEntity({
-        schoolId: ctx.schoolId,
-        recipient: {
-          entityId: entity.entityId,
-          profile: entity.entityType,
+      const recipient = await ctx.services.notification.syncRecipientFromEntity(
+        {
+          schoolId: ctx.schoolId,
+          recipient: {
+            entityId: entity.entityId,
+            profile: entity.entityType,
+          },
         },
-      });
+      );
 
       const delivery = await ctx.db.notificationDelivery.findFirst({
         where: {
@@ -253,13 +259,15 @@ export const userNotificationRouter = {
       if (!entity.entityId) {
         return [];
       }
-      const recipient = await ctx.services.notification.syncRecipientFromEntity({
-        schoolId: ctx.schoolId,
-        recipient: {
-          entityId: entity.entityId,
-          profile: entity.entityType,
+      const recipient = await ctx.services.notification.syncRecipientFromEntity(
+        {
+          schoolId: ctx.schoolId,
+          recipient: {
+            entityId: entity.entityId,
+            profile: entity.entityType,
+          },
         },
-      });
+      );
 
       const notifications = await ctx.db.notification.findMany({
         where: {
@@ -305,7 +313,8 @@ export const userNotificationRouter = {
         const inAppDelivery = notification.deliveries[0];
         return {
           id: notification.id,
-          title: notification.template?.name ?? toTitle(notification.sourceType),
+          title:
+            notification.template?.name ?? toTitle(notification.sourceType),
           message: getMessageFromPayload(
             notification.payload,
             notification.sourceId,

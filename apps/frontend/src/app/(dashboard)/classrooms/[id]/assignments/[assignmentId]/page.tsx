@@ -1,8 +1,13 @@
 import Link from "next/link";
-import { BookOpen, Calendar, Clock, Download, FileText, Info } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  Clock,
+  Download,
+  FileText,
+  Info,
+} from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-
-
 
 import { Badge } from "~/components/base-badge";
 import { AssignmentDetailsHeader } from "~/components/classrooms/assignments/AssignmentDetailsHeader";
@@ -11,7 +16,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { getFileBasename } from "~/lib/utils";
 import { caller } from "~/trpc/server";
-
 
 export default async function Page(props: {
   params: Promise<{ id: string; assignmentId: string }>;

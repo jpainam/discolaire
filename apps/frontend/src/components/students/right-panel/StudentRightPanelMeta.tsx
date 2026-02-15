@@ -14,6 +14,15 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 import { StudentPerformanceTrend } from "./StudentPerformanceTrend";
 import {
+  computeAcademicSummary,
+  computeAttendanceSummary,
+  computeContactSummary,
+  computeDocumentSummary,
+  computeFinancialSummary,
+  computeTimelineSummary,
+  formatStudentStatus,
+} from "./StudentRightPanelMeta.utils";
+import {
   StudentAcademicSection,
   StudentAttendanceSection,
   StudentDocumentsSection,
@@ -23,27 +32,24 @@ import {
   StudentQuickActionsSection,
   StudentTimelineSection,
 } from "./StudentRightPanelMetaSections";
-import {
-  computeAcademicSummary,
-  computeAttendanceSummary,
-  computeContactSummary,
-  computeDocumentSummary,
-  computeFinancialSummary,
-  computeTimelineSummary,
-  formatStudentStatus,
-} from "./StudentRightPanelMeta.utils";
 
 export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
   const trpc = useTRPC();
 
   const studentQuery = useQuery(trpc.student.get.queryOptions(studentId));
-  const gradesQuery = useQuery(trpc.student.grades.queryOptions({ id: studentId }));
+  const gradesQuery = useQuery(
+    trpc.student.grades.queryOptions({ id: studentId }),
+  );
   const attendanceQuery = useQuery(
     trpc.attendance.student.queryOptions({ studentId }),
   );
-  const statementsQuery = useQuery(trpc.student.getStatements.queryOptions(studentId));
+  const statementsQuery = useQuery(
+    trpc.student.getStatements.queryOptions(studentId),
+  );
   const contactsQuery = useQuery(trpc.student.contacts.queryOptions(studentId));
-  const documentsQuery = useQuery(trpc.student.documents.queryOptions(studentId));
+  const documentsQuery = useQuery(
+    trpc.student.documents.queryOptions(studentId),
+  );
   const activitiesQuery = useQuery(
     trpc.student.activities.queryOptions({ studentId, limit: 20 }),
   );

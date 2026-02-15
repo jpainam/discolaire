@@ -118,7 +118,10 @@ export function computeAcademicSummary(grades: GradeData[]): AcademicSummary {
   let total = 0;
 
   for (const grade of graded) {
-    const normalized = normalizeGradePercentage(grade.grade, grade.gradeSheet.scale);
+    const normalized = normalizeGradePercentage(
+      grade.grade,
+      grade.gradeSheet.scale,
+    );
     total += normalized;
 
     const subjectId = `${grade.gradeSheet.subjectId}`;
@@ -264,8 +267,7 @@ export function computeContactSummary(contacts: ContactData[]): ContactSummary {
     null;
   const secondary =
     contacts.find(
-      (contact) =>
-        contact.contactId !== primary?.id && !contact.primaryContact,
+      (contact) => contact.contactId !== primary?.id && !contact.primaryContact,
     )?.contact ?? null;
 
   const hasEmail = contacts.some(
@@ -290,10 +292,12 @@ export function computeContactSummary(contacts: ContactData[]): ContactSummary {
   };
 }
 
-export function computeDocumentSummary(documents: DocumentData[]): DocumentSummary {
+export function computeDocumentSummary(
+  documents: DocumentData[],
+): DocumentSummary {
   const latestDocument = documents[0];
   const latestDocumentTitle = latestDocument
-    ? latestDocument.title ?? startCase(latestDocument.type)
+    ? (latestDocument.title ?? startCase(latestDocument.type))
     : null;
 
   return {
@@ -315,14 +319,18 @@ export function computeTimelineSummary({
   documents: DocumentData[];
 }): TimelineSummary {
   return {
-    lastGradeUpdate: getLatestDate(grades.map((grade) => grade.gradeSheet.createdAt)),
+    lastGradeUpdate: getLatestDate(
+      grades.map((grade) => grade.gradeSheet.createdAt),
+    ),
     lastAttendanceEvent: getLatestDate(
       attendances.map((attendance) => attendance.createdAt),
     ),
     lastProfileActivity: getLatestDate(
       activities.map((activity) => activity.createdAt),
     ),
-    lastDocumentUpload: getLatestDate(documents.map((document) => document.createdAt)),
+    lastDocumentUpload: getLatestDate(
+      documents.map((document) => document.createdAt),
+    ),
   };
 }
 
@@ -330,7 +338,9 @@ function getLatestDate(dates: Date[]) {
   if (dates.length === 0) {
     return null;
   }
-  return dates.reduce((latest, current) => (current > latest ? current : latest));
+  return dates.reduce((latest, current) =>
+    current > latest ? current : latest,
+  );
 }
 
 function normalizeGradePercentage(grade: number, scale: number) {
