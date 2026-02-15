@@ -40,6 +40,7 @@ import {
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { FileIcon } from "~/icons";
 import { cn } from "~/lib/utils";
@@ -86,7 +87,8 @@ export function ReportCardSkillAcquisition({
   const filtered = useMemo(() => {
     return gradesheets.filter((g) => g.termId == termId);
   }, [gradesheets, termId]);
-
+  const canCreateReportCard = useCheckPermission("reportcard.create");
+  const canUpdateReportCard = useCheckPermission("reportcard.update");
   return (
     <div className="flex flex-col gap-2">
       <div className="border-y px-4 py-1">
@@ -115,18 +117,20 @@ export function ReportCardSkillAcquisition({
             <PDFIcon />
             Commentaires
           </Button>
-          <Button
-            onClick={() => {
-              window.open(
-                `/api/pdfs/reportcards/ipbw/competences?classroomId=${classroomId}&termId=${termId}`,
-                "__blank",
-              );
-            }}
-            variant={"secondary"}
-          >
-            <PDFIcon />
-            {t("pdf_export")}
-          </Button>
+          {canCreateReportCard && (
+            <Button
+              onClick={() => {
+                window.open(
+                  `/api/pdfs/reportcards/ipbw/competences?classroomId=${classroomId}&termId=${termId}`,
+                  "__blank",
+                );
+              }}
+              variant={"secondary"}
+            >
+              <PDFIcon />
+              {t("pdf_export")}
+            </Button>
+          )}
           <Button
             onClick={() => {
               if (panelMounted) setPanelMounted(false);
@@ -220,6 +224,7 @@ export function ReportCardSkillAcquisition({
                         {/* <TableCell>{gs.weight * 100}%</TableCell> */}
                         <TableCell className="w-full">
                           <Textarea
+                            disabled={!canUpdateReportCard}
                             onChange={(e) => {
                               debounced(e.target.value, gs.subjectId);
                             }}
@@ -290,6 +295,8 @@ function BookTextDetail({
     trpc.subject.get.queryOptions(subjectId),
   );
 
+  const canUpdateSubjectProgram = useCheckPermission("program.update");
+
   const { data: journals, isPending: journalsIsPending } = useQuery(
     trpc.subjectJournal.subject.queryOptions({
       subjectId,
@@ -332,15 +339,17 @@ function BookTextDetail({
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button
-                onClick={() => {
-                  router.push(
-                    `/classrooms/${subject.classroomId}/subjects/${subject.id}`,
-                  );
-                }}
-              >
-                Créer
-              </Button>
+              {canUpdateSubjectProgram && (
+                <Button
+                  onClick={() => {
+                    router.push(
+                      `/classrooms/${subject.classroomId}/subjects/${subject.id}`,
+                    );
+                  }}
+                >
+                  Créer
+                </Button>
+              )}
             </EmptyContent>
           </Empty>
         )}
@@ -358,15 +367,17 @@ function BookTextDetail({
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button
-                onClick={() => {
-                  router.push(
-                    `/classrooms/${subject.classroomId}/teaching_session?subjectId=${subjectId}`,
-                  );
-                }}
-              >
-                Créer
-              </Button>
+              {canUpdateSubjectProgram && (
+                <Button
+                  onClick={() => {
+                    router.push(
+                      `/classrooms/${subject.classroomId}/teaching_session?subjectId=${subjectId}`,
+                    );
+                  }}
+                >
+                  Créer
+                </Button>
+              )}
             </EmptyContent>
           </Empty>
         ) : (

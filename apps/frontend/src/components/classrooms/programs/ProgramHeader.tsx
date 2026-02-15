@@ -32,6 +32,7 @@ export function ProgramHeader({
   const params = useParams<{ id: string; subjectId: string }>();
 
   const pathname = usePathname();
+  // program.update -> cahier de texte, programme, couverture
   const canEditSubjectProgram = useCheckPermission("program.update");
   useEffect(() => {
     const breads = [

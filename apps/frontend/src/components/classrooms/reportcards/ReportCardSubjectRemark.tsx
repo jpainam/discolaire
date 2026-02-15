@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { UserLink } from "~/components/UserLink";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -56,6 +57,7 @@ export function ReportCardSubjectRemark({
   const disciplineQuery = useQuery(
     trpc.discipline.sequence.queryOptions({ termId, classroomId }),
   );
+  const canUpdateReportCard = useCheckPermission("reportcard.update");
   const [councilNotes, setCouncilNotes] = useState<Record<string, string>>({});
   const { studentsMap } = useMemo(() => {
     const studentsMap = new Map(students.map((s) => [s.id, s]));
@@ -92,7 +94,11 @@ export function ReportCardSubjectRemark({
               <TableHead className="text-center">
                 <div className="flex items-center justify-between pr-4">
                   <span>Appréciation matière</span>
-                  <Button>{t("submit")}</Button>
+                  {canUpdateReportCard && (
+                    <Button disabled={!canUpdateReportCard}>
+                      {t("submit")}
+                    </Button>
+                  )}
                 </div>
               </TableHead>
             </TableRow>
@@ -154,6 +160,7 @@ export function ReportCardSubjectRemark({
                     <div className="flex items-center gap-1">
                       <InputGroup>
                         <InputGroupInput
+                          disabled={!canUpdateReportCard}
                           placeholder="Saisir appréciation..."
                           value={councilNotes[student.id] ?? ""}
                           onChange={(event) => {
@@ -183,15 +190,17 @@ export function ReportCardSubjectRemark({
                         </InputGroupAddon>
                       </InputGroup>
 
-                      <AppreciationSelector
-                        className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
-                        onSelectAction={(e) => {
-                          setCouncilNotes((prev) => ({
-                            ...prev,
-                            [student.id]: e.content,
-                          }));
-                        }}
-                      />
+                      {canUpdateReportCard && (
+                        <AppreciationSelector
+                          className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
+                          onSelectAction={(e) => {
+                            setCouncilNotes((prev) => ({
+                              ...prev,
+                              [student.id]: e.content,
+                            }));
+                          }}
+                        />
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>

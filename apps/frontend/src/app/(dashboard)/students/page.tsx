@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
-import { StudentDataTable } from "~/components/students/StudentDataTable";
+import { StudentTable } from "~/components/students/StudentTable";
 import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StudentHeader } from "./StudentHeader";
@@ -65,7 +65,7 @@ export default async function Page() {
           {session.user.profile == "staff" ? (
             <StudentSearchPage />
           ) : (
-            <StudentDataTable />
+            <StudentTable />
           )}
         </Suspense>
       </ErrorBoundary>

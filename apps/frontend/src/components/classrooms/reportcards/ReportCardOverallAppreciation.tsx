@@ -18,6 +18,7 @@ import {
 } from "~/components/ui/table";
 import { Textarea } from "~/components/ui/textarea";
 import { UserLink } from "~/components/UserLink";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -41,6 +42,8 @@ export function ReportCardOverallAppreciation({
   const { data: students } = useSuspenseQuery(
     trpc.classroom.students.queryOptions(classroomId),
   );
+
+  const canUpdateReportCard = useCheckPermission("reportcard.update");
 
   const disciplineQuery = useQuery(
     trpc.discipline.sequence.queryOptions({ termId, classroomId }),
@@ -85,7 +88,9 @@ export function ReportCardOverallAppreciation({
               <TableHead>
                 <div className="flex flex-row items-center justify-between px-2">
                   <span>App. B: Avis Global</span>
-                  <Button>Valider</Button>
+                  {canUpdateReportCard && (
+                    <Button disabled={!canUpdateReportCard}>Valider</Button>
+                  )}
                 </div>
               </TableHead>
             </TableRow>
@@ -140,6 +145,7 @@ export function ReportCardOverallAppreciation({
                   <TableCell className="w-1/2">
                     <div className="flex gap-1">
                       <Textarea
+                        disabled={!canUpdateReportCard}
                         placeholder="Saisir une appréciation"
                         defaultValue={appreciations[student.id]}
                         onChange={(event) => {
@@ -150,20 +156,23 @@ export function ReportCardOverallAppreciation({
                           }));
                         }}
                       />
-                      <AppreciationSelector
-                        className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
-                        onSelectAction={(e) => {
-                          setAppreciations((prev) => ({
-                            ...prev,
-                            [student.id]: e.content,
-                          }));
-                        }}
-                      />
+                      {canUpdateReportCard && (
+                        <AppreciationSelector
+                          className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
+                          onSelectAction={(e) => {
+                            setAppreciations((prev) => ({
+                              ...prev,
+                              [student.id]: e.content,
+                            }));
+                          }}
+                        />
+                      )}
                     </div>
                   </TableCell>
                   <TableCell className="w-1/2">
                     <div className="flex gap-1">
                       <Textarea
+                        disabled={!canUpdateReportCard}
                         placeholder="Saisir votre avis"
                         defaultValue={avis[student.id]}
                         onChange={(event) => {
@@ -174,15 +183,17 @@ export function ReportCardOverallAppreciation({
                           }));
                         }}
                       />
-                      <AppreciationSelector
-                        className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
-                        onSelectAction={(e) => {
-                          setAvis((prev) => ({
-                            ...prev,
-                            [student.id]: e.content,
-                          }));
-                        }}
-                      />
+                      {canUpdateReportCard && (
+                        <AppreciationSelector
+                          className="opacity-0 transition-opacity group-hover/table-row:opacity-100"
+                          onSelectAction={(e) => {
+                            setAvis((prev) => ({
+                              ...prev,
+                              [student.id]: e.content,
+                            }));
+                          }}
+                        />
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>

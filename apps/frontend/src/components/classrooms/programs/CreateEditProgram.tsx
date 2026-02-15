@@ -32,7 +32,6 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
-import { Label } from "~/components/ui/label";
 import { Spinner } from "~/components/ui/spinner";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -78,7 +77,7 @@ export function CreateEditProgram({
 
   const queryClient = useQueryClient();
 
-  const canUpdateSubject = useCheckPermission("subject.update");
+  const canUpdateSubjectProgram = useCheckPermission("program.update");
   const updateSubjectProgram = useMutation(
     trpc.subject.updateProgram.mutationOptions({
       onSuccess: async () => {
@@ -109,9 +108,8 @@ export function CreateEditProgram({
         onSubmit={form.handleSubmit(submitProgram)}
       >
         <div className="bg-muted/50 flex flex-row justify-end gap-4 border-b px-4 py-1">
-          <Label>Programme {subjectQuery.data?.course.name}</Label>
           <div className="ml-auto flex flex-row items-center gap-2">
-            {canUpdateSubject && (
+            {canUpdateSubjectProgram && (
               <>
                 <Button disabled={updateSubjectProgram.isPending} type="submit">
                   {updateSubjectProgram.isPending && <Spinner />}
@@ -184,7 +182,7 @@ export function CreateEditProgram({
             </DropdownMenu>
           </div>
         </div>
-        {!canUpdateSubject && (
+        {!canUpdateSubjectProgram && (
           <>
             <div
               className="prose prose-sm max-w-none"
@@ -197,7 +195,7 @@ export function CreateEditProgram({
             )}
           </>
         )}
-        {canUpdateSubject && (
+        {canUpdateSubjectProgram && (
           <FormField
             control={form.control}
             name="content"

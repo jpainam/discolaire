@@ -215,7 +215,7 @@ export function IPBWCompetence({
                           borderRight: "1px solid black",
                         }}
                       >
-                        <Text>{grade?.total}</Text>
+                        <Text>{grade?.total?.toFixed(2)}</Text>
                       </View>
                       <View
                         style={{
