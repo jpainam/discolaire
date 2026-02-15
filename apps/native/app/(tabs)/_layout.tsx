@@ -88,9 +88,20 @@ export default function TabLayout() {
       <Tabs.Screen
         name="classroom"
         options={{
+          headerShown: true,
           title: "Classrooms",
           tabBarIcon: ({ color, size }: { color: string; size: number }) => (
             <Ionicons name="school" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="students"
+        options={{
+          headerShown: true,
+          title: "Students",
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+            <Ionicons name="people" size={size} color={color} />
           ),
         }}
       />

@@ -23,6 +23,7 @@ function StackLayout() {
     <Stack screenOptions={{}}>
       <Stack.Screen name="sign-in" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="classroom/[id]" />
       <Stack.Screen
         name="modal"
         options={{ title: "Modal", presentation: "modal" }}
