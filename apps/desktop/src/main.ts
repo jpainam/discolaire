@@ -5,6 +5,7 @@ import { Module } from "module";
 
 let mainWindow: BrowserWindow | null = null;
 let serverStarted = false;
+let transitioning = false;
 
 const isDev = !app.isPackaged;
 const port = process.env.ELECTRON_PORT || process.env.PORT || "3000";
@@ -169,6 +170,7 @@ async function waitForServer(url: string, timeoutMs = 30000) {
 }
 
 function startServer() {
+  if (serverStarted) return;
   if (isDev) return;
   if (!fs.existsSync(serverEntry)) {
     throw new Error(`Server entry not found: ${serverEntry}`);
@@ -282,6 +284,7 @@ ipcMain.handle("save-env", async (_event, envContent: string) => {
     applyEnvVars(vars);
 
     // Close setup window, start server, open app window
+    transitioning = true;
     if (mainWindow) {
       mainWindow.close();
       mainWindow = null;
@@ -385,7 +388,7 @@ app.on("ready", async () => {
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+  if (process.platform !== "darwin" && !transitioning) {
     app.quit();
   }
 });
