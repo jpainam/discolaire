@@ -20,10 +20,7 @@ import { authClient } from "@/utils/auth-client";
 import { queryClient } from "@/utils/trpc";
 
 const signInSchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .min(1, "Username is required"),
+  username: z.string().trim().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
 });
 

@@ -48,7 +48,9 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
 
           const schoolYearId = getSchoolYearId();
           if (schoolYearId) {
-            cookieParts.push(`x-school-year=${encodeURIComponent(schoolYearId)}`);
+            cookieParts.push(
+              `x-school-year=${encodeURIComponent(schoolYearId)}`,
+            );
           }
 
           if (cookieParts.length > 0) {

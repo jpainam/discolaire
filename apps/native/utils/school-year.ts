@@ -61,7 +61,9 @@ export async function hydrateSchoolYearContext(): Promise<SchoolYearContext | nu
   return cachedSchoolYearContext;
 }
 
-export async function setSchoolYearContext(value: SchoolYearContext): Promise<void> {
+export async function setSchoolYearContext(
+  value: SchoolYearContext,
+): Promise<void> {
   cachedSchoolYearContext = value;
   isHydrated = true;
   await SecureStore.setItemAsync(storageKey, JSON.stringify(value));

@@ -13,11 +13,11 @@ export function ThemeSelector() {
 
   const applyTheme = (index: number) => {
     const selectedTheme = availableThemes[index];
-    if (!selectedTheme) return;
+    // if (!selectedTheme) return;
     setThemeOption(selectedTheme.id);
 
     if (Platform.OS === "ios") {
-      Haptics.selectionAsync();
+      void Haptics.selectionAsync();
     }
   };
 
