@@ -59,10 +59,23 @@ jobs:
             exit 1
           fi
 
-      - name: Build and publish desktop apps
+      - name: Build desktop apps
         env:
           CI: true
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm --filter @repo/desktop build:frontend
-          pnpm --filter @repo/desktop build:electron -- --publish always
+          pnpm --filter @repo/desktop build:electron -- --publish never
+
+      - name: Upload artifacts to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            apps/desktop/dist/*.dmg
+            apps/desktop/dist/*.zip
+            apps/desktop/dist/*.exe
+            apps/desktop/dist/*.msi
+            apps/desktop/dist/*.AppImage
+            apps/desktop/dist/*.deb
+            apps/desktop/dist/*.rpm
+            apps/desktop/dist/*.snap
+            apps/desktop/dist/latest*.yml
