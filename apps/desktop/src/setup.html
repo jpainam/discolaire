@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discolaire — Setup</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0f0f0f;
+      color: #e5e5e5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .subtitle { color: #888; font-size: 0.875rem; margin-bottom: 1.5rem; }
+    .info {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: #a0a0c0;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .info strong { color: #c0c0e0; }
+    textarea {
+      flex: 1;
+      width: 100%;
+      background: #1a1a1a;
+      color: #e5e5e5;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+    }
+    textarea:focus { border-color: #555; }
+    textarea::placeholder { color: #555; }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    button {
+      padding: 0.625rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    #save-btn {
+      background: #fff;
+      color: #0f0f0f;
+    }
+    #status {
+      font-size: 0.8125rem;
+      color: #888;
+    }
+    #status.error { color: #f87171; }
+    #status.success { color: #4ade80; }
+  </style>
+</head>
+<body>
+  <h1>Discolaire</h1>
+  <p class="subtitle">First-time setup — paste your environment configuration below</p>
+  <div class="info">
+    <strong>Your configuration will be encrypted</strong> using the OS credential store
+    (macOS Keychain / Windows DPAPI / Linux libsecret).
+    No plain-text secrets are stored on disk.
+  </div>
+  <textarea id="env-input" spellcheck="false" placeholder="# Paste your .env content here&#10;&#10;DATABASE_URL=&quot;postgresql://...&quot;&#10;AUTH_SECRET=...&#10;REDIS_URL=redis://localhost:6379"></textarea>
+  <div class="actions">
+    <button id="save-btn">Save &amp; Launch</button>
+    <span id="status"></span>
+  </div>
+
+  <script>
+    const textarea = document.getElementById("env-input");
+    const saveBtn = document.getElementById("save-btn");
+    const status = document.getElementById("status");
+
+    // Load template on startup
+    window.electronAPI.getEnvTemplate().then((template) => {
+      if (template && !textarea.value) {
+        textarea.value = template;
+      }
+    });
+
+    saveBtn.addEventListener("click", async () => {
+      const content = textarea.value.trim();
+      if (!content) {
+        status.textContent = "Please paste your environment variables first.";
+        status.className = "error";
+        return;
+      }
+
+      saveBtn.disabled = true;
+      status.textContent = "Encrypting and saving...";
+      status.className = "";
+
+      try {
+        const result = await window.electronAPI.saveEnv(content);
+        if (result.success) {
+          status.textContent = "Saved! Starting server...";
+          status.className = "success";
+        } else {
+          status.textContent = result.error || "Failed to save.";
+          status.className = "error";
+          saveBtn.disabled = false;
+        }
+      } catch (err) {
+        status.textContent = String(err);
+        status.className = "error";
+        saveBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

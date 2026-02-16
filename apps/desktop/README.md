@@ -18,9 +18,11 @@ The build process:
 
 At runtime, the Electron app:
 
-1. Reads environment variables from `discolaire.env` in the user data directory
-2. Starts the embedded Next.js server on port 3000
-3. Opens a browser window pointing to `http://127.0.0.1:3000`
+1. On first launch, shows a setup screen where the user pastes their environment variables
+2. Encrypts the env vars using the OS credential store (`safeStorage`) — no plain-text secrets on disk
+3. Decrypts and applies env vars to `process.env` before starting the Next.js server
+4. Starts the embedded Next.js server on port 3000
+5. Opens a browser window pointing to `http://127.0.0.1:3000`
 
 ## Build the Installer
 
@@ -135,19 +137,23 @@ Use a GitHub Codespace, Azure VM, or AWS EC2 Windows instance to run the build r
 
 ## Setup for the End User
 
-After installing the app, the user must create an environment file before launching.
+### First Launch
 
-### 1. Locate the User Data Directory
+1. Open **Discolaire** from your Applications folder (macOS), Start Menu (Windows), or run the AppImage (Linux)
+2. On first launch, a **setup screen** appears asking you to paste your environment configuration
+3. Paste the env vars (`.env` format) into the text area and click **Save & Launch**
+4. The app encrypts the configuration using the OS credential store and starts the server
 
-| OS      | Path |
-|---------|------|
-| macOS   | `~/Library/Application Support/Discolaire/` |
-| Windows | `%APPDATA%\Discolaire\` |
-| Linux   | `~/.config/Discolaire/` |
+Your secrets are encrypted at rest using:
+- **macOS**: Keychain
+- **Windows**: DPAPI (Data Protection API)
+- **Linux**: libsecret
 
-### 2. Create `discolaire.env`
+No plain-text secrets are stored on disk. Only the Discolaire app can decrypt them.
 
-Create a file named `discolaire.env` in the user data directory above. Copy the template below and fill in the values for your environment:
+### Environment Variables Template
+
+When setting up, paste the following (with your actual values filled in):
 
 ```env
 # --- Required ---
@@ -215,15 +221,21 @@ SENTRY_AUTH_TOKEN=<token>
 RESEND_API_KEY=<key>
 ```
 
-### 3. Launch the App
+### Reconfiguring Environment Variables
 
-Open **Discolaire** from your Applications folder (macOS), Start Menu (Windows), or run the AppImage (Linux). The app will:
+To update your env vars, delete the encrypted file and relaunch the app:
 
-1. Read `discolaire.env` from the user data directory
-2. Start the embedded Next.js server
-3. Open the main window once the server is ready
+| OS      | Encrypted file path |
+|---------|---------------------|
+| macOS   | `~/Library/Application Support/Discolaire/discolaire.env.enc` |
+| Windows | `%APPDATA%\Discolaire\discolaire.env.enc` |
+| Linux   | `~/.config/Discolaire/discolaire.env.enc` |
 
-If the env file is missing, an error dialog will appear with the expected path.
+Delete `discolaire.env.enc`, then relaunch — the setup screen will appear again.
+
+### Legacy Migration
+
+If you previously used a plain-text `discolaire.env` file, the app will automatically encrypt it and delete the plain-text version on the next launch.
 
 ## Troubleshooting
 
@@ -238,7 +250,7 @@ If the env file is missing, an error dialog will appear with the expected path.
 Common issues:
 
 - **"Server entry not found"** — The frontend was not bundled correctly. Rebuild with `pnpm build:desktop`.
-- **"Runtime env file not found"** — Create `discolaire.env` in the user data directory (see above).
+- **"OS encryption is not available"** — On Linux, ensure `libsecret` is installed (`sudo apt install libsecret-1-dev gnome-keyring`).
 - **Server not ready after 30s** — Check that `DATABASE_URL` and `REDIS_URL` point to reachable services. Inspect `desktop.log` for details.
 - **Blank window** — Check `desktop.log` for server startup errors. Ensure all required env vars are set.
 

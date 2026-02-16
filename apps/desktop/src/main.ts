@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, safeStorage } from "electron";
 import fs from "fs";
 import path from "path";
 import { Module } from "module";
@@ -20,7 +20,8 @@ const serverEntry = path.join(frontendRoot, "server.js");
 app.setName("Discolaire");
 
 const getUserDataPath = () => app.getPath("userData");
-const getUserEnvPath = () => path.join(getUserDataPath(), "discolaire.env");
+const getEncryptedEnvPath = () =>
+  path.join(getUserDataPath(), "discolaire.env.enc");
 const getLogPath = () => path.join(getUserDataPath(), "desktop.log");
 
 const logLine = (message: string) => {
@@ -32,6 +33,10 @@ const logLine = (message: string) => {
   }
 };
 
+// ---------------------------------------------------------------------------
+// Environment helpers
+// ---------------------------------------------------------------------------
+
 const stripQuotes = (value: string) => {
   if (
     (value.startsWith('"') && value.endsWith('"')) ||
@@ -42,9 +47,8 @@ const stripQuotes = (value: string) => {
   return value;
 };
 
-const loadEnvFile = (filePath: string) => {
-  if (!fs.existsSync(filePath)) return;
-  const content = fs.readFileSync(filePath, "utf8");
+const parseEnvContent = (content: string) => {
+  const vars: Record<string, string> = {};
   for (const line of content.split("\n")) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) continue;
@@ -52,9 +56,69 @@ const loadEnvFile = (filePath: string) => {
     if (eq === -1) continue;
     const key = trimmed.slice(0, eq).trim();
     const value = stripQuotes(trimmed.slice(eq + 1).trim());
+    vars[key] = value;
+  }
+  return vars;
+};
+
+const applyEnvVars = (vars: Record<string, string>) => {
+  for (const [key, value] of Object.entries(vars)) {
     process.env[key] = value;
   }
 };
+
+// ---------------------------------------------------------------------------
+// safeStorage – encrypt / decrypt env content
+// ---------------------------------------------------------------------------
+
+const saveEncryptedEnv = (plainText: string) => {
+  if (!safeStorage.isEncryptionAvailable()) {
+    throw new Error("OS encryption is not available on this machine.");
+  }
+  const encrypted = safeStorage.encryptString(plainText);
+  fs.mkdirSync(path.dirname(getEncryptedEnvPath()), { recursive: true });
+  fs.writeFileSync(getEncryptedEnvPath(), encrypted);
+  logLine("Encrypted env saved.");
+};
+
+const loadEncryptedEnv = (): string | null => {
+  const encPath = getEncryptedEnvPath();
+  if (!fs.existsSync(encPath)) return null;
+  if (!safeStorage.isEncryptionAvailable()) {
+    throw new Error("OS encryption is not available on this machine.");
+  }
+  const encrypted = fs.readFileSync(encPath);
+  return safeStorage.decryptString(encrypted);
+};
+
+const hasEncryptedEnv = () => fs.existsSync(getEncryptedEnvPath());
+
+// ---------------------------------------------------------------------------
+// Legacy migration: convert plain-text discolaire.env → encrypted
+// ---------------------------------------------------------------------------
+
+const migrateLegacyEnvFile = () => {
+  const legacyPath = path.join(getUserDataPath(), "discolaire.env");
+  if (!fs.existsSync(legacyPath)) return;
+  if (hasEncryptedEnv()) {
+    // Already migrated — delete plain-text file
+    fs.unlinkSync(legacyPath);
+    logLine("Deleted legacy plain-text env file (already migrated).");
+    return;
+  }
+  try {
+    const plainText = fs.readFileSync(legacyPath, "utf8");
+    saveEncryptedEnv(plainText);
+    fs.unlinkSync(legacyPath);
+    logLine("Migrated legacy plain-text env file to encrypted storage.");
+  } catch (error) {
+    logLine(`Legacy migration failed: ${String(error)}`);
+  }
+};
+
+// ---------------------------------------------------------------------------
+// URL helpers
+// ---------------------------------------------------------------------------
 
 const resolveBaseUrl = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -86,6 +150,10 @@ const isLocalHost = (urlString: string) => {
   }
 };
 
+// ---------------------------------------------------------------------------
+// Server lifecycle
+// ---------------------------------------------------------------------------
+
 async function waitForServer(url: string, timeoutMs = 30000) {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
@@ -102,24 +170,21 @@ async function waitForServer(url: string, timeoutMs = 30000) {
 
 function startServer() {
   if (isDev) return;
-  const userEnvPath = getUserEnvPath();
   if (!fs.existsSync(serverEntry)) {
     throw new Error(`Server entry not found: ${serverEntry}`);
   }
-  if (!fs.existsSync(userEnvPath)) {
-    throw new Error(`Runtime env file not found: ${userEnvPath}`);
-  }
+
   logLine(`Starting server from: ${serverEntry}`);
-  logLine(`Env file: ${userEnvPath}`);
   logLine(`Frontend root: ${frontendRoot}`);
   logLine(`Port: ${port}`);
-  loadEnvFile(userEnvPath);
+
   const baseUrl = resolveBaseUrl();
   logLine(`Base URL: ${baseUrl}`);
   if (!isLocalHost(baseUrl)) {
     logLine("Base URL is remote; skipping embedded server start.");
     return;
   }
+
   try {
     const dbUrl = process.env.DATABASE_URL;
     if (dbUrl) {
@@ -129,6 +194,7 @@ function startServer() {
   } catch {
     logLine("DATABASE_URL host: invalid URL");
   }
+
   process.env.NODE_ENV = "production";
   process.env.PORT = port;
   process.chdir(frontendRoot);
@@ -150,7 +216,32 @@ function startServer() {
   }
 }
 
-function createWindow() {
+// ---------------------------------------------------------------------------
+// Windows
+// ---------------------------------------------------------------------------
+
+function createSetupWindow() {
+  mainWindow = new BrowserWindow({
+    title: "Discolaire — Setup",
+    width: 720,
+    height: 640,
+    resizable: true,
+    autoHideMenuBar: true,
+    webPreferences: {
+      contextIsolation: true,
+      sandbox: true,
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  mainWindow.on("page-title-updated", (event) => {
+    event.preventDefault();
+  });
+
+  mainWindow.loadFile(path.join(__dirname, "setup.html"));
+}
+
+function createAppWindow() {
   mainWindow = new BrowserWindow({
     title: "Discolaire",
     width: 1280,
@@ -162,7 +253,6 @@ function createWindow() {
     },
   });
 
-  // Keep "Discolaire" as the window title regardless of the page <title>
   mainWindow.on("page-title-updated", (event) => {
     event.preventDefault();
   });
@@ -175,6 +265,61 @@ function createWindow() {
     mainWindow.loadURL(prodUrl);
   }
 }
+
+// ---------------------------------------------------------------------------
+// IPC handlers (setup page → main process)
+// ---------------------------------------------------------------------------
+
+ipcMain.handle("save-env", async (_event, envContent: string) => {
+  try {
+    // Validate that content has at least one KEY=VALUE pair
+    const vars = parseEnvContent(envContent);
+    if (Object.keys(vars).length === 0) {
+      return { success: false, error: "No valid KEY=VALUE pairs found." };
+    }
+
+    saveEncryptedEnv(envContent);
+    applyEnvVars(vars);
+
+    // Close setup window, start server, open app window
+    if (mainWindow) {
+      mainWindow.close();
+      mainWindow = null;
+    }
+
+    startServer();
+    if (!isDev) {
+      const baseUrl = resolveBaseUrl();
+      if (isLocalHost(baseUrl)) {
+        await waitForServer(baseUrl);
+      }
+    }
+    createAppWindow();
+
+    return { success: true };
+  } catch (error) {
+    logLine(`save-env error: ${String(error)}`);
+    return { success: false, error: String(error) };
+  }
+});
+
+ipcMain.handle("get-env-template", () => {
+  // Provide the .env.example content as a starting template
+  const templatePaths = [
+    path.join(appRoot, ".env.example"),
+    path.join(appRoot, "..", ".env.example"),
+  ];
+  for (const p of templatePaths) {
+    if (fs.existsSync(p)) {
+      return fs.readFileSync(p, "utf8");
+    }
+  }
+  return null;
+});
+
+// ---------------------------------------------------------------------------
+// App lifecycle
+// ---------------------------------------------------------------------------
 
 const gotSingleInstanceLock = app.requestSingleInstanceLock();
 if (!gotSingleInstanceLock) {
@@ -190,27 +335,48 @@ if (!gotSingleInstanceLock) {
 
 app.on("ready", async () => {
   try {
-    startServer();
-    if (!isDev) {
-      const baseUrl = resolveBaseUrl();
-      if (isLocalHost(baseUrl)) {
-        await waitForServer(baseUrl);
-      }
+    if (isDev) {
+      // Dev mode: skip encryption, just load the Next.js dev server
+      createAppWindow();
+      return;
     }
-    createWindow();
+
+    // Migrate legacy plain-text env file if it exists
+    migrateLegacyEnvFile();
+
+    // Check for encrypted env
+    const envContent = loadEncryptedEnv();
+    if (!envContent) {
+      // No env configured yet — show setup screen
+      logLine("No encrypted env found. Showing setup screen.");
+      createSetupWindow();
+      return;
+    }
+
+    // Decrypt and apply env vars BEFORE starting the Next.js server
+    const vars = parseEnvContent(envContent);
+    applyEnvVars(vars);
+    logLine(`Loaded ${Object.keys(vars).length} env vars from encrypted store.`);
+
+    startServer();
+
+    const baseUrl = resolveBaseUrl();
+    if (isLocalHost(baseUrl)) {
+      await waitForServer(baseUrl);
+    }
+
+    createAppWindow();
   } catch (error) {
     console.error(error);
     if (!isDev) {
-      const userEnvPath = getUserEnvPath();
       const logPath = getLogPath();
       dialog.showErrorBox(
         "Discolaire failed to start",
         [
           "The desktop app could not start the embedded server.",
-          `Make sure your runtime env file exists at: ${userEnvPath}`,
           `Log file: ${logPath}`,
           `Error: ${String(error)}`,
-          "Then restart the app.",
+          "Restart the app to try again.",
         ].join("\n"),
       );
     }
@@ -232,6 +398,10 @@ app.on("before-quit", () => {
 
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    if (!isDev && !hasEncryptedEnv()) {
+      createSetupWindow();
+    } else {
+      createAppWindow();
+    }
   }
 });
