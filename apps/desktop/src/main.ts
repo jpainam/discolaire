@@ -152,6 +152,7 @@ function startServer() {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
+    title: "Discolaire",
     width: 1280,
     height: 800,
     autoHideMenuBar: true,
@@ -159,6 +160,11 @@ function createWindow() {
       contextIsolation: true,
       sandbox: true,
     },
+  });
+
+  // Keep "Discolaire" as the window title regardless of the page <title>
+  mainWindow.on("page-title-updated", (event) => {
+    event.preventDefault();
   });
 
   if (isDev) {

@@ -46,6 +46,7 @@
       "target": [
         "dmg"
       ],
+      "icon": "resources/icon.icns",
       "identity": null,
       "hardenedRuntime": false,
       "gatekeeperAssess": false
@@ -53,12 +54,14 @@
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "resources/icon.png"
     },
     "linux": {
       "target": [
         "AppImage"
-      ]
+      ],
+      "icon": "resources/icon.png"
     },
     "publish": [
       {
