@@ -1,14 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Redirect } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { Tabs } from "expo-router";
 import { Button, Spinner, Surface, useThemeColor } from "heroui-native";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
+import { ThemeSelector } from "@/components/theme-selector";
 import { useProtectedSession } from "@/hooks/use-protected-session";
 import { authClient } from "@/utils/auth-client";
 import { clearSchoolYearContext } from "@/utils/school-year";
 
 export default function TabLayout() {
+  const router = useRouter();
   const { session, isPending, error, retry } = useProtectedSession();
   const themeColorForeground = useThemeColor("foreground");
   const themeColorBackground = useThemeColor("background");
@@ -79,7 +81,23 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          headerShown: true,
           title: "Home",
+          headerRight: () => (
+            <View className="flex-row items-center mr-2">
+              <ThemeSelector />
+              <Pressable
+                onPress={() => router.push("/calendar")}
+                className="px-2.5 active:opacity-60"
+              >
+                <Ionicons
+                  name="calendar-outline"
+                  size={20}
+                  color={themeColorForeground}
+                />
+              </Pressable>
+            </View>
+          ),
           tabBarIcon: ({ color, size }: { color: string; size: number }) => (
             <Ionicons name="home" size={size} color={color} />
           ),

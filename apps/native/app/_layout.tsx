@@ -4,14 +4,16 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { HeroUINativeProvider } from "heroui-native";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 
-import { AppThemeProvider } from "@/contexts/app-theme-context";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { AppThemeProvider, useAppTheme } from "@/contexts/app-theme-context";
 import { AuthProvider, useAuth } from "@/contexts/auth-context";
 import { queryClient } from "@/utils/trpc";
-
+import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export const unstable_settings = {
@@ -19,16 +21,29 @@ export const unstable_settings = {
 };
 
 function StackLayout() {
+  const { isDark } = useAppTheme();
+  const _renderThemeToggle = useCallback(() => <ThemeToggle />, []);
   return (
-    <Stack screenOptions={{}}>
-      <Stack.Screen name="sign-in" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="classroom/[id]" />
-      <Stack.Screen
-        name="modal"
-        options={{ title: "Modal", presentation: "modal" }}
-      />
-    </Stack>
+    <View className="flex-1 bg-background">
+      <StatusBar style={isDark ? "light" : "dark"} />
+      <Stack
+        screenOptions={{
+          headerRight: _renderThemeToggle,
+        }}
+      >
+        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="classroom/[id]" />
+        <Stack.Screen
+          name="modal"
+          options={{ title: "Modal", presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="calendar"
+          options={{ title: "Calendar", presentation: "modal" }}
+        />
+      </Stack>
+    </View>
   );
 }
 

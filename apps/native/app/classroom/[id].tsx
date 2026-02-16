@@ -183,8 +183,7 @@ function AttendanceTab({ classroomId }: { classroomId: string }) {
   );
 
   if (isLoading) return <ListSkeleton />;
-  if (!attendances?.length)
-    return <EmptyState text="No attendance records" />;
+  if (!attendances?.length) return <EmptyState text="No attendance records" />;
 
   return (
     <View className="gap-3 mt-3">
@@ -219,13 +218,7 @@ function EmptyState({ text }: { text: string }) {
 
 // ── Info stat card ────────────────────────────────────────────────
 
-function StatCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | number;
-}) {
+function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
     <Card className="flex-1 items-center p-3">
       <Text className="text-foreground text-lg font-semibold">{value}</Text>
@@ -305,7 +298,11 @@ export default function ClassroomDetailScreen() {
           {/* Classroom info header */}
           <View className="px-6 pt-4 pb-2">
             <Text className="text-muted text-sm mb-3">
-              {[classroom.cycle?.name, classroom.section?.name, classroom.level?.name]
+              {[
+                classroom.cycle?.name,
+                classroom.section?.name,
+                classroom.level?.name,
+              ]
                 .filter(Boolean)
                 .join(" · ")}
             </Text>
@@ -342,7 +339,7 @@ export default function ClassroomDetailScreen() {
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
-              variant="secondary"
+              variant="primary"
             >
               <Tabs.List>
                 <Tabs.ScrollView>
