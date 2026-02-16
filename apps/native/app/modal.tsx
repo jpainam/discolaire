@@ -18,7 +18,10 @@ function Modal() {
     return (
       <Container isScrollable={false}>
         <View className="flex-1 justify-center items-center p-4">
-          <Surface variant="secondary" className="p-5 w-full max-w-sm rounded-lg">
+          <Surface
+            variant="secondary"
+            className="p-5 w-full max-w-sm rounded-lg"
+          >
             <Text className="text-muted text-center">
               Loading protected content...
             </Text>
@@ -36,7 +39,10 @@ function Modal() {
     return (
       <Container isScrollable={false}>
         <View className="flex-1 justify-center items-center p-4">
-          <Surface variant="secondary" className="p-5 w-full max-w-sm rounded-lg">
+          <Surface
+            variant="secondary"
+            className="p-5 w-full max-w-sm rounded-lg"
+          >
             <Text className="text-foreground font-medium mb-2">
               Session setup failed
             </Text>

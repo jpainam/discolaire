@@ -92,13 +92,11 @@ function FeesTab({ classroomId }: { classroomId: string }) {
           <View className="flex-row items-center justify-between">
             <View className="flex-1">
               <Text className="text-foreground font-medium text-sm">
-                {fee.name}
+                {/* {fee.name} */}
               </Text>
               <Text className="text-muted text-xs mt-0.5">
-                {fee.amount?.toLocaleString() ?? "—"} · Due{" "}
-                {fee.dueDate
-                  ? new Date(fee.dueDate).toLocaleDateString()
-                  : "N/A"}
+                {fee.amount.toLocaleString()} · Due{" "}
+                {new Date(fee.dueDate).toLocaleDateString()}
               </Text>
             </View>
           </View>
@@ -123,7 +121,7 @@ function SubjectsTab({ classroomId }: { classroomId: string }) {
           <View className="flex-row items-center justify-between">
             <View className="flex-1">
               <Text className="text-foreground font-medium text-sm">
-                {subject.course?.name ?? subject.name}
+                {subject.course.name}
               </Text>
               {subject.teacher && (
                 <Text className="text-muted text-xs mt-0.5">
@@ -131,11 +129,11 @@ function SubjectsTab({ classroomId }: { classroomId: string }) {
                 </Text>
               )}
             </View>
-            {subject.coefficient != null && (
+            {/* {subject.coefficient != null && (
               <Text className="text-muted text-xs">
                 Coeff. {subject.coefficient}
               </Text>
-            )}
+            )} */}
           </View>
         </Card>
       ))}
@@ -158,18 +156,17 @@ function AssignmentsTab({ classroomId }: { classroomId: string }) {
           <View className="flex-row items-center justify-between">
             <View className="flex-1">
               <Text className="text-foreground font-medium text-sm">
-                {assignment.name}
+                {/* {assignment.name} */}
               </Text>
               <Text className="text-muted text-xs mt-0.5">
-                {assignment.subject?.course?.name ?? "—"} ·{" "}
-                {assignment.term?.name ?? "—"}
+                {assignment.subject.course.name} · {assignment.term.name}
               </Text>
             </View>
-            {assignment.date && (
+            {/* {assignment.date && (
               <Text className="text-muted text-xs">
                 {new Date(assignment.date).toLocaleDateString()}
               </Text>
-            )}
+            )} */}
           </View>
         </Card>
       ))}
@@ -195,7 +192,7 @@ function AttendanceTab({ classroomId }: { classroomId: string }) {
                 {getFullName(attendance.student)}
               </Text>
               <Text className="text-muted text-xs mt-0.5">
-                {attendance.type} · {attendance.term?.name ?? "—"}
+                {attendance.type} · {attendance.term.name}
               </Text>
             </View>
             <Text className="text-muted text-xs">
@@ -301,7 +298,7 @@ export default function ClassroomDetailScreen() {
               {[
                 classroom.cycle?.name,
                 classroom.section?.name,
-                classroom.level?.name,
+                classroom.level.name,
               ]
                 .filter(Boolean)
                 .join(" · ")}
@@ -347,15 +344,21 @@ export default function ClassroomDetailScreen() {
                   <Tabs.Trigger value="students">
                     <Tabs.Label>Students</Tabs.Label>
                   </Tabs.Trigger>
+                  <Tabs.Separator betweenValues={["students", "fees"]} />
                   <Tabs.Trigger value="fees">
                     <Tabs.Label>Fees</Tabs.Label>
                   </Tabs.Trigger>
+                  <Tabs.Separator betweenValues={["fees", "subjects"]} />
                   <Tabs.Trigger value="subjects">
                     <Tabs.Label>Subjects</Tabs.Label>
                   </Tabs.Trigger>
+                  <Tabs.Separator betweenValues={["subjects", "assignments"]} />
                   <Tabs.Trigger value="assignments">
                     <Tabs.Label>Assignments</Tabs.Label>
                   </Tabs.Trigger>
+                  <Tabs.Separator
+                    betweenValues={["assignments", "attendance"]}
+                  />
                   <Tabs.Trigger value="attendance">
                     <Tabs.Label>Attendance</Tabs.Label>
                   </Tabs.Trigger>

@@ -52,11 +52,7 @@ export default function StudentsScreen() {
   }, [students, visibleCount]);
 
   const renderItem = useCallback(
-    ({
-      item: student,
-    }: {
-      item: NonNullable<typeof students>[number];
-    }) => (
+    ({ item: student }: { item: NonNullable<typeof students>[number] }) => (
       <Pressable className="mx-6 mb-3">
         <Card className="p-4">
           <View className="flex-row items-center justify-between">
@@ -67,11 +63,7 @@ export default function StudentsScreen() {
               <View className="flex-row items-center gap-3">
                 {student.classroom?.name && (
                   <View className="flex-row items-center gap-1">
-                    <Ionicons
-                      name="school-outline"
-                      size={14}
-                      color="#888"
-                    />
+                    <Ionicons name="school-outline" size={14} color="#888" />
                     <Text className="text-muted text-xs">
                       {student.classroom.name}
                     </Text>
@@ -111,7 +103,10 @@ export default function StudentsScreen() {
           data={visibleStudents}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingTop: 8, paddingBottom: insets.bottom }}
+          contentContainerStyle={{
+            paddingTop: 8,
+            paddingBottom: insets.bottom,
+          }}
           showsVerticalScrollIndicator={false}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}

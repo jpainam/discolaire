@@ -17,12 +17,42 @@ const MOCK_EVENTS: Record<string, { title: string; color: string }[]> = {
 };
 
 const MOCK_SCHEDULE = [
-  { time: "08:00 - 09:00", subject: "Mathematics", classroom: "6eme A", teacher: "Mr. Dupont" },
-  { time: "09:00 - 10:00", subject: "French", classroom: "5eme B", teacher: "Mme. Martin" },
-  { time: "10:15 - 11:15", subject: "Physics", classroom: "4eme A", teacher: "Mr. Bernard" },
-  { time: "11:15 - 12:15", subject: "History", classroom: "3eme C", teacher: "Mme. Leroy" },
-  { time: "14:00 - 15:00", subject: "English", classroom: "6eme A", teacher: "Mr. Smith" },
-  { time: "15:00 - 16:00", subject: "Biology", classroom: "5eme B", teacher: "Mme. Dubois" },
+  {
+    time: "08:00 - 09:00",
+    subject: "Mathematics",
+    classroom: "6eme A",
+    teacher: "Mr. Dupont",
+  },
+  {
+    time: "09:00 - 10:00",
+    subject: "French",
+    classroom: "5eme B",
+    teacher: "Mme. Martin",
+  },
+  {
+    time: "10:15 - 11:15",
+    subject: "Physics",
+    classroom: "4eme A",
+    teacher: "Mr. Bernard",
+  },
+  {
+    time: "11:15 - 12:15",
+    subject: "History",
+    classroom: "3eme C",
+    teacher: "Mme. Leroy",
+  },
+  {
+    time: "14:00 - 15:00",
+    subject: "English",
+    classroom: "6eme A",
+    teacher: "Mr. Smith",
+  },
+  {
+    time: "15:00 - 16:00",
+    subject: "Biology",
+    classroom: "5eme B",
+    teacher: "Mme. Dubois",
+  },
 ];
 
 function getDaysInMonth(year: number, month: number) {
@@ -39,8 +69,18 @@ function formatDateKey(year: number, month: number, day: number) {
 }
 
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function CalendarScreen() {
@@ -84,7 +124,10 @@ export default function CalendarScreen() {
   }
 
   return (
-    <Container className="p-4" scrollViewProps={{ showsVerticalScrollIndicator: false }}>
+    <Container
+      className="p-4"
+      scrollViewProps={{ showsVerticalScrollIndicator: false }}
+    >
       {/* Month Navigation */}
       <View className="flex-row items-center justify-between mb-4 px-2">
         <Pressable onPress={goToPrevMonth} className="p-2 active:opacity-60">
@@ -110,12 +153,18 @@ export default function CalendarScreen() {
       {/* Calendar Grid */}
       <View className="flex-row flex-wrap mb-6">
         {calendarCells.map((day, index) => {
-          const dateKey = day ? formatDateKey(currentYear, currentMonth, day) : "";
+          const dateKey = day
+            ? formatDateKey(currentYear, currentMonth, day)
+            : "";
           const hasEvents = day ? Boolean(MOCK_EVENTS[dateKey]) : false;
           const isSelected = day === selectedDay;
 
           return (
-            <View key={index} className="items-center justify-center" style={{ width: "14.28%" }}>
+            <View
+              key={index}
+              className="items-center justify-center"
+              style={{ width: "14.28%" }}
+            >
               {day ? (
                 <Pressable
                   onPress={() => setSelectedDay(day)}
@@ -148,7 +197,9 @@ export default function CalendarScreen() {
             {selectedEvents.map((event, i) => (
               <Card key={i} className="p-3 flex-row items-center gap-3">
                 <View className={`w-3 h-3 rounded-full ${event.color}`} />
-                <Text className="text-foreground text-sm font-medium">{event.title}</Text>
+                <Text className="text-foreground text-sm font-medium">
+                  {event.title}
+                </Text>
               </Card>
             ))}
           </View>
@@ -167,7 +218,9 @@ export default function CalendarScreen() {
                 <Ionicons name="time-outline" size={16} color={foreground} />
               </View>
               <View className="flex-1">
-                <Text className="text-foreground font-medium text-sm">{period.subject}</Text>
+                <Text className="text-foreground font-medium text-sm">
+                  {period.subject}
+                </Text>
                 <Text className="text-muted text-xs mt-0.5">
                   {period.time} · {period.classroom} · {period.teacher}
                 </Text>

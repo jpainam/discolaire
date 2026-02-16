@@ -63,11 +63,7 @@ export default function ClassroomScreen() {
                       {classroom.size} / {classroom.maxSize} students
                     </Text>
                   </View>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={20}
-                    color="#888"
-                  />
+                  <Ionicons name="chevron-forward" size={20} color="#888" />
                 </View>
               </Card>
             </Pressable>

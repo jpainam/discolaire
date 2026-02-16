@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Redirect, useRouter } from "expo-router";
-import { Tabs } from "expo-router";
+import { Redirect, Tabs, useRouter } from "expo-router";
 import { Button, Spinner, Surface, useThemeColor } from "heroui-native";
 import { Pressable, Text, View } from "react-native";
 

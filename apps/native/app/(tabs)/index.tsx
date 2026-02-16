@@ -6,10 +6,30 @@ import { Container } from "@/components/container";
 import { useAuth } from "@/contexts/auth-context";
 
 const MOCK_STATS = [
-  { label: "Students", value: "342", icon: "people" as const, color: "bg-accent" },
-  { label: "Classrooms", value: "12", icon: "school" as const, color: "bg-success" },
-  { label: "Pending Fees", value: "28", icon: "cash-outline" as const, color: "bg-warning" },
-  { label: "Attendance", value: "94%", icon: "checkmark-circle-outline" as const, color: "bg-default" },
+  {
+    label: "Students",
+    value: "342",
+    icon: "people" as const,
+    color: "bg-accent",
+  },
+  {
+    label: "Classrooms",
+    value: "12",
+    icon: "school" as const,
+    color: "bg-success",
+  },
+  {
+    label: "Pending Fees",
+    value: "28",
+    icon: "cash-outline" as const,
+    color: "bg-warning",
+  },
+  {
+    label: "Attendance",
+    value: "94%",
+    icon: "checkmark-circle-outline" as const,
+    color: "bg-default",
+  },
 ];
 
 const MOCK_SCHEDULE = [
@@ -20,15 +40,35 @@ const MOCK_SCHEDULE = [
 ];
 
 const MOCK_EVENTS = [
-  { date: "Feb 16", title: "Parent-Teacher Meeting", icon: "people-circle-outline" as const },
-  { date: "Feb 18", title: "Mid-term Exams Begin", icon: "document-text-outline" as const },
+  {
+    date: "Feb 16",
+    title: "Parent-Teacher Meeting",
+    icon: "people-circle-outline" as const,
+  },
+  {
+    date: "Feb 18",
+    title: "Mid-term Exams Begin",
+    icon: "document-text-outline" as const,
+  },
   { date: "Feb 23", title: "Science Fair", icon: "flask-outline" as const },
 ];
 
 const MOCK_ACTIVITY = [
-  { text: "New student enrolled in 6eme A", time: "2h ago", icon: "person-add-outline" as const },
-  { text: "Fee payment received — Moussa K.", time: "4h ago", icon: "card-outline" as const },
-  { text: "Attendance marked for 5eme B", time: "Yesterday", icon: "checkmark-done-outline" as const },
+  {
+    text: "New student enrolled in 6eme A",
+    time: "2h ago",
+    icon: "person-add-outline" as const,
+  },
+  {
+    text: "Fee payment received — Moussa K.",
+    time: "4h ago",
+    icon: "card-outline" as const,
+  },
+  {
+    text: "Attendance marked for 5eme B",
+    time: "Yesterday",
+    icon: "checkmark-done-outline" as const,
+  },
 ];
 
 function getGreeting() {
@@ -49,11 +89,14 @@ export default function Home() {
   });
 
   return (
-    <Container className="p-5" scrollViewProps={{ showsVerticalScrollIndicator: false }}>
+    <Container
+      className="p-5"
+      scrollViewProps={{ showsVerticalScrollIndicator: false }}
+    >
       {/* Greeting */}
       <View className="mb-5">
         <Text className="text-2xl font-bold text-foreground">
-          {getGreeting()}, {session?.user.name?.split(" ")[0]}
+          {getGreeting()}, {session?.user.name.split(" ")[0]}
         </Text>
         <Text className="text-muted text-sm mt-1">{today}</Text>
       </View>
@@ -61,13 +104,21 @@ export default function Home() {
       {/* Quick Stats */}
       <View className="flex-row flex-wrap gap-3 mb-5">
         {MOCK_STATS.map((stat) => (
-          <Card key={stat.label} className="p-4 flex-1" style={{ minWidth: "46%" }}>
+          <Card
+            key={stat.label}
+            className="p-4 flex-1"
+            style={{ minWidth: "46%" }}
+          >
             <View className="flex-row items-center gap-3">
-              <View className={`w-10 h-10 rounded-xl items-center justify-center ${stat.color}`}>
+              <View
+                className={`w-10 h-10 rounded-xl items-center justify-center ${stat.color}`}
+              >
                 <Ionicons name={stat.icon} size={20} color={foreground} />
               </View>
               <View>
-                <Text className="text-foreground text-xl font-bold">{stat.value}</Text>
+                <Text className="text-foreground text-xl font-bold">
+                  {stat.value}
+                </Text>
                 <Text className="text-muted text-xs">{stat.label}</Text>
               </View>
             </View>
@@ -84,10 +135,14 @@ export default function Home() {
         <View className="gap-2">
           {MOCK_SCHEDULE.map((period, i) => (
             <View key={i} className="flex-row items-center gap-3 py-2">
-              <Text className="text-accent font-semibold text-sm w-12">{period.time}</Text>
+              <Text className="text-accent font-semibold text-sm w-12">
+                {period.time}
+              </Text>
               <View className="w-0.5 h-full bg-separator self-stretch" />
               <View className="flex-1">
-                <Text className="text-foreground text-sm font-medium">{period.subject}</Text>
+                <Text className="text-foreground text-sm font-medium">
+                  {period.subject}
+                </Text>
                 <Text className="text-muted text-xs">{period.classroom}</Text>
               </View>
             </View>
@@ -108,7 +163,9 @@ export default function Home() {
                 <Ionicons name={event.icon} size={16} color={foreground} />
               </View>
               <View className="flex-1">
-                <Text className="text-foreground text-sm font-medium">{event.title}</Text>
+                <Text className="text-foreground text-sm font-medium">
+                  {event.title}
+                </Text>
                 <Text className="text-muted text-xs">{event.date}</Text>
               </View>
             </View>
@@ -129,7 +186,9 @@ export default function Home() {
                 <Ionicons name={item.icon} size={16} color={foreground} />
               </View>
               <View className="flex-1">
-                <Text className="text-foreground text-sm font-medium">{item.text}</Text>
+                <Text className="text-foreground text-sm font-medium">
+                  {item.text}
+                </Text>
                 <Text className="text-muted text-xs">{item.time}</Text>
               </View>
             </View>
