@@ -62,6 +62,7 @@ jobs:
       - name: Build desktop apps
         env:
           CI: true
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm --filter @repo/desktop build:frontend
           pnpm --filter @repo/desktop build:electron -- --publish never
