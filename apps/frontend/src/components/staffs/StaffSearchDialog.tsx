@@ -16,7 +16,7 @@ import {
   InputGroupInput,
 } from "../ui/input-group";
 
-export interface SearchedStudent {
+export interface SearchedStaff {
   id: string;
   lastName: string | null;
   firstName: string | null;
@@ -24,37 +24,31 @@ export interface SearchedStudent {
 }
 
 interface SearchDialogProps {
-  onSelect: (value: SearchedStudent) => void;
+  onSelect: (value: SearchedStaff) => void;
   placeholder?: string;
-  triggerLabel?: string;
 }
 
-export function StudentSearchDialog({
+export function StaffSearchDialog({
   onSelect,
-  placeholder = "Search for something...",
+  placeholder = "Rechercher un personnel...",
 }: SearchDialogProps) {
   const [query, setQuery] = useState("");
-
   const [debounceValue] = useDebounce(query, 500);
-
   const trpc = useTRPC();
-
-  const studentsQuery = useQuery(
-    trpc.student.all.queryOptions({
-      query: debounceValue,
-    }),
-  );
-
   const { closeModal } = useModal();
 
+  const staffQuery = useQuery(
+    trpc.staff.all.queryOptions({ query: debounceValue }),
+  );
+
   const handleSuggestionClick = (
-    student: RouterOutputs["student"]["all"][number],
+    staff: RouterOutputs["staff"]["all"][number],
   ) => {
     onSelect({
-      id: student.id,
-      firstName: student.firstName,
-      lastName: student.lastName,
-      userId: student.userId,
+      id: staff.id,
+      firstName: staff.firstName,
+      lastName: staff.lastName,
+      userId: staff.userId,
     });
     closeModal();
     setQuery("");
@@ -75,29 +69,34 @@ export function StudentSearchDialog({
       </InputGroup>
 
       <div className="h-[200px] overflow-y-auto rounded-md border">
-        {studentsQuery.isPending ? (
+        {staffQuery.isPending ? (
           <div className="flex h-full flex-shrink-0 items-center justify-center">
             <Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
           </div>
-        ) : (studentsQuery.data ?? []).length > 0 ? (
+        ) : (staffQuery.data ?? []).length > 0 ? (
           <ul className="divide-y">
-            {studentsQuery.data?.map((student) => (
+            {staffQuery.data?.map((staff) => (
               <li
-                key={student.id}
+                key={staff.id}
                 className="hover:bg-muted cursor-pointer px-4 py-3 transition-colors"
-                onClick={() => handleSuggestionClick(student)}
+                onClick={() => handleSuggestionClick(staff)}
               >
-                {getFullName(student)}
+                <div className="font-medium">{getFullName(staff)}</div>
+                {staff.jobTitle && (
+                  <div className="text-muted-foreground text-xs">
+                    {staff.jobTitle}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
         ) : query.length > 1 ? (
           <div className="text-muted-foreground flex h-full flex-shrink-0 items-center justify-center">
-            No results found
+            Aucun résultat trouvé
           </div>
         ) : (
           <div className="text-muted-foreground flex h-full flex-shrink-0 items-center justify-center">
-            Type to search
+            Tapez pour rechercher
           </div>
         )}
       </div>

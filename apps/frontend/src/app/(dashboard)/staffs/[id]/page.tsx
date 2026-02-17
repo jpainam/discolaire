@@ -9,7 +9,7 @@ import { ClassPerformance } from "./ClassPerformance";
 import { PendingTasks } from "./PendingTasks";
 import { QuickActions } from "./QuickActions";
 import { StatsCards } from "./StatsCards";
-import { TodaySchedule } from "./TodaySchedule";
+import { TodaySchedule } from "./WeekSchedule";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -27,6 +27,7 @@ export default async function Page(props: {
     trpc.term.all.queryOptions(),
     trpc.subject.gradesheetCount.queryOptions({ teacherId: staffId }),
     trpc.staff.stats.queryOptions(staffId),
+    trpc.staff.timetables.queryOptions(staffId),
   ]);
   return (
     <HydrateClient>
@@ -90,9 +91,21 @@ export default async function Page(props: {
             <PendingTasks />
           </div>
 
-          {/* Class Performance */}
+          {/* Week Schedule */}
           <div className="lg:col-span-1">
-            <TodaySchedule />
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense
+                fallback={
+                  <div className="grid grid-cols-1 gap-2">
+                    {Array.from({ length: 4 }).map((_, t) => (
+                      <Skeleton className="h-10" key={t} />
+                    ))}
+                  </div>
+                }
+              >
+                <TodaySchedule staffId={staffId} />
+              </Suspense>
+            </ErrorBoundary>
           </div>
         </div>
       </div>

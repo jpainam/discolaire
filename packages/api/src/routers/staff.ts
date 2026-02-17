@@ -47,21 +47,43 @@ const createUpdateSchema = z.object({
   tax: z.string().optional(),
 });
 export const staffRouter = {
-  all: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.staff.findMany({
-      where: {
-        schoolId: ctx.schoolId,
-      },
-      include: {
-        country: true,
-        degree: true,
-        user: true,
-      },
-      orderBy: {
-        lastName: "asc",
-      },
-    });
-  }),
+  all: protectedProcedure
+    .input(
+      z
+        .object({
+          limit: z.number().optional().default(300),
+          query: z.string().optional(),
+        })
+        .optional(),
+    )
+    .query(({ ctx, input }) => {
+      const q = input?.query;
+      return ctx.db.staff.findMany({
+        take: input?.limit ?? 300,
+        where: {
+          schoolId: ctx.schoolId,
+          ...(q
+            ? {
+                OR: [
+                  { firstName: { contains: q, mode: "insensitive" } },
+                  { lastName: { contains: q, mode: "insensitive" } },
+                  { email: { contains: q, mode: "insensitive" } },
+                  { phoneNumber1: { contains: q, mode: "insensitive" } },
+                  { jobTitle: { contains: q, mode: "insensitive" } },
+                ],
+              }
+            : {}),
+        },
+        include: {
+          country: true,
+          degree: true,
+          user: true,
+        },
+        orderBy: {
+          lastName: "asc",
+        },
+      });
+    }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.staff.findUniqueOrThrow({
       where: {
@@ -377,6 +399,12 @@ export const staffRouter = {
       },
     });
   }),
+  timetables: protectedProcedure
+    .input(z.string().min(1))
+    .query(({ ctx, input }) => {
+      return ctx.services.staff.getTimetables(input, ctx.schoolYearId);
+    }),
+
   stats: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const classrooms = await ctx.services.staff.getClassrooms(
       input,

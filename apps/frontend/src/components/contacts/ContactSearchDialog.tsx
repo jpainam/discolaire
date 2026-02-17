@@ -16,7 +16,7 @@ import {
   InputGroupInput,
 } from "../ui/input-group";
 
-export interface SearchedStudent {
+export interface SearchedContact {
   id: string;
   lastName: string | null;
   firstName: string | null;
@@ -24,37 +24,31 @@ export interface SearchedStudent {
 }
 
 interface SearchDialogProps {
-  onSelect: (value: SearchedStudent) => void;
+  onSelect: (value: SearchedContact) => void;
   placeholder?: string;
-  triggerLabel?: string;
 }
 
-export function StudentSearchDialog({
+export function ContactSearchDialog({
   onSelect,
-  placeholder = "Search for something...",
+  placeholder = "Rechercher un contact...",
 }: SearchDialogProps) {
   const [query, setQuery] = useState("");
-
   const [debounceValue] = useDebounce(query, 500);
-
   const trpc = useTRPC();
-
-  const studentsQuery = useQuery(
-    trpc.student.all.queryOptions({
-      query: debounceValue,
-    }),
-  );
-
   const { closeModal } = useModal();
 
+  const contactsQuery = useQuery(
+    trpc.contact.all.queryOptions({ query: debounceValue }),
+  );
+
   const handleSuggestionClick = (
-    student: RouterOutputs["student"]["all"][number],
+    contact: RouterOutputs["contact"]["all"][number],
   ) => {
     onSelect({
-      id: student.id,
-      firstName: student.firstName,
-      lastName: student.lastName,
-      userId: student.userId,
+      id: contact.id,
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      userId: contact.userId,
     });
     closeModal();
     setQuery("");
@@ -65,8 +59,8 @@ export function StudentSearchDialog({
       <InputGroup>
         <InputGroupInput
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
           autoFocus
+          onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
         />
         <InputGroupAddon>
@@ -75,29 +69,34 @@ export function StudentSearchDialog({
       </InputGroup>
 
       <div className="h-[200px] overflow-y-auto rounded-md border">
-        {studentsQuery.isPending ? (
+        {contactsQuery.isPending ? (
           <div className="flex h-full flex-shrink-0 items-center justify-center">
             <Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
           </div>
-        ) : (studentsQuery.data ?? []).length > 0 ? (
+        ) : (contactsQuery.data ?? []).length > 0 ? (
           <ul className="divide-y">
-            {studentsQuery.data?.map((student) => (
+            {contactsQuery.data?.map((contact) => (
               <li
-                key={student.id}
+                key={contact.id}
                 className="hover:bg-muted cursor-pointer px-4 py-3 transition-colors"
-                onClick={() => handleSuggestionClick(student)}
+                onClick={() => handleSuggestionClick(contact)}
               >
-                {getFullName(student)}
+                <div className="font-medium">{getFullName(contact)}</div>
+                {contact.phoneNumber1 && (
+                  <div className="text-muted-foreground text-xs">
+                    {contact.phoneNumber1}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
         ) : query.length > 1 ? (
           <div className="text-muted-foreground flex h-full flex-shrink-0 items-center justify-center">
-            No results found
+            Aucun résultat trouvé
           </div>
         ) : (
           <div className="text-muted-foreground flex h-full flex-shrink-0 items-center justify-center">
-            Type to search
+            Tapez pour rechercher
           </div>
         )}
       </div>
