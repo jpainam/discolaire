@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   useMutation,
   useQueryClient,
@@ -40,6 +40,7 @@ export function StaffPermissionTable({
 }) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const t = useTranslations();
   const [selectedModule, setSelectedModule] = useState<
     RouterOutputs["module"]["all"][number] | null
   >(null);
@@ -47,11 +48,11 @@ export function StaffPermissionTable({
   const { data: staffPermissions } = useSuspenseQuery(
     trpc.staff.permissions.queryOptions(staffId),
   );
-  const t = useTranslations();
   const { data: permissions } = useSuspenseQuery(
     trpc.permission.all.queryOptions(),
   );
 
+  console.log(staffPermissions);
   const updatePermission = useMutation(
     trpc.user.updatePermission.mutationOptions({
       onSuccess: async () => {
@@ -66,37 +67,19 @@ export function StaffPermissionTable({
     }),
   );
 
-  const { moduleMapPermission, staffperms } = useMemo(() => {
-    const mmp = new Map<string, RouterOutputs["permission"]["all"]>();
-    const resourceToModuleId = new Map<string, string>();
-    modules.forEach((mod) => {
-      mmp.set(mod.id, []);
-      mod.permissions.forEach((permission) => {
-        resourceToModuleId.set(permission.resource, mod.id);
-      });
-    });
-    permissions.forEach((permission) => {
-      const moduleId = resourceToModuleId.get(permission.resource);
-      if (!moduleId) return;
-      const modulePermissions = mmp.get(moduleId);
-      if (modulePermissions) {
-        modulePermissions.push(permission);
-      } else {
-        mmp.set(moduleId, [permission]);
-      }
-    });
-    const staffperms = new Map<
-      string,
-      RouterOutputs["staff"]["permissions"][number]
-    >();
-    staffPermissions.forEach((sps) => {
-      staffperms.set(sps.resource, sps);
-    });
-    return { moduleMapPermission: mmp, staffperms };
-  }, [modules, permissions, staffPermissions]);
+  // Build a lookup map: resource (lowercase) -> staff permission
+  const staffPermMap = new Map(
+    staffPermissions.map((sp) => [sp.resource.toLowerCase(), sp]),
+  );
 
-  const perms = selectedModule
-    ? moduleMapPermission?.get(selectedModule.id)
+  // Build a set of resources belonging to the selected module
+  const moduleResources = new Set(
+    selectedModule?.permissions.map((p) => p.resource),
+  );
+
+  // Filter all permissions to only those in the selected module
+  const modulePermissions = selectedModule
+    ? permissions.filter((p) => moduleResources.has(p.resource))
     : [];
 
   const handlePermissionChange = (
@@ -113,23 +96,19 @@ export function StaffPermissionTable({
   return (
     <div className="grid grid-cols-[16rem_1fr] items-start gap-4">
       <div className="bg-muted/50 grid grid-cols-1 border">
-        {modules.map((mod, index) => {
-          return (
-            <div
-              onClick={() => {
-                void setSelectedModule(mod);
-              }}
-              className={cn(
-                "flex cursor-pointer flex-col gap-1 border-b px-4 py-2",
-                selectedModule?.id == mod.id && "bg-primary/10",
-              )}
-              key={index}
-            >
-              <span className="font-medium">{mod.name}</span>
-              <span className="text-muted-foreground">{mod.description}</span>
-            </div>
-          );
-        })}
+        {modules.map((mod) => (
+          <div
+            key={mod.id}
+            onClick={() => setSelectedModule(mod)}
+            className={cn(
+              "flex cursor-pointer flex-col gap-1 border-b px-4 py-2",
+              selectedModule?.id === mod.id && "bg-primary/10",
+            )}
+          >
+            <span className="font-medium">{mod.name}</span>
+            <span className="text-muted-foreground">{mod.description}</span>
+          </div>
+        ))}
       </div>
       {selectedModule ? (
         <Card>
@@ -138,10 +117,10 @@ export function StaffPermissionTable({
             <CardDescription>{selectedModule.description}</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 gap-2 pt-1">
-            {perms?.map((p, idx) => {
-              const staffperm = staffperms.get(p.resource);
-              const effect = staffperm?.effect;
-              const roleSources = staffperm?.sources.filter(
+            {modulePermissions.map((p) => {
+              const staffPerm = staffPermMap.get(p.resource.toLowerCase());
+              const effect = staffPerm?.effect;
+              const roleSources = staffPerm?.sources.filter(
                 (s) => s.type === "role",
               ) as
                 | { type: "role"; role: { id: string; name: string } }[]
@@ -149,7 +128,7 @@ export function StaffPermissionTable({
 
               return (
                 <div
-                  key={`${p.resource}-${idx}`}
+                  key={p.resource}
                   className="flex items-center justify-between rounded-lg border p-2"
                 >
                   <div className="flex flex-col gap-2 px-2">
@@ -185,29 +164,25 @@ export function StaffPermissionTable({
                         ))}
                     </div>
                   </div>
-                  <div>
-                    <Select
-                      value={effect ?? ""}
-                      onValueChange={(value) =>
-                        handlePermissionChange(p, value)
-                      }
-                      disabled={updatePermission.isPending}
-                    >
-                      <SelectTrigger size="sm" className="w-[110px]">
-                        <SelectValue placeholder="—" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="allow">
-                          <CheckIcon className="text-green-600" />
-                          {t("Allow")}
-                        </SelectItem>
-                        <SelectItem value="deny">
-                          <XIcon className="text-red-600" />
-                          {t("Deny")}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Select
+                    value={effect ?? ""}
+                    onValueChange={(value) => handlePermissionChange(p, value)}
+                    disabled={updatePermission.isPending}
+                  >
+                    <SelectTrigger size="sm" className="w-[110px]">
+                      <SelectValue placeholder="—" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="allow">
+                        <CheckIcon className="text-green-600" />
+                        {t("Allow")}
+                      </SelectItem>
+                      <SelectItem value="deny">
+                        <XIcon className="text-red-600" />
+                        {t("Deny")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               );
             })}

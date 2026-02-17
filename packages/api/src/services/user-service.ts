@@ -508,13 +508,15 @@ export class UserService {
     });
     const perms = (user.permissions ?? []) as {
       resource: string;
-      action: string;
+      action?: string;
       effect: string;
       condition?: Record<string, unknown> | null;
     }[];
     const directPermissions = perms.map((p) => {
       return {
-        resource: `${p.resource}.${p.action}`.toLowerCase(),
+        resource: p.action
+          ? `${p.resource}.${p.action}`.toLowerCase()
+          : p.resource,
         effect: p.effect.toLowerCase() as "allow" | "deny",
         condition: p.condition,
         sources: [
