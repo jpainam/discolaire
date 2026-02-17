@@ -7,7 +7,6 @@ import { CheckIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { RouterOutputs } from "@repo/api";
-import { RoleLevel } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
 import {
@@ -17,15 +16,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Checkbox } from "~/components/ui/checkbox";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldTitle,
-} from "~/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -78,71 +68,14 @@ export function StaffPermissionTable({ staffId }: { staffId: string }) {
     return { mmp, staffperms };
   }, [modules, permissions, staffPermissions]);
   return (
-    <div className="grid grid-cols-1 items-start gap-4 px-4 xl:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>Roles de l'utilisateur</CardTitle>
-          <CardDescription>
-            Sélectionner un ou plusieurs rôles pour cet utilisateurs. Les
-            permissions seront héritées des rôles
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <FieldGroup className="gap-2">
-            {roles.map((r, index) => {
-              return (
-                <FieldLabel key={index}>
-                  <Field orientation="horizontal">
-                    <Checkbox
-                      id="toggle-checkbox-2"
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setRoleIds([...roleIds, r.id]);
-                        } else {
-                          setRoleIds((ids) => ids.filter((id) => id != r.id));
-                        }
-                      }}
-                      name="toggle-checkbox-2"
-                    />
-                    <FieldContent>
-                      <FieldTitle>
-                        {r.name}
-                        <Badge
-                          size={"xs"}
-                          className=""
-                          //className="size-1.5 h-5 text-[8px]"
-                          variant={
-                            r.level == RoleLevel.LEVEL1
-                              ? "destructive"
-                              : r.level == RoleLevel.LEVEL2
-                                ? "primary"
-                                : r.level == RoleLevel.LEVEL3
-                                  ? "info"
-                                  : r.level == RoleLevel.LEVEL4
-                                    ? "secondary"
-                                    : "warning"
-                          }
-                          appearance={"light"}
-                        >
-                          {r.level}
-                        </Badge>
-                      </FieldTitle>
-                      <FieldDescription>{r.description}</FieldDescription>
-                    </FieldContent>
-                  </Field>
-                </FieldLabel>
-              );
-            })}
-          </FieldGroup>
-        </CardContent>
-      </Card>
-
+    <div className="grid grid-cols-1 items-start gap-4 pb-8 xl:grid-cols-2">
       {modules.map((mod, index) => {
         const perms = moduleMapPermission.get(mod.id);
         return (
           <Card key={index}>
             <CardHeader>
               <CardTitle>{mod.name}</CardTitle>
+              <CardDescription>{mod.description}</CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 gap-2 pt-1">
               {perms?.map((p, idx) => {
@@ -150,7 +83,7 @@ export function StaffPermissionTable({ staffId }: { staffId: string }) {
                 return (
                   <div
                     key={`${p.resource}-${idx}`}
-                    className="flex-items flex justify-between p-2"
+                    className="flex-items flex justify-between rounded-lg border p-2"
                   >
                     <div className="flex flex-col gap-2 px-2">
                       <div className="text-xs">{p.name}</div>
