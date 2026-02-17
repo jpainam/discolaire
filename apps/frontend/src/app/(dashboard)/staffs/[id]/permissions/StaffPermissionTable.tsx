@@ -11,14 +11,7 @@ import { RoleLevel } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
-import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -86,7 +79,7 @@ export function StaffPermissionTable({ staffId }: { staffId: string }) {
   }, [modules, permissions, staffPermissions]);
   return (
     <div className="grid grid-cols-1 items-start gap-4 px-4 xl:grid-cols-2">
-      <Card className="col-span-full">
+      <Card>
         <CardHeader>
           <CardTitle>Roles de l'utilisateur</CardTitle>
           <CardDescription>
@@ -143,97 +136,79 @@ export function StaffPermissionTable({ staffId }: { staffId: string }) {
           </FieldGroup>
         </CardContent>
       </Card>
-      <div className="col-span-2 grid items-start gap-2 xl:grid-cols-2">
-        {[
-          modules.slice(0, modules.length / 2),
-          modules.slice(modules.length / 2),
-        ].map((mmod, iindex) => {
-          return (
-            <Accordion
-              defaultValue={mmod.slice(0, 3).map((m) => m.id)}
-              type="multiple"
-              key={iindex}
-            >
-              {mmod.map((mod, index) => {
-                const perms = moduleMapPermission.get(mod.id);
+
+      {modules.map((mod, index) => {
+        const perms = moduleMapPermission.get(mod.id);
+        return (
+          <Card key={index}>
+            <CardHeader>
+              <CardTitle>{mod.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 gap-2 pt-1">
+              {perms?.map((p, idx) => {
+                //const staffperm = staffperms.get(p.resource);
                 return (
-                  <AccordionItem key={index} value={mod.id}>
-                    <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">
-                      {mod.name}
-                    </AccordionTrigger>
-                    <AccordionContent className="grid grid-cols-1 gap-2 pt-1">
-                      {perms?.map((p, idx) => {
-                        //const staffperm = staffperms.get(p.resource);
-                        return (
-                          <Card
-                            key={`${p.resource}-${idx}`}
-                            className="m-0 gap-0 px-0 py-1"
-                          >
-                            <CardHeader className="px-2">
-                              <CardTitle className="text-xs">
-                                {p.name}
-                              </CardTitle>
-                              <CardAction>
-                                <Select>
-                                  <SelectTrigger
-                                    size="sm"
-                                    className="w-[110px]"
-                                  >
-                                    <SelectValue placeholder="Autorisation" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="allow">
-                                      <CheckIcon className="text-green-600" />
-                                      {t("Allow")}
-                                    </SelectItem>
-                                    <SelectItem value="deny">
-                                      <XIcon className="text-red-600" />
-                                      {t("Deny")}
-                                    </SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </CardAction>
-                              <CardDescription className="flex items-center gap-2">
-                                <Badge
-                                  variant={
-                                    p.type == "ACTION"
-                                      ? "success"
-                                      : p.type == "MENU"
-                                        ? "primary"
-                                        : "destructive"
-                                  }
-                                  size={"xs"}
-                                  appearance={"light"}
-                                >
-                                  {p.type}
-                                </Badge>
-                                <Badge
-                                  size={"xs"}
-                                  variant={"info"}
-                                  appearance={"light"}
-                                >
-                                  {p.resource}
-                                </Badge>
-                                <Badge
-                                  size={"xs"}
-                                  variant={"warning"}
-                                  appearance={"light"}
-                                >
-                                  Via rôle
-                                </Badge>
-                              </CardDescription>
-                            </CardHeader>
-                          </Card>
-                        );
-                      })}
-                    </AccordionContent>
-                  </AccordionItem>
+                  <div
+                    key={`${p.resource}-${idx}`}
+                    className="flex-items flex justify-between p-2"
+                  >
+                    <div className="flex flex-col gap-2 px-2">
+                      <div className="text-xs">{p.name}</div>
+
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant={
+                            p.type == "ACTION"
+                              ? "success"
+                              : p.type == "MENU"
+                                ? "primary"
+                                : "destructive"
+                          }
+                          size={"xs"}
+                          appearance={"light"}
+                        >
+                          {p.type}
+                        </Badge>
+                        <Badge
+                          size={"xs"}
+                          variant={"info"}
+                          appearance={"light"}
+                        >
+                          {p.resource}
+                        </Badge>
+                        <Badge
+                          size={"xs"}
+                          variant={"warning"}
+                          appearance={"light"}
+                        >
+                          Via rôle
+                        </Badge>
+                      </div>
+                    </div>
+                    <div>
+                      <Select>
+                        <SelectTrigger size="sm" className="w-[110px]">
+                          <SelectValue placeholder="Autorisation" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="allow">
+                            <CheckIcon className="text-green-600" />
+                            {t("Allow")}
+                          </SelectItem>
+                          <SelectItem value="deny">
+                            <XIcon className="text-red-600" />
+                            {t("Deny")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 );
               })}
-            </Accordion>
-          );
-        })}
-      </div>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }
