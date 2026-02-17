@@ -378,13 +378,24 @@ export const staffRouter = {
         },
       });
       if (!staff.userId) {
-        // throw new TRPCError({
-        //   code: "PRECONDITION_FAILED",
-        //   message: "Le staff n'est pas de compte utilisateur",
-        // });
         return [];
       }
       return ctx.services.user.getPermissions(staff.userId);
+    }),
+  roles: protectedProcedure
+    .input(z.string().min(1))
+    .query(async ({ ctx, input }) => {
+      const staff = await ctx.db.staff.findUniqueOrThrow({
+        where: { id: input },
+      });
+      if (!staff.userId) {
+        return [];
+      }
+      const userRoles = await ctx.db.userRole.findMany({
+        where: { userId: staff.userId },
+        select: { roleId: true },
+      });
+      return userRoles.map((ur) => ur.roleId);
     }),
   attendances: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.staffAttendance.findMany({

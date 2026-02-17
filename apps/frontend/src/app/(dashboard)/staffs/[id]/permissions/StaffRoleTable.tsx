@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
-import type { RouterOutputs } from "@repo/api";
 import { RoleLevel } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
@@ -27,93 +25,97 @@ import {
 } from "~/components/ui/field";
 import { useTRPC } from "~/trpc/react";
 
-export function StaffRoleTable({ staffId }: { staffId: string }) {
+export function StaffRoleTable({
+  staffId,
+  userId,
+}: {
+  staffId: string;
+  userId: string;
+}) {
   const trpc = useTRPC();
-  const [roleIds, setRoleIds] = useState<string[]>([]);
-  const { data: roles } = useSuspenseQuery(trpc.role.all.queryOptions());
-  const { data: modules } = useSuspenseQuery(trpc.module.all.queryOptions());
-  const { data: staffPermissions } = useSuspenseQuery(
-    trpc.staff.permissions.queryOptions(staffId),
-  );
+  const queryClient = useQueryClient();
   const t = useTranslations();
-  const { data: permissions } = useSuspenseQuery(
-    trpc.permission.all.queryOptions(),
+  const { data: roles } = useSuspenseQuery(trpc.role.all.queryOptions());
+  const { data: staffRoleIds } = useSuspenseQuery(
+    trpc.staff.roles.queryOptions(staffId),
   );
-  const { mmp: moduleMapPermission, staffperms } = useMemo(() => {
-    const mmp = new Map<string, RouterOutputs["permission"]["all"]>();
-    const resourceToModuleId = new Map<string, string>();
-    modules.forEach((mod) => {
-      mmp.set(mod.id, []);
-      mod.permissions.forEach((permission) => {
-        resourceToModuleId.set(permission.resource, mod.id);
-      });
-    });
-    permissions.forEach((permission) => {
-      const moduleId = resourceToModuleId.get(permission.resource);
-      if (!moduleId) {
-        return;
-      }
-      const modulePermissions = mmp.get(moduleId);
-      if (modulePermissions) {
-        modulePermissions.push(permission);
-      } else {
-        mmp.set(moduleId, [permission]);
-      }
-    });
-    const staffperms = new Map<
-      string,
-      RouterOutputs["staff"]["permissions"][number]
-    >();
-    staffPermissions.forEach((sps) => {
-      staffperms.set(sps.resource, sps);
-    });
-    return { mmp, staffperms };
-  }, [modules, permissions, staffPermissions]);
+
+  const addRole = useMutation(
+    trpc.role.addUsers.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.roles.pathFilter());
+        await queryClient.invalidateQueries(trpc.staff.permissions.pathFilter());
+        toast.success("Rôle ajouté");
+      },
+      onError: () => {
+        toast.error("Erreur lors de l'ajout du rôle");
+      },
+    }),
+  );
+
+  const removeRole = useMutation(
+    trpc.role.removeUser.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.staff.roles.pathFilter());
+        await queryClient.invalidateQueries(trpc.staff.permissions.pathFilter());
+        toast.success("Rôle retiré");
+      },
+      onError: () => {
+        toast.error("Erreur lors du retrait du rôle");
+      },
+    }),
+  );
+
+  const isPending = addRole.isPending || removeRole.isPending;
+
+  const handleRoleToggle = (roleId: string, checked: boolean) => {
+    if (checked) {
+      addRole.mutate({ roleId, userIds: [userId] });
+    } else {
+      removeRole.mutate({ roleId, userId });
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Roles de l'utilisateur</CardTitle>
+        <CardTitle>{t("Roles de l'utilisateur")}</CardTitle>
         <CardDescription>
-          Sélectionner un ou plusieurs rôles pour cet utilisateurs. Les
-          permissions seront héritées des rôles
+          Sélectionner un ou plusieurs rôles pour cet utilisateur. Les
+          permissions seront héritées des rôles.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <FieldGroup className="grid grid-cols-1 gap-2 lg:grid-cols-2">
-          {roles.map((r, index) => {
+          {roles.map((r) => {
+            const isChecked = staffRoleIds.includes(r.id);
             return (
-              <FieldLabel key={index}>
+              <FieldLabel key={r.id}>
                 <Field orientation="horizontal">
                   <Checkbox
-                    id="toggle-checkbox-2"
+                    checked={isChecked}
+                    disabled={isPending}
                     onCheckedChange={(checked) => {
-                      if (checked) {
-                        setRoleIds([...roleIds, r.id]);
-                      } else {
-                        setRoleIds((ids) => ids.filter((id) => id != r.id));
-                      }
+                      handleRoleToggle(r.id, !!checked);
                     }}
-                    name="toggle-checkbox-2"
                   />
                   <FieldContent>
                     <FieldTitle>
                       {r.name}
                       <Badge
-                        size={"xs"}
-                        className=""
-                        //className="size-1.5 h-5 text-[8px]"
+                        size="xs"
                         variant={
-                          r.level == RoleLevel.LEVEL1
+                          r.level === RoleLevel.LEVEL1
                             ? "destructive"
-                            : r.level == RoleLevel.LEVEL2
+                            : r.level === RoleLevel.LEVEL2
                               ? "primary"
-                              : r.level == RoleLevel.LEVEL3
+                              : r.level === RoleLevel.LEVEL3
                                 ? "info"
-                                : r.level == RoleLevel.LEVEL4
+                                : r.level === RoleLevel.LEVEL4
                                   ? "secondary"
                                   : "warning"
                         }
-                        appearance={"light"}
+                        appearance="light"
                       >
                         {r.level}
                       </Badge>
