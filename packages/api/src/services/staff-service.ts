@@ -1,5 +1,6 @@
-import type { PrismaClient } from "@repo/db";
 import { addDays, isBefore, startOfDay } from "date-fns";
+
+import type { PrismaClient } from "@repo/db";
 
 const timetableColors = [
   "sky",
@@ -233,8 +234,7 @@ export class StaffService {
 
         events.push({
           id: `${lesson.id}-${eventStart.toISOString()}`,
-          title:
-            lesson.subject.course.shortName || lesson.subject.course.name,
+          title: lesson.subject.course.shortName || lesson.subject.course.name,
           description: lesson.subject.course.name,
           start: eventStart,
           end: eventEnd,

@@ -169,8 +169,7 @@ export function CreateEditUser() {
         className: "sm:max-w-xl",
         view: <ContactSearchDialog onSelect={handleSelect} />,
         title: titles[profile],
-        description:
-          "Sélectionner le contact à associer au compte utilisateur",
+        description: "Sélectionner le contact à associer au compte utilisateur",
       });
     }
   };
@@ -346,7 +345,7 @@ export function CreateEditUser() {
             </div>
 
             {entityError && (
-              <div className="bg-destructive/10 text-destructive rounded-md border border-destructive/20 p-3 text-sm">
+              <div className="bg-destructive/10 text-destructive border-destructive/20 rounded-md border p-3 text-sm">
                 {entityError}
               </div>
             )}

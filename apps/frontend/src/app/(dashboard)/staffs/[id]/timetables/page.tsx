@@ -6,9 +6,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { StaffTimetablesCalendar } from "./StaffTimetablesCalendar";
 
-export default async function Page(props: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const staffId = params.id;
 

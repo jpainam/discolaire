@@ -359,7 +359,9 @@ app.on("ready", async () => {
     // Decrypt and apply env vars BEFORE starting the Next.js server
     const vars = parseEnvContent(envContent);
     applyEnvVars(vars);
-    logLine(`Loaded ${Object.keys(vars).length} env vars from encrypted store.`);
+    logLine(
+      `Loaded ${Object.keys(vars).length} env vars from encrypted store.`,
+    );
 
     startServer();
 

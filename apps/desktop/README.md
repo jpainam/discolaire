@@ -47,11 +47,11 @@ pnpm build
 
 The installer will be created in `apps/desktop/dist/app/`:
 
-| Platform | Output |
-|----------|--------|
-| macOS    | `.dmg` file |
+| Platform | Output                  |
+| -------- | ----------------------- |
+| macOS    | `.dmg` file             |
 | Windows  | NSIS installer (`.exe`) |
-| Linux    | `.AppImage` |
+| Linux    | `.AppImage`             |
 
 ### Building for a Specific Platform
 
@@ -70,11 +70,11 @@ electron-builder --win        # Windows .exe (see cross-compilation notes below)
 
 ### Cross-Compilation from macOS
 
-| Target   | Build from macOS? | Notes |
-|----------|-------------------|-------|
-| macOS    | Yes               | Native build, works out of the box |
-| Linux    | Yes               | Works out of the box, electron-builder handles it |
-| Windows  | No                | Requires Windows or CI (see below) |
+| Target  | Build from macOS? | Notes                                             |
+| ------- | ----------------- | ------------------------------------------------- |
+| macOS   | Yes               | Native build, works out of the box                |
+| Linux   | Yes               | Works out of the box, electron-builder handles it |
+| Windows | No                | Requires Windows or CI (see below)                |
 
 **Why Windows builds don't work from macOS**: electron-builder needs Windows-specific tools (NSIS installer compiler, code signing utilities) that don't run natively on macOS. While Wine-based cross-compilation exists, it is fragile and not recommended.
 
@@ -145,6 +145,7 @@ Use a GitHub Codespace, Azure VM, or AWS EC2 Windows instance to run the build r
 4. The app encrypts the configuration using the OS credential store and starts the server
 
 Your secrets are encrypted at rest using:
+
 - **macOS**: Keychain
 - **Windows**: DPAPI (Data Protection API)
 - **Linux**: libsecret
@@ -225,11 +226,11 @@ RESEND_API_KEY=<key>
 
 To update your env vars, delete the encrypted file and relaunch the app:
 
-| OS      | Encrypted file path |
-|---------|---------------------|
+| OS      | Encrypted file path                                           |
+| ------- | ------------------------------------------------------------- |
 | macOS   | `~/Library/Application Support/Discolaire/discolaire.env.enc` |
-| Windows | `%APPDATA%\Discolaire\discolaire.env.enc` |
-| Linux   | `~/.config/Discolaire/discolaire.env.enc` |
+| Windows | `%APPDATA%\Discolaire\discolaire.env.enc`                     |
+| Linux   | `~/.config/Discolaire/discolaire.env.enc`                     |
 
 Delete `discolaire.env.enc`, then relaunch — the setup screen will appear again.
 
@@ -241,11 +242,11 @@ If you previously used a plain-text `discolaire.env` file, the app will automati
 
 **Logs** are written to:
 
-| OS      | Path |
-|---------|------|
+| OS      | Path                                                   |
+| ------- | ------------------------------------------------------ |
 | macOS   | `~/Library/Application Support/Discolaire/desktop.log` |
-| Windows | `%APPDATA%\Discolaire\desktop.log` |
-| Linux   | `~/.config/Discolaire/desktop.log` |
+| Windows | `%APPDATA%\Discolaire\desktop.log`                     |
+| Linux   | `~/.config/Discolaire/desktop.log`                     |
 
 Common issues:
 

@@ -14,7 +14,9 @@ export function StaffPermissionSummary({ staffId }: { staffId: string }) {
     trpc.staff.roles.queryOptions(staffId),
   );
 
-  const allowCount = staffPermissions.filter((p) => p.effect === "allow").length;
+  const allowCount = staffPermissions.filter(
+    (p) => p.effect === "allow",
+  ).length;
   const denyCount = staffPermissions.filter((p) => p.effect === "deny").length;
   const roleCount = staffRoleIds.length;
 

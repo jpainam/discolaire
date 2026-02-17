@@ -14,6 +14,7 @@ import {
 import { fr } from "date-fns/locale";
 import { Clock, Users } from "lucide-react";
 
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { Badge } from "~/components/ui/badge";
 import {
   Card,
@@ -22,7 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { EmptyComponent } from "~/components/EmptyComponent";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -64,8 +64,8 @@ export function TodaySchedule({ staffId }: { staffId: string }) {
           dayLabel: WEEKDAY_LABELS[start.getDay()] ?? "",
           startTime: format(start, "HH:mm"),
           endTime: format(end, "HH:mm"),
-          courseName: ev.description ?? ev.title,
-          classroomName: meta?.classroomName ?? ev.location ?? "",
+          courseName: ev.description,
+          classroomName: meta?.classroomName,
           studentCount: meta?.studentCount ?? 0,
           isToday,
           isPast,
