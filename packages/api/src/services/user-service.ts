@@ -91,61 +91,80 @@ export class UserService {
 
     return Array.from(merged.values());
   }
+  /**
+   * Normalizes a raw permission entry to the combined resource format.
+   * Old format: { resource: "classroom", action: "Read" } → "classroom.read"
+   * New format: { resource: "classroom.read" }             → "classroom.read"
+   */
+  private normalizePermissionResource(perm: {
+    resource: string;
+    action?: string;
+  }): string {
+    if (perm.action) {
+      return `${perm.resource}.${perm.action}`.toLowerCase();
+    }
+    return perm.resource.toLowerCase();
+  }
+
   private async getDirectPermissions(userId: string) {
     const user = await this.db.user.findUniqueOrThrow({
       where: { id: userId },
     });
-    const perms = user.permissions as {
+    const perms = (user.permissions ?? []) as {
       resource: string;
-      action: string;
+      action?: string;
       effect: string;
       condition?: Record<string, unknown> | null;
     }[];
 
     return perms.map((p) => {
       return {
-        resource: `${p.resource}.${p.action}`.toLowerCase(),
+        resource: this.normalizePermissionResource(p),
         effect: p.effect.toLowerCase(),
         condition: p.condition,
       };
     });
   }
+
   async updatePermission({
     userId,
     resource,
-    action,
     effect,
   }: {
     userId: string;
     resource: string;
-    action: "read" | "update" | "create" | "delete";
     effect: "allow" | "deny";
   }) {
-    const permissions = await this.getDirectPermissions(userId);
+    const user = await this.db.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
+    const rawPerms = (user.permissions ?? []) as {
+      resource: string;
+      action?: string;
+      effect: string;
+      condition?: Record<string, unknown> | null;
+    }[];
 
-    let updatedPermissions = [];
-    if (effect === "allow") {
-      const newPermission = {
-        resource,
-        action,
-        effect,
-      };
-      updatedPermissions = [...permissions, newPermission];
-      if (
-        newPermission.resource == "user" &&
-        newPermission.action == "create"
-      ) {
-        await this.db.user.update({
-          where: { id: userId },
-          data: {
-            role: "admin",
-          },
-        });
-      }
-    } else {
-      updatedPermissions = permissions.filter(
-        (perm) => !(perm.resource === resource),
-      );
+    const normalizedResource = resource.toLowerCase();
+
+    // Remove any existing entry that resolves to the same combined resource
+    const filtered = rawPerms.filter(
+      (perm) => this.normalizePermissionResource(perm) !== normalizedResource,
+    );
+
+    // Store in the new combined format (no action field)
+    const updatedPermissions = [
+      ...filtered,
+      { resource: normalizedResource, effect },
+    ];
+
+    if (effect === "allow" && normalizedResource === "user.create") {
+      await this.db.user.update({
+        where: { id: userId },
+        data: {
+          role: "admin",
+        },
+      });
     }
     return this.db.user.update({
       where: { id: userId },

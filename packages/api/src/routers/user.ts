@@ -238,7 +238,6 @@ export const userRouter = {
     .input(
       z.object({
         userId: z.string().min(1),
-        action: z.enum(["read", "update", "create", "delete"]),
         resource: z.string().min(1),
         effect: z.enum(["allow", "deny"]),
       }),
@@ -257,7 +256,6 @@ export const userRouter = {
       return ctx.services.user.updatePermission({
         userId: input.userId,
         resource: input.resource,
-        action: input.action,
         effect: input.effect,
       });
     }),

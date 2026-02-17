@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import type { RouterOutputs } from "@repo/api";
 
 import { Badge } from "~/components/base-badge";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import {
   Card,
   CardContent,
@@ -102,12 +103,9 @@ export function StaffPermissionTable({
     permission: RouterOutputs["permission"]["all"][number],
     value: string,
   ) => {
-    const [resource, action] = permission.resource.split(".");
-    if (!resource || !action) return;
     updatePermission.mutate({
       userId,
-      resource,
-      action: action as "read" | "update" | "create" | "delete",
+      resource: permission.resource,
       effect: value as "allow" | "deny",
     });
   };
@@ -122,7 +120,7 @@ export function StaffPermissionTable({
                 void setSelectedModule(mod);
               }}
               className={cn(
-                "pointer flex flex-col gap-1 border-b px-4 py-2",
+                "flex cursor-pointer flex-col gap-1 border-b px-4 py-2",
                 selectedModule?.id == mod.id && "bg-primary/10",
               )}
               key={index}
@@ -133,7 +131,7 @@ export function StaffPermissionTable({
           );
         })}
       </div>
-      {selectedModule && (
+      {selectedModule ? (
         <Card>
           <CardHeader>
             <CardTitle>{selectedModule.name}</CardTitle>
@@ -215,6 +213,11 @@ export function StaffPermissionTable({
             })}
           </CardContent>
         </Card>
+      ) : (
+        <EmptyComponent
+          title="Choisir un module"
+          description="Veuillez choisir un module à gauche pour commencer"
+        />
       )}
     </div>
   );

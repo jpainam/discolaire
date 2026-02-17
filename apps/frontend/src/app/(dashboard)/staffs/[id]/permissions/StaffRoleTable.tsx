@@ -1,6 +1,10 @@
 "use client";
 
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -44,7 +48,9 @@ export function StaffRoleTable({
     trpc.role.addUsers.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.staff.roles.pathFilter());
-        await queryClient.invalidateQueries(trpc.staff.permissions.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.staff.permissions.pathFilter(),
+        );
         toast.success("Rôle ajouté");
       },
       onError: () => {
@@ -57,7 +63,9 @@ export function StaffRoleTable({
     trpc.role.removeUser.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.staff.roles.pathFilter());
-        await queryClient.invalidateQueries(trpc.staff.permissions.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.staff.permissions.pathFilter(),
+        );
         toast.success("Rôle retiré");
       },
       onError: () => {
@@ -79,7 +87,7 @@ export function StaffRoleTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("Roles de l'utilisateur")}</CardTitle>
+        <CardTitle>{t("User roles")}</CardTitle>
         <CardDescription>
           Sélectionner un ou plusieurs rôles pour cet utilisateur. Les
           permissions seront héritées des rôles.
