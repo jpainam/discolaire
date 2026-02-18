@@ -67,17 +67,6 @@ jobs:
           pnpm --filter @repo/desktop build:frontend
           pnpm --filter @repo/desktop build:electron -- --publish never
 
-      - name: List build artifacts
-        run: |
-          echo "=== Listing all files in apps/desktop/dist/app recursively ==="
-          find apps/desktop/dist/app -type f 2>/dev/null | sort
-          echo ""
-          echo "=== Directory structure ==="
-          ls -lah apps/desktop/dist/app/ 2>/dev/null || echo "Directory not found"
-          echo ""
-          echo "=== Total file count ==="
-          find apps/desktop/dist/app -type f 2>/dev/null | wc -l
-
       - name: Upload macOS artifacts
         if: runner.os == 'macOS'
         uses: softprops/action-gh-release@v2
