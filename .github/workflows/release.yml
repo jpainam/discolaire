@@ -69,26 +69,35 @@ jobs:
 
       - name: List build artifacts
         run: |
-          echo "=== Listing all files in apps/desktop/dist recursively ==="
-          find apps/desktop/dist -type f 2>/dev/null | sort
+          echo "=== Listing all files in apps/desktop/dist/app recursively ==="
+          find apps/desktop/dist/app -type f 2>/dev/null | sort
           echo ""
           echo "=== Directory structure ==="
-          ls -lah apps/desktop/dist/ 2>/dev/null || echo "Directory not found"
+          ls -lah apps/desktop/dist/app/ 2>/dev/null || echo "Directory not found"
           echo ""
           echo "=== Total file count ==="
-          find apps/desktop/dist -type f 2>/dev/null | wc -l
+          find apps/desktop/dist/app -type f 2>/dev/null | wc -l
 
-      - name: Upload artifacts to release
+      - name: Upload macOS artifacts
+        if: runner.os == 'macOS'
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            apps/desktop/dist/**/*.dmg
-            apps/desktop/dist/**/*.zip
-            apps/desktop/dist/**/*.exe
-            apps/desktop/dist/**/*.msi
-            apps/desktop/dist/**/*.AppImage
-            apps/desktop/dist/**/*.deb
-            apps/desktop/dist/**/*.rpm
-            apps/desktop/dist/**/*.snap
-            apps/desktop/dist/**/latest*.yml
-          fail_on_unmatched_files: true
+            apps/desktop/dist/app/*.dmg
+            apps/desktop/dist/app/latest-mac.yml
+
+      - name: Upload Windows artifacts
+        if: runner.os == 'Windows'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            apps/desktop/dist/app/*.exe
+            apps/desktop/dist/app/latest.yml
+
+      - name: Upload Linux artifacts
+        if: runner.os == 'Linux'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            apps/desktop/dist/app/*.AppImage
+            apps/desktop/dist/app/latest-linux.yml
