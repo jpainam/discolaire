@@ -67,16 +67,28 @@ jobs:
           pnpm --filter @repo/desktop build:frontend
           pnpm --filter @repo/desktop build:electron -- --publish never
 
+      - name: List build artifacts
+        run: |
+          echo "=== Listing all files in apps/desktop/dist recursively ==="
+          find apps/desktop/dist -type f 2>/dev/null | sort
+          echo ""
+          echo "=== Directory structure ==="
+          ls -lah apps/desktop/dist/ 2>/dev/null || echo "Directory not found"
+          echo ""
+          echo "=== Total file count ==="
+          find apps/desktop/dist -type f 2>/dev/null | wc -l
+
       - name: Upload artifacts to release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            apps/desktop/dist/*.dmg
-            apps/desktop/dist/*.zip
-            apps/desktop/dist/*.exe
-            apps/desktop/dist/*.msi
-            apps/desktop/dist/*.AppImage
-            apps/desktop/dist/*.deb
-            apps/desktop/dist/*.rpm
-            apps/desktop/dist/*.snap
-            apps/desktop/dist/latest*.yml
+            apps/desktop/dist/**/*.dmg
+            apps/desktop/dist/**/*.zip
+            apps/desktop/dist/**/*.exe
+            apps/desktop/dist/**/*.msi
+            apps/desktop/dist/**/*.AppImage
+            apps/desktop/dist/**/*.deb
+            apps/desktop/dist/**/*.rpm
+            apps/desktop/dist/**/*.snap
+            apps/desktop/dist/**/latest*.yml
+          fail_on_unmatched_files: true

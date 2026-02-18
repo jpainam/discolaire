@@ -29,7 +29,6 @@ export const moduleRouter = {
         _count: {
           select: {
             permissions: true,
-            
           },
         },
       },

@@ -3,8 +3,8 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient } from "~/trpc/server";
-import { ModuleTable } from "./ModuleTable";
 import { ModuleHeader } from "./ModuleHeader";
+import { ModuleTable } from "./ModuleTable";
 
 export default function Page() {
   return (
