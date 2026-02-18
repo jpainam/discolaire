@@ -259,6 +259,28 @@ export const userRouter = {
         effect: input.effect,
       });
     }),
+  removePermission: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1),
+        resource: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.pubsub.publish("permission", {
+        type: "update",
+        data: {
+          id: input.userId,
+          metadata: {
+            resource: input.resource,
+          },
+        },
+      });
+      return ctx.services.user.removePermission({
+        userId: input.userId,
+        resource: input.resource,
+      });
+    }),
   subscription: protectedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {

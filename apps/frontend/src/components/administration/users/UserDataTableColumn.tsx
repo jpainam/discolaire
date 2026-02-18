@@ -3,7 +3,11 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { AbacusIcon, AddInvoiceIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -27,6 +31,7 @@ import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { AddPermissionSelector } from "./AddPermissionSelector";
 import { AddRoleSelector } from "./AddRoleSelector";
 
 type User = RouterOutputs["user"]["all"]["data"][number];
@@ -196,9 +201,18 @@ function ActionCell({ user }: { user: User }) {
   const t = useTranslations();
   const confirm = useConfirm();
   const router = useRouter();
+  const trpc = useTRPC();
+
+  const { data: userPermissions } = useSuspenseQuery(
+    trpc.user.getPermissions.queryOptions(user.id),
+  );
+
+  const currentPermissionResources = userPermissions
+    .filter((p) => p.sources.some((s) => s.type === "direct"))
+    .map((p) => p.resource);
 
   const canDeleteUser = useCheckPermission("user.delete");
-  const trpc = useTRPC();
+
   const queryClient = useQueryClient();
   const { openModal } = useModal();
 
@@ -261,7 +275,16 @@ function ActionCell({ user }: { user: User }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              router.push(`/administration/users/${user.id}/permissions`);
+              openModal({
+                title: "Ajouter des permissions",
+                className: "sm:max-w-xl",
+                view: (
+                  <AddPermissionSelector
+                    userId={user.id}
+                    currentPermissionResources={currentPermissionResources}
+                  />
+                ),
+              });
             }}
           >
             <HugeiconsIcon

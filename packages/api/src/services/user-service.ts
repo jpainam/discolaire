@@ -174,6 +174,38 @@ export class UserService {
       },
     });
   }
+  async removePermission({
+    userId,
+    resource,
+  }: {
+    userId: string;
+    resource: string;
+  }) {
+    const user = await this.db.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
+    const rawPerms = (user.permissions ?? []) as {
+      resource: string;
+      action?: string;
+      effect: string;
+      condition?: Record<string, unknown> | null;
+    }[];
+
+    const normalizedResource = resource.toLowerCase();
+
+    const filtered = rawPerms.filter(
+      (perm) => this.normalizePermissionResource(perm) !== normalizedResource,
+    );
+
+    return this.db.user.update({
+      where: { id: userId },
+      data: {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+        permissions: filtered as any,
+      },
+    });
+  }
+
   async getEntityFromUser(
     userId: string,
     profile: "student" | "staff" | "contact",
