@@ -21,11 +21,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
+import { AddRoleSelector } from "./AddRoleSelector";
 
 type User = RouterOutputs["user"]["all"]["data"][number];
 
@@ -133,20 +135,30 @@ export function useUserColumns() {
           cell: ({ row }) => {
             const userRoles = row.original.userRoles;
             return (
-              <div className="flex items-center gap-2">
-                {userRoles.length == 0 && (
+              <div className="flex items-center gap-1">
+                {userRoles.length == 0 ? (
                   <span className="text-destructive">Aucun rôle</span>
+                ) : (
+                  <>
+                    <Badge
+                      size={"xs"}
+                      variant={"secondary"}
+                      appearance={"light"}
+                    >
+                      {userRoles[0]?.role.name}
+                    </Badge>
+                    {userRoles.length > 1 && (
+                      <Badge
+                        size={"xs"}
+                        variant={"info"}
+                        className="rounded-full"
+                        appearance={"light"}
+                      >
+                        +{userRoles.length}
+                      </Badge>
+                    )}
+                  </>
                 )}
-                {userRoles.map((ur, index) => (
-                  <Badge
-                    key={index}
-                    size={"xs"}
-                    variant={"secondary"}
-                    appearance={"light"}
-                  >
-                    {ur.role.name}
-                  </Badge>
-                ))}
               </div>
             );
           },
@@ -188,7 +200,7 @@ function ActionCell({ user }: { user: User }) {
   const canDeleteUser = useCheckPermission("user.delete");
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  //const { openSheet } = useSheet();
+  const { openModal } = useModal();
 
   const deleteUserMutation = useMutation(
     trpc.user.delete.mutationOptions({
@@ -228,7 +240,16 @@ function ActionCell({ user }: { user: User }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              // assign roles
+              openModal({
+                title: t("roles"),
+                className: "sm:max-w-xl",
+                view: (
+                  <AddRoleSelector
+                    userId={user.id}
+                    currentRoleIds={user.userRoles.map((ur) => ur.role.id)}
+                  />
+                ),
+              });
             }}
           >
             <HugeiconsIcon

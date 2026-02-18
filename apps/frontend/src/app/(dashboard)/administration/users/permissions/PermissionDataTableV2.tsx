@@ -243,6 +243,9 @@ function PermissionActions({ permission }: { permission: Permission }) {
               <DropdownMenuItem
                 onSelect={() => {
                   openModal({
+                    title: "Modifier une permission",
+                    description: `${permission.name} - ${permission.resource}`,
+                    className: "sm:max-w-xl",
                     view: <CreateEditPermission permission={permission} />,
                   });
                 }}
