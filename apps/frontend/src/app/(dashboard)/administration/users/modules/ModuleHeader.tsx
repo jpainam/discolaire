@@ -12,7 +12,7 @@ export function ModuleHeader() {
   const t = useTranslations();
   const { openModal } = useModal();
   return (
-    <div className="flex items-center gap-2 px-4">
+    <div className="flex items-center gap-2 px-4 pt-2">
       <Label>Modules</Label>
       <div className="ml-auto flex items-center gap-4">
         <Button

@@ -3,20 +3,20 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient } from "~/trpc/server";
-import { ModuleTable } from "./ModuleTable";
-import { ModuleHeader } from "./ModuleHeader";
+import { ModulePermissionTable } from "./ModulePermissionTable";
 
-export default function Page() {
+export default async function Page(props: {
+  params: Promise<{ moduleId: string }>;
+}) {
+  const params = await props.params;
+
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense>
-          <ModuleHeader />
+          <ModulePermissionTable moduleId={params.moduleId} />
         </Suspense>
       </ErrorBoundary>
-      <Suspense>
-        <ModuleTable />
-      </Suspense>
     </HydrateClient>
   );
 }

@@ -19,6 +19,22 @@ export const moduleRouter = {
       },
     });
   }),
+  get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.db.module.findUniqueOrThrow({
+      where: {
+        id: input,
+      },
+      include: {
+        permissions: true,
+        _count: {
+          select: {
+            permissions: true,
+            
+          },
+        },
+      },
+    });
+  }),
 
   create: protectedProcedure
     .input(
