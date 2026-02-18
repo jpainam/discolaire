@@ -81,7 +81,7 @@ export function UserDetailClient({ userId }: { userId: string }) {
     if (!permissionsByModule.has(moduleKey)) {
       permissionsByModule.set(moduleKey, { moduleName, permissions: [] });
     }
-    permissionsByModule.get(moduleKey)!.permissions.push(perm);
+    permissionsByModule.get(moduleKey)?.permissions.push(perm);
   }
 
   return (

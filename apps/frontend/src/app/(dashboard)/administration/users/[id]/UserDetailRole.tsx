@@ -4,7 +4,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { AddPermissionSelector } from "~/components/administration/users/AddPermissionSelector";
 import { AddRoleSelector } from "~/components/administration/users/AddRoleSelector";
 import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
@@ -49,23 +48,6 @@ export function UserDetailRole({ userId }: { userId: string }) {
     });
   };
 
-  const currentPermissionResources = userPermissions
-    .filter((p) => p.sources.some((s) => s.type === "direct"))
-    .map((p) => p.resource);
-
-  const handleAddPermission = () => {
-    openModal({
-      title: "Ajouter des permissions",
-      className: "sm:max-w-xl",
-      view: (
-        <AddPermissionSelector
-          userId={userId}
-          currentPermissionResources={currentPermissionResources}
-        />
-      ),
-    });
-  };
-
   // Group permissions by module
   const permissionsByModule = new Map<
     string,
@@ -81,7 +63,7 @@ export function UserDetailRole({ userId }: { userId: string }) {
     if (!permissionsByModule.has(moduleKey)) {
       permissionsByModule.set(moduleKey, { moduleName, permissions: [] });
     }
-    permissionsByModule.get(moduleKey)!.permissions.push(perm);
+    permissionsByModule.get(moduleKey)?.permissions.push(perm);
   }
 
   return (

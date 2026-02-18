@@ -142,7 +142,10 @@ export function AddRoleSelector({
         >
           {t("close")}
         </Button>
-        <Button disabled={isSubmitting || selected.length === 0} onClick={handleSubmit}>
+        <Button
+          disabled={isSubmitting || selected.length === 0}
+          onClick={handleSubmit}
+        >
           {isSubmitting && <Spinner />}
           {t("submit")}
         </Button>
