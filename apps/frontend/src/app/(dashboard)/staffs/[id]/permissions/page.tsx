@@ -13,6 +13,7 @@ import { StaffRoleTable } from "./StaffRoleTable";
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const staffId = params.id;
+
   const queryClient = getQueryClient();
   const staff = await queryClient.fetchQuery(
     trpc.staff.get.queryOptions(staffId),
@@ -43,7 +44,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <TabsContent value="permissions">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<TableSkeleton rows={8} cols={2} />}>
-              <StaffPermissionTable staffId={staffId} userId={userId} />
+              <StaffPermissionTable userId={userId} />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>

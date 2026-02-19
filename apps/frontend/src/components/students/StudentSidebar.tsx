@@ -3,8 +3,10 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { Shield } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { useSession } from "~/auth/client";
 import {
   Sidebar,
   SidebarContent,
@@ -41,6 +43,10 @@ export function StudentSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const params = useParams<{ id: string }>();
+  const { data: session } = useSession();
+  const canUpdatePermission = useCheckPermission("permission.update");
+  const isStaff = session?.user.profile === "staff";
+
   const informations = [
     {
       name: "profile",
@@ -100,6 +106,15 @@ export function StudentSidebar({
     url: `/students/${params.id}/transactions`,
   });
   //}
+
+  if (isStaff && canUpdatePermission) {
+    informations.push({
+      name: "permissions",
+      icon: <Shield className="size-4" />,
+      url: `/students/${params.id}/permissions`,
+    });
+  }
+
   const school_life = [
     {
       name: "attendances",
