@@ -76,7 +76,11 @@ export const photoRouter = {
         bucket: env.S3_AVATAR_BUCKET_NAME,
         prefix: "student/",
       });
-      const objects = filterByDateRange(allObjects, input.dateFrom, input.dateTo);
+      const objects = filterByDateRange(
+        allObjects,
+        input.dateFrom,
+        input.dateTo,
+      );
       const { ids: studentIds, map: objByStudentId } = buildObjMap(objects);
 
       const skip = (input.pageIndex - 1) * input.limit;
@@ -84,9 +88,21 @@ export const photoRouter = {
         ? [
             {
               OR: [
-                { firstName: { contains: input.q, mode: "insensitive" as const } },
-                { lastName: { contains: input.q, mode: "insensitive" as const } },
-                { registrationNumber: { contains: input.q, mode: "insensitive" as const } },
+                {
+                  firstName: {
+                    contains: input.q,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  lastName: { contains: input.q, mode: "insensitive" as const },
+                },
+                {
+                  registrationNumber: {
+                    contains: input.q,
+                    mode: "insensitive" as const,
+                  },
+                },
               ],
             },
           ]
@@ -96,7 +112,10 @@ export const photoRouter = {
             {
               enrollments: {
                 some: {
-                  classroom: { id: input.classroomId, schoolYearId: ctx.schoolYearId },
+                  classroom: {
+                    id: input.classroomId,
+                    schoolYearId: ctx.schoolYearId,
+                  },
                 },
               },
             },
@@ -115,7 +134,12 @@ export const photoRouter = {
         orderBy: { updatedAt: "desc" },
         where: {
           AND: [
-            { OR: [{ id: { in: studentIds } }, { registrationNumber: { in: studentIds } }] },
+            {
+              OR: [
+                { id: { in: studentIds } },
+                { registrationNumber: { in: studentIds } },
+              ],
+            },
             ...searchConditions,
             ...classroomConditions,
           ],
@@ -124,7 +148,9 @@ export const photoRouter = {
       return students.map((s) => {
         const obj =
           objByStudentId.get(s.id) ??
-          (s.registrationNumber ? objByStudentId.get(s.registrationNumber) : undefined);
+          (s.registrationNumber
+            ? objByStudentId.get(s.registrationNumber)
+            : undefined);
         return {
           ...s,
           classroom: s.enrollments.find(
@@ -149,7 +175,11 @@ export const photoRouter = {
         bucket: env.S3_AVATAR_BUCKET_NAME,
         prefix: "contact/",
       });
-      const objects = filterByDateRange(allObjects, input.dateFrom, input.dateTo);
+      const objects = filterByDateRange(
+        allObjects,
+        input.dateFrom,
+        input.dateTo,
+      );
       const { ids: contactIds, map: objByContactId } = buildObjMap(objects);
 
       const skip = (input.pageIndex - 1) * input.limit;
@@ -157,8 +187,15 @@ export const photoRouter = {
         ? [
             {
               OR: [
-                { firstName: { contains: input.q, mode: "insensitive" as const } },
-                { lastName: { contains: input.q, mode: "insensitive" as const } },
+                {
+                  firstName: {
+                    contains: input.q,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  lastName: { contains: input.q, mode: "insensitive" as const },
+                },
               ],
             },
           ]
@@ -174,10 +211,7 @@ export const photoRouter = {
         take: input.limit,
         orderBy: { updatedAt: "desc" },
         where: {
-          AND: [
-            { id: { in: contactIds } },
-            ...searchConditions,
-          ],
+          AND: [{ id: { in: contactIds } }, ...searchConditions],
         },
       });
       return contacts.map((c) => ({
@@ -200,7 +234,11 @@ export const photoRouter = {
         bucket: env.S3_AVATAR_BUCKET_NAME,
         prefix: "staff/",
       });
-      const objects = filterByDateRange(allObjects, input.dateFrom, input.dateTo);
+      const objects = filterByDateRange(
+        allObjects,
+        input.dateFrom,
+        input.dateTo,
+      );
       const { ids: staffIds, map: objByStaffId } = buildObjMap(objects);
 
       const skip = (input.pageIndex - 1) * input.limit;
@@ -208,9 +246,18 @@ export const photoRouter = {
         ? [
             {
               OR: [
-                { firstName: { contains: input.q, mode: "insensitive" as const } },
-                { lastName: { contains: input.q, mode: "insensitive" as const } },
-                { jobTitle: { contains: input.q, mode: "insensitive" as const } },
+                {
+                  firstName: {
+                    contains: input.q,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  lastName: { contains: input.q, mode: "insensitive" as const },
+                },
+                {
+                  jobTitle: { contains: input.q, mode: "insensitive" as const },
+                },
               ],
             },
           ]
@@ -226,10 +273,7 @@ export const photoRouter = {
         take: input.limit,
         orderBy: { updatedAt: "desc" },
         where: {
-          AND: [
-            { id: { in: staffIds } },
-            ...searchConditions,
-          ],
+          AND: [{ id: { in: staffIds } }, ...searchConditions],
         },
       });
       return staffs.map((s) => ({

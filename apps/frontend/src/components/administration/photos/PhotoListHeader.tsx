@@ -58,7 +58,9 @@ export function PhotoListHeader({
         setIsExtracting(false);
         openModal({
           className: "sm:max-w-xl",
-          view: <PhotoListUploader initialFiles={[file]} entityType={entityType} />,
+          view: (
+            <PhotoListUploader initialFiles={[file]} entityType={entityType} />
+          ),
         });
         return;
       }
@@ -91,7 +93,9 @@ export function PhotoListHeader({
 
       openModal({
         className: "sm:max-w-xl",
-        view: <PhotoListUploader initialFiles={files} entityType={entityType} />,
+        view: (
+          <PhotoListUploader initialFiles={files} entityType={entityType} />
+        ),
       });
     } catch (err) {
       toast.error((err as Error).message, { id: 0 });
