@@ -29,15 +29,16 @@ export const formerShoolRouter = {
           orderBy: { name: "asc" },
           take,
           where,
-          ...(input.cursor
-            ? { cursor: { id: input.cursor }, skip: 1 }
-            : {}),
+          include: { _count: { select: { students: true } } },
+          ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
         }),
       ]);
 
       const hasNextPage = data.length > input.pageSize;
       const items = hasNextPage ? data.slice(0, -1) : data;
-      const nextCursor = hasNextPage ? (items[items.length - 1]?.id ?? null) : null;
+      const nextCursor = hasNextPage
+        ? (items[items.length - 1]?.id ?? null)
+        : null;
 
       return { data: items, rowCount, nextCursor };
     }),

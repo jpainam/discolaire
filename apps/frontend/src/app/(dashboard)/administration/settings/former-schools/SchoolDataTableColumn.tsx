@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { Badge } from "~/components/base-badge";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -61,8 +62,35 @@ export function useSchoolColumns() {
             <DataTableColumnHeader column={column} title={t("name")} />
           ),
           cell: ({ row }) => (
-            <div className="flex">{decode(row.getValue("name"))}</div>
+            <div className="flex items-center gap-2">
+              <span>{decode(row.getValue("name"))}</span>
+            </div>
           ),
+        },
+        {
+          accessorKey: "_count.students",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("students")} />
+          ),
+          cell: ({ row }) => {
+            const c = row.original._count.students;
+            return (
+              <Badge
+                variant={
+                  c > 50
+                    ? "destructive"
+                    : c > 10
+                      ? "warning"
+                      : c > 5
+                        ? "info"
+                        : "secondary"
+                }
+                appearance={"light"}
+              >
+                {row.original._count.students}
+              </Badge>
+            );
+          },
         },
 
         {

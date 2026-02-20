@@ -31,7 +31,9 @@ export function SchoolDataTableAction({
   const deleteSchoolsMutation = useMutation(
     trpc.formerSchool.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.formerSchool.list.pathFilter());
+        await queryClient.invalidateQueries(
+          trpc.formerSchool.list.pathFilter(),
+        );
         await queryClient.invalidateQueries(trpc.formerSchool.all.pathFilter());
         table.toggleAllRowsSelected(false);
         toast.success(t("deleted_successfully"), { id: 0 });
