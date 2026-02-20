@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { headers } from "next/headers";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { getAuth } from "~/auth/server";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import {
   Card,
@@ -14,9 +15,10 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { UserPermissionTable } from "~/components/users/UserPermissionTable";
+import { UserRoleCard } from "~/components/users/UserRoleCard";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
-import { UserDetailClient } from "./UserDetailClient";
-import { UserDetailRole } from "./UserDetailRole";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -34,6 +36,20 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
   )[0];
   const locale = await getLocale();
+  const t = await getTranslations();
+
+  const userPermissions = await queryClient.fetchQuery(
+    trpc.user.getPermissions.queryOptions(userId),
+  );
+
+  const currentRoleIds = [
+    ...new Set(
+      userPermissions
+        .flatMap((p) => p.sources)
+        .filter((s) => s.type === "role")
+        .map((s) => (s as { type: "role"; role: { id: string } }).role.id),
+    ),
+  ];
 
   void queryClient.prefetchQuery(trpc.role.all.queryOptions());
   void queryClient.prefetchQuery(trpc.user.getPermissions.queryOptions(userId));
@@ -41,7 +57,15 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <HydrateClient>
-      <div className="grid grid-cols-1 items-start gap-4 p-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-4 p-4">
+        <BreadcrumbsSetter
+          items={[
+            { label: t("home"), href: "/" },
+            { label: t("administration"), href: "/administration" },
+            { label: t("users"), href: "/administration/users" },
+            { label: user.name },
+          ]}
+        />
         <Card>
           <CardHeader>
             <CardTitle>Informations</CardTitle>
@@ -72,28 +96,36 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </p>
           </CardFooter>
         </Card>
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense fallback={<Skeleton className="h-20" />}>
-            <UserDetailRole userId={userId} />
-          </Suspense>
-        </ErrorBoundary>
-        <div className="col-span-full">
-          <Suspense
-            fallback={
-              <Card>
-                <CardHeader>
-                  <Skeleton className="h-4 w-24" />
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Skeleton className="h-8 w-full" />
-                  <Skeleton className="h-8 w-full" />
-                </CardContent>
-              </Card>
-            }
-          >
-            <UserDetailClient userId={userId} />
-          </Suspense>
-        </div>
+        <Tabs defaultValue="roles" className="w-full">
+          <TabsList>
+            <TabsTrigger value="roles">{t("roles")}</TabsTrigger>
+            <TabsTrigger value="permissions">{t("permissions")}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="roles">
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense fallback={<Skeleton className="h-20" />}>
+                <UserRoleCard userId={userId} currentRoleIds={currentRoleIds} />
+              </Suspense>
+            </ErrorBoundary>
+          </TabsContent>
+          <TabsContent value="permissions">
+            <Suspense
+              fallback={
+                <Card>
+                  <CardHeader>
+                    <Skeleton className="h-4 w-24" />
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                  </CardContent>
+                </Card>
+              }
+            >
+              <UserPermissionTable userId={userId} />
+            </Suspense>
+          </TabsContent>
+        </Tabs>
       </div>
     </HydrateClient>
   );

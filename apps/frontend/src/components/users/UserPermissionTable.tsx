@@ -30,6 +30,7 @@ import {
 } from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
+import { Label } from "../ui/label";
 
 interface UserPermissionTableProps {
   userId: string;
@@ -99,17 +100,17 @@ export function UserPermissionTable({
 
   return (
     <div className="grid grid-cols-[16rem_1fr] items-start gap-4">
-      <div className="bg-muted/50 grid grid-cols-1 border">
+      <div className="bg-muted/10 grid grid-cols-1 border">
         {modules.map((mod) => (
           <div
             key={mod.id}
             onClick={() => setSelectedModule(mod)}
             className={cn(
               "flex cursor-pointer flex-col gap-1 border-b px-4 py-2",
-              selectedModule?.id === mod.id && "bg-primary/10",
+              selectedModule?.id === mod.id && "bg-muted",
             )}
           >
-            <span className="font-medium">{mod.name}</span>
+            <Label>{mod.name}</Label>
             <span className="text-muted-foreground">{mod.description}</span>
           </div>
         ))}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { UserDataTableV2Test } from "~/components/administration/users/UserDataTableV2Test";
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
@@ -28,9 +29,16 @@ export default async function Page() {
   );
   return (
     <HydrateClient>
+      <BreadcrumbsSetter
+        items={[
+          { label: t("home"), href: "/" },
+          { label: t("administration"), href: "/administration" },
+          { label: t("users"), href: "/administration/users" },
+        ]}
+      />
       <ErrorBoundary errorComponent={ErrorFallback}>
         <div className="flex items-center gap-4 px-4 py-2">
-          <Label>{t("users")} - DataTable v2</Label>
+          <Label>{t("users")}</Label>
           <div className="ml-auto flex items-center gap-2">
             <Button asChild>
               <Link href={`/administration/users/create`}>

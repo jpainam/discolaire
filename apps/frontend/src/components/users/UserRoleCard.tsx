@@ -32,14 +32,9 @@ import { useTRPC } from "~/trpc/react";
 interface UserRoleCardProps {
   userId: string;
   currentRoleIds: string[];
-  onSuccess?: () => Promise<void> | void;
 }
 
-export function UserRoleCard({
-  userId,
-  currentRoleIds,
-  onSuccess,
-}: UserRoleCardProps) {
+export function UserRoleCard({ userId, currentRoleIds }: UserRoleCardProps) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const t = useTranslations();
@@ -50,7 +45,9 @@ export function UserRoleCard({
     trpc.role.addUsers.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.role.pathFilter());
-        await onSuccess?.();
+        await queryClient.invalidateQueries(
+          trpc.user.getPermissions.pathFilter(),
+        );
         toast.success("Rôle ajouté");
       },
       onError: () => {
@@ -63,7 +60,9 @@ export function UserRoleCard({
     trpc.role.removeUser.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.role.pathFilter());
-        await onSuccess?.();
+        await queryClient.invalidateQueries(
+          trpc.user.getPermissions.pathFilter(),
+        );
         toast.success("Rôle retiré");
       },
       onError: () => {

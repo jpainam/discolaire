@@ -1,9 +1,9 @@
+import { getSession } from "~/auth/server";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { NoPermission } from "~/components/no-permission";
 import { UserPermissionsPageClient } from "~/components/users/UserPermissionsPageClient";
 import { checkPermission } from "~/permissions/server";
-import { getSession } from "~/auth/server";
-import { HydrateClient, getQueryClient, trpc } from "~/trpc/server";
+import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
