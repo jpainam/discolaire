@@ -28,7 +28,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
-type ProcedureOutput = RouterOutputs["attendance"]["all"][number];
+type ProcedureOutput = RouterOutputs["attendance"]["list"]["data"][number];
 
 function getTotalIssues(a: ProcedureOutput) {
   return (

@@ -125,7 +125,16 @@ export function useDataTableV2<TData, TValue>({
     ],
   );
 
-  const resolvedRowCount = rowCount ?? data.length;
+  // In manual pagination mode, keep the last positive rowCount so the page
+  // count never resets to 0 while a new page is still loading.
+  const stableRowCountRef = React.useRef<number>(0);
+  const effectiveRowCount = rowCount ?? data.length;
+  if (manualPagination && effectiveRowCount > 0) {
+    stableRowCountRef.current = effectiveRowCount;
+  }
+  const resolvedRowCount = manualPagination
+    ? (effectiveRowCount > 0 ? effectiveRowCount : stableRowCountRef.current)
+    : effectiveRowCount;
   const resolvedPageCount =
     pageCount ?? Math.ceil(resolvedRowCount / pagination.pageSize);
 

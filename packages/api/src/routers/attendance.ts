@@ -75,6 +75,62 @@ export const attendanceRouter = {
         };
       });
     }),
+  list: protectedProcedure
+    .input(
+      z.object({
+        termId: z.string().nullish(),
+        search: z.string().optional().default(""),
+        pageSize: z.number().int().min(1).max(200).optional().default(30),
+        cursor: z.number().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const search = input.search.trim();
+
+      const where: Prisma.AttendanceWhereInput = {
+        term: {
+          schoolId: ctx.schoolId,
+          schoolYearId: ctx.schoolYearId,
+        },
+        ...(input.termId ? { termId: input.termId } : {}),
+        ...(search
+          ? {
+              student: {
+                OR: [
+                  { firstName: { contains: search, mode: "insensitive" } },
+                  { lastName: { contains: search, mode: "insensitive" } },
+                ],
+              },
+            }
+          : {}),
+      };
+
+      const take = input.pageSize + 1;
+
+      const [rowCount, data] = await ctx.db.$transaction([
+        ctx.db.attendance.count({ where }),
+        ctx.db.attendance.findMany({
+          include: { student: true, term: true },
+          orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+          take,
+          where,
+          ...(input.cursor
+            ? { cursor: { id: input.cursor }, skip: 1 }
+            : {}),
+        }),
+      ]);
+
+      const hasNextPage = data.length > input.pageSize;
+      const items = hasNextPage ? data.slice(0, -1) : data;
+      const nextCursor = hasNextPage ? (items[items.length - 1]?.id ?? null) : null;
+
+      return {
+        data: items.map((a) => ({ ...a, ...attendanceToData(a.data) })),
+        rowCount,
+        nextCursor,
+      };
+    }),
+
   get: protectedProcedure
     .input(z.coerce.number())
     .query(async ({ ctx, input }) => {
