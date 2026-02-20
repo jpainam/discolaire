@@ -1,6 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { DownloadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -8,30 +7,28 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
-import { Skeleton } from "~/components/ui/skeleton";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, EditIcon } from "~/icons";
-import { useTRPC } from "~/trpc/react";
 
 export function PhotoDetails({ fileName }: { fileName: string }) {
   const { closeSheet } = useSheet();
   const t = useTranslations();
-  const trpc = useTRPC();
-  const photoQuery = useQuery(
-    trpc.photo.get.queryOptions({ key: fileName, type: "avatar" }),
-  );
-  if (photoQuery.isPending) {
-    return (
-      <div className="grid grid-cols-1 gap-4 p-4">
-        {Array.from({ length: 8 }).map((_, t) => (
-          <Skeleton key={t} className="h-8" />
-        ))}
-      </div>
-    );
-  }
+  //const trpc = useTRPC();
+  // const { isPending } = useQuery(
+  //   trpc.photo.get.queryOptions({ key: fileName, type: "avatar" }),
+  // );
+  // if (isPending) {
+  //   return (
+  //     <div className="grid grid-cols-1 gap-4 p-4">
+  //       {Array.from({ length: 8 }).map((_, t) => (
+  //         <Skeleton key={t} className="h-8" />
+  //       ))}
+  //     </div>
+  //   );
+  // }
   return (
-    <>
-      <div className="grid flex-1 auto-rows-min gap-4 px-4">
+    <div className="flex flex-col gap-2">
+      <div className="grid flex-1 auto-rows-min gap-4">
         <div className="flex flex-col items-center justify-center">
           <Avatar className="size-48">
             <AvatarImage src={`/api/download/avatars/${fileName}`} />
@@ -73,7 +70,7 @@ export function PhotoDetails({ fileName }: { fileName: string }) {
           </ul>
         </div>
       </div>
-      <div className="p-4">
+      <div>
         <Button
           className="w-full"
           variant={"outline"}
@@ -84,6 +81,6 @@ export function PhotoDetails({ fileName }: { fileName: string }) {
           {t("close")}
         </Button>
       </div>
-    </>
+    </div>
   );
 }

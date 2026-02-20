@@ -36,6 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { UserLink } from "~/components/UserLink";
 import { useSheet } from "~/hooks/use-sheet";
 import { DeleteIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
@@ -139,12 +140,13 @@ export function PhotoStudentList() {
                     <TableRow key={index}>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Link
-                            className="hover:underline"
+                          <UserLink
                             href={`/students/${p.id}`}
-                          >
-                            {getFullName(p)}
-                          </Link>
+                            id={p.id}
+                            profile="student"
+                            name={getFullName(p)}
+                          />
+
                           <Button
                             variant={"secondary"}
                             onClick={() => {
