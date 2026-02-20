@@ -34,13 +34,9 @@ import { Label } from "../ui/label";
 
 interface UserPermissionTableProps {
   userId: string;
-  onSuccess?: () => Promise<void> | void;
 }
 
-export function UserPermissionTable({
-  userId,
-  onSuccess,
-}: UserPermissionTableProps) {
+export function UserPermissionTable({ userId }: UserPermissionTableProps) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const t = useTranslations();
@@ -63,7 +59,9 @@ export function UserPermissionTable({
         await queryClient.invalidateQueries(
           trpc.user.getPermissions.pathFilter(),
         );
-        await onSuccess?.();
+        await queryClient.invalidateQueries(
+          trpc.staff.permissions.pathFilter(),
+        );
         toast.success("Permission mise à jour");
       },
       onError: () => {

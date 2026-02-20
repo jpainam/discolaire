@@ -5,10 +5,10 @@ import { EmptyComponent } from "~/components/EmptyComponent";
 import { ErrorFallback } from "~/components/error-fallback";
 import { TableSkeleton } from "~/components/skeletons/table-skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { UserPermissionTable } from "~/components/users/UserPermissionTable";
+import { UserRoleCard } from "~/components/users/UserRoleCard";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { StaffPermissionSummary } from "./StaffPermissionSummary";
-import { StaffPermissionTable } from "./StaffPermissionTable";
-import { StaffRoleTable } from "./StaffRoleTable";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -28,6 +28,9 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   }
 
   const userId = staff.userId;
+  const currentRoleIds = await queryClient.fetchQuery(
+    trpc.staff.roles.queryOptions(staffId),
+  );
 
   return (
     <HydrateClient>
@@ -44,14 +47,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         <TabsContent value="permissions">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<TableSkeleton rows={8} cols={2} />}>
-              <StaffPermissionTable userId={userId} />
+              <UserPermissionTable userId={userId} />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
         <TabsContent value="roles">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<TableSkeleton rows={8} cols={2} />}>
-              <StaffRoleTable staffId={staffId} userId={userId} />
+              <UserRoleCard userId={userId} currentRoleIds={currentRoleIds} />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>

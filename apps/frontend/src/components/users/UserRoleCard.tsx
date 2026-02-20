@@ -45,9 +45,8 @@ export function UserRoleCard({ userId, currentRoleIds }: UserRoleCardProps) {
     trpc.role.addUsers.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.role.pathFilter());
-        await queryClient.invalidateQueries(
-          trpc.user.getPermissions.pathFilter(),
-        );
+        await queryClient.invalidateQueries(trpc.user.pathFilter());
+        await queryClient.invalidateQueries(trpc.staff.pathFilter());
         toast.success("Rôle ajouté");
       },
       onError: () => {
@@ -60,9 +59,8 @@ export function UserRoleCard({ userId, currentRoleIds }: UserRoleCardProps) {
     trpc.role.removeUser.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.role.pathFilter());
-        await queryClient.invalidateQueries(
-          trpc.user.getPermissions.pathFilter(),
-        );
+        await queryClient.invalidateQueries(trpc.user.pathFilter());
+        await queryClient.invalidateQueries(trpc.staff.pathFilter());
         toast.success("Rôle retiré");
       },
       onError: () => {
