@@ -58,7 +58,13 @@ async function runWithConcurrency<T>(
   await Promise.all(runners);
 }
 
-export function PhotoListUploader({ initialFiles }: { initialFiles: File[] }) {
+export function PhotoListUploader({
+  initialFiles,
+  entityType,
+}: {
+  initialFiles: File[];
+  entityType: "student" | "staff" | "contact";
+}) {
   const { closeModal } = useModal();
 
   const [files, setFiles] = useState<File[]>(() => initialFiles);
@@ -100,7 +106,7 @@ export function PhotoListUploader({ initialFiles }: { initialFiles: File[] }) {
     const k = fileKey(f);
     setStatus((prev) => ({ ...prev, [k]: "uploading" }));
     try {
-      const destination = `${school.code}/student/${f.name.split("/").pop()}`;
+      const destination = `${school.code}/${entityType}/${f.name.split("/").pop()}`;
       await uploadFile({
         file: f,
         destination: destination,

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import {
@@ -10,8 +9,6 @@ import {
   useQueryState,
 } from "nuqs";
 import { toast } from "sonner";
-
-import type { RouterOutputs } from "@repo/api";
 
 import { handleDeleteAvatar } from "~/actions/upload";
 import { PhotoDetails } from "~/components/administration/photos/PhotoDetails";
@@ -54,13 +51,9 @@ const formatFileSize = (bytes: number): string => {
   return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
 };
 
-export function PhotoStudentList() {
+export function PhotoStaffList() {
   const t = useTranslations();
   const [searchQuery] = useQueryState("q", parseAsString.withDefault(""));
-  const [classroomId] = useQueryState(
-    "classroomId",
-    parseAsString.withDefault(""),
-  );
   const [dateFrom] = useQueryState("dateFrom", parseAsIsoDate);
   const [dateTo] = useQueryState("dateTo", parseAsIsoDate);
   const [pageIndex, setPageIndex] = useQueryState(
@@ -68,14 +61,9 @@ export function PhotoStudentList() {
     parseAsInteger.withDefault(1),
   );
   const trpc = useTRPC();
-  const {
-    data: photos,
-
-    isFetching,
-  } = useQuery(
-    trpc.photo.students.queryOptions({
+  const { data: photos, isFetching } = useQuery(
+    trpc.photo.staffs.queryOptions({
       q: searchQuery || undefined,
-      classroomId: classroomId || undefined,
       dateFrom: dateFrom?.toISOString().split("T")[0],
       dateTo: dateTo?.toISOString().split("T")[0],
       pageIndex,
@@ -87,21 +75,21 @@ export function PhotoStudentList() {
   const queryClient = useQueryClient();
   const confirm = useConfirm();
 
-  const openDetails = (p: RouterOutputs["photo"]["students"][number]) => {
+  const openDetails = (p: NonNullable<typeof photos>[number]) => {
     if (!p.key) {
       toast.warning(`Nom du fichier non trouvé`);
       return;
     }
     openSheet({
       title: getFullName(p),
-      description: `Photo ${t("student")} - ${p.registrationNumber}`,
+      description: `Photo ${t("staff")}`,
       view: <PhotoDetails fileName={p.key} />,
     });
   };
 
   const deletePhoto = async (key: string) => {
     toast.loading(t("deleting"), { id: 0 });
-    const result = await handleDeleteAvatar(key, "student");
+    const result = await handleDeleteAvatar(key, "staff");
     if (result.success) {
       await queryClient.invalidateQueries(trpc.photo.pathFilter());
       toast.success(t("deleted_successfully"), { id: 0 });
@@ -112,15 +100,14 @@ export function PhotoStudentList() {
 
   return (
     <div className="flex flex-col gap-2">
-      <PhotoListHeader entityType="student" />
+      <PhotoListHeader entityType="staff" showClassroomFilter={false} />
       <div className="flex flex-col gap-2 px-4">
         <div className="bg-background overflow-hidden rounded-md border">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
                 <TableHead>{t("fullName")}</TableHead>
-                <TableHead>{t("registrationNumber")}</TableHead>
-                <TableHead>{t("classroom")}</TableHead>
+                <TableHead>{t("jobTitle")}</TableHead>
                 <TableHead>Taille</TableHead>
                 <TableHead>{t("Modified")}</TableHead>
                 <TableHead className="text-right"></TableHead>
@@ -129,14 +116,14 @@ export function PhotoStudentList() {
             <TableBody>
               {isFetching && photos?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6}>
-                    <TableSkeleton rows={10} cols={5} />
+                  <TableCell colSpan={5}>
+                    <TableSkeleton rows={10} cols={4} />
                   </TableCell>
                 </TableRow>
               ) : photos?.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={6}
+                    colSpan={5}
                     className="text-muted-foreground py-10 text-center"
                   >
                     {t("no_results")}
@@ -151,24 +138,15 @@ export function PhotoStudentList() {
                   >
                     <TableCell>
                       <UserLink
-                        href={`/students/${p.id}`}
+                        href={`/staffs/${p.id}`}
                         id={p.id}
                         avatar={p.location}
-                        profile="student"
+                        profile="staff"
                         name={getFullName(p)}
                       />
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {p.registrationNumber}
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        className="text-muted-foreground hover:underline"
-                        href={`/classrooms/${p.classroom?.id}`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {p.classroom?.reportName}
-                      </Link>
+                      {p.jobTitle ?? "-"}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {p.size ? formatFileSize(p.size) : "-"}

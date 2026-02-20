@@ -10,6 +10,40 @@ function extractId(path: string): string | null {
   return match?.[1] ?? null;
 }
 
+type S3Object = Awaited<ReturnType<typeof listS3Objects>>[number];
+
+function filterByDateRange(
+  objects: S3Object[],
+  dateFrom: string | undefined,
+  dateTo: string | undefined,
+): S3Object[] {
+  if (!dateFrom && !dateTo) return objects;
+  const from = dateFrom ? new Date(dateFrom) : null;
+  const to = dateTo ? new Date(dateTo + "T23:59:59.999Z") : null;
+  return objects.filter((obj) => {
+    if (!obj.lastModified) return true;
+    if (from && obj.lastModified < from) return false;
+    if (to && obj.lastModified > to) return false;
+    return true;
+  });
+}
+
+function buildObjMap(objects: S3Object[]): {
+  ids: string[];
+  map: Map<string, S3Object>;
+} {
+  const ids: string[] = [];
+  const map = new Map<string, S3Object>();
+  for (const obj of objects) {
+    const id = extractId(obj.key);
+    if (id) {
+      ids.push(id);
+      map.set(id, obj);
+    }
+  }
+  return { ids, map };
+}
+
 export const photoRouter = {
   listObjects: protectedProcedure
     .input(
@@ -42,48 +76,17 @@ export const photoRouter = {
         bucket: env.S3_AVATAR_BUCKET_NAME,
         prefix: "student/",
       });
+      const objects = filterByDateRange(allObjects, input.dateFrom, input.dateTo);
+      const { ids: studentIds, map: objByStudentId } = buildObjMap(objects);
 
-      // Filter S3 objects by photo lastModified date range
-      const dateFrom = input.dateFrom ? new Date(input.dateFrom) : null;
-      const dateTo = input.dateTo
-        ? new Date(input.dateTo + "T23:59:59.999Z")
-        : null;
-      const objects =
-        dateFrom ?? dateTo
-          ? allObjects.filter((obj) => {
-              if (!obj.lastModified) return true;
-              if (dateFrom && obj.lastModified < dateFrom) return false;
-              if (dateTo && obj.lastModified > dateTo) return false;
-              return true;
-            })
-          : allObjects;
-
-      const studentIds: string[] = [];
-      const objByStudentId = new Map<string, (typeof objects)[number]>();
-      for (const obj of objects) {
-        const an_id = extractId(obj.key);
-        if (an_id) {
-          studentIds.push(an_id);
-          objByStudentId.set(an_id, obj);
-        }
-      }
       const skip = (input.pageIndex - 1) * input.limit;
       const searchConditions = input.q
         ? [
             {
               OR: [
-                {
-                  firstName: { contains: input.q, mode: "insensitive" as const },
-                },
-                {
-                  lastName: { contains: input.q, mode: "insensitive" as const },
-                },
-                {
-                  registrationNumber: {
-                    contains: input.q,
-                    mode: "insensitive" as const,
-                  },
-                },
+                { firstName: { contains: input.q, mode: "insensitive" as const } },
+                { lastName: { contains: input.q, mode: "insensitive" as const } },
+                { registrationNumber: { contains: input.q, mode: "insensitive" as const } },
               ],
             },
           ]
@@ -93,10 +96,7 @@ export const photoRouter = {
             {
               enrollments: {
                 some: {
-                  classroom: {
-                    id: input.classroomId,
-                    schoolYearId: ctx.schoolYearId,
-                  },
+                  classroom: { id: input.classroomId, schoolYearId: ctx.schoolYearId },
                 },
               },
             },
@@ -108,25 +108,14 @@ export const photoRouter = {
           lastName: true,
           firstName: true,
           registrationNumber: true,
-          enrollments: {
-            select: {
-              classroom: true,
-            },
-          },
+          enrollments: { select: { classroom: true } },
         },
         skip,
         take: input.limit,
-        orderBy: {
-          updatedAt: "desc",
-        },
+        orderBy: { updatedAt: "desc" },
         where: {
           AND: [
-            {
-              OR: [
-                { id: { in: studentIds } },
-                { registrationNumber: { in: studentIds } },
-              ],
-            },
+            { OR: [{ id: { in: studentIds } }, { registrationNumber: { in: studentIds } }] },
             ...searchConditions,
             ...classroomConditions,
           ],
@@ -135,9 +124,7 @@ export const photoRouter = {
       return students.map((s) => {
         const obj =
           objByStudentId.get(s.id) ??
-          (s.registrationNumber
-            ? objByStudentId.get(s.registrationNumber)
-            : undefined);
+          (s.registrationNumber ? objByStudentId.get(s.registrationNumber) : undefined);
         return {
           ...s,
           classroom: s.enrollments.find(
@@ -146,6 +133,109 @@ export const photoRouter = {
           ...obj,
         };
       });
+    }),
+  contacts: protectedProcedure
+    .input(
+      z.object({
+        q: z.string().optional(),
+        dateFrom: z.string().optional(),
+        dateTo: z.string().optional(),
+        pageIndex: z.number().default(1),
+        limit: z.number().default(20),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const allObjects = await listS3Objects({
+        bucket: env.S3_AVATAR_BUCKET_NAME,
+        prefix: "contact/",
+      });
+      const objects = filterByDateRange(allObjects, input.dateFrom, input.dateTo);
+      const { ids: contactIds, map: objByContactId } = buildObjMap(objects);
+
+      const skip = (input.pageIndex - 1) * input.limit;
+      const searchConditions = input.q
+        ? [
+            {
+              OR: [
+                { firstName: { contains: input.q, mode: "insensitive" as const } },
+                { lastName: { contains: input.q, mode: "insensitive" as const } },
+              ],
+            },
+          ]
+        : [];
+      const contacts = await ctx.db.contact.findMany({
+        select: {
+          id: true,
+          lastName: true,
+          firstName: true,
+          occupation: true,
+        },
+        skip,
+        take: input.limit,
+        orderBy: { updatedAt: "desc" },
+        where: {
+          AND: [
+            { id: { in: contactIds } },
+            ...searchConditions,
+          ],
+        },
+      });
+      return contacts.map((c) => ({
+        ...c,
+        ...objByContactId.get(c.id),
+      }));
+    }),
+  staffs: protectedProcedure
+    .input(
+      z.object({
+        q: z.string().optional(),
+        dateFrom: z.string().optional(),
+        dateTo: z.string().optional(),
+        pageIndex: z.number().default(1),
+        limit: z.number().default(20),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const allObjects = await listS3Objects({
+        bucket: env.S3_AVATAR_BUCKET_NAME,
+        prefix: "staff/",
+      });
+      const objects = filterByDateRange(allObjects, input.dateFrom, input.dateTo);
+      const { ids: staffIds, map: objByStaffId } = buildObjMap(objects);
+
+      const skip = (input.pageIndex - 1) * input.limit;
+      const searchConditions = input.q
+        ? [
+            {
+              OR: [
+                { firstName: { contains: input.q, mode: "insensitive" as const } },
+                { lastName: { contains: input.q, mode: "insensitive" as const } },
+                { jobTitle: { contains: input.q, mode: "insensitive" as const } },
+              ],
+            },
+          ]
+        : [];
+      const staffs = await ctx.db.staff.findMany({
+        select: {
+          id: true,
+          lastName: true,
+          firstName: true,
+          jobTitle: true,
+        },
+        skip,
+        take: input.limit,
+        orderBy: { updatedAt: "desc" },
+        where: {
+          AND: [
+            { id: { in: staffIds } },
+            ...searchConditions,
+          ],
+        },
+      });
+      return staffs.map((s) => ({
+        ...s,
+        ...objByStaffId.get(s.id),
+      }));
     }),
   getFromKey: protectedProcedure
     .input(

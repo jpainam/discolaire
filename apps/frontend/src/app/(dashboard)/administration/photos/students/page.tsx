@@ -27,18 +27,6 @@ export default async function Page() {
           <PhotoStudentList />
         </Suspense>
       </ErrorBoundary>
-      {/* <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-4 gap-4 p-4">
-              {Array.from({ length: 8 }, (_, index) => (
-                <Skeleton key={index} className="h-32" />
-              ))}
-            </div>
-          }
-        ></Suspense>
-        <ImageGrid bucket={env.S3_AVATAR_BUCKET_NAME} prefix="student/" />
-      </ErrorBoundary> */}
     </HydrateClient>
   );
 }

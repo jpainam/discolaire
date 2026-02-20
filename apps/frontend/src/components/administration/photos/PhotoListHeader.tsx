@@ -26,7 +26,13 @@ const isZip = (f: File) => /\.zip$/i.test(f.name);
 const isImagePath = (name: string) =>
   /\.(jpg|jpeg|png|gif|bmp|webp|tiff|svg)$/i.test(name);
 
-export function PhotoStudentHeader() {
+export function PhotoListHeader({
+  showClassroomFilter = true,
+  entityType,
+}: {
+  showClassroomFilter?: boolean;
+  entityType: "student" | "staff" | "contact";
+}) {
   const [isExtracting, setIsExtracting] = useState<boolean>(false);
   const [_, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
   const [classroomId, setClassroomId] = useQueryState(
@@ -52,7 +58,7 @@ export function PhotoStudentHeader() {
         setIsExtracting(false);
         openModal({
           className: "sm:max-w-xl",
-          view: <PhotoListUploader initialFiles={[file]} />,
+          view: <PhotoListUploader initialFiles={[file]} entityType={entityType} />,
         });
         return;
       }
@@ -85,7 +91,7 @@ export function PhotoStudentHeader() {
 
       openModal({
         className: "sm:max-w-xl",
-        view: <PhotoListUploader initialFiles={files} />,
+        view: <PhotoListUploader initialFiles={files} entityType={entityType} />,
       });
     } catch (err) {
       toast.error((err as Error).message, { id: 0 });
@@ -111,10 +117,12 @@ export function PhotoStudentHeader() {
           </InputGroupAddon>
         </InputGroup>
 
-        <ClassroomSelector
-          defaultValue={classroomId || undefined}
-          onSelect={(id) => void setClassroomId(id)}
-        />
+        {showClassroomFilter && (
+          <ClassroomSelector
+            defaultValue={classroomId || undefined}
+            onSelect={(id) => void setClassroomId(id)}
+          />
+        )}
 
         <DateRangePicker
           defaultValue={
