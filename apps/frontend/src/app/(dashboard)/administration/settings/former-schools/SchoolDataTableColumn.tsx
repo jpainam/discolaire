@@ -87,7 +87,7 @@ export function useSchoolColumns() {
                 }
                 appearance={"light"}
               >
-                {row.original._count.students}
+                {c}
               </Badge>
             );
           },

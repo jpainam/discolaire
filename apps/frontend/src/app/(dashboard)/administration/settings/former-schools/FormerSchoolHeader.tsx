@@ -41,7 +41,7 @@ export function FormerSchoolHeader() {
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <PDFIcon />
               {t("pdf_export")}
