@@ -23,7 +23,7 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditSchool } from "./CreateEditSchool";
 
-type FormerSchool = RouterOutputs["formerSchool"]["all"][number];
+type FormerSchool = RouterOutputs["formerSchool"]["list"]["data"][number];
 
 export function useSchoolColumns() {
   const t = useTranslations();
