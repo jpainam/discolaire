@@ -133,7 +133,9 @@ export function useDataTableV2<TData, TValue>({
     stableRowCountRef.current = effectiveRowCount;
   }
   const resolvedRowCount = manualPagination
-    ? (effectiveRowCount > 0 ? effectiveRowCount : stableRowCountRef.current)
+    ? effectiveRowCount > 0
+      ? effectiveRowCount
+      : stableRowCountRef.current
     : effectiveRowCount;
   const resolvedPageCount =
     pageCount ?? Math.ceil(resolvedRowCount / pagination.pageSize);

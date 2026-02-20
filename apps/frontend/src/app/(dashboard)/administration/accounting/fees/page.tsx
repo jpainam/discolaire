@@ -38,10 +38,12 @@ export default function Page() {
             </div>
           }
         >
-          <FeeDataTable />
+          <div className="py-2">
+            <FeeDataTable />
+          </div>
         </Suspense>
       </ErrorBoundary>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-2 px-4 pb-4">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Skeleton className="h-[200px] w-[350px] p-2" />}>
             <FeeBar />

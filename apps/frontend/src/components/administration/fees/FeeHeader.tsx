@@ -5,8 +5,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { MoreVertical, Plus } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
+import { Badge } from "~/components/base-badge";
 import { CreateEditFee } from "~/components/classrooms/fees/CreateEditFee";
-import FlatBadge from "~/components/FlatBadge";
 import PDFIcon from "~/components/icons/pdf-solid";
 import XMLIcon from "~/components/icons/xml-solid";
 import { ClassroomSelector } from "~/components/shared/selects/ClassroomSelector";
@@ -51,14 +51,14 @@ export function FeeHeader() {
     <div className="flex flex-row items-center gap-4 border-b px-4 py-1">
       <Label className="hidden md:block">{t("classrooms")}</Label>
       <ClassroomSelector
-        className="w-full md:w-[300px]"
+        className="w-full xl:w-1/3"
         defaultValue={classroomId ?? ""}
         onSelect={(val) => {
           router.push("?" + createQueryString({ classroomId: val }));
         }}
       />
       <div className="flex flex-row items-center gap-2">
-        <FlatBadge variant={"green"}>
+        <Badge variant={"success"} appearance={"outline"}>
           {t("total_fees")}:{" "}
           {sums.total.toLocaleString(locale, {
             style: "currency",
@@ -66,8 +66,8 @@ export function FeeHeader() {
             minimumFractionDigits: 0,
             currency: school.currency,
           })}
-        </FlatBadge>
-        <FlatBadge variant={"pink"}>
+        </Badge>
+        <Badge variant={"info"} appearance={"outline"}>
           {t("required_fees")}:{" "}
           {sums.required.toLocaleString(locale, {
             style: "currency",
@@ -75,7 +75,7 @@ export function FeeHeader() {
             minimumFractionDigits: 0,
             currency: school.currency,
           })}
-        </FlatBadge>
+        </Badge>
       </div>
 
       <div className="ml-auto flex items-center gap-2">
@@ -98,7 +98,7 @@ export function FeeHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="size-8" size={"icon"}>
+            <Button variant={"outline"} size={"icon"}>
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
