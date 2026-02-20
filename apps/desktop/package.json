@@ -40,6 +40,10 @@
       {
         "from": "build/frontend",
         "to": "frontend"
+      },
+      {
+        "from": "../../packages/db/prisma/migrations",
+        "to": "migrations"
       }
     ],
     "mac": {

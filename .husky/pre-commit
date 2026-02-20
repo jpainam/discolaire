@@ -2,3 +2,12 @@ pnpm i
 pnpm lint --fix
 pnpm format --write
 pnpm typecheck
+
+# Auto-generate a Prisma migration if any .prisma schema files changed
+CHANGED_PRISMA=$(git diff --cached --name-only | grep -E '\.prisma$' || true)
+if [ -n "$CHANGED_PRISMA" ]; then
+  MIGRATION_NAME="auto_$(date +%Y%m%d%H%M%S)"
+  echo "Prisma schema changes detected — generating migration '$MIGRATION_NAME'..."
+  pnpm --filter @repo/db migrate --name "$MIGRATION_NAME"
+  git add packages/db/prisma/migrations/
+fi

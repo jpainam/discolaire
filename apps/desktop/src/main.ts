@@ -1,4 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, safeStorage } from "electron";
+import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { Module } from "module";
@@ -152,6 +153,111 @@ const isLocalHost = (urlString: string) => {
 };
 
 // ---------------------------------------------------------------------------
+// Database migrations
+// ---------------------------------------------------------------------------
+
+/**
+ * Runs pending Prisma migrations against the configured DATABASE_URL.
+ * Uses pg directly (bundled in the standalone frontend) so the prisma CLI
+ * does not need to be shipped with the app.
+ * Writes to the standard _prisma_migrations table so it stays compatible
+ * with `prisma migrate deploy` if the admin ever runs it manually.
+ */
+async function runMigrations() {
+  if (isDev) return;
+
+  const migrationsDir = path.join(process.resourcesPath, "migrations");
+  if (!fs.existsSync(migrationsDir)) {
+    logLine("Migrations directory not found, skipping.");
+    return;
+  }
+
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl) {
+    logLine("DATABASE_URL not set, skipping migrations.");
+    return;
+  }
+
+  // pg is available in the bundled standalone node_modules via @prisma/adapter-pg
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { Client } = require(path.join(frontendRoot, "node_modules", "pg")) as {
+    Client: new (config: { connectionString: string }) => {
+      connect(): Promise<void>;
+      end(): Promise<void>;
+      query<T extends Record<string, unknown> = Record<string, unknown>>(
+        sql: string,
+        params?: unknown[]
+      ): Promise<{ rows: T[] }>;
+    };
+  };
+
+  const client = new Client({ connectionString: dbUrl });
+  await client.connect();
+  logLine("Connected to database for migrations.");
+
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS "_prisma_migrations" (
+        "id"                  VARCHAR(36)  NOT NULL,
+        "checksum"            VARCHAR(64)  NOT NULL,
+        "finished_at"         TIMESTAMPTZ,
+        "migration_name"      VARCHAR(255) NOT NULL,
+        "logs"                TEXT,
+        "rolled_back_at"      TIMESTAMPTZ,
+        "started_at"          TIMESTAMPTZ  NOT NULL DEFAULT now(),
+        "applied_steps_count" INTEGER      NOT NULL DEFAULT 0,
+        PRIMARY KEY ("id")
+      )
+    `);
+
+    const { rows: applied } = await client.query<{ migration_name: string }>(
+      'SELECT migration_name FROM "_prisma_migrations" WHERE finished_at IS NOT NULL'
+    );
+    const appliedSet = new Set(applied.map((r) => r.migration_name));
+
+    const dirs = fs
+      .readdirSync(migrationsDir)
+      .filter((d) => fs.statSync(path.join(migrationsDir, d)).isDirectory())
+      .sort();
+
+    for (const dir of dirs) {
+      if (appliedSet.has(dir)) continue;
+      const sqlFile = path.join(migrationsDir, dir, "migration.sql");
+      if (!fs.existsSync(sqlFile)) continue;
+
+      const sql = fs.readFileSync(sqlFile, "utf8");
+      const checksum = crypto.createHash("sha256").update(sql).digest("hex");
+      const id = crypto.randomUUID();
+
+      logLine(`Applying migration: ${dir}`);
+      await client.query(
+        'INSERT INTO "_prisma_migrations" (id, checksum, migration_name, started_at) VALUES ($1, $2, $3, now())',
+        [id, checksum, dir]
+      );
+
+      try {
+        await client.query(sql);
+        await client.query(
+          'UPDATE "_prisma_migrations" SET finished_at = now(), applied_steps_count = 1 WHERE id = $1',
+          [id]
+        );
+        logLine(`Migration applied: ${dir}`);
+      } catch (err) {
+        await client.query(
+          'UPDATE "_prisma_migrations" SET logs = $2, rolled_back_at = now() WHERE id = $1',
+          [id, String(err)]
+        );
+        throw err;
+      }
+    }
+
+    logLine("All migrations up to date.");
+  } finally {
+    await client.end();
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Server lifecycle
 // ---------------------------------------------------------------------------
 
@@ -283,6 +389,8 @@ ipcMain.handle("save-env", async (_event, envContent: string) => {
     saveEncryptedEnv(envContent);
     applyEnvVars(vars);
 
+    await runMigrations();
+
     // Close setup window, start server, open app window
     transitioning = true;
     if (mainWindow) {
@@ -363,6 +471,7 @@ app.on("ready", async () => {
       `Loaded ${Object.keys(vars).length} env vars from encrypted store.`,
     );
 
+    await runMigrations();
     startServer();
 
     const baseUrl = resolveBaseUrl();
