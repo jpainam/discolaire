@@ -8,6 +8,7 @@ import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -16,8 +17,10 @@ import {
 } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { EditUserButton } from "~/components/users/EditUserButton";
 import { UserPermissionTable } from "~/components/users/UserPermissionTable";
 import { UserRoleCard } from "~/components/users/UserRoleCard";
+import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -26,6 +29,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const queryClient = getQueryClient();
   const user = await queryClient.fetchQuery(trpc.user.get.queryOptions(userId));
   const auth = await getAuth();
+  const canUpdateUser = await checkPermission("user.update");
   const { sessions } = await auth.api.listUserSessions({
     body: {
       userId,
@@ -70,6 +74,16 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           <CardHeader>
             <CardTitle>Informations</CardTitle>
             <CardDescription>{user.email}</CardDescription>
+            <CardAction>
+              {canUpdateUser && (
+                <EditUserButton
+                  userId={userId}
+                  username={user.username}
+                  email={user.email}
+                  type={user.profile as "staff" | "contact" | "student"}
+                />
+              )}
+            </CardAction>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-2">
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">

@@ -11,12 +11,17 @@ import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { Spinner } from "../ui/spinner";
 
-const createEditUserSchema = z.object({
+const createUserSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
   email: z.union([z.string().email(), z.literal(""), z.null()]),
 });
-type CreateEditUserFormValues = z.input<typeof createEditUserSchema>;
+const editUserSchema = z.object({
+  username: z.string().min(1),
+  password: z.string(),
+  email: z.union([z.string().email(), z.literal(""), z.null()]),
+});
+type CreateEditUserFormValues = z.input<typeof createUserSchema>;
 
 export function CreateEditUser({
   entityId,
@@ -25,12 +30,13 @@ export function CreateEditUser({
   email,
   type,
 }: {
-  entityId: string;
+  entityId?: string;
   userId?: string;
   username?: string;
   email?: string | null;
   type: "staff" | "contact" | "student";
 }) {
+  const schema = userId ? editUserSchema : createUserSchema;
   const defaultValues: CreateEditUserFormValues = {
     username: username ?? "",
     password: "",
@@ -39,19 +45,23 @@ export function CreateEditUser({
   const form = useForm({
     defaultValues,
     validators: {
-      onSubmit: createEditUserSchema,
+      onSubmit: schema,
     },
     onSubmit: ({ value }) => {
-      const parsed = createEditUserSchema.parse(value);
+      const parsed = schema.parse(value);
       if (userId) {
         toast.loading(t("updating"), { id: 0 });
         updateUserMutation.mutate({
           id: userId,
           username: parsed.username,
-          password: parsed.password,
+          password: parsed.password || undefined,
           email: parsed.email ?? undefined,
         });
       } else {
+        if (!entityId) {
+          toast.warning("EntityId est requis pour la creation");
+          return;
+        }
         toast.loading(t("creating"), { id: 0 });
         createUserMutation.mutate({
           username: parsed.username,
