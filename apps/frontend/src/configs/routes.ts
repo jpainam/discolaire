@@ -167,13 +167,6 @@ export const routes = {
       details: (id: string) => `/
       /subjects/${id}`,
     },
-    sms_management: {
-      details: (id: number) => `/administration/sms-emails/${id}`,
-      history: "/administration/sms-emails",
-      templates: "/administration/sms-emails/templates",
-      to_parents: "/administration/sms-emails/to-parents",
-      to_staffs: "/administration/sms-emails/to-staffs",
-    },
     grade_management: {
       index: "/administration/grade-options",
       appreciations: "/administration/grade-options/appreciations",

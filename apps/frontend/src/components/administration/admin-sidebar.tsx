@@ -185,8 +185,8 @@ export function AdminSidebar({
     ],
     projects: [
       {
-        name: "sms_and_emails",
-        url: "/administration/sms-emails",
+        name: "Notification templates",
+        url: "/administration/notification-templates",
         icon: Frame,
       },
     ],
