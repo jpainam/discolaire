@@ -30,17 +30,34 @@ export const photoRouter = {
     .input(
       z.object({
         q: z.string().optional(),
+        classroomId: z.string().optional(),
+        dateFrom: z.string().optional(),
+        dateTo: z.string().optional(),
         pageIndex: z.number().default(1),
-        limit: z.number().default(10),
-        startAfter: z.string().optional(),
+        limit: z.number().default(20),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const objects = await listS3Objects({
+      const allObjects = await listS3Objects({
         bucket: env.S3_AVATAR_BUCKET_NAME,
         prefix: "student/",
-        startAfter: input.startAfter,
       });
+
+      // Filter S3 objects by photo lastModified date range
+      const dateFrom = input.dateFrom ? new Date(input.dateFrom) : null;
+      const dateTo = input.dateTo
+        ? new Date(input.dateTo + "T23:59:59.999Z")
+        : null;
+      const objects =
+        dateFrom ?? dateTo
+          ? allObjects.filter((obj) => {
+              if (!obj.lastModified) return true;
+              if (dateFrom && obj.lastModified < dateFrom) return false;
+              if (dateTo && obj.lastModified > dateTo) return false;
+              return true;
+            })
+          : allObjects;
+
       const studentIds: string[] = [];
       const objByStudentId = new Map<string, (typeof objects)[number]>();
       for (const obj of objects) {
@@ -50,6 +67,41 @@ export const photoRouter = {
           objByStudentId.set(an_id, obj);
         }
       }
+      const skip = (input.pageIndex - 1) * input.limit;
+      const searchConditions = input.q
+        ? [
+            {
+              OR: [
+                {
+                  firstName: { contains: input.q, mode: "insensitive" as const },
+                },
+                {
+                  lastName: { contains: input.q, mode: "insensitive" as const },
+                },
+                {
+                  registrationNumber: {
+                    contains: input.q,
+                    mode: "insensitive" as const,
+                  },
+                },
+              ],
+            },
+          ]
+        : [];
+      const classroomConditions = input.classroomId
+        ? [
+            {
+              enrollments: {
+                some: {
+                  classroom: {
+                    id: input.classroomId,
+                    schoolYearId: ctx.schoolYearId,
+                  },
+                },
+              },
+            },
+          ]
+        : [];
       const students = await ctx.db.student.findMany({
         select: {
           id: true,
@@ -62,23 +114,21 @@ export const photoRouter = {
             },
           },
         },
+        skip,
         take: input.limit,
         orderBy: {
           updatedAt: "desc",
         },
-
         where: {
-          OR: [
+          AND: [
             {
-              id: {
-                in: studentIds,
-              },
+              OR: [
+                { id: { in: studentIds } },
+                { registrationNumber: { in: studentIds } },
+              ],
             },
-            {
-              registrationNumber: {
-                in: studentIds,
-              },
-            },
+            ...searchConditions,
+            ...classroomConditions,
           ],
         },
       });

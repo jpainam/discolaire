@@ -5,17 +5,11 @@ import { getTranslations } from "next-intl/server";
 import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
-import { env } from "~/env";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { PhotoStudentList } from "../../../../../components/administration/photos/PhotoStudentList";
 
 export default async function Page() {
-  prefetch(
-    trpc.photo.listObjects.queryOptions({
-      prefix: "student/",
-      bucket: env.S3_AVATAR_BUCKET_NAME,
-    }),
-  );
+  prefetch(trpc.photo.students.queryOptions({ pageIndex: 1 }));
   const t = await getTranslations();
 
   return (

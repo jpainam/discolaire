@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import JSZip from "jszip";
 import { Filter, Search, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsIsoDate, parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -29,6 +29,13 @@ const isImagePath = (name: string) =>
 export function PhotoStudentHeader() {
   const [isExtracting, setIsExtracting] = useState<boolean>(false);
   const [_, setSearchQuery] = useQueryState("q", parseAsString.withDefault(""));
+  const [classroomId, setClassroomId] = useQueryState(
+    "classroomId",
+    parseAsString.withDefault(""),
+  );
+  const [dateFrom, setDateFrom] = useQueryState("dateFrom", parseAsIsoDate);
+  const [dateTo, setDateTo] = useQueryState("dateTo", parseAsIsoDate);
+
   const debounced = useDebouncedCallback((value: string) => {
     void setSearchQuery(value);
   }, 1000);
@@ -56,12 +63,11 @@ export function PhotoStudentHeader() {
 
       const extracted = await Promise.all(
         entries.map(async (zf) => {
-          const filename = zf.name.replace(/^\/+/, ""); // normalize leading slash
+          const filename = zf.name.replace(/^\/+/, "");
           if (!isImagePath(filename)) return null;
 
           const blob = await zf.async("blob");
 
-          // Note: blob.type is often empty; infer from filename if you want stricter typing
           return new File([blob], filename, {
             type: blob.type || "application/octet-stream",
             lastModified: Date.now(),
@@ -82,9 +88,7 @@ export function PhotoStudentHeader() {
         view: <PhotoListUploader initialFiles={files} />,
       });
     } catch (err) {
-      toast.error((err as Error).message, {
-        id: 0,
-      });
+      toast.error((err as Error).message, { id: 0 });
       setIsExtracting(false);
     }
   };
@@ -107,11 +111,21 @@ export function PhotoStudentHeader() {
           </InputGroupAddon>
         </InputGroup>
 
-        {/* Document Type Filter */}
-        <ClassroomSelector />
+        <ClassroomSelector
+          defaultValue={classroomId || undefined}
+          onSelect={(id) => void setClassroomId(id)}
+        />
 
-        {/* Date Filter */}
-        <DateRangePicker />
+        <DateRangePicker
+          defaultValue={
+            dateFrom ? { from: dateFrom, to: dateTo ?? undefined } : undefined
+          }
+          onSelectAction={(range) => {
+            void setDateFrom(range?.from ?? null);
+            void setDateTo(range?.to ?? null);
+          }}
+        />
+
         <div>
           <input
             ref={inputRef}

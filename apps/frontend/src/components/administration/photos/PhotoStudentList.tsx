@@ -2,10 +2,16 @@
 
 import Link from "next/link";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
+import {
+  parseAsInteger,
+  parseAsIsoDate,
+  parseAsString,
+  useQueryState,
+} from "nuqs";
 import { toast } from "sonner";
+
+import type { RouterOutputs } from "@repo/api";
 
 import { handleDeleteAvatar } from "~/actions/upload";
 import { PhotoDetails } from "~/components/administration/photos/PhotoDetails";
@@ -16,15 +22,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
@@ -38,7 +41,7 @@ import {
 } from "~/components/ui/table";
 import { UserLink } from "~/components/UserLink";
 import { useSheet } from "~/hooks/use-sheet";
-import { DeleteIcon, ViewIcon } from "~/icons";
+import { DeleteIcon, MoreIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -54,49 +57,48 @@ const formatFileSize = (bytes: number): string => {
 export function PhotoStudentList() {
   const t = useTranslations();
   const [searchQuery] = useQueryState("q", parseAsString.withDefault(""));
-  const [startAfter, setStartAfter] = useQueryState(
-    "startAfter",
+  const [classroomId] = useQueryState(
+    "classroomId",
     parseAsString.withDefault(""),
   );
-
+  const [dateFrom] = useQueryState("dateFrom", parseAsIsoDate);
+  const [dateTo] = useQueryState("dateTo", parseAsIsoDate);
   const [pageIndex, setPageIndex] = useQueryState(
     "pageIndex",
     parseAsInteger.withDefault(1),
   );
   const trpc = useTRPC();
-  const studentPhotoQuery = useQuery(
+  const {
+    data: photos,
+
+    isFetching,
+  } = useQuery(
     trpc.photo.students.queryOptions({
-      q: searchQuery,
-      pageIndex: pageIndex,
-      startAfter: startAfter,
+      q: searchQuery || undefined,
+      classroomId: classroomId || undefined,
+      dateFrom: dateFrom?.toISOString().split("T")[0],
+      dateTo: dateTo?.toISOString().split("T")[0],
+      pageIndex,
     }),
   );
-  const photos = studentPhotoQuery.data ?? [];
-  const nextPage = () => {
-    const lastImage = photos[photos.length - 1];
-    if (!lastImage?.name) return;
-    void setStartAfter(lastImage.name);
-    void setPageIndex(() => pageIndex + 1);
-  };
-  const previousPage = () => {
-    const firstImage = photos[0];
-    if (!firstImage?.name) return;
-    void setStartAfter(firstImage.name);
-    void setPageIndex(() => pageIndex - 1);
-  };
-
-  // const { data: photos } = useSuspenseQuery(
-  //   trpc.photo.listObjects.queryOptions({
-  //     prefix: "student/",
-  //     bucket,
-  //   }),
-  // );
 
   const locale = useLocale();
-
   const { openSheet } = useSheet();
   const queryClient = useQueryClient();
   const confirm = useConfirm();
+
+  const openDetails = (p: RouterOutputs["photo"]["students"][number]) => {
+    if (!p.key) {
+      toast.warning(`Nom du fichier non trouvé`);
+      return;
+    }
+    openSheet({
+      title: getFullName(p),
+      description: `Photo ${t("student")} - ${p.registrationNumber}`,
+      view: <PhotoDetails fileName={p.key} />,
+    });
+  };
+
   const deletePhoto = async (key: string) => {
     toast.loading(t("deleting"), { id: 0 });
     const result = await handleDeleteAvatar(key, "student");
@@ -119,200 +121,130 @@ export function PhotoStudentList() {
                 <TableHead>{t("fullName")}</TableHead>
                 <TableHead>{t("registrationNumber")}</TableHead>
                 <TableHead>{t("classroom")}</TableHead>
-                <TableHead className="text-center">URL</TableHead>
-
                 <TableHead>Taille</TableHead>
                 <TableHead>{t("Modified")}</TableHead>
-
                 <TableHead className="text-right"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {studentPhotoQuery.isPending ? (
+              {isFetching && photos?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7}>
-                    <TableSkeleton rows={10} cols={6} />
+                  <TableCell colSpan={6}>
+                    <TableSkeleton rows={10} cols={5} />
+                  </TableCell>
+                </TableRow>
+              ) : photos?.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="text-muted-foreground py-10 text-center"
+                  >
+                    {t("no_results")}
                   </TableCell>
                 </TableRow>
               ) : (
-                studentPhotoQuery.data?.map((p, index) => {
-                  return (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <UserLink
-                            href={`/students/${p.id}`}
-                            id={p.id}
-                            profile="student"
-                            name={getFullName(p)}
-                          />
-
-                          <Button
-                            variant={"secondary"}
-                            onClick={() => {
+                photos?.map((p, index) => (
+                  <TableRow
+                    key={index}
+                    className="cursor-pointer"
+                    onClick={() => openDetails(p)}
+                  >
+                    <TableCell>
+                      <UserLink
+                        href={`/students/${p.id}`}
+                        id={p.id}
+                        avatar={p.location}
+                        profile="student"
+                        name={getFullName(p)}
+                      />
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {p.registrationNumber}
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        className="text-muted-foreground hover:underline"
+                        href={`/classrooms/${p.classroom?.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {p.classroom?.reportName}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {p.size ? formatFileSize(p.size) : "-"}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {p.lastModified?.toLocaleDateString(locale, {
+                        month: "short",
+                        year: "numeric",
+                        day: "numeric",
+                      })}
+                    </TableCell>
+                    <TableCell
+                      className="text-right"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant={"ghost"} size={"icon-sm"}>
+                            <MoreIcon />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onSelect={async () => {
                               if (!p.key) {
                                 toast.warning(`Nom du fichier non trouvé`);
                                 return;
                               }
-                              openSheet({
-                                title: getFullName(p),
-                                description: `Photo ${t("student")} - ${p.registrationNumber}`,
-                                view: <PhotoDetails fileName={p.key} />,
+                              await confirm({
+                                title: t("delete"),
+                                description: t("delete_confirmation"),
+                                onConfirm: async () => {
+                                  if (p.key) await deletePhoto(p.key);
+                                },
                               });
                             }}
-                            size={"xs"}
+                            variant="destructive"
                           >
-                            {t("details")}
-                          </Button>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {p.registrationNumber}
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          className="text-muted-foreground hover:underline"
-                          href={`/classrooms/${p.classroom?.id}`}
-                        >
-                          {p.classroom?.reportName}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Button variant={"link"} size={"sm"}>
-                          ... {p.key?.slice(-10)}
-                        </Button>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {p.size ? formatFileSize(p.size) : "-"}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {p.lastModified?.toLocaleDateString(locale, {
-                          month: "short",
-                          year: "numeric",
-                          day: "numeric",
-                        })}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant={"ghost"} size={"icon-sm"}>
-                              <MoreHorizontal />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onSelect={() => {
-                                if (!p.key) {
-                                  toast.warning(`Nom du fichier non trouvé`);
-                                  return;
-                                }
-                                openSheet({
-                                  title: getFullName(p),
-                                  description: `Photo ${t("student")} - ${p.registrationNumber}`,
-                                  view: <PhotoDetails fileName={p.key} />,
-                                });
-                              }}
-                            >
-                              <ViewIcon />
-                              {t("details")}
-                            </DropdownMenuItem>
-
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onSelect={async () => {
-                                if (!p.key) {
-                                  toast.warning(`Nom du fichier non trouvé`);
-                                  return;
-                                }
-                                await confirm({
-                                  title: t("delete"),
-                                  description: t("delete_confirmation"),
-
-                                  onConfirm: async () => {
-                                    if (p.key) {
-                                      await deletePhoto(p.key);
-                                    }
-                                  },
-                                });
-                              }}
-                              variant="destructive"
-                            >
-                              <DeleteIcon />
-                              {t("delete")}
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
+                            <DeleteIcon />
+                            {t("delete")}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
             </TableBody>
           </Table>
         </div>
         <Pagination>
           <PaginationContent>
-            <PaginationItem aria-disabled={true}>
+            <PaginationItem>
               <PaginationPrevious
                 tabIndex={pageIndex <= 1 ? -1 : undefined}
                 className={
                   pageIndex <= 1 ? "pointer-events-none opacity-50" : undefined
                 }
                 aria-disabled={pageIndex <= 1}
-                onClick={() => {
-                  void previousPage();
-                }}
+                onClick={() => void setPageIndex(pageIndex - 1)}
               />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink
-                isActive={pageIndex == 1}
-                onClick={() => {
-                  void setPageIndex(1);
-                }}
-              >
-                1
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                onClick={() => {
-                  void setPageIndex(2);
-                }}
-                isActive={pageIndex == 2}
-              >
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                isActive={pageIndex == 9}
-                onClick={() => {
-                  void setPageIndex(9);
-                }}
-              >
-                9
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                onClick={() => {
-                  void setPageIndex(10);
-                }}
-                isActive={pageIndex == 10}
-              >
-                10
-              </PaginationLink>
+              <span className="text-muted-foreground px-4 text-sm">
+                {t("page")} {pageIndex}
+              </span>
             </PaginationItem>
             <PaginationItem>
               <PaginationNext
-                onClick={() => {
-                  void nextPage();
-                }}
-                //href="#"
+                className={
+                  (photos ?? []).length < 20
+                    ? "pointer-events-none opacity-50"
+                    : undefined
+                }
+                aria-disabled={(photos ?? []).length < 20}
+                onClick={() => void setPageIndex(pageIndex + 1)}
               />
             </PaginationItem>
           </PaginationContent>
