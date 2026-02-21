@@ -289,15 +289,16 @@ directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 - https://github.com/jpainam/discolaire/blob/4324613a0d0feec36b01a659a814b5a58ec8d4d5/apps/frontend/Dockerfile
 - https://miale.ac.ke/biometric-integration
 
-INitialize from empty database
-`pn with-env prisma migrate diff --from-empty --to-schema prisma/schema --script > prisma/migrations/0_init/migration.sql`
 
-`cd packages/db && pnpm with-env prisma migrate resolve --applied 0_init`
+```
+pnpm with-env prisma migrate diff --from-empty --to-schema prisma/schema --script > prisma/migrations/0_init/migration.sql`
 
-On the deskop, run 
-`cd packages/db && pn with-env prisma migrate deploy`
+cd packages/db && pnpm with-env prisma migrate resolve --applied 0_init`
 
-It will show
-`1 migration found in prisma/migrations
-No pending migrations to apply.
-`
+cd packages/db && pn with-env prisma migrate deploy`
+```
+
+```
+You: pnpm db:migrate --name <describe_the_change>
+End user: pnpm db:deploy
+```

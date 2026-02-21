@@ -8,6 +8,8 @@
     "clean:workspaces": "turbo run clean",
     "db:push": "turbo -F @repo/db push",
     "db:studio": "turbo -F @repo/db studio",
+    "db:migrate": "pnpm --filter @repo/db with-env prisma migrate dev",
+    "db:deploy": "pnpm --filter @repo/db with-env prisma migrate deploy",
     "dev": "turbo watch dev --continue",
     "dev:desktop": "pnpm --filter @repo/desktop dev",
     "dev:native": "turbo watch dev --continue -F @repo/native -F @repo/frontend",
