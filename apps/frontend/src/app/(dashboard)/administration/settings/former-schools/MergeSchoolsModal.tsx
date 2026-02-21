@@ -4,6 +4,7 @@ import type { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { decode } from "entities";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -71,7 +72,6 @@ export function MergeSchoolsModal({ table }: { table: Table<FormerSchool> }) {
   );
 
   const onSubmit = (data: z.infer<typeof mergeSchema>) => {
-    toast.loading(t("merging"), { id: 0 });
     mergeMutation.mutate({
       name: data.name,
       ids: schoolsToMerge.map((s) => s.id),
@@ -94,7 +94,7 @@ export function MergeSchoolsModal({ table }: { table: Table<FormerSchool> }) {
                 key={s.id}
                 className="flex items-center justify-between gap-2"
               >
-                <span>{s.name}</span>
+                <span>{decode(s.name)}</span>
                 <Button
                   type="button"
                   size={"icon-xs"}
