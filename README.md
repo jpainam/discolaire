@@ -289,7 +289,6 @@ directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 - https://github.com/jpainam/discolaire/blob/4324613a0d0feec36b01a659a814b5a58ec8d4d5/apps/frontend/Dockerfile
 - https://miale.ac.ke/biometric-integration
 
-
 ```
 pnpm with-env prisma migrate diff --from-empty --to-schema prisma/schema --script > prisma/migrations/0_init/migration.sql`
 
