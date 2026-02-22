@@ -106,6 +106,88 @@ export const importStudentRouter = {
       return { success: true };
     }),
 
+  checkMapping: protectedProcedure
+    .input(
+      z.object({
+        by: z.enum(["id", "old_registration", "full_name"]),
+        match_values: z.array(z.string()),
+        new_registrations: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const normalize = (s: string) =>
+        s.toLowerCase().replace(/\s+/g, " ").trim();
+
+      // Build student lookup map: key -> { id, registrationNumber }
+      // We include registrationNumber so we can detect if the student already
+      // has the new registration (no-op rows).
+      const studentMap = new Map<
+        string,
+        { id: string; registrationNumber: string | null }
+      >();
+
+      if (input.by === "id") {
+        const students = await ctx.db.student.findMany({
+          where: { id: { in: input.match_values } },
+          select: { id: true, registrationNumber: true },
+        });
+        students.forEach((s) => studentMap.set(s.id, s));
+      } else if (input.by === "old_registration") {
+        const students = await ctx.db.student.findMany({
+          where: { registrationNumber: { in: input.match_values } },
+          select: { id: true, registrationNumber: true },
+        });
+        students.forEach((s) => {
+          if (s.registrationNumber) studentMap.set(s.registrationNumber, s);
+        });
+      } else if (input.by === "full_name") {
+        const students = await ctx.db.student.findMany({
+          where: {
+            enrollments: {
+              some: { schoolYear: { id: ctx.schoolYearId } },
+            },
+          },
+          select: { id: true, firstName: true, lastName: true, registrationNumber: true },
+        });
+        students.forEach((s) => {
+          const key1 = normalize(s.firstName + " " + s.lastName);
+          const key2 = normalize(s.lastName + " " + s.firstName);
+          studentMap.set(key1, s);
+          studentMap.set(key2, s);
+        });
+      }
+
+      const results = input.match_values.map((value, index) => {
+        const newReg = input.new_registrations[index] ?? "";
+        const lookupKey =
+          input.by === "full_name" ? normalize(value) : value;
+        const student = studentMap.get(lookupKey);
+
+        if (!student) {
+          return { index, status: "unmatched" as const, studentId: undefined };
+        }
+
+        // The matched student already has the new registration — nothing to do.
+        if (student.registrationNumber === newReg) {
+          return {
+            index,
+            status: "already_exists" as const,
+            studentId: student.id,
+          };
+        }
+
+        return { index, status: "matched" as const, studentId: student.id };
+      });
+
+      return {
+        results,
+        matchedCount: results.filter((r) => r.status === "matched").length,
+        unmatchedCount: results.filter((r) => r.status === "unmatched").length,
+        alreadyExistsCount: results.filter((r) => r.status === "already_exists")
+          .length,
+      };
+    }),
+
   checkFullNameMapping: protectedProcedure
     .input(
       z.object({
