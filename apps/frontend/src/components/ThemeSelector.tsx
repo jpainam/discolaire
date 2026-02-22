@@ -179,7 +179,9 @@ function ThemeControls() {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">
-          <p className="text-xs">{isScaled ? "Disable scaling" : "Enable scaling"}</p>
+          <p className="text-xs">
+            {isScaled ? "Disable scaling" : "Enable scaling"}
+          </p>
         </TooltipContent>
       </Tooltip>
 
