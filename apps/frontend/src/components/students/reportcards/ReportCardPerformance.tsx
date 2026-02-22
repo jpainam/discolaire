@@ -24,7 +24,7 @@ export function ReportCardPerformance({
 }) {
   const t = useTranslations();
 
-  const rowClassName = "border-r text-sm";
+  const rowClassName = "border-r ";
   return (
     <div className="border">
       <Table>

@@ -7,9 +7,8 @@ import type {
   PrismaClient,
 } from "@repo/db";
 
-import { sendEmail } from "../notifications/email";
+import { emailQueue } from "../notifications/email-queue";
 import { sendSms } from "../notifications/providers";
-import { renderTemplateFromDb } from "../notifications/template";
 import { sendWhatsapp } from "../notifications/whatsapp";
 
 const DEFAULT_FREE_CHANNELS: NotificationChannel[] = ["EMAIL", "IN_APP"];
@@ -34,8 +33,11 @@ interface ChannelResolution {
 }
 export class NotificationService {
   private db: PrismaClient;
-  constructor(db: PrismaClient) {
+  private tenant: string;
+
+  constructor(db: PrismaClient, tenant: string) {
     this.db = db;
+    this.tenant = tenant;
   }
   async getStatuses(params: {
     sourceType: NotificationSourceType;
@@ -430,16 +432,13 @@ export class NotificationService {
     recipient: Recipient;
     sourceType: NotificationSourceType;
     sourceId: string;
-    templateId: string;
-    payload: Record<string, unknown>;
+    context: Record<string, unknown>;
   }) {
-    const { schoolId, recipient, sourceType, sourceId, templateId, payload } =
-      params;
+    const { schoolId, recipient, sourceType, sourceId, context } = params;
     const recipientRecord = await this.ensureRecipient({
       schoolId,
       recipient,
     });
-    // 1) Create or get Notification (unique constraint prevents duplicates)
     const notification = await this.db.notification.upsert({
       where: {
         schoolId_recipientId_sourceType_sourceId: {
@@ -454,17 +453,12 @@ export class NotificationService {
         recipientId: recipientRecord.id,
         sourceType,
         sourceId,
-        templateId,
-        payload: payload as Prisma.JsonObject,
+        context: context as Prisma.JsonObject,
       },
       update: {
-        // Optional policy:
-        templateId,
-        // if re-triggered, update payload/templateId to latest.
-        payload: payload as Prisma.JsonObject,
+        context: context as Prisma.JsonObject,
       },
     });
-    // 2) Resolve channels: school rules + recipient subscription + credit
     const resolutions = await this.resolveChannelsForRecipients({
       schoolId,
       recipients: [
@@ -479,8 +473,8 @@ export class NotificationService {
     return this.deliverNotification({
       notificationId: notification.id,
       recipient: recipientRecord,
-      templateId,
-      payload,
+      sourceType,
+      context,
       eligible: resolution.eligible,
       ineligible: resolution.ineligible,
     });
@@ -492,8 +486,7 @@ export class NotificationService {
     items: {
       recipient: Recipient;
       sourceId: string;
-      templateId: string;
-      payload: Record<string, unknown>;
+      context: Record<string, unknown>;
     }[];
   }) {
     const { schoolId, sourceType, items } = params;
@@ -546,12 +539,10 @@ export class NotificationService {
             recipientId: recipientRecord.id,
             sourceType,
             sourceId: item.sourceId,
-            templateId: item.templateId,
-            payload: item.payload as Prisma.JsonObject,
+            context: item.context as Prisma.JsonObject,
           },
           update: {
-            templateId: item.templateId,
-            payload: item.payload as Prisma.JsonObject,
+            context: item.context as Prisma.JsonObject,
           },
         }),
       ),
@@ -569,8 +560,8 @@ export class NotificationService {
       const delivered = await this.deliverNotification({
         notificationId: notification.id,
         recipient: recipientRecord,
-        templateId: item.templateId,
-        payload: item.payload,
+        sourceType,
+        context: item.context,
         eligible: resolution.eligible,
         ineligible: resolution.ineligible,
       });
@@ -583,19 +574,13 @@ export class NotificationService {
   private async deliverNotification(params: {
     notificationId: string;
     recipient: RecipientRecord;
-    templateId: string;
-    payload: Record<string, unknown>;
+    sourceType: NotificationSourceType;
+    context: Record<string, unknown>;
     eligible: NotificationChannel[];
     ineligible: { channel: NotificationChannel; reason: string }[];
   }) {
-    const {
-      notificationId,
-      recipient,
-      templateId,
-      payload,
-      eligible,
-      ineligible,
-    } = params;
+    const { notificationId, recipient, sourceType, context, eligible, ineligible } =
+      params;
     for (const skipped of ineligible) {
       await this.db.notificationDelivery.upsert({
         where: {
@@ -681,13 +666,6 @@ export class NotificationService {
       });
     }
 
-    const rendered = await renderTemplateFromDb({
-      db: this.db,
-      templateId,
-      payload: payload,
-      throwOnMissingPayload: true,
-    });
-
     for (const channel of actionable) {
       if (channel === "IN_APP") {
         await this.db.notificationDelivery.upsert({
@@ -713,15 +691,13 @@ export class NotificationService {
         continue;
       }
 
-      if (channel === "EMAIL" && !recipient.primaryEmail) {
-        continue;
-      }
+      if (channel === "EMAIL" && !recipient.primaryEmail) continue;
       if (
         (channel === "SMS" || channel === "WHATSAPP") &&
         !recipient.primaryPhone
-      ) {
+      )
         continue;
-      }
+
       const delivery = await this.db.$transaction(async (tx) => {
         if (METERED_CHANNELS.includes(channel)) {
           const subscription = await tx.notificationSubscription.findFirst({
@@ -765,23 +741,38 @@ export class NotificationService {
         });
       });
       if (!delivery) continue;
-      try {
-        const bodyText = rendered.body;
-        const subject = rendered.subject ?? "Notification";
 
+      if (channel === "EMAIL" && recipient.primaryEmail) {
+        // Rendering happens in the worker (via @repo/transactional)
+        // to keep the API package free of React/email template dependencies.
+        await emailQueue.add("send-email", {
+          deliveryId: delivery.id,
+          tenant: this.tenant,
+          toEmail: recipient.primaryEmail,
+          sourceType: String(sourceType),
+          context,
+        });
+        continue;
+      }
+
+      // SMS and WhatsApp: plain-text body assembled from context
+      const smsBody = Object.entries(context)
+        .filter(([, v]) => v !== null && v !== undefined && v !== 0 && v !== "0")
+        .map(([k, v]) => `${k}: ${String(v)}`)
+        .join(", ");
+
+      try {
         let res: { provider: string; providerMsgId: string } | null = null;
-        if (channel === "EMAIL" && recipient.primaryEmail) {
-          res = await sendEmail({
-            toEmail: recipient.primaryEmail,
-            subject,
-            bodyText,
+
+        if (channel === "SMS" && recipient.primaryPhone) {
+          res = await sendSms({
+            toPhone: recipient.primaryPhone,
+            bodyText: smsBody,
           });
-        } else if (channel === "SMS" && recipient.primaryPhone) {
-          res = await sendSms({ toPhone: recipient.primaryPhone, bodyText });
         } else if (channel === "WHATSAPP" && recipient.primaryPhone) {
           res = await sendWhatsapp({
             toPhone: recipient.primaryPhone,
-            bodyText,
+            bodyText: smsBody,
           });
         }
 
@@ -817,20 +808,3 @@ export class NotificationService {
   }
 }
 
-const VAR_EXTRACT_REGEX = /{{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*}}/g;
-export function extractTemplateVars(input: string | null): string[] {
-  if (!input) return [];
-
-  const seen = new Set<string>();
-  const vars: string[] = [];
-  let match: RegExpExecArray | null;
-  while ((match = VAR_EXTRACT_REGEX.exec(input)) !== null) {
-    const key = match[1];
-    if (!key) continue;
-    if (!seen.has(key)) {
-      seen.add(key);
-      vars.push(key);
-    }
-  }
-  return vars;
-}

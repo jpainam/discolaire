@@ -33,14 +33,6 @@ const buildNotificationWhere = (params: {
             },
           },
           {
-            template: {
-              name: {
-                contains: query,
-                mode: "insensitive",
-              },
-            },
-          },
-          {
             recipient: {
               primaryEmail: {
                 contains: query,
@@ -184,7 +176,6 @@ export const notificationRouter = {
         include: {
           deliveries: true,
           recipient: true,
-          template: true,
         },
         where: notificationWhere,
       });

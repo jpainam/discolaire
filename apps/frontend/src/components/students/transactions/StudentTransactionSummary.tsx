@@ -89,7 +89,7 @@ export async function StudentTransactionSummary({
         return (
           <MetricCard key={index} variant={"default"} className="text-xs">
             <MetricCardHeader className="flex items-center justify-between gap-2">
-              <MetricCardTitle className="truncate uppercase">
+              <MetricCardTitle className="truncate text-xs uppercase">
                 {title}
               </MetricCardTitle>
               <Banknote className="size-4" />
@@ -121,7 +121,7 @@ export async function StudentTransactionSummary({
       })}
       <MetricCard variant={"success"}>
         <MetricCardHeader className="flex items-center justify-between gap-2">
-          <MetricCardTitle className="truncate uppercase">
+          <MetricCardTitle className="truncate text-xs uppercase">
             {t("amountPaid")}
           </MetricCardTitle>
           <BanknoteArrowDown className="size-4" />
@@ -137,7 +137,7 @@ export async function StudentTransactionSummary({
       </MetricCard>
       <MetricCard variant={"warning"}>
         <MetricCardHeader className="flex items-center justify-between gap-2">
-          <MetricCardTitle className="truncate uppercase">
+          <MetricCardTitle className="truncate text-xs uppercase">
             {t("discount")}
           </MetricCardTitle>
           <BanknoteX className="size-4" />
@@ -153,7 +153,7 @@ export async function StudentTransactionSummary({
       </MetricCard>
       <MetricCard variant={"destructive"}>
         <MetricCardHeader className="flex items-center justify-between gap-2">
-          <MetricCardTitle className="truncate uppercase">
+          <MetricCardTitle className="truncate text-xs uppercase">
             {t("amountDue")}
           </MetricCardTitle>
           <BanknoteArrowUp className="size-4" />
@@ -169,7 +169,7 @@ export async function StudentTransactionSummary({
       </MetricCard>
       <MetricCard variant={"success"}>
         <MetricCardHeader className="flex items-center justify-between gap-2">
-          <MetricCardTitle className="truncate uppercase">
+          <MetricCardTitle className="truncate text-xs uppercase">
             {t("transactionsCompleted")}
           </MetricCardTitle>
           <HandCoins className="size-4" />

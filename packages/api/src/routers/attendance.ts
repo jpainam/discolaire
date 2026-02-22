@@ -418,12 +418,7 @@ export const attendanceRouter = {
       });
     }),
   notify: protectedProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        templateId: z.string().optional(),
-      }),
-    )
+    .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const attendance = await ctx.db.attendance.findUniqueOrThrow({
         where: {
@@ -441,30 +436,13 @@ export const attendanceRouter = {
           },
         },
       });
-      const templateId =
-        input.templateId ??
-        (
-          await ctx.db.notificationTemplate.findFirst({
-            where: {
-              schoolId: ctx.schoolId,
-              sourceType: NotificationSourceType.ABSENCE_ALERTS,
-              status: "ACTIVE",
-              channel: "EMAIL",
-            },
-            select: { id: true },
-          })
-        )?.id;
-
-      if (!templateId) {
-        throw new Error("No active attendance notification template found.");
-      }
 
       const attendanceData = attendanceToData(attendance.data);
       const studentName = `${attendance.student.firstName ?? ""} ${
         attendance.student.lastName ?? ""
       }`.trim();
 
-      const payload = {
+      const context = {
         attendanceId: attendance.id,
         studentName,
         studentId: attendance.studentId,
@@ -491,8 +469,7 @@ export const attendanceRouter = {
             profile: "contact",
           },
           sourceId: String(attendance.id),
-          templateId,
-          payload,
+          context,
         })),
       });
     }),

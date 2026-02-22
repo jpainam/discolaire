@@ -18,7 +18,7 @@ export function ReportCardSummary({
   const t = useTranslations();
 
   return (
-    <div className="flex-1 border text-sm">
+    <div className="flex-1 border text-xs">
       <div className="bg-muted/50 py-2 text-center font-bold">
         {t("result_summary")}
       </div>

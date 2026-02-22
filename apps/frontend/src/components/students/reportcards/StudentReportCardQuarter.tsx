@@ -90,7 +90,7 @@ export function StudentReportCardQuarter({
         pdfHref={`/api/pdfs/reportcards/ipbw/trimestres/?studentId=${studentId}&trimestreId=${termId}`}
       />
       <div>
-        <div className="bg-background overflow-hidden rounded-md">
+        <div className="bg-background overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">

@@ -28,11 +28,11 @@ import { breadcrumbIcons } from "~/icons";
 import { useBreadcrumbsStore } from "~/stores/breadcrumbs";
 import { useRightPanel } from "./RightPanelProvider";
 
-export function SiteHeader({ schoolYearId }: { schoolYearId: string }) {
+export function  SiteHeader({ schoolYearId }: { schoolYearId: string }) {
   const breadcrumbs = useBreadcrumbsStore((s) => s.items);
   const { isOpen, toggle } = useRightPanel();
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+    <header className="sticky top-0 z-10 flex h-(--header-height) shrink-0 items-center gap-2 rounded-t-xl border-b bg-background transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" />

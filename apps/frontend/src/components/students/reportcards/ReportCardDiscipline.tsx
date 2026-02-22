@@ -27,7 +27,7 @@ export function ReportCardDiscipline({
   consigne: number;
 }) {
   const t = useTranslations();
-  const rowClassName = "border-r text-sm";
+  const rowClassName = "border-r";
   return (
     <div className="border">
       <Table>

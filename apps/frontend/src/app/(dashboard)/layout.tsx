@@ -57,6 +57,7 @@ export default async function Layout({
 
   return (
     <SidebarProvider
+      className="h-svh"
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 58)",
@@ -74,7 +75,7 @@ export default async function Layout({
           <ModalProvider>
             <AppSidebar className="p-0" variant="inset" />
             <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
-            <SidebarInset className="border">
+            <SidebarInset className="border overflow-y-auto">
               <RightPanelProvider>
                 <HydrateClient>
                   <ErrorBoundary errorComponent={ErrorFallback}>

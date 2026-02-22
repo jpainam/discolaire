@@ -42,7 +42,6 @@ import { notificationRouter } from "./routers/notification";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { notificationRecipientRouter } from "./routers/notificationRecipient";
 import { notificationSubscriptionRouter } from "./routers/notificationSubscription";
-import { notificationTemplateRouter } from "./routers/notificationTemplate";
 import { permissionRouter } from "./routers/permission";
 import { photoRouter } from "./routers/photo";
 import { recipientRouter } from "./routers/recipient";
@@ -146,7 +145,6 @@ export const appRouter = createTRPCRouter({
   appreciation: appreciationRouter,
   skillAcquisition: skillAcquisitionRouter,
   notification: notificationRouter,
-  notificationTemplate: notificationTemplateRouter,
 });
 
 // export type definition of API

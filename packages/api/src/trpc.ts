@@ -58,7 +58,7 @@ export const createTRPCContext = async (opts: {
   }
   const db = getDb({ connectionString: env.DATABASE_URL, tenant });
   const schoolYearId = getCookieValue(opts.headers, "x-school-year");
-  const services = createServices(db);
+  const services = createServices(db, tenant);
   return {
     authApi,
     session,

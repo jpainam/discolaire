@@ -99,11 +99,6 @@ export const userNotificationRouter = {
           },
         },
         include: {
-          template: {
-            select: {
-              name: true,
-            },
-          },
           deliveries: {
             where: {
               channel: "IN_APP",
@@ -128,10 +123,9 @@ export const userNotificationRouter = {
         const inAppDelivery = notification.deliveries[0];
         return {
           id: notification.id,
-          title:
-            notification.template?.name ?? toTitle(notification.sourceType),
+          title: toTitle(notification.sourceType),
           message: getMessageFromPayload(
-            notification.payload,
+            notification.context,
             notification.sourceId,
           ),
           read: (inAppDelivery?.events.length ?? 0) > 0,
@@ -284,11 +278,6 @@ export const userNotificationRouter = {
         },
         take: input.limit,
         include: {
-          template: {
-            select: {
-              name: true,
-            },
-          },
           deliveries: {
             where: {
               channel: "IN_APP",
@@ -313,10 +302,9 @@ export const userNotificationRouter = {
         const inAppDelivery = notification.deliveries[0];
         return {
           id: notification.id,
-          title:
-            notification.template?.name ?? toTitle(notification.sourceType),
+          title: toTitle(notification.sourceType),
           message: getMessageFromPayload(
-            notification.payload,
+            notification.context,
             notification.sourceId,
           ),
           read: (inAppDelivery?.events.length ?? 0) > 0,

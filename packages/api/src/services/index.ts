@@ -51,23 +51,27 @@ const serviceRegistry = {
   schoolyear: SchoolYearService,
   staff: StaffService,
   user: UserService,
-  notification: NotificationService,
   academicSnapshot: AcademicSnapshotService,
   logActivity: LogActivityService,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, ServiceCtor<any>>;
 
-export type Services = {
+type RegistryServices = {
   [K in keyof typeof serviceRegistry]: InstanceType<
     (typeof serviceRegistry)[K]
   >;
 };
 
-export function createServices(db: PrismaClient): Services {
+export type Services = RegistryServices & { notification: NotificationService };
+
+export function createServices(db: PrismaClient, tenant: string): Services {
   const entries = Object.entries(serviceRegistry).map(([name, Ctor]) => {
     const instance = new Ctor(db);
     return [name, instance];
   });
 
-  return Object.fromEntries(entries) as Services;
+  return {
+    ...(Object.fromEntries(entries) as RegistryServices),
+    notification: new NotificationService(db, tenant),
+  };
 }

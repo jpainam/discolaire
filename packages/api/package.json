@@ -10,7 +10,9 @@
       "default": "./src/index.ts"
     },
     "./services": "./src/services/index.ts",
-    "./email": "./src/email.ts"
+    "./email": "./src/email.ts",
+    "./notifications/email-queue": "./src/notifications/email-queue.ts",
+    "./notifications/email": "./src/notifications/email.ts"
   },
   "scripts": {
     "build": "tsc",

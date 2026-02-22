@@ -31,3 +31,4 @@ export async function initializeJobs() {
 export * from "./db-backup.worker";
 //export * from "./grade-notification.worker";
 export * from "./log.worker";
+export * from "./email-notification.worker";

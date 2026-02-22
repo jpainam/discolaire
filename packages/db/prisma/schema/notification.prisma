@@ -14,60 +14,6 @@ enum NotificationStatus {
     SKIPPED
 }
 
-model NotificationDelivery {
-    id             String              @id @default(cuid())
-    notificationId String
-    channel        NotificationChannel
-    status         NotificationStatus  @default(PENDING)
-    provider       String? // "twilio", "ses", "whatsapp"
-    providerMsgId  String? // message id from provider
-    error          String?
-    attemptCount   Int                 @default(0)
-    // if skipped due to subscription/credit rules
-    skipReason     String?
-    sentAt         DateTime?
-    createdAt      DateTime            @default(now())
-    updateAt       DateTime            @updatedAt
-    notification   Notification        @relation(fields: [notificationId], references: [id], onDelete: Cascade)
-    events         NotificationEvent[]
-
-    @@unique([notificationId, channel])
-    @@index([notificationId, channel])
-    @@index([status, channel])
-}
-
-model Notification {
-    id          String                 @id @default(cuid())
-    schoolId    String
-    recipientId String
-    recipient   NotificationRecipient  @relation(fields: [recipientId], references: [id], onDelete: Cascade)
-    sourceType  NotificationSourceType
-    sourceId    String
-    templateId  String?
-    template    NotificationTemplate?  @relation(fields: [templateId], references: [id])
-    payload     Json
-    createdAt   DateTime               @default(now())
-    deliveries  NotificationDelivery[]
-
-    @@unique([schoolId, recipientId, sourceType, sourceId])
-    @@index([schoolId, recipientId, createdAt])
-    @@index([schoolId, sourceType, sourceId])
-}
-
-model NotificationPreference {
-    id          String                 @id @default(cuid())
-    recipientId String
-    recipient   NotificationRecipient  @relation(fields: [recipientId], references: [id], onDelete: Cascade)
-    sourceType  NotificationSourceType
-    channel     NotificationChannel
-    enabled     Boolean                @default(true)
-    createdAt   DateTime               @default(now())
-    updatedAt   DateTime               @updatedAt
-
-    @@unique([recipientId, sourceType, channel])
-    @@index([recipientId])
-}
-
 enum NotificationChannel {
     EMAIL
     SMS
@@ -81,11 +27,12 @@ enum NotificationRecipientProfile {
     STAFF
 }
 
+// One record per (school, entity) — links a staff/student/contact to the notification system.
 model NotificationRecipient {
     id            String                       @id @default(cuid())
     schoolId      String
     profile       NotificationRecipientProfile
-    entityId      String
+    entityId      String // foreign key to Staff.id / Student.id / Contact.id
     userId        String?
     primaryEmail  String?
     primaryPhone  String?
@@ -102,66 +49,79 @@ model NotificationRecipient {
     @@index([userId])
 }
 
-model NotificationEvent {
-    id         String   @id @default(cuid())
-    deliveryId String
-    type       String // "REQUESTED" | "PROVIDER_ACCEPTED" | "DELIVERED" | ...
-    data       Json?
-    createdAt  DateTime @default(now())
+// One record per (recipient, sourceType, sourceId).
+// The unique constraint acts as a deduplication guard — creating a Notification
+// for an already-recorded source event is a no-op (or idempotent upsert).
+model Notification {
+    id          String                 @id @default(cuid())
+    schoolId    String
+    recipientId String
+    recipient   NotificationRecipient  @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+    sourceType  NotificationSourceType
+    sourceId    String // e.g., absence record id, invoice id, grade id
+    // Optional contextual data used when rendering the hardcoded message content.
+    context     Json?
+    createdAt   DateTime               @default(now())
+    deliveries  NotificationDelivery[]
 
-    delivery NotificationDelivery @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+    @@unique([schoolId, recipientId, sourceType, sourceId])
+    @@index([schoolId, recipientId, createdAt])
+    @@index([schoolId, sourceType, sourceId])
+}
+
+// One record per (notification, channel).
+// Tracks whether a channel delivery was attempted, succeeded, failed, or skipped.
+model NotificationDelivery {
+    id             String              @id @default(cuid())
+    notificationId String
+    channel        NotificationChannel
+    status         NotificationStatus  @default(PENDING)
+    provider       String? // "twilio", "ses", "whatsapp"
+    providerMsgId  String? // message id from the external provider
+    error          String?
+    attemptCount   Int                 @default(0)
+    skipReason     String? // populated when status=SKIPPED (e.g., "channel_disabled")
+    sentAt         DateTime?
+    createdAt      DateTime            @default(now())
+    updatedAt      DateTime            @updatedAt
+    notification   Notification        @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+    events         NotificationEvent[]
+
+    @@unique([notificationId, channel])
+    @@index([notificationId, channel])
+    @@index([status, channel])
+}
+
+// Webhook / provider callback events appended to a delivery timeline.
+model NotificationEvent {
+    id         String               @id @default(cuid())
+    deliveryId String
+    type       String // "REQUESTED" | "PROVIDER_ACCEPTED" | "DELIVERED" | "BOUNCED" | ...
+    data       Json?
+    createdAt  DateTime             @default(now())
+    delivery   NotificationDelivery @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
 
     @@index([deliveryId, createdAt])
 }
 
-enum NotificationTemplateStatus {
-    DRAFT
-    ACTIVE
-    ARCHIVED
-}
-
-enum NotificationTemplateVarType {
-    STRING
-    NUMBER
-    BOOLEAN
-    DATE
-    DATETIME
-}
-
-model NotificationTemplate {
-    id              String                     @id @default(cuid())
-    schoolId        String
-    sourceType      NotificationSourceType
-    channel         NotificationChannel
-    locale          String? // fr, en, es
-    name            String
-    status          NotificationTemplateStatus @default(DRAFT)
-    version         Int                        @default(1)
-    subjectTemplate String?
-    bodyTemplate    String
-    createdAt       DateTime                   @default(now())
-    updatedAt       DateTime                   @updatedAt
-    notifications   Notification[]
-
-    @@index([schoolId, sourceType, channel, locale])
-}
-
-model NotificationTemplateVariable {
-    id          String                      @id @default(cuid())
-    schoolId    String
+// Per-recipient, per-source-type, per-channel opt-in/out.
+// EMAIL and IN_APP rows are seeded with enabled=true for every new recipient (free).
+// SMS and WHATSAPP rows are seeded with enabled=false — the recipient must opt in
+// AND have an active NotificationSubscription with sufficient balance for those channels.
+//
+// Dispatch gate: preference.enabled = true AND (channel is free OR subscription.balance > 0)
+model NotificationPreference {
+    id          String                 @id @default(cuid())
+    recipientId String
+    recipient   NotificationRecipient  @relation(fields: [recipientId], references: [id], onDelete: Cascade)
     sourceType  NotificationSourceType
-    key         String
-    label       String
-    description String?
-    example     String?
-    type        NotificationTemplateVarType
-    // e.g., date: dd/MM/yyyy
-    formatHint  String?
-    createdAt   DateTime                    @default(now())
-    updatedAt   DateTime                    @updatedAt
+    channel     NotificationChannel
+    enabled     Boolean                @default(true)
+    createdAt   DateTime               @default(now())
+    updatedAt   DateTime               @updatedAt
 
-    @@unique([schoolId, sourceType, key])
-    @@index([schoolId, sourceType])
+    @@unique([recipientId, sourceType, channel])
+    @@index([recipientId])
 }
 
 enum SubscriptionStatus {
@@ -170,23 +130,45 @@ enum SubscriptionStatus {
     CANCELED
 }
 
+// Credit-based access to paid channels (SMS, WHATSAPP).
+// EMAIL and IN_APP do not need a subscription — they are always available.
+// One subscription per (recipient, channel). Balance is decremented on each sent message.
 model NotificationSubscription {
     id          String                @id @default(cuid())
-    recipientId String
-    recipient   NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
-    channel     NotificationChannel
-    status      SubscriptionStatus    @default(ACTIVE)
-    // Credits in "messages". Email will be free/unlimited  and large number of unlimited credit
-    balance     Int
-    plan        String
-    createdAt   DateTime              @default(now())
-    createdById String
     schoolId    String
-    school      School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-    createdBy   User                  @relation("CreatedSubscriptions", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    updatedAt   DateTime              @updatedAt
+    recipientId String
+    channel     NotificationChannel   // typically SMS or WHATSAPP
+    status      SubscriptionStatus    @default(ACTIVE)
+    balance     Int                   // remaining message credits
+    plan        String?               // e.g., "sms_50", "whatsapp_100"
     comment     String?
+    createdAt   DateTime              @default(now())
+    updatedAt   DateTime              @updatedAt
+    createdById String
+    school      School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    recipient   NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+    createdBy   User                  @relation("CreatedSubscriptions", fields: [createdById], references: [id], onUpdate: Cascade)
 
+    creditLogs  NotificationCreditLog[]
+
+    @@unique([recipientId, channel])
     @@index([recipientId, channel, status])
     @@index([schoolId, channel, status])
+}
+
+// Immutable log of every credit change on a subscription.
+// Allows auditing top-ups, deductions, and refunds.
+model NotificationCreditLog {
+    id             String                   @id @default(cuid())
+    subscriptionId String
+    subscription   NotificationSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+    delta          Int    // positive = top-up, negative = deduction
+    balanceAfter   Int    // snapshot of balance after this operation
+    reason         String // "TOP_UP" | "MESSAGE_SENT" | "REFUND" | "ADJUSTMENT"
+    notificationId String? // set when reason = MESSAGE_SENT
+    createdById    String?
+    createdBy      User?                    @relation("CreditLogCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+    createdAt      DateTime                 @default(now())
+
+    @@index([subscriptionId, createdAt])
 }
