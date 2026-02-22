@@ -8,23 +8,15 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { DollarSign } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { TermType } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
+import { EmptyComponent } from "~/components/EmptyComponent";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "~/components/ui/empty";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
@@ -152,16 +144,19 @@ export function StudentGradesheetTable({
 
   if (!classroom) {
     return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <DollarSign />
-          </EmptyMedia>
-          <EmptyTitle>Aucune note</EmptyTitle>
-          <EmptyDescription>{t("student_not_registered_yet")}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent></EmptyContent>
-      </Empty>
+      <EmptyComponent
+        title="Aucune note"
+        description={t("student_not_registered_yet")}
+      />
+    );
+  }
+
+  if (grades.length == 0) {
+    return (
+      <EmptyComponent
+        title="Aucune note"
+        description="Cette élève ne possède aucune note"
+      />
     );
   }
 
