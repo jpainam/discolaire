@@ -15,10 +15,17 @@ function setThemeCookie(theme: string) {
   document.cookie = `${COOKIE_NAME}=${theme}; path=/; max-age=31536000; SameSite=Lax; ${window.location.protocol === "https:" ? "Secure;" : ""}`;
 }
 
+function setScaledCookie(scaled: boolean) {
+  if (typeof window === "undefined") return;
+
+  document.cookie = `theme-scaled=${scaled}; path=/; max-age=31536000; SameSite=Lax; ${window.location.protocol === "https:" ? "Secure;" : ""}`;
+}
+
 interface ThemeContextType {
   activeTheme: string;
   isScaled: boolean;
   setActiveTheme: (theme: string) => void;
+  setIsScaled: (scaled: boolean) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -26,7 +33,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({
   children,
   initialTheme,
-  isScaled,
+  isScaled: initialIsScaled,
 }: {
   children: ReactNode;
   initialTheme?: string;
@@ -37,10 +44,19 @@ export function ThemeProvider({
       ? initialTheme
       : DEFAULT_THEME,
   );
+  const [isScaled, setIsScaledState] = useState<boolean>(
+    initialIsScaled ?? false,
+  );
+
   const setActiveThemeSafe = (theme: string) => {
     setActiveTheme(
       Object.keys(defaultThemes).includes(theme) ? theme : DEFAULT_THEME,
     );
+  };
+
+  const setIsScaled = (scaled: boolean) => {
+    setIsScaledState(scaled);
+    setScaledCookie(scaled);
   };
 
   useEffect(() => {
@@ -50,6 +66,7 @@ export function ThemeProvider({
 
     setThemeCookie(nextTheme);
 
+    // Update body classes
     Array.from(document.body.classList)
       .filter((className) => className.startsWith("theme-"))
       .forEach((className) => {
@@ -59,9 +76,19 @@ export function ThemeProvider({
       document.body.classList.add(`theme-${nextTheme}`);
     }
     if (isScaled) document.body.classList.add("theme-scaled");
-    // if (activeTheme.endsWith("-scaled")) {
-    //   document.body.classList.add("theme-scaled");
-    // }
+
+    // Also update the SSR wrapper div so themes switch without a page reload
+    const themeRoot = document.getElementById("theme-root");
+    if (themeRoot) {
+      Array.from(themeRoot.classList)
+        .filter((className) => className.startsWith("theme-"))
+        .forEach((className) => {
+          themeRoot.classList.remove(className);
+        });
+      if (nextTheme !== "default") {
+        themeRoot.classList.add(`theme-${nextTheme}`);
+      }
+    }
   }, [activeTheme, isScaled]);
 
   return (
@@ -76,7 +103,8 @@ export function ThemeProvider({
         value={{
           activeTheme,
           setActiveTheme: setActiveThemeSafe,
-          isScaled: isScaled ?? false,
+          isScaled,
+          setIsScaled,
         }}
       >
         {children}
@@ -85,7 +113,7 @@ export function ThemeProvider({
   );
 }
 
-export function useThemeConfig() {
+export function useThemeConfig(): ThemeContextType {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error("useThemeConfig must be used within an ThemeProvider");

@@ -210,6 +210,32 @@ export function ImportStudentRegistrationNumber() {
     });
   };
 
+  const exportToCSV = (rowsToExport: RowState[], filename: string) => {
+    const csvData = rowsToExport.map((r) => r.data);
+    const csv = Papa.unparse(csvData, { columns: headers });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExportMatched = () => {
+    exportToCSV(
+      rows.filter((r) => r.status === "matched"),
+      "matched.csv",
+    );
+  };
+
+  const handleExportUnmatched = () => {
+    exportToCSV(
+      rows.filter((r) => r.status === "unmatched"),
+      "unmatched.csv",
+    );
+  };
+
   const filteredRows =
     filterMode === "all"
       ? rows
@@ -344,6 +370,27 @@ export function ImportStudentRegistrationNumber() {
           {updateRegistrationMutation.isPending && <Spinner />}
           Valider
         </Button>
+
+        {isMatched && (
+          <>
+            <Button
+              onClick={handleExportMatched}
+              disabled={(matchStats?.matched ?? 0) === 0}
+              variant="outline"
+            >
+              <DownloadIcon />
+              Exporter matchés
+            </Button>
+            <Button
+              onClick={handleExportUnmatched}
+              disabled={(matchStats?.unmatched ?? 0) === 0}
+              variant="outline"
+            >
+              <DownloadIcon />
+              Exporter non matchés
+            </Button>
+          </>
+        )}
       </div>
 
       {/* Match stats banner */}

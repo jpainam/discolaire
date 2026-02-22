@@ -6,6 +6,7 @@ import {
   Check,
   ChevronRight,
   Moon,
+  Scaling,
   Shuffle,
   Sun,
 } from "lucide-react";
@@ -123,7 +124,7 @@ function ColorBox({ color }: { color: string }) {
 }
 
 function ThemeControls() {
-  const { setActiveTheme } = useThemeConfig();
+  const { setActiveTheme, isScaled, setIsScaled } = useThemeConfig();
   const { setMetaColor } = useMetaColor();
   const { setTheme, resolvedTheme } = useTheme();
 
@@ -143,6 +144,10 @@ function ThemeControls() {
     );
   }, [resolvedTheme, setTheme, setMetaColor]);
 
+  const toggleScaled = useCallback(() => {
+    setIsScaled(!isScaled);
+  }, [isScaled, setIsScaled]);
+
   return (
     <div className="flex gap-1">
       <Tooltip>
@@ -157,6 +162,24 @@ function ThemeControls() {
         </TooltipTrigger>
         <TooltipContent side="bottom">
           <p className="text-xs">Toggle theme</p>
+        </TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            className="h-7 w-7 p-0"
+            onClick={toggleScaled}
+            data-active={isScaled}
+          >
+            <Scaling
+              className={`h-3.5 w-3.5 ${isScaled ? "text-primary" : ""}`}
+            />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          <p className="text-xs">{isScaled ? "Disable scaling" : "Enable scaling"}</p>
         </TooltipContent>
       </Tooltip>
 

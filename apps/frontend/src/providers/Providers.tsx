@@ -22,6 +22,7 @@ export async function Providers(props: PropsWithChildren) {
 
   return (
     <div
+      id="theme-root"
       className={cn(
         activeThemeValue && activeThemeValue !== "default"
           ? `theme-${activeThemeValue}`
