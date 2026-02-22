@@ -1,6 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
-import { z } from "zod/v4";
+import z from "zod";
 
 import { protectedProcedure } from "../trpc";
 
@@ -140,6 +140,7 @@ export const importStudentRouter = {
         students.forEach((s) => {
           if (s.registrationNumber) studentMap.set(s.registrationNumber, s);
         });
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       } else if (input.by === "full_name") {
         const students = await ctx.db.student.findMany({
           where: {
@@ -147,7 +148,12 @@ export const importStudentRouter = {
               some: { schoolYear: { id: ctx.schoolYearId } },
             },
           },
-          select: { id: true, firstName: true, lastName: true, registrationNumber: true },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            registrationNumber: true,
+          },
         });
         students.forEach((s) => {
           const key1 = normalize(s.firstName + " " + s.lastName);
@@ -159,8 +165,7 @@ export const importStudentRouter = {
 
       const results = input.match_values.map((value, index) => {
         const newReg = input.new_registrations[index] ?? "";
-        const lookupKey =
-          input.by === "full_name" ? normalize(value) : value;
+        const lookupKey = input.by === "full_name" ? normalize(value) : value;
         const student = studentMap.get(lookupKey);
 
         if (!student) {

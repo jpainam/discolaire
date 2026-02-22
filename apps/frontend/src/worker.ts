@@ -8,6 +8,7 @@
  */
 import "./workers/email-notification.worker";
 import "./workers/db-backup.worker";
+
 import { initializeJobs } from "./workers";
 
 console.log("[Worker] Starting standalone worker process...");

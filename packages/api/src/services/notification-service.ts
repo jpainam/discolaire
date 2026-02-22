@@ -579,8 +579,14 @@ export class NotificationService {
     eligible: NotificationChannel[];
     ineligible: { channel: NotificationChannel; reason: string }[];
   }) {
-    const { notificationId, recipient, sourceType, context, eligible, ineligible } =
-      params;
+    const {
+      notificationId,
+      recipient,
+      sourceType,
+      context,
+      eligible,
+      ineligible,
+    } = params;
     for (const skipped of ineligible) {
       await this.db.notificationDelivery.upsert({
         where: {
@@ -757,7 +763,9 @@ export class NotificationService {
 
       // SMS and WhatsApp: plain-text body assembled from context
       const smsBody = Object.entries(context)
-        .filter(([, v]) => v !== null && v !== undefined && v !== 0 && v !== "0")
+        .filter(
+          ([, v]) => v !== null && v !== undefined && v !== 0 && v !== "0",
+        )
         .map(([k, v]) => `${k}: ${String(v)}`)
         .join(", ");
 
@@ -807,4 +815,3 @@ export class NotificationService {
     });
   }
 }
-

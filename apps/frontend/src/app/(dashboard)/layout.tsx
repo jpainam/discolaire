@@ -75,7 +75,7 @@ export default async function Layout({
           <ModalProvider>
             <AppSidebar className="p-0" variant="inset" />
             <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
-            <SidebarInset className="border overflow-y-auto">
+            <SidebarInset className="overflow-y-auto border">
               <RightPanelProvider>
                 <HydrateClient>
                   <ErrorBoundary errorComponent={ErrorFallback}>

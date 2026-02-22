@@ -76,7 +76,7 @@ interface NotificationRow {
   channel: NotificationChannel;
   status: NotificationStatus;
   content: string;
-  payload: unknown;
+  context: unknown;
   recipientName: string;
   recipientEmail: string;
   isRead: boolean;
@@ -249,8 +249,8 @@ export function NotificationTable({
           sourceType: notification.sourceType,
           channel,
           status,
-          content: notification.template?.name ?? notification.sourceId,
-          payload: notification.payload ?? {},
+          content: notification.sourceId,
+          context: notification.context ?? {},
           recipientName: recipientLabel,
           recipientEmail:
             notification.recipient.primaryEmail ??
@@ -616,7 +616,7 @@ export function NotificationTable({
               <div>
                 <p className="text-muted-foreground mb-2 text-xs">Payload</p>
                 <pre className="bg-muted text-foreground overflow-auto rounded-lg p-3 text-xs">
-                  {JSON.stringify(viewingNotification.payload, null, 2)}
+                  {JSON.stringify(viewingNotification.context, null, 2)}
                 </pre>
               </div>
 

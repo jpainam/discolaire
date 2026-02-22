@@ -71,7 +71,7 @@ interface NotificationRow {
   channel: NotificationChannel;
   status: NotificationStatus;
   content: string;
-  payload: unknown;
+  context: unknown;
   recipientName: string;
   recipientEmail: string;
   isRead: boolean;
@@ -247,8 +247,8 @@ export function NotificationTable({
           sourceType: notification.sourceType,
           channel,
           status,
-          content: notification.template?.name ?? notification.sourceId,
-          payload: notification.payload ?? {},
+          content: notification.sourceType,
+          context: notification.context ?? {},
           recipientName: recipientLabel,
           recipientEmail:
             notification.recipient.primaryEmail ??
