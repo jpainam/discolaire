@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { BirthdayCakeIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   useMutation,
   useQueryClient,
@@ -35,6 +37,11 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { UserLink } from "~/components/UserLink";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
@@ -45,7 +52,7 @@ import { cn } from "~/lib/utils";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
-import { getFullName } from "~/utils";
+import { getFullName, isAnniversary } from "~/utils";
 
 export function ClassroomStudentTable({
   classroomId,
@@ -148,7 +155,7 @@ export function ClassroomStudentTable({
                   }}
                 />
               </TableHead>
-              <TableHead className="w-[20px]"></TableHead>
+
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("registrationNumber")}</TableHead>
               <TableHead>{t("placeOfBirth")}</TableHead>
@@ -177,14 +184,30 @@ export function ClassroomStudentTable({
                       }}
                     />
                   </TableCell>
-                  <TableCell>{index + 1}</TableCell>
+
                   <TableCell>
-                    <UserLink
-                      id={stud.id}
-                      name={getFullName(stud)}
-                      avatar={stud.avatar}
-                      profile="student"
-                    />
+                    <div className="flex items-center gap-2">
+                      <UserLink
+                        id={stud.id}
+                        name={getFullName(stud)}
+                        avatar={stud.avatar}
+                        profile="student"
+                      />
+                      {stud.dateOfBirth && isAnniversary(stud.dateOfBirth) && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HugeiconsIcon
+                              icon={BirthdayCakeIcon}
+                              className="size-4 animate-pulse text-pink-600"
+                              strokeWidth={2}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Anniversaire</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {stud.registrationNumber}

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { BirthdayCakeIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Search, UserCircle } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -41,6 +43,11 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -55,7 +62,7 @@ import {
 } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
-import { getFullName } from "~/utils";
+import { getFullName, isAnniversary } from "~/utils";
 import { Badge as BaseBadge } from "../base-badge";
 import { EmptyComponent } from "../EmptyComponent";
 import { UpdateRegistrationNumber } from "../students/UpdateRegistrationNumber";
@@ -181,14 +188,6 @@ export function QuickStudentList() {
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-row items-center gap-1.5">
-                      {st.registrationNumber && (
-                        <Badge
-                          variant="secondary"
-                          className="border-border border"
-                        >
-                          {st.registrationNumber}
-                        </Badge>
-                      )}
                       {st.status == "ACTIVE" ? (
                         <Badge variant="outline" className="gap-1.5">
                           <span
@@ -205,6 +204,28 @@ export function QuickStudentList() {
                           ></span>
                           {t(`${st.status.toLowerCase()}`)}
                         </Badge>
+                      )}
+                      {st.registrationNumber && (
+                        <Badge
+                          variant="secondary"
+                          className="border-border border"
+                        >
+                          {st.registrationNumber}
+                        </Badge>
+                      )}
+                      {st.dateOfBirth && isAnniversary(st.dateOfBirth) && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HugeiconsIcon
+                              icon={BirthdayCakeIcon}
+                              className="size-4 animate-pulse text-pink-600"
+                              strokeWidth={2}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Anniversaire</p>
+                          </TooltipContent>
+                        </Tooltip>
                       )}
                     </div>
                   </TableCell>

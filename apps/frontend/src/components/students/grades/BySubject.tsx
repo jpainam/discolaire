@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
+
+import type { RouterOutputs } from "@repo/api";
 
 import FlatBadge from "~/components/FlatBadge";
 import {
@@ -14,19 +14,12 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { Separator } from "~/components/ui/separator";
-import { Skeleton } from "~/components/ui/skeleton";
-import { useTRPC } from "~/trpc/react";
 
-export function BySubject() {
-  const params = useParams<{ id: string }>();
-  const trpc = useTRPC();
-
-  const { data: grades, isPending: gradesIsPending } = useQuery(
-    trpc.student.grades.queryOptions({
-      id: params.id,
-    }),
-  );
-
+export function BySubject({
+  grades,
+}: {
+  grades: RouterOutputs["student"]["grades"];
+}) {
   const [__, setGradeId] = useQueryState("gradeId", parseAsInteger);
   const [_, setGradeSheetId] = useQueryState("gradesheetId", parseAsInteger);
   const [termId] = useQueryState("termId", parseAsString);
@@ -34,7 +27,7 @@ export function BySubject() {
   const locale = useLocale();
 
   const { subjects, subjectSums, filteredGrades } = useMemo(() => {
-    let filteredGrades = grades ?? [];
+    let filteredGrades = grades;
     if (termId) {
       filteredGrades = filteredGrades.filter(
         (g) => g.gradeSheet.termId === termId,
@@ -61,15 +54,7 @@ export function BySubject() {
   }, [grades, termId]);
 
   const uniqueSubjectTitles: number[] = [];
-  if (gradesIsPending) {
-    return (
-      <div className="grid grid-cols-1 gap-4 p-4">
-        {Array.from({ length: 12 }).map((_, index) => (
-          <Skeleton className="h-8" key={index} />
-        ))}
-      </div>
-    );
-  }
+
   return (
     <Accordion type="single" collapsible className="w-full">
       {subjects.map((subject, index) => {

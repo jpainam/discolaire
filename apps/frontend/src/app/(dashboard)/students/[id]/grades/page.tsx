@@ -9,7 +9,12 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  batchPrefetch([trpc.student.get.queryOptions(params.id)]);
+  batchPrefetch([
+    trpc.student.get.queryOptions(params.id),
+    trpc.student.grades.queryOptions({
+      id: params.id,
+    }),
+  ]);
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>

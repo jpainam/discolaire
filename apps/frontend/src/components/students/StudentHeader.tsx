@@ -1,9 +1,5 @@
 "use client";
 
-import type * as RPNInput from "react-phone-number-input";
-import { useCallback, useState } from "react";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
 import {
   useMutation,
   useQuery,
@@ -27,7 +23,11 @@ import {
   XIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+import { useCallback, useState } from "react";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
+import type * as RPNInput from "react-phone-number-input";
 import { toast } from "sonner";
 
 import { StudentStatus } from "@repo/db/enums";
@@ -76,7 +76,7 @@ import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { UserAvatar } from "../UserAvatar";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
 import { CreateEditUser } from "../users/CreateEditUser";
-import { SuccessProbability } from "./SuccessProbability";
+import { StudentAnniversary } from "./StudentAnniversary";
 import { UpdateRegistrationNumber } from "./UpdateRegistrationNumber";
 
 export function StudentHeader() {
@@ -311,7 +311,8 @@ export function StudentHeader() {
             </Button>
           )}
 
-          <SuccessProbability />
+          <StudentAnniversary dateOfBirth={student.dateOfBirth} />
+          {/* <SuccessProbability /> */}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

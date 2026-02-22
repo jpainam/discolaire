@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import {
@@ -11,20 +10,22 @@ import {
   useQueryState,
 } from "nuqs";
 
+import type { RouterOutputs } from "@repo/api";
+
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
-export function ByChronologicalOrder({ classroomId }: { classroomId: string }) {
-  const params = useParams<{ id: string }>();
+export function ByChronologicalOrder({
+  grades,
+  classroomId,
+}: {
+  classroomId: string;
+  grades: RouterOutputs["student"]["grades"];
+}) {
   const trpc = useTRPC();
   const { data: minMaxMoy, isPending: summaryIsPending } = useQuery(
     trpc.classroom.getMinMaxMoyGrades.queryOptions(classroomId),
-  );
-  const { data: grades, isPending: gradesIsPending } = useQuery(
-    trpc.student.grades.queryOptions({
-      id: params.id,
-    }),
   );
 
   const [termId] = useQueryState("termId", parseAsString);
@@ -35,7 +36,7 @@ export function ByChronologicalOrder({ classroomId }: { classroomId: string }) {
   );
 
   const sortedGrades = useMemo(() => {
-    let filteredGrades = grades ?? [];
+    let filteredGrades = grades;
 
     if (termId) {
       filteredGrades = filteredGrades.filter(
@@ -61,10 +62,10 @@ export function ByChronologicalOrder({ classroomId }: { classroomId: string }) {
 
   const t = useTranslations();
   const locale = useLocale();
-  if (gradesIsPending || summaryIsPending) {
+  if (summaryIsPending) {
     return (
-      <div className="grid grid-cols-1 gap-4 p-4">
-        {Array.from({ length: 12 }).map((_, index) => (
+      <div className="grid grid-cols-1 gap-2 p-4">
+        {Array.from({ length: 20 }).map((_, index) => (
           <Skeleton className="h-8" key={index} />
         ))}
       </div>

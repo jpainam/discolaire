@@ -14,6 +14,7 @@ import { toast } from "sonner";
 
 import { TermType } from "@repo/db/enums";
 
+import { Badge } from "~/components/base-badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -174,7 +175,9 @@ export function StudentGradesheetTable({
               {terms
                 .filter((t) => t.type == TermType.MONTHLY)
                 .map((t) => (
-                  <TableHead key={t.id}>{t.shortName}</TableHead>
+                  <TableHead key={t.id} className="text-center">
+                    {t.shortName}
+                  </TableHead>
                 ))}
 
               <TableHead className="text-center">{t("avg")}</TableHead>
@@ -198,7 +201,7 @@ export function StudentGradesheetTable({
 
               return (
                 <TableRow key={index}>
-                  <TableCell className="py-0 font-medium">
+                  <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
                       <div
                         className="size-4 rounded-full"
@@ -218,6 +221,15 @@ export function StudentGradesheetTable({
                     .filter((t) => t.type == TermType.MONTHLY)
                     .map((term) => {
                       const g = row.grades.find((x) => x.termId === term.id);
+                      if (g?.isAbsent) {
+                        return (
+                          <TableCell className="text-center">
+                            <Badge variant={"destructive"} appearance={"light"}>
+                              A
+                            </Badge>
+                          </TableCell>
+                        );
+                      }
                       return (
                         <Cell
                           key={term.id}
@@ -279,7 +291,7 @@ function Cell({
     return (
       <TableCell
         className={cn(
-          "text-muted-foreground py-0",
+          "text-muted-foreground text-center",
           g >= 18 ? "text-green-500" : "",
           g < 10 ? "text-red-500" : "",
         )}
@@ -291,7 +303,7 @@ function Cell({
   return (
     <TableCell
       className={cn(
-        "text-muted-foreground py-0",
+        "text-muted-foreground text-center",
         g >= 18 ? "text-green-500" : "",
         g < 10 ? "text-red-500" : "",
       )}

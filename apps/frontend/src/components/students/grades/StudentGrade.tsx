@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from "nuqs";
@@ -18,12 +18,18 @@ import { StudentGradeDetails } from "./StudentGradeDetails";
 
 export function StudentGrade() {
   const params = useParams<{ id: string }>();
+  const studentId = params.id;
 
   const [gradeId] = useQueryState("gradeId", parseAsInteger);
   const [gradesheetId] = useQueryState("gradesheetId", parseAsInteger);
   const trpc = useTRPC();
   const { data: student, isPending } = useQuery(
     trpc.student.get.queryOptions(params.id),
+  );
+  const { data: grades } = useSuspenseQuery(
+    trpc.student.grades.queryOptions({
+      id: studentId,
+    }),
   );
 
   const [view] = useQueryState("view", {
@@ -68,6 +74,15 @@ export function StudentGrade() {
   if (!classroom) {
     return <EmptyComponent title={t("student_not_registered_yet")} />;
   }
+  const evaluated = grades.filter((g) => !g.isAbsent);
+  if (grades.length == 0 || evaluated.length == 0) {
+    return (
+      <EmptyComponent
+        title="Aucune notes"
+        description="Cette élève ne possède aucune note"
+      />
+    );
+  }
 
   return (
     <div className="grid gap-0 p-0 pb-2 text-sm md:grid-cols-2">
@@ -93,9 +108,9 @@ export function StudentGrade() {
 
         <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-r border-b">
           {view === "by_subject" ? (
-            <BySubject />
+            <BySubject grades={grades} />
           ) : (
-            <ByChronologicalOrder classroomId={classroom.id} />
+            <ByChronologicalOrder grades={grades} classroomId={classroom.id} />
           )}
         </ScrollArea>
       </div>

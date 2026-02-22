@@ -48,21 +48,32 @@ export function getNameParts(person?: any, ppart?: number) {
 
 export function getAge(date: string | Date | null | undefined) {
   if (!date) {
-    return "";
+    return 0;
   }
   const dob = typeof date === "string" ? new Date(date) : date;
   const now = new Date();
-  const diff = now.getTime() - dob.getTime();
-  const age = new Date(diff);
-  return Math.abs(age.getUTCFullYear() - 1970);
+  let age = now.getFullYear() - dob.getFullYear();
+  const m = now.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) {
+    age--;
+  }
+  return age;
 }
 
-export function isAnniversary(dateOfBirth: Date): boolean {
-  const currentDate = new Date();
-  return (
-    dateOfBirth.getMonth() === currentDate.getMonth() &&
-    dateOfBirth.getDate() === currentDate.getDate()
-  );
+export function isAnniversary(dateOfBirth: Date, windowDays = 3): boolean {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  for (let offset = -windowDays; offset <= windowDays; offset++) {
+    const candidate = new Date(today);
+    candidate.setDate(today.getDate() + offset);
+    if (
+      dateOfBirth.getMonth() === candidate.getMonth() &&
+      dateOfBirth.getDate() === candidate.getDate()
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export const xlsxType =
