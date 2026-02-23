@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   ArrowLeft,
   Banknote,
@@ -17,12 +21,7 @@ import { toast } from "sonner";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { Table, TableBody, TableCell, TableRow } from "~/components/ui/table";
 import { useTRPC } from "~/trpc/react";
@@ -95,7 +94,12 @@ export function SalaryDetailView({ salaryId }: { salaryId: string }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="icon" className="bg-transparent" asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="bg-transparent"
+            asChild
+          >
             <Link href="/administration/accounting/salary">
               <ArrowLeft className="h-4 w-4" />
             </Link>
@@ -210,7 +214,7 @@ export function SalaryDetailView({ salaryId }: { salaryId: string }) {
                   <p className="font-medium capitalize">{periodLabel}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground text-xs flex items-center gap-1">
+                  <p className="text-muted-foreground flex items-center gap-1 text-xs">
                     <Calendar className="h-3 w-3" />
                     Créé le
                   </p>
@@ -224,7 +228,7 @@ export function SalaryDetailView({ salaryId }: { salaryId: string }) {
                 </div>
                 {payroll.createdBy && (
                   <div>
-                    <p className="text-muted-foreground text-xs flex items-center gap-1">
+                    <p className="text-muted-foreground flex items-center gap-1 text-xs">
                       <Clock className="h-3 w-3" />
                       Créé par
                     </p>
@@ -253,7 +257,9 @@ export function SalaryDetailView({ salaryId }: { salaryId: string }) {
           <Card className="sticky top-6">
             <CardContent className="p-6">
               <div className="bg-primary text-primary-foreground mb-6 rounded-lg p-4">
-                <h2 className="text-center font-semibold">RÉSUMÉ DU PAIEMENT</h2>
+                <h2 className="text-center font-semibold">
+                  RÉSUMÉ DU PAIEMENT
+                </h2>
                 <p className="mt-1 text-center text-xs capitalize opacity-80">
                   {periodLabel}
                 </p>
@@ -303,7 +309,7 @@ export function SalaryDetailView({ salaryId }: { salaryId: string }) {
               </div>
 
               <div className="mt-4 text-center">
-                <Badge className={`${statusCfg.className} text-sm px-4 py-1`}>
+                <Badge className={`${statusCfg.className} px-4 py-1 text-sm`}>
                   {statusCfg.label}
                 </Badge>
               </div>

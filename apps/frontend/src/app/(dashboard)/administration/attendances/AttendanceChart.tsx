@@ -129,10 +129,27 @@ export function AttendanceChart() {
         >
           <AreaChart data={filteredData}>
             <defs>
-              {(["absence", "late", "chatter", "consigne", "exclusion"] as const).map((key) => (
-                <linearGradient key={key} id={`fill-${key}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={`var(--color-${key})`} stopOpacity={0.8} />
-                  <stop offset="95%" stopColor={`var(--color-${key})`} stopOpacity={0.1} />
+              {(
+                ["absence", "late", "chatter", "consigne", "exclusion"] as const
+              ).map((key) => (
+                <linearGradient
+                  key={key}
+                  id={`fill-${key}`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="5%"
+                    stopColor={`var(--color-${key})`}
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor={`var(--color-${key})`}
+                    stopOpacity={0.1}
+                  />
                 </linearGradient>
               ))}
             </defs>
@@ -168,7 +185,9 @@ export function AttendanceChart() {
                 />
               }
             />
-            {(["exclusion", "consigne", "chatter", "late", "absence"] as const).map((key) => (
+            {(
+              ["exclusion", "consigne", "chatter", "late", "absence"] as const
+            ).map((key) => (
               <Area
                 key={key}
                 dataKey={key}

@@ -63,24 +63,22 @@ export const payrollRouter = {
       });
     }),
 
-  get: protectedProcedure
-    .input(z.string())
-    .query(async ({ ctx, input }) => {
-      const payroll = await ctx.db.payroll.findUnique({
-        where: { id: input },
-        include: {
-          staff: true,
-          createdBy: true,
-        },
+  get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const payroll = await ctx.db.payroll.findUnique({
+      where: { id: input },
+      include: {
+        staff: true,
+        createdBy: true,
+      },
+    });
+    if (!payroll) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: `Payroll with id ${input} not found`,
       });
-      if (!payroll) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: `Payroll with id ${input} not found`,
-        });
-      }
-      return payroll;
-    }),
+    }
+    return payroll;
+  }),
 
   create: protectedProcedure
     .input(
@@ -166,11 +164,9 @@ export const payrollRouter = {
       });
     }),
 
-  delete: protectedProcedure
-    .input(z.string())
-    .mutation(({ ctx, input }) => {
-      return ctx.db.payroll.delete({
-        where: { id: input },
-      });
-    }),
+  delete: protectedProcedure.input(z.string()).mutation(({ ctx, input }) => {
+    return ctx.db.payroll.delete({
+      where: { id: input },
+    });
+  }),
 } satisfies TRPCRouterRecord;

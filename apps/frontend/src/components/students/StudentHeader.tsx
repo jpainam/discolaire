@@ -85,7 +85,9 @@ const CreateEditUser = dynamic(
 
 const UpdateRegistrationNumber = dynamic(
   () =>
-    import("./UpdateRegistrationNumber").then((m) => m.UpdateRegistrationNumber),
+    import("./UpdateRegistrationNumber").then(
+      (m) => m.UpdateRegistrationNumber,
+    ),
   { ssr: false },
 );
 
