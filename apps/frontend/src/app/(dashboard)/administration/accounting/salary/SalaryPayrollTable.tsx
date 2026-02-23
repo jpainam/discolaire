@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Edit, Eye, Filter, RotateCcw, Trash2 } from "lucide-react";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { Filter, RotateCcw } from "lucide-react";
 import { useLocale } from "next-intl";
+import { toast } from "sonner";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -24,6 +25,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { DeleteIcon, EditIcon, ViewIcon } from "~/icons";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 type PayrollStatus = "PENDING" | "PAID" | "CANCELED";
@@ -60,6 +63,21 @@ export function SalaryPayrollTable() {
   const status =
     (searchParams.get("status") as PayrollStatus | null) ?? undefined;
   const period = searchParams.get("period") ?? undefined;
+
+  const queryClient = useQueryClient();
+  const confirm = useConfirm();
+
+  const deletePayroll = useMutation(
+    trpc.payroll.delete.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.payroll.pathFilter());
+        toast.success("Paiement supprimé");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }),
+  );
 
   const { data: payrolls } = useSuspenseQuery(
     trpc.payroll.all.queryOptions({
@@ -243,33 +261,44 @@ export function SalaryPayrollTable() {
                       {statusCfg.label}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 bg-transparent"
-                        asChild
+                        onClick={() => {
+                          router.push(
+                            `/administration/accounting/salary/${payroll.id}`,
+                          );
+                        }}
                       >
-                        <Link
-                          href={`/administration/accounting/salary/${payroll.id}`}
-                        >
-                          <Eye className="h-4 w-4 text-blue-500" />
-                        </Link>
+                        <ViewIcon />
                       </Button>
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 bg-transparent"
+                        onClick={() => {
+                          router.push(
+                            `/administration/accounting/salary/${payroll.id}/edit`,
+                          );
+                        }}
                       >
-                        <Edit className="h-4 w-4 text-blue-500" />
+                        <EditIcon />
                       </Button>
                       <Button
-                        variant="outline"
+                        variant="destructive"
                         size="icon"
-                        className="h-8 w-8 bg-transparent"
+                        onClick={async () => {
+                          await confirm({
+                            title: "Supprimer ce paiement ?",
+                            description: `Le paiement ${payroll.paymentRef ?? payroll.id} sera définitivement supprimé. Cette action est irréversible.`,
+                            onConfirm: async () => {
+                              await deletePayroll.mutateAsync(payroll.id);
+                            },
+                          });
+                        }}
                       >
-                        <Trash2 className="h-4 w-4 text-red-500" />
+                        <DeleteIcon />
                       </Button>
                     </div>
                   </TableCell>

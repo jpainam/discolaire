@@ -124,6 +124,34 @@ export const payrollRouter = {
       });
     }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        staffId: z.string(),
+        period: z.coerce.date(),
+        baseSalary: z.number(),
+        deductions: z.number().default(0),
+        netSalary: z.number(),
+        method: z.string().optional().default("CASH"),
+        observation: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.payroll.update({
+        where: { id: input.id },
+        data: {
+          staffId: input.staffId,
+          period: input.period,
+          baseSalary: input.baseSalary,
+          deductions: input.deductions,
+          netSalary: input.netSalary,
+          method: input.method,
+          observation: input.observation,
+        },
+      });
+    }),
+
   updateStatus: protectedProcedure
     .input(
       z.object({
