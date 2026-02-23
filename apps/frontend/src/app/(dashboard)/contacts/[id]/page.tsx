@@ -15,7 +15,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const contactId = params.id;
 
   batchPrefetch([
-    trpc.contact.get.queryOptions(contactId),
     trpc.contact.students.queryOptions(contactId),
     trpc.contact.transactions.queryOptions(contactId),
     trpc.contact.studentOverview.queryOptions(contactId),

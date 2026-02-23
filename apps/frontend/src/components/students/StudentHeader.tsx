@@ -2,6 +2,7 @@
 
 import type * as RPNInput from "react-phone-number-input";
 import { useCallback, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import {
@@ -75,9 +76,18 @@ import { DropdownHelp } from "../shared/DropdownHelp";
 import { DropdownInvitation } from "../shared/invitations/DropdownInvitation";
 import { UserAvatar } from "../UserAvatar";
 import { ChangeAvatarButton } from "../users/ChangeAvatarButton";
-import { CreateEditUser } from "../users/CreateEditUser";
 import { StudentAnniversary } from "./StudentAnniversary";
-import { UpdateRegistrationNumber } from "./UpdateRegistrationNumber";
+
+const CreateEditUser = dynamic(
+  () => import("../users/CreateEditUser").then((m) => m.CreateEditUser),
+  { ssr: false },
+);
+
+const UpdateRegistrationNumber = dynamic(
+  () =>
+    import("./UpdateRegistrationNumber").then((m) => m.UpdateRegistrationNumber),
+  { ssr: false },
+);
 
 export function StudentHeader() {
   const trpc = useTRPC();

@@ -46,8 +46,11 @@ export const createQueryClient = (options: CreateQueryClientOptions = {}) =>
     defaultOptions: {
       queries: {
         // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
-        staleTime: 30 * 1000,
+        // above 0 to avoid refetching immediately on the client.
+        // Most app data (students, grades, classrooms) changes infrequently,
+        // so keep it fresh for 5 min and hold it in cache for 30 min.
+        staleTime: 5 * 60 * 1000,
+        gcTime: 30 * 60 * 1000,
       },
       dehydrate: {
         serializeData: SuperJSON.serialize,

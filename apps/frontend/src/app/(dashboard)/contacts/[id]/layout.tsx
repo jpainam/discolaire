@@ -11,7 +11,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
-import { caller, HydrateClient } from "~/trpc/server";
+import { caller, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 export default async function Layout({
@@ -23,7 +23,10 @@ export default async function Layout({
   if (!session) {
     redirect("/auth/login");
   }
-  const contact = await caller.contact.get(id);
+  const queryClient = getQueryClient();
+  const contact = await queryClient.fetchQuery(
+    trpc.contact.get.queryOptions(id),
+  );
   if (session.user.profile == "contact" && session.user.id != contact.userId) {
     return <NoPermission />;
   }
