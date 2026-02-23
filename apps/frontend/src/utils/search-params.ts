@@ -78,3 +78,11 @@ export const createTransactionSchema = {
   step: parseAsStringLiteral(["step1", "step2"]),
 };
 export const createTransactionLoader = createLoader(createTransactionSchema);
+
+export const payrollSearchParamsSchema = {
+  query: parseAsString,
+  status: parseAsStringLiteral(["PENDING", "PAID", "CANCELED"]),
+  period: parseAsIsoDate,
+};
+
+export const payrollSearchParams = createLoader(payrollSearchParamsSchema);

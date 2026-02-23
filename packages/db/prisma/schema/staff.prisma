@@ -52,6 +52,37 @@ model Staff {
     inventoryAssignedEvents   InventoryEvent[]  @relation("InventoryEventAssignee")
     attendances               StaffAttendance[]
     documents                 Document[]
+    payrolls                  Payroll[]
+}
+
+model Payroll {
+    id           String        @id @default(cuid())
+    paymentRef   String?
+    staffId      String
+    staff        Staff         @relation(fields: [staffId], references: [id], onDelete: Cascade)
+    period       DateTime      @db.Date
+    baseSalary   Float
+    deductions   Float         @default(0)
+    netSalary    Float
+    status       PayrollStatus @default(PENDING)
+    method       String        @default("CASH")
+    observation  String?
+    schoolId     String
+    schoolYearId String
+    createdAt    DateTime      @default(now()) @db.Timestamp(6)
+    updatedAt    DateTime      @updatedAt
+    createdById  String?
+    createdBy    User?         @relation("PayrollCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+    @@index([schoolId, status])
+    @@index([schoolId, staffId])
+    @@index([schoolId, period])
+}
+
+enum PayrollStatus {
+    PENDING
+    PAID
+    CANCELED
 }
 
 model StaffAttendance {
