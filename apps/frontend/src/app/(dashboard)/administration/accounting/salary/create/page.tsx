@@ -5,34 +5,22 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm, useStore } from "@tanstack/react-form";
 import { ArrowLeft, Calculator, HelpCircle, Square } from "lucide-react";
+import { useTranslations } from "next-intl";
 
+
+
+import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+import { Label } from "~/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Table, TableBody, TableCell, TableRow } from "~/components/ui/table";
 import { Textarea } from "~/components/ui/textarea";
+
 
 export default function NouveauPaiementPage() {
   const [showBeneficiaryDetails, setShowBeneficiaryDetails] = useState(false);
@@ -58,6 +46,7 @@ export default function NouveauPaiementPage() {
       observations: "",
     },
   });
+  const t = useTranslations();
   const selectedBeneficiary = useStore(
     form.store,
     (state) => state.values.beneficiary,
@@ -94,24 +83,19 @@ export default function NouveauPaiementPage() {
 
   return (
     <div className="flex flex-col gap-4 p-4">
+      <BreadcrumbsSetter
+        items={[
+          { label: t("administration"), href: "/administration" },
+          { label: t("Finances"), href: "/administration/accounting" },
+          {
+            label: t("Salary & Payroll"),
+            href: "/administration/accounting/salary",
+          },
+          { label: t("create") },
+        ]}
+      />
       <div className="flex items-center justify-between">
-        <div>
-          <div className="mb-2 flex items-center gap-2">
-            <Square className="text-primary h-5 w-5" />
-            <h1 className="text-primary text-2xl font-semibold">
-              Nouveau Paiement de Salaire
-            </h1>
-          </div>
-          <nav className="text-muted-foreground flex items-center gap-2 text-sm">
-            <span>Accueil</span>
-            <span>/</span>
-            <span>Finances</span>
-            <span>/</span>
-            <span>Paiements Salaires</span>
-            <span>/</span>
-            <span className="text-foreground">Nouveau</span>
-          </nav>
-        </div>
+        <Label>Creation de nouveau</Label>
         <div className="flex gap-3">
           <Button variant="outline" className="gap-2 bg-transparent">
             <HelpCircle className="h-4 w-4" />
