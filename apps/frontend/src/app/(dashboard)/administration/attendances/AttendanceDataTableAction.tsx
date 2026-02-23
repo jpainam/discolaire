@@ -19,6 +19,7 @@ export function AttendanceDataTableAction({
 
   return (
     <TermSelector
+      className="w-64"
       onChange={(val) => {
         void setTermId(val);
       }}

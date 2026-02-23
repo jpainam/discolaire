@@ -57,6 +57,6 @@ export function getReportTypes() {
     { id: "003", label: "Statistics by course" },
     { id: "004", label: "Summary of results (10 first/10 last)" },
     { id: "005", label: "Summary Report" },
-    { id: "006", label: "Synthèse des résultats de la classe" },
+    { id: "006", label: "Summary of classroom results" },
   ];
 }

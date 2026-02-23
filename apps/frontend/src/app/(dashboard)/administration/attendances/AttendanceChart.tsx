@@ -21,22 +21,30 @@ import {
 } from "~/components/ui/chart";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useIsMobile } from "~/hooks/use-mobile";
-import { useSchool } from "~/providers/SchoolProvider";
 import { useTRPC } from "~/trpc/react";
 
 export const description = "An interactive area chart";
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
   absence: {
     label: "Absences",
+    color: "var(--chart-1)",
+  },
+  late: {
+    label: "Retards",
     color: "var(--chart-2)",
   },
-  justified: {
-    label: "Justi.",
-    color: "var(--chart-1)",
+  chatter: {
+    label: "Bavardages",
+    color: "var(--chart-3)",
+  },
+  consigne: {
+    label: "Consignes",
+    color: "var(--chart-4)",
+  },
+  exclusion: {
+    label: "Exclusions",
+    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
@@ -54,10 +62,9 @@ export function AttendanceChart() {
     }
   }, [isMobile]);
 
-  const { schoolYear } = useSchool();
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date);
-    const referenceDate = schoolYear.startDate;
+    const referenceDate = new Date();
     let daysToSubtract = 90;
     if (timeRange === "30d") {
       daysToSubtract = 30;
@@ -122,30 +129,12 @@ export function AttendanceChart() {
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillabsence" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-absence)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-absence)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-justified)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-justified)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
+              {(["absence", "late", "chatter", "consigne", "exclusion"] as const).map((key) => (
+                <linearGradient key={key} id={`fill-${key}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={`var(--color-${key})`} stopOpacity={0.8} />
+                  <stop offset="95%" stopColor={`var(--color-${key})`} stopOpacity={0.1} />
+                </linearGradient>
+              ))}
             </defs>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -179,20 +168,16 @@ export function AttendanceChart() {
                 />
               }
             />
-            <Area
-              dataKey="justified"
-              type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-justified)"
-              stackId="a"
-            />
-            <Area
-              dataKey="absence"
-              type="natural"
-              fill="url(#fillabsence)"
-              stroke="var(--color-absence)"
-              stackId="a"
-            />
+            {(["exclusion", "consigne", "chatter", "late", "absence"] as const).map((key) => (
+              <Area
+                key={key}
+                dataKey={key}
+                type="natural"
+                fill={`url(#fill-${key})`}
+                stroke={`var(--color-${key})`}
+                stackId="a"
+              />
+            ))}
           </AreaChart>
         </ChartContainer>
       </CardContent>

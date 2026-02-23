@@ -3,9 +3,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import Link from "next/link";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -48,6 +47,7 @@ function getSeverity(total: number) {
 }
 
 export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
+  const t = useTranslations();
   return useMemo(
     () => [
       {
@@ -93,7 +93,7 @@ export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
       {
         accessorKey: "lastName",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"lastName"} />
+          <DataTableColumnHeader column={column} title={t("lastName")} />
         ),
         cell: ({ row }) => {
           const att = row.original;
@@ -110,16 +110,20 @@ export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
       {
         accessorKey: "absence",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"absence"} />
+          <DataTableColumnHeader
+            className="justify-center"
+            column={column}
+            title={t("absence")}
+          />
         ),
         size: 100,
         cell: ({ row }) => {
           const att = row.original;
           return (
-            <div className="text-muted-foreground flex flex-row gap-2">
+            <div className="text-muted-foreground flex flex-row justify-center gap-2">
               {att.absence}{" "}
               {att.justifiedAbsence > 0 && (
-                <Badge appearance={"outline"} variant={"warning"}>
+                <Badge appearance={"light"} size={"xs"} variant={"warning"}>
                   {att.justifiedAbsence} justifiées
                 </Badge>
               )}
@@ -130,52 +134,84 @@ export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
       {
         accessorKey: "chatter",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"chatter"} />
+          <DataTableColumnHeader
+            className="flex justify-center"
+            column={column}
+            title={t("chatter")}
+          />
         ),
         size: 60,
         cell: ({ row }) => {
           const att = row.original;
-          return <div className="text-muted-foreground">{att.chatter}</div>;
+          return (
+            <div className="text-muted-foreground flex justify-center">
+              {att.chatter}
+            </div>
+          );
         },
       },
       {
         accessorKey: "consigne",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"consigne"} />
+          <DataTableColumnHeader
+            className="flex justify-center"
+            column={column}
+            title={t("consigne")}
+          />
         ),
         size: 60,
         cell: ({ row }) => {
           const att = row.original;
-          return <div className="text-muted-foreground">{att.consigne}</div>;
+          return (
+            <div className="text-muted-foreground flex justify-center">
+              {att.consigne}
+            </div>
+          );
         },
       },
       {
         accessorKey: "late",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"late"} />
+          <DataTableColumnHeader
+            className="flex justify-center"
+            column={column}
+            title={t("late")}
+          />
         ),
         size: 60,
         cell: ({ row }) => {
           const att = row.original;
-          return <div className="text-muted-foreground">{att.late}</div>;
+          return (
+            <div className="text-muted-foreground flex justify-center">
+              {att.late}
+            </div>
+          );
         },
       },
       {
         accessorKey: "exclusion",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"exclusion"} />
+          <DataTableColumnHeader
+            column={column}
+            className="flex justify-center"
+            title={t("exclusion")}
+          />
         ),
         size: 60,
         cell: ({ row }) => {
           const att = row.original;
-          return <div className="text-muted-foreground">{att.exclusion}</div>;
+          return (
+            <div className="text-muted-foreground flex justify-center">
+              {att.exclusion}
+            </div>
+          );
         },
       },
 
       {
         accessorKey: "termId",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"term"} />
+          <DataTableColumnHeader column={column} title={t("term")} />
         ),
         size: 120,
         cell: ({ row }) => {
@@ -186,7 +222,7 @@ export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
       {
         accessorKey: "student.userId",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={"exclusion"} />
+          <DataTableColumnHeader column={column} title={t("status")} />
         ),
         size: 60,
         cell: ({ row }) => {
@@ -194,7 +230,7 @@ export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
           const total = getTotalIssues(att);
           const sev = getSeverity(total);
           return (
-            <Badge variant={sev.variant} appearance="outline">
+            <Badge variant={sev.variant} size={"xs"} appearance="light">
               {sev.label}
             </Badge>
           );
@@ -212,7 +248,7 @@ export function useColumns(): ColumnDef<ProcedureOutput, unknown>[] {
         enableHiding: false,
       },
     ],
-    [],
+    [t],
   );
 }
 
@@ -244,12 +280,8 @@ function ActionCells({ attendance }: { attendance: ProcedureOutput }) {
     <div className="flex justify-end">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Open menu"
-            variant="ghost"
-            className="data-[state=open]:bg-muted flex size-8 p-0"
-          >
-            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+          <Button size={"icon"} variant="ghost">
+            <MoreHorizontal aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

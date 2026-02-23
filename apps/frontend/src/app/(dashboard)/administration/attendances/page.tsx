@@ -9,6 +9,7 @@ import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { AttendanceChart } from "./AttendanceChart";
 import { AttendanceDataTable } from "./AttendanceDataTable";
 import { AttendanceStats } from "./AttendanceStats";
+import { AttendanceStudentHeader } from "./AttendanceStudentHeader";
 
 export default async function Page() {
   const t = await getTranslations();
@@ -22,9 +23,9 @@ export default async function Page() {
         <TabsList>
           <TabsList className="gap-1 bg-transparent">
             <TabsTrigger value="tab-1">{t("dashboard")}</TabsTrigger>
-            <TabsTrigger value="tab-3">{t("students")}</TabsTrigger>
-            <TabsTrigger value="tab-4">{t("notifications")}</TabsTrigger>
-            <TabsTrigger value="tab-5">{t("settings")}</TabsTrigger>
+            <TabsTrigger value="tab-2">{t("students")}</TabsTrigger>
+            <TabsTrigger value="tab-3">{t("notifications")}</TabsTrigger>
+            <TabsTrigger value="tab-4">{t("settings")}</TabsTrigger>
           </TabsList>
         </TabsList>
         <TabsContent value="tab-1">
@@ -59,7 +60,26 @@ export default async function Page() {
             </ErrorBoundary>
           </div>
         </TabsContent>
-        <TabsContent value="tab-2"></TabsContent>
+        <TabsContent value="tab-2">
+          <div className="flex flex-col gap-2">
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <AttendanceStudentHeader />
+            </ErrorBoundary>
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense
+                fallback={
+                  <div className="grid grid-cols-4 gap-4">
+                    {Array.from({ length: 8 }).map((_, index) => {
+                      return <Skeleton key={index} className="h-8" />;
+                    })}
+                  </div>
+                }
+              >
+                <AttendanceDataTable />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+        </TabsContent>
         <TabsContent value="tab-3">
           <p className="text-muted-foreground p-4 text-center text-xs">
             Content for Tab 3

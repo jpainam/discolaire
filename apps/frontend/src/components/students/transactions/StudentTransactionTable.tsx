@@ -24,10 +24,8 @@ import { toast } from "sonner";
 
 import { TransactionType } from "@repo/db/enums";
 
-import type { FlatBadgeVariant } from "~/components/FlatBadge";
+import { Badge } from "~/components/base-badge";
 import { EmptyComponent } from "~/components/EmptyComponent";
-import FlatBadge from "~/components/FlatBadge";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -142,11 +140,17 @@ export function StudentTransactionTable() {
                   </TableCell>
                   <TableCell>
                     {transaction.transactionType == TransactionType.DISCOUNT ? (
-                      <FlatBadge variant="pink">{t("discount")}</FlatBadge>
+                      <Badge appearance={"light"} variant="info">
+                        {t("discount")}
+                      </Badge>
                     ) : transaction.transactionType == TransactionType.DEBIT ? (
-                      <FlatBadge variant="red">{t("debit")}</FlatBadge>
+                      <Badge variant="destructive" appearance={"light"}>
+                        {t("debit")}
+                      </Badge>
                     ) : (
-                      <FlatBadge variant="green">{t("credit")}</FlatBadge>
+                      <Badge appearance={"light"} variant="success">
+                        {t("credit")}
+                      </Badge>
                     )}
                   </TableCell>
                   <TableCell>
@@ -246,37 +250,46 @@ export function StudentTransactionTable() {
                                     value={"VALIDATED"}
                                     className="capitalize"
                                   >
-                                    <FlatBadge variant={"green"}>
+                                    <Badge
+                                      appearance={"light"}
+                                      variant={"success"}
+                                    >
                                       <CheckCircledIcon
                                         className="text-muted-foreground size-4"
                                         aria-hidden="true"
                                       />
                                       {t("validate")}
-                                    </FlatBadge>
+                                    </Badge>
                                   </DropdownMenuRadioItem>
                                   <DropdownMenuRadioItem
                                     value={"CANCELED"}
                                     className="capitalize"
                                   >
-                                    <FlatBadge variant={"red"}>
+                                    <Badge
+                                      appearance={"light"}
+                                      variant={"destructive"}
+                                    >
                                       <CrossCircledIcon
                                         className="text-muted-foreground size-4"
                                         aria-hidden="true"
                                       />
                                       {t("cancel")}
-                                    </FlatBadge>
+                                    </Badge>
                                   </DropdownMenuRadioItem>
                                   <DropdownMenuRadioItem
                                     value={"PENDING"}
                                     className="capitalize"
                                   >
-                                    <FlatBadge variant={"yellow"}>
+                                    <Badge
+                                      variant={"warning"}
+                                      appearance={"light"}
+                                    >
                                       <StopwatchIcon
                                         className="text-muted-foreground size-4"
                                         aria-hidden="true"
                                       />
                                       {t("pending")}
-                                    </FlatBadge>
+                                    </Badge>
                                   </DropdownMenuRadioItem>
                                 </DropdownMenuRadioGroup>
                               </DropdownMenuSubContent>
@@ -320,25 +333,28 @@ export function StudentTransactionTable() {
 
 export function TransactionStatus({ status }: { status: string }) {
   const t = useTranslations();
-  let variant = "gray";
-  if (status === "VALIDATED") {
-    variant = "green";
-  } else if (status === "CANCELED") {
-    variant = "red";
-  } else if (status === "PENDING") {
-    variant = "amber";
-  }
-
   return (
-    <FlatBadge className="gap-1" variant={variant as FlatBadgeVariant}>
+    <Badge
+      size={"xs"}
+      appearance={"light"}
+      variant={
+        status == "VALIDATED"
+          ? "success"
+          : status == "CANCELED"
+            ? "destructive"
+            : status == "PENDING"
+              ? "warning"
+              : "secondary"
+      }
+    >
       {status === "CANCELED" ? (
-        <CrossCircledIcon className="size-3.5" aria-hidden="true" />
+        <CrossCircledIcon />
       ) : status === "VALIDATED" ? (
-        <CheckCircle className="size-3.5" aria-hidden="true" />
+        <CheckCircle />
       ) : (
-        <StopwatchIcon className="size-3.5" aria-hidden="true" />
+        <StopwatchIcon />
       )}
       <span className="capitalize">{t(status)}</span>
-    </FlatBadge>
+    </Badge>
   );
 }

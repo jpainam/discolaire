@@ -74,7 +74,11 @@ export async function GradeReportDashboard() {
             </ErrorBoundary>
           </CardContent>
         </Card>
-        <GradeReportGenerator limited={true} />
+        <ErrorBoundary errorComponent={ErrorFallback}>
+          <Suspense fallback={<Skeleton className="h-48" />}>
+            <GradeReportGenerator limited={true} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   );

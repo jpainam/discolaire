@@ -156,10 +156,10 @@ export const useTransactionColumns = (): ColumnDef<
             const status = row.original.status;
             const user = trans.updatedBy2;
             return (
-              <div className="flex flex-row gap-1">
+              <div className="flex items-center gap-1">
                 <TransactionStatus status={status} />
                 {user && (
-                  <Badge className="w-fit" variant={"secondary"}>
+                  <Badge size={"xs"} variant={"secondary"}>
                     {user.username}
                   </Badge>
                 )}
