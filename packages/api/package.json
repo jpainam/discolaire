@@ -32,6 +32,7 @@
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/kv": "workspace:*",
+    "@repo/messaging": "workspace:*",
     "@repo/utils": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@trpc/server": "catalog:",

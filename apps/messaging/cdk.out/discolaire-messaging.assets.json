@@ -1,0 +1,51 @@
+{
+  "version": "50.0.0",
+  "files": {
+    "4da9ab2a856a9ccd1328a802a3a7f0ad0b19c0d06e6ef7c1de1d06bac68c0e03": {
+      "displayName": "EmailConsumer/Code",
+      "source": {
+        "path": "asset.4da9ab2a856a9ccd1328a802a3a7f0ad0b19c0d06e6ef7c1de1d06bac68c0e03",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "024501307720-eu-central-1-30892093": {
+          "bucketName": "cdk-hnb659fds-assets-024501307720-eu-central-1",
+          "objectKey": "4da9ab2a856a9ccd1328a802a3a7f0ad0b19c0d06e6ef7c1de1d06bac68c0e03.zip",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::024501307720:role/cdk-hnb659fds-file-publishing-role-024501307720-eu-central-1"
+        }
+      }
+    },
+    "8af1c0cd072c2eef9265f15fc8caf89979e5782891176c4c1992847011172269": {
+      "displayName": "NotificationsHandler/Code",
+      "source": {
+        "path": "asset.8af1c0cd072c2eef9265f15fc8caf89979e5782891176c4c1992847011172269",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "024501307720-eu-central-1-cc3b4156": {
+          "bucketName": "cdk-hnb659fds-assets-024501307720-eu-central-1",
+          "objectKey": "8af1c0cd072c2eef9265f15fc8caf89979e5782891176c4c1992847011172269.zip",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::024501307720:role/cdk-hnb659fds-file-publishing-role-024501307720-eu-central-1"
+        }
+      }
+    },
+    "7a82a5980e07150b805040e93f1799a7911468668d0c7516f852a2e783e1930c": {
+      "displayName": "discolaire-messaging Template",
+      "source": {
+        "path": "discolaire-messaging.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "024501307720-eu-central-1-a5e9c9ff": {
+          "bucketName": "cdk-hnb659fds-assets-024501307720-eu-central-1",
+          "objectKey": "7a82a5980e07150b805040e93f1799a7911468668d0c7516f852a2e783e1930c.json",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::024501307720:role/cdk-hnb659fds-file-publishing-role-024501307720-eu-central-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tooling/typescript/base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "dist/cdk",
+    "declaration": false
+  },
+  "include": ["cdk", "src/schemas.ts"]
+}

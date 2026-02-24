@@ -21,6 +21,7 @@ import { disciplineRouter } from "./routers/discipline";
 import { discountPolicyRouter } from "./routers/discountPolicy";
 import { documentRouter } from "./routers/document";
 import { emailRouter } from "./routers/email";
+import { sesEmailRouter } from "./routers/sesEmail";
 import { enrollmentRouter } from "./routers/enrollment";
 import { feeRouter } from "./routers/fee";
 import { feedbackRouter } from "./routers/feedback";
@@ -108,6 +109,7 @@ export const appRouter = createTRPCRouter({
   schoolYearEvent: schoolYearEventRouter,
   school: schoolRouter,
   email: emailRouter,
+  sesEmail: sesEmailRouter,
   role: roleRouter,
   inventoryUsage: inventoryUsageRouter,
   studentContact: studentContactRouter,

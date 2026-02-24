@@ -1,0 +1,691 @@
+{
+ "Description": "Discolaire bulk email delivery: SQS + Lambda + SES",
+ "Resources": {
+  "EmailDLQ296C1313": {
+   "Type": "AWS::SQS::Queue",
+   "Properties": {
+    "MessageRetentionPeriod": 1209600,
+    "QueueName": "discolaire-email-dlq",
+    "SqsManagedSseEnabled": true,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/EmailDLQ/Resource"
+   }
+  },
+  "EmailQueue9C1DA90F": {
+   "Type": "AWS::SQS::Queue",
+   "Properties": {
+    "MessageRetentionPeriod": 345600,
+    "QueueName": "discolaire-email-queue",
+    "RedrivePolicy": {
+     "deadLetterTargetArn": {
+      "Fn::GetAtt": [
+       "EmailDLQ296C1313",
+       "Arn"
+      ]
+     },
+     "maxReceiveCount": 3
+    },
+    "SqsManagedSseEnabled": true,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ],
+    "VisibilityTimeout": 310
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/EmailQueue/Resource"
+   }
+  },
+  "IdempotencyTable22A5A209": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "messageId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "messageId",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": false
+    },
+    "TableName": "discolaire-email-idempotency",
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ],
+    "TimeToLiveSpecification": {
+     "AttributeName": "expiresAt",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/IdempotencyTable/Resource"
+   }
+  },
+  "ConsumerLogGroupA8C286BC": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": "/aws/lambda/discolaire-email-consumer",
+    "RetentionInDays": 30,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/ConsumerLogGroup/Resource"
+   }
+  },
+  "EmailConsumerServiceRoleA753BFF8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/EmailConsumer/ServiceRole/Resource"
+   }
+  },
+  "EmailConsumerServiceRoleDefaultPolicyF4251023": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sqs:ChangeMessageVisibility",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:ReceiveMessage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "EmailQueue9C1DA90F",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "IdempotencyTable22A5A209",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+       ],
+       "Effect": "Allow",
+       "Resource": "*",
+       "Sid": "AllowSESSend"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "EmailConsumerServiceRoleDefaultPolicyF4251023",
+    "Roles": [
+     {
+      "Ref": "EmailConsumerServiceRoleA753BFF8"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/EmailConsumer/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "EmailConsumerFFF816A9": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-024501307720-eu-central-1",
+     "S3Key": "4da9ab2a856a9ccd1328a802a3a7f0ad0b19c0d06e6ef7c1de1d06bac68c0e03.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_OPTIONS": "--enable-source-maps",
+      "IDEMPOTENCY_TABLE": {
+       "Ref": "IdempotencyTable22A5A209"
+      },
+      "SES_FROM_ADDRESS": "",
+      "SES_REGION": "eu-central-1"
+     }
+    },
+    "FunctionName": "discolaire-email-consumer",
+    "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "ConsumerLogGroupA8C286BC"
+     }
+    },
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "EmailConsumerServiceRoleA753BFF8",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ],
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "EmailConsumerServiceRoleDefaultPolicyF4251023",
+    "EmailConsumerServiceRoleA753BFF8"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/EmailConsumer/Resource",
+    "aws:asset:path": "asset.4da9ab2a856a9ccd1328a802a3a7f0ad0b19c0d06e6ef7c1de1d06bac68c0e03",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "EmailConsumerSqsEventSourcediscolairemessagingEmailQueueBA43610F317BD1B3": {
+   "Type": "AWS::Lambda::EventSourceMapping",
+   "Properties": {
+    "BatchSize": 10,
+    "EventSourceArn": {
+     "Fn::GetAtt": [
+      "EmailQueue9C1DA90F",
+      "Arn"
+     ]
+    },
+    "FunctionName": {
+     "Ref": "EmailConsumerFFF816A9"
+    },
+    "FunctionResponseTypes": [
+     "ReportBatchItemFailures"
+    ],
+    "MaximumBatchingWindowInSeconds": 5,
+    "ScalingConfig": {
+     "MaximumConcurrency": 2
+    },
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/EmailConsumer/SqsEventSource:discolairemessagingEmailQueueBA43610F/Resource"
+   }
+  },
+  "BounceTopic97342D88": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "SES Bounce Notifications",
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ],
+    "TopicName": "discolaire-ses-bounces"
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/BounceTopic/Resource"
+   }
+  },
+  "ComplaintTopic5CB073F4": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "SES Complaint Notifications",
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ],
+    "TopicName": "discolaire-ses-complaints"
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/ComplaintTopic/Resource"
+   }
+  },
+  "NotificationsLogGroup30CD7BAC": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": "/aws/lambda/discolaire-ses-notifications",
+    "RetentionInDays": 30,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/NotificationsLogGroup/Resource"
+   }
+  },
+  "NotificationsHandlerServiceRole17515686": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/NotificationsHandler/ServiceRole/Resource"
+   }
+  },
+  "NotificationsHandler4CA9F200": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-024501307720-eu-central-1",
+     "S3Key": "8af1c0cd072c2eef9265f15fc8caf89979e5782891176c4c1992847011172269.zip"
+    },
+    "FunctionName": "discolaire-ses-notifications",
+    "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "NotificationsLogGroup30CD7BAC"
+     }
+    },
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "NotificationsHandlerServiceRole17515686",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "discolaire"
+     },
+     {
+      "Key": "component",
+      "Value": "messaging"
+     },
+     {
+      "Key": "managed-by",
+      "Value": "aws-cdk"
+     }
+    ],
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "NotificationsHandlerServiceRole17515686"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/NotificationsHandler/Resource",
+    "aws:asset:path": "asset.8af1c0cd072c2eef9265f15fc8caf89979e5782891176c4c1992847011172269",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "NotificationsHandlerAllowInvokediscolairemessagingBounceTopicCDD684A6B5AC7D1E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "NotificationsHandler4CA9F200",
+      "Arn"
+     ]
+    },
+    "Principal": "sns.amazonaws.com",
+    "SourceArn": {
+     "Ref": "BounceTopic97342D88"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/NotificationsHandler/AllowInvoke:discolairemessagingBounceTopicCDD684A6"
+   }
+  },
+  "NotificationsHandlerBounceTopicB7423D8E": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Endpoint": {
+     "Fn::GetAtt": [
+      "NotificationsHandler4CA9F200",
+      "Arn"
+     ]
+    },
+    "Protocol": "lambda",
+    "TopicArn": {
+     "Ref": "BounceTopic97342D88"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/NotificationsHandler/BounceTopic/Resource"
+   }
+  },
+  "NotificationsHandlerAllowInvokediscolairemessagingComplaintTopic11C128D5A62610FA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "NotificationsHandler4CA9F200",
+      "Arn"
+     ]
+    },
+    "Principal": "sns.amazonaws.com",
+    "SourceArn": {
+     "Ref": "ComplaintTopic5CB073F4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/NotificationsHandler/AllowInvoke:discolairemessagingComplaintTopic11C128D5"
+   }
+  },
+  "NotificationsHandlerComplaintTopic12AFC871": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Endpoint": {
+     "Fn::GetAtt": [
+      "NotificationsHandler4CA9F200",
+      "Arn"
+     ]
+    },
+    "Protocol": "lambda",
+    "TopicArn": {
+     "Ref": "ComplaintTopic5CB073F4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/NotificationsHandler/ComplaintTopic/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22Py26DMBBFvyV7Z0pJfqBBbTZ9pJA9GoxBw8OmjJ0osvzvFSatuujqnpmRjuamkO4TSDZ45a2s++1AFfjCouwFXrn0/MXgP51ySmSNjhBEfdM4mroCf8ZqiJcIQQymZfCvpj3Oxk3L4YeDGHCsaiy1qVXH8B7jxWlpyWhBOILPzSqLeTIDydsyrhQE70pkVpbhaQnBOzg42St7QFZ3Pfis0b/W54vStjBuluoNp4l0u/j+357UPBIzGR0EawZ/NhPJ2C1C4SqWM01RnDX67xyCyBVHo4i/FRbbu/fD2cnZIJbe0PHDJd3DYwrJpmOi7ey0pVFBvuY3nPVXuo8BAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "discolaire-messaging/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "QueueUrl": {
+   "Description": "Set as SQS_EMAIL_QUEUE_URL in apps/frontend/.env",
+   "Value": {
+    "Ref": "EmailQueue9C1DA90F"
+   },
+   "Export": {
+    "Name": "discolaire-email-queue-url"
+   }
+  },
+  "QueueArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "EmailQueue9C1DA90F",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "discolaire-email-queue-arn"
+   }
+  },
+  "DLQUrl": {
+   "Description": "Dead-letter queue – inspect here for permanently failed emails",
+   "Value": {
+    "Ref": "EmailDLQ296C1313"
+   }
+  },
+  "BounceTopicArn": {
+   "Description": "Configure in SES Verified Identity → Notifications → Bounces",
+   "Value": {
+    "Ref": "BounceTopic97342D88"
+   },
+   "Export": {
+    "Name": "discolaire-ses-bounce-topic-arn"
+   }
+  },
+  "ComplaintTopicArn": {
+   "Description": "Configure in SES Verified Identity → Notifications → Complaints",
+   "Value": {
+    "Ref": "ComplaintTopic5CB073F4"
+   },
+   "Export": {
+    "Name": "discolaire-ses-complaint-topic-arn"
+   }
+  },
+  "IdempotencyTableName": {
+   "Value": {
+    "Ref": "IdempotencyTable22A5A209"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

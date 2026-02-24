@@ -1,0 +1,117 @@
+name: Deploy Messaging Service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/messaging/**"
+      - ".github/workflows/messaging-deploy.yml"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: false
+        default: "production"
+
+concurrency:
+  group: messaging-deploy-${{ github.ref }}
+  cancel-in-progress: false # Never cancel an in-flight deploy
+
+env:
+  FORCE_COLOR: 3
+  # Turborepo remote cache (optional – matches existing CI)
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+
+jobs:
+  deploy:
+    name: Test → CDK Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Required for GitHub OIDC token (AssumeRoleWithWebIdentity)
+      id-token: write
+      # Required to checkout the repository
+      contents: read
+
+    steps:
+      # ── 1. Checkout ─────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Setup Node + pnpm ─────────────────────────────────────────────────
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      # ── 3. Install dependencies ──────────────────────────────────────────────
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 4. Typecheck ─────────────────────────────────────────────────────────
+      - name: Typecheck messaging service
+        run: pnpm --filter @repo/messaging typecheck
+
+      # ── 5. Unit tests ────────────────────────────────────────────────────────
+      - name: Run unit tests
+        run: pnpm --filter @repo/messaging test
+
+      # ── 6. Configure AWS credentials via OIDC (no long-lived keys) ───────────
+      #
+      # Prerequisites (see apps/messaging/README.md):
+      #   - GitHub OIDC provider created in AWS IAM
+      #   - IAM role with trust policy scoped to this repo + branch
+      #   - Role ARN stored as GitHub secret: AWS_DEPLOY_ROLE_ARN
+      #   - AWS account ID stored as GitHub secret: AWS_ACCOUNT_ID
+      #   - AWS region stored as GitHub variable: AWS_REGION
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          role-session-name: discolaire-messaging-deploy-${{ github.run_id }}
+
+      # ── 7. CDK synth (dry-run, validates the template) ───────────────────────
+      - name: CDK Synth
+        working-directory: apps/messaging
+        run: npx cdk synth --app 'npx tsx cdk/bin/app.ts' --quiet
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+          CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+          SES_FROM_ADDRESS: ${{ vars.SES_FROM_ADDRESS }}
+          STACK_PREFIX: ${{ vars.STACK_PREFIX || 'discolaire' }}
+
+      # ── 8. CDK Deploy ────────────────────────────────────────────────────────
+      - name: CDK Deploy
+        working-directory: apps/messaging
+        run: |
+          npx cdk deploy \
+            --app 'npx tsx cdk/bin/app.ts' \
+            --require-approval never \
+            --outputs-file cdk-outputs.json
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+          CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+          SES_FROM_ADDRESS: ${{ vars.SES_FROM_ADDRESS }}
+          STACK_PREFIX: ${{ vars.STACK_PREFIX || 'discolaire' }}
+
+      # ── 9. Print outputs ─────────────────────────────────────────────────────
+      - name: Print CDK outputs
+        if: always()
+        working-directory: apps/messaging
+        run: |
+          if [ -f cdk-outputs.json ]; then
+            echo "### CDK Outputs" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat cdk-outputs.json >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Copy \`QueueUrl\` into \`SQS_EMAIL_QUEUE_URL\` in your frontend environment.**" >> $GITHUB_STEP_SUMMARY
+          fi
