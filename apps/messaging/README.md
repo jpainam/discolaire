@@ -175,36 +175,107 @@ Create a role with the following **trust policy** (replace placeholders):
 
 ### 3. Attach permissions to the role
 
-Minimum permissions needed (attach as an inline or managed policy):
+Replace `ACCOUNT_ID` and `REGION` throughout. The CDK bootstrap qualifier
+(`hnb659fds`) is the default — if you bootstrapped with a custom qualifier,
+adjust accordingly.
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "CDKBootstrap",
+      "Sid": "CloudFormation",
+      "Effect": "Allow",
+      "Action": ["cloudformation:*"],
+      "Resource": [
+        "arn:aws:cloudformation:REGION:ACCOUNT_ID:stack/discolaire-messaging/*",
+        "arn:aws:cloudformation:REGION:ACCOUNT_ID:stack/CDKToolkit/*"
+      ]
+    },
+    {
+      "Sid": "IAMForCDKRoles",
       "Effect": "Allow",
       "Action": [
-        "cloudformation:*",
-        "iam:CreateRole", "iam:AttachRolePolicy", "iam:DetachRolePolicy",
-        "iam:GetRole", "iam:PutRolePolicy", "iam:DeleteRolePolicy",
-        "iam:PassRole", "iam:TagRole",
-        "lambda:*",
-        "sqs:*",
-        "dynamodb:*",
-        "sns:*",
-        "logs:*",
-        "s3:GetObject", "s3:PutObject", "s3:ListBucket",
-        "ecr:*",
-        "ssm:GetParameter"
+        "iam:CreateRole", "iam:DeleteRole", "iam:GetRole",
+        "iam:AttachRolePolicy", "iam:DetachRolePolicy",
+        "iam:PutRolePolicy", "iam:DeleteRolePolicy",
+        "iam:PassRole", "iam:TagRole", "iam:UntagRole",
+        "iam:GetRolePolicy"
       ],
-      "Resource": "*"
+      "Resource": [
+        "arn:aws:iam::ACCOUNT_ID:role/discolaire-messaging-*",
+        "arn:aws:iam::ACCOUNT_ID:role/cdk-hnb659fds-*"
+      ]
+    },
+    {
+      "Sid": "Lambda",
+      "Effect": "Allow",
+      "Action": ["lambda:*"],
+      "Resource": [
+        "arn:aws:lambda:REGION:ACCOUNT_ID:function:discolaire-email-consumer",
+        "arn:aws:lambda:REGION:ACCOUNT_ID:function:discolaire-ses-notifications"
+      ]
+    },
+    {
+      "Sid": "SQS",
+      "Effect": "Allow",
+      "Action": ["sqs:*"],
+      "Resource": [
+        "arn:aws:sqs:REGION:ACCOUNT_ID:discolaire-email-queue",
+        "arn:aws:sqs:REGION:ACCOUNT_ID:discolaire-email-dlq"
+      ]
+    },
+    {
+      "Sid": "DynamoDB",
+      "Effect": "Allow",
+      "Action": ["dynamodb:*"],
+      "Resource": "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/discolaire-email-idempotency"
+    },
+    {
+      "Sid": "SNS",
+      "Effect": "Allow",
+      "Action": ["sns:*"],
+      "Resource": [
+        "arn:aws:sns:REGION:ACCOUNT_ID:discolaire-ses-bounces",
+        "arn:aws:sns:REGION:ACCOUNT_ID:discolaire-ses-complaints"
+      ]
+    },
+    {
+      "Sid": "CloudWatchLogs",
+      "Effect": "Allow",
+      "Action": ["logs:*"],
+      "Resource": [
+        "arn:aws:logs:REGION:ACCOUNT_ID:log-group:/aws/lambda/discolaire-email-consumer:*",
+        "arn:aws:logs:REGION:ACCOUNT_ID:log-group:/aws/lambda/discolaire-ses-notifications:*"
+      ]
+    },
+    {
+      "Sid": "CDKBootstrapS3",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:ListBucket", "s3:DeleteObject"],
+      "Resource": [
+        "arn:aws:s3:::cdk-hnb659fds-assets-ACCOUNT_ID-REGION",
+        "arn:aws:s3:::cdk-hnb659fds-assets-ACCOUNT_ID-REGION/*"
+      ]
+    },
+    {
+      "Sid": "CDKBootstrapECR",
+      "Effect": "Allow",
+      "Action": ["ecr:*"],
+      "Resource": "arn:aws:ecr:REGION:ACCOUNT_ID:repository/cdk-hnb659fds-container-assets-ACCOUNT_ID-REGION"
+    },
+    {
+      "Sid": "CDKBootstrapSSM",
+      "Effect": "Allow",
+      "Action": ["ssm:GetParameter"],
+      "Resource": "arn:aws:ssm:REGION:ACCOUNT_ID:parameter/cdk-bootstrap/hnb659fds/version"
     }
   ]
 }
 ```
 
-> Lock down `Resource` to specific ARNs in production for least-privilege.
+> **Tip:** If you changed `STACK_PREFIX` from `discolaire`, update the resource
+> names above accordingly (e.g. `myschool-email-queue`).
 
 ### 4. Configure GitHub repository variables / secrets
 
