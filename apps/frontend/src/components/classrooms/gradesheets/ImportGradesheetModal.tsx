@@ -14,6 +14,7 @@ import type { RouterOutputs } from "@repo/api";
 import { SubjectSelector } from "~/components/shared/selects/SubjectSelector";
 import { TermSelector } from "~/components/shared/selects/TermSelector";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -94,7 +95,7 @@ export function ImportGradesheetModal({
       scale: 20,
       grades: students.map((student) => ({
         studentId: student.id,
-        absent: false,
+        absent: !mappings.get(student.id)?.grade,
         grade: mappings.get(student.id)?.grade ?? "",
       })),
     },
@@ -226,6 +227,7 @@ export function ImportGradesheetModal({
                 <TableHead>{t("registrationNumber")}</TableHead>
                 <TableHead>{t("fullName")}</TableHead>
                 <TableHead>Note</TableHead>
+                <TableHead>{t("absence")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -257,6 +259,30 @@ export function ImportGradesheetModal({
                         }}
                         className="w-[150px]"
                         defaultValue={m?.grade ?? ""}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormField
+                        control={form.control}
+                        name={`grades.${index}.absent`}
+                        render={({ field }) => (
+                          <FormItem className="space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={
+                                  // eslint-disable-next-line react-hooks/incompatible-library
+                                  form.watch(`grades.${index}.grade`)
+                                    ? false
+                                    : true
+                                }
+                                onCheckedChange={(checked: boolean) => {
+                                  field.onChange(checked);
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
                     </TableCell>
                   </TableRow>

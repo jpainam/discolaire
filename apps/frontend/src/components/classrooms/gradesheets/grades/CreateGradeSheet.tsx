@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TriangleAlert } from "lucide-react";
+import { Download, TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { z } from "zod";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { ImportGradeButton } from "~/components/classrooms/gradesheets/ImportGradeButton";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -228,7 +229,7 @@ export function CreateGradeSheet({
                 </FormItem>
               )}
             /> */}
-            <div className="mt-4 grid grid-cols-2 items-center gap-2">
+            <div className="col-span-2 mt-4 grid flex-1 items-center gap-4 md:flex">
               <Button
                 type="button"
                 className="w-fit"
@@ -252,6 +253,26 @@ export function CreateGradeSheet({
 
                 {t("submit")}
               </Button>
+              <div className="ml-auto">
+                <ImportGradeButton
+                  variant="outline"
+                  onRows={(rows) => {
+                    const gradeMap = new Map(
+                      rows.map((r) => [r.studentId, r.grade]),
+                    );
+                    students.forEach((student, index) => {
+                      form.setValue(
+                        `grades.${index}.grade`,
+                        gradeMap.get(student.id) ?? "",
+                        { shouldDirty: true },
+                      );
+                    });
+                  }}
+                >
+                  <Download />
+                  Importer les notes
+                </ImportGradeButton>
+              </div>
             </div>
           </div>
 
