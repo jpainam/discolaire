@@ -1,28 +1,28 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
-import ResetPassword from "@repo/transactional/emails/ResetPassword";
-import { sendEmail } from "@repo/utils/resend";
+import { enqueueEmailJobs } from "@repo/messaging/client";
+import { ResetPassword } from "@repo/transactional/emails/ResetPassword";
 
-import { getQueryClient, trpc } from "~/trpc/server";
+import { env } from "~/env";
 
 const schema = z.object({
   url: z.string().min(1),
   email: z.email(),
   name: z.string().min(1),
-  userId: z.string().min(1),
 });
-export async function POST(req: NextRequest) {
-  // TOODO: Uncomment this when session management is implemented
-  // const session = await getSession();
 
-  // if (!session) {
-  //   return new Response("Unauthorized", { status: 401 });
-  // }
+export async function POST(req: NextRequest) {
+  // Called by packages/auth (BetterAuth callbacks) without a user session.
+  const apiKey = req.headers.get("x-api-key");
+  if (!apiKey || apiKey !== env.DISCOLAIRE_API_KEY) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
     const result = schema.safeParse(body);
 
@@ -30,22 +30,20 @@ export async function POST(req: NextRequest) {
       const error = z.treeifyError(result.error);
       return NextResponse.json(error, { status: 400 });
     }
-    const { url, email, name, userId } = result.data;
-    const queryClient = getQueryClient();
-    const user = await queryClient.fetchQuery(
-      trpc.user.get.queryOptions(userId),
+    const { url, email, name } = result.data;
+
+    const html = await render(
+      ResetPassword({ username: name, resetLink: url, school: "IPBW" }),
     );
 
-    await sendEmail({
-      from: `${user.school.name} <hi@discolaire.com>`,
-      to: email,
-      subject: "Réinitialisez votre mot de passe.",
-      react: ResetPassword({
-        username: name,
-        resetLink: `${url}`,
-        school: user.school.name,
-      }) as React.ReactElement,
-    });
+    await enqueueEmailJobs([
+      {
+        to: email,
+        from: "Discolaire <contact@discolaire.com>",
+        subject: "Réinitialisez votre mot de passe.",
+        html,
+      },
+    ]);
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {

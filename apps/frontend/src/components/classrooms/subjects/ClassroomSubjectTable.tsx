@@ -2,40 +2,20 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { decode } from "entities";
-import {
-  ExternalLink,
-  FileTextIcon,
-  MoreHorizontal,
-  Trash2,
-} from "lucide-react";
+import { ExternalLink, FileTextIcon, MoreHorizontal, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+
+
 
 import { authClient } from "~/auth/client";
 import { Badge } from "~/components/base-badge";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -48,6 +28,7 @@ import { ClassroomSubjectGradeSheet } from "./ClassroomSubjectGradeSheet";
 import { ClassroomSubjectTimetable } from "./ClassroomSubjectTimetable";
 import { CreateEditSubject } from "./CreateEditSubject";
 import { SubjectSessionBoard } from "./SubjectSessionBoard";
+
 
 export function ClassroomSubjectTable() {
   const params = useParams<{ id: string }>();
@@ -145,7 +126,8 @@ export function ClassroomSubjectTable() {
                           }}
                           className="cursor-pointer"
                           variant={"warning"}
-                          appearance={"outline"}
+                          size={"xs"}
+                          appearance={"light"}
                         >
                           {gradeCount?.count ?? 0} {t("gradesheets")}{" "}
                           <ExternalLink />
@@ -153,6 +135,8 @@ export function ClassroomSubjectTable() {
 
                         <Badge
                           className="cursor-pointer"
+                          size={"xs"}
+                          appearance={"light"}
                           onClick={() => {
                             openSheet({
                               title: `Programme ${subject.course.name} `,
@@ -169,7 +153,6 @@ export function ClassroomSubjectTable() {
                               className: "min-w-3/4 w-full sm:max-w-5xl w-3/4",
                             });
                           }}
-                          appearance={"outline"}
                           variant={"info"}
                         >
                           {subject.programs.length} programmes <ExternalLink />
@@ -189,7 +172,8 @@ export function ClassroomSubjectTable() {
                             });
                           }}
                           variant={"success"}
-                          appearance={"outline"}
+                          size={"xs"}
+                          appearance={"light"}
                         >
                           {subject.timetables.length} {t("timetable")}
                           <ExternalLink />
@@ -221,11 +205,11 @@ export function ClassroomSubjectTable() {
                     {subject.order}
                   </TableCell>
 
-                  <TableCell className="py-0 text-right">
+                  <TableCell className="text-right">
                     {(canEditClassroomSubject || canDeleteClassroomSubject) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant={"ghost"} size={"icon-sm"}>
+                          <Button variant={"ghost"} size={"icon"}>
                             <MoreHorizontal />
                           </Button>
                         </DropdownMenuTrigger>

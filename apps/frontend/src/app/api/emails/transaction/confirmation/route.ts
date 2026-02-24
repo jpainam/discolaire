@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { nanoid } from "nanoid";
+import { render } from "@react-email/render";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod/v4";
 
 import TransactionConfirmation from "@repo/transactional/emails/TransactionConfirmation";
-import { resend } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
@@ -17,12 +15,14 @@ const schema = z.object({
   createdBy: z.string().min(1),
   status: z.string().min(1).default("success"),
 });
+
 export async function POST(req: Request) {
   try {
     const session = await getSession();
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
@@ -54,27 +54,31 @@ export async function POST(req: Request) {
       })
       .filter((email) => email != null);
 
+    if (destinationEmails.length === 0) {
+      return Response.json({ success: true, sent: 0 }, { status: 200 });
+    }
+
     const t = await getTranslations();
     const school = await caller.school.getSchool();
 
-    const { error } = await resend.emails.send({
-      from: "Confirmation de Paiement <hi@discolaire.com>",
-      to: destinationEmails,
-      subject: "Paiement " + school.name,
-      headers: {
-        "X-Entity-Ref-ID": nanoid(),
-      },
-      react: TransactionConfirmation({
+    const html = await render(
+      TransactionConfirmation({
         name: getFullName(student),
         amount: transaction.amount,
         remaining: remaining,
         createdBy: createdBy,
         status: t(status),
-      }) as React.ReactElement,
+      }),
+    );
+
+    await caller.sesEmail.enqueue({
+      jobs: destinationEmails.map((to) => ({
+        to,
+        from: "Discolaire <contact@discolaire.com>",
+        subject: "Paiement " + school.name,
+        html,
+      })),
     });
-    if (error) {
-      return Response.json({ error }, { status: 500 });
-    }
 
     return Response.json({ success: true }, { status: 200 });
   } catch (e) {

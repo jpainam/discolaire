@@ -24,7 +24,7 @@ export default function SendNotificationDialog() {
   const t = useTranslations();
   const trpc = useTRPC();
   const sendEmailMutation = useMutation(
-    trpc.messaging.sendEmail.mutationOptions(),
+    trpc.sesEmail.enqueue.mutationOptions(),
   );
   return (
     <>
@@ -103,11 +103,14 @@ export default function SendNotificationDialog() {
           onClick={() => {
             toast.promise(
               sendEmailMutation.mutateAsync({
-                subject: "Hello",
-                body: "<p>Hello this is avery long content o tetes</p>",
-                schedule: "now",
-                to: ["jpainam@gmail.com"],
-                receipt: false,
+                jobs: [
+                  {
+                    to: "jpainam@gmail.com",
+                    from: "Discolaire <contact@discolaire.com>",
+                    subject: "Hello",
+                    html: "<p>Hello this is a very long content to test</p>",
+                  },
+                ],
               }),
               {
                 loading: t("sending"),

@@ -14,9 +14,10 @@ export const EmailJobSchema = z.object({
 
   /**
    * Sender address. Must be a verified SES identity.
-   * Defaults to SES_FROM_ADDRESS env var when omitted.
+   * Supports plain email ("hi@example.com") or display-name format
+   * ("Discolaire <hi@example.com>"). Defaults to SES_FROM_ADDRESS env var when omitted.
    */
-  from: z.email().optional(),
+  from: z.string().min(1).optional(),
 
   /** Email subject line */
   subject: z.string().min(1).max(998),
@@ -81,9 +82,10 @@ export const BroadcastEmailSchema = z.object({
 
   /**
    * Sender address. Must be a verified SES identity.
-   * Defaults to SES_FROM_ADDRESS env var when omitted.
+   * Supports plain email ("hi@example.com") or display-name format
+   * ("Discolaire <hi@example.com>"). Defaults to SES_FROM_ADDRESS env var when omitted.
    */
-  from: z.email().optional(),
+  from: z.string().min(1).optional(),
 
   /** Email subject line (same for every recipient) */
   subject: z.string().min(1).max(998),

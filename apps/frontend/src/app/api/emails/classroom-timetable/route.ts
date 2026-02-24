@@ -1,7 +1,7 @@
+import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
 import { ClassroomTimetableEmail } from "@repo/transactional";
-import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
@@ -220,21 +220,23 @@ export async function POST(req: Request) {
     const timetable = buildWeeklyTimetable(timetableEvents);
     const subject = `Emploi du temps ${classroom.name} - ${school.name}`;
 
-    await Promise.all(
-      recipients.map(async (recipient) => {
-        await sendEmail({
-          from: `${school.name} <contact@discolaire.com>`,
-          to: recipient.email,
-          subject,
-          react: ClassroomTimetableEmail({
+    const jobs = await Promise.all(
+      recipients.map(async (recipient) => ({
+        to: recipient.email,
+        from: "Discolaire <contact@discolaire.com>",
+        subject,
+        html: await render(
+          ClassroomTimetableEmail({
             schoolName: school.name,
             classroomName: classroom.name,
             recipientName: recipient.name,
             timetable,
           }),
-        });
-      }),
+        ),
+      })),
     );
+
+    await caller.sesEmail.enqueue({ jobs });
 
     return Response.json({
       success: true,

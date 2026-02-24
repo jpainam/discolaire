@@ -14,7 +14,6 @@ import {
 } from "better-auth/plugins";
 
 import { getDb } from "@repo/db";
-import { sendEmail } from "@repo/utils/resend";
 
 import { authEnv } from "../env";
 import {
@@ -22,6 +21,18 @@ import {
   sendOrganizationInvitation,
   sendResetPassword,
 } from "./utils";
+
+async function sendPlainEmail(
+  baseUrl: string,
+  apiKey: string,
+  opts: { to: string; subject: string; html?: string; text?: string },
+) {
+  await fetch(`${baseUrl}/api/emails/plain`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-api-key": apiKey },
+    body: JSON.stringify(opts),
+  });
+}
 
 const env = authEnv();
 /* eslint-disable @typescript-eslint/require-await */
@@ -76,8 +87,7 @@ export function initAuth(options: {
           request,
         ) => {
           console.log(">>> sendChangeEmailVerification:", user.email, newEmail);
-          await sendEmail({
-            from: "Discolaire <hi@discolaire.com>",
+          await sendPlainEmail(options.baseUrl, env.DISCOLAIRE_API_KEY, {
             to: user.email, // verification email must be sent to the current user email to approve the change
             subject: "Confirmation de changement d'email",
             text: `Cliquez sur le lien pour confirmer le changement.: ${url}`,
@@ -106,7 +116,7 @@ export function initAuth(options: {
           console.log("Completing registration");
           await completeRegistration({ user, url, baseUrl: options.baseUrl });
         } else {
-          await sendResetPassword({ user, url });
+          await sendResetPassword({ user, url, baseUrl: options.baseUrl });
         }
       },
       requireEmailVerification: false,
@@ -120,8 +130,7 @@ export function initAuth(options: {
           console.warn("User already verified, skipping email verification");
           return;
         }
-        await sendEmail({
-          from: "Discolaire <hi@discolaire.com>",
+        await sendPlainEmail(options.baseUrl, env.DISCOLAIRE_API_KEY, {
           to: user.email,
           subject: "Verifier votre adresse e-mail",
           text: `Cliquez sur le lien ci-dessous pour vérifier votre adresse e-mail : ${url}`,

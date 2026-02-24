@@ -12,7 +12,7 @@
  *   sesEmail.broadcast — one template → N recipients, each send is individual
  */
 import type { TRPCRouterRecord } from "@trpc/server";
-import { z } from "zod/v4";
+import  z from "zod";
 
 import { broadcastEmail, enqueueEmailJobs } from "@repo/messaging/client";
 import { BroadcastEmailSchema, EmailJobSchema } from "@repo/messaging/schemas";

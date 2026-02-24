@@ -1,7 +1,5 @@
 import { z } from "zod/v4";
 
-import { sendEmail } from "@repo/utils/resend";
-
 import { getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
@@ -38,19 +36,21 @@ export async function POST(req: Request) {
 
 async function completeSend(title: string, body: string, studentId: string) {
   const studentContacts = await caller.student.contacts(studentId);
-  if (studentContacts.length === 0) {
-    return new Response("Student has no contact", { status: 404 });
-  }
+  if (studentContacts.length === 0) return;
 
   const contactEmails = studentContacts
     .map((c) => c.contact.user?.email)
     .filter((v): v is string => !!v && v !== "");
 
-  await sendEmail({
-    from: "Discolaire <hi@discolaire.com>",
-    to: contactEmails,
-    subject: title,
-    html: body,
-    text: body.replace(/<[^>]+>/g, ""), // Simple text fallback
+  if (contactEmails.length === 0) return;
+
+  await caller.sesEmail.enqueue({
+    jobs: contactEmails.map((to) => ({
+      to,
+      from: "Discolaire <contact@discolaire.com>",
+      subject: title,
+      html: `<p>${body}</p>`,
+      text: body,
+    })),
   });
 }

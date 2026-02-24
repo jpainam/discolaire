@@ -372,3 +372,12 @@ apps/messaging/
 ├── tsconfig.json
 └── tsconfig.cdk.json
 ```
+
+Read dead-letter-queue
+```
+aws logs filter-log-events \
+  --log-group-name "/aws/lambda/discolaire-email-consumer" \
+  --region eu-central-1 \
+  --filter-pattern "ERROR" \
+  --start-time $(date -v-1H +%s000)
+  ```

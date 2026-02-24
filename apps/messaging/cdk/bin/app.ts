@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 import "source-map-support/register";
+import { config } from "dotenv";
+import { resolve } from "path";
 import * as cdk from "aws-cdk-lib";
 import { MessagingStack } from "../lib/messaging-stack";
+
+// Load .env from the app root (apps/messaging/.env) so CDK picks up
+// SES_FROM_ADDRESS, CDK_DEFAULT_ACCOUNT, CDK_DEFAULT_REGION, etc.
+config({ path: resolve(__dirname, "../../.env") });
 
 const app = new cdk.App();
 

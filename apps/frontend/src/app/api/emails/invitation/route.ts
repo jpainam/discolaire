@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
 import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
-import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
-import { getQueryClient, trpc } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const schema = z.object({
   url: z.string().min(1),
@@ -15,12 +14,14 @@ const schema = z.object({
   name: z.string().min(1),
   userId: z.string().min(1),
 });
+
 export async function POST(req: NextRequest) {
   const session = await getSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
@@ -33,16 +34,24 @@ export async function POST(req: NextRequest) {
       trpc.user.get.queryOptions(userId),
     );
 
-    await sendEmail({
-      from: `${user.school.name} <hi@discolaire.com>`,
-      to: email,
-      subject: "Invitation " + user.school.name,
-      react: InvitationEmail({
+    const html = await render(
+      InvitationEmail({
         inviteeName: name,
         schoolName: user.school.name,
         inviteLink: `${url}&id=${userId}`,
         logo: user.school.logo ?? "",
-      }) as React.ReactElement,
+      }),
+    );
+
+    await caller.sesEmail.enqueue({
+      jobs: [
+        {
+          to: email,
+          from: "Discolaire <contact@discolaire.com>",
+          subject: "Invitation " + user.school.name,
+          html,
+        },
+      ],
     });
 
     return Response.json({ success: true }, { status: 200 });

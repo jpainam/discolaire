@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
 import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary";
-import { sendEmail } from "@repo/utils/resend";
 
 import { getSession } from "~/auth/server";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
-import { getQueryClient, trpc } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
 const schema = z.object({
@@ -16,12 +14,14 @@ const schema = z.object({
   endDate: z.coerce.date(),
   schoolYearId: z.string(),
 });
+
 export async function POST(req: Request) {
   try {
     const session = await getSession();
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
     const result = schema.safeParse(body);
     if (!result.success) {
@@ -51,61 +51,38 @@ export async function POST(req: Request) {
       trpc.school.get.queryOptions(user.schoolId),
     );
 
-    const plainText = await render(
-      TransactionsSummary({
-        baseUrl,
-        locale: school.defaultLocale,
-        school: {
-          name: school.name,
-          id: school.id,
-          logo: school.logo ?? "",
-        },
-        transactions: transactions.map((transaction) => {
-          return {
-            id: transaction.id,
-            description: transaction.description ?? "",
-            name: getFullName(transaction.student),
-            date: transaction.createdAt.toISOString(),
-            amount: transaction.amount,
-            status: transaction.status,
-            currency: school.currency,
-            deleted: transaction.deletedAt != null,
-          };
-        }),
-        fullName: user.name,
-      }),
-      {
-        plainText: true,
-      },
-    );
+    const templateProps = {
+      baseUrl,
+      locale: school.defaultLocale,
+      school: { name: school.name, id: school.id, logo: school.logo ?? "" },
+      transactions: transactions.map((transaction) => ({
+        id: transaction.id,
+        description: transaction.description ?? "",
+        name: getFullName(transaction.student),
+        date: transaction.createdAt.toISOString(),
+        amount: transaction.amount,
+        status: transaction.status,
+        currency: school.currency,
+        deleted: transaction.deletedAt != null,
+      })),
+      fullName: user.name,
+    };
 
-    await sendEmail({
-      from: `${school.name} <contact@discolaire.com>`,
-      text: plainText,
-      react: TransactionsSummary({
-        baseUrl,
-        locale: school.defaultLocale,
-        school: {
-          name: school.name,
-          id: school.id,
-          logo: school.logo ?? "",
+    const [html, text] = await Promise.all([
+      render(TransactionsSummary(templateProps)),
+      render(TransactionsSummary(templateProps), { plainText: true }),
+    ]);
+
+    await caller.sesEmail.enqueue({
+      jobs: [
+        {
+          to: user.email,
+          from: "Discolaire <contact@discolaire.com>",
+          subject: `Résumé des transactions - ${school.name}`,
+          html,
+          text,
         },
-        transactions: transactions.map((transaction) => {
-          return {
-            id: transaction.id,
-            description: transaction.description ?? "",
-            name: getFullName(transaction.student),
-            date: transaction.createdAt.toISOString(),
-            amount: transaction.amount,
-            status: transaction.status,
-            currency: school.currency,
-            deleted: transaction.deletedAt != null,
-          };
-        }),
-        fullName: user.name,
-      }),
-      subject: `Résumé des transactions - ${school.name}`,
-      to: user.email,
+      ],
     });
 
     return Response.json({ success: true }, { status: 200 });

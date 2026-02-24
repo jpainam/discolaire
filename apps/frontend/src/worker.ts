@@ -6,7 +6,6 @@
  *   or with tsx:
  *   pnpm with-env tsx src/worker.ts
  */
-import "./workers/email-notification.worker";
 import "./workers/db-backup.worker";
 
 import { initializeJobs } from "./workers";

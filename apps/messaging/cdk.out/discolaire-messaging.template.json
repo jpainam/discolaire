@@ -256,7 +256,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-024501307720-eu-central-1",
-     "S3Key": "4da9ab2a856a9ccd1328a802a3a7f0ad0b19c0d06e6ef7c1de1d06bac68c0e03.zip"
+     "S3Key": "1fd4a05d102e64178a53a4c4f4c04088a22e7b8877ccdde4be7c8874f582f367.zip"
     },
     "Environment": {
      "Variables": {
@@ -264,7 +264,7 @@
       "IDEMPOTENCY_TABLE": {
        "Ref": "IdempotencyTable22A5A209"
       },
-      "SES_FROM_ADDRESS": "",
+      "SES_FROM_ADDRESS": "contact@discolaire.com",
       "SES_REGION": "eu-central-1"
      }
     },
@@ -305,7 +305,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "discolaire-messaging/EmailConsumer/Resource",
-    "aws:asset:path": "asset.4da9ab2a856a9ccd1328a802a3a7f0ad0b19c0d06e6ef7c1de1d06bac68c0e03",
+    "aws:asset:path": "asset.1fd4a05d102e64178a53a4c4f4c04088a22e7b8877ccdde4be7c8874f582f367",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

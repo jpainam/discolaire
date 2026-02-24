@@ -10,9 +10,9 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint --flag unstable_native_nodejs_ts_config",
     "start": "pnpm with-env next start",
-    "worker": "pnpm with-env tsx src/worker.ts",
     "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --",
+    "worker": "pnpm with-env tsx src/worker.ts"
   },
   "prettier": "@repo/prettier-config",
   "dependencies": {
@@ -45,6 +45,7 @@
     "@repo/api": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
+    "@repo/messaging": "workspace:*",
     "@repo/notification": "workspace:*",
     "@repo/transactional": "workspace:*",
     "@repo/utils": "workspace:*",
