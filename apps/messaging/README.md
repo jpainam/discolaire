@@ -196,10 +196,16 @@ adjust accordingly.
       "Sid": "IAMForCDKRoles",
       "Effect": "Allow",
       "Action": [
-        "iam:CreateRole", "iam:DeleteRole", "iam:GetRole",
-        "iam:AttachRolePolicy", "iam:DetachRolePolicy",
-        "iam:PutRolePolicy", "iam:DeleteRolePolicy",
-        "iam:PassRole", "iam:TagRole", "iam:UntagRole",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:GetRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:PassRole",
+        "iam:TagRole",
+        "iam:UntagRole",
         "iam:GetRolePolicy"
       ],
       "Resource": [
@@ -252,7 +258,12 @@ adjust accordingly.
     {
       "Sid": "CDKBootstrapS3",
       "Effect": "Allow",
-      "Action": ["s3:GetObject", "s3:PutObject", "s3:ListBucket", "s3:DeleteObject"],
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ],
       "Resource": [
         "arn:aws:s3:::cdk-hnb659fds-assets-ACCOUNT_ID-REGION",
         "arn:aws:s3:::cdk-hnb659fds-assets-ACCOUNT_ID-REGION/*"
@@ -279,12 +290,12 @@ adjust accordingly.
 
 ### 4. Configure GitHub repository variables / secrets
 
-| Name | Type | Value |
-|------|------|-------|
-| `AWS_DEPLOY_ROLE_ARN` | Secret | `arn:aws:iam::ACCOUNT_ID:role/discolaire-github-deploy` |
-| `AWS_ACCOUNT_ID` | Secret | your 12-digit AWS account ID |
-| `AWS_REGION` | Variable | e.g. `us-east-1` |
-| `SES_FROM_ADDRESS` | Variable | e.g. `no-reply@yourdomain.com` |
+| Name                  | Type     | Value                                                   |
+| --------------------- | -------- | ------------------------------------------------------- |
+| `AWS_DEPLOY_ROLE_ARN` | Secret   | `arn:aws:iam::ACCOUNT_ID:role/discolaire-github-deploy` |
+| `AWS_ACCOUNT_ID`      | Secret   | your 12-digit AWS account ID                            |
+| `AWS_REGION`          | Variable | e.g. `us-east-1`                                        |
+| `SES_FROM_ADDRESS`    | Variable | e.g. `no-reply@yourdomain.com`                          |
 
 ### 5. Push to `main`
 
@@ -374,10 +385,11 @@ apps/messaging/
 ```
 
 Read dead-letter-queue
+
 ```
 aws logs filter-log-events \
   --log-group-name "/aws/lambda/discolaire-email-consumer" \
   --region eu-central-1 \
   --filter-pattern "ERROR" \
   --start-time $(date -v-1H +%s000)
-  ```
+```

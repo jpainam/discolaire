@@ -162,7 +162,9 @@ export async function enqueueEmailJobs(
   const validated = jobs.map((job, i) => {
     const result = EmailJobSchema.safeParse(job);
     if (!result.success) {
-      throw new Error(`Invalid EmailJob at index ${i}: ${result.error.message}`);
+      throw new Error(
+        `Invalid EmailJob at index ${i}: ${result.error.message}`,
+      );
     }
     return result.data;
   });

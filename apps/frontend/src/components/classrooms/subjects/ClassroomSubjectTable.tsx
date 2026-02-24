@@ -2,20 +2,40 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { decode } from "entities";
-import { ExternalLink, FileTextIcon, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  ExternalLink,
+  FileTextIcon,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-
-
 
 import { authClient } from "~/auth/client";
 import { Badge } from "~/components/base-badge";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { Button } from "~/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
@@ -28,7 +48,6 @@ import { ClassroomSubjectGradeSheet } from "./ClassroomSubjectGradeSheet";
 import { ClassroomSubjectTimetable } from "./ClassroomSubjectTimetable";
 import { CreateEditSubject } from "./CreateEditSubject";
 import { SubjectSessionBoard } from "./SubjectSessionBoard";
-
 
 export function ClassroomSubjectTable() {
   const params = useParams<{ id: string }>();

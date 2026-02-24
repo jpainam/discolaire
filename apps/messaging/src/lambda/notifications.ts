@@ -38,7 +38,10 @@ export const handler = async (event: SNSEvent): Promise<void> => {
     try {
       notification = JSON.parse(record.Sns.Message) as SESNotification;
     } catch {
-      console.error("[notifications] Failed to parse SNS message:", record.Sns.Message);
+      console.error(
+        "[notifications] Failed to parse SNS message:",
+        record.Sns.Message,
+      );
       continue;
     }
 
@@ -64,17 +67,25 @@ export const handler = async (event: SNSEvent): Promise<void> => {
           //     data: addresses.map(email => ({ email, reason: "hard_bounce" })),
           //     skipDuplicates: true,
           //   });
-          console.warn("[notifications] TODO: suppress hard-bounce addresses:", addresses);
+          console.warn(
+            "[notifications] TODO: suppress hard-bounce addresses:",
+            addresses,
+          );
         } else {
           // Transient bounce (e.g. mailbox full) — optionally schedule a retry.
-          console.warn("[notifications] Transient bounce, no action taken:", addresses);
+          console.warn(
+            "[notifications] Transient bounce, no action taken:",
+            addresses,
+          );
         }
         break;
       }
 
       case "Complaint": {
         const complaint = notification.complaint!;
-        const addresses = complaint.complainedRecipients.map((r) => r.emailAddress);
+        const addresses = complaint.complainedRecipients.map(
+          (r) => r.emailAddress,
+        );
 
         console.log(
           `[notifications] Complaint (${complaint.complaintFeedbackType ?? "unknown"}) for: ${addresses.join(", ")}`,
@@ -90,7 +101,10 @@ export const handler = async (event: SNSEvent): Promise<void> => {
         //     data: addresses.map(email => ({ email, reason: "complaint" })),
         //     skipDuplicates: true,
         //   });
-        console.warn("[notifications] TODO: suppress complaint addresses:", addresses);
+        console.warn(
+          "[notifications] TODO: suppress complaint addresses:",
+          addresses,
+        );
         break;
       }
 
@@ -103,7 +117,10 @@ export const handler = async (event: SNSEvent): Promise<void> => {
       }
 
       default: {
-        console.warn("[notifications] Unknown notification type:", notification);
+        console.warn(
+          "[notifications] Unknown notification type:",
+          notification,
+        );
       }
     }
   }

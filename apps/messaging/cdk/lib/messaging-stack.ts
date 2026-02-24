@@ -192,18 +192,21 @@ export class MessagingStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, "DLQUrl", {
       value: dlq.queueUrl,
-      description: "Dead-letter queue – inspect here for permanently failed emails",
+      description:
+        "Dead-letter queue – inspect here for permanently failed emails",
     });
 
     new cdk.CfnOutput(this, "BounceTopicArn", {
       value: bounceTopic.topicArn,
-      description: "Configure in SES Verified Identity → Notifications → Bounces",
+      description:
+        "Configure in SES Verified Identity → Notifications → Bounces",
       exportName: `${prefix}-ses-bounce-topic-arn`,
     });
 
     new cdk.CfnOutput(this, "ComplaintTopicArn", {
       value: complaintTopic.topicArn,
-      description: "Configure in SES Verified Identity → Notifications → Complaints",
+      description:
+        "Configure in SES Verified Identity → Notifications → Complaints",
       exportName: `${prefix}-ses-complaint-topic-arn`,
     });
 

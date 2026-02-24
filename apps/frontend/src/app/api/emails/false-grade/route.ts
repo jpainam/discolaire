@@ -31,9 +31,16 @@ export async function GET(req: NextRequest) {
           reportComment: "This is a fake  grade report",
         }),
       );
-      
+
       await caller.sesEmail.enqueue({
-        jobs: [{ to: user.email, from: "Discolaire <contact@discolaire.com>", subject: "Signalement de fausse note", html: emailHtml }],
+        jobs: [
+          {
+            to: user.email,
+            from: "Discolaire <contact@discolaire.com>",
+            subject: "Signalement de fausse note",
+            html: emailHtml,
+          },
+        ],
       });
     }
     return Response.json({ success: true }, { status: 200 });

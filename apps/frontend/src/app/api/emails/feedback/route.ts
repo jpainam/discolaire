@@ -44,7 +44,14 @@ export async function POST(req: NextRequest) {
     );
 
     await caller.sesEmail.enqueue({
-      jobs: [{ to: "jpainam@gmail.com", from: "Discolaire <contact@discolaire.com>", subject: "Feedback", html }],
+      jobs: [
+        {
+          to: "jpainam@gmail.com",
+          from: "Discolaire <contact@discolaire.com>",
+          subject: "Feedback",
+          html,
+        },
+      ],
     });
 
     return Response.json({ success: true }, { status: 200 });

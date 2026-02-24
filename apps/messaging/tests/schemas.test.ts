@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { BroadcastEmailSchema, EmailJobBatchSchema, EmailJobSchema } from "../src/schemas";
+import {
+  BroadcastEmailSchema,
+  EmailJobBatchSchema,
+  EmailJobSchema,
+} from "../src/schemas";
 
 // ─── EmailJobSchema ───────────────────────────────────────────────────────────
 
@@ -30,7 +34,10 @@ describe("EmailJobSchema", () => {
   });
 
   it("rejects a missing `to` field", () => {
-    const result = EmailJobSchema.safeParse({ subject: "Hi", html: "<p>Hi</p>" });
+    const result = EmailJobSchema.safeParse({
+      subject: "Hi",
+      html: "<p>Hi</p>",
+    });
     expect(result.success).toBe(false);
   });
 
@@ -70,7 +77,10 @@ describe("EmailJobSchema", () => {
 
   it("idempotencyKey is preserved when provided", () => {
     const key = "my-custom-key-123";
-    const result = EmailJobSchema.safeParse({ ...minimal, idempotencyKey: key });
+    const result = EmailJobSchema.safeParse({
+      ...minimal,
+      idempotencyKey: key,
+    });
     if (!result.success) throw result.error;
     expect(result.data.idempotencyKey).toBe(key);
   });
@@ -207,7 +217,10 @@ describe("BroadcastEmailSchema", () => {
 
   it("accepts exactly 10 000 recipients", () => {
     const max = Array.from({ length: 10_000 }, (_, i) => `u${i}@example.com`);
-    const result = BroadcastEmailSchema.safeParse({ ...minimal, recipients: max });
+    const result = BroadcastEmailSchema.safeParse({
+      ...minimal,
+      recipients: max,
+    });
     expect(result.success).toBe(true);
   });
 
