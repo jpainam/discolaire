@@ -8,8 +8,8 @@ import { useTranslations } from "next-intl";
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from "nuqs";
 
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { MasterDetail } from "~/components/MasterDetail";
 import { Button } from "~/components/ui/button";
-import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useTRPC } from "~/trpc/react";
 import { ByChronologicalOrder } from "./ByChronologicalOrder";
@@ -85,10 +85,10 @@ export function StudentGrade() {
   }
 
   return (
-    <div className="grid gap-0 p-0 pb-2 text-sm md:grid-cols-2">
-      <div className="flex flex-col">
-        <div className="bg-muted/50 flex flex-row justify-between gap-4 border-r border-b px-4 py-1.5">
-          <Button variant={"ghost"} onClick={() => handleSort("subject")}>
+    <MasterDetail
+      listHeader={
+        <div className="flex flex-row justify-between gap-4 px-4 py-1.5">
+          <Button variant="ghost" onClick={() => handleSort("subject")}>
             {t("subject")}{" "}
             {orderBy === "subject" && sortOrder === "asc" ? (
               <ChevronUp className="ml-2 h-4 w-4" />
@@ -96,7 +96,7 @@ export function StudentGrade() {
               <ChevronDown className="ml-2 h-4 w-4" />
             )}
           </Button>
-          <Button variant={"ghost"} onClick={() => handleSort("grade")}>
+          <Button variant="ghost" onClick={() => handleSort("grade")}>
             {t("grade")}
             {orderBy === "grade" && sortOrder === "asc" ? (
               <ChevronUp className="ml-2 h-4 w-4" />
@@ -105,23 +105,24 @@ export function StudentGrade() {
             )}
           </Button>
         </div>
-
-        <ScrollArea className="flex h-[calc(100vh-21rem)] rounded-b-sm border-r border-b">
-          {view === "by_subject" ? (
-            <BySubject grades={grades} />
-          ) : (
-            <ByChronologicalOrder grades={grades} classroomId={classroom.id} />
-          )}
-        </ScrollArea>
-      </div>
-      {gradeId && gradesheetId ? (
-        <StudentGradeDetails gradeId={gradeId} gradesheetId={gradesheetId} />
-      ) : (
-        <EmptyComponent
-          title={"Choisir une note"}
-          description="Veuillez choisir une note pour commencer"
-        />
-      )}
-    </div>
+      }
+      list={
+        view === "by_subject" ? (
+          <BySubject grades={grades} />
+        ) : (
+          <ByChronologicalOrder grades={grades} classroomId={classroom.id} />
+        )
+      }
+      detail={
+        gradeId && gradesheetId ? (
+          <StudentGradeDetails gradeId={gradeId} gradesheetId={gradesheetId} />
+        ) : (
+          <EmptyComponent
+            title="Choisir une note"
+            description="Veuillez choisir une note pour commencer"
+          />
+        )
+      }
+    />
   );
 }

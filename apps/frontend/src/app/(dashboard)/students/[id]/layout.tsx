@@ -122,16 +122,14 @@ export default async function Layout(props: {
       <RightPanelSetter
         content={<StudentRightPanelMeta studentId={params.id} />}
       />
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col min-h-0">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<StudentHeaderSkeleton />}>
             <StudentHeader />
           </Suspense>
         </ErrorBoundary>
 
-        {/* <CardContent className="flex h-[calc(100vh-20rem)] flex-1 w-full p-0"> */}
-
-        <main className="flex-1">{props.children}</main>
+        <main className="flex-1 min-h-0 flex flex-col">{props.children}</main>
         {/* <div className="bg-muted/50 flex flex-row items-center border-y px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />

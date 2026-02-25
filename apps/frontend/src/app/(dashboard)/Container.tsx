@@ -8,16 +8,10 @@ import { useRightPanel } from "./RightPanelProvider";
 export function Container(props: PropsWithChildren) {
   const { isOpen, content } = useRightPanel();
   return (
-    <div className="flex flex-1 flex-col">
-      <div
-        className={
-          "grid flex-1 grid-cols-1 " +
-          (isOpen
-            ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,20rem)]"
-            : "lg:grid-cols-[minmax(0,1fr)_minmax(0,0px)]")
-        }
-      >
-        <div className="@container/main flex h-full flex-1 flex-col gap-2">
+    <div className="flex flex-1 min-h-0 flex-col">
+      {/* flex-row split: main content + optional right panel */}
+      <div className="flex flex-1 min-h-0">
+        <div className="@container/main flex flex-1 min-h-0 flex-col gap-2">
           {props.children}
         </div>
         <AnimatePresence initial={false}>
@@ -28,7 +22,7 @@ export function Container(props: PropsWithChildren) {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 80, opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 26 }}
-              className="lg:border-border h-full lg:border-l"
+              className="hidden lg:flex lg:flex-col w-80 flex-none border-l border-border"
             >
               {content ?? "Right pannel"}
             </motion.div>
