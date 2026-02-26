@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { addDays, subDays, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
+import type { Prisma } from "@repo/db";
 import type { TransactionType } from "@repo/db/enums";
 import { TransactionStatus } from "@repo/db/enums";
 
@@ -157,6 +158,114 @@ export const transactionRouter = {
         },
       });
     }),
+  list: protectedProcedure
+    .input(
+      z.object({
+        search: z.string().optional().default(""),
+        pageSize: z.number().int().min(1).max(200).optional().default(30),
+        cursor: z.number().nullish(),
+        from: z.coerce.date().optional(),
+        to: z.coerce.date().optional(),
+        status: z.string().optional(),
+        classroomId: z.string().optional(),
+        journalId: z.string().optional(),
+        transactionType: z.enum(["CREDIT", "DEBIT", "DISCOUNT"]).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const search = input.search.trim();
+      const status = input.status
+        ? (input.status as TransactionStatus)
+        : undefined;
+
+      const where: Prisma.TransactionWhereInput = {
+        schoolYearId: ctx.schoolYearId,
+        deletedAt: null,
+        AND: [
+          ...(status ? [{ status }] : []),
+          ...(input.transactionType
+            ? [
+                {
+                  transactionType: {
+                    equals: input.transactionType as TransactionType,
+                  },
+                },
+              ]
+            : []),
+          ...(input.journalId ? [{ journalId: input.journalId }] : []),
+          ...(input.from
+            ? [
+                {
+                  createdAt: {
+                    gte: input.from,
+                    lt: addDays(input.to ?? new Date(), 1),
+                  },
+                },
+              ]
+            : []),
+          ...(input.classroomId
+            ? [
+                {
+                  student: {
+                    enrollments: {
+                      some: { classroomId: input.classroomId },
+                    },
+                  },
+                },
+              ]
+            : []),
+          ...(search
+            ? [
+                {
+                  student: {
+                    OR: [
+                      {
+                        firstName: { contains: search, mode: "insensitive" as const },
+                      },
+                      {
+                        lastName: { contains: search, mode: "insensitive" as const },
+                      },
+                    ],
+                  },
+                },
+              ]
+            : []),
+        ],
+      };
+
+      const take = input.pageSize + 1;
+
+      const [rowCount, data] = await ctx.db.$transaction([
+        ctx.db.transaction.count({ where }),
+        ctx.db.transaction.findMany({
+          include: {
+            journal: true,
+            createdBy: true,
+            updatedBy2: true,
+            receivedBy: true,
+            deletedBy: true,
+            student: true,
+          },
+          orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+          take,
+          where,
+          ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
+        }),
+      ]);
+
+      const hasNextPage = data.length > input.pageSize;
+      const items = hasNextPage ? data.slice(0, -1) : data;
+      const nextCursor = hasNextPage
+        ? (items[items.length - 1]?.id ?? null)
+        : null;
+
+      return {
+        data: items,
+        rowCount,
+        nextCursor,
+      };
+    }),
+
   updateStatus: protectedProcedure
     .input(
       z.object({

@@ -9,11 +9,12 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { decode } from "entities";
-import { BookCopy, MoreHorizontal } from "lucide-react";
+import { Banknote, BookCopy, MoreHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
+import { TransactionType } from "@repo/db/enums";
 
 import { Badge } from "~/components/base-badge";
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
@@ -41,9 +42,8 @@ import { CURRENCY } from "~/lib/constants";
 import { useTRPC } from "~/trpc/react";
 import { TransactionDetails } from "./TransactionDetails";
 
-type TransactionAllProcedureOutput = NonNullable<
-  RouterOutputs["transaction"]["all"]
->[number];
+type TransactionAllProcedureOutput =
+  RouterOutputs["transaction"]["list"]["data"][number];
 
 const columnHelper = createColumnHelper<TransactionAllProcedureOutput>();
 
@@ -84,12 +84,11 @@ export const useTransactionColumns = (): ColumnDef<
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={t("createdAt")} />
           ),
-          size: 80,
+          size: 100,
           cell: ({ row }) => {
             const transaction = row.original;
-
             return (
-              <div>
+              <div className="text-muted-foreground">
                 {transaction.createdAt.toLocaleDateString(locale, {
                   year: "numeric",
                   month: "short",
@@ -126,6 +125,7 @@ export const useTransactionColumns = (): ColumnDef<
               title={t("transactionRef")}
             />
           ),
+          size: 120,
           cell: ({ row }) => {
             const transaction = row.original;
             return (
@@ -143,7 +143,70 @@ export const useTransactionColumns = (): ColumnDef<
             <DataTableColumnHeader column={column} title={t("description")} />
           ),
           cell: ({ row }) => {
-            return <div>{row.original.description}</div>;
+            return (
+              <div className="line-clamp-1">{row.original.description}</div>
+            );
+          },
+        }),
+        columnHelper.accessor("transactionType", {
+          id: "transactionType",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("type")} />
+          ),
+          size: 100,
+          cell: ({ row }) => {
+            const type = row.original.transactionType;
+            if (type === TransactionType.DISCOUNT) {
+              return (
+                <Badge appearance="light" variant="info">
+                  {t("discount")}
+                </Badge>
+              );
+            }
+            if (type === TransactionType.DEBIT) {
+              return (
+                <Badge appearance="light" variant="destructive">
+                  {t("debit")}
+                </Badge>
+              );
+            }
+            return (
+              <Badge appearance="light" variant="success">
+                {t("credit")}
+              </Badge>
+            );
+          },
+        }),
+        columnHelper.accessor("method", {
+          id: "method",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("method")} />
+          ),
+          size: 100,
+          cell: ({ row }) => {
+            return (
+              <Badge variant="secondary" size="xs">
+                <Banknote className="h-3 w-3" />
+                {row.original.method}
+              </Badge>
+            );
+          },
+        }),
+        columnHelper.accessor((row) => row.journal?.name, {
+          id: "journal",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("journal")} />
+          ),
+          size: 140,
+          cell: ({ row }) => {
+            const journal = row.original.journal;
+            if (!journal)
+              return <span className="text-muted-foreground">—</span>;
+            return (
+              <Badge variant="secondary" size="xs">
+                {journal.name}
+              </Badge>
+            );
           },
         }),
         columnHelper.accessor("status", {
@@ -152,17 +215,10 @@ export const useTransactionColumns = (): ColumnDef<
           ),
           size: 120,
           cell: ({ row }) => {
-            const trans = row.original;
             const status = row.original.status;
-            const user = trans.updatedBy2;
             return (
               <div className="flex items-center gap-1">
                 <TransactionStatus status={status} />
-                {user && (
-                  <Badge size={"xs"} variant={"secondary"}>
-                    {user.username}
-                  </Badge>
-                )}
               </div>
             );
           },
@@ -175,7 +231,7 @@ export const useTransactionColumns = (): ColumnDef<
           cell: ({ row }) => {
             const amount = row.original.amount;
             return (
-              <div>
+              <div className="font-medium">
                 {amount.toLocaleString(locale, {
                   style: "currency",
                   currency: CURRENCY,
@@ -186,7 +242,87 @@ export const useTransactionColumns = (): ColumnDef<
             );
           },
         }),
-
+        columnHelper.accessor("observation", {
+          id: "observation",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("observation")} />
+          ),
+          cell: ({ row }) => {
+            return (
+              <div className="text-muted-foreground line-clamp-1">
+                {row.original.observation ?? "—"}
+              </div>
+            );
+          },
+        }),
+        columnHelper.accessor((row) => row.createdBy?.username, {
+          id: "createdBy",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("created_by")} />
+          ),
+          size: 120,
+          cell: ({ row }) => {
+            const user = row.original.createdBy;
+            if (!user) return <span className="text-muted-foreground">—</span>;
+            return (
+              <Badge size="xs" variant="secondary">
+                {user.username}
+              </Badge>
+            );
+          },
+        }),
+        columnHelper.accessor((row) => row.updatedBy2?.username, {
+          id: "updatedBy",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("updatedBy")} />
+          ),
+          size: 120,
+          cell: ({ row }) => {
+            const user = row.original.updatedBy2;
+            if (!user) return <span className="text-muted-foreground">—</span>;
+            return (
+              <Badge size="xs" variant="secondary">
+                {user.username}
+              </Badge>
+            );
+          },
+        }),
+        columnHelper.accessor((row) => row.receivedBy?.username, {
+          id: "receivedBy",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("receivedBy")} />
+          ),
+          size: 120,
+          cell: ({ row }) => {
+            const user = row.original.receivedBy;
+            if (!user) return <span className="text-muted-foreground">—</span>;
+            return (
+              <Badge size="xs" variant="secondary">
+                {user.username}
+              </Badge>
+            );
+          },
+        }),
+        columnHelper.accessor("receivedAt", {
+          id: "receivedAt",
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("receivedAt")} />
+          ),
+          size: 100,
+          cell: ({ row }) => {
+            const date = row.original.receivedAt;
+            if (!date) return <span className="text-muted-foreground">—</span>;
+            return (
+              <div className="text-muted-foreground">
+                {date.toLocaleDateString(locale, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </div>
+            );
+          },
+        }),
         {
           id: "actions",
           cell: ({ row }: { row: Row<TransactionAllProcedureOutput> }) => (

@@ -28,9 +28,8 @@ import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 
-type TransactionAllProcedureOutput = NonNullable<
-  RouterOutputs["transaction"]["all"]
->[number];
+type TransactionAllProcedureOutput =
+  RouterOutputs["transaction"]["list"]["data"][number];
 
 export function TransactionDataTableAction({
   table,
