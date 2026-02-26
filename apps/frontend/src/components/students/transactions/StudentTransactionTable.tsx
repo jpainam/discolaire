@@ -77,13 +77,23 @@ export function StudentTransactionTable() {
 
   const updateTransactionMutation = useMutation(
     trpc.transaction.updateStatus.mutationOptions({
-      onSuccess: async () => {
+      onSuccess: async (_data, variables) => {
         await queryClient.invalidateQueries(
           trpc.student.transactions.pathFilter(),
         );
         await queryClient.invalidateQueries(
           trpc.student.getStatements.pathFilter(),
         );
+        if (variables.status === "VALIDATED" && variables.transactionId) {
+          void fetch("/api/emails/transaction/validated", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              transactionId: variables.transactionId,
+              studentId: params.id,
+            }),
+          });
+        }
         toast.success(t("updated_successfully"), { id: 0 });
       },
       onError: (error) => {

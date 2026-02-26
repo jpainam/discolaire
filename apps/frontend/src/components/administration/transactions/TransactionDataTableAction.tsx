@@ -48,11 +48,27 @@ export function TransactionDataTableAction({
 
   const updateTransactionMutation = useMutation(
     trpc.transaction.updateStatus.mutationOptions({
-      onSuccess: async () => {
+      onSuccess: async (_data, variables) => {
         await queryClient.invalidateQueries(trpc.transaction.pathFilter());
         await queryClient.invalidateQueries(
           trpc.student.transactions.pathFilter(),
         );
+        const { transactionIds } = variables;
+        if (variables.status === "VALIDATED" && transactionIds) {
+          const validatedRows = rows.filter((r) =>
+            transactionIds.includes(r.original.id),
+          );
+          for (const row of validatedRows) {
+            void fetch("/api/emails/transaction/validated", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                transactionId: row.original.id,
+                studentId: row.original.studentId,
+              }),
+            });
+          }
+        }
         table.toggleAllRowsSelected(false);
         toast.success(t("updated_successfully"), { id: 0 });
       },

@@ -52,6 +52,14 @@ export function Step2({ onPrevAction }: { onPrevAction: () => void }) {
         await queryClient.invalidateQueries(
           trpc.student.transactions.pathFilter(),
         );
+        void fetch("/api/emails/transaction/pending", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            transactionId: transaction.id,
+            studentId: student.id,
+          }),
+        });
         toast.success(t("created_successfully"), { id: 0 });
         router.push(
           routes.students.transactions.details(student.id, transaction.id),
