@@ -14,3 +14,4 @@ export * from "./emails/TransactionsSummary";
 export * from "./emails/WelcomeEmail";
 export * from "./emails/QuarterlyAttendanceSummaryEmail";
 export * from "./emails/StaffWeeklyTimetableEmail";
+export * from "./emails/GradeCreatedEmail";

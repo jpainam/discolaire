@@ -131,6 +131,11 @@ export function CreateGradeSheet({
         router.push(
           routes.classrooms.gradesheets.details(params.id, result.id),
         );
+        void fetch("/api/emails/grades", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ gradeSheetId: result.id }),
+        });
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
