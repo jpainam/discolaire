@@ -18,10 +18,12 @@ export const env = createEnv({
   server: {
     AUTH_SECRET: z.string().min(1),
     DATABASE_URL: z.string(),
-    S3_ACCESS_KEY_ID: z.string().min(10),
-    S3_REGION: z.string().min(2),
-    S3_BUCKET_NAME: z.string().min(2),
-    S3_SECRET_ACCESS_KEY: z.string().min(1),
+    AWS_ACCESS_KEY_ID: z.string().min(10),
+    AWS_REGION: z.string().min(2),
+    AWS_SECRET_ACCESS_KEY: z.string().min(1),
+    MINIO_ACCESS_KEY_ID: z.string().min(1),
+    MINIO_SECRET_ACCESS_KEY: z.string().min(1),
+    MINIO_REGION: z.string().min(1),
     S3_AVATAR_BUCKET_NAME: z.string().min(2),
     S3_IMAGE_BUCKET_NAME: z.string().min(2),
     S3_DOCUMENT_BUCKET_NAME: z.string().min(2),
@@ -56,6 +58,8 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
+    MINIO_SECRET_ACCESS_KEY: process.env.MINIO_SECRET_ACCESS_KEY,
+    MINIO_REGION: process.env.MINIO_REGION,
     AUTH_SECRET: process.env.AUTH_SECRET,
     DISCOLAIRE_API_KEY: process.env.DISCOLAIRE_API_KEY,
     S3_IMAGE_BUCKET_NAME: process.env.S3_IMAGE_BUCKET_NAME,
@@ -72,16 +76,17 @@ export const env = createEnv({
     AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
     AI_PROVIDER: process.env.AI_PROVIDER,
     AI_MODEL: process.env.AI_MODEL,
+    MINIO_ACCESS_KEY_ID: process.env.MINIO_ACCESS_KEY_ID,
     AI_SYSTEM_PROMPT: process.env.AI_SYSTEM_PROMPT,
     NEXT_PUBLIC_AI_PROVIDER: process.env.NEXT_PUBLIC_AI_PROVIDER,
     NEXT_PUBLIC_AI_MODEL: process.env.NEXT_PUBLIC_AI_MODEL,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // AWS S3
-    S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
-    S3_REGION: process.env.S3_REGION,
-    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
-    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_REGION: process.env.AWS_REGION,
+
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",

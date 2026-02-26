@@ -42,6 +42,8 @@ export const createTRPCContext = async (opts: {
   db: PrismaClient;
   services: Services;
   schoolYearId: string | null;
+  tenant: string;
+  baseUrl: string;
 }> => {
   const authApi: Auth["api"] = opts.auth.api;
 
@@ -59,12 +61,22 @@ export const createTRPCContext = async (opts: {
   const db = getDb({ connectionString: env.DATABASE_URL, tenant });
   const schoolYearId = getCookieValue(opts.headers, "x-school-year");
   const services = createServices(db, tenant);
+
+  const protocol = opts.headers.get("x-forwarded-proto") ?? "http";
+  const host =
+    opts.headers.get("x-forwarded-host") ?? opts.headers.get("host");
+  const baseUrl = host
+    ? `${protocol}://${host}`
+    : `http://localhost:${process.env.PORT ?? 3000}`;
+
   return {
     authApi,
     session,
     db,
     services,
     schoolYearId: schoolYearId,
+    tenant,
+    baseUrl,
   };
 };
 /**
@@ -172,6 +184,7 @@ export const protectedProcedure = t.procedure
         permissions: permissions,
         schoolId: ctx.session.user.schoolId,
         schoolYearId: ctx.schoolYearId,
+        // tenant and baseUrl flow through from the base context unchanged
         pubsub: new PubSubLogger(
           ctx.session.user.id,
           ctx.session.user.schoolId,

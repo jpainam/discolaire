@@ -7,10 +7,9 @@ export const env = createEnv({
     MESSAGING_SERVICE_URL: z.string(),
     MESSAGING_SECRET_KEY: z.string(),
     // AWS S3
-    S3_ACCESS_KEY_ID: z.string().min(10),
-    S3_REGION: z.string().min(2),
-    S3_BUCKET_NAME: z.string().min(2),
-    S3_SECRET_ACCESS_KEY: z.string().min(1),
+    AWS_ACCESS_KEY_ID: z.string().min(10),
+    AWS_REGION: z.string().min(2),
+    AWS_SECRET_ACCESS_KEY: z.string().min(1),
     REDIS_URL: z.string().min(1),
     UNKEY_ROOT_KEY: z.string().optional(),
     AUTH_SECRET: z.string().min(1),
@@ -61,10 +60,9 @@ export const env = createEnv({
       process.env.WHATSAPP_BUSINESS_PHONE_NUMBER_ID,
 
     // AWS S3
-    S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
-    S3_REGION: process.env.S3_REGION,
-    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
-    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_REGION: process.env.AWS_REGION,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   },
   //experimental__runtimeEnv: {},
   skipValidation:

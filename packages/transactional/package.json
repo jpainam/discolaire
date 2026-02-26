@@ -7,6 +7,10 @@
   "workspaces": [
     ".react-email"
   ],
+  "exports": {
+    ".": "./index.ts",
+    "./emails/*": "./emails/*.tsx"
+  },
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",

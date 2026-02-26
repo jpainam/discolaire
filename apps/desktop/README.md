@@ -178,10 +178,9 @@ REDIS_URL=redis://localhost:6379
 
 # --- Object Storage (S3 / MinIO) ---
 
-S3_REGION=eu-central-1
-S3_ACCESS_KEY_ID=<your-key>
-S3_SECRET_ACCESS_KEY=<your-secret>
-S3_BUCKET_NAME=<your-bucket>
+AWS_REGION=eu-central-1
+AWS_ACCESS_KEY_ID=<your-key>
+AWS_SECRET_ACCESS_KEY=<your-secret>
 S3_AVATAR_BUCKET_NAME=avatars
 S3_IMAGE_BUCKET_NAME=images
 S3_DOCUMENT_BUCKET_NAME=documents

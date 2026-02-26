@@ -214,11 +214,11 @@ export function StudentGradesheetTable({
                   </TableCell>
                   {terms
                     .filter((t) => t.type == TermType.MONTHLY)
-                    .map((term) => {
+                    .map((term, index) => {
                       const g = row.grades.find((x) => x.termId === term.id);
                       if (g?.isAbsent) {
                         return (
-                          <TableCell className="text-center">
+                          <TableCell key={index} className="text-center">
                             <Badge variant={"destructive"} appearance={"light"}>
                               A
                             </Badge>

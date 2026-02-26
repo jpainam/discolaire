@@ -2,6 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod/v4";
 
+import { env } from "../env";
 import { protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = {
@@ -170,6 +171,32 @@ export const enrollmentRouter = {
               id: enr.id.toString(),
             },
           });
+
+          // Send enrollment notification email.
+          // Awaited so it always completes regardless of deployment target,
+          // but errors are caught so they never fail the enrollment itself.
+          try {
+            await fetch(`${ctx.baseUrl}/api/emails/enrollment`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-api-key": env.DISCOLAIRE_API_KEY,
+              },
+              body: JSON.stringify({
+                tenant: ctx.tenant,
+                studentId: e.studentId,
+                classroomId: e.classroomId,
+                schoolYearId: e.schoolYearId,
+              }),
+            });
+          } catch (err) {
+            console.error(
+              `[enrollment.create] Failed to send email for student ${e.studentId}:`,
+              err,
+            );
+          }
+
+          return enr;
         }),
       );
       return results;

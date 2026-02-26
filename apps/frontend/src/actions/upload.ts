@@ -143,7 +143,7 @@ export async function uploadFile({
     await s3client.send(command);
     return {
       key: destination,
-      fullPath: `https://${env.S3_REGION}.amazonaws.com/${bucket}/${destination}`,
+      fullPath: `https://${env.AWS_REGION}.amazonaws.com/${bucket}/${destination}`,
     };
   }
 }

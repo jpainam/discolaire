@@ -31,16 +31,17 @@ const { host, port } = getHost(env.NEXT_PUBLIC_MINIO_URL);
 export const minioClient = new Minio.Client({
   endPoint: host,
   port: Number(port),
+  region: env.MINIO_REGION,
   useSSL: false, // set to False when using localhost
-  accessKey: env.S3_ACCESS_KEY_ID,
-  secretKey: env.S3_SECRET_ACCESS_KEY,
+  accessKey: env.MINIO_ACCESS_KEY_ID,
+  secretKey: env.MINIO_SECRET_ACCESS_KEY,
 });
 
 export const s3client = new S3Client({
-  region: env.S3_REGION,
+  region: env.AWS_REGION,
   credentials: {
-    accessKeyId: env.S3_ACCESS_KEY_ID,
-    secretAccessKey: env.S3_SECRET_ACCESS_KEY,
+    accessKeyId: env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
@@ -147,7 +148,7 @@ export async function listS3Objects({
           size: obj.Size ?? 0,
           lastModified: obj.LastModified ?? new Date(),
           key: obj.Key ?? "",
-          location: `https://${env.S3_REGION}.amazonaws.com/${bucket}/${obj.Key}`,
+          location: `https://${env.AWS_REGION}.amazonaws.com/${bucket}/${obj.Key}`,
           bucket: bucket,
           prefix: prefix ?? "",
         });

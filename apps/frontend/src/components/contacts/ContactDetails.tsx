@@ -241,6 +241,7 @@ export function ContactDetails({ contactId }: { contactId: string }) {
         </div>
       </div>
       <div className="grid w-full grid-cols-4 gap-4">
+        <ItemCell label={t("email")} value={contact.email} />
         <ItemCell
           label={t("phoneNumber") + " 1"}
           value={contact.phoneNumber1}
