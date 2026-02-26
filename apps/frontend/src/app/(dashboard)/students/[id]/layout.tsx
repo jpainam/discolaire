@@ -122,14 +122,14 @@ export default async function Layout(props: {
       <RightPanelSetter
         content={<StudentRightPanelMeta studentId={params.id} />}
       />
-      <div className="flex flex-1 flex-col min-h-0">
+      <div className="flex min-h-0 flex-1 flex-col">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<StudentHeaderSkeleton />}>
             <StudentHeader />
           </Suspense>
         </ErrorBoundary>
 
-        <main className="flex-1 min-h-0 flex flex-col">{props.children}</main>
+        <main className="flex min-h-0 flex-1 flex-col">{props.children}</main>
         {/* <div className="bg-muted/50 flex flex-row items-center border-y px-6 py-1">
           <Suspense fallback={<Skeleton className="h-full w-full" />}>
             <StudentFooter />

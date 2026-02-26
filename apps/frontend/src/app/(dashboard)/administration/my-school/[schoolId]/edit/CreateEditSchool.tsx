@@ -24,7 +24,8 @@ import { Input } from "~/components/ui/input";
 import { Spinner } from "~/components/ui/spinner";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
-import { FileUploader } from "~/uploads/file-uploader";
+
+import { SchoolLogoDropzone } from "./SchoolLogoDropzone";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -39,7 +40,6 @@ const formSchema = z.object({
   phoneNumber2: z.string().optional(),
   email: z.string().email().optional(),
   website: z.string().url().optional(),
-  //logo: z.string().optional(),
   isActive: z.boolean().default(true),
 });
 
@@ -266,21 +266,10 @@ export function CreateEditSchool({ school }: { school: School }) {
           )}
         />
 
-        <FileUploader
-          maxFileCount={1}
-          maxSize={1 * 1024 * 1024}
-          onValueChange={(files) => {
-            if (files.length === 0) {
-              return;
-            }
-            const file = files[0];
-            if (!file) {
-              toast.error("No file uploaded");
-              return;
-            }
-            setFile(file);
-          }}
-          //progresses={progresses}
+        <SchoolLogoDropzone
+          initialImage={school.logo ?? null}
+          disabled={updateSchoolMutation.isPending || isLoading}
+          onFileChange={setFile}
         />
 
         <FormField

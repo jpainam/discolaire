@@ -25,8 +25,6 @@ import {
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { useModal } from "~/hooks/use-modal";
-import { useUpload } from "~/hooks/use-upload";
-import { FileUploader } from "~/uploads/file-uploader";
 import { Spinner } from "../ui/spinner";
 
 const preventSchema = z.object({
@@ -36,7 +34,7 @@ const preventSchema = z.object({
   attachment: z.string().optional().default(""),
   observation: z.string().optional().default(""),
 });
-export function PreventAbsence({ studentId }: { studentId: string }) {
+export function PreventAbsence({ _studentId }: { _studentId: string }) {
   const { closeModal } = useModal();
   const form = useForm({
     resolver: standardSchemaResolver(preventSchema),
@@ -49,29 +47,13 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
     },
   });
 
-  const { unstable_onUpload: onUpload } = useUpload();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [files, setFiles] = React.useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const t = useTranslations();
-  const onSubmit = async (data: z.infer<typeof preventSchema>) => {
+  const onSubmit = (_data: z.infer<typeof preventSchema>) => {
     setIsLoading(true);
-    const uploadPromises = files.map((file) => {
-      return onUpload(file);
-    });
-    const uploadState = await Promise.all(uploadPromises);
-    const attachments = uploadState
-      .map((state) => state.data?.id)
-      .filter((v) => v != undefined);
-    const values = {
-      attachments: attachments,
-      studentId: studentId,
-      comment: data.observation,
-      reason: data.reason,
-      from: new Date(data.from),
-      to: new Date(data.to),
-    };
-    console.log(values);
     //createPreventedAbsence.mutate(values);
   };
   return (
@@ -136,11 +118,6 @@ export function PreventAbsence({ studentId }: { studentId: string }) {
                   Drag and drop your files here or click to browse.
                 </DialogDescription>
               </DialogHeader>
-              <FileUploader
-                maxFileCount={8}
-                maxSize={8 * 1024 * 1024}
-                onValueChange={setFiles}
-              />
             </DialogContent>
           </Dialog>
           <span className="text-xs">

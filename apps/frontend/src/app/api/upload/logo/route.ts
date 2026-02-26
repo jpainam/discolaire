@@ -1,3 +1,5 @@
+import path from "path";
+
 import { uploadFile } from "~/actions/upload";
 import { getSession } from "~/auth/server";
 import { env } from "~/env";
@@ -21,12 +23,16 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid file type" }, { status: 400 });
     }
 
+    if (!schoolId) {
+      return Response.json({ error: "No schoolId provided" }, { status: 400 });
+    }
+
     const school = await caller.school.get(schoolId);
-    const ext = file.name.split(".").pop();
+    const ext = path.extname(file.name);
 
     const { key, fullPath } = await uploadFile({
       file: file,
-      destination: `${school.code}/${school.id}.${ext}`,
+      destination: `${school.code}/${school.id}${ext}`,
       bucket: env.S3_IMAGE_BUCKET_NAME,
     });
 
@@ -36,6 +42,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error(error);
-    return Response.json({ error: (error as Error).message });
+    return Response.json({ error: (error as Error).message }, { status: 500 });
   }
 }

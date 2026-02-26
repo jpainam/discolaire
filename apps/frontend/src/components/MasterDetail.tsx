@@ -21,18 +21,18 @@ interface MasterDetailProps {
  */
 export function MasterDetail({ listHeader, list, detail }: MasterDetailProps) {
   return (
-    <div className="flex flex-1 min-h-0 flex-col md:flex-row text-sm">
+    <div className="flex min-h-0 flex-1 flex-col text-sm md:flex-row">
       {/* List panel */}
-      <div className="flex flex-1 min-h-0 flex-col border-b md:border-r">
+      <div className="flex min-h-0 flex-1 flex-col border-b md:border-r">
         {listHeader && (
-          <div className="shrink-0 bg-muted/50 border-b">{listHeader}</div>
+          <div className="bg-muted/50 shrink-0 border-b">{listHeader}</div>
         )}
-        <ScrollArea className="flex-1 min-h-0">{list}</ScrollArea>
+        <ScrollArea className="min-h-0 flex-1">{list}</ScrollArea>
       </div>
 
       {/* Detail panel */}
-      <div className="flex flex-1 min-h-0 flex-col border-b">
-        <ScrollArea className="flex-1 min-h-0">{detail}</ScrollArea>
+      <div className="flex min-h-0 flex-1 flex-col border-b">
+        <ScrollArea className="min-h-0 flex-1">{detail}</ScrollArea>
       </div>
     </div>
   );

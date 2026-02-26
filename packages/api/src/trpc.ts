@@ -63,8 +63,7 @@ export const createTRPCContext = async (opts: {
   const services = createServices(db, tenant);
 
   const protocol = opts.headers.get("x-forwarded-proto") ?? "http";
-  const host =
-    opts.headers.get("x-forwarded-host") ?? opts.headers.get("host");
+  const host = opts.headers.get("x-forwarded-host") ?? opts.headers.get("host");
   const baseUrl = host
     ? `${protocol}://${host}`
     : `http://localhost:${process.env.PORT ?? 3000}`;

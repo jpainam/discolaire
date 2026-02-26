@@ -742,39 +742,6 @@ export const studentRouter = {
       });
     }),
 
-  addPhoto: protectedProcedure
-    .input(
-      z.object({
-        url: z.string().min(1),
-        id: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const student = await ctx.db.student.findFirstOrThrow({
-        where: {
-          id: input.id,
-        },
-      });
-      const photos = [...student.photos, input.url];
-      await ctx.pubsub.publish("student", {
-        type: "update",
-        data: {
-          id: input.id,
-          metadata: {
-            name: "Added photo",
-          },
-        },
-      });
-      return ctx.db.student.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          photos: photos,
-        },
-      });
-    }),
-
   getPrimaryContact: protectedProcedure
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {

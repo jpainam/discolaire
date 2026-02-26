@@ -67,6 +67,11 @@ export function ChangeAvatarButton(
         }
         const croppedBlob = await (await fetch(croppedImageUrl)).blob();
 
+        if (croppedBlob.size > 1024 * 1024 * 2) {
+          toast.error("L'image est trop large", { id: 0, duration: 4000 });
+          return;
+        }
+
         const file = new File([croppedBlob], selectedFile.name, {
           type: croppedBlob.type || "application/octet-stream",
           lastModified: Date.now(),
@@ -80,7 +85,8 @@ export function ChangeAvatarButton(
           toast.error("Une erreur s'est produite");
         }
       } catch (error) {
-        toast.error("Something went wrong while uploading", { id: 0 });
+        const err = error as Error;
+        toast.error(err.message, { id: 0 });
         console.error(error);
       }
     },

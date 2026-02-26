@@ -61,7 +61,7 @@ export function StudentAttendanceHeader() {
               onSelect={() => {
                 openModal({
                   title: t("prevent_an_absence"),
-                  view: <PreventAbsence studentId={params.id} />,
+                  view: <PreventAbsence _studentId={params.id} />,
                 });
               }}
             >

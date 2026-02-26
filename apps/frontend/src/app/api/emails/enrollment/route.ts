@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
       return [s, cl, sy, sc] as const;
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!student || !classroom || !schoolYear || !school) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -92,7 +93,10 @@ export async function POST(req: NextRequest) {
       })),
     );
 
-    return Response.json({ success: true, sent: uniqueEmails.length }, { status: 200 });
+    return Response.json(
+      { success: true, sent: uniqueEmails.length },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("[api/emails/enrollment]", error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
