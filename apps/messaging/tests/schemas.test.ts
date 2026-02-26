@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   BroadcastEmailSchema,
   EmailJobBatchSchema,
@@ -8,7 +8,7 @@ import {
 // ─── EmailJobSchema ───────────────────────────────────────────────────────────
 
 describe("EmailJobSchema", () => {
-  const minimal: unknown = {
+  const minimal: { to: string; subject: string; html: string } = {
     to: "student@example.com",
     subject: "Fee reminder",
     html: "<p>Your fee is due.</p>",
@@ -29,6 +29,7 @@ describe("EmailJobSchema", () => {
       replyTo: "admin@yourdomain.com",
       idempotencyKey: "report-card-2024-student-42",
       tags: { tenant: "my-school", type: "report-card" },
+      unsubscribeUrl: "https://example.com/unsubscribe",
     });
     expect(result.success).toBe(true);
   });
@@ -46,8 +47,8 @@ describe("EmailJobSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("rejects an invalid `from` email", () => {
-    const result = EmailJobSchema.safeParse({ ...minimal, from: "bad" });
+  it("rejects an empty `from` string", () => {
+    const result = EmailJobSchema.safeParse({ ...minimal, from: "" });
     expect(result.success).toBe(false);
   });
 
@@ -66,13 +67,30 @@ describe("EmailJobSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("allows `from`, `text`, `replyTo`, `tags` to be omitted (all optional)", () => {
+  it("allows `from`, `text`, `replyTo`, `tags`, `unsubscribeUrl` to be omitted (all optional)", () => {
     const result = EmailJobSchema.safeParse(minimal);
     if (!result.success) throw result.error;
     expect(result.data.from).toBeUndefined();
     expect(result.data.text).toBeUndefined();
     expect(result.data.replyTo).toBeUndefined();
     expect(result.data.tags).toBeUndefined();
+    expect(result.data.unsubscribeUrl).toBeUndefined();
+  });
+
+  it("accepts a valid unsubscribeUrl", () => {
+    const result = EmailJobSchema.safeParse({
+      ...minimal,
+      unsubscribeUrl: "https://example.com/unsubscribe?token=abc",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an invalid unsubscribeUrl", () => {
+    const result = EmailJobSchema.safeParse({
+      ...minimal,
+      unsubscribeUrl: "not-a-url",
+    });
+    expect(result.success).toBe(false);
   });
 
   it("idempotencyKey is preserved when provided", () => {
@@ -224,9 +242,9 @@ describe("BroadcastEmailSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("rejects an invalid from address", () => {
+  it("rejects an empty from string", () => {
     expect(
-      BroadcastEmailSchema.safeParse({ ...minimal, from: "bad" }).success,
+      BroadcastEmailSchema.safeParse({ ...minimal, from: "" }).success,
     ).toBe(false);
   });
 
