@@ -28,10 +28,10 @@ interface ClassroomTimetableEmailProps {
 }
 
 export function ClassroomTimetableEmail({
-  schoolName,
-  classroomName,
-  recipientName,
-  timetable,
+  schoolName ="Shool name",
+  classroomName ="Sixieme",
+  recipientName="Dupont Pierre",
+  timetable =[],
 }: ClassroomTimetableEmailProps) {
   return (
     <Html>

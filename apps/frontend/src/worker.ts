@@ -6,8 +6,6 @@
  *   or with tsx:
  *   pnpm with-env tsx src/worker.ts
  */
-import "./workers/db-backup.worker";
-
 import { initializeJobs } from "./workers";
 
 console.log("[Worker] Starting standalone worker process...");

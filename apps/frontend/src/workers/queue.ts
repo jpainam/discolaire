@@ -11,10 +11,8 @@ export const JobNames = {
 const connection = getRedis();
 export const jobQueueName = "job-queue";
 export const logQueueName = "log-queue";
-export const backupQueueName = "backup-queue";
 export const jobQueue = new Queue(jobQueueName, { connection });
 export const logQueue = new Queue(logQueueName, { connection });
-export const backupQueue = new Queue(backupQueueName, { connection });
 
 // Queue Events for Debugging
 const queueEvents = new QueueEvents(jobQueueName, { connection });
