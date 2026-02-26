@@ -70,13 +70,16 @@ export const TransactionValidatedEmail = ({
               <span className="font-semibold">{formattedAmount}</span> pour{" "}
               <span className="font-semibold">{studentName}</span> (référence :{" "}
               <span className="font-semibold">{transactionRef}</span>) a été{" "}
-              <span className="font-semibold">entièrement traité et validé</span>.
+              <span className="font-semibold">
+                entièrement traité et validé
+              </span>
+              .
             </Text>
 
             <Text className="text-[#121212]">
-              Le montant est désormais reflété dans le compte de votre apprenant.
-              Vous pouvez consulter le détail de vos transactions en cliquant sur
-              le bouton ci-dessous.
+              Le montant est désormais reflété dans le compte de votre
+              apprenant. Vous pouvez consulter le détail de vos transactions en
+              cliquant sur le bouton ci-dessous.
             </Text>
 
             <Section className="mt-[24px] mb-[24px] text-center">
