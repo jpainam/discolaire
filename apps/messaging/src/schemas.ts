@@ -43,6 +43,16 @@ export const EmailJobSchema = z.object({
    * and CloudWatch Insights filtering.
    */
   tags: z.record(z.string(), z.string()).optional(),
+
+  /**
+   * When provided, the consumer adds RFC 8058 one-click unsubscribe headers:
+   *   List-Unsubscribe: <url>
+   *   List-Unsubscribe-Post: List-Unsubscribe=One-Click
+   * This causes Gmail to display the "Unsubscribe" button at the top of the email.
+   * The URL should point to an endpoint that handles both GET (user click) and
+   * POST (Gmail one-click) unsubscribe requests.
+   */
+  unsubscribeUrl: z.url().optional(),
 });
 
 export type EmailJob = z.infer<typeof EmailJobSchema>;

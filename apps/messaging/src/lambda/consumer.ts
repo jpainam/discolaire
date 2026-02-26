@@ -9,10 +9,10 @@
  */
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
-  SESClient,
+  SESv2Client,
   SendEmailCommand,
   type SendEmailCommandInput,
-} from "@aws-sdk/client-ses";
+} from "@aws-sdk/client-sesv2";
 import {
   DynamoDBDocumentClient,
   GetCommand,
@@ -28,7 +28,7 @@ import { EmailJobSchema } from "../schemas";
 
 // ─── AWS clients (initialised once per container) ────────────────────────────
 
-const ses = new SESClient({ region: process.env.SES_REGION ?? "us-east-1" });
+const ses = new SESv2Client({ region: process.env.SES_REGION ?? "us-east-1" });
 
 const dynamo = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
@@ -138,20 +138,36 @@ export const handler = async (event: SQSEvent): Promise<SQSBatchResponse> => {
 
       // ── 3. Build SES input ────────────────────────────────────────────────
       const sesInput: SendEmailCommandInput = {
-        Source: job.from ?? SES_FROM_ADDRESS,
+        FromEmailAddress: job.from ?? SES_FROM_ADDRESS,
         Destination: { ToAddresses: [job.to] },
-        Message: {
-          Subject: { Data: job.subject, Charset: "UTF-8" },
-          Body: {
-            Html: { Data: job.html, Charset: "UTF-8" },
-            ...(job.text && {
-              Text: { Data: job.text, Charset: "UTF-8" },
-            }),
+        Content: {
+          Simple: {
+            Subject: { Data: job.subject, Charset: "UTF-8" },
+            Body: {
+              Html: { Data: job.html, Charset: "UTF-8" },
+              ...(job.text && {
+                Text: { Data: job.text, Charset: "UTF-8" },
+              }),
+            },
+            // RFC 8058: causes Gmail to show the "Unsubscribe" button at the
+            // top of the email when an unsubscribeUrl is provided.
+            Headers: job.unsubscribeUrl
+              ? [
+                  {
+                    Name: "List-Unsubscribe",
+                    Value: `<${job.unsubscribeUrl}>`,
+                  },
+                  {
+                    Name: "List-Unsubscribe-Post",
+                    Value: "List-Unsubscribe=One-Click",
+                  },
+                ]
+              : [],
           },
         },
         ...(job.replyTo && { ReplyToAddresses: [job.replyTo] }),
         ...(job.tags && {
-          Tags: Object.entries(job.tags).map(([Name, Value]) => ({
+          EmailTags: Object.entries(job.tags).map(([Name, Value]) => ({
             Name,
             Value,
           })),

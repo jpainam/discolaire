@@ -8,6 +8,8 @@ import { enqueueEmailJobs } from "@repo/messaging/client";
 import { EnrollmentEmail } from "@repo/transactional/emails/EnrollmentEmail";
 
 import { env } from "~/env";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { createUnsubscribeToken } from "~/lib/unsubscribe-token";
 
 export const runtime = "nodejs";
 
@@ -84,13 +86,24 @@ export async function POST(req: NextRequest) {
       return Response.json({ success: true, sent: 0 }, { status: 200 });
     }
 
+    const baseUrl = await getRequestBaseUrl(req.headers);
+
     await enqueueEmailJobs(
-      uniqueEmails.map((to) => ({
-        to,
-        from: `${school.code} <contact@discolaire.com>`,
-        subject,
-        html,
-      })),
+      uniqueEmails.map((to) => {
+        const token = createUnsubscribeToken(
+          "NEW_ENROLLMENT",
+          to,
+          tenant,
+          env.AUTH_SECRET,
+        );
+        return {
+          to,
+          from: `${school.code} <contact@discolaire.com>`,
+          subject,
+          html,
+          unsubscribeUrl: `${baseUrl}/api/emails/unsubscribe?token=${token}`,
+        };
+      }),
     );
 
     return Response.json(

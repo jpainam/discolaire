@@ -1,16 +1,16 @@
 {
   "version": "50.0.0",
   "files": {
-    "1fd4a05d102e64178a53a4c4f4c04088a22e7b8877ccdde4be7c8874f582f367": {
+    "88a323421b6478f2b7eb346709e54b4d1ad1281a852fdfaa8ecf1628221ab55a": {
       "displayName": "EmailConsumer/Code",
       "source": {
-        "path": "asset.1fd4a05d102e64178a53a4c4f4c04088a22e7b8877ccdde4be7c8874f582f367",
+        "path": "asset.88a323421b6478f2b7eb346709e54b4d1ad1281a852fdfaa8ecf1628221ab55a",
         "packaging": "zip"
       },
       "destinations": {
-        "024501307720-eu-central-1-66b84f04": {
+        "024501307720-eu-central-1-dcd2e677": {
           "bucketName": "cdk-hnb659fds-assets-024501307720-eu-central-1",
-          "objectKey": "1fd4a05d102e64178a53a4c4f4c04088a22e7b8877ccdde4be7c8874f582f367.zip",
+          "objectKey": "88a323421b6478f2b7eb346709e54b4d1ad1281a852fdfaa8ecf1628221ab55a.zip",
           "region": "eu-central-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::024501307720:role/cdk-hnb659fds-file-publishing-role-024501307720-eu-central-1"
         }
@@ -31,16 +31,16 @@
         }
       }
     },
-    "50ba33daf12459865f106388eb0dfab0ecfcb7a56852f48bfdde4098fcd926ba": {
+    "ddc6288e73a61f4a8dda9f9c53efcdef88da0ee59de9f3cadbba1ada9868f950": {
       "displayName": "discolaire-messaging Template",
       "source": {
         "path": "discolaire-messaging.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "024501307720-eu-central-1-991b3683": {
+        "024501307720-eu-central-1-7d6b1722": {
           "bucketName": "cdk-hnb659fds-assets-024501307720-eu-central-1",
-          "objectKey": "50ba33daf12459865f106388eb0dfab0ecfcb7a56852f48bfdde4098fcd926ba.json",
+          "objectKey": "ddc6288e73a61f4a8dda9f9c53efcdef88da0ee59de9f3cadbba1ada9868f950.json",
           "region": "eu-central-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::024501307720:role/cdk-hnb659fds-file-publishing-role-024501307720-eu-central-1"
         }

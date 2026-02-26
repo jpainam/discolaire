@@ -1,4 +1,4 @@
-name: Deploy Messaging Service
+name: Messaging Service
 
 on:
   push:
@@ -25,7 +25,7 @@ env:
 
 jobs:
   deploy:
-    name: Test → CDK Deploy
+    name: CDK Deploy
     runs-on: ubuntu-latest
 
     permissions:
@@ -42,8 +42,6 @@ jobs:
       # ── 2. Setup Node + pnpm ─────────────────────────────────────────────────
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

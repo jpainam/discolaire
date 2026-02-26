@@ -256,7 +256,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-024501307720-eu-central-1",
-     "S3Key": "1fd4a05d102e64178a53a4c4f4c04088a22e7b8877ccdde4be7c8874f582f367.zip"
+     "S3Key": "88a323421b6478f2b7eb346709e54b4d1ad1281a852fdfaa8ecf1628221ab55a.zip"
     },
     "Environment": {
      "Variables": {
@@ -305,7 +305,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "discolaire-messaging/EmailConsumer/Resource",
-    "aws:asset:path": "asset.1fd4a05d102e64178a53a4c4f4c04088a22e7b8877ccdde4be7c8874f582f367",
+    "aws:asset:path": "asset.88a323421b6478f2b7eb346709e54b4d1ad1281a852fdfaa8ecf1628221ab55a",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
