@@ -36,7 +36,7 @@ export const EnrollmentEmail = ({
   schoolYearName = "2024-2025",
   school = defaultSchool,
 }: Props) => {
-  const title = `Inscription de ${studentName} – ${classroomName}`;
+  const title = `${classroomName} - ${schoolYearName}`;
 
   return (
     <Html>

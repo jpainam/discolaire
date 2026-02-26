@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { initials } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -21,13 +23,12 @@ import { z } from "zod/v4";
 import type { RouterOutputs } from "@repo/api";
 
 import { useSession } from "~/auth/client";
-import { AvatarState } from "~/components/AvatarState";
 import { EmptyComponent } from "~/components/EmptyComponent";
 import { CheckboxField } from "~/components/shared/forms/checkbox-field";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Form } from "~/components/ui/form";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
-import { routes } from "~/configs/routes";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
 
@@ -121,81 +122,77 @@ export function StudentContactDetails({
   if (!contact) {
     return <EmptyComponent />;
   }
+  const avatar = createAvatar(initials, {
+    seed: getFullName(contact),
+  });
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="overflow flex flex-col gap-4">
-          <div className="flex flex-col">
-            <div className="flex flex-row items-center gap-2 p-2">
-              <AvatarState
-                pos={0}
-                className="h-16 w-16"
-                avatar={contact.avatar}
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-row items-start gap-2">
+            <Avatar className="size-[80px]">
+              <AvatarImage
+                src={
+                  contact.avatar
+                    ? `/api/avatars/${contact.avatar}`
+                    : avatar.toDataUri()
+                }
               />
-              <div className="flex flex-col gap-2">
-                <Link
-                  className="flex flex-row items-center gap-2 hover:text-blue-600 hover:underline"
-                  href={routes.contacts.details(contact.id)}
-                >
-                  <span className="text-md font-semibold">
-                    {getFullName(contact)}
-                  </span>
-                  <ExternalLink className="h-4 w-4" />
-                </Link>
-                <span>{studentContact.relationship?.name ?? "N/A"}</span>
-              </div>
-            </div>
-            <div className="">
-              <div className="bg-muted/50 col-span-full flex flex-row items-center gap-1 border-y p-2">
-                {/* <span className="font-semibold text-lg">{t("globalFields")}</span> */}
-                <span className="text-md font-semibold">{t("details")}</span>
-              </div>
-              <div className="grid p-2 md:grid-cols-2">
-                <Label className="text-muted-foreground flex flex-row items-center gap-1">
-                  <Languages className="h-4 w-4" /> {t("language")}
-                </Label>
-                {"French"}
-              </div>
-              <div className="grid p-2 md:grid-cols-2">
-                <Label className="text-muted-foreground flex flex-row items-center gap-1">
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+
+            <div className="flex flex-col items-start gap-2">
+              <Link
+                className="text-md flex flex-row items-center gap-2 hover:underline"
+                href={`/contacts/${contact.id}`}
+              >
+                {getFullName(contact)}
+
+                <ExternalLink className="h-4 w-4" />
+              </Link>
+              <span>{studentContact.relationship?.name}</span>
+              <div className="grid md:grid-cols-2">
+                <Label className="flex flex-row items-center gap-1">
                   <Briefcase className="h-4 w-4" /> {t("occupation")}
                 </Label>
                 {contact.occupation}
               </div>
-              <Separator />
-              <div className="grid p-2 md:grid-cols-2">
-                <Label className="text-muted-foreground flex flex-row items-center gap-1">
-                  <Mail className="h-4 w-4" /> {t("primaryEmail")}
-                </Label>
-                <EmailComponent email={contact.user?.email} />
-              </div>
-              {/* <div className="grid p-2 md:grid-cols-2">
-              <Label className="flex flex-row gap-1 items-center text-muted-foreground">
-                <Mails className="h-4 w-4" /> {t("workEmail")}
-              </Label>
-              {contact?.workEmail}
-            </div> */}
-              <Separator />
-              <div className="grid p-2 md:grid-cols-2">
-                <Label className="text-muted-foreground flex flex-row items-center gap-1">
-                  <Phone className="h-4 w-4" /> {t("phone")} 1
-                </Label>
-                {contact.phoneNumber1}
-              </div>
-              <div className="grid p-2 md:grid-cols-2">
-                <Label className="text-muted-foreground flex flex-row items-center gap-1">
-                  <PhoneCall className="h-4 w-4" /> {t("phone")} 2
-                </Label>
-                {contact.phoneNumber2}
-              </div>
-              <div className="grid p-2 md:grid-cols-2">
-                <Label className="text-muted-foreground flex flex-row items-center gap-1">
-                  <MapPin className="h-4 w-4" /> {t("address")}
-                </Label>
-                {contact.address}
-              </div>
             </div>
           </div>
+
+          <div className="grid md:grid-cols-2">
+            <Label className="flex flex-row items-center gap-2">
+              <Languages className="h-4 w-4" /> {t("language")}
+            </Label>
+            {"French"}
+          </div>
+
+          <div className="grid md:grid-cols-2">
+            <Label className="flex flex-row items-center gap-2">
+              <Mail className="h-4 w-4" /> {t("primaryEmail")}
+            </Label>
+            <EmailComponent email={contact.email} />
+          </div>
+
+          <div className="grid md:grid-cols-2">
+            <Label className="flex flex-row items-center gap-2">
+              <Phone className="h-4 w-4" /> {t("phone")} 1
+            </Label>
+            {contact.phoneNumber1}
+          </div>
+          <div className="grid md:grid-cols-2">
+            <Label className="flex flex-row items-center gap-2">
+              <PhoneCall className="h-4 w-4" /> {t("phone")} 2
+            </Label>
+            {contact.phoneNumber2}
+          </div>
+          <div className="grid md:grid-cols-2">
+            <Label className="flex flex-row items-center gap-1">
+              <MapPin className="h-4 w-4" /> {t("address")}
+            </Label>
+            {contact.address}
+          </div>
+          <Separator />
           <div className="flex flex-col gap-4">
             <CheckboxField
               disabled={disabled}
@@ -223,7 +220,7 @@ export function StudentContactDetails({
                 name: "Dupont",
               })}
             </div>
-            <div className="grid gap-2 md:grid-cols-3">
+            <div className="grid gap-2 md:grid-cols-2">
               <CheckboxField
                 disabled={disabled}
                 name="canAccessData"

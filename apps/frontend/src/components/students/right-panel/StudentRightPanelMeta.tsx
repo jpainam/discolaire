@@ -114,7 +114,7 @@ export function StudentRightPanelMeta({ studentId }: { studentId: string }) {
         "actions",
         "trend",
       ]}
-      className="w-full rounded-none border-none"
+      className="w-full overflow-y-auto rounded-none border-none"
     >
       <AccordionItem value="identity">
         <AccordionTrigger className="text-muted-foreground tracking-wide uppercase hover:no-underline">

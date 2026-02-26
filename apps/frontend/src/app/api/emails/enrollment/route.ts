@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     await enqueueEmailJobs(
       uniqueEmails.map((to) => ({
         to,
-        from: "Discolaire <contact@discolaire.com>",
+        from: `${school.code} <contact@discolaire.com>`,
         subject,
         html,
       })),
