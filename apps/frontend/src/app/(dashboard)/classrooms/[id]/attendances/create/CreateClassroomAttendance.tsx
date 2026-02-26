@@ -62,12 +62,9 @@ export function CreateClassroomAttendance({
   const router = useRouter();
 
   const t = useTranslations();
+
   const createPeriodic = useMutation(
     trpc.attendance.create.mutationOptions({
-      onSuccess: () => {
-        toast.success(t("created_successfully"), { id: 0 });
-        router.push(`/classrooms/${classroomId}/attendances`);
-      },
       onError: (e) => {
         toast.error(e.message, { id: 0 });
       },
@@ -104,7 +101,7 @@ export function CreateClassroomAttendance({
       },
     },
 
-    onSubmit: ({ value }) => {
+    onSubmit: async ({ value }) => {
       const parsed = formSchema.safeParse(value);
       if (!parsed.success) {
         toast.error(t("validation_error"));
@@ -132,11 +129,18 @@ export function CreateClassroomAttendance({
           justifiedLate: a.justifiedLate,
           exclusion: a.exclusion,
         }));
-      createPeriodic.mutate({
+      await createPeriodic.mutateAsync({
         termId: termId,
         classroomId: classroomId,
         attendances: payload,
       });
+      toast.success(t("created_successfully"), { id: 0 });
+      void fetch("/api/emails/attendance-summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ classroomId, termId, attendances: payload }),
+      }).catch(() => undefined);
+      router.push(`/classrooms/${classroomId}/attendances`);
     },
   });
 

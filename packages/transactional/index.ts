@@ -12,3 +12,4 @@ export * from "./emails/ResetPassword";
 export * from "./emails/TransactionConfirmation";
 export * from "./emails/TransactionsSummary";
 export * from "./emails/WelcomeEmail";
+export * from "./emails/QuarterlyAttendanceSummaryEmail";
