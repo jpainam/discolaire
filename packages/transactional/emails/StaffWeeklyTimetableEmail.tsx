@@ -82,14 +82,16 @@ export const StaffWeeklyTimetableEmail = ({
     <Html>
       <Tailwind>
         <Head />
-        <Preview>
-          Emploi du temps – semaine {weekLabel}
-        </Preview>
+        <Preview>Emploi du temps – semaine {weekLabel}</Preview>
 
         <Body className="mx-auto my-auto bg-[#f6f7fb] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] rounded-[10px] bg-white p-[24px]"
-            style={{ borderStyle: "solid", borderWidth: 1, borderColor: "#E8E7E1" }}
+            style={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "#E8E7E1",
+            }}
           >
             <Logo logoUrl={school.logo} />
 
@@ -109,7 +111,7 @@ export const StaffWeeklyTimetableEmail = ({
 
             {days.map((day) => (
               <Section key={day.dayLabel} className="mb-[20px]">
-                <Text className="m-0 mb-[8px] text-[13px] font-semibold uppercase tracking-wide text-[#667085]">
+                <Text className="m-0 mb-[8px] text-[13px] font-semibold tracking-wide text-[#667085] uppercase">
                   {day.dayLabel}
                 </Text>
 
@@ -122,7 +124,8 @@ export const StaffWeeklyTimetableEmail = ({
                       {slot.courseName}
                     </Text>
                     <Text className="m-0 mt-[2px] text-[13px] text-[#475467]">
-                      {slot.startTime} – {slot.endTime} &nbsp;·&nbsp; {slot.classroomName}
+                      {slot.startTime} – {slot.endTime} &nbsp;·&nbsp;{" "}
+                      {slot.classroomName}
                     </Text>
                   </Section>
                 ))}
