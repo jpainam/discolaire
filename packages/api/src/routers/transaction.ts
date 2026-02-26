@@ -217,22 +217,32 @@ export const transactionRouter = {
           ...(search
             ? [
                 {
-                  student: {
-                    OR: [
-                      {
-                        firstName: {
-                          contains: search,
-                          mode: "insensitive" as const,
-                        },
+                  OR: [
+                    {
+                      transactionRef: {
+                        contains: search,
+                        mode: "insensitive" as const,
                       },
-                      {
-                        lastName: {
-                          contains: search,
-                          mode: "insensitive" as const,
-                        },
+                    },
+                    {
+                      student: {
+                        OR: [
+                          {
+                            firstName: {
+                              contains: search,
+                              mode: "insensitive" as const,
+                            },
+                          },
+                          {
+                            lastName: {
+                              contains: search,
+                              mode: "insensitive" as const,
+                            },
+                          },
+                        ],
                       },
-                    ],
-                  },
+                    },
+                  ],
                 },
               ]
             : []),

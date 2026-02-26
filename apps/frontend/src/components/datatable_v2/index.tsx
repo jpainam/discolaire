@@ -89,6 +89,16 @@ export function useDataTableV2<TData, TValue>({
     React.useState<VisibilityState>(
       storedColumnVisibility ?? initialState?.columnVisibility ?? {},
     );
+
+  // Apply stored visibility after async hydration (when storedColumnVisibility
+  // transitions from undefined to its persisted value).
+  const isHydrationPending = React.useRef(storedColumnVisibility === undefined);
+  React.useEffect(() => {
+    if (isHydrationPending.current && storedColumnVisibility !== undefined) {
+      isHydrationPending.current = false;
+      setColumnVisibility(storedColumnVisibility);
+    }
+  }, [storedColumnVisibility]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     initialState?.columnFilters ?? [],
   );
@@ -172,8 +182,15 @@ export function useDataTableV2<TData, TValue>({
     onStateChange?.(tableState);
   }, [tableState, onStateChange]);
 
+  // Skip the very first run so we don't overwrite localStorage before zustand
+  // has had a chance to hydrate the persisted value.
+  const isFirstVisibilitySave = React.useRef(true);
   React.useEffect(() => {
     if (!columnVisibilityKey) return;
+    if (isFirstVisibilitySave.current) {
+      isFirstVisibilitySave.current = false;
+      return;
+    }
     setColumnVisibilitySetting(columnVisibilityKey, columnVisibility);
   }, [columnVisibility, columnVisibilityKey, setColumnVisibilitySetting]);
 
