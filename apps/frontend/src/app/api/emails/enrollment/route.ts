@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
       }),
     );
 
-    const subject = `Inscription de ${studentName} – ${classroom.name} (${schoolYear.name})`;
+    const subject = `Inscription de ${studentName} - ${classroom.name} (${schoolYear.name})`;
 
     const emails = [
       student.user?.email,
