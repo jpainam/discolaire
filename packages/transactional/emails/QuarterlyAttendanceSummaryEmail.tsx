@@ -98,7 +98,10 @@ export const QuarterlyAttendanceSummaryEmail = ({
               {rows.map((row) => (
                 <Row
                   key={row.label}
-                  style={{ borderBottom: "1px solid #F0EFE9", padding: "10px 0" }}
+                  style={{
+                    borderBottom: "1px solid #F0EFE9",
+                    padding: "10px 0",
+                  }}
                 >
                   <td
                     style={{
