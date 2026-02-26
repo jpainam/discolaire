@@ -36,9 +36,9 @@ export function createUnsubscribeToken(
   tenant: string,
   secret: string,
 ): string {
-  const payload = Buffer.from(
-    [emailType, email, tenant].join(SEP),
-  ).toString("base64url");
+  const payload = Buffer.from([emailType, email, tenant].join(SEP)).toString(
+    "base64url",
+  );
   const sig = hmac(payload, secret);
   return `${payload}.${sig}`;
 }

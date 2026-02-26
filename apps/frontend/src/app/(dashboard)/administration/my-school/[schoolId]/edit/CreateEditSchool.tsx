@@ -24,7 +24,6 @@ import { Input } from "~/components/ui/input";
 import { Spinner } from "~/components/ui/spinner";
 import { useRouter } from "~/hooks/use-router";
 import { useTRPC } from "~/trpc/react";
-
 import { SchoolLogoDropzone } from "./SchoolLogoDropzone";
 
 const formSchema = z.object({

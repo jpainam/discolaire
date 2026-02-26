@@ -12,6 +12,20 @@ import {
   type BroadcastEmail,
 } from "../schemas";
 
+// ─── Email validation ─────────────────────────────────────────────────────────
+
+const BLOCKED_DOMAINS = new Set([
+  "example.com", "example.org", "example.net",
+  "test.com", "localhost",
+]);
+
+function isValidEmail(email: string): boolean {
+  if (!email.includes("@")) return false;
+  const [, domain] = email.split("@");
+  if (!domain || BLOCKED_DOMAINS.has(domain.toLowerCase())) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 // ─── SQS client ───────────────────────────────────────────────────────────────
 
 let _sqs: SQSClient | null = null;
@@ -159,7 +173,14 @@ export async function enqueueEmailJobs(
 ): Promise<EnqueueResult> {
   if (jobs.length === 0) return { messageIds: [], failed: [] };
 
-  const validated = jobs.map((job, i) => {
+  const filtered = jobs.filter((job) => isValidEmail(job.to));
+  const skipped = jobs.length - filtered.length;
+  if (skipped > 0) {
+    console.warn(`[enqueueEmailJobs] Skipped ${skipped} job(s) with invalid/blocked email address.`);
+  }
+  if (filtered.length === 0) return { messageIds: [], failed: [] };
+
+  const validated = filtered.map((job, i) => {
     const result = EmailJobSchema.safeParse(job);
     if (!result.success) {
       throw new Error(
@@ -202,8 +223,15 @@ export async function broadcastEmail(
     throw new Error(`Invalid BroadcastEmail: ${parsed.error.message}`);
   }
 
-  const { broadcastId, recipients, from, subject, html, text, replyTo, tags } =
+  const { broadcastId, recipients: rawRecipients, from, subject, html, text, replyTo, tags } =
     parsed.data;
+
+  const recipients = rawRecipients.filter(isValidEmail);
+  const skipped = rawRecipients.length - recipients.length;
+  if (skipped > 0) {
+    console.warn(`[broadcastEmail] Skipped ${skipped} recipient(s) with invalid/blocked email address.`);
+  }
+  if (recipients.length === 0) return { enqueuedCount: 0, failedCount: 0, failedRecipients: [] };
 
   // Expand each recipient into an individual EmailJob.
   // The idempotencyKey is stable across retries so DynamoDB dedup kicks in.
