@@ -15,8 +15,11 @@ import {
 // ─── Email validation ─────────────────────────────────────────────────────────
 
 const BLOCKED_DOMAINS = new Set([
-  "example.com", "example.org", "example.net",
-  "test.com", "localhost",
+  "example.com",
+  "example.org",
+  "example.net",
+  "test.com",
+  "localhost",
 ]);
 
 function isValidEmail(email: string): boolean {
@@ -176,7 +179,9 @@ export async function enqueueEmailJobs(
   const filtered = jobs.filter((job) => isValidEmail(job.to));
   const skipped = jobs.length - filtered.length;
   if (skipped > 0) {
-    console.warn(`[enqueueEmailJobs] Skipped ${skipped} job(s) with invalid/blocked email address.`);
+    console.warn(
+      `[enqueueEmailJobs] Skipped ${skipped} job(s) with invalid/blocked email address.`,
+    );
   }
   if (filtered.length === 0) return { messageIds: [], failed: [] };
 
@@ -223,15 +228,26 @@ export async function broadcastEmail(
     throw new Error(`Invalid BroadcastEmail: ${parsed.error.message}`);
   }
 
-  const { broadcastId, recipients: rawRecipients, from, subject, html, text, replyTo, tags } =
-    parsed.data;
+  const {
+    broadcastId,
+    recipients: rawRecipients,
+    from,
+    subject,
+    html,
+    text,
+    replyTo,
+    tags,
+  } = parsed.data;
 
   const recipients = rawRecipients.filter(isValidEmail);
   const skipped = rawRecipients.length - recipients.length;
   if (skipped > 0) {
-    console.warn(`[broadcastEmail] Skipped ${skipped} recipient(s) with invalid/blocked email address.`);
+    console.warn(
+      `[broadcastEmail] Skipped ${skipped} recipient(s) with invalid/blocked email address.`,
+    );
   }
-  if (recipients.length === 0) return { enqueuedCount: 0, failedCount: 0, failedRecipients: [] };
+  if (recipients.length === 0)
+    return { enqueuedCount: 0, failedCount: 0, failedRecipients: [] };
 
   // Expand each recipient into an individual EmailJob.
   // The idempotencyKey is stable across retries so DynamoDB dedup kicks in.
