@@ -117,7 +117,7 @@ export const StudentCreatedEmail = ({
                   </Text>
                 </Column>
               </Row>
-              {(phoneNumber ?? residence) && (
+              {phoneNumber && (
                 <Row>
                   {phoneNumber && (
                     <Column className="w-1/2 py-1">

@@ -6,6 +6,7 @@ import { z } from "zod/v4";
 import { StudentCreatedEmail } from "@repo/transactional/emails/StudentCreatedEmail";
 
 import { getSession } from "~/auth/server";
+import { getStudentEmailRecipients } from "~/lib/email";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
 
@@ -49,35 +50,33 @@ export async function POST(req: NextRequest) {
 
     const { studentId } = result.data;
 
-    const [student, studentContacts] = await Promise.all([
+    const [student, studentContacts, emails] = await Promise.all([
       caller.student.get(studentId),
       caller.student.contacts(studentId),
+      getStudentEmailRecipients(studentId),
     ]);
 
-    if (!student) {
-      return NextResponse.json({ error: "Student not found" }, { status: 404 });
+    if (emails.length === 0) {
+      return Response.json({ success: true, sent: 0 }, { status: 200 });
     }
 
-    const school = student.school;
-    const studentName = [student.firstName, student.lastName]
-      .filter(Boolean)
-      .join(" ");
+    const school = await caller.school.get(student.schoolId);
 
     const parents = studentContacts.map((sc) => ({
       name: [sc.contact.firstName, sc.contact.lastName]
         .filter(Boolean)
         .join(" "),
       relationship: sc.relationship?.name,
-      email: sc.contact.user?.email ?? undefined,
-      phone: sc.contact.phoneNumber ?? undefined,
+      email: sc.contact.user?.email ?? sc.contact.email ?? undefined,
+      phone: sc.contact.phoneNumber1 ?? sc.contact.phoneNumber2 ?? undefined,
     }));
 
     const html = await render(
       StudentCreatedEmail({
-        studentFirstName: student.firstName,
-        studentLastName: student.lastName,
+        studentFirstName: student.firstName ?? "",
+        studentLastName: student.lastName ?? "",
         dateOfBirth: formatDate(student.dateOfBirth),
-        gender: genderLabel(student.gender),
+        gender: genderLabel(student.gender ?? "male"),
         phoneNumber: student.phoneNumber ?? undefined,
         residence: student.residence ?? undefined,
         parents,
@@ -89,20 +88,10 @@ export async function POST(req: NextRequest) {
       }),
     );
 
-    const subject = `Inscription de ${studentName} — Dossier enregistré`;
-
-    const emails = [
-      student.user?.email,
-      ...studentContacts.map((sc) => sc.contact.user?.email),
-    ].filter((email): email is string => Boolean(email));
-
-    const uniqueEmails = [...new Set(emails)];
-    if (uniqueEmails.length === 0) {
-      return Response.json({ success: true, sent: 0 }, { status: 200 });
-    }
+    const subject = `Inscription de ${student.firstName} ${student.lastName} — Dossier enregistré`;
 
     await caller.sesEmail.enqueue({
-      jobs: uniqueEmails.map((to) => ({
+      jobs: emails.map((to) => ({
         to,
         from: `${school.code} <contact@discolaire.com>`,
         subject,
@@ -111,7 +100,7 @@ export async function POST(req: NextRequest) {
     });
 
     return Response.json(
-      { success: true, sent: uniqueEmails.length },
+      { success: true, sent: emails.length },
       { status: 200 },
     );
   } catch (error) {

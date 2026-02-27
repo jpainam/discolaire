@@ -1,6 +1,7 @@
 import { z } from "zod/v4";
 
 import { getSession } from "~/auth/server";
+import { getStudentEmailRecipients } from "~/lib/email";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
 
@@ -35,17 +36,11 @@ export async function POST(req: Request) {
 }
 
 async function completeSend(title: string, body: string, studentId: string) {
-  const studentContacts = await caller.student.contacts(studentId);
-  if (studentContacts.length === 0) return;
-
-  const contactEmails = studentContacts
-    .map((c) => c.contact.user?.email)
-    .filter((v): v is string => !!v && v !== "");
-
-  if (contactEmails.length === 0) return;
+  const emails = await getStudentEmailRecipients(studentId);
+  if (emails.length === 0) return;
 
   await caller.sesEmail.enqueue({
-    jobs: contactEmails.map((to) => ({
+    jobs: emails.map((to) => ({
       to,
       from: "Discolaire <contact@discolaire.com>",
       subject: title,
