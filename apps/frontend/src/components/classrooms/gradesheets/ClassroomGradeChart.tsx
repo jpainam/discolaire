@@ -70,7 +70,7 @@ export function ClassroomGradeChart({
   const countp05 = grades.filter((g) => g.grade >= 8 && g.grade < 10).length;
   const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
   return (
-    <div className={cn("flex flex-col gap-2 overflow-hidden", className)}>
+    <div className={cn("flex flex-col gap-2 overflow-hidden p-2", className)}>
       <Card className="group/dist">
         <CardHeader>
           <CardTitle>{t("Grade distribution")}</CardTitle>

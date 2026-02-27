@@ -115,10 +115,10 @@ export function GradeSheetDataTable() {
           const subject = row.original.subject;
           const teacher = subject.teacher;
           return (
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex w-full flex-row items-center gap-2">
               <Link
                 href={`/classrooms/${subject.classroomId}/subjects/${subject.id}`}
-                className="text-muted-foreground hover:underline"
+                className="min-w-0 flex-1 hover:underline"
               >
                 {subject.course.reportName}
               </Link>
@@ -139,8 +139,8 @@ export function GradeSheetDataTable() {
                 variant={"secondary"}
                 size={"xs"}
               >
-                <ExternalLink />
                 {t("details")}
+                <ExternalLink />
               </Button>
             </div>
           );

@@ -63,16 +63,16 @@ export function useGradeTrackerColumns(): ColumnDef<
         cell: ({ row }) => {
           const subject = row.original;
           return (
-            <div className="flex flex-1 flex-row items-center gap-1">
+            <div className="flex w-full flex-row items-center gap-2">
               <div
-                className="h-4 w-4 rounded-full"
+                className="h-4 w-4 shrink-0 rounded-full"
                 style={{
                   backgroundColor: subject.course.color,
                 }}
               />
               <Link
                 href={`/classrooms/${subject.classroomId}/subjects/${subject.id}`}
-                className="text-muted-foreground hover:underline"
+                className="min-w-0 flex-1 truncate hover:underline"
               >
                 {subject.course.name}
               </Link>
@@ -92,10 +92,9 @@ export function useGradeTrackerColumns(): ColumnDef<
                   });
                 }}
                 variant={"secondary"}
-                size={"sm"}
-                className="h-7"
+                size={"xs"}
               >
-                {t("details")} <ExternalLink className="h-3 w-3" />
+                {t("details")} <ExternalLink />
               </Button>
             </div>
           );
@@ -135,7 +134,7 @@ export function useGradeTrackerColumns(): ColumnDef<
               href={`/classrooms/${subject.classroomId}`}
               className="text-muted-foreground hover:underline"
             >
-              ({subject.classroom.name})
+              {subject.classroom.name}
             </Link>
           );
         },

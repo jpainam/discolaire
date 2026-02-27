@@ -168,7 +168,12 @@ export function DataTable<TData>({
               {headerGroup.headers.map((header, index) => {
                 return (
                   <TableHead
-                    style={{ width: `${header.getSize()}px` }}
+                    style={{
+                      width:
+                        header.column.columnDef.size !== undefined
+                          ? `${header.getSize()}px`
+                          : undefined,
+                    }}
                     key={`${header.id}-${index}`}
                     colSpan={header.colSpan}
                     className="bg-sidebar border-border relative h-9 border-y select-none first:rounded-l-lg first:border-l last:rounded-r-lg last:border-r"
