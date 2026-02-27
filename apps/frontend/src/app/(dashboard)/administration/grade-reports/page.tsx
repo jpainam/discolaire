@@ -1,24 +1,18 @@
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import { AnalysisTextLinkIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  BetweenHorizontalStart,
-  CircleGauge,
-  FileIcon,
-  FileTextIcon,
-} from "lucide-react";
+import { CircleGauge, FileIcon, FileTextIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsString } from "nuqs/server";
 
 import { GradeReportDashboard } from "~/components/administration/grade-reports/GradeReportDashboard";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
-import { GradeReportPublicationDates } from "~/components/administration/grade-reports/GradeReportPublicationDates";
+import { GradeReportSchedules } from "~/components/administration/grade-reports/GradeReportSchedules";
 import { GradeReportTrackerDataTable } from "~/components/administration/grade-reports/GradeReportTrackerDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { CalendarDays } from "~/icons";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 
 const gradeReportSearchSchema = {
@@ -52,12 +46,12 @@ export default async function Page(props: PageProps) {
           <TabsTrigger value="reports">
             <FileIcon /> {t("reports")}
           </TabsTrigger>
-          <TabsTrigger value="distributions">
-            <HugeiconsIcon icon={AnalysisTextLinkIcon} /> {t("Distributions")}
+          <TabsTrigger value="grade-schedules">
+            <CalendarDays /> {t("schedules")}
           </TabsTrigger>
-          <TabsTrigger value="publications">
+          {/* <TabsTrigger value="publications">
             <BetweenHorizontalStart /> Publications
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         <TabsContent value="dashboard">
           <ErrorBoundary errorComponent={ErrorFallback}>
@@ -88,14 +82,16 @@ export default async function Page(props: PageProps) {
             </Suspense>
           </ErrorBoundary>
         </TabsContent>
-        <TabsContent value="distributions">Distributions</TabsContent>
-        <TabsContent value="publications">
+        <TabsContent value="grade-schedules">
+          <GradeReportSchedules />
+        </TabsContent>
+        {/* <TabsContent value="publications">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-48" />}>
               <GradeReportPublicationDates />
             </Suspense>
           </ErrorBoundary>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </HydrateClient>
   );
