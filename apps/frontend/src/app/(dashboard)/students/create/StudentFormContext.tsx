@@ -9,8 +9,37 @@ import {
   useState,
 } from "react";
 
+import { StudentStatus } from "@repo/db/enums";
+
 import type { AcademicInfo, BasicInfo, ParentInfo } from "./validation";
-import { initialStudentData } from "./store";
+
+const initialStudentData = {
+  registrationNumber: "",
+  tags: [] as string[],
+  firstName: "",
+  bloodType: "",
+  lastName: "",
+  dateOfBirth: undefined as Date | undefined,
+  placeOfBirth: "",
+  gender: "male" as const,
+  residence: "",
+  phoneNumber: "",
+  isRepeating: false,
+  isNew: true,
+  countryId: "",
+  classroomId: "",
+  allergies: "",
+  externalAccountingNo: "",
+  dateOfExit: undefined as Date | undefined,
+  dateOfEntry: new Date(),
+  formerSchoolId: "",
+  observation: "",
+  religionId: "",
+  isBaptized: false,
+  status: StudentStatus.ACTIVE,
+  clubs: [] as string[],
+  sports: [] as string[],
+};
 
 interface StudentFormContextValue {
   currentStep: number;

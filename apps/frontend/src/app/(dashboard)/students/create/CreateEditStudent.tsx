@@ -259,6 +259,18 @@ export function CreateEditStudent({ student }: { student?: StudentDetails }) {
     }
   };
 
+  const sendCreationEmail = async (studentId: string) => {
+    try {
+      await fetch("/api/emails/student/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId }),
+      });
+    } catch {
+      // Email sending is non-critical; silently ignore failures
+    }
+  };
+
   const finishSubmission = async (studentId: string) => {
     let contactsSyncFailed = false;
     try {
@@ -267,6 +279,9 @@ export function CreateEditStudent({ student }: { student?: StudentDetails }) {
       contactsSyncFailed = true;
     }
     await uploadAvatar(studentId);
+    if (!isEditMode) {
+      await sendCreationEmail(studentId);
+    }
     await Promise.all([
       queryClient.invalidateQueries(trpc.student.pathFilter()),
       queryClient.invalidateQueries(trpc.student.contacts.pathFilter()),
