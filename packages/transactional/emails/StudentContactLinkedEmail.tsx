@@ -62,8 +62,7 @@ export const StudentContactLinkedEmail = ({
 
             <Text className="text-[#121212]">
               Nous vous informons que votre profil a été associé au dossier de
-              l'élève{" "}
-              <span className="font-semibold">{studentName}</span>
+              l'élève <span className="font-semibold">{studentName}</span>
               {relationshipName ? (
                 <>
                   {" "}

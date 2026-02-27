@@ -64,7 +64,10 @@ export const studentContactRouter = {
   create: protectedProcedure
     .input(createUpdateSchema.array())
     .mutation(async ({ ctx, input }) => {
-      const created = await ctx.db.studentContact.createMany({ data: input, skipDuplicates: true });
+      const created = await ctx.db.studentContact.createMany({
+        data: input,
+        skipDuplicates: true,
+      });
       const contactIds = Array.from(
         new Set(input.map((item) => item.contactId)),
       );
