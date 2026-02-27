@@ -2,7 +2,6 @@ import cron from "node-cron";
 
 import { env } from "~/env";
 import { logger } from "~/utils/logger";
-
 import { runDbBackup } from "./jobs/db-backup";
 import { sendExamReminderToAdmin } from "./jobs/exam-reminder-admin";
 import { sendExamWeekEmailToParents } from "./jobs/exam-week-parents";

@@ -6,8 +6,7 @@ import { ExamWeekParentEmail } from "@repo/transactional";
 
 import { env } from "~/env";
 import { logger } from "~/utils/logger";
-
-import { FROM, SCHOOL_TENANTS, nextWeekWindow } from "./constants";
+import { FROM, nextWeekWindow, SCHOOL_TENANTS } from "./constants";
 
 /**
  * Every Friday – if exams are next week, send a reminder email to every
@@ -55,7 +54,9 @@ export async function sendExamWeekEmailToParents() {
         }));
 
       if (!defaultSchoolYear) {
-        logger.warn(`[Cron] No school year found for tenant ${tenant} — skipping`);
+        logger.warn(
+          `[Cron] No school year found for tenant ${tenant} — skipping`,
+        );
         continue;
       }
 

@@ -8,8 +8,7 @@ import { ExamReminderAdminEmail } from "@repo/transactional";
 
 import { env } from "~/env";
 import { logger } from "~/utils/logger";
-
-import { ADMIN_EMAIL, FROM, SCHOOL_TENANTS, nextWeekWindow } from "./constants";
+import { ADMIN_EMAIL, FROM, nextWeekWindow, SCHOOL_TENANTS } from "./constants";
 
 /**
  * Every Wednesday – alert the admin if exams are scheduled next week.

@@ -1,4 +1,4 @@
-import { addDays, startOfDay, nextMonday } from "date-fns";
+import { addDays, nextMonday, startOfDay } from "date-fns";
 
 export const FROM = "Discolaire <contact@discolaire.com>";
 

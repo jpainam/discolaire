@@ -42,8 +42,7 @@ export const ExamWeekParentEmail = ({
   examEndDate = null,
   school = defaultSchool,
 }: Props) => {
-  const formatDate = (d: Date) =>
-    format(d, "EEEE d MMMM yyyy", { locale: fr });
+  const formatDate = (d: Date) => format(d, "EEEE d MMMM yyyy", { locale: fr });
 
   const examPeriod = examEndDate
     ? `du ${formatDate(examStartDate)} au ${formatDate(examEndDate)}`
@@ -60,7 +59,11 @@ export const ExamWeekParentEmail = ({
         <Body className="mx-auto my-auto bg-[#f6f7fb] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] rounded-[10px] bg-white p-[24px]"
-            style={{ borderStyle: "solid", borderWidth: 1, borderColor: "#E8E7E1" }}
+            style={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "#E8E7E1",
+            }}
           >
             <Logo logoUrl={school.logo} />
 

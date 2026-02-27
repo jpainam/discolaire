@@ -38,8 +38,7 @@ export const ExamReminderAdminEmail = ({
   examEndDate = null,
   school = defaultSchool,
 }: Props) => {
-  const formatDate = (d: Date) =>
-    format(d, "EEEE d MMMM yyyy", { locale: fr });
+  const formatDate = (d: Date) => format(d, "EEEE d MMMM yyyy", { locale: fr });
 
   const examPeriod = examEndDate
     ? `du ${formatDate(examStartDate)} au ${formatDate(examEndDate)}`
@@ -56,7 +55,11 @@ export const ExamReminderAdminEmail = ({
         <Body className="mx-auto my-auto bg-[#f6f7fb] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] rounded-[10px] bg-white p-[24px]"
-            style={{ borderStyle: "solid", borderWidth: 1, borderColor: "#E8E7E1" }}
+            style={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "#E8E7E1",
+            }}
           >
             <Logo logoUrl={school.logo} />
 
@@ -74,7 +77,10 @@ export const ExamReminderAdminEmail = ({
               <span className="font-semibold">{examPeriod}</span>.
             </Text>
 
-            <Section className="rounded-[8px] bg-[#fffbeb] px-[16px] py-[14px]" style={{ borderLeft: "4px solid #f59e0b" }}>
+            <Section
+              className="rounded-[8px] bg-[#fffbeb] px-[16px] py-[14px]"
+              style={{ borderLeft: "4px solid #f59e0b" }}
+            >
               <Text className="m-0 text-[13px] font-semibold text-[#92400e]">
                 Action requise avant vendredi
               </Text>

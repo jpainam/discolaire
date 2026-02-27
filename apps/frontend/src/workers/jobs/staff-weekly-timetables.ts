@@ -8,7 +8,6 @@ import { StaffWeeklyTimetableEmail } from "@repo/transactional";
 
 import { env } from "~/env";
 import { logger } from "~/utils/logger";
-
 import { FROM, SCHOOL_TENANTS, WEEKDAY_LABELS } from "./constants";
 
 export async function sendStaffWeeklyTimetables() {
