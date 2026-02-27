@@ -67,6 +67,7 @@ import { subjectGroupRouter } from "./routers/subjectGroup";
 import { subjectJournalRouter } from "./routers/subjectJournal";
 import { subjectProgramRouter } from "./routers/subjectProgram";
 import { subjectTimetableRouter } from "./routers/subjectTimetable";
+import { termReportConfigRouter } from "./routers/termReportConfig";
 import { termRouter } from "./routers/term";
 import { transactionRouter } from "./routers/transaction";
 import { uploadRouter } from "./routers/upload";
@@ -104,6 +105,7 @@ export const appRouter = createTRPCRouter({
   assignment: assignmentRouter,
   staffAttendance: staffAttendanceRouter,
   term: termRouter,
+  termReportConfig: termReportConfigRouter,
   module: moduleRouter,
   document: documentRouter,
   schoolYearEvent: schoolYearEventRouter,

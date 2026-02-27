@@ -27,6 +27,7 @@ export default async function Page(props: PageProps) {
   const searchParams = await gradeReportSchema(props.searchParams);
   batchPrefetch([
     trpc.term.all.queryOptions(),
+    trpc.termReportConfig.all.queryOptions(),
     trpc.gradeSheet.distribution.queryOptions(),
     trpc.gradeSheet.allPercentile.queryOptions(),
     trpc.gradeSheet.gradesReportTracker.queryOptions(),

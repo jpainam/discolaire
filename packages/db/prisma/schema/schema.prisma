@@ -308,6 +308,7 @@ model Term {
     skillAcquisitions SkillAcquisition[]
     councils          ClassroomCouncil[]
     academicSnapshots StudentAcademicSnapshot[]
+    reportConfig      TermReportConfig?
 }
 
 model TermPart {
@@ -319,6 +320,21 @@ model TermPart {
 
     @@id([parentId, childId])
     @@index([childId])
+}
+
+model TermReportConfig {
+    id                String     @id @default(cuid())
+    termId            String     @unique
+    term              Term       @relation(fields: [termId], references: [id], onDelete: Cascade)
+    examStartDate     DateTime?
+    examEndDate       DateTime?
+    resultPublishedAt DateTime?
+    schoolId          String
+    school            School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    schoolYearId      String
+    schoolYear        SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+    createdAt         DateTime   @default(now())
+    updatedAt         DateTime   @updatedAt
 }
 
 model ContactRelationship {
@@ -604,6 +620,7 @@ model School {
     permissions               Permission[]
     roles                     Role[]
     notificationRecipients    NotificationRecipient[]
+    termReportConfigs       TermReportConfig[]
 }
 
 model RequiredAccountingJournal {
@@ -659,7 +676,8 @@ model SchoolYear {
     events              SchoolYearEvent[]
     accountingJournals  AccountingJournal[]
     discountPolicies    DiscountPolicy[]
-    scheduleDivisions   ScheduleDivision[]
+    scheduleDivisions       ScheduleDivision[]
+    termReportConfigs     TermReportConfig[]
 }
 
 model ClassroomCycle {
