@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
+import { Badge } from "~/components/base-badge";
 import { DatePicker } from "~/components/DatePicker";
 import {
   Accordion,
@@ -24,6 +25,8 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -221,40 +224,32 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
   const statusText = isActive ? "text-accent" : "text-muted-foreground";
 
   return (
-    <Accordion
-      type="single"
-      collapsible
-      //className="border-border bg-card rounded-xl border transition-shadow duration-200 hover:shadow-sm"
-    >
-      <AccordionItem value="schedule" className="data-open:bg-transparent">
-        <AccordionTrigger className="items-center gap-4 px-5 py-4 hover:no-underline">
-          {/* Accent indicator */}
+    <Accordion type="single" collapsible>
+      <AccordionItem value="schedule">
+        <AccordionTrigger className="items-center gap-4 px-4 hover:no-underline">
           <div
             className="h-8 w-1 shrink-0 rounded-full"
             style={{ backgroundColor: accentColor }}
           />
 
-          {/* Term name + status */}
-          <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="min-w-0">
-              <p className="text-foreground truncate text-sm font-semibold">
-                {term.name}
-              </p>
-              <div className="mt-0.5 flex items-center gap-1.5">
-                <span
-                  className={cn("h-1.5 w-1.5 shrink-0 rounded-full", statusDot)}
-                />
-                <span className={cn("text-xs", statusText)}>{statusLabel}</span>
-              </div>
-            </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
+            <Label>{term.name}</Label>
+            <Badge
+              variant={term.isActive ? "success" : "destructive"}
+              size={"xs"}
+              appearance={"light"}
+              className="w-fit"
+            >
+              {/* <DotIcon /> */}
+              {statusLabel}
+            </Badge>
           </div>
 
-          {/* Exam dates — desktop */}
-          <div className="hidden w-44 shrink-0 flex-col items-start gap-0.5 md:flex">
-            <span className="text-muted-foreground text-xs">Exam period</span>
+          <div className="hidden w-96 shrink-0 flex-col items-start gap-2 md:flex">
+            <Label>Exam period</Label>
             <span
               className={cn(
-                "text-sm",
+                "text-xs",
                 schedule?.examStartDate
                   ? "text-foreground font-medium"
                   : "text-muted-foreground text-xs italic",
@@ -267,11 +262,11 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
           </div>
 
           {/* Grade report date — desktop */}
-          <div className="hidden w-36 shrink-0 flex-col items-start gap-0.5 md:flex">
-            <span className="text-muted-foreground text-xs">Grade reports</span>
+          <div className="hidden w-36 shrink-0 flex-col items-start gap-2 md:flex">
+            <Label>Grade reports</Label>
             <span
               className={cn(
-                "text-sm",
+                "text-xs",
                 schedule?.resultPublishedAt
                   ? "text-foreground font-medium"
                   : "text-muted-foreground text-xs italic",
@@ -281,27 +276,19 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
             </span>
           </div>
 
-          {/* Configured pill */}
-          <div className="hidden shrink-0 items-center sm:flex">
-            <span
-              className={cn(
-                "rounded-full px-2.5 py-1 text-xs font-medium",
-                isConfigured
-                  ? "bg-primary/10 text-primary"
-                  : "bg-muted text-muted-foreground",
-              )}
-            >
-              {isConfigured ? "Configured" : "Pending"}
-            </span>
-          </div>
+          <Badge
+            appearance={"light"}
+            size={"sm"}
+            variant={isConfigured ? "warning" : "secondary"}
+          >
+            {isConfigured ? "Configured" : "Pending"}
+          </Badge>
         </AccordionTrigger>
 
-        <AccordionContent className="border-border -mx-2 border-t px-5 py-5">
-          <div className="mb-5 flex items-center justify-between">
-            <h3 className="text-foreground text-sm font-semibold">
-              {term.name} — TermReportConfig Details
-            </h3>
-          </div>
+        <AccordionContent className="border-border -mx-2 flex flex-col gap-4 border-t px-4 py-4">
+          <Label className="font-semibold">
+            {term.name} — TermReportConfig Details
+          </Label>
 
           <form
             onSubmit={(e) => {
@@ -309,29 +296,26 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
               void form.handleSubmit();
             }}
           >
-            <FieldGroup className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              {/* Exam period */}
-              <div>
-                <div className="mb-3 flex items-center gap-2">
+            <FieldGroup className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
                   <div
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+                    className="flex size-6 shrink-0 items-center justify-center rounded-lg"
                     style={{ backgroundColor: accentColor + "20" }}
                   >
                     <CalendarDays
-                      className="h-3.5 w-3.5"
+                      className="size-3"
                       style={{ color: accentColor }}
                     />
                   </div>
-                  <span className="text-foreground text-sm font-semibold">
-                    Exam Period
-                  </span>
+                  <Label>Exam Period</Label>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 pl-9">
+                <div className="grid grid-cols-2 gap-4 pl-9">
                   <form.Field name="examStartDate">
                     {(field) => (
                       <Field>
-                        <FieldLabel className="text-muted-foreground mb-1.5 text-xs">
+                        <FieldLabel className="text-muted-foreground">
                           Start Date
                         </FieldLabel>
                         <DatePicker
@@ -345,7 +329,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                   <form.Field name="examEndDate">
                     {(field) => (
                       <Field>
-                        <FieldLabel className="text-muted-foreground mb-1.5 text-xs">
+                        <FieldLabel className="text-muted-foreground">
                           End Date
                         </FieldLabel>
                         <DatePicker
@@ -359,27 +343,27 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
               </div>
 
               {/* Grade report */}
-              <div>
-                <div className="mb-3 flex items-center gap-2">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
                   <div
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+                    className="flex size-6 shrink-0 items-center justify-center rounded-lg"
                     style={{ backgroundColor: accentColor + "20" }}
                   >
                     <ClipboardList
-                      className="h-3.5 w-3.5"
+                      className="size-3"
                       style={{ color: accentColor }}
                     />
                   </div>
-                  <span className="text-foreground text-sm font-semibold">
+                  <Label className="font-semibold">
                     Grade Report Availability
-                  </span>
+                  </Label>
                 </div>
 
                 <div className="pl-9">
                   <form.Field name="resultPublishedAt">
                     {(field) => (
                       <Field>
-                        <FieldLabel className="text-muted-foreground mb-1.5 text-xs">
+                        <FieldLabel className="text-muted-foreground">
                           Available From
                         </FieldLabel>
                         <DatePicker
@@ -392,8 +376,9 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                 </div>
               </div>
             </FieldGroup>
+            <Separator className="my-2" />
 
-            <div className="border-border mt-6 flex justify-end border-t pt-4">
+            <div className="flex justify-end">
               <form.Subscribe selector={(s) => s.isDirty}>
                 {(isDirty) => (
                   <>
@@ -401,22 +386,18 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                       <Button
                         type="button"
                         variant="ghost"
-                        size="sm"
-                        className="mr-2"
                         onClick={() => form.reset()}
                       >
-                        <X className="h-4 w-4" />
+                        <X />
                         Cancel
                       </Button>
                     )}
                     <Button
                       type="submit"
-                      size="sm"
                       disabled={!isDirty || upsertMutation.isPending}
-                      className="text-primary-foreground gap-2 px-5 text-sm"
                       style={{ backgroundColor: accentColor }}
                     >
-                      <Check className="h-4 w-4" />
+                      <Check />
                       Save Changes
                     </Button>
                   </>

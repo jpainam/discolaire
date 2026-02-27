@@ -12,6 +12,21 @@ import {
   type BroadcastEmail,
 } from "../schemas";
 
+// ─── Test-mode redirect ───────────────────────────────────────────────────────
+//
+// When EMAIL_TEST_ADDRESS is set, all outbound emails are redirected to that
+// address so real recipients never get test emails.
+
+const TEST_ADDRESS = process.env.EMAIL_TEST_ADDRESS;
+
+function resolveRecipient(to: string): string {
+  if (TEST_ADDRESS) {
+    console.log(`[messaging] TEST MODE: redirecting ${to} → ${TEST_ADDRESS}`);
+    return TEST_ADDRESS;
+  }
+  return to;
+}
+
 // ─── Email validation ─────────────────────────────────────────────────────────
 
 const BLOCKED_DOMAINS = new Set([
@@ -186,7 +201,10 @@ export async function enqueueEmailJobs(
   if (filtered.length === 0) return { messageIds: [], failed: [] };
 
   const validated = filtered.map((job, i) => {
-    const result = EmailJobSchema.safeParse(job);
+    const result = EmailJobSchema.safeParse({
+      ...job,
+      to: resolveRecipient(job.to),
+    });
     if (!result.success) {
       throw new Error(
         `Invalid EmailJob at index ${i}: ${result.error.message}`,
@@ -252,7 +270,7 @@ export async function broadcastEmail(
   // Expand each recipient into an individual EmailJob.
   // The idempotencyKey is stable across retries so DynamoDB dedup kicks in.
   const jobs: EmailJob[] = recipients.map((to) => ({
-    to,
+    to: resolveRecipient(to),
     from,
     subject,
     html,
