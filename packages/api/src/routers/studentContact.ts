@@ -1,6 +1,7 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
+import { env } from "../env";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -63,7 +64,7 @@ export const studentContactRouter = {
   create: protectedProcedure
     .input(createUpdateSchema.array())
     .mutation(async ({ ctx, input }) => {
-      const created = await ctx.db.studentContact.createMany({ data: input });
+      const created = await ctx.db.studentContact.createMany({ data: input, skipDuplicates: true });
       const contactIds = Array.from(
         new Set(input.map((item) => item.contactId)),
       );
@@ -72,6 +73,28 @@ export const studentContactRouter = {
         schoolId: ctx.schoolId,
         schoolYearId: ctx.schoolYearId,
       });
+
+      // Fire-and-forget: notify each linked contact by email via the Next.js email API route
+      void Promise.all(
+        input.map((item) =>
+          fetch(`${ctx.baseUrl}/api/emails/student-contact/link`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": env.DISCOLAIRE_API_KEY,
+            },
+            body: JSON.stringify({
+              tenant: ctx.tenant,
+              studentId: item.studentId,
+              contactId: item.contactId,
+              relationshipId: item.relationshipId,
+            }),
+          }),
+        ),
+      ).catch((err) => {
+        console.error("[studentContact.create] email error:", err);
+      });
+
       return created;
     }),
 
