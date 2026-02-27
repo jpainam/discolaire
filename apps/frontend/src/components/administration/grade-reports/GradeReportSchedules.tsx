@@ -220,8 +220,6 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
   );
 
   const statusLabel = isActive ? "Active" : "Inactive";
-  const statusDot = isActive ? "bg-accent" : "bg-muted-foreground/40";
-  const statusText = isActive ? "text-accent" : "text-muted-foreground";
 
   return (
     <Accordion type="single" collapsible>

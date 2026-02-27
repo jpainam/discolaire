@@ -126,6 +126,7 @@ export class SchoolYearService {
         isDefault: true,
         schoolId: schoolId,
       },
+      orderBy: { startDate: "desc" },
     });
     if (!schoolyear) {
       return this.db.schoolYear.findFirst({
