@@ -3,13 +3,18 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { AnalysisTextLinkIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CircleGauge, FileIcon, FileTextIcon, Settings } from "lucide-react";
+import {
+  BetweenHorizontalStart,
+  CircleGauge,
+  FileIcon,
+  FileTextIcon,
+} from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsString } from "nuqs/server";
 
 import { GradeReportDashboard } from "~/components/administration/grade-reports/GradeReportDashboard";
 import { GradeReportGenerator } from "~/components/administration/grade-reports/GradeReportGenerator";
-import { GradeReportSettings } from "~/components/administration/grade-reports/GradeReportSettings";
+import { GradeReportPublicationDates } from "~/components/administration/grade-reports/GradeReportPublicationDates";
 import { GradeReportTrackerDataTable } from "~/components/administration/grade-reports/GradeReportTrackerDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -50,8 +55,8 @@ export default async function Page(props: PageProps) {
           <TabsTrigger value="distributions">
             <HugeiconsIcon icon={AnalysisTextLinkIcon} /> {t("Distributions")}
           </TabsTrigger>
-          <TabsTrigger value="settings">
-            <Settings /> {t("settings")}
+          <TabsTrigger value="publications">
+            <BetweenHorizontalStart /> Publications
           </TabsTrigger>
         </TabsList>
         <TabsContent value="dashboard">
@@ -84,10 +89,10 @@ export default async function Page(props: PageProps) {
           </ErrorBoundary>
         </TabsContent>
         <TabsContent value="distributions">Distributions</TabsContent>
-        <TabsContent value="settings">
+        <TabsContent value="publications">
           <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense fallback={<Skeleton className="h-48" />}>
-              <GradeReportSettings />
+              <GradeReportPublicationDates />
             </Suspense>
           </ErrorBoundary>
         </TabsContent>

@@ -4,11 +4,12 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 
 import type { Sidebar } from "~/components/ui/sidebar";
+//import { TimetableSidebar } from "./timetables/TimetableSidebar";
+import { CommunicationSidebar } from "~/components/communications/communication-sidebar";
 import { MainSidebar } from "~/components/MainSidebar";
 import { StudentSidebar } from "~/components/students/StudentSidebar";
 import { cn } from "~/lib/utils";
 import { AdminSidebar } from "./administration/admin-sidebar";
-//import { TimetableSidebar } from "./timetables/TimetableSidebar";
 import { ClassroomSidebar } from "./classrooms/ClassroomSidebar";
 import { ContactSidebar } from "./contacts/ContactSidebar";
 import { StaffSidebar } from "./staffs/StaffSidebar";
@@ -53,6 +54,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     !["create", "attendances"].includes(segments[1] ?? "");
 
   const isTimetable = pathname.startsWith("/timetables");
+  const isCommunication = pathname.startsWith("/communications");
 
   React.useEffect(() => {
     setMounted(true);
@@ -106,6 +108,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         Component: StaffSidebar,
       };
     }
+    if (isCommunication) {
+      return {
+        key: "communications",
+        Component: CommunicationSidebar,
+      };
+    }
     return null;
   }, [
     isAdmin,
@@ -116,6 +124,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     isStudent,
     isTimetable,
     isUser,
+    isCommunication,
   ]);
 
   if (!mounted || !activeSidebar) {

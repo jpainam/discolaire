@@ -38,7 +38,7 @@ const formSchema = z.object({
     }),
   ),
 });
-export function GradeReportSettings() {
+export function GradeReportPublicationDates() {
   const t = useTranslations();
   const trpc = useTRPC();
   const { data: terms } = useSuspenseQuery(trpc.term.all.queryOptions());
