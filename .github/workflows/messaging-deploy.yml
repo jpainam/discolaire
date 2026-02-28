@@ -26,6 +26,7 @@ env:
 jobs:
   deploy:
     name: CDK Deploy
+    if: false # temporarily disabled
     runs-on: ubuntu-latest
 
     permissions:

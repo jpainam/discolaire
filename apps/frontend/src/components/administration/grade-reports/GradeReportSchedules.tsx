@@ -3,12 +3,16 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Check, ClipboardList, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { Badge } from "~/components/base-badge";
 import { DatePicker } from "~/components/DatePicker";
+import PDFIcon from "~/components/icons/pdf-solid";
+import XMLIcon from "~/components/icons/xml-solid";
+import { TableSkeleton } from "~/components/skeletons/table-skeleton";
 import {
   Accordion,
   AccordionContent,
@@ -16,14 +20,6 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "~/components/ui/field";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
@@ -44,9 +40,9 @@ const TERM_ACCENT_COLORS = [
   "#14b8a6",
 ];
 
-function formatDate(date: Date | null | undefined): string {
+function formatDate(date: Date | null | undefined, locale = "en-US"): string {
   if (!date) return "—";
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -76,93 +72,84 @@ export function GradeReportSchedules() {
   }).length;
 
   const isPending = termsLoading || schedulesLoading;
+  const t = useTranslations();
+
+  if (isPending) {
+    return <TableSkeleton rows={8} cols={3} />;
+  }
 
   return (
-    <Card className="rounded-none bg-transparent ring-0">
-      <CardHeader>
-        <CardTitle>Term TermReportConfig Management</CardTitle>
-        <CardDescription>
-          Configure exam period dates and grade report availability for each
-          academic term. Click a term to expand and edit.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2">
-        {!isPending && (
-          <div className="border-border flex items-center gap-6 rounded-xl border p-2">
-            <div className="flex items-center gap-2">
-              <span className="bg-primary/50 h-2.5 w-2.5 shrink-0 rounded-full" />
-              <span className="text-foreground text-sm font-medium">
-                {configuredCount} configured
-              </span>
-            </div>
-            <div className="bg-border h-4 w-px" />
-            <div className="flex items-center gap-2">
-              <span className="bg-muted-foreground/30 h-2.5 w-2.5 shrink-0 rounded-full" />
-              <span className="text-muted-foreground text-sm">
-                {terms.length - configuredCount} pending
-              </span>
-            </div>
-            <div className="ml-auto">
-              <div className="flex gap-1">
-                {terms.map((t, i) => {
-                  const s = scheduleByTermId.get(t.id);
-                  const isConfigured = !!(
-                    s?.examStartDate && s.resultPublishedAt
-                  );
-                  return (
-                    <div
-                      key={t.id}
-                      className="h-1.5 w-5 rounded-full"
-                      style={{
-                        backgroundColor: isConfigured
-                          ? getAccentColor(i)
-                          : "#e5e7eb",
-                      }}
-                      title={t.name}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+    <div className="ga flex flex-col gap-2 px-2">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <Label>{t("schedules")}</Label>
+          <div className="text-muted-foreground text-xs">
+            Configurer les dates d'examens et de la disponibilités des
+            bulletins.
           </div>
-        )}
-
-        {/* Column headers — desktop only */}
-        <div className="mb-2 hidden grid-cols-[1fr_176px_144px_108px_20px] gap-4 px-5 md:grid">
-          <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Term
-          </span>
-          <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Exam Period
-          </span>
-          <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Grade Reports
-          </span>
-          <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Status
-          </span>
         </div>
-
-        {/* Term rows */}
-        <div className="space-y-2">
-          {terms.map((term, index) => (
-            <TermRow
-              key={term.id}
-              term={term}
-              schedule={scheduleByTermId.get(term.id)}
-              accentColor={getAccentColor(index)}
-            />
-          ))}
+        <div className="ml-auto flex items-center gap-2">
+          <Button variant={"secondary"}>
+            <PDFIcon />
+            {t("pdf_export")}
+          </Button>
+          <Button variant={"secondary"}>
+            <XMLIcon />
+            {t("xml_export")}
+          </Button>
         </div>
-      </CardContent>
+      </div>
 
-      {!isPending && (
-        <CardFooter>
-          {configuredCount} of {terms.length} terms fully configured · Changes
-          are saved immediately
-        </CardFooter>
-      )}
-    </Card>
+      <div className="border-border flex items-center gap-6 rounded-lg border p-2">
+        <div className="flex items-center gap-2">
+          <span className="bg-primary/50 h-2.5 w-2.5 shrink-0 rounded-full" />
+          <Label className="font-medium">{configuredCount} configuré(s)</Label>
+        </div>
+        <Separator orientation="vertical" />
+        <div className="flex items-center gap-2">
+          <span className="bg-muted-foreground/30 h-2.5 w-2.5 shrink-0 rounded-full" />
+          <Label className="text-muted-foreground lowercase">
+            {terms.length - configuredCount} {t("pending")}
+          </Label>
+        </div>
+        <div className="ml-auto">
+          <div className="flex gap-1">
+            {terms.map((t, i) => {
+              const s = scheduleByTermId.get(t.id);
+              const isConfigured = !!(s?.examStartDate && s.resultPublishedAt);
+              return (
+                <div
+                  key={t.id}
+                  className="h-1.5 w-5 rounded-full"
+                  style={{
+                    backgroundColor: isConfigured
+                      ? getAccentColor(i)
+                      : "#e5e7eb",
+                  }}
+                  title={t.name}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Term rows */}
+      <div className="space-y-2">
+        {terms.map((term, index) => (
+          <TermRow
+            key={term.id}
+            term={term}
+            schedule={scheduleByTermId.get(term.id)}
+            accentColor={getAccentColor(index)}
+          />
+        ))}
+      </div>
+
+      <div className="text-muted-foreground text-xs">
+        {configuredCount} sur {terms.length} périodes ont été configuré(s).
+      </div>
+    </div>
   );
 }
 
@@ -175,11 +162,13 @@ interface TermRowProps {
 function TermRow({ term, schedule, accentColor }: TermRowProps) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const locale = useLocale();
 
   const isConfigured = !!(
     schedule?.examStartDate && schedule.resultPublishedAt
   );
   const isActive = term.isActive;
+  const t = useTranslations();
 
   const form = useForm({
     defaultValues: {
@@ -244,34 +233,32 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
           </div>
 
           <div className="hidden w-96 shrink-0 flex-col items-start gap-2 md:flex">
-            <Label>Exam period</Label>
-            <span
+            <Label>Pérides des examens</Label>
+            <Label
               className={cn(
-                "text-xs",
                 schedule?.examStartDate
-                  ? "text-foreground font-medium"
+                  ? "font-medium"
                   : "text-muted-foreground text-xs italic",
               )}
             >
               {schedule?.examStartDate
-                ? `${formatDate(schedule.examStartDate)} – ${formatDate(schedule.examEndDate)}`
+                ? `${formatDate(schedule.examStartDate, locale)} - ${formatDate(schedule.examEndDate, locale)}`
                 : "Not set"}
-            </span>
+            </Label>
           </div>
 
           {/* Grade report date — desktop */}
-          <div className="hidden w-36 shrink-0 flex-col items-start gap-2 md:flex">
-            <Label>Grade reports</Label>
-            <span
+          <div className="hidden w-56 shrink-0 flex-col items-start gap-2 md:flex">
+            <Label>Publication des bulletins</Label>
+            <Label
               className={cn(
-                "text-xs",
                 schedule?.resultPublishedAt
-                  ? "text-foreground font-medium"
+                  ? "font-medium"
                   : "text-muted-foreground text-xs italic",
               )}
             >
               {formatDate(schedule?.resultPublishedAt)}
-            </span>
+            </Label>
           </div>
 
           <Badge
@@ -285,7 +272,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
 
         <AccordionContent className="border-border -mx-2 flex flex-col gap-4 border-t px-4 py-4">
           <Label className="font-semibold">
-            {term.name} — TermReportConfig Details
+            {term.name} - Configurer les détails
           </Label>
 
           <form
@@ -306,7 +293,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                       style={{ color: accentColor }}
                     />
                   </div>
-                  <Label>Exam Period</Label>
+                  <Label>Période des examens</Label>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 pl-9">
@@ -314,7 +301,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                     {(field) => (
                       <Field>
                         <FieldLabel className="text-muted-foreground">
-                          Start Date
+                          {t("Start date")}
                         </FieldLabel>
                         <DatePicker
                           defaultValue={field.state.value}
@@ -328,7 +315,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                     {(field) => (
                       <Field>
                         <FieldLabel className="text-muted-foreground">
-                          End Date
+                          {t("End date")}
                         </FieldLabel>
                         <DatePicker
                           defaultValue={field.state.value}
@@ -353,7 +340,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                     />
                   </div>
                   <Label className="font-semibold">
-                    Grade Report Availability
+                    Publication des bulletins
                   </Label>
                 </div>
 
@@ -362,7 +349,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                     {(field) => (
                       <Field>
                         <FieldLabel className="text-muted-foreground">
-                          Available From
+                          Disponible à partir de
                         </FieldLabel>
                         <DatePicker
                           defaultValue={field.state.value}
@@ -383,11 +370,11 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                     {isDirty && (
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="secondary"
                         onClick={() => form.reset()}
                       >
                         <X />
-                        Cancel
+                        {t("cancel")}
                       </Button>
                     )}
                     <Button
@@ -396,7 +383,7 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
                       style={{ backgroundColor: accentColor }}
                     >
                       <Check />
-                      Save Changes
+                      {t("submit")}
                     </Button>
                   </>
                 )}
