@@ -89,11 +89,26 @@ export function GradeReportSchedules() {
           </div>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant={"secondary"}>
+          <Button
+            variant={"secondary"}
+            onClick={() =>
+              window.open(
+                "/api/pdfs/gradereports/schedules?format=pdf",
+                "_blank",
+              )
+            }
+          >
             <PDFIcon />
             {t("pdf_export")}
           </Button>
-          <Button variant={"secondary"}>
+          <Button
+            variant={"secondary"}
+            onClick={() => {
+              const a = document.createElement("a");
+              a.href = "/api/pdfs/gradereports/schedules?format=csv";
+              a.click();
+            }}
+          >
             <XMLIcon />
             {t("xml_export")}
           </Button>

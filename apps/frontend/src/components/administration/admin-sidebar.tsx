@@ -2,24 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  BlindsIcon,
-  BrickWall,
-  CalendarDays,
-  CircleArrowOutUpRight,
-  CircleDollarSign,
-  FileTextIcon,
-  Frame,
-  ImageUp,
-  LayoutListIcon,
-  LifeBuoy,
-  PrinterIcon,
-  SchoolIcon,
-  ScrollTextIcon,
-  Send,
-  Settings,
-  Users,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -31,6 +13,24 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import {
+  AttendanceIcon,
+  BookmarkIcon,
+  CalendarDays,
+  FileIcon,
+  FilesIcon,
+  HelpIcon,
+  HomeIcon,
+  LibraryIcon,
+  LockIcon,
+  MailIcon,
+  MoneyIcon,
+  NotificationIcon,
+  PrinterIcon,
+  ReportGradeIcon,
+  SettingsIcon,
+  UsersIcon,
+} from "~/icons";
 import { SidebarLogo } from "../sidebar-logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
@@ -43,7 +43,7 @@ export function AdminSidebar({
       {
         title: "my_school",
         url: "/administration/my-school",
-        icon: SchoolIcon,
+        icon: <HomeIcon />,
 
         items: [
           {
@@ -72,7 +72,7 @@ export function AdminSidebar({
       {
         title: "Finances",
         url: "#",
-        icon: CircleDollarSign,
+        icon: <MoneyIcon />,
         //isActive: true,
         items: [
           {
@@ -101,7 +101,7 @@ export function AdminSidebar({
       {
         title: "Utilisateurs",
         url: "/administration/users",
-        icon: Users,
+        icon: <UsersIcon />,
         items: [
           {
             title: "Liste",
@@ -129,7 +129,7 @@ export function AdminSidebar({
       {
         title: "settings",
         url: "/administration/settings",
-        icon: Settings,
+        icon: <SettingsIcon />,
         items: [
           {
             title: "configurations_page",
@@ -175,19 +175,19 @@ export function AdminSidebar({
       {
         title: "Support",
         url: "#",
-        icon: LifeBuoy,
+        icon: <HelpIcon />,
       },
       {
         title: "Feedback",
         url: "#",
-        icon: Send,
+        icon: <MailIcon />,
       },
     ],
     projects: [
       {
         name: "Notification templates",
         url: "/administration/notification-templates",
-        icon: Frame,
+        icon: <NotificationIcon />,
       },
     ],
   };
@@ -195,48 +195,47 @@ export function AdminSidebar({
     {
       name: "grades_and_reports",
       url: "/administration/grade-reports",
-      icon: FileTextIcon,
+      icon: <ReportGradeIcon />,
     },
     {
       name: "academy",
       url: "/administration/academy",
-      icon: ScrollTextIcon,
+      icon: <LibraryIcon />,
     },
     {
       name: "inventory",
       url: "/administration/inventory",
-      icon: LayoutListIcon,
+      icon: <FilesIcon />,
     },
     {
       name: "reports",
       url: "/administration/reports",
-      icon: PrinterIcon,
+      icon: <PrinterIcon />,
     },
     {
       name: "schoolYear",
       url: "/administration/event-calendar",
-      icon: CalendarDays,
+      icon: <CalendarDays />,
     },
     {
       name: "school_life",
       url: "/administration/attendances",
-      icon: BrickWall,
-      //icon: CalendarArrowUp,
+      icon: <AttendanceIcon />,
     },
     {
       name: "photos",
       url: "/administration/photos",
-      icon: ImageUp,
+      icon: <FileIcon />,
     },
     {
       name: "subscriptions",
       url: "/administration/subscriptions",
-      icon: CircleArrowOutUpRight,
+      icon: <BookmarkIcon />,
     },
     {
       name: "audit_logs",
       url: "/administration/audit-logs",
-      icon: BlindsIcon,
+      icon: <LockIcon />,
     },
   ];
   const pathname = usePathname();
@@ -260,7 +259,7 @@ export function AdminSidebar({
                   isActive={pathname === item.url}
                 >
                   <Link href={item.url}>
-                    <item.icon aria-hidden="true" />
+                    {item.icon}
                     <span>{t(item.name)}</span>
                   </Link>
                 </SidebarMenuButton>

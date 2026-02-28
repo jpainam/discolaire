@@ -1,6 +1,6 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   FileClockIcon,
@@ -33,7 +33,7 @@ export function NavProjects({
   projects: {
     name: string;
     url: string;
-    icon: LucideIcon;
+    icon: ReactNode;
   }[];
 }) {
   const { isMobile } = useSidebar();
@@ -47,11 +47,7 @@ export function NavProjects({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <Link href={item.url}>
-                <item.icon
-                //className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary"
-                //size={22}
-                //aria-hidden="true"
-                />
+                {item.icon}
                 <span>{t(item.name)}</span>
               </Link>
             </SidebarMenuButton>
