@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState } from "react";
 import {
   ChevronDown,
-  ChevronRight,
   Filter,
   GraduationCap,
   Mail,
@@ -17,6 +16,12 @@ import {
 import { useTranslations } from "next-intl";
 
 import type { EmailTemplate, RecipientType } from "./email-data";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -247,16 +252,12 @@ function EmailRow({
 function CategoryAccordion({
   category,
   rows,
-  isOpen,
-  onToggleOpen,
   onToggle,
   onToggleEnabled,
   onBulkSet,
 }: {
   category: string;
   rows: EmailTemplate[];
-  isOpen: boolean;
-  onToggleOpen: () => void;
   onToggle: (id: string, type: RecipientType, val: boolean) => void;
   onToggleEnabled: (id: string) => void;
   onBulkSet: (
@@ -274,18 +275,13 @@ function CategoryAccordion({
   const disabledCount = rows.length - activeCount;
 
   return (
-    <div className="bg-card border-border overflow-hidden rounded-xl border">
-      {/* Accordion header */}
-      <button
-        onClick={onToggleOpen}
-        className="hover:bg-muted/30 flex w-full items-center gap-3 px-5 py-3.5 text-left transition-colors"
-        aria-expanded={isOpen}
-      >
-        <ChevronRight
-          className={`text-muted-foreground size-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}
-        />
+    <AccordionItem
+      value={category}
+      className="bg-card border-border data-open:bg-card overflow-hidden rounded-xl border not-last:border-b"
+    >
+      <AccordionTrigger className="hover:bg-muted/30 items-center gap-3 px-5 py-3.5 hover:no-underline">
         <span
-          className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${colors.bg} ${colors.text} flex-shrink-0`}
+          className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${colors.bg} ${colors.text}`}
         >
           {category}
         </span>
@@ -297,36 +293,28 @@ function CategoryAccordion({
             {disabledCount} disabled
           </span>
         )}
+      </AccordionTrigger>
 
-        {/* Spacer + bulk actions (only visible when open) */}
-        <div
-          className="ml-auto flex items-center gap-1"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {isOpen && (
-            <>
-              <button
-                onClick={() => onBulkSet("all", true, category)}
-                className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer rounded px-2 py-1 text-[11px] whitespace-nowrap transition-colors"
-              >
-                Allow all
-              </button>
-              <span className="text-border text-xs select-none">·</span>
-              <button
-                onClick={() => onBulkSet("all", false, category)}
-                className="text-muted-foreground hover:text-destructive hover:bg-accent cursor-pointer rounded px-2 py-1 text-[11px] whitespace-nowrap transition-colors"
-              >
-                Deny all
-              </button>
-            </>
-          )}
-        </div>
-      </button>
+      <AccordionContent className="pb-0">
+        <div className="border-border -mx-2 border-t">
+          {/* Bulk actions */}
+          <div className="border-border flex items-center gap-1 border-b px-5 py-2">
+            <button
+              onClick={() => onBulkSet("all", true, category)}
+              className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer rounded px-2 py-1 text-[11px] whitespace-nowrap transition-colors"
+            >
+              Allow all
+            </button>
+            <span className="text-border text-xs select-none">·</span>
+            <button
+              onClick={() => onBulkSet("all", false, category)}
+              className="text-muted-foreground hover:text-destructive hover:bg-accent cursor-pointer rounded px-2 py-1 text-[11px] whitespace-nowrap transition-colors"
+            >
+              Deny all
+            </button>
+          </div>
 
-      {/* Accordion body */}
-      {isOpen && (
-        <div className="border-border border-t">
-          {/* Column header */}
+          {/* Column headers */}
           <div className="border-border bg-muted/40 hidden grid-cols-[1fr_140px_140px_140px_160px] border-b sm:grid">
             <div className="text-muted-foreground px-5 py-2 text-xs font-medium">
               Email
@@ -355,8 +343,8 @@ function CategoryAccordion({
             />
           ))}
         </div>
-      )}
-    </div>
+      </AccordionContent>
+    </AccordionItem>
   );
 }
 
@@ -367,8 +355,8 @@ export default function Page() {
     new Set(),
   );
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [openCategories, setOpenCategories] = useState<Set<string>>(
-    new Set(EMAIL_CATEGORIES as unknown as string[]),
+  const [openCategories, setOpenCategories] = useState<string[]>(
+    EMAIL_CATEGORIES as unknown as string[],
   );
 
   const toggleRecipient = useCallback(
@@ -415,21 +403,12 @@ export default function Page() {
     setStatusFilter("all");
   }, []);
 
-  const toggleAccordion = useCallback((cat: string) => {
-    setOpenCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(cat)) next.delete(cat);
-      else next.add(cat);
-      return next;
-    });
-  }, []);
-
   const expandAll = useCallback(() => {
-    setOpenCategories(new Set(EMAIL_CATEGORIES as unknown as string[]));
+    setOpenCategories(EMAIL_CATEGORIES as unknown as string[]);
   }, []);
 
   const collapseAll = useCallback(() => {
-    setOpenCategories(new Set());
+    setOpenCategories([]);
   }, []);
 
   const grouped = useMemo(() => {
@@ -467,7 +446,7 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-2 px-4 py-2">
       <div className="flex flex-col gap-3 sm:flex-row">
-        <InputGroup>
+        <InputGroup className="w-1/3">
           <InputGroupInput
             placeholder="Search email types…"
             value={search}
@@ -613,21 +592,24 @@ export default function Page() {
           </Button>
         </div>
       ) : (
-        <div className="space-y-2">
+        <Accordion
+          type="multiple"
+          value={openCategories}
+          onValueChange={setOpenCategories}
+          className="gap-2 overflow-visible rounded-none border-none"
+        >
           {visibleCategories.map((cat) => (
             <CategoryAccordion
               key={cat}
               category={cat}
-              // @ts-expect-error TOD fix later
+              // @ts-expect-error TODO fix later
               rows={grouped[cat]}
-              isOpen={openCategories.has(cat)}
-              onToggleOpen={() => toggleAccordion(cat)}
               onToggle={toggleRecipient}
               onToggleEnabled={toggleEnabled}
               onBulkSet={bulkSet}
             />
           ))}
-        </div>
+        </Accordion>
       )}
     </div>
   );
