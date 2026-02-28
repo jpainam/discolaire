@@ -26,6 +26,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar";
+import { MailIcon } from "~/icons";
 
 export function NavProjects({
   projects,
@@ -43,6 +44,14 @@ export function NavProjects({
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>{t("communications")}</SidebarGroupLabel>
       <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <Link href={"/administration/communications/emails"}>
+              <MailIcon />
+              <span>Emails</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>

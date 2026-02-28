@@ -279,9 +279,10 @@ function TermRow({ term, schedule, accentColor }: TermRowProps) {
           <Badge
             appearance={"light"}
             size={"sm"}
+            className="capitalize"
             variant={isConfigured ? "warning" : "secondary"}
           >
-            {isConfigured ? "Configured" : "Pending"}
+            {isConfigured ? "Configuré" : t("pending")}
           </Badge>
         </AccordionTrigger>
 
