@@ -502,8 +502,6 @@ export default function Page() {
   const hasActiveFilters =
     search || selectedCategories.size > 0 || statusFilter !== "all";
 
-  
-
   return (
     <div className="">
       <main className="flex flex-col gap-2 px-4 py-2">
