@@ -14,6 +14,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { EmailTemplate, RecipientType } from "./email-data";
 import { Badge } from "~/components/ui/badge";
@@ -26,13 +27,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { PlusIcon } from "~/icons";
 import { EMAIL_CATEGORIES, EMAIL_TEMPLATES } from "./email-data";
 
 type StatusFilter = "all" | "active" | "disabled";
@@ -144,51 +150,6 @@ function RecipientToggle({
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
-}
-
-function StatsBar({ templates }: { templates: EmailTemplate[] }) {
-  const stats = useMemo(() => {
-    const active = templates.filter((t) => t.enabled);
-    return {
-      total: templates.length,
-      activeCount: active.length,
-      staffEnabled: active.filter((t) => t.staff).length,
-      studentEnabled: active.filter((t) => t.student).length,
-      contactEnabled: active.filter((t) => t.contact).length,
-    };
-  }, [templates]);
-
-  return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-      {[
-        { label: "Total Emails", value: stats.total, cls: "text-foreground" },
-        { label: "Active", value: stats.activeCount, cls: "text-primary" },
-        {
-          label: "Staff Enabled",
-          value: stats.staffEnabled,
-          cls: "text-blue-600",
-        },
-        {
-          label: "Students Enabled",
-          value: stats.studentEnabled,
-          cls: "text-violet-600",
-        },
-        {
-          label: "Contacts Enabled",
-          value: stats.contactEnabled,
-          cls: "text-emerald-600",
-        },
-      ].map(({ label, value, cls }) => (
-        <div
-          key={label}
-          className="bg-card border-border rounded-lg border px-4 py-3"
-        >
-          <p className="text-muted-foreground mb-0.5 text-xs">{label}</p>
-          <p className={`text-2xl font-semibold ${cls}`}>{value}</p>
-        </div>
-      ))}
-    </div>
   );
 }
 
@@ -499,176 +460,175 @@ export default function Page() {
     (s, arr) => s + arr.length,
     0,
   );
+  const t = useTranslations();
   const hasActiveFilters =
     search || selectedCategories.size > 0 || statusFilter !== "all";
 
   return (
-    <div className="">
-      <main className="flex flex-col gap-2 px-4 py-2">
-        {/* Stats */}
-        <StatsBar templates={templates} />
+    <div className="flex flex-col gap-2 px-4 py-2">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <InputGroup>
+          <InputGroupInput
+            placeholder="Search email types…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
 
-        {/* Toolbar */}
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <div className="relative max-w-sm flex-1">
-            <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-            <Input
-              placeholder="Search email types…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 text-sm"
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Status filter */}
-            <div className="border-border bg-card flex items-center overflow-hidden rounded-lg border">
-              {(["all", "active", "disabled"] as StatusFilter[]).map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setStatusFilter(s)}
-                  className={`cursor-pointer px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
-                    statusFilter === s
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-
-            {/* Category filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-1.5 text-xs">
-                  <Filter className="size-3.5" />
-                  Category
-                  {selectedCategories.size > 0 && (
-                    <Badge className="bg-primary text-primary-foreground ml-1 h-4 min-w-4 rounded-full px-1 text-[10px]">
-                      {selectedCategories.size}
-                    </Badge>
-                  )}
-                  <ChevronDown className="size-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-52">
-                <DropdownMenuLabel className="text-muted-foreground text-xs">
-                  Filter by category
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {EMAIL_CATEGORIES.map((cat) => (
-                  <DropdownMenuCheckboxItem
-                    key={cat}
-                    checked={selectedCategories.has(cat)}
-                    onCheckedChange={() => toggleCategory(cat)}
-                    className="text-sm"
-                  >
-                    <span
-                      className={`mr-2 inline-block size-2 rounded-full ${CATEGORY_COLORS[cat]?.dot ?? "bg-muted-foreground"}`}
-                    />
-                    {cat}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {hasActiveFilters && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="gap-1.5 text-xs"
-                onClick={clearFilters}
-              >
-                <X className="size-3.5" /> Clear
-              </Button>
-            )}
-
-            {/* Expand / collapse */}
-            <div className="ml-auto flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Status filter */}
+          <div className="border-border bg-card flex items-center overflow-hidden rounded-lg border">
+            {(["all", "active", "disabled"] as StatusFilter[]).map((s) => (
               <button
-                onClick={expandAll}
-                className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer rounded px-2 py-1 text-xs transition-colors"
+                key={s}
+                onClick={() => setStatusFilter(s)}
+                className={`cursor-pointer px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
+                  statusFilter === s
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-muted"
+                }`}
               >
-                Expand all
+                {s}
               </button>
-              <span className="text-border text-xs select-none">·</span>
-              <button
-                onClick={collapseAll}
-                className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer rounded px-2 py-1 text-xs transition-colors"
-              >
-                Collapse all
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Active filter chips */}
-        {selectedCategories.size > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {Array.from(selectedCategories).map((cat) => {
-              const c = CATEGORY_COLORS[cat];
-              return (
-                <button
-                  key={cat}
-                  onClick={() => toggleCategory(cat)}
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${c?.bg ?? "bg-muted"} ${c?.text ?? "text-foreground"}`}
-                >
-                  {cat}
-                  <X className="size-3" />
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Results count */}
-        <p className="text-muted-foreground text-xs">
-          Showing{" "}
-          <span className="text-foreground font-medium">{totalFiltered}</span>{" "}
-          of{" "}
-          <span className="text-foreground font-medium">
-            {templates.length}
-          </span>{" "}
-          email types across{" "}
-          <span className="text-foreground font-medium">
-            {visibleCategories.length}
-          </span>{" "}
-          categories
-        </p>
-
-        {/* Accordion list */}
-        {visibleCategories.length === 0 ? (
-          <div className="bg-card border-border flex flex-col items-center justify-center gap-3 rounded-xl border py-20 text-center">
-            <Mail className="text-muted-foreground size-8" />
-            <p className="text-foreground text-sm font-medium">
-              No email types found
-            </p>
-            <p className="text-muted-foreground text-xs">
-              Try adjusting your search or filters.
-            </p>
-            <Button variant="outline" size="sm" onClick={clearFilters}>
-              Clear filters
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {visibleCategories.map((cat) => (
-              <CategoryAccordion
-                key={cat}
-                category={cat}
-                // @ts-expect-error TOD fix later
-                rows={grouped[cat]}
-                isOpen={openCategories.has(cat)}
-                onToggleOpen={() => toggleAccordion(cat)}
-                onToggle={toggleRecipient}
-                onToggleEnabled={toggleEnabled}
-                onBulkSet={bulkSet}
-              />
             ))}
           </div>
-        )}
-      </main>
+
+          {/* Category filter */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                <Filter className="size-3.5" />
+                Category
+                {selectedCategories.size > 0 && (
+                  <Badge className="bg-primary text-primary-foreground ml-1 h-4 min-w-4 rounded-full px-1 text-[10px]">
+                    {selectedCategories.size}
+                  </Badge>
+                )}
+                <ChevronDown className="size-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuLabel className="text-muted-foreground text-xs">
+                Filter by category
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {EMAIL_CATEGORIES.map((cat) => (
+                <DropdownMenuCheckboxItem
+                  key={cat}
+                  checked={selectedCategories.has(cat)}
+                  onCheckedChange={() => toggleCategory(cat)}
+                  className="text-sm"
+                >
+                  <span
+                    className={`mr-2 inline-block size-2 rounded-full ${CATEGORY_COLORS[cat]?.dot ?? "bg-muted-foreground"}`}
+                  />
+                  {cat}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-1.5 text-xs"
+              onClick={clearFilters}
+            >
+              <X className="size-3.5" /> Clear
+            </Button>
+          )}
+
+          {/* Expand / collapse */}
+          <div className="ml-auto flex items-center gap-1.5">
+            <button
+              onClick={expandAll}
+              className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer rounded px-2 py-1 text-xs transition-colors"
+            >
+              Expand all
+            </button>
+            <span className="text-border text-xs select-none">·</span>
+            <button
+              onClick={collapseAll}
+              className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer rounded px-2 py-1 text-xs transition-colors"
+            >
+              Collapse all
+            </button>
+          </div>
+        </div>
+        <div className="ml-auto">
+          <Button>
+            <PlusIcon />
+            {t("add")}
+          </Button>
+        </div>
+      </div>
+
+      {/* Active filter chips */}
+      {selectedCategories.size > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {Array.from(selectedCategories).map((cat) => {
+            const c = CATEGORY_COLORS[cat];
+            return (
+              <button
+                key={cat}
+                onClick={() => toggleCategory(cat)}
+                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${c?.bg ?? "bg-muted"} ${c?.text ?? "text-foreground"}`}
+              >
+                {cat}
+                <X className="size-3" />
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Results count */}
+      <p className="text-muted-foreground text-xs">
+        Showing{" "}
+        <span className="text-foreground font-medium">{totalFiltered}</span> of{" "}
+        <span className="text-foreground font-medium">{templates.length}</span>{" "}
+        email types across{" "}
+        <span className="text-foreground font-medium">
+          {visibleCategories.length}
+        </span>{" "}
+        categories
+      </p>
+
+      {/* Accordion list */}
+      {visibleCategories.length === 0 ? (
+        <div className="bg-card border-border flex flex-col items-center justify-center gap-3 rounded-xl border py-20 text-center">
+          <Mail className="text-muted-foreground size-8" />
+          <p className="text-foreground text-sm font-medium">
+            No email types found
+          </p>
+          <p className="text-muted-foreground text-xs">
+            Try adjusting your search or filters.
+          </p>
+          <Button variant="outline" size="sm" onClick={clearFilters}>
+            Clear filters
+          </Button>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {visibleCategories.map((cat) => (
+            <CategoryAccordion
+              key={cat}
+              category={cat}
+              // @ts-expect-error TOD fix later
+              rows={grouped[cat]}
+              isOpen={openCategories.has(cat)}
+              onToggleOpen={() => toggleAccordion(cat)}
+              onToggle={toggleRecipient}
+              onToggleEnabled={toggleEnabled}
+              onBulkSet={bulkSet}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

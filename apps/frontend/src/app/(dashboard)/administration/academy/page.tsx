@@ -6,7 +6,6 @@ import { getTranslations } from "next-intl/server";
 import { createLoader, parseAsString } from "nuqs/server";
 
 import { ErrorFallback } from "~/components/error-fallback";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
@@ -36,55 +35,22 @@ export default async function Page(props: PageProps) {
   ]);
   const t = await getTranslations();
   return (
-    <Tabs defaultValue="tab-1">
-      <ScrollArea>
-        <TabsList className="bg-background h-auto -space-x-px p-0 shadow-xs rtl:space-x-reverse">
-          {/* <TabsTrigger
-            value="tab-1"
-            className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
-          >
-            <HouseIcon
-              className="-ms-0.5 me-1.5 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            {t("academy")}
-          </TabsTrigger> */}
-          <TabsTrigger
-            value="tab-1"
-            className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative w-fit overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
-          >
-            <PanelsTopLeftIcon
-              className="-ms-0.5 me-1.5 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            {t("Coverage")}
-          </TabsTrigger>
-          <TabsTrigger
-            value="tab-2"
-            className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
-          >
-            <BoxIcon
-              className="-ms-0.5 me-1.5 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            {t("settings")}
-          </TabsTrigger>
-        </TabsList>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-      {/* <TabsContent value="tab-1" className="gap-0 p-0">
-        <div className="flex flex-col px-4">
-          <AcademyStatCard />
-          <CourseCoverageOverview />
-        </div>
-      </TabsContent> */}
+    <Tabs defaultValue="tab-1" className="px-4 py-2">
+      <TabsList>
+        <TabsTrigger value="tab-1">
+          <PanelsTopLeftIcon size={16} aria-hidden="true" />
+          {t("Coverage")}
+        </TabsTrigger>
+        <TabsTrigger value="tab-2">
+          <BoxIcon size={16} aria-hidden="true" />
+          {t("settings")}
+        </TabsTrigger>
+      </TabsList>
+
       <TabsContent value="tab-1">
         <HydrateClient>
-          <div className="grid grid-cols-4 gap-2 px-4">
-            <div className="col-span-3 flex flex-col gap-2">
+          <div className="grid grid-cols-4 gap-2">
+            <div className="col-span-3 flex flex-col gap-4">
               <Suspense fallback={<Skeleton className="h-8" />}>
                 <CourseCoverageHeader />
               </Suspense>

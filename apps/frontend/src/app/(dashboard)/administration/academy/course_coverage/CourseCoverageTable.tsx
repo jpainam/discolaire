@@ -19,7 +19,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import { Progress } from "~/components/ui/progress";
 import {
   Table,
@@ -57,15 +61,13 @@ export function CourseCoverageTable() {
   return (
     <div className="mb-4 flex flex-col gap-2">
       <div className="flex items-center gap-2">
-        <div className="relative w-full md:w-64">
-          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-          <Input
-            placeholder={t("search") + "..."}
-            className="pl-8"
-            //value={query}
-            // onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
+        <InputGroup>
+          <InputGroupInput placeholder={t("search")} />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
+
         <div className="ml-auto flex items-center gap-2">
           <Button
             variant={"secondary"}
@@ -93,8 +95,8 @@ export function CourseCoverageTable() {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"icon"} className="size-8">
-                <MoreVertical className="size-4" />
+              <Button variant={"outline"} size={"icon"}>
+                <MoreVertical />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -154,11 +156,7 @@ export function CourseCoverageTable() {
                       >
                         {p.subject.course.name}
                       </Link>
-                      <Badge
-                        variant="info"
-                        appearance="light"
-                        className="h-5 text-[10px]"
-                      >
+                      <Badge variant="info" appearance="light" size={"xs"}>
                         {p.subject.course.shortName}
                       </Badge>
                     </div>
@@ -186,6 +184,7 @@ export function CourseCoverageTable() {
                 </TableCell>
                 <TableCell className="text-muted-foreground py-1">
                   <Badge
+                    //size={"xs"}
                     variant={
                       p.journals.length == 0
                         ? "destructive"
@@ -193,14 +192,14 @@ export function CourseCoverageTable() {
                           ? "warning"
                           : "success"
                     }
-                    appearance="outline"
+                    appearance="light"
                   >
                     {p.journals.length}
                   </Badge>
                 </TableCell>
 
                 <TableCell className="py-1 font-medium">
-                  <Badge variant="destructive" appearance="outline">
+                  <Badge variant="destructive" appearance="light">
                     {p.journals.length}
                   </Badge>
                 </TableCell>
@@ -213,7 +212,8 @@ export function CourseCoverageTable() {
                     //       ? "warning"
                     //       : "success"
                     // }
-                    appearance="outline"
+                    //size="xs"
+                    appearance="light"
                   >
                     0
                   </Badge>
