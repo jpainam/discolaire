@@ -2,6 +2,8 @@ import {
   Download,
   Edit3,
   FolderInput,
+  LogIn,
+  LogOut,
   MessageSquare,
   PlusCircle,
   RefreshCcw,
@@ -55,6 +57,21 @@ export const actionStyles = {
     icon: Trash2,
     iconColor: "text-red-500",
     iconBg: "bg-red-500/10",
+  },
+  delete: {
+    icon: Trash2,
+    iconColor: "text-red-500",
+    iconBg: "bg-red-500/10",
+  },
+  enrolled: {
+    icon: LogIn,
+    iconColor: "text-teal-500",
+    iconBg: "bg-teal-500/10",
+  },
+  unenrolled: {
+    icon: LogOut,
+    iconColor: "text-orange-500",
+    iconBg: "bg-orange-500/10",
   },
 } as const;
 export type ActionType = keyof typeof actionStyles;

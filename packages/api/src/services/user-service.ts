@@ -6,7 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 import type { Auth } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
 
-import type { PubSubLogger } from "../pubsub-logger";
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
+import type { ActivityLogger } from "../activity-logger";
 import { getBaseUrlFromHeaders } from "../lib/base-url";
 
 type PermissionSource =
@@ -259,7 +260,7 @@ export class UserService {
     authApi,
     requestHeaders,
     schoolId,
-    pubsub,
+    activityLog,
   }: {
     input: {
       username: string;
@@ -271,7 +272,7 @@ export class UserService {
     authApi: Auth["api"];
     requestHeaders: Headers;
     schoolId: string;
-    pubsub: PubSubLogger;
+    activityLog: ActivityLogger;
   }) {
     const entity = await this.getUserFromEntity({
       entityId: input.entityId,
@@ -385,15 +386,12 @@ export class UserService {
       headers: requestHeaders,
     });
 
-    await pubsub.publish("user", {
-      type: "create",
-      data: {
-        id: input.entityId,
-        metadata: {
-          profile: input.profile,
-          entityId: input.entityId,
-        },
-      },
+    activityLog.log({
+      action: ActivityAction.CREATE,
+      targetType: ActivityTargetType.USER,
+      targetId: input.entityId,
+      description: `${activityLog.actor} a créé un compte utilisateur (${input.profile}) pour l'entité ${input.entityId}`,
+      metadata: { profile: input.profile, actorName: activityLog.actor },
     });
     return newUser;
   }
@@ -402,7 +400,7 @@ export class UserService {
     input,
     authApi,
     requestHeaders,
-    pubsub,
+    activityLog,
   }: {
     input: {
       id: string;
@@ -413,7 +411,7 @@ export class UserService {
     };
     authApi: Auth["api"];
     requestHeaders: Headers;
-    pubsub: PubSubLogger;
+    activityLog: ActivityLogger;
   }) {
     const userExist = await this.db.user.findFirst({
       where: {
@@ -485,14 +483,12 @@ export class UserService {
         headers: requestHeaders,
       });
     }
-    await pubsub.publish("user", {
-      type: "update",
-      data: {
-        id: input.id,
-        metadata: {
-          name: input.name,
-        },
-      },
+    activityLog.log({
+      action: ActivityAction.UPDATE,
+      targetType: ActivityTargetType.USER,
+      targetId: input.id,
+      description: `${activityLog.actor} a modifié les informations de l'utilisateur ${input.name ?? input.id}`,
+      metadata: { entityName: input.name ?? input.id, actorName: activityLog.actor },
     });
     return this.db.user.findUniqueOrThrow({
       where: {

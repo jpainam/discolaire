@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -15,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import { DateRangePicker } from "../DateRangePicker";
 import { TableSkeleton } from "../skeletons/table-skeleton";
@@ -35,29 +35,34 @@ import {
 } from "../ui/timeline";
 import { getActionStyle } from "./action-styles";
 
+const ACTIONS = [
+  "create",
+  "update",
+  "delete",
+  "enrolled",
+  "unenrolled",
+  "uploaded",
+  "downloaded",
+  "deleted",
+];
+
 export function LogActivityList({
   entityId,
   entityType,
+  className,
 }: {
   entityId: string;
-  entityType: "staff" | "student" | "contact";
+  entityType: "staff" | "student" | "contact"; // app's "entity" concept — person record
+  className?: string;
 }) {
   const trpc = useTRPC();
   const [queryText, setQueryText] = useState("");
+  const [selectedAction, setSelectedAction] = useState<string | undefined>(
+    undefined,
+  );
   const debounce = useDebouncedCallback((value: string) => {
     setQueryText(value);
   }, 300);
-  const actions = [
-    "uploaded",
-    "shared",
-    "edited",
-    "updated",
-    "created",
-    "downloaded",
-    "moved",
-    "commented on",
-    "deleted",
-  ];
 
   const locale = useLocale();
 
@@ -65,19 +70,26 @@ export function LogActivityList({
     from: parseAsIsoDate,
     to: parseAsIsoDate,
   });
+
   const { data: activities, isPending } = useQuery(
     trpc.logActivity.all.queryOptions({
       limit: 100,
-      entityId,
-      entityType,
+      targetId: entityId,
+      targetType: entityType,
+      query: queryText || undefined,
+      action: selectedAction,
+      from: range.from ?? undefined,
+      to: range.to ?? undefined,
     }),
   );
   const t = useTranslations();
+
   if (isPending) {
     return <TableSkeleton rows={8} cols={5} />;
   }
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className={cn("flex flex-col gap-2 px-4", className)}>
       <div className="grid grid-cols-3 gap-4">
         <InputGroup>
           <InputGroupInput
@@ -94,13 +106,21 @@ export function LogActivityList({
             void setRange(value ? (value as { from: Date; to: Date }) : null);
           }}
         />
-        <Select>
+        <Select
+          value={selectedAction ?? ""}
+          onValueChange={(v) =>
+            setSelectedAction(v === "all" ? undefined : v || undefined)
+          }
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder={t("Action")} />
           </SelectTrigger>
           <SelectContent>
-            {actions.map((a) => (
-              <SelectItem value={a}>{t(a)}</SelectItem>
+            <SelectItem value="all">{t("All")}</SelectItem>
+            {ACTIONS.map((a) => (
+              <SelectItem key={a} value={a}>
+                {t(a)}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -116,14 +136,24 @@ export function LogActivityList({
             >
               <TimelineHeader>
                 <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                <TimelineTitle className="mt-0.5">{item.title}</TimelineTitle>
-                <TimelineIndicator className="bg-primary/10 group-data-completed/timeline-item:bg-primary group-data-completed/timeline-item:text-primary-foreground flex size-6 items-center justify-center border-none group-data-[orientation=vertical]/timeline:-left-7">
+                <TimelineIndicator
+                  className={cn(
+                    "flex size-6 items-center justify-center border-none",
+                    "group-data-[orientation=vertical]/timeline:-left-7",
+                    iconBg ?? "bg-primary/10",
+                    iconColor,
+                  )}
+                >
                   <Icon size={14} />
                 </TimelineIndicator>
               </TimelineHeader>
               <TimelineContent>
-                {item.description}
-                <TimelineDate className="mt-2 mb-0">
+                {/* Description is server-generated HTML with entity links */}
+                <TimelineTitle
+                  className="mt-0.5 text-sm font-normal [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_strong]:font-semibold"
+                  dangerouslySetInnerHTML={{ __html: item.description }}
+                />
+                <TimelineDate className="mt-1 mb-0">
                   {item.createdAt.toLocaleDateString(locale, {
                     year: "numeric",
                     month: "short",

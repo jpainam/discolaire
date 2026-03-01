@@ -5,8 +5,8 @@ import { fromZonedTime } from "date-fns-tz";
 import z from "zod";
 
 import type { Prisma } from "@repo/db";
-import { ActivityType } from "@repo/db";
 
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 import { buildPermissionIndex, checkPermission } from "../utils";
 
@@ -262,14 +262,13 @@ export const studentRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      await ctx.pubsub.publish("student", {
-        type: "create",
-        data: {
-          id: student.id,
-          metadata: {
-            name: student.lastName,
-          },
-        },
+      const studentName = `${student.firstName} ${student.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.CREATE,
+        targetType: ActivityTargetType.STUDENT,
+        targetId: student.id,
+        description: `${ctx.activityLog.actor} a créé l'élève <a href="/students/${student.id}">${studentName}</a>`,
+        metadata: { entityName: studentName, actorName: ctx.activityLog.actor },
       });
       void ctx.services.student.addClubs(student.id, input.clubs ?? []);
       void ctx.services.student.addSports(student.id, input.sports ?? []);
@@ -283,14 +282,12 @@ export const studentRouter = {
             createdById: ctx.session.user.id,
           },
         });
-        await ctx.pubsub.publish("enrollment", {
-          type: "create",
-          data: {
-            id: enr.id.toString(),
-            metadata: {
-              name: student.lastName,
-            },
-          },
+        ctx.activityLog.log({
+          action: ActivityAction.ENROLLED,
+          targetType: ActivityTargetType.STUDENT,
+          targetId: student.id,
+          description: `${ctx.activityLog.actor} a inscrit l'élève <a href="/students/${student.id}">${studentName}</a>`,
+          metadata: { entityName: studentName, actorName: ctx.activityLog.actor },
         });
       }
       await ctx.services.billing.syncAutoDiscountAssignmentsForStudent({
@@ -319,15 +316,6 @@ export const studentRouter = {
         //   message: "Registration number already exists",
         // });
       }
-      await ctx.pubsub.publish("student", {
-        type: "update",
-        data: {
-          id: input.id,
-          metadata: {
-            name: input.lastName,
-          },
-        },
-      });
       const student = await ctx.db.student.update({
         where: { id: input.id },
         data: {
@@ -361,6 +349,14 @@ export const studentRouter = {
           createdById: ctx.session.user.id,
         },
       });
+      const updatedName = `${student.firstName} ${student.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.STUDENT,
+        targetId: student.id,
+        description: `${ctx.activityLog.actor} a modifié les informations de l'élève <a href="/students/${student.id}">${updatedName}</a>`,
+        metadata: { entityName: updatedName, actorName: ctx.activityLog.actor },
+      });
       await ctx.services.billing.syncAutoDiscountAssignmentsForStudent({
         studentId: student.id,
         schoolId: ctx.schoolId,
@@ -392,22 +388,22 @@ export const studentRouter = {
         //   message: "Registration number already exists",
         // });
       }
-      await ctx.pubsub.publish("student", {
-        type: "update",
-        data: {
-          id: input.studentId,
-          metadata: {
-            name: input.registrationNumber,
-          },
-        },
-      });
-      return ctx.db.student.update({
+      const updated = await ctx.db.student.update({
         where: { id: input.studentId },
         data: {
           registrationNumber: input.registrationNumber,
           createdById: ctx.session.user.id,
         },
       });
+      const regName = `${updated.firstName} ${updated.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.STUDENT,
+        targetId: input.studentId,
+        description: `${ctx.activityLog.actor} a mis à jour le numéro d'inscription de l'élève <a href="/students/${input.studentId}">${regName}</a> (${input.registrationNumber})`,
+        metadata: { entityName: regName, registrationNumber: input.registrationNumber, actorName: ctx.activityLog.actor },
+      });
+      return updated;
     }),
   count: protectedProcedure
     .input(
@@ -450,13 +446,24 @@ export const studentRouter = {
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
-      const r = await ctx.services.student.delete(input, ctx.schoolId);
-      await ctx.pubsub.publish("student", {
-        type: "delete",
-        data: {
-          id: Array.isArray(input) ? input.join(",") : input,
-        },
+      const studentIds = Array.isArray(input) ? input : [input];
+      const students = await ctx.db.student.findMany({
+        where: { id: { in: studentIds }, schoolId: ctx.schoolId },
+        select: { id: true, firstName: true, lastName: true, registrationNumber: true },
       });
+      const r = await ctx.services.student.delete(input, ctx.schoolId);
+      ctx.activityLog.logMany(
+        students.map((student) => {
+          const name = `${student.firstName} ${student.lastName}`.trim();
+          return {
+            action: ActivityAction.DELETE,
+            targetType: ActivityTargetType.STUDENT,
+            targetId: student.id,
+            description: `${ctx.activityLog.actor} a supprimé l'élève ${name}`,
+            metadata: { entityName: name, actorName: ctx.activityLog.actor },
+          };
+        }),
+      );
       return r;
     }),
   siblings: protectedProcedure
@@ -654,7 +661,6 @@ export const studentRouter = {
     .input(
       z.object({
         studentId: z.string().min(1),
-        activityType: z.enum(ActivityType).optional(),
         limit: z.number().min(1).max(100).optional().default(20),
       }),
     )
@@ -662,13 +668,10 @@ export const studentRouter = {
       const logs = await ctx.db.logActivity.findMany({
         where: {
           schoolId: ctx.schoolId,
-          entity: "student",
-          entityId: input.studentId,
-          ...(input.activityType ? { activityType: input.activityType } : {}),
+          targetType: "student",
+          targetId: input.studentId,
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: { createdAt: "desc" },
         take: input.limit,
       });
       return ctx.services.logActivity.formatLogActivities(logs);
@@ -723,23 +726,19 @@ export const studentRouter = {
   disable: protectedProcedure
     .input(z.object({ id: z.string().min(1), isActive: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.pubsub.publish("student", {
-        type: "update",
-        data: {
-          id: input.id,
-          metadata: {
-            name: input.isActive ? "Enabled" : "Disabled",
-          },
-        },
+      const student = await ctx.db.student.update({
+        where: { id: input.id },
+        data: { isActive: input.isActive },
       });
-      return ctx.db.student.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          isActive: input.isActive,
-        },
+      const name = `${student.firstName} ${student.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.DISABLED,
+        targetType: ActivityTargetType.STUDENT,
+        targetId: input.id,
+        description: `${ctx.activityLog.actor} a ${input.isActive ? "activé" : "désactivé"} l'élève <a href="/students/${input.id}">${name}</a>`,
+        metadata: { entityName: name, isActive: input.isActive, actorName: ctx.activityLog.actor },
       });
+      return student;
     }),
 
   getPrimaryContact: protectedProcedure
@@ -801,23 +800,25 @@ export const studentRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.pubsub.publish("student", {
-        type: "update_status",
-        data: {
-          id: input.studentId,
-          metadata: {
-            name: input.status,
-          },
-        },
+      const statusLabels: Record<string, string> = {
+        ACTIVE: "actif",
+        GRADUATED: "diplômé",
+        INACTIVE: "inactif",
+        EXPELLED: "expulsé",
+      };
+      const student = await ctx.db.student.update({
+        where: { id: input.studentId },
+        data: { status: input.status },
       });
-      return ctx.db.student.update({
-        where: {
-          id: input.studentId,
-        },
-        data: {
-          status: input.status,
-        },
+      const name = `${student.firstName} ${student.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.STUDENT,
+        targetId: input.studentId,
+        description: `${ctx.activityLog.actor} a changé le statut de l'élève <a href="/students/${input.studentId}">${name}</a> en « ${statusLabels[input.status] ?? input.status} »`,
+        metadata: { entityName: name, status: input.status, actorName: ctx.activityLog.actor },
       });
+      return student;
     }),
 
   getFromUserId: protectedProcedure

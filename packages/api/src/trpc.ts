@@ -16,7 +16,7 @@ import { getDb } from "@repo/db";
 
 import type { Services } from "./services";
 import { env } from "./env";
-import { PubSubLogger } from "./pubsub-logger";
+import { ActivityLogger } from "./activity-logger";
 import { createServices } from "./services";
 import { getCookieValue } from "./utils";
 
@@ -184,8 +184,9 @@ export const protectedProcedure = t.procedure
         schoolId: ctx.session.user.schoolId,
         schoolYearId: ctx.schoolYearId,
         // tenant and baseUrl flow through from the base context unchanged
-        pubsub: new PubSubLogger(
+        activityLog: new ActivityLogger(
           ctx.session.user.id,
+          ctx.session.user.name,
           ctx.session.user.schoolId,
           ctx.db,
         ),

@@ -139,7 +139,7 @@ export function DocumentRecentActivity({
               activity.createdAt instanceof Date
                 ? activity.createdAt
                 : new Date(activity.createdAt);
-            const data = activity.data as {
+            const data = activity.metadata as {
               filename?: string;
               title?: string;
             } | null;

@@ -5,6 +5,7 @@ import { z } from "zod/v4";
 
 import { TransactionStatus, TransactionType } from "@repo/db/enums";
 
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 import { buildPermissionIndex, checkPermission } from "../utils";
 
@@ -114,12 +115,19 @@ export const classroomRouter = {
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
       const classroomIds = Array.isArray(input) ? input : [input];
-      await ctx.pubsub.publish("classroom", {
-        type: "delete",
-        data: {
-          id: classroomIds.join(","),
-        },
+      const classrooms = await ctx.db.classroom.findMany({
+        where: { id: { in: classroomIds } },
+        select: { id: true, name: true },
       });
+      ctx.activityLog.logMany(
+        classrooms.map((cl) => ({
+          action: ActivityAction.DELETE,
+          targetType: ActivityTargetType.CLASSROOM,
+          targetId: cl.id,
+          description: `${ctx.activityLog.actor} a supprimé la classe ${cl.name}`,
+          metadata: { entityName: cl.name, actorName: ctx.activityLog.actor },
+        })),
+      );
       return ctx.db.classroom.deleteMany({
         where: {
           id: {
@@ -167,14 +175,12 @@ export const classroomRouter = {
           createdById: ctx.session.user.id,
         },
       });
-      await ctx.pubsub.publish("classroom", {
-        type: "create",
-        data: {
-          id: cl.id,
-          metadata: {
-            name: cl.name,
-          },
-        },
+      ctx.activityLog.log({
+        action: ActivityAction.CREATE,
+        targetType: ActivityTargetType.CLASSROOM,
+        targetId: cl.id,
+        description: `${ctx.activityLog.actor} a créé la classe <a href="/classrooms/${cl.id}">${cl.name}</a>`,
+        metadata: { entityName: cl.name, actorName: ctx.activityLog.actor },
       });
       return cl;
     }),
@@ -492,14 +498,12 @@ export const classroomRouter = {
   update: protectedProcedure
     .input(createUpdateSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.pubsub.publish("classroom", {
-        type: "update",
-        data: {
-          id: input.id,
-          metadata: {
-            name: input.name,
-          },
-        },
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.CLASSROOM,
+        targetId: input.id,
+        description: `${ctx.activityLog.actor} a modifié la classe <a href="/classrooms/${input.id}">${input.name}</a>`,
+        metadata: { entityName: input.name, actorName: ctx.activityLog.actor },
       });
       return ctx.db.classroom.update({
         where: {

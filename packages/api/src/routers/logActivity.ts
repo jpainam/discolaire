@@ -1,36 +1,33 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { TRPCRouterRecord } from "@trpc/server";
 import z from "zod";
 
-import { ActivityType } from "@repo/db";
-
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 
 export const logActivityRouter = {
   create: protectedProcedure
     .input(
       z.object({
-        activityType: z.enum(ActivityType),
-        action: z.string().min(1),
-        entity: z.string().min(1),
-        entityId: z.string().optional(),
-        data: z.any().optional(),
+        action: z.nativeEnum(ActivityAction),
+        targetType: z.nativeEnum(ActivityTargetType),
+        targetId: z.string().optional(),
+        description: z.string().min(1),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
-      await ctx.pubsub.log({
-        activityType: input.activityType,
+    .mutation(({ ctx, input }) => {
+      ctx.activityLog.log({
         action: input.action,
-        entity: input.entity,
-        entityId: input.entityId,
-        data: input.data,
+        targetType: input.targetType,
+        targetId: input.targetId,
+        description: input.description,
       });
     }),
+
   user: protectedProcedure.input(z.string().min(1)).query(({ input, ctx }) => {
     return ctx.db.logActivity.findMany({
       take: 100,
       include: {
-        user: true,
+        user: { select: { id: true, name: true } },
       },
       orderBy: {
         createdAt: "desc",
@@ -41,49 +38,62 @@ export const logActivityRouter = {
       },
     });
   }),
+
   all: protectedProcedure
     .input(
       z.object({
         query: z.string().optional(),
         limit: z.number().optional().default(100),
-        entityId: z.string().optional(),
-        entityType: z.enum(["staff", "student", "contact"]),
+        targetId: z.string().optional(),
+        targetType: z.enum(["staff", "student", "contact"]),
+        action: z.string().optional(),
+        from: z.coerce.date().optional(),
+        to: z.coerce.date().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const activities = await ctx.db.logActivity.findMany({
-        take: 100,
-        orderBy: {
-          createdAt: "desc",
-        },
+      return ctx.db.logActivity.findMany({
+        take: input.limit,
+        orderBy: { createdAt: "desc" },
         include: {
-          user: true,
+          user: { select: { id: true, name: true } },
         },
         where: {
           schoolId: ctx.schoolId,
-          entityId: input.entityId,
-          entity: input.entityType,
+          targetId: input.targetId,
+          targetType: input.targetType,
+          ...(input.action ? { action: input.action } : {}),
+          ...(input.from || input.to
+            ? {
+                createdAt: {
+                  ...(input.from ? { gte: input.from } : {}),
+                  ...(input.to ? { lte: input.to } : {}),
+                },
+              }
+            : {}),
           ...(input.query
             ? {
                 OR: [
                   { action: { contains: input.query, mode: "insensitive" } },
-                  // { data: { contains: input.query, mode: "insensitive" } },
+                  {
+                    description: {
+                      contains: input.query,
+                      mode: "insensitive",
+                    },
+                  },
                 ],
               }
             : {}),
         },
       });
-      return activities.map((log) => {
-        return ctx.services.logActivity.formatLogActivity(log);
-      });
     }),
+
   search: protectedProcedure
     .input(
       z.object({
         query: z.string().optional(),
-        activityType: z.enum(ActivityType).optional(),
         action: z.string().optional(),
-        entity: z.string().optional(),
+        targetType: z.string().optional(),
         userId: z.string().optional(),
         from: z.coerce.date().optional(),
         to: z.coerce.date().optional(),
@@ -91,24 +101,24 @@ export const logActivityRouter = {
       }),
     )
     .query(({ ctx, input }) => {
-      const q = `%${input.query}%`;
-      console.log("Searching log activities with query:", q);
       return ctx.db.logActivity.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: { createdAt: "desc" },
         take: input.limit,
         include: {
-          user: true,
+          user: { select: { id: true, name: true } },
         },
         where: {
           schoolId: ctx.schoolId,
-          ...(input.activityType ? { activityType: input.activityType } : {}),
           ...(input.action ? { action: input.action } : {}),
-          ...(input.entity ? { entity: input.entity } : {}),
+          ...(input.targetType ? { targetType: input.targetType } : {}),
           ...(input.userId ? { userId: input.userId } : {}),
           ...(input.from ? { createdAt: { gte: input.from } } : {}),
           ...(input.to ? { createdAt: { lte: input.to } } : {}),
+          ...(input.query
+            ? {
+                description: { contains: input.query, mode: "insensitive" },
+              }
+            : {}),
         },
       });
     }),
@@ -116,31 +126,16 @@ export const logActivityRouter = {
   delete: protectedProcedure
     .input(z.coerce.number())
     .mutation(({ ctx, input }) => {
-      return ctx.db.logActivity.delete({
-        where: {
-          id: input,
-        },
-      });
+      return ctx.db.logActivity.delete({ where: { id: input } });
     }),
 
   findByUserId: protectedProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-      }),
-    )
+    .input(z.object({ userId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.logActivity.findMany({
-        where: {
-          userId: input.userId,
-          schoolId: ctx.schoolId,
-        },
-        include: {
-          user: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
+        where: { userId: input.userId, schoolId: ctx.schoolId },
+        include: { user: { select: { id: true, name: true } } },
+        orderBy: { createdAt: "desc" },
       });
     }),
 } satisfies TRPCRouterRecord;

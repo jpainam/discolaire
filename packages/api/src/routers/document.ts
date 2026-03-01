@@ -1,9 +1,10 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { ActivityType, DocumentType } from "@repo/db";
+import { DocumentType } from "@repo/db";
 import { getDocumentFileCategory } from "@repo/utils";
 
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 
 const createDocumentSchema = z.object({
@@ -61,11 +62,11 @@ const toDocumentLogEntity = (doc: {
 }) => {
   const entity = resolveDocumentEntity(doc);
   if (entity.entityType && entity.entityId) {
-    return entity;
+    return { targetType: entity.entityType, targetId: entity.entityId };
   }
   return {
-    entityType: "document" as const,
-    entityId: doc.id ?? null,
+    targetType: "document" as const,
+    targetId: doc.id ?? null,
   };
 };
 
@@ -108,51 +109,37 @@ export const documentRouter = {
     .input(z.string().array())
     .mutation(async ({ ctx, input }) => {
       const ids = input;
-      return ctx.db.$transaction(async (tx) => {
-        const documents = await tx.document.findMany({
-          where: {
-            id: { in: ids },
-            schoolId: ctx.schoolId,
-          },
-          select: {
-            id: true,
-            title: true,
-            url: true,
-            studentId: true,
-            staffId: true,
-            contactId: true,
-            classroomId: true,
-          },
-        });
-
-        if (documents.length) {
-          await ctx.pubsub.logMany(
-            documents.map((doc) => {
-              const entity = toDocumentLogEntity({ ...doc, id: doc.id });
-              return {
-                activityType: ActivityType.DOCUMENT,
-                action: "deleted",
-                entity: entity.entityType,
-                entityId: entity.entityId,
-                data: {
-                  documentId: doc.id,
-                  title: doc.title,
-                  filename: doc.title ?? doc.url,
-                  url: doc.url,
-                },
-              };
-            }),
-          );
-        }
-
-        return tx.document.deleteMany({
-          where: {
-            id: {
-              in: ids,
-            },
-          },
-        });
+      const documents = await ctx.db.document.findMany({
+        where: { id: { in: ids }, schoolId: ctx.schoolId },
+        select: {
+          id: true,
+          title: true,
+          url: true,
+          studentId: true,
+          staffId: true,
+          contactId: true,
+          classroomId: true,
+        },
       });
+      const result = await ctx.db.document.deleteMany({
+        where: { id: { in: ids } },
+      });
+      if (documents.length) {
+        ctx.activityLog.logMany(
+          documents.map((doc) => {
+            const entity = toDocumentLogEntity({ ...doc, id: doc.id });
+            const filename = doc.title ?? doc.url;
+            return {
+              action: ActivityAction.DELETE,
+              targetType: entity.targetType as ActivityTargetType,
+              targetId: entity.targetId,
+              description: `${ctx.activityLog.actor} a supprimé le document <strong>${filename}</strong>`,
+              metadata: { documentTitle: filename, actorName: ctx.activityLog.actor },
+            };
+          }),
+        );
+      }
+      return result;
     }),
   update: protectedProcedure
     .input(updateDocumentSchema)
@@ -175,40 +162,31 @@ export const documentRouter = {
   create: protectedProcedure
     .input(createDocumentSchema)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.$transaction(async (tx) => {
-        const document = await tx.document.create({
-          data: {
-            type: input.type,
-            title: input.title,
-            description: input.description,
-            mime: input.mime,
-            size: input.size,
-            url: input.url,
-            createdById: ctx.session.user.id,
-            schoolId: ctx.schoolId,
-            studentId: input.entityType == "student" ? input.entityId : null,
-            staffId: input.entityType == "staff" ? input.entityId : null,
-            contactId: input.entityType == "contact" ? input.entityId : null,
-            classroomId:
-              input.entityType == "classroom" ? input.entityId : null,
-          },
-        });
-
-        await ctx.pubsub.log({
-          activityType: ActivityType.DOCUMENT,
-          action: "uploaded",
-          entity: input.entityType,
-          entityId: input.entityId,
-          data: {
-            documentId: document.id,
-            title: document.title,
-            filename: document.title ?? document.url,
-            url: document.url,
-          },
-        });
-
-        return document;
+      const document = await ctx.db.document.create({
+        data: {
+          type: input.type,
+          title: input.title,
+          description: input.description,
+          mime: input.mime,
+          size: input.size,
+          url: input.url,
+          createdById: ctx.session.user.id,
+          schoolId: ctx.schoolId,
+          studentId: input.entityType == "student" ? input.entityId : null,
+          staffId: input.entityType == "staff" ? input.entityId : null,
+          contactId: input.entityType == "contact" ? input.entityId : null,
+          classroomId: input.entityType == "classroom" ? input.entityId : null,
+        },
       });
+      const filename = document.title ?? document.url;
+      ctx.activityLog.log({
+        action: ActivityAction.UPLOADED,
+        targetType: input.entityType as ActivityTargetType,
+        targetId: input.entityId,
+        description: `${ctx.activityLog.actor} a téléversé le document <strong>${filename}</strong>`,
+        metadata: { documentTitle: filename, actorName: ctx.activityLog.actor },
+      });
+      return document;
     }),
   get: protectedProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.document.findUniqueOrThrow({
@@ -302,9 +280,9 @@ export const documentRouter = {
         },
         where: {
           schoolId: ctx.schoolId,
-          activityType: ActivityType.DOCUMENT,
-          entity: input.entityType,
-          entityId: input.entityId,
+          action: { in: [ActivityAction.UPLOADED, ActivityAction.DOWNLOADED, ActivityAction.DELETE] },
+          targetType: input.entityType,
+          targetId: input.entityId,
         },
       });
     }),
@@ -323,17 +301,13 @@ export const documentRouter = {
       }
 
       const entity = toDocumentLogEntity({ ...document, id: document.id });
-      await ctx.pubsub.log({
-        activityType: ActivityType.DOCUMENT,
-        action: "downloaded",
-        entity: entity.entityType,
-        entityId: entity.entityId,
-        data: {
-          documentId: document.id,
-          title: document.title,
-          filename: document.title ?? document.url,
-          url: document.url,
-        },
+      const dlFilename = document.title ?? document.url;
+      ctx.activityLog.log({
+        action: ActivityAction.DOWNLOADED,
+        targetType: entity.targetType as ActivityTargetType,
+        targetId: entity.targetId,
+        description: `${ctx.activityLog.actor} a téléchargé le document <strong>${dlFilename}</strong>`,
+        metadata: { documentTitle: dlFilename, actorName: ctx.activityLog.actor },
       });
 
       return document.id;

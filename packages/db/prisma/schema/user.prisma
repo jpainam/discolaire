@@ -71,28 +71,21 @@ model User {
 }
 
 model LogActivity {
-    id           Int          @id @default(autoincrement())
-    userId       String?
-    activityType ActivityType
-    action       String
-    entity       String
-    entityId     String?
-    data         Json?
-    createdAt    DateTime     @default(now())
-    user         User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-    schoolId     String
-    school       School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-}
+    id          Int      @id @default(autoincrement())
+    userId      String?
+    action      String
+    targetType  String
+    targetId    String?
+    description String
+    metadata    Json?
+    createdAt   DateTime @default(now())
+    user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+    schoolId    String
+    school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-enum ActivityType {
-    DOCUMENT
-    STUDENT
-    STAFF
-    CONTACT
-    USER
-    AUTH
-    SYSTEM
-    OTHER
+    @@index([schoolId, targetType, targetId])
+    @@index([schoolId, userId])
+    @@index([schoolId, createdAt(sort: Desc)])
 }
 
 model SchoolYearEvent {

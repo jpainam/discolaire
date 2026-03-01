@@ -4,8 +4,6 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import z from "zod";
 
-import { ActivityType } from "@repo/db";
-
 import { getAuth, getSession } from "~/auth/server";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
@@ -58,20 +56,6 @@ export async function signIn(
     }
 
     await setSchoolYearCookie(schoolYear.id);
-
-    try {
-      await caller.logActivity.create({
-        activityType: ActivityType.AUTH,
-        action: "login",
-        entity: "user",
-        entityId: result.user.id,
-        data: {
-          username: result.user.username,
-        },
-      });
-    } catch (logError) {
-      logger.warn("Failed to log login activity", logError);
-    }
   } catch (error) {
     const err = error as Error;
     logger.error(error);

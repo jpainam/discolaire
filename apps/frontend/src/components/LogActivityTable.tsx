@@ -48,13 +48,13 @@ export async function LogActivityTable({
               {log.user?.name ?? "system"}
             </span>{" "}
             <span className="lowercase">{t(getActionString(log.action))} </span>
-            <span className="font-mono lowercase">un/une {t(log.entity)}</span>
-            {log.entityId && (
+            <span className="font-mono lowercase">un/une {t(log.targetType)}</span>
+            {log.targetId && (
               <span>
                 {" "}
                 correspondant à{" "}
                 <span className="font-mono text-orange-500">
-                  {log.entityId} {log.data && JSON.stringify(log.data)}
+                  {log.targetId}
                 </span>
               </span>
             )}

@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { subMonths } from "date-fns";
 import { z } from "zod/v4";
 
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 import { getFullName } from "../utils";
 
@@ -119,12 +120,18 @@ export const staffRouter = {
           },
         });
       }
-      await ctx.pubsub.publish("staff", {
-        type: "delete",
-        data: {
-          id: staffIds.join(","),
-        },
-      });
+      ctx.activityLog.logMany(
+        staffs.map((staff) => {
+          const name = [staff.firstName, staff.lastName].filter(Boolean).join(" ");
+          return {
+            action: ActivityAction.DELETE,
+            targetType: ActivityTargetType.STAFF,
+            targetId: staff.id,
+            description: `${ctx.activityLog.actor} a supprimé le membre du personnel ${name}`,
+            metadata: { entityName: name, actorName: ctx.activityLog.actor },
+          };
+        }),
+      );
       return ctx.db.staff.deleteMany({
         where: {
           schoolId: ctx.schoolId,
@@ -167,14 +174,13 @@ export const staffRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      await ctx.pubsub.publish("staff", {
-        type: "create",
-        data: {
-          id: staff.id,
-          metadata: {
-            name: input.lastName,
-          },
-        },
+      const staffName = [staff.firstName, staff.lastName].filter(Boolean).join(" ");
+      ctx.activityLog.log({
+        action: ActivityAction.CREATE,
+        targetType: ActivityTargetType.STAFF,
+        targetId: staff.id,
+        description: `${ctx.activityLog.actor} a créé le membre du personnel <a href="/staffs/${staff.id}">${staffName}</a>`,
+        metadata: { entityName: staffName, actorName: ctx.activityLog.actor },
       });
       return staff;
     }),
@@ -204,14 +210,13 @@ export const staffRouter = {
           headers: await headers(),
         });
       }
-      await ctx.pubsub.publish("staff", {
-        type: "update",
-        data: {
-          id: id,
-          metadata: {
-            name: data.lastName,
-          },
-        },
+      const updatedName = [staff.firstName, staff.lastName].filter(Boolean).join(" ");
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.STAFF,
+        targetId: id,
+        description: `${ctx.activityLog.actor} a modifié les informations du membre du personnel <a href="/staffs/${id}">${updatedName}</a>`,
+        metadata: { entityName: updatedName, actorName: ctx.activityLog.actor },
       });
       return staff;
     }),

@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod/v4";
 
 import { env } from "../env";
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = {
@@ -162,14 +163,25 @@ export const enrollmentRouter = {
             },
           ];
 
+      const students = await ctx.db.student.findMany({
+        where: { id: { in: studentIds } },
+        select: { id: true, firstName: true, lastName: true, registrationNumber: true },
+      });
+      const studentMap = new Map(students.map((s) => [s.id, s]));
+
       const results = await Promise.all(
         data.map(async (e) => {
           const enr = await ctx.db.enrollment.create({ data: e });
-          await ctx.pubsub.publish("enrollment", {
-            type: "create",
-            data: {
-              id: enr.id.toString(),
-            },
+          const student = studentMap.get(e.studentId);
+          const name = student
+            ? `${student.firstName} ${student.lastName}`.trim()
+            : e.studentId;
+          ctx.activityLog.log({
+            action: ActivityAction.ENROLLED,
+            targetType: ActivityTargetType.STUDENT,
+            targetId: e.studentId,
+            description: `${ctx.activityLog.actor} a inscrit l'élève <a href="/students/${e.studentId}">${name}</a>`,
+            metadata: { entityName: name, actorName: ctx.activityLog.actor },
           });
 
           // Send enrollment notification email.
@@ -251,12 +263,29 @@ export const enrollmentRouter = {
       const studentIds = Array.isArray(input.studentId)
         ? input.studentId
         : [input.studentId];
-      await ctx.pubsub.publish("enrollment", {
-        type: "delete",
-        data: {
-          id: studentIds.join(","),
-        },
+
+      const students = await ctx.db.student.findMany({
+        where: { id: { in: studentIds } },
+        select: { id: true, firstName: true, lastName: true, registrationNumber: true },
       });
+      const studentMap = new Map(students.map((s) => [s.id, s]));
+
+      ctx.activityLog.logMany(
+        studentIds.map((studentId) => {
+          const student = studentMap.get(studentId);
+          const name = student
+            ? `${student.firstName} ${student.lastName}`.trim()
+            : studentId;
+          return {
+            action: ActivityAction.UNENROLLED,
+            targetType: ActivityTargetType.STUDENT,
+            targetId: studentId,
+            description: `${ctx.activityLog.actor} a retiré l'élève <a href="/students/${studentId}">${name}</a> de sa classe`,
+            metadata: { entityName: name, actorName: ctx.activityLog.actor },
+          };
+        }),
+      );
+
       return ctx.db.enrollment.deleteMany({
         where: {
           studentId: {
@@ -269,19 +298,32 @@ export const enrollmentRouter = {
   delete: protectedProcedure
     .input(z.union([z.array(z.coerce.number()), z.coerce.number()]))
     .mutation(async ({ ctx, input }) => {
-      const studentIds = Array.isArray(input) ? input : [input];
+      const enrollmentIds = Array.isArray(input) ? input : [input];
 
-      await ctx.pubsub.publish("enrollment", {
-        type: "delete",
-        data: {
-          id: studentIds.join(","),
+      const enrollments = await ctx.db.enrollment.findMany({
+        where: { id: { in: enrollmentIds } },
+        include: {
+          student: { select: { id: true, firstName: true, lastName: true, registrationNumber: true } },
         },
       });
+
+      ctx.activityLog.logMany(
+        enrollments.map((enr) => {
+          const name = `${enr.student.firstName} ${enr.student.lastName}`.trim();
+          return {
+            action: ActivityAction.UNENROLLED,
+            targetType: ActivityTargetType.STUDENT,
+            targetId: enr.studentId,
+            description: `${ctx.activityLog.actor} a retiré l'élève <a href="/students/${enr.studentId}">${name}</a> de sa classe`,
+            metadata: { entityName: name, actorName: ctx.activityLog.actor },
+          };
+        }),
+      );
 
       return ctx.db.enrollment.deleteMany({
         where: {
           id: {
-            in: studentIds,
+            in: enrollmentIds,
           },
         },
       });

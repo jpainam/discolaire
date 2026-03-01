@@ -4,6 +4,7 @@ import { z } from "zod/v4";
 
 import type { Prisma } from "@repo/db";
 
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = {
@@ -206,12 +207,19 @@ export const userRouter = {
     .input(z.union([z.array(z.string()), z.string()]))
     .mutation(async ({ input, ctx }) => {
       const userIds = Array.isArray(input) ? input : [input];
-      await ctx.pubsub.publish("user", {
-        type: "delete",
-        data: {
-          id: userIds.join(","),
-        },
+      const users = await ctx.db.user.findMany({
+        where: { id: { in: userIds } },
+        select: { id: true, name: true },
       });
+      ctx.activityLog.logMany(
+        users.map((u) => ({
+          action: ActivityAction.DELETE,
+          targetType: ActivityTargetType.USER,
+          targetId: u.id,
+          description: `${ctx.activityLog.actor} a supprimé l'utilisateur ${u.name}`,
+          metadata: { entityName: u.name, actorName: ctx.activityLog.actor },
+        })),
+      );
       return ctx.services.user.deleteUsers(userIds);
     }),
 
@@ -243,15 +251,12 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.pubsub.publish("permission", {
-        type: "update",
-        data: {
-          id: input.userId,
-          metadata: {
-            resource: input.resource,
-            effect: input.effect,
-          },
-        },
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.PERMISSION,
+        targetId: input.userId,
+        description: `${ctx.activityLog.actor} a ${input.effect === "allow" ? "accordé" : "refusé"} la permission « ${input.resource} » à l'utilisateur ${input.userId}`,
+        metadata: { resource: input.resource, effect: input.effect, actorName: ctx.activityLog.actor },
       });
       return ctx.services.user.updatePermission({
         userId: input.userId,
@@ -267,14 +272,12 @@ export const userRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.pubsub.publish("permission", {
-        type: "update",
-        data: {
-          id: input.userId,
-          metadata: {
-            resource: input.resource,
-          },
-        },
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.PERMISSION,
+        targetId: input.userId,
+        description: `${ctx.activityLog.actor} a retiré la permission « ${input.resource} » de l'utilisateur ${input.userId}`,
+        metadata: { resource: input.resource, actorName: ctx.activityLog.actor },
       });
       return ctx.services.user.removePermission({
         userId: input.userId,
@@ -327,7 +330,7 @@ export const userRouter = {
         authApi: ctx.authApi,
         requestHeaders,
         schoolId: ctx.schoolId,
-        pubsub: ctx.pubsub,
+        activityLog: ctx.activityLog,
       });
     }),
 
@@ -347,7 +350,7 @@ export const userRouter = {
         input,
         authApi: ctx.authApi,
         requestHeaders,
-        pubsub: ctx.pubsub,
+        activityLog: ctx.activityLog,
       });
     }),
 

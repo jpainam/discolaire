@@ -2,8 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { addDays, isBefore, startOfDay, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
-import { ActivityType } from "@repo/db";
-
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 
 const createUpdateSchema = z.object({
@@ -88,16 +87,17 @@ export const contactRouter = {
         });
       }
       if (contacts.length > 0) {
-        await ctx.pubsub.logMany(
-          contacts.map((contact) => ({
-            activityType: ActivityType.CONTACT,
-            action: "delete",
-            entity: "contact",
-            entityId: contact.id,
-            data: {
-              name: `${contact.firstName} ${contact.lastName}`.trim(),
-            },
-          })),
+        ctx.activityLog.logMany(
+          contacts.map((contact) => {
+            const name = `${contact.firstName} ${contact.lastName}`.trim();
+            return {
+              action: ActivityAction.DELETE,
+              targetType: ActivityTargetType.CONTACT,
+              targetId: contact.id,
+              description: `${ctx.activityLog.actor} a supprimé le contact ${name}`,
+              metadata: { entityName: name, actorName: ctx.activityLog.actor },
+            };
+          }),
         );
       }
       return ctx.db.contact.deleteMany({
@@ -525,14 +525,13 @@ export const contactRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      await ctx.pubsub.log({
-        activityType: ActivityType.CONTACT,
-        action: "create",
-        entity: "contact",
-        entityId: contact.id,
-        data: {
-          name: `${contact.firstName} ${contact.lastName}`.trim(),
-        },
+      const contactName = `${contact.firstName} ${contact.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.CREATE,
+        targetType: ActivityTargetType.CONTACT,
+        targetId: contact.id,
+        description: `${ctx.activityLog.actor} a créé le contact <a href="/contacts/${contact.id}">${contactName}</a>`,
+        metadata: { entityName: contactName, actorName: ctx.activityLog.actor },
       });
       return contact;
     }),
@@ -558,14 +557,13 @@ export const contactRouter = {
           phoneNumber2: input.phoneNumber2,
         },
       });
-      await ctx.pubsub.log({
-        activityType: ActivityType.CONTACT,
-        action: "update",
-        entity: "contact",
-        entityId: contact.id,
-        data: {
-          name: `${contact.firstName} ${contact.lastName}`.trim(),
-        },
+      const updatedName = `${contact.firstName} ${contact.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.UPDATE,
+        targetType: ActivityTargetType.CONTACT,
+        targetId: contact.id,
+        description: `${ctx.activityLog.actor} a modifié les informations du contact <a href="/contacts/${contact.id}">${updatedName}</a>`,
+        metadata: { entityName: updatedName, actorName: ctx.activityLog.actor },
       });
       return contact;
     }),
@@ -647,7 +645,6 @@ export const contactRouter = {
     .input(
       z.object({
         contactId: z.string().min(1),
-        activityType: z.enum(ActivityType).optional(),
         limit: z.number().min(1).max(100).optional().default(20),
       }),
     )
@@ -655,13 +652,10 @@ export const contactRouter = {
       const logs = await ctx.db.logActivity.findMany({
         where: {
           schoolId: ctx.schoolId,
-          entity: "contact",
-          entityId: input.contactId,
-          ...(input.activityType ? { activityType: input.activityType } : {}),
+          targetType: "contact",
+          targetId: input.contactId,
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: { createdAt: "desc" },
         take: input.limit,
       });
       return ctx.services.logActivity.formatLogActivities(logs);
