@@ -60,7 +60,7 @@ export function QuickClassroomList() {
       </CardHeader>
 
       <CardContent className="px-2">
-        <ScrollArea className="h-96">
+        <ScrollArea className="h-75">
           <div className="space-y-1">
             {filtered.map((classroom) => {
               const avatar = createAvatar(initials, {

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
+import { QuickChartCard } from "~/components/dashboard/QuickChartCard";
 import { QuickClassroomList } from "~/components/dashboard/QuickClassroomList";
 import { QuickStatistics } from "~/components/dashboard/QuickStatistics";
 import { QuickStudentList } from "~/components/dashboard/QuickStudentList";
@@ -8,7 +9,6 @@ import { RecentActivitiesDashboard } from "~/components/dashboard/RecentActiviti
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
-import { NotesChart } from "./notes-chart";
 
 export default function Page() {
   batchPrefetch([
@@ -20,7 +20,6 @@ export default function Page() {
   return (
     <HydrateClient>
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
-       
         <Suspense
           fallback={
             <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
@@ -38,7 +37,19 @@ export default function Page() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           {/* Notes chart – takes 5 cols */}
           <div className="lg:col-span-5">
-            <NotesChart />
+            <ErrorBoundary errorComponent={ErrorFallback}>
+              <Suspense
+                fallback={
+                  <div className="grid grid-cols-1 gap-4">
+                    <Skeleton className="h-20" />
+                    <Skeleton className="h-20" />
+                    <Skeleton className="h-20" />
+                  </div>
+                }
+              >
+                <QuickChartCard />
+              </Suspense>
+            </ErrorBoundary>
           </div>
           {/* Class list – takes 4 cols */}
           <div className="lg:col-span-4">

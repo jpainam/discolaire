@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { FileTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
@@ -15,6 +14,7 @@ import {
   ChartTooltipContent,
 } from "~/components/ui/chart";
 import { useTRPC } from "~/trpc/react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export const description = "A multiple bar chart";
 
@@ -52,16 +52,11 @@ export function QuickChartCard() {
     return gs.filter((g) => g.max > 0).slice(0, 8);
   }, [latestGradesheet]);
   return (
-    <div className="border-border bg-card relative max-h-[400px] overflow-y-auto rounded-xl border p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <FileTextIcon className="text-muted-foreground size-4" />
-          <h2 className="text-foreground text-[15px] font-normal">
-            {t("Recent Grades")}
-          </h2>
-        </div>
-      </div>
-      <div className="">
+    <Card>
+      <CardHeader>
+        <CardTitle>{t("Recent Grades")}</CardTitle>
+      </CardHeader>
+      <CardContent>
         <ChartContainer className="h-75 w-full" config={chartConfig}>
           <BarChart accessibilityLayer data={grades}>
             <CartesianGrid vertical={false} />
@@ -84,7 +79,7 @@ export function QuickChartCard() {
             <Bar dataKey="average" fill="var(--color-average)" radius={4} />
           </BarChart>
         </ChartContainer>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
