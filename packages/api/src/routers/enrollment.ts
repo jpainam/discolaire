@@ -2,8 +2,8 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod/v4";
 
-import { env } from "../env";
 import { ActivityAction, ActivityTargetType } from "../activity-logger";
+import { env } from "../env";
 import { protectedProcedure } from "../trpc";
 
 export const enrollmentRouter = {
@@ -165,7 +165,12 @@ export const enrollmentRouter = {
 
       const students = await ctx.db.student.findMany({
         where: { id: { in: studentIds } },
-        select: { id: true, firstName: true, lastName: true, registrationNumber: true },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          registrationNumber: true,
+        },
       });
       const studentMap = new Map(students.map((s) => [s.id, s]));
 
@@ -266,7 +271,12 @@ export const enrollmentRouter = {
 
       const students = await ctx.db.student.findMany({
         where: { id: { in: studentIds } },
-        select: { id: true, firstName: true, lastName: true, registrationNumber: true },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          registrationNumber: true,
+        },
       });
       const studentMap = new Map(students.map((s) => [s.id, s]));
 
@@ -303,13 +313,21 @@ export const enrollmentRouter = {
       const enrollments = await ctx.db.enrollment.findMany({
         where: { id: { in: enrollmentIds } },
         include: {
-          student: { select: { id: true, firstName: true, lastName: true, registrationNumber: true } },
+          student: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              registrationNumber: true,
+            },
+          },
         },
       });
 
       ctx.activityLog.logMany(
         enrollments.map((enr) => {
-          const name = `${enr.student.firstName} ${enr.student.lastName}`.trim();
+          const name =
+            `${enr.student.firstName} ${enr.student.lastName}`.trim();
           return {
             action: ActivityAction.UNENROLLED,
             targetType: ActivityTargetType.STUDENT,

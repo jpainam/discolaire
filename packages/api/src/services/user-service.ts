@@ -6,8 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 import type { Auth } from "@repo/auth";
 import type { PrismaClient } from "@repo/db";
 
-import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import type { ActivityLogger } from "../activity-logger";
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { getBaseUrlFromHeaders } from "../lib/base-url";
 
 type PermissionSource =
@@ -488,7 +488,10 @@ export class UserService {
       targetType: ActivityTargetType.USER,
       targetId: input.id,
       description: `${activityLog.actor} a modifié les informations de l'utilisateur ${input.name ?? input.id}`,
-      metadata: { entityName: input.name ?? input.id, actorName: activityLog.actor },
+      metadata: {
+        entityName: input.name ?? input.id,
+        actorName: activityLog.actor,
+      },
     });
     return this.db.user.findUniqueOrThrow({
       where: {

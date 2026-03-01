@@ -4,7 +4,8 @@ import { z } from "zod/v4";
 import { DocumentType } from "@repo/db";
 import { getDocumentFileCategory } from "@repo/utils";
 
-import { ActivityAction, ActivityTargetType } from "../activity-logger";
+import type { ActivityTargetType } from "../activity-logger";
+import { ActivityAction } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 
 const createDocumentSchema = z.object({
@@ -134,7 +135,10 @@ export const documentRouter = {
               targetType: entity.targetType as ActivityTargetType,
               targetId: entity.targetId,
               description: `${ctx.activityLog.actor} a supprimé le document <strong>${filename}</strong>`,
-              metadata: { documentTitle: filename, actorName: ctx.activityLog.actor },
+              metadata: {
+                documentTitle: filename,
+                actorName: ctx.activityLog.actor,
+              },
             };
           }),
         );
@@ -280,7 +284,13 @@ export const documentRouter = {
         },
         where: {
           schoolId: ctx.schoolId,
-          action: { in: [ActivityAction.UPLOADED, ActivityAction.DOWNLOADED, ActivityAction.DELETE] },
+          action: {
+            in: [
+              ActivityAction.UPLOADED,
+              ActivityAction.DOWNLOADED,
+              ActivityAction.DELETE,
+            ],
+          },
           targetType: input.entityType,
           targetId: input.entityId,
         },
@@ -307,7 +317,10 @@ export const documentRouter = {
         targetType: entity.targetType as ActivityTargetType,
         targetId: entity.targetId,
         description: `${ctx.activityLog.actor} a téléchargé le document <strong>${dlFilename}</strong>`,
-        metadata: { documentTitle: dlFilename, actorName: ctx.activityLog.actor },
+        metadata: {
+          documentTitle: dlFilename,
+          actorName: ctx.activityLog.actor,
+        },
       });
 
       return document.id;

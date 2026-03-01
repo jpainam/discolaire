@@ -122,7 +122,9 @@ export const staffRouter = {
       }
       ctx.activityLog.logMany(
         staffs.map((staff) => {
-          const name = [staff.firstName, staff.lastName].filter(Boolean).join(" ");
+          const name = [staff.firstName, staff.lastName]
+            .filter(Boolean)
+            .join(" ");
           return {
             action: ActivityAction.DELETE,
             targetType: ActivityTargetType.STAFF,
@@ -174,7 +176,9 @@ export const staffRouter = {
           schoolId: ctx.schoolId,
         },
       });
-      const staffName = [staff.firstName, staff.lastName].filter(Boolean).join(" ");
+      const staffName = [staff.firstName, staff.lastName]
+        .filter(Boolean)
+        .join(" ");
       ctx.activityLog.log({
         action: ActivityAction.CREATE,
         targetType: ActivityTargetType.STAFF,
@@ -210,7 +214,9 @@ export const staffRouter = {
           headers: await headers(),
         });
       }
-      const updatedName = [staff.firstName, staff.lastName].filter(Boolean).join(" ");
+      const updatedName = [staff.firstName, staff.lastName]
+        .filter(Boolean)
+        .join(" ");
       ctx.activityLog.log({
         action: ActivityAction.UPDATE,
         targetType: ActivityTargetType.STAFF,

@@ -48,7 +48,9 @@ export async function LogActivityTable({
               {log.user?.name ?? "system"}
             </span>{" "}
             <span className="lowercase">{t(getActionString(log.action))} </span>
-            <span className="font-mono lowercase">un/une {t(log.targetType)}</span>
+            <span className="font-mono lowercase">
+              un/une {t(log.targetType)}
+            </span>
             {log.targetId && (
               <span>
                 {" "}

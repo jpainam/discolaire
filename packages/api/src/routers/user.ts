@@ -256,7 +256,11 @@ export const userRouter = {
         targetType: ActivityTargetType.PERMISSION,
         targetId: input.userId,
         description: `${ctx.activityLog.actor} a ${input.effect === "allow" ? "accordé" : "refusé"} la permission « ${input.resource} » à l'utilisateur ${input.userId}`,
-        metadata: { resource: input.resource, effect: input.effect, actorName: ctx.activityLog.actor },
+        metadata: {
+          resource: input.resource,
+          effect: input.effect,
+          actorName: ctx.activityLog.actor,
+        },
       });
       return ctx.services.user.updatePermission({
         userId: input.userId,
@@ -277,7 +281,10 @@ export const userRouter = {
         targetType: ActivityTargetType.PERMISSION,
         targetId: input.userId,
         description: `${ctx.activityLog.actor} a retiré la permission « ${input.resource} » de l'utilisateur ${input.userId}`,
-        metadata: { resource: input.resource, actorName: ctx.activityLog.actor },
+        metadata: {
+          resource: input.resource,
+          actorName: ctx.activityLog.actor,
+        },
       });
       return ctx.services.user.removePermission({
         userId: input.userId,

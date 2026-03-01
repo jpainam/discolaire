@@ -274,7 +274,7 @@ export const studentRouter = {
       void ctx.services.student.addSports(student.id, input.sports ?? []);
 
       if (input.classroom) {
-        const enr = await ctx.db.enrollment.create({
+        await ctx.db.enrollment.create({
           data: {
             studentId: student.id,
             classroomId: input.classroom,
@@ -287,7 +287,10 @@ export const studentRouter = {
           targetType: ActivityTargetType.STUDENT,
           targetId: student.id,
           description: `${ctx.activityLog.actor} a inscrit l'élève <a href="/students/${student.id}">${studentName}</a>`,
-          metadata: { entityName: studentName, actorName: ctx.activityLog.actor },
+          metadata: {
+            entityName: studentName,
+            actorName: ctx.activityLog.actor,
+          },
         });
       }
       await ctx.services.billing.syncAutoDiscountAssignmentsForStudent({
@@ -401,7 +404,11 @@ export const studentRouter = {
         targetType: ActivityTargetType.STUDENT,
         targetId: input.studentId,
         description: `${ctx.activityLog.actor} a mis à jour le numéro d'inscription de l'élève <a href="/students/${input.studentId}">${regName}</a> (${input.registrationNumber})`,
-        metadata: { entityName: regName, registrationNumber: input.registrationNumber, actorName: ctx.activityLog.actor },
+        metadata: {
+          entityName: regName,
+          registrationNumber: input.registrationNumber,
+          actorName: ctx.activityLog.actor,
+        },
       });
       return updated;
     }),
@@ -449,7 +456,12 @@ export const studentRouter = {
       const studentIds = Array.isArray(input) ? input : [input];
       const students = await ctx.db.student.findMany({
         where: { id: { in: studentIds }, schoolId: ctx.schoolId },
-        select: { id: true, firstName: true, lastName: true, registrationNumber: true },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          registrationNumber: true,
+        },
       });
       const r = await ctx.services.student.delete(input, ctx.schoolId);
       ctx.activityLog.logMany(
@@ -736,7 +748,11 @@ export const studentRouter = {
         targetType: ActivityTargetType.STUDENT,
         targetId: input.id,
         description: `${ctx.activityLog.actor} a ${input.isActive ? "activé" : "désactivé"} l'élève <a href="/students/${input.id}">${name}</a>`,
-        metadata: { entityName: name, isActive: input.isActive, actorName: ctx.activityLog.actor },
+        metadata: {
+          entityName: name,
+          isActive: input.isActive,
+          actorName: ctx.activityLog.actor,
+        },
       });
       return student;
     }),
@@ -816,7 +832,11 @@ export const studentRouter = {
         targetType: ActivityTargetType.STUDENT,
         targetId: input.studentId,
         description: `${ctx.activityLog.actor} a changé le statut de l'élève <a href="/students/${input.studentId}">${name}</a> en « ${statusLabels[input.status] ?? input.status} »`,
-        metadata: { entityName: name, status: input.status, actorName: ctx.activityLog.actor },
+        metadata: {
+          entityName: name,
+          status: input.status,
+          actorName: ctx.activityLog.actor,
+        },
       });
       return student;
     }),

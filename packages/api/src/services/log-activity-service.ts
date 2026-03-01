@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { PrismaClient } from "@repo/db";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FormattedLogActivity = {
+export interface FormattedLogActivity {
   id: number;
   createdAt: Date;
   action: string;
   entityType: string;
   entityId?: string | null;
   description: string;
-};
+}
 
 export class LogActivityService {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor(_db: PrismaClient) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -10,7 +10,8 @@ export const ActivityAction = {
   DOWNLOADED: "downloaded",
   DISABLED: "disabled",
 } as const;
-export type ActivityAction = (typeof ActivityAction)[keyof typeof ActivityAction];
+export type ActivityAction =
+  (typeof ActivityAction)[keyof typeof ActivityAction];
 
 /**
  * The target of a log entry — what this activity was performed on.
