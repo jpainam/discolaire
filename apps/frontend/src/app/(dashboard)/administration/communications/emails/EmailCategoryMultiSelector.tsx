@@ -55,13 +55,33 @@ export const CATEGORY_COLORS: Record<
     dot: "bg-purple-400",
   },
   // English fallbacks (static data)
-  Attendance: { bg: "bg-orange-100", text: "text-orange-700", dot: "bg-orange-400" },
+  Attendance: {
+    bg: "bg-orange-100",
+    text: "text-orange-700",
+    dot: "bg-orange-400",
+  },
   Academic: { bg: "bg-blue-100", text: "text-blue-700", dot: "bg-blue-400" },
   Behaviour: { bg: "bg-red-100", text: "text-red-700", dot: "bg-red-400" },
-  "Health & Wellbeing": { bg: "bg-pink-100", text: "text-pink-700", dot: "bg-pink-400" },
-  "Events & Activities": { bg: "bg-yellow-100", text: "text-yellow-700", dot: "bg-yellow-400" },
-  "System & Admin": { bg: "bg-slate-100", text: "text-slate-700", dot: "bg-slate-400" },
-  Reports: { bg: "bg-purple-100", text: "text-purple-700", dot: "bg-purple-400" },
+  "Health & Wellbeing": {
+    bg: "bg-pink-100",
+    text: "text-pink-700",
+    dot: "bg-pink-400",
+  },
+  "Events & Activities": {
+    bg: "bg-yellow-100",
+    text: "text-yellow-700",
+    dot: "bg-yellow-400",
+  },
+  "System & Admin": {
+    bg: "bg-slate-100",
+    text: "text-slate-700",
+    dot: "bg-slate-400",
+  },
+  Reports: {
+    bg: "bg-purple-100",
+    text: "text-purple-700",
+    dot: "bg-purple-400",
+  },
 };
 
 export const categoriesSearchParam = parseAsArrayOf(parseAsString).withDefault(
@@ -75,7 +95,7 @@ interface Category {
 
 export function EmailCategoryMultiSelector() {
   const trpc = useTRPC();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+
   const query = useQuery(trpc.notificationCategory.list.queryOptions());
   const categories = (query.data ?? []) as Category[];
 

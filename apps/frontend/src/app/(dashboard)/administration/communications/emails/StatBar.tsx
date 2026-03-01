@@ -1,25 +1,29 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-import type { EmailTemplate } from "./email-data";
-import { EMAIL_TEMPLATES } from "./email-data";
+import { useTRPC } from "~/trpc/react";
 
 export function StatsBar() {
-  const [templates] = useState<EmailTemplate[]>(EMAIL_TEMPLATES);
+  const trpc = useTRPC();
+  const { data: templates } = useSuspenseQuery(
+    trpc.notificationConfig.list.queryOptions({ channel: "EMAIL" }),
+  );
+
   const stats = useMemo(() => {
     const active = templates.filter((t) => t.enabled);
     return {
       total: templates.length,
       activeCount: active.length,
-      staffEnabled: active.filter((t) => t.staff).length,
-      studentEnabled: active.filter((t) => t.student).length,
-      contactEnabled: active.filter((t) => t.contact).length,
+      staffEnabled: active.filter((t) => t.allowStaff).length,
+      studentEnabled: active.filter((t) => t.allowStudent).length,
+      contactEnabled: active.filter((t) => t.allowContact).length,
     };
   }, [templates]);
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+    <div className="grid grid-cols-2 gap-3 px-4 py-2 sm:grid-cols-5">
       {[
         { label: "Total Emails", value: stats.total, cls: "text-foreground" },
         { label: "Active", value: stats.activeCount, cls: "text-primary" },

@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Mail, Power, PowerOff, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import type { EmailTemplate } from "./email-data";
 import { Badge } from "~/components/base-badge";
 import {
   Accordion,
@@ -28,7 +28,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { PlusIcon } from "~/icons";
-import { EMAIL_CATEGORIES, EMAIL_TEMPLATES } from "./email-data";
+import { useTRPC } from "~/trpc/react";
 import {
   CATEGORY_COLORS,
   EmailCategoryMultiSelector,
@@ -36,17 +36,39 @@ import {
 
 type StatusFilter = "all" | "active" | "disabled";
 
+interface NotificationConfig {
+  id: string;
+  templateKey: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  allowStaff: boolean;
+  allowStudent: boolean;
+  allowContact: boolean;
+  category: { id: string; label: string; order: number } | null;
+}
+
 function EmailRow({
-  template,
-  onToggleEnabled,
+  config,
   isLast,
 }: {
-  template: EmailTemplate;
-
-  onToggleEnabled: (id: string) => void;
+  config: NotificationConfig;
   isLast: boolean;
 }) {
-  const isDisabled = !template.enabled;
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const upsert = useMutation(
+    trpc.notificationConfig.upsert.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.notificationConfig.list.pathFilter(),
+        );
+      },
+    }),
+  );
+
+  const isDisabled = !config.enabled;
   return (
     <div
       className={`group grid grid-cols-1 items-center gap-0 transition-colors sm:grid-cols-[1fr_auto] ${isDisabled ? "bg-muted/20" : "hover:bg-muted/30"} ${!isLast ? "border-border border-b" : ""} `}
@@ -57,26 +79,59 @@ function EmailRow({
           <span
             className={`text-sm leading-tight font-medium ${isDisabled ? "text-muted-foreground line-through" : "text-foreground"}`}
           >
-            {template.name}
+            {config.name}
           </span>
           <span className="text-muted-foreground line-clamp-1 text-xs leading-relaxed">
-            {template.description}
+            {config.description}
           </span>
         </div>
 
         {/* Desktop: one cell per recipient */}
         <FieldGroup className="flex flex-1 flex-row items-center">
           <Field orientation="horizontal">
-            <Checkbox id="staff" name="staff" />
-            <Label htmlFor="staff">Staff</Label>
+            <Checkbox
+              id={`${config.id}-staff`}
+              name="staff"
+              checked={config.allowStaff}
+              onCheckedChange={(checked) =>
+                upsert.mutate({
+                  templateKey: config.templateKey,
+                  channel: "EMAIL",
+                  allowStaff: !!checked,
+                })
+              }
+            />
+            <Label htmlFor={`${config.id}-staff`}>Staff</Label>
           </Field>
           <Field orientation="horizontal">
-            <Checkbox id="student" name="student" />
-            <Label htmlFor="student">Student</Label>
+            <Checkbox
+              id={`${config.id}-student`}
+              name="student"
+              checked={config.allowStudent}
+              onCheckedChange={(checked) =>
+                upsert.mutate({
+                  templateKey: config.templateKey,
+                  channel: "EMAIL",
+                  allowStudent: !!checked,
+                })
+              }
+            />
+            <Label htmlFor={`${config.id}-student`}>Student</Label>
           </Field>
           <Field orientation="horizontal">
-            <Checkbox id="contact" name="contact" />
-            <Label htmlFor="contact">Contact</Label>
+            <Checkbox
+              id={`${config.id}-contact`}
+              name="contact"
+              checked={config.allowContact}
+              onCheckedChange={(checked) =>
+                upsert.mutate({
+                  templateKey: config.templateKey,
+                  channel: "EMAIL",
+                  allowContact: !!checked,
+                })
+              }
+            />
+            <Label htmlFor={`${config.id}-contact`}>Contact</Label>
           </Field>
         </FieldGroup>
       </div>
@@ -87,7 +142,13 @@ function EmailRow({
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                onClick={() => onToggleEnabled(template.key)}
+                onClick={() =>
+                  upsert.mutate({
+                    templateKey: config.templateKey,
+                    channel: "EMAIL",
+                    enabled: !config.enabled,
+                  })
+                }
                 aria-label={
                   isDisabled ? "Enable this email" : "Disable this email"
                 }
@@ -122,8 +183,21 @@ function CategoryAccordion({
   rows,
 }: {
   category: string;
-  rows: EmailTemplate[];
+  rows: NotificationConfig[];
 }) {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const upsertMany = useMutation(
+    trpc.notificationConfig.upsertMany.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.notificationConfig.list.pathFilter(),
+        );
+      },
+    }),
+  );
+
   const colors = CATEGORY_COLORS[category] ?? {
     bg: "bg-muted",
     text: "text-foreground",
@@ -131,6 +205,7 @@ function CategoryAccordion({
   };
   const activeCount = rows.filter((r) => r.enabled).length;
   const disabledCount = rows.length - activeCount;
+  const templateKeys = rows.map((r) => r.templateKey);
 
   return (
     <AccordionItem
@@ -155,18 +230,38 @@ function CategoryAccordion({
 
       <AccordionContent className="border-border -mx-2 border-t pb-0">
         <div className="border-border flex items-center gap-4 border-b px-5 py-2">
-          <Button size={"xs"} variant={"outline"}>
+          <Button
+            size={"xs"}
+            variant={"outline"}
+            onClick={() =>
+              upsertMany.mutate({
+                templateKeys,
+                channel: "EMAIL",
+                enabled: true,
+              })
+            }
+          >
             Allow all
           </Button>
-          <Button size={"xs"} variant={"destructive"}>
+          <Button
+            size={"xs"}
+            variant={"destructive"}
+            onClick={() =>
+              upsertMany.mutate({
+                templateKeys,
+                channel: "EMAIL",
+                enabled: false,
+              })
+            }
+          >
             Deny all
           </Button>
         </div>
 
-        {rows.map((tpl, idx) => (
+        {rows.map((config, idx) => (
           <EmailRow
-            key={tpl.key}
-            template={tpl}
+            key={config.id}
+            config={config}
             isLast={idx === rows.length - 1}
           />
         ))}
@@ -176,15 +271,38 @@ function CategoryAccordion({
 }
 
 export default function Page() {
-  const [templates] = useState<EmailTemplate[]>(EMAIL_TEMPLATES);
+  const trpc = useTRPC();
+
+  const configsQuery = useQuery(
+    trpc.notificationConfig.list.queryOptions({ channel: "EMAIL" }),
+  );
+  const categoriesQuery = useQuery(
+    trpc.notificationCategory.list.queryOptions(),
+  );
+
+  const configs = useMemo(
+    () => (configsQuery.data ?? []) as NotificationConfig[],
+    [configsQuery.data],
+  );
+  const categories = useMemo(
+    () => categoriesQuery.data ?? [],
+    [categoriesQuery.data],
+  );
+
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     new Set(),
   );
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [openCategories, setOpenCategories] = useState<string[]>(
-    EMAIL_CATEGORIES.map((c) => c.label),
-  );
+  const [openCategories, setOpenCategories] = useState<string[]>([]);
+
+  const initializedRef = useRef(false);
+  useEffect(() => {
+    if (!initializedRef.current && categories.length > 0) {
+      initializedRef.current = true;
+      setOpenCategories(categories.map((c) => c.label));
+    }
+  }, [categories]);
 
   const toggleCategory = useCallback((cat: string) => {
     setSelectedCategories((prev) => {
@@ -202,8 +320,8 @@ export default function Page() {
   }, []);
 
   const expandAll = useCallback(() => {
-    setOpenCategories(EMAIL_CATEGORIES.map((c) => c.label));
-  }, []);
+    setOpenCategories(categories.map((c) => c.label));
+  }, [categories]);
 
   const collapseAll = useCallback(() => {
     setOpenCategories([]);
@@ -211,28 +329,32 @@ export default function Page() {
 
   const grouped = useMemo(() => {
     const q = search.toLowerCase();
-    const groups: Record<string, EmailTemplate[]> = {};
-    for (const t of templates) {
+    const groups: Record<string, NotificationConfig[]> = {};
+    for (const config of configs) {
+      const catLabel = config.category?.label ?? "";
       const matchSearch =
         !q ||
-        t.name.toLowerCase().includes(q) ||
-        t.description.toLowerCase().includes(q) ||
-        t.category.toLowerCase().includes(q);
+        config.name.toLowerCase().includes(q) ||
+        config.description.toLowerCase().includes(q) ||
+        catLabel.toLowerCase().includes(q);
       const matchCat =
-        selectedCategories.size === 0 || selectedCategories.has(t.category);
+        selectedCategories.size === 0 || selectedCategories.has(catLabel);
       const matchStatus =
         statusFilter === "all" ||
-        (statusFilter === "active" && t.enabled) ||
-        (statusFilter === "disabled" && !t.enabled);
+        (statusFilter === "active" && config.enabled) ||
+        (statusFilter === "disabled" && !config.enabled);
       if (!matchSearch || !matchCat || !matchStatus) continue;
-      (groups[t.category] ??= []).push(t);
+      (groups[catLabel] ??= []).push(config);
     }
     return groups;
-  }, [templates, search, selectedCategories, statusFilter]);
+  }, [configs, search, selectedCategories, statusFilter]);
 
-  const visibleCategories = EMAIL_CATEGORIES.map((c) => c.label).filter(
-    (label) => grouped[label]?.length,
+  const visibleCategories = useMemo(
+    () =>
+      categories.map((c) => c.label).filter((label) => grouped[label]?.length),
+    [categories, grouped],
   );
+
   const totalFiltered = Object.values(grouped).reduce(
     (s, arr) => s + arr.length,
     0,
@@ -335,7 +457,7 @@ export default function Page() {
       <p className="text-muted-foreground text-xs">
         Showing{" "}
         <span className="text-foreground font-medium">{totalFiltered}</span> of{" "}
-        <span className="text-foreground font-medium">{templates.length}</span>{" "}
+        <span className="text-foreground font-medium">{configs.length}</span>{" "}
         email types across{" "}
         <span className="text-foreground font-medium">
           {visibleCategories.length}
