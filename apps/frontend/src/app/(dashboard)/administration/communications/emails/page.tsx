@@ -1,19 +1,11 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import {
-  GraduationCap,
-  Mail,
-  Phone,
-  Power,
-  PowerOff,
-  Search,
-  Users,
-  X,
-} from "lucide-react";
+import { Mail, Power, PowerOff, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import type { EmailTemplate, RecipientType } from "./email-data";
+import type { EmailTemplate } from "./email-data";
+import { Badge } from "~/components/base-badge";
 import {
   Accordion,
   AccordionContent,
@@ -21,11 +13,14 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Field, FieldGroup } from "~/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "~/components/ui/input-group";
+import { Label } from "~/components/ui/label";
 import {
   Tooltip,
   TooltipContent,
@@ -41,84 +36,13 @@ import {
 
 type StatusFilter = "all" | "active" | "disabled";
 
-const RECIPIENT_META: Record<
-  RecipientType,
-  {
-    label: string;
-    activeClass: string;
-    inactiveClass: string;
-    Icon: React.FC<{ className?: string }>;
-  }
-> = {
-  staff: {
-    label: "Staff",
-    activeClass: "bg-blue-600 text-white border-blue-600",
-    inactiveClass: "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100",
-    Icon: ({ className }) => <Users className={className} />,
-  },
-  student: {
-    label: "Students",
-    activeClass: "bg-violet-600 text-white border-violet-600",
-    inactiveClass:
-      "bg-violet-50 text-violet-600 border-violet-200 hover:bg-violet-100",
-    Icon: ({ className }) => <GraduationCap className={className} />,
-  },
-  contact: {
-    label: "Contacts",
-    activeClass: "bg-emerald-600 text-white border-emerald-600",
-    inactiveClass:
-      "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100",
-    Icon: ({ className }) => <Phone className={className} />,
-  },
-};
-
-function RecipientToggle({
-  active,
-  type,
-  disabled,
-  onChange,
-}: {
-  active: boolean;
-  type: RecipientType;
-  disabled: boolean;
-  onChange: (val: boolean) => void;
-}) {
-  const { label, activeClass, inactiveClass, Icon } = RECIPIENT_META[type];
-  return (
-    <TooltipProvider delayDuration={200}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <button
-            onClick={() => !disabled && onChange(!active)}
-            aria-pressed={active}
-            aria-label={`${active ? "Disable" : "Enable"} for ${label}`}
-            disabled={disabled}
-            className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-all select-none ${active ? activeClass : inactiveClass} ${disabled ? "pointer-events-none cursor-not-allowed opacity-30" : ""} `}
-          >
-            <Icon className="size-3" />
-            <span className="sr-only sm:not-sr-only">{label}</span>
-          </button>
-        </TooltipTrigger>
-        <TooltipContent side="top" className="text-xs">
-          {disabled
-            ? "Email is disabled"
-            : active
-              ? `Disable for ${label}`
-              : `Enable for ${label}`}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
-
 function EmailRow({
   template,
-  onToggle,
   onToggleEnabled,
   isLast,
 }: {
   template: EmailTemplate;
-  onToggle: (id: string, type: RecipientType, val: boolean) => void;
+
   onToggleEnabled: (id: string) => void;
   isLast: boolean;
 }) {
@@ -140,30 +64,21 @@ function EmailRow({
           </span>
         </div>
 
-        {/* Mobile: toggles inline */}
-        <div className="flex flex-wrap gap-2 px-5 pb-3 sm:hidden">
-          {(["staff", "student", "contact"] as RecipientType[]).map((type) => (
-            <RecipientToggle
-              key={type}
-              type={type}
-              active={template[type]}
-              disabled={isDisabled}
-              onChange={(val) => onToggle(template.key, type, val)}
-            />
-          ))}
-        </div>
-
         {/* Desktop: one cell per recipient */}
-        {(["staff", "student", "contact"] as RecipientType[]).map((type) => (
-          <div key={type} className="hidden items-center px-4 py-3.5 sm:flex">
-            <RecipientToggle
-              type={type}
-              active={template[type]}
-              disabled={isDisabled}
-              onChange={(val) => onToggle(template.key, type, val)}
-            />
-          </div>
-        ))}
+        <FieldGroup className="flex flex-1 flex-row items-center">
+          <Field orientation="horizontal">
+            <Checkbox id="staff" name="staff" />
+            <Label htmlFor="staff">Staff</Label>
+          </Field>
+          <Field orientation="horizontal">
+            <Checkbox id="student" name="student" />
+            <Label htmlFor="student">Student</Label>
+          </Field>
+          <Field orientation="horizontal">
+            <Checkbox id="contact" name="contact" />
+            <Label htmlFor="contact">Contact</Label>
+          </Field>
+        </FieldGroup>
       </div>
 
       {/* Enable / Disable button */}
@@ -205,19 +120,9 @@ function EmailRow({
 function CategoryAccordion({
   category,
   rows,
-  onToggle,
-  onToggleEnabled,
-  onBulkSet,
 }: {
   category: string;
   rows: EmailTemplate[];
-  onToggle: (id: string, type: RecipientType, val: boolean) => void;
-  onToggleEnabled: (id: string) => void;
-  onBulkSet: (
-    type: RecipientType | "all",
-    value: boolean,
-    scope: string,
-  ) => void;
 }) {
   const colors = CATEGORY_COLORS[category] ?? {
     bg: "bg-muted",
@@ -230,17 +135,17 @@ function CategoryAccordion({
   return (
     <AccordionItem
       value={category}
-      className="bg-card border-border data-open:bg-card overflow-hidden rounded-xl border not-last:border-b"
+      className="border-border overflow-hidden rounded-xl border not-last:border-b"
     >
       <AccordionTrigger className="hover:bg-muted/30 items-center gap-3 px-5 py-3.5 hover:no-underline">
-        <span
-          className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${colors.bg} ${colors.text}`}
+        <Badge
+          className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs ${colors.bg} ${colors.text}`}
         >
           {category}
-        </span>
-        <span className="text-muted-foreground text-xs">
+        </Badge>
+        <Badge size={"xs"} variant={"secondary"} appearance={"light"}>
           {rows.length} email{rows.length !== 1 ? "s" : ""}
-        </span>
+        </Badge>
         {disabledCount > 0 && (
           <span className="text-muted-foreground bg-muted rounded-full px-2 py-0.5 text-xs">
             {disabledCount} disabled
@@ -248,61 +153,30 @@ function CategoryAccordion({
         )}
       </AccordionTrigger>
 
-      <AccordionContent className="pb-0">
-        <div className="border-border -mx-2 border-t">
-          {/* Bulk actions */}
-          <div className="border-border flex items-center gap-1 border-b px-5 py-2">
-            <button
-              onClick={() => onBulkSet("all", true, category)}
-              className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer rounded px-2 py-1 text-[11px] whitespace-nowrap transition-colors"
-            >
-              Allow all
-            </button>
-            <span className="text-border text-xs select-none">·</span>
-            <button
-              onClick={() => onBulkSet("all", false, category)}
-              className="text-muted-foreground hover:text-destructive hover:bg-accent cursor-pointer rounded px-2 py-1 text-[11px] whitespace-nowrap transition-colors"
-            >
-              Deny all
-            </button>
-          </div>
-
-          {/* Column headers */}
-          <div className="border-border bg-muted/40 hidden grid-cols-[1fr_140px_140px_140px_160px] border-b sm:grid">
-            <div className="text-muted-foreground px-5 py-2 text-xs font-medium">
-              Email
-            </div>
-            <div className="text-muted-foreground flex items-center gap-1.5 px-4 py-2 text-xs font-medium">
-              <Users className="size-3 text-blue-500" /> Staff
-            </div>
-            <div className="text-muted-foreground flex items-center gap-1.5 px-4 py-2 text-xs font-medium">
-              <GraduationCap className="size-3 text-violet-500" /> Students
-            </div>
-            <div className="text-muted-foreground flex items-center gap-1.5 px-4 py-2 text-xs font-medium">
-              <Phone className="size-3 text-emerald-500" /> Contacts
-            </div>
-            <div className="text-muted-foreground px-4 py-2 text-right text-xs font-medium">
-              Status
-            </div>
-          </div>
-
-          {rows.map((tpl, idx) => (
-            <EmailRow
-              key={tpl.key}
-              template={tpl}
-              onToggle={onToggle}
-              onToggleEnabled={onToggleEnabled}
-              isLast={idx === rows.length - 1}
-            />
-          ))}
+      <AccordionContent className="border-border -mx-2 border-t pb-0">
+        <div className="border-border flex items-center gap-4 border-b px-5 py-2">
+          <Button size={"xs"} variant={"outline"}>
+            Allow all
+          </Button>
+          <Button size={"xs"} variant={"destructive"}>
+            Deny all
+          </Button>
         </div>
+
+        {rows.map((tpl, idx) => (
+          <EmailRow
+            key={tpl.key}
+            template={tpl}
+            isLast={idx === rows.length - 1}
+          />
+        ))}
       </AccordionContent>
     </AccordionItem>
   );
 }
 
 export default function Page() {
-  const [templates, setTemplates] = useState<EmailTemplate[]>(EMAIL_TEMPLATES);
+  const [templates] = useState<EmailTemplate[]>(EMAIL_TEMPLATES);
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     new Set(),
@@ -310,35 +184,6 @@ export default function Page() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [openCategories, setOpenCategories] = useState<string[]>(
     EMAIL_CATEGORIES.map((c) => c.label),
-  );
-
-  const toggleRecipient = useCallback(
-    (id: string, type: RecipientType, val: boolean) => {
-      setTemplates((prev) =>
-        prev.map((t) => (t.id === id ? { ...t, [type]: val } : t)),
-      );
-    },
-    [],
-  );
-
-  const toggleEnabled = useCallback((id: string) => {
-    setTemplates((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, enabled: !t.enabled } : t)),
-    );
-  }, []);
-
-  const bulkSet = useCallback(
-    (type: RecipientType | "all", value: boolean, scope?: string) => {
-      setTemplates((prev) =>
-        prev.map((t) => {
-          if (scope && t.category !== scope) return t;
-          if (type === "all")
-            return { ...t, staff: value, student: value, contact: value };
-          return { ...t, [type]: value };
-        }),
-      );
-    },
-    [],
   );
 
   const toggleCategory = useCallback((cat: string) => {
@@ -429,10 +274,7 @@ export default function Page() {
           </div>
 
           {/* Category filter */}
-          <EmailCategoryMultiSelector
-            selectedCategories={selectedCategories}
-            toggleCategory={toggleCategory}
-          />
+          <EmailCategoryMultiSelector />
 
           {hasActiveFilters && (
             <Button
@@ -527,9 +369,6 @@ export default function Page() {
               key={cat}
               category={cat}
               rows={grouped[cat] ?? []}
-              onToggle={toggleRecipient}
-              onToggleEnabled={toggleEnabled}
-              onBulkSet={bulkSet}
             />
           ))}
         </Accordion>

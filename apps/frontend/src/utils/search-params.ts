@@ -86,3 +86,11 @@ export const payrollSearchParamsSchema = {
 };
 
 export const payrollSearchParams = createLoader(payrollSearchParamsSchema);
+
+export const emailSearchParamsSchema = {
+  categories: parseAsString,
+  search: parseAsString,
+  status: parseAsStringLiteral(["all", "active", "disabled"]),
+};
+
+export const emailSearchParams = createLoader(emailSearchParamsSchema);
