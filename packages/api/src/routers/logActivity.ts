@@ -44,8 +44,8 @@ export const logActivityRouter = {
       z.object({
         query: z.string().optional(),
         limit: z.number().optional().default(100),
-        targetId: z.string().optional(),
-        targetType: z.enum(["staff", "student", "contact"]),
+        userId: z.string().optional(),
+        targetType: z.enum(["staff", "student", "contact"]).optional(),
         action: z.string().optional(),
         from: z.coerce.date().optional(),
         to: z.coerce.date().optional(),
@@ -60,8 +60,8 @@ export const logActivityRouter = {
         },
         where: {
           schoolId: ctx.schoolId,
-          targetId: input.targetId,
-          targetType: input.targetType,
+          ...(input.userId ? { userId: input.userId } : {}),
+          ...(input.targetType ? { targetType: input.targetType } : {}),
           ...(input.action ? { action: input.action } : {}),
           ...(input.from || input.to
             ? {

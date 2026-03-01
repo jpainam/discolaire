@@ -47,12 +47,10 @@ const ACTIONS = [
 ];
 
 export function LogActivityList({
-  entityId,
-  entityType,
+  userId,
   className,
 }: {
-  entityId: string;
-  entityType: "staff" | "student" | "contact"; // app's "entity" concept — person record
+  userId: string;
   className?: string;
 }) {
   const trpc = useTRPC();
@@ -74,8 +72,7 @@ export function LogActivityList({
   const { data: activities, isPending } = useQuery(
     trpc.logActivity.all.queryOptions({
       limit: 100,
-      targetId: entityId,
-      targetType: entityType,
+      userId: userId,
       query: queryText || undefined,
       action: selectedAction,
       from: range.from ?? undefined,

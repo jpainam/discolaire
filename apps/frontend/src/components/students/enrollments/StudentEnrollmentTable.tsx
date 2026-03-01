@@ -6,7 +6,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { MoreVertical, Trash2 } from "lucide-react";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -132,8 +132,8 @@ export function StudentEnrollmentTable({
                     {canDeleteEnrollment && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant={"outline"} size={"icon"}>
-                            <MoreVertical />
+                          <Button variant={"ghost"} size={"icon"}>
+                            <MoreHorizontal />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -144,12 +144,6 @@ export function StudentEnrollmentTable({
                               await confirm({
                                 title: t("delete"),
                                 description: t("delete_confirmation"),
-                                icon: (
-                                  <Trash2 className="text-destructive h-5 w-5" />
-                                ),
-                                alertDialogTitle: {
-                                  className: "flex items-center gap-2",
-                                },
 
                                 onConfirm: async () => {
                                   toast.loading(t("Processing"), { id: 0 });

@@ -4,7 +4,12 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { ErrorFallback } from "~/components/error-fallback";
 import { LogActivityList } from "~/components/log-activities/LogActivityList";
 import { Skeleton } from "~/components/ui/skeleton";
-import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
 import { ClassPerformance } from "./ClassPerformance";
 import { PendingTasks } from "./PendingTasks";
 import { QuickActions } from "./QuickActions";
@@ -17,6 +22,10 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   const staffId = params.id;
+  const queryClient = getQueryClient();
+  const staff = await queryClient.fetchQuery(
+    trpc.staff.get.queryOptions(staffId),
+  );
   batchPrefetch([
     trpc.staff.subjects.queryOptions(staffId),
     trpc.staff.gradesheets.queryOptions(staffId),
@@ -73,7 +82,7 @@ export default async function Page(props: {
                   </div>
                 }
               >
-                <LogActivityList entityId={staffId} entityType="staff" />
+                {staff.userId && <LogActivityList userId={staff.userId} />}
               </Suspense>
             </ErrorBoundary>
           </div>
