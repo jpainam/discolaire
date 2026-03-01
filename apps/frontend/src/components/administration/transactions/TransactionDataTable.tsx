@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
@@ -102,6 +103,7 @@ export function TransactionDataTable() {
     table.setPageIndex(0);
   }, [state.globalFilter, from, to, status, classroomId, journalId, table]);
 
+  const t = useTranslations();
   React.useEffect(() => {
     const pages = data?.pages ?? [];
     const page = pages[state.pagination.pageIndex];
@@ -116,7 +118,7 @@ export function TransactionDataTable() {
       toolbar={
         <DataTableToolbarV2
           table={table}
-          searchPlaceholder="Search transactions..."
+          searchPlaceholder={t("search")}
           rightActions={<DataTableViewOptionsV2 table={table} />}
         >
           <TransactionDataTableAction table={table} />

@@ -106,7 +106,7 @@ export const useTransactionColumns = (): ColumnDef<
             const transaction = row.original;
             return (
               <Link
-                className="hover:underline"
+                className="block min-w-0 truncate hover:underline"
                 href={`/students/${transaction.studentId}/transactions`}
               >
                 {decode(
@@ -130,7 +130,7 @@ export const useTransactionColumns = (): ColumnDef<
             const transaction = row.original;
             return (
               <Link
-                className="hover:underline"
+                className="block truncate hover:underline"
                 href={`/students/${transaction.studentId}/transactions/${transaction.id}`}
               >
                 {transaction.transactionRef}
@@ -144,7 +144,7 @@ export const useTransactionColumns = (): ColumnDef<
           ),
           cell: ({ row }) => {
             return (
-              <div className="line-clamp-1">{row.original.description}</div>
+              <div className="truncate">{row.original.description}</div>
             );
           },
         }),
