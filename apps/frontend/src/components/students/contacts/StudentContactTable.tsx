@@ -6,13 +6,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import {
-  FileHeart,
-  HeartIcon,
-  MoreHorizontal,
-  Phone,
-  Trash2,
-} from "lucide-react";
+import { FileHeart, HeartIcon, MoreHorizontal, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -286,12 +280,6 @@ export function StudentContactTable({
                                 onSelect={async () => {
                                   await confirm({
                                     title: t("delete"),
-                                    icon: (
-                                      <Trash2 className="text-destructive" />
-                                    ),
-                                    alertDialogTitle: {
-                                      className: "flex items-center gap-2",
-                                    },
                                     description: t("delete_confirmation", {
                                       name: getFullName(contact),
                                     }),

@@ -127,7 +127,7 @@ export function LogActivityList({
           const { icon: Icon, iconColor, iconBg } = getActionStyle(item.action);
           return (
             <TimelineItem
-              className="group-data-[orientation=vertical]/timeline:ms-10"
+              className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:!pb-3"
               key={item.id}
               step={item.id}
             >
@@ -147,7 +147,7 @@ export function LogActivityList({
               <TimelineContent>
                 {/* Description is server-generated HTML with entity links */}
                 <TimelineTitle
-                  className="[&_a]:text-primary mt-0.5 text-sm font-normal [&_a]:underline [&_a]:underline-offset-2 [&_strong]:font-semibold"
+                  className="[&_a]:text-primary mt-0.5 text-xs font-normal [&_a]:underline [&_a]:underline-offset-2 [&_strong]:font-semibold"
                   dangerouslySetInnerHTML={{ __html: item.description }}
                 />
                 <TimelineDate className="mt-1 mb-0">

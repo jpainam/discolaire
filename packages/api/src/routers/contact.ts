@@ -493,6 +493,7 @@ export const contactRouter = {
             { lastName: { contains: q, mode: "insensitive" } },
             { phoneNumber1: { contains: q, mode: "insensitive" } },
             { phoneNumber2: { contains: q, mode: "insensitive" } },
+            { email: { contains: q, mode: "insensitive" } },
             {
               user: {
                 email: { contains: q, mode: "insensitive" },
