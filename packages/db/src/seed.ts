@@ -54,7 +54,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "late-arrival",
     categoryKey: "attendance",
     name: "Alerte de retard",
-    description: "Notifie lorsqu'un élève arrive après l'heure de début des cours.",
+    description:
+      "Notifie lorsqu'un élève arrive après l'heure de début des cours.",
     allowStaff: true,
     allowStudent: false,
     allowContact: true,
@@ -63,7 +64,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "attendance-summary-quarterly",
     categoryKey: "attendance",
     name: "Bilan de présence (trimestriel)",
-    description: "Récapitulatif trimestriel de la présence de l'élève envoyé aux parents.",
+    description:
+      "Récapitulatif trimestriel de la présence de l'élève envoyé aux parents.",
     allowStaff: false,
     allowStudent: false,
     allowContact: true,
@@ -73,7 +75,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "grade-published",
     categoryKey: "academic",
     name: "Note publiée",
-    description: "Notifie lorsqu'un enseignant publie une note pour une évaluation.",
+    description:
+      "Notifie lorsqu'un enseignant publie une note pour une évaluation.",
     allowStaff: false,
     allowStudent: true,
     allowContact: true,
@@ -82,7 +85,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "grade-report-available",
     categoryKey: "academic",
     name: "Bulletin disponible",
-    description: "Notifie lorsque le bulletin trimestriel est disponible en ligne.",
+    description:
+      "Notifie lorsque le bulletin trimestriel est disponible en ligne.",
     allowStaff: false,
     allowStudent: true,
     allowContact: true,
@@ -109,7 +113,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "exam-week-parent",
     categoryKey: "academic",
     name: "Avis de semaine d'examens",
-    description: "Notification de la semaine d'examens pour les parents et tuteurs.",
+    description:
+      "Notification de la semaine d'examens pour les parents et tuteurs.",
     allowStaff: false,
     allowStudent: false,
     allowContact: true,
@@ -128,7 +133,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "detention-notice",
     categoryKey: "behaviour",
     name: "Avis de consigne",
-    description: "Informe le parent ou tuteur qu'une consigne a été attribuée à l'élève.",
+    description:
+      "Informe le parent ou tuteur qu'une consigne a été attribuée à l'élève.",
     allowStaff: false,
     allowStudent: true,
     allowContact: true,
@@ -184,7 +190,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "classroom-timetable",
     categoryKey: "events-activities",
     name: "Emploi du temps de la classe",
-    description: "Emploi du temps de la classe partagé avec les élèves et les parents.",
+    description:
+      "Emploi du temps de la classe partagé avec les élèves et les parents.",
     allowStaff: false,
     allowStudent: true,
     allowContact: false,
@@ -194,7 +201,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "invitation",
     categoryKey: "admissions",
     name: "Invitation",
-    description: "Invitation envoyée à un nouveau membre de la communauté scolaire.",
+    description:
+      "Invitation envoyée à un nouveau membre de la communauté scolaire.",
     allowStaff: false,
     allowStudent: false,
     allowContact: true,
@@ -221,7 +229,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "student-contact-linked",
     categoryKey: "admissions",
     name: "Contact rattaché à l'élève",
-    description: "Notification lors du rattachement d'un contact au dossier d'un élève.",
+    description:
+      "Notification lors du rattachement d'un contact au dossier d'un élève.",
     allowStaff: false,
     allowStudent: false,
     allowContact: true,
@@ -231,7 +240,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "password-reset",
     categoryKey: "system-admin",
     name: "Réinitialisation du mot de passe",
-    description: "Lien sécurisé pour réinitialiser les identifiants de connexion.",
+    description:
+      "Lien sécurisé pour réinitialiser les identifiants de connexion.",
     allowStaff: true,
     allowStudent: true,
     allowContact: true,
@@ -240,7 +250,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "password-reset-success",
     categoryKey: "system-admin",
     name: "Mot de passe réinitialisé",
-    description: "Confirmation que le mot de passe a été réinitialisé avec succès.",
+    description:
+      "Confirmation que le mot de passe a été réinitialisé avec succès.",
     allowStaff: true,
     allowStudent: true,
     allowContact: true,
@@ -249,7 +260,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "welcome",
     categoryKey: "system-admin",
     name: "E-mail de bienvenue",
-    description: "E-mail d'accueil envoyé lors de la création d'un nouveau compte.",
+    description:
+      "E-mail d'accueil envoyé lors de la création d'un nouveau compte.",
     allowStaff: true,
     allowStudent: true,
     allowContact: true,
@@ -258,7 +270,8 @@ const NOTIFICATION_CONFIGS: {
     templateKey: "staff-weekly-timetable",
     categoryKey: "system-admin",
     name: "Emploi du temps hebdomadaire du personnel",
-    description: "Planning hebdomadaire envoyé au personnel enseignant et administratif.",
+    description:
+      "Planning hebdomadaire envoyé au personnel enseignant et administratif.",
     allowStaff: true,
     allowStudent: false,
     allowContact: false,

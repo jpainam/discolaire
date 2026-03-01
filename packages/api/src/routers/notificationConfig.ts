@@ -36,10 +36,7 @@ export const notificationConfigRouter = {
           ...(input?.categoryId ? { categoryId: input.categoryId } : {}),
         },
         include: { category: true },
-        orderBy: [
-          { category: { order: "asc" } },
-          { templateKey: "asc" },
-        ],
+        orderBy: [{ category: { order: "asc" } }, { templateKey: "asc" }],
       });
     }),
 
@@ -90,11 +87,7 @@ export const notificationConfigRouter = {
 
   // Update name, description, category, or any toggle on an existing config.
   update: protectedProcedure
-    .input(
-      z
-        .object({ id: z.string() })
-        .merge(configFields.partial()),
-    )
+    .input(z.object({ id: z.string() }).merge(configFields.partial()))
     .mutation(async ({ ctx, input }) => {
       const { id, ...fields } = input;
       return ctx.db.notificationConfig.update({
@@ -132,7 +125,14 @@ export const notificationConfigRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { templateKey, channel, categoryId, name, description, ...toggles } = input;
+      const {
+        templateKey,
+        channel,
+        categoryId,
+        name,
+        description,
+        ...toggles
+      } = input;
       return ctx.db.notificationConfig.upsert({
         where: {
           schoolId_templateKey_channel: {
