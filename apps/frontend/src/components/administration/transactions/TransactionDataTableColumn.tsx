@@ -143,9 +143,7 @@ export const useTransactionColumns = (): ColumnDef<
             <DataTableColumnHeader column={column} title={t("description")} />
           ),
           cell: ({ row }) => {
-            return (
-              <div className="truncate">{row.original.description}</div>
-            );
+            return <div className="truncate">{row.original.description}</div>;
           },
         }),
         columnHelper.accessor("transactionType", {
