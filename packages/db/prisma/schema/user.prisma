@@ -63,6 +63,7 @@ model User {
     members                      Member[]
     invitations                  Invitation[]
     notificationRecipients       NotificationRecipient[]
+    notificationConfigUpdates    NotificationConfig[]    @relation("NotificationConfigUpdatedBy")
     aiChats                      AiChat[]
 
     @@unique([email])

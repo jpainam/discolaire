@@ -1,7 +1,7 @@
 export type RecipientType = "staff" | "student" | "contact";
 
 export interface EmailTemplate {
-  id: string;
+  key: string; // matches NotificationConfig.templateKey
   name: string;
   description: string;
   category: string;
@@ -11,25 +11,25 @@ export interface EmailTemplate {
   contact: boolean;
 }
 
-export const EMAIL_CATEGORIES = [
-  "Attendance",
-  "Academic",
-  "Behaviour",
-  "Finance",
-  "Health & Wellbeing",
-  "Events & Activities",
-  "Admissions",
-  "Communication",
-  "System & Admin",
-  "Reports",
-] as const;
+export const EMAIL_CATEGORIES: { key: string; label: string }[] = [
+  { key: "0001", label: "Attendance" },
+  { key: "0002", label: "Academic" },
+  { key: "0003", label: "Behaviour" },
+  { key: "0004", label: "Finance" },
+  { key: "0005", label: "Health & Wellbeing" },
+  { key: "0006", label: "Events & Activities" },
+  { key: "0007", label: "Admissions" },
+  { key: "0008", label: "Communication" },
+  { key: "0009", label: "System & Admin" },
+  { key: "0010", label: "Reports" },
+];
 
-export type EmailCategory = (typeof EMAIL_CATEGORIES)[number];
+export type EmailCategory = (typeof EMAIL_CATEGORIES)[number]["label"];
 
 export const EMAIL_TEMPLATES: EmailTemplate[] = [
   // Attendance
   {
-    id: "att-001",
+    key: "att-001",
     name: "Absence Notification",
     description: "Sent when a student is marked absent for the day.",
     category: "Attendance",
@@ -39,7 +39,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "att-002",
+    key: "att-002",
     name: "Late Arrival Alert",
     description: "Notifies when a student arrives after school start time.",
     category: "Attendance",
@@ -49,7 +49,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "att-003",
+    key: "att-003",
     name: "Attendance Summary (Weekly)",
     description: "Weekly overview of student attendance sent to parents.",
     category: "Attendance",
@@ -59,7 +59,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "att-004",
+    key: "att-004",
     name: "Persistent Absence Warning",
     description:
       "Alert sent when student falls below 90% attendance threshold.",
@@ -70,7 +70,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "att-005",
+    key: "att-005",
     name: "Authorised Absence Confirmation",
     description: "Confirms that an absence request has been approved.",
     category: "Attendance",
@@ -82,7 +82,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Academic
   {
-    id: "aca-001",
+    key: "aca-001",
     name: "Grade Published",
     description: "Notifies when a teacher publishes results for an assessment.",
     category: "Academic",
@@ -92,7 +92,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "aca-002",
+    key: "aca-002",
     name: "Homework Assigned",
     description: "Sent when new homework is set for a class.",
     category: "Academic",
@@ -102,7 +102,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: false,
   },
   {
-    id: "aca-003",
+    key: "aca-003",
     name: "Homework Overdue",
     description: "Reminder that a homework assignment has not been submitted.",
     category: "Academic",
@@ -112,7 +112,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "aca-004",
+    key: "aca-004",
     name: "Term Report Released",
     description: "Notifies when the official term report is available online.",
     category: "Academic",
@@ -122,7 +122,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "aca-005",
+    key: "aca-005",
     name: "Academic Achievement Award",
     description: "Celebrates a student reaching a notable academic milestone.",
     category: "Academic",
@@ -132,7 +132,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "aca-006",
+    key: "aca-006",
     name: "Exam Timetable Published",
     description: "Informs recipients when the exam schedule is finalised.",
     category: "Academic",
@@ -144,7 +144,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Behaviour
   {
-    id: "beh-001",
+    key: "beh-001",
     name: "Behaviour Incident Report",
     description: "Summary of a logged behaviour incident for a student.",
     category: "Behaviour",
@@ -154,7 +154,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "beh-002",
+    key: "beh-002",
     name: "Detention Notice",
     description: "Informs parent or guardian that a detention has been issued.",
     category: "Behaviour",
@@ -164,7 +164,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "beh-003",
+    key: "beh-003",
     name: "Positive Behaviour Recognition",
     description: "Celebrates positive behaviour or achievement points earned.",
     category: "Behaviour",
@@ -174,7 +174,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "beh-004",
+    key: "beh-004",
     name: "Suspension Notice",
     description: "Formal notification of a fixed-term exclusion.",
     category: "Behaviour",
@@ -186,7 +186,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Finance
   {
-    id: "fin-001",
+    key: "fin-001",
     name: "Invoice Generated",
     description: "Sent when a new fee invoice is created for a student.",
     category: "Finance",
@@ -196,7 +196,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "fin-002",
+    key: "fin-002",
     name: "Payment Received",
     description:
       "Confirmation email when a payment has been successfully processed.",
@@ -207,7 +207,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "fin-003",
+    key: "fin-003",
     name: "Payment Overdue Reminder",
     description: "Reminder that an outstanding balance remains unpaid.",
     category: "Finance",
@@ -217,7 +217,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "fin-004",
+    key: "fin-004",
     name: "Trip/Activity Payment Request",
     description:
       "Payment link sent when a student is signed up for a school trip.",
@@ -228,7 +228,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "fin-005",
+    key: "fin-005",
     name: "Bursary/Grant Confirmation",
     description:
       "Notifies when a financial support application has been approved.",
@@ -241,7 +241,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Health & Wellbeing
   {
-    id: "hlt-001",
+    key: "hlt-001",
     name: "Medical Appointment Reminder",
     description: "Reminder for a scheduled medical or counselling appointment.",
     category: "Health & Wellbeing",
@@ -251,7 +251,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "hlt-002",
+    key: "hlt-002",
     name: "Medication Administration Notice",
     description: "Informs parents that medication was administered at school.",
     category: "Health & Wellbeing",
@@ -261,7 +261,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "hlt-003",
+    key: "hlt-003",
     name: "Safeguarding Alert (Internal)",
     description: "Internal notification sent to designated safeguarding leads.",
     category: "Health & Wellbeing",
@@ -271,7 +271,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: false,
   },
   {
-    id: "hlt-004",
+    key: "hlt-004",
     name: "Wellbeing Check-In Follow-Up",
     description: "Sent after a pastoral check-in session with a student.",
     category: "Health & Wellbeing",
@@ -283,7 +283,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Events & Activities
   {
-    id: "evt-001",
+    key: "evt-001",
     name: "School Event Announcement",
     description: "Announcement of an upcoming school-wide event or activity.",
     category: "Events & Activities",
@@ -293,7 +293,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "evt-002",
+    key: "evt-002",
     name: "Trip Consent Request",
     description: "Requests parental consent for a school trip or outing.",
     category: "Events & Activities",
@@ -303,7 +303,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "evt-003",
+    key: "evt-003",
     name: "Sports Team Selection",
     description:
       "Notifies a student they have been selected for a school team.",
@@ -314,7 +314,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "evt-004",
+    key: "evt-004",
     name: "Parent Evening Booking Confirmation",
     description: "Confirms parent/teacher meeting time and location.",
     category: "Events & Activities",
@@ -324,7 +324,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "evt-005",
+    key: "evt-005",
     name: "Club Sign-Up Confirmation",
     description: "Confirms enrolment in an after-school club or activity.",
     category: "Events & Activities",
@@ -336,7 +336,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Admissions
   {
-    id: "adm-001",
+    key: "adm-001",
     name: "Application Received",
     description:
       "Acknowledgement that a new school application has been submitted.",
@@ -347,7 +347,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "adm-002",
+    key: "adm-002",
     name: "Offer of Place",
     description: "Formal offer of a school place to a prospective student.",
     category: "Admissions",
@@ -357,7 +357,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "adm-003",
+    key: "adm-003",
     name: "Enrolment Confirmation",
     description:
       "Confirms that enrolment documents have been received and processed.",
@@ -368,7 +368,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "adm-004",
+    key: "adm-004",
     name: "Waiting List Update",
     description:
       "Update on a student's position on the admissions waiting list.",
@@ -381,7 +381,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Communication
   {
-    id: "com-001",
+    key: "com-001",
     name: "Newsletter",
     description: "Periodic school newsletter sent to the whole community.",
     category: "Communication",
@@ -391,7 +391,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "com-002",
+    key: "com-002",
     name: "Urgent School Announcement",
     description: "High-priority message (e.g. school closure, emergency).",
     category: "Communication",
@@ -401,7 +401,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "com-003",
+    key: "com-003",
     name: "Class Change Notification",
     description:
       "Informs of a temporary or permanent change to a scheduled class.",
@@ -412,7 +412,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: false,
   },
   {
-    id: "com-004",
+    key: "com-004",
     name: "Teacher Message to Parent",
     description: "Direct message from a class teacher to a student's contacts.",
     category: "Communication",
@@ -424,7 +424,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // System & Admin
   {
-    id: "sys-001",
+    key: "sys-001",
     name: "Welcome — New Staff",
     description: "Onboarding email for a newly created staff account.",
     category: "System & Admin",
@@ -434,7 +434,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: false,
   },
   {
-    id: "sys-002",
+    key: "sys-002",
     name: "Welcome — New Student",
     description: "Onboarding email for a newly created student account.",
     category: "System & Admin",
@@ -444,7 +444,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "sys-003",
+    key: "sys-003",
     name: "Password Reset",
     description: "Secure link to reset account credentials.",
     category: "System & Admin",
@@ -454,7 +454,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "sys-004",
+    key: "sys-004",
     name: "Two-Factor Authentication Code",
     description: "One-time verification code for secure login.",
     category: "System & Admin",
@@ -464,7 +464,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "sys-005",
+    key: "sys-005",
     name: "Account Deactivation Notice",
     description: "Notification that a user account has been deactivated.",
     category: "System & Admin",
@@ -474,7 +474,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: false,
   },
   {
-    id: "sys-006",
+    key: "sys-006",
     name: "Data Export Ready",
     description: "Notifies admin when a requested data export is available.",
     category: "System & Admin",
@@ -486,7 +486,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
 
   // Reports
   {
-    id: "rep-001",
+    key: "rep-001",
     name: "End-of-Year Report",
     description:
       "Annual performance report covering all subjects and pastoral notes.",
@@ -497,7 +497,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "rep-002",
+    key: "rep-002",
     name: "Mid-Term Progress Report",
     description: "Interim report giving a snapshot of academic progress.",
     category: "Reports",
@@ -507,7 +507,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "rep-003",
+    key: "rep-003",
     name: "Attendance Report (Monthly)",
     description: "Monthly attendance statistics sent to parents and admin.",
     category: "Reports",
@@ -517,7 +517,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "rep-004",
+    key: "rep-004",
     name: "Behaviour Summary Report",
     description: "Periodic summary of behaviour points and incidents.",
     category: "Reports",
@@ -527,7 +527,7 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
     contact: true,
   },
   {
-    id: "rep-005",
+    key: "rep-005",
     name: "Staff Performance Review",
     description: "Internal report shared with staff and line managers.",
     category: "Reports",

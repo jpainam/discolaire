@@ -156,6 +156,50 @@ model NotificationSubscription {
     @@index([schoolId, channel, status])
 }
 
+// Groups notification templates for display in the admin UI.
+// Replaces the hardcoded EMAIL_CATEGORIES list.
+model NotificationCategory {
+    id        String               @id @default(cuid())
+    schoolId  String
+    school    School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    key       String               // stable slug, e.g. "attendance"
+    label     String               // display name, e.g. "Attendance"
+    order     Int                  @default(0)
+    configs   NotificationConfig[]
+    createdAt DateTime             @default(now())
+    updatedAt DateTime             @updatedAt
+
+    @@unique([schoolId, key])
+    @@index([schoolId, order])
+}
+
+// Canonical registry of notification templates, one row per (school, templateKey, channel).
+// This is the source of truth for what emails exist, how they are named, and who can receive them.
+// Sending code checks enabled + allowStaff/allowStudent/allowContact before dispatching.
+model NotificationConfig {
+    id           String                @id @default(cuid())
+    schoolId     String
+    school       School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    categoryId   String?
+    category     NotificationCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+    templateKey  String                // stable slug, e.g. "att-001" or "attendance-summary"
+    channel      NotificationChannel   @default(EMAIL)
+    name         String                // display name, e.g. "Absence Notification"
+    description  String                // short description shown in admin UI
+    enabled      Boolean               @default(true)
+    allowStaff   Boolean               @default(true)
+    allowStudent Boolean               @default(true)
+    allowContact Boolean               @default(true)
+    updatedById  String?
+    updatedBy    User?                 @relation("NotificationConfigUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+    createdAt    DateTime              @default(now())
+    updatedAt    DateTime              @updatedAt
+
+    @@unique([schoolId, templateKey, channel])
+    @@index([schoolId, channel])
+    @@index([schoolId, categoryId])
+}
+
 // Immutable log of every credit change on a subscription.
 // Allows auditing top-ups, deductions, and refunds.
 model NotificationCreditLog {

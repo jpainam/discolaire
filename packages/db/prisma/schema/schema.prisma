@@ -616,6 +616,8 @@ model School {
     requiredJournals          RequiredAccountingJournal[]
     discountPolicies          DiscountPolicy[]
     notificationSubscriptions NotificationSubscription[]
+    notificationCategories    NotificationCategory[]
+    notificationConfigs       NotificationConfig[]
     modules                   Module[]
     permissions               Permission[]
     roles                     Role[]

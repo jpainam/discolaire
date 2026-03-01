@@ -39,6 +39,8 @@ import { menuRouter } from "./routers/menu";
 import { messagingRouter } from "./routers/messaging";
 import { moduleRouter } from "./routers/module";
 import { notificationRouter } from "./routers/notification";
+import { notificationCategoryRouter } from "./routers/notificationCategory";
+import { notificationConfigRouter } from "./routers/notificationConfig";
 import { notificationPreferenceRouter } from "./routers/notificationPreference";
 import { notificationRecipientRouter } from "./routers/notificationRecipient";
 import { notificationSubscriptionRouter } from "./routers/notificationSubscription";
@@ -150,6 +152,8 @@ export const appRouter = createTRPCRouter({
   appreciation: appreciationRouter,
   skillAcquisition: skillAcquisitionRouter,
   notification: notificationRouter,
+  notificationCategory: notificationCategoryRouter,
+  notificationConfig: notificationConfigRouter,
   payroll: payrollRouter,
 });
 
