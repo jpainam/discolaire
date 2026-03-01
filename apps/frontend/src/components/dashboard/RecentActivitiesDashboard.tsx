@@ -1,158 +1,177 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { ArrowRight, Clock } from "lucide-react";
+import { useLocale } from "next-intl";
+
 import {
-  Activity,
-  AlertCircle,
-  BookOpen,
-  CheckCircle,
-  Clock,
-  FileEdit,
-  UserPlus,
-} from "lucide-react";
-
+  DeleteIcon,
+  EditIcon,
+  EnrollmentIcon,
+  FileIcon,
+  FilesIcon,
+  LogoutIcon,
+  PlusIcon,
+} from "~/icons";
 import { cn } from "~/lib/utils";
+import { useTRPC } from "~/trpc/react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
-interface ActivityItem {
-  id: number;
-  type: "enrollment" | "grade" | "edit" | "alert" | "check";
-  message: string;
-  user: string;
-  time: string;
-  unread?: boolean;
-}
+type AppIcon = React.ComponentType<{ className?: string }>;
 
-const activities: ActivityItem[] = [
-  {
-    id: 1,
-    type: "enrollment",
-    message: "Nouvel élève inscrit en Sixième M2",
-    user: "Admin",
-    time: "Il y a 5 min",
-    unread: true,
+const actionIconMap: Record<
+  string,
+  { icon: AppIcon; iconBg: string; iconColor: string }
+> = {
+  create: {
+    icon: PlusIcon,
+    iconBg: "bg-green-500/10",
+    iconColor: "text-green-500",
   },
-  {
-    id: 2,
-    type: "grade",
-    message: "Notes de Géographie saisies pour Première CG",
-    user: "M. Dupont",
-    time: "Il y a 18 min",
-    unread: true,
+  update: {
+    icon: EditIcon,
+    iconBg: "bg-amber-500/10",
+    iconColor: "text-amber-500",
   },
-  {
-    id: 3,
-    type: "edit",
-    message: "Fiche de TCHAPTCHET Lima mise à jour",
-    user: "Secrétariat",
-    time: "Il y a 34 min",
+  delete: {
+    icon: DeleteIcon,
+    iconBg: "bg-red-500/10",
+    iconColor: "text-red-500",
   },
-  {
-    id: 4,
-    type: "check",
-    message: "Présences validées — Terminale Esp. 2",
-    user: "Prof. Mba",
-    time: "Il y a 1h",
+  deleted: {
+    icon: DeleteIcon,
+    iconBg: "bg-red-500/10",
+    iconColor: "text-red-500",
   },
-  {
-    id: 5,
-    type: "alert",
-    message: "Absence non justifiée — ONDOA Mveng J.",
-    user: "Système",
-    time: "Il y a 2h",
+  enrolled: {
+    icon: EnrollmentIcon,
+    iconBg: "bg-teal-500/10",
+    iconColor: "text-teal-500",
   },
-  {
-    id: 6,
-    type: "enrollment",
-    message: "Inscription confirmée — BATA Mamiah K.",
-    user: "Admin",
-    time: "Il y a 3h",
+  unenrolled: {
+    icon: LogoutIcon,
+    iconBg: "bg-orange-500/10",
+    iconColor: "text-orange-500",
   },
-  {
-    id: 7,
-    type: "grade",
-    message: "Bulletin trimestriel généré — Classe 5M1",
-    user: "Système",
-    time: "Hier",
+  uploaded: {
+    icon: FileIcon,
+    iconBg: "bg-emerald-500/10",
+    iconColor: "text-emerald-500",
   },
-];
-
-const iconMap = {
-  enrollment: { icon: UserPlus, bg: "bg-primary/10", color: "text-primary" },
-  grade: { icon: BookOpen, bg: "bg-amber-100", color: "text-amber-600" },
-  edit: { icon: FileEdit, bg: "bg-sky-100", color: "text-sky-600" },
-  alert: { icon: AlertCircle, bg: "bg-red-100", color: "text-red-500" },
-  check: { icon: CheckCircle, bg: "bg-emerald-100", color: "text-emerald-600" },
+  downloaded: {
+    icon: FilesIcon,
+    iconBg: "bg-violet-500/10",
+    iconColor: "text-violet-500",
+  },
 };
 
+const fallbackStyle = {
+  icon: EditIcon,
+  iconBg: "bg-muted/10",
+  iconColor: "text-muted-foreground",
+};
+
+function getStyle(action: string) {
+  return actionIconMap[action] ?? fallbackStyle;
+}
+
+function relativeTime(date: Date, locale: string): string {
+  const diffSec = (date.getTime() - Date.now()) / 1000;
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+  const units: [Intl.RelativeTimeFormatUnit, number][] = [
+    ["year", 31_536_000],
+    ["month", 2_592_000],
+    ["week", 604_800],
+    ["day", 86_400],
+    ["hour", 3_600],
+    ["minute", 60],
+    ["second", 1],
+  ];
+  for (const [unit, seconds] of units) {
+    if (Math.abs(diffSec) >= seconds || unit === "second") {
+      return formatter.format(Math.round(diffSec / seconds), unit);
+    }
+  }
+  return "";
+}
+
 export function RecentActivitiesDashboard() {
-  const unreadCount = activities.filter((a) => a.unread).length;
+  const trpc = useTRPC();
+  const locale = useLocale();
+
+  const { data: activities, isPending } = useQuery(
+    trpc.logActivity.all.queryOptions({ limit: 10 }),
+  );
 
   return (
-    <div className="bg-card border-border flex h-full flex-col rounded-xl border p-4">
-      <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Activity className="text-muted-foreground h-4 w-4" />
-          <h2 className="text-foreground text-sm font-semibold">
-            Activités récentes
-          </h2>
-        </div>
-        {unreadCount > 0 && (
-          <span className="bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 text-[10px] font-semibold">
-            {unreadCount} new
-          </span>
-        )}
-      </div>
+    <Card>
+      <CardHeader>
+        <CardTitle> Activités récentes</CardTitle>
+      </CardHeader>
 
-      <div className="-mx-1 flex-1 space-y-0.5 overflow-y-auto">
-        {activities.map((item, idx) => {
-          const { icon: Icon, bg, color } = iconMap[item.type];
-          return (
-            <div
-              key={item.id}
-              className={cn(
-                "hover:bg-muted/60 relative flex cursor-pointer gap-2.5 rounded-lg px-2 py-2 transition-colors",
-                item.unread && "bg-primary/5",
-              )}
-            >
-              {/* Timeline line */}
-              {idx < activities.length - 1 && (
-                <div className="bg-border absolute top-9 bottom-0 left-[22px] z-0 w-px" />
-              )}
-              <div
-                className={cn(
-                  "z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
-                  bg,
-                )}
-              >
-                <Icon className={cn("h-3.5 w-3.5", color)} />
+      <CardContent className="px-2 py-0">
+        {isPending ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex gap-2.5 rounded-lg px-2 py-2">
+              <div className="bg-muted h-7 w-7 shrink-0 animate-pulse rounded-full" />
+              <div className="flex-1 space-y-1.5 pt-1">
+                <div className="bg-muted h-3 w-3/4 animate-pulse rounded" />
+                <div className="bg-muted h-2.5 w-1/3 animate-pulse rounded" />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-foreground text-[11px] leading-relaxed">
-                  {item.message}
-                </p>
-                <div className="mt-0.5 flex items-center gap-1.5">
-                  <span className="text-muted-foreground text-[10px] font-medium">
-                    {item.user}
-                  </span>
-                  <span className="text-muted-foreground/60 text-[10px]">
-                    ·
-                  </span>
-                  <Clock className="text-muted-foreground/60 h-2.5 w-2.5" />
-                  <span className="text-muted-foreground/60 text-[10px]">
-                    {item.time}
-                  </span>
+            </div>
+          ))
+        ) : !activities?.length ? (
+          <p className="text-muted-foreground px-2 py-6 text-center text-xs">
+            Aucune activité récente
+          </p>
+        ) : (
+          activities.map((item, idx) => {
+            const { icon: Icon, iconBg, iconColor } = getStyle(item.action);
+            return (
+              <div
+                key={item.id}
+                className="hover:bg-muted/60 relative flex cursor-pointer gap-2.5 rounded-lg px-2 py-2 transition-colors"
+              >
+                {idx < activities.length - 1 && (
+                  <div className="bg-border absolute top-9 bottom-0 left-[22px] z-0 w-px" />
+                )}
+                <div
+                  className={cn(
+                    "z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
+                    iconBg,
+                  )}
+                >
+                  <Icon className={cn("size-3.5", iconColor)} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-foreground [&_a]:text-primary text-[11px] leading-relaxed [&_a]:underline [&_a]:underline-offset-2"
+                    dangerouslySetInnerHTML={{ __html: item.description }}
+                  />
+                  <div className="mt-0.5 flex items-center gap-1">
+                    <Clock className="text-muted-foreground/60 h-2.5 w-2.5" />
+                    <span className="text-muted-foreground/60 text-[10px]">
+                      {relativeTime(item.createdAt, locale)}
+                    </span>
+                  </div>
                 </div>
               </div>
-              {item.unread && (
-                <div className="bg-primary mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full" />
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <button className="text-primary border-border mt-3 w-full border-t pt-2 text-center text-xs font-medium hover:underline">
-        Voir toutes les activités →
-      </button>
-    </div>
+            );
+          })
+        )}
+      </CardContent>
+      <CardFooter className="justify-center">
+        <Button variant={"link"} className="w-ful">
+          Voir toutes les activités <ArrowRight />
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

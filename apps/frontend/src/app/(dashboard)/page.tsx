@@ -36,7 +36,7 @@ export default function Page() {
         {/* Middle row: Chart + Classes + Recent Activities */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           {/* Notes chart – takes 5 cols */}
-          <div className="lg:col-span-5">
+          <div className="h-full lg:col-span-5">
             <ErrorBoundary errorComponent={ErrorFallback}>
               <Suspense
                 fallback={
@@ -52,13 +52,13 @@ export default function Page() {
             </ErrorBoundary>
           </div>
           {/* Class list – takes 4 cols */}
-          <div className="lg:col-span-4">
+          <div className="h-full lg:col-span-4">
             <Suspense fallback={<Skeleton className="h-full w-full" />}>
               <QuickClassroomList />
             </Suspense>
           </div>
           {/* Recent activities – takes 3 cols */}
-          <div className="lg:col-span-3">
+          <div className="h-full lg:col-span-3">
             <RecentActivitiesDashboard />
           </div>
         </div>

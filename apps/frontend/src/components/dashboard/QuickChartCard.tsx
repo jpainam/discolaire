@@ -52,7 +52,7 @@ export function QuickChartCard() {
     return gs.filter((g) => g.max > 0).slice(0, 8);
   }, [latestGradesheet]);
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>{t("Recent Grades")}</CardTitle>
       </CardHeader>

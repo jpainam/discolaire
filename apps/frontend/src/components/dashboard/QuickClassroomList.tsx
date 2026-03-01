@@ -43,7 +43,7 @@ export function QuickClassroomList() {
   }, [classrooms, query]);
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>{t("Classroom list")}</CardTitle>
         <CardAction>
