@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Clock } from "lucide-react";
 import { useLocale } from "next-intl";
 
+import { useRouter } from "~/hooks/use-router";
 import {
   DeleteIcon,
   EditIcon,
@@ -109,6 +110,7 @@ export function RecentActivitiesDashboard() {
   const { data: activities, isPending } = useQuery(
     trpc.logActivity.all.queryOptions({ limit: 10 }),
   );
+  const router = useRouter();
 
   return (
     <Card className="h-full">
@@ -152,7 +154,7 @@ export function RecentActivitiesDashboard() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="text-foreground [&_a]:text-primary text-xs leading-relaxed [&_a]:underline [&_a]:underline-offset-2"
+                    className="text-foreground [&_a]:text-primary line-clamp-3 text-xs leading-relaxed [&_a]:underline [&_a]:underline-offset-2"
                     dangerouslySetInnerHTML={{ __html: item.description }}
                   />
                   <div className="mt-0.5 flex items-center gap-1">
@@ -168,7 +170,13 @@ export function RecentActivitiesDashboard() {
         )}
       </CardContent>
       <CardFooter className="mt-auto justify-center">
-        <Button variant={"link"} className="w-ful">
+        <Button
+          variant={"link"}
+          onClick={() => {
+            router.push("/administration/audit-logs");
+          }}
+          className="w-ful"
+        >
           Voir toutes les activités <ArrowRight />
         </Button>
       </CardFooter>

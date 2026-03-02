@@ -99,10 +99,8 @@ export default async function Page() {
           <QuickStatistics />
         </Suspense>
 
-        {/* Middle row: Chart + Classes + Recent Activities */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-          {/* Notes chart – takes 5 cols */}
-          <div className="grid gap-4 lg:col-span-9 lg:grid-cols-12">
+          <div className="grid self-start gap-4 lg:col-span-9 lg:grid-cols-12">
             <div className="h-full lg:col-span-6">
               <ErrorBoundary errorComponent={ErrorFallback}>
                 <Suspense
