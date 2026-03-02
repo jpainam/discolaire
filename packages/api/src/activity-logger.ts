@@ -26,6 +26,7 @@ export const ActivityTargetType = {
   DOCUMENT: "document",
   USER: "user",
   PERMISSION: "permission",
+  TRANSACTION: "transaction",
 } as const;
 export type ActivityTargetType =
   (typeof ActivityTargetType)[keyof typeof ActivityTargetType];

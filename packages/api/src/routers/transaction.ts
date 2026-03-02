@@ -7,8 +7,15 @@ import type { Prisma } from "@repo/db";
 import type { TransactionType } from "@repo/db/enums";
 import { TransactionStatus } from "@repo/db/enums";
 
+import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { notificationQueue } from "../queue";
 import { protectedProcedure } from "../trpc";
+
+const statusLabels: Record<string, string> = {
+  PENDING: "En attente",
+  VALIDATED: "Validée",
+  CANCELED: "Annulée",
+};
 
 const createSchema = z.object({
   amount: z.number(),
@@ -298,27 +305,67 @@ export const transactionRouter = {
         });
       }
       if (input.transactionIds) {
-        return ctx.db.transaction.updateMany({
-          where: {
-            id: {
-              in: input.transactionIds,
-            },
-          },
+        const transactions = await ctx.db.transaction.findMany({
+          where: { id: { in: input.transactionIds } },
+          include: { student: true },
+        });
+        const result = await ctx.db.transaction.updateMany({
+          where: { id: { in: input.transactionIds } },
           data: {
             status: input.status,
             updatedById: ctx.session.user.id,
           },
         });
+        ctx.activityLog.logMany(
+          transactions.map((t) => {
+            const studentName =
+              `${t.student.firstName} ${t.student.lastName}`.trim();
+            return {
+              action: ActivityAction.UPDATE,
+              targetType: ActivityTargetType.TRANSACTION,
+              targetId: t.id.toString(),
+              description: `${ctx.activityLog.actor} a changé le statut de la transaction <a href="/students/${t.studentId}/transactions/${t.id}">${t.transactionRef}</a> de ${studentName} en « ${statusLabels[input.status]} »`,
+              metadata: {
+                entityName: t.transactionRef,
+                studentId: t.studentId,
+                studentName,
+                status: input.status,
+                actorName: ctx.activityLog.actor,
+              },
+            };
+          }),
+        );
+        return result;
       }
-      return ctx.db.transaction.update({
-        where: {
-          id: input.transactionId,
-        },
+      const transaction = await ctx.db.transaction.findUnique({
+        where: { id: input.transactionId },
+        include: { student: true },
+      });
+      const result = await ctx.db.transaction.update({
+        where: { id: input.transactionId },
         data: {
           status: input.status,
           updatedById: ctx.session.user.id,
         },
       });
+      if (transaction) {
+        const studentName =
+          `${transaction.student.firstName} ${transaction.student.lastName}`.trim();
+        ctx.activityLog.log({
+          action: ActivityAction.UPDATE,
+          targetType: ActivityTargetType.TRANSACTION,
+          targetId: result.id.toString(),
+          description: `${ctx.activityLog.actor} a changé le statut de la transaction <a href="/students/${transaction.studentId}/transactions/${result.id}">${transaction.transactionRef}</a> de ${studentName} en « ${statusLabels[input.status]} »`,
+          metadata: {
+            entityName: transaction.transactionRef,
+            studentId: transaction.studentId,
+            studentName,
+            status: input.status,
+            actorName: ctx.activityLog.actor,
+          },
+        });
+      }
+      return result;
     }),
   get: protectedProcedure
     .input(z.coerce.number())
@@ -358,12 +405,13 @@ export const transactionRouter = {
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.transaction.updateMany({
-        where: {
-          id: {
-            in: Array.isArray(input.ids) ? input.ids : [input.ids],
-          },
-        },
+      const ids = Array.isArray(input.ids) ? input.ids : [input.ids];
+      const transactions = await ctx.db.transaction.findMany({
+        where: { id: { in: ids } },
+        include: { student: true },
+      });
+      const result = await ctx.db.transaction.updateMany({
+        where: { id: { in: ids } },
         data: {
           deletedAt: new Date(),
           deletedById: ctx.session.user.id,
@@ -371,6 +419,27 @@ export const transactionRouter = {
           observation: input.observation,
         },
       });
+      ctx.activityLog.logMany(
+        transactions.map((t) => {
+          const studentName =
+            `${t.student.firstName} ${t.student.lastName}`.trim();
+          return {
+            action: ActivityAction.DELETE,
+            targetType: ActivityTargetType.TRANSACTION,
+            targetId: t.id.toString(),
+            description: `${ctx.activityLog.actor} a supprimé la transaction ${t.transactionRef} de l'élève ${studentName}`,
+            metadata: {
+              entityName: t.transactionRef,
+              studentId: t.studentId,
+              studentName,
+              amount: t.amount,
+              transactionType: t.transactionType,
+              actorName: ctx.activityLog.actor,
+            },
+          };
+        }),
+      );
+      return result;
     }),
   quotas: protectedProcedure
     .input(z.object({ journalId: z.string().optional() }).optional())
@@ -473,6 +542,24 @@ export const transactionRouter = {
           journalId: input.journalId,
           method: input.method,
           updatedById: ctx.session.user.id,
+        },
+        include: { student: true },
+      });
+
+      const studentName =
+        `${result.student.firstName} ${result.student.lastName}`.trim();
+      ctx.activityLog.log({
+        action: ActivityAction.CREATE,
+        targetType: ActivityTargetType.TRANSACTION,
+        targetId: result.id.toString(),
+        description: `${ctx.activityLog.actor} a créé la transaction <a href="/students/${result.studentId}/transactions/${result.id}">${result.transactionRef}</a> pour l'élève <a href="/students/${result.studentId}">${studentName}</a>`,
+        metadata: {
+          entityName: result.transactionRef,
+          studentId: result.studentId,
+          studentName,
+          amount: result.amount,
+          transactionType: result.transactionType,
+          actorName: ctx.activityLog.actor,
         },
       });
 
