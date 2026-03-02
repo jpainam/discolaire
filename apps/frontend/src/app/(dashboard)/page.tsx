@@ -102,45 +102,48 @@ export default async function Page() {
         {/* Middle row: Chart + Classes + Recent Activities */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           {/* Notes chart – takes 5 cols */}
-          <div className="h-full lg:col-span-5">
-            <ErrorBoundary errorComponent={ErrorFallback}>
-              <Suspense
-                fallback={
-                  <div className="grid grid-cols-1 gap-4">
-                    <Skeleton className="h-20" />
-                    <Skeleton className="h-20" />
-                    <Skeleton className="h-20" />
-                  </div>
-                }
-              >
-                <QuickChartCard />
+          <div className="grid gap-4 lg:col-span-9 lg:grid-cols-12">
+            <div className="h-full lg:col-span-6">
+              <ErrorBoundary errorComponent={ErrorFallback}>
+                <Suspense
+                  fallback={
+                    <div className="grid grid-cols-1 gap-4">
+                      <Skeleton className="h-20" />
+                      <Skeleton className="h-20" />
+                      <Skeleton className="h-20" />
+                    </div>
+                  }
+                >
+                  <QuickChartCard />
+                </Suspense>
+              </ErrorBoundary>
+            </div>
+            {/* Class list – takes 4 cols */}
+            <div className="h-full lg:col-span-6">
+              <Suspense fallback={<Skeleton className="h-full w-full" />}>
+                <QuickClassroomList />
               </Suspense>
-            </ErrorBoundary>
-          </div>
-          {/* Class list – takes 4 cols */}
-          <div className="h-full lg:col-span-4">
-            <Suspense fallback={<Skeleton className="h-full w-full" />}>
-              <QuickClassroomList />
-            </Suspense>
+            </div>
+            <div className="col-span-full">
+              <ErrorBoundary errorComponent={ErrorFallback}>
+                <Suspense
+                  fallback={
+                    <div className="grid grid-cols-1 gap-4 px-4">
+                      <Skeleton className="h-8 w-full" />
+                      <Skeleton className="h-20 w-full" />
+                    </div>
+                  }
+                >
+                  <QuickStudentList />
+                </Suspense>
+              </ErrorBoundary>
+            </div>
           </div>
           {/* Recent activities – takes 3 cols */}
           <div className="h-full lg:col-span-3">
             <RecentActivitiesDashboard />
           </div>
         </div>
-
-        <ErrorBoundary errorComponent={ErrorFallback}>
-          <Suspense
-            fallback={
-              <div className="grid grid-cols-1 gap-4 px-4">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-20 w-full" />
-              </div>
-            }
-          >
-            <QuickStudentList />
-          </Suspense>
-        </ErrorBoundary>
       </div>
     </HydrateClient>
   );

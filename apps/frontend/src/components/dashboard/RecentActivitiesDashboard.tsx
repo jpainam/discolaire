@@ -107,11 +107,11 @@ export function RecentActivitiesDashboard() {
   const locale = useLocale();
 
   const { data: activities, isPending } = useQuery(
-    trpc.logActivity.all.queryOptions({ limit: 4 }),
+    trpc.logActivity.all.queryOptions({ limit: 15 }),
   );
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle> Activités récentes</CardTitle>
       </CardHeader>
@@ -167,7 +167,7 @@ export function RecentActivitiesDashboard() {
           })
         )}
       </CardContent>
-      <CardFooter className="justify-center">
+      <CardFooter className="mt-auto justify-center">
         <Button variant={"link"} className="w-ful">
           Voir toutes les activités <ArrowRight />
         </Button>

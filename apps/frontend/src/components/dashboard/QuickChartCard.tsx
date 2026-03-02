@@ -49,7 +49,7 @@ export function QuickChartCard() {
         ),
       };
     });
-    return gs.filter((g) => g.max > 0).slice(0, 8);
+    return gs.filter((g) => g.max > 0).slice(0, 7);
   }, [latestGradesheet]);
   return (
     <Card className="h-full">

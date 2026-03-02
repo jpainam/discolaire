@@ -63,7 +63,6 @@ import {
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName, isAnniversary } from "~/utils";
-import { Badge as BaseBadge } from "../base-badge";
 import { EmptyComponent } from "../EmptyComponent";
 import { UpdateRegistrationNumber } from "../students/UpdateRegistrationNumber";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -147,9 +146,9 @@ export function QuickStudentList() {
               <TableHead>{t("fullName")}</TableHead>
               <TableHead>{t("registrationNumber")}</TableHead>
               <TableHead>{t("dateOfBirth")}</TableHead>
-              <TableHead>{t("placeOfBirth")}</TableHead>
+              {/* <TableHead>{t("placeOfBirth")}</TableHead> */}
               <TableHead>{t("classroom")}</TableHead>
-              <TableHead>{t("gender")}</TableHead>
+              {/* <TableHead>{t("gender")}</TableHead> */}
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -237,9 +236,9 @@ export function QuickStudentList() {
                       timeZone: "UTC",
                     })}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  {/* <TableCell className="text-muted-foreground">
                     {st.placeOfBirth}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <div className="flex flex-row items-center gap-2">
                       <Link
@@ -268,14 +267,14 @@ export function QuickStudentList() {
                     </div>
                   </TableCell>
 
-                  <TableCell>
+                  {/* <TableCell>
                     <BaseBadge
                       variant={st.gender == "male" ? "info" : "destructive"}
                       appearance={"outline"}
                     >
                       {t(st.gender ?? "male")}
                     </BaseBadge>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
