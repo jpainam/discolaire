@@ -13,7 +13,7 @@ export default async function Layout({ children }: PropsWithChildren) {
   }
   const t = await getTranslations();
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-1 flex-col">
       <BreadcrumbsSetter
         items={[
           { label: t("home"), href: "/" },

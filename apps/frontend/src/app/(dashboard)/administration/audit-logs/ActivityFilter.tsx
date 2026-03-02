@@ -5,6 +5,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { CalendarDays, Check, Search, Tag, User, X, Zap } from "lucide-react";
 import { useQueryStates } from "nuqs";
 
+import { cn } from "~/lib/utils";
+import { useTRPC } from "~/trpc/react";
 import {
   ACTION_CONFIG,
   ALL_ACTIONS,
@@ -12,8 +14,6 @@ import {
   TARGET_TYPE_LABELS,
 } from "./_config";
 import { auditLogParsers, DATE_RANGE_LABELS } from "./_parsers";
-import { cn } from "~/lib/utils";
-import { useTRPC } from "~/trpc/react";
 
 export function ActivityFilter() {
   const [params, setParams] = useQueryStates(auditLogParsers);
@@ -22,10 +22,7 @@ export function ActivityFilter() {
   // Local input state so typing feels immediate; syncs to URL after debounce
   const [inputValue, setInputValue] = useState(q);
   useEffect(() => {
-    const t = setTimeout(
-      () => void setParams({ q: inputValue || null }),
-      300,
-    );
+    const t = setTimeout(() => void setParams({ q: inputValue || null }), 300);
     return () => clearTimeout(t);
   }, [inputValue, setParams]);
 
@@ -65,7 +62,13 @@ export function ActivityFilter() {
   };
 
   const clearAll = () =>
-    void setParams({ q: null, range: null, actions: null, types: null, users: null });
+    void setParams({
+      q: null,
+      range: null,
+      actions: null,
+      types: null,
+      users: null,
+    });
 
   const activeFilterCount =
     (q ? 1 : 0) +
@@ -77,7 +80,7 @@ export function ActivityFilter() {
   return (
     <aside
       className={cn(
-        "bg-card border-border shrink-0 overflow-y-auto border-r transition-all duration-200",
+        "border-border h-full shrink-0 overflow-y-auto border-r transition-all duration-200",
         open ? "w-60" : "w-0 overflow-hidden",
       )}
     >
@@ -134,10 +137,16 @@ export function ActivityFilter() {
             Période
           </label>
           <div className="space-y-1">
-            {(Object.keys(DATE_RANGE_LABELS) as Array<keyof typeof DATE_RANGE_LABELS>).map((r) => (
+            {(
+              Object.keys(
+                DATE_RANGE_LABELS,
+              ) as (keyof typeof DATE_RANGE_LABELS)[]
+            ).map((r) => (
               <button
                 key={r}
-                onClick={() => void setParams({ range: r === "all" ? null : r })}
+                onClick={() =>
+                  void setParams({ range: r === "all" ? null : r })
+                }
                 className={cn(
                   "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs transition-colors",
                   range === r

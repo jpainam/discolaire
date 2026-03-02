@@ -6,19 +6,19 @@ import { Activity, Clock, SlidersHorizontal, User, X } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useQueryStates } from "nuqs";
 
-import {
-  ACTION_CONFIG,
-  FALLBACK_ACTION,
-  TARGET_TYPE_LABELS,
-  dateGroupLabel,
-  fromDateForRange,
-  relativeTime,
-} from "./_config";
-import { auditLogParsers, DATE_RANGE_LABELS } from "./_parsers";
+import { Button } from "~/components/ui/button";
 import { useDebounce } from "~/hooks/use-debounce";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
-import { Button } from "~/components/ui/button";
+import {
+  ACTION_CONFIG,
+  dateGroupLabel,
+  FALLBACK_ACTION,
+  fromDateForRange,
+  relativeTime,
+  TARGET_TYPE_LABELS,
+} from "./_config";
+import { auditLogParsers, DATE_RANGE_LABELS } from "./_parsers";
 
 export function ActivityAuditList() {
   const trpc = useTRPC();
@@ -72,7 +72,7 @@ export function ActivityAuditList() {
     for (const a of filtered) {
       const key = dateGroupLabel(a.createdAt);
       if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(a);
+      map.get(key)?.push(a);
     }
     return map;
   }, [filtered]);
@@ -84,12 +84,6 @@ export function ActivityAuditList() {
     types.length +
     users.length;
 
-  const removeAction = (v: string) =>
-    void setParams({ actions: actions.filter((a) => a !== v) || null });
-  const removeType = (v: string) =>
-    void setParams({ types: types.filter((t) => t !== v) || null });
-  const removeUser = (v: string) =>
-    void setParams({ users: users.filter((u) => u !== v) || null });
   const clearAll = () =>
     void setParams({
       q: null,
@@ -100,7 +94,7 @@ export function ActivityAuditList() {
     });
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       {/* Toolbar */}
       <div className="bg-background/95 border-border sticky top-0 z-10 flex items-center gap-3 border-b px-4 py-2.5 backdrop-blur-sm">
         <Button
@@ -140,29 +134,34 @@ export function ActivityAuditList() {
             <FilterChip
               key={a}
               label={ACTION_CONFIG[a]?.label ?? a}
-              onRemove={() => removeAction(a)}
+              onRemove={() =>
+                void setParams({ actions: actions.filter((x) => x !== a) })
+              }
             />
           ))}
           {types.map((tt) => (
             <FilterChip
               key={tt}
               label={TARGET_TYPE_LABELS[tt] ?? tt}
-              onRemove={() => removeType(tt)}
+              onRemove={() =>
+                void setParams({ types: types.filter((x) => x !== tt) })
+              }
             />
           ))}
           {users.map((id) => (
             <FilterChip
               key={id}
               label={userMap.get(id) ?? id}
-              onRemove={() => removeUser(id)}
+              onRemove={() =>
+                void setParams({ users: users.filter((x) => x !== id) })
+              }
             />
           ))}
         </div>
 
         <span className="text-muted-foreground ml-auto shrink-0 text-xs">
-          {isPending
-            ? "…"
-            : `${filtered.length} événement${filtered.length !== 1 ? "s" : ""}`}
+          {!isPending &&
+            `${filtered.length} événement${filtered.length !== 1 ? "s" : ""}`}
         </span>
       </div>
 
@@ -232,7 +231,7 @@ export function ActivityAuditList() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <p
-                            className="text-foreground [&_a]:text-primary text-sm leading-relaxed [&_a]:underline [&_a]:underline-offset-2"
+                            className="text-foreground [&_a]:text-primary text-xs leading-relaxed [&_a]:underline [&_a]:underline-offset-2"
                             dangerouslySetInnerHTML={{
                               __html: item.description,
                             }}
@@ -240,7 +239,7 @@ export function ActivityAuditList() {
                           <div className="mt-1 flex flex-wrap items-center gap-2">
                             {item.user && (
                               <>
-                                <span className="text-muted-foreground inline-flex items-center gap-1 text-[11px] font-medium">
+                                <span className="text-muted-foreground inline-flex items-center gap-1 text-xs font-medium">
                                   <User className="h-3 w-3" />
                                   {item.user.name}
                                 </span>
