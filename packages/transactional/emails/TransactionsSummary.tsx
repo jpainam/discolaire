@@ -127,7 +127,11 @@ export const TransactionsSummary = ({
         <Body className="mx-auto my-auto bg-[#f6f7fb] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] rounded-[10px] bg-white p-[24px]"
-            style={{ borderStyle: "solid", borderWidth: 1, borderColor: "#E8E7E1" }}
+            style={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "#E8E7E1",
+            }}
           >
             <Logo logoUrl={school.logo} />
 
@@ -162,12 +166,22 @@ export const TransactionsSummary = ({
                     }}
                   >
                     <Text
-                      style={{ margin: 0, fontSize: 11, color: "#6b7280", marginBottom: 4 }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        color: "#6b7280",
+                        marginBottom: 4,
+                      }}
                     >
                       Total encaissé
                     </Text>
                     <Text
-                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#111827" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#111827",
+                      }}
                     >
                       {formatAmount(totalAmount)}
                     </Text>
@@ -184,12 +198,22 @@ export const TransactionsSummary = ({
                     }}
                   >
                     <Text
-                      style={{ margin: 0, fontSize: 11, color: "#059669", marginBottom: 4 }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        color: "#059669",
+                        marginBottom: 4,
+                      }}
                     >
                       Validé
                     </Text>
                     <Text
-                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#065f46" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#065f46",
+                      }}
                     >
                       {formatAmount(totalValidated)}
                     </Text>
@@ -206,12 +230,22 @@ export const TransactionsSummary = ({
                     }}
                   >
                     <Text
-                      style={{ margin: 0, fontSize: 11, color: "#d97706", marginBottom: 4 }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        color: "#d97706",
+                        marginBottom: 4,
+                      }}
                     >
                       En attente
                     </Text>
                     <Text
-                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#92400e" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#92400e",
+                      }}
                     >
                       {formatAmount(totalPending)}
                     </Text>
@@ -228,12 +262,22 @@ export const TransactionsSummary = ({
                     }}
                   >
                     <Text
-                      style={{ margin: 0, fontSize: 11, color: "#dc2626", marginBottom: 4 }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        color: "#dc2626",
+                        marginBottom: 4,
+                      }}
                     >
                       Annulé
                     </Text>
                     <Text
-                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#7f1d1d" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#7f1d1d",
+                      }}
                     >
                       {formatAmount(totalCanceled)}
                     </Text>
@@ -276,35 +320,60 @@ export const TransactionsSummary = ({
                 >
                   <Column style={{ width: "12%" }}>
                     <Text
-                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "#374151",
+                      }}
                     >
                       Date
                     </Text>
                   </Column>
                   <Column style={{ width: "28%" }}>
                     <Text
-                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "#374151",
+                      }}
                     >
                       Élève
                     </Text>
                   </Column>
                   <Column style={{ width: "28%" }}>
                     <Text
-                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "#374151",
+                      }}
                     >
                       Description
                     </Text>
                   </Column>
                   <Column style={{ width: "18%", textAlign: "right" }}>
                     <Text
-                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "#374151",
+                      }}
                     >
                       Montant
                     </Text>
                   </Column>
                   <Column style={{ width: "14%", textAlign: "center" }}>
                     <Text
-                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                      style={{
+                        margin: 0,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "#374151",
+                      }}
                     >
                       Statut
                     </Text>
@@ -316,23 +385,31 @@ export const TransactionsSummary = ({
                     key={i}
                     style={{
                       borderBottom:
-                        i < transactions.length - 1 ? "1px solid #f3f4f6" : "none",
+                        i < transactions.length - 1
+                          ? "1px solid #f3f4f6"
+                          : "none",
                       padding: "8px 12px",
                       background: i % 2 === 0 ? "#ffffff" : "#fafafa",
                     }}
                   >
                     <Column style={{ width: "12%" }}>
-                      <Text style={{ margin: 0, fontSize: 12, color: "#6b7280" }}>
+                      <Text
+                        style={{ margin: 0, fontSize: 12, color: "#6b7280" }}
+                      >
                         {tx.date}
                       </Text>
                     </Column>
                     <Column style={{ width: "28%" }}>
-                      <Text style={{ margin: 0, fontSize: 12, color: "#111827" }}>
+                      <Text
+                        style={{ margin: 0, fontSize: 12, color: "#111827" }}
+                      >
                         {tx.studentName}
                       </Text>
                     </Column>
                     <Column style={{ width: "28%" }}>
-                      <Text style={{ margin: 0, fontSize: 12, color: "#6b7280" }}>
+                      <Text
+                        style={{ margin: 0, fontSize: 12, color: "#6b7280" }}
+                      >
                         {tx.description ?? METHOD_LABEL[tx.method] ?? tx.method}
                       </Text>
                     </Column>
@@ -343,7 +420,9 @@ export const TransactionsSummary = ({
                           fontSize: 12,
                           fontWeight: 600,
                           color:
-                            tx.transactionType === "DEBIT" ? "#dc2626" : "#059669",
+                            tx.transactionType === "DEBIT"
+                              ? "#dc2626"
+                              : "#059669",
                         }}
                       >
                         {tx.transactionType === "DEBIT" ? "−" : "+"}

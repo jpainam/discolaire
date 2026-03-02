@@ -34,9 +34,7 @@ export async function sendTransactionSummaryToAdmin(
       ? "Bilan hebdomadaire des transactions"
       : "Bilan des 3 derniers jours";
 
-  logger.info(
-    `[Cron] Transaction summary (${periodType}) — ${periodLabel}`,
-  );
+  logger.info(`[Cron] Transaction summary (${periodType}) — ${periodLabel}`);
 
   for (const tenant of SCHOOL_TENANTS) {
     try {
