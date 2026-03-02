@@ -111,7 +111,7 @@
     "react-image-crop": "^11.0.10",
     "react-medium-image-zoom": "^5.4.0",
     "react-phone-number-input": "^3.4.14",
-    "recharts": "^2.15.4",
+    "recharts": "^3.7.0",
     "redis": "^5.10.0",
     "remark-gfm": "^4.0.1",
     "resumable-stream": "^2.2.10",
