@@ -19,6 +19,7 @@ import { SchoolYearService } from "./school-year-service";
 import { SequenceService } from "./sequence-service";
 import { StaffService } from "./staff-service";
 import { StudentService } from "./student-service";
+import { TimetableService } from "./timetable-service";
 import { TransactionService } from "./transaction-service";
 import { TrimestreService } from "./trimestre-service";
 import { UserService } from "./user-service";
@@ -53,6 +54,7 @@ const serviceRegistry = {
   user: UserService,
   academicSnapshot: AcademicSnapshotService,
   logActivity: LogActivityService,
+  timetable: TimetableService,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, ServiceCtor<any>>;
 
