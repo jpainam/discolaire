@@ -47,7 +47,7 @@ export default function Page() {
     Set<ActivityItem["category"]>
   >(new Set());
   const [selectedUsers, setUsers] = useState<Set<string>>(new Set());
-  const [showUnreadOnly, setUnreadOnly] = useState(false);
+
   const [filtersOpen, setFiltersOpen] = useState(true);
 
   const toggleCategory = (c: ActivityItem["category"]) =>
@@ -69,19 +69,16 @@ export default function Page() {
     setDateRange("all");
     setCategories(new Set());
     setUsers(new Set());
-    setUnreadOnly(false);
   };
 
   const activeFilterCount =
     (search ? 1 : 0) +
     (dateRange !== "all" ? 1 : 0) +
     selectedCategories.size +
-    selectedUsers.size +
-    (showUnreadOnly ? 1 : 0);
+    selectedUsers.size;
 
   const filtered = useMemo(() => {
     return allActivities.filter((a) => {
-      if (showUnreadOnly && !a.unread) return false;
       if (selectedCategories.size > 0 && !selectedCategories.has(a.category))
         return false;
       if (selectedUsers.size > 0 && !selectedUsers.has(a.user)) return false;
@@ -96,7 +93,7 @@ export default function Page() {
       }
       return true;
     });
-  }, [search, dateRange, selectedCategories, selectedUsers, showUnreadOnly]);
+  }, [search, dateRange, selectedCategories, selectedUsers]);
 
   // Group by date label
   const grouped = useMemo(() => {
@@ -324,12 +321,6 @@ export default function Page() {
               {Array.from(selectedUsers).map((u) => (
                 <FilterChip key={u} label={u} onRemove={() => toggleUser(u)} />
               ))}
-              {showUnreadOnly && (
-                <FilterChip
-                  label="Non lues"
-                  onRemove={() => setUnreadOnly(false)}
-                />
-              )}
             </div>
           </div>
 

@@ -30,7 +30,7 @@ export const allActivities: ActivityItem[] = [
     user: "Admin",
     time: "Il y a 5 min",
     date: "2026-03-01",
-    unread: true,
+
     category: "inscription",
   },
   {
@@ -40,7 +40,7 @@ export const allActivities: ActivityItem[] = [
     user: "M. Dupont",
     time: "Il y a 18 min",
     date: "2026-03-01",
-    unread: true,
+
     category: "notes",
   },
   {
