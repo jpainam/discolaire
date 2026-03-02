@@ -146,7 +146,11 @@ export class TimetableService {
           continue;
         }
 
-        const eventStart = createDateAtTime(day, startTime.hour, startTime.minute);
+        const eventStart = createDateAtTime(
+          day,
+          startTime.hour,
+          startTime.minute,
+        );
         const eventEnd = createDateAtTime(day, endTime.hour, endTime.minute);
 
         if (eventStart < lesson.validFrom) {
@@ -165,7 +169,8 @@ export class TimetableService {
           if (timetableColorSet.has(rawColor as TimetableColor)) {
             color = rawColor as TimetableColor;
           } else {
-            color = timetableColors[colorIndex % timetableColors.length] ?? "sky";
+            color =
+              timetableColors[colorIndex % timetableColors.length] ?? "sky";
             colorIndex += 1;
           }
           courseColorMap.set(courseId, color);

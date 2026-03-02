@@ -45,7 +45,18 @@ export const logActivityRouter = {
         query: z.string().optional(),
         limit: z.number().optional().default(100),
         userId: z.string().optional(),
-        targetType: z.enum(["student", "staff", "contact", "classroom", "document", "user", "permission", "transaction"]).optional(),
+        targetType: z
+          .enum([
+            "student",
+            "staff",
+            "contact",
+            "classroom",
+            "document",
+            "user",
+            "permission",
+            "transaction",
+          ])
+          .optional(),
         action: z.string().optional(),
         from: z.coerce.date().optional(),
         to: z.coerce.date().optional(),

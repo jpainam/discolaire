@@ -65,7 +65,6 @@ const createUpdateSchema = z.object({
   classroom: z.string().optional(),
 });
 
-
 export const studentRouter = {
   all: protectedProcedure
     .input(

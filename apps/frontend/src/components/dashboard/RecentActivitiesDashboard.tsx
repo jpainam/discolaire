@@ -152,7 +152,7 @@ export function RecentActivitiesDashboard() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p
-                    className="text-foreground [&_a]:text-primary text-[11px] leading-relaxed [&_a]:underline [&_a]:underline-offset-2"
+                    className="text-foreground [&_a]:text-primary text-xs leading-relaxed [&_a]:underline [&_a]:underline-offset-2"
                     dangerouslySetInnerHTML={{ __html: item.description }}
                   />
                   <div className="mt-0.5 flex items-center gap-1">

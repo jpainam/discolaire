@@ -107,9 +107,7 @@ export const TARGET_TYPE_LABELS: Record<string, string> = {
   transaction: "Transaction",
 };
 
-export const ALL_TARGET_TYPES = Object.keys(TARGET_TYPE_LABELS) as Array<
-  keyof typeof TARGET_TYPE_LABELS
->;
+export const ALL_TARGET_TYPES = Object.keys(TARGET_TYPE_LABELS);
 
 // ─── Date helpers ──────────────────────────────────────────────────────────────
 

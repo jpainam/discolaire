@@ -41,7 +41,6 @@ export function ActivityFilter() {
   );
 
   const availableUsers = useMemo(() => {
-    if (!recentData) return [];
     const seen = new Set<string>();
     return recentData.flatMap((a) => {
       if (!a.user || seen.has(a.user.id)) return [];
