@@ -107,7 +107,7 @@ export function RecentActivitiesDashboard() {
   const locale = useLocale();
 
   const { data: activities, isPending } = useQuery(
-    trpc.logActivity.all.queryOptions({ limit: 15 }),
+    trpc.logActivity.all.queryOptions({ limit: 10 }),
   );
 
   return (
