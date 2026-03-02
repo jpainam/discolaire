@@ -100,7 +100,7 @@ export default async function Page() {
         </Suspense>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-          <div className="grid self-start gap-4 lg:col-span-9 lg:grid-cols-12">
+          <div className="grid gap-4 self-start lg:col-span-9 lg:grid-cols-12">
             <div className="h-full lg:col-span-6">
               <ErrorBoundary errorComponent={ErrorFallback}>
                 <Suspense
