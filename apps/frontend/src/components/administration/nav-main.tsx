@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRightIcon } from "lucide-react";
+import { ArrowLeft, ChevronRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -54,6 +54,14 @@ export function NavMain({
       </SidebarGroup> */}
       <SidebarGroup>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip={t("back_to_home")}>
+              <Link href={"/"}>
+                <ArrowLeft />
+                <span>{t("back")}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild

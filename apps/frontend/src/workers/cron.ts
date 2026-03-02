@@ -6,6 +6,7 @@ import { runDbBackup } from "./jobs/db-backup";
 import { sendExamReminderToAdmin } from "./jobs/exam-reminder-admin";
 import { sendExamWeekEmailToParents } from "./jobs/exam-week-parents";
 import { sendStaffWeeklyTimetables } from "./jobs/staff-weekly-timetables";
+import { sendTransactionSummaryToAdmin } from "./jobs/transaction-summary-admin";
 
 export function runCronJobs() {
   // Every Wednesday at 10:00 — alert admin if exams are scheduled next week
@@ -14,11 +15,27 @@ export function runCronJobs() {
   });
   logger.info("[Cron] Admin exam reminder job scheduled (Wednesdays 10:00)");
 
+  // Every Wednesday at 11:00 — send transaction summary for the last 3 days
+  cron.schedule("0 11 * * 3", () => {
+    void sendTransactionSummaryToAdmin("wednesday");
+  });
+  logger.info(
+    "[Cron] Transaction summary (3 days) job scheduled (Wednesdays 11:00)",
+  );
+
   // Every Friday at 10:00 — email all parents if exams are next week
   cron.schedule("0 10 * * 5", () => {
     void sendExamWeekEmailToParents();
   });
   logger.info("[Cron] Parent exam week email job scheduled (Fridays 10:00)");
+
+  // Every Friday at 11:00 — send weekly transaction summary
+  cron.schedule("0 11 * * 5", () => {
+    void sendTransactionSummaryToAdmin("friday");
+  });
+  logger.info(
+    "[Cron] Transaction summary (weekly) job scheduled (Fridays 11:00)",
+  );
 
   // Every Friday at 16:00 — sends next week's timetable to staff who have an email
   cron.schedule("0 16 * * 5", () => {

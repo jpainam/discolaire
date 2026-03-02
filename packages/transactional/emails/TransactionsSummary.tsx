@@ -1,271 +1,407 @@
 import {
   Body,
   Button,
+  Column,
   Container,
   Heading,
+  Hr,
   Html,
-  Link,
   Preview,
+  Row,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
-import { format } from "date-fns";
 
-import { Footer } from "../components/footer";
 import { Head } from "../components/Head";
 import { Logo } from "../components/logo";
-import { geti18n } from "../locales";
-import { cn } from "../utils";
 
-interface Transaction {
-  id: number;
-  date: string;
+export interface TransactionItem {
+  date: string; // pre-formatted, e.g. "25/02"
+  studentName: string;
+  description: string | null;
   amount: number;
-  name: string;
-  deleted: boolean;
-  description: string;
-  currency: string;
-  category?: string;
-  status: string;
+  method: string;
+  status: "PENDING" | "VALIDATED" | "CANCELED";
+  transactionType: "CREDIT" | "DEBIT" | "DISCOUNT";
 }
 
-interface School {
-  logo: string;
-  name: string;
-  id: string;
+export interface TransactionsSummaryProps {
+  school: { name: string; logo?: string | null };
+  periodLabel: string;
+  periodType: "wednesday" | "friday";
+  transactions: TransactionItem[];
+  totalAmount: number;
+  totalValidated: number;
+  totalPending: number;
+  totalCanceled: number;
+  transactionsUrl: string;
 }
 
-const defaultSchool = {
-  logo: `logo-round.png`,
-  name: "Institut Polyvalent Wague",
-  id: "1",
+const STATUS_LABEL: Record<string, string> = {
+  PENDING: "En attente",
+  VALIDATED: "Validé",
+  CANCELED: "Annulé",
 };
 
-interface Props {
-  fullName: string;
-  transactions: Transaction[];
-  locale: string;
-  school: School;
-  baseUrl: string;
+const STATUS_COLOR: Record<string, string> = {
+  PENDING: "#d97706",
+  VALIDATED: "#059669",
+  CANCELED: "#dc2626",
+};
+
+const METHOD_LABEL: Record<string, string> = {
+  CASH: "Espèces",
+  CARD: "Carte",
+  TRANSFER: "Virement",
+  MOBILE: "Mobile Money",
+  CHECK: "Chèque",
+};
+
+function formatAmount(amount: number) {
+  return `${amount.toLocaleString("fr-FR")} FCFA`;
 }
 
-const defaultTransactions = [
+const previewTransactions: TransactionItem[] = [
   {
-    id: 1,
-    date: new Date().toISOString(),
-    amount: -1000,
-    deleted: true,
-    currency: "CFA",
-    name: "Spotify",
-    description: "Spotify Premium",
-    status: "PENDING",
-  },
-  {
-    id: 2,
-    date: new Date().toISOString(),
-    amount: 1000,
-    currency: "CFA",
-    description: "Salary",
-    name: "H23504959",
-    category: "income",
-    deleted: false,
-    status: "PENDING",
-  },
-  {
-    id: 3,
-    date: new Date().toISOString(),
-    amount: -1000,
-    deleted: false,
-    currency: "CFA",
-    description: "Webflow Subscription",
-    name: "Webflow",
-    status: "PENDING",
-  },
-  {
-    id: 4,
-    date: new Date().toISOString(),
-    amount: -1000,
-    currency: "CFA",
-    deleted: true,
-    description: "Netflix Subscription",
-    name: "Netflix",
+    date: "25/02",
+    studentName: "Ainam Jean-Paul",
+    description: "Frais de scolarité T1",
+    amount: 50000,
+    method: "CASH",
     status: "VALIDATED",
+    transactionType: "CREDIT",
+  },
+  {
+    date: "26/02",
+    studentName: "Dupont Marie",
+    description: "Frais d'inscription",
+    amount: 15000,
+    method: "TRANSFER",
+    status: "PENDING",
+    transactionType: "CREDIT",
+  },
+  {
+    date: "27/02",
+    studentName: "Nguema Paul",
+    description: "Frais de scolarité T2",
+    amount: 50000,
+    method: "CASH",
+    status: "CANCELED",
+    transactionType: "CREDIT",
   },
 ];
 
 export const TransactionsSummary = ({
-  fullName = "Jean-Paul Ainam",
-  transactions = defaultTransactions,
-  locale = "fr",
-  school = defaultSchool,
-  baseUrl = "http://example.domain.com",
-}: Props) => {
-  const { t } = geti18n({ locale });
-  const firstName = fullName.split(" ").at(0) ?? "";
+  school = { name: "Institut Polyvalent Wague", logo: "logo-round.png" },
+  periodLabel = "du lundi 25 février au mercredi 27 février 2026",
+  periodType = "wednesday",
+  transactions = previewTransactions,
+  totalAmount = 115000,
+  totalValidated = 50000,
+  totalPending = 15000,
+  totalCanceled = 50000,
+  transactionsUrl = "https://demo.discolaire.com/accounting/transactions",
+}: TransactionsSummaryProps) => {
+  const isWeekly = periodType === "friday";
+  const title = isWeekly
+    ? "Bilan hebdomadaire des transactions"
+    : "Bilan des 3 derniers jours";
 
-  const previewText = t("transactions.preview", {
-    firstName,
-    numberOfTransactions: transactions.length,
-  });
+  const intro = isWeekly
+    ? `Voici le récapitulatif des transactions enregistrées cette semaine (${periodLabel}) pour l'année scolaire en cours.`
+    : `Voici le récapitulatif des transactions enregistrées au cours des 3 derniers jours (${periodLabel}) pour l'année scolaire en cours.`;
 
-  const today = new Date();
+  const cronNote = isWeekly
+    ? "Cet e-mail est généré automatiquement chaque vendredi."
+    : "Cet e-mail est généré automatiquement chaque mercredi.";
 
   return (
     <Html>
       <Tailwind>
         <Head />
-        <Preview>{previewText}</Preview>
+        <Preview>
+          {title} — {school.name}
+        </Preview>
 
-        <Body className="mx-auto my-auto bg-[#fff] font-sans">
+        <Body className="mx-auto my-auto bg-[#f6f7fb] font-sans">
           <Container
-            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
-            style={{ borderStyle: "solid", borderWidth: 1 }}
+            className="mx-auto my-[40px] max-w-[600px] rounded-[10px] bg-white p-[24px]"
+            style={{ borderStyle: "solid", borderWidth: 1, borderColor: "#E8E7E1" }}
           >
             <Logo logoUrl={school.logo} />
-            <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
-              {t("transactions.title1")}
-              <span className="font-semibold">
-                {t("transactions.title2", {
-                  count: transactions.length,
-                })}{" "}
-              </span>
+
+            <Heading className="mx-0 mt-[16px] p-0 text-[20px] font-semibold text-[#101828]">
+              {title}
             </Heading>
-            <Text className="text-[14px] leading-[24px] text-[#121212]">
-              {t("transactions.title3", { firstName })},
-              <br />
-              <br />
-              {t("transactions.description", {
-                date: format(today, "MMMM d, yyyy"),
-                schoolName: school.name,
-              })}{" "}
+
+            <Text className="mt-[8px] mb-0 text-[14px] text-[#475467]">
+              Bonjour,
             </Text>
 
-            <br />
+            <Text className="mt-[4px] mb-[20px] text-[14px] text-[#475467]">
+              {intro} Le détail des{" "}
+              <span className="font-semibold">
+                {transactions.length} transaction
+                {transactions.length !== 1 ? "s" : ""}
+              </span>{" "}
+              est présenté ci-dessous.
+            </Text>
 
-            <table
-              style={{ width: "100% !important", minWidth: "100%" }}
-              className="w-full border-collapse"
-            >
-              <thead style={{ width: "100%" }}>
-                <tr className="h-[45px] border-0 border-t-[1px] border-b-[1px] border-solid border-[#E8E7E1]">
-                  <th align="left">
-                    <Text className="m-0 p-0 text-[14px] font-semibold">
-                      {t("date")}
-                    </Text>
-                  </th>
-                  <th align="left" style={{ width: "50%" }}>
-                    <Text className="m-0 p-0 text-[14px] font-semibold">
-                      {t("description")}
-                    </Text>
-                  </th>
-                  <th align="left">
-                    <Text className="m-0 p-0 text-[14px] font-semibold">
-                      {t("amount")}
-                    </Text>
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody style={{ width: "100%", minWidth: "100% !important" }}>
-                {transactions.map((transaction) => (
-                  <tr
-                    key={transaction.id}
-                    className="h-[45px] border-0 border-b-[1px] border-solid border-[#E8E7E1]"
+            {/* Stats row */}
+            <Section className="mb-[20px]">
+              <Row>
+                <Column style={{ width: "25%", paddingRight: 6 }}>
+                  <div
+                    style={{
+                      background: "#f9fafb",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 6,
+                      padding: "10px 8px",
+                      textAlign: "center",
+                    }}
                   >
-                    <td align="left">
-                      <Text className="m-0 mt-1 p-0 pb-1 text-xs">
-                        {format(new Date(transaction.date), "MMM d")}
-                      </Text>
-                    </td>
-                    <td align="left" style={{ width: "50%" }}>
-                      <Link
-                        href={`${baseUrl}/transactions?id=${transaction.id}`}
-                        className={cn(
-                          "text-[#121212]",
-                          transaction.category === "income" &&
-                            "!text-[#00C969]",
-                        )}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <Text className="line-clamp-1 text-xs">
-                            {transaction.name}
-                          </Text>
-
-                          <div className="flex items-center space-x-1 border px-2 py-1 text-xs text-[#878787]">
-                            {transaction.deleted ? (
-                              <span className="rounded-md bg-red-300 px-2 text-red-950">
-                                {t("deleted")}
-                              </span>
-                            ) : (
-                              <span>
-                                {t(
-                                  transaction.status as
-                                    | "PENDING"
-                                    | "CANCELED"
-                                    | "VALIDATED",
-                                )}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </Link>
-                    </td>
-                    <td align="left">
-                      <Text
-                        className={cn(
-                          "m-0 mt-1 p-0 pb-1 text-xs text-[#121212]",
-                          transaction.category === "income" &&
-                            "!text-[#00C969]",
-                        )}
-                      >
-                        {Intl.NumberFormat(locale, {
-                          style: "currency",
-                          currency: transaction.currency,
-                          maximumFractionDigits: 0,
-                          minimumFractionDigits: 0,
-                        }).format(transaction.amount)}
-                      </Text>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            <br />
-
-            <Section className="mt-[32px] mb-[32px] text-center">
-              <Button
-                style={{
-                  ...button,
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                  paddingTop: 12,
-                  paddingBottom: 12,
-                }}
-                href={`${baseUrl}/transactions?start=${transactions.at(0)?.date}&end=${transactions[transactions.length - 1]?.date}`}
-              >
-                {t("transactions.view")}
-              </Button>
+                    <Text
+                      style={{ margin: 0, fontSize: 11, color: "#6b7280", marginBottom: 4 }}
+                    >
+                      Total encaissé
+                    </Text>
+                    <Text
+                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#111827" }}
+                    >
+                      {formatAmount(totalAmount)}
+                    </Text>
+                  </div>
+                </Column>
+                <Column style={{ width: "25%", paddingRight: 6 }}>
+                  <div
+                    style={{
+                      background: "#ecfdf5",
+                      border: "1px solid #6ee7b7",
+                      borderRadius: 6,
+                      padding: "10px 8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Text
+                      style={{ margin: 0, fontSize: 11, color: "#059669", marginBottom: 4 }}
+                    >
+                      Validé
+                    </Text>
+                    <Text
+                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#065f46" }}
+                    >
+                      {formatAmount(totalValidated)}
+                    </Text>
+                  </div>
+                </Column>
+                <Column style={{ width: "25%", paddingRight: 6 }}>
+                  <div
+                    style={{
+                      background: "#fffbeb",
+                      border: "1px solid #fcd34d",
+                      borderRadius: 6,
+                      padding: "10px 8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Text
+                      style={{ margin: 0, fontSize: 11, color: "#d97706", marginBottom: 4 }}
+                    >
+                      En attente
+                    </Text>
+                    <Text
+                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#92400e" }}
+                    >
+                      {formatAmount(totalPending)}
+                    </Text>
+                  </div>
+                </Column>
+                <Column style={{ width: "25%" }}>
+                  <div
+                    style={{
+                      background: "#fef2f2",
+                      border: "1px solid #fca5a5",
+                      borderRadius: 6,
+                      padding: "10px 8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Text
+                      style={{ margin: 0, fontSize: 11, color: "#dc2626", marginBottom: 4 }}
+                    >
+                      Annulé
+                    </Text>
+                    <Text
+                      style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#7f1d1d" }}
+                    >
+                      {formatAmount(totalCanceled)}
+                    </Text>
+                  </div>
+                </Column>
+              </Row>
             </Section>
 
-            <br />
-            <Footer />
+            {/* Transaction table */}
+            {transactions.length === 0 ? (
+              <Section
+                style={{
+                  border: "1px solid #E8E7E1",
+                  borderRadius: 6,
+                  padding: "20px",
+                  marginBottom: 20,
+                  textAlign: "center",
+                }}
+              >
+                <Text style={{ margin: 0, fontSize: 14, color: "#98a2b3" }}>
+                  Aucune transaction enregistrée sur cette période.
+                </Text>
+              </Section>
+            ) : (
+              <Section
+                style={{
+                  border: "1px solid #E8E7E1",
+                  borderRadius: 6,
+                  marginBottom: 20,
+                  overflow: "hidden",
+                }}
+              >
+                {/* Table header */}
+                <Row
+                  style={{
+                    background: "#f9fafb",
+                    borderBottom: "1px solid #E8E7E1",
+                    padding: "8px 12px",
+                  }}
+                >
+                  <Column style={{ width: "12%" }}>
+                    <Text
+                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                    >
+                      Date
+                    </Text>
+                  </Column>
+                  <Column style={{ width: "28%" }}>
+                    <Text
+                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                    >
+                      Élève
+                    </Text>
+                  </Column>
+                  <Column style={{ width: "28%" }}>
+                    <Text
+                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                    >
+                      Description
+                    </Text>
+                  </Column>
+                  <Column style={{ width: "18%", textAlign: "right" }}>
+                    <Text
+                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                    >
+                      Montant
+                    </Text>
+                  </Column>
+                  <Column style={{ width: "14%", textAlign: "center" }}>
+                    <Text
+                      style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#374151" }}
+                    >
+                      Statut
+                    </Text>
+                  </Column>
+                </Row>
+
+                {transactions.map((tx, i) => (
+                  <Row
+                    key={i}
+                    style={{
+                      borderBottom:
+                        i < transactions.length - 1 ? "1px solid #f3f4f6" : "none",
+                      padding: "8px 12px",
+                      background: i % 2 === 0 ? "#ffffff" : "#fafafa",
+                    }}
+                  >
+                    <Column style={{ width: "12%" }}>
+                      <Text style={{ margin: 0, fontSize: 12, color: "#6b7280" }}>
+                        {tx.date}
+                      </Text>
+                    </Column>
+                    <Column style={{ width: "28%" }}>
+                      <Text style={{ margin: 0, fontSize: 12, color: "#111827" }}>
+                        {tx.studentName}
+                      </Text>
+                    </Column>
+                    <Column style={{ width: "28%" }}>
+                      <Text style={{ margin: 0, fontSize: 12, color: "#6b7280" }}>
+                        {tx.description ?? METHOD_LABEL[tx.method] ?? tx.method}
+                      </Text>
+                    </Column>
+                    <Column style={{ width: "18%", textAlign: "right" }}>
+                      <Text
+                        style={{
+                          margin: 0,
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color:
+                            tx.transactionType === "DEBIT" ? "#dc2626" : "#059669",
+                        }}
+                      >
+                        {tx.transactionType === "DEBIT" ? "−" : "+"}
+                        {formatAmount(tx.amount)}
+                      </Text>
+                    </Column>
+                    <Column style={{ width: "14%", textAlign: "center" }}>
+                      <Text
+                        style={{
+                          margin: 0,
+                          fontSize: 11,
+                          fontWeight: 600,
+                          color: STATUS_COLOR[tx.status] ?? "#374151",
+                        }}
+                      >
+                        {STATUS_LABEL[tx.status] ?? tx.status}
+                      </Text>
+                    </Column>
+                  </Row>
+                ))}
+              </Section>
+            )}
+
+            <Button
+              href={transactionsUrl}
+              style={{
+                display: "block",
+                background: "#2563eb",
+                color: "#ffffff",
+                padding: "10px 20px",
+                borderRadius: 6,
+                fontSize: 14,
+                fontWeight: 500,
+                textAlign: "center",
+                textDecoration: "none",
+              }}
+            >
+              Voir toutes les transactions
+            </Button>
+
+            <Hr className="my-[20px] border-[#eaecf0]" />
+
+            <Text className="m-0 text-[13px] text-[#475467]">
+              Cordialement,
+              <br />
+              Le système Discolaire
+              <br />
+              {school.name}
+            </Text>
+
+            <Text className="mt-[16px] mb-0 text-[11px] text-[#98a2b3]">
+              {cronNote} Ne pas répondre à ce message.
+            </Text>
           </Container>
         </Body>
       </Tailwind>
     </Html>
   );
-};
-
-const button = {
-  backgroundColor: "#007bff",
-  borderRadius: "8px",
-  color: "#fff",
-  fontSize: "16px",
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "inline-block",
 };
 
 export default TransactionsSummary;

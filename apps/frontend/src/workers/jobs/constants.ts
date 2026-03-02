@@ -17,6 +17,24 @@ export const WEEKDAY_LABELS: Record<number, string> = {
 
 export const ADMIN_EMAIL = "jpainam@gmail.com";
 
+export type Tenant = (typeof SCHOOL_TENANTS)[number];
+
+/**
+ * Per-tenant admin email overrides.
+ * Only list tenants that need a custom set — all others fall back to ADMIN_EMAIL.
+ */
+export const TENANT_ADMIN_EMAILS: Partial<Record<Tenant, string[]>> = {
+  // csac: ["admin@csac.cd"],
+  // demo: ["jpainam@gmail.com", "another@example.com"],
+  // ipbw: ["direction@ipbw.cd"],
+  app: ["fezeu71@gmail.com", "jpainam@gmail.com", "gmboudie@gmail.com"],
+};
+
+/** Returns the admin email list for a tenant, falling back to [ADMIN_EMAIL]. */
+export function getTenantAdminEmails(tenant: Tenant): string[] {
+  return TENANT_ADMIN_EMAILS[tenant] ?? [ADMIN_EMAIL];
+}
+
 /** Returns the window [nextMonday, nextSunday] relative to `now`. */
 export function nextWeekWindow(now: Date) {
   const monday = startOfDay(nextMonday(now));

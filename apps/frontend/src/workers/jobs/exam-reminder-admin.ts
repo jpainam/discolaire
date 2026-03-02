@@ -8,7 +8,7 @@ import { ExamReminderAdminEmail } from "@repo/transactional";
 
 import { env } from "~/env";
 import { logger } from "~/utils/logger";
-import { ADMIN_EMAIL, FROM, nextWeekWindow, SCHOOL_TENANTS } from "./constants";
+import { FROM, getTenantAdminEmails, nextWeekWindow, SCHOOL_TENANTS } from "./constants";
 
 /**
  * Every Wednesday – alert the admin if exams are scheduled next week.
@@ -70,14 +70,14 @@ export async function sendExamReminderToAdmin() {
           }),
         );
 
-        await enqueueEmailJobs([
-          {
-            to: ADMIN_EMAIL,
+        await enqueueEmailJobs(
+          getTenantAdminEmails(tenant).map((to) => ({
+            to,
             from: FROM,
             subject: `Rappel : examens ${termName} — semaine prochaine (${tenant})`,
             html,
-          },
-        ]);
+          })),
+        );
 
         logger.info(
           `[Cron] Admin exam reminder sent for ${termName} (${tenant})`,
