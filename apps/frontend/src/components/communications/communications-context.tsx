@@ -51,7 +51,7 @@ export function CommunicationsProvider({
   const openRecipientModal = useCallback(
     (initialTarget: RecipientTarget | null) => {
       openModal({
-        className: "p-0 sm:max-w-xl overflow-hidden",
+        className: "p-0 sm:max-w-3xl overflow-hidden",
         view: (
           <RecipientSelector
             initialTarget={initialTarget}

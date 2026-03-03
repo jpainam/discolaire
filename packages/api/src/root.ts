@@ -1,11 +1,11 @@
 import { accountingJournal } from "./routers/accountingJournal";
 import { announcementRouter } from "./routers/announcement";
-import { bulkEmailRouter } from "./routers/bulkEmail";
 import { appreciationRouter } from "./routers/appreciation";
 import { assignmentRouter } from "./routers/assignment";
 import { attendanceRouter } from "./routers/attendance";
 import { bibleRouter } from "./routers/bible";
 import { bookRouter } from "./routers/book";
+import { bulkEmailRouter } from "./routers/bulkEmail";
 import { calendarEventRouter } from "./routers/calendarEvent";
 import { classroomRouter } from "./routers/classroom";
 import { classroomCycleRouter } from "./routers/classroomCycle";

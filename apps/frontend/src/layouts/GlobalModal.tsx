@@ -30,7 +30,7 @@ export default function GlobalModal() {
       }}
     >
       <DialogContent className={className}>
-        {title ?? description ? (
+        {(title ?? description) ? (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             {description && (

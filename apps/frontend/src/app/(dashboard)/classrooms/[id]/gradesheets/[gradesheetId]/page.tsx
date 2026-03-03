@@ -63,8 +63,7 @@ export default async function Page(props: {
       ? 0
       : grades.filter(
           (grade) =>
-            grade.grade >= passingThreshold &&
-            grade.student.gender == "female",
+            grade.grade >= passingThreshold && grade.student.gender == "female",
         ).length / femaleCount;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -166,7 +165,9 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium">{t("average")} ≥ {passingThreshold}</div>
+            <div className="text-sm font-medium">
+              {t("average")} ≥ {passingThreshold}
+            </div>
             <div className="flex items-center space-x-2">
               <Award className="h-5 w-5 text-purple-600" />
               <span className="text-2xl font-bold">{grades10}</span>
@@ -200,7 +201,9 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium">{t("success_rate")} ≥ {passingThreshold}</div>
+            <div className="text-sm font-medium">
+              {t("success_rate")} ≥ {passingThreshold}
+            </div>
             <div className="flex items-center space-x-2">
               <Progress value={(grades10 * 100) / len} />
               <span className="text-sm font-medium">

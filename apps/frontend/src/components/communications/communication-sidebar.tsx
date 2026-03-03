@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Inbox, PenSquare, Send, Trash2 } from "lucide-react";
 
-import { useCommunications } from "./communications-context";
 import { Button } from "~/components/ui/button";
 import {
   Sidebar,
@@ -18,6 +17,7 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { SidebarLogo } from "../sidebar-logo";
+import { useCommunications } from "./communications-context";
 
 const NAV_ITEMS = [
   { id: "inbox", label: "Inbox", icon: Inbox, url: "/communications" },
@@ -82,10 +82,7 @@ export function CommunicationSidebar({
           <SidebarGroupLabel>QUICK LINKS</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                tooltip={""}
-              >
+              <SidebarMenuButton asChild tooltip={""}>
                 <Link href={"#"}></Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

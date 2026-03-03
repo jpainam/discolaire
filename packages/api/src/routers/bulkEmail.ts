@@ -40,6 +40,7 @@ interface ResolvedRecipient {
 async function resolveRecipients(
   db: PrismaClient,
   schoolId: string,
+  schoolYearId: string,
   target: RecipientTarget,
 ): Promise<ResolvedRecipient[]> {
   const results: ResolvedRecipient[] = [];
@@ -54,37 +55,47 @@ async function resolveRecipients(
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
+  // Valid email: must contain "@" and not be a placeholder/example address
+  const validEmail: Prisma.StringNullableFilter = { contains: "@" };
+  const notExampleDomain = { email: { endsWith: "example.com" } };
+
   async function fetchParents(classroomIds?: string[]) {
-    const studentWhere: Prisma.StudentWhereInput = { isActive: true };
-    if (classroomIds) {
-      studentWhere.enrollments = {
-        some: { classroomId: { in: classroomIds } },
-      };
-    }
+    const studentWhere: Prisma.StudentWhereInput = {
+      isActive: true,
+      enrollments: classroomIds
+        ? { some: { classroomId: { in: classroomIds } } }
+        : { some: { schoolYearId } },
+    };
 
     const contacts = await db.contact.findMany({
       where: {
         schoolId,
         isActive: true,
+        email: validEmail,
+        NOT: notExampleDomain,
         studentContacts: { some: { student: studentWhere } },
       },
       select: { id: true, firstName: true, lastName: true, email: true },
     });
 
     for (const c of contacts) {
-      if (c.email) {
-        add({
-          email: c.email,
-          name: [c.firstName, c.lastName].filter(Boolean).join(" ") || null,
-          recipientType: "contact",
-          recipientId: c.id,
-        });
-      }
+      if (!c.email) continue;
+      add({
+        email: c.email,
+        name: [c.firstName, c.lastName].filter(Boolean).join(" ") || null,
+        recipientType: "contact",
+        recipientId: c.id,
+      });
     }
   }
 
   async function fetchStaff(classroomIds?: string[], specificIds?: string[]) {
-    const where: Prisma.StaffWhereInput = { schoolId, isActive: true };
+    const where: Prisma.StaffWhereInput = {
+      schoolId,
+      isActive: true,
+      email: validEmail,
+      NOT: notExampleDomain,
+    };
     if (specificIds && specificIds.length > 0) {
       where.id = { in: specificIds };
     } else if (classroomIds) {
@@ -97,57 +108,38 @@ async function resolveRecipients(
     });
 
     for (const s of staffList) {
-      if (s.email) {
-        add({
-          email: s.email,
-          name: [s.firstName, s.lastName].filter(Boolean).join(" ") || null,
-          recipientType: "staff",
-          recipientId: s.id,
-        });
-      }
+      if (!s.email) continue;
+      add({
+        email: s.email,
+        name: [s.firstName, s.lastName].filter(Boolean).join(" ") || null,
+        recipientType: "staff",
+        recipientId: s.id,
+      });
     }
   }
 
   async function fetchStudents(classroomIds?: string[]) {
-    // Query via User to get only students who have an account with an email.
-    // User.email is non-nullable, so no null-check needed there.
-    const where: Prisma.UserWhereInput = {
-      schoolId,
-      students: { some: { isActive: true } },
-    };
-    if (classroomIds) {
-      where.students = {
-        some: {
-          isActive: true,
-          enrollments: { some: { classroomId: { in: classroomIds } } },
-        },
-      };
-    }
-
-    const users = await db.user.findMany({
-      where,
-      select: {
-        email: true,
-        students: {
-          where: { isActive: true },
-          select: { id: true, firstName: true, lastName: true },
-          take: 1,
-        },
+    const students = await db.student.findMany({
+      where: {
+        schoolId,
+        isActive: true,
+        email: validEmail,
+        NOT: notExampleDomain,
+        enrollments: classroomIds
+          ? { some: { classroomId: { in: classroomIds } } }
+          : { some: { schoolYearId } },
       },
+      select: { id: true, firstName: true, lastName: true, email: true },
     });
 
-    for (const u of users) {
-      const student = u.students[0];
-      if (student) {
-        add({
-          email: u.email,
-          name:
-            [student.firstName, student.lastName].filter(Boolean).join(" ") ||
-            null,
-          recipientType: "student",
-          recipientId: student.id,
-        });
-      }
+    for (const s of students) {
+      if (!s.email) continue;
+      add({
+        email: s.email,
+        name: [s.firstName, s.lastName].filter(Boolean).join(" ") || null,
+        recipientType: "student",
+        recipientId: s.id,
+      });
     }
   }
 
@@ -224,6 +216,7 @@ export const bulkEmailRouter = {
           distinct: ["teacherId"],
         },
         enrollments: {
+          where: { student: { isActive: true } },
           select: {
             student: {
               select: {
@@ -241,20 +234,20 @@ export const bulkEmailRouter = {
     });
 
     return classrooms.map((c) => {
-      // Unique teachers with email
+      // All assigned teachers (email may be empty; filtering for send is listStaff's job)
       const teacherMap = new Map<
         string,
         { id: string; name: string; email: string }
       >();
       for (const s of c.subjects) {
-        if (s.teacher?.email && !teacherMap.has(s.teacher.id)) {
+        if (s.teacher && !teacherMap.has(s.teacher.id)) {
           teacherMap.set(s.teacher.id, {
             id: s.teacher.id,
             name:
               [s.teacher.firstName, s.teacher.lastName]
                 .filter(Boolean)
                 .join(" ") || s.teacher.id,
-            email: s.teacher.email,
+            email: s.teacher.email ?? "",
           });
         }
       }
@@ -287,7 +280,8 @@ export const bulkEmailRouter = {
       where: {
         schoolId: ctx.schoolId,
         isActive: true,
-        email: { not: null },
+        email: { contains: "@" },
+        NOT: { email: { endsWith: "example.com" } },
       },
       select: {
         id: true,
@@ -302,10 +296,56 @@ export const bulkEmailRouter = {
     return staffList.map((s) => ({
       id: s.id,
       name:
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         [s.firstName, s.lastName].filter(Boolean).join(" ") || s.email || s.id,
-      email: s.email!,
+      email: s.email ?? "",
       isTeacher: s.isTeacher ?? false,
     }));
+  }),
+
+  /**
+   * Real school-wide counts for the broadcast role selector UI.
+   * Matches the logic used by resolveRecipients so counts are accurate.
+   */
+  broadcastStats: protectedProcedure.query(async ({ ctx }) => {
+    const validEmail = { contains: "@" };
+    const notExample = { email: { endsWith: "example.com" } };
+    const [parentCount, staffCount, studentCount] = await Promise.all([
+      ctx.db.contact.count({
+        where: {
+          schoolId: ctx.schoolId,
+          isActive: true,
+          email: validEmail,
+          NOT: notExample,
+          studentContacts: {
+            some: {
+              student: {
+                isActive: true,
+                enrollments: { some: { schoolYearId: ctx.schoolYearId } },
+              },
+            },
+          },
+        },
+      }),
+      ctx.db.staff.count({
+        where: {
+          schoolId: ctx.schoolId,
+          isActive: true,
+          email: validEmail,
+          NOT: notExample,
+        },
+      }),
+      ctx.db.student.count({
+        where: {
+          schoolId: ctx.schoolId,
+          isActive: true,
+          email: validEmail,
+          NOT: notExample,
+          enrollments: { some: { schoolYearId: ctx.schoolYearId } },
+        },
+      }),
+    ]);
+    return { parentCount, staffCount, studentCount };
   }),
 
   /**
@@ -314,7 +354,12 @@ export const bulkEmailRouter = {
   previewCount: protectedProcedure
     .input(RecipientTargetSchema)
     .query(async ({ ctx, input }) => {
-      const recipients = await resolveRecipients(ctx.db, ctx.schoolId, input);
+      const recipients = await resolveRecipients(
+        ctx.db,
+        ctx.schoolId,
+        ctx.schoolYearId,
+        input,
+      );
       return { count: recipients.length };
     }),
 
@@ -334,6 +379,7 @@ export const bulkEmailRouter = {
       const recipients = await resolveRecipients(
         ctx.db,
         ctx.schoolId,
+        ctx.schoolYearId,
         input.recipientTarget,
       );
 

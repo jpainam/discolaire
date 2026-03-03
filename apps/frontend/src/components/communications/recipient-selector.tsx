@@ -2,21 +2,19 @@
 
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  BookOpen,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  GraduationCap,
-  Search,
-  UserCheck,
-  Users,
-  X,
-} from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
+import {
+  ContactIcon,
+  GroupsIcon,
+  LibraryIcon,
+  SearchIcon,
+  UserIcon,
+  UsersIcon,
+} from "~/icons";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 
@@ -48,25 +46,25 @@ export interface RecipientTarget {
   breadcrumb: string[];
 }
 
-// ─── Server-side classroom / staff shapes ────────────────────────────────────
+// ─── Server-side shapes ───────────────────────────────────────────────────────
 
-type ClassroomData = {
+interface ClassroomData {
   id: string;
   name: string;
   grade: string;
   teachers: { id: string; name: string; email: string }[];
   studentCount: number;
   parentCount: number;
-};
+}
 
-type StaffData = {
+interface StaffData {
   id: string;
   name: string;
   email: string;
   isTeacher: boolean;
-};
+}
 
-// ─── Summary helper ───────────────────────────────────────────────────────────
+// ─── Summary helper (used by compose-panel) ───────────────────────────────────
 
 export function getRecipientSummary(target: RecipientTarget): {
   label: string;
@@ -80,9 +78,9 @@ export function getRecipientSummary(target: RecipientTarget): {
   };
 }
 
-// ─── Count helpers ────────────────────────────────────────────────────────────
+// ─── Label builder (display only, no counting) ───────────────────────────────
 
-function computeCount(
+function buildLabel(
   target: Pick<
     RecipientTarget,
     | "mode"
@@ -93,120 +91,50 @@ function computeCount(
   >,
   classrooms: ClassroomData[],
   staff: StaffData[],
-): { count: number; label: string; breadcrumb: string[] } {
-  const seen = new Set<string>();
-
-  function countUnique(emails: (string | undefined | null)[]) {
-    let n = 0;
-    for (const e of emails) {
-      if (e && !seen.has(e)) {
-        seen.add(e);
-        n++;
-      }
-    }
-    return n;
-  }
-
+): { label: string; breadcrumb: string[] } {
   if (target.mode === "broadcast") {
     const roles = target.broadcastRoles;
-    const all = roles.includes("all");
+    if (roles.includes("all")) {
+      return { label: "Tout le monde", breadcrumb: ["École", "Tout le monde"] };
+    }
     const parts: string[] = [];
-    let count = 0;
-
-    if (all || roles.includes("parents")) {
-      const n = countUnique(
-        classrooms.flatMap(() => Array(0).fill("")), // parents resolved server-side
-      );
-      // Approximate from classroom parent counts
-      const parentEmails = new Set<string>();
-      classrooms.forEach((c) => {
-        // We don't have individual parent emails client-side; use parentCount as proxy
-        for (let i = 0; i < c.parentCount; i++) {
-          parentEmails.add(`__parent_${c.id}_${i}`);
-        }
-      });
-      const parentCount = parentEmails.size;
-      count += parentCount;
-      parts.push("All Parents");
-      void n;
-    }
-    if (all || roles.includes("staff") || roles.includes("teachers")) {
-      count += countUnique(staff.map((s) => s.email));
-      parts.push("All Staff");
-    }
-    if (all || roles.includes("students")) {
-      let studentCount = 0;
-      classrooms.forEach((c) => {
-        studentCount += c.studentCount;
-      });
-      count += studentCount;
-      parts.push("All Students");
-    }
-
-    const label = parts.join(", ") || "No recipients";
-    return { count, label, breadcrumb: ["School-wide", ...parts] };
+    if (roles.includes("parents")) parts.push("Parents");
+    if (roles.includes("staff") || roles.includes("teachers"))
+      parts.push("Personnel");
+    if (roles.includes("students")) parts.push("Élèves");
+    const label = parts.join(", ") || "Aucun destinataire";
+    return { label, breadcrumb: ["École", ...parts] };
   }
 
-  // class-based
   const selectedClasses = classrooms.filter((c) =>
     target.classIds.includes(c.id),
   );
   const classNames = selectedClasses.map((c) => c.name);
 
   if (target.classRecipientMode === "specific-teacher") {
-    const people = staff.filter((s) =>
-      target.specificPersonIds.includes(s.id),
-    );
+    const people = staff.filter((s) => target.specificPersonIds.includes(s.id));
     const label =
-      people.map((p) => p.name).join(", ") || "No teachers selected";
-    return {
-      count: people.length,
-      label,
-      breadcrumb: [...classNames, label],
-    };
+      people.map((p) => p.name).join(", ") || "Aucun enseignant sélectionné";
+    return { label, breadcrumb: [...classNames, label] };
   }
 
-  let count = 0;
-  let roleLabel = "";
-
-  if (target.classRecipientMode === "all") {
-    const teacherEmails = new Set<string>();
-    selectedClasses.forEach((c) => {
-      c.teachers.forEach((t) => teacherEmails.add(t.email));
-    });
-    const parentCount = selectedClasses.reduce(
-      (s, c) => s + c.parentCount,
-      0,
-    );
-    const studentCount = selectedClasses.reduce(
-      (s, c) => s + c.studentCount,
-      0,
-    );
-    count = teacherEmails.size + parentCount + studentCount;
-    roleLabel = "Everyone";
-  } else if (target.classRecipientMode === "teachers") {
-    const teacherEmails = new Set<string>();
-    selectedClasses.forEach((c) =>
-      c.teachers.forEach((t) => teacherEmails.add(t.email)),
-    );
-    count = teacherEmails.size;
-    roleLabel = "Teachers";
-  } else if (target.classRecipientMode === "parents") {
-    count = selectedClasses.reduce((s, c) => s + c.parentCount, 0);
-    roleLabel = "Parents";
-  } else if (target.classRecipientMode === "students") {
-    count = selectedClasses.reduce((s, c) => s + c.studentCount, 0);
-    roleLabel = "Students";
-  }
-
+  const roleLabels: Record<
+    Exclude<ClassRecipientMode, "specific-teacher">,
+    string
+  > = {
+    all: "Tout le monde",
+    parents: "Parents",
+    teachers: "Enseignants",
+    students: "Élèves",
+  };
+  const roleLabel = roleLabels[target.classRecipientMode];
   return {
-    count,
     label: `${classNames.join(", ")} — ${roleLabel}`,
     breadcrumb: [...classNames, roleLabel],
   };
 }
 
-// ─── Step Indicator ─────────────────────────────────────────────────────────
+// ─── Step Indicator ──────────────────────────────────────────────────────────
 
 function StepIndicator({
   current,
@@ -255,28 +183,28 @@ function StepIndicator({
   );
 }
 
-// ─── Step 1: Mode ────────────────────────────────────────────────────────────
+// ─── Step 1: Mode ─────────────────────────────────────────────────────────────
 
 function StepMode({ onSelect }: { onSelect: (mode: BroadcastMode) => void }) {
   return (
     <div className="space-y-3">
       <p className="text-muted-foreground mb-4 text-sm">
-        How would you like to address the recipients of this message?
+        Comment souhaitez-vous cibler les destinataires ?
       </p>
       <button
         onClick={() => onSelect("class-based")}
         className="border-border hover:border-primary/50 hover:bg-primary/5 group flex w-full items-start gap-4 rounded-lg border-2 p-4 text-left transition-all"
       >
         <div className="bg-badge-blue mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
-          <BookOpen className="text-badge-blue-foreground h-5 w-5" />
+          <LibraryIcon className="text-badge-blue-foreground h-5 w-5" />
         </div>
         <div>
           <p className="text-foreground group-hover:text-primary text-sm font-semibold transition-colors">
-            By Class
+            Par classe
           </p>
           <p className="text-muted-foreground mt-0.5 text-xs leading-relaxed">
-            Select one or more classes, then specify who to contact: teachers,
-            parents, students, or everyone.
+            Sélectionnez une ou plusieurs classes, puis précisez qui contacter :
+            enseignants, parents, élèves ou tout le monde.
           </p>
         </div>
         <ChevronRight className="text-muted-foreground group-hover:text-primary mt-3 ml-auto h-4 w-4 shrink-0" />
@@ -286,15 +214,15 @@ function StepMode({ onSelect }: { onSelect: (mode: BroadcastMode) => void }) {
         className="border-border hover:border-primary/50 hover:bg-primary/5 group flex w-full items-start gap-4 rounded-lg border-2 p-4 text-left transition-all"
       >
         <div className="bg-badge-green mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
-          <Users className="text-badge-green-foreground h-5 w-5" />
+          <GroupsIcon className="text-badge-green-foreground h-5 w-5" />
         </div>
         <div>
           <p className="text-foreground group-hover:text-primary text-sm font-semibold transition-colors">
-            School-wide Broadcast
+            Diffusion générale
           </p>
           <p className="text-muted-foreground mt-0.5 text-xs leading-relaxed">
-            Send to all staff, all parents, all students, or any combination
-            across the whole school.
+            Envoyez à tout le personnel, tous les parents ou tous les élèves de
+            l&apos;établissement.
           </p>
         </div>
         <ChevronRight className="text-muted-foreground group-hover:text-primary mt-3 ml-auto h-4 w-4 shrink-0" />
@@ -303,7 +231,7 @@ function StepMode({ onSelect }: { onSelect: (mode: BroadcastMode) => void }) {
   );
 }
 
-// ─── Step 2a: Class Select ───────────────────────────────────────────────────
+// ─── Step 2a: Class Select ────────────────────────────────────────────────────
 
 function StepClassSelect({
   classrooms,
@@ -319,8 +247,8 @@ function StepClassSelect({
   const grouped = useMemo(() => {
     const grades: Record<string, ClassroomData[]> = {};
     classrooms.forEach((c) => {
-      if (!grades[c.grade]) grades[c.grade] = [];
-      grades[c.grade]!.push(c);
+      grades[c.grade] ??= [];
+      grades[c.grade]?.push(c);
     });
     return grades;
   }, [classrooms]);
@@ -334,12 +262,13 @@ function StepClassSelect({
   return (
     <div className="space-y-3">
       <p className="text-muted-foreground mb-2 text-sm">
-        Select one or more classes. Choose recipient type in the next step.
+        Sélectionnez une ou plusieurs classes. Le type de destinataire sera
+        précisé à l&apos;étape suivante.
       </p>
       <div className="relative mb-3">
-        <Search className="text-muted-foreground absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
+        <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
         <Input
-          placeholder="Search classes..."
+          placeholder="Rechercher une classe..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="h-8 pl-8 text-sm"
@@ -356,7 +285,10 @@ function StepClassSelect({
                 className="bg-primary text-primary-foreground flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
               >
                 {c.name}
-                <button onClick={() => onToggle(id)} className="hover:opacity-70">
+                <button
+                  onClick={() => onToggle(id)}
+                  className="hover:opacity-70"
+                >
                   <X className="h-3 w-3" />
                 </button>
               </span>
@@ -366,7 +298,7 @@ function StepClassSelect({
       )}
       <div className="max-h-64 space-y-3 overflow-y-auto pr-1">
         {(filtered
-          ? [{ grade: "Results", classes: filtered }]
+          ? [{ grade: "Résultats", classes: filtered }]
           : Object.entries(grouped).map(([grade, classes]) => ({
               grade,
               classes,
@@ -407,10 +339,10 @@ function StepClassSelect({
                         {c.name}
                       </p>
                       <p className="text-muted-foreground text-xs">
-                        {c.teachers.length} teachers
+                        {c.teachers.length} enseignant(s)
                       </p>
                       <p className="text-muted-foreground text-xs">
-                        {c.studentCount} students
+                        {c.studentCount} élève(s)
                       </p>
                     </div>
                   </button>
@@ -424,61 +356,64 @@ function StepClassSelect({
   );
 }
 
-// ─── Step 2b: Broadcast Role Select ─────────────────────────────────────────
+// ─── Step 2b: Broadcast Role Select ──────────────────────────────────────────
 
 function StepBroadcastRole({
-  classrooms,
-  staff,
+  stats,
+  statsLoading,
   selected,
   onToggle,
 }: {
-  classrooms: ClassroomData[];
-  staff: StaffData[];
+  stats?: { parentCount: number; staffCount: number; studentCount: number };
+  statsLoading: boolean;
   selected: RecipientRole[];
   onToggle: (r: RecipientRole) => void;
 }) {
-  const totalParents = classrooms.reduce((s, c) => s + c.parentCount, 0);
-  const totalStudents = classrooms.reduce((s, c) => s + c.studentCount, 0);
-  const totalStaff = staff.length;
+  const fmt = (n: number | undefined) =>
+    statsLoading || n === undefined ? "—" : n.toLocaleString();
 
   const options: {
     role: RecipientRole;
     label: string;
     desc: string;
-    count: number;
+    count: string;
     icon: React.ReactNode;
     color: string;
   }[] = [
     {
       role: "staff",
-      label: "All Staff",
-      desc: "Teachers + admin staff",
-      count: totalStaff,
-      icon: <UserCheck className="h-5 w-5" />,
+      label: "Tout le personnel",
+      desc: "Enseignants et personnel administratif",
+      count: fmt(stats?.staffCount),
+      icon: <UserIcon className="h-5 w-5" />,
       color: "text-badge-amber-foreground bg-badge-amber",
     },
     {
       role: "parents",
-      label: "All Parents",
-      desc: "Parents across all classes",
-      count: totalParents,
-      icon: <Users className="h-5 w-5" />,
+      label: "Tous les parents",
+      desc: "Parents des élèves inscrits cette année",
+      count: fmt(stats?.parentCount),
+      icon: <ContactIcon className="h-5 w-5" />,
       color: "text-badge-green-foreground bg-badge-green",
     },
     {
       role: "students",
-      label: "All Students",
-      desc: "Students across all classes",
-      count: totalStudents,
-      icon: <GraduationCap className="h-5 w-5" />,
+      label: "Tous les élèves",
+      desc: "Élèves inscrits cette année",
+      count: fmt(stats?.studentCount),
+      icon: <UsersIcon className="h-5 w-5" />,
       color: "text-badge-blue-foreground bg-badge-blue",
     },
     {
       role: "all",
-      label: "Everyone",
-      desc: "All staff, parents & students",
-      count: totalStaff + totalParents + totalStudents,
-      icon: <Users className="h-5 w-5" />,
+      label: "Tout le monde",
+      desc: "Personnel, parents et élèves",
+      count: fmt(
+        stats
+          ? stats.staffCount + stats.parentCount + stats.studentCount
+          : undefined,
+      ),
+      icon: <GroupsIcon className="h-5 w-5" />,
       color: "text-primary-foreground bg-primary",
     },
   ];
@@ -486,8 +421,8 @@ function StepBroadcastRole({
   return (
     <div className="space-y-3">
       <p className="text-muted-foreground mb-2 text-sm">
-        Select who should receive this school-wide message. Multiple groups can
-        be selected.
+        Sélectionnez qui doit recevoir ce message. Plusieurs groupes peuvent
+        être sélectionnés.
       </p>
       {options.map(({ role, label, desc, count, icon, color }) => {
         const isSelected = selected.includes(role);
@@ -519,10 +454,8 @@ function StepBroadcastRole({
               <p className="text-muted-foreground text-xs">{desc}</p>
             </div>
             <div className="mr-2 text-right">
-              <p className="text-foreground text-sm font-bold">
-                {count.toLocaleString()}
-              </p>
-              <p className="text-muted-foreground text-xs">recipients</p>
+              <p className="text-foreground text-sm font-bold">{count}</p>
+              <p className="text-muted-foreground text-xs">destinataires</p>
             </div>
             <div
               className={cn(
@@ -543,7 +476,7 @@ function StepBroadcastRole({
   );
 }
 
-// ─── Step 3: Recipient Type for classes ─────────────────────────────────────
+// ─── Step 3: Recipient Type for classes ───────────────────────────────────────
 
 function StepClassRecipientType({
   classrooms,
@@ -565,8 +498,6 @@ function StepClassRecipientType({
   const selectedClasses = classrooms.filter((c) =>
     selectedClassIds.includes(c.id),
   );
-
-  // Teachers who teach in selected classrooms
   const classTeacherIds = new Set(
     selectedClasses.flatMap((c) => c.teachers.map((t) => t.id)),
   );
@@ -581,37 +512,37 @@ function StepClassRecipientType({
   }[] = [
     {
       value: "all",
-      label: "Everyone",
-      desc: "Teachers, parents & students",
-      icon: <Users className="h-4 w-4" />,
+      label: "Tout le monde",
+      desc: "Enseignants, parents et élèves",
+      icon: <GroupsIcon className="h-4 w-4" />,
       color: "bg-primary text-primary-foreground",
     },
     {
       value: "parents",
-      label: "Parents Only",
-      desc: "Parents of selected classes",
-      icon: <Users className="h-4 w-4" />,
+      label: "Parents uniquement",
+      desc: "Parents des classes sélectionnées",
+      icon: <ContactIcon className="h-4 w-4" />,
       color: "bg-badge-green text-badge-green-foreground",
     },
     {
       value: "teachers",
-      label: "Teachers Only",
-      desc: "All teachers of selected classes",
-      icon: <UserCheck className="h-4 w-4" />,
+      label: "Enseignants uniquement",
+      desc: "Tous les enseignants des classes",
+      icon: <UserIcon className="h-4 w-4" />,
       color: "bg-badge-amber text-badge-amber-foreground",
     },
     {
       value: "students",
-      label: "Students Only",
-      desc: "Students in selected classes",
-      icon: <GraduationCap className="h-4 w-4" />,
+      label: "Élèves uniquement",
+      desc: "Élèves des classes sélectionnées",
+      icon: <UsersIcon className="h-4 w-4" />,
       color: "bg-badge-blue text-badge-blue-foreground",
     },
     {
       value: "specific-teacher",
-      label: "Specific Teacher(s)",
-      desc: "Choose individual teachers",
-      icon: <UserCheck className="h-4 w-4" />,
+      label: "Enseignant(s) spécifique(s)",
+      desc: "Choisir des enseignants individuellement",
+      icon: <UserIcon className="h-4 w-4" />,
       color: "bg-muted text-muted-foreground",
     },
   ];
@@ -619,7 +550,7 @@ function StepClassRecipientType({
   return (
     <div className="space-y-3">
       <div className="text-muted-foreground mb-2 text-sm">
-        Sending to:{" "}
+        Envoi à :{" "}
         <span className="text-foreground font-medium">
           {selectedClasses.map((c) => c.name).join(", ")}
         </span>
@@ -654,11 +585,11 @@ function StepClassRecipientType({
       {mode === "specific-teacher" && (
         <div className="bg-muted/50 border-border mt-2 space-y-2 rounded-lg border p-3">
           <p className="text-foreground mb-2 text-xs font-semibold">
-            Select teachers:
+            Sélectionner des enseignants :
           </p>
           {classTeachers.length === 0 ? (
             <p className="text-muted-foreground text-xs">
-              No teachers found for selected classes.
+              Aucun enseignant trouvé pour les classes sélectionnées.
             </p>
           ) : (
             classTeachers.map((t) => {
@@ -702,7 +633,7 @@ function StepClassRecipientType({
   );
 }
 
-// ─── Main Recipient Selector ─────────────────────────────────────────────────
+// ─── Main Recipient Selector ──────────────────────────────────────────────────
 
 type SelectorStep = "mode" | "class-select" | "recipient-type";
 
@@ -723,7 +654,9 @@ export default function RecipientSelector({
   const { data: staff = [], isLoading: staffLoading } = useQuery(
     trpc.bulkEmail.listStaff.queryOptions(),
   );
-  const isLoading = classroomsLoading || staffLoading;
+  const { data: broadcastStats, isLoading: statsLoading } = useQuery(
+    trpc.bulkEmail.broadcastStats.queryOptions(),
+  );
 
   const [step, setStep] = useState<SelectorStep>(
     initialTarget ? "recipient-type" : "mode",
@@ -743,8 +676,32 @@ export default function RecipientSelector({
     initialTarget?.specificPersonIds ?? [],
   );
 
-  const STEPS_CLASS = ["Mode", "Classes", "Recipients"];
-  const STEPS_BROADCAST = ["Mode", "Recipients"];
+  // Real count from server, enabled when on recipient-type step
+  const previewTarget = useMemo(
+    () => ({
+      mode: broadcastMode ?? "broadcast",
+      classIds,
+      broadcastRoles,
+      classRecipientMode,
+      specificPersonIds,
+    }),
+    [
+      broadcastMode,
+      classIds,
+      broadcastRoles,
+      classRecipientMode,
+      specificPersonIds,
+    ],
+  );
+  const { data: preview } = useQuery({
+    ...trpc.bulkEmail.previewCount.queryOptions(previewTarget),
+    enabled: step === "recipient-type" && broadcastMode !== null,
+  });
+
+  const isLoading = classroomsLoading || staffLoading;
+
+  const STEPS_CLASS = ["Mode", "Classes", "Destinataires"];
+  const STEPS_BROADCAST = ["Mode", "Destinataires"];
 
   const currentStepIndex = useMemo(() => {
     if (broadcastMode === "broadcast") return step === "mode" ? 0 : 1;
@@ -793,22 +750,22 @@ export default function RecipientSelector({
       setStep("recipient-type");
       return;
     }
-    if (step === "recipient-type") {
+    if (step === "recipient-type" && broadcastMode) {
       const partialTarget = {
-        mode: broadcastMode!,
+        mode: broadcastMode,
         classIds,
         broadcastRoles,
         classRecipientMode,
         specificPersonIds,
       };
-      const { count, label, breadcrumb } = computeCount(
+      const { label, breadcrumb } = buildLabel(
         partialTarget,
         classrooms,
         staff,
       );
       onConfirm({
         ...partialTarget,
-        resolvedCount: count,
+        resolvedCount: preview?.count ?? 0,
         resolvedLabel: label,
         breadcrumb,
       });
@@ -836,15 +793,15 @@ export default function RecipientSelector({
       <div className="border-border flex items-center border-b px-6 py-4">
         <div>
           <h2 className="text-foreground text-base font-semibold">
-            Select Recipients
+            Sélectionner les destinataires
           </h2>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            {step === "mode" && "Choose how to target recipients"}
-            {step === "class-select" && "Select one or more classes"}
+            {step === "mode" && "Choisissez comment cibler les destinataires"}
+            {step === "class-select" && "Sélectionnez une ou plusieurs classes"}
             {step === "recipient-type" &&
               (broadcastMode === "broadcast"
-                ? "Choose recipient groups"
-                : "Choose recipient type")}
+                ? "Choisissez les groupes destinataires"
+                : "Choisissez le type de destinataire")}
           </p>
         </div>
       </div>
@@ -853,7 +810,7 @@ export default function RecipientSelector({
       <div className="flex-1 overflow-y-auto px-6 py-5">
         {isLoading && (
           <div className="text-muted-foreground py-8 text-center text-sm">
-            Loading...
+            Chargement...
           </div>
         )}
         {!isLoading && (
@@ -871,8 +828,8 @@ export default function RecipientSelector({
             )}
             {step === "recipient-type" && broadcastMode === "broadcast" && (
               <StepBroadcastRole
-                classrooms={classrooms}
-                staff={staff}
+                stats={broadcastStats}
+                statsLoading={statsLoading}
                 selected={broadcastRoles}
                 onToggle={handleBroadcastRoleToggle}
               />
@@ -900,25 +857,15 @@ export default function RecipientSelector({
         <>
           <Separator />
           <div className="flex items-center justify-between px-6 py-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleBack}
-              className="gap-1.5"
-            >
-              <ChevronLeft className="h-4 w-4" /> Back
+            <Button variant="ghost" onClick={handleBack}>
+              <ChevronLeft /> Retour
             </Button>
-            <Button
-              size="sm"
-              onClick={handleNext}
-              disabled={!canProceed() || isLoading}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5"
-            >
+            <Button onClick={handleNext} disabled={!canProceed() || isLoading}>
               {isLastStep ? (
-                "Confirm Recipients"
+                "Confirmer les destinataires"
               ) : (
                 <>
-                  Continue <ChevronRight className="h-4 w-4" />
+                  Continuer <ChevronRight />
                 </>
               )}
             </Button>

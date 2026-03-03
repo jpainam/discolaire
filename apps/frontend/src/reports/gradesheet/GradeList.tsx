@@ -19,11 +19,14 @@ export function GradeList({
   grades: RouterOutputs["gradeSheet"]["grades"];
   allGrades: RouterOutputs["gradeSheet"]["grades"];
 }) {
+  const passingThreshold = gradesheet.scale / 2;
   const maxGrade = Math.max(...allGrades.map((grade) => grade.grade));
   const minGrade = Math.min(
     ...allGrades.filter((g) => !g.isAbsent).map((grade) => grade.grade),
   );
-  const grades10 = allGrades.filter((grade) => grade.grade >= 10).length;
+  const grades10 = allGrades.filter(
+    (grade) => grade.grade >= passingThreshold,
+  ).length;
   const len = allGrades.filter((grade) => !grade.isAbsent).length || 1e9;
 
   const maleCount = allGrades.filter(
@@ -31,7 +34,8 @@ export function GradeList({
   ).length;
   const males10Rate =
     allGrades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "male",
+      (grade) =>
+        grade.grade >= passingThreshold && grade.student.gender == "male",
     ).length / (maleCount == 0 ? 1e9 : maleCount);
 
   const femaleCount = allGrades.filter(
@@ -39,7 +43,8 @@ export function GradeList({
   ).length;
   const females10Rate =
     allGrades.filter(
-      (grade) => grade.grade >= 10 && grade.student.gender == "female",
+      (grade) =>
+        grade.grade >= passingThreshold && grade.student.gender == "female",
     ).length / (femaleCount == 0 ? 1e9 : femaleCount);
 
   const dateFormatter = Intl.DateTimeFormat("fr", {
@@ -126,7 +131,7 @@ export function GradeList({
             >
               <Item label="Effectif évalué" />
               <Item label="Moy. générale de la classe" />
-              <Item label="Nombre de notes >= 10" />
+              <Item label={`Nombre de notes >= ${passingThreshold}`} />
               <View
                 style={{
                   width: "25%",
@@ -226,7 +231,10 @@ export function GradeList({
                 </View>
               </View>
               <Item label={((grades10 / len) * 100).toFixed(2) + "%"} />
-              <Item last={true} label={getAppreciations(average)} />
+              <Item
+                last={true}
+                label={getAppreciations(average, gradesheet.scale)}
+              />
             </View>
             {/* Statistic */}
           </View>
@@ -364,7 +372,9 @@ export function GradeList({
                       paddingLeft: 3,
                     }}
                   >
-                    <Text>{getAppreciations(grade.grade)}</Text>
+                    <Text>
+                      {getAppreciations(grade.grade, gradesheet.scale)}
+                    </Text>
                   </View>
                 </View>
               );

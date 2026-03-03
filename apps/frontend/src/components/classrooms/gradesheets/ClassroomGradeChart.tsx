@@ -46,16 +46,18 @@ export function ClassroomGradeChart({
   const pathname = usePathname();
 
   // Thresholds proportional to scale (calibrated for scale=20)
-  const tPass = scale / 2;          // 10 @ 20, 5 @ 10
-  const tGood = scale * 0.7;        // 14 @ 20, 7 @ 10
-  const tExcellent = scale * 0.9;   // 18 @ 20, 9 @ 10
-  const tPassable = scale * 0.4;    // 8  @ 20, 4 @ 10
-  const tLow = scale * 0.25;        // 5  @ 20, 2.5 @ 10
+  const tPass = scale / 2; // 10 @ 20, 5 @ 10
+  const tGood = scale * 0.7; // 14 @ 20, 7 @ 10
+  const tExcellent = scale * 0.9; // 18 @ 20, 9 @ 10
+  const tPassable = scale * 0.4; // 8  @ 20, 4 @ 10
+  const tLow = scale * 0.25; // 5  @ 20, 2.5 @ 10
 
   const p05 = grades.filter((g) => !g.isAbsent && g.grade < tLow).length;
   const p09 = grades.filter((g) => g.grade >= tLow && g.grade < tPass).length;
   const p13 = grades.filter((g) => g.grade >= tPass && g.grade < tGood).length;
-  const p17 = grades.filter((g) => g.grade >= tGood && g.grade < tExcellent).length;
+  const p17 = grades.filter(
+    (g) => g.grade >= tGood && g.grade < tExcellent,
+  ).length;
   const p20 = grades.filter((g) => g.grade >= tExcellent).length;
   const total = grades.filter((g) => !g.isAbsent).length;
 
@@ -73,10 +75,18 @@ export function ClassroomGradeChart({
   ).length;
 
   const countp18 = grades.filter((g) => g.grade >= tExcellent).length;
-  const countp14 = grades.filter((g) => g.grade >= tGood && g.grade < tExcellent).length;
-  const countp10 = grades.filter((g) => g.grade >= tPass && g.grade < tGood).length;
-  const countp05 = grades.filter((g) => g.grade >= tPassable && g.grade < tPass).length;
-  const countp00 = grades.filter((g) => !g.isAbsent && g.grade < tPassable).length;
+  const countp14 = grades.filter(
+    (g) => g.grade >= tGood && g.grade < tExcellent,
+  ).length;
+  const countp10 = grades.filter(
+    (g) => g.grade >= tPass && g.grade < tGood,
+  ).length;
+  const countp05 = grades.filter(
+    (g) => g.grade >= tPassable && g.grade < tPass,
+  ).length;
+  const countp00 = grades.filter(
+    (g) => !g.isAbsent && g.grade < tPassable,
+  ).length;
   return (
     <div className={cn("flex flex-col gap-2 overflow-hidden p-2", className)}>
       <Card className="group/dist">
@@ -103,8 +113,16 @@ export function ClassroomGradeChart({
                 { range: `0-${tLow}`, count: p05, fill: "#ef4444" },
                 { range: `${tLow}-${tPass}`, count: p09, fill: "#f97316" },
                 { range: `${tPass}-${tGood}`, count: p13, fill: "#eab308" },
-                { range: `${tGood}-${tExcellent}`, count: p17, fill: "#22c55e" },
-                { range: `${tExcellent}-${scale}`, count: p20, fill: "#16a34a" },
+                {
+                  range: `${tGood}-${tExcellent}`,
+                  count: p17,
+                  fill: "#22c55e",
+                },
+                {
+                  range: `${tExcellent}-${scale}`,
+                  count: p20,
+                  fill: "#16a34a",
+                },
               ]}
             >
               <CartesianGrid strokeDasharray="3 3" />

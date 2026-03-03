@@ -9,7 +9,6 @@ import { DatePicker } from "~/components/DatePicker";
 import { PhoneInput } from "~/components/phone-input";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { InputField } from "~/components/shared/forms/input-field";
-import { Input } from "~/components/ui/input";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
@@ -20,6 +19,7 @@ import {
   FormMessage,
   useFormContext,
 } from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { useSchool } from "~/providers/SchoolProvider";
 
 export function CreateUpdateAddress() {

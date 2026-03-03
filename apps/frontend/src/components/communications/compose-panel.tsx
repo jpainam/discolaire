@@ -22,13 +22,13 @@ import {
 } from "lucide-react";
 
 import type { RecipientTarget } from "./recipient-selector";
-import { useCommunications } from "./communications-context";
-import { getRecipientSummary } from "./recipient-selector";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
+import { useCommunications } from "./communications-context";
+import { getRecipientSummary } from "./recipient-selector";
 
 interface ComposePanelProps {
   onSend: (data: {
@@ -136,12 +136,20 @@ function RecipientPill({
 }
 
 // ─── Compose Panel ───────────────────────────────────────────────────────────
-export default function ComposePanel({ onSend, onDraft, onCancel, isSending = false, isSavingDraft = false }: ComposePanelProps) {
+export default function ComposePanel({
+  onSend,
+  onDraft,
+  onCancel,
+  isSending = false,
+  isSavingDraft = false,
+}: ComposePanelProps) {
   const { recipientTarget, editRecipients } = useCommunications();
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 
-  const summary = recipientTarget ? getRecipientSummary(recipientTarget) : { label: "", count: 0 };
+  const summary = recipientTarget
+    ? getRecipientSummary(recipientTarget)
+    : { label: "", count: 0 };
   const canSend = subject.trim().length > 0 && body.trim().length > 0;
   const canDraft = subject.trim().length > 0 || body.trim().length > 0;
 
@@ -192,7 +200,10 @@ export default function ComposePanel({ onSend, onDraft, onCancel, isSending = fa
           </Label>
           <div className="flex min-h-[32px] flex-1 flex-wrap items-center gap-2">
             {recipientTarget && (
-              <RecipientPill target={recipientTarget} onClick={editRecipients} />
+              <RecipientPill
+                target={recipientTarget}
+                onClick={editRecipients}
+              />
             )}
           </div>
         </div>
