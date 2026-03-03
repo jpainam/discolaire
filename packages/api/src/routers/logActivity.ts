@@ -134,6 +134,57 @@ export const logActivityRouter = {
       });
     }),
 
+  allPaginated: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().optional(),
+        from: z.coerce.date().optional(),
+        to: z.coerce.date().optional(),
+        actions: z.array(z.string()).optional(),
+        types: z.array(z.string()).optional(),
+        userIds: z.array(z.string()).optional(),
+        page: z.number().int().min(1).default(1),
+        pageSize: z.number().int().min(1).max(100).default(25),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const where = {
+        schoolId: ctx.schoolId,
+        ...(input.userIds?.length ? { userId: { in: input.userIds } } : {}),
+        ...(input.types?.length ? { targetType: { in: input.types } } : {}),
+        ...(input.actions?.length ? { action: { in: input.actions } } : {}),
+        ...(input.from || input.to
+          ? {
+              createdAt: {
+                ...(input.from ? { gte: input.from } : {}),
+                ...(input.to ? { lte: input.to } : {}),
+              },
+            }
+          : {}),
+        ...(input.query
+          ? {
+              OR: [
+                { action: { contains: input.query, mode: "insensitive" as const } },
+                { description: { contains: input.query, mode: "insensitive" as const } },
+              ],
+            }
+          : {}),
+      };
+
+      const [items, total] = await Promise.all([
+        ctx.db.logActivity.findMany({
+          take: input.pageSize,
+          skip: (input.page - 1) * input.pageSize,
+          orderBy: { createdAt: "desc" },
+          include: { user: { select: { id: true, name: true } } },
+          where,
+        }),
+        ctx.db.logActivity.count({ where }),
+      ]);
+
+      return { items, total };
+    }),
+
   delete: protectedProcedure
     .input(z.coerce.number())
     .mutation(({ ctx, input }) => {

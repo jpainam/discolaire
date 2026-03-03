@@ -22,7 +22,10 @@ export function ActivityFilter() {
   // Local input state so typing feels immediate; syncs to URL after debounce
   const [inputValue, setInputValue] = useState(q);
   useEffect(() => {
-    const t = setTimeout(() => void setParams({ q: inputValue || null }), 300);
+    const t = setTimeout(
+      () => void setParams({ q: inputValue || null, page: 1 }),
+      300,
+    );
     return () => clearTimeout(t);
   }, [inputValue, setParams]);
 
@@ -57,7 +60,7 @@ export function ActivityFilter() {
     const next = current.includes(value)
       ? current.filter((v) => v !== value)
       : [...current, value];
-    void setParams({ [key]: next.length ? next : null });
+    void setParams({ [key]: next.length ? next : null, page: 1 });
   };
 
   const clearAll = () =>
@@ -67,6 +70,7 @@ export function ActivityFilter() {
       actions: null,
       types: null,
       users: null,
+      page: 1,
     });
 
   const activeFilterCount =
@@ -79,7 +83,8 @@ export function ActivityFilter() {
   return (
     <aside
       className={cn(
-        "border-border h-full shrink-0 overflow-y-auto border-r transition-all duration-200",
+        "border-border shrink-0 overflow-y-auto border-r transition-all duration-200",
+        "h-[calc(100svh-var(--header-height))]",
         open ? "w-60" : "w-0 overflow-hidden",
       )}
     >
@@ -118,7 +123,7 @@ export function ActivityFilter() {
               <button
                 onClick={() => {
                   setInputValue("");
-                  void setParams({ q: null });
+                  void setParams({ q: null, page: 1 });
                 }}
                 className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2"
                 aria-label="Effacer la recherche"
@@ -144,7 +149,7 @@ export function ActivityFilter() {
               <button
                 key={r}
                 onClick={() =>
-                  void setParams({ range: r === "all" ? null : r })
+                  void setParams({ range: r === "all" ? null : r, page: 1 })
                 }
                 className={cn(
                   "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs transition-colors",

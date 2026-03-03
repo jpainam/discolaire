@@ -1,6 +1,7 @@
 import {
   parseAsArrayOf,
   parseAsBoolean,
+  parseAsInteger,
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
@@ -21,4 +22,5 @@ export const auditLogParsers = {
   types: parseAsArrayOf(parseAsString).withDefault([]),
   users: parseAsArrayOf(parseAsString).withDefault([]),
   open: parseAsBoolean.withDefault(true),
+  page: parseAsInteger.withDefault(1),
 };

@@ -7,6 +7,15 @@ import { useLocale } from "next-intl";
 import { useQueryStates } from "nuqs";
 
 import { Button } from "~/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "~/components/ui/pagination";
 import { useDebounce } from "~/hooks/use-debounce";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -20,62 +29,57 @@ import {
 } from "./_config";
 import { auditLogParsers, DATE_RANGE_LABELS } from "./_parsers";
 
+const PAGE_SIZE = 15;
+
 export function ActivityAuditList() {
   const trpc = useTRPC();
   const locale = useLocale();
 
   const [params, setParams] = useQueryStates(auditLogParsers);
-  const { q, range, actions, types, users, open } = params;
+  const { q, range, actions, types, users, open, page } = params;
 
-  // Debounce the URL-synced `q` before sending to the server
   const debouncedQ = useDebounce(q, 300);
-
-  // Memoize the from-date so the query key stays stable between renders.
-  // Calling fromDateForRange() inline would create a new Date() every render
-  // for "7d"/"30d" (different ms each time), causing infinite re-fetches.
   const fromDate = useMemo(() => fromDateForRange(range), [range]);
 
-  // Server-side: search + date range
   const { data, isPending } = useQuery(
-    trpc.logActivity.all.queryOptions({
+    trpc.logActivity.allPaginated.queryOptions({
       query: debouncedQ || undefined,
       from: fromDate,
-      limit: 200,
+      actions: actions.length ? actions : undefined,
+      types: types.length ? types : undefined,
+      userIds: users.length ? users : undefined,
+      page,
+      pageSize: PAGE_SIZE,
     }),
   );
 
-  // Client-side: action, targetType, user multi-select
-  const filtered = useMemo(() => {
-    if (!data) return [];
-    return data.filter((a) => {
-      if (actions.length > 0 && !actions.includes(a.action)) return false;
-      if (types.length > 0 && !types.includes(a.targetType)) return false;
-      if (users.length > 0 && (!a.userId || !users.includes(a.userId)))
-        return false;
-      return true;
-    });
-  }, [data, actions, types, users]);
+  // Fetch recent logs (same cache key as ActivityFilter) to build user name map
+  const { data: allData } = useQuery(
+    trpc.logActivity.all.queryOptions({ limit: 100 }),
+  );
 
-  // User name lookup for toolbar chips (data always contains all users since
-  // user filter is client-side only)
   const userMap = useMemo(() => {
     const m = new Map<string, string>();
-    data?.forEach((a) => {
+    allData?.forEach((a) => {
       if (a.user) m.set(a.user.id, a.user.name);
     });
     return m;
-  }, [data]);
+  }, [allData]);
 
-  // Group filtered results by date
+  const total = data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  // Group items by date
   const grouped = useMemo(() => {
-    const map = new Map<string, typeof filtered>();
-    for (const a of filtered) {
+    const list = data?.items ?? [];
+    const map = new Map<string, (typeof list)[number][]>();
+    for (const a of list) {
       const key = dateGroupLabel(a.createdAt);
       if (!map.has(key)) map.set(key, []);
       map.get(key)?.push(a);
     }
     return map;
-  }, [filtered]);
+  }, [data]);
 
   const activeFilterCount =
     (q ? 1 : 0) +
@@ -91,7 +95,10 @@ export function ActivityAuditList() {
       actions: null,
       types: null,
       users: null,
+      page: 1,
     });
+
+  const goToPage = (p: number) => void setParams({ page: p });
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
@@ -121,13 +128,13 @@ export function ActivityAuditList() {
           {q && (
             <FilterChip
               label={`"${q}"`}
-              onRemove={() => void setParams({ q: null })}
+              onRemove={() => void setParams({ q: null, page: 1 })}
             />
           )}
           {range !== "all" && (
             <FilterChip
               label={DATE_RANGE_LABELS[range]}
-              onRemove={() => void setParams({ range: null })}
+              onRemove={() => void setParams({ range: null, page: 1 })}
             />
           )}
           {actions.map((a) => (
@@ -135,7 +142,10 @@ export function ActivityAuditList() {
               key={a}
               label={ACTION_CONFIG[a]?.label ?? a}
               onRemove={() =>
-                void setParams({ actions: actions.filter((x) => x !== a) })
+                void setParams({
+                  actions: actions.filter((x) => x !== a),
+                  page: 1,
+                })
               }
             />
           ))}
@@ -144,7 +154,10 @@ export function ActivityAuditList() {
               key={tt}
               label={TARGET_TYPE_LABELS[tt] ?? tt}
               onRemove={() =>
-                void setParams({ types: types.filter((x) => x !== tt) })
+                void setParams({
+                  types: types.filter((x) => x !== tt),
+                  page: 1,
+                })
               }
             />
           ))}
@@ -153,21 +166,23 @@ export function ActivityAuditList() {
               key={id}
               label={userMap.get(id) ?? id}
               onRemove={() =>
-                void setParams({ users: users.filter((x) => x !== id) })
+                void setParams({
+                  users: users.filter((x) => x !== id),
+                  page: 1,
+                })
               }
             />
           ))}
         </div>
 
         <span className="text-muted-foreground ml-auto shrink-0 text-xs">
-          {!isPending &&
-            `${filtered.length} événement${filtered.length !== 1 ? "s" : ""}`}
+          {!isPending && `${total} événement${total !== 1 ? "s" : ""}`}
         </span>
       </div>
 
       {/* Activity feed */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="space-y-6 p-4">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <div className="space-y-3 p-4">
           {isPending ? (
             Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="flex gap-3 rounded-lg px-3 py-3">
@@ -197,28 +212,29 @@ export function ActivityAuditList() {
               )}
             </div>
           ) : (
-            Array.from(grouped.entries()).map(([label, items]) => (
+            Array.from(grouped.entries()).map(([label, groupItems]) => (
               <section key={label}>
-                <div className="mb-3 flex items-center gap-3">
+                <div className="flex items-center gap-3">
                   <span className="text-muted-foreground text-xs font-semibold tracking-wide whitespace-nowrap uppercase">
                     {label}
                   </span>
                   <div className="bg-border h-px flex-1" />
                   <span className="text-muted-foreground/60 text-[10px] whitespace-nowrap">
-                    {items.length} événement{items.length !== 1 ? "s" : ""}
+                    {groupItems.length} événement
+                    {groupItems.length !== 1 ? "s" : ""}
                   </span>
                 </div>
 
                 <div className="space-y-1">
-                  {items.map((item, idx) => {
+                  {groupItems.map((item, idx) => {
                     const cfg = ACTION_CONFIG[item.action] ?? FALLBACK_ACTION;
                     const { icon: Icon, iconBg, iconColor } = cfg;
                     return (
                       <div
                         key={item.id}
-                        className="hover:bg-muted/60 relative flex gap-3 rounded-lg px-3 py-3 transition-colors"
+                        className="hover:bg-muted/60 relative flex gap-3 rounded-lg px-3 py-1 transition-colors"
                       >
-                        {idx < items.length - 1 && (
+                        {idx < groupItems.length - 1 && (
                           <div className="bg-border/70 absolute top-10 bottom-0 left-[26px] w-px" />
                         )}
                         <div
@@ -269,8 +285,89 @@ export function ActivityAuditList() {
           )}
         </div>
       </div>
+
+      {/* Pagination — pinned at the bottom */}
+      {!isPending && totalPages > 1 && (
+        <div className="border-border shrink-0 border-t px-4 py-3">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page > 1) goToPage(page - 1);
+                  }}
+                  className={
+                    page <= 1 ? "pointer-events-none opacity-50" : ""
+                  }
+                  aria-disabled={page <= 1}
+                />
+              </PaginationItem>
+
+              {getPaginationPages(page, totalPages).map((p, i) =>
+                p === "ellipsis" ? (
+                  <PaginationItem key={`ellipsis-${i}`}>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                ) : (
+                  <PaginationItem key={p}>
+                    <PaginationLink
+                      href="#"
+                      isActive={p === page}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        goToPage(p);
+                      }}
+                    >
+                      {p}
+                    </PaginationLink>
+                  </PaginationItem>
+                ),
+              )}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page < totalPages) goToPage(page + 1);
+                  }}
+                  className={
+                    page >= totalPages ? "pointer-events-none opacity-50" : ""
+                  }
+                  aria-disabled={page >= totalPages}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
+}
+
+function getPaginationPages(
+  currentPage: number,
+  totalPages: number,
+): (number | "ellipsis")[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  const pages: (number | "ellipsis")[] = [1];
+
+  if (currentPage > 3) pages.push("ellipsis");
+
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+  for (let i = start; i <= end; i++) pages.push(i);
+
+  if (currentPage < totalPages - 2) pages.push("ellipsis");
+
+  pages.push(totalPages);
+
+  return pages;
 }
 
 function FilterChip({

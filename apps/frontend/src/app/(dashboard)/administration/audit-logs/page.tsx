@@ -19,11 +19,12 @@ export default async function Page({
   batchPrefetch([
     // ActivityFilter: user list (static, never changes)
     trpc.logActivity.all.queryOptions({ limit: 100 }),
-    // ActivityAuditList: initial feed matching the URL's current search + date range
-    trpc.logActivity.all.queryOptions({
+    // ActivityAuditList: first page matching the URL's current search + date range
+    trpc.logActivity.allPaginated.queryOptions({
       query: q || undefined,
       from: fromDateForRange(range),
-      limit: 200,
+      page: 1,
+      pageSize: 25,
     }),
   ]);
 
