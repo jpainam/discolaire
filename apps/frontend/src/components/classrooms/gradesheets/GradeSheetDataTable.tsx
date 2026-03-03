@@ -113,11 +113,12 @@ export function GradeSheetDataTable() {
         ),
         cell: ({ row }) => {
           const subject = row.original.subject;
+          const gs = row.original;
           const teacher = subject.teacher;
           return (
             <div className="flex w-full flex-row items-center gap-2">
               <Link
-                href={`/classrooms/${subject.classroomId}/subjects/${subject.id}`}
+                href={`/classrooms/${subject.classroomId}/gradesheets/${gs.id}`}
                 className="min-w-0 flex-1 hover:underline"
               >
                 {subject.course.reportName}
@@ -210,10 +211,11 @@ export function GradeSheetDataTable() {
         size: 60,
         cell: ({ row }) => {
           const avg = row.original.avg || 0;
+          const threshold = row.original.scale / 2;
           return (
             <Badge
               appearance={"light"}
-              variant={avg < 10 ? "destructive" : "success"}
+              variant={avg < threshold ? "destructive" : "success"}
             >
               {avg.toFixed(2)}
             </Badge>
@@ -228,10 +230,11 @@ export function GradeSheetDataTable() {
         size: 60,
         cell: ({ row }) => {
           const min = isFinite(row.original.min) ? row.original.min : 0;
+          const threshold = row.original.scale / 2;
           return (
             <Badge
               appearance={"light"}
-              variant={min < 10 ? "secondary" : "warning"}
+              variant={min < threshold ? "secondary" : "warning"}
             >
               {min.toFixed(2)}
             </Badge>
@@ -246,10 +249,11 @@ export function GradeSheetDataTable() {
         size: 60,
         cell: ({ row }) => {
           const max = isFinite(row.original.max) ? row.original.max : 0;
+          const threshold = row.original.scale / 2;
           return (
             <Badge
               appearance={"light"}
-              variant={max < 10 ? "info" : "secondary"}
+              variant={max < threshold ? "info" : "secondary"}
             >
               {max.toFixed(2)}
             </Badge>

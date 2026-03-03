@@ -35,40 +35,48 @@ import { cn } from "~/lib/utils";
 
 export function ClassroomGradeChart({
   grades,
+  scale,
   className,
 }: {
   grades: RouterOutputs["gradeSheet"]["grades"];
+  scale: number;
   className?: string;
 }) {
   const t = useTranslations();
   const pathname = usePathname();
-  const p05 = grades.filter((g) => !g.isAbsent && g.grade < 5).length;
-  const p09 = grades.filter((g) => g.grade >= 5 && g.grade < 10).length;
-  const p13 = grades.filter((g) => g.grade >= 10 && g.grade < 14).length;
-  const p17 = grades.filter((g) => g.grade >= 14 && g.grade < 18).length;
-  const p20 = grades.filter((g) => g.grade >= 18).length;
+
+  // Thresholds proportional to scale (calibrated for scale=20)
+  const tPass = scale / 2;          // 10 @ 20, 5 @ 10
+  const tGood = scale * 0.7;        // 14 @ 20, 7 @ 10
+  const tExcellent = scale * 0.9;   // 18 @ 20, 9 @ 10
+  const tPassable = scale * 0.4;    // 8  @ 20, 4 @ 10
+  const tLow = scale * 0.25;        // 5  @ 20, 2.5 @ 10
+
+  const p05 = grades.filter((g) => !g.isAbsent && g.grade < tLow).length;
+  const p09 = grades.filter((g) => g.grade >= tLow && g.grade < tPass).length;
+  const p13 = grades.filter((g) => g.grade >= tPass && g.grade < tGood).length;
+  const p17 = grades.filter((g) => g.grade >= tGood && g.grade < tExcellent).length;
+  const p20 = grades.filter((g) => g.grade >= tExcellent).length;
   const total = grades.filter((g) => !g.isAbsent).length;
 
-  //const totalFailed = grades.filter((g) => g.grade < 10).length;
-
   const malePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "male",
+    (g) => g.grade >= tPass && g.student.gender === "male",
   ).length;
   const femalePassedCount = grades.filter(
-    (g) => g.grade >= 10 && g.student.gender === "female",
+    (g) => g.grade >= tPass && g.student.gender === "female",
   ).length;
   const maleFailedCount = grades.filter(
-    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "male",
+    (g) => !g.isAbsent && g.grade < tPass && g.student.gender === "male",
   ).length;
   const femaleFailedCount = grades.filter(
-    (g) => !g.isAbsent && g.grade < 10 && g.student.gender === "female",
+    (g) => !g.isAbsent && g.grade < tPass && g.student.gender === "female",
   ).length;
 
-  const countp18 = grades.filter((g) => g.grade >= 18).length;
-  const countp14 = grades.filter((g) => g.grade >= 14 && g.grade < 18).length;
-  const countp10 = grades.filter((g) => g.grade >= 10 && g.grade < 14).length;
-  const countp05 = grades.filter((g) => g.grade >= 8 && g.grade < 10).length;
-  const countp00 = grades.filter((g) => !g.isAbsent && g.grade < 8).length;
+  const countp18 = grades.filter((g) => g.grade >= tExcellent).length;
+  const countp14 = grades.filter((g) => g.grade >= tGood && g.grade < tExcellent).length;
+  const countp10 = grades.filter((g) => g.grade >= tPass && g.grade < tGood).length;
+  const countp05 = grades.filter((g) => g.grade >= tPassable && g.grade < tPass).length;
+  const countp00 = grades.filter((g) => !g.isAbsent && g.grade < tPassable).length;
   return (
     <div className={cn("flex flex-col gap-2 overflow-hidden p-2", className)}>
       <Card className="group/dist">
@@ -92,11 +100,11 @@ export function ClassroomGradeChart({
           >
             <BarChart
               data={[
-                { range: "0-5", count: p05, fill: "#ef4444" },
-                { range: "6-9", count: p09, fill: "#f97316" },
-                { range: "10-13", count: p13, fill: "#eab308" },
-                { range: "14-17", count: p17, fill: "#22c55e" },
-                { range: "18-20", count: p20, fill: "#16a34a" },
+                { range: `0-${tLow}`, count: p05, fill: "#ef4444" },
+                { range: `${tLow}-${tPass}`, count: p09, fill: "#f97316" },
+                { range: `${tPass}-${tGood}`, count: p13, fill: "#eab308" },
+                { range: `${tGood}-${tExcellent}`, count: p17, fill: "#22c55e" },
+                { range: `${tExcellent}-${scale}`, count: p20, fill: "#16a34a" },
               ]}
             >
               <CartesianGrid strokeDasharray="3 3" />
@@ -182,7 +190,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                <Label>Excellent {">= 18"}</Label>
+                <Label>Excellent {`>= ${tExcellent}`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -197,7 +205,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-blue-500"></div>
-                <Label>Bien {">= 14"}</Label>
+                <Label>Bien {`>= ${tGood}`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -212,7 +220,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-orange-500"></div>
-                <Label>Assez bien {">= 10"}</Label>
+                <Label>Assez bien {`>= ${tPass}`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -227,7 +235,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                <Label>Passable {">= 8"}</Label>
+                <Label>Passable {`>= ${tPassable}`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">
@@ -242,7 +250,7 @@ export function ClassroomGradeChart({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                <Label>Nul {"< 8"}</Label>
+                <Label>Nul {`< ${tPassable}`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-20 rounded-full bg-gray-200">

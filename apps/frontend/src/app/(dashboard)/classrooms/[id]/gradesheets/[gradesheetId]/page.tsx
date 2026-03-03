@@ -33,11 +33,14 @@ export default async function Page(props: {
 
   const t = await getTranslations();
   const locale = await getLocale();
+  const passingThreshold = gradesheet.scale / 2;
   const maxGrade = Math.max(...grades.map((grade) => grade.grade));
   const minGrade = Math.min(
     ...grades.filter((g) => !g.isAbsent).map((grade) => grade.grade),
   );
-  const grades10 = grades.filter((grade) => grade.grade >= 10).length;
+  const grades10 = grades.filter(
+    (grade) => grade.grade >= passingThreshold,
+  ).length;
   const len = grades.filter((grade) => !grade.isAbsent).length;
   const average =
     len == 0 ? 0 : grades.reduce((acc, grade) => acc + grade.grade, 0) / len;
@@ -48,7 +51,8 @@ export default async function Page(props: {
     maleCount == 0
       ? 0
       : grades.filter(
-          (grade) => grade.grade >= 10 && grade.student.gender == "male",
+          (grade) =>
+            grade.grade >= passingThreshold && grade.student.gender == "male",
         ).length / maleCount;
 
   const femaleCount = grades.filter(
@@ -58,7 +62,9 @@ export default async function Page(props: {
     femaleCount == 0
       ? 0
       : grades.filter(
-          (grade) => grade.grade >= 10 && grade.student.gender == "female",
+          (grade) =>
+            grade.grade >= passingThreshold &&
+            grade.student.gender == "female",
         ).length / femaleCount;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -160,7 +166,7 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium">{t("average")} ≥ 10</div>
+            <div className="text-sm font-medium">{t("average")} ≥ {passingThreshold}</div>
             <div className="flex items-center space-x-2">
               <Award className="h-5 w-5 text-purple-600" />
               <span className="text-2xl font-bold">{grades10}</span>
@@ -194,7 +200,7 @@ export default async function Page(props: {
 
         <Card className="px-0 py-2">
           <CardContent>
-            <div className="text-sm font-medium">{t("success_rate")} ≥ 10</div>
+            <div className="text-sm font-medium">{t("success_rate")} ≥ {passingThreshold}</div>
             <div className="flex items-center space-x-2">
               <Progress value={(grades10 * 100) / len} />
               <span className="text-sm font-medium">
@@ -237,7 +243,7 @@ export default async function Page(props: {
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary errorComponent={ErrorFallback}>
-          <ClassroomGradeChart grades={grades} />
+          <ClassroomGradeChart grades={grades} scale={gradesheet.scale} />
         </ErrorBoundary>
       </div>
     </div>
