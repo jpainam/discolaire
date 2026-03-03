@@ -41,9 +41,10 @@ export function getDb({ connectionString, tenant }: GetDbParams): PrismaClient {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return cache.get(tenantConnectionString)!;
   }
+  const schema = tenant === "app" ? "public" : tenant;
   const adapter = new PrismaPg(
     { connectionString: connectionString },
-    { schema: !tenant.includes("demo") ? "public" : tenant }, //
+    { schema },
   );
 
   const prisma = new PrismaClient({ adapter });

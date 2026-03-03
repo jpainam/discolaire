@@ -13,8 +13,8 @@ import {
   FROM,
   getTenantAdminEmails,
   nextWeekWindow,
-  tenantBaseUrl,
   SCHOOL_TENANTS,
+  tenantBaseUrl,
 } from "./constants";
 
 /**

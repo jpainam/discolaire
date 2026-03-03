@@ -9,7 +9,12 @@ import { TransactionsSummary } from "@repo/transactional";
 import { env } from "~/env";
 import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
-import { FROM, getTenantAdminEmails, SCHOOL_TENANTS, tenantBaseUrl } from "./constants";
+import {
+  FROM,
+  getTenantAdminEmails,
+  SCHOOL_TENANTS,
+  tenantBaseUrl,
+} from "./constants";
 
 /**
  * Wednesday – send a summary of the last 3 days (Mon → Wed).

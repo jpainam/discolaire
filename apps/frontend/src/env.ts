@@ -37,7 +37,7 @@ export const env = createEnv({
     AI_PROVIDER: z.enum(["openai", "anthropic", "google"]).optional(),
     AI_MODEL: z.string().min(1).optional(),
     AI_SYSTEM_PROMPT: z.string().optional(),
-    LOCAL_BACKUP_PATH: z.string().optional()
+    LOCAL_BACKUP_PATH: z.string().optional(),
   },
 
   /**

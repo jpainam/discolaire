@@ -9,7 +9,12 @@ import { StaffWeeklyTimetableEmail } from "@repo/transactional";
 import { env } from "~/env";
 import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
-import { FROM, SCHOOL_TENANTS, tenantBaseUrl, WEEKDAY_LABELS } from "./constants";
+import {
+  FROM,
+  SCHOOL_TENANTS,
+  tenantBaseUrl,
+  WEEKDAY_LABELS,
+} from "./constants";
 
 export async function sendStaffWeeklyTimetables() {
   // Compute next week's window (Mon 00:00 → Sun 23:59:59)
@@ -98,7 +103,9 @@ export async function sendStaffWeeklyTimetables() {
             weekLabel,
             school: {
               name: schoolName,
-              logo: buildLogoUrl(staff.school.logo, tenantBaseUrl(tenant)) ?? undefined,
+              logo:
+                buildLogoUrl(staff.school.logo, tenantBaseUrl(tenant)) ??
+                undefined,
             },
             days,
           }),
