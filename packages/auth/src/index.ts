@@ -25,7 +25,13 @@ import {
 async function sendPlainEmail(
   baseUrl: string,
   apiKey: string,
-  opts: { to: string; subject: string; html?: string; text?: string; tenant?: string },
+  opts: {
+    to: string;
+    subject: string;
+    html?: string;
+    text?: string;
+    tenant?: string;
+  },
 ) {
   await fetch(`${baseUrl}/api/emails/plain`, {
     method: "POST",
