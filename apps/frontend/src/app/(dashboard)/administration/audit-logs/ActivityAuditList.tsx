@@ -183,7 +183,7 @@ export function ActivityAuditList() {
       </div>
 
       {/* Activity feed */}
-      <ScrollArea className="h-[calc(100vh-8rem)]">
+      <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-3 p-4">
           {isPending ? (
             Array.from({ length: 6 }).map((_, i) => (

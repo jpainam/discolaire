@@ -30,7 +30,7 @@ export default async function Page({
 
   return (
     <HydrateClient>
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         {/* Suspense because ActivityFilter uses useSuspenseQuery */}
         <Suspense>
           <ActivityFilter />
