@@ -60,7 +60,7 @@ export const directoryRouter = {
           lastName: student.lastName,
           phoneNumber1: student.phoneNumber,
           phoneNumber2: null,
-          email: student.user?.email ?? null,
+          email: student.email ?? null,
         });
       }
       const staffs = await ctx.db.staff.findMany({

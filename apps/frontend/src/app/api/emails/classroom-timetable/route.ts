@@ -173,7 +173,7 @@ export async function POST(req: Request) {
 
       if (recipientType === "students") {
         for (const student of students) {
-          const email = (student.user?.email ?? "").trim();
+          const email = (student.email ?? "").trim();
           const name = getStudentName(student) || undefined;
           if (!email) {
             skippedNoEmail.push(name ?? student.id);

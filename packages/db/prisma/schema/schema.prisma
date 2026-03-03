@@ -409,6 +409,7 @@ model Student {
     isBaptized           Boolean                    @default(false)
     isRepeating          Boolean                    @default(false)
     isNew                Boolean                    @default(false)
+    email                String?
     phoneNumber          String?
     parentDivorced       Boolean                    @default(false)
     dateOfEntry          DateTime?                  @db.Date

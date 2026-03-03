@@ -389,7 +389,7 @@ function ActionCells({ student }: { student: StudentAllProcedureOutput }) {
           <DropdownInvitation
             entityId={student.id}
             entityType="student"
-            email={student.user?.email}
+            email={student.email}
           />
           <DropdownMenuSeparator />
           <DropdownMenuItem

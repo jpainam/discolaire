@@ -208,7 +208,7 @@ export function StudentTable() {
                         <DropdownInvitation
                           entityId={student.id}
                           entityType="student"
-                          email={student.user?.email}
+                          email={student.email}
                         />
                       </DropdownMenuContent>
                     </DropdownMenu>

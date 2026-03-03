@@ -60,6 +60,7 @@ export function BasicInfoStep({
         isBaptized: value.isBaptized ?? false,
         tags: value.tags ?? [],
         externalAccountingNo: value.externalAccountingNo ?? "",
+        email: value.email ?? "",
         phoneNumber: value.phoneNumber ?? "",
         allergies: value.allergies ?? "",
         observation: value.observation ?? "",
@@ -252,6 +253,32 @@ export function BasicInfoStep({
                       placeholder={t("citizenship")}
                       onChange={field.handleChange}
                       defaultValue={field.state.value}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
+            <form.Field
+              name="email"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel>{t("email")}</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      type="email"
+                      value={field.state.value ?? ""}
+                      onBlur={field.handleBlur}
+                      onChange={(event) =>
+                        field.handleChange(event.target.value)
+                      }
+                      autoComplete="off"
                     />
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />

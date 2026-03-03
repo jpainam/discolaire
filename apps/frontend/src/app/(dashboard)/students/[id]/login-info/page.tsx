@@ -99,7 +99,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <AttachUserButton
               entityId={student.id}
               type={"student"}
-              email={student.user?.email}
+              email={student.email}
               userId={student.userId ?? undefined}
               username={student.user?.username}
             />

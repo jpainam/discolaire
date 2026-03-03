@@ -85,7 +85,7 @@ async function toExcel({
       Religion: student.religion?.name,
       formerSchool: student.formerSchool?.name,
       Residence: student.residence,
-      Email: student.user?.email,
+      Email: student.email,
       Phone: student.phoneNumber,
       Address: student.residence,
       "Date de naissance":
@@ -129,7 +129,7 @@ async function toCSV({
     return {
       "First Name": student.firstName,
       "Last Name": student.lastName,
-      Email: student.user?.email,
+      Email: student.email,
       Phone: student.phoneNumber,
       Address: student.residence,
       "Date of Birth": student.dateOfBirth?.toLocaleDateString(locale, {

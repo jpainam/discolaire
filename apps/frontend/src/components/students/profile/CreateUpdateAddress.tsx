@@ -9,6 +9,7 @@ import { DatePicker } from "~/components/DatePicker";
 import { PhoneInput } from "~/components/phone-input";
 import { CountryPicker } from "~/components/shared/CountryPicker";
 import { InputField } from "~/components/shared/forms/input-field";
+import { Input } from "~/components/ui/input";
 import { FormerSchoolSelector } from "~/components/shared/selects/FormerSchoolSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
@@ -82,6 +83,21 @@ export function CreateUpdateAddress() {
                       onChange={field.onChange}
                       defaultValue={field.value}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>{t("email")}</FormLabel>
+                  <FormControl>
+                    <Input type="email" {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

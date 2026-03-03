@@ -112,7 +112,7 @@ async function _toExcel({
       religion: student.religion?.name,
       formerSchool: student.formerSchool?.name,
       Residence: student.residence,
-      Email: student.user?.email,
+      Email: student.email,
       Phone: student.phoneNumber,
       Address: student.residence,
       "Date of Birth":

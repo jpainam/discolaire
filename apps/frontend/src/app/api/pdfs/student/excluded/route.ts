@@ -71,7 +71,7 @@ async function toExcel({
 
       formerSchool: student.formerSchool?.name,
       Residence: student.residence,
-      Email: student.user?.email,
+      Email: student.email,
       Phone: student.phoneNumber,
       Address: student.residence,
       Observation: student.observation,

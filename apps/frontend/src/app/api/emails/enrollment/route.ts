@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
     const subject = `Inscription de ${studentName} - ${classroom.name} (${schoolYear.name})`;
 
     const emails = [
-      student.user?.email,
+      student.email,
       ...student.studentContacts.map((sc) => sc.contact.email),
     ].filter((email): email is string => Boolean(email));
 

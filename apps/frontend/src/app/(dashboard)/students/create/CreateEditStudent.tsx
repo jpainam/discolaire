@@ -56,6 +56,7 @@ const toStudentMutationInput = (data: z.output<typeof studentSchema>) => {
     registrationNumber: data.registrationNumber,
     firstName: data.firstName,
     lastName: data.lastName,
+    email: data.email,
     dateOfBirth: data.dateOfBirth,
     placeOfBirth: data.placeOfBirth,
     gender: data.gender,

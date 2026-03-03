@@ -131,7 +131,7 @@ export function StudentSearchResultCard({
                     <span className="text-xs">{student.classroom.name}</span>
                   </div>
                 )}
-                <EmailComponent email={student.user?.email} />
+                <EmailComponent email={student.email} />
 
                 {student.phoneNumber && (
                   <div className="flex items-center gap-1.5">

@@ -31,6 +31,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       : [],
     registrationNumber: student.registrationNumber ?? "",
     externalAccountingNo: student.externalAccountingNo ?? "",
+    email: student.email ?? "",
     phoneNumber: student.phoneNumber ?? "",
     residence: student.residence ?? "",
     allergies: student.allergies ?? "",

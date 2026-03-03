@@ -16,6 +16,7 @@ export const basicInfoSchema = z.object({
   tags: z.array(z.string()).optional().default([]),
   registrationNumber: z.string().optional(),
   externalAccountingNo: z.string().optional().default(""),
+  email: z.string().optional().default(""),
   phoneNumber: z.string().optional().default(""),
   residence: z.string().min(1),
   allergies: z.string().optional().default(""),

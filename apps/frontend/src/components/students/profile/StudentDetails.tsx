@@ -109,7 +109,7 @@ export default function StudentDetails({ className }: { className?: string }) {
           <AtSign className="h-4 w-4" />
           {t("email")}
         </span>
-        <EmailComponent email={student.user?.email} />
+        <EmailComponent email={student.email} />
         {/* <span className="flex flex-row items-center gap-1 text-muted-foreground">
           <CircleUser className="h-4 w-4" />
           {t("userId")}

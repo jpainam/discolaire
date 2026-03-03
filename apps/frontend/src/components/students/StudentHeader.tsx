@@ -342,7 +342,7 @@ export function StudentHeader() {
               <DropdownInvitation
                 entityId={student.id}
                 entityType="student"
-                email={student.user?.email}
+                email={student.email}
               />
               <DropdownMenuSeparator />
               <DropdownHelp />
@@ -375,7 +375,7 @@ export function StudentHeader() {
                           userId={student.userId}
                           type="student"
                           entityId={params.id}
-                          email={student.user?.email}
+                          email={student.email}
                           username={student.user?.username}
                         />
                       ),

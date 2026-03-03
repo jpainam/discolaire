@@ -114,7 +114,7 @@ export function StudentPage({
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
             <Item label={"Tel"} value={student.phoneNumber} />
-            <Item label="Email" value={student.user?.email} />
+            <Item label="Email" value={student.email} />
           </View>
 
           <View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
