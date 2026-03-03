@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { getSession } from "~/auth/server";
 import { AppSidebar } from "~/components/app-sidebar";
 import { BreadcrumbsSetter } from "~/components/BreadcrumbsSetter";
+import { CommunicationsProvider } from "~/components/communications/communications-context";
 import { ErrorFallback } from "~/components/error-fallback";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -73,23 +74,25 @@ export default async function Layout({
       >
         <SheetProvider>
           <ModalProvider>
-            <AppSidebar className="p-0" variant="inset" />
-            <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
-            <SidebarInset className="flex flex-col overflow-hidden border">
-              <RightPanelProvider>
-                <HydrateClient>
-                  <ErrorBoundary errorComponent={ErrorFallback}>
-                    <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-                      <SiteHeader schoolYearId={schoolYearId} />
-                    </Suspense>
-                  </ErrorBoundary>
-                </HydrateClient>
-                <Container>{children}</Container>
-              </RightPanelProvider>
-            </SidebarInset>
+            <CommunicationsProvider>
+              <AppSidebar className="p-0" variant="inset" />
+              <BreadcrumbsSetter items={[{ label: t("home"), href: "/" }]} />
+              <SidebarInset className="flex flex-col overflow-hidden border">
+                <RightPanelProvider>
+                  <HydrateClient>
+                    <ErrorBoundary errorComponent={ErrorFallback}>
+                      <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+                        <SiteHeader schoolYearId={schoolYearId} />
+                      </Suspense>
+                    </ErrorBoundary>
+                  </HydrateClient>
+                  <Container>{children}</Container>
+                </RightPanelProvider>
+              </SidebarInset>
 
-            <GlobalSheet />
-            <GlobalModal />
+              <GlobalSheet />
+              <GlobalModal />
+            </CommunicationsProvider>
           </ModalProvider>
         </SheetProvider>
       </SchoolContextProvider>

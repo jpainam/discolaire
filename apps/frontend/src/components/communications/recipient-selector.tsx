@@ -17,7 +17,6 @@ import type { ClassRoom } from "./mock-data";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
-import { useModal } from "~/hooks/use-modal";
 import { cn } from "~/lib/utils";
 import { ALL_STAFF, CLASSES } from "./mock-data";
 
@@ -622,7 +621,6 @@ export default function RecipientSelector({
         : "recipient-type"
       : "mode",
   );
-  const { closeModal } = useModal();
   const [broadcastMode, setBroadcastMode] = useState<BroadcastMode | null>(
     initialTarget?.mode ?? null,
   );
@@ -716,93 +714,83 @@ export default function RecipientSelector({
   const isLastStep = step === "recipient-type";
 
   return (
-    <div className="bg-foreground/30 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className="bg-card border-border flex max-h-[85vh] w-full max-w-xl flex-col rounded-xl border shadow-2xl">
-        {/* Header */}
-        <div className="border-border flex items-center justify-between border-b px-6 py-4">
-          <div>
-            <h2 className="text-foreground text-base font-semibold">
-              Select Recipients
-            </h2>
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              {step === "mode" && "Choose how to target recipients"}
-              {step === "class-select" && "Select one or more classes"}
-              {step === "recipient-type" &&
-                (broadcastMode === "broadcast"
-                  ? "Choose recipient groups"
-                  : "Choose recipient type")}
-            </p>
-          </div>
-          <button
-            onClick={() => {
-              closeModal();
+    <div className="flex max-h-[85vh] flex-col overflow-hidden">
+      {/* Header */}
+      <div className="border-border flex items-center border-b px-6 py-4">
+        <div>
+          <h2 className="text-foreground text-base font-semibold">
+            Select Recipients
+          </h2>
+          <p className="text-muted-foreground mt-0.5 text-xs">
+            {step === "mode" && "Choose how to target recipients"}
+            {step === "class-select" && "Select one or more classes"}
+            {step === "recipient-type" &&
+              (broadcastMode === "broadcast"
+                ? "Choose recipient groups"
+                : "Choose recipient type")}
+          </p>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto px-6 py-5">
+        {broadcastMode && (
+          <StepIndicator current={currentStepIndex} steps={steps} />
+        )}
+        {step === "mode" && <StepMode onSelect={handleModeSelect} />}
+        {step === "class-select" && (
+          <StepClassSelect selected={classIds} onToggle={handleClassToggle} />
+        )}
+        {step === "recipient-type" && broadcastMode === "broadcast" && (
+          <StepBroadcastRole
+            selected={broadcastRoles}
+            onToggle={handleBroadcastRoleToggle}
+          />
+        )}
+        {step === "recipient-type" && broadcastMode === "class-based" && (
+          <StepClassRecipientType
+            selectedClassIds={classIds}
+            mode={classRecipientMode}
+            onModeChange={(m) => {
+              setClassRecipientMode(m);
+              setSpecificPersonIds([]);
             }}
-            className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-full transition-colors"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-5">
-          {broadcastMode && (
-            <StepIndicator current={currentStepIndex} steps={steps} />
-          )}
-          {step === "mode" && <StepMode onSelect={handleModeSelect} />}
-          {step === "class-select" && (
-            <StepClassSelect selected={classIds} onToggle={handleClassToggle} />
-          )}
-          {step === "recipient-type" && broadcastMode === "broadcast" && (
-            <StepBroadcastRole
-              selected={broadcastRoles}
-              onToggle={handleBroadcastRoleToggle}
-            />
-          )}
-          {step === "recipient-type" && broadcastMode === "class-based" && (
-            <StepClassRecipientType
-              selectedClassIds={classIds}
-              mode={classRecipientMode}
-              onModeChange={(m) => {
-                setClassRecipientMode(m);
-                setSpecificPersonIds([]);
-              }}
-              specificIds={specificPersonIds}
-              onToggleSpecific={handleSpecificToggle}
-            />
-          )}
-        </div>
-
-        {/* Footer */}
-        {step !== "mode" && (
-          <>
-            <Separator />
-            <div className="flex items-center justify-between px-6 py-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleBack}
-                className="gap-1.5"
-              >
-                <ChevronLeft className="h-4 w-4" /> Back
-              </Button>
-              <Button
-                size="sm"
-                onClick={handleNext}
-                disabled={!canProceed()}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5"
-              >
-                {isLastStep ? (
-                  "Confirm Recipients"
-                ) : (
-                  <>
-                    Continue <ChevronRight className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </div>
-          </>
+            specificIds={specificPersonIds}
+            onToggleSpecific={handleSpecificToggle}
+          />
         )}
       </div>
+
+      {/* Footer */}
+      {step !== "mode" && (
+        <>
+          <Separator />
+          <div className="flex items-center justify-between px-6 py-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBack}
+              className="gap-1.5"
+            >
+              <ChevronLeft className="h-4 w-4" /> Back
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleNext}
+              disabled={!canProceed()}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5"
+            >
+              {isLastStep ? (
+                "Confirm Recipients"
+              ) : (
+                <>
+                  Continue <ChevronRight className="h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

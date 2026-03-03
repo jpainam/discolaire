@@ -30,10 +30,16 @@ export default function GlobalModal() {
       }}
     >
       <DialogContent className={className}>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
+        {title ?? description ? (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
+          </DialogHeader>
+        ) : (
+          <DialogTitle className="sr-only">Dialog</DialogTitle>
+        )}
 
         {view}
       </DialogContent>

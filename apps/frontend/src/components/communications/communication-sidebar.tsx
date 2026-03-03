@@ -1,12 +1,11 @@
 "use client";
 
 import type * as React from "react";
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Inbox, PenSquare, Send, Trash2 } from "lucide-react";
 
-import type { RecipientTarget } from "./recipient-selector";
+import { useCommunications } from "./communications-context";
 import { Button } from "~/components/ui/button";
 import {
   Sidebar,
@@ -18,15 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
-import { useModal } from "~/hooks/use-modal";
 import { SidebarLogo } from "../sidebar-logo";
-import RecipientSelector from "./recipient-selector";
-
-type ComposeSta =
-  | { stage: "idle" }
-  | { stage: "selecting-recipients" }
-  | { stage: "composing"; target: RecipientTarget }
-  | { stage: "editing-recipients"; target: RecipientTarget };
 
 const NAV_ITEMS = [
   { id: "inbox", label: "Inbox", icon: Inbox, url: "/communications" },
@@ -39,22 +30,12 @@ const NAV_ITEMS = [
   },
   { id: "trash", label: "Trash", icon: Trash2, url: "/communications/trash" },
 ];
+
 export function CommunicationSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const { openModal } = useModal();
-  const [composeState, setComposeState] = useState<ComposeSta>({
-    stage: "idle",
-  });
-
-  function handleRecipientConfirm(target: RecipientTarget) {
-    if (composeState.stage === "editing-recipients") {
-      setComposeState({ stage: "composing", target });
-    } else {
-      setComposeState({ stage: "composing", target });
-    }
-  }
+  const { startCompose } = useCommunications();
 
   return (
     <Sidebar {...props}>
@@ -66,19 +47,7 @@ export function CommunicationSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <Button
-                  onClick={() => {
-                    openModal({
-                      className: "sm:max-w-3xl",
-                      view: (
-                        <RecipientSelector
-                          initialTarget={null}
-                          onConfirm={handleRecipientConfirm}
-                        />
-                      ),
-                    });
-                  }}
-                >
+                <Button onClick={startCompose}>
                   <PenSquare className="h-4 w-4" />
                   Compose Message
                 </Button>
@@ -116,7 +85,6 @@ export function CommunicationSidebar({
               <SidebarMenuButton
                 asChild
                 tooltip={""}
-                //isActive={pathname === item.label}
               >
                 <Link href={"#"}></Link>
               </SidebarMenuButton>

@@ -4,30 +4,20 @@ import { useMemo, useState } from "react";
 import { X } from "lucide-react";
 
 import type { Message } from "~/components/communications/mock-data";
-import type { RecipientTarget } from "~/components/communications/recipient-selector";
+import { useCommunications } from "~/components/communications/communications-context";
 import ComposePanel from "~/components/communications/compose-panel";
 import MessageList from "~/components/communications/message-list";
 import MessageView from "~/components/communications/message-view";
 import { MOCK_MESSAGES } from "~/components/communications/mock-data";
 import { cn } from "~/lib/utils";
 
-type ComposeSta =
-  | { stage: "idle" }
-  | { stage: "selecting-recipients" }
-  | { stage: "composing"; target: RecipientTarget }
-  | { stage: "editing-recipients"; target: RecipientTarget };
-
 export default function InboxPage() {
   const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
   const [activeFolder, setActiveFolder] = useState("inbox");
   const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
-  const [composeState, setComposeState] = useState<ComposeSta>({
-    stage: "idle",
-  });
+  const { composeStage, startCompose, cancelCompose } = useCommunications();
 
-  const isComposing =
-    composeState.stage === "composing" ||
-    composeState.stage === "editing-recipients";
+  const isComposing = composeStage === "composing";
 
   const folderMessages = useMemo(
     () => messages.filter((m) => m.folder === activeFolder),
@@ -41,8 +31,7 @@ export default function InboxPage() {
 
   function handleSelectMessage(msg: Message) {
     setActiveMessageId(msg.id);
-
-    setComposeState({ stage: "idle" });
+    cancelCompose();
     setMessages((prev) =>
       prev.map((m) => (m.id === msg.id ? { ...m, read: true } : m)),
     );
@@ -50,42 +39,7 @@ export default function InboxPage() {
 
   function handleComposeClick() {
     setActiveMessageId(null);
-
-    setComposeState({ stage: "selecting-recipients" });
-  }
-
-  // function handleRecipientConfirm(target: RecipientTarget) {
-  //   if (composeState.stage === "editing-recipients") {
-  //     setComposeState({ stage: "composing", target });
-  //   } else {
-  //     setComposeState({ stage: "composing", target });
-  //   }
-  // }
-
-  // function handleRecipientCancel() {
-  //   if (composeState.stage === "editing-recipients") {
-  //     // Go back to composing with whatever target was there
-  //     setComposeState({
-  //       stage: "composing",
-  //       target: (
-  //         composeState as {
-  //           stage: "editing-recipients";
-  //           target: RecipientTarget;
-  //         }
-  //       ).target,
-  //     });
-  //   } else {
-  //     setComposeState({ stage: "idle" });
-  //   }
-  // }
-
-  function handleEditRecipients() {
-    if (composeState.stage === "composing") {
-      setComposeState({
-        stage: "editing-recipients",
-        target: composeState.target,
-      });
-    }
+    startCompose();
   }
 
   function handleSend(data: {
@@ -109,7 +63,7 @@ export default function InboxPage() {
     setMessages((prev) => [newMsg, ...prev]);
     setActiveFolder("sent");
     setActiveMessageId(newMsg.id);
-    setComposeState({ stage: "idle" });
+    cancelCompose();
   }
 
   function handleDraft(data: {
@@ -131,7 +85,7 @@ export default function InboxPage() {
     setMessages((prev) => [newMsg, ...prev]);
     setActiveFolder("drafts");
     setActiveMessageId(newMsg.id);
-    setComposeState({ stage: "idle" });
+    cancelCompose();
   }
 
   return (
@@ -146,14 +100,7 @@ export default function InboxPage() {
           )}
         >
           {/* Mobile top bar */}
-          <div className="border-border bg-card flex items-center gap-2 border-b px-3 py-2 lg:hidden">
-            {/* <button
-              onClick={() => setSidebarOpen(true)}
-              className="text-muted-foreground hover:bg-muted rounded-md p-2 transition-colors"
-            >
-              <Menu className="h-5 w-5" />
-            </button> */}
-          </div>
+          <div className="border-border bg-card flex items-center gap-2 border-b px-3 py-2 lg:hidden" />
           <div className="flex flex-1 flex-col overflow-hidden">
             <MessageList
               messages={folderMessages}
@@ -171,13 +118,11 @@ export default function InboxPage() {
             !isComposing && !activeMessageId ? "hidden sm:flex" : "flex",
           )}
         >
-          {isComposing && composeState.stage === "composing" ? (
+          {isComposing ? (
             <ComposePanel
-              target={composeState.target}
-              onOpenRecipientSelector={handleEditRecipients}
               onSend={handleSend}
               onDraft={handleDraft}
-              onCancel={() => setComposeState({ stage: "idle" })}
+              onCancel={cancelCompose}
             />
           ) : (
             <>
