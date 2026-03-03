@@ -1,45 +1,77 @@
 import {
   Body,
+  Button,
   Container,
-  Heading,
+  Font,
+  Head,
   Html,
-  Link,
+  Preview,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 
-export default function PasswordResetSuccess() {
+import { EmailFooter } from "../components/EmailFooter";
+
+export default function PasswordResetSuccess({
+  loginUrl = "https://app.discolaire.com/login",
+}: {
+  loginUrl?: string;
+}) {
   return (
-    <Html>
+    <Html lang="fr">
       <Tailwind>
-        <Body className="bg-gray-100 font-sans">
-          <Container className="mx-auto max-w-md py-10">
-            <Section className="rounded-lg bg-white p-6 shadow-md">
-              <Heading className="mb-4 text-center text-2xl font-semibold text-blue-600">
-                Password Reset Successful
-              </Heading>
-              <Text className="mb-4 text-gray-700">Hello,</Text>
-              <Text className="mb-4 text-gray-700">
-                We wanted to let you know that your password has been
-                successfully reset. You can now log in with your new password.
-              </Text>
-              <Section className="text-center">
-                <Link
-                  href="https://your-app.com/login"
-                  className="inline-block rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white"
-                >
-                  Log In
-                </Link>
-              </Section>
-              <Text className="mt-6 text-xs text-gray-500">
-                If you did not request this change, please contact our support
-                team immediately.
-              </Text>
-              <Text className="mt-2 text-xs text-gray-500">
-                Thank you for using our service!
-              </Text>
+        <Head>
+          <Font
+            fontFamily="Geist"
+            fallbackFontFamily="Helvetica"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-400-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={400}
+            fontStyle="normal"
+          />
+          <Font
+            fontFamily="Geist"
+            fallbackFontFamily="Helvetica"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-500-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={500}
+            fontStyle="normal"
+          />
+        </Head>
+        <Preview>Votre mot de passe a été réinitialisé</Preview>
+        <Body className="mx-auto my-auto bg-[#f5f5f5] font-sans">
+          <Container
+            className="mx-auto my-[40px] max-w-[600px] rounded-[8px] border border-[#E8E7E1] bg-white p-[32px]"
+            style={{ borderStyle: "solid", borderWidth: 1 }}
+          >
+            <Text className="mb-[4px] text-[24px] font-semibold text-blue-600">
+              Mot de passe réinitialisé
+            </Text>
+            <Text className="mb-[16px] text-[14px] leading-[24px] text-gray-700">
+              Bonjour,
+            </Text>
+            <Text className="mb-[24px] text-[14px] leading-[24px] text-gray-700">
+              Votre mot de passe a été réinitialisé avec succès. Vous pouvez
+              maintenant vous connecter avec votre nouveau mot de passe.
+            </Text>
+            <Section className="text-center">
+              <Button
+                href={loginUrl}
+                className="box-border rounded-[8px] bg-blue-600 px-[24px] py-[12px] text-[16px] font-medium text-white no-underline"
+              >
+                Se connecter
+              </Button>
             </Section>
+            <Text className="mt-[24px] text-[12px] text-gray-500">
+              Si vous n&apos;avez pas demandé cette modification, veuillez
+              contacter notre équipe d&apos;assistance immédiatement.
+            </Text>
+            <EmailFooter />
           </Container>
         </Body>
       </Tailwind>

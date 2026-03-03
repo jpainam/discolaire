@@ -9,7 +9,6 @@ export * from "./emails/InvitationEmail";
 export * from "./emails/LatenessEmail";
 export * from "./emails/PasswordResetSuccess";
 export * from "./emails/ResetPassword";
-export * from "./emails/TransactionConfirmation";
 export * from "./emails/TransactionsSummary";
 export * from "./emails/WelcomeEmail";
 export * from "./emails/QuarterlyAttendanceSummaryEmail";

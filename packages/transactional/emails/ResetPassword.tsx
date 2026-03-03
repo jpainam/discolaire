@@ -2,8 +2,8 @@ import {
   Body,
   Button,
   Container,
+  Font,
   Head,
-  Heading,
   Html,
   Link,
   Preview,
@@ -12,85 +12,94 @@ import {
   Text,
 } from "@react-email/components";
 
-import { geti18n } from "../locales";
+import { EmailFooter } from "../components/EmailFooter";
+import { EmailHeader } from "../components/EmailHeader";
+
+interface School {
+  logo?: string | null;
+  name: string;
+  id: string;
+}
+
+const defaultSchool = {
+  logo: `logo-round.png`,
+  name: "Institut Polyvalent Wague",
+  id: "1",
+};
 
 export const ResetPassword = ({
   username = "Dupont",
   resetLink = "https://example.com/reset-password",
-  school = "Institut Polyvalent Wague",
+  school = defaultSchool,
 }: {
   username: string;
   resetLink: string;
-  school: string;
+  school: School;
 }) => {
-  const { t } = geti18n({ locale: "fr" });
   return (
-    <Html>
+    <Html lang="fr">
       <Tailwind>
-        <Head />
-        <Preview>{t("reinitialize_password")}</Preview>
-        <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
-          {school}
-        </Heading>
-        <Body className="mx-auto my-auto bg-[#fff] font-sans">
+        <Head>
+          <Font
+            fontFamily="Geist"
+            fallbackFontFamily="Helvetica"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-400-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={400}
+            fontStyle="normal"
+          />
+          <Font
+            fontFamily="Geist"
+            fallbackFontFamily="Helvetica"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-500-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={500}
+            fontStyle="normal"
+          />
+        </Head>
+        <Preview>Réinitialiser le mot de passe</Preview>
+        <Body className="mx-auto my-auto bg-[#f5f5f5] font-sans">
           <Container
-            className="mx-auto my-[40px] max-w-[600px] border-transparent p-[20px] md:border-[#E8E7E1]"
+            className="mx-auto my-[40px] max-w-[600px] rounded-[8px] border border-[#E8E7E1] bg-white p-[32px]"
             style={{ borderStyle: "solid", borderWidth: 1 }}
           >
-            {/* <Heading className="mx-0 p-0 text-center text-[18px] font-normal text-[#121212]">
-              {t("reinitialize_password")}
-            </Heading> */}
+            <EmailHeader logoUrl={school.logo} schoolName={school.name} />
             <Text className="text-[14px] leading-[24px] text-[#121212]">
-              Hello {username},
-              <br />
-              <br />
-              {t("reinitialize_password_text")}
+              Bonjour {username},
             </Text>
-
+            <Text className="text-[14px] leading-[24px] text-[#121212]">
+              Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur
+              le lien ci-dessous pour choisir un nouveau mot de passe.
+            </Text>
             <Section className="mt-[32px] mb-[32px] text-center">
               <Button
-                style={{
-                  ...button,
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                  paddingTop: 12,
-                  paddingBottom: 12,
-                }}
+                className="box-border rounded-[8px] bg-[#007bff] px-[20px] py-[12px] text-[16px] font-medium text-white no-underline"
                 href={resetLink}
               >
-                {t("reinitialize")}
+                Réinitialiser le mot de passe
               </Button>
             </Section>
-            <Text style={text}>{t("renitialize_password_alt")}</Text>
-            <Link href={resetLink} style={link}>
+            <Text className="text-[14px] leading-[24px] text-[#333]">
+              Si le bouton ne fonctionne pas, copiez et collez ce lien dans
+              votre navigateur :
+            </Text>
+            <Link
+              href={resetLink}
+              className="text-[12px] text-[#007bff] underline"
+              style={{ wordBreak: "break-all" }}
+            >
               {resetLink}
             </Link>
+            <EmailFooter schoolName={school.name} />
           </Container>
         </Body>
       </Tailwind>
     </Html>
   );
-};
-
-const text = {
-  color: "#333",
-  fontSize: "16px",
-  lineHeight: "26px",
-};
-
-const button = {
-  backgroundColor: "#007bff",
-  borderRadius: "8px",
-  color: "#fff",
-  fontSize: "16px",
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "inline-block",
-};
-
-const link = {
-  color: "#007bff",
-  textDecoration: "underline",
 };
 
 export default ResetPassword;

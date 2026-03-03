@@ -2,8 +2,8 @@ import {
   Body,
   Button,
   Container,
+  Font,
   Head,
-  Heading,
   Hr,
   Html,
   Preview,
@@ -11,8 +11,8 @@ import {
   Text,
 } from "@react-email/components";
 
-import { Footer } from "../components/footer";
-import { Logo } from "../components/logo";
+import { EmailFooter } from "../components/EmailFooter";
+import { EmailHeader } from "../components/EmailHeader";
 
 const InvitationEmail = ({
   inviteeName = "Jamie Smith",
@@ -21,44 +21,57 @@ const InvitationEmail = ({
   inviteLink = "https://app.example.com/invite/team/abc123",
 }) => {
   return (
-    <Html>
-      <Head />
-      <Preview>
-        Vous avez été invité à rejoindre {schoolName} sur discolaire.com
-      </Preview>
+    <Html lang="fr">
       <Tailwind>
+        <Head>
+          <Font
+            fontFamily="Geist"
+            fallbackFontFamily="Helvetica"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-400-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={400}
+            fontStyle="normal"
+          />
+          <Font
+            fontFamily="Geist"
+            fallbackFontFamily="Helvetica"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-500-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={500}
+            fontStyle="normal"
+          />
+        </Head>
+        <Preview>
+          Vous avez été invité à rejoindre {schoolName} sur discolaire.com
+        </Preview>
         <Body className="bg-[#f5f5f7] py-[40px] font-sans">
           <Container className="mx-auto max-w-[600px] rounded-[12px] bg-white p-[32px] shadow-sm">
-            <Logo logoUrl={logo} />
-            <Heading className="m-0 mb-[24px] text-[18px] font-bold text-black">
-              Rejoindre {schoolName}
-            </Heading>
-
+            <EmailHeader logoUrl={logo} schoolName={schoolName} />
             <Text className="mb-[24px] text-[16px] leading-[24px] text-[#333333]">
               Bonjour {inviteeName},
             </Text>
-
             <Text className="mb-[32px] text-[16px] leading-[24px] text-[#333333]">
-              Vous êtes invités à rejoindre la plateforme de gestion scolaire de{" "}
-              <strong>{schoolName}</strong>.
+              Vous êtes invité(e) à rejoindre la plateforme de gestion scolaire
+              de <strong>{schoolName}</strong>.
             </Text>
-
             <Button
               href={inviteLink}
               className="box-border rounded-[8px] bg-[#0071e3] px-[24px] py-[12px] text-center text-[16px] font-medium text-white no-underline"
             >
-              Accepter l'invitation
+              Accepter l&apos;invitation
             </Button>
-
             <Hr className="my-[32px] border-[#e6e6e6]" />
-
             <Text className="text-[14px] text-[#666666]">
               Si vous ne vous attendiez pas à cette invitation, vous pouvez
               ignorer cet e-mail. Si vous avez des questions, veuillez
-              contacter, support@discolaire.com.
+              contacter support@discolaire.com.
             </Text>
+            <EmailFooter schoolName={schoolName} />
           </Container>
-          <Footer />
         </Body>
       </Tailwind>
     </Html>
@@ -67,7 +80,7 @@ const InvitationEmail = ({
 
 InvitationEmail.PreviewProps = {
   inviteeName: "Jamie Smith",
-  teamName: "Design Collective",
+  schoolName: "Design Collective",
   inviteLink: "https://app.example.com/invite/team/abc123",
 };
 
