@@ -164,8 +164,18 @@ export const logActivityRouter = {
         ...(input.query
           ? {
               OR: [
-                { action: { contains: input.query, mode: "insensitive" as const } },
-                { description: { contains: input.query, mode: "insensitive" as const } },
+                {
+                  action: {
+                    contains: input.query,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  description: {
+                    contains: input.query,
+                    mode: "insensitive" as const,
+                  },
+                },
               ],
             }
           : {}),
