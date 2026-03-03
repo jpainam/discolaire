@@ -9,7 +9,7 @@ import { TransactionsSummary } from "@repo/transactional";
 import { env } from "~/env";
 import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
-import { FROM, getTenantAdminEmails, SCHOOL_TENANTS } from "./constants";
+import { FROM, getTenantAdminEmails, SCHOOL_TENANTS, tenantBaseUrl } from "./constants";
 
 /**
  * Wednesday – send a summary of the last 3 days (Mon → Wed).
@@ -114,7 +114,7 @@ export async function sendTransactionSummaryToAdmin(
         TransactionsSummary({
           school: {
             name: school?.name ?? tenant,
-            logo: buildLogoUrl(school?.logo, env.APP_URL),
+            logo: buildLogoUrl(school?.logo, tenantBaseUrl(tenant)),
           },
           periodLabel,
           periodType,

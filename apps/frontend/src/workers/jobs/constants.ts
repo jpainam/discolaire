@@ -35,6 +35,11 @@ export function getTenantAdminEmails(tenant: Tenant): string[] {
   return TENANT_ADMIN_EMAILS[tenant] ?? [ADMIN_EMAIL];
 }
 
+/** Returns the base URL for a tenant (e.g. https://csac.discolaire.com). */
+export function tenantBaseUrl(tenant: Tenant): string {
+  return `https://${tenant}.discolaire.com`;
+}
+
 /** Returns the window [nextMonday, nextSunday] relative to `now`. */
 export function nextWeekWindow(now: Date) {
   const monday = startOfDay(nextMonday(now));

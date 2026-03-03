@@ -13,6 +13,7 @@ import {
   FROM,
   getTenantAdminEmails,
   nextWeekWindow,
+  tenantBaseUrl,
   SCHOOL_TENANTS,
 } from "./constants";
 
@@ -71,7 +72,7 @@ export async function sendExamReminderToAdmin() {
             examEndDate: config.examEndDate,
             school: {
               name: school?.name ?? tenant,
-              logo: buildLogoUrl(school?.logo, env.APP_URL),
+              logo: buildLogoUrl(school?.logo, tenantBaseUrl(tenant)),
             },
           }),
         );

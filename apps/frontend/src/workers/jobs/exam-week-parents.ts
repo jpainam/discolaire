@@ -7,7 +7,7 @@ import { ExamWeekParentEmail } from "@repo/transactional";
 import { env } from "~/env";
 import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
-import { FROM, nextWeekWindow, SCHOOL_TENANTS } from "./constants";
+import { FROM, nextWeekWindow, SCHOOL_TENANTS, tenantBaseUrl } from "./constants";
 
 /**
  * Every Friday – if exams are next week, send a reminder email to every
@@ -119,7 +119,7 @@ export async function sendExamWeekEmailToParents() {
                 examEndDate: config.examEndDate,
                 school: {
                   name: school?.name ?? tenant,
-                  logo: buildLogoUrl(school?.logo, env.APP_URL),
+                  logo: buildLogoUrl(school?.logo, tenantBaseUrl(tenant)),
                 },
               }),
             );
