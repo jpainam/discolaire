@@ -9,6 +9,7 @@ import { GradeReportAvailableEmail } from "@repo/transactional";
 
 import { env } from "~/env";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/utils";
 
 export const runtime = "nodejs";
 
@@ -141,7 +142,7 @@ export async function POST(req: NextRequest) {
             resultPublishedAt,
             school: {
               name: school?.name ?? tenant,
-              logo: school?.logo,
+              logo: buildLogoUrl(school?.logo, baseUrl),
             },
             appUrl: baseUrl,
           }),

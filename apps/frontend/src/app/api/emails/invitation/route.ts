@@ -6,6 +6,8 @@ import { z } from "zod/v4";
 import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
 
 import { getSession } from "~/auth/server";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/logo-url";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const schema = z.object({
@@ -30,16 +32,17 @@ export async function POST(req: NextRequest) {
     }
     const { url, email, name, userId } = result.data;
     const queryClient = getQueryClient();
-    const user = await queryClient.fetchQuery(
-      trpc.user.get.queryOptions(userId),
-    );
+    const [user, baseUrl] = await Promise.all([
+      queryClient.fetchQuery(trpc.user.get.queryOptions(userId)),
+      getRequestBaseUrl(req.headers),
+    ]);
 
     const html = await render(
       InvitationEmail({
         inviteeName: name,
         schoolName: user.school.name,
         inviteLink: `${url}&id=${userId}`,
-        logo: user.school.logo ?? "",
+        logo: buildLogoUrl(user.school.logo, baseUrl) ?? "",
       }),
     );
 

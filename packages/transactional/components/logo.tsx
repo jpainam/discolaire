@@ -5,7 +5,7 @@ export function Logo({ logoUrl }: { logoUrl?: string | null }) {
     <Section>
       {logoUrl && (
         <Img
-          src={`https://discolaire-images-public-uploads-g5v2c4o.s3.eu-central-1.amazonaws.com/${logoUrl}`}
+          src={logoUrl}
           width="100"
           height="100"
           alt="Logo"

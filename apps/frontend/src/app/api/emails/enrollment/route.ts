@@ -10,6 +10,7 @@ import { EnrollmentEmail } from "@repo/transactional/emails/EnrollmentEmail";
 import { env } from "~/env";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
 import { createUnsubscribeToken } from "~/lib/unsubscribe-token";
+import { buildLogoUrl } from "~/lib/utils";
 
 export const runtime = "nodejs";
 
@@ -61,6 +62,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
+    const baseUrl = await getRequestBaseUrl(req.headers);
+
     const studentName = [student.firstName, student.lastName]
       .filter(Boolean)
       .join(" ");
@@ -70,7 +73,11 @@ export async function POST(req: NextRequest) {
         studentName,
         classroomName: classroom.name,
         schoolYearName: schoolYear.name,
-        school: { id: school.id, name: school.name, logo: school.logo },
+        school: {
+          id: school.id,
+          name: school.name,
+          logo: buildLogoUrl(school.logo, baseUrl),
+        },
       }),
     );
 
@@ -85,8 +92,6 @@ export async function POST(req: NextRequest) {
     if (uniqueEmails.length === 0) {
       return Response.json({ success: true, sent: 0 }, { status: 200 });
     }
-
-    const baseUrl = await getRequestBaseUrl(req.headers);
 
     await enqueueEmailJobs(
       uniqueEmails.map((to) => {

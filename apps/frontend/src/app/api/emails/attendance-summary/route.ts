@@ -4,6 +4,8 @@ import { z } from "zod/v4";
 import { QuarterlyAttendanceSummaryEmail } from "@repo/transactional";
 
 import { getSession } from "~/auth/server";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 
 export const runtime = "nodejs";
@@ -42,16 +44,17 @@ export async function POST(req: Request) {
 
     const { classroomId, termId, attendances } = result.data;
 
-    const [classroom, term, school] = await Promise.all([
+    const [classroom, term, school, baseUrl] = await Promise.all([
       caller.classroom.get(classroomId),
       caller.term.get(termId),
       caller.school.getSchool(),
+      getRequestBaseUrl(),
     ]);
 
     const schoolInfo = {
       id: school.id,
       name: school.name,
-      logo: school.logo ?? undefined,
+      logo: buildLogoUrl(school.logo, baseUrl) ?? undefined,
     };
 
     const jobs: {

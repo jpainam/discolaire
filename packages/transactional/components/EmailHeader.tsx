@@ -10,7 +10,7 @@ export function EmailHeader({ logoUrl, schoolName }: EmailHeaderProps) {
     <Section className="mb-[32px] text-center">
       {logoUrl && (
         <Img
-          src={`https://discolaire-images-public-uploads-g5v2c4o.s3.eu-central-1.amazonaws.com/${logoUrl}`}
+          src={logoUrl}
           width="80"
           height="80"
           alt={schoolName ?? "Logo"}

@@ -4,6 +4,8 @@ import { z } from "zod/v4";
 import { GradeCreatedEmail } from "@repo/transactional";
 
 import { getSession } from "~/auth/server";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/logo-url";
 import { caller } from "~/trpc/server";
 
 const schema = z.object({
@@ -16,6 +18,8 @@ export async function POST(req: Request) {
     if (!session) {
       return new Response("Not authenticated", { status: 401 });
     }
+
+    const baseUrl = await getRequestBaseUrl(req.headers);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
@@ -117,7 +121,7 @@ export async function POST(req: Request) {
             scale: gradeSheet.scale,
             grade: recipient.grade,
             isAbsent: recipient.isAbsent,
-            school: { name: school.name, logo: school.logo },
+            school: { name: school.name, logo: buildLogoUrl(school.logo, baseUrl) },
           }),
         ),
       })),

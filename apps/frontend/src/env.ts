@@ -38,6 +38,7 @@ export const env = createEnv({
     AI_MODEL: z.string().min(1).optional(),
     AI_SYSTEM_PROMPT: z.string().optional(),
     LOCAL_BACKUP_PATH: z.string().optional(),
+    APP_URL: z.string().url().optional(),
   },
 
   /**
@@ -80,6 +81,7 @@ export const env = createEnv({
     MINIO_ACCESS_KEY_ID: process.env.MINIO_ACCESS_KEY_ID,
     AI_SYSTEM_PROMPT: process.env.AI_SYSTEM_PROMPT,
     LOCAL_BACKUP_PATH: process.env.LOCAL_BACKUP_PATH,
+    APP_URL: process.env.APP_URL,
     NEXT_PUBLIC_AI_PROVIDER: process.env.NEXT_PUBLIC_AI_PROVIDER,
     NEXT_PUBLIC_AI_MODEL: process.env.NEXT_PUBLIC_AI_MODEL,
 

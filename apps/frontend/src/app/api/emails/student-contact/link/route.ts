@@ -8,6 +8,8 @@ import { enqueueEmailJobs } from "@repo/messaging/client";
 import { StudentContactLinkedEmail } from "@repo/transactional/emails/StudentContactLinkedEmail";
 
 import { env } from "~/env";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
 
 export const runtime = "nodejs";
@@ -70,6 +72,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });
     }
 
+    const baseUrl = await getRequestBaseUrl(req.headers);
+
     const studentName = [student.firstName, student.lastName]
       .filter(Boolean)
       .join(" ");
@@ -82,7 +86,11 @@ export async function POST(req: NextRequest) {
         studentName,
         contactName,
         relationshipName: relationship?.name ?? undefined,
-        school: { id: school.id, name: school.name, logo: school.logo },
+        school: {
+          id: school.id,
+          name: school.name,
+          logo: buildLogoUrl(school.logo, baseUrl),
+        },
       }),
     );
 

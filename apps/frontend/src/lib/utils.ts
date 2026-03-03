@@ -179,3 +179,23 @@ export function percentile(sorted: number[], p: number): number {
     (sorted[low] ?? 0) + weight * ((sorted[high] ?? 0) - (sorted[low] ?? 0))
   );
 }
+
+/**
+ * Converts a raw S3 logo key into a server-proxied URL so that email
+ * clients (Gmail etc.) see your own domain instead of an external S3 link.
+ *
+ * Usage in route handlers (request context available):
+ *   const baseUrl = await getRequestBaseUrl(req.headers);
+ *   logo: buildLogoUrl(school.logo, baseUrl)
+ *
+ * Usage in cron workers (no request context — uses APP_URL env var):
+ *   import { env } from "~/env";
+ *   logo: buildLogoUrl(school?.logo, env.APP_URL)
+ */
+export function buildLogoUrl(
+  key: string | null | undefined,
+  baseUrl: string | undefined,
+): string | null {
+  if (!key || !baseUrl) return null;
+  return `${baseUrl}/api/logo/${key}`;
+}

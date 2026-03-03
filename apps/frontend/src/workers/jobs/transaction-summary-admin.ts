@@ -7,6 +7,7 @@ import { enqueueEmailJobs } from "@repo/messaging/client";
 import { TransactionsSummary } from "@repo/transactional";
 
 import { env } from "~/env";
+import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
 import { FROM, getTenantAdminEmails, SCHOOL_TENANTS } from "./constants";
 
@@ -111,7 +112,10 @@ export async function sendTransactionSummaryToAdmin(
 
       const html = await render(
         TransactionsSummary({
-          school: { name: school?.name ?? tenant, logo: school?.logo },
+          school: {
+            name: school?.name ?? tenant,
+            logo: buildLogoUrl(school?.logo, env.APP_URL),
+          },
           periodLabel,
           periodType,
           transactions,

@@ -4,6 +4,8 @@ import { z } from "zod/v4";
 import { TransactionPendingEmail } from "@repo/transactional/emails/TransactionPendingEmail";
 
 import { getSession } from "~/auth/server";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/utils";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 
@@ -33,12 +35,17 @@ export async function POST(req: Request) {
 
     const queryClient = getQueryClient();
 
-    const [transaction, student, contacts, school] = await Promise.all([
-      queryClient.fetchQuery(trpc.transaction.get.queryOptions(transactionId)),
-      queryClient.fetchQuery(trpc.student.get.queryOptions(studentId)),
-      queryClient.fetchQuery(trpc.student.contacts.queryOptions(studentId)),
-      caller.school.getSchool(),
-    ]);
+    const [transaction, student, contacts, school, baseUrl] = await Promise.all(
+      [
+        queryClient.fetchQuery(
+          trpc.transaction.get.queryOptions(transactionId),
+        ),
+        queryClient.fetchQuery(trpc.student.get.queryOptions(studentId)),
+        queryClient.fetchQuery(trpc.student.contacts.queryOptions(studentId)),
+        caller.school.getSchool(),
+        getRequestBaseUrl(),
+      ],
+    );
 
     const destinationEmails = contacts
       .map((c) => {
@@ -57,7 +64,11 @@ export async function POST(req: Request) {
         studentName: getFullName(student),
         amount: transaction.amount,
         transactionRef: transaction.transactionRef ?? "",
-        school: { id: school.id, name: school.name, logo: school.logo },
+        school: {
+          id: school.id,
+          name: school.name,
+          logo: buildLogoUrl(school.logo, baseUrl),
+        },
       }),
     );
 

@@ -8,6 +8,7 @@ import TransactionsSummary from "@repo/transactional/emails/TransactionsSummary"
 
 import { getSession } from "~/auth/server";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/utils";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const schema = z.object({
@@ -110,7 +111,7 @@ export async function POST(req: Request) {
     const templateProps: TransactionsSummaryProps = {
       school: {
         name: school.name,
-        logo: (school as { logo?: string | null }).logo ?? null,
+        logo: buildLogoUrl((school as { logo?: string | null }).logo, baseUrl),
       },
       periodLabel,
       periodType: resolvedPeriodType,

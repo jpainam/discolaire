@@ -6,7 +6,9 @@ import { z } from "zod/v4";
 import { StudentCreatedEmail } from "@repo/transactional/emails/StudentCreatedEmail";
 
 import { getSession } from "~/auth/server";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
 import { getStudentEmailRecipients } from "~/lib/email";
+import { buildLogoUrl } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 import { logger } from "~/utils/logger";
 
@@ -60,7 +62,10 @@ export async function POST(req: NextRequest) {
       return Response.json({ success: true, sent: 0 }, { status: 200 });
     }
 
-    const school = await caller.school.get(student.schoolId);
+    const [school, baseUrl] = await Promise.all([
+      caller.school.get(student.schoolId),
+      getRequestBaseUrl(req.headers),
+    ]);
 
     const parents = studentContacts.map((sc) => ({
       name: [sc.contact.firstName, sc.contact.lastName]
@@ -83,7 +88,7 @@ export async function POST(req: NextRequest) {
         school: {
           id: school.id,
           name: school.name,
-          logo: school.logo ?? null,
+          logo: buildLogoUrl(school.logo, baseUrl),
         },
       }),
     );

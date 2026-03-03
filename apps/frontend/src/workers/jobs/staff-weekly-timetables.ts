@@ -7,6 +7,7 @@ import { enqueueEmailJobs } from "@repo/messaging/client";
 import { StaffWeeklyTimetableEmail } from "@repo/transactional";
 
 import { env } from "~/env";
+import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
 import { FROM, SCHOOL_TENANTS, WEEKDAY_LABELS } from "./constants";
 
@@ -95,7 +96,10 @@ export async function sendStaffWeeklyTimetables() {
           StaffWeeklyTimetableEmail({
             staffName,
             weekLabel,
-            school: { name: schoolName, logo: staff.school.logo ?? undefined },
+            school: {
+              name: schoolName,
+              logo: buildLogoUrl(staff.school.logo, env.APP_URL) ?? undefined,
+            },
             days,
           }),
         );

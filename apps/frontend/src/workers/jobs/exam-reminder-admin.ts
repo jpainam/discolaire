@@ -7,6 +7,7 @@ import { enqueueEmailJobs } from "@repo/messaging/client";
 import { ExamReminderAdminEmail } from "@repo/transactional";
 
 import { env } from "~/env";
+import { buildLogoUrl } from "~/lib/utils";
 import { logger } from "~/utils/logger";
 import {
   FROM,
@@ -70,7 +71,7 @@ export async function sendExamReminderToAdmin() {
             examEndDate: config.examEndDate,
             school: {
               name: school?.name ?? tenant,
-              logo: school?.logo,
+              logo: buildLogoUrl(school?.logo, env.APP_URL),
             },
           }),
         );
