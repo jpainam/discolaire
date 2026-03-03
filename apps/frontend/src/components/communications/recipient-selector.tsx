@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   BookOpen,
   Check,
@@ -13,14 +14,14 @@ import {
   X,
 } from "lucide-react";
 
-import type { ClassRoom } from "./mock-data";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
-import { ALL_STAFF, CLASSES } from "./mock-data";
+import { useTRPC } from "~/trpc/react";
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+// ─── Types ───────────────────────────────────────────────────────────────────
+
 export type BroadcastMode = "broadcast" | "class-based";
 export type RecipientRole =
   | "parents"
@@ -41,88 +42,172 @@ export interface RecipientTarget {
   broadcastRoles: RecipientRole[];
   classRecipientMode: ClassRecipientMode;
   specificPersonIds: string[];
+  /** Populated at confirmation time by the selector. */
+  resolvedCount: number;
+  resolvedLabel: string;
+  breadcrumb: string[];
 }
+
+// ─── Server-side classroom / staff shapes ────────────────────────────────────
+
+type ClassroomData = {
+  id: string;
+  name: string;
+  grade: string;
+  teachers: { id: string; name: string; email: string }[];
+  studentCount: number;
+  parentCount: number;
+};
+
+type StaffData = {
+  id: string;
+  name: string;
+  email: string;
+  isTeacher: boolean;
+};
+
+// ─── Summary helper ───────────────────────────────────────────────────────────
 
 export function getRecipientSummary(target: RecipientTarget): {
   label: string;
   count: number;
   breadcrumb: string[];
 } {
-  if (target.mode === "broadcast") {
-    if (target.broadcastRoles.includes("all")) {
-      const count =
-        ALL_STAFF.length +
-        CLASSES.reduce((s, c) => s + c.parentCount + c.studentCount, 0);
-      return {
-        label: "Everyone",
-        count,
-        breadcrumb: ["School-wide", "Everyone"],
-      };
+  return {
+    label: target.resolvedLabel,
+    count: target.resolvedCount,
+    breadcrumb: target.breadcrumb,
+  };
+}
+
+// ─── Count helpers ────────────────────────────────────────────────────────────
+
+function computeCount(
+  target: Pick<
+    RecipientTarget,
+    | "mode"
+    | "classIds"
+    | "broadcastRoles"
+    | "classRecipientMode"
+    | "specificPersonIds"
+  >,
+  classrooms: ClassroomData[],
+  staff: StaffData[],
+): { count: number; label: string; breadcrumb: string[] } {
+  const seen = new Set<string>();
+
+  function countUnique(emails: (string | undefined | null)[]) {
+    let n = 0;
+    for (const e of emails) {
+      if (e && !seen.has(e)) {
+        seen.add(e);
+        n++;
+      }
     }
-    const parts: string[] = [];
-    let count = 0;
-    if (target.broadcastRoles.includes("staff")) {
-      parts.push("All Staff");
-      count += ALL_STAFF.length;
-    }
-    if (target.broadcastRoles.includes("parents")) {
-      parts.push("All Parents");
-      count += CLASSES.reduce((s, c) => s + c.parentCount, 0);
-    }
-    if (target.broadcastRoles.includes("students")) {
-      parts.push("All Students");
-      count += CLASSES.reduce((s, c) => s + c.studentCount, 0);
-    }
-    return {
-      label: parts.join(", ") || "No recipients",
-      count,
-      breadcrumb: ["School-wide", ...parts],
-    };
+    return n;
   }
 
-  // Class-based
-  const selectedClasses = CLASSES.filter((c) => target.classIds.includes(c.id));
+  if (target.mode === "broadcast") {
+    const roles = target.broadcastRoles;
+    const all = roles.includes("all");
+    const parts: string[] = [];
+    let count = 0;
+
+    if (all || roles.includes("parents")) {
+      const n = countUnique(
+        classrooms.flatMap(() => Array(0).fill("")), // parents resolved server-side
+      );
+      // Approximate from classroom parent counts
+      const parentEmails = new Set<string>();
+      classrooms.forEach((c) => {
+        // We don't have individual parent emails client-side; use parentCount as proxy
+        for (let i = 0; i < c.parentCount; i++) {
+          parentEmails.add(`__parent_${c.id}_${i}`);
+        }
+      });
+      const parentCount = parentEmails.size;
+      count += parentCount;
+      parts.push("All Parents");
+      void n;
+    }
+    if (all || roles.includes("staff") || roles.includes("teachers")) {
+      count += countUnique(staff.map((s) => s.email));
+      parts.push("All Staff");
+    }
+    if (all || roles.includes("students")) {
+      let studentCount = 0;
+      classrooms.forEach((c) => {
+        studentCount += c.studentCount;
+      });
+      count += studentCount;
+      parts.push("All Students");
+    }
+
+    const label = parts.join(", ") || "No recipients";
+    return { count, label, breadcrumb: ["School-wide", ...parts] };
+  }
+
+  // class-based
+  const selectedClasses = classrooms.filter((c) =>
+    target.classIds.includes(c.id),
+  );
   const classNames = selectedClasses.map((c) => c.name);
 
   if (target.classRecipientMode === "specific-teacher") {
-    const people = ALL_STAFF.filter((p) =>
-      target.specificPersonIds.includes(p.id),
+    const people = staff.filter((s) =>
+      target.specificPersonIds.includes(s.id),
     );
+    const label =
+      people.map((p) => p.name).join(", ") || "No teachers selected";
     return {
-      label: people.map((p) => p.name).join(", ") || "No teachers selected",
       count: people.length,
-      breadcrumb: [...classNames, people.map((p) => p.name).join(", ")],
+      label,
+      breadcrumb: [...classNames, label],
     };
   }
 
   let count = 0;
   let roleLabel = "";
+
   if (target.classRecipientMode === "all") {
-    count = selectedClasses.reduce(
-      (s, c) => s + c.teachers.length + c.parentCount + c.studentCount,
+    const teacherEmails = new Set<string>();
+    selectedClasses.forEach((c) => {
+      c.teachers.forEach((t) => teacherEmails.add(t.email));
+    });
+    const parentCount = selectedClasses.reduce(
+      (s, c) => s + c.parentCount,
       0,
     );
+    const studentCount = selectedClasses.reduce(
+      (s, c) => s + c.studentCount,
+      0,
+    );
+    count = teacherEmails.size + parentCount + studentCount;
     roleLabel = "Everyone";
   } else if (target.classRecipientMode === "teachers") {
-    count = selectedClasses.reduce((s, c) => s + c.teachers.length, 0);
+    const teacherEmails = new Set<string>();
+    selectedClasses.forEach((c) =>
+      c.teachers.forEach((t) => teacherEmails.add(t.email)),
+    );
+    count = teacherEmails.size;
     roleLabel = "Teachers";
   } else if (target.classRecipientMode === "parents") {
     count = selectedClasses.reduce((s, c) => s + c.parentCount, 0);
     roleLabel = "Parents";
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   } else if (target.classRecipientMode === "students") {
     count = selectedClasses.reduce((s, c) => s + c.studentCount, 0);
     roleLabel = "Students";
   }
 
   return {
-    label: `${classNames.join(", ")} — ${roleLabel}`,
     count,
+    label: `${classNames.join(", ")} — ${roleLabel}`,
     breadcrumb: [...classNames, roleLabel],
   };
 }
 
 // ─── Step Indicator ─────────────────────────────────────────────────────────
+
 function StepIndicator({
   current,
   steps,
@@ -171,6 +256,7 @@ function StepIndicator({
 }
 
 // ─── Step 1: Mode ────────────────────────────────────────────────────────────
+
 function StepMode({ onSelect }: { onSelect: (mode: BroadcastMode) => void }) {
   return (
     <div className="space-y-3">
@@ -218,28 +304,31 @@ function StepMode({ onSelect }: { onSelect: (mode: BroadcastMode) => void }) {
 }
 
 // ─── Step 2a: Class Select ───────────────────────────────────────────────────
+
 function StepClassSelect({
+  classrooms,
   selected,
   onToggle,
 }: {
+  classrooms: ClassroomData[];
   selected: string[];
   onToggle: (id: string) => void;
 }) {
   const [search, setSearch] = useState("");
 
   const grouped = useMemo(() => {
-    const grades: Record<string, ClassRoom[]> = {};
-    CLASSES.forEach((c) => {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const grades: Record<string, ClassroomData[]> = {};
+    classrooms.forEach((c) => {
       if (!grades[c.grade]) grades[c.grade] = [];
-      // @ts-expect-error TODO Later
-      grades[c.grade].push(c);
+      grades[c.grade]!.push(c);
     });
     return grades;
-  }, []);
+  }, [classrooms]);
 
   const filtered = search
-    ? CLASSES.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
+    ? classrooms.filter((c) =>
+        c.name.toLowerCase().includes(search.toLowerCase()),
+      )
     : null;
 
   return (
@@ -259,18 +348,15 @@ function StepClassSelect({
       {selected.length > 0 && (
         <div className="bg-muted/50 mb-2 flex flex-wrap gap-1.5 rounded-md p-2">
           {selected.map((id) => {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const c = CLASSES.find((x) => x.id === id)!;
+            const c = classrooms.find((x) => x.id === id);
+            if (!c) return null;
             return (
               <span
                 key={id}
                 className="bg-primary text-primary-foreground flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
               >
                 {c.name}
-                <button
-                  onClick={() => onToggle(id)}
-                  className="hover:opacity-70"
-                >
+                <button onClick={() => onToggle(id)} className="hover:opacity-70">
                   <X className="h-3 w-3" />
                 </button>
               </span>
@@ -339,13 +425,22 @@ function StepClassSelect({
 }
 
 // ─── Step 2b: Broadcast Role Select ─────────────────────────────────────────
+
 function StepBroadcastRole({
+  classrooms,
+  staff,
   selected,
   onToggle,
 }: {
+  classrooms: ClassroomData[];
+  staff: StaffData[];
   selected: RecipientRole[];
   onToggle: (r: RecipientRole) => void;
 }) {
+  const totalParents = classrooms.reduce((s, c) => s + c.parentCount, 0);
+  const totalStudents = classrooms.reduce((s, c) => s + c.studentCount, 0);
+  const totalStaff = staff.length;
+
   const options: {
     role: RecipientRole;
     label: string;
@@ -358,7 +453,7 @@ function StepBroadcastRole({
       role: "staff",
       label: "All Staff",
       desc: "Teachers + admin staff",
-      count: ALL_STAFF.length,
+      count: totalStaff,
       icon: <UserCheck className="h-5 w-5" />,
       color: "text-badge-amber-foreground bg-badge-amber",
     },
@@ -366,7 +461,7 @@ function StepBroadcastRole({
       role: "parents",
       label: "All Parents",
       desc: "Parents across all classes",
-      count: CLASSES.reduce((s, c) => s + c.parentCount, 0),
+      count: totalParents,
       icon: <Users className="h-5 w-5" />,
       color: "text-badge-green-foreground bg-badge-green",
     },
@@ -374,7 +469,7 @@ function StepBroadcastRole({
       role: "students",
       label: "All Students",
       desc: "Students across all classes",
-      count: CLASSES.reduce((s, c) => s + c.studentCount, 0),
+      count: totalStudents,
       icon: <GraduationCap className="h-5 w-5" />,
       color: "text-badge-blue-foreground bg-badge-blue",
     },
@@ -382,9 +477,7 @@ function StepBroadcastRole({
       role: "all",
       label: "Everyone",
       desc: "All staff, parents & students",
-      count:
-        ALL_STAFF.length +
-        CLASSES.reduce((s, c) => s + c.parentCount + c.studentCount, 0),
+      count: totalStaff + totalParents + totalStudents,
       icon: <Users className="h-5 w-5" />,
       color: "text-primary-foreground bg-primary",
     },
@@ -451,23 +544,33 @@ function StepBroadcastRole({
 }
 
 // ─── Step 3: Recipient Type for classes ─────────────────────────────────────
+
 function StepClassRecipientType({
+  classrooms,
+  staff,
   selectedClassIds,
   mode,
   onModeChange,
   specificIds,
   onToggleSpecific,
 }: {
+  classrooms: ClassroomData[];
+  staff: StaffData[];
   selectedClassIds: string[];
   mode: ClassRecipientMode;
   onModeChange: (m: ClassRecipientMode) => void;
   specificIds: string[];
   onToggleSpecific: (id: string) => void;
 }) {
-  const selectedClasses = CLASSES.filter((c) =>
+  const selectedClasses = classrooms.filter((c) =>
     selectedClassIds.includes(c.id),
   );
-  const allTeachers = selectedClasses.flatMap((c) => c.teachers);
+
+  // Teachers who teach in selected classrooms
+  const classTeacherIds = new Set(
+    selectedClasses.flatMap((c) => c.teachers.map((t) => t.id)),
+  );
+  const classTeachers = staff.filter((s) => classTeacherIds.has(s.id));
 
   const topOptions: {
     value: ClassRecipientMode;
@@ -553,14 +656,13 @@ function StepClassRecipientType({
           <p className="text-foreground mb-2 text-xs font-semibold">
             Select teachers:
           </p>
-          {allTeachers.length === 0 ? (
+          {classTeachers.length === 0 ? (
             <p className="text-muted-foreground text-xs">
               No teachers found for selected classes.
             </p>
           ) : (
-            allTeachers.map((t) => {
+            classTeachers.map((t) => {
               const isSelected = specificIds.includes(t.id);
-              const cls = selectedClasses.find((c) => c.id === t.classId);
               return (
                 <button
                   key={t.id}
@@ -588,9 +690,7 @@ function StepClassRecipientType({
                     <p className="text-foreground text-xs font-medium">
                       {t.name}
                     </p>
-                    <p className="text-muted-foreground text-xs">
-                      {cls?.name} · {t.email}
-                    </p>
+                    <p className="text-muted-foreground text-xs">{t.email}</p>
                   </div>
                 </button>
               );
@@ -603,6 +703,7 @@ function StepClassRecipientType({
 }
 
 // ─── Main Recipient Selector ─────────────────────────────────────────────────
+
 type SelectorStep = "mode" | "class-select" | "recipient-type";
 
 interface RecipientSelectorProps {
@@ -614,12 +715,18 @@ export default function RecipientSelector({
   initialTarget,
   onConfirm,
 }: RecipientSelectorProps) {
+  const trpc = useTRPC();
+
+  const { data: classrooms = [], isLoading: classroomsLoading } = useQuery(
+    trpc.bulkEmail.listClassrooms.queryOptions(),
+  );
+  const { data: staff = [], isLoading: staffLoading } = useQuery(
+    trpc.bulkEmail.listStaff.queryOptions(),
+  );
+  const isLoading = classroomsLoading || staffLoading;
+
   const [step, setStep] = useState<SelectorStep>(
-    initialTarget
-      ? initialTarget.mode === "class-based"
-        ? "recipient-type"
-        : "recipient-type"
-      : "mode",
+    initialTarget ? "recipient-type" : "mode",
   );
   const [broadcastMode, setBroadcastMode] = useState<BroadcastMode | null>(
     initialTarget?.mode ?? null,
@@ -687,13 +794,23 @@ export default function RecipientSelector({
       return;
     }
     if (step === "recipient-type") {
-      onConfirm({
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const partialTarget = {
         mode: broadcastMode!,
         classIds,
         broadcastRoles,
         classRecipientMode,
         specificPersonIds,
+      };
+      const { count, label, breadcrumb } = computeCount(
+        partialTarget,
+        classrooms,
+        staff,
+      );
+      onConfirm({
+        ...partialTarget,
+        resolvedCount: count,
+        resolvedLabel: label,
+        breadcrumb,
       });
     }
   }
@@ -734,30 +851,47 @@ export default function RecipientSelector({
 
       {/* Body */}
       <div className="flex-1 overflow-y-auto px-6 py-5">
-        {broadcastMode && (
-          <StepIndicator current={currentStepIndex} steps={steps} />
+        {isLoading && (
+          <div className="text-muted-foreground py-8 text-center text-sm">
+            Loading...
+          </div>
         )}
-        {step === "mode" && <StepMode onSelect={handleModeSelect} />}
-        {step === "class-select" && (
-          <StepClassSelect selected={classIds} onToggle={handleClassToggle} />
-        )}
-        {step === "recipient-type" && broadcastMode === "broadcast" && (
-          <StepBroadcastRole
-            selected={broadcastRoles}
-            onToggle={handleBroadcastRoleToggle}
-          />
-        )}
-        {step === "recipient-type" && broadcastMode === "class-based" && (
-          <StepClassRecipientType
-            selectedClassIds={classIds}
-            mode={classRecipientMode}
-            onModeChange={(m) => {
-              setClassRecipientMode(m);
-              setSpecificPersonIds([]);
-            }}
-            specificIds={specificPersonIds}
-            onToggleSpecific={handleSpecificToggle}
-          />
+        {!isLoading && (
+          <>
+            {broadcastMode && (
+              <StepIndicator current={currentStepIndex} steps={steps} />
+            )}
+            {step === "mode" && <StepMode onSelect={handleModeSelect} />}
+            {step === "class-select" && (
+              <StepClassSelect
+                classrooms={classrooms}
+                selected={classIds}
+                onToggle={handleClassToggle}
+              />
+            )}
+            {step === "recipient-type" && broadcastMode === "broadcast" && (
+              <StepBroadcastRole
+                classrooms={classrooms}
+                staff={staff}
+                selected={broadcastRoles}
+                onToggle={handleBroadcastRoleToggle}
+              />
+            )}
+            {step === "recipient-type" && broadcastMode === "class-based" && (
+              <StepClassRecipientType
+                classrooms={classrooms}
+                staff={staff}
+                selectedClassIds={classIds}
+                mode={classRecipientMode}
+                onModeChange={(m) => {
+                  setClassRecipientMode(m);
+                  setSpecificPersonIds([]);
+                }}
+                specificIds={specificPersonIds}
+                onToggleSpecific={handleSpecificToggle}
+              />
+            )}
+          </>
         )}
       </div>
 
@@ -777,7 +911,7 @@ export default function RecipientSelector({
             <Button
               size="sm"
               onClick={handleNext}
-              disabled={!canProceed()}
+              disabled={!canProceed() || isLoading}
               className="bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5"
             >
               {isLastStep ? (

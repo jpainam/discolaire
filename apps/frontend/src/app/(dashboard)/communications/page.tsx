@@ -1,40 +1,110 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
+import { toast } from "sonner";
 
 import type { Message } from "~/components/communications/mock-data";
 import { useCommunications } from "~/components/communications/communications-context";
 import ComposePanel from "~/components/communications/compose-panel";
 import MessageList from "~/components/communications/message-list";
 import MessageView from "~/components/communications/message-view";
-import { MOCK_MESSAGES } from "~/components/communications/mock-data";
 import { cn } from "~/lib/utils";
+import { useTRPC } from "~/trpc/react";
 
 export default function InboxPage() {
-  const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
-  const [activeFolder, setActiveFolder] = useState("inbox");
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const [activeFolder, setActiveFolder] = useState<"sent" | "drafts">("sent");
   const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
-  const { composeStage, startCompose, cancelCompose } = useCommunications();
+  const { composeStage, recipientTarget, startCompose, cancelCompose } =
+    useCommunications();
 
   const isComposing = composeStage === "composing";
 
-  const folderMessages = useMemo(
-    () => messages.filter((m) => m.folder === activeFolder),
-    [messages, activeFolder],
+  // ── Fetch bulk emails from server ─────────────────────────────────────────
+
+  const { data: serverData, isLoading } = useQuery(
+    trpc.bulkEmail.list.queryOptions({ folder: activeFolder, limit: 50 }),
   );
+
+  const messages: Message[] = useMemo(() => {
+    if (!serverData) return [];
+    return serverData.emails.map((e) => {
+      const target = e.recipientTarget as Record<string, unknown> | null;
+      const toLabel =
+        typeof target?.resolvedLabel === "string"
+          ? target.resolvedLabel
+          : `${e.recipientCount} recipient(s)`;
+
+      return {
+        id: e.id,
+        subject: e.subject,
+        preview: e.preview,
+        from: e.sender.name,
+        to: toLabel,
+        date:
+          e.sentAt?.toISOString().split("T")[0] ??
+          e.createdAt.toISOString().split("T")[0] ??
+          "",
+        read: true,
+        folder: e.status === "DRAFT" ? ("drafts" as const) : ("sent" as const),
+        recipientCount: e.recipientCount,
+        body: e.body,
+      };
+    });
+  }, [serverData]);
 
   const activeMessage = useMemo(
     () => messages.find((m) => m.id === activeMessageId) ?? null,
     [messages, activeMessageId],
   );
 
+  // ── Mutations ─────────────────────────────────────────────────────────────
+
+  const sendMutation = useMutation(
+    trpc.bulkEmail.send.mutationOptions({
+      onSuccess: (result) => {
+        toast.success(
+          `Email sent to ${result.recipientCount} recipient(s)${result.failedCount > 0 ? ` (${result.failedCount} failed)` : ""}`,
+        );
+        void queryClient.invalidateQueries(
+          trpc.bulkEmail.list.queryOptions({ folder: "sent", limit: 50 }),
+        );
+        setActiveFolder("sent");
+        setActiveMessageId(result.id);
+        cancelCompose();
+      },
+      onError: (err) => {
+        toast.error(`Failed to send: ${err.message}`);
+      },
+    }),
+  );
+
+  const draftMutation = useMutation(
+    trpc.bulkEmail.saveDraft.mutationOptions({
+      onSuccess: (result) => {
+        toast.success("Draft saved");
+        void queryClient.invalidateQueries(
+          trpc.bulkEmail.list.queryOptions({ folder: "drafts", limit: 50 }),
+        );
+        setActiveFolder("drafts");
+        setActiveMessageId(result.id);
+        cancelCompose();
+      },
+      onError: (err) => {
+        toast.error(`Failed to save draft: ${err.message}`);
+      },
+    }),
+  );
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
+
   function handleSelectMessage(msg: Message) {
     setActiveMessageId(msg.id);
     cancelCompose();
-    setMessages((prev) =>
-      prev.map((m) => (m.id === msg.id ? { ...m, read: true } : m)),
-    );
   }
 
   function handleComposeClick() {
@@ -48,22 +118,15 @@ export default function InboxPage() {
     recipients: string;
     recipientCount: number;
   }) {
-    const newMsg: Message = {
-      id: `msg-${Date.now()}`,
+    if (!recipientTarget) {
+      toast.error("Please select recipients before sending.");
+      return;
+    }
+    sendMutation.mutate({
       subject: data.subject,
-      preview: data.body.slice(0, 100) + (data.body.length > 100 ? "..." : ""),
-      from: "Admin",
-      to: data.recipients,
-      date: new Date().toISOString().split("T")[0] ?? "",
-      read: true,
-      folder: "sent",
-      recipientCount: data.recipientCount,
       body: data.body,
-    };
-    setMessages((prev) => [newMsg, ...prev]);
-    setActiveFolder("sent");
-    setActiveMessageId(newMsg.id);
-    cancelCompose();
+      recipientTarget,
+    });
   }
 
   function handleDraft(data: {
@@ -71,22 +134,23 @@ export default function InboxPage() {
     body: string;
     recipients: string;
   }) {
-    const newMsg: Message = {
-      id: `draft-${Date.now()}`,
+    draftMutation.mutate({
       subject: data.subject || "(No subject)",
-      preview: data.body.slice(0, 100) + (data.body.length > 100 ? "..." : ""),
-      from: "Admin",
-      to: data.recipients,
-      date: new Date().toISOString().split("T")[0] ?? "",
-      read: true,
-      folder: "drafts",
       body: data.body,
-    };
-    setMessages((prev) => [newMsg, ...prev]);
-    setActiveFolder("drafts");
-    setActiveMessageId(newMsg.id);
-    cancelCompose();
+      recipientTarget: recipientTarget ?? {
+        mode: "broadcast",
+        classIds: [],
+        broadcastRoles: [],
+        classRecipientMode: "all",
+        specificPersonIds: [],
+        resolvedCount: 0,
+        resolvedLabel: "",
+        breadcrumb: [],
+      },
+    });
   }
+
+  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -99,15 +163,20 @@ export default function InboxPage() {
             isComposing || activeMessageId ? "hidden sm:flex" : "flex",
           )}
         >
-          {/* Mobile top bar */}
           <div className="border-border bg-card flex items-center gap-2 border-b px-3 py-2 lg:hidden" />
           <div className="flex flex-1 flex-col overflow-hidden">
-            <MessageList
-              messages={folderMessages}
-              activeMessageId={activeMessageId}
-              onSelectMessage={handleSelectMessage}
-              folder={activeFolder}
-            />
+            {isLoading ? (
+              <div className="text-muted-foreground py-8 text-center text-sm">
+                Loading...
+              </div>
+            ) : (
+              <MessageList
+                messages={messages}
+                activeMessageId={activeMessageId}
+                onSelectMessage={handleSelectMessage}
+                folder={activeFolder}
+              />
+            )}
           </div>
         </div>
 
@@ -123,6 +192,8 @@ export default function InboxPage() {
               onSend={handleSend}
               onDraft={handleDraft}
               onCancel={cancelCompose}
+              isSending={sendMutation.isPending}
+              isSavingDraft={draftMutation.isPending}
             />
           ) : (
             <>

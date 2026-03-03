@@ -40,6 +40,7 @@ model User {
     healthVisits                 HealthVisit[]
     logActivities                LogActivity[]
     sentEmails                   Email[]                    @relation("Sender")
+    bulkEmailsSent               BulkEmail[]                @relation("BulkEmailSender")
     receivedEmails               EmailRecipient[]
     createdSubscriptions         NotificationSubscription[] @relation("CreatedSubscriptions")
     notificationCreditLogs       NotificationCreditLog[]    @relation("CreditLogCreatedBy")

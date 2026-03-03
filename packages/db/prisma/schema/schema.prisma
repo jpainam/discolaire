@@ -623,6 +623,7 @@ model School {
     roles                     Role[]
     notificationRecipients    NotificationRecipient[]
     termReportConfigs       TermReportConfig[]
+    bulkEmails              BulkEmail[]
 }
 
 model RequiredAccountingJournal {

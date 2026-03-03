@@ -14,6 +14,46 @@ model Email {
   deletedBySenderAt DateTime? // <-- soft delete for sender
 }
 
+enum BulkEmailStatus {
+  DRAFT
+  SENDING
+  SENT
+  FAILED
+}
+
+model BulkEmail {
+  id              String               @id @default(cuid())
+  subject         String
+  body            String
+  status          BulkEmailStatus      @default(DRAFT)
+  senderId        String
+  sender          User                 @relation("BulkEmailSender", fields: [senderId], references: [id])
+  schoolId        String
+  school          School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  recipientTarget Json
+  recipientCount  Int                  @default(0)
+  sentAt          DateTime?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  recipients      BulkEmailRecipient[]
+}
+
+model BulkEmailRecipient {
+  id            String    @id @default(cuid())
+  bulkEmailId   String
+  bulkEmail     BulkEmail @relation(fields: [bulkEmailId], references: [id], onDelete: Cascade)
+  email         String
+  name          String?
+  recipientType String // "contact" | "staff" | "student"
+  recipientId   String
+  status        String    @default("queued") // "queued" | "sent" | "failed"
+  sentAt        DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([bulkEmailId])
+  @@index([recipientType, recipientId])
+}
+
 model EmailRecipient {
   id        String    @id @default(cuid())
   emailId   String

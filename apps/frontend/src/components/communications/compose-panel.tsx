@@ -43,6 +43,8 @@ interface ComposePanelProps {
     recipients: string;
   }) => void;
   onCancel: () => void;
+  isSending?: boolean;
+  isSavingDraft?: boolean;
 }
 
 // ─── Toolbar button ──────────────────────────────────────────────────────────
@@ -134,7 +136,7 @@ function RecipientPill({
 }
 
 // ─── Compose Panel ───────────────────────────────────────────────────────────
-export default function ComposePanel({ onSend, onDraft, onCancel }: ComposePanelProps) {
+export default function ComposePanel({ onSend, onDraft, onCancel, isSending = false, isSavingDraft = false }: ComposePanelProps) {
   const { recipientTarget, editRecipients } = useCommunications();
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
@@ -299,21 +301,22 @@ export default function ComposePanel({ onSend, onDraft, onCancel }: ComposePanel
             variant="outline"
             size="sm"
             onClick={handleDraft}
-            disabled={!canDraft}
+            disabled={!canDraft || isSavingDraft || isSending}
             className="gap-1.5"
           >
             <FileText className="h-3.5 w-3.5" />
-            Save Draft
+            {isSavingDraft ? "Saving..." : "Save Draft"}
           </Button>
           <Button
             size="sm"
             onClick={handleSend}
-            disabled={!canSend}
+            disabled={!canSend || isSending || isSavingDraft}
             className="bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5"
           >
             <Send className="h-3.5 w-3.5" />
-            Send to {summary.count.toLocaleString()}{" "}
-            {summary.count === 1 ? "person" : "people"}
+            {isSending
+              ? "Sending..."
+              : `Send to ${summary.count.toLocaleString()} ${summary.count === 1 ? "person" : "people"}`}
           </Button>
         </div>
       </div>

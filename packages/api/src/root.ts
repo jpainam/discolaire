@@ -1,5 +1,6 @@
 import { accountingJournal } from "./routers/accountingJournal";
 import { announcementRouter } from "./routers/announcement";
+import { bulkEmailRouter } from "./routers/bulkEmail";
 import { appreciationRouter } from "./routers/appreciation";
 import { assignmentRouter } from "./routers/assignment";
 import { attendanceRouter } from "./routers/attendance";
@@ -114,6 +115,7 @@ export const appRouter = createTRPCRouter({
   school: schoolRouter,
   email: emailRouter,
   sesEmail: sesEmailRouter,
+  bulkEmail: bulkEmailRouter,
   role: roleRouter,
   inventoryUsage: inventoryUsageRouter,
   studentContact: studentContactRouter,
