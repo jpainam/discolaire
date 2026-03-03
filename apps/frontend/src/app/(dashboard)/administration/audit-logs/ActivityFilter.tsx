@@ -2,9 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { CalendarDays, Check, Search, Tag, User, X, Zap } from "lucide-react";
+import { CalendarDays, Check, Search, Tag, X, XIcon, Zap } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 
+import { Button } from "~/components/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "~/components/ui/input-group";
+import { Label } from "~/components/ui/label";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { UserIcon } from "~/icons";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
 import {
@@ -52,6 +63,8 @@ export function ActivityFilter() {
     });
   }, [recentData]);
 
+  const t = useTranslations();
+
   const toggle = <T extends string>(
     current: T[],
     value: T,
@@ -83,167 +96,89 @@ export function ActivityFilter() {
   return (
     <aside
       className={cn(
-        "border-border shrink-0 overflow-y-auto border-r transition-all duration-200",
-        "h-[calc(100svh-var(--header-height))]",
+        "border-border flex min-h-0 shrink-0 flex-col border-r transition-all duration-200",
         open ? "w-60" : "w-0 overflow-hidden",
       )}
     >
-      <div className="w-60 space-y-5 p-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <span className="text-foreground text-xs font-semibold tracking-wide uppercase">
-            Filtres
-          </span>
-          {activeFilterCount > 0 && (
-            <button
-              onClick={clearAll}
-              className="text-primary flex items-center gap-1 text-xs hover:underline"
-            >
-              <X className="h-3 w-3" />
-              Effacer tout
-            </button>
-          )}
-        </div>
-
-        {/* Search */}
-        <div>
-          <label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
-            <Search className="h-3.5 w-3.5" />
-            Recherche
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Description, action..."
-              className="bg-background border-border focus:ring-ring placeholder:text-muted-foreground/60 w-full rounded-md border px-2.5 py-1.5 pr-6 text-xs focus:ring-1 focus:outline-none"
-            />
-            {inputValue && (
-              <button
-                onClick={() => {
-                  setInputValue("");
-                  void setParams({ q: null, page: 1 });
-                }}
-                className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2"
-                aria-label="Effacer la recherche"
-              >
-                <X className="h-3 w-3" />
-              </button>
+      <ScrollArea className="h-[calc(100vh-6.5rem)]">
+        <div className="w-60 space-y-4 p-4">
+          <div className="flex items-center justify-between">
+            <Label className="py-1 font-semibold tracking-wide uppercase">
+              Filtres
+            </Label>
+            {activeFilterCount > 0 && (
+              <Button variant={"link"} size={"xs"} onClick={clearAll}>
+                <X />
+                Effacer tout
+              </Button>
             )}
           </div>
-        </div>
 
-        {/* Date range */}
-        <div>
-          <label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
-            <CalendarDays className="h-3.5 w-3.5" />
-            Période
-          </label>
-          <div className="space-y-1">
-            {(
-              Object.keys(
-                DATE_RANGE_LABELS,
-              ) as (keyof typeof DATE_RANGE_LABELS)[]
-            ).map((r) => (
-              <button
-                key={r}
-                onClick={() =>
-                  void setParams({ range: r === "all" ? null : r, page: 1 })
-                }
-                className={cn(
-                  "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs transition-colors",
-                  range === r
-                    ? "bg-primary text-primary-foreground font-medium"
-                    : "text-foreground hover:bg-muted",
-                )}
-              >
-                {DATE_RANGE_LABELS[r]}
-                {range === r && <Check className="h-3 w-3" />}
-              </button>
-            ))}
-          </div>
-        </div>
+          <InputGroup>
+            <InputGroupInput
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder={t("search")}
+            />
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
 
-        {/* Action */}
-        <div>
-          <label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
-            <Zap className="h-3.5 w-3.5" />
-            Action
-          </label>
-          <div className="space-y-1">
-            {ALL_ACTIONS.map((action) => {
-              const cfg = ACTION_CONFIG[action];
-              const active = actions.includes(action);
-              return (
-                <button
-                  key={action}
-                  onClick={() => toggle(actions, action, "actions")}
-                  className={cn(
-                    "flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors",
-                    active
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted",
-                  )}
+            <InputGroupAddon align="inline-end">
+              {inputValue && (
+                <InputGroupButton
+                  onClick={() => {
+                    setInputValue("");
+                    void setParams({ q: null, page: 1 });
+                  }}
                 >
-                  <div
-                    className={cn(
-                      "flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded border transition-colors",
-                      active ? "bg-primary border-primary" : "border-border",
-                    )}
-                  >
-                    {active && (
-                      <Check className="text-primary-foreground h-2.5 w-2.5" />
-                    )}
-                  </div>
-                  <span>{cfg?.label ?? action}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                  <XIcon />
+                </InputGroupButton>
+              )}
+            </InputGroupAddon>
+          </InputGroup>
 
-        {/* Target type */}
-        <div>
-          <label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
-            <Tag className="h-3.5 w-3.5" />
-            Type d'entité
-          </label>
-          <div className="space-y-1">
-            {ALL_TARGET_TYPES.map((tt) => {
-              const active = types.includes(tt);
-              return (
-                <button
-                  key={tt}
-                  onClick={() => toggle(types, tt, "types")}
-                  className={cn(
-                    "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs transition-colors",
-                    active
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted",
-                  )}
-                >
-                  <span>{TARGET_TYPE_LABELS[tt]}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* User */}
-        {availableUsers.length > 0 && (
+          {/* Date range */}
           <div>
             <label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
-              <User className="h-3.5 w-3.5" />
-              Utilisateur
+              <CalendarDays className="h-3.5 w-3.5" />
+              Période
             </label>
             <div className="space-y-1">
-              {availableUsers.map((u) => {
-                const active = users.includes(u.id);
+              {(
+                Object.keys(
+                  DATE_RANGE_LABELS,
+                ) as (keyof typeof DATE_RANGE_LABELS)[]
+              ).map((r) => (
+                <Button
+                  key={r}
+                  onClick={() =>
+                    void setParams({ range: r === "all" ? null : r, page: 1 })
+                  }
+                  variant={range == r ? "default" : "ghost"}
+                  className="w-full justify-between"
+                >
+                  {DATE_RANGE_LABELS[r]}
+                  {range === r && <Check className="h-3 w-3" />}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Action */}
+          <div>
+            <Label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
+              <Zap className="h-3.5 w-3.5" />
+              Action
+            </Label>
+            <div className="space-y-1">
+              {ALL_ACTIONS.map((action) => {
+                const cfg = ACTION_CONFIG[action];
+                const active = actions.includes(action);
                 return (
                   <button
-                    key={u.id}
-                    onClick={() => toggle(users, u.id, "users")}
+                    key={action}
+                    onClick={() => toggle(actions, action, "actions")}
                     className={cn(
                       "flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors",
                       active
@@ -261,14 +196,82 @@ export function ActivityFilter() {
                         <Check className="text-primary-foreground h-2.5 w-2.5" />
                       )}
                     </div>
-                    <span className="truncate">{u.name}</span>
+                    <span>{cfg?.label ?? action}</span>
                   </button>
                 );
               })}
             </div>
           </div>
-        )}
-      </div>
+
+          {/* Target type */}
+          <div>
+            <Label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
+              <Tag className="h-3.5 w-3.5" />
+              Type d'entité
+            </Label>
+            <div className="space-y-1">
+              {ALL_TARGET_TYPES.map((tt) => {
+                const active = types.includes(tt);
+                return (
+                  <button
+                    key={tt}
+                    onClick={() => toggle(types, tt, "types")}
+                    className={cn(
+                      "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs transition-colors",
+                      active
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-foreground hover:bg-muted",
+                    )}
+                  >
+                    <span>{TARGET_TYPE_LABELS[tt]}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* User */}
+          {availableUsers.length > 0 && (
+            <div>
+              <Label className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs font-medium">
+                <UserIcon className="h-3.5 w-3.5" />
+                Utilisateur
+              </Label>
+              <div className="space-y-1">
+                {availableUsers.map((u) => {
+                  const active = users.includes(u.id);
+                  return (
+                    <button
+                      key={u.id}
+                      onClick={() => toggle(users, u.id, "users")}
+                      className={cn(
+                        "flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors",
+                        active
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-foreground hover:bg-muted",
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded border transition-colors",
+                          active
+                            ? "bg-primary border-primary"
+                            : "border-border",
+                        )}
+                      >
+                        {active && (
+                          <Check className="text-primary-foreground h-2.5 w-2.5" />
+                        )}
+                      </div>
+                      <span className="truncate">{u.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </ScrollArea>
     </aside>
   );
 }

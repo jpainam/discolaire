@@ -6,6 +6,7 @@ import { Activity, Clock, SlidersHorizontal, User, X } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useQueryStates } from "nuqs";
 
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
   Pagination,
@@ -16,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { useDebounce } from "~/hooks/use-debounce";
 import { cn } from "~/lib/utils";
 import { useTRPC } from "~/trpc/react";
@@ -103,7 +105,7 @@ export function ActivityAuditList() {
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       {/* Toolbar */}
-      <div className="bg-background/95 border-border sticky top-0 z-10 flex items-center gap-3 border-b px-4 py-2.5 backdrop-blur-sm">
+      <div className="bg-background/95 border-border flex shrink-0 items-center gap-3 border-b px-4 py-2.5 backdrop-blur-sm">
         <Button
           size="sm"
           onClick={() => void setParams({ open: !open })}
@@ -181,7 +183,7 @@ export function ActivityAuditList() {
       </div>
 
       {/* Activity feed */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <ScrollArea className="h-[calc(100vh-8rem)]">
         <div className="space-y-3 p-4">
           {isPending ? (
             Array.from({ length: 6 }).map((_, i) => (
@@ -252,7 +254,7 @@ export function ActivityAuditList() {
                               __html: item.description,
                             }}
                           />
-                          <div className="mt-1 flex flex-wrap items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-2">
                             {item.user && (
                               <>
                                 <span className="text-muted-foreground inline-flex items-center gap-1 text-xs font-medium">
@@ -270,9 +272,9 @@ export function ActivityAuditList() {
                             </span>
                             {item.targetType &&
                               TARGET_TYPE_LABELS[item.targetType] && (
-                                <span className="bg-muted text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] font-medium">
+                                <Badge variant={"secondary"}>
                                   {TARGET_TYPE_LABELS[item.targetType]}
-                                </span>
+                                </Badge>
                               )}
                           </div>
                         </div>
@@ -284,7 +286,7 @@ export function ActivityAuditList() {
             ))
           )}
         </div>
-      </div>
+      </ScrollArea>
 
       {/* Pagination — pinned at the bottom */}
       {!isPending && totalPages > 1 && (
@@ -298,9 +300,7 @@ export function ActivityAuditList() {
                     e.preventDefault();
                     if (page > 1) goToPage(page - 1);
                   }}
-                  className={
-                    page <= 1 ? "pointer-events-none opacity-50" : ""
-                  }
+                  className={page <= 1 ? "pointer-events-none opacity-50" : ""}
                   aria-disabled={page <= 1}
                 />
               </PaginationItem>
