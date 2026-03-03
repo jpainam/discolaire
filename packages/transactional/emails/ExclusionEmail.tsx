@@ -78,10 +78,10 @@ export const ExclusionEmail = ({
             </Text>
             <Text className="text-[14px] leading-[24px] text-[#121212]">
               Nous vous informons que votre enfant, {studentName}, a fait
-              l&apos;objet d&apos;une exclusion temporaire de l&apos;établissement
-              à compter du {startDate.toLocaleDateString()} jusqu&apos;au{" "}
-              {endDate.toLocaleDateString()}. Cette décision a été prise en
-              raison de {motif}.
+              l&apos;objet d&apos;une exclusion temporaire de
+              l&apos;établissement à compter du {startDate.toLocaleDateString()}{" "}
+              jusqu&apos;au {endDate.toLocaleDateString()}. Cette décision a été
+              prise en raison de {motif}.
               <br />
               Nous vous invitons à rencontrer l&apos;équipe éducative afin de
               discuter de cette situation et des mesures à prendre pour éviter

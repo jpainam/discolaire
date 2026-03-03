@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod/v4";
 
+import { getDb } from "@repo/db";
 import { enqueueEmailJobs } from "@repo/messaging/client";
 
 import { env } from "~/env";
@@ -11,6 +12,7 @@ const schema = z.object({
   html: z.string().optional(),
   text: z.string().optional(),
   from: z.string().optional(),
+  tenant: z.string().min(1).optional(),
 });
 
 /**
@@ -34,18 +36,25 @@ export async function POST(req: NextRequest) {
       return new Response(z.prettifyError(result.error), { status: 400 });
     }
 
-    const { to, subject, html, text, from } = result.data;
+    const { to, subject, html, text, from, tenant } = result.data;
 
     const htmlBody = html ?? (text ? `<p>${text}</p>` : null);
     if (!htmlBody) {
       return new Response("html or text is required", { status: 400 });
     }
 
+    let senderName = "Discolaire";
+    if (tenant) {
+      const db = getDb({ connectionString: env.DATABASE_URL, tenant });
+      const school = await db.school.findFirst({ select: { name: true } });
+      senderName = school?.name ?? tenant.toUpperCase();
+    }
+
     const recipients = Array.isArray(to) ? to : [to];
     await enqueueEmailJobs(
       recipients.map((recipient) => ({
         to: recipient,
-        from: from ?? "Discolaire <contact@discolaire.com>",
+        from: from ?? `${senderName} <contact@discolaire.com>`,
         subject,
         html: htmlBody,
         text,

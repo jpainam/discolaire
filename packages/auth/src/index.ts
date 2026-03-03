@@ -25,7 +25,7 @@ import {
 async function sendPlainEmail(
   baseUrl: string,
   apiKey: string,
-  opts: { to: string; subject: string; html?: string; text?: string },
+  opts: { to: string; subject: string; html?: string; text?: string; tenant?: string },
 ) {
   await fetch(`${baseUrl}/api/emails/plain`, {
     method: "POST",
@@ -91,6 +91,7 @@ export function initAuth(options: {
             to: user.email, // verification email must be sent to the current user email to approve the change
             subject: "Confirmation de changement d'email",
             text: `Cliquez sur le lien pour confirmer le changement.: ${url}`,
+            tenant: options.tenant,
           });
         },
       },
@@ -116,7 +117,12 @@ export function initAuth(options: {
           console.log("Completing registration");
           await completeRegistration({ user, url, baseUrl: options.baseUrl });
         } else {
-          await sendResetPassword({ user, url, baseUrl: options.baseUrl });
+          await sendResetPassword({
+            user,
+            url,
+            baseUrl: options.baseUrl,
+            tenant: options.tenant,
+          });
         }
       },
       requireEmailVerification: false,
@@ -135,6 +141,7 @@ export function initAuth(options: {
           subject: "Verifier votre adresse e-mail",
           text: `Cliquez sur le lien ci-dessous pour vérifier votre adresse e-mail : ${url}`,
           html: `<p>Cliquez sur le lien ci-dessous pour vérifier votre adresse e-mail <a href='${url}'>${url}</a></p>`,
+          tenant: options.tenant,
         });
       },
     },

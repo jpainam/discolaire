@@ -132,7 +132,7 @@ export async function POST(req: Request) {
       jobs: [
         {
           to: user.email,
-          from: "Discolaire <contact@discolaire.com>",
+          from: `${school.name} <contact@discolaire.com>`,
           subject: `${resolvedPeriodType === "friday" ? "Bilan hebdomadaire" : "Bilan des 3 derniers jours"} — ${school.name}`,
           html,
           text,

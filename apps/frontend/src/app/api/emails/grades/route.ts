@@ -5,7 +5,7 @@ import { GradeCreatedEmail } from "@repo/transactional";
 
 import { getSession } from "~/auth/server";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
-import { buildLogoUrl } from "~/lib/logo-url";
+import { buildLogoUrl } from "~/lib/utils";
 import { caller } from "~/trpc/server";
 
 const schema = z.object({
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
     const jobs = await Promise.all(
       recipients.map(async (recipient) => ({
         to: recipient.email,
-        from: `${school.code} <contact@discolaire.com>`,
+        from: `${school.name} <contact@discolaire.com>`,
         subject,
         html: await render(
           GradeCreatedEmail({
@@ -121,7 +121,10 @@ export async function POST(req: Request) {
             scale: gradeSheet.scale,
             grade: recipient.grade,
             isAbsent: recipient.isAbsent,
-            school: { name: school.name, logo: buildLogoUrl(school.logo, baseUrl) },
+            school: {
+              name: school.name,
+              logo: buildLogoUrl(school.logo, baseUrl),
+            },
           }),
         ),
       })),

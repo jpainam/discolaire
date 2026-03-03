@@ -40,10 +40,12 @@ export async function sendResetPassword({
   user,
   url,
   baseUrl,
+  tenant,
 }: {
   user: { id: string; email: string; name: string };
   url: string;
   baseUrl: string;
+  tenant: string;
 }) {
   if (user.email.includes("@example.com")) {
     console.warn("User email is a placeholder, skipping email sending.");
@@ -56,7 +58,12 @@ export async function sendResetPassword({
       "Content-Type": "application/json",
       "x-api-key": env.DISCOLAIRE_API_KEY,
     },
-    body: JSON.stringify({ email: user.email, name: user.name, url }),
+    body: JSON.stringify({
+      email: user.email,
+      name: user.name,
+      url,
+      tenant,
+    }),
   });
 
   if (!response.ok) {

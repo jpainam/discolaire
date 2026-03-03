@@ -36,13 +36,16 @@ export async function POST(req: Request) {
 }
 
 async function completeSend(title: string, body: string, studentId: string) {
-  const emails = await getStudentEmailRecipients(studentId);
+  const [emails, school] = await Promise.all([
+    getStudentEmailRecipients(studentId),
+    caller.school.getSchool(),
+  ]);
   if (emails.length === 0) return;
 
   await caller.sesEmail.enqueue({
     jobs: emails.map((to) => ({
       to,
-      from: "Discolaire <contact@discolaire.com>",
+      from: `${school.name} <contact@discolaire.com>`,
       subject: title,
       html: `<p>${body}</p>`,
       text: body,

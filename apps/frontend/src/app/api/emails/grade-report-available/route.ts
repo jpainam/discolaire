@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
 
         jobs.push({
           to: parent.email,
-          from: `Discolaire <contact@discolaire.com>`,
+          from: `${school?.name ?? tenant.toUpperCase()} <contact@discolaire.com>`,
           subject: `Bulletin de notes disponible — ${termName} (${studentName})`,
           html,
         });

@@ -17,7 +17,10 @@ export async function GET(req: NextRequest) {
     if (!id) {
       return new Response("Invalid request", { status: 400 });
     }
-    const user = await caller.user.get(id);
+    const [user, school] = await Promise.all([
+      caller.user.get(id),
+      caller.school.getSchool(),
+    ]);
     if (user.email) {
       const emailHtml = await render(
         FakeGradeReportEmail({
@@ -36,7 +39,7 @@ export async function GET(req: NextRequest) {
         jobs: [
           {
             to: user.email,
-            from: "Discolaire <contact@discolaire.com>",
+            from: `${school.name} <contact@discolaire.com>`,
             subject: "Signalement de fausse note",
             html: emailHtml,
           },

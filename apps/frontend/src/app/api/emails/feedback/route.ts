@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       jobs: [
         {
           to: "jpainam@gmail.com",
-          from: "Discolaire <contact@discolaire.com>",
+          from: `${school.name} <contact@discolaire.com>`,
           subject: "Feedback",
           html,
         },

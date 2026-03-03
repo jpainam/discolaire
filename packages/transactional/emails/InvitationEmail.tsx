@@ -67,8 +67,8 @@ const InvitationEmail = ({
             <Hr className="my-[32px] border-[#e6e6e6]" />
             <Text className="text-[14px] text-[#666666]">
               Si vous ne vous attendiez pas à cette invitation, vous pouvez
-              ignorer cet e-mail. Si vous avez des questions, veuillez
-              contacter support@discolaire.com.
+              ignorer cet e-mail. Si vous avez des questions, veuillez contacter
+              support@discolaire.com.
             </Text>
             <EmailFooter schoolName={schoolName} />
           </Container>

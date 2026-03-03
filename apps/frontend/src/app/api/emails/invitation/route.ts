@@ -7,7 +7,7 @@ import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
 
 import { getSession } from "~/auth/server";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
-import { buildLogoUrl } from "~/lib/logo-url";
+import { buildLogoUrl } from "~/lib/utils";
 import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const schema = z.object({
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       jobs: [
         {
           to: email,
-          from: "Discolaire <contact@discolaire.com>",
+          from: `${user.school.name} <contact@discolaire.com>`,
           subject: "Invitation " + user.school.name,
           html,
         },

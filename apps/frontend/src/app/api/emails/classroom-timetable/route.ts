@@ -223,7 +223,7 @@ export async function POST(req: Request) {
     const jobs = await Promise.all(
       recipients.map(async (recipient) => ({
         to: recipient.email,
-        from: "Discolaire <contact@discolaire.com>",
+        from: `${school.name} <contact@discolaire.com>`,
         subject,
         html: await render(
           ClassroomTimetableEmail({

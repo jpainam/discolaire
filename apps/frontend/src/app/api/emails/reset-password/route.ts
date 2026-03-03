@@ -3,15 +3,19 @@ import { NextResponse } from "next/server";
 import { render } from "@react-email/render";
 import { z } from "zod/v4";
 
+import { getDb } from "@repo/db";
 import { enqueueEmailJobs } from "@repo/messaging/client";
 import { ResetPassword } from "@repo/transactional/emails/ResetPassword";
 
 import { env } from "~/env";
+import { getRequestBaseUrl } from "~/lib/base-url.server";
+import { buildLogoUrl } from "~/lib/utils";
 
 const schema = z.object({
   url: z.string().min(1),
   email: z.email(),
   name: z.string().min(1),
+  tenant: z.string().min(1),
 });
 
 export async function POST(req: NextRequest) {
@@ -30,16 +34,30 @@ export async function POST(req: NextRequest) {
       const error = z.treeifyError(result.error);
       return NextResponse.json(error, { status: 400 });
     }
-    const { url, email, name } = result.data;
+    const { url, email, name, tenant } = result.data;
+
+    const db = getDb({ connectionString: env.DATABASE_URL, tenant });
+    const [school, baseUrl] = await Promise.all([
+      db.school.findFirst({ select: { id: true, name: true, logo: true } }),
+      getRequestBaseUrl(req.headers),
+    ]);
 
     const html = await render(
-      ResetPassword({ username: name, resetLink: url, school: "IPBW" }),
+      ResetPassword({
+        username: name,
+        resetLink: url,
+        school: {
+          id: school?.id ?? tenant,
+          name: school?.name ?? tenant,
+          logo: buildLogoUrl(school?.logo, baseUrl),
+        },
+      }),
     );
 
     await enqueueEmailJobs([
       {
         to: email,
-        from: "Discolaire <contact@discolaire.com>",
+        from: `${school?.name ?? tenant.toUpperCase()} <contact@discolaire.com>`,
         subject: "Réinitialisez votre mot de passe.",
         html,
       },
