@@ -11,8 +11,8 @@ export function EmailHeader({ logoUrl, schoolName }: EmailHeaderProps) {
       {logoUrl && (
         <Img
           src={logoUrl}
-          width="80"
-          height="80"
+          width="100"
+          height="100"
           alt={schoolName ?? "Logo"}
           className="mx-auto mb-[12px] block rounded-full object-cover"
         />
