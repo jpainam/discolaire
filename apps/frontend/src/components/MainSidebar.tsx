@@ -37,6 +37,7 @@ import {
   HomeIcon,
   InformationIcon,
   LibraryIcon,
+  MailIcon,
   SettingsIcon,
   UsersIcon,
 } from "~/icons";
@@ -116,6 +117,14 @@ export function MainSidebar({
       name: "administration",
       url: `/administration`,
       icon: <AdministrationIcon />,
+    });
+  }
+  const canMassCommunicate = useCheckPermission("menu:communication.read");
+  if (canMassCommunicate) {
+    data.push({
+      name: "Communication",
+      url: "/communications",
+      icon: <MailIcon />,
     });
   }
 

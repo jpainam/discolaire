@@ -158,12 +158,12 @@ export default function InboxPage() {
         {/* Message list panel */}
         <div
           className={cn(
-            "border-border bg-card flex flex-col border-r",
+            "border-border flex flex-col",
             "w-full shrink-0 sm:w-80 md:w-96 lg:w-80 xl:w-96",
             isComposing || activeMessageId ? "hidden sm:flex" : "flex",
           )}
         >
-          <div className="border-border bg-card flex items-center gap-2 border-b px-3 py-2 lg:hidden" />
+          <div className="border-border flex items-center gap-2 border-b px-3 py-2 lg:hidden" />
           <div className="flex flex-1 flex-col overflow-hidden">
             {isLoading ? (
               <div className="text-muted-foreground py-8 text-center text-sm">
@@ -199,7 +199,7 @@ export default function InboxPage() {
             <>
               {/* Mobile back button */}
               {activeMessageId && (
-                <div className="border-border bg-card flex items-center gap-2 border-b px-3 py-2 sm:hidden">
+                <div className="border-border b flex items-center gap-2 border-b px-3 py-2 sm:hidden">
                   <button
                     onClick={() => setActiveMessageId(null)}
                     className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"

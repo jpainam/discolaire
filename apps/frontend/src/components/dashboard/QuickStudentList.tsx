@@ -205,10 +205,7 @@ export function QuickStudentList() {
                         </Badge>
                       )}
                       {st.registrationNumber && (
-                        <Badge
-                          variant="secondary"
-                          className="border-border border"
-                        >
+                        <Badge variant="secondary">
                           {st.registrationNumber}
                         </Badge>
                       )}
@@ -257,13 +254,13 @@ export function QuickStudentList() {
                             ? lastEnrollment.classroom.name
                             : "N/A"}
                       </Link>
-                      <span className="border-border bg-muted text-foreground rounded-md border px-2 py-0.5 text-xs">
+                      <Badge variant={"secondary"} className="border-border">
                         {st.classroom
                           ? st.classroom.schoolYear.name
                           : lastEnrollment
                             ? lastEnrollment.schoolYear.name
                             : "N/A"}
-                      </span>
+                      </Badge>
                     </div>
                   </TableCell>
 

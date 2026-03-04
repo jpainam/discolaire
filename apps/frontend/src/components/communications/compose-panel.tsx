@@ -171,31 +171,30 @@ export default function ComposePanel({
   }
 
   return (
-    <div className="bg-card flex h-full flex-col">
+    <div className="flex h-full flex-col">
       {/* Top bar */}
-      <div className="border-border flex items-center justify-between border-b px-6 py-4">
+      <div className="border-border flex items-center justify-between border-b p-2">
         <div>
-          <h2 className="text-foreground text-base font-semibold">
-            New Bulk Message
-          </h2>
-          <p className="text-muted-foreground mt-0.5 text-xs">
+          <Label className="text-base font-semibold">New Bulk Message</Label>
+          <span className="text-muted-foreground text-xs">
             Compose and send your message below
-          </p>
+          </span>
         </div>
-        <button
+        <Button
+          variant={"ghost"}
+          size={"icon"}
           onClick={onCancel}
-          className="text-muted-foreground hover:text-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-full transition-colors"
           title="Discard"
         >
-          <X className="h-4 w-4" />
-        </button>
+          <X />
+        </Button>
       </div>
 
       {/* Form */}
       <div className="flex-1 overflow-y-auto">
         {/* To field */}
-        <div className="border-border flex items-start gap-3 border-b px-6 py-3">
-          <Label className="text-muted-foreground w-14 shrink-0 pt-1.5 text-xs font-semibold">
+        <div className="border-border flex items-start gap-3 border-b px-4 py-2">
+          <Label className="w-14 shrink-0 pt-1.5 text-xs font-semibold">
             To
           </Label>
           <div className="flex min-h-[32px] flex-1 flex-wrap items-center gap-2">
@@ -209,10 +208,10 @@ export default function ComposePanel({
         </div>
 
         {/* Subject field */}
-        <div className="border-border flex items-center gap-3 border-b px-6 py-3">
+        <div className="border-border flex items-center gap-3 border-b px-4 py-2">
           <Label
             htmlFor="compose-subject"
-            className="text-muted-foreground w-14 shrink-0 text-xs font-semibold"
+            className="w-14 shrink-0 text-xs font-semibold"
           >
             Subject
           </Label>
@@ -221,7 +220,6 @@ export default function ComposePanel({
             placeholder="Enter message subject..."
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="h-8 border-0 px-0 text-sm font-medium shadow-none placeholder:font-normal focus-visible:ring-0"
           />
         </div>
 
@@ -277,7 +275,7 @@ export default function ComposePanel({
             onChange={(e) => setBody(e.target.value)}
             className={cn(
               "w-full flex-1 resize-none px-6 py-4 text-sm leading-relaxed",
-              "bg-card text-foreground placeholder:text-muted-foreground",
+              "text-foreground placeholder:text-muted-foreground",
               "min-h-[280px] focus:outline-none",
               "font-sans",
             )}
@@ -300,31 +298,22 @@ export default function ComposePanel({
 
         {/* Action buttons */}
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onCancel}
-            className="text-muted-foreground hover:text-foreground"
-          >
+          <Button variant="ghost" onClick={onCancel}>
             Cancel
           </Button>
           <Button
             variant="outline"
-            size="sm"
             onClick={handleDraft}
             disabled={!canDraft || isSavingDraft || isSending}
-            className="gap-1.5"
           >
-            <FileText className="h-3.5 w-3.5" />
+            <FileText />
             {isSavingDraft ? "Saving..." : "Save Draft"}
           </Button>
           <Button
-            size="sm"
             onClick={handleSend}
             disabled={!canSend || isSending || isSavingDraft}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5"
           >
-            <Send className="h-3.5 w-3.5" />
+            <Send />
             {isSending
               ? "Sending..."
               : `Send to ${summary.count.toLocaleString()} ${summary.count === 1 ? "person" : "people"}`}

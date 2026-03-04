@@ -71,6 +71,10 @@ export async function POST(req: Request) {
       }),
     );
 
+    if (transactions.length === 0) {
+      return Response.json({ success: false, skipped: true, reason: "No transactions" }, { status: 200 });
+    }
+
     const user = await queryClient.fetchQuery(
       trpc.user.get.queryOptions(userId),
     );

@@ -5,6 +5,7 @@ import { Search, Users } from "lucide-react";
 
 import type { Message } from "./mock-data";
 import { cn } from "~/lib/utils";
+import { EmptyComponent } from "../EmptyComponent";
 import {
   InputGroup,
   InputGroupAddon,
@@ -68,10 +69,10 @@ export default function MessageList({
       {/* List */}
       <div className="divide-border flex-1 divide-y overflow-y-auto">
         {filtered.length === 0 ? (
-          <div className="text-muted-foreground flex h-full flex-col items-center justify-center gap-2 py-12">
-            <Search className="h-8 w-8 opacity-30" />
-            <p className="text-sm">No messages found</p>
-          </div>
+          <EmptyComponent
+            title="Aucun message"
+            description="Commencer par composer un email"
+          />
         ) : (
           filtered.map((msg) => (
             <button

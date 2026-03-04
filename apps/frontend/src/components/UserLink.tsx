@@ -30,7 +30,9 @@ export function UserLink(props: {
     <div className={cn("flex items-center gap-2", props.rootClassName)}>
       <Avatar size="sm">
         <AvatarImage
-          src={props.avatar ?? avatar.toDataUri()}
+          src={
+            props.avatar ? `/api/avatars/${props.avatar}` : avatar.toDataUri()
+          }
           alt={props.name}
         />
         <AvatarFallback></AvatarFallback>

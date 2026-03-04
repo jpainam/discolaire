@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Inbox, PenSquare, Send, Trash2 } from "lucide-react";
 
-import { Button } from "~/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -45,12 +44,18 @@ export function CommunicationSidebar({
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
+            {/* <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={t("back_to_home")}>
+                <Link href={"/"}>
+                  <ArrowLeft />
+                  <span>{t("back")}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem> */}
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Button onClick={startCompose}>
-                  <PenSquare className="h-4 w-4" />
-                  Compose Message
-                </Button>
+              <SidebarMenuButton className="bg-primary" onClick={startCompose}>
+                <PenSquare className="h-4 w-4" />
+                Compose Message
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
