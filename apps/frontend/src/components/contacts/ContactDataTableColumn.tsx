@@ -289,7 +289,7 @@ export function useContactColumns(): ColumnDef<
         },
         {
           id: "createdAt",
-          accessorFn: (contact) => contact.createdAt?.toString() ?? "",
+          accessorFn: (contact) => contact.createdAt.toString(),
           size: 120,
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title={t("createdAt")} />

@@ -144,10 +144,16 @@ export function QuickStudentList() {
           <TableHeader>
             <TableRow>
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead className="hidden sm:table-cell">{t("registrationNumber")}</TableHead>
-              <TableHead className="hidden md:table-cell">{t("dateOfBirth")}</TableHead>
+              <TableHead className="hidden sm:table-cell">
+                {t("registrationNumber")}
+              </TableHead>
+              <TableHead className="hidden md:table-cell">
+                {t("dateOfBirth")}
+              </TableHead>
               {/* <TableHead>{t("placeOfBirth")}</TableHead> */}
-              <TableHead className="hidden sm:table-cell">{t("classroom")}</TableHead>
+              <TableHead className="hidden sm:table-cell">
+                {t("classroom")}
+              </TableHead>
               {/* <TableHead>{t("gender")}</TableHead> */}
               <TableHead className="text-right"></TableHead>
             </TableRow>

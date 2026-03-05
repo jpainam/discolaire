@@ -128,7 +128,7 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
                 name={getFullName(staff)}
                 avatar={staff.avatar}
                 rootClassName="min-w-0"
-                className="truncate min-w-0"
+                className="min-w-0 truncate"
               />
             );
           },
@@ -154,7 +154,9 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
             <DataTableColumnHeader column={column} title={t("firstName")} />
           ),
           cell: ({ row }) => (
-            <div className="text-muted-foreground">{row.original.firstName}</div>
+            <div className="text-muted-foreground">
+              {row.original.firstName}
+            </div>
           ),
         },
         {
@@ -249,7 +251,9 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
             <DataTableColumnHeader column={column} title={t("specialty")} />
           ),
           cell: ({ row }) => (
-            <div className="text-muted-foreground">{row.original.specialty}</div>
+            <div className="text-muted-foreground">
+              {row.original.specialty}
+            </div>
           ),
         },
 
@@ -401,7 +405,9 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
             <DataTableColumnHeader column={column} title={t("bloodType")} />
           ),
           cell: ({ row }) => (
-            <div className="text-muted-foreground">{row.original.bloodType}</div>
+            <div className="text-muted-foreground">
+              {row.original.bloodType}
+            </div>
           ),
         },
 
@@ -424,10 +430,7 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
           accessorFn: (staff) => staff.dateOfRelease?.toString() ?? "",
           size: 120,
           header: ({ column }) => (
-            <DataTableColumnHeader
-              column={column}
-              title={t("dateOfRelease")}
-            />
+            <DataTableColumnHeader column={column} title={t("dateOfRelease")} />
           ),
           cell: ({ row }) => (
             <div className="text-muted-foreground">
@@ -610,10 +613,7 @@ export function useStaffColumns(): ColumnDef<StaffProcedureOutput, unknown>[] {
           id: "accountNumber",
           accessorKey: "accountNumber",
           header: ({ column }) => (
-            <DataTableColumnHeader
-              column={column}
-              title={t("accountNumber")}
-            />
+            <DataTableColumnHeader column={column} title={t("accountNumber")} />
           ),
           cell: ({ row }) => (
             <div className="text-muted-foreground">

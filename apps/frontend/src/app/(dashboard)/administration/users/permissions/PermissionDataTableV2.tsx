@@ -129,7 +129,9 @@ function usePermissionColumns() {
         ),
         size: 300,
         cell: ({ row }) => (
-          <div className="text-muted-foreground min-w-0 flex-1 truncate">{row.original.name}</div>
+          <div className="text-muted-foreground min-w-0 flex-1 truncate">
+            {row.original.name}
+          </div>
         ),
       },
       {

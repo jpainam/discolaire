@@ -577,9 +577,7 @@ export const contactRouter = {
         .map((sort) => ({ [sort.id]: sort.desc ? "desc" : "asc" }));
 
       const resolvedOrderBy: Prisma.ContactOrderByWithRelationInput[] =
-        orderBy.length > 0
-          ? orderBy
-          : [{ createdAt: "desc" }, { id: "desc" }];
+        orderBy.length > 0 ? orderBy : [{ createdAt: "desc" }, { id: "desc" }];
 
       if (!resolvedOrderBy.some((order) => "id" in order)) {
         resolvedOrderBy.push({ id: "desc" });
@@ -594,9 +592,7 @@ export const contactRouter = {
           include: contactInclude,
           orderBy: resolvedOrderBy,
           take,
-          ...(input.cursor
-            ? { cursor: { id: input.cursor }, skip: 1 }
-            : {}),
+          ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
         }),
       ]);
 

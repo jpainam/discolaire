@@ -33,26 +33,6 @@ export default async function Page() {
           </div>
         </Suspense>
       </ErrorBoundary>
-      {/* <ErrorBoundary errorComponent={ErrorFallback}>
-        <Suspense
-          key={"contacts"}
-          fallback={
-            <div className="grid grid-cols-4 gap-4 p-4">
-              {Array.from({ length: 16 }).map((_, i) => (
-                <Skeleton key={i} className="h-8" />
-              ))}
-            </div>
-          }
-        >
-          {user.profile != "staff" ? (
-            <div className="px-4 py-4">
-              <ContactDataTable />
-            </div>
-          ) : (
-            <ContactSearchPage />
-          )}
-        </Suspense>
-      </ErrorBoundary> */}
     </HydrateClient>
   );
 }

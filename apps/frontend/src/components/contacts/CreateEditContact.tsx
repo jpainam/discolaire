@@ -41,7 +41,7 @@ const createEditContactSchema = z.object({
 
 interface CreateEditContactProps {
   contact?:
-    | RouterOutputs["contact"]["all"][number]
+    | RouterOutputs["contact"]["all"]["data"][number]
     | RouterOutputs["contact"]["get"];
   studentId?: string;
 }
