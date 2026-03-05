@@ -3,13 +3,13 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { redirect } from "next/navigation";
 
 import { getSession } from "~/auth/server";
-import { ContactTable } from "~/components/contacts/ContactTable";
+import { ContactDataTable } from "~/components/contacts/ContactDataTable";
 import { ErrorFallback } from "~/components/error-fallback";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { ContactHeader } from "./ContactHeader";
 
 export default async function Page() {
-  prefetch(trpc.contact.all.queryOptions());
+  prefetch(trpc.contact.search.queryOptions({ query: "", limit: 20 }));
   const session = await getSession();
   if (!session) {
     redirect("/auth/login");
@@ -28,7 +28,9 @@ export default async function Page() {
       </ErrorBoundary>
       <ErrorBoundary errorComponent={ErrorFallback}>
         <Suspense>
-          <ContactTable />
+          <div className="px-4">
+            <ContactDataTable />
+          </div>
         </Suspense>
       </ErrorBoundary>
       {/* <ErrorBoundary errorComponent={ErrorFallback}>

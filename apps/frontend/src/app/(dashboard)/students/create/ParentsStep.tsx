@@ -51,7 +51,7 @@ export function ParentsStep() {
   }, 200);
 
   const { data: parents, isPending } = useQuery(
-    trpc.contact.all.queryOptions({ query, limit: 10 }),
+    trpc.contact.search.queryOptions({ query, limit: 10 }),
   );
 
   const handleAddParent = (parent: {

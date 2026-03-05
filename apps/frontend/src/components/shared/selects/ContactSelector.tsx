@@ -44,7 +44,7 @@ export function ContactSelector({
   const t = useTranslations();
   const [label, setLabel] = React.useState(t("select_an_option"));
   const trpc = useTRPC();
-  const contactsQuery = useQuery(trpc.contact.all.queryOptions());
+  const contactsQuery = useQuery(trpc.contact.search.queryOptions());
 
   React.useEffect(() => {
     if (contactsQuery.data) {

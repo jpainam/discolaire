@@ -17,7 +17,7 @@ export async function searchStudents({
 }
 
 export async function searchContacts({ q }: { q?: string }) {
-  return caller.contact.all({
+  return caller.contact.search({
     query: q,
     limit: 10,
   });

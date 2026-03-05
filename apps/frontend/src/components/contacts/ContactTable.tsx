@@ -75,7 +75,7 @@ export function ContactTable() {
   const { openModal } = useModal();
 
   const { data: contacts, isPending } = useQuery(
-    trpc.contact.all.queryOptions({
+    trpc.contact.search.queryOptions({
       query: queryText,
       limit: 20,
     }),
@@ -92,7 +92,7 @@ export function ContactTable() {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.contact.search.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
     }),

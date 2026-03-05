@@ -51,7 +51,7 @@ export function AddToParentToStudent({ studentId }: { studentId: string }) {
   const [contactIds, setContactIds] = useState<string[]>([]);
   const [queryText, setQueryText] = useState<string>("");
   const { data: contacts, isPending } = useQuery(
-    trpc.contact.all.queryOptions({
+    trpc.contact.search.queryOptions({
       query: queryText,
     }),
   );

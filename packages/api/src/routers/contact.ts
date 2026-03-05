@@ -2,6 +2,8 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { addDays, isBefore, startOfDay, subMonths } from "date-fns";
 import { z } from "zod/v4";
 
+import type { Prisma } from "@repo/db";
+
 import { ActivityAction, ActivityTargetType } from "../activity-logger";
 import { protectedProcedure } from "../trpc";
 
@@ -65,6 +67,70 @@ function normalizeWeekday(weekday: number) {
   return ((weekday % 7) + 7) % 7;
 }
 export const contactRouter = {
+  search: protectedProcedure
+    .input(
+      z
+        .object({
+          limit: z.number().optional().default(100),
+          query: z.string().optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      const q = input?.query;
+      const searchInclude = {
+        user: true,
+        studentContacts: {
+          include: { student: true, relationship: true },
+        },
+      } as const;
+
+      if (ctx.session.user.profile == "contact") {
+        const contact = await ctx.services.contact.getFromUserId(
+          ctx.session.user.id,
+        );
+        const c = await ctx.db.contact.findUniqueOrThrow({
+          include: searchInclude,
+          where: { id: contact.id },
+        });
+        return [c];
+      }
+      if (ctx.session.user.profile == "student") {
+        const student = await ctx.services.student.getFromUserId(
+          ctx.session.user.id,
+        );
+        const studentContacts = await ctx.db.studentContact.findMany({
+          where: { studentId: student.id },
+        });
+        const contactIds = studentContacts.map((sc) => sc.contactId);
+        return ctx.db.contact.findMany({
+          include: searchInclude,
+          where: { id: { in: contactIds } },
+        });
+      }
+      return ctx.db.contact.findMany({
+        take: input?.limit ?? 100,
+        orderBy: { createdAt: "desc" },
+        include: searchInclude,
+        where: {
+          schoolId: ctx.schoolId,
+          ...(q
+            ? {
+                OR: [
+                  { firstName: { contains: q, mode: "insensitive" } },
+                  { lastName: { contains: q, mode: "insensitive" } },
+                  { phoneNumber1: { contains: q, mode: "insensitive" } },
+                  { phoneNumber2: { contains: q, mode: "insensitive" } },
+                  { email: { contains: q, mode: "insensitive" } },
+                  { user: { email: { contains: q, mode: "insensitive" } } },
+                  { employer: { contains: q, mode: "insensitive" } },
+                  { occupation: { contains: q, mode: "insensitive" } },
+                ],
+              }
+            : {}),
+        },
+      });
+    }),
   delete: protectedProcedure
     .input(z.union([z.string(), z.array(z.string())]))
     .mutation(async ({ ctx, input }) => {
@@ -419,92 +485,126 @@ export const contactRouter = {
 
   all: protectedProcedure
     .input(
-      z
-        .object({
-          limit: z.number().optional().default(100),
-          query: z.string().optional(),
-        })
-        .optional(),
+      z.object({
+        pageSize: z.number().int().min(1).max(200).optional().default(30),
+        cursor: z.string().nullish(),
+        search: z.string().optional().default(""),
+        sorting: z
+          .array(
+            z.object({
+              id: z.string().min(1),
+              desc: z.boolean().optional().default(false),
+            }),
+          )
+          .optional()
+          .default([]),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const q = input?.query;
+      const contactInclude = {
+        user: true,
+        country: true,
+        studentContacts: {
+          include: { student: true, relationship: true },
+        },
+      } as const;
+
       if (ctx.session.user.profile == "contact") {
         const contact = await ctx.services.contact.getFromUserId(
           ctx.session.user.id,
         );
         const c = await ctx.db.contact.findUniqueOrThrow({
-          include: {
-            user: true,
-            studentContacts: {
-              include: {
-                student: true,
-                relationship: true,
-              },
-            },
-          },
-          where: {
-            id: contact.id,
-          },
+          include: contactInclude,
+          where: { id: contact.id },
         });
-        return [c];
+        return { data: [c], rowCount: 1, nextCursor: undefined };
       }
+
       if (ctx.session.user.profile == "student") {
         const student = await ctx.services.student.getFromUserId(
           ctx.session.user.id,
         );
         const studentContacts = await ctx.db.studentContact.findMany({
-          where: {
-            studentId: student.id,
-          },
+          where: { studentId: student.id },
         });
         const contactIds = studentContacts.map((sc) => sc.contactId);
-        return ctx.db.contact.findMany({
-          include: {
-            user: true,
-            studentContacts: {
-              include: { student: true, relationship: true },
-            },
-          },
-          where: {
-            id: {
-              in: contactIds,
-            },
-          },
+        const contacts = await ctx.db.contact.findMany({
+          include: contactInclude,
+          where: { id: { in: contactIds } },
         });
+        return {
+          data: contacts,
+          rowCount: contacts.length,
+          nextCursor: undefined,
+        };
       }
-      return ctx.db.contact.findMany({
-        take: input?.limit ?? 100,
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
-          user: true,
-          studentContacts: {
-            include: {
-              student: true,
-              relationship: true,
-            },
-          },
-        },
-        where: {
-          schoolId: ctx.schoolId,
-          OR: [
-            { firstName: { contains: q, mode: "insensitive" } },
-            { lastName: { contains: q, mode: "insensitive" } },
-            { phoneNumber1: { contains: q, mode: "insensitive" } },
-            { phoneNumber2: { contains: q, mode: "insensitive" } },
-            { email: { contains: q, mode: "insensitive" } },
-            {
-              user: {
-                email: { contains: q, mode: "insensitive" },
-              },
-            },
 
-            { employer: { contains: q, mode: "insensitive" } },
-            { occupation: { contains: q, mode: "insensitive" } },
-          ],
-        },
-      });
+      const search = input.search.trim();
+
+      const where: Prisma.ContactWhereInput = {
+        schoolId: ctx.schoolId,
+        ...(search
+          ? {
+              OR: [
+                { firstName: { contains: search, mode: "insensitive" } },
+                { lastName: { contains: search, mode: "insensitive" } },
+                { phoneNumber1: { contains: search, mode: "insensitive" } },
+                { phoneNumber2: { contains: search, mode: "insensitive" } },
+                { email: { contains: search, mode: "insensitive" } },
+                { employer: { contains: search, mode: "insensitive" } },
+                { occupation: { contains: search, mode: "insensitive" } },
+                {
+                  user: {
+                    email: { contains: search, mode: "insensitive" },
+                  },
+                },
+              ],
+            }
+          : {}),
+      };
+
+      const sortableFields = new Set([
+        "firstName",
+        "lastName",
+        "createdAt",
+        "employer",
+        "occupation",
+        "isActive",
+      ]);
+
+      const orderBy = input.sorting
+        .filter((sort) => sortableFields.has(sort.id))
+        .map((sort) => ({ [sort.id]: sort.desc ? "desc" : "asc" }));
+
+      const resolvedOrderBy: Prisma.ContactOrderByWithRelationInput[] =
+        orderBy.length > 0
+          ? orderBy
+          : [{ createdAt: "desc" }, { id: "desc" }];
+
+      if (!resolvedOrderBy.some((order) => "id" in order)) {
+        resolvedOrderBy.push({ id: "desc" });
+      }
+
+      const take = input.pageSize + 1;
+
+      const [rowCount, data] = await ctx.db.$transaction([
+        ctx.db.contact.count({ where }),
+        ctx.db.contact.findMany({
+          where,
+          include: contactInclude,
+          orderBy: resolvedOrderBy,
+          take,
+          ...(input.cursor
+            ? { cursor: { id: input.cursor }, skip: 1 }
+            : {}),
+        }),
+      ]);
+
+      const hasNextPage = data.length > input.pageSize;
+      const items = hasNextPage ? data.slice(0, -1) : data;
+      const nextCursor = hasNextPage ? items[items.length - 1]?.id : undefined;
+
+      return { data: items, rowCount, nextCursor };
     }),
   create: protectedProcedure
     .input(createUpdateSchema)

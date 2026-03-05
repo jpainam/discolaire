@@ -12,7 +12,7 @@ import { useCheckPermission } from "~/hooks/use-permission";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-type Contact = RouterOutputs["contact"]["all"][number];
+type Contact = RouterOutputs["contact"]["all"]["data"][number];
 
 export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const rows = table.getFilteredSelectedRowModel().rows;
@@ -24,7 +24,10 @@ export function ContactDataTableAction({ table }: { table: Table<Contact> }) {
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
+        await Promise.all([
+          queryClient.invalidateQueries(trpc.contact.all.pathFilter()),
+          queryClient.invalidateQueries(trpc.contact.search.pathFilter()),
+        ]);
         toast.success(t("deleted_successfully"), { id: 0 });
         table.toggleAllRowsSelected(false);
       },

@@ -38,11 +38,11 @@ export function ContactSearchDialog({
   const { closeModal } = useModal();
 
   const contactsQuery = useQuery(
-    trpc.contact.all.queryOptions({ query: debounceValue }),
+    trpc.contact.search.queryOptions({ query: debounceValue }),
   );
 
   const handleSuggestionClick = (
-    contact: RouterOutputs["contact"]["all"][number],
+    contact: RouterOutputs["contact"]["search"][number],
   ) => {
     onSelect({
       id: contact.id,

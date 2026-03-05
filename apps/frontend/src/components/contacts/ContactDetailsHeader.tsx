@@ -61,7 +61,10 @@ export function ContactDetailsHeader() {
   const deleteContactMutation = useMutation(
     trpc.contact.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.contact.all.pathFilter());
+        await Promise.all([
+          queryClient.invalidateQueries(trpc.contact.all.pathFilter()),
+          queryClient.invalidateQueries(trpc.contact.search.pathFilter()),
+        ]);
         toast.success(t("deleted_successfully"), { id: 0 });
         router.push(routes.contacts.index);
       },
