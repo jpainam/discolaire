@@ -101,7 +101,7 @@ export default async function Page() {
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           <div className="grid gap-4 self-start lg:col-span-9 lg:grid-cols-12">
-            <div className="h-full lg:col-span-6">
+            <div className="min-w-0 lg:h-full lg:col-span-6">
               <ErrorBoundary errorComponent={ErrorFallback}>
                 <Suspense
                   fallback={
@@ -117,7 +117,7 @@ export default async function Page() {
               </ErrorBoundary>
             </div>
             {/* Class list – takes 4 cols */}
-            <div className="h-full lg:col-span-6">
+            <div className="lg:h-full lg:col-span-6">
               <Suspense fallback={<Skeleton className="h-full w-full" />}>
                 <QuickClassroomList />
               </Suspense>
@@ -138,7 +138,7 @@ export default async function Page() {
             </div>
           </div>
           {/* Recent activities – takes 3 cols */}
-          <div className="h-full lg:col-span-3">
+          <div className="lg:h-full lg:col-span-3">
             <RecentActivitiesDashboard />
           </div>
         </div>

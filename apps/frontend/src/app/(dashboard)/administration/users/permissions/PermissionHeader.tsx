@@ -18,6 +18,8 @@ import { Label } from "~/components/ui/label";
 import { useModal } from "~/hooks/use-modal";
 import { PlusIcon } from "~/icons";
 import { CreateEditPermission } from "./CreateEditPermission";
+import { toast } from "sonner";
+import { updatePermission } from "~/actions/update_policies";
 
 export function PermissionHeader() {
   const t = useTranslations();
@@ -31,7 +33,8 @@ export function PermissionHeader() {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        {/* <Button
+
+        <Button
           onClick={async () => {
             toast.loading("Updating....", { id: 0 });
             await updatePermission();
@@ -39,7 +42,7 @@ export function PermissionHeader() {
           }}
         >
           Update Permission
-        </Button> */}
+        </Button> 
         <Button
           onClick={() => {
             openModal({

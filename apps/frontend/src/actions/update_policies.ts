@@ -1,114 +1,150 @@
 "use server";
 
-import { PermissionType } from "@repo/db";
+import { headers } from "next/headers";
 
-import { menuPolicies, policies } from "~/configs/policies";
-import { caller } from "~/trpc/server";
+import { getDb } from "@repo/db";
 
-const defaultModules = [
-  { name: "Configuration", code: "configuration" },
-  { name: "Enrollment", code: "enrollment" },
-  { name: "Contact", code: "contact" },
-  { name: "Staff", code: "staff" },
-  { name: "Finance", code: "finance" },
-  { name: "Report", code: "report" },
-  { name: "Student", code: "student" },
-  { name: "Academy", code: "academy" },
-  { name: "Administration", code: "administration" },
-];
+import { env } from "~/env";
 
-const resourceModuleMap: Record<string, string> = {
-  classroom: "student",
-  student: "student",
-  staff: "staff",
-  contact: "contact",
-  subject: "academy",
-  program: "academy",
-  assignment: "academy",
-  timetable: "academy",
-  library: "academy",
-  enrollment: "enrollment",
-  fee: "finance",
-  transaction: "finance",
-  gradesheet: "report",
-  attendance: "report",
-  reportcard: "report",
-  module: "configuration",
-  policy: "configuration",
-  subscription: "configuration",
-  school: "configuration",
-  user: "administration",
-  inventory: "administration",
-  communication: "administration",
-  "menu:administration": "administration",
-  "menu:staff": "staff",
-  "menu:library": "academy",
+const permission_name: Record<string, string> = {
+  "classroom.read": "Consulter la liste des salles de classe",
+  "classroom.create": "Créer une nouvelle salle de classe",
+  "classroom.update": "Modifier les informations d'une salle de classe",
+  "classroom.delete": "Supprimer une salle de classe",
+
+  "module.read": "Consulter les modules",
+  "module.create": "Créer un module",
+  "module.update": "Modifier un module",
+  "module.delete": "Supprimer un module",
+
+  "student.read": "Consulter les élèves",
+  "student.create": "Créer un élève",
+  "student.update": "Modifier les informations d'un élève",
+  "student.delete": "Supprimer un élève",
+
+  "staff.read": "Consulter le personnel",
+  "staff.create": "Créer un membre du personnel",
+  "staff.update": "Modifier les informations d'un membre du personnel",
+  "staff.delete": "Supprimer un membre du personnel",
+
+  "contact.read": "Consulter les contacts",
+  "contact.create": "Créer un contact",
+  "contact.update": "Modifier un contact",
+  "contact.delete": "Supprimer un contact",
+
+  "subject.read": "Consulter les matières",
+  "subject.create": "Créer une matière",
+  "subject.update": "Modifier une matière",
+  "subject.delete": "Supprimer une matière",
+
+  "program.read": "Consulter les programmes",
+  "program.create": "Créer un programme",
+  "program.update": "Modifier un programme",
+  "program.delete": "Supprimer un programme",
+
+  "enrollment.read": "Consulter les inscriptions",
+  "enrollment.create": "Créer une inscription",
+  "enrollment.update": "Modifier une inscription",
+  "enrollment.delete": "Supprimer une inscription",
+
+  "fee.read": "Consulter les frais scolaires",
+  "fee.create": "Créer des frais scolaires",
+  "fee.update": "Modifier des frais scolaires",
+  "fee.delete": "Supprimer des frais scolaires",
+
+  "transaction.read": "Consulter les transactions",
+  "transaction.create": "Créer une transaction",
+  "transaction.update": "Modifier une transaction",
+  "transaction.delete": "Supprimer une transaction",
+
+  "library.read": "Consulter la bibliothèque",
+  "library.create": "Ajouter un élément à la bibliothèque",
+  "library.update": "Modifier un élément de la bibliothèque",
+  "library.delete": "Supprimer un élément de la bibliothèque",
+
+  "gradesheet.read": "Consulter les feuilles de notes",
+  "gradesheet.create": "Créer une feuille de notes",
+  "gradesheet.update": "Modifier une feuille de notes",
+  "gradesheet.delete": "Supprimer une feuille de notes",
+
+  "role.read": "Consulter les rôles",
+  "role.create": "Créer un rôle",
+  "role.update": "Modifier un rôle",
+  "role.delete": "Supprimer un rôle",
+
+  "permission.read": "Consulter les permissions",
+  "permission.create": "Créer une permission",
+  "permission.update": "Modifier une permission",
+  "permission.delete": "Supprimer une permission",
+
+  "attendance.read": "Consulter les présences",
+  "attendance.create": "Enregistrer une présence",
+  "attendance.update": "Modifier une présence",
+  "attendance.delete": "Supprimer une présence",
+
+  "reportcard.read": "Consulter les bulletins scolaires",
+  "reportcard.create": "Créer un bulletin scolaire",
+  "reportcard.update": "Modifier un bulletin scolaire",
+  "reportcard.delete": "Supprimer un bulletin scolaire",
+
+  "policy.read": "Consulter les politiques",
+  "policy.create": "Créer une politique",
+  "policy.update": "Modifier une politique",
+  "policy.delete": "Supprimer une politique",
+
+  "user.read": "Consulter les utilisateurs",
+  "user.create": "Créer un utilisateur",
+  "user.update": "Modifier un utilisateur",
+  "user.delete": "Supprimer un utilisateur",
+
+  "assignment.read": "Consulter les devoirs",
+  "assignment.create": "Créer un devoir",
+  "assignment.update": "Modifier un devoir",
+  "assignment.delete": "Supprimer un devoir",
+
+  "timetable.read": "Consulter les emplois du temps",
+  "timetable.create": "Créer un emploi du temps",
+  "timetable.update": "Modifier un emploi du temps",
+  "timetable.delete": "Supprimer un emploi du temps",
+
+  "subscription.read": "Consulter les abonnements",
+  "subscription.create": "Créer un abonnement",
+  "subscription.update": "Modifier un abonnement",
+  "subscription.delete": "Supprimer un abonnement",
+
+  "inventory.read": "Consulter l'inventaire",
+  "inventory.create": "Ajouter un élément à l'inventaire",
+  "inventory.update": "Modifier un élément de l'inventaire",
+  "inventory.delete": "Supprimer un élément de l'inventaire",
+
+  "communication.create": "Créer une communication",
+
+  "school.read": "Consulter les informations de l'école",
+  "school.update": "Modifier les informations de l'école",
+  "school.delete": "Supprimer l'école",
+
+  "staff.attendance.create": "Créer une présence du personnel",
+  "staff.attendance.update": "Modifier une présence du personnel",
+  "staff.attendance.delete": "Supprimer une présence du personnel",
+
+  "menu:administration.read": "Accéder au menu Administration",
+  "menu:library.read": "Accéder au menu Bibliothèque",
+  "menu:staff.read": "Accéder au menu Personnel",
+  "menu:communication.read": "Accéder au menu Communication",
 };
-
-function formatTitle(title: string) {
-  return title.replaceAll("_", " ").trim();
-}
-
 export async function updatePermission() {
-  const existingModules = await caller.module.all();
-  const moduleIdByCode = new Map(
-    existingModules.map((module) => [module.code.toLowerCase(), module.id]),
-  );
+  const heads = await headers();
+  const tenant = heads.get("discolaire-tenant") ?? env.DEFAULT_TENANT;
+  if (!tenant) throw new Error("Tenant could not be determined.");
 
-  for (const mod of defaultModules) {
-    const code = mod.code.toLowerCase();
-    if (moduleIdByCode.has(code)) continue;
-    const created = await caller.module.create({
-      name: mod.name,
-      code,
-      description: `${mod.name} module`,
-      isActive: true,
-    });
-    moduleIdByCode.set(code, created.id);
-  }
+  const db = getDb({ connectionString: env.DATABASE_URL, tenant });
 
-  const existingPermissions = await caller.permission.all();
-  const existingKeys = new Set(
-    existingPermissions.map(
-      (permission) =>
-        `${permission.moduleId}:${permission.type}:${permission.resource}:${permission.name}`,
+  await Promise.all(
+    Object.entries(permission_name).map(([resource, name]) =>
+      db.permission.updateMany({
+        where: { resource },
+        data: { name },
+      }),
     ),
   );
-
-  const actionPolicies = policies.map((policy) => ({
-    ...policy,
-    type: PermissionType.ACTION,
-  }));
-  const menuPolicyEntries = menuPolicies.map((policy) => ({
-    ...policy,
-    type: PermissionType.MENU,
-  }));
-
-  const plannedKeys = new Set(existingKeys);
-
-  for (const policy of [...actionPolicies, ...menuPolicyEntries]) {
-    const moduleCode = resourceModuleMap[policy.resource] ?? "administration";
-    const moduleId = moduleIdByCode.get(moduleCode);
-    if (!moduleId) continue;
-
-    const baseTitle = formatTitle(policy.title);
-    const actionLabel =
-      policy.type === PermissionType.MENU
-        ? "access"
-        : policy.action.toLowerCase();
-    const name = `${actionLabel} ${baseTitle}`.trim();
-    const resourceName = `${policy.resource}.${policy.action.toLowerCase()}`;
-
-    const key = `${moduleId}:${policy.type}:${resourceName}:${name}`;
-    if (plannedKeys.has(key)) continue;
-
-    await caller.permission.create({
-      name,
-      moduleId,
-      type: policy.type,
-      resource: resourceName,
-      isActive: true,
-    });
-    plannedKeys.add(key);
-  }
 }

@@ -109,8 +109,8 @@ export function QuickStudentList() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 sm:gap-4">
-          <InputGroup>
+        <CardTitle className="flex flex-wrap items-center gap-2 sm:gap-4">
+          <InputGroup className="min-w-0 flex-1">
             <InputGroupInput
               onChange={(e) => debounced(e.target.value)}
               placeholder={t("search")}
@@ -123,7 +123,7 @@ export function QuickStudentList() {
             </InputGroupAddon>
           </InputGroup>
           <Select onValueChange={(val) => setSchoolYear(val)}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder={t("schoolYear")} />
             </SelectTrigger>
             <SelectContent>
@@ -144,10 +144,10 @@ export function QuickStudentList() {
           <TableHeader>
             <TableRow>
               <TableHead>{t("fullName")}</TableHead>
-              <TableHead>{t("registrationNumber")}</TableHead>
-              <TableHead>{t("dateOfBirth")}</TableHead>
+              <TableHead className="hidden sm:table-cell">{t("registrationNumber")}</TableHead>
+              <TableHead className="hidden md:table-cell">{t("dateOfBirth")}</TableHead>
               {/* <TableHead>{t("placeOfBirth")}</TableHead> */}
-              <TableHead>{t("classroom")}</TableHead>
+              <TableHead className="hidden sm:table-cell">{t("classroom")}</TableHead>
               {/* <TableHead>{t("gender")}</TableHead> */}
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -185,7 +185,7 @@ export function QuickStudentList() {
                       profile="student"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden sm:table-cell">
                     <div className="flex flex-row items-center gap-1.5">
                       {st.status == "ACTIVE" ? (
                         <Badge variant="outline" className="gap-1.5">
@@ -225,7 +225,7 @@ export function QuickStudentList() {
                       )}
                     </div>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell className="text-muted-foreground hidden md:table-cell">
                     {st.dateOfBirth?.toLocaleDateString(locale, {
                       month: "short",
                       year: "numeric",
@@ -236,7 +236,7 @@ export function QuickStudentList() {
                   {/* <TableCell className="text-muted-foreground">
                     {st.placeOfBirth}
                   </TableCell> */}
-                  <TableCell>
+                  <TableCell className="hidden sm:table-cell">
                     <div className="flex flex-row items-center gap-2">
                       <Link
                         className="text-muted-foreground hover:underline"

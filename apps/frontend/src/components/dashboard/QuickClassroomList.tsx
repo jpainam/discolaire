@@ -43,11 +43,11 @@ export function QuickClassroomList() {
   }, [classrooms, query]);
 
   return (
-    <Card className="h-full">
+    <Card className="lg:h-full">
       <CardHeader>
         <CardTitle>{t("Classroom list")}</CardTitle>
         <CardAction>
-          <InputGroup className="w-52">
+          <InputGroup className="w-full sm:w-52">
             <InputGroupInput
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t("search")}

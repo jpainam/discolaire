@@ -127,8 +127,9 @@ function usePermissionColumns() {
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("name")} />
         ),
+        size: 300,
         cell: ({ row }) => (
-          <div className="text-muted-foreground flex">{row.original.name}</div>
+          <div className="text-muted-foreground min-w-0 flex-1 truncate">{row.original.name}</div>
         ),
       },
       {
