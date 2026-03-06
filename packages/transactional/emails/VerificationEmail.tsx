@@ -16,12 +16,19 @@ import {
 import { EmailFooter } from "../components/EmailFooter";
 import { EmailHeader } from "../components/EmailHeader";
 
-const InvitationEmail = ({
-  inviteeName = "Jamie Smith",
-  schoolName = "Design Collective",
-  logo = `logo-round.png`,
-  inviteLink = "https://app.example.com/invite/team/abc123",
-}) => {
+interface VerificationEmailProps {
+  username?: string;
+  verificationLink?: string;
+  schoolName?: string;
+  logo?: string;
+}
+
+const VerificationEmail = ({
+  username = "Jean Dupont",
+  verificationLink = "https://discolaire.com/verify",
+  schoolName = "Mon École",
+  logo = "",
+}: VerificationEmailProps) => {
   return (
     <Html lang="fr">
       <Tailwind>
@@ -47,9 +54,7 @@ const InvitationEmail = ({
             fontStyle="normal"
           />
         </Head>
-        <Preview>
-          Vous avez été invité(e) à rejoindre {schoolName} sur discolaire.com
-        </Preview>
+        <Preview>Vérifiez votre adresse e-mail pour accéder à {schoolName}</Preview>
         <Body className="mx-auto my-auto bg-[#f5f5f5] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] rounded-[8px] border border-[#E8E7E1] bg-white p-[32px]"
@@ -57,20 +62,19 @@ const InvitationEmail = ({
           >
             <EmailHeader logoUrl={logo} schoolName={schoolName} />
             <Text className="text-[14px] leading-[24px] text-[#121212]">
-              Bonjour {inviteeName},
+              Bonjour {username},
             </Text>
             <Text className="text-[14px] leading-[24px] text-[#121212]">
-              Vous avez été invité(e) à rejoindre la plateforme de gestion
-              scolaire de <strong>{schoolName}</strong>. Cliquez sur le bouton
-              ci-dessous pour créer votre mot de passe et accéder à votre
-              espace.
+              Merci de vous être inscrit(e) sur la plateforme de{" "}
+              <strong>{schoolName}</strong>. Cliquez sur le bouton ci-dessous
+              pour vérifier votre adresse e-mail et activer votre compte.
             </Text>
             <Section className="mt-[32px] mb-[32px] text-center">
               <Button
-                href={inviteLink}
+                href={verificationLink}
                 className="box-border rounded-[8px] bg-[#007bff] px-[20px] py-[12px] text-[16px] font-medium text-white no-underline"
               >
-                Activer mon compte
+                Vérifier mon adresse e-mail
               </Button>
             </Section>
             <Text className="text-[14px] leading-[24px] text-[#333]">
@@ -78,17 +82,16 @@ const InvitationEmail = ({
               votre navigateur :
             </Text>
             <Link
-              href={inviteLink}
+              href={verificationLink}
               className="text-[12px] text-[#007bff] underline"
               style={{ wordBreak: "break-all" }}
             >
-              {inviteLink}
+              {verificationLink}
             </Link>
             <Hr className="my-[32px] border-[#e6e6e6]" />
             <Text className="text-[14px] text-[#666666]">
-              Si vous ne vous attendiez pas à cette invitation, vous pouvez
-              ignorer cet e-mail. Pour toute question, contactez
-              support@discolaire.com.
+              Si vous n&apos;avez pas créé de compte, vous pouvez ignorer cet
+              e-mail.
             </Text>
             <EmailFooter schoolName={schoolName} />
           </Container>
@@ -98,10 +101,10 @@ const InvitationEmail = ({
   );
 };
 
-InvitationEmail.PreviewProps = {
-  inviteeName: "Jamie Smith",
-  schoolName: "Design Collective",
-  inviteLink: "https://app.example.com/invite/team/abc123",
+VerificationEmail.PreviewProps = {
+  username: "Jean Dupont",
+  verificationLink: "https://discolaire.com/verify/abc123",
+  schoolName: "Mon École",
 };
 
-export default InvitationEmail;
+export default VerificationEmail;

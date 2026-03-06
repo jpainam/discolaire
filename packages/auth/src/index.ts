@@ -18,30 +18,14 @@ import { getDb } from "@repo/db";
 import { authEnv } from "../env";
 import {
   completeRegistration,
+  sendChangeEmailVerification,
   sendOrganizationInvitation,
   sendResetPassword,
+  sendVerificationEmail,
 } from "./utils";
 
-async function sendPlainEmail(
-  baseUrl: string,
-  apiKey: string,
-  opts: {
-    to: string;
-    subject: string;
-    html?: string;
-    text?: string;
-    tenant?: string;
-  },
-) {
-  await fetch(`${baseUrl}/api/emails/plain`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": apiKey },
-    body: JSON.stringify(opts),
-  });
-}
-
 const env = authEnv();
-/* eslint-disable @typescript-eslint/require-await */
+
 export function initAuth(options: {
   secret: string | undefined;
   baseUrl: string;
@@ -78,7 +62,8 @@ export function initAuth(options: {
       },
       deleteUser: {
         enabled: true,
-        beforeDelete: async (user, request) => {
+        beforeDelete: async (user, _request) => {
+          await new Promise((resolve) => setTimeout(resolve, 1));
           if (user.email.includes("admin")) {
             throw new APIError("BAD_REQUEST", {
               message: "Admin accounts can't be deleted",
@@ -89,14 +74,15 @@ export function initAuth(options: {
       changeEmail: {
         enabled: true,
         sendChangeEmailVerification: async (
-          { user, newEmail, url, token },
-          request,
+          { user, newEmail, url },
+          _request,
         ) => {
           console.log(">>> sendChangeEmailVerification:", user.email, newEmail);
-          await sendPlainEmail(options.baseUrl, env.DISCOLAIRE_API_KEY, {
-            to: user.email, // verification email must be sent to the current user email to approve the change
-            subject: "Confirmation de changement d'email",
-            text: `Cliquez sur le lien pour confirmer le changement.: ${url}`,
+          await sendChangeEmailVerification({
+            user,
+            newEmail,
+            url,
+            baseUrl: options.baseUrl,
             tenant: options.tenant,
           });
         },
@@ -121,7 +107,12 @@ export function initAuth(options: {
         }
         if (url.includes("complete-registration")) {
           console.log("Completing registration");
-          await completeRegistration({ user, url, baseUrl: options.baseUrl });
+          await completeRegistration({
+            user,
+            url,
+            baseUrl: options.baseUrl,
+            tenant: options.tenant,
+          });
         } else {
           await sendResetPassword({
             user,
@@ -142,11 +133,10 @@ export function initAuth(options: {
           console.warn("User already verified, skipping email verification");
           return;
         }
-        await sendPlainEmail(options.baseUrl, env.DISCOLAIRE_API_KEY, {
-          to: user.email,
-          subject: "Verifier votre adresse e-mail",
-          text: `Cliquez sur le lien ci-dessous pour vérifier votre adresse e-mail : ${url}`,
-          html: `<p>Cliquez sur le lien ci-dessous pour vérifier votre adresse e-mail <a href='${url}'>${url}</a></p>`,
+        await sendVerificationEmail({
+          user,
+          url,
+          baseUrl: options.baseUrl,
           tenant: options.tenant,
         });
       },

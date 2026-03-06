@@ -5,7 +5,7 @@ import { z } from "zod/v4";
 
 import { getDb } from "@repo/db";
 import { enqueueEmailJobs } from "@repo/messaging/client";
-import InvitationEmail from "@repo/transactional/emails/InvitationEmail";
+import ChangeEmailVerificationEmail from "@repo/transactional/emails/ChangeEmailVerificationEmail";
 
 import { env } from "~/env";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
@@ -14,8 +14,8 @@ import { buildLogoUrl } from "~/lib/utils";
 const schema = z.object({
   url: z.string().min(1),
   email: z.email(),
+  newEmail: z.email(),
   name: z.string().min(1),
-  userId: z.string().min(1),
   tenant: z.string().min(1),
 });
 
@@ -30,11 +30,12 @@ export async function POST(req: NextRequest) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
     const result = schema.safeParse(body);
+
     if (!result.success) {
       const error = z.treeifyError(result.error);
       return NextResponse.json(error, { status: 400 });
     }
-    const { url, email, name, userId, tenant } = result.data;
+    const { url, email, newEmail, name, tenant } = result.data;
 
     const db = getDb({ connectionString: env.DATABASE_URL, tenant });
     const [school, baseUrl] = await Promise.all([
@@ -45,10 +46,11 @@ export async function POST(req: NextRequest) {
     const schoolName = school?.name ?? tenant.toUpperCase();
 
     const html = await render(
-      InvitationEmail({
-        inviteeName: name,
+      ChangeEmailVerificationEmail({
+        username: name,
+        newEmail,
+        verificationLink: url,
         schoolName,
-        inviteLink: `${url}&id=${userId}&email=${encodeURIComponent(email)}`,
         logo: buildLogoUrl(school?.logo, baseUrl) ?? "",
       }),
     );
@@ -57,7 +59,7 @@ export async function POST(req: NextRequest) {
       {
         to: email,
         from: `${schoolName} <contact@discolaire.com>`,
-        subject: `Invitation ${schoolName}`,
+        subject: "Confirmation de changement d'e-mail",
         html,
       },
     ]);

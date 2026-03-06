@@ -6,10 +6,12 @@ export async function completeRegistration({
   user,
   url,
   baseUrl,
+  tenant,
 }: {
   user: { id: string; email: string; name: string };
   url: string;
   baseUrl: string;
+  tenant: string;
 }) {
   if (user.email.includes("@example.com")) {
     console.warn("User email is a placeholder, skipping email sending.");
@@ -27,12 +29,13 @@ export async function completeRegistration({
       email: user.email,
       name: user.name,
       url: url,
+      tenant,
     }),
   });
   if (!response.ok) {
-    const error = (await response.json()) as Error;
-    console.error(error);
-    throw new Error(`Failed to send invitation email: ${error.message}`);
+    const text = await response.text();
+    console.error("Failed to send invitation email:", text);
+    throw new Error(`Failed to send invitation email: ${text}`);
   }
 }
 
@@ -69,6 +72,84 @@ export async function sendResetPassword({
   if (!response.ok) {
     console.error(await response.json());
     throw new Error(`Failed to send reset password email`);
+  }
+}
+
+export async function sendChangeEmailVerification({
+  user,
+  newEmail,
+  url,
+  baseUrl,
+  tenant,
+}: {
+  user: { id: string; email: string; name: string };
+  newEmail: string;
+  url: string;
+  baseUrl: string;
+  tenant: string;
+}) {
+  if (user.email.includes("@example.com")) {
+    console.warn("User email is a placeholder, skipping email sending.");
+    return;
+  }
+
+  const response = await fetch(
+    `${baseUrl}/api/emails/change-email-verification`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.DISCOLAIRE_API_KEY,
+      },
+      body: JSON.stringify({
+        email: user.email,
+        newEmail,
+        name: user.name,
+        url,
+        tenant,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    console.error(await response.text());
+    throw new Error(`Failed to send change email verification`);
+  }
+}
+
+export async function sendVerificationEmail({
+  user,
+  url,
+  baseUrl,
+  tenant,
+}: {
+  user: { id: string; email: string; name: string };
+  url: string;
+  baseUrl: string;
+  tenant: string;
+}) {
+  if (user.email.includes("@example.com")) {
+    console.warn("User email is a placeholder, skipping email sending.");
+    return;
+  }
+
+  const response = await fetch(`${baseUrl}/api/emails/verify-email`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": env.DISCOLAIRE_API_KEY,
+    },
+    body: JSON.stringify({
+      email: user.email,
+      name: user.name,
+      url,
+      tenant,
+    }),
+  });
+
+  if (!response.ok) {
+    console.error(await response.text());
+    throw new Error(`Failed to send verification email`);
   }
 }
 
