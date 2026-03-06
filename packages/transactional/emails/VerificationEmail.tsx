@@ -54,7 +54,9 @@ const VerificationEmail = ({
             fontStyle="normal"
           />
         </Head>
-        <Preview>Vérifiez votre adresse e-mail pour accéder à {schoolName}</Preview>
+        <Preview>
+          Vérifiez votre adresse e-mail pour accéder à {schoolName}
+        </Preview>
         <Body className="mx-auto my-auto bg-[#f5f5f5] font-sans">
           <Container
             className="mx-auto my-[40px] max-w-[600px] rounded-[8px] border border-[#E8E7E1] bg-white p-[32px]"
