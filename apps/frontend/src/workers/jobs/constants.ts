@@ -27,7 +27,7 @@ export const TENANT_ADMIN_EMAILS: Partial<Record<Tenant, string[]>> = {
   // csac: ["admin@csac.cd"],
   // demo: ["jpainam@gmail.com", "another@example.com"],
   // ipbw: ["direction@ipbw.cd"],
-  app: ["fezeu71@gmail.com", "jpainam@gmail.com", "gmboudie@gmail.com"],
+  app: ["fezeu71@gmail.com", "jpainam@gmail.com"],
 };
 
 /** Returns the admin email list for a tenant, falling back to [ADMIN_EMAIL]. */

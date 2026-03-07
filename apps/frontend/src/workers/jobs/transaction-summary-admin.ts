@@ -89,6 +89,13 @@ export async function sendTransactionSummaryToAdmin(
         },
       });
 
+      if (rawTransactions.length === 0) {
+        logger.info(
+          `[Cron] No transactions for tenant ${tenant} — skipping email`,
+        );
+        continue;
+      }
+
       const transactions = rawTransactions.map((tx) => ({
         date: format(tx.createdAt, "dd/MM", { locale: fr }),
         studentName: [tx.student.firstName, tx.student.lastName]
