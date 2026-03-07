@@ -1,7 +1,6 @@
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import {
   BoxIcon,
-  ChartLine,
   HouseIcon,
   PanelsTopLeftIcon,
   SettingsIcon,
@@ -52,10 +51,10 @@ export default async function Page() {
             <UsersRoundIcon size={16} aria-hidden="true" />
             {t("reservations")}
           </TabsTrigger>
-          <TabsTrigger value="tab-5">
+          {/* <TabsTrigger value="tab-5">
             <ChartLine size={16} aria-hidden="true" />
             {t("insights")}
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger value="tab-6">
             <SettingsIcon size={16} aria-hidden="true" />
             {t("settings")}
@@ -79,11 +78,11 @@ export default async function Page() {
             <ReservationDataTable />
           </ErrorBoundary>
         </TabsContent>
-        <TabsContent value="tab-5">
+        {/* <TabsContent value="tab-5">
           <p className="text-muted-foreground pt-1 text-center text-xs">
             Encours d'implementation
           </p>
-        </TabsContent>
+        </TabsContent> */}
         <TabsContent value="tab-6">
           <LibrarySetting />
         </TabsContent>
