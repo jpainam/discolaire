@@ -2,14 +2,20 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, PlusIcon, TrashIcon } from "lucide-react";
+import { Pencil, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod/v4";
 
 import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import {
   Form,
   FormControl,
@@ -19,6 +25,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -29,6 +36,8 @@ import {
 } from "~/components/ui/table";
 import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
+import { DeleteIcon } from "~/icons";
+import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
 export function BookCategory() {
@@ -53,96 +62,96 @@ export function BookCategory() {
   const canUpdateCategory = useCheckPermission("library.update");
   const canCreateCategory = useCheckPermission("library.create");
   const canDeleteCategory = useCheckPermission("library.delete");
+  const confirm = useConfirm();
 
   return (
-    <Card className="gap-0 p-0">
-      <CardHeader className="bg-muted/50 border-b p-2">
-        <CardTitle className="flex flex-row items-center justify-between">
-          {t("material_categories")}
-          <div className="ml-auto">
-            {canCreateCategory && (
-              <Button
-                onClick={() => {
-                  openModal({
-                    className: "w-96",
-                    title: t("create_a_category"),
-                    view: <CreateEditCategory />,
-                  });
-                }}
-                size={"sm"}
-              >
-                <PlusIcon />
-                {t("add")}
-              </Button>
-            )}
-          </div>
-        </CardTitle>
+    <Card>
+      <CardHeader>
+        <CardTitle>{t("material_categories")}</CardTitle>
+        <CardAction>
+          {canCreateCategory && (
+            <Button
+              onClick={() => {
+                openModal({
+                  title: t("create_a_category"),
+                  view: <CreateEditCategory />,
+                });
+              }}
+            >
+              <PlusIcon />
+              {t("add")}
+            </Button>
+          )}
+        </CardAction>
       </CardHeader>
-      <CardContent className="p-2">
-        <div className="bg-background overflow-hidden rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead>{t("name")}</TableHead>
-                <TableHead className="w-[50px] text-right"></TableHead>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>{t("name")}</TableHead>
+              <TableHead className="w-[50px] text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {categoryQuery.data?.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={2} className="text-center">
+                  {t("no_data")}
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {categoryQuery.data?.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={2} className="text-center">
-                    {t("no_data")}
+            )}
+            {categoryQuery.data?.map((category) => {
+              return (
+                <TableRow key={category.id}>
+                  <TableCell>{category.name}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex flex-row items-center gap-2">
+                      {canUpdateCategory && (
+                        <Button
+                          onClick={() => {
+                            openModal({
+                              className: "w-96",
+                              title: t("edit_a_category"),
+                              view: (
+                                <CreateEditCategory
+                                  category={{
+                                    name: category.name,
+                                    id: category.id,
+                                  }}
+                                />
+                              ),
+                            });
+                          }}
+                          variant={"ghost"}
+                          size={"icon"}
+                        >
+                          <Pencil />
+                        </Button>
+                      )}
+                      {canDeleteCategory && (
+                        <Button
+                          onClick={async () => {
+                            await confirm({
+                              title: t("delete"),
+                              description: t("delete_confirmation"),
+                              onConfirm: async () => {
+                                await deleteCategory.mutateAsync(category.id);
+                              },
+                            });
+                          }}
+                          variant={"ghost"}
+                          size={"icon"}
+                        >
+                          <DeleteIcon className="text-destructive" />
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
-              )}
-              {categoryQuery.data?.map((category) => {
-                return (
-                  <TableRow key={category.id}>
-                    <TableCell>{category.name}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex flex-row items-center gap-2">
-                        {canUpdateCategory && (
-                          <Button
-                            onClick={() => {
-                              openModal({
-                                className: "w-96",
-                                title: t("edit_a_category"),
-                                view: (
-                                  <CreateEditCategory
-                                    category={{
-                                      name: category.name,
-                                      id: category.id,
-                                    }}
-                                  />
-                                ),
-                              });
-                            }}
-                            variant={"outline"}
-                            size={"icon"}
-                          >
-                            <Pencil />
-                          </Button>
-                        )}
-                        {canDeleteCategory && (
-                          <Button
-                            onClick={() => {
-                              toast.loading(t("deleting"), { id: 0 });
-                              void deleteCategory.mutate(category.id);
-                            }}
-                            variant={"destructive"}
-                            size={"icon"}
-                          >
-                            <TrashIcon />
-                          </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+              );
+            })}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );
@@ -209,7 +218,7 @@ function CreateEditCategory({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel></FormLabel>
+              <FormLabel>{t("Label")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -218,7 +227,14 @@ function CreateEditCategory({
           )}
         />
         <div className="mt-2 flex flex-row items-center justify-end gap-2">
-          <Button>{t("submit")}</Button>
+          <Button
+            disabled={updateCategory.isPending || createCategory.isPending}
+          >
+            {(updateCategory.isPending || createCategory.isPending) && (
+              <Spinner />
+            )}
+            {t("submit")}
+          </Button>
           <Button
             type="button"
             onClick={() => {
