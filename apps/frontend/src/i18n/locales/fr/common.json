@@ -11,6 +11,8 @@
   "book_title": "Titre",
   "book_author": "Auteur",
   "borrower_type": "Type",
+  "createdBy": "Créé par",
+  "receivedAt": "Réçu le",
   "reservedAt": "Réservation",
   "borrower": "Emprunteur",
   "seq": "Séq",

@@ -31,16 +31,20 @@ export async function StudentTransactionSummary({
   const journals = await caller.accountingJournal.all();
   const fees = classroom ? await caller.classroom.fees(classroom.id) : [];
 
-  const discounts = transactions
+  const validatedTransactions = transactions.filter(
+    (t) => t.status === "VALIDATED",
+  );
+
+  const discounts = validatedTransactions
     .filter((t) => t.transactionType == TransactionType.DISCOUNT)
     .map((t) => t.amount);
   const totalDiscount = sumBy(discounts, (d) => d);
-  const totalPaid = transactions
+  const totalPaid = validatedTransactions
     .filter((t) => t.transactionType == TransactionType.CREDIT)
     .map((t) => t.amount)
     .reduce((acc, curr) => acc + curr, 0);
 
-  const totalDebit = transactions
+  const totalDebit = validatedTransactions
     .filter((t) => t.transactionType == TransactionType.DEBIT)
     .map((t) => t.amount)
     .reduce((acc, curr) => acc + curr, 0);
@@ -60,7 +64,7 @@ export async function StudentTransactionSummary({
     debit: number;
     discount: number;
   }
-  const txByJournal = transactions.reduce<Record<string, Totals>>((acc, t) => {
+  const txByJournal = validatedTransactions.reduce<Record<string, Totals>>((acc, t) => {
     const id = t.journalId ?? "default";
     const bucket = acc[id] ?? (acc[id] = { credit: 0, debit: 0, discount: 0 });
     if (t.transactionType === TransactionType.CREDIT) bucket.credit += t.amount;
@@ -175,10 +179,7 @@ export async function StudentTransactionSummary({
           <HandCoins className="size-4" />
         </MetricCardHeader>
         <MetricCardValue>
-          {sumBy(
-            transactions.filter((t) => t.status == "VALIDATED"),
-            "amount",
-          ).toLocaleString(locale, {
+          {sumBy(validatedTransactions, "amount").toLocaleString(locale, {
             style: "currency",
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,

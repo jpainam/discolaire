@@ -7,52 +7,52 @@ import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { UserPermissionsPageClient } from "~/components/users/UserPermissionsPageClient";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
 
-// import { UserProfile } from "./UserProfile";
+import { UserProfile } from "./UserProfile";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const session = await getSession();
   const { id } = params;
   const t = await getTranslations();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const canReadPermission = await checkPermission("policy.read");
+
+  const isStaff = session?.user.profile === "staff";
+  const canReadPermission = isStaff && (await checkPermission("policy.read"));
 
   prefetch(trpc.user.get.queryOptions(id));
 
+  if (canReadPermission) {
+    prefetch(trpc.user.getPermissions.queryOptions(id));
+    prefetch(trpc.module.all.queryOptions());
+    prefetch(trpc.permission.all.queryOptions());
+    prefetch(trpc.role.all.queryOptions());
+  }
+
   return (
     <HydrateClient>
-      <div className="w-full px-4">
-        <Tabs defaultValue="tab-1">
-          <TabsList className="text-foreground h-auto w-full items-start justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-left">
-            <TabsTrigger
-              value="tab-1"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <User />
-              {t("profile")}
+      <Tabs defaultValue="tab-1">
+        <TabsList>
+          <TabsTrigger value="tab-1">
+            <User />
+            {t("profile")}
+          </TabsTrigger>
+          <TabsTrigger value="tab-2">
+            <LockKeyhole />
+            {t("password")}
+          </TabsTrigger>
+          {canReadPermission && (
+            <TabsTrigger value="tab-3">
+              <Shield />
+              {t("permissions")}
             </TabsTrigger>
-            <TabsTrigger
-              value="tab-2"
-              className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-            >
-              <LockKeyhole />
-              {t("password")}
-            </TabsTrigger>
-            {session?.user.profile == "staff" && (
-              <TabsTrigger
-                value="tab-3"
-                className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-              >
-                <Shield />
-                {t("permissions")}
-              </TabsTrigger>
-            )}
-          </TabsList>
-          <TabsContent className="px-4" value="tab-1">
+          )}
+        </TabsList>
+        <TabsContent className="px-4" value="tab-1">
+          <ErrorBoundary errorComponent={ErrorFallback}>
             <Suspense
               key={params.id}
               fallback={
@@ -63,26 +63,23 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 </div>
               }
             >
-              {/* <UserProfile /> */}
+              <UserProfile />
             </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
+        <TabsContent className="px-4" value="tab-2">
+          <ErrorBoundary errorComponent={ErrorFallback}>
+            <Suspense key={params.id} fallback={<Skeleton className="h-20" />}>
+              <ReinitializePassword />
+            </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
+        {canReadPermission && (
+          <TabsContent value="tab-3">
+            <UserPermissionsPageClient userId={id} />
           </TabsContent>
-          <TabsContent className="px-4" value="tab-2">
-            <ErrorBoundary errorComponent={ErrorFallback}>
-              <Suspense
-                key={params.id}
-                fallback={<Skeleton className="h-20" />}
-              >
-                <ReinitializePassword />
-              </Suspense>
-            </ErrorBoundary>
-          </TabsContent>
-          {session?.user.profile == "staff" && (
-            <TabsContent value="tab-3">
-              {/* {canReadPermission && <PermissionTable userId={params.id} />} */}
-            </TabsContent>
-          )}
-        </Tabs>
-      </div>
+        )}
+      </Tabs>
     </HydrateClient>
   );
 }

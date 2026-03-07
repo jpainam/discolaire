@@ -53,6 +53,7 @@ export class TransactionService {
         deletedAt: null,
         schoolYearId: transaction.schoolYearId,
         journalId: transaction.journalId,
+        OR: [{ status: TransactionStatus.VALIDATED }, { id: transactionId }],
       },
     });
     const txSummary = this.billing.summarizeTransactions(

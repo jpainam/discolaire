@@ -88,10 +88,14 @@ export const useDeletedDataTableColumn = (): ColumnDef<
             const transaction = row.original;
             return (
               <Link
-                className="hover:text-blue-600 hover:underline"
+                className="block min-w-0 truncate hover:underline"
                 href={`/students/${transaction.studentId}/transactions`}
               >
-                {transaction.student.lastName}
+                {decode(
+                  transaction.student.lastName ??
+                    transaction.student.firstName ??
+                    "",
+                )}
               </Link>
             );
           },
@@ -167,15 +171,15 @@ export const useDeletedDataTableColumn = (): ColumnDef<
             );
           },
         }),
-        columnHelper.accessor("description", {
+        columnHelper.accessor("observation", {
+          id: "observation",
           header: ({ column }) => (
-            <DataTableColumnHeader column={column} title={t("description")} />
+            <DataTableColumnHeader column={column} title={t("observation")} />
           ),
           cell: ({ row }) => {
-            const transaction = row.original;
             return (
               <div className="text-muted-foreground line-clamp-1 truncate text-xs">
-                {transaction.observation}
+                {row.original.observation}
               </div>
             );
           },

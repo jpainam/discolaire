@@ -42,7 +42,7 @@ export function TransactionDataTable() {
     columnVisibilityKey: "transaction-table-v2",
     initialState: {
       columnVisibility: {
-        transactionType: false,
+        transactionType: true,
         journal: false,
         observation: false,
         //createdBy: false,

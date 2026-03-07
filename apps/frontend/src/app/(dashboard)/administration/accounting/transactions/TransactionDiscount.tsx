@@ -19,8 +19,8 @@ export function TransactionDiscount() {
   const transactionsQuery = useQuery(
     trpc.transaction.all.queryOptions({
       status: searchParams.status ?? undefined,
-      from: searchParams.from,
-      to: searchParams.to,
+      from: searchParams.from ?? undefined,
+      to: searchParams.to ?? undefined,
       classroomId: searchParams.classroomId ?? undefined,
       journalId: searchParams.journalId ?? undefined,
       transactionType: "DISCOUNT",
