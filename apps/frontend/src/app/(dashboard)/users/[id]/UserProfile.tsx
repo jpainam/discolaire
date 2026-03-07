@@ -2,7 +2,11 @@
 
 import { useParams } from "next/navigation";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -49,7 +53,7 @@ export function UserProfile() {
     resolver: standardSchemaResolver(usernameSchema),
     defaultValues: {
       name: user.name,
-      email: user.email ?? "",
+      email: user.email,
       username: user.username,
     },
   });

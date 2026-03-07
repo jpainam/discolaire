@@ -7,11 +7,10 @@ import { getSession } from "~/auth/server";
 import { ErrorFallback } from "~/components/error-fallback";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { UserPermissionsPageClient } from "~/components/users/UserPermissionsPageClient";
 import { ReinitializePassword } from "~/components/users/password/ReinitializePassword";
+import { UserPermissionsPageClient } from "~/components/users/UserPermissionsPageClient";
 import { checkPermission } from "~/permissions/server";
 import { HydrateClient, prefetch, trpc } from "~/trpc/server";
-
 import { UserProfile } from "./UserProfile";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

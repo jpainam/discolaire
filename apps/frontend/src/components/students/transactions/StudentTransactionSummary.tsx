@@ -64,15 +64,20 @@ export async function StudentTransactionSummary({
     debit: number;
     discount: number;
   }
-  const txByJournal = validatedTransactions.reduce<Record<string, Totals>>((acc, t) => {
-    const id = t.journalId ?? "default";
-    const bucket = acc[id] ?? (acc[id] = { credit: 0, debit: 0, discount: 0 });
-    if (t.transactionType === TransactionType.CREDIT) bucket.credit += t.amount;
-    else if (t.transactionType === TransactionType.DEBIT)
-      bucket.debit += t.amount;
-    else bucket.discount += t.amount;
-    return acc;
-  }, {});
+  const txByJournal = validatedTransactions.reduce<Record<string, Totals>>(
+    (acc, t) => {
+      const id = t.journalId ?? "default";
+      const bucket =
+        acc[id] ?? (acc[id] = { credit: 0, debit: 0, discount: 0 });
+      if (t.transactionType === TransactionType.CREDIT)
+        bucket.credit += t.amount;
+      else if (t.transactionType === TransactionType.DEBIT)
+        bucket.debit += t.amount;
+      else bucket.discount += t.amount;
+      return acc;
+    },
+    {},
+  );
 
   const locale = await getLocale();
   const t = await getTranslations();

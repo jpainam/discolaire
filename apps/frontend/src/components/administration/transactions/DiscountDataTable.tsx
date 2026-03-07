@@ -1,7 +1,8 @@
 "use client";
 
-import type { RouterOutputs } from "@repo/api";
 import { useTranslations } from "next-intl";
+
+import type { RouterOutputs } from "@repo/api";
 
 import {
   DataTableToolbarV2,
