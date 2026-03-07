@@ -27,7 +27,7 @@ export default async function Page() {
   prefetch(trpc.book.recentlyUsed.queryOptions());
   return (
     <HydrateClient>
-      <Tabs defaultValue="tab-1" className="px-4">
+      <Tabs defaultValue="tab-1" className="px-4 py-2">
         <TabsList>
           <TabsTrigger value="tab-1">
             <HouseIcon size={16} aria-hidden="true" />

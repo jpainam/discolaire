@@ -34,9 +34,7 @@ export const libraryRouter = {
     );
     const borrowed = activeLoans.length;
     const activeBorrowers = new Set(
-      activeLoans.map(
-        (l) => l.studentId ?? l.staffId ?? l.contactId,
-      ),
+      activeLoans.map((l) => l.studentId ?? l.staffId ?? l.contactId),
     );
     const overdueBooks = activeLoans.filter(
       (l) => l.expected !== null && l.expected < now,
@@ -139,9 +137,7 @@ export const libraryRouter = {
           include: { book: true, ...borrowerInclude },
           orderBy: resolvedOrderBy,
           take,
-          ...(input.cursor
-            ? { cursor: { id: input.cursor }, skip: 1 }
-            : {}),
+          ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
         }),
       ]);
 
@@ -230,6 +226,70 @@ export const libraryRouter = {
         where: { id: input.id },
       });
     }),
+
+  monthlyActivities: protectedProcedure.query(async ({ ctx }) => {
+    const now = new Date();
+
+    const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
+      where: {
+        id: ctx.schoolYearId,
+      },
+    });
+
+    const start = schoolYear.startDate;
+    const end = schoolYear.endDate;
+
+    const loans = await ctx.db.bookLoan.findMany({
+      where: {
+        book: { schoolId: ctx.schoolId },
+        OR: [
+          { borrowed: { gte: start, lte: end } },
+          { returned: { gte: start, lte: end } },
+        ],
+      },
+      select: { borrowed: true, returned: true, expected: true },
+    });
+
+    const toKey = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+
+    const buckets = new Map<
+      string,
+      { loans: number; returned: number; overdue: number }
+    >();
+
+    const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+    const endMonth = new Date(end.getFullYear(), end.getMonth(), 1);
+    while (cursor <= endMonth) {
+      buckets.set(toKey(cursor), { loans: 0, returned: 0, overdue: 0 });
+      cursor.setMonth(cursor.getMonth() + 1);
+    }
+
+    for (const loan of loans) {
+      const borrowBucket = buckets.get(toKey(loan.borrowed));
+      if (borrowBucket) borrowBucket.loans++;
+
+      if (loan.returned) {
+        const returnBucket = buckets.get(toKey(loan.returned));
+        if (returnBucket) returnBucket.returned++;
+      }
+
+      if (loan.expected && loan.expected < now && !loan.returned) {
+        const overdueBucket = buckets.get(toKey(loan.expected));
+        if (overdueBucket) overdueBucket.overdue++;
+      }
+    }
+
+    return Array.from(buckets.entries()).map(([key, data]) => {
+      const [year, month] = key.split("-");
+      const date = new Date(Number(year), Number(month) - 1, 1);
+      const label = date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+      return { month: label, ...data };
+    });
+  }),
 
   reservations: protectedProcedure
     .input(
@@ -321,9 +381,7 @@ export const libraryRouter = {
           include: { book: true, ...borrowerInclude },
           orderBy: resolvedOrderBy,
           take,
-          ...(input.cursor
-            ? { cursor: { id: input.cursor }, skip: 1 }
-            : {}),
+          ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
         }),
       ]);
 

@@ -1,10 +1,9 @@
 "use client";
 
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useForm } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDays } from "date-fns";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -16,13 +15,11 @@ import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { Button } from "~/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "~/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -30,9 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { SheetFooter } from "~/components/ui/sheet";
 import { Spinner } from "~/components/ui/spinner";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
 
@@ -43,12 +39,12 @@ const formSchema = z.object({
   bookId: z.number().positive(),
   borrowerType: z.enum(BORROWER_TYPES),
   borrowerId: z.string().min(1),
-  borrowed: z.date().default(() => new Date()),
+  borrowed: z.date(),
   returned: z.date().nullable(),
   expected: z.date().nullable(),
 });
 
-type LoanOutput = RouterOutputs["library"]["loans"][number];
+type LoanOutput = RouterOutputs["library"]["loans"]["data"][number];
 
 function deriveBorrowerType(loan: LoanOutput): BorrowerType {
   if (loan.studentId) return "student";
@@ -61,22 +57,10 @@ function deriveBorrowerId(loan: LoanOutput): string {
 }
 
 export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
-  const { closeSheet } = useSheet();
-  const form = useForm({
-    resolver: standardSchemaResolver(formSchema),
-    defaultValues: {
-      bookId: loan?.bookId ?? 0,
-      borrowerType: loan ? deriveBorrowerType(loan) : ("student" as BorrowerType),
-      borrowerId: loan ? deriveBorrowerId(loan) : "",
-      borrowed: loan?.borrowed ?? new Date(),
-      returned: loan?.returned ?? null,
-      expected: loan?.expected ?? addDays(new Date(), 14),
-    },
-  });
-
-  const borrowerType = form.watch("borrowerType");
+  const { closeModal } = useModal();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const t = useTranslations();
 
   const createMutation = useMutation(
     trpc.library.createLoan.mutationOptions({
@@ -84,7 +68,7 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         await queryClient.invalidateQueries(trpc.library.loans.pathFilter());
         toast.success("Loan created successfully", { id: 0 });
-        closeSheet();
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -98,7 +82,7 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         await queryClient.invalidateQueries(trpc.library.loans.pathFilter());
         toast.success("Loan updated successfully", { id: 0 });
-        closeSheet();
+        closeModal();
       },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
@@ -106,166 +90,217 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
     }),
   );
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    if (!loan) {
-      createMutation.mutate(data);
-    } else {
-      updateMutation.mutate({ id: loan.id, ...data });
-    }
-  };
+  const form = useForm({
+    defaultValues: {
+      bookId: loan?.bookId ?? 0,
+      borrowerType: loan
+        ? deriveBorrowerType(loan)
+        : ("student" as BorrowerType),
+      borrowerId: loan ? deriveBorrowerId(loan) : "",
+      borrowed: loan?.borrowed ?? new Date(),
+      returned: loan?.returned ?? null,
+      expected: loan?.expected ?? addDays(new Date(), 14),
+    },
+    validators: {
+      onSubmit: ({ value }) => {
+        const parsed = formSchema.safeParse(value);
+        if (!parsed.success) {
+          return { error: z.treeifyError(parsed.error) };
+        }
+      },
+    },
+    onSubmit: ({ value }) => {
+      const parsed = formSchema.safeParse(value);
+      if (!parsed.success) {
+        toast.error(t("validation_error"));
+        return;
+      }
+      if (!loan) {
+        createMutation.mutate(parsed.data);
+      } else {
+        updateMutation.mutate({ id: loan.id, ...parsed.data });
+      }
+    },
+  });
 
-  const t = useTranslations();
+  const isPending = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <Form {...form}>
-      <form
-        className="flex flex-1 flex-col overflow-hidden"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <div className="grid flex-1 auto-rows-min gap-6 overflow-y-auto px-4">
-          <FormField
-            control={form.control}
-            name="bookId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("books")}</FormLabel>
-                <FormControl>
-                  <BookSelector
-                    className="w-full"
-                    onChange={(val) => field.onChange(val)}
-                    defaultValue={field.value}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        await form.handleSubmit();
+      }}
+      className="grid gap-4"
+    >
+      <form.Field
+        name="bookId"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>{t("books")}</FieldLabel>
+              </FieldContent>
+              <BookSelector
+                className="w-full"
+                onChange={(val) => field.handleChange(val)}
+                defaultValue={field.state.value}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
 
-          <FormField
-            control={form.control}
-            name="borrowerType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("borrower_type")}</FormLabel>
-                <FormControl>
-                  <Select
-                    value={field.value}
-                    onValueChange={(val) => {
-                      field.onChange(val);
-                      form.setValue("borrowerId", "");
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="student">{t("student")}</SelectItem>
-                      <SelectItem value="staff">{t("staff")}</SelectItem>
-                      <SelectItem value="contact">{t("contact")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form.Field
+        name="borrowerType"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>
+                  {t("borrower_type")}
+                </FieldLabel>
+              </FieldContent>
+              <Select
+                value={field.state.value}
+                onValueChange={(val) => {
+                  field.handleChange(val as BorrowerType);
+                  form.setFieldValue("borrowerId", "");
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">{t("student")}</SelectItem>
+                  <SelectItem value="staff">{t("staff")}</SelectItem>
+                  <SelectItem value="contact">{t("contact")}</SelectItem>
+                </SelectContent>
+              </Select>
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
 
-          <FormField
-            control={form.control}
+      <form.Subscribe
+        selector={(state) => state.values.borrowerType}
+        children={(borrowerType) => (
+          <form.Field
             name="borrowerId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("borrower")}</FormLabel>
-                <FormControl>
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldContent>
+                    <FieldLabel htmlFor={field.name}>
+                      {t("borrower")}
+                    </FieldLabel>
+                  </FieldContent>
                   {borrowerType === "student" ? (
                     <StudentSelector
                       className="w-full"
-                      defaultValue={field.value}
-                      onChange={(val) => field.onChange(val ?? "")}
+                      defaultValue={field.state.value}
+                      onChange={(val) => field.handleChange(val ?? "")}
                     />
                   ) : borrowerType === "staff" ? (
                     <StaffSelector
                       className="w-full"
-                      defaultValue={field.value}
-                      onChange={(val) => field.onChange(val ?? "")}
+                      defaultValue={field.state.value}
+                      onSelect={(val) => field.handleChange(val)}
                     />
                   ) : (
                     <ContactSelector
                       className="w-full"
-                      defaultValue={field.value}
-                      onChange={(val) => field.onChange(val ?? "")}
+                      defaultValue={field.state.value}
+                      onChange={(val) => field.handleChange(val ?? "")}
                     />
                   )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
           />
+        )}
+      />
 
-          <FormField
-            control={form.control}
-            name="borrowed"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("borrow_from")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={field.value}
-                    onSelectAction={(val) => field.onChange(val)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="expected"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("borrow_to")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={field.value ?? undefined}
-                    onSelectAction={(val) => field.onChange(val)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="returned"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("returned_date")}</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    defaultValue={field.value ?? undefined}
-                    onSelectAction={(val) => field.onChange(val)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <SheetFooter>
-          <Button
-            disabled={createMutation.isPending || updateMutation.isPending}
-            type="submit"
-          >
-            {(createMutation.isPending || updateMutation.isPending) && (
-              <Spinner />
-            )}
-            {t("submit")}
-          </Button>
-          <Button variant={"outline"} type="button" onClick={() => closeSheet()}>
-            {t("close")}
-          </Button>
-        </SheetFooter>
-      </form>
-    </Form>
+      <form.Field
+        name="borrowed"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>{t("borrow_from")}</FieldLabel>
+              </FieldContent>
+              <DatePicker
+                defaultValue={field.state.value}
+                onSelectAction={(val) => field.handleChange(val)}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="expected"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>{t("borrow_to")}</FieldLabel>
+              </FieldContent>
+              <DatePicker
+                defaultValue={field.state.value ?? undefined}
+                onSelectAction={(val) => field.handleChange(val)}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <form.Field
+        name="returned"
+        children={(field) => {
+          const isInvalid =
+            field.state.meta.isTouched && !field.state.meta.isValid;
+          return (
+            <Field data-invalid={isInvalid}>
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>
+                  {t("returned_date")}
+                </FieldLabel>
+              </FieldContent>
+              <DatePicker
+                defaultValue={field.state.value ?? undefined}
+                onSelectAction={(val) => field.handleChange(val)}
+              />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
+            </Field>
+          );
+        }}
+      />
+
+      <div className="flex flex-row items-center justify-end gap-2">
+        <Button onClick={closeModal} type="button" variant="outline">
+          {t("cancel")}
+        </Button>
+        <Button disabled={isPending} type="submit">
+          {isPending && <Spinner />}
+          {t("submit")}
+        </Button>
+      </div>
+    </form>
   );
 }

@@ -33,7 +33,7 @@ export function BookTab() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="bg-muted/50 flex flex-row items-center justify-between border-y px-4 py-1">
+      <div className=" flex flex-row items-center justify-between border-y py-1">
         <div className="flex flex-row items-center gap-2">
           <LibraryBigIcon />
           <Label>{t("materials")}</Label>
@@ -76,7 +76,7 @@ export function BookTab() {
         </div>
       </div>
       <Separator />
-      <div className="px-4">
+      <div >
         {bookQuery.isPending && (
           <DataTableSkeleton rowCount={8} columnCount={4} />
         )}

@@ -48,7 +48,7 @@ export const BookSelector = ({
 
   const data = booksQuery.data ?? [];
   return (
-    <div>
+    <div className="w-full">
       <Popover open={open} onOpenChange={setOpen} modal={false}>
         <PopoverTrigger asChild>
           <Button

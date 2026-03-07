@@ -27,9 +27,9 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useCreateQueryString } from "~/hooks/create-query-string";
+import { useModal } from "~/hooks/use-modal";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
-import { useSheet } from "~/hooks/use-sheet";
 import { BookSelector } from "../BookSelector";
 import { CreateEditLoan } from "./CreateEditLoan";
 
@@ -37,13 +37,14 @@ export function LoanHeader() {
   const t = useTranslations();
   const { createQueryString } = useCreateQueryString();
   const router = useRouter();
-  const { openSheet } = useSheet();
+  const { openModal } = useModal();
   const canCreateLoan = useCheckPermission("library.create");
   return (
     <div className="grid flex-row items-center gap-4 border-y px-4 py-1 md:flex">
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex w-full flex-row items-center gap-2">
         <Label>{t("books")}</Label>
         <BookSelector
+          className="w-full"
           onChange={(val) => {
             router.push(
               `/library?${createQueryString({ bookId: val, tab: "tab-3" })}`,
@@ -60,7 +61,7 @@ export function LoanHeader() {
             );
           }}
         >
-          <SelectTrigger className="w-full md:w-[280px]">
+          <SelectTrigger className="w-full xl:w-[380px]">
             <SelectValue placeholder={t("filter_by_status")} />
           </SelectTrigger>
           <SelectContent>
@@ -83,12 +84,11 @@ export function LoanHeader() {
         {canCreateLoan && (
           <Button
             onClick={() => {
-              openSheet({
+              openModal({
                 title: t("create_a_book_loan"),
                 view: <CreateEditLoan />,
               });
             }}
-            size={"sm"}
           >
             <PlusIcon />
             {t("add")}
@@ -96,7 +96,7 @@ export function LoanHeader() {
         )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} className="size-8" variant={"outline"}>
+            <Button size={"icon"} variant={"outline"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>

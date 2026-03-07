@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditLoan } from "./CreateEditLoan";
@@ -172,7 +172,7 @@ export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
 }
 
 function ActionCells({ loan }: { loan: LoanOutput }) {
-  const { openSheet } = useSheet();
+  const { openModal } = useModal();
   const confirm = useConfirm();
   const t = useTranslations();
   const trpc = useTRPC();
@@ -221,7 +221,7 @@ function ActionCells({ loan }: { loan: LoanOutput }) {
               <>
                 <DropdownMenuItem
                   onSelect={() => {
-                    openSheet({
+                    openModal({
                       title: t("edit_a_loan"),
                       view: <CreateEditLoan loan={loan} />,
                     });
