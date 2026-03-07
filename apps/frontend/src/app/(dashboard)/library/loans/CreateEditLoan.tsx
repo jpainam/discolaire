@@ -36,7 +36,7 @@ const BORROWER_TYPES = ["student", "staff", "contact"] as const;
 type BorrowerType = (typeof BORROWER_TYPES)[number];
 
 const formSchema = z.object({
-  bookId: z.number().positive(),
+  bookId: z.string().min(1),
   borrowerType: z.enum(BORROWER_TYPES),
   borrowerId: z.string().min(1),
   borrowed: z.date(),
@@ -92,7 +92,7 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
 
   const form = useForm({
     defaultValues: {
-      bookId: loan?.bookId ?? 0,
+      bookId: loan?.bookId ?? "",
       borrowerType: loan
         ? deriveBorrowerType(loan)
         : ("student" as BorrowerType),
@@ -118,7 +118,10 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
       if (!loan) {
         createMutation.mutate(parsed.data);
       } else {
-        updateMutation.mutate({ id: loan.id, ...parsed.data });
+        updateMutation.mutate({
+          id: loan.id,
+          ...parsed.data,
+        });
       }
     },
   });
@@ -145,7 +148,7 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
               </FieldContent>
               <BookSelector
                 className="w-full"
-                onChange={(val) => field.handleChange(val)}
+                onChange={(val) => field.handleChange(val ?? "")}
                 defaultValue={field.state.value}
               />
               {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -242,7 +245,7 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
               </FieldContent>
               <DatePicker
                 defaultValue={field.state.value}
-                onSelectAction={(val) => field.handleChange(val)}
+                onSelectAction={(val) => field.handleChange(val ?? null)}
               />
               {isInvalid && <FieldError errors={field.state.meta.errors} />}
             </Field>
@@ -261,7 +264,7 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
                 <FieldLabel htmlFor={field.name}>{t("borrow_to")}</FieldLabel>
               </FieldContent>
               <DatePicker
-                defaultValue={field.state.value ?? undefined}
+                defaultValue={field.state.value}
                 onSelectAction={(val) => field.handleChange(val)}
               />
               {isInvalid && <FieldError errors={field.state.meta.errors} />}

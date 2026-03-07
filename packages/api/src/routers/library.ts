@@ -152,7 +152,7 @@ export const libraryRouter = {
       z.object({
         borrowerType: borrowerTypeSchema,
         borrowerId: z.string().min(1),
-        bookId: z.coerce.number().positive(),
+        bookId: z.string().min(1),
         borrowed: z.date().default(() => new Date()),
         returned: z.date().nullable(),
         expected: z.date().nullable(),
@@ -184,7 +184,7 @@ export const libraryRouter = {
         id: z.coerce.number(),
         borrowerType: borrowerTypeSchema,
         borrowerId: z.string().min(1),
-        bookId: z.coerce.number().positive(),
+        bookId: z.string().min(1),
         borrowed: z.date().default(() => new Date()),
         returned: z.date().nullable(),
         expected: z.date().nullable(),
@@ -394,7 +394,7 @@ export const libraryRouter = {
   createReservation: protectedProcedure
     .input(
       z.object({
-        bookId: z.coerce.number().positive(),
+        bookId: z.string().min(1),
         borrowerType: borrowerTypeSchema,
         borrowerId: z.string().min(1),
         expiresAt: z.date().nullable(),

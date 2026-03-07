@@ -12,7 +12,7 @@ const createUpdateBook = z.object({
   author: z.string().optional().default(""),
 });
 export const bookRouter = {
-  get: protectedProcedure.input(z.coerce.number()).query(({ ctx, input }) => {
+  get: protectedProcedure.input(z.string().min(1)).query(({ ctx, input }) => {
     return ctx.db.book.findUnique({
       where: {
         id: input,
@@ -110,7 +110,7 @@ export const bookRouter = {
       });
     }),
   update: protectedProcedure
-    .input(createUpdateBook.extend({ id: z.coerce.number() }))
+    .input(createUpdateBook.extend({ id: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.book.update({
         where: {
@@ -120,7 +120,7 @@ export const bookRouter = {
       });
     }),
   delete: protectedProcedure
-    .input(z.coerce.number())
+    .input(z.string().min(1))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.book.delete({ where: { id: input } });
     }),

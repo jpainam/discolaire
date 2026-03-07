@@ -25,8 +25,8 @@ import { useTRPC } from "~/trpc/react";
 interface BookSelectorProps {
   className?: string;
   disabled?: boolean;
-  defaultValue?: number;
-  onChange: (value: number | undefined) => void;
+  defaultValue?: string;
+  onChange: (value: string | undefined) => void;
 }
 
 export const BookSelector = ({
@@ -36,7 +36,7 @@ export const BookSelector = ({
   defaultValue,
 }: BookSelectorProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState<number>(defaultValue ?? -1);
+  const [value, setValue] = useState<string | null>(defaultValue ?? "");
 
   const t = useTranslations();
   const trpc = useTRPC();
@@ -56,8 +56,8 @@ export const BookSelector = ({
             disabled={disabled}
             className={cn(`w-[250px] justify-between`, className)}
           >
-            {value && value !== -1
-              ? data.find((b) => b.id == Number(value))?.title
+            {value
+              ? data.find((b) => b.id == value)?.title
               : t("select_an_option")}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -79,14 +79,14 @@ export const BookSelector = ({
                       key={b.id}
                       className="flex w-full cursor-pointer items-center justify-between space-x-2"
                       onSelect={(_selectedValue) => {
-                        const v = b.id == Number(value) ? undefined : b.id;
+                        const v = b.id == value ? undefined : b.id;
                         onChange(v);
-                        setValue(v ?? -1);
+                        setValue(v?.toString() ?? null);
                         setOpen(false);
                       }}
                     >
                       <span>{b.title}</span>
-                      {Number(value) === b.id && (
+                      {value === b.id && (
                         <Check
                           className="text-brand"
                           strokeWidth={2}

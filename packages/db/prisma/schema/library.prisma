@@ -1,19 +1,19 @@
 model Book {
-    id            Int               @id @default(autoincrement())
-    title         String
-    description   String?
-    year          Int?
-    author        String
-    isbn          String?
-    publishedAt   DateTime?
-    lastBorrowed  DateTime?
-    tags          String[]
-    schoolId      String
-    createdAt     DateTime          @default(now())
-    updatedAt     DateTime          @updatedAt
-    categoryId    String
-    copies        Int               @default(1)
-    category      BookCategory      @relation(fields: [categoryId], references: [id])
+    id           String            @id @default(cuid())
+    title        String
+    description  String?
+    year         Int?
+    author       String
+    isbn         String?
+    publishedAt  DateTime?
+    lastBorrowed DateTime?
+    tags         String[]
+    schoolId     String
+    createdAt    DateTime          @default(now())
+    updatedAt    DateTime          @updatedAt
+    categoryId   String
+    copies       Int               @default(1)
+    category     BookCategory      @relation(fields: [categoryId], references: [id])
     loans        BookLoan[]
     reservations BookReservation[]
 
@@ -31,7 +31,7 @@ model BookCategory {
 
 model BookLoan {
     id          Int       @id @default(autoincrement())
-    bookId      Int
+    bookId      String
     studentId   String?
     staffId     String?
     contactId   String?
@@ -56,19 +56,19 @@ enum ReservationStatus {
 }
 
 model BookReservation {
-    id         Int               @id @default(autoincrement())
-    bookId     Int
+    id          Int               @id @default(autoincrement())
+    bookId      String
     studentId   String?
     staffId     String?
     contactId   String?
     createdById String?
     reservedAt  DateTime          @default(now())
-    expiresAt  DateTime?
-    status     ReservationStatus @default(PENDING)
-    schoolId   String
-    createdAt  DateTime          @default(now())
-    updatedAt  DateTime          @updatedAt
-    book       Book              @relation(fields: [bookId], references: [id], onDelete: Cascade)
+    expiresAt   DateTime?
+    status      ReservationStatus @default(PENDING)
+    schoolId    String
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+    book        Book              @relation(fields: [bookId], references: [id], onDelete: Cascade)
     student     Student?          @relation(fields: [studentId], references: [id], onDelete: SetNull)
     staff       Staff?            @relation(fields: [staffId], references: [id], onDelete: SetNull)
     contact     Contact?          @relation(fields: [contactId], references: [id], onDelete: SetNull)
