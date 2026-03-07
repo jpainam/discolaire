@@ -19,14 +19,14 @@ import {
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { BookDataTable } from "./BookDataTable";
 import { CreateEditBook } from "./CreateEditBook";
 
 export function BookTab() {
   const t = useTranslations();
-  const { openSheet } = useSheet();
+  const { openModal } = useModal();
   const trpc = useTRPC();
   const bookQuery = useQuery(trpc.book.recentlyUsed.queryOptions());
   const canCreateBook = useCheckPermission("library.create");
@@ -41,9 +41,9 @@ export function BookTab() {
         <div className="flex flex-row items-center gap-2">
           {canCreateBook && (
             <Button
-             
               onClick={() => {
-                openSheet({
+                openModal({
+                  className: "sm:max-w-xl",
                   title: t("create_a_new_book"),
                   view: <CreateEditBook />,
                 });

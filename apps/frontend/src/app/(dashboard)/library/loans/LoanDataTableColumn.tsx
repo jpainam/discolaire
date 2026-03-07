@@ -222,6 +222,7 @@ function ActionCells({ loan }: { loan: LoanOutput }) {
                 <DropdownMenuItem
                   onSelect={() => {
                     openModal({
+                      className: "sm:max-w-xl",
                       title: t("edit_a_loan"),
                       view: <CreateEditLoan loan={loan} />,
                     });

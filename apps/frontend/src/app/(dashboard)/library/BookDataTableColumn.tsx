@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
-import { useSheet } from "~/hooks/use-sheet";
+import { useModal } from "~/hooks/use-modal";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditBook } from "./CreateEditBook";
@@ -158,7 +158,7 @@ export function getBookColumns({
 }
 
 function ActionCells({ book }: { book: BookProcedureOutput }) {
-  const { openSheet } = useSheet();
+  const { openModal } = useModal();
   const confirm = useConfirm();
 
   const t = useTranslations();
@@ -193,7 +193,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
               <>
                 <DropdownMenuItem
                   onSelect={() => {
-                    openSheet({
+                    openModal({
+                      className: "sm:max-w-xl",
                       description: t("book"),
                       title: t("edit"),
                       view: <CreateEditBook book={book} />,

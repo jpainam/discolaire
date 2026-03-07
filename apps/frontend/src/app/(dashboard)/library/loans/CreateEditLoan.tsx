@@ -7,30 +7,24 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
 
+
+
 import type { RouterOutputs } from "@repo/api";
+
+
 
 import { DatePicker } from "~/components/DatePicker";
 import { ContactSelector } from "~/components/shared/selects/ContactSelector";
 import { StaffSelector } from "~/components/shared/selects/StaffSelector";
 import { StudentSelector } from "~/components/shared/selects/StudentSelector";
 import { Button } from "~/components/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from "~/components/ui/field";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+import { Field, FieldContent, FieldError, FieldLabel } from "~/components/ui/field";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Spinner } from "~/components/ui/spinner";
 import { useModal } from "~/hooks/use-modal";
 import { useTRPC } from "~/trpc/react";
 import { BookSelector } from "../BookSelector";
+
 
 const BORROWER_TYPES = ["student", "staff", "contact"] as const;
 type BorrowerType = (typeof BORROWER_TYPES)[number];
@@ -99,7 +93,7 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
       borrowerId: loan ? deriveBorrowerId(loan) : "",
       borrowed: loan?.borrowed ?? new Date(),
       returned: loan?.returned ?? null,
-      expected: loan?.expected ?? addDays(new Date(), 14),
+      expected: loan ? loan.expected : addDays(new Date(), 14),
     },
     validators: {
       onSubmit: ({ value }) => {
@@ -245,55 +239,58 @@ export function CreateEditLoan({ loan }: { loan?: LoanOutput }) {
               </FieldContent>
               <DatePicker
                 defaultValue={field.state.value}
-                onSelectAction={(val) => field.handleChange(val ?? null)}
+                onSelectAction={(val) => {
+                  if (val) field.handleChange(val);
+                }}
               />
               {isInvalid && <FieldError errors={field.state.meta.errors} />}
             </Field>
           );
         }}
       />
+      <div className="grid grid-cols-2 gap-4">
+        <form.Field
+          name="expected"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldContent>
+                  <FieldLabel htmlFor={field.name}>{t("borrow_to")}</FieldLabel>
+                </FieldContent>
+                <DatePicker
+                  defaultValue={field.state.value ?? undefined}
+                  onSelectAction={(val) => field.handleChange(val ?? null)}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
 
-      <form.Field
-        name="expected"
-        children={(field) => {
-          const isInvalid =
-            field.state.meta.isTouched && !field.state.meta.isValid;
-          return (
-            <Field data-invalid={isInvalid}>
-              <FieldContent>
-                <FieldLabel htmlFor={field.name}>{t("borrow_to")}</FieldLabel>
-              </FieldContent>
-              <DatePicker
-                defaultValue={field.state.value}
-                onSelectAction={(val) => field.handleChange(val)}
-              />
-              {isInvalid && <FieldError errors={field.state.meta.errors} />}
-            </Field>
-          );
-        }}
-      />
-
-      <form.Field
-        name="returned"
-        children={(field) => {
-          const isInvalid =
-            field.state.meta.isTouched && !field.state.meta.isValid;
-          return (
-            <Field data-invalid={isInvalid}>
-              <FieldContent>
-                <FieldLabel htmlFor={field.name}>
-                  {t("returned_date")}
-                </FieldLabel>
-              </FieldContent>
-              <DatePicker
-                defaultValue={field.state.value ?? undefined}
-                onSelectAction={(val) => field.handleChange(val)}
-              />
-              {isInvalid && <FieldError errors={field.state.meta.errors} />}
-            </Field>
-          );
-        }}
-      />
+        <form.Field
+          name="returned"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldContent>
+                  <FieldLabel htmlFor={field.name}>
+                    {t("returned_date")}
+                  </FieldLabel>
+                </FieldContent>
+                <DatePicker
+                  defaultValue={field.state.value ?? undefined}
+                  onSelectAction={(val) => field.handleChange(val ?? null)}
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+      </div>
 
       <div className="flex flex-row items-center justify-end gap-2">
         <Button onClick={closeModal} type="button" variant="outline">
