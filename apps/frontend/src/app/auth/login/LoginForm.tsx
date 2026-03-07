@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useFormStatus } from "react-dom";
@@ -14,6 +15,12 @@ import { ModeSwitcher } from "~/components/mode-switcher";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import { Label } from "~/components/ui/label";
 import { Spinner } from "~/components/ui/spinner";
 
@@ -30,6 +37,7 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
 
+  const [showPassword, setShowPassword] = useState(false);
   const t = useTranslations();
   useEffect(() => {
     if (state.error) {
@@ -144,12 +152,24 @@ export function LoginForm() {
                   >
                     <div className="flex flex-col space-y-2">
                       <Label htmlFor="password">{t("password")}</Label>
-                      <Input
-                        type="password"
-                        required
-                        className="border-border border"
-                        name="password"
-                      />
+                      <InputGroup>
+                        <InputGroupInput
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          required
+                          name="password"
+                        />
+                        <InputGroupAddon align="inline-end">
+                          <InputGroupButton
+                            onClick={() => setShowPassword((v) => !v)}
+                            aria-label={
+                              showPassword ? "Hide password" : "Show password"
+                            }
+                          >
+                            {showPassword ? <EyeOff /> : <Eye />}
+                          </InputGroupButton>
+                        </InputGroupAddon>
+                      </InputGroup>
                       <Link
                         href="/auth/request-reset-password"
                         className="text-primary ml-auto text-sm hover:underline"
@@ -236,19 +256,19 @@ export function LoginForm() {
                       ease: "easeOut",
                     }}
                   >
-                    By signing in you agree to our{" "}
+                    En vous connectant, vous acceptez nos{" "}
                     <Link
-                      href="#"
+                      href="/legal/terms"
                       className="text-muted-foreground hover:text-primary underline"
                     >
-                      terms of service
+                      conditions d&apos;utilisation
                     </Link>{" "}
-                    and{" "}
+                    et notre{" "}
                     <Link
-                      href="#"
+                      href="/legal/privacy"
                       className="text-muted-foreground hover:text-primary underline"
                     >
-                      privacy policy
+                      politique de confidentialité
                     </Link>
                     .
                   </motion.p>
