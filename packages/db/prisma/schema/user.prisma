@@ -36,7 +36,8 @@ model User {
     schoolId                     String
     school                       School                     @relation(fields: [schoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     documentCreatedBy            Document[]                 @relation("DocumentCreatedBy")
-    borrowedBooks                BorrowedBook[]
+    bookLoansCreated             BookLoan[]          @relation("BookLoanCreatedBy")
+    bookReservationsCreated      BookReservation[]   @relation("BookReservationCreatedBy")
     healthVisits                 HealthVisit[]
     logActivities                LogActivity[]
     sentEmails                   Email[]                    @relation("Sender")

@@ -98,16 +98,20 @@ export function getBookColumns({
       },
     },
     {
-      accessorKey: "available",
+      id: "availability",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("availability")} />
       ),
       size: 60,
       cell: ({ row }) => {
         const book = row.original;
+        const activeLoans = book.loans.filter(
+          (b) => b.returned === null,
+        ).length;
+        const available = book.copies - activeLoans;
         return (
           <div className="text-center">
-            {book.available > 0 ? (
+            {available > 0 ? (
               <Badge
                 variant={"outline"}
                 className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
@@ -127,16 +131,14 @@ export function getBookColumns({
       },
     },
     {
-      accessorKey: "available",
+      accessorKey: "copies",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={t("copies")} />
       ),
       cell: ({ row }) => {
         const book = row.original;
         return (
-          <div className="text-muted-foreground text-center">
-            {book.available}
-          </div>
+          <div className="text-muted-foreground text-center">{book.copies}</div>
         );
       },
       size: 38,

@@ -2,36 +2,44 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addDays } from "date-fns";
-import { StampIcon, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@repo/api";
 
 import { DataTableColumnHeader } from "~/components/datatable/data-table-column-header";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 
-type BookProcedureOutput = RouterOutputs["library"]["borrowBooks"][number];
-export function useReservationColumns(): ColumnDef<
-  BookProcedureOutput,
-  unknown
->[] {
+type ReservationOutput = RouterOutputs["library"]["reservations"]["data"][number];
+
+function getBorrowerName(r: ReservationOutput): string {
+  if (r.student) return `${r.student.firstName ?? ""} ${r.student.lastName ?? ""}`.trim();
+  if (r.staff) return `${r.staff.firstName ?? ""} ${r.staff.lastName ?? ""}`.trim();
+  if (r.contact) return `${r.contact.firstName ?? ""} ${r.contact.lastName ?? ""}`.trim();
+  return "—";
+}
+
+const STATUS_STYLES: Record<string, string> = {
+  PENDING: "bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100",
+  CONFIRMED: "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100",
+  CANCELLED: "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100",
+  FULFILLED: "bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100",
+};
+
+export function useReservationColumns(): ColumnDef<ReservationOutput, unknown>[] {
   const locale = useLocale();
   const t = useTranslations();
   return useMemo(
@@ -44,9 +52,7 @@ export function useReservationColumns(): ColumnDef<
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
             }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
             aria-label="Select all"
           />
         ),
@@ -62,65 +68,68 @@ export function useReservationColumns(): ColumnDef<
         enableHiding: false,
       },
       {
-        accessorKey: "borrowed",
+        accessorKey: "reservedAt",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("date")} />
         ),
-        cell: ({ row }) => {
-          const book = row.original;
-          return (
-            <span>
-              {book.borrowed.toLocaleDateString(locale, {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </span>
-          );
-        },
+        cell: ({ row }) => (
+          <span>
+            {row.original.reservedAt.toLocaleDateString(locale, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
+        ),
       },
       {
         accessorKey: "book.title",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("title")} />
         ),
-        cell: ({ row }) => {
-          const book = row.original;
-          return (
-            <span className="text-muted-foreground">{book.book.title}</span>
-          );
-        },
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">{row.original.book.title}</span>
+        ),
       },
       {
         accessorKey: "book.author",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("author")} />
         ),
-        cell: ({ row }) => {
-          const book = row.original;
-          return (
-            <span className="text-muted-foreground">{book.book.author}</span>
-          );
-        },
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">{row.original.book.author}</span>
+        ),
       },
       {
-        accessorKey: "user.name",
+        id: "borrower",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("name")} />
         ),
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">{getBorrowerName(row.original)}</span>
+        ),
+      },
+      {
+        accessorKey: "status",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title={t("status")} />
+        ),
         cell: ({ row }) => {
-          const book = row.original;
+          const status = row.original.status;
           return (
-            <span className="text-muted-foreground">{book.user.name}</span>
+            <div className="text-center">
+              <Badge variant={"outline"} className={STATUS_STYLES[status]}>
+                {t(status.toLowerCase())}
+              </Badge>
+            </div>
           );
         },
       },
-
       {
         id: "actions",
         header: () => <span className="sr-only">Actions</span>,
         cell: function Cell({ row }) {
-          return <ActionCells book={row.original} />;
+          return <ActionCells reservation={row.original} />;
         },
         size: 48,
         enableSorting: false,
@@ -131,20 +140,16 @@ export function useReservationColumns(): ColumnDef<
   );
 }
 
-function ActionCells({ book }: { book: BookProcedureOutput }) {
+function ActionCells({ reservation }: { reservation: ReservationOutput }) {
   const confirm = useConfirm();
-
   const t = useTranslations();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const bookMutation = useMutation(
-    trpc.library.deleteBorrow.mutationOptions({
+  const deleteMutation = useMutation(
+    trpc.library.deleteReservation.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter(),
-        );
-        await queryClient.invalidateQueries(trpc.book.all.pathFilter());
+        await queryClient.invalidateQueries(trpc.library.reservations.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
       onError: (error) => {
@@ -153,26 +158,24 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
     }),
   );
 
-  const updateBookMutation = useMutation(
-    trpc.library.updateBorrowedStatus.mutationOptions({
+  const updateStatusMutation = useMutation(
+    trpc.library.updateReservationStatus.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.library.reservations.pathFilter());
+        toast.success(t("updated_successfully"), { id: 0 });
+      },
       onError: (error) => {
         toast.error(error.message, { id: 0 });
-      },
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter(),
-        );
-        toast.success(t("updated_successfully"), { id: 0 });
       },
     }),
   );
 
-  const canUpdateLoan = useCheckPermission("library.update");
-  const canDeleteLoan = useCheckPermission("library.delete");
+  const canUpdate = useCheckPermission("library.update");
+  const canDelete = useCheckPermission("library.delete");
 
   return (
     <div className="flex justify-end">
-      {(canDeleteLoan || canUpdateLoan) && (
+      {(canDelete || canUpdate) && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size={"icon"}>
@@ -180,60 +183,32 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
-                <StampIcon className="text-muted-foreground mr-2 h-4 w-4" />
-                <span>{t("status")}</span>
-              </DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
+            {canUpdate && (
+              <>
+                {(["PENDING", "CONFIRMED", "FULFILLED", "CANCELLED"] as const).map((s) => (
                   <DropdownMenuItem
+                    key={s}
                     onSelect={() => {
                       toast.loading(t("updating"), { id: 0 });
-                      void updateBookMutation.mutate({
-                        id: book.id,
-                        returned: true,
-                      });
+                      void updateStatusMutation.mutate({ id: reservation.id, status: s });
                     }}
                   >
-                    <Checkbox checked={book.returned !== null} />
-                    {t("returned")}
+                    <Checkbox checked={reservation.status === s} />
+                    {t(s.toLowerCase())}
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Checkbox
-                      checked={
-                        book.expected ? book.expected < new Date() : false
-                      }
-                    />
-                    {t("overdue")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      toast.loading(t("updating"), { id: 0 });
-                      void updateBookMutation.mutate({
-                        id: book.id,
-                        returned: false,
-                        expected: addDays(new Date(), 7),
-                      });
-                    }}
-                  >
-                    <Checkbox checked={book.returned === null} />
-                    {t("borrowed")}
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
-            <DropdownMenuSeparator />
-            {canDeleteLoan && (
+                ))}
+                <DropdownMenuSeparator />
+              </>
+            )}
+            {canDelete && (
               <DropdownMenuItem
                 variant="destructive"
                 onSelect={async () => {
                   await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
-
                     onConfirm: async () => {
-                      await bookMutation.mutateAsync(book.id);
+                      await deleteMutation.mutateAsync(reservation.id);
                     },
                   });
                 }}

@@ -41,7 +41,7 @@ export function BookTab() {
         <div className="flex flex-row items-center gap-2">
           {canCreateBook && (
             <Button
-              size={"sm"}
+             
               onClick={() => {
                 openSheet({
                   title: t("create_a_new_book"),
@@ -55,7 +55,7 @@ export function BookTab() {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"icon"} className="size-8">
+              <Button variant={"outline"} size={"icon"} >
                 <MoreVerticalIcon />
               </Button>
             </DropdownMenuTrigger>

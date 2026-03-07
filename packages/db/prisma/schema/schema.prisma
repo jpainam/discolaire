@@ -452,6 +452,8 @@ model Student {
     councils             ClassroomCouncil[]
     academicSnapshots    StudentAcademicSnapshot[]
     documents            Document[]
+    bookLoans        BookLoan[]
+    bookReservations BookReservation[]
 }
 
 model StudentSibling {
@@ -541,10 +543,12 @@ model Contact {
     countryId       String?
     country         Country?         @relation(fields: [countryId], references: [id])
     user            User?            @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-    studentContacts StudentContact[]
-    school          School           @relation(fields: [schoolId], references: [id])
-    schoolId        String
-    documents       Document[]
+    studentContacts  StudentContact[]
+    school           School           @relation(fields: [schoolId], references: [id])
+    schoolId         String
+    documents        Document[]
+    bookLoans        BookLoan[]
+    bookReservations BookReservation[]
 }
 
 model Country {

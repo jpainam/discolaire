@@ -7,7 +7,7 @@ const createUpdateBook = z.object({
   title: z.string(),
   description: z.string().optional(),
   isbn: z.string().optional(),
-  available: z.coerce.number(),
+  copies: z.coerce.number().min(0),
   categoryId: z.string().min(1),
   author: z.string().optional().default(""),
 });
@@ -31,6 +31,9 @@ export const bookRouter = {
         category: true,
       },
     });
+  }),
+  count: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.book.count({ where: { schoolId: ctx.schoolId } });
   }),
   createCategory: protectedProcedure
     .input(
@@ -84,7 +87,7 @@ export const bookRouter = {
       },
       include: {
         category: true,
-        borrowedBooks: true,
+        loans: true,
       },
       orderBy: {
         lastBorrowed: "desc",
@@ -100,7 +103,7 @@ export const bookRouter = {
           categoryId: input.categoryId,
           title: input.title,
           isbn: input.isbn,
-          available: input.available,
+          copies: input.copies,
           description: input.description,
           schoolId: ctx.schoolId,
         },

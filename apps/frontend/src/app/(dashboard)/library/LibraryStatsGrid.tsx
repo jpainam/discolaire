@@ -6,7 +6,7 @@ import { cn } from "~/lib/utils";
 interface StatsCardProps {
   title: string;
   value: string;
-  change: {
+  change?: {
     value: string;
     trend: "up" | "down";
   };
@@ -19,8 +19,6 @@ export async function StatsCard({
   change,
   icon,
 }: StatsCardProps) {
-  const isPositive = change.trend === "up";
-  const trendColor = isPositive ? "text-emerald-500" : "text-red-500";
   const t = await getTranslations();
 
   return (
@@ -44,12 +42,19 @@ export async function StatsCard({
             {title}
           </a>
           <div className="mb-2 text-2xl font-semibold">{value}</div>
-          <div className="text-muted-foreground/60 text-xs">
-            <span className={cn("font-medium", trendColor)}>
-              {isPositive ? "↗" : "↘"} {change.value}
-            </span>{" "}
-            {t("vs_last_year")}
-          </div>
+          {change && (
+            <div className="text-muted-foreground/60 text-xs">
+              <span
+                className={cn(
+                  "font-medium",
+                  change.trend === "up" ? "text-emerald-500" : "text-red-500",
+                )}
+              >
+                {change.trend === "up" ? "↗" : "↘"} {change.value}
+              </span>{" "}
+              {t("vs_last_year")}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -30,11 +30,22 @@ import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditLoan } from "./CreateEditLoan";
 
-type BookProcedureOutput = RouterOutputs["library"]["borrowBooks"][number];
-export function useBorrowBooksColumns(): ColumnDef<
-  BookProcedureOutput,
-  unknown
->[] {
+type LoanOutput = RouterOutputs["library"]["loans"]["data"][number];
+
+function getBorrowerName(loan: LoanOutput): string {
+  if (loan.student) {
+    return `${loan.student.firstName ?? ""} ${loan.student.lastName ?? ""}`.trim();
+  }
+  if (loan.staff) {
+    return `${loan.staff.firstName ?? ""} ${loan.staff.lastName ?? ""}`.trim();
+  }
+  if (loan.contact) {
+    return `${loan.contact.firstName ?? ""} ${loan.contact.lastName ?? ""}`.trim();
+  }
+  return "—";
+}
+
+export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
   const locale = useLocale();
   const t = useTranslations();
   return useMemo(
@@ -70,10 +81,10 @@ export function useBorrowBooksColumns(): ColumnDef<
           <DataTableColumnHeader column={column} title={t("borrow_date")} />
         ),
         cell: ({ row }) => {
-          const book = row.original;
+          const loan = row.original;
           return (
             <span>
-              {book.borrowed.toLocaleDateString(locale, {
+              {loan.borrowed.toLocaleDateString(locale, {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
@@ -87,36 +98,27 @@ export function useBorrowBooksColumns(): ColumnDef<
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("title")} />
         ),
-        cell: ({ row }) => {
-          const book = row.original;
-          return (
-            <span className="text-muted-foreground">{book.book.title}</span>
-          );
-        },
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">{row.original.book.title}</span>
+        ),
       },
       {
         accessorKey: "book.author",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("author")} />
         ),
-        cell: ({ row }) => {
-          const book = row.original;
-          return (
-            <span className="text-muted-foreground">{book.book.author}</span>
-          );
-        },
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">{row.original.book.author}</span>
+        ),
       },
       {
-        accessorKey: "user.name",
+        id: "borrower",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={t("name")} />
         ),
-        cell: ({ row }) => {
-          const book = row.original;
-          return (
-            <span className="text-muted-foreground">{book.user.name}</span>
-          );
-        },
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">{getBorrowerName(row.original)}</span>
+        ),
       },
       {
         accessorKey: "returned",
@@ -125,46 +127,40 @@ export function useBorrowBooksColumns(): ColumnDef<
         ),
         size: 60,
         cell: ({ row }) => {
-          const book = row.original;
+          const loan = row.original;
           const today = new Date();
-          let content = <></>;
-          if (book.expected && book.expected < today) {
-            content = (
-              <Badge
-                variant={"outline"}
-                className="bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
-              >
-                {t("overdue")}
-              </Badge>
-            );
-          } else if (book.returned && book.returned <= today) {
-            content = (
-              <Badge
-                variant={"outline"}
-                className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
-              >
-                {t("returned")}
-              </Badge>
-            );
-          } else {
-            content = (
-              <Badge
-                variant={"outline"}
-                className="bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
-              >
-                {t("borrowed")}
-              </Badge>
+          if (loan.expected && loan.expected < today && !loan.returned) {
+            return (
+              <div className="text-center">
+                <Badge variant={"outline"} className="bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
+                  {t("overdue")}
+                </Badge>
+              </div>
             );
           }
-          return <div className="text-center">{content}</div>;
+          if (loan.returned && loan.returned <= today) {
+            return (
+              <div className="text-center">
+                <Badge variant={"outline"} className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                  {t("returned")}
+                </Badge>
+              </div>
+            );
+          }
+          return (
+            <div className="text-center">
+              <Badge variant={"outline"} className="bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+                {t("borrowed")}
+              </Badge>
+            </div>
+          );
         },
       },
-
       {
         id: "actions",
         header: () => <span className="sr-only">Actions</span>,
         cell: function Cell({ row }) {
-          return <ActionCells book={row.original} />;
+          return <ActionCells loan={row.original} />;
         },
         size: 48,
         enableSorting: false,
@@ -175,21 +171,17 @@ export function useBorrowBooksColumns(): ColumnDef<
   );
 }
 
-function ActionCells({ book }: { book: BookProcedureOutput }) {
+function ActionCells({ loan }: { loan: LoanOutput }) {
   const { openSheet } = useSheet();
   const confirm = useConfirm();
-
   const t = useTranslations();
-
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const bookMutation = useMutation(
-    trpc.library.deleteBorrow.mutationOptions({
+  const deleteMutation = useMutation(
+    trpc.library.deleteLoan.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter(),
-        );
+        await queryClient.invalidateQueries(trpc.library.loans.pathFilter());
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         toast.success(t("deleted_successfully"), { id: 0 });
       },
@@ -199,15 +191,13 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
     }),
   );
 
-  const updateBookMutation = useMutation(
-    trpc.library.updateBorrowedStatus.mutationOptions({
+  const updateStatusMutation = useMutation(
+    trpc.library.updateLoanStatus.mutationOptions({
       onError: (error) => {
         toast.error(error.message, { id: 0 });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.library.borrowBooks.pathFilter(),
-        );
+        await queryClient.invalidateQueries(trpc.library.loans.pathFilter());
         await queryClient.invalidateQueries(trpc.book.all.pathFilter());
         toast.success(t("updated_successfully"), { id: 0 });
       },
@@ -233,14 +223,13 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                   onSelect={() => {
                     openSheet({
                       title: t("edit_a_loan"),
-                      view: <CreateEditLoan borrow={book} />,
+                      view: <CreateEditLoan loan={loan} />,
                     });
                   }}
                 >
                   <Pencil />
                   {t("edit")}
                 </DropdownMenuItem>
-
                 <DropdownMenuSeparator />
               </>
             )}
@@ -254,34 +243,23 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                   <DropdownMenuItem
                     onSelect={() => {
                       toast.loading(t("updating"), { id: 0 });
-                      void updateBookMutation.mutate({
-                        id: book.id,
-                        returned: true,
-                      });
+                      void updateStatusMutation.mutate({ id: loan.id, returned: true });
                     }}
                   >
-                    <Checkbox checked={book.returned !== null} />
+                    <Checkbox checked={loan.returned !== null} />
                     {t("returned")}
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Checkbox
-                      checked={
-                        book.expected ? book.expected < new Date() : false
-                      }
-                    />
+                    <Checkbox checked={loan.expected ? loan.expected < new Date() && !loan.returned : false} />
                     {t("overdue")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
                       toast.loading(t("updating"), { id: 0 });
-                      void updateBookMutation.mutate({
-                        id: book.id,
-                        returned: false,
-                        expected: addDays(new Date(), 7),
-                      });
+                      void updateStatusMutation.mutate({ id: loan.id, returned: false, expected: addDays(new Date(), 7) });
                     }}
                   >
-                    <Checkbox checked={book.returned === null} />
+                    <Checkbox checked={loan.returned === null} />
                     {t("borrowed")}
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
@@ -296,9 +274,8 @@ function ActionCells({ book }: { book: BookProcedureOutput }) {
                   await confirm({
                     title: t("delete"),
                     description: t("delete_confirmation"),
-
                     onConfirm: async () => {
-                      await bookMutation.mutateAsync(book.id);
+                      await deleteMutation.mutateAsync(loan.id);
                     },
                   });
                 }}

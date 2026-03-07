@@ -53,6 +53,8 @@ model Staff {
     attendances               StaffAttendance[]
     documents                 Document[]
     payrolls                  Payroll[]
+    bookLoans                 BookLoan[]
+    bookReservations          BookReservation[]
 }
 
 model Payroll {

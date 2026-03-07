@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import {
   BoxIcon,
@@ -12,8 +11,6 @@ import { getTranslations } from "next-intl/server";
 
 import { ErrorFallback } from "~/components/error-fallback";
 import { Badge } from "~/components/ui/badge";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
-import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { caller, HydrateClient, prefetch, trpc } from "~/trpc/server";
 import { BookTab } from "./BookTab";
@@ -25,48 +22,46 @@ import { ReservationDataTable } from "./reservations/ReservationDataTable";
 
 export default async function Page() {
   const t = await getTranslations();
-  const books = await caller.book.all();
+  const bookCount = await caller.book.count();
 
-  prefetch(trpc.library.borrowBooks.queryOptions({ limit: 2000 }));
+  prefetch(trpc.book.recentlyUsed.queryOptions());
   return (
     <HydrateClient>
       <Tabs defaultValue="tab-1" className="px-4">
-        <ScrollArea>
-          <TabsList>
-            <TabsTrigger value="tab-1">
-              <HouseIcon size={16} aria-hidden="true" />
-              {t("dashboard")}
-            </TabsTrigger>
-            <TabsTrigger value="tab-2">
-              <PanelsTopLeftIcon size={16} aria-hidden="true" />
-              {t("materials")}
-              <Badge
-                className="bg-primary/15 ms-1.5 min-w-5 px-1"
-                variant="secondary"
-              >
-                {books.length}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger value="tab-3">
-              <BoxIcon size={16} aria-hidden="true" />
-              {t("loans")}
-              <Badge className="ms-1.5">New</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="tab-4">
-              <UsersRoundIcon size={16} aria-hidden="true" />
-              {t("reservations")}
-            </TabsTrigger>
-            <TabsTrigger value="tab-5">
-              <ChartLine size={16} aria-hidden="true" />
-              {t("insights")}
-            </TabsTrigger>
-            <TabsTrigger value="tab-6">
-              <SettingsIcon size={16} aria-hidden="true" />
-              {t("settings")}
-            </TabsTrigger>
-          </TabsList>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        <TabsList>
+          <TabsTrigger value="tab-1">
+            <HouseIcon size={16} aria-hidden="true" />
+            {t("dashboard")}
+          </TabsTrigger>
+          <TabsTrigger value="tab-2">
+            <PanelsTopLeftIcon size={16} aria-hidden="true" />
+            {t("materials")}
+            <Badge
+              className="bg-primary/15 ms-1.5 min-w-5 px-1"
+              variant="secondary"
+            >
+              {bookCount}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="tab-3">
+            <BoxIcon size={16} aria-hidden="true" />
+            {t("loans")}
+            <Badge className="ms-1.5">New</Badge>
+          </TabsTrigger>
+          <TabsTrigger value="tab-4">
+            <UsersRoundIcon size={16} aria-hidden="true" />
+            {t("reservations")}
+          </TabsTrigger>
+          <TabsTrigger value="tab-5">
+            <ChartLine size={16} aria-hidden="true" />
+            {t("insights")}
+          </TabsTrigger>
+          <TabsTrigger value="tab-6">
+            <SettingsIcon size={16} aria-hidden="true" />
+            {t("settings")}
+          </TabsTrigger>
+        </TabsList>
+
         <TabsContent value="tab-1">
           <LibraryDashboard />
         </TabsContent>
@@ -76,32 +71,12 @@ export default async function Page() {
         <TabsContent value="tab-3">
           <div className="flex flex-col gap-2">
             <LoanHeader />
-            <Suspense
-              fallback={
-                <div className="grid grid-cols-4 gap-4 px-4">
-                  {Array.from({ length: 32 }).map((_, i) => (
-                    <Skeleton key={i} className="h-8" />
-                  ))}
-                </div>
-              }
-            >
-              <BorrowBookDataTable />
-            </Suspense>
+            <BorrowBookDataTable />
           </div>
         </TabsContent>
         <TabsContent value="tab-4">
           <ErrorBoundary errorComponent={ErrorFallback}>
-            <Suspense
-              fallback={
-                <div className="grid grid-cols-4 gap-4 px-4">
-                  {Array.from({ length: 32 }).map((_, i) => (
-                    <Skeleton key={i} className="h-8" />
-                  ))}
-                </div>
-              }
-            >
-              <ReservationDataTable />
-            </Suspense>
+            <ReservationDataTable />
           </ErrorBoundary>
         </TabsContent>
         <TabsContent value="tab-5">

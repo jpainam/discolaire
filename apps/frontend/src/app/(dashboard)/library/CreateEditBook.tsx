@@ -34,7 +34,7 @@ import { useTRPC } from "~/trpc/react";
 const updateBookSchema = z.object({
   title: z.string().trim().min(1),
   author: z.string().min(1),
-  available: z.number().min(0),
+  copies: z.number().min(0),
   description: z.string().optional(),
   isbn: z.string().optional(),
   categoryId: z.string().min(1),
@@ -54,7 +54,7 @@ export function CreateEditBook({
       description: book?.description ?? "",
       categoryId: book?.categoryId ?? "",
       isbn: book?.isbn ?? "",
-      available: book?.available ?? 0,
+      copies: book?.copies ?? 0,
       author: book?.author ?? "",
     },
   });
@@ -192,10 +192,10 @@ export function CreateEditBook({
           />
           <FormField
             control={form.control}
-            name="available"
+            name="copies"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("available")}</FormLabel>
+                <FormLabel>{t("copies")}</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
