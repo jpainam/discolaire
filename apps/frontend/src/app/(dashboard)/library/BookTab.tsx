@@ -18,8 +18,8 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useTRPC } from "~/trpc/react";
 import { BookDataTable } from "./BookDataTable";
 import { CreateEditBook } from "./CreateEditBook";
@@ -33,7 +33,7 @@ export function BookTab() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className=" flex flex-row items-center justify-between border-y py-1">
+      <div className="flex flex-row items-center justify-between border-y py-1">
         <div className="flex flex-row items-center gap-2">
           <LibraryBigIcon />
           <Label>{t("materials")}</Label>
@@ -55,7 +55,7 @@ export function BookTab() {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"icon"} >
+              <Button variant={"outline"} size={"icon"}>
                 <MoreVerticalIcon />
               </Button>
             </DropdownMenuTrigger>
@@ -76,7 +76,7 @@ export function BookTab() {
         </div>
       </div>
       <Separator />
-      <div >
+      <div>
         {bookQuery.isPending && (
           <DataTableSkeleton rowCount={8} columnCount={4} />
         )}

@@ -259,7 +259,9 @@ export function CreateEditBook({
             return (
               <Field className="md:col-span-2" data-invalid={isInvalid}>
                 <FieldContent>
-                  <FieldLabel htmlFor={field.name}>{t("description")}</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    {t("description")}
+                  </FieldLabel>
                 </FieldContent>
                 <Textarea
                   id={field.name}

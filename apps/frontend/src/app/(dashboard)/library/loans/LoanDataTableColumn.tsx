@@ -24,8 +24,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useCheckPermission } from "~/hooks/use-permission";
 import { useModal } from "~/hooks/use-modal";
+import { useCheckPermission } from "~/hooks/use-permission";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { CreateEditLoan } from "./CreateEditLoan";
@@ -99,7 +99,9 @@ export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
           <DataTableColumnHeader column={column} title={t("title")} />
         ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground">{row.original.book.title}</span>
+          <span className="text-muted-foreground">
+            {row.original.book.title}
+          </span>
         ),
       },
       {
@@ -108,7 +110,9 @@ export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
           <DataTableColumnHeader column={column} title={t("author")} />
         ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground">{row.original.book.author}</span>
+          <span className="text-muted-foreground">
+            {row.original.book.author}
+          </span>
         ),
       },
       {
@@ -117,7 +121,9 @@ export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
           <DataTableColumnHeader column={column} title={t("name")} />
         ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground">{getBorrowerName(row.original)}</span>
+          <span className="text-muted-foreground">
+            {getBorrowerName(row.original)}
+          </span>
         ),
       },
       {
@@ -132,7 +138,10 @@ export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
           if (loan.expected && loan.expected < today && !loan.returned) {
             return (
               <div className="text-center">
-                <Badge variant={"outline"} className="bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
+                <Badge
+                  variant={"outline"}
+                  className="bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100"
+                >
                   {t("overdue")}
                 </Badge>
               </div>
@@ -141,7 +150,10 @@ export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
           if (loan.returned && loan.returned <= today) {
             return (
               <div className="text-center">
-                <Badge variant={"outline"} className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                <Badge
+                  variant={"outline"}
+                  className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100"
+                >
                   {t("returned")}
                 </Badge>
               </div>
@@ -149,7 +161,10 @@ export function useBorrowBooksColumns(): ColumnDef<LoanOutput, unknown>[] {
           }
           return (
             <div className="text-center">
-              <Badge variant={"outline"} className="bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+              <Badge
+                variant={"outline"}
+                className="bg-yellow-50 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100"
+              >
                 {t("borrowed")}
               </Badge>
             </div>
@@ -244,20 +259,33 @@ function ActionCells({ loan }: { loan: LoanOutput }) {
                   <DropdownMenuItem
                     onSelect={() => {
                       toast.loading(t("updating"), { id: 0 });
-                      void updateStatusMutation.mutate({ id: loan.id, returned: true });
+                      void updateStatusMutation.mutate({
+                        id: loan.id,
+                        returned: true,
+                      });
                     }}
                   >
                     <Checkbox checked={loan.returned !== null} />
                     {t("returned")}
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Checkbox checked={loan.expected ? loan.expected < new Date() && !loan.returned : false} />
+                    <Checkbox
+                      checked={
+                        loan.expected
+                          ? loan.expected < new Date() && !loan.returned
+                          : false
+                      }
+                    />
                     {t("overdue")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
                       toast.loading(t("updating"), { id: 0 });
-                      void updateStatusMutation.mutate({ id: loan.id, returned: false, expected: addDays(new Date(), 7) });
+                      void updateStatusMutation.mutate({
+                        id: loan.id,
+                        returned: false,
+                        expected: addDays(new Date(), 7),
+                      });
                     }}
                   >
                     <Checkbox checked={loan.returned === null} />
