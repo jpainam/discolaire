@@ -15,6 +15,7 @@ const unProtectedRoutes = [
   "/auth",
   "/gabari",
   "/invite",
+  "/legal",
   "/fonts",
   "/manifest.webmanifest",
   "/favicon.ico",
