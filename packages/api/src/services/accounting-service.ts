@@ -52,6 +52,7 @@ export class AccountingService {
       where: {
         studentId: studentId,
         deletedAt: null,
+        status: "VALIDATED",
         journalId: {
           in: journalIds,
         },
