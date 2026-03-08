@@ -6,7 +6,7 @@ import Link from "next/link";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { decode } from "entities";
-import { Pencil, ReceiptText, Trash2, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { PiGenderFemaleThin, PiGenderMaleThin } from "react-icons/pi";
 import { toast } from "sonner";
@@ -28,6 +28,7 @@ import { routes } from "~/configs/routes";
 import { useCheckPermission } from "~/hooks/use-permission";
 import { useRouter } from "~/hooks/use-router";
 import { useSheet } from "~/hooks/use-sheet";
+import { DeleteIcon, EditIcon, UsersIcon, ViewIcon } from "~/icons";
 import { useConfirm } from "~/providers/confirm-dialog";
 import { useTRPC } from "~/trpc/react";
 import { getFullName } from "~/utils";
@@ -43,8 +44,6 @@ export const contactDefaultColumnVisibility: VisibilityState = {
   firstName: false,
   lastName: false,
   prefix: false,
-  phoneNumber2: false,
-  email: false,
   address: false,
   occupation: false,
   employer: false,
@@ -301,6 +300,23 @@ export function useContactColumns(): ColumnDef<
           ),
         },
         {
+          id: "studentsCount",
+          accessorFn: (contact) => contact.studentContacts.length,
+          size: 100,
+          header: ({ column }) => (
+            <DataTableColumnHeader column={column} title={t("students")} />
+          ),
+          cell: ({ row }) => {
+            const count = row.original.studentContacts.length;
+            return (
+              <div className="text-muted-foreground flex items-center gap-1">
+                <UsersIcon />
+                {count}
+              </div>
+            );
+          },
+        },
+        {
           id: "observation",
           accessorKey: "observation",
           header: ({ column }) => (
@@ -353,8 +369,8 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
     <div className="flex justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button aria-label="Open menu" variant="ghost">
-            <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+          <Button aria-label="Open menu" variant="ghost" size={"icon"}>
+            <DotsHorizontalIcon aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -363,7 +379,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
               router.push(`/contacts/${contact.id}`);
             }}
           >
-            <ReceiptText />
+            <ViewIcon />
             {t("details")}
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -386,7 +402,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
                 });
               }}
             >
-              <Pencil />
+              <EditIcon />
               {t("edit")}
             </DropdownMenuItem>
           )}
@@ -414,7 +430,7 @@ function ActionsCell({ contact }: { contact: ContactAllProcedureOutput }) {
                   });
                 }}
               >
-                <Trash2 />
+                <DeleteIcon />
                 {t("delete")}
               </DropdownMenuItem>
             </>
