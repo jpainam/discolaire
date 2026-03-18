@@ -44,7 +44,7 @@ export function StudentReportCardQuarter({
   const studentId = student.id;
 
   const trpc = useTRPC();
-  const { title, seq1, seq2 } = getTitle({ trimestreId: term.id });
+  const { title, seq1, seq2 } = getTitle({ trimestreId: term.name });
 
   const {
     data: { studentsReport, summary, globalRanks },

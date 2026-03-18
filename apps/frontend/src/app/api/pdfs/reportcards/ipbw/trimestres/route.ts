@@ -2,9 +2,11 @@ import type { NextRequest } from "next/server";
 import { renderToStream } from "@react-pdf/renderer";
 import { z } from "zod/v4";
 
+import type { RouterOutputs } from "@repo/api";
+
 import { getSession } from "~/auth/server";
 import { IPBWTrimestre } from "~/reports/reportcards/IPBWTrimestre";
-import { caller } from "~/trpc/server";
+import { caller, getQueryClient, trpc } from "~/trpc/server";
 
 const searchSchema = z.object({
   studentId: z.string().nullable(),
@@ -25,32 +27,38 @@ export async function GET(req: NextRequest) {
     trimestreId: trimestre,
     classroomId: classId,
   });
+
   if (!result.success) {
     const error = z.treeifyError(result.error).errors;
     return new Response(JSON.stringify(error), { status: 400 });
   }
 
   const { studentId, trimestreId, classroomId } = result.data;
+  const queryClient = getQueryClient();
+  const term = await queryClient.fetchQuery(
+    trpc.term.get.queryOptions(trimestreId),
+  );
   if (studentId) {
-    return indvidualReportCard({ studentId, trimestreId });
+    return indvidualReportCard({ studentId, term });
   } else if (classroomId) {
-    return classroomReportCard({ classroomId, trimestreId });
+    return classroomReportCard({ classroomId, term });
   }
 }
 
 async function classroomReportCard({
   classroomId,
-  trimestreId,
+  term,
 }: {
   classroomId: string;
-  trimestreId: string;
+  term: RouterOutputs["term"]["get"];
 }) {
   const school = await caller.school.getSchool();
   const students = await caller.classroom.students(classroomId);
   const contacts = await caller.student.getPrimaryContacts({ classroomId });
+
   const report = await caller.reportCard.getTrimestre({
     classroomId: classroomId,
-    termId: trimestreId,
+    termId: term.id,
   });
 
   const subjects = await caller.classroom.subjects(classroomId);
@@ -58,7 +66,7 @@ async function classroomReportCard({
 
   const disciplines = await caller.discipline.trimestre({
     classroomId,
-    termId: trimestreId,
+    termId: term.id,
   });
   const lang = classroom.section?.name == "ANG" ? "en" : "fr";
 
@@ -68,7 +76,7 @@ async function classroomReportCard({
       students,
       disciplines,
       classroom,
-      trimestreId,
+      term,
       subjects,
       report,
       contacts,
@@ -86,10 +94,10 @@ async function classroomReportCard({
 }
 async function indvidualReportCard({
   studentId,
-  trimestreId,
+  term,
 }: {
   studentId: string;
-  trimestreId: string;
+  term: RouterOutputs["term"]["get"];
 }) {
   const student = await caller.student.get(studentId);
   if (!student.classroom) {
@@ -98,7 +106,7 @@ async function indvidualReportCard({
 
   const report = await caller.reportCard.getTrimestre({
     classroomId: student.classroom.id,
-    termId: trimestreId,
+    termId: term.id,
   });
 
   const subjects = await caller.classroom.subjects(student.classroom.id);
@@ -117,7 +125,7 @@ async function indvidualReportCard({
 
   const disciplines = await caller.discipline.trimestre({
     classroomId: classroom.id,
-    termId: trimestreId,
+    termId: term.id,
   });
   const lang = classroom.section?.name == "ANG" ? "en" : ("fr" as const);
 
@@ -126,7 +134,7 @@ async function indvidualReportCard({
       school,
       students: [student],
       classroom,
-      trimestreId,
+      term,
       disciplines,
       subjects,
       report,

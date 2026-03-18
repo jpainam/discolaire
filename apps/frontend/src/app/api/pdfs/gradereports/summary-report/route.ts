@@ -105,7 +105,7 @@ export async function GET(req: NextRequest) {
             report,
             students,
             school,
-            trimestreId: termId,
+            term: term,
           }),
         );
         // @ts-expect-error TODO: fix this

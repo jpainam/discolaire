@@ -9,7 +9,7 @@ const COL_WIDTH = 27;
 
 export function ClassroomSummaryReportTrimestre({
   school,
-  trimestreId,
+  term,
   classroom,
   students,
   subjects,
@@ -19,7 +19,7 @@ export function ClassroomSummaryReportTrimestre({
   subjects: RouterOutputs["classroom"]["subjects"];
   students: RouterOutputs["classroom"]["students"];
   classroom: RouterOutputs["classroom"]["get"];
-  trimestreId: string;
+  term: RouterOutputs["term"]["get"];
   report: RouterOutputs["reportCard"]["getTrimestre"];
   school: NonNullable<RouterOutputs["school"]["getSchool"]>;
   disciplines: RouterOutputs["discipline"]["trimestre"];
@@ -33,7 +33,7 @@ export function ClassroomSummaryReportTrimestre({
   const successRate = successCount / averages.length;
   const average = averages.reduce((acc, val) => acc + val, 0) / averages.length;
 
-  const { title, seq1, seq2 } = getTitle({ trimestreId });
+  const { title, seq1, seq2 } = getTitle({ trimestreId: term.name });
 
   return (
     <Document>

@@ -41,7 +41,7 @@ export function ReportCardQuarter({
     trpc.classroom.get.queryOptions(classroomId),
   );
 
-  const { title } = getTitle({ trimestreId: term.id });
+  const { title } = getTitle({ trimestreId: term.name });
 
   const {
     data: { studentsReport, summary: _summary, globalRanks },
