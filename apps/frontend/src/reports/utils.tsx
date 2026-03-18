@@ -12,26 +12,50 @@ export function getCdnUrl() {
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
 
-export function getTitle({ trimestreId }: { trimestreId: string }) {
+export function getTitle({
+  trimestreId,
+  lang,
+}: {
+  trimestreId: string;
+  lang: "fr" | "en";
+}) {
   if (trimestreId.includes("1")) {
-    return {
-      title: "BULLETIN SCOLAIRE DU PREMIER TRIMESTRE",
-      seq1: "SEQ1",
-      seq2: "SEQ2",
-    };
+    return lang == "fr"
+      ? {
+          title: "BULLETIN SCOLAIRE DU PREMIER TRIMESTRE",
+          seq1: "SEQ1",
+          seq2: "SEQ2",
+        }
+      : {
+          title: "FIRST TERM REPORT CARD",
+          seq1: "SEQ1",
+          seq2: "SEQ2",
+        };
   }
   if (trimestreId.includes("2")) {
-    return {
-      title: "BULLETIN SCOLAIRE DU SECOND TRIMESTRE",
-      seq1: "SEQ3",
-      seq2: "SEQ4",
-    };
+    return lang == "fr"
+      ? {
+          title: "BULLETIN SCOLAIRE DU SECOND TRIMESTRE",
+          seq1: "SEQ3",
+          seq2: "SEQ4",
+        }
+      : {
+          title: "SECOND TERM REPORT CARD",
+          seq1: "SEQ3",
+          seq2: "SEQ4",
+        };
   }
-  return {
-    title: "BULLETIN SCOLAIRE DU TROISIEME TRIMESTRE",
-    seq1: "SEQ5",
-    seq2: "SEQ6",
-  };
+  return lang == "fr"
+    ? {
+        title: "BULLETIN SCOLAIRE DU TROISIEME TRIMESTRE",
+        seq1: "SEQ5",
+        seq2: "SEQ6",
+      }
+    : {
+        title: "THIRD TERM REPORT CARD",
+        seq1: "SEQ5",
+        seq2: "SEQ6",
+      };
 }
 
 export function getAssetUrl(asset: "image" | "avatar") {

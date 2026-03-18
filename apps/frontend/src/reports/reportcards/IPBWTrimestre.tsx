@@ -53,7 +53,7 @@ export function IPBWTrimestre({
     contacts.filter((c) => c.studentId).map((c) => [c.studentId, c]),
   );
   const groups = _.groupBy(subjects, "subjectGroupId");
-  const { title, seq1, seq2 } = getTitle({ trimestreId: term.name });
+  const { title, seq1, seq2 } = getTitle({ trimestreId: term.name, lang });
   const averages = values.map((g) => g.average);
   const successCount = averages.filter((val) => val >= 10).length;
   const successRate = successCount / averages.length;
