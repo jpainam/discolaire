@@ -24,6 +24,7 @@ const ipbwTranslate = {
     NON: "NO",
     OUI: "YES",
     MOY: "AVG",
+    "MOY MENSUELLES": "MONTHLY AVG",
     "Résume des resultats": "Summary of results",
     Moyenne: "Average",
     Observation: "Observation",

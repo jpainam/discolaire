@@ -134,7 +134,7 @@ export function IPBWTrimestre({
                   flexDirection: "column",
                 }}
               >
-                <IPBWTableHeader seq1={seq1} seq2={seq2} W={W} />
+                <IPBWTableHeader seq1={seq1} seq2={seq2} W={W} lang={lang} />
                 {Object.keys(groups).map((groupId: string) => {
                   const items = groups[Number(groupId)]?.sort(
                     (a, b) => a.order - b.order,
@@ -322,7 +322,9 @@ export function IPBWTrimestre({
                             justifyContent: "center",
                           }}
                         >
-                          <Text style={{ paddingLeft: 4 }}>{group?.name}</Text>
+                          <Text style={{ paddingLeft: 4 }}>
+                            {t(group?.name ?? "")}
+                          </Text>
                         </View>
                         <View
                           style={{
@@ -363,7 +365,7 @@ export function IPBWTrimestre({
                           }}
                         >
                           <Text>
-                            MOY :{" "}
+                            {t("MOY")} :{" "}
                             {(
                               sum(
                                 items.map(
@@ -394,7 +396,7 @@ export function IPBWTrimestre({
                       padding: 2,
                     }}
                   >
-                    <Text>MOY. MENSUELLES</Text>
+                    <Text>{t("MOY MENSUELLES")}</Text>
                   </View>
                   <View
                     style={{
@@ -523,11 +525,14 @@ function IPBWTableHeader({
   W,
   seq1,
   seq2,
+  lang,
 }: {
   W: number[] | string[];
   seq1: string;
   seq2: string;
+  lang: "fr" | "en";
 }) {
+  const t = getTranslation(lang);
   return (
     <View
       style={{
@@ -550,7 +555,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text>Matieres</Text>
+        <Text>{t("Matières")}</Text>
       </View>
       <View
         style={{
@@ -583,7 +588,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text>Moy</Text>
+        <Text>{t("MOY")}</Text>
       </View>
       <View
         style={{
@@ -594,7 +599,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> Coef.</Text>
+        <Text>Coef</Text>
       </View>
       <View
         style={{
@@ -605,7 +610,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> Total</Text>
+        <Text>Total</Text>
       </View>
       <View
         style={{
@@ -616,7 +621,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> Rang</Text>
+        <Text> {t("Rang")}</Text>
       </View>
       <View
         style={{
@@ -627,7 +632,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text>Moy C</Text>
+        <Text>{t("Moy C")}</Text>
       </View>
       <View
         style={{
@@ -638,7 +643,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> Min/Max</Text>
+        <Text> {t("Min/Max")}</Text>
       </View>
       <View
         style={{
@@ -648,7 +653,7 @@ function IPBWTableHeader({
           paddingHorizontal: 2,
         }}
       >
-        <Text> Appreciation</Text>
+        <Text> {t("Appréciation")}</Text>
       </View>
     </View>
   );

@@ -28,8 +28,8 @@ export function getTitle({
         }
       : {
           title: "FIRST TERM REPORT CARD",
-          seq1: "SEQ1",
-          seq2: "SEQ2",
+          seq1: "M1",
+          seq2: "M2",
         };
   }
   if (trimestreId.includes("2")) {
@@ -41,8 +41,8 @@ export function getTitle({
         }
       : {
           title: "SECOND TERM REPORT CARD",
-          seq1: "SEQ3",
-          seq2: "SEQ4",
+          seq1: "M3",
+          seq2: "M4",
         };
   }
   return lang == "fr"
@@ -53,8 +53,8 @@ export function getTitle({
       }
     : {
         title: "THIRD TERM REPORT CARD",
-        seq1: "SEQ5",
-        seq2: "SEQ6",
+        seq1: "M5",
+        seq2: "M6",
       };
 }
 
