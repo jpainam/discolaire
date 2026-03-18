@@ -10,6 +10,7 @@ import { IPBWNotationSystem } from "./IPBWNotationSystem";
 import { IPBWSignatureTrimestre } from "./IPBWSignature";
 import { IPBWStudentInfo } from "./IPBWStudentInfo";
 import { IPBWSummary } from "./IPBWSummary";
+import { getTranslation } from "./translation";
 
 const W = ["30%", "6%", "6%", "6%", "6%", "6%", "10%", "12%"];
 
@@ -48,6 +49,7 @@ export function IPBWTrimestre({
       hour12: true,
     },
   );
+  const t = getTranslation(lang);
   const studentsMap = new Map(students.map((s) => [s.id, s]));
   const primaryContactsMap = new Map(
     contacts.filter((c) => c.studentId).map((c) => [c.studentId, c]),
@@ -105,7 +107,7 @@ export function IPBWTrimestre({
                     fontSize: 9,
                   }}
                 >
-                  Année scolaire {schoolYear.name}
+                  {t("Année scolaire")} {schoolYear.name}
                 </Text>
               </View>
               <IPBWStudentInfo
