@@ -4,7 +4,6 @@ import { CheckIcon, ChevronsUpDown } from "lucide-react";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 
-import type { InputProps } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import {
   Command,
@@ -22,6 +21,8 @@ import {
 } from "~/components/ui/popover";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/lib/utils";
+
+type InputProps = React.ComponentProps<"input">;
 
 type PhoneInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
