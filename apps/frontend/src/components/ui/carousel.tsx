@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import type { UseEmblaCarouselType } from "embla-carousel-react";
@@ -101,6 +100,7 @@ function Carousel({
     api.on("select", onSelect);
 
     return () => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       api?.off("select", onSelect);
     };
   }, [api, onSelect]);
@@ -112,6 +112,7 @@ function Carousel({
         api: api,
         opts,
         orientation:
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
         scrollPrev,
         scrollNext,

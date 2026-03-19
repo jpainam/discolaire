@@ -3,22 +3,21 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { Suspense } from "react";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 
+import { TooltipProvider } from "~/components/ui/tooltip";
 import { getRequestBaseUrl } from "~/lib/base-url.server";
 import { cn } from "~/lib/utils";
 import { Providers } from "~/providers/Providers";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fontSans = Geist({
   subsets: ["latin"],
+  variable: "--font-sans",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const fontMono = Geist_Mono({
   subsets: ["latin"],
+  variable: "--font-mono",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,18 +35,23 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       // https://github.com/facebook/react/issues/11538#issuecomment-350110297
       lang={"en"}
       translate="no"
-      className={cn("notranslate", inter.variable)}
+      className={cn(
+        "notranslate antialiased",
+        fontMono.variable,
+        "font-sans",
+        fontSans.variable,
+      )}
       suppressHydrationWarning
     >
       <head>
         <meta name="google" content="notranslate" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         {/* <NextTopLoader showSpinner={false} /> */}
         <Suspense fallback={null}>
-          <Providers>{props.children}</Providers>
+          <TooltipProvider>
+            <Providers>{props.children}</Providers>
+          </TooltipProvider>
         </Suspense>
       </body>
     </html>
