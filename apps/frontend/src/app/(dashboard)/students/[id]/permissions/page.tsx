@@ -1,6 +1,11 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+
 import { getSession } from "~/auth/server";
 import { EmptyComponent } from "~/components/EmptyComponent";
+import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
+import { TableSkeleton } from "~/components/skeletons/table-skeleton";
 import { UserPermissionsPageClient } from "~/components/users/UserPermissionsPageClient";
 import { checkPermission } from "~/permissions/server";
 import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
@@ -42,7 +47,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <HydrateClient>
-      <UserPermissionsPageClient userId={userId} />
+      <ErrorBoundary errorComponent={ErrorFallback}>
+        <Suspense fallback={<TableSkeleton rows={4} cols={4} />}>
+          <UserPermissionsPageClient userId={userId} />
+        </Suspense>
+      </ErrorBoundary>
     </HydrateClient>
   );
 }

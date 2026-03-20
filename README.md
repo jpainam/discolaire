@@ -305,3 +305,15 @@ End user: pnpm db:deploy
 paul@~/Downloads$ ./minio server --console-address :9001 ./data --address ":9310"
 
 https://reui.io/docs/radix/data-grid
+
+```bash
+# export to custom format
+ pg_dump "Database_URL" -n public  --no-owner --no-privileges -Fc > Downloads/new_demo.dump
+ # delete and create the demo schema
+psql --dbname "Database_url"
+DROP SCHEMA IF EXISTS demo CASCADE;
+CREATE SCHEMA demo;
+ # import into demo
+ pg_restore  --dbname="Database_URL" --schema=demo  --no-owner --no-privileges new_demo.dump
+
+ ```
